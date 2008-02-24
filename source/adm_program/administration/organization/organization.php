@@ -85,11 +85,29 @@ $g_layout['header'] =  "
 		{
 			if(document.getElementById(LayerSwith).value == \"1\")
 			{
-				document.getElementById(LayerSetting).style.display = \"inline\";
+				if(document.getElementById(LayerSetting))
+				{
+					document.getElementById(LayerSetting).style.display = \"inline\";
+				}
 			}
 			else
 			{
-				document.getElementById(LayerSetting).style.display = \"none\";
+				if(document.getElementById(LayerSetting))
+				{
+					document.getElementById(LayerSetting).style.display = \"none\";
+				}
+			}
+		}
+		function drawForumAccessDataTable(LayerSetting,LayerSwith)
+		{
+			if(document.getElementById(LayerSwith).checked == true && document.getElementById(LayerSetting))
+			{
+					document.getElementById(LayerSetting).innerHTML = \"<table summary='Forum_Zugangsdaten' border='0'><tr><td>Datenbank:<\/td><td><input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' /><\/td><\/tr><\/table>\";
+			}
+			else
+			{
+					document.getElementById(LayerSetting).innerHTML = \"\";
+					document.getElementById(LayerSetting).innerHTML += \"<table summary='Forum_Zugangsdaten' border='0'><tr><td>Server:<\/td><td><input id='forum_srv' name='forum_srv' style='width: 150px;' value='". $form_values['forum_srv']. "' type='text' /><\/td><\/tr><tr><td>User:<\/td><td><input id='forum_usr' name='forum_usr' style='width: 150px;' value='". $form_values['forum_usr']. "' type='text' /><\/td><\/tr><tr><td>Passwort:<\/td><td><input id='forum_pw' name='forum_pw' style='width: 150px;' value='". $form_values['forum_pw']. "' type='password' /><\/td><\/tr><tr><td>Datenbank:<\/td><td><input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' /><\/td><\/tr></\table>\";
 			}
 		}
     --></script>";
@@ -175,7 +193,6 @@ echo "
 
                                     while (false !== ($filename = readdir($dir_handle)))
                                     {
-                                    	echo $filename. "<br>";
                                         if(is_file($filename) == false
                                         && strpos($filename, ".") !== 0)
                                         {
@@ -825,19 +842,40 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_zugangsdaten\">Zugangsdaten zur Datenbank des Forums:</label></dt>
-                            <dd>
-								<table summary=\"Forum_Zugangsdaten\" border=\"0\">
-								<tr><td>Server:</td><td><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" style=\"width:150px\" value=\"". $form_values['forum_srv']. "\" /></td></tr>
-								<tr><td>Datenbank:</td><td><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width:150px\" value=\"". $form_values['forum_db']. "\" /></td></tr>
-								<tr><td>Username:</td><td><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" style=\"width:150px\" value=\"". $form_values['forum_usr']. "\" /></td></tr>
-								<tr>
-									<td>Passwort:</td><td><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" style=\"width:150px\" value=\"". $form_values['forum_pw']. "\" /></td>
-								</tr>
-								</table>
-                             </dd>
-                        </dl>
-                    </li>
+							<dt><label for=\"forum_zugangsdaten_von_admidio\">Zugangsdaten von Admidio verwenden:</label></dt>
+							<dd>
+								<div style=\"display:inline;\">
+								<input type=\"checkbox\" id=\"forum_sqldata_from_admidio\" name=\"forum_sqldata_from_admidio\" onchange=\"javascript:drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');\" ";
+                                if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+								</div>
+							</dd>
+						</dl>
+					</li>
+					<li class=\"smallFontSize\">
+						Falls mann die gleiche DB benutzt wie Admidio.
+					<li>
+						<dl>
+							<dt><label for=\"forum_zugangsdaten\">Zugangsdaten zur Datenbank des Forums:</label></dt>
+							<dd>
+								<div id=\"Forum_Zugangsdaten\">";
+								if($form_values['forum_sqldata_from_admidio'] == 0)
+								{
+									echo "<table summary='Forum_Zugangsdaten' border='0'><tr><td>Server:</td><td><input id='forum_srv' name='forum_srv' style='width: 150px;' value='". $form_values['forum_srv']. "' type='text' /></td></tr><tr><td>User:</td><td><input id='forum_usr' name='forum_usr' style='width: 150px;' value='". $form_values['forum_usr']. "' type='text' /></td></tr><tr><td>Passwort:</td><td><input id='forum_pw' name='forum_pw' style='width: 150px;' value='". $form_values['forum_pw']. "' type='password' /></td></tr><tr><td>Datenbank:</td><td><input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' /></td></tr></table>";
+								}
+								else
+								{
+									echo "Datenbank: <input id='forum_db' name='forum_db' style='width: 150px;' value='". $form_values['forum_db']. "' type='text' />";
+								}
+								echo "
+								</div>
+							</dd>
+						</dl>
+					</li>		
+			 
                     <li class=\"smallFontSize\">
                         Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
                     </li>                
