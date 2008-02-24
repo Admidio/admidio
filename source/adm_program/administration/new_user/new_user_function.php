@@ -147,7 +147,7 @@ elseif($req_mode == 4)
     // Registrierung loeschen
     
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_forum_integriert)
+    if($g_preferences['enable_forum_interface'])
     {
         $g_forum->userDelete($new_user->getValue("usr_login_name"));
     }
@@ -176,7 +176,7 @@ elseif($req_mode == 6)
     $new_user->delete();
     
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_forum_integriert)
+    if($g_preferences['enable_forum_interface'])
     {
         $g_forum->userDelete($new_user->getValue("usr_login_name"));
     }

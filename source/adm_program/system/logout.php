@@ -13,7 +13,7 @@
 require_once("common.php");
 require_once("auto_login_class.php");
 
-// User aus der Session entfernen
+// User aus der Session entfernen 
 $g_current_session->setValue("ses_usr_id", "");
 $g_current_session->save();
 
@@ -27,7 +27,7 @@ if(isset($_COOKIE['admidio_data']))
     setcookie("admidio_data",       "" , time() - 1000, "/", $domain, 0);
     
     $auto_login = new AutoLogin($g_db, $g_session_id);
-    $auto_login->delete();
+    $auto_login->delete(); 
 }
 
 unset($_SESSION['g_current_user']);
@@ -35,7 +35,7 @@ unset($_SESSION['g_current_user']);
 $message_code = "logout";
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
-if($g_forum_integriert && $g_forum->session_valid)
+if($g_preferences['enable_forum_interface'] && $g_forum->session_valid)
 {
     $g_forum->userLogoff();
     $message_code = "logout_forum";

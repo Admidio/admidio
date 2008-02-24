@@ -41,7 +41,7 @@ class MySqlDB extends DB
                 return $this->connect_id;
             }
         }
-        return $this->db_error();
+        return false;
     }
     
     function select_db($database)

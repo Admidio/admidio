@@ -129,7 +129,7 @@ else
 // Pfad zum gewaehlten Theme zusammensetzen
 define('THEME_SERVER_PATH', SERVER_PATH. "/adm_themes/". $g_preferences['theme']);
 define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
-if ($g_preferences['forum_integriert'])
+if ($g_preferences['enable_forum_interface'])
 {
 require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
 }
@@ -286,7 +286,7 @@ else
 Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
 /********************************************************************************/
 
-if($g_preferences['forum_integriert']) 
+if($g_preferences['enable_forum_interface']) 
 {
     // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
     // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
@@ -310,8 +310,5 @@ if($g_preferences['forum_integriert'])
     // Forum Session auf Gueltigkeit pruefen
     $g_forum->checkSession($g_valid_login);
 }
-else
-{
-    $g_forum_con = false;
-}
+
 ?>

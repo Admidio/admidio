@@ -102,7 +102,7 @@ if ($user_found >= 1)
         $g_current_user->save();
 
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
-        if($g_preferences['forum_integriert'])
+        if($g_preferences['enable_forum_interface'])
         {
             $g_forum->userLogin($g_current_user->getValue("usr_id"), $_GET['usr_login_name'], $req_password_crypt, 
                                 $g_current_user->getValue("usr_login_name"), $g_current_user->getValue("usr_password"), 

@@ -29,9 +29,6 @@
  *                          RETURNCODE = TRUE  - Den User gibt es
  *                          RETURNCODE = FALSE - Den User gibt es nicht
  *
- * userRegister($username)
- *
- *
  * userLogin($usr_id, $login_name, $password_crypt, $forum_user, $forum_password, $forum_email)
  *                        - Meldet den User (Username) im Forum an.
  *                          $usr_id             = Der aktuelle Admidio user_id des Users
@@ -101,8 +98,7 @@ class Forum
     // Allgemeine Forums Umgebungsdaten
     var $version;                   // Hersteller und Version des Forums
     var $sitename;                  // Name des Forums
-    var $server;                    // Server des Forums
-    var $path;                      // Pfad zum Forum
+    var $url;                       // URL zum Forum
     var $cookie_name;               // Name des Forum Cookies
     var $cookie_path;               // Pfad zum Forum Cookies
     var $cookie_domain;             // Domain des Forum Cookies
@@ -117,7 +113,7 @@ class Forum
     // Konstruktor
     function Forum()
     {
-        $this->forum_db    = new MySqlDB();    
+        $this->forum_db    = new MySqlDB();
     }
     
     function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $admidio_db = 0)
@@ -137,7 +133,7 @@ class Forum
             $new_db_connection = true;
         }
         
-        $this->forum_db->connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_db_connection);
+        return $this->forum_db->connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_db_connection);
     }
 
 
@@ -181,26 +177,21 @@ class Forum
         $row    = $this->forum_db->fetch_array($result);
         $this->cookie_secure = $row[0];
 
+		// Url zum Forum ermitteln
         $sql    = "SELECT config_value FROM ". $this->praefix. "_config WHERE config_name = 'server_name' ";
         $result = $this->forum_db->query($sql);
         $row    = $this->forum_db->fetch_array($result);
-        $this->server = str_replace('http://', '', $row[0]);
-        $this->server = str_replace('HTTP://', '', $row[0]);
+        $this->url .= str_replace('http://', '', strtolower($row['config_value']));
 
         $sql    = "SELECT config_value FROM ". $this->praefix. "_config WHERE config_name = 'script_path' ";
         $result = $this->forum_db->query($sql);
-        $row    = $this->forum_db->fetch_array($result);        
-        $this->path = trim(str_replace('//', '/', $row[0]));
-        
-        // Slash am Anfang und Ende entfernen
-        if(strpos($this->path, "/") == 0)
+        $row    = $this->forum_db->fetch_array($result);
+        if(strlen($row['config_value']) > 1)
         {
-            $this->path = substr($this->path, 1);
+        	$this->url .= '/'. $row['config_value'];
         }
-        if(strrpos($this->path, "/") == strlen($this->path)-1)
-        {
-            $this->path = substr($this->path, 0, strlen($this->path)-1);
-        }
+        $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
+        $this->url = 'http://'. $this->url;
     }
 
 
@@ -221,13 +212,6 @@ class Forum
         {
             return FALSE;
         }
-    }
-
-
-    // Funktion registriert den aktuellen User im Forum an
-    function userRegister($forum_user)
-    {
-
     }
 
 

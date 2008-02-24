@@ -23,7 +23,7 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/email_class.php");
 
-$err_code = "";
+$err_code = ""; 
 $err_text = "";
 
 // nur berechtigte User duerfen Funktionen aufrufen
@@ -166,7 +166,7 @@ elseif($_GET["mode"] == 3)
     }
 
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_forum_integriert)
+    if($g_preferences['enable_forum_interface'])
     {
         $g_forum->userDelete($user->getValue("usr_login_name"));
         
