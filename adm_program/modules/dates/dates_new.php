@@ -154,7 +154,7 @@ echo "
                 <dl>
                     <dt><label for=\"dat_headline\">Überschrift:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"dat_headline\" name=\"dat_headline\" style=\"width: 350px;\" maxlength=\"100\" value=\"". $date->getValue("dat_headline"). "\" />
+                        <input type=\"text\" id=\"dat_headline\" name=\"dat_headline\" style=\"width: 345px;\" maxlength=\"100\" value=\"". $date->getValue("dat_headline"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -176,7 +176,7 @@ echo "
                             }
                             echo " value=\"1\" />
                             <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=date_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </dd>
                     </dl>
                 </li>";
@@ -232,8 +232,12 @@ echo "
                 <dl>
                     <dt><label for=\"dat_location\">Treffpunkt:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />
-                    </dd>
+                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 345px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />";
+                        if($g_preferences['dates_show_map_link'])
+                        {
+                        	echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link',this);\" onmouseout=\"ajax_hideTooltip()\" />";
+                        } 
+                    echo "</dd>
                 </dl>
             </li>
             <li>
@@ -246,7 +250,7 @@ echo "
                         }
                     echo "</dt>
                     <dd>
-                        <textarea id=\"dat_description\" name=\"dat_description\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $date->getValue("dat_description"). "</textarea>
+                        <textarea id=\"dat_description\" name=\"dat_description\" style=\"width: 345px;\" rows=\"10\" cols=\"40\">". $date->getValue("dat_description"). "</textarea>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>

@@ -252,7 +252,7 @@ echo "
                 echo "W&auml;hle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.";
                 break;
 
-            case "termin_global":
+            case "date_global":
                 echo "Termine / Ank&uuml;ndigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
                       folgender Organisationen:<p><b>";
 
@@ -270,6 +270,10 @@ echo "
                       Moderatoren dieser Organisationen k&ouml;nnen den Termin / Ank&uuml;ndigung dann bearbeiten
                       bzw. die Option zur&uuml;cksetzen.";
                 break;
+                
+            case "date_location_link":
+            	echo "Geben Sie genügend Informationen zum Treffpunkt ein, so kann ein Link bzw. eine Route zu 
+            	diesem Treffpunkt über Google-Maps erstellt werden."; 
 
             case "user_field_description":
                 echo $g_current_user->getProperty($req_err_text, "usf_description");

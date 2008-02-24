@@ -116,7 +116,7 @@ echo "
                         {
                           echo "<br /><br />
                           <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"5\">Text formatieren</a>";
-                        }
+                        } 
                     echo "</dt>
                     <dd>
                         <textarea id=\"ann_description\" name=\"ann_description\" style=\"width: 350px;\" tabindex=\"2\" rows=\"10\" cols=\"40\">". $announcement->getValue("ann_description"). "</textarea>
@@ -142,7 +142,7 @@ echo "
                             echo " value=\"1\" />
                             <label for=\"ann_global\">$req_headline f&uuml;r mehrere Organisationen sichtbar</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=termin_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" />
+                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" />
                         </dd>
                     </dl>
                 </li>";
