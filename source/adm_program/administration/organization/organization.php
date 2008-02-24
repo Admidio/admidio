@@ -1400,6 +1400,7 @@ echo "
             $temp_data .='</select>';
             return $temp_data;
         }
+        
         /**************************************************************************************/
         //Einstellungen Profilmodul
         /**************************************************************************************/
@@ -1445,7 +1446,24 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_roles_view\">Rollenmitgliedschaften anzeigen:</label></dt>
+                            <dt><label for=\"profile_show_map_link\">Kartenlink anzeigen:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"profile_show_map_link\" name=\"profile_show_map_link\" ";
+                                if(isset($form_values['profile_show_map_link']) && $form_values['profile_show_map_link'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Sobald genügend Adressinformationen vorhanden sind, wird ein Link zu Google-Maps erstellt,
+                        welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"profile_show_roles_view\">Rollenmitgliedschaften anzeigen:</label></dt>
                             <dd>
                                 <input type=\"checkbox\" id=\"enable_roles_view\" name=\"enable_roles_view\" ";
                                 if(isset($form_values['enable_roles_view']) && $form_values['enable_roles_view'] == 1)
@@ -1547,7 +1565,24 @@ echo "
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.
                     </li>
-                </ul>
+                    <li>
+                        <dl>
+                            <dt><label for=\"dates_show_map_link\">Kartenlink anzeigen:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"dates_show_map_link\" name=\"dates_show_map_link\" ";
+                                if(isset($form_values['dates_show_map_link']) && $form_values['dates_show_map_link'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Wird ein Treffpunkt angegeben, so wird versucht ein Link zu Google-Maps zu erstellen,
+                        welcher den Treffpunkt anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort.
+                    </li>
+               	</ul>
             </div>
         </div>";
 

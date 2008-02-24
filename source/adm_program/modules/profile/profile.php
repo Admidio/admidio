@@ -17,7 +17,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// Uebergabevariablen pruefen
+// Uebergabevariablen pruefen 
 
 if(isset($_GET['user_id']))
 {
@@ -303,7 +303,8 @@ echo "
                                                             if(strlen($user->getValue("Land")) > 0)
                                                                 echo "<br />". $user->getValue("Land");
 
-                                                            if(strlen($user->getValue("Adresse")) > 0
+                                                            if($g_preferences['profile_show_map_link']
+                                                            && strlen($user->getValue("Adresse")) > 0
                                                             && (  strlen($user->getValue("PLZ"))  > 0
                                                             || strlen($user->getValue("Ort"))  > 0 ))
                                                             {
@@ -482,7 +483,7 @@ echo "
             echo "</ul></div></div>";
         }
 
-        if($g_preferences['enable_roles_view'] == 1)
+        if($g_preferences['profile_show_roles'] == 1)
         {
             // *******************************************************************************
             // Rollen-Block
@@ -646,7 +647,7 @@ echo "
             </div>";
         }
 
-        if($g_preferences['enable_former_roles_view'] == 1)
+        if($g_preferences['profile_show_former_roles'] == 1)
         {
             // *******************************************************************************
             // Ehemalige Rollen Block
@@ -728,7 +729,7 @@ echo "
             </div>";
         }
 
-        if($g_preferences['enable_extern_roles_view'] == 1
+        if($g_preferences['profile_show_extern_roles'] == 1
         && (  $g_current_organization->getValue("org_org_id_parent") > 0 
            || $g_current_organization->hasChildOrganizations() ))
         {

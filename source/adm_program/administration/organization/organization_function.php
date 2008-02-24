@@ -83,119 +83,43 @@ else if ($_POST['enable_forum_interface'] == 1)
 // Daten speichern
 // *******************************************************************************
 
-if(isset($_POST['enable_system_mails']) == false)
+// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
+// falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+
+$checkboxes = array('dates_show_map_link'
+				   ,'enable_system_mails'
+                   ,'enable_mail_captcha'
+                   ,'enable_registration_captcha'
+                   ,'enable_registration_admin_mail'
+                   ,'enable_bbcode'
+                   ,'enable_rss'
+                   ,'enable_auto_login'
+                   ,'enable_download_module'
+                   ,'enable_intial_comments_loading'
+                   ,'enable_mail_module'
+                   ,'enable_guestbook_captcha'
+                   ,'enable_photo_module'
+                   ,'enable_forum_interface'
+                   ,'enable_gbook_comments4all'
+                   ,'enable_ecard_module'
+                   ,'forum_export_user'
+                   ,'flooding_protection_time'
+                   ,'max_file_upload_size'
+                   ,'max_email_attachment_size'
+                   ,'photo_image_text'
+                   ,'profile_show_map_link'
+                   ,'profile_show_roles'
+                   ,'profile_show_former_roles'
+                   ,'profile_show_extern_roles');
+
+foreach($checkboxes as $key => $value)
 {
-    $_POST['enable_system_mails'] = 0;
+	if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+	{
+		$_POST[$value] = 0;
+	}
 }
 
-if(strlen($_POST['max_email_attachment_size']) == 0)
-{
-    $_POST['max_email_attachment_size'] = 0;
-}
-
-if(isset($_POST['enable_mail_captcha']) == false)
-{
-    $_POST['enable_mail_captcha'] = 0;
-}
-
-if(isset($_POST['enable_registration_captcha']) == false)
-{
-    $_POST['enable_registration_captcha'] = 0;
-}
-
-if(isset($_POST['enable_registration_admin_mail']) == false)
-{
-    $_POST['enable_registration_admin_mail'] = 0;
-}
-
-if(isset($_POST['enable_bbcode']) == false)
-{
-    $_POST['enable_bbcode'] = 0;
-}
-
-if(isset($_POST['enable_rss']) == false)
-{
-    $_POST['enable_rss'] = 0; 
-}
-
-if(isset($_POST['enable_auto_login']) == false)
-{
-    $_POST['enable_auto_login'] = 0;
-}
-
-if(isset($_POST['enable_download_module']) == false)
-{
-    $_POST['enable_download_module'] = 0;
-}
-
-if(strlen($_POST['max_file_upload_size']) == 0)
-{
-    $_POST['max_file_upload_size'] = 0;
-}
-
-if(isset($_POST['enable_photo_module']) == false)
-{
-    $_POST['enable_photo_module'] = 0;
-}
-
-if(isset($_POST['photo_image_text']) == false)
-{
-    $_POST['photo_image_text'] = 0;
-}
-
-if(isset($_POST['enable_forum_interface']) == false)
-{
-    $_POST['enable_forum_interface'] = 0;
-}
-
-if(isset($_POST['forum_export_user']) == false)
-{
-    $_POST['forum_export_user'] = 0;
-}
-
-if(isset($_POST['enable_guestbook_captcha']) == false)
-{
-    $_POST['enable_guestbook_captcha'] = 0;
-}
-
-if(isset($_POST['enable_gbook_comments4all']) == false)
-{
-    $_POST['enable_gbook_comments4all'] = 0;
-}
-
-if(strlen($_POST['flooding_protection_time']) == 0)
-{
-    $_POST['flooding_protection_time'] = 0;
-}
-
-if(isset($_POST['enable_intial_comments_loading']) == false)
-{
-    $_POST['enable_intial_comments_loading'] = 0;
-}
-
-if(isset($_POST['enable_mail_module']) == false)
-{
-    $_POST['enable_mail_module'] = 0;
-}
-
-if(isset($_POST['enable_roles_view']) == false)
-{
-    $_POST['enable_roles_view'] = 0;
-}
-
-if(isset($_POST['enable_former_roles_view']) == false)
-{
-    $_POST['enable_former_roles_view'] = 0;
-}
-
-if(isset($_POST['enable_extern_roles_view']) == false)
-{
-    $_POST['enable_extern_roles_view'] = 0;
-}
-if(isset($_POST['enable_ecard_module']) == false)
-{
-    $_POST['enable_ecard_module'] = 0;
-}
 
 // *******************************************************************************
 // Organisation updaten

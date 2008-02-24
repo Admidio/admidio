@@ -236,7 +236,7 @@ if($g_db->num_rows($dates_result) == 0)
     }
     else
     {
-        echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+        echo "<p>Es sind keine Einträge vorhanden.</p>";
     }
 }
 else
@@ -312,7 +312,8 @@ else
                             echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;<strong></div>
                             <div style="float: left;">'. $date->getValue("dat_location"). '</strong><br />';
                                 // eventuell Karte- und Routenlink anhaengen
-                                if(count(split("[,; ]", $date->getValue("dat_location"))) > 1)
+                                if($g_preferences['dates_show_map_link']
+                                && count(split("[,; ]", $date->getValue("dat_location"))) > 1)
                                 {
                                     echo '<span class="iconTextLink">
                                         <a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank"><img
