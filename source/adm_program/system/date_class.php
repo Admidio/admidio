@@ -30,7 +30,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/libs/bennu/bennu.inc.php");
 require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
 
 class Date extends TableAccess
@@ -104,25 +103,33 @@ class Date extends TableAccess
     // gibt einen Termin im iCal-Format zurueck
     function getIcal($domain)
     {
-        $cal = new iCalendar;
-        $event = new iCalendar_event;
-        $cal->add_property('METHOD','PUBLISH');
         $prodid = "-//www.admidio.org//Admidio" . ADMIDIO_VERSION . "//DE";
-        $cal->add_property('PRODID',$prodid);
         $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
-        $event->add_property('uid', $uid);
-    
-        $event->add_property('summary',     $this->db_fields['dat_headline']);
-        $event->add_property('description', $this->db_fields['dat_description']);
+        
+    	$ical = "BEGIN:VCALENDAR\n".
+    	        "METHOD:PUBLISH\n".
+    	        "PRODID:". $prodid. "\n".
+    	        "VERSION:2.0\n".
+    	        "BEGIN:VEVENT\n".
+    	        "UID:". $uid. "\n".
+    	        "SUMMARY:". $this->db_fields['dat_headline']. "\n".
+    	        "DESCRIPTION:". $this->db_fields['dat_description']. "\n".
+    	        "DTSTAMP:". mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']). "\n".
+    	        "LOCATION:". $this->db_fields['dat_location']. "\n";
+		if($this->db_fields['dat_all_day'] == 1)
+		{
+			$ical .= "DTSTART;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_begin']). "\n".
+			         "DTEND;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_end']). "\n";
+		}
+		else
+		{
+			$ical .= "DTSTART:". mysqldatetime("ymdThis", $this->db_fields['dat_begin']). "\n".
+			         "DTEND:". mysqldatetime("ymdThis", $this->db_fields['dat_end']). "\n";
+        }
+        $ical .= "END:VEVENT\n".
+                 "END:VCALENDAR";
 
-        $event->add_property('dtstart', mysqldatetime("ymdThis", $this->db_fields['dat_begin']));
-        $event->add_property('dtend',   mysqldatetime("ymdThis", $this->db_fields['dat_end']));
-        $event->add_property('dtstamp', mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']));
-
-        $event->add_property('location', $this->db_fields['dat_location']);
-
-        $cal->add_component($event);
-        return $cal->serialize();    
+        return $ical;
     }    
     
     // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
