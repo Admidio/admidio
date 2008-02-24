@@ -221,7 +221,7 @@ elseif($_GET["mode"] == 2)
 elseif($_GET["mode"] == 4)
 {
     header('Content-Type: text/calendar');
-    header('Content-Disposition: attachment; filename="'. $date->getValue("dat_begin"). '.ics"');
+    header('Content-Disposition: attachment; filename="'. $date->getValue("dat_headline"). '.ics"');
 
     echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();
