@@ -162,6 +162,8 @@ if(!is_numeric($bild) || !is_numeric($_GET['pho_id']))
 if(isset($bild_url))
 {
 	list($width, $height)	= getimagesize($bild_url);
+	$propotional_size_card  = array();
+	$propotional_size_view	= array();
 	$propotional_size_card	= getPropotionalSize($width, $height, $g_preferences['ecard_card_picture_width'], $g_preferences['ecard_card_picture_height']);
 	$propotional_size_view	= getPropotionalSize($width, $height, $g_preferences['ecard_view_width'], $g_preferences['ecard_view_height']);
 }
@@ -869,7 +871,7 @@ if (empty($submit_action))
 					';
 					if($g_preferences['enable_ecard_cc_recipients'])
 					{	
-						echo '<div id="getmoreRecipient" style="padding-top:20px;">
+						echo '<div id="getmoreRecipient" style="padding-top:18px;">
 						<a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
 						</div>';
 					}	
@@ -994,24 +996,23 @@ if (empty($submit_action))
 							echo '<div id="getmoreSettings" style="';
 							if($g_preferences['enable_ecard_text_length'])
 							{
-								echo 'padding-top:30px;';
+								echo 'padding-top:28px;';
 							}
 							else
 							{
-								echo 'padding-top:155px;';
+								echo 'padding-top:153px;';
 							}
 							echo '">
 								<a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
 							</div>	
 						</dt>
                         <dd>
-							<textarea id="Nachricht" style="width: 330px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"
-							';
+							<textarea id="Nachricht" style="width: 330px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
 							if($g_preferences['enable_ecard_text_length'])
 							{
-							echo' onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();';
+							echo' onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();"';
 							}
-							echo' ">';
+							echo' >';
 					  		if (! empty($ecard["message"])) 
 							{
 						 		echo ''.$ecard["message"].''; 
@@ -1152,7 +1153,7 @@ else
 	}
 	echo '</tr></table><br /><br/>';
 }  
-echo "</div></div></div></div>";
+echo "</div></div></div>";
 /************************Buttons********************************/
 //Uebersicht
 if($photo_event->getValue("pho_id") > 0)

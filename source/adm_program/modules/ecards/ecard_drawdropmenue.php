@@ -173,15 +173,20 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 		while ($row = $g_db->fetch_object($result))
 		{
 			$full_name	= ''.$row->first_name.' '.$row->last_name.'';
-			echo '<input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />
-			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" /><div style="display:inline; margin-left:43px;"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></div>
+			echo '<table summary="DataSender" style="border:0px;" border="0" cellpadding="0" cellspacing="0" cols="0" rules="none" width="100%">
+			<tr>
+			<td align="left"><input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" /></td>
+			<td align="right"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></td>
+			</tr>
+			</table>
+			<input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />
 			';
 		}
 	}
 	else
 	{
 		echo '<input type="hidden" name="ecard[email_recipient]" value="'.$_GET['usrid'].'@rolle.com" />
-			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" /><div style="display:inline; margin-left:40px;"><a href="javascript:getMenuRecepientName();">anderen Empf&auml;nger</a></div>
+			<input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" /><div align="right" style="display:inline; position:relative;"><a href="javascript:getMenuRecepientName();">anderen Empf&auml;nger</a></div>
 			';
 	}
 }
