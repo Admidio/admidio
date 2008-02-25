@@ -260,7 +260,7 @@ echo " werden angezeigt</p>";
 //Hier gibt es jetzt noch die Suchbox...
 echo "
 <form action=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\" method=\"post\">
-    <div style=\"width: 300px; margin: auto;\">
+    <div id=\"search_members\">
         <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" style=\"width: 200px;\"  />
         <input type=\"submit\" value=\"Suchen\" />    
     </div>

@@ -186,7 +186,7 @@ else
                 echo '
                 <li>
                     <dl>
-                        <dt><label for="auto_login">Angemeldet bleiben:</label></dt>
+                        <dt><label for="plg_auto_login">Angemeldet bleiben:</label></dt>
                         <dd><input type="checkbox" id="plg_auto_login" name="auto_login" value="1" /></dd>
                     </dl>
                 </li>';
@@ -195,9 +195,10 @@ else
             echo '
             <li>
                 <dl>
-                    <dt style="clear: left;">
+                    <dt>
                         <button type="submit" value="Login">Login</button>
                     </dt>
+                    <dd>&nbsp;</dd>
                 </dl>
             </li>';
         
@@ -208,8 +209,9 @@ else
                     <dl>';
                         if($plg_show_register_link && $g_preferences['registration_mode'])
                         {
-                            echo '<dt style="clear: left;"><a href="'. $g_root_path. '/adm_program/system/registration.php" 
-                                 '. $plg_link_target. '>Registrieren</a></dt>';
+                            echo '<dt><a href="'. $g_root_path. '/adm_program/system/registration.php" 
+                                 '. $plg_link_target. '>Registrieren</a></dt>
+                                 <dd>&nbsp;</dd>';
                         }
                         if($plg_show_register_link && $plg_show_email_link)
                         {
@@ -230,7 +232,8 @@ else
                             {
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
                             }
-                            echo '<dt style="clear: left;"><a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a></dt>';
+                            echo '<dt><a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a></dt>
+                            <dd>&nbsp;</dd>';
                         }
                     echo '</dl>
                 </li>';

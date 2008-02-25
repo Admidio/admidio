@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------
                                Admidio 
-     	        Copyright (c) 2004 - 2007 The Admidio Team
+     	        Copyright (c) 2004 - 2008 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
 
@@ -127,14 +127,14 @@ Lokesh Dhakar
 	http://www.huddletogether.com/projects/lightbox2
 	Lightbox 2
 	
-Tango Desktop Project
-	http://tango.freedesktop.org
-	Icon Bibliothek Tango
-
-Jon Papaioannou
-	http://bennu.sourceforge.net
-	iCal Bibliothek Bennu
+Alf Magne Kalleland
+	http://www.dhtmlgoodies.com
+	Ajax-Tooltip
 	
+Matt Kruse
+	http://www.mattkruse.com
+	Kalender-Popup
+
 Timothy Groves
 	http://www.brandspankingnew.net
 	BSN.AutoSuggest
@@ -147,7 +147,11 @@ phpBB bulletin board
 	http://www.phpbb.com
 	Diverse Funktionen
 
+Tango Desktop Project
+	http://tango.freedesktop.org
+	Icon Bibliothek Tango
+
 -------------------------------------------------------------------------
-       	      Copyright (c) 2004 - 2007 The Admidio Team
+       	      Copyright (c) 2004 - 2008 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
