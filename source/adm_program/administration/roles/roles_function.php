@@ -150,70 +150,34 @@ elseif($_GET["mode"] == 2)
         $_POST['rol_mail_login']   = 1;
     }
 
-    if(isset($_POST['rol_assign_roles']) == false)
-    {
-        $_POST['rol_assign_roles'] = 0;
-    }
-    if(isset($_POST['rol_approve_users']) == false)
-    {
-        $_POST['rol_approve_users'] = 0;
-    }
-    if(isset($_POST['rol_announcements']) == false)
-    {
-        $_POST['rol_announcements'] = 0;
-    }
-    if(isset($_POST['rol_dates']) == false)
-    {
-        $_POST['rol_dates'] = 0;
-    }
-    if(isset($_POST['rol_photo']) == false)
-    {
-        $_POST['rol_photo'] = 0;
-    }
-    if(isset($_POST['rol_download']) == false)
-    {
-        $_POST['rol_download'] = 0;
-    }
-    if(isset($_POST['rol_guestbook']) == false)
-    {
-        $_POST['rol_guestbook'] = 0;
-    }
-    if(isset($_POST['rol_guestbook_comments']) == false)
-    {
-        $_POST['rol_guestbook_comments'] = 0;
-    }
-    if(isset($_POST['rol_edit_user']) == false)
-    {
-        $_POST['rol_edit_user'] = 0;
-    }
-    if(isset($_POST['rol_mail_logout']) == false)
-    {
-        $_POST['rol_mail_logout'] = 0;
-    }
-    if(isset($_POST['rol_mail_login']) == false)
-    {
-        $_POST['rol_mail_login'] = 0;
-    }
-    if(isset($_POST['rol_weblinks']) == false)
-    {
-        $_POST['rol_weblinks'] = 0;
-    }
-	if(isset($_POST['rol_this_list_view']) == false)
-    {
-        $_POST['rol_this_list_view'] = 0;
-    }
-	if(isset($_POST['rol_all_lists_view']) == false)
-    {
-        $_POST['rol_all_lists_view'] = 0;
-    }     
-    if(isset($_POST['rol_profile']) == false)
-    {
-        $_POST['rol_profile'] = 0;
-    }
-    if(isset($_POST['rol_locked']) == false)
-    {
-        $_POST['rol_locked'] = 0;
-    }
+	// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
+	// falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+
+	$checkboxes = array('rol_assign_roles'
+					   ,'rol_approve_users'
+					   ,'rol_announcements'
+					   ,'rol_dates'
+					   ,'rol_photo'
+					   ,'rol_download'
+					   ,'rol_guestbook'
+					   ,'rol_guestbook_comments'
+					   ,'rol_edit_user'
+					   ,'rol_mail_logout'
+					   ,'rol_mail_login'
+					   ,'rol_weblinks'
+					   ,'rol_this_list_view'
+					   ,'rol_all_lists_view'
+					   ,'rol_profile'
+					   ,'rol_locked');
+	
+	foreach($checkboxes as $key => $value)
+	{
+		if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+		{
+			$_POST[$value] = 0;
+		}
+	}
+
     
     // Zeitraum von/bis auf Gueltigkeit pruefen
 
@@ -318,7 +282,6 @@ elseif($_GET["mode"] == 2)
     //Rollenabhaengigkeiten setzten
     if(array_key_exists("ChildRoles", $_POST))
     {
-
         $sentChildRoles = $_POST['ChildRoles'];
 
         $roleDep = new RoleDependency($g_db);

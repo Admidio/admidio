@@ -82,46 +82,51 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Rolle";
+if($req_rol_id > 0)
+{
+	$g_layout['title'] = "Rolle ändern";
+}
+else
+{
+	$g_layout['title'] = "Rolle anlegen";
+}
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         function hinzufuegen()
         {
-            var form      = document.getElementById('formRole');
-            var all_roles = document.getElementById('AllRoles');
+            var child_roles = document.getElementById('ChildRoles');
+            var all_roles   = document.getElementById('AllRoles');
             
-            NeuerEintrag = new Option(all_roles.options[document.formRole.AllRoles.selectedIndex].text, all_roles.options[all_roles.selectedIndex].value, false, true);
-            all_roles.options[document.formRole.AllRoles.selectedIndex] = null;
-            form.elements['ChildRoles[]'].options[form.elements['ChildRoles[]'].length] = NeuerEintrag;
+            NeuerEintrag = new Option(all_roles.options[all_roles.selectedIndex].text, all_roles.options[all_roles.selectedIndex].value, false, true);
+            all_roles.options[all_roles.selectedIndex] = null;
+            child_roles.options[child_roles.length] = NeuerEintrag;
         }
 
         function entfernen()
         {
-            var form      = document.getElementById('formRole');
-            var all_roles = document.getElementById('AllRoles');
+            var child_roles = document.getElementById('ChildRoles');
+            var all_roles   = document.getElementById('AllRoles');
             
-            NeuerEintrag = new Option(form.elements['ChildRoles[]'].options[form.elements['ChildRoles[]'].selectedIndex].text, form.elements['ChildRoles[]'].options[form.elements['ChildRoles[]'].selectedIndex].value, false, true);
-            form.elements['ChildRoles[]'].options[form.elements['ChildRoles[]'].selectedIndex] = null;
+            NeuerEintrag = new Option(child_roles.options[child_roles.selectedIndex].text, child_roles.options[child_roles.selectedIndex].value, false, true);
+            child_roles.options[child_roles.selectedIndex] = null;
             all_roles.options[all_roles.length] = NeuerEintrag;
         }
 
         function absenden()
         {
-            var form = document.getElementById('formRole');
+            var child_roles = document.getElementById('ChildRoles');
             
-            for (var i = 0; i < form.elements['ChildRoles[]'].options.length; i++)
+            for (var i = 0; i < child_roles.options.length; i++)
             {
-                form.elements['ChildRoles[]'].options[i].selected = true;
+                child_roles.options[i].selected = true;
             }
 
             form.submit();
         }
-    --></script>";
-
-$g_layout['header']	= "";
-$g_layout['header'] .= "
-<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
-<link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />";
+    --></script>
+    
+	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+	<link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -129,16 +134,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form id=\"formRole\" action=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=2\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_roles_form\">
-    <div class=\"formHead\">";
-        if($req_rol_id > 0)
-        {
-            echo "Rolle &auml;ndern";
-        }
-        else
-        {
-            echo "Rolle anlegen";
-        }
-    echo "</div>
+    <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">
             <li>
@@ -200,7 +196,7 @@ echo "
 
         <div class=\"groupBox\" id=\"properties_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"properties_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','$g_root_path')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','". THEME_PATH. "')\"><img 
                 id=\"img_properties_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Eigenschaften
             </div>
 
@@ -287,7 +283,7 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
         
         <div class=\"groupBox\" id=\"justifications_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','$g_root_path')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','". THEME_PATH. "')\"><img 
                 id=\"img_justifications_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Berechtigungen
             </div>
 
@@ -478,7 +474,7 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
 
         <div class=\"groupBox\" id=\"dates_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dates_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','$g_root_path')\"><img 
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','". THEME_PATH. "')\"><img 
                 id=\"img_dates_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
@@ -486,7 +482,7 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                 <ul class=\"formFieldList\">
                     <li>
                         <dl>
-                            <dt><label for=\"rol_start_date\">G&uuml;ltig von:</label></dt>
+                            <dt><label for=\"rol_start_date\">Gültig von:</label></dt>
                             <dd>
 								<script type=\"text/javascript\" id=\"js18\">
 									var cal18 = new CalendarPopup(\"calendardiv\");
@@ -550,7 +546,7 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
         
         <div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
             <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','$g_root_path')\"><img
+                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','". THEME_PATH. "')\"><img
                 id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
             </div>
 
@@ -583,7 +579,7 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
 
                         echo "<div>unabhängig</div>
                         <div>
-                            <select name=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
+                            <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
                                 while($row = $g_db->fetch_object($allRoles))
                                 {
                                     if(in_array($row->rol_id,$childRoles)  )
@@ -604,9 +600,9 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                         </div>
                     </div>
                     <div>
-                        <div>abh&auml;ngig</div>
+                        <div>abhängig</div>
                         <div>
-                            <select name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
+                            <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
                                 foreach ($childRoleObjects as $childRoleObject)
                                 {
                                     echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
@@ -668,11 +664,11 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
         && $role->getValue("rol_weekday") == 0
         && strlen($role->getValue("rol_location")) == 0)
         {
-            echo "showHideBlock('dates_body','$g_root_path');\n";
+            echo "showHideBlock('dates_body','". THEME_PATH. "');\n";
         }
         if(count($childRoles) == 0)
         {
-            echo "showHideBlock('dependancies_body','$g_root_path');\n";
+            echo "showHideBlock('dependancies_body','". THEME_PATH. "');\n";
         }
     }
 echo "\n--></script>";
