@@ -1,0 +1,111 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen der Druckvorschau anzupassen
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese CSS-Datei ist fuer das Layout des Listendrucks zustaendig. Hier 
+ * koennen Sie spezielle Anpassungen fuer einen besseren Druck vornehmen
+ *
+ *****************************************************************************/
+
+/* Layout fuer die Drucklisten
+   Dieses braucht in der Regel nicht angepasst werden.
+   Es ist für schwarz/weiß Drucker optimiert. */
+
+.bodyPrint {
+    color:            #000000;
+    font-family:      arial, sans-serif;
+    font-size:        10pt;
+    background-color: #ffffff;
+    text-align:       center;
+}
+
+.tableListPrint {
+    width:            270mm;
+    background-color: #ffffff;
+    border:           1px solid #cccccc;
+    padding:          0px;
+    border-spacing:   0px;
+    margin:           auto;
+}
+
+.tableListPrint th {
+    color:            #000000;
+    font-family:      arial, sans-serif;
+    font-size:        10pt;
+    background-color: #cccccc;
+}
+
+.tableSubHeaderPrint {
+    background-color: #eeeeee;
+    padding:          0px;
+}
+
+.tableSubHeaderFontPrint {
+    color:            #888888;
+    font-size:        12pt;  
+    font-weight:      bold;
+    font-style:       italic;
+    letter-spacing:   0.2em;
+}
+
+.tableListPrint td {
+    border-width:     0px;
+    border-style:     solid;
+}
+
+
+/* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
+   z.B. die Infobox in Listen */
+
+.groupBox {
+    color:            #000000;
+    background-color: #ffffff;
+    border:           1px solid #cccccc;
+    padding:          5px 10px 5px 10px;
+    text-align:       left;
+    margin-top:       12px;
+}
+
+/* Ueberschrift der rechteckigen Groupbox */
+
+.groupBoxHeadline {
+    color:            #000000;
+    font-weight:      bold;
+    padding-bottom:   5px;
+}
+
+/* Ordnet Felder mit ihren Beschreibungen in Formularen.
+   Diese werden in einer Liste untereinander und 
+   mit Beschreibung + Feld nebenandern angeordnet */
+
+.formFieldList {
+    margin:            0px;
+    padding:           0px;
+    list-style-type:   none;
+}
+
+.formFieldList li { 
+    display:           inline;
+    text-align:        center;
+}
+.formFieldList li dl {
+    margin:            8px 0px 8px 0px;
+    padding:           0px;
+}
+.formFieldList li dl dt {
+    width:             30%;
+    text-align:        left;
+    float:             left;
+    display:           block;
+}
+.formFieldList li dl dd {
+    margin-left:       31%;
+    text-align:        left;
+}
+
+#infoboxListsBox {
+    width:             400px; 
+}

@@ -30,23 +30,29 @@
 }
 
 body {
-    color:              #555555;
-    font-family:        arial, sans-serif;
-    background-color:   #ffffff;
-    text-align:         center;
+	color: #606465;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	margin: auto;
+	font-size: 11pt;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+	text-align: center;
+	background-color: #96c4cb; 
+	background-repeat: repeat-x;
+	background-attachment: fixed;
+	background-image: url(../images/background.png);
 }
 
 h1 {
-     color:             #85C226;
-     letter-spacing:    0.3em;
-     margin-bottom:     10px;
-     padding-top: 		20px;
-     text-align: 		center;
-     font-size: 		20pt;
+	padding-top: 		5px;
+	margin-top: 		0px;
+	margin-bottom: 		20px;
+	font-size: 			18pt;
+	color: #449ba6 				;
 }
 
 hr {
-    border:             1px solid #6CA7A8;
+    border:             1px solid #449ba6;
     width:              85%;
 }
 
@@ -82,15 +88,13 @@ button img {
 /* Links */
 
 a:link, a:visited {
-    color:              #E0791F;
-    font-weight:        bold;
-    text-decoration:    none;
+    color: #222222;
+	text-decoration: underline;
 }
 
 a:hover, a:active {
-    color:              #E0791F;
-    font-weight:        bold;
-    text-decoration:    underline;
+	text-decoration: underline;
+	color: #FF9C00;
 }
 
 /* Layout fuer die Boxen (Termine usw.)
@@ -99,22 +103,20 @@ a:hover, a:active {
    (z.B.: Ankuendigungen, Termine) */
 
 .boxLayout {
-    width:              550px;
-    border:             1px solid #555555;
+    width:              570px;
     overflow:           hidden;
-    margin:             auto;
-    margin-bottom:      25px;
+    margin-bottom:      30px;
 }
 
 .boxHead {
     color:              #333333;
     text-align:         left;
-    background-color:   #85C226;
     width:              100%;
     min-height:         20px;
     font-size:          12pt;
     font-weight:        bold;
     padding:            2px;
+    border-bottom:      2px solid #449ba6;
 }
 
 .boxHead img {
@@ -139,13 +141,11 @@ a:hover, a:active {
 }
 
 .boxBody {
-    color:              #555555;
     text-align:         left;
-    background-color:   #eaeaea;
     padding:            5px;
 }
 
-/*Layout fuer die Komentare innerhalb des boxBodys*/
+/* Layout fuer die Komentare innerhalb des boxBodys */
 .commentBoxHidden{
 	visibility:         hidden;
 	display:            none;
@@ -169,30 +169,26 @@ a:hover, a:active {
    
 .formLayout {
     width:              570px;
-    border:             1px solid #555555;
-    margin:             auto;
+    /*margin:             auto;*/
     margin-top:         30px;
 }
 
 .formHead {
     color:              #333333;
-    background-color:   #85C226;
-    font-size:          12pt;
+    font-size:          14pt;
     font-weight:        bold;
     letter-spacing:     0.2em;
-    border-bottom:      1px solid #555555;
-    padding:            3px 15px 0px 15px;
-    text-align:         center;
+    text-align:         left;
+    border-bottom:      2px solid #449ba6;
 }
 
 .formBody {
-    color:              #555555;
-    background-color:   #eaeaea;
-    padding:            10px 15px 10px 15px;
+    padding-top:        10px;
+    padding-bottom:     10px;
 }
 
 .formBody hr {
-    border:             1px solid #6CA7A8;
+    border:             1px solid #bad8e2;
     width:              100%;
     margin-top:         10px; 
     margin-bottom:      10px; 
@@ -229,7 +225,7 @@ a:hover, a:active {
 .formSubmit {
     padding-top:        5px;
     padding-bottom:     5px;
-    text-align: 	    center;
+    text-align: left 	;
 }
 
 
@@ -238,8 +234,8 @@ a:hover, a:active {
 
 .groupBox {
     color:              #555555;
-    background-color:   #cccccc;
-    border:       		1px solid #999999;
+    border:             2px solid #449ba6;
+    /*border-collapse:    collapse;*/
     padding:            5px 10px 5px 10px;
     text-align:         left;
     margin-top:         12px;
@@ -260,11 +256,12 @@ a:hover, a:active {
    (z.B.: Listen, Eigene Liste) */
 
 .tableList {
-    width:              550px;         /* Optimale Breite von Listen */
+    width:              570px;         /* Optimale Breite von Listen */
     font-size:          10pt;
-    background-color:   #eaeaea;
-    border:             1px solid #555555;
-    margin:             auto;
+    /*background-color:   #eaeaea;
+    border-bottom:      1px solid #555555;
+    border-left:        1px solid #555555;
+    border-right:       1px solid #555555;*/
 }
 
 .tableList th {
@@ -273,6 +270,8 @@ a:hover, a:active {
     background-color:   #85C226;
     text-align:         left;
     padding:            3px;
+	background-repeat: 	repeat-x;
+	background-image: 	url(../images/stripe.png);    
 }
 
 .tableList td {
@@ -298,27 +297,29 @@ a:hover, a:active {
 /* Farbe des Markierungsbalken in Listen */
 
 .listMouseOut {
-    background-color:   #eaeaea;
+    background-color:   transparent;
     color:              #555555;
 }
 
 .listMouseOver {
-    background-color:   #d5d5d5;
-    color:              #555555;
+    /*background-color:   #d5d5d5;
+    color:              #555555;*/
+	background-repeat: 	repeat-x;
+	background-image: 	url(../images/row_marker.png);     
 }
 
 /*Links in Verbindung mit einem Icon (mit Text)*/
 .iconTextLinkList {
     list-style-type:    none;
     padding:            0px;
-    margin-top:         10px;
-    margin-bottom:      10px;
-    text-align: 		center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: left 		;
 }
 
 .iconTextLinkList li{   
+    padding-right: 20px;   
     display:            inline;
-    padding:            10px;
     font-size:          10pt;
 }
 
@@ -365,10 +366,10 @@ a:hover, a:active {
 
 /* Elemente fuer Navigationsklasse */
 .pageNavigation {
-    text-align:         center;
+    text-align:         left;
     vertical-align:     middle;
     margin-top:         15px;
-    margin-bottom:      15px;
+    margin-bottom:      25px;
 }
 
 .pageNavigation img {
@@ -385,6 +386,7 @@ a:hover, a:active {
     font-size:          8pt;
     margin-top:         8px;
     text-align:         left;
+    color:				#555555;
 }
 
 .formBody .editInformation {
@@ -427,6 +429,11 @@ a:hover, a:active {
 
 #organization_form .formFieldList li dl dd {
     margin-left:        55%;
+}
+
+#search_members {
+	margin-top:			10px;
+	padding-bottom:		10px;	
 }
 
 /* spezielle Anpassung fuer die Profilseite */

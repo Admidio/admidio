@@ -1,0 +1,123 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen des Kalender-Popups anzupassen
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Hier koennen Sie das Aussehen des kleinen Kalender-Popups hinter Datumsfeldern
+ * anpassen und veraendern.
+ *
+ *****************************************************************************/
+
+#calendarcpYearNavigation,
+#calendarcpMonthNavigation
+{
+background-color:#85C226;
+text-align:center;
+vertical-align:center;
+text-decoration:none;
+color:#333333;
+border-bottom:0px;
+font-weight:bold;
+font-size:10pt;
+font-family:arial;
+cursor:pointer;
+}
+#calendarcpDayColumnHeader,
+#calendarcpCurrentMonthDate,
+#calendarcpCurrentMonthDateDisabled,
+#calendarcpOtherMonthDate,
+#calendarcpOtherMonthDateDisabled,
+#calendarcpCurrentDate,
+#calendarcpCurrentDateDisabled,
+#calendarcpTodayText,
+#calendarcpTodayTextDisabled,
+#calendarcpText
+{
+font-family:arial;
+font-size:10pt;
+padding-right:2px;
+cursor:pointer;
+}
+#calendarcpDayColumnHeader
+{
+border-bottom:1px solid black;
+padding:2px;
+font-weight:bold;
+padding-right:5px;
+cursor:default;
+}
+#calendarcpCurrentMonthDate,
+#calendarcpOtherMonthDate,
+#calendarcpCurrentDate
+{
+text-align:right;
+text-decoration:none;
+}
+#calendarcpCurrentMonthDateDisabled,
+#calendarcpOtherMonthDateDisabled,
+#calendarcpCurrentDateDisabled
+{
+color:#D0D0D0;
+text-align:right;
+text-decoration:line-through;
+}
+#calendarcpCurrentMonthDate
+{
+color:#6677DD;
+font-weight:bold;
+}
+#calendarcpCurrentDate
+{
+color: #E0791F;
+font-weight:bold;
+}
+#calendarcpOtherMonthDate
+{
+color:#808080;
+}
+#calendarcpCurrentDate
+{
+color:#FFFFFF;
+background-color: #6677DD;
+}
+#calendarcpCurrentDateDisabled
+{
+border:1px solid thin #FF;
+}
+#calendarcpTodayText ,
+#calendarcpTodayTextDisabled
+{
+height:20px;
+padding-top:10px;
+}
+#calendarcpTodayText 
+{
+color:#E0791F;
+font-weight:bold;
+}
+#calendarcpTodayTextDisabled 
+{
+color:#D0D0D0;
+}
+#calendarcpBorder
+{
+border-right:0px;
+background-color: #EAEAEA;
+border:1px solid black;
+left:0px;
+width:170px;
+}
+#daynames
+{
+margin-top:10px;
+border-bottom:0px;
+border-left:0px;
+border-top:0px;
+border-right:0px;
+}
+#navigationbar
+{
+border-bottom:1px solid black;
+}

@@ -7,7 +7,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
- 
+
 #plgLoginFormFieldList {
     margin:             0px;
     padding:            0px;
@@ -33,10 +33,11 @@
 }
 
 #plgLoginFormFieldList li dl dd {
-    margin-left:        100px;      /* 0px  : Label und Feld untereinander */
+    margin-left:        110px;      /* 0px  : Label und Feld untereinander */
     text-align:         left;
     font-weight:        bold;
 }
+
 
 /* Hack, da der IE mit diesem CSS nicht klar kommt */
 ul[id]#plgLoginFormFieldList li {

@@ -1,0 +1,182 @@
+
+
+#page_header {
+	text-align: left;
+	margin: 0 auto;
+	width: 955px;
+}
+
+h2 {
+	padding-top: 5px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+	font-size: 14pt;
+	color: #449ba6;
+}
+
+h3 {
+	padding-bottom: 3px;
+	font-size: 12pt;
+	padding-top: 20px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+	color: #459ba6;
+}
+
+h4 {
+	padding-bottom: 3px;
+	font-size: 11pt;
+	padding-top: 10px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #459ba6;
+}
+
+#orga_name {
+	top: 113px;
+	position: absolute;
+	margin-left: 372px;
+	padding: 0px;
+	font-size: 24pt;
+	color: #444444;
+}
+
+.menu {
+	display: block;
+	padding-bottom: 7px;
+}
+
+p {
+	padding-bottom: 10px;
+	padding-top: 10px;
+	margin: 0px;
+}
+
+img {
+	border: 0px;
+}
+
+
+#page {
+	text-align: left;
+	margin: 0px auto;
+	width: 925px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	display: block;
+}
+
+#left_block {
+	float: left;
+	margin-right: 20px;
+}
+
+#right_block div {
+	margin-left: 625px;
+}
+
+/* spezieller Hack, damit der Block im IE6 auch richtig neben den anderem positioniert sind */
+html.* #right_block div { 
+	margin-left: 622px;
+}
+
+/* damit unter den Rahmenbildern keine 2px Abstand sind */
+.img_border {
+	display: block;
+}
+
+#content, #content_left {
+	padding-left: 13px;
+	padding-right: 12px;
+}
+
+.content {
+	border-right-color: #7d7d7d;
+	border-left-color: #7d7d7d;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-left-style: solid;
+	border-left-width: 1px;
+	background-color: white;
+	background-position: 0 bottom;
+	background-repeat: repeat-x;
+	background-image: url(../images/background_in_borders.png);
+}
+
+#sidebar {
+	padding-left: 15px;
+	padding-right: 15px;	
+}
+
+#sidebar hr {
+	margin-top: 10px;
+	color: #d7d7d7;
+	border-width: 1px;
+	border-style: dashed;
+}
+
+/***************************************/
+/* Spezieller Teil fuer die Startseite */
+/***************************************/
+
+#home_left_block {
+	float: left;
+	margin-right: 20px;
+	width: 250px;
+}
+
+#home_block {
+	text-align: left;
+	margin: 0px;
+	width: 540px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	display: block;
+}
+
+#home_right_block div {
+	margin-left: 285px;
+	width: 220px;
+}
+
+#home_content_1 {
+	border: 1px solid #777777;
+	padding-left: 15px;
+	padding-right: 15px;	
+}
+
+#home_content_2 {
+	border: 1px solid #777777;
+	padding-left: 15px;
+	padding-right: 15px;	
+}
+
+#home_features {
+	border: 1px solid #777777;
+	width: 535px;
+}
+
+#home_features_content {
+	padding-left: 15px;
+	padding-right: 15px;	
+}
+
+#download {
+	margin-bottom: 15px;
+	margin-top: 15px;
+	width: 310px;
+	color: #266507;
+	border-style: solid;
+	padding: 15px;
+	border-color: #71ab24;
+	border-width: 2px;
+	background-color: #91d52d;
+	-moz-border-radius: 25px;
+}
+
+#download a {
+	padding-bottom: 5px;
+	color: #25650c;
+	font-size: 18pt;
+}
+

@@ -1,0 +1,177 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen des Fotomoduls weiter anzupassen
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Jochen Erkens
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese CSS-Datei dient dazu spezifische Anpassungen am Fotomodul zu machen.
+ * Hier sind auch die CSS-Eigenschaften fuer Lightbox zu finden.
+ *
+ *****************************************************************************/
+ 
+/*Die Thumbnails werden in einer Tabelle aufbebaut
+hier koenne Einstellungen fuer diese vorgenommen werden*/
+#photoThumbnailTable {
+    width: 550px;   
+}
+
+/*Einstellung fuer die Thumbnailtabellenzeile, z.B. die Hoehe*/
+.photoThumbnailTableRow{
+}
+
+/*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
+.photoThumbnailTableColumn{
+    text-align: center;
+}
+
+/*Einstellung fuer das Thumbnail selbst, z.B. laesst sich ein Rand um jedes Bild legen*/
+.photoThumbnail{
+    vertical-align: middle;
+    cursor: pointer;
+    border: none;
+}
+
+
+/*Auch die Fotoevents werden in einer Tabelle angezeigt*/
+#photoEventTable{
+    width: 550px;
+}
+
+/*Einstellung fuer die Fotoeventtabellenzeile, z.B. die Hoehe*/
+.photoEventTableRow{
+}
+
+/*Einstellung fuer die FotoeventtabellenBILDERspalte*/
+.photoEventTablePicColumn{
+    padding: 4px;
+    text-align: right;
+    width: 35%;
+}
+
+/*Einstellung fuer die FotoeventtabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
+.photoEventTableTextColumn{
+    text-align: left;
+    font-size: 8px;
+}
+
+/*Wenn in dieser Spalte Ein Link vorkommt wir dieser So dargestellt*/
+.photoEventTableTextColumn a{
+    font-size: 12px;
+}
+
+/*Auch das Vorschaubild koenne z.B. einen Rand erhalten*/
+.photoPreviewPic{
+    border: none;
+    vertical-align: middle;
+}
+
+/*Umramender Container um Thumbnail- und Fotoeventtabelle, sowie Uploadbericht*/
+.photoModuleContainer{
+    border-width: 0px;
+    border-color: #6CA7A8;
+    border-style: solid;
+    width: 550px;
+    margin: auto;
+    text-align: center;
+}
+
+/*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/
+.photoOutput{
+    text-align: center;
+    border: none;
+}
+
+/*Informationen ueber den Thumbnails, derzeit nur Datum*/
+#photoEventInformation{
+    margin: 5px
+}
+
+.photoModuleContainer .editInformation {
+    text-align: center;
+}
+
+/*****************************************/
+/* CSS der Lightbox                      */
+/*****************************************/
+
+#lightbox{
+	position: absolute;
+	left: 0;
+	width: 100%;
+	z-index: 100;
+	text-align: center;
+	line-height: 0;
+	}
+
+#lightbox a img{ border: none; }
+
+#outerImageContainer{
+	position: relative;
+	background-color: #fff;
+	width: 250px;
+	height: 250px;
+	margin: 0 auto;
+	}
+
+#imageContainer{
+	padding: 10px;
+	}
+
+#loading{
+	position: absolute;
+	top: 40%;
+	left: 0%;
+	height: 25%;
+	width: 100%;
+	text-align: center;
+	line-height: 0;
+	}
+#hoverNav{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+	}
+#imageContainer>#hoverNav{ left: 0;}
+#hoverNav a{ outline: none;}
+
+#prevLink, #nextLink{
+	width: 49%;
+	height: 100%;
+	background: transparent url(icons/blank.gif) no-repeat; /* Trick IE into showing hover */
+	display: block;
+	}
+#prevLink { left: 0; float: left;}
+#nextLink { right: 0; float: right;}
+#prevLink:hover, #prevLink:visited:hover { background: url(images/prevlabel.gif) left 15% no-repeat; }
+#nextLink:hover, #nextLink:visited:hover { background: url(images/nextlabel.gif) right 15% no-repeat; }
+
+
+#imageDataContainer{
+	font: 10px Verdana, Helvetica, sans-serif;
+	background-color: #fff;
+	margin: 0 auto;
+	line-height: 1.4em;
+	overflow: auto;
+	width: 100%	
+	}
+
+#imageData{	padding:0 10px; color: #666; }
+#imageData #imageDetails{ width: 70%; float: left; text-align: left; }	
+#imageData #caption{ font-weight: bold;	}
+#imageData #numberDisplay{ display: block; clear: left; padding-bottom: 1.0em;	}			
+#imageData #bottomNavClose{ width: 113px; float: right;  padding-bottom: 0.7em;	}	
+		
+#overlay{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	width: 100%;
+	height: 500px;
+	background-color: #000;
+	}
