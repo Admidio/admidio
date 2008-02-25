@@ -1151,7 +1151,7 @@ else
 			}
 		}
 	}
-	echo '</tr></table><br /><br/>';
+	echo '</tr></table><br /><br/></div>';
 }  
 echo "</div></div></div>";
 /************************Buttons********************************/
