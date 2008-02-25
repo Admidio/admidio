@@ -1463,10 +1463,10 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"profile_show_roles_view\">Rollenmitgliedschaften anzeigen:</label></dt>
+                            <dt><label for=\"profile_show_roles\">Rollenmitgliedschaften anzeigen:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_roles_view\" name=\"enable_roles_view\" ";
-                                if(isset($form_values['enable_roles_view']) && $form_values['enable_roles_view'] == 1)
+                                <input type=\"checkbox\" id=\"profile_show_roles\" name=\"profile_show_roles\" ";
+                                if(isset($form_values['profile_show_roles']) && $form_values['profile_show_roles'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
@@ -1480,10 +1480,10 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_former_roles_view\">Ehemalige Rollenmitgliedschaften anzeigen:</label></dt>
+                            <dt><label for=\"profile_show_former_roles\">Ehemalige Rollenmitgliedschaften anzeigen:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_former_roles_view\" name=\"enable_former_roles_view\" ";
-                                if(isset($form_values['enable_former_roles_view']) && $form_values['enable_former_roles_view'] == 1)
+                                <input type=\"checkbox\" id=\"profile_show_former_roles\" name=\"profile_show_former_roles\" ";
+                                if(isset($form_values['profile_show_former_roles']) && $form_values['profile_show_former_roles'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
@@ -1502,10 +1502,10 @@ echo "
                         echo "
                         <li>
                             <dl>
-                                <dt><label for=\"enable_extern_roles_view\">Rollen anderer Organisationen anzeigen:</label></dt>
+                                <dt><label for=\"profile_show_extern_roles\">Rollen anderer Organisationen anzeigen:</label></dt>
                                 <dd>
-                                    <input type=\"checkbox\" id=\"enable_extern_roles_view\" name=\"enable_extern_roles_view\" ";
-                                    if(isset($form_values['enable_extern_roles_view']) && $form_values['enable_extern_roles_view'] == 1)
+                                    <input type=\"checkbox\" id=\"profile_show_extern_roles\" name=\"profile_show_extern_roles\" ";
+                                    if(isset($form_values['profile_show_extern_roles']) && $form_values['profile_show_extern_roles'] == 1)
                                     {
                                         echo " checked=\"checked\" ";
                                     }
