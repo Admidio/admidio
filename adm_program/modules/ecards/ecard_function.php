@@ -30,7 +30,7 @@ function getPropotionalSize($src_w, $src_h, $max_w, $max_h)
 		}
 		else 
 		{
-			$return_val['width']  = ($max_h*$src_w)/$src_h;
+			$return_val['width']  = round(($max_h*$src_w)/$src_h);
 		}
 	}
 	return $return_val;
