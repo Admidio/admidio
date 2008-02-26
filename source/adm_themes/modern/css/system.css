@@ -26,7 +26,7 @@
     font-weight:        bold;
 }
 .smallFontSize {
-    font-size:          8pt;
+    font-size:          9pt;
 }
 
 body {
@@ -312,15 +312,15 @@ a:hover, a:active {
 .iconTextLinkList {
     list-style-type:    none;
     padding:            0px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    text-align: left 		;
+    margin-top: 		25px;
+    margin-bottom: 		25px;
+    text-align: 		left;
 }
 
 .iconTextLinkList li{   
-    padding-right: 20px;   
+    padding-right: 		20px;   
     display:            inline;
-    font-size:          10pt;
+    font-size:          11pt;
 }
 
 .iconTextLink {
@@ -402,7 +402,7 @@ a:hover, a:active {
 
 /*Einstellungen fuer eine Pfadnavigation, z.B. durch die Versanstaltungsherarchie im Fotomodul*/
 .navigationPath{
-    text-align:         center;
+    text-align:         left;
     margin:             5px;
 }
 
