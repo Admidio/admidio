@@ -305,7 +305,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/members/members.php\">Benutzerverwaltung</a></span><br />
-                                <span class=\"smallFontSize\">Mitglieder (Benutzer) k&ouml;nnen entfernt und neue Mitglieder (Benutzer) k&ouml;nnen in der Datenbank anlegt werden.</span>
+                                <span class=\"smallFontSize\">Mitglieder (Benutzer) können entfernt und neue Mitglieder (Benutzer) können in der Datenbank anlegt werden.</span>
                             </dd>
                         </dl>
                     </li>";
@@ -322,7 +322,8 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
-                                <span class=\"smallFontSize\">Rollen (Gruppen / Kurse / Abteilungen) k&ouml;nnen hier erstellt oder bearbeitet werden.</span>
+                                <span class=\"smallFontSize\">Rollen (Gruppen / Kurse / Abteilungen) können hier erstellt oder bearbeitet, sowie deren
+                                 	Rechtebereich definiert werden.</span>
                             </dd>
                         </dl>
                     </li>";

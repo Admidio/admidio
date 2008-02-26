@@ -22,29 +22,57 @@
 			
 			<br />
 			<h3>Module</h3>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/announcements/announcements.php">Ankündigungen</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/download/download.php">Downloads</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/mail/mail.php">E-Mail</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/photos/photos.php">Fotos</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/guestbook/guestbook.php">Gästebuch</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/lists.php">Listen</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/mylist.php">Eigene Liste</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/profile/profile.php">Profil</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/dates/dates.php">Termine</a></span>
-            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/links/links.php">Weblinks</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/announcements/announcements.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/note.png" alt="Ankündigungen" title="Ankündigungen" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/announcements/announcements.php">Ankündigungen</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/download/download.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/folder_down.png" alt="Downloads" title="Downloads" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/download/download.php">Downloads</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/mail/mail.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/email.png" alt="E-Mail" title="E-Mail" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/mail/mail.php">E-Mail</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/photos/photos.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/photo.png" alt="Fotos" title="Fotos" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/photos/photos.php">Fotos</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/guestbook/guestbook.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/comment.png" alt="Gästebuch" title="Gästebuch" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/guestbook/guestbook.php">Gästebuch</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/lists.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/pages_white_text.png" alt="Listen" title="Listen" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/lists.php">Listen</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/mylist.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/pages_white_text.png" alt="Eigene Listen" title="Eigene Listen" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/mylist.php">Eigene Listen</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/profile/profile.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/user.png" alt="Mein Profil" title="Mein Profil" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/profile/profile.php">Mein Profil</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/dates/dates.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/date.png" alt="Termine" title="Termine" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/dates/dates.php">Termine</a></span>
+            <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/links/links.php"><img 
+            	style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/globe.png" alt="Weblinks" title="Weblinks" /></a>
+            	<a href="<?php echo $g_root_path; ?>/adm_program/modules/links/links.php">Weblinks</a></span>
             
 			<?php            
             if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUser())
             {
             	echo '<h3>Administration</h3>';
             	if($g_current_user->editUser())
-					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php">Neue Anmeldungen</a></span>';
+					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php"><img 
+            		style="vertical-align: middle;" src="'. THEME_PATH. '/icons/properties.png" alt="Neue Anmeldungen" title="Neue Anmeldungen" /></a>
+            		<a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php">Neue Anmeldungen</a></span>';
 				if($g_current_user->approveUsers())
-					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/members/members.php">Benutzerverwaltung</a></span>';
+					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php"><img 
+            		style="vertical-align: middle;" src="'. THEME_PATH. '/icons/group.png" alt="Benutzerverwaltung" title="Benutzerverwaltung" /></a>
+            		<a href="'. $g_root_path. '/adm_program/administration/members/members.php">Benutzerverwaltung</a></span>';
 				if($g_current_user->assignRoles())
-					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/roles/roles.php">Rollenverwaltung</a></span>';
+					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php"><img 
+            		style="vertical-align: middle;" src="'. THEME_PATH. '/icons/wand.png" alt="Rollenverwaltung" title="Rollenverwaltung" /></a>
+            		<a href="'. $g_root_path. '/adm_program/administration/roles/roles.php">Rollenverwaltung</a></span>';
 				if($g_current_user->isWebmaster())
-					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/organization/organization.php">Organisationseinstellungen</a></span>';
+					echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php"><img 
+            		style="vertical-align: middle;" src="'. THEME_PATH. '/icons/options.png" alt="Organisationseinstellungen" title="Organisationseinstellungen" /></a>
+            		<a href="'. $g_root_path. '/adm_program/administration/organization/organization.php">Organisationseinstellungen</a></span>';
             }
             ?>
 		</div>
