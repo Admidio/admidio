@@ -38,6 +38,10 @@
     font-weight:        bold;
 }
 
+#plgRowLoginButton {
+	padding-bottom:			10px;
+}
+
 
 /* Hack, da der IE mit diesem CSS nicht klar kommt */
 ul[id]#plgLoginFormFieldList li {

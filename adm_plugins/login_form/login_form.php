@@ -48,6 +48,11 @@ if(isset($plg_show_logout_link) == false || is_numeric($plg_show_logout_link) ==
     $plg_show_logout_link = 1;
 }
 
+if(isset($plg_show_icons) == false || is_numeric($plg_show_icons) == false)
+{
+    $plg_show_icons = 1;
+}
+
 if(isset($plg_link_target) && $plg_link_target != "_self")
 {
     $plg_link_target = ' target="'. strip_tags($plg_link_target). '" ';
@@ -190,10 +195,10 @@ else
                         <dd><input type="checkbox" id="plg_auto_login" name="auto_login" value="1" /></dd>
                     </dl>
                 </li>';
-            }            
+            } 
             
             echo '
-            <li>
+            <li id="plgRowLoginButton">
                 <dl>
                     <dt>
                         <button type="submit" value="Login">Login</button>
@@ -210,7 +215,7 @@ else
                         if($plg_show_register_link && $g_preferences['registration_mode'])
                         {
                             echo '<dt><a href="'. $g_root_path. '/adm_program/system/registration.php" 
-                                 '. $plg_link_target. '>Registrieren</a></dt>
+                                	'. $plg_link_target. '>Registrieren</a></dt>
                                  <dd>&nbsp;</dd>';
                         }
                         if($plg_show_register_link && $plg_show_email_link)
@@ -236,6 +241,7 @@ else
 							{
 								$mail_link = "$g_root_path/adm_program/system/lost_password.php";
 							}
+							
                             echo '<dt><a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a></dt>
                             <dd>&nbsp;</dd>';
                         }

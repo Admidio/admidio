@@ -98,19 +98,18 @@ else
 				<ul class="formFieldList">
 					<li>
 						<div>
-							Wenn Sie Ihr Passwort vergessen haben, kann das System ein neues erstellen und an Ihre E-Mail Adresse senden. Geben Sie einfach Ihre E-Mail Adresse in das untenstehende Formular ein und klicken Sie auf die Schaltfläche "Neues Passwort zusenden".
+							Wenn Sie Ihr Passwort vergessen haben, kann das System ein Neues erstellen und an Ihre E-Mail Adresse senden. 
+							Geben Sie dazu Ihre E-Mail-Adresse in das untenstehende Formular ein und klicken Sie auf die Schaltfläche "Neues Passwort zusenden".
 						</div>
 					</li>
-					<li>
-						<hr />
-					</li>
+					<li>&nbsp;</li>
 					<li>
 						<dl>
 							<dt>
 								<label>E-Mail:</label>
 							</dt>
 							<dd>
-								<input type="text" name="empfaenger_email" style="margin-bottom:3px; width: 200px;" maxlength="50" />
+								<input type="text" name="empfaenger_email" style="width: 300px;" maxlength="50" />
 							</dd>
 						</dl>
 					</li>';
@@ -119,6 +118,7 @@ else
                 if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
                 {
                     echo "
+                    <li>&nbsp;</li>
                     <li>
                         <dl>
                             <dt>&nbsp;</dt>
@@ -138,7 +138,7 @@ else
                         </dl>
                     </li>";
                 }
-				echo'									
+				echo'<hr />									
 				<button name="abschicken" type="submit" value="abschicken"><img src="'. THEME_PATH.'/icons/email.png" alt="Abschicken" />&nbsp;Neues Passwort zusenden</button>
 				</ul>
 			</form>
