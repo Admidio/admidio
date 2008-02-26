@@ -204,6 +204,13 @@ class File extends TableAccess
         return $completeFolder;
     }
 
+    // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz und all seinen Unterordnern
+	function editPublicFlagOnFolder($public_flag)
+    {
+		//TODO: Hier muss noch ein "bisschen" Code rein, der das attribut fol_public entsprechend der Uebergabe auf allen Unterordnern setzt
+    }
+
+
     // die Methode wird innerhalb von delete() aufgerufen und entsorgt die Referenzen des Datensatzes...
     function _delete()
     {
