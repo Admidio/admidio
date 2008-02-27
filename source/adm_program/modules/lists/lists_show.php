@@ -321,19 +321,25 @@ if($req_mode != "csv")
     }
     else
     {
-        $g_layout['title']  = "Liste - ". $role->getValue("rol_name");
-        $g_layout['header'] = "
-            <script type=\"text/javascript\"><!--
+        $g_layout['title']    = "Liste - ". $role->getValue("rol_name");
+        $g_layout['includes'] = false;
+        $g_layout['header']   = '
+        	<style type="text/css">
+        		body {
+        			margin: 20px;
+        		}
+        	</style>
+            <script type="text/javascript"><!--
                 function exportList(element)
                 {
                     var sel_list = element.value;
 
                     if(sel_list.length > 1)
                     {
-                        self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=$req_type&rol_id=$req_rol_id&mode=' + sel_list;
+                        self.location.href = \''. $g_root_path. '/adm_program/modules/lists/lists_show.php?type='. $req_type. '&rol_id='. $req_rol_id. '&mode=\' + sel_list;
                     }
                 }
-            //--></script>";
+            //--></script>';
         require(THEME_SERVER_PATH. "/overall_header.php");
     }
     
