@@ -79,7 +79,32 @@ class File extends TableAccess
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
         $this->readData($file_id, $condition, $tables);
 
-        //TODO: Pruefen ob der aktuelle Benutzer Rechte an der Datei hat, die Datei oder der Ordner gelocked ist usw...
+        //Pruefen ob der aktuelle Benutzer Rechte an der Datei hat
+        //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
+        if ($this->getValue('fil_id'))
+        {
+	        if (!$this->getValue("fol_public"))
+	        {
+	        	//Wenn der Ordner nicht public ist, muessen die Rechte untersucht werden
+	        	$sql_rights = "SELECT count(*)
+                         FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
+                        WHERE flr_fol_id		= ". $this->getValue("fol_id"). "
+                          AND flr_rol_id 		= mem_rol_id
+                          AND mem_usr_id 		= ". $g_current_user->getValue("usr_id"). "
+                          AND mem_valid 		= 1";
+        		$result_rights = $this->db->query($sql_rights);
+        		$row_rights = $g_db->fetch_array($result_rights);
+        		$row_count  = $row_rights[0];
+
+        		//Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
+        		//wird auch kein Ordner geliefert.
+        		if ($row_count == 0)
+        		{
+        			$this->clear();
+        		}
+
+	        }
+        }
 
     }
 
