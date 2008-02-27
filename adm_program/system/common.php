@@ -55,7 +55,7 @@ require_once(SERVER_PATH. "/adm_program/system/navigation_class.php");
 require_once(SERVER_PATH. "/adm_program/system/user_class.php");
 require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
 require_once(SERVER_PATH. "/adm_program/system/session_class.php");
-require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
+require_once(SERVER_PATH. "/adm_program/system/forum/forum.php");
 
 // Variablen von HMTL & PHP-Code befreien
 $_REQUEST = array_map("strStripTags", $_REQUEST);
@@ -77,6 +77,13 @@ $g_valid_login = false;
 $g_layout      = array();
 $g_message     = new Message();
 
+ // Verbindung zu Datenbank herstellen
+$g_db = new MySqlDB();
+$g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+
+// Script fuer das Forum ermitteln und includen, bevor die Session erstellt wird
+includeForumScript($g_db);
+
 // PHP-Session starten
 if(headers_sent() == false)
 {
@@ -93,10 +100,6 @@ else
 {
     $g_session_id = session_id();
 }
-
- // Verbindung zu Datenbank herstellen
-$g_db = new MySqlDB();
-$g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
@@ -297,14 +300,10 @@ if($g_preferences['enable_forum_interface'])
     }
     else
     {
-        $g_forum = new Forum();
+        $g_forum = createForumObject($g_preferences['forum_version']);
         $g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db);
+        $g_forum->preferences(session_id(), $g_preferences['forum_praefix'], $g_preferences['forum_export']);
         $_SESSION['g_forum'] =& $g_forum;
-        $g_forum->praefix     = $g_preferences['forum_praefix'];
-        $g_forum->export      = $g_preferences['forum_export'];
-        $g_forum->version     = $g_preferences['forum_version'];
-        $g_forum->session_id  = session_id();
-        $g_forum->preferences();
     }
     
     // Forum Session auf Gueltigkeit pruefen

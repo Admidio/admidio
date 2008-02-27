@@ -63,8 +63,9 @@ else if ($_POST['enable_forum_interface'] == 1)
 	{
 		$_POST['forum_pw'] = $g_preferences['forum_pw'];
 	}
-
-	$forum_test = new Forum();
+	
+	$forum_test = createForumObject($_POST['forum_version']);
+	
 	if($_POST['forum_sqldata_from_admidio'] == 0)
 	{
 		$connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
