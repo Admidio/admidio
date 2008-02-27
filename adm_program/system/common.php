@@ -132,10 +132,7 @@ else
 // Pfad zum gewaehlten Theme zusammensetzen
 define('THEME_SERVER_PATH', SERVER_PATH. "/adm_themes/". $g_preferences['theme']);
 define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
-if ($g_preferences['enable_forum_interface'])
-{
-require_once(SERVER_PATH. "/adm_program/system/forum_class_phpbb.php");
-}
+
 // pruefen, ob Datenbank-Version zu den Scripten passt
 if(isset($g_preferences['db_version']) == false
 || version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) != 0)
