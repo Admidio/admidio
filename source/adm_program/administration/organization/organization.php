@@ -784,12 +784,12 @@ echo "
                             <dt><label for=\"forum_version\">Genutztes Forum:</label></dt>
                             <dd>
                                 <select size=\"1\" id=\"forum_version\" name=\"forum_version\">
-                                    <option value=\"phpbb2\" ";
-                                    if($form_values['forum_version'] == "phpbb2")
+                                    <option value=\"phpBB2\" ";
+                                    if($form_values['forum_version'] == "phpBB2")
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">phpbb2</option>
+                                    echo ">phpBB2</option>
                                 </select>
                             </dd>
                         </dl>
