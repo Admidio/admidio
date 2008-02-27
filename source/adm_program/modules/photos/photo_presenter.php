@@ -106,8 +106,8 @@ echo "
 			{
 				echo"<li>
 					<span class=\"iconTextLink\">
-						<a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">Nächstes Bild</a>
-						<a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
+						<a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
+						<a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&aumlchstes Bild\" /></a>
 					</span>
 				</li>";
 			}
@@ -171,8 +171,8 @@ echo "
 			echo"<ul class=\"iconTextLinkList\">
 				<li>
 					<span class=\"iconTextLink\">
-						<a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"zur Übersicht\" /></a>
-						<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur Übersicht</a>
+						<a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"zur &Uuml;bersicht\" /></a>
+						<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
 					</span>
 				</li>
 			</ul>";
