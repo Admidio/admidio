@@ -63,6 +63,7 @@ echo '
     }
     echo '</title>    
     
+    <link rel="shortcut icon" type="image/ico" href="'. THEME_PATH. '/icons/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
