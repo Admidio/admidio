@@ -84,7 +84,7 @@
 
 <p>
 	<a href="http://www.admidio.org"><img 
-	src="<?php echo THEME_PATH ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;" src="images/admidio_small.png"
+	src="<?php echo THEME_PATH ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
 	 alt="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen"
 	 title="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen" /></a>
 	<span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - <? echo date('Y', time()); ?>&nbsp;&nbsp;Admidio Team</span>
