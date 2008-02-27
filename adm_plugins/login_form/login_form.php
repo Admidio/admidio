@@ -154,9 +154,10 @@ else
     <script type="text/javascript"><!--
         function loadPageLogin()
         {
-            var loginname = document.getElementById(\'plg_usr_login_name\').value;
-            var password  = document.getElementById(\'plg_usr_password\').value;
-            var link      = \''. $g_root_path. '/adm_program/system/login_check.php?usr_login_name=\' + loginname + \'&usr_password=\' + password;';
+            var loginname  = document.getElementById(\'plg_usr_login_name\').value;
+            var password   = document.getElementById(\'plg_usr_password\').value;
+            var auto_login = document.getElementById(\'plg_auto_login\').value;
+            var link       = \''. $g_root_path. '/adm_program/system/login_check.php?usr_login_name=\' + loginname + \'&usr_password=\' + password + \'&auto_login=\' + auto_login;';
 
             if(strlen($plg_link_target) > 0 && strpos($plg_link_target, "_") === false)
             {
