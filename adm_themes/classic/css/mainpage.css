@@ -7,6 +7,10 @@
  *
  *****************************************************************************/
 
+#modules_list_form dl {
+	margin-bottom: 10px;
+}
+
 #modules_list_form dt {
 	font-size:	20pt;
 	width:		45px;
