@@ -87,7 +87,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\"><img 
-                            src=\"". THEME_PATH. "/icons/note_big.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
+                            src=\"". THEME_PATH. "/icons/announcements_big.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\">Ankündigungen</a></span><br />
@@ -121,7 +121,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/mail/mail.php\"><img 
-                            src=\"". THEME_PATH. "/icons/mail_open_big.png\" alt=\"E-Mail\" title=\"E-Mail\" /></a>
+                            src=\"". THEME_PATH. "/icons/email_big.png\" alt=\"E-Mail\" title=\"E-Mail\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/mail/mail.php\">E-Mail</a></span><br />
@@ -187,10 +187,10 @@ echo "</ul>
                 <dl>
                     <dt>
                         <a href=\"$g_root_path/adm_program/modules/profile/profile.php\"><img 
-                        src=\"". THEME_PATH. "/icons/person_big.png\" alt=\"Profil\" title=\"Profil\" /></a>
+                        src=\"". THEME_PATH. "/icons/profile_big.png\" alt=\"Mein Profil\" title=\"Mein Profil\" /></a>
                     </dt>
                     <dd>
-                        <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Profil</a></span>";
+                        <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/profile/profile.php\">Mein Profil</a></span>";
                         if($g_valid_login)
                         {
                             echo "&nbsp;&nbsp;
@@ -209,7 +209,7 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/dates/dates.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/dates/dates_big.php\"><img 
                             src=\"". THEME_PATH. "/icons/history_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
                         </dt>
                         <dd>
@@ -229,7 +229,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/links/links.php\"><img 
-                            src=\"". THEME_PATH. "/icons/globe_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
+                            src=\"". THEME_PATH. "/icons/weblinks_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
@@ -284,7 +284,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\"><img 
-                                src=\"". THEME_PATH. "/icons/ok_big.png\" alt=\"Web-Anmeldungen\" title=\"Web-Anmeldungen\" /></a>
+                                src=\"". THEME_PATH. "/icons/new_registrations_big.png\" alt=\"Web-Anmeldungen\" title=\"Web-Anmeldungen\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\">Neue Web-Anmeldungen verwalten</a></span><br />
@@ -301,7 +301,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/members/members.php\"><img 
-                                src=\"". THEME_PATH. "/icons/person_admin_big.png\" alt=\"Benutzerverwaltung\" title=\"Benutzerverwaltung\" /></a>
+                                src=\"". THEME_PATH. "/icons/user_administration_big.png\" alt=\"Benutzerverwaltung\" title=\"Benutzerverwaltung\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/members/members.php\">Benutzerverwaltung</a></span><br />
@@ -318,7 +318,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/roles/roles.php\"><img 
-                                src=\"". THEME_PATH. "/icons/wand_big.png\" alt=\"Rollenverwaltung\" title=\"Rollenverwaltung\" /></a>
+                                src=\"". THEME_PATH. "/icons/roles_administration_big.png\" alt=\"Rollenverwaltung\" title=\"Rollenverwaltung\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
