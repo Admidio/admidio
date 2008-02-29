@@ -13,7 +13,7 @@
  *
  *****************************************************************************/
 
-require("../../system/photo_event_class.php");
+require("../../system/photo_album_class.php");
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("photo_function.php");
@@ -43,26 +43,26 @@ if (empty($_POST))
     $g_message->show("empty_photo_post", ini_get(post_max_size));
 }
 
-// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $_GET["pho_id"])
+// Fotoalbums-Objekt erzeugen oder aus Session lesen
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $_GET["pho_id"])
 {
-    $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db =& $g_db;
+    $photo_album =& $_SESSION['photo_album'];
+    $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_event = new PhotoEvent($g_db, $_GET["pho_id"]);
-    $_SESSION['photo_event'] =& $photo_event;
+    $photo_album = new PhotoAlbum($g_db, $_GET["pho_id"]);
+    $_SESSION['photo_album'] =& $photo_album;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($photo_event->getValue('pho_org_shortname') != $g_organization)
+if($photo_album->getValue('pho_org_shortname') != $g_organization)
 {
     $g_message->show("invalid");
 }
 
 //Ordnerpfad
-$ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+$ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
 
 //Kontrollmechanismen bei Upload
 if($_POST["upload"])
@@ -121,11 +121,11 @@ if($_POST["upload"])
     echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>
     <div class=\"photoModuleContainer\">
         Bitte einen Moment Geduld. 
-        Die Bilder wurden dem Album <br /> - ".$photo_event->getValue("pho_name")." - <br />
+        Die Bilder wurden dem Album <br /> - ".$photo_album->getValue("pho_name")." - <br />
         erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br />";
 
         //Verarbeitungsschleife fuer die einzelnen Bilder
-        $bildnr=$photo_event->getValue("pho_quantity");
+        $bildnr=$photo_album->getValue("pho_quantity");
         for($x=0; $x<=4; $x=$x+1)
         {
             $y=$x+1;
@@ -166,12 +166,12 @@ if($_POST["upload"])
                 //Kontrolle
                 if(file_exists($ordner."/".$bildnr.".jpg"))
                 {
-                    echo"<img src=\"photo_show.php?scal=300&amp;pic_nr=".$bildnr."&amp;pho_id=".$photo_event->getValue("pho_id")."&amp;pho_begin=".$photo_event->getValue("pho_begin")."\"
+                    echo"<img src=\"photo_show.php?scal=300&amp;pic_nr=".$bildnr."&amp;pho_id=".$photo_album->getValue("pho_id")."&amp;pho_begin=".$photo_album->getValue("pho_begin")."\"
                             class=\"photoOutput\" /><br /><br />";
 
                     //Aendern der Datenbankeintaege
-                    $photo_event->setValue("pho_quantity", $photo_event->getValue("pho_quantity")+1);
-                    $photo_event->save();
+                    $photo_album->setValue("pho_quantity", $photo_album->getValue("pho_quantity")+1);
+                    $photo_album->save();
                 }
                 else
                 {

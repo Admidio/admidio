@@ -20,7 +20,7 @@
  *****************************************************************************/
 
 require_once("../../system/common.php");
-require_once("../../system/photo_event_class.php");
+require_once("../../system/photo_album_class.php");
 
 // die Funktionen sollten auch ausgeloggt irgendwo benutzt werden koennen
 if(isset($_GET["job"]))
@@ -147,13 +147,13 @@ function right_rotate ($pho_id, $bild)
     header("Content-Type: image/jpeg");
 
     //Aufruf des ggf. uebergebenen Albums
-    $photo_event = new PhotoEvent($g_db, $pho_id);
+    $photo_album = new PhotoAlbum($g_db, $pho_id);
 
     //Thumbnail loeschen
-    thumbnail_delete($pho_id, $bild, $photo_event->getValue("pho_begin"));
+    thumbnail_delete($pho_id, $bild, $photo_album->getValue("pho_begin"));
     
     //Ordnerpfad zusammensetzen
-    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
   
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -198,13 +198,13 @@ function left_rotate ($pho_id, $bild)
     header("Content-Type: image/jpeg");
 
     //Aufruf des ggf. uebergebenen Albums
-    $photo_event = new PhotoEvent($g_db, $pho_id);
+    $photo_album = new PhotoAlbum($g_db, $pho_id);
     
     //Thumbnail loeschen
-    thumbnail_delete($pho_id, $bild, $photo_event->getValue("pho_begin"));
+    thumbnail_delete($pho_id, $bild, $photo_album->getValue("pho_begin"));
 
     //Ordnerpfad zusammensetzen
-    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
 
     //Ermittlung der Original Bildgroessee
     $bildgroesse = getimagesize("$ordner/$bild.jpg");
@@ -248,13 +248,13 @@ function delete ($pho_id, $bild)
     global $g_organization;
 
     // einlesen des Albums
-    $photo_event = new PhotoEvent($g_db, $pho_id);
+    $photo_album = new PhotoAlbum($g_db, $pho_id);
     
     //Speicherort
-    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
 
     //Bericht mit loeschen
-    $neuebilderzahl = $photo_event->getValue("pho_quantity")-1;
+    $neuebilderzahl = $photo_album->getValue("pho_quantity")-1;
     
     //Bilder loeschen
     if(file_exists("$ordner/$bild.jpg"))
@@ -265,7 +265,7 @@ function delete ($pho_id, $bild)
 
     //Umbennenen der Restbilder und Thumbnails loeschen
     $neuenr=1;
-    for($x=1; $x<=$photo_event->getValue("pho_quantity"); $x++)
+    for($x=1; $x<=$photo_album->getValue("pho_quantity"); $x++)
     {
         if(file_exists("$ordner/$x.jpg"))
         {
@@ -277,12 +277,12 @@ function delete ($pho_id, $bild)
         }//if
         
         //Thumbnails loeschen
-         thumbnail_delete($pho_id, $neuenr-1, $photo_event->getValue("pho_begin"));
+         thumbnail_delete($pho_id, $neuenr-1, $photo_album->getValue("pho_begin"));
    }//for
 
    // Aendern der Datenbankeintaege
-   $photo_event->setValue("pho_quantity", $neuebilderzahl);
-   $photo_event->save();
+   $photo_album->setValue("pho_quantity", $neuebilderzahl);
+   $photo_album->save();
 };
 
 
@@ -316,13 +316,13 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     delete($pho_id, $_GET["bild"]);
     
     //Neu laden der Albumdaten
-    $photo_event = new PhotoEvent($g_db);
+    $photo_album = new PhotoAlbum($g_db);
     if($pho_id > 0)
     {
-        $photo_event->getPhotoEvent($pho_id);
+        $photo_album->getPhotoAlbum($pho_id);
     }
 
-    $_SESSION['photo_event'] =& $photo_event;
+    $_SESSION['photo_album'] =& $photo_album;
     
     $_SESSION['navigation']->deleteLastUrl();
     $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php", 2000);

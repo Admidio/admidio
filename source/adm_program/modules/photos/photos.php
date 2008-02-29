@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-require_once("../../system/photo_event_class.php");
+require_once("../../system/photo_album_class.php");
 require_once("../../system/common.php");
 require_once("photo_function.php");
 
@@ -37,7 +37,7 @@ else
     $pho_id = NULL;
 }
 
-unset($_SESSION['photo_event_request']);
+unset($_SESSION['photo_album_request']);
 
 //Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
 if ($pho_id == NULL)
@@ -48,18 +48,18 @@ if ($pho_id == NULL)
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-//aktuelle event_element
+//aktuelle album_element
 if(array_key_exists("start", $_GET))
 {
     if(is_numeric($_GET["start"]) == false)
     {
         $g_message->show("invalid");
     }
-    $event_element = $_GET['start'];
+    $album_element = $_GET['start'];
 }
 else
 {
-    $event_element = 0;
+    $album_element = 0;
 }
 
 if(array_key_exists("thumb_seite", $_GET))
@@ -89,26 +89,26 @@ if(!is_numeric($locked) && $locked!=NULL)
     $g_message->show("invalid");
 }
 
-// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
+// Fotoalbums-Objekt erzeugen oder aus Session lesen
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $pho_id)
 {
-    $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db =& $g_db;
+    $photo_album =& $_SESSION['photo_album'];
+    $photo_album->db =& $g_db;
 }
 else
 {
     // einlesen des Albums falls noch nicht in Session gespeichert
-    $photo_event = new PhotoEvent($g_db);
+    $photo_album = new PhotoAlbum($g_db);
     if($pho_id > 0)
     {
-        $photo_event->getPhotoEvent($pho_id);
+        $photo_album->getPhotoAlbum($pho_id);
     }
 
-    $_SESSION['photo_event'] =& $photo_event;
+    $_SESSION['photo_album'] =& $photo_album;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($pho_id > 0 && $photo_event->getValue("pho_org_shortname") != $g_organization)
+if($pho_id > 0 && $photo_album->getValue("pho_org_shortname") != $g_organization)
 {
     $g_message->show("invalid");
 }   
@@ -123,12 +123,12 @@ if($locked=="1" || $locked=="0")
         $g_message->show("photoverwaltunsrecht");
     }
     
-    $photo_event->setValue("pho_locked", $locked);
-    $photo_event->save();
+    $photo_album->setValue("pho_locked", $locked);
+    $photo_album->save();
 
-    //Zurueck zur Elternveranstaltung    
-    $pho_id = $photo_event->getValue("pho_pho_id_parent");
-    $photo_event->getPhotoEvent($pho_id);
+    //Zurueck zum Elternalbum    
+    $pho_id = $photo_album->getValue("pho_pho_id_parent");
+    $photo_album->getPhotoAlbum($pho_id);
 }
 
 /*********************HTML_TEIL*******************************/
@@ -159,7 +159,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo"<h1 class=\"moduleHeadline\">";
 if($pho_id > 0)
 {
-    echo $photo_event->getValue("pho_name");
+    echo $photo_album->getValue("pho_name");
 }
 else
 {
@@ -167,22 +167,22 @@ else
 }
 echo "</h1>";
 
-//solange nach Unterveranstaltungen suchen bis es keine mehr gibt
+//solange nach Unteralben suchen bis es keine mehr gibt
 $navilink = "";
-$pho_parent_id = $photo_event->getValue("pho_pho_id_parent");
-$photo_event_parent = new PhotoEvent($g_db);
+$pho_parent_id = $photo_album->getValue("pho_pho_id_parent");
+$photo_album_parent = new PhotoAlbum($g_db);
 
 while ($pho_parent_id > 0)
 {
     // Einlesen des Eltern Albums
-    $photo_event_parent->getPhotoEvent($pho_parent_id);
+    $photo_album_parent->getPhotoAlbum($pho_parent_id);
     
     //Link zusammensetzen
-    $navilink = "&nbsp;&gt;&nbsp;<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$photo_event_parent->getValue("pho_id")."\">".
-        $photo_event_parent->getValue("pho_name")."</a>".$navilink;
+    $navilink = "&nbsp;&gt;&nbsp;<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$photo_album_parent->getValue("pho_id")."\">".
+        $photo_album_parent->getValue("pho_name")."</a>".$navilink;
 
     //Elternveranst
-    $pho_parent_id = $photo_event_parent->getValue("pho_pho_id_parent");
+    $pho_parent_id = $photo_album_parent->getValue("pho_pho_id_parent");
 }
 
 if($pho_id > 0)
@@ -200,9 +200,9 @@ if($g_current_user->editPhotoRight())
     echo"<ul class=\"iconTextLinkList\">
             <li>
                 <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\"><img
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id=$pho_id\"><img
                         src=\"". THEME_PATH. "/icons/add.png\" alt=\"Album anlegen\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?job=new&amp;pho_id=$pho_id\">Album anlegen</a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id=$pho_id\">Album anlegen</a>
                 </span>
             </li>";
         if($pho_id > 0)
@@ -222,12 +222,12 @@ if($g_current_user->editPhotoRight())
 echo "<div class=\"photoModuleContainer\">";
     /*************************THUMBNAILS**********************************/
     //Nur wenn uebergebenes Album Bilder enthaelt
-    if($photo_event->getValue("pho_quantity") > 0)
+    if($photo_album->getValue("pho_quantity") > 0)
     {        
         //Aanzahl der Bilder
-        $bilder = $photo_event->getValue("pho_quantity");
+        $bilder = $photo_album->getValue("pho_quantity");
         //Ordnerpfad
-        $ordner_foto = "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+        $ordner_foto = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
         $ordner      = SERVER_PATH. $ordner_foto;
         $ordner_url  = $g_root_path. $ordner_foto;
 
@@ -259,11 +259,11 @@ echo "<div class=\"photoModuleContainer\">";
         }
 
         //Datum des Albums
-        echo"<div id=\"photoEventInformation\">
-            Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
-            if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin"))
+        echo"<div id=\"photoAlbumInformation\">
+            Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
+            if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin"))
             {
-                echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
+                echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
             }
         echo"</div>";
 
@@ -355,7 +355,7 @@ echo "<div class=\"photoModuleContainer\">";
                             elseif($g_preferences['photo_show_mode']==1)
                             {
                                 echo "<div>
-                                    <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\" /></a>
+                                    <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_album->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\" /></a>
                                 </div>";
                             }
 
@@ -404,23 +404,23 @@ echo "<div class=\"photoModuleContainer\">";
         //Anleger und Veraendererinfos
         echo"
         <div class=\"editInformation\">";
-            if($photo_event->getValue("pho_usr_id") > 0)
+            if($photo_album->getValue("pho_usr_id") > 0)
             {
-                $user_create = new User($g_db, $photo_event->getValue("pho_usr_id"));
+                $user_create = new User($g_db, $photo_album->getValue("pho_usr_id"));
                 echo"Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname")
-                ." am ". mysqldatetime("d.m.y h:i", $photo_event->getValue("pho_timestamp"));
+                ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp"));
             }
             
             // Zuletzt geaendert nur anzeigen, wenn ?Ñnderung nach 1 Stunde oder durch anderen Nutzer gemacht wurde
-            if($photo_event->getValue("pho_usr_id_change") > 0
-            && $photo_event->getValue("pho_last_change") > 0
-            && (  strtotime($photo_event->getValue("pho_last_change")) > (strtotime($photo_event->getValue("pho_timestamp")) + 3600)
-               || $photo_event->getValue("pho_usr_id_change") != $photo_event->getValue("pho_usr_id") ) )
+            if($photo_album->getValue("pho_usr_id_change") > 0
+            && $photo_album->getValue("pho_last_change") > 0
+            && (  strtotime($photo_album->getValue("pho_last_change")) > (strtotime($photo_album->getValue("pho_timestamp")) + 3600)
+               || $photo_album->getValue("pho_usr_id_change") != $photo_album->getValue("pho_usr_id") ) )
             {
-                $user_change = new User($g_db, $photo_event->getValue("pho_usr_id_change"));
+                $user_change = new User($g_db, $photo_album->getValue("pho_usr_id_change"));
                 echo"<br />
                 Letztes Update durch ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname")
-                ." am ". mysqldatetime("d.m.y h:i", $photo_event->getValue("pho_last_change"));
+                ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_last_change"));
             }
         echo "</div>";
     }
@@ -447,18 +447,18 @@ echo "<div class=\"photoModuleContainer\">";
     $result_list = $g_db->query($sql);
 
     //Gesamtzahl der auszugebenden Alben
-    $events = $g_db->num_rows($result_list);
+    $albums = $g_db->num_rows($result_list);
 
-    // falls zum aktuellen Album Bilder und Unterveranstaltungen existieren,
+    // falls zum aktuellen Album Bilder und Unteralben existieren,
     // dann einen Trennstrich zeichnen
-    if($photo_event->getValue("pho_quantity") > 0 && $events > 0)
+    if($photo_album->getValue("pho_quantity") > 0 && $albums > 0)
     {
         echo"<hr />";
     }
 
     $ignored=0; //Summe aller zu ignorierender Elemente
     $ignore=0; //Summe der zu ignorierenden Elemente auf dieser Seite
-    for($x=0; $x<$events; $x++)
+    for($x=0; $x<$albums; $x++)
     {
         $adm_photo_list = $g_db->fetch_array($result_list);
         //Hauptordner
@@ -467,18 +467,18 @@ echo "<div class=\"photoModuleContainer\">";
         if((!file_exists($ordner) || $adm_photo_list["pho_locked"]==1) && (!$g_current_user->editPhotoRight()))
         {
             $ignored++;
-            if($x>=$event_element+$ignored-$ignore)
+            if($x>=$album_element+$ignored-$ignore)
                 $ignore++;
         }
     }
 
     //Dateizeiger auf erstes auszugebendes Element setzen
-    if($events > 0 && $events != $ignored)
+    if($albums > 0 && $albums != $ignored)
     {
-        $g_db->data_seek($result_list, $event_element+$ignored-$ignore);
+        $g_db->data_seek($result_list, $album_element+$ignored-$ignore);
     }
 
-    //Funktion mit selbstaufruf zum erfassen der Bilder in Unterveranstaltungen
+    //Funktion mit Selbstaufruf zum Erfassen der Bilder in Unteralben
     function bildersumme($pho_id_parent)
     {
         global $g_db;
@@ -528,11 +528,11 @@ echo "<div class=\"photoModuleContainer\">";
 
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
-    echo "<div class=\"pageNavigation\">".generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE)."</div>";
+    echo "<div class=\"pageNavigation\">".generatePagination($base_url, $albums-$ignored, 10, $album_element, TRUE)."</div>";
     
     $counter = 0;
 
-    for($x=$event_element+$ignored-$ignore; $x<=$event_element+$ignored+9 && $x<$events; $x++)
+    for($x=$album_element+$ignored-$ignore; $x<=$album_element+$ignored+9 && $x<$albums; $x++)
     {
         $adm_photo_list = $g_db->fetch_array($result_list);
         //Hauptordner
@@ -543,7 +543,7 @@ echo "<div class=\"photoModuleContainer\">";
         {
             if($counter == 0)
             {
-                echo '<table id="photo_event_table">';
+                echo '<table id="photo_album_table">';
             }
 
             //Summe der Bilder erfassen und zufaelliges Beispeilbild auswaehlen
@@ -556,7 +556,7 @@ echo "<div class=\"photoModuleContainer\">";
             $bsp_pic_nr=0;
             $bsp_pic_begin=0;
 
-            //sehen ob die Hauptveranstaltung Bilder enthaelt, nur wenn nicht in unterveranst suchen
+            //sehen ob das Hauptalbum Bilder enthaelt, nur wenn nicht in unterveranst suchen
             if($adm_photo_list["pho_quantity"]>0)
             {
                 $bsp_pic_nr=mt_rand(1, $adm_photo_list["pho_quantity"]);
@@ -580,8 +580,8 @@ echo "<div class=\"photoModuleContainer\">";
 
             //Ausgabe
             echo"
-            <tr class=\"photoEventTableRow\">
-                <td class=\"photoEventTablePicColumn\">";
+            <tr class=\"photoAlbumTableRow\">
+                <td class=\"photoAlbumTablePicColumn\">";
                     if(file_exists($ordner))
                     {
                         //beispielbild nur anzeigen wenn x-seite unter 3+ y-seite ist
@@ -595,7 +595,7 @@ echo "<div class=\"photoModuleContainer\">";
                         }
                     }
                 echo"</td>
-                <td class=\"photoEventTableTextColumn\">";
+                <td class=\"photoAlbumTableTextColumn\">";
                     if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($adm_photo_list["pho_locked"]==1 && file_exists($ordner)))
                     {                   
                         echo"<ul class=\"iconLinkRow\">";
@@ -647,15 +647,15 @@ echo "<div class=\"photoModuleContainer\">";
                                 </span>
 
                                 <span class=\"iconLink\">
-                                    <a href=\"$g_root_path/adm_program/modules/photos/photo_event_new.php?pho_id=$this_pho_id&amp;job=change\"><img 
+                                    <a href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?pho_id=$this_pho_id&amp;job=change\"><img 
                                     src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                                 </span>";
                             }
 
                             echo"
                             <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?job=delete_request&amp;pho_id=$this_pho_id\"><img 
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Album L&ouml;schen\" title=\"Album L&ouml;schen\" /></a>
+                                <a href=\"$g_root_path/adm_program/modules/photos/photo_album_function.php?job=delete_request&amp;pho_id=$this_pho_id\"><img 
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Album Löschen\" title=\"Album Löschen\" /></a>
                             </span>";
 
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
@@ -690,22 +690,22 @@ echo "<div class=\"photoModuleContainer\">";
         
     /****************************Leeres Album****************/
     //Falls das Album weder Bilder noch Unterordner enthaelt
-    if(($photo_event->getValue("pho_quantity")=="0" || strlen($photo_event->getValue("pho_quantity")) == 0) && $events<1)  // alle vorhandenen Albumen werden ignoriert
+    if(($photo_album->getValue("pho_quantity")=="0" || strlen($photo_album->getValue("pho_quantity")) == 0) && $albums<1)  // alle vorhandenen Albumen werden ignoriert
     {
-        echo"Dieses Album enth&auml;lt leider noch keine Bilder.";
+        echo"Dieses Album enthält leider noch keine Bilder.";
     }
     
     if($g_db->num_rows($result_list) > 2)
     {
         // Navigation mit Vor- und Zurueck-Buttons
         // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-        echo generatePagination($base_url, $events-$ignored, 10, $event_element, TRUE);
+        echo generatePagination($base_url, $albums-$ignored, 10, $album_element, TRUE);
     }
 echo "</div>";
 
 /************************Buttons********************************/
 //Uebersicht
-if($photo_event->getValue("pho_id") > 0)
+if($photo_album->getValue("pho_id") > 0)
 {
     echo "
     <ul class=\"iconTextLinkList\">

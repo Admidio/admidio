@@ -15,7 +15,7 @@
  1. Einleitung
 -------------------------------------------------------------------------
 Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
-und verlinkt neben dem Bild die dazugehörige Veranstaltung
+und verlinkt neben dem Bild das dazugehörige Album
  
 Random Photo ist ein Plugin zu der Online-Mitgliederverwaltung
 Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.

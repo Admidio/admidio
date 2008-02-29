@@ -13,7 +13,7 @@
  *
  *****************************************************************************/
 
-require("../../system/photo_event_class.php");
+require("../../system/photo_album_class.php");
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
@@ -47,20 +47,20 @@ if($ini!=1)
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $_GET["pho_id"])
+// Fotoalbums-Objekt erzeugen oder aus Session lesen
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $_GET["pho_id"])
 {
-    $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db =& $g_db;
+    $photo_album =& $_SESSION['photo_album'];
+    $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_event = new PhotoEvent($g_db, $_GET["pho_id"]);
-    $_SESSION['photo_event'] =& $photo_event;
+    $photo_album = new PhotoAlbum($g_db, $_GET["pho_id"]);
+    $_SESSION['photo_album'] =& $photo_album;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($photo_event->getValue("pho_org_shortname") != $g_organization)
+if($photo_album->getValue("pho_org_shortname") != $g_organization)
 {
     $g_message->show("invalid");
 }
@@ -78,9 +78,9 @@ echo"
     <div class=\"formHead\">Bilder hochladen</div>
     <div class=\"formBody\">
         <div class=\"formRow\">
-            Bilder zu diesem Album hinzuf&uuml;gen:<br />"
-            .$photo_event->getValue("pho_name")."<br />"
-            ."(Beginn: ". mysqldate("d.m.y", $photo_event->getValue("pho_begin")).")"
+            Bilder zu diesem Album hinzufügen:<br />"
+            .$photo_album->getValue("pho_name")."<br />"
+            ."(Beginn: ". mysqldate("d.m.y", $photo_album->getValue("pho_begin")).")"
             ."
         </div>
         <hr />

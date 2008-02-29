@@ -339,10 +339,10 @@ $message_text = array(
         %VAR1%<br />wirklich löschen?<br />
         Alle enthaltenen Unteralben und Bilder gehen verloren.",
 
-    "event_deleted" =>
+    "album_deleted" =>
         "Das Album wurde erfolgreich gelöscht.",
 
-    "event_deleted_error" =>
+    "album_deleted_error" =>
         "Beim Löschen des Albums sind Probleme aufgetreten.<br />
         Es konnten nicht alle Dateien bzw. Datensätze gelöscht werden.",
 

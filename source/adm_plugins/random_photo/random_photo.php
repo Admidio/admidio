@@ -5,7 +5,7 @@
  * Version 1.0.1
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
- * und verlinkt neben dem Bild die dazugehörige Veranstaltung
+ * und verlinkt neben dem Bild das dazugehörige Album
  *
  * Kompatible ab Admidio-Versions 1.4.1
  *
@@ -71,9 +71,9 @@ if(!isset($plg_photos_max_height) || !is_numeric($plg_photos_max_height))
 {
     $plg_photos_max_height = 200;
 }
-if(!isset($plg_photos_events) || !is_numeric($plg_photos_events))
+if(!isset($plg_photos_albums) || !is_numeric($plg_photos_albums))
 {
-    $plg_photos_events = 0;
+    $plg_photos_albums = 0;
 }
 if(!isset($plg_photos_picnr) || !is_numeric($plg_photos_picnr))
 {
@@ -97,15 +97,15 @@ $sql="      SELECT *
             ORDER BY pho_begin DESC";
 
 //Limit setzen falls gefordert
-if($plg_photos_events != 0)
+if($plg_photos_albums != 0)
 {
-    $sql = $sql."LIMIT 0, $plg_photos_events";
+    $sql = $sql."LIMIT 0, $plg_photos_albums";
 }
 
 $result = $g_db->query($sql);
 
 do{
-    //Zeiger per Zufall auf eine Veranstaltung setzen
+    //Zeiger per Zufall auf ein Album setzen
     $g_db->data_seek($result, mt_rand(0, $g_db->num_rows($result)-1));
     
     //Ausgewähltendatendatz holen
@@ -172,7 +172,7 @@ else
 
 echo "</a>";
 
-//Link zur Veranstaltung
+//Link zum Album
 if($plg_photos_show_link)
 {
     echo"<br /><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id."\" target=\"$plg_link_target\">".$link_text."</a>";

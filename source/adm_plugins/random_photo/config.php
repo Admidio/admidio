@@ -21,15 +21,15 @@ $plg_photos_max_width = 150;
 //Angabe in px, (Default = 200)
 $plg_photos_max_height = 200;
 
-//Zahl der Veranstaltungen aus denen das Foto kommen darf, gezählt wird ab der aktuellsten
+//Zahl der Alben aus denen das Foto kommen darf, gezählt wird ab dem Aktuellsten
 //Default = 0 (Keine Einschraenkung)
-$plg_photos_events = 0;
+$plg_photos_albums = 0;
 
 //Bildauswahl
 // =1 (erstes Bild) etc. =0 (Zufall,(Default)) 
 $plg_photos_picnr = 0;
 
-//Soll der Link zur Veranstaltung unter dem Bild angezeigt werden?
+//Soll der Link zum Album unter dem Bild angezeigt werden?
 $plg_photos_show_link = true;
 
 // Name einer CSS-Klasse fuer Links

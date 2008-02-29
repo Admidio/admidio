@@ -34,30 +34,30 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 
 
-/*Auch die Fotoevents werden in einer Tabelle angezeigt*/
-#photoEventTable{
+/*Auch die Fotoalben werden in einer Tabelle angezeigt*/
+#photoAlbumTable{
     width: 550px;
 }
 
-/*Einstellung fuer die Fotoeventtabellenzeile, z.B. die Hoehe*/
-.photoEventTableRow{
+/*Einstellung fuer die Fotoalbentabellenzeile, z.B. die Hoehe*/
+.photoAlbumTableRow{
 }
 
-/*Einstellung fuer die FotoeventtabellenBILDERspalte*/
-.photoEventTablePicColumn{
+/*Einstellung fuer die FotoalbentabellenBILDERspalte*/
+.photoAlbumTablePicColumn{
     padding: 4px;
     text-align: right;
     width: 35%;
 }
 
-/*Einstellung fuer die FotoeventtabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photoEventTableTextColumn{
+/*Einstellung fuer die FotoalbentabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
+.photoAlbumTableTextColumn{
     text-align: left;
     font-size: 8px;
 }
 
 /*Wenn in dieser Spalte Ein Link vorkommt wir dieser So dargestellt*/
-.photoEventTableTextColumn a{
+.photoAlbumTableTextColumn a{
     font-size: 12px;
 }
 
@@ -67,7 +67,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
     vertical-align: middle;
 }
 
-/*Umramender Container um Thumbnail- und Fotoeventtabelle, sowie Uploadbericht*/
+/*Umramender Container um Thumbnail- und Fotoalbentabelle, sowie Uploadbericht*/
 .photoModuleContainer{
     border-width: 0px;
     border-color: #6CA7A8;
@@ -84,7 +84,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 
 /*Informationen ueber den Thumbnails, derzeit nur Datum*/
-#photoEventInformation{
+#photoAlbumInformation{
     margin: 5px
 }
 

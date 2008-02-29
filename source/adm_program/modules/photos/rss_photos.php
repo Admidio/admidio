@@ -7,7 +7,7 @@
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 neuesten Fotoveranstaltungen
+ * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 neuesten Fotoalben
  *
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
@@ -32,7 +32,7 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-// die neuesten 10 Photoveranstaltungen aus der DB fischen...
+// die neuesten 10 Fotoalben aus der DB fischen...
 $sql = "SELECT * FROM ". TBL_PHOTOS. "
         WHERE ( pho_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
         AND pho_locked = 0)
@@ -40,7 +40,7 @@ $sql = "SELECT * FROM ". TBL_PHOTOS. "
         LIMIT 10";
 $result = $g_db->query($sql);
 
-//Funktion mit selbstaufruf zum erfassen der Bilder in Unterveranstaltungen
+//Funktion mit selbstaufruf zum erfassen der Bilder in Unteralben
 function bildersumme($pho_id_parent)
 {
     global $g_db;
@@ -61,7 +61,7 @@ function bildersumme($pho_id_parent)
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Fotos", "Die 10 neuesten Fotoveranstaltungen");
+$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Fotos", "Die 10 neuesten Fotoalben");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_object($result))
