@@ -224,11 +224,19 @@ echo "
         }
     echo "</table>
 
-    <div class=\"formSubmit\">";
-        echo "<button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"self.location.href='$g_root_path/adm_program/system/back.php'\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class=\"formSubmit\">
         <button name=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
     </div>
+
+    <ul class=\"iconTextLinkList\">
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
+                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+            </span>
+        </li>
+    </ul>
 </form>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
