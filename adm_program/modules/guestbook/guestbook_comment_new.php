@@ -98,7 +98,7 @@ $guestbook_comment = new GuestbookComment($g_db);
 if(isset($_GET["cid"]) && $_GET["cid"] > 0)
 {
     $guestbook_comment->getGuestbookComment($_GET["cid"]);
-    
+
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook_comment->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
     {
@@ -115,7 +115,7 @@ if(isset($_SESSION['guestbook_comment_request']))
         if(strpos($key, "gbc_") == 0)
         {
             $guestbook_comment->setValue($key, stripslashes($value));
-        }        
+        }
     }
     unset($_SESSION['guestbook_comment_request']);
 }
@@ -164,7 +164,24 @@ else
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
-<form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$id&amp;headline=". $_GET['headline']. "&amp;mode=$mode\" method=\"post\">
+<script language=\"javascript\" type=\"text/javascript\">
+function emoticon(text) {
+	var txtarea = document.post.gbc_text;
+	text = ' ' + text + ' ';
+	if (txtarea.createTextRange && txtarea.caretPos) {
+		var caretPos = txtarea.caretPos;
+		caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? text + ' ' : text;
+		txtarea.focus();
+	} else {
+		txtarea.value  += text;
+		txtarea.focus();
+	}
+}
+</script>
+";
+
+echo "
+<form action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$id&amp;headline=". $_GET['headline']. "&amp;mode=$mode\" name=\"post\" method=\"post\">
 <div class=\"formLayout\" id=\"edit_guestbook_comment_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
@@ -202,7 +219,17 @@ echo "
                           echo "<br /><br />
                           <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
                         }
-                    echo "</dt>
+                    echo "<br /><br />&nbsp;&nbsp;
+                        <a href=\"javascript:emoticon(':)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(';)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':D')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':lol:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
+                        <br />&nbsp;&nbsp;
+                        <a href=\"javascript:emoticon(':(')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':p')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':o')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':twisted:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>
+                    </dt>
                     <dd>
                         <textarea  id=\"gbc_text\" name=\"gbc_text\" tabindex=\"3\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $guestbook_comment->getValue("gbc_text"). "</textarea>&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>
                     </dd>
@@ -235,7 +262,7 @@ echo "
                 </li>";
             }
         echo "</ul>
-        
+
         <hr />
 
         <div class=\"formSubmit\">
@@ -249,7 +276,7 @@ echo "
 <ul class=\"iconTextLinkList\">
     <li>
         <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img
             src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
