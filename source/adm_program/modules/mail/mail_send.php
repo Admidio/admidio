@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /******************************************************************************
  * Verschiedene Funktionen fuer Rollen
  *
@@ -22,7 +22,7 @@ if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
     $g_message->show("module_disabled");
-}
+} 
 
 
 // Uebergabevariablen pruefen
@@ -287,7 +287,7 @@ if ($email->sendEmail())
     {
         $err_text = $_POST['mailto'];
     }
-    $err_code="mail_send";
+    $err_code="mail_send"; 
 
     // Der CaptchaCode wird bei erfolgreichem Mailversand aus der Session geloescht
     if (isset($_SESSION['captchacode']))

@@ -370,7 +370,8 @@ function sendEmail()
 
                 // Mail wird jetzt versendet...
                 // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-                if (!mail(utf8_decode($recipient), utf8_decode($subject), utf8_decode($this->mail_body), utf8_decode($this->mail_properties)))
+                if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)), 
+                          utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
                 {
                      return false;
                 }
@@ -394,7 +395,8 @@ function sendEmail()
 
         // Mail wird jetzt versendet...
         // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-        if (!mail(utf8_decode($recipient), utf8_decode($subject), utf8_decode($this->mail_body), utf8_decode($this->mail_properties)))
+        if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)), 
+                  utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
         {
              return false;
         }
@@ -430,7 +432,8 @@ function sendEmail()
 
          // Kopie versenden an den originalen Absender...
          // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-         if (!mail(utf8_decode($this->headerOptions['From']), utf8_decode($subject), utf8_decode($this->mail_body), utf8_decode($this->mail_properties)))
+         if (!mail(utf8_decode(stripslashes($this->headerOptions['From'])), utf8_decode(stripslashes($subject)), 
+                   utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
          {
              return false;
          }
