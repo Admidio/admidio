@@ -661,14 +661,14 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_preview_scale\">H&ouml;he der Vorschaubilder:</label></dt>
+                            <dt><label for=\"photo_preview_scale\">Höhe der Vorschaubilder:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_preview_scale\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird die H&ouml;he des jeweiligen Vorschaubildes in der Veranstaltungs&uuml;bersicht festgelegt. (Standardwert: 100)
+                        Hier wird die Höhe des jeweiligen Vorschaubildes in der Albenübersicht festgelegt. (Standardwert: 100)
                     </li>
                     <li>
                         <dl>

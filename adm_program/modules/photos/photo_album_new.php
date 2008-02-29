@@ -16,7 +16,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/photo_event_class.php");
+require("../../system/photo_album_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] != 1)
@@ -48,46 +48,46 @@ if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "change")
 $pho_id = $_GET["pho_id"];
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// Fotoeventobjekt anlegen
-$photo_event = new PhotoEvent($g_db);
+// Fotoalbumobjekt anlegen
+$photo_album = new PhotoAlbum($g_db);
 
 // nur Daten holen, wenn Album editiert werden soll
 if ($_GET["job"] == "change")
 {
-    $photo_event->getPhotoEvent($pho_id);
+    $photo_album->getPhotoAlbum($pho_id);
     
-    // Pruefung, ob die Fotoveranstaltung zur aktuellen Organisation gehoert
-    if($photo_event->getValue("pho_org_shortname") != $g_organization)
+    // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
+    if($photo_album->getValue("pho_org_shortname") != $g_organization)
     {
         $g_message->show("norights");
     }
 }
 
-if(isset($_SESSION['photo_event_request']))
+if(isset($_SESSION['photo_album_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['photo_event_request'] as $key => $value)
+    foreach($_SESSION['photo_album_request'] as $key => $value)
     {
         if(strpos($key, "pho_") == 0)
         {
-            $photo_event->setValue($key, stripslashes($value));
+            $photo_album->setValue($key, stripslashes($value));
         }        
     }
-    unset($_SESSION['photo_event_request']);
+    unset($_SESSION['photo_album_request']);
 }
 else
 {
     // Datum formatieren
-    $photo_event->setValue("pho_begin", mysqldate('d.m.y', $photo_event->getValue("pho_begin")));
-    $photo_event->setValue("pho_end", mysqldate('d.m.y', $photo_event->getValue("pho_end")));
+    $photo_album->setValue("pho_begin", mysqldate('d.m.y', $photo_album->getValue("pho_begin")));
+    $photo_album->setValue("pho_end", mysqldate('d.m.y', $photo_album->getValue("pho_end")));
 }
 
 // einlesen der Albumliste
 $pho_id_condition = "";
-if($photo_event->getValue("pho_id") > 0)
+if($photo_album->getValue("pho_id") > 0)
 {
-    $pho_id_condition = " AND pho_id <> ". $photo_event->getValue("pho_id");
+    $pho_id_condition = " AND pho_id <> ". $photo_album->getValue("pho_id");
 }
 
 $sql="  SELECT *
@@ -100,16 +100,16 @@ $result_list = $g_db->query($sql);
 
 //Parent
 //Suchen nach Kindern, Funktion mit selbstaufruf
-function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
+function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 {
     global $g_db;
     $vorschub = $vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
 
     //Erfassen des auszugebenden Albums
     $pho_id_condition = "";
-    if($photo_event->getValue("pho_id") > 0)
+    if($photo_album->getValue("pho_id") > 0)
     {
-        $pho_id_condition = " AND pho_id <> ". $photo_event->getValue("pho_id");
+        $pho_id_condition = " AND pho_id <> ". $photo_album->getValue("pho_id");
     }    
     
     $sql = "SELECT *
@@ -122,7 +122,7 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
     {
         //Wenn die Elternveranstaltung von pho_id dann selected
         $selected = 0;
-        if(($adm_photo_child["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
+        if(($adm_photo_child["pho_id"] == $photo_album->getValue("pho_pho_id_parent"))
         ||  $adm_photo_child["pho_id"] == $pho_id)
         {
             $selected = " selected=\"selected\" ";
@@ -131,7 +131,7 @@ function subfolder($parent_id, $vorschub, $photo_event, $pho_id)
         echo"<option value=\"".$adm_photo_child["pho_id"]."\" $selected>".$vorschub."&#151;".$adm_photo_child["pho_name"]
         ."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
 
-        subfolder($adm_photo_child["pho_id"], $vorschub, $photo_event, $pho_id);
+        subfolder($adm_photo_child["pho_id"], $vorschub, $photo_album, $pho_id);
     }//while
 }//function
 
@@ -149,14 +149,14 @@ $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
     <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />";
 require(THEME_SERVER_PATH. "/overall_header.php");
-echo"<h1 class=\"moduleHeadline\">Foto-Album-Verwaltung</h1>";
+echo"<h1 class=\"moduleHeadline\">Fotoalbum-Verwaltung</h1>";
 
 
 /****************************Formular***********************************************/
 
 echo "
-<form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photo_event_function.php?pho_id=". $_GET["pho_id"]. "&amp;job=". $_GET["job"]. "\">
-<div class=\"formLayout\" id=\"photo_event_new_form\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photo_album_function.php?pho_id=". $_GET["pho_id"]. "&amp;job=". $_GET["job"]. "\">
+<div class=\"formLayout\" id=\"photo_album_new_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">";
         //Album
@@ -166,7 +166,7 @@ echo "
                 <dl>
                     <dt><label for=\"pho_name\">Album:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_event->getValue("pho_name")."\" />
+                        <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_album->getValue("pho_name")."\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -183,9 +183,9 @@ echo "
 
                            while($adm_photo_list = $g_db->fetch_array($result_list))
                             {
-                                //Wenn die Elternveranstaltung von pho_id dann selected
+                                //Wenn das Elternalbum von pho_id dann selected
                                 $selected = 0;
-                                if(($adm_photo_list["pho_id"] == $photo_event->getValue("pho_pho_id_parent"))
+                                if(($adm_photo_list["pho_id"] == $photo_album->getValue("pho_pho_id_parent"))
                                 ||  $adm_photo_list["pho_id"] == $pho_id)
                                 {
                                     $selected = " selected=\"selected\" ";
@@ -195,7 +195,7 @@ echo "
                                 ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
 
                                 //Auftruf der Funktion
-                                subfolder($adm_photo_list["pho_id"], "", $photo_event, $pho_id);
+                                subfolder($adm_photo_list["pho_id"], "", $photo_album, $pho_id);
                             }//while
                             echo"
                         </select>
@@ -213,7 +213,7 @@ echo "
 							var cal18 = new CalendarPopup(\"calendardiv\");
 							cal18.setCssPrefix(\"calendar\");
 						</script>
-						<input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_begin")."\" />
+						<input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_begin")."\" />
 						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 						<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
@@ -227,7 +227,7 @@ echo "
                 <dl>
                     <dt><label for=\"pho_end\">Ende:</label></dt>
                     <dd>
-						<input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_event->getValue("pho_end")."\">
+						<input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_end")."\">
 						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                     </dd>
                 </dl>
@@ -239,7 +239,7 @@ echo "
                 <dl>
                     <dt><label for=\"pho_photographers\">Fotografen:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_photographers\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_event->getValue("pho_photographers")."\" />
+                        <input type=\"text\" id=\"pho_photographers\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_album->getValue("pho_photographers")."\" />
                     </dd>
                 </dl>
             </li>";
@@ -252,7 +252,7 @@ echo "
                     <dd>";
                         echo "<input type=\"checkbox\" id=\"pho_locked\" name=\"pho_locked\" tabindex=\"6\" value=\"1\"";
 
-                        if($photo_event->getValue("pho_locked") == 1)
+                        if($photo_album->getValue("pho_locked") == 1)
                         {
                             echo "checked = \"checked\" ";
                         }

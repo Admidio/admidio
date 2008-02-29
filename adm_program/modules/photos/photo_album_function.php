@@ -18,7 +18,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/photo_event_class.php");
+require("../../system/photo_album_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] != 1)
@@ -47,27 +47,27 @@ if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "do_delete"
 }
 
 //Gepostete Variablen in Session speichern
-$_SESSION['photo_event_request'] = $_REQUEST;
+$_SESSION['photo_album_request'] = $_REQUEST;
 
 //Uebernahme Variablen
 $pho_id  = $_GET['pho_id'];
 
-// Fotoeventobjekt anlegen
-$photo_event = new PhotoEvent($g_db);
+// Fotoalbumobjekt anlegen
+$photo_album = new PhotoAlbum($g_db);
 
 if($_GET["job"] != "new")
 {
-    $photo_event->getPhotoEvent($pho_id);
+    $photo_album->getPhotoAlbum($pho_id);
     
-    // Pruefung, ob die Fotoveranstaltung zur aktuellen Organisation gehoert
-    if($photo_event->getValue("pho_org_shortname") != $g_organization)
+    // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
+    if($photo_album->getValue("pho_org_shortname") != $g_organization)
     {
         $g_message->show("norights");
     }
 }
 
 //Speicherort mit dem Pfad aus der Datenbank
-$ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+$ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if(isset($_POST["submit"]) && $_POST["submit"])
@@ -137,7 +137,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     {
         if(strpos($key, "pho_") === 0)
         {
-            $photo_event->setValue($key, $value);
+            $photo_album->setValue($key, $value);
         }
     }
     
@@ -145,13 +145,13 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     if ($_GET["job"]=="new")
     {
         // Album in Datenbank schreiben
-        $photo_event->save();
+        $photo_album->save();
         
-        $error = $photo_event->createFolder();
+        $error = $photo_album->createFolder();
         
         if($error['code'] < 0)
         {
-            $photo_event->delete();
+            $photo_album->delete();
             
             // der entsprechende Ordner konnte nicht angelegt werden
             $g_message->addVariableContent($error['text'], 1);
@@ -160,9 +160,9 @@ if(isset($_POST["submit"]) && $_POST["submit"])
             $g_message->show("write_access");
         }
         
-        $pho_id = $photo_event->getValue("pho_id");
+        $pho_id = $photo_album->getValue("pho_id");
 
-        // Anlegen des Albums war erfolgreich -> event_new aus der Historie entfernen
+        // Anlegen des Albums war erfolgreich -> album_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
     }//if
 
@@ -170,7 +170,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     //Bearbeiten Anfangsdatum und Ordner ge&auml;ndert
     elseif ($_GET["job"]=="change" && $ordner != SERVER_PATH. "/adm_my_files/photos/".$_POST['pho_begin']."_"."$pho_id")
     {
-        $ordnerneu = "$beginn"."_".$photo_event->getValue("pho_id");
+        $ordnerneu = "$beginn"."_".$photo_album->getValue("pho_id");
         //testen ob Schreibrechte fuer adm_my_files bestehen
         if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
         {
@@ -187,7 +187,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         }
 
         //Dateien verschieben
-        for($x=1; $x<=$photo_event->getValue("pho_quantity"); $x++)
+        for($x=1; $x<=$photo_album->getValue("pho_quantity"); $x++)
         {
             chmod("$ordner/$x.jpg", 0777);
             copy("$ordner/$x.jpg", SERVER_PATH. "/adm_my_files/photos/$ordnerneu/$x.jpg");
@@ -198,7 +198,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         chmod("$ordner", 0777);
         rmdir("$ordner");
         
-        // Aendern des Albums war erfolgreich -> event_new aus der Historie entfernen
+        // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
     }//if
 
@@ -207,7 +207,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     if($_GET["job"]=="change")
     {
         // geaenderte Daten in der Datenbank akutalisieren
-        $photo_event->save();
+        $photo_album->save();
     }
 
     //Photomodulspezifische CSS laden
@@ -225,16 +225,16 @@ if(isset($_POST["submit"]) && $_POST["submit"])
             <ul class=\"formFieldList\">
                 <li><dl>
                     <dt>Album:</dt>
-                    <dd>".$photo_event->getValue("pho_name")."</dd>
+                    <dd>".$photo_album->getValue("pho_name")."</dd>
                 </dl></li>
 
                 <li><dl>
                     <dt>im Album:</dt>
                     <dd>";
-                        if($photo_event->getValue("pho_pho_id_parent") > 0)
+                        if($photo_album->getValue("pho_pho_id_parent") > 0)
                         {
-                            $photo_event_parent = new PhotoEvent($g_db, $photo_event->getValue("pho_pho_id_parent"));
-                            echo $photo_event_parent->getValue("pho_name");
+                            $photo_album_parent = new PhotoAlbum($g_db, $photo_album->getValue("pho_pho_id_parent"));
+                            echo $photo_album_parent->getValue("pho_name");
                         }
                         else
                         {
@@ -245,23 +245,23 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 
                 <li><dl>
                     <dt>Anfangsdatum:</dt>
-                    <dd>".mysqldate("d.m.y", $photo_event->getValue("pho_begin"))."</dd>
+                    <dd>".mysqldate("d.m.y", $photo_album->getValue("pho_begin"))."</dd>
                 </dl></li>
 
                 <li><dl>
                     <dt>Enddatum:</dt>
-                    <dd>".mysqldate("d.m.y", $photo_event->getValue("pho_end"))."</dd>
+                    <dd>".mysqldate("d.m.y", $photo_album->getValue("pho_end"))."</dd>
                 </dl></li>
 
                 <li><dl>
                     <dt>Fotografen:</dt>
-                    <dd>".$photo_event->getValue("pho_photographers")."</dd>
+                    <dd>".$photo_album->getValue("pho_photographers")."</dd>
                 </dl></li>
 
                 <li><dl>
                     <dt>Gesperrt:</dt>
                     <dd>";
-                        if($photo_event->getValue("pho_locked")==1)
+                        if($photo_album->getValue("pho_locked")==1)
                         {
                              echo "Ja";
                         }
@@ -275,9 +275,9 @@ if(isset($_POST["submit"]) && $_POST["submit"])
                 <li><dl>
                     <dt>Aktuelle Bilderzahl:</dt>
                     <dd>";
-                        if($photo_event->getValue("pho_quantity")!=NULL)
+                        if($photo_album->getValue("pho_quantity")!=NULL)
                         {
-                            echo $photo_event->getValue("pho_quantity");
+                            echo $photo_album->getValue("pho_quantity");
                         }
                         else
                         {
@@ -304,23 +304,23 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 //Nachfrage ob geloescht werden soll
 if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
 {
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_event_function.php?job=do_delete&pho_id=$pho_id");
-    $g_message->show("delete_veranst", $photo_event->getValue("pho_name"));
+    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_album_function.php?job=do_delete&pho_id=$pho_id");
+    $g_message->show("delete_veranst", $photo_album->getValue("pho_name"));
 }
 
 // Nun Album loeschen
 if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
 {
-    $return_code = $photo_event->delete();
+    $return_code = $photo_album->delete();
     
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $photo_event->getValue("pho_pho_id_parent"));
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $photo_album->getValue("pho_pho_id_parent"));
     if($return_code)
     {
-        $g_message->show("event_deleted");
+        $g_message->show("album_deleted");
     }
     else
     {
-        $g_message->show("event_deleted_error");
+        $g_message->show("album_deleted_error");
     }
 }
 

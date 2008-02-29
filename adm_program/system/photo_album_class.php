@@ -12,9 +12,9 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
  * aktuellen Datenbankverbindung:
- * $photo_event = new PhotoEvent($g_db);
+ * $photo_album = new PhotoAlbum($g_db);
  *
- * Mit der Funktion getPhotoEvent($pho_id) kann die gewuenschte Fotoveranstaltung 
+ * Mit der Funktion getPhotoAlbum($pho_id) kann die gewuenschte Fotoveranstaltung 
  * ausgelesen werden. 
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
@@ -34,10 +34,10 @@
 $absolute_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
 require_once("$absolute_path/adm_program/system/table_access_class.php");
 
-class PhotoEvent extends TableAccess
+class PhotoAlbum extends TableAccess
 {
     // Konstruktor
-    function PhotoEvent(&$db, $photo_id = 0)
+    function PhotoAlbum(&$db, $photo_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_PHOTOS;
@@ -45,7 +45,7 @@ class PhotoEvent extends TableAccess
         
         if(is_numeric($photo_id))
         {
-            $this->getPhotoEvent($photo_id);
+            $this->getPhotoAlbum($photo_id);
         }
         else
         {
@@ -53,8 +53,8 @@ class PhotoEvent extends TableAccess
         }
     }
 
-    // Fotoevent mit der uebergebenen Foto-ID aus der Datenbank auslesen
-    function getPhotoEvent($photo_id)
+    // Fotoalbum mit der uebergebenen Foto-ID aus der Datenbank auslesen
+    function getPhotoAlbum($photo_id)
     {
         $this->readData($photo_id);
     }

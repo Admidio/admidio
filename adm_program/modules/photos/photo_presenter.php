@@ -14,7 +14,7 @@
  *
  *****************************************************************************/
 
-require("../../system/photo_event_class.php");
+require("../../system/photo_album_class.php");
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -41,15 +41,15 @@ $pho_id = $_GET['pho_id'];
 $bild   = $_GET['bild'];
 
 //erfassen des Albums falls noch nicht in Session gespeichert
-if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $pho_id)
 {
-    $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db =& $g_db;
+    $photo_album =& $_SESSION['photo_album'];
+    $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_event = new PhotoEvent($g_db, $pho_id);
-    $_SESSION['photo_event'] =& $photo_event;
+    $photo_album = new PhotoAlbum($g_db, $pho_id);
+    $_SESSION['photo_album'] =& $photo_album;
 }
 
 //Naechstes und Letztes Bild
@@ -57,7 +57,7 @@ $prev_image = $bild-1;
 $next_image = $bild+1;
 
 //Ordnerpfad zusammensetzen
-$ordner_foto = "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+$ordner_foto = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
 $ordner      = SERVER_PATH. $ordner_foto;
 $ordner_url  = $g_root_path. $ordner_foto;
 
@@ -81,15 +81,15 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 //untere Zelle mit Buttons Bild und Fenster Schließen Button
 echo "
 <div class=\"formLayout\" id=\"photo_presenter\" style=\"width: ".$body_with."px;\">
-	<div class=\"formHead\">".$photo_event->getValue("pho_name")."</div>
+	<div class=\"formHead\">".$photo_album->getValue("pho_name")."</div>
 	<div class=\"formBody\">";
-		echo"Datum: ".mysqldate("d.m.y", $photo_event->getValue("pho_begin"));
-		if($photo_event->getValue("pho_end") != $photo_event->getValue("pho_begin")
-		&& strlen($photo_event->getValue("pho_end")) > 0)
+		echo"Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
+		if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
+		&& strlen($photo_album->getValue("pho_end")) > 0)
 		{
-			echo " bis ".mysqldate("d.m.y", $photo_event->getValue("pho_end"));
+			echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
 		}
-		echo "<br />Fotos von: ".$photo_event->getValue("pho_photographers")."<br /><br />";
+		echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."<br /><br />";
 	
 		//Vor und zurueck buttons
 		echo"<ul class=\"iconTextLinkList\">";
@@ -102,7 +102,7 @@ echo "
 					</span>
 				</li>";
 			}
-			if($next_image <= $photo_event->getValue("pho_quantity"))
+			if($next_image <= $photo_album->getValue("pho_quantity"))
 			{
 				echo"<li>
 					<span class=\"iconTextLink\">
@@ -146,7 +146,7 @@ echo "
 		//Ausgabe Bild
 		echo"
 			<div><a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">
-				<img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
+				<img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
 				</a>
 			</div>";
 	

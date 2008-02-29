@@ -9,13 +9,13 @@
  *
  * Uebergaben:
  *
- * pho_id:		id der Veranstaltung deren Bilder angezeigt werden sollen
+ * pho_id:		id des Albums dessen Bilder angezeigt werden sollen
  * photo:       Name des Bildes ohne(.jpg) spaeter -> (admidio/adm_my_files/photos/<* Gallery *>/$_GET['photo'].jpg)
  * usr_id:		Die Benutzer id an dem die Grußkarte gesendet werden soll
  *
  *****************************************************************************/
 
-require_once("../../system/photo_event_class.php");
+require_once("../../system/photo_album_class.php");
 require_once("../../system/common.php");
 require_once("../photos/photo_function.php");
 require_once("ecard_function.php");
@@ -52,7 +52,7 @@ else
     $pho_id = NULL;
 }
 
-unset($_SESSION['photo_event_request']);
+unset($_SESSION['photo_album_request']);
 
 //Wurde keine Veranstaltung uebergeben kann das Navigationsstack zurückgesetzt werden
 if ($pho_id == NULL)
@@ -64,25 +64,25 @@ if ($pho_id == NULL)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_event']) && $_SESSION['photo_event']->getValue("pho_id") == $pho_id)
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $pho_id)
 {
-    $photo_event =& $_SESSION['photo_event'];
-    $photo_event->db =& $g_db;
+    $photo_album =& $_SESSION['photo_album'];
+    $photo_album->db =& $g_db;
 }
 else
 {
     // einlesen der Veranstaltung falls noch nicht in Session gespeichert
-    $photo_event = new PhotoEvent($g_db);
+    $photo_album = new PhotoAlbum($g_db);
     if($pho_id > 0)
     {
-        $photo_event->getPhotoEvent($pho_id);
+        $photo_album->getPhotoAlbum($pho_id);
     }
 
-    $_SESSION['photo_event'] =& $photo_event;
+    $_SESSION['photo_album'] =& $photo_album;
 }
 
 // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-if($pho_id > 0 && $photo_event->getValue("pho_org_shortname") != $g_organization)
+if($pho_id > 0 && $photo_album->getValue("pho_org_shortname") != $g_organization)
 {
     $g_message->show("invalid");
 } 
@@ -144,7 +144,7 @@ $bild         = $_REQUEST['photo'];
 // gültig ist dann wird der komplete Pfad für das Bild generiert
 if(is_numeric($bild) && isset($_GET['pho_id']))
 {
-    $ordner_foto		= "/adm_my_files/photos/".$photo_event->getValue("pho_begin")."_".$photo_event->getValue("pho_id");
+    $ordner_foto		= "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
     $ordner_url			= $g_root_path.$ordner_foto;
     $bild_url			= "".$ordner_url."/".$_REQUEST['photo'].".jpg";
 }
@@ -280,7 +280,7 @@ if (! empty($submit_action))
 // Wenn noch keine Anfrage zum versenden der Grußkarte vorhanden ist das Grußkarten Bild setzten
 else 
 {
-    $ecard["image_name"] = "$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_card['height']."&amp;side=y";
+    $ecard["image_name"] = "$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_card['height']."&amp;side=y";
 }
 
 /*********************HTML_TEIL*******************************/
@@ -839,18 +839,18 @@ if (empty($submit_action))
 	if($g_preferences['photo_show_mode']==0)
 	{
 		echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=".$_REQUEST['pho_id']."','msg','height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-			 src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
+			 src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
 	}
 	//Lightbox-Mode
 	if($g_preferences['photo_show_mode']==1)
 	{
-		echo "<a href=\"".$bild_url."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_event->getValue("pho_name")."\"><img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" /></a>";
+		echo "<a href=\"".$bild_url."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_album->getValue("pho_name")."\"><img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" /></a>";
 	}
 	
 	//Gleichesfenster-Mode
 	if($g_preferences['photo_show_mode']==2)
 	{
-		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_event->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
+		echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
 	}      
     if ($error_msg != "")
 	{
@@ -1156,7 +1156,7 @@ else
 echo "</div></div></div>";
 /************************Buttons********************************/
 //Uebersicht
-if($photo_event->getValue("pho_id") > 0)
+if($photo_album->getValue("pho_id") > 0)
 {
     echo "
     <ul class=\"iconTextLinkList\">

@@ -15,7 +15,7 @@
  * side: Seite des Bildes die scaliert werden soll
  *
  *****************************************************************************/
-require("../../system/photo_event_class.php");
+require("../../system/photo_album_class.php");
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
