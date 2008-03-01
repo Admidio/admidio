@@ -140,7 +140,7 @@ echo "
 <script language=\"javascript\" type=\"text/javascript\">
 function emoticon(text) {
 	var txtarea = document.post.gbo_text;
-	text = ' ' + text + ' ';
+	text = text + ' ';
 	if (txtarea.createTextRange && txtarea.caretPos) {
 		var caretPos = txtarea.caretPos;
 		caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? text + ' ' : text;
@@ -153,17 +153,36 @@ function emoticon(text) {
 
 var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
 var bbcodes = Array(\"[b]\",\"[/b]\",\"[u]\",\"[/u]\",\"[i]\",\"[/i]\",\"[big]\",\"[/big]\",\"[small]\",\"[/small]\",\"[center]\",\"[/center]\",\"[url=http://www.Adresse.de]\",\"[/url]\",\"[email=adresse@demo.de]\",\"[/email]\",\"[img]\",\"[/img]\");
-var bbcodestext = Array(\"[b]\",\"[/b]\",\"[u]\",\"[/u]\",\"[i]\",\"[/i]\",\"[big]\",\"[/big]\",\"[small]\",\"[/small]\",\"[center]\",\"[/center]\",\"[url]\",\"[/url]\",\"[mail]\",\"[/mail]\",\"[img]\",\"[/img]\");
+var bbcodestext = Array(\"<img src='". THEME_PATH. "/icons/text_bold_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/text_bold.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/text_underline_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/text_underline.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/text_italic_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/text_italic.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/text_bigger_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/text_bigger.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/text_smaller_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/text_smaller.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/text_align_center_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/text_align_center.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/link_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/link.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/email_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/email.png' border='0'>\",
+                        \"<img src='". THEME_PATH. "/icons/image_point.png' border='0'>\",\"<img src='". THEME_PATH. "/icons/image.png' border='0'>\");
+
 
 function bbcode(nummer) {
+   var arrayid;
    if (vorbelegt[nummer]) {
-      emoticon(bbcodes[nummer*2+1]);
-      document.getElementById(bbcodestext[nummer*2]).innerHTML = bbcodestext[nummer*2];
+      arrayid = nummer*2+1;
    } else {
-      emoticon(bbcodes[nummer*2]);
-      document.getElementById(bbcodestext[nummer*2]).innerHTML = bbcodestext[nummer*2+1];
+      arrayid = nummer*2;
    };
+   emoticon(bbcodes[arrayid]);
+   document.getElementById(bbcodes[nummer*2]).innerHTML = bbcodestext[arrayid];
    vorbelegt[nummer] = !vorbelegt[nummer];
+}
+
+//Funktion schließt alle offnen Tags
+function bbcodeclose() {
+   for (var i=0;i<9;i++) {
+      if (vorbelegt[i]) {
+         bbcode(i);
+      }
+   }
 }
 
 </script>
@@ -225,7 +244,16 @@ echo "
                 <dl>
                     <dt></dt>
                     <dd>
-                        <a href=\"javascript:bbcode(0)\" id=\"[b]\">[b]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(1)\" id=\"[u]\">[u]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(2)\" id=\"[i]\">[i]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(3)\" id=\"[big]\">[big]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(4)\" id=\"[small]\">[small]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(5)\" id=\"[center]\">[center]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(6)\" id=\"[url]\">[url]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(7)\" id=\"[mail]\">[mail]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(8)\" id=\"[img]\">[img]</a>
+                        <a href=\"javascript:bbcode(0)\" id=\"[b]\"><img src=\"". THEME_PATH. "/icons/text_bold.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(1)\" id=\"[u]\"><img src=\"". THEME_PATH. "/icons/text_underline.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(2)\" id=\"[i]\"><img src=\"". THEME_PATH. "/icons/text_italic.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(3)\" id=\"[big]\"><img src=\"". THEME_PATH. "/icons/text_bigger.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(4)\" id=\"[small]\"><img src=\"". THEME_PATH. "/icons/text_smaller.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(5)\" id=\"[center]\"><img src=\"". THEME_PATH. "/icons/text_align_center.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(6)\" id=\"[url=http://www.Adresse.de]\"><img src=\"". THEME_PATH. "/icons/link.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(7)\" id=\"[email=adresse@demo.de]\"><img src=\"". THEME_PATH. "/icons/email.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:emoticon('[img]www.Bild-Adresse.de[/img]')\" id=\"[img]\"><img src=\"". THEME_PATH. "/icons/image.png\" border=\"0\"></a>&nbsp;&nbsp;
+                        <a href=\"javascript:bbcodeclose()\" id=\"[img]\"><img src=\"". THEME_PATH. "/icons/cross.png\" border=\"0\"></a>
                     </dd>
                 </dl>
             </li>";
