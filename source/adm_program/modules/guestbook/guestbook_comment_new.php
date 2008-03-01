@@ -165,6 +165,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <script language=\"javascript\" type=\"text/javascript\">
+//Die Funktion fügt in das Textarea den übergebenen Text ein
 function emoticon(text) {
 	var txtarea = document.post.gbc_text;
 	text = ' ' + text + ' ';
@@ -176,6 +177,27 @@ function emoticon(text) {
 		txtarea.value  += text;
 		txtarea.focus();
 	}
+}
+
+//Deklaration von Arbeitsvariablen
+var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
+var bbcodes = Array(\"[b]\",\"[/b]\",\"[u]\",\"[/u]\",\"[i]\",\"[/i]\",\"[big]\",\"[/big]\",\"[small]\",\"[/small]\",\"[center]\",\"[/center]\",\"[url=http://www.Adresse.de]\",\"[/url]\",\"[email=adresse@demo.de]\",\"[/email]\",\"[img]\",\"[/img]\");
+var bbcodestext = Array(\"[b]\",\"[/b]\",\"[u]\",\"[/u]\",\"[i]\",\"[/i]\",\"[big]\",\"[/big]\",\"[small]\",\"[/small]\",\"[center]\",\"[/center]\",\"[url]\",\"[/url]\",\"[mail]\",\"[/mail]\",\"[img]\",\"[/img]\");
+
+//Funktion für den BBcode. nummer =>Pos in bbcodes/2
+function bbcode(nummer) {
+   //Abfrage ob das Tag schon mal benutzt wurde
+   if (vorbelegt[nummer]) {
+      //einfügen des Tags
+      emoticon(bbcodes[nummer*2+1]);
+      //ändern des Linktext
+      document.getElementById(bbcodestext[nummer*2]).innerHTML = bbcodestext[nummer*2];
+   } else {
+      emoticon(bbcodes[nummer*2]);
+      document.getElementById(bbcodestext[nummer*2]).innerHTML = bbcodestext[nummer*2+1];
+   };
+   //Tag Vorbelegung umkehren
+   vorbelegt[nummer] = !vorbelegt[nummer];
 }
 </script>
 ";
@@ -210,15 +232,28 @@ echo "
                         <input type=\"text\" id=\"gbc_email\" name=\"gbc_email\" tabindex=\"2\" style=\"width: 350px;\" maxlength=\"50\" value=\"". $guestbook_comment->getValue("gbc_email"). "\" />
                     </dd>
                 </dl>
-            </li>
+            </li>";
+         if ($g_preferences['enable_bbcode'] == 1)
+         {
+            echo "
+            <li>
+                <dl>
+                    <dt></dt>
+                    <dd>
+                        <a href=\"javascript:bbcode(0)\" id=\"[b]\">[b]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(1)\" id=\"[u]\">[u]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(2)\" id=\"[i]\">[i]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(3)\" id=\"[big]\">[big]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(4)\" id=\"[small]\">[small]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(5)\" id=\"[center]\">[center]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(6)\" id=\"[url]\">[url]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(7)\" id=\"[mail]\">[mail]</a>&nbsp;&nbsp;<a href=\"javascript:bbcode(8)\" id=\"[img]\">[img]</a>
+                    </dd>
+                </dl>
+            </li>";
+         }
+         echo "
             <li>
                 <dl>
                     <dt><label for=\"gbc_text\">Kommentar:</label>";
-                        if ($g_preferences['enable_bbcode'] == 1)
+                        /*if ($g_preferences['enable_bbcode'] == 1)
                         {
                           echo "<br /><br />
                           <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
-                        }
+                        }*/
                     echo "<br /><br />&nbsp;&nbsp;
                         <a href=\"javascript:emoticon(':)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
                         <a href=\"javascript:emoticon(';)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
