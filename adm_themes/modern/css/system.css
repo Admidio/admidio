@@ -48,7 +48,7 @@ h1 {
 	margin-top: 		0px;
 	margin-bottom: 		20px;
 	font-size: 			18pt;
-	color: #449ba6 				;
+	color: 				#449ba6;
 }
 
 hr {
@@ -286,12 +286,14 @@ a:hover, a:active {
 .tableSubHeader {
     background-color:   #c5c5c5;
     padding:            1px;
-    color:              #888888;
-    font-size:          13pt;  
+    color:              #555555;
+    font-size:          12pt;  
     font-weight:        bold;
     font-style:         italic;
     letter-spacing:     0.2em;
     text-align:         left;
+    background-repeat: 	repeat-x;
+	background-image: 	url(../images/sub_row_marker.png);   
 }
 
 /* Farbe des Markierungsbalken in Listen */
