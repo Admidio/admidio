@@ -10,7 +10,7 @@
  
 /****************** includes *************************************************/
 require("../../system/email_class.php");
- 
+require("../../system/bbcode.php");
 /****************** Funktionen fuer ecard_form ********************************/
  
 // rechnet die propotionale Groeße eines Bildes aus
@@ -235,7 +235,7 @@ function getEcardTemplate($template_name,$tmpl_folder)
 //		Bild Daten:				<%ecard_image_width%>		<%ecard_image_height%> 		<%ecard_image_name%>
 //		Nachricht:				<%ecard_message%>
 */
-function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height,$empfaenger_name,$empfaenger_email) 
+function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height,$empfaenger_name,$empfaenger_email,$bbcode_enable) 
 {   
 	// Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
 	if(strip_tags(trim($empfaenger_name)) == "")
@@ -274,7 +274,15 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 	$ecard_data = preg_replace ("/<%ecard_image_height%>/",		$propotional_height, $ecard_data);
 	$ecard_data = preg_replace ("/<%ecard_image_name%>/",		$ecard["image_name"], $ecard_data);
 	// Hier wird die Nachricht ersetzt
-	$ecard_data = preg_replace ("/<%ecard_message%>/", 			preg_replace ("/\r?\n/", "<br />\n", htmlspecialchars($ecard["message"])), $ecard_data);
+	if ($bbcode_enable)
+	{
+		$bbcode = new ubbParser();
+		$ecard_data = preg_replace ("/<%ecard_message%>/", 	preg_replace ("/\r?\n/", "<br />\n", $bbcode->parse($ecard["message"])), $ecard_data);
+	}
+	else
+	{
+		$ecard_data = preg_replace ("/<%ecard_message%>/", 	preg_replace ("/\r?\n/", "<br />\n", htmlspecialchars($ecard["message"])), $ecard_data);
+	}
     // Hier werden die Umlaute ersetzt
 	$ecard_data = preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $ecard_data);
 	// Die fertig geparsten Daten werden jetzt nurnoch als Return Wert zurueckgeliefert
