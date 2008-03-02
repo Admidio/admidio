@@ -146,7 +146,7 @@ elseif($_GET["job"]=="change")
     $g_layout['title'] = "Album bearbeiten";
 }
 $g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/CalendarPopup.js\"></script>
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
     <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />";
 require(THEME_SERVER_PATH. "/overall_header.php");
 echo"<h1 class=\"moduleHeadline\">Fotoalbum-Verwaltung</h1>";
