@@ -926,7 +926,7 @@ function CP_getCalendar() {
 		if (last_month < 1) { last_month=12; last_month_year--; }
 		var date_class;
 		if (this.type!="WINDOW") {
-			result += "<table id=navigationbar width=100% border=0 borderwidth=0 cellspacing=0 cellpadding=0 align=center>";
+			result += "<table id=navigationbar width=100% style='border:0px;' border=0 cellpadding=0 cellspacing=0 cols=0 rules=none align=center>";
 			}
 		result += '<tr>\n';
 		var refresh = windowref+'CP_refreshCalendar';
@@ -964,13 +964,13 @@ function CP_getCalendar() {
 				result += '<td id="'+this.cssPrefix+'cpYearNavigation" width="10"><a id="'+this.cssPrefix+'cpYearNavigation" onclick="'+refreshLink+'('+this.index+','+month+','+(year+1)+');">&gt;</a></td>';
 				}
 			else {
-				result += '<td id="'+this.cssPrefix+'cpMonthNavigation" width="22"><a onclick="'+refreshLink+'('+this.index+','+last_month+','+last_month_year+');" onmouseover="neueFarbe('+this.cssPrefix+'cpMonthNavigation)" onmouseout="alteFarbe('+this.cssPrefix+'cpMonthNavigation)">&lt;&lt;</a></td>\n';
+				result += '<td id="'+this.cssPrefix+'cpMonthNavigation" width="22"><a onclick="'+refreshLink+'('+this.index+','+last_month+','+last_month_year+');">&lt;&lt;</a></td>\n';
 				result += '<td id="'+this.cssPrefix+'cpMonthNavigation" width="100"><span id="'+this.cssPrefix+'cpMonthNavigation">'+this.monthNames[month-1]+' '+year+'</span></td>\n';
-				result += '<td id="'+this.cssPrefix+'cpMonthNavigation" width="22"><a onclick="'+refreshLink+'('+this.index+','+next_month+','+next_month_year+');" onmouseover="neueFarbe('+this.cssPrefix+'cpMonthNavigation)" onmouseout="alteFarbe('+this.cssPrefix+'cpMonthNavigation)">&gt;&gt;</a></td>\n';
+				result += '<td id="'+this.cssPrefix+'cpMonthNavigation" width="22"><a onclick="'+refreshLink+'('+this.index+','+next_month+','+next_month_year+');">&gt;&gt;</a></td>\n';
 				}
 			}
 		result += '</tr></table>\n';
-		result += '<table id="daynames" width=120 rules="cols" border="1" cellpadding="2" cellspacing="2" align=center>\n';
+		result += '<table id="daynames" rules="cols" width="100%" style="border:0px;" border="0" cellpadding="0" cellspacing="0" align="center">\n';
 		result += '<tr>\n';
 		for (var j=0; j<7; j++) {
 
@@ -1010,7 +1010,7 @@ function CP_getCalendar() {
 						selected_month = d.getMonth()+1;
 						selected_date = d.getDate();
 						}
-					result += '	<td id="'+this.cssPrefix+dateClass+'"><a  onclick="javascript:'+windowref+this.returnFunction+'('+selected_year+','+selected_month+','+selected_date+');'+windowref+'CP_hideCalendar(\''+this.index+'\');" onmouseover="neueFarbe('+this.cssPrefix+dateClass+')" onmouseout="alteFarbe('+this.cssPrefix+dateClass+')">'+display_date+'</a></td>\n';
+					result += '	<td id="'+this.cssPrefix+dateClass+'"><a  onclick="javascript:'+windowref+this.returnFunction+'('+selected_year+','+selected_month+','+selected_date+');'+windowref+'CP_hideCalendar(\''+this.index+'\');">'+display_date+'</a></td>\n';
 					}
 				display_date++;
 				if (display_date > daysinmonth[display_month]) {

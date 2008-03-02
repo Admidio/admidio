@@ -483,19 +483,27 @@ a:hover, a:active {
 	text-align:left;
 }
 #ajax_tooltipObj div{
-	position:relative;
+	border:1px solid #000000;
+	color:#000000;
+	width:auto;
+	min-width:300px;
+	max-width:300px;
+	height:auto;
+	min-height:30px;
+	background-color:#fdf594;
+	padding:5px;
+	font-size:1em;
+	z-index:1000001;
 }
 
 #ajax_tooltipObj .ajax_tooltip_content{
 	border:1px solid #000000;
 	color:#000000;
-	left:-15px;
-	top:35px;
-	position:absolute;
 	width:auto;
-	min-width:400px;
-	max-width:600px;
+	min-width:300px;
+	max-width:300px;
 	height:auto;
+	min-height:30px;
 	background-color:#fdf594;
 	padding:5px;
 	font-size:1em;
