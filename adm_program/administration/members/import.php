@@ -26,7 +26,6 @@ if (ini_get('file_uploads') != '1')
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Benutzer importieren";
-    
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -57,8 +56,7 @@ echo "
                         echo generateRoleSelectBox();
 
                         echo "&nbsp;
-                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" />
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign',this);\" onmouseout=\"ajax_hideTooltip()\" />
                     </dd>
                 </dl>
             </li>

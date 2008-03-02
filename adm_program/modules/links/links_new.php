@@ -88,6 +88,65 @@ else
 {
     $g_layout['title'] = $_GET["headline"]. " anlegen";
 }
+$javascript = "";
+$javascript = '<script language="javascript" type="text/javascript">
+
+		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
+		var bbcodes = Array("[b]","[\/b]","[u]","[\/u]","[i]","[\/i]","[big]","[\/big]","[small]","[\/small]","[center]","[\/center]","[url=http:\/\/www.Adresse.de]","[\/url]","[email=adresse@demo.de]","[\/email]","[img]","[\/img]");
+		var bbcodestext = Array("<img src=\''. THEME_PATH. '/icons/text_bold_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_bold.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/text_underline_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_underline.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/text_italic_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_italic.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/text_bigger_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_bigger.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/text_smaller_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_smaller.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/text_align_center_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_align_center.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/link_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/link.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/email_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/email.png\' border=\'0\'>",
+		"<img src=\''. THEME_PATH. '/icons/image_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/image.png\' border=\'0\'>");
+		function emoticon(text) 
+		{
+			var txtarea = document.post.lnk_description;
+			text = text + \' \';
+			if (txtarea.createTextRange && txtarea.caretPos) 
+			{
+				var caretPos = txtarea.caretPos;
+				caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == \'\' ? text + \'\' : text;
+				txtarea.focus();
+			} 
+			else 
+			{
+				txtarea.value  += text;
+				txtarea.focus();
+			}
+		}
+		function bbcode(nummer) 
+		{
+			var arrayid;
+			if (vorbelegt[nummer]) 
+			{
+				arrayid = nummer*2+1;
+			} 
+			else 
+			{
+				arrayid = nummer*2;
+			};
+			emoticon(bbcodes[arrayid]);
+			document.getElementById(bbcodes[nummer*2]).innerHTML = bbcodestext[arrayid];
+			vorbelegt[nummer] = !vorbelegt[nummer];
+		}
+		
+		//Funktion schließt alle offnen Tags
+		function bbcodeclose() 
+		{
+			for (var i=0;i<9;i++) 
+			{
+				if (vorbelegt[i]) 
+				{
+					bbcode(i);
+				}
+			}
+		}</script>';
+$g_layout['header'] = "";
+$g_layout['header'] .= $javascript;
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -101,7 +160,7 @@ else
 }
 
 echo "
-<form action=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$new_mode\" method=\"post\">
+<form action=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=". $_GET["lnk_id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$new_mode\" method=\"post\" name=\"post\">
 <div class=\"formLayout\" id=\"edit_links_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
@@ -156,13 +215,47 @@ echo "
                     </dd>
                 </dl>
             </li>
+			";
+         if ($g_preferences['enable_bbcode'] == 1)
+         {
+            echo "
             <li>
                 <dl>
-                    <dt><label for=\"lnk_description\">Beschreibung:</label>";
+                    <dt></dt>
+                    <dd>
+                        <a href=\"javascript:bbcode(0)\" id=\"[b]\"><img src=\"". THEME_PATH. "/icons/text_bold.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(1)\" id=\"[u]\"><img src=\"". THEME_PATH. "/icons/text_underline.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(2)\" id=\"[i]\"><img src=\"". THEME_PATH. "/icons/text_italic.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(3)\" id=\"[big]\"><img src=\"". THEME_PATH. "/icons/text_bigger.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(4)\" id=\"[small]\"><img src=\"". THEME_PATH. "/icons/text_smaller.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(5)\" id=\"[center]\"><img src=\"". THEME_PATH. "/icons/text_align_center.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(6)\" id=\"[url=http://www.Adresse.de]\"><img src=\"". THEME_PATH. "/icons/link.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:bbcode(7)\" id=\"[email=adresse@demo.de]\"><img src=\"". THEME_PATH. "/icons/email.png\" border=\"0\"></a>&nbsp;
+                        <a href=\"javascript:emoticon('[img]www.Bild-Adresse.de[/img]')\" id=\"[img]\"><img src=\"". THEME_PATH. "/icons/image.png\" border=\"0\"></a>&nbsp;&nbsp;
+                        <a href=\"javascript:bbcodeclose()\" id=\"[img]\"><img src=\"". THEME_PATH. "/icons/cross.png\" border=\"0\"></a>
+                    </dd>
+                </dl>
+            </li>";
+         }
+         echo "
+            <li>
+                <dl>
+                    <dt><label for=\"lnk_description\">Text:</label>";
                         if($g_preferences['enable_bbcode'] == 1)
                         {
-                          echo "<br /><br />
-                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"7\">Text formatieren</a>";
+                          //echo "<br /><br />
+//                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"7\">Text formatieren</a>";
+ echo "<br /><br />&nbsp;&nbsp;
+                        <a href=\"javascript:emoticon(':)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(';)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':D')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':lol:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
+                        <br />&nbsp;&nbsp;
+                        <a href=\"javascript:emoticon(':(')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':p')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':o')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
+                        <a href=\"javascript:emoticon(':twisted:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>
+                    </dt>";
                         }
                     echo "</dt>
                     <dd>
