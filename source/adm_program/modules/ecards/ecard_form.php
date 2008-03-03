@@ -436,11 +436,20 @@ $javascript='
 		} // Ende function check()
 		function echeck(str) 
 		{
+			var zeichen=Array("<",">")
 			var at="@"
 			var dot="."
 			var lat=str.indexOf(at)
 			var lstr=str.length
 			var ldot=str.indexOf(dot)
+			
+			for(var i=0;i<zeichen.length;i++)
+			{
+				if (str.indexOf(zeichen[i])!=-1){
+				return false
+				}
+			}
+			
 			if (str.indexOf(at)==-1){
 			return false
 			}
@@ -789,7 +798,7 @@ $javascript='
 			var text = document.ecard_form["ecard[message]"].value;
 			for(var i=0;i<bbcodes.length;i++)
 			{
-				text = text.replace(bbcodes[i],"").replace (/^\s+/,"").replace (/\s+$/,"");
+				text = text.replace(/\[.*?\]/gi,"").replace (/^\s+/,"").replace (/\s+$/,"");
 			}
 			var textlenght = text.length;
 			wert = max - textlenght;

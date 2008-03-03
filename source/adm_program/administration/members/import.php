@@ -56,7 +56,7 @@ echo "
                         echo generateRoleSelectBox();
 
                         echo "&nbsp;
-                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign',this);\" onmouseout=\"ajax_hideTooltip()\" />
                     </dd>
                 </dl>
             </li>
