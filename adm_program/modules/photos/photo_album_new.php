@@ -283,9 +283,9 @@ echo "
 	<li>
 		<span class=\"iconLink\">
 
-            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\"
+            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\" 
 onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
-            <a href=\"\" alt=\"Hilfe\" class=\"iconLink\" onclick=\"window.open('http://localhost/htdocs/admidio/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=600,left=310,top=200,scrollbars=yes')\">Hilfe</a>
+            <a href=\"\" alt=\"Hilfe\" class=\"iconLink\" onclick=\"window.open('http://localhost/htdocs/admidio/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
 		</li>
 </ul>
