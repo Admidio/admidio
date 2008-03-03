@@ -325,15 +325,15 @@ $javascript='
 				
 		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
 		var bbcodes = Array("[b]","[\/b]","[u]","[\/u]","[i]","[\/i]","[big]","[\/big]","[small]","[\/small]","[center]","[\/center]","[url=http:\/\/www.Adresse.de]","[\/url]","[email=adresse@demo.de]","[\/email]","[img]","[\/img]");
-		var bbcodestext = Array("<img src=\''. THEME_PATH. '/icons/text_bold_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_bold.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/text_underline_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_underline.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/text_italic_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_italic.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/text_bigger_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_bigger.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/text_smaller_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_smaller.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/text_align_center_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/text_align_center.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/link_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/link.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/email_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/email.png\' border=\'0\'>",
-		"<img src=\''. THEME_PATH. '/icons/image_point.png\' border=\'0\'>","<img src=\''. THEME_PATH. '/icons/image.png\' border=\'0\'>");
+		var bbcodestext = Array("<img src=\''. THEME_PATH. '/icons/text_bold_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_bold.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/text_underline_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_underline.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/text_italic_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_italic.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/text_bigger_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_bigger.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/text_smaller_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_smaller.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/text_align_center_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_align_center.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/link_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/link.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/email_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/email.png\' border=\'0\'\/>",
+		"<img src=\''. THEME_PATH. '/icons/image_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/image.png\' border=\'0\'\/>");
 
 		
          function popup_win(theURL,winName,winOptions) 
@@ -1103,16 +1103,16 @@ if (empty($submit_action))
          				{
 							echo'
 							<div>
-							 <a href="javascript:bbcode(0)" id="[b]"><img src="'. THEME_PATH. '/icons/text_bold.png" border="0"></a>&nbsp;
-							<a href="javascript:bbcode(1)" id="[u]"><img src="'. THEME_PATH. '/icons/text_underline.png" border="0"></a>&nbsp;
-							<a href="javascript:bbcode(2)" id="[i]"><img src="'. THEME_PATH. '/icons/text_italic.png" border="0"></a>&nbsp;
-							<a href="javascript:bbcode(3)" id="[big]"><img src="'. THEME_PATH. '/icons/text_bigger.png" border="0"></a>&nbsp;
-							<a href="javascript:bbcode(4)" id="[small]"><img src="'. THEME_PATH. '/icons/text_smaller.png" border="0"></a>&nbsp;
-							<a href="javascript:bbcode(5)" id="[center]"><img src="'. THEME_PATH. '/icons/text_align_center.png" border="0"></a>&nbsp;
-							<a href="javascript:bbcode(6)" id="[url=http://www.Adresse.de]"><img src="'. THEME_PATH. '/icons/link.png" border="0"></a>&nbsp;
-							<a href="javascript:bbcode(7)" id="[email=adresse@demo.de]"><img src="'. THEME_PATH. '/icons/email.png" border="0"></a>&nbsp;
-							<a href="javascript:emoticon(\'[img]www.Bild-Adresse.de[/img]\')" id="[img]"><img src="'. THEME_PATH. '/icons/image.png" border="0"></a>&nbsp;&nbsp;
-							<a href="javascript:bbcodeclose()" id="[img]"><img src="'. THEME_PATH. '/icons/cross.png" border="0"></a>
+							 <a href="javascript:bbcode(0)" id="[b]"><img src="'. THEME_PATH. '/icons/text_bold.png" border="0"/></a>&nbsp;
+							<a href="javascript:bbcode(1)" id="[u]"><img src="'. THEME_PATH. '/icons/text_underline.png" border="0"/></a>&nbsp;
+							<a href="javascript:bbcode(2)" id="[i]"><img src="'. THEME_PATH. '/icons/text_italic.png" border="0"/></a>&nbsp;
+							<a href="javascript:bbcode(3)" id="[big]"><img src="'. THEME_PATH. '/icons/text_bigger.png" border="0"/></a>&nbsp;
+							<a href="javascript:bbcode(4)" id="[small]"><img src="'. THEME_PATH. '/icons/text_smaller.png" border="0"/></a>&nbsp;
+							<a href="javascript:bbcode(5)" id="[center]"><img src="'. THEME_PATH. '/icons/text_align_center.png" border="0"/></a>&nbsp;
+							<a href="javascript:bbcode(6)" id="[url=http://www.Adresse.de]"><img src="'. THEME_PATH. '/icons/link.png" border="0"/></a>&nbsp;
+							<a href="javascript:bbcode(7)" id="[email=adresse@demo.de]"><img src="'. THEME_PATH. '/icons/email.png" border="0"/></a>&nbsp;
+							<a href="javascript:emoticon(\'[img]www.Bild-Adresse.de[/img]\')" id="[img]"><img src="'. THEME_PATH. '/icons/image.png" border="0"/></a>&nbsp;&nbsp;
+							<a href="javascript:bbcodeclose()" id="[img]"><img src="'. THEME_PATH. '/icons/cross.png" border="0"/></a>
 							</div>
 							';
 						}
