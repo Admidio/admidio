@@ -85,10 +85,10 @@
             ?>
 		</div>
 		<div><img class="img_border" src="<?php echo THEME_PATH; ?>/images/border_bottom_small.png" alt="border" /></div>
+		
+		<div style="clear: both;"></div>
 	</div>
 </div>
-
-<div style="clear: left;">&nbsp;</div>
 
 <p>
 	<a href="http://www.admidio.org"><img 
