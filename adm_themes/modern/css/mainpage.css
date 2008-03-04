@@ -7,9 +7,14 @@
  *
  *****************************************************************************/
 
-.veryBigFontSize a {
+.veryBigFontSize a:link, .veryBigFontSize a:visited {
 	color: #449ba6;
 	text-decoration: none;
+}
+
+.veryBigFontSize a:hover, .veryBigFontSize a:active {
+	color: #FF9C00;
+	text-decoration: underline;
 }
 
 #modules_list_form dl {

@@ -38,8 +38,8 @@
     font-weight:        bold;
 }
 
-#plgRowLoginButton {
-	padding-bottom:			10px;
+#plgRowLoginButton dd {
+	padding-bottom:		10px;
 }
 
 
