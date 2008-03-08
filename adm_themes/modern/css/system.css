@@ -62,7 +62,7 @@ hr {
 
 /* Elemente, die fuer ein Drag&Drop angefasst werden koennen */
 .dragable {
-    cursor:     move;
+    cursor:     		move;
     border-width:       0px;
 }
 
@@ -71,12 +71,11 @@ textarea {
     font-size:          10pt;
 }
 
-/* Layout fuer Buttons mit Icon */
-
-button {    
+/* Hack fuer IE6, damit dieser lange Buttons vernuenftig darstellt */
+html.* button {    
     padding:            0em .25em;
-    width:              auto;       /* noetig damit IE6 lange Buttons vernuenftig darstellt */
-    overflow:           visible;    /* noetig damit IE6 lange Buttons vernuenftig darstellt */
+    width:              auto;
+    overflow:           visible;
 }
 
 button img {

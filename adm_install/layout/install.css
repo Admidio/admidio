@@ -1,0 +1,130 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen des Installationsassistenten 
+ * anzupassen
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese Datei bitte nicht anpassen !!!
+ *
+ *****************************************************************************/
+ 
+body {
+	color: #606465;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	margin: auto;
+	font-size: 11pt;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+	text-align: center;
+	background-color: #96c4cb; 
+	background-repeat: repeat-x;
+	background-attachment: fixed;
+	background-image: url(background.png);
+}
+
+#page {
+	text-align: left;
+	margin: 0px auto;
+	width: 601px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	display: block;
+}
+
+#content_left {
+	padding-left: 13px;
+	padding-right: 12px;
+}
+
+.content {
+	border-right: 1px solid #7d7d7d;
+	border-left: 1px solid #7d7d7d;
+	background-color: white;
+	background-position: 0 bottom;
+	background-repeat: repeat-x;
+	background-image: url(background_in_borders.png);
+}
+
+/* damit unter den Rahmenbildern keine 2px Abstand sind */
+.img_border {
+	display: block;
+}
+
+/* Hack fuer IE6, damit dieser lange Buttons vernuenftig darstellt */
+html.* button {    
+    padding:            0em .25em;
+    width:              auto;
+    overflow:           visible;
+}
+
+button img {
+     vertical-align:    middle;
+     border-width:      none;
+}
+
+/* Layout fuer die Formulare
+   Es ist in einen Kopf (formHead) und einen Inhalt (formBody) unterteilt
+   (z.B.: Profil, Login, Registrieren) */
+   
+.formLayout {
+    width:              570px;
+    margin:             auto;
+    margin-top:         30px;
+}
+
+.formHead {
+    color:              #333333;
+    font-size:          14pt;
+    font-weight:        bold;
+    letter-spacing:     0.2em;
+    text-align:         left;
+    border-bottom:      2px solid #449ba6;
+}
+
+.formBody {
+    padding-top:        10px;
+    padding-bottom:     10px;
+}
+
+.formBody hr {
+    border:             1px solid #bad8e2;
+    width:              100%;
+    margin-top:         10px; 
+    margin-bottom:      10px; 
+}
+
+
+/* Ordnet Felder mit ihren Beschreibungen in Formularen.
+   Diese werden in einer Liste untereinander und 
+   mit Beschreibung + Feld nebenandern angeordnet */
+
+.formFieldList {
+    margin:             0px;
+    padding:            0px;
+    list-style-type:    none;
+}
+
+.formFieldList li { 
+    display:            inline;
+    text-align:         left;
+}
+.formFieldList li dl {
+    padding:            0px;
+    margin-top:         8px;
+    margin-bottom:      8px;
+}
+.formFieldList li dl dt {
+    text-align:         left;
+    float:              left;
+}
+.formFieldList li dl dd {
+    margin-left:        31%;
+    text-align:         left;
+}
+
+.formSubmit {
+    padding-top:        25px;
+    text-align: 		center;
+}
