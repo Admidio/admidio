@@ -20,77 +20,7 @@
  *****************************************************************************/
 
 require_once("install_functions.php");
-/*
-function showPage($message, $next_url, $icon, $icon_text, $focus = "next_page")
-{
-    // Html des Modules ausgeben
-    echo '    
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
-    <head>
-        <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
 
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="author"   content="Admidio Team" />
-        <meta name="robots"   content="noindex" />
-        
-        <title>Admidio - Update</title>
-
-        <link rel="stylesheet" type="text/css" href="../adm_themes/classic/css/system.css" />
-        <script type="text/javascript" src="../adm_program/system/common_functions.js"></script>
-
-        <!--[if lt IE 7]>
-        <script type="text/javascript"><!--
-            window.attachEvent("onload", correctPNG);
-        --></script>
-        <![endif]-->
-        
-        <script><!--
-            imgLoader = new Image();
-            imgLoader.src = "../adm_themes/classic/icons/loader.gif";
-        
-            function startUpdate()
-            {
-                submit_button = document.getElementById(\'next_page\');
-                if(submit_button.value == \'Datenbank aktualisieren\' || submit_button.value == \'Admidio installieren\')
-                {
-                    submit_button.disabled  = true;
-                    document.btn_icon.src = imgLoader.src;
-                    document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird aktualisiert\';
-                }
-                document.forms[0].submit();
-            }
-        --></script>
-    </head>
-    <body>
-        <form action="'. $next_url. '" method="post">
-		<div class="formLayout" id="installation_form">
-			<div class="formHead" style="text-align: left; letter-spacing: 0em;">
-				<img style="float:left; padding: 5px 0px 0px 0px; border: none;" src="../adm_themes/classic/images/admidio_logo_50.png" alt="www.admidio.org" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<div style="font-size: 16pt; font-weight: bold; text-align: right; padding: 5px 10px 10px 0px;">Version '. ADMIDIO_VERSION. '</div>
-				<div style="font-size: 11pt; padding: 0px 0px 5px 0px;">Die Online-Mitgliederverwaltung f&uuml;r Vereine, Gruppen und Organisationen</div>
-			</div>
-
-			<div class="formBody" style="text-align: left;">
-				<span class="bigFontSize">'.
-					$message.
-				'</span>
-				<hr />
-				<div class="formSubmit" style="text-align: center;">
-					<button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
-				</div>
-			</div>
-		</div>
-        </form>
-
-        <script type="text/javascript"><!--
-            document.getElementById(\''. $focus. '\').focus();
-        --></script>
-    </body>
-    </html>';
-    exit();
-}
-*/
 // Uebergabevariablen pruefen
 
 if(isset($_GET['mode']) && is_numeric($_GET['mode']))
