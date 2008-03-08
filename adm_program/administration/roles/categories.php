@@ -13,6 +13,7 @@
  *        Typ der Kategorien, die gepflegt werden sollen
  *        ROL = Rollenkategorien
  *        LNK = Linkkategorien
+ *        USF = Profilfelder
  *
  ****************************************************************************/
  
@@ -208,10 +209,13 @@ echo "
     </li>
 </ul>
 
-<script type=\"text/javascript\"><!--
-        Sortable.create('cat_all_orgas',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_all_orgas'],hoverclass:'drag'});
-    Sortable.create('cat_list',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
---></script>";
+<script type=\"text/javascript\"><!--\n";
+	if($_GET['type'] == "USF")
+	{
+        echo "Sortable.create('cat_all_orgas',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_all_orgas'],hoverclass:'drag'});";
+    }
+    echo "Sortable.create('cat_list',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
+\n--></script>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
