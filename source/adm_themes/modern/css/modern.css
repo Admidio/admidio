@@ -91,12 +91,8 @@ html.* #right_block div {
 }
 
 .content {
-	border-right-color: #7d7d7d;
-	border-left-color: #7d7d7d;
-	border-right-width: 1px;
-	border-right-style: solid;
-	border-left-style: solid;
-	border-left-width: 1px;
+	border-right: 1px solid #7d7d7d;
+	border-left: 1px solid #7d7d7d;
 	background-color: white;
 	background-position: 0 bottom;
 	background-repeat: repeat-x;
