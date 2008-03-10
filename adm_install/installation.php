@@ -181,6 +181,16 @@ elseif($req_mode == 3)
             $message   = "Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !";
             showPage($message, "installation.php?mode=2", "back.png", "Zurück");
         }
+        
+        // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
+        $db = new MySqlDB();
+        if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
+        {
+            $message   = "Mit Ihren Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden !<br /><br />
+                          Korrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie, 
+                          ob die Datenbank online ist.";
+            showPage($message, "installation.php?mode=2", "back.png", "Zurück");
+        }
     }
     
     // Formular vorbelegen
@@ -232,10 +242,10 @@ elseif($req_mode == 4)
         $_SESSION['orga_name_long']  = strStripTags($_POST['orga_name_long']);
     
         if(strlen($_SESSION['orga_name_short']) == 0
-        || strlen($_SESSION['orga_name_short']) == 0 )
+        || strlen($_SESSION['orga_name_long']) == 0 )
         {
-            $message = "Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !";
-            showPage($message, "installation.php?mode=2", "back.png", "Zurück");
+            $message = "Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !";
+            showPage($message, "installation.php?mode=3", "back.png", "Zurück");
         }
     }
     
@@ -325,13 +335,13 @@ elseif($req_mode == 5)
         || strlen($_SESSION['user_password'])   == 0 )
         {
             $message = "Es sind nicht alle Daten für den Administrator eingegeben worden !";
-            showPage($message, "installation.php?mode=3", "back.png", "Zurück");
+            showPage($message, "installation.php?mode=4", "back.png", "Zurück");
         }
 
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
         {
             $message = "Das Passwort stimmt nicht mit der Wiederholung überein !";
-            showPage($message, "installation.php?mode=3", "back.png", "Zurück");
+            showPage($message, "installation.php?mode=4", "back.png", "Zurück");
         }
     }
     
@@ -389,7 +399,8 @@ elseif($req_mode == 7)
     
     if(file_exists("../config.php") == false)
     {
-        $message = "Die Datei <strong>config.php</strong> befindet sich nicht im Verzeichnis <strong>adm_config</strong> !";
+        $message = "Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
+                    Laden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.";
         showPage($message, "installation.php?mode=5", "back.png", "Zurück");
     }
     

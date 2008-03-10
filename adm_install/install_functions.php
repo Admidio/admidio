@@ -51,11 +51,19 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
             function startUpdate()
             {
                 submit_button = document.getElementById(\'next_page\');
-                if(submit_button.value == \'Datenbank aktualisieren\')
+                if(submit_button.value == \'Datenbank aktualisieren\'
+                || submit_button.value == \'Admidio installieren\')
                 {
                     submit_button.disabled  = true;
                     document.btn_icon.src = imgLoader.src;
-                    document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird aktualisiert\';
+                    if(submit_button.value == \'Datenbank aktualisieren\')
+                    {
+                        document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird aktualisiert\';
+                    }
+                    else
+                    {
+                        document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird eingerichtet\';
+                    }
                 }
                 document.forms[0].submit();
             }
