@@ -13,6 +13,8 @@
 function includeForumScript($db)
 {
 	global $g_organization;
+	$forum_enable  = 0;
+	$forum_version = 0;
 	
 	$sql    = "SELECT prf_name, prf_value 
 	             FROM ". TBL_PREFERENCES. ", ". TBL_ORGANIZATIONS. "
@@ -20,6 +22,7 @@ function includeForumScript($db)
 	              AND prf_org_id = org_id 
 	              AND prf_name IN ('forum_version','enable_forum_interface')";
     $result = $db->query($sql);
+    
     while($row = $db->fetch_array($result))
     {
     	if($row['prf_name'] == 'forum_version')
