@@ -74,6 +74,8 @@ if($req_mode == 1)
     // pruefen, ob ein Update ueberhaupt notwendig ist
     if(isset($g_preferences['db_version']) == false)
     {
+        // bei einem Update von Admidio 1.x muss die spezielle Version noch erfragt werden,
+        // da in Admidio 1.x die Version noch nicht in der DB gepflegt wurde
         $message   = '<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />
                       Sie haben bisher eine Version 1.x von Admidio verwendet. Um Ihre Datenbank
                       erfolgreich auf Admidio '. ADMIDIO_VERSION. ' zu migrieren, ist es erforderlich,
@@ -87,12 +89,12 @@ if($req_mode == 1)
                       </select>';
         showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", false);
     }
-    elseif(version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) != 0)
+    elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
     {
         $message   = "<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />";
         showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", false);
     }
-    elseif(version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) == 0)
+    elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0)
     {
         $message   = "<strong>Eine Aktualisierung ist nicht erforderlich</strong><br /><br />
                       Die Admidio-Datenbank ist aktuell.";
@@ -119,12 +121,6 @@ elseif($req_mode == 2)
         $old_version = substr($g_preferences['db_version'], 0, 3);
     }
 
-    $main_version_old  = substr($old_version, 0, 1);
-    $sub_version_old   = substr($old_version, 2, 1);
-    $main_version_new  = substr(ADMIDIO_VERSION, 0, 1);
-    $sub_version_new   = substr(ADMIDIO_VERSION, 2, 1);
-    $flag_next_version = true;
-
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(120);
@@ -145,49 +141,59 @@ elseif($req_mode == 2)
         $g_current_organization->setPreferences($orga_preferences, false);
     }
 
+    $main_version      = substr($old_version, 0, 1);
+    $sub_version       = substr($old_version, 2, 1);
+    $flag_next_version = true;
+
     // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
     while($flag_next_version)
     {
-        // Update-Datei der naechsten hoeheren Version ermitteln
         $flag_next_version = false;
-        $sub_version_old   = $sub_version_old + 1;
-        $sql_file  = "db_scripts/upd_". $main_version_old. "_". $sub_version_old. "_db.sql";
-        $conv_file = "db_scripts/upd_". $main_version_old. "_". $sub_version_old. "_conv.php";                
+        $sub_version   = $sub_version + 1;
         
-        if(file_exists($sql_file))
+        // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
+        // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
+        for($micro_version = 0; $micro_version < 15; $micro_version++)
         {
-            // SQL-Script abarbeiten
-            $file    = fopen($sql_file, "r")
-                       or showPage("Die Datei <strong>$sql_file</strong> konnte nicht geöffnet werden.", "update.php", "back.png", "Zurück");
-            $content = fread($file, filesize($sql_file));
-            $sql_arr = explode(";", $content);
-            fclose($file);
-
-            foreach($sql_arr as $sql)
-            {
-                if(strlen(trim($sql)) > 0)
-                {
-                    // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-                    $sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
-                    $g_db->query($sql);
-                }
-            }
+            // Update-Datei der naechsten hoeheren Version ermitteln
+            $sql_file  = "db_scripts/upd_". $main_version. "_". $sub_version. "_". $micro_version. "_db.sql";
+            $conv_file = "db_scripts/upd_". $main_version. "_". $sub_version. "_". $micro_version. "_conv.php";                
             
-            $flag_next_version = true;
+            if(file_exists($sql_file))
+            {
+                // SQL-Script abarbeiten
+                $file    = fopen($sql_file, "r")
+                           or showPage("Die Datei <strong>$sql_file</strong> konnte nicht geöffnet werden.", "update.php", "back.png", "Zurück");
+                $content = fread($file, filesize($sql_file));
+                $sql_arr = explode(";", $content);
+                fclose($file);
+    
+                foreach($sql_arr as $sql)
+                {
+                    if(strlen(trim($sql)) > 0)
+                    {
+                        // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+                        $sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
+                        $g_db->query($sql);
+                    }
+                }
+                
+                $flag_next_version = true;
+            }
+    
+            if(file_exists($conv_file))
+            {
+                // Nun das PHP-Script abarbeiten
+                include($conv_file);
+                $flag_next_version = true;
+            }
         }
 
-        if(file_exists($conv_file))
+        // keine Datei mit der Subversion gefunden, dann die Mainversion hochsetzen
+        if($flag_next_version == false && $main_version < 2)
         {
-            // Nun das PHP-Script abarbeiten
-            include($conv_file);
-            $flag_next_version = true;
-        }
-
-        // keine Datei mit der Version gefunden, dann die Main-Version hochsetzen
-        if($flag_next_version == false && $main_version_old < 2)
-        {
-            $main_version_old  = $main_version_old + 1;
-            $sub_version_old   = -1;
+            $main_version  = $main_version + 1;
+            $sub_version   = -1;
             $flag_next_version = true;
         }
     }

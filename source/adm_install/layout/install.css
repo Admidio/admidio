@@ -47,6 +47,18 @@ body {
 	background-image: url(background_in_borders.png);
 }
 
+/* Links */
+
+a:link, a:visited {
+    color: #222222;
+	text-decoration: underline;
+}
+
+a:hover, a:active {
+	text-decoration: underline;
+	color: #FF9C00;
+}
+
 /* damit unter den Rahmenbildern keine 2px Abstand sind */
 .img_border {
 	display: block;
@@ -127,4 +139,12 @@ button img {
 .formSubmit {
     padding-top:        25px;
     text-align: 		center;
+}
+
+/* weitere CSS-Klassen */
+
+.iconTextLink img {
+    border:             none;
+    vertical-align:     middle;
+    padding-right:      1px;
 }
