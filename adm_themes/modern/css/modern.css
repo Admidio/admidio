@@ -1,4 +1,14 @@
-
+/******************************************************************************
+ * Spezielle Cascading-Style-Sheets-Datei nur fuer das Modern-Theme
+ *
+ * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Mit dieser CSS-Datei koennen Sie die spezifischen Anpassungen fuer das
+ * Modern-Theme bearbeiten. Dies sind keine Admidio-Standard-CSS-Klassen.
+ *
+ *****************************************************************************/
 
 #page_header {
 	text-align: left;
@@ -71,7 +81,7 @@ img {
 	margin-right: 20px;
 }
 
-#right_block div {
+#right_block > div {
 	margin-left: 625px;
 }
 
@@ -101,78 +111,13 @@ html.* #right_block div {
 
 #sidebar {
 	padding-left: 15px;
-	padding-right: 15px;	
+	padding-right: 15px;
 }
 
 #sidebar hr {
-	margin-top: 10px;
-	color: #d7d7d7;
-	border-width: 1px;
-	border-style: dashed;
+	margin-top:     10px;
+	color:          #d7d7d7;
+	border-width:   1px;
+	border-style:   dashed;
+	text-align:     left;
 }
-
-/***************************************/
-/* Spezieller Teil fuer die Startseite */
-/***************************************/
-
-#home_left_block {
-	float: left;
-	margin-right: 20px;
-	width: 250px;
-}
-
-#home_block {
-	text-align: left;
-	margin: 0px;
-	width: 540px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	display: block;
-}
-
-#home_right_block div {
-	margin-left: 285px;
-	width: 220px;
-}
-
-#home_content_1 {
-	border: 1px solid #777777;
-	padding-left: 15px;
-	padding-right: 15px;	
-}
-
-#home_content_2 {
-	border: 1px solid #777777;
-	padding-left: 15px;
-	padding-right: 15px;	
-}
-
-#home_features {
-	border: 1px solid #777777;
-	width: 535px;
-}
-
-#home_features_content {
-	padding-left: 15px;
-	padding-right: 15px;	
-}
-
-#download {
-	margin-bottom: 15px;
-	margin-top: 15px;
-	width: 310px;
-	color: #266507;
-	border-style: solid;
-	padding: 15px;
-	border-color: #71ab24;
-	border-width: 2px;
-	background-color: #91d52d;
-	-moz-border-radius: 25px;
-}
-
-#download a {
-	padding-bottom: 5px;
-	color: #25650c;
-	font-size: 18pt;
-}
-

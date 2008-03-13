@@ -120,9 +120,9 @@ if($_POST["upload"])
     //Anlegen des Berichts
     echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>
     <div class=\"photoModuleContainer\">
-        Bitte einen Moment Geduld. 
-        Die Bilder wurden dem Album <br /> - ".$photo_album->getValue("pho_name")." - <br />
-        erfolgreich hinzugef&uuml;gt, wenn sie hier angezeigt werden.<br />";
+        Bitte einen Moment Geduld ...<br /><br />
+        Die Bilder wurden dem Album <strong>".$photo_album->getValue("pho_name")."</strong>
+        erfolgreich hinzugefügt, wenn sie hier angezeigt werden.<br />";
 
         //Verarbeitungsschleife fuer die einzelnen Bilder
         $bildnr=$photo_album->getValue("pho_quantity");

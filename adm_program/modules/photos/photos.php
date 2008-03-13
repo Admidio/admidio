@@ -575,7 +575,7 @@ echo "<div class=\"photoModuleContainer\">";
             //Wenn kein Bild gefunden wurde
             if($bsp_pho_id==0)
             {
-               $bsp_pic_path = THEME_PATH. "/images/nopix.jpg";
+                $bsp_pic_path = THEME_PATH. "/images/nopix.jpg";
             }
 
             //Ausgabe
@@ -598,21 +598,21 @@ echo "<div class=\"photoModuleContainer\">";
                 <td class=\"photoAlbumTableTextColumn\">";
                     if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($adm_photo_list["pho_locked"]==1 && file_exists($ordner)))
                     {                   
-                        echo"<ul class=\"iconLinkRow\">";
                         //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                         if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                         {
-                            echo"<li><img src=\"". THEME_PATH. "/icons/warning16.png\" class=\"iconLink\" alt=\"Warnhinweis\" title=\"Warnhinweis\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folder_not_found','Message','width=400, height=400, left=310,top=200,scrollbars=no')\" /></li>";
+                            echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/warning16.png" alt="Warnhinweis" title="Warnhinweis"
+                            onmouseover="ajax_showTooltip(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=folder_not_found\',this);" onmouseout="ajax_hideTooltip()"
+                            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=folder_not_found&amp;window=true\',\'Message\',\'width=400, height=400, left=310,top=200,scrollbars=no\')" />';
                         }
 
                         //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                         if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                         {
-                            echo"<li><img src=\"". THEME_PATH. "/icons/lock.png\" class=\"iconLink\" alt=\"Album ist gesperrt\" title=\"Album ist gesperrt\"
-                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=not_approved','Message','width=400, height=300, left=310,top=200,scrollbars=no')\" /></li>";
+                            echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="Album ist gesperrt" title="Album ist gesperrt"
+                            onmouseover="ajax_showTooltip(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=not_approved\',this);" onmouseout="ajax_hideTooltip()"
+                            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=not_approved&amp;window=true\',\'Message\',\'width=400, height=300, left=310,top=200,scrollbars=no\')" />';
                         }
-                        echo"</ul>";
                     }
 
                     //Album angaben

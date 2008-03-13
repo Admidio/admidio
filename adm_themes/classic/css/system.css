@@ -45,11 +45,6 @@ h1 {
      font-size: 		20pt;
 }
 
-hr {
-    border:             1px solid #6CA7A8;
-    width:              85%;
-}
-
 .readonly {
     color:              #666666;
 }
@@ -213,8 +208,7 @@ a:hover, a:active {
 }
 .formFieldList li dl {
     padding:            0px;
-    margin-top:         8px;
-    margin-bottom:      8px;
+    margin:             8px 0px 8px 0px;
 }
 .formFieldList li dl dt {
     text-align:         left;
