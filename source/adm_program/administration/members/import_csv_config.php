@@ -59,31 +59,29 @@ $g_layout['title'] = "Benutzer importieren";
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo "
-<form action=\"$g_root_path/adm_program/administration/members/import_csv.php\" method=\"post\">
-<div class=\"formLayout\" id=\"import_csv_form\">
-    <div class=\"formHead\">Felder zuordnen</div>
-    <div class=\"formBody\">
-        <div style=\"text-align: center; width: 100%;\">
-            <p>Ordne den Datenbankfeldern, wenn m&ouml;glich eine Spalte aus der Datei zu.</p>
-            <p>Auf der linken Seite stehen alle m&ouml;glichen Datenbankfelder und auf der
-            rechten Seite sind jeweils alle Spalten aus der ausgew&auml;hlten Datei
-            aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, k&ouml;nnen
-            diese Felder einfach leer gelassen werden.</p>
-        </div>
+echo '
+<form action="'. $g_root_path. '/adm_program/administration/members/import_csv.php" method="post">
+<div class="formLayout" id="import_csv_form">
+    <div class="formHead">Felder zuordnen</div>
+    <div class="formBody">
+        <p>Ordne den Datenbankfeldern, wenn möglich eine Spalte aus der Datei zu.</p>
+        <p>Auf der linken Seite stehen alle möglichen Datenbankfelder und auf der
+        rechten Seite sind jeweils alle Spalten aus der ausgew&auml;hlten Datei
+        aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, k&ouml;nnen
+        diese Felder einfach leer gelassen werden.</p>
 
-        <div style=\"margin-top: 6px; margin-bottom: 10px;\">
-            <input type=\"checkbox\" id=\"first_row\" name=\"first_row\" style=\"vertical-align: middle;\" checked=\"checked\" value=\"1\" />&nbsp;
-            <label for=\"first_row\">Erste Zeile beinhaltet die Spaltenbezeichnungen</label>
-        </div>
+        <p style="margin-bottom: 10px;">
+            <input type="checkbox" id="first_row" name="first_row" style="vertical-align: middle;" checked="checked" value="1" />&nbsp;
+            <label for="first_row">Erste Zeile beinhaltet die Spaltenbezeichnungen</label>
+        </p>
 
-        <table class=\"tableList\" style=\"width: 80%;\" cellspacing=\"0\">
+        <table class="tableList" style="width: 80%;" cellspacing="0">
             <thead>
                 <tr>
                     <th>Datenbankfeld</th>
                     <th>Dateispalte</th>
                 </tr>
-            </thead>";
+            </thead>';
 
             $line = reset($_SESSION["file_lines"]);
             $arr_columns = explode($_SESSION["value_separator"], $line);
@@ -100,22 +98,22 @@ echo "
                         echo "</tbody>";
                     }
                     $block_id = "cat_". $value['cat_id'];
-                    echo "<tbody>
+                    echo '<tbody>
                         <tr>
-                            <td class=\"tableSubHeader\" colspan=\"4\">
-                                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id', '". THEME_PATH. "')\"><img 
-                                id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>". $value['cat_name']. "
+                            <td class="tableSubHeader" colspan="4">
+                                <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''. THEME_PATH. '\')"><img 
+                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'. $value['cat_name']. '
                             </td>
                         </tr>
                     </tbody>
-                    <tbody id=\"$block_id\">";
+                    <tbody id="$block_id">';
 
                     $category = $value['cat_id'];
                 }             
                 echo "<tr>
                     <td><label for=\"usf-". $value['usf_id']. "\">". $value['usf_name']. ":</label></td>
                     <td>
-                        <select size=\"1\" id=\"usf-". $value['usf_id']. "\" name=\"usf-". $value['usf_id']. "\">
+                        <select size=\"1\" id=\"usf-". $value['usf_id']. "\" name=\"usf-". $value['usf_id']. "\" style=\"width: 95%;\">
                             <option value=\"\" selected=\"selected\"></option>";
 
                             // Alle Spalten aus der Datei in Combobox auflisten

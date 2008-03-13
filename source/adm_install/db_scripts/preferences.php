@@ -24,7 +24,7 @@ $orga_preferences = array(
     'email_administrator'			=> 'webmaster@'. $_SERVER['HTTP_HOST'],
     'homepage_logout'				=> 'index.html',
     'homepage_login'				=> 'index.html',
-    'theme'							=> 'classic',
+    'theme'							=> 'modern',
 	'enable_password_recovery'		=> '1',
 
     // Registrierung
@@ -52,12 +52,15 @@ $orga_preferences = array(
     'photo_show_mode'	  => '1',
 
 	// Forum
-
 	'enable_forum_interface'=> '0',
 	'forum_version'			=> 'phpbb2',
 	'forum_export_user'	    => '1',
 	'forum_praefix'         => 'phpbb',
 	'forum_sqldata_from_admidio'		=> '0',
+	'forum_db'              => '',
+	'forum_srv'             => '',
+	'forum_usr'             => '',
+	'forum_pw'              => '',
 	
     // Gaestebuch
     'enable_guestbook_module'           => '1',

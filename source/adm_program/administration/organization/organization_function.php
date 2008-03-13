@@ -52,32 +52,35 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
 }
 
 // Forumverbindung testen
-if($_POST['enable_forum_interface'] == 1 && $_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
+if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] == 1)
 {
-	$g_message->show("forum_access_data");
-}
-else if ($_POST['enable_forum_interface'] == 1)
-{
-	// Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
-	if($_POST['forum_pw'] == "0000")
-	{
-		$_POST['forum_pw'] = $g_preferences['forum_pw'];
-	}
-	
-	$forum_test = createForumObject($_POST['forum_version']);
-	
-	if($_POST['forum_sqldata_from_admidio'] == 0)
-	{
-		$connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
-	}
-	else
-	{
-		$connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
-	}
-	if($connect_id == false)
-	{
-		$g_message->show("forum_db_connection_failed");
-	}
+    if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
+    {
+    	$g_message->show("forum_access_data");
+    }
+    else
+    {
+    	// Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
+    	if($_POST['forum_pw'] == "0000")
+    	{
+    		$_POST['forum_pw'] = $g_preferences['forum_pw'];
+    	}
+    	
+    	$forum_test = createForumObject($_POST['forum_version']);
+    	
+    	if($_POST['forum_sqldata_from_admidio'] == 0)
+    	{
+    		$connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
+    	}
+    	else
+    	{
+    		$connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
+    	}
+    	if($connect_id == false)
+    	{
+    		$g_message->show("forum_db_connection_failed");
+    	}
+    }
 }
 
 // *******************************************************************************
