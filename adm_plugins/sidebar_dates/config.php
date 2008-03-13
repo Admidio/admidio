@@ -1,16 +1,21 @@
 <?php
 /******************************************************************************
- * Konfigurationsdatei fuer Sidebar-Dates
- * ein Admidio-Plugin
+ * Konfigurationsdatei fuer Admidio-Plugin Sidebar-Dates
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
 // Anzahl der Termine, die angezeigt werden sollen (Default = 2)
 $plg_dates_count = 2;
+
+// Bis-Uhrzeit/Datum anzeigen
+// 0 = Bis-Uhrzeit und Datum nicht anzeigen
+// 1 = (Default) Bis-Uhrzeit und Datum anzeigen
+$plg_show_date_end = 1;
 
 // Name einer CSS-Klasse fuer Links
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen

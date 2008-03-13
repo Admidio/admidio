@@ -2,12 +2,12 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.0.1
+ * Version 1.1.0
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatible ab Admidio-Versions 1.4.1
+ * Kompatible ab Admidio-Versions 2.0.0
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -26,6 +26,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
+require_once(PLUGIN_PATH. "/../adm_program/system/date_class.php");
 require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -34,6 +35,12 @@ if(isset($plg_dates_count) == false || is_numeric($plg_dates_count) == false)
 {
     $plg_dates_count = 2;
 }
+
+if(isset($plg_show_date_end) == false || is_numeric($plg_show_date_end) == false)
+{
+    $plg_show_date_end = 1;
+}
+
 if(isset($plg_max_char_per_word) == false || is_numeric($plg_max_char_per_word) == false)
 {
     $plg_max_char_per_word = 0;
@@ -102,19 +109,43 @@ else
                 LIMIT $plg_dates_count";
 }
 $result = $g_db->query($sql);
+$date = new Date($g_db);
+
+echo '<div id="plugin_'. $plugin_folder. '">';
 
 if($g_db->num_rows($result) > 0)
 {
     while($row = $g_db->fetch_object($result))
     {
-        echo '<div>'. mysqldatetime("d.m.y", $row->dat_begin). '&nbsp;&nbsp;';
+        $date->clear();
+        $date->setArray($row);
+        $html_end_date = "";
+        
+        echo mysqldatetime("d.m.y", $date->getValue("dat_begin")). '&nbsp;&nbsp;';
     
-        if (mysqldatetime("h:i", $row->dat_begin) != "00:00")
+        if ($date->getValue("dat_all_day") != 1)
         {
-            echo mysqldatetime("h:i", $row->dat_begin);
+            echo mysqldatetime("h:i", $date->getValue("dat_begin"));
+        }
+        
+        // Bis-Datum und Uhrzeit anzeigen
+        if($plg_show_date_end)
+        {
+            if(mysqldatetime("d.m.y", $date->getValue("dat_begin")) != mysqldatetime("d.m.y", $date->getValue("dat_end")))
+            {
+                $html_end_date .= mysqldatetime("d.m.y", $date->getValue("dat_end"));
+            }
+            if ($date->getValue("dat_all_day") != 1)
+            {
+                $html_end_date .= mysqldatetime("h:i", $date->getValue("dat_end"));
+            }
+            if(strlen($html_end_date) > 0)
+            {
+                $html_end_date = ' - '. $html_end_date;
+            }
         }
     
-        echo '<br /><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php?id='. $row->dat_id. '" target="'. $plg_link_target. '">';
+        echo $html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php?id='. $date->getValue("dat_id"). '" target="'. $plg_link_target. '">';
     
         if($plg_max_char_per_word > 0)
         {
@@ -122,25 +153,25 @@ if($g_db->num_rows($result) > 0)
             unset($words);
             
             // Woerter unterbrechen, wenn sie zu lang sind
-            $words = explode(" ", $row->dat_headline);
+            $words = explode(" ", $date->getValue("dat_headline"));
             
             for($i = 0; $i < count($words); $i++)
             {
                 if(strlen($words[$i]) > $plg_max_char_per_word)
                 {
-                    $new_headline = "$new_headline ". substr($row->dat_headline, 0, $plg_max_char_per_word). "-<br />". 
-                                    substr($row->dat_headline, $plg_max_char_per_word);
+                    $new_headline = "$new_headline ". substr($date->getValue("dat_headline"), 0, $plg_max_char_per_word). "-<br />". 
+                                    substr($date->getValue("dat_headline"), $plg_max_char_per_word);
                 }
                 else
                 {
                     $new_headline = "$new_headline ". $words[$i];
                 }
             }
-            echo $new_headline. '</a><br />-----<br /></div>';
+            echo $new_headline. '</a><hr />';
         }
         else
         {
-            echo $row->dat_headline. '</a><br />-----<br /></div>';
+            echo $date->getValue("dat_headline"). '</a><hr />';
         }
     }
     
@@ -148,6 +179,8 @@ if($g_db->num_rows($result) > 0)
 }
 else
 {
-    echo '<div>Es sind keine Termine vorhanden.</div>';
+    echo 'Es sind keine Termine vorhanden.';
 }
+
+echo '</div>';
 ?>
