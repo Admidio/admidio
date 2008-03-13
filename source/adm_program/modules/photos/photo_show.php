@@ -9,10 +9,11 @@
  *
  * Uebergaben:
  *
- * bild: welches Bild soll angezeigt werden
- * scal: Pixelanzahl auf die die laengere Bildseite scaliert werden soll
- * nr: Nummer des hochgeladenen bildes
- * side: Seite des Bildes die scaliert werden soll
+ * pho_id    : Id des Albums, aus dem das Bild kommen soll
+ * pho_begin : Datum des Albums
+ * bild      : Nummer des Bildes, das angezeigt werden soll
+ * scal      : Pixelanzahl auf die die Bildseite scaliert werden soll
+ * side      : Seite des Bildes die skaliert werden soll (x oder y)
  *
  *****************************************************************************/
 require("../../system/photo_album_class.php");
@@ -25,76 +26,73 @@ if ($g_preferences['enable_photo_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-
-header("Content-Type: image/jpeg");
-
 //Uebergaben pruefen
-//pho_id
-$pho_id=NULL;
+
+$pho_id    = NULL;
+$pho_begin = 0;
+$pic_nr    = NULL;
+$scal      = NULL;
+$side      = "";
+
+// Album-ID
 if(isset($_GET['pho_id']))
 {
     $pho_id = $_GET['pho_id'];
 }
-if(!is_numeric($pho_id))
-{
-    $g_message->show("invalid");
-}
 
 //pho_begin
-$pho_begin=NULL;
-if(isset($_GET['pho_begin']))
+if(isset($_GET['pho_begin']) && strlen($_GET['pho_begin']) == 10)
 {
-    $pho_begin = $_GET['pho_begin'];
-}
-if(!dtCheckDate(mysqldate("d.m.y", $pho_begin)) && $pho_begin!=0)
-{
-    $g_message->show("invalid");
+    if(dtCheckDate(mysqldate("d.m.y", $_GET['pho_begin'])))
+    {
+        $pho_begin = $_GET['pho_begin'];
+    }
 }
 
 //Bildnr.
-$pic_nr=NULL;
 if(isset($_GET['pic_nr']))
 {
     $pic_nr = $_GET['pic_nr'];
-}
-if(!is_numeric($pic_nr))
-{
-    $g_message->show("invalid");
-}
+} 
 
-//Scale
-$scal=NULL;
+// Bildskalierung
 if(isset($_GET['scal']))
 {
     $scal = $_GET['scal'];
 }
-if(!is_numeric($scal))
-{
-    $g_message->show("invalid");
-}
 
 //Seite
-$side=NULL;
-if(isset($_GET['side']))
+$_GET['side'] = strtolower($_GET['side']);
+
+if(isset($_GET['side'])
+&& ($_GET['side'] ==  "x" || $_GET['side'] == "y"))
 {
     $side = $_GET['side'];
 }
-if($side != "y" && $side != "x" && $side!=NULL)
+
+error_log($pho_id);
+error_log($pho_begin);
+error_log($pic_nr);
+error_log($scal);
+error_log($side);
+
+// Bildpfad zusammensetzten
+if(!is_numeric($pho_id) || $pho_begin == 0 || !is_numeric($pic_nr) || !is_numeric($scal))
 {
-    $g_message->show("invalid");
+    $bild = THEME_SERVER_PATH. "/images/nopix.jpg";
 }
-
-//Bildpfadzusammensetzten
-$bild = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
-
-//Falls die 0 als Bildnummer übergeben wurde
-if(!file_exists($bild))
+else
 {
-    $bild = THEME_PATH. "/images/nopix.jpg";
+    $bild = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
+}
+// im Debug-Modus den ermittelten Bildpfad ausgeben
+if($g_debug == 1)
+{
+    error_log($bild);
 }
 
 //Ermittlung der Original Bildgroesse
-$bildgroesse = getimagesize("$bild");
+$bildgroesse = getimagesize($bild);
 
 //Errechnung seitenverhaeltniss
 $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
@@ -112,7 +110,7 @@ if($side=="y")
 }
 
 //laengere seite soll scallirt werden
-if($side=='')
+if(strlen($side) == 0)
 {
     //Errechnug neuen Bildgroesse Querformat
     if($bildgroesse[0]>=$bildgroesse[1])
@@ -147,6 +145,7 @@ if ($scal>200 && $g_preferences['photo_image_text'] == 1)
 }
 
 //Rueckgabe des Neuen Bildes
+header("Content-Type: image/jpeg");
 imagejpeg($neubild,"",90);
 
 imagedestroy($neubild);

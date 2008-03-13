@@ -3,7 +3,6 @@
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese CSS-Datei dient dazu spezifische Anpassungen am Fotomodul zu machen.
@@ -14,7 +13,7 @@
 /*Die Thumbnails werden in einer Tabelle aufbebaut
 hier koenne Einstellungen fuer diese vorgenommen werden*/
 #photoThumbnailTable {
-    width: 550px;   
+    width: 570px;   
 }
 
 /*Einstellung fuer die Thumbnailtabellenzeile, z.B. die Hoehe*/
@@ -35,46 +34,35 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 
 
 /*Auch die Fotoalben werden in einer Tabelle angezeigt*/
-#photoAlbumTable{
+#photo_album_table{
     width: 550px;
-}
-
-/*Einstellung fuer die Fotoalbentabellenzeile, z.B. die Hoehe*/
-.photoAlbumTableRow{
 }
 
 /*Einstellung fuer die FotoalbentabellenBILDERspalte*/
 .photoAlbumTablePicColumn{
-    padding: 4px;
-    text-align: right;
-    width: 35%;
+    padding: 5px;
+    text-align: left;
+    width: 1px;
 }
 
 /*Einstellung fuer die FotoalbentabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
 .photoAlbumTableTextColumn{
     text-align: left;
-    font-size: 8px;
-}
-
-/*Wenn in dieser Spalte Ein Link vorkommt wir dieser So dargestellt*/
-.photoAlbumTableTextColumn a{
-    font-size: 12px;
-}
-
-/*Auch das Vorschaubild koenne z.B. einen Rand erhalten*/
-.photoPreviewPic{
-    border: none;
-    vertical-align: middle;
+    padding-left: 15px;
 }
 
 /*Umramender Container um Thumbnail- und Fotoalbentabelle, sowie Uploadbericht*/
 .photoModuleContainer{
-    border-width: 0px;
-    border-color: #6CA7A8;
-    border-style: solid;
-    width: 550px;
-    margin: auto;
-    text-align: center;
+    border: 0px solid #6CA7A8;
+    width: 570px;
+    text-align: left;
+}
+
+.photoModuleContainer hr {
+    border:             1px solid #bad8e2;
+    width:              100%;
+    margin-top:         10px; 
+    margin-bottom:      10px; 
 }
 
 /*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/

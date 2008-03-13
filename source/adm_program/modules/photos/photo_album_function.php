@@ -129,7 +129,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     //Photographen
     if(strlen($_POST["pho_photographers"]) == 0)
     {
-        $_POST["pho_photographers"] = "leider unbekannt";
+        $_POST["pho_photographers"] = "unbekannt";
     }
 
     // POST Variablen in das Role-Objekt schreiben

@@ -69,8 +69,6 @@ if($photo_album->getValue("pho_org_shortname") != $g_organization)
 $g_layout['title'] = "Fotos hochladen";
 require(THEME_SERVER_PATH. "/overall_header.php");
 
-echo"<h1 class=\"moduleHeadline\">Fotogalerien - Upload</h1>";
-
 /**************************Formular********************************************************/
 echo"
 <form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
@@ -78,8 +76,7 @@ echo"
     <div class=\"formHead\">Bilder hochladen</div>
     <div class=\"formBody\">
         <div class=\"formRow\">
-            Bilder zu diesem Album hinzufügen:<br />"
-            .$photo_album->getValue("pho_name")."<br />"
+            Bilder zum Album <strong>".$photo_album->getValue("pho_name")."</strong> hinzufügen.<br />"
             ."(Beginn: ". mysqldate("d.m.y", $photo_album->getValue("pho_begin")).")"
             ."
         </div>
