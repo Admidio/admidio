@@ -2,7 +2,7 @@
 /******************************************************************************
  * Random Photo
  *
- * Version 1.0.1
+ * Version 1.0.2
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
  * und verlinkt neben dem Bild das dazugehörige Album
@@ -158,8 +158,8 @@ else
 
 //Ausgabe
 $pho_id = $event['pho_id'];
-
-echo"<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id."\" target=\"$plg_link_target\">";
+echo '<div id="plugin_'. $plugin_folder. '">
+    <a class="$plg_link_class" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'. $plg_link_target. '">';
 //Entscheidung ueber scallierung
 if($bildgroesse[0]/$plg_photos_max_width > $bildgroesse[1]/$plg_photos_max_height)
 {
@@ -177,5 +177,7 @@ if($plg_photos_show_link)
 {
     echo"<br /><a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id."\" target=\"$plg_link_target\">".$link_text."</a>";
 }
+
+echo '</div>';
 
 ?>

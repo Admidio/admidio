@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Announcements
  *
- * Version 1.0.2
+ * Version 1.1.0
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -110,11 +110,13 @@ else
 }
 $result = $g_db->query($sql);
 
+echo '<div id="plugin_'. $plugin_folder. '">';
+
 if($g_db->num_rows($result) > 0)
 {
     while($row = $g_db->fetch_object($result))
     {
-        echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?id=$row->ann_id&amp;headline=$plg_headline\" target=\"$plg_link_target\">";
+        echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $row->ann_id. '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
         
         if($plg_max_char_per_word > 0)
         {
@@ -143,7 +145,7 @@ if($g_db->num_rows($result) > 0)
             echo "$row->ann_headline</a><br />";
         }
          
-        echo "(&nbsp;". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;)<br />-----<br />";
+        echo "(&nbsp;". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;)<hr />";
     }
     
     echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?headline=$plg_headline\" target=\"$plg_link_target\">Alle $plg_headline</a>";
@@ -152,4 +154,7 @@ else
 {
     echo "Es wurden noch keine $plg_headline erfasst.";
 }
+
+echo '</div>';
+
 ?>

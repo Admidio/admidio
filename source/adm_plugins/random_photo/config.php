@@ -1,11 +1,11 @@
 <?php
 /******************************************************************************
- * Konfigurationsdatei fuer Sidebar-Announcements
- * ein Admidio-Plugin
+ * Konfigurationsdatei fuer Admidio-Plugin Random Photo
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Markus Fassbender
+ * Module-Owner : Jochen Erkens
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -26,7 +26,8 @@ $plg_photos_max_height = 200;
 $plg_photos_albums = 0;
 
 //Bildauswahl
-// =1 (erstes Bild) etc. =0 (Zufall,(Default)) 
+// 0 : (Default) Zufallsbild 
+// 1 : erstes Bild etc. 
 $plg_photos_picnr = 0;
 
 //Soll der Link zum Album unter dem Bild angezeigt werden?

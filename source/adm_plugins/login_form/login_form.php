@@ -172,18 +172,18 @@ else
         }
     --></script>
     
-    <form id="plg_login_form" style="display: inline;" action="javascript:loadPageLogin()" method="get">
+    <form id="plugin_'. $plugin_folder. '" style="display: inline;" action="javascript:loadPageLogin()" method="get">
         <ul class="formFieldList" id="plgLoginFormFieldList">
             <li>
                 <dl>
                     <dt><label for="usr_login_name">Login-Name:</label></dt>
-                    <dd><input type="text" id="plg_usr_login_name" name="usr_login_name" size="10" maxlength="35" /></dd>
+                    <dd><input type="text" id="plg_usr_login_name" name="usr_login_name" size="10" maxlength="35" tabindex="95" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
                     <dt><label for="usr_password">Passwort:</label></dt>
-                    <dd><input type="password" id="plg_usr_password" name="usr_password" size="10" maxlength="25" /></dd>
+                    <dd><input type="password" id="plg_usr_password" name="usr_password" size="10" maxlength="25" tabindex="96" /></dd>
                 </dl>
             </li>';
             
@@ -193,7 +193,7 @@ else
                 <li>
                     <dl>
                         <dt><label for="plg_auto_login">Angemeldet bleiben:</label></dt>
-                        <dd><input type="checkbox" id="plg_auto_login" name="auto_login" value="1" /></dd>
+                        <dd><input type="checkbox" id="plg_auto_login" name="auto_login" value="1" tabindex="97" /></dd>
                     </dl>
                 </li>';
             } 
@@ -202,7 +202,7 @@ else
             <li id="plgRowLoginButton">
                 <dl>
                     <dt>
-                        <button type="submit" value="Login">Login</button>
+                        <button type="submit" value="Login" tabindex="98">Login</button>
                     </dt>
                     <dd>&nbsp;</dd>
                 </dl>
