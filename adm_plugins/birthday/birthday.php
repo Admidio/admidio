@@ -132,6 +132,8 @@ $result = $g_db->query($sql);
 
 $anz_geb = $g_db->num_rows($result);
 
+echo '<div id="plugin_'. $plugin_folder. '">';
+
 if($anz_geb > 0)
 {
     if($plg_show_names_extern == 1 || $g_valid_login == 1)
@@ -203,7 +205,7 @@ if($anz_geb > 0)
                              target="'. $plg_link_target. '">'. $show_name. '</a>
                              <span class="iconLink">
                                 <a href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
-                                src="'. THEME_PATH. '/images/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
+                                src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
                             </span>';
                     }
                     else
@@ -211,7 +213,7 @@ if($anz_geb > 0)
                         $show_name = $show_name. 
                             '<span class="iconLink">
                                 <a href="mailto:'. $row['email']. '"><img 
-                                src="'. THEME_PATH. '/images/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
+                                src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
                             </span>';
                     }
                 }
@@ -277,4 +279,7 @@ else
         echo "<p>Heute hat keiner Geburtstag.</p>";
     }
 }
+
+echo '</div>';
+
 ?>

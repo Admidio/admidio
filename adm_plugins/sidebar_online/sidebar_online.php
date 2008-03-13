@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Online
  *
- * Version 1.0.2
+ * Version 1.0.3
  *
  * Plugin zeigt Besucher und aktive registrierte Mitglieder der Homepage an
  *
@@ -95,6 +95,8 @@ if($plg_show_self == 0 && $g_valid_login)
 $sql = $sql. " ORDER BY ses_usr_id ";
 $result = $g_db->query($sql);
 
+echo '<div id="plugin_'. $plugin_folder. '">';
+
 if($g_db->num_rows($result) > 0)
 {
     echo "Seit ".$plg_time_online." Minuten online:<br />";
@@ -137,4 +139,7 @@ else
 {
     echo "Momentan ist kein anderer Benutzer online";
 }
+
+echo '</div>';
+
 ?>
