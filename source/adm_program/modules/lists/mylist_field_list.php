@@ -32,7 +32,7 @@ echo "
         <option value=\"\" ";
             if($b_ajax == true || $b_history == false)
             {
-                echo " selected=\"selected\" ";
+                echo ' selected="selected" ';
             }
             echo "></option>";
 
@@ -55,23 +55,23 @@ echo "
                         {
                             if($form_values["column$i"] == "usr_photo")
                             {
-                                $photo_selected = " selected=\"selected\" ";                          
+                                $photo_selected = ' selected="selected" ';                        
                             }
                             elseif($form_values["column$i"] == "usr_login_name")
                             {
-                                $login_selected = " selected=\"selected\" ";                          
+                                $login_selected = ' selected="selected" ';                 
                             }
                         }
-
+                    
                         // Zusatzfelder z.B. usr_photo, mem_begin hinzufuegen
-                        echo "<option value=\"usr_login_name\" $login_selected>Benutzername</option>
-                              <option value=\"usr_photo\" $photo_selected>Foto</option>";
+                        echo '<option value="usr_login_name" $login_selected>Benutzername</option>
+                              <option value="usr_photo" $photo_selected>Foto</option>';
                     }
 
-                    echo "</optgroup>";
+                    echo '</optgroup>';
                 }
 
-                echo "<optgroup label=\"". $value['cat_name']. "\">";
+                echo '<optgroup label="'. $value['cat_name']. '">';
 
                 if($value['cat_name'] == "Stammdaten")
                 {
@@ -83,6 +83,7 @@ echo "
                 }
                 $category = $value['cat_id'];
             }
+            
 
             //Nur Moderatoren duerfen sich gelockte Felder anzeigen lassen 
             if($value['usf_hidden'] == 0 || $g_current_user->assignRoles())
@@ -92,10 +93,20 @@ echo "
                 if($b_ajax == false && $b_history == true
                 && $form_values["column$i"] == $value['usf_id'])
                 {
-                    $selected = " selected=\"selected\" ";                          
+                    $selected = ' selected="selected" ';                  
+                }
+                else
+                {
+					// Nachname und Vorname sollen in den ersten beiden
+					// Spalten vorgeschlagen werden
+					if(($value['usf_name'] == "Nachname" && $i == 1 )
+					|| ($value['usf_name'] == "Vorname" && $i == 2 )) 
+					{
+						$selected = ' selected="selected" ';
+					}
                 }
 
-                echo"<option value=\"". $value['usf_id']. "\" $selected >". $value['usf_name']. "</option>";
+                echo '<option value="'. $value['usf_id']. '" $selected >'. $value['usf_name']. '</option>';
             }
         } 
 
