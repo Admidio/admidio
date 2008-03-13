@@ -163,7 +163,7 @@ echo "
                             <dt><label for=\"version\">Admidio-Version:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"version\" name=\"version\" class=\"readonly\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. "\" />&nbsp;
-                                <a href=\"http://www.admidio.org/index.php?download.php\">Update suchen</a>
+                                <a href=\"http://www.admidio.org/index.php?page=download\">Update suchen</a>
                             </dd>
                         </dl>
                     </li>
