@@ -189,7 +189,7 @@ echo "
                     <dd>
                         <select id=\"lnk_cat_id\" name=\"lnk_cat_id\" size=\"1\" tabindex=\"3\">
                             <option value=\" \""; 
-                                if($form_values['category'] == 0) 
+                                if($link->getValue("lnk_cat_id") == 0) 
                                 {
                                     echo " selected=\"selected\"";
                                 }
