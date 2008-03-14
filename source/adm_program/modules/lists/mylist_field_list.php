@@ -106,7 +106,7 @@ echo "
 					}
                 }
 
-                echo '<option value="'. $value['usf_id']. '" $selected >'. $value['usf_name']. '</option>';
+                echo '<option value="'. $value['usf_id']. '" '. $selected. ' >'. $value['usf_name']. '</option>';
             }
         } 
 
