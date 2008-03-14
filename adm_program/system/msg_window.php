@@ -274,6 +274,7 @@ echo "
             case "date_location_link":
             	echo "Geben Sie genügend Informationen zum Treffpunkt ein, so kann ein Link bzw. eine Route zu 
             	diesem Treffpunkt über Google-Maps erstellt werden."; 
+            	break;
 
             case "user_field_description":
                 echo $g_current_user->getProperty($req_err_text, "usf_description");
