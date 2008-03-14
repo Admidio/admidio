@@ -180,7 +180,7 @@ echo "
                 $category = $row->cat_name;
             }
             echo "
-            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+            <tr class=\"tableMouseOver\">
                <td style=\"text-align: center;\">
                   <input type=\"checkbox\" id=\"role-$row->rol_id\" name=\"role-$row->rol_id\" ";
                      if($row->mem_usr_id > 0)

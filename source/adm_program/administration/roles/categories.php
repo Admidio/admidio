@@ -159,7 +159,7 @@ echo "
             $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge ändern\" title=\"Reihenfolge ändern\" />";
         }
         echo "
-        <tr id=\"row_". $cat_row['cat_id']. "\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+        <tr id=\"row_". $cat_row['cat_id']. "\" class=\"tableMouseOver\">
             <td style=\"width: 5%;\">$drag_icon</td>
             <td><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">". $cat_row['cat_name']. "</a></td>
             <td>";

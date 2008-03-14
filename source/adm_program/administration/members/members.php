@@ -401,7 +401,7 @@ if($num_members > 0)
             if($row = $g_db->fetch_array($result_mgl))
             {
                 echo "
-                <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                <tr class=\"tableMouseOver\">
                     <td>". ($req_start + $i + 1). "</td>
                     <td>";
                         if($row['member'] > 0)

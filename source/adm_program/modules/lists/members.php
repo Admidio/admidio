@@ -507,7 +507,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             }
             
             echo"
-            <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+            <tr class=\"tableMouseOver\">
                 <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                 <td>". $user['last_name']."</td>
                 <td>". $user['first_name']."</td>
@@ -618,7 +618,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                             .$user['zip_code']."&nbsp;".$user['city']."&nbsp;&nbsp;&nbsp;"
                             .$user['phone'];
                 echo"
-                <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+                <tr class=\"tableMouseOver\">
                     <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                     <td>". $user['last_name']."</td>
                     <td>". $user['first_name']."</td>

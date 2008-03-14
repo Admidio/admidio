@@ -129,7 +129,7 @@ echo "
                 $cat_id = $row->cat_id;
             }           
             echo "
-            <tr id=\"row_$row->usf_id\" class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+            <tr id=\"row_$row->usf_id\" class=\"tableMouseOver\">
                 <td style=\"width: 18px;\"><img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge &auml;ndern\" title=\"Reihenfolge &auml;ndern\" /></td>
                 <td><a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\">$row->usf_name</a></td>
                 <td>$row->usf_description</td>
