@@ -99,7 +99,8 @@ $g_db->select_db($g_adm_db);
 
 $sql    = "SELECT DISTINCT usr_id, usr_login_name, 
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 
-                           birthday.usd_value as birthday, email.usd_value as email
+                           birthday.usd_value as birthday, email.usd_value as email,
+                           gender.usd_value as gender
              FROM ". TBL_USERS. " 
             RIGHT JOIN ". TBL_USER_DATA. " as birthday
                ON birthday.usd_usr_id = usr_id
@@ -117,6 +118,9 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
              LEFT JOIN ". TBL_USER_DATA. " as email
                ON email.usd_usr_id = usr_id
               AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+             LEFT JOIN ". TBL_USER_DATA. " as gender
+               ON gender.usd_usr_id = usr_id
+              AND gender.usd_usf_id = ". $g_current_user->getProperty("Geschlecht", "usf_id"). "
              LEFT JOIN ". TBL_MEMBERS. "
                ON mem_usr_id = usr_id
               AND mem_valid  = 1
@@ -223,20 +227,20 @@ if($anz_geb > 0)
                     if($g_valid_login == false
                     && $plg_show_alter_anrede <= $age)
                     {
-                        if (($row->usr_gender) > 1)
+                        if (($row->gender) > 1)
                         {
-                            $show_name = "Frau $row->usr_last_name";
+                            $show_name = "Frau $row->last_name";
                         }
                         else
                         {
                             // Eine kleine Feinheit zur Textanpassung bei den Herren ;-)
                             if ($plg_show_zeitraum > 0)
                             {
-                                $show_name = "Herrn $row->usr_last_name";
+                                $show_name = "Herrn $row->last_name";
                             }
                             else
                             {
-                                $show_name = "Herr $row->usr_last_name";
+                                $show_name = "Herr $row->last_name";
                             }
                         }
                     }
