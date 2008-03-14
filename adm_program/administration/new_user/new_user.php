@@ -72,7 +72,7 @@ echo "
     while($row = $g_db->fetch_object($usr_result))
     {
         echo "
-        <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+        <tr class=\"tableMouseOver\">
             <td><a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->last_name, $row->first_name</a></td>
             <td>$row->usr_login_name</td>
             <td>";

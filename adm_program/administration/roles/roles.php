@@ -145,7 +145,7 @@ echo "
             $cat_id = $row->cat_id;
         }            
         echo "
-        <tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\" onmouseout=\"this.className='listMouseOut'\">
+        <tr class=\"tableMouseOver\">
             <td>&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=$row->rol_id\" title=\"$row->rol_description\">$row->rol_name</a></td>
             <td>";
                 if($row->rol_assign_roles == 1)

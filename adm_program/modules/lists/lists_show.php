@@ -528,9 +528,8 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
 
         if($req_mode == "html")
         {
-            echo "<tr class=\"listMouseOut\" onmouseover=\"this.className='listMouseOver'\"
-            onmouseout=\"this.className='listMouseOut'\" style=\"cursor: pointer\"
-            onclick=\"window.location.href='$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "'\">\n";
+            echo '<tr class="tableMouseOver" style="cursor: pointer"
+            onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'">\n';
         }
         else if($req_mode == "print")
         {

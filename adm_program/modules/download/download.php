@@ -242,7 +242,7 @@ for($i=0; $i<count($ordnerarray); $i++)
         }
 
         echo "
-        <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
+        <tr class=\"tableMouseOver\">
             <td>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/download/download.php?folder=". urlencode($next_folder). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
@@ -320,7 +320,7 @@ for($i=0; $i<count($ordnerarray); $i++)
 
         //Link und Dateiinfo Ausgabe
         echo "
-        <tr class=\"listMouseOut\" onMouseOver=\"this.className='listMouseOver'\" onMouseOut=\"this.className='listMouseOut'\">
+        <tr class=\"tableMouseOver\">
             <td>
                 <span class=\"iconLink\">
                     <a href=\"$g_root_path/adm_program/modules/download/get_file.php?folder=". urlencode($req_folder). "&amp;file=". urlencode($ordnerarray[$i]). "&amp;default_folder=". urlencode($req_default_folder). "\"><img 
