@@ -432,7 +432,8 @@ for($i = $start_column; $i < count($arr_fields); $i++)
         $arr_usf_types[$usf_id] = $row->usf_type;
         $arr_usf_names[$usf_id] = $row->usf_name;
 
-        if($arr_usf_types[$usf_id] == "CHECKBOX")
+        if($arr_usf_types[$usf_id] == "CHECKBOX"
+        || $arr_usf_names[$usf_id] == "Geschlecht")
         {
             $align = "center";
         }
@@ -444,12 +445,6 @@ for($i = $start_column; $i < count($arr_fields); $i++)
     else
     {
         $col_name = $arr_col_name[$arr_fields[$i]];
-
-        if($arr_fields[$i] == "usr_gender")
-        {
-            // Icon des Geschlechts zentriert darstellen
-            $align = "center";
-        }
     }
 
     if($req_mode == "csv")
@@ -529,7 +524,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
         if($req_mode == "html")
         {
             echo '<tr class="tableMouseOver" style="cursor: pointer"
-            onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'">\n';
+            onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'">';
         }
         else if($req_mode == "print")
         {
@@ -558,7 +553,8 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 $align = "left";
                 if($b_user_field == true)
                 {
-                    if($arr_usf_types[$usf_id] == "CHECKBOX")
+                    if($arr_usf_types[$usf_id] == "CHECKBOX"
+                    || $arr_usf_names[$usf_id] == "Geschlecht")
                     {
                         $align = "center";
                     }
@@ -567,13 +563,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                         $align = "right";
                     }
                 }
-                else
-                {
-                    if($arr_fields[$i] == "usr_gender")
-                    {
-                        $align = "center";
-                    }
-                }
+
                 if($i == $start_column)
                 {
                     // die Laufende Nummer noch davorsetzen
@@ -619,8 +609,8 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     }
                     else
                     {
-                        $content = "<img src=\"". THEME_PATH. "/icons/male.png\"
-                                    style=\"vertical-align: middle;\" alt=\"m&auml;nnlich\" />";
+                        $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png"
+                                    title="männlich" alt="männlich" />';
                     }
                 }
                 elseif($row[$i] == 2)
@@ -631,8 +621,8 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     }
                     else
                     {
-                        $content = "<img src=\"". THEME_PATH. "/icons/female.png\"
-                                    style=\"vertical-align: middle;\" alt=\"weiblich\" />";
+                        $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png"
+                                    alt="weiblich" alt="weiblich" />';
                     }
                 }
                 else
