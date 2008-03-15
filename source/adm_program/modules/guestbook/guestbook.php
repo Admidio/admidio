@@ -132,15 +132,15 @@ $g_layout['header'] = $g_layout['header']. "
 
         function toggleDiv(objectId)
         {
-            if (document.getElementById(objectId).style.visibility == 'visible')
-            {
-                document.getElementById(objectId).style.visibility = 'hidden';
-                document.getElementById(objectId).style.display    = 'none';
-            }
-            else
+            if (document.getElementById(objectId).style.visibility == 'hidden')
             {
                 document.getElementById(objectId).style.visibility = 'visible';
                 document.getElementById(objectId).style.display    = 'block';
+            }
+            else
+            {
+                document.getElementById(objectId).style.visibility = 'hidden';
+                document.getElementById(objectId).style.display    = 'none';
             }
         }
 
@@ -220,7 +220,7 @@ if ($g_db->num_rows($guestbook_result) == 0)
     }
     else
     {
-        echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+        echo "<p>Es sind keine Einträge vorhanden.</p>";
     }
 }
 else
@@ -312,65 +312,51 @@ else
 
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
-                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0 && $g_preferences['enable_intial_comments_loading'] == 0)
+                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0)
                 {
+                	if($g_preferences['enable_intial_comments_loading'] == 1)
+                	{
+                		$visibility_show_comments = "hidden";
+                		$display_show_comments    = "none";
+                		$visibility_others        = "visible";
+                		$display_others           = "block";
+                	}
+                	else
+                	{
+                		$visibility_show_comments = "visible";
+                		$display_show_comments    = "block";
+                		$visibility_others        = "hidden";
+                		$display_others           = "none";
+                	}
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
-                    echo "
-                    <div id=\"commentsVisible_$row->gbo_id\" class=\"hideCommentLink\" style=\"visibility: hidden; display: none;\">
-                        <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
-                            alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\" /></a>
-                            <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
+                    echo '
+                    <div id="commentsVisible_'. $row->gbo_id. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
+                        <span class="iconTextLink">
+                            <a href="javascript:toggleComments('. $row->gbo_id. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            alt="Kommentare ausblenden" title="Kommentare ausblenden" /></a>
+                            <a href="javascript:toggleComments('. $row->gbo_id. ')">Kommentare ausblenden</a>
                         </span>
-                    </div>";
+                    </div>';
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
-                    echo "
-                    <div id=\"commentsInvisible_$row->gbo_id\" class=\"showCommentLink\" style=\"visibility: visible; display: block;\">
-                        <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
-                            alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\" /></a>
-                            <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
+                    echo '
+                    <div id="commentsInvisible_'. $row->gbo_id. '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
+                        <span class="iconTextLink">
+                            <a href="javascript:toggleComments('. $row->gbo_id. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            alt="Kommentare anzeigen" title="Kommentare anzeigen" /></a>
+                            <a href="javascript:toggleComments('. $row->gbo_id. ')">'. $g_db->num_rows($comment_result). ' Kommentar(e) zu diesem Eintrag</a>
                         </span>
-                        <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
-                    </div>";
+                        <div id="comments_'. $row->gbo_id. '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
+                    </div>';
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
-                    echo "
-                    <div id=\"commentSection_$row->gbo_id\" class=\"commentBoxHidden\"></div>";
+                    echo '<div id="commentSection_'. $row->gbo_id. '" class="commentBox" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">';
+                    	if($g_preferences['enable_intial_comments_loading'] == 1)
+                    	{
+                    		include("get_comments.php");
+                    	}
+                    echo '</div>';
                 }
-                // Falls Kommentare vorhanden sind und diese direkt geladen und angezeigt werden sollen..
-                elseif ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0 && $g_preferences['enable_intial_comments_loading'] == 1)
-                {
-                    // Dieses div wird direkt angezeigt
-                    echo "
-                    <div id=\"commentsVisible_$row->gbo_id\" class=\"hideCommentLink\" style=\"visibility: visible; display: block;\">
-                        <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
-                            alt=\"Kommentare ausblenden\" title=\"Kommentare ausblenden\" /></a>
-                            <a href=\"javascript:toggleComments($row->gbo_id)\">Kommentare ausblenden</a>
-                        </span>
-                    </div>";
-
-                    // Dieses div wird ausgeblendet bzw wieder angezeigt wenn die Kommentare ausgeblendet werden
-                    echo "
-                    <div id=\"commentsInvisible_$row->gbo_id\" class=\"showCommentLink\" style=\"visibility: hidden; display: none;\">
-                        <span class=\"iconTextLink\">
-                            <a href=\"javascript:toggleComments($row->gbo_id)\"><img src=\"". THEME_PATH. "/icons/comments.png\"
-                            alt=\"Kommentare anzeigen\" title=\"Kommentare anzeigen\" /></a>
-                            <a href=\"javascript:toggleComments($row->gbo_id)\">". $g_db->num_rows($comment_result). " Kommentar(e) zu diesem Eintrag</a>
-                        </span>
-                        <div id=\"comments_$row->gbo_id\" style=\"text-align: left;\"></div>
-                    </div>";
-
-                    // Hier ist das div, in das die Kommentare reingesetzt werden
-                    echo "
-                    <div id=\"commentSection_$row->gbo_id\" class=\"commentBoxHidden\" style=\"visibility: visible; display: block;\">";
-                        include("get_comments.php");
-                    echo "
-                    </div>";
-                }
-
 
                 if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) == 0 && ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1) )
                 {

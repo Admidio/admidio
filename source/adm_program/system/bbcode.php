@@ -53,7 +53,7 @@ function ubbtexthandler($text, $this = null)
 {
   global $g_root_path;
 
-  $text = htmlspecialchars($text);
+  //$text = htmlspecialchars($text);
   if(is_object($this)) if(strpos(strtolower($text), '/me') > 0) $text = eregi_replace("([^[])/me([^\n\r$]*)([\n\r$])", "\\1<span class=\"me\">*".$this->username." \\2 *</span>\\3", $text);
   $text = nl2br($text);
 
