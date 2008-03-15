@@ -98,18 +98,16 @@ if (isset($comment_result))
                 echo "</div>
             </div>
 
-            <div class=\"groupBoxBody\">
-                <div class=\"commentBoxText\">";
-                    // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-                    if ($g_preferences['enable_bbcode'] == 1)
-                    {
-                        echo $bbcode->parse($row->gbc_text);
-                    }
-                    else
-                    {
-                        echo nl2br($row->gbc_text);
-                    }
-                echo "</div>";
+            <div class=\"groupBoxBody\">";
+				// wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
+				if ($g_preferences['enable_bbcode'] == 1)
+				{
+					echo $bbcode->parse($row->gbc_text);
+				}
+				else
+				{
+					echo nl2br($row->gbc_text);
+				}
 
                 // Falls der Kommentar editiert worden ist, wird dies angezeigt
                 if($row->gbc_usr_id_change > 0)

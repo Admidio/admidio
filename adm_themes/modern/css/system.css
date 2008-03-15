@@ -30,17 +30,17 @@
 }
 
 body {
-	color: #606465;
-	padding-bottom: 15px;
-	padding-top: 15px;
-	margin: auto;
-	font-size: 11pt;
-	font-family: Helvetica, Verdana, Arial, sans-serif;
-	text-align: center;
-	background-color: #96c4cb; 
-	background-repeat: repeat-x;
+	color: 				#606465;
+	padding-bottom: 	15px;
+	padding-top: 		15px;
+	margin: 			auto;
+	font-size: 			11pt;
+	font-family: 		Helvetica, Verdana, Arial, sans-serif;
+	text-align: 		left;
+	background-color: 	#96c4cb; 
+	background-repeat: 	repeat-x;
 	background-attachment: fixed;
-	background-image: url(../images/background.png);
+	background-image: 	url(../images/background.png);
 }
 
 h1 {
@@ -62,7 +62,7 @@ h1 {
 }
 
 textarea {
-    font-family:        arial, sans-serif;
+    font-family:        Arial, sans-serif;
     font-size:          10pt;
 }
 
@@ -82,13 +82,13 @@ button img {
 /* Links */
 
 a:link, a:visited {
-    color: #222222;
-	text-decoration: underline;
+    color: 				#222222;
+	text-decoration: 	underline;
 }
 
 a:hover, a:active {
-	text-decoration: underline;
-	color: #FF9C00;
+	text-decoration: 	underline;
+	color: 				#FF9C00;
 }
 
 /* Layout fuer die Boxen (Termine usw.)
@@ -100,61 +100,35 @@ a:hover, a:active {
     width:              570px;
     overflow:           hidden;
     margin-bottom:      30px;
+    text-align:			left;
 }
 
 .boxHead {
     color:              #333333;
-    text-align:         left;
     width:              100%;
     min-height:         20px;
     font-size:          12pt;
     font-weight:        bold;
-    padding:            2px;
     border-bottom:      2px solid #449ba6;
 }
 
-.boxHead img {
-    margin-right:       4px;
-    vertical-align:     middle;
-    border: 			0px;
+.boxHeadLeft img {
+    margin-right:       5px;
+    vertical-align:     bottom;
+    border-width: 		none;
 }
 
 .boxHeadLeft{
     float:              left;
-    margin-left:        5px;
-}
-
-.boxHeadCenter{
-    float:              left;
-    margin-left:        10px;
 }
 
 .boxHeadRight{
     float:              right;
-    margin-right:       5px;
 }
 
 .boxBody {
-    text-align:         left;
-    padding:            5px;
-}
-
-/* Layout fuer die Komentare innerhalb des boxBodys */
-.commentBoxHidden{
-	visibility:         hidden;
-	display:            none;
-}
-
-.showCommentLink{
-	margin:             8px 4px 4px;
-}
-
-.hideCommentLink{
-	margin:              8px 4px 4px;
-}
-
-.commentBoxText{
-	margin-top: 		20px;
+    padding:            10px 0px 5px 0px;
+    clear:				both;
 }
 
 /* Layout fuer die Formulare
@@ -178,6 +152,7 @@ a:hover, a:active {
 .formBody {
     padding-top:        10px;
     padding-bottom:     10px;
+    text-align:			left;
 }
 
 .formBody hr {
@@ -206,18 +181,15 @@ a:hover, a:active {
     margin:             8px 0px 8px 0px;
 }
 .formFieldList li dl dt {
-    text-align:         left;
     float:              left;
 }
 .formFieldList li dl dd {
     margin-left:        31%;
-    text-align:         left;
 }
 
 .formSubmit {
     padding-top:        5px;
     padding-bottom:     5px;
-    text-align: left 	;
 }
 
 
@@ -227,18 +199,19 @@ a:hover, a:active {
 .groupBox {
     color:              #555555;
     border:             2px solid #449ba6;
-    /*border-collapse:    collapse;*/
     padding:            5px 10px 5px 10px;
     text-align:         left;
     margin-top:         12px;
 }
 
-/* Ueberschrift der rechteckigen Groupbox */
-
 .groupBoxHeadline {
     color:              #333333;
     font-weight:        bold;
-    padding-bottom:     5px;
+}
+
+.groupBoxBody {
+	padding-top: 7px;
+	clear: both;
 }
 
 /* Layout fuer Listen
@@ -255,14 +228,12 @@ a:hover, a:active {
 
 .tableList th {
     background-color:   #85C226;
-    text-align:         left;
     padding:            3px;
 	background-repeat: 	repeat-x;
 	background-image: 	url(../images/stripe.png);    
 }
 
 .tableList td {
-    text-align:         left;
     vertical-align:     top;
     padding:            3px;
 }
@@ -277,7 +248,6 @@ a:hover, a:active {
     font-weight:        bold;
     font-style:         italic;
     letter-spacing:     0.2em;
-    text-align:         left;
     background-repeat: 	repeat-x;
 	background-image: 	url(../images/sub_row_marker.png);   
 }
@@ -292,9 +262,7 @@ a:hover, a:active {
 .iconTextLinkList {
     list-style-type:    none;
     padding:            0px;
-    margin-top: 		25px;
-    margin-bottom: 		25px;
-    text-align: 		left;
+    margin: 		    25px 0px 25px 0px;
 }
 
 .iconTextLinkList li{   
@@ -342,7 +310,7 @@ a:hover, a:active {
 
 /* Elemente fuer Navigationsklasse */
 .pageNavigation {
-    text-align:         left;
+    /*text-align:         left;*/
     vertical-align:     middle;
     margin-top:         15px;
     margin-bottom:      25px;
@@ -363,10 +331,6 @@ a:hover, a:active {
     margin-top:         8px;
     text-align:         left;
     color:				#555555;
-}
-
-.formBody .editInformation {
-    text-align:         center;
 }
 
 /*Pflichtfeldmarkierung*/
@@ -434,6 +398,11 @@ a:hover, a:active {
 #search_members {
 	margin-top:			10px;
 	padding-bottom:		10px;	
+}
+
+/* spezielle Anpassung fuer das Gaestebuch */
+.commentLink{
+	margin:             8px 4px 4px 0px;
 }
 
 /* spezielle Anpassung fuer die Profilseite */

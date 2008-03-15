@@ -114,17 +114,12 @@ a:hover, a:active {
 .boxHead img {
     margin-right:       4px;
     vertical-align:     middle;
-    border: 			0px;
+    border: 			none;
 }
 
 .boxHeadLeft{
     float:              left;
     margin-left:        5px;
-}
-
-.boxHeadCenter{
-    float:              left;
-    margin-left:        10px;
 }
 
 .boxHeadRight{
@@ -137,24 +132,7 @@ a:hover, a:active {
     text-align:         left;
     background-color:   #eaeaea;
     padding:            5px;
-}
-
-/*Layout fuer die Komentare innerhalb des boxBodys*/
-.commentBoxHidden{
-	visibility:         hidden;
-	display:            none;
-}
-
-.showCommentLink{
-	margin:             8px 4px 4px;
-}
-
-.hideCommentLink{
-	margin:              8px 4px 4px;
-}
-
-.commentBoxText{
-	margin-top: 		20px;
+    clear:				both;
 }
 
 /* Layout fuer die Formulare
@@ -183,6 +161,7 @@ a:hover, a:active {
     color:              #555555;
     background-color:   #eaeaea;
     padding:            10px 15px 10px 15px;
+    text-align:			center;
 }
 
 .formBody hr {
@@ -222,7 +201,6 @@ a:hover, a:active {
 .formSubmit {
     padding-top:        5px;
     padding-bottom:     5px;
-    text-align: 	    center;
 }
 
 
@@ -238,12 +216,14 @@ a:hover, a:active {
     margin-top:         12px;
 }
 
-/* Ueberschrift der rechteckigen Groupbox */
-
 .groupBoxHeadline {
     color:              #333333;
     font-weight:        bold;
-    padding-bottom:     5px;
+}
+
+.groupBoxBody {
+	padding-top: 7px;
+	clear: both;
 }
 
 /* Layout fuer Listen
@@ -365,11 +345,6 @@ a:hover, a:active {
 .editInformation{
     font-size:          8pt;
     margin-top:         8px;
-    text-align:         left;
-}
-
-.formBody .editInformation {
-    text-align:         center;
 }
 
 /*Pflichtfeldmarkierung*/
@@ -432,6 +407,11 @@ a:hover, a:active {
 
 #organization_form .formFieldList li dl dd {
     margin-left:        55%;
+}
+
+/* spezielle Anpassung fuer das Gaestebuch */
+.commentLink{
+	margin:             8px 4px 4px 0px;
 }
 
 /* spezielle Anpassung fuer die Profilseite */
