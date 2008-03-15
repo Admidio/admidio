@@ -138,17 +138,16 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
 <script language=\"javascript\" type=\"text/javascript\">
-function emoticon(text) {
+function emoticon(text) 
+{
 	var txtarea = document.getElementById('gbo_text');
-	text = text + ' ';
+
 	if (txtarea.createTextRange && txtarea.caretPos) {
-		var caretPos = txtarea.caretPos;
-		caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? text + ' ' : text;
-		txtarea.focus();
+		txtarea.caretPos.text = text;
 	} else {
 		txtarea.value  += text;
-		txtarea.focus();
 	}
+	txtarea.focus();
 }
 
 var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
@@ -164,7 +163,8 @@ var bbcodestext = Array(\"text_bold_point.png\",\"text_bold.png\",
                         \"image_point.png\",\"image.png\");
 
 
-function bbcode(nummer) {
+function bbcode(nummer) 
+{
    var arrayid;
    if (vorbelegt[nummer]) {
       arrayid = nummer*2+1;
@@ -177,7 +177,8 @@ function bbcode(nummer) {
 }
 
 //Funktion schließt alle offnen Tags
-function bbcodeclose() {
+function bbcodeclose() 
+{
    for (var i=0;i<9;i++) {
       if (vorbelegt[i]) {
          bbcode(i);
