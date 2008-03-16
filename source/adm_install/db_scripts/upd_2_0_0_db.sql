@@ -28,6 +28,12 @@ ALTER TABLE %PRAEFIX%_users MODIFY COLUMN `usr_login_name` VARCHAR(35) DEFAULT N
 
 -- Dates-Tabelle ergaenzen
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_all_day` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `dat_end`;
+ALTER TABLE %PRAEFIX%_dates MODIFY COLUMN `dat_begin` DATETIME NOT NULL;
+ALTER TABLE %PRAEFIX%_dates MODIFY COLUMN `dat_end` DATETIME NOT NULL;
+
+-- Photos-Tabelle ergaenzen
+ALTER TABLE %PRAEFIX%_photos MODIFY COLUMN `pho_begin` DATETIME NOT NULL;
+ALTER TABLE %PRAEFIX%_photos MODIFY COLUMN `pho_end` DATETIME NOT NULL;
 
 -- Announcement-Tabelle korrigieren
 ALTER TABLE %PRAEFIX%_announcements DROP FOREIGN KEY %PRAEFIX%_FK_ANN_USR;
