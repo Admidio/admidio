@@ -30,25 +30,25 @@
 }
 
 body {
-	color: 				#606465;
-	padding-bottom: 	15px;
-	padding-top: 		15px;
-	margin: 			auto;
-	font-size: 			11pt;
-	font-family: 		Helvetica, Verdana, Arial, sans-serif;
-	text-align: 		left;
-	background-color: 	#96c4cb; 
-	background-repeat: 	repeat-x;
-	background-attachment: fixed;
-	background-image: 	url(../images/background.png);
+    color:              #606465;
+    padding-bottom:     15px;
+    padding-top:        15px;
+    margin:             auto;
+    font-size:          11pt;
+    font-family:        Helvetica, Verdana, Arial, sans-serif;
+    text-align:         center;
+    background-color:   #96c4cb; 
+    background-repeat:  repeat-x;
+    background-attachment: fixed;
+    background-image:   url(../images/background.png);
 }
 
 h1 {
-	padding-top: 		5px;
-	margin-top: 		0px;
-	margin-bottom: 		20px;
-	font-size: 			18pt;
-	color: 				#449ba6;
+    padding-top:        5px;
+    margin-top:         0px;
+    margin-bottom:      20px;
+    font-size:          18pt;
+    color:              #449ba6;
 }
 
 .readonly {
@@ -57,7 +57,7 @@ h1 {
 
 /* Elemente, die fuer ein Drag&Drop angefasst werden koennen */
 .dragable {
-    cursor:     		move;
+    cursor:             move;
     border-width:       0px;
 }
 
@@ -82,13 +82,13 @@ button img {
 /* Links */
 
 a:link, a:visited {
-    color: 				#222222;
-	text-decoration: 	underline;
+    color:              #222222;
+    text-decoration:    underline;
 }
 
 a:hover, a:active {
-	text-decoration: 	underline;
-	color: 				#FF9C00;
+    text-decoration:    underline;
+    color:              #FF9C00;
 }
 
 /* Layout fuer die Boxen (Termine usw.)
@@ -100,7 +100,7 @@ a:hover, a:active {
     width:              570px;
     overflow:           hidden;
     margin-bottom:      30px;
-    text-align:			left;
+    text-align:         left;
 }
 
 .boxHead {
@@ -115,7 +115,7 @@ a:hover, a:active {
 .boxHeadLeft img {
     margin-right:       5px;
     vertical-align:     bottom;
-    border-width: 		none;
+    border-width:       none;
 }
 
 .boxHeadLeft{
@@ -128,7 +128,7 @@ a:hover, a:active {
 
 .boxBody {
     padding:            10px 0px 5px 0px;
-    clear:				both;
+    clear:              both;
 }
 
 /* Layout fuer die Formulare
@@ -152,7 +152,7 @@ a:hover, a:active {
 .formBody {
     padding-top:        10px;
     padding-bottom:     10px;
-    text-align:			left;
+    text-align:         left;
 }
 
 .formBody hr {
@@ -210,8 +210,8 @@ a:hover, a:active {
 }
 
 .groupBoxBody {
-	padding-top: 7px;
-	clear: both;
+    padding-top: 7px;
+    clear: both;
 }
 
 /* Layout fuer Listen
@@ -229,8 +229,8 @@ a:hover, a:active {
 .tableList th {
     background-color:   #85C226;
     padding:            3px;
-	background-repeat: 	repeat-x;
-	background-image: 	url(../images/stripe.png);    
+    background-repeat:  repeat-x;
+    background-image:   url(../images/stripe.png);    
 }
 
 .tableList td {
@@ -248,25 +248,25 @@ a:hover, a:active {
     font-weight:        bold;
     font-style:         italic;
     letter-spacing:     0.2em;
-    background-repeat: 	repeat-x;
-	background-image: 	url(../images/sub_row_marker.png);   
+    background-repeat:  repeat-x;
+    background-image:   url(../images/sub_row_marker.png);   
 }
 
 /* aktuelle Zeile kann in Listen markiert werden */
 .tableMouseOver:hover {
-	background-repeat: 	repeat-x;
-	background-image: 	url(../images/row_marker.png);     
+    background-repeat:  repeat-x;
+    background-image:   url(../images/row_marker.png);     
 }
 
 /*Links in Verbindung mit einem Icon (mit Text)*/
 .iconTextLinkList {
     list-style-type:    none;
     padding:            0px;
-    margin: 		    25px 0px 25px 0px;
+    margin:             25px 0px 25px 0px;
 }
 
 .iconTextLinkList li{   
-    padding-right: 		20px;   
+    padding-right:      20px;   
     display:            inline;
     font-size:          11pt;
 }
@@ -330,7 +330,7 @@ a:hover, a:active {
     font-size:          8pt;
     margin-top:         8px;
     text-align:         left;
-    color:				#555555;
+    color:              #555555;
 }
 
 /*Pflichtfeldmarkierung*/
@@ -353,26 +353,26 @@ a:hover, a:active {
 
 /* Style Eigenschaften fuer das tooltip */
 #ajax_tooltipObj{
-	z-index:            1000000;
-	text-align:         left;
+    z-index:            1000000;
+    text-align:         left;
 }
 
 #ajax_tooltipObj .ajax_tooltip_content{
-	border:             1px solid #333333;
-	color:              #333333;
-	width:              auto;
-	min-width:          300px;
-	max-width:          300px;
-	height:             auto;
-	min-height:         30px;
-	background-color:   #fdf594;
-	padding:            5px;
-	z-index:            1000001;
+    border:             1px solid #333333;
+    color:              #333333;
+    width:              auto;
+    min-width:          300px;
+    max-width:          300px;
+    height:             auto;
+    min-height:         30px;
+    background-color:   #fdf594;
+    padding:            5px;
+    z-index:            1000001;
 }
 
 #ajax_tooltipObj h3 {
-	color:              #333333;
-	padding-top:        0px;
+    color:              #333333;
+    padding-top:        0px;
 }
 
 /* spezielle Anpassung fuer die Loginseite */
@@ -396,13 +396,13 @@ a:hover, a:active {
 }
 
 #search_members {
-	margin-top:			10px;
-	padding-bottom:		10px;	
+    margin-top:         10px;
+    padding-bottom:     10px;   
 }
 
 /* spezielle Anpassung fuer das Gaestebuch */
 .commentLink{
-	margin:             8px 4px 4px 0px;
+    margin:             8px 4px 4px 0px;
 }
 
 /* spezielle Anpassung fuer die Profilseite */
@@ -430,7 +430,7 @@ a:hover, a:active {
 }
 
 #links_overview .formBody {
-	text-align:	        left;
+    text-align:         left;
 }
 
 #infoboxListsBox {
