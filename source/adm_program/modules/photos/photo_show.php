@@ -70,12 +70,6 @@ if(isset($_GET['side'])
     $side = $_GET['side'];
 }
 
-error_log($pho_id);
-error_log($pho_begin);
-error_log($pic_nr);
-error_log($scal);
-error_log($side);
-
 // Bildpfad zusammensetzten
 if(!is_numeric($pho_id) || $pho_begin == 0 || !is_numeric($pic_nr) || !is_numeric($scal))
 {
