@@ -320,13 +320,12 @@ a:hover, a:active {
 .iconHelpLink {
     border:             none;
     cursor:             pointer;
-    vertical-align:     middle;
-    margin:             4px 3px 0px 3px;
+    vertical-align:     top;
+    margin:             0px 3px 0px 3px;
 }
 
 /* Elemente fuer Navigationsklasse */
 .pageNavigation {
-    text-align:         center;
     vertical-align:     middle;
     margin-top:         15px;
     margin-bottom:      15px;
@@ -356,7 +355,6 @@ a:hover, a:active {
 
 /*Einstellungen fuer eine Pfadnavigation, z.B. durch die Versanstaltungsherarchie im Fotomodul*/
 .navigationPath{
-    text-align:         center;
     margin:             5px;
 }
 
