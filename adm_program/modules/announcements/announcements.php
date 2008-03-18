@@ -71,10 +71,10 @@ if(array_key_exists("date", $_GET))
     {
         $g_message->show("invalid");
     }
-	else
-	{
-		$sql_datum = substr($_GET["date"],0,4). "-". substr($_GET["date"],4,2). "-". substr($_GET["date"],6,2);
-	}
+    else
+    {
+        $sql_datum = substr($_GET["date"],0,4). "-". substr($_GET["date"],4,2). "-". substr($_GET["date"],6,2);
+    }
 }
 
 if($g_preferences['enable_bbcode'] == 1)
@@ -126,20 +126,20 @@ if(strlen($organizations) == 0)
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
 {
-	$conditions = " AND ann_id = $req_id ";
+    $conditions = " AND ann_id = $req_id ";
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-	// Ankuendigungen an einem Tag suchen
-	if(strlen($sql_datum) > 0)
-	{
-    	$conditions = " AND DATE_FORMAT(ann_timestamp, '%Y-%m-%d') = '$sql_datum' ";		
-	}
+    // Ankuendigungen an einem Tag suchen
+    if(strlen($sql_datum) > 0)
+    {
+        $conditions = " AND DATE_FORMAT(ann_timestamp, '%Y-%m-%d') = '$sql_datum' ";        
+    }
     //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
     else
     {
-    	$conditions = "";
+        $conditions = "";
     }
 }
 
@@ -166,16 +166,16 @@ $num_announcements = $row['count'];
 // Neue Ankuendigung anlegen
 if($g_current_user->editAnnouncements())
 {
-	echo "
-	<ul class=\"iconTextLinkList\">
-		<li>
-			<span class=\"iconTextLink\">
-				<a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
-				src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neu anlegen\" /></a>
-				<a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
-			</span>
-		</li>
-	</ul>";        
+    echo "
+    <ul class=\"iconTextLinkList\">
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
+                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neu anlegen\" /></a>
+                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
+            </span>
+        </li>
+    </ul>";        
 }
 
 if($num_announcements > 10)
@@ -222,20 +222,16 @@ else
                         if($announcement->editRight() == true)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=". $announcement->getValue("ann_id"). "&amp;headline=$req_headline\"><img 
-                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=". $announcement->getValue("ann_id"). "&amp;headline=$req_headline\"><img 
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
                         if($announcement->getValue("ann_org_shortname") == $g_organization)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=". $announcement->getValue("ann_id"). "\"><img 
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=". $announcement->getValue("ann_id"). "\"><img 
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                         }    
                     }
                     echo "</div>

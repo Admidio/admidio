@@ -194,10 +194,8 @@ echo "
                     }
                 echo "</td>
                 <td style=\"text-align: right; width: 45px;\">
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\"><img 
-                        src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                    </span>";
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_new.php?usf_id=$row->usf_id\"><img 
+                        src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
                     if($row->usf_system == 1)
                     {
                         echo "
@@ -208,10 +206,8 @@ echo "
                     else
                     {
                         echo "
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/administration/members/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
-                        </span>";
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
+                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                     }
                 echo "</td>
             </tr>";

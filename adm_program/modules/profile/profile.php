@@ -125,23 +125,21 @@ function getFieldCode($field, $user_id)
             $icq_number = implode("", reset($matches));
 
             // ICQ Onlinestatus anzeigen
-            $value = "<span class=\"iconLink\">
-                        <a href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\" class=\"wpaction\"><img 
+            $value = "<a class=\"iconLink\" href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"><img 
                         src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\" 
-                        alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
-                        title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>
-                      </span>$value";
+                        alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
+                        title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
+                      $value";
         }
         elseif($field['usf_name'] == 'Skype')
         {
             // Skype Onlinestatus anzeigen
             $value = "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
-            <span class=\"iconLink\">
-                <a href=\"skype:". $field['usd_value']. "?add\"><img 
+            <a class=\"iconLink\" href=\"skype:". $field['usd_value']. "?add\"><img 
                 src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
-                title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" 
-                alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzuf&uuml;gen\" /></a>
-            </span>$value";
+                title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
+                alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
+            $value";
         }
         elseif($field['usf_name'] == 'AIM')
         {
@@ -236,21 +234,17 @@ echo "
                             }
                         echo "</div>
                         <div style=\"text-align: right;\">
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
                                 src=\"". THEME_PATH. "/icons/vcard.png\" 
                                 alt=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" 
-                                title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" /></a>
-                            </span>";
+                                title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" /></a>";
                             
                             // Nur berechtigte User duerfen ein Profil editieren
                             if($g_current_user->editProfile($a_user_id) == true)
                             {
                                 echo "
-                                <span class=\"iconLink\">
-                                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
-                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\" /></a>
-                                </span>";
+                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
+                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\" /></a>";
                             }
                         echo "</div>
                     </div>
@@ -325,10 +319,10 @@ echo "
 
                                                                 echo '<br />
                                                                 <span class="iconTextLink">
-																	<a href="'. $map_url. '" target="_blank"><img
-																		src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
-																	<a href="'. $map_url. '" target="_blank">Karte</a>
-																</span>';
+                                                                    <a href="'. $map_url. '" target="_blank"><img
+                                                                        src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
+                                                                    <a href="'. $map_url. '" target="_blank">Karte</a>
+                                                                </span>';
 
                                                                 if($g_current_user->getValue("usr_id") != $a_user_id)
                                                                 {
@@ -407,14 +401,10 @@ echo "
                 <div class=\"groupBox\">
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
                         <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\" />
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                            src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto &auml;ndern\" title=\"Foto &auml;ndern\" /></a>
-                        </span>
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
-                        </span>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
+                            src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>
+                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img
+                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
                     </div>
                 </div>
             </div>
@@ -456,10 +446,8 @@ echo "
                             {
                                 echo "
                                 <div style=\"text-align: right;\">
-                                    <span class=\"iconLink\">
-                                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $value['cat_id']. "\"><img
+                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $value['cat_id']. "\"><img
                                         src=\"". THEME_PATH. "/icons/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\" /></a>
-                                    </span>
                                 </div>";
                             }
                         echo "</div>
@@ -520,10 +508,8 @@ echo "
                         {
                             echo "
                             <div style=\"text-align: right;\">
-                                <span class=\"iconLink\">
-                                    <a href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
+                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/roles.php?user_id=$a_user_id\"><img
                                     src=\"". THEME_PATH. "/icons/edit.png\" title=\"Rollen ändern\" alt=\"Rollen ändern\" /></a>
-                                </span>
                             </div>";
                         }
                 echo "</div>
@@ -544,14 +530,14 @@ echo "
                                     <dl>
                                         <dt>
                                             '. $row['cat_name']. ' - ';
-                                				if($g_current_user->viewRole($row['mem_rol_id']))
-                                				{
-													echo'<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
-                                				}
-                                				else
-                                				{
-													echo $row['rol_name'];	
-                                				}
+                                                if($g_current_user->viewRole($row['mem_rol_id']))
+                                                {
+                                                    echo'<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                                }
+                                                else
+                                                {
+                                                    echo $row['rol_name'];  
+                                                }
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo ' - Leiter';
@@ -614,28 +600,26 @@ echo "
                                                 echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
                                                 alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                                             }
-                            				if($row['rol_this_list_view'] == 1)
-							                {
-							                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
-							                    alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
-							                }
-							   				if($row['rol_all_lists_view'] == 1)
-							                {
-							                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
-							                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
-							                }
-							                                        echo "</dt>
+                                            if($row['rol_this_list_view'] == 1)
+                                            {
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
+                                                alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
+                                            }
+                                            if($row['rol_all_lists_view'] == 1)
+                                            {
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
+                                                alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
+                                            }
+                                                                    echo "</dt>
                                         <dd>
                                             seit ". mysqldate('d.m.y', $row['mem_begin']);
                                             if($g_current_user->assignRoles() || $g_current_user->editUser())
 
                                             {
                                                 echo "
-                                                <span class=\"iconLink\">
-                                                    <a href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
+                                                <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
                                                     mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ", '". $g_root_path. "', '". $g_preferences['theme']. "')\"><img 
-                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
-                                                </span>";
+                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                                             }
                                         echo "</dd>
                                     </dl>
@@ -695,14 +679,14 @@ echo "
                                     <dl>
                                         <dt>".
                                             $row['cat_name'];
-                           					 if($g_current_user->viewRole($row['mem_rol_id']))
-                               				{
-												echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
-                               				}
-                               				else
-                               				{
-												echo" - ".$row['rol_name'];	
-                               				}
+                                             if($g_current_user->viewRole($row['mem_rol_id']))
+                                            {
+                                                echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+                                            }
+                                            else
+                                            {
+                                                echo" - ".$row['rol_name']; 
+                                            }
                                             if($row['mem_leader'] == 1)
                                             {
                                                 echo " - Leiter";
@@ -714,10 +698,8 @@ echo "
                                             if($g_current_user->isWebmaster())
                                             {
                                                 echo "
-                                                <span class=\"iconLink\">
-                                                    <a href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
-                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
-                                                </span>";
+                                                <a class=\"iconLink\" href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
+                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                                             }
                                         echo "</dd>
                                     </dl>

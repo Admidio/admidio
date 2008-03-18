@@ -172,8 +172,8 @@ echo "
                                 besitzt aber bereits Logindaten.<br />
 
                                 <span class=\"iconTextLink\">
-                                    <a href=\"$link\"><img class=\"iconLink\" 
-                                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Mitgliedschaft zuweisen\" /></a>
+                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/properties.png\" 
+                                        alt=\"Mitgliedschaft zuweisen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft zuweisen</a>
                                 </span>";
                             }               
@@ -184,8 +184,8 @@ echo "
                                 besitzt auch keine Logindaten.<br />
                                 
                                 <span class=\"iconTextLink\">
-                                    <a href=\"$link\"><img class=\"iconLink\"
-                                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Rollen und Logindaten diesem Benutzer zuordnen\" /></a>
+                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/properties.png\" 
+                                        alt=\"Rollen und Logindaten diesem Benutzer zuordnen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
                                 </span>";
                             }               

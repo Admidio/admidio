@@ -240,20 +240,16 @@ else
                     if (strlen(trim($row->gbo_homepage)) > 0)
                     {
                         echo "
-                        <span class=\"iconLink\">
-                            <a href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
-                            alt=\"Gehe zu $row->gbo_homepage\" title=\"Gehe zu $row->gbo_homepage\" /></a>
-                        </span>";
+                        <a class=\"iconLink\" href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
+                            alt=\"Gehe zu $row->gbo_homepage\" title=\"Gehe zu $row->gbo_homepage\" /></a>";
                     }
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
                     if (isValidEmailAddress($row->gbo_email))
                     {
                         echo "
-                        <span class=\"iconLink\">
-                            <a href=\"mailto:$row->gbo_email\"><img src=\"". THEME_PATH. "/icons/email.png\"
-                            alt=\"Mail an $row->gbo_email\" title=\"Mail an $row->gbo_email\" /></a>
-                        </span>";
+                        <a class=\"iconLink\" href=\"mailto:$row->gbo_email\"><img src=\"". THEME_PATH. "/icons/email.png\"
+                            alt=\"Mail an $row->gbo_email\" title=\"Mail an $row->gbo_email\" /></a>";
                     }
 
                 echo "</div>
@@ -264,14 +260,10 @@ else
                     if ($g_current_user->editGuestbookRight())
                     {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "\"><img
                                 src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                            </span>
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6\"><img
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6\"><img
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>";
                     }
 
                 echo "</div>
@@ -314,20 +306,20 @@ else
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
                 if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0)
                 {
-                	if($g_preferences['enable_intial_comments_loading'] == 1)
-                	{
-                		$visibility_show_comments = "hidden";
-                		$display_show_comments    = "none";
-                		$visibility_others        = "visible";
-                		$display_others           = "block";
-                	}
-                	else
-                	{
-                		$visibility_show_comments = "visible";
-                		$display_show_comments    = "block";
-                		$visibility_others        = "hidden";
-                		$display_others           = "none";
-                	}
+                    if($g_preferences['enable_intial_comments_loading'] == 1)
+                    {
+                        $visibility_show_comments = "hidden";
+                        $display_show_comments    = "none";
+                        $visibility_others        = "visible";
+                        $display_others           = "block";
+                    }
+                    else
+                    {
+                        $visibility_show_comments = "visible";
+                        $display_show_comments    = "block";
+                        $visibility_others        = "hidden";
+                        $display_others           = "none";
+                    }
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo '
                     <div id="commentsVisible_'. $row->gbo_id. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
@@ -351,10 +343,10 @@ else
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
                     echo '<div id="commentSection_'. $row->gbo_id. '" class="commentBox" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">';
-                    	if($g_preferences['enable_intial_comments_loading'] == 1)
-                    	{
-                    		include("get_comments.php");
-                    	}
+                        if($g_preferences['enable_intial_comments_loading'] == 1)
+                        {
+                            include("get_comments.php");
+                        }
                     echo '</div>';
                 }
 

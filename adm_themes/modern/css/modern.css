@@ -11,113 +11,118 @@
  *****************************************************************************/
 
 #page_header {
-	text-align: left;
-	margin: 0 auto;
-	width: 955px;
+    text-align: left;
+    margin: 0 auto;
+    width: 955px;
 }
 
 h2 {
-	padding-top: 5px;
-	margin-top: 0px;
-	margin-bottom: 5px;
-	font-size: 14pt;
-	color: #449ba6;
+    padding-top: 5px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-size: 14pt;
+    color: #449ba6;
 }
 
 h3 {
-	padding-bottom: 3px;
-	font-size: 12pt;
-	padding-top: 20px;
-	margin-top: 0px;
-	margin-bottom: 5px;
-	color: #459ba6;
+    padding-bottom: 3px;
+    font-size: 12pt;
+    padding-top: 20px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    color: #459ba6;
 }
 
 h4 {
-	padding-bottom: 3px;
-	font-size: 11pt;
-	padding-top: 10px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	color: #459ba6;
+    padding-bottom: 3px;
+    font-size: 11pt;
+    padding-top: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #459ba6;
 }
 
 #orga_name {
-	top: 113px;
-	position: absolute;
-	margin-left: 372px;
-	padding: 0px;
-	font-size: 24pt;
-	color: #444444;
+    color: #dbebee;
+    top: 108px;
+    position: absolute;
+    margin-left: 372px;
+    padding: 0px;
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+#orga_name {
+    margin-left: -593px!;
 }
 
 .menu {
-	display: block;
-	padding-bottom: 7px;
+    display: block;
+    padding-bottom: 7px;
 }
 
 p {
-	padding-bottom: 10px;
-	padding-top: 10px;
-	margin: 0px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin: 0px;
 }
 
 img {
-	border: 0px;
+    border: 0px;
 }
 
 
 #page {
-	text-align: left;
-	margin: 0px auto;
-	width: 925px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	display: block;
+    text-align: left;
+    margin: 0px auto;
+    width: 925px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: block;
 }
 
 #left_block {
-	float: left;
-	margin-right: 20px;
+    float: left;
+    margin-right: 20px;
 }
 
 #right_block > div {
-	margin-left: 625px;
+    margin-left: 625px;
 }
 
 /* spezieller Hack, damit der Block im IE6 auch richtig neben den anderem positioniert sind */
 html.* #right_block div { 
-	margin-left: 622px;
+    margin-left: 622px;
 }
 
 /* damit unter den Rahmenbildern keine 2px Abstand sind */
 .img_border {
-	display: block;
+    display: block;
 }
 
 #content, #content_left {
-	padding-left: 13px;
-	padding-right: 12px;
+    padding-left: 13px;
+    padding-right: 12px;
 }
 
 .content {
-	border-right: 1px solid #7d7d7d;
-	border-left: 1px solid #7d7d7d;
-	background-color: white;
-	background-position: 0 bottom;
-	background-repeat: repeat-x;
-	background-image: url(../images/background_in_borders.png);
+    border-right: 1px solid #7d7d7d;
+    border-left: 1px solid #7d7d7d;
+    background-color: white;
+    background-position: 0 bottom;
+    background-repeat: repeat-x;
+    background-image: url(../images/background_in_borders.png);
 }
 
 #sidebar {
-	padding-left: 15px;
-	padding-right: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 #sidebar hr {
-	margin-top:     10px;
-	color:          #d7d7d7;
-	border-width:   1px;
-	border-style:   dashed;
-	text-align:     left;
+    margin-top:     10px;
+    color:          #d7d7d7;
+    border-width:   1px;
+    border-style:   dashed;
+    text-align:     left;
 }

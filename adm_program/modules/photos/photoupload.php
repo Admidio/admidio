@@ -114,15 +114,17 @@ echo"
 echo "
 <ul class=\"iconTextLinkList\">
     <li>
-        <span class=\"iconLink\">
+        <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img 
             src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>    
     <li>
-        <span class=\"iconLink\">
-            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\"  onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
+        <span class=\"iconTextLink\">
+            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\"  
+                onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
             <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
     </li>

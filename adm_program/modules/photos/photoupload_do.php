@@ -187,14 +187,14 @@ if($_POST["upload"])
         <hr />
         <ul class=\"iconTextLinkList\">
             <li>
-                <span class=\"iconLink\">
+                <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\"><img 
-                    src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"Zurück\" /></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">&Uuml;bersicht</a>
+                    src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"Übersicht\" /></a>
+                    <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">Übersicht</a>
                 </span>
             </li>
             <li>
-                <span class=\"iconLink\">
+                <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img 
                     src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Weitere Bilder hochladen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>

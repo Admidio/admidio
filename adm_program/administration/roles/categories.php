@@ -173,25 +173,17 @@ echo "
                 }
             echo "</td>
             <td style=\"text-align: right; width: 45px;\">
-                <span class=\"iconLink\">
-                    <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\"><img 
-                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                </span>";
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\"><img 
+                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
 
                 if($cat_row['cat_system'] == 1)
                 {
-                    echo "
-                    <span class=\"iconLink\">
-                        <img src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" />
-                    </span>";
+                    echo "<img class=\"iconLink\" src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" />";
                 }
                 else
                 {
-                    echo "
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
-                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
-                    </span>";
+                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
+                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                 }
             echo "</td>
         </tr>";
@@ -210,8 +202,8 @@ echo "
 </ul>
 
 <script type=\"text/javascript\"><!--\n";
-	if($_GET['type'] == "USF")
-	{
+    if($_GET['type'] == "USF")
+    {
         echo "Sortable.create('cat_all_orgas',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_all_orgas'],hoverclass:'drag'});";
     }
     echo "Sortable.create('cat_list',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
