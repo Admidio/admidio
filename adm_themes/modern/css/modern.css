@@ -52,7 +52,7 @@ h4 {
     font-weight: bold;
 }
 
-#orga_name {
+*:first-child+html #orga_name[id] {
     margin-left: -593px!;
 }
 
