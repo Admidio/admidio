@@ -95,7 +95,7 @@ echo "
                             <td>Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                          </tr>
                          <tr>
-                            <td>Ein Bild <img src=\"". THEME_PATH. "/icons/admidio_logo_20.png\" /> anzeigen</td>
+                            <td>Ein Bild <img src=\"". THEME_PATH. "/images/admidio_logo_20.png\" /> anzeigen</td>
                             <td>Ein Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
                          </tr>
                       </table>";

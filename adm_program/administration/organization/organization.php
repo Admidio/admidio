@@ -820,7 +820,7 @@ echo "
                         <dl>
                             <dt><label for=\"forum_praefix\">Forum Tabellen praefix:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"forum_praefix\" name=\"forum_praefix\" size=\"6\" value=\"". $form_values['forum_praefix']. "\" />
+                                <input type=\"text\" id=\"forum_praefix\" name=\"forum_praefix\" style=\"width: 50px;\" value=\"". $form_values['forum_praefix']. "\" />
                              </dd>
                         </dl>
                     </li>
@@ -829,13 +829,13 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_zugangsdaten\">Zugangsdaten zur Datenbank des Forums:</label></dt>
+                            <dt><label>Zugangsdaten zur Datenbank des Forums:</label></dt>
                             <dd>&nbsp;</dd>
                         </dl>
                     </li>
                     <li>
                     	<dl>
-							<dt><label for=\"forum_zugangsdaten_von_admidio\">Zugangsdaten von Admidio verwenden:</label></dt>
+							<dt><label for=\"forum_sqldata_from_admidio\">Zugangsdaten von Admidio verwenden:</label></dt>
 							<dd>
 								<div style=\"display:inline;\">
 								<input type=\"checkbox\" id=\"forum_sqldata_from_admidio\" name=\"forum_sqldata_from_admidio\" onchange=\"javascript:drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');\" ";
@@ -850,47 +850,46 @@ echo "
 					</li>
 					<li class=\"smallFontSize\">
 						Falls mann die gleiche DB benutzt wie Admidio.
-					</li>
-					<div id=\"Forum_Zugangsdaten\">";
+					</li>";
+					
 					if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 0)
 					{
-                    echo "<li>
-					
-                        <dl>
-                            <dt><label for=\"forum_srv\">Server:</label></dt>
-                            <dd><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_srv']. "\" /></dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"forum_usr\">Username:</label></dt>
-                            <dd><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_usr']. "\" /></dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"forum_pw\">Passwort:</label></dt>
-                            <dd><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_pw']. "\" /></dd>
-                        </dl>
-                    </li>
-					<li>
-                        <dl>
-                            <dt><label for=\"forum_db\">Datenbank:</label></dt>
-                            <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
-                        </dl>
-                    </li>";
+                        echo "<li>
+    					
+                            <dl>
+                                <dt><label for=\"forum_srv\">Server:</label></dt>
+                                <dd><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_srv']. "\" /></dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt><label for=\"forum_usr\">Username:</label></dt>
+                                <dd><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_usr']. "\" /></dd>
+                            </dl>
+                        </li>
+                        <li>
+                            <dl>
+                                <dt><label for=\"forum_pw\">Passwort:</label></dt>
+                                <dd><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_pw']. "\" /></dd>
+                            </dl>
+                        </li>
+    					<li>
+                            <dl>
+                                <dt><label for=\"forum_db\">Datenbank:</label></dt>
+                                <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
+                            </dl>
+                        </li>";
 					}
 					else
 					{
-					echo "<li>
-                        <dl>
-                            <dt><label for=\"forum_db\">Datenbank:</label></dt>
-                            <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
-                        </dl>
-                    </li>";
+    					echo "<li>
+                            <dl>
+                                <dt><label for=\"forum_db\">Datenbank:</label></dt>
+                                <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
+                            </dl>
+                        </li>";
 					}
 					echo"
-					</div>
                     <li class=\"smallFontSize\">
                         Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
                     </li>                
@@ -1147,7 +1146,7 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_view_scale\">Skalierung Vorschaubild:</label></dt>
+                            <dt><label for=\"ecard_view_width\">Skalierung Vorschaubild:</label></dt>
                             <dd>
                                 <table summary=\"Skalierung Vorschaubild\" border=\"0\" cellspacing=\"2\">
                                     <tr>
@@ -1173,7 +1172,7 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_card_picture_scale\">Skalierung Grußkartenbild:</label></dt>
+                            <dt><label for=\"ecard_card_picture_width\">Skalierung Grußkartenbild:</label></dt>
                             <dd>
                                 <table summary=\"Skalierung Grußkartenbild\" border=\"0\" cellspacing=\"2\">
                                     <tr>
@@ -1353,7 +1352,7 @@ echo "
         function getMenueSettings($data_array,$name,$first_value,$width,$schowfont,$showcolor)
         {
             $temp_data = "";
-            $temp_data .=  '<select size="1" id='.$name.' name='.$name.' style="width:'.$width.'px;">';
+            $temp_data .=  '<select size="1" id="'.$name.'" name="'.$name.'" style="width:'.$width.'px;">';
             for($i=0; $i<count($data_array);$i++)
             {
                 $temp = explode(".", $data_array[$i]);
