@@ -294,11 +294,14 @@ a:hover, a:active {
 }
 
 /* Iconlinks um Funktionen aufzurufen (ohne Text) */
+.iconLink {
+    margin-left:        2px;
+    margin-right:       2px;
+}
+
 .iconLink img {
     border:             none;
     vertical-align:     top;
-    margin-left:        2px;
-    margin-right:       2px;
 }
 
 /* Icon um Bereiche auf und zu zuklappen */
