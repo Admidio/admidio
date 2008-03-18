@@ -137,7 +137,7 @@ else
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
-<script language=\"javascript\" type=\"text/javascript\">
+<script type=\"text/javascript\"><!--
 function emoticon(text) 
 {
 	var txtarea = document.getElementById('gbo_text');
@@ -163,7 +163,7 @@ var bbcodestext = Array(\"text_bold_point.png\",\"text_bold.png\",
                         \"image_point.png\",\"image.png\");
 
 
-function bbcode(nummer) 
+function bbcode(nummer)
 {
    var arrayid;
    if (vorbelegt[nummer]) {
@@ -185,7 +185,7 @@ function bbcodeclose()
       }
    }
 }
-</script>
+--></script>
 ";
 
 // Html des Modules ausgeben
@@ -199,7 +199,7 @@ else
 }
 
 echo "
-<form method=\"post\" name=\"post\" action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=". $_GET["id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$mode\" >
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=". $_GET["id"]. "&amp;headline=". $_GET['headline']. "&amp;mode=$mode\" >
 <div class=\"formLayout\" id=\"edit_guestbook_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
@@ -244,18 +244,37 @@ echo "
             <li>
                 <dl>
                     <dt>&nbsp;</dt>
-                    <dd><span class=\"iconLink\">
-                        <a href=\"javascript:bbcode(0)\" ><img title=\"Fett schreiben\" alt=\"[b]\" id=\"[b]\" src=\"". THEME_PATH. "/icons/text_bold.png\" ></a>&nbsp;
-                        <a href=\"javascript:bbcode(1)\" ><img title=\"Text unterstreichen\" alt=\"[u]\" id=\"[u]\" src=\"". THEME_PATH. "/icons/text_underline.png\"></a>&nbsp;
-                        <a href=\"javascript:bbcode(2)\" ><img title=\"Kursiv schreiben\" alt=\"[i]\" id=\"[i]\" src=\"". THEME_PATH. "/icons/text_italic.png\"></a>&nbsp;
-                        <a href=\"javascript:bbcode(3)\" ><img title=\"Groß schreiben\" alt=\"[big]\" id=\"[big]\" src=\"". THEME_PATH. "/icons/text_bigger.png\"></a>&nbsp;
-                        <a href=\"javascript:bbcode(4)\" ><img title=\"Klein schreiben\" alt=\"[small]\"id=\"[small]\" src=\"". THEME_PATH. "/icons/text_smaller.png\"></a>&nbsp;
-                        <a href=\"javascript:bbcode(5)\" ><img title=\"Text zentrieren\" alt=\"[center]\"id=\"[center]\" src=\"". THEME_PATH. "/icons/text_align_center.png\"></a>&nbsp;
-                        <a href=\"javascript:bbcode(6)\" ><img title=\"Link einfügen\" alt=\"[url]\" id=\"[url=".$g_root_path."]\" src=\"". THEME_PATH. "/icons/link.png\"></a>&nbsp;
-                        <a href=\"javascript:bbcode(7)\" ><img title=\"E-Mail-Adresse einfügen\" alt=\"[email]\" id=\"[email=adresse@demo.de]\" src=\"". THEME_PATH. "/icons/email.png\"></a>&nbsp;
-                        <a href=\"javascript:emoticon('[img]".$g_root_path."[/img]')\" ><img title=\"Bild einfügen\" alt=\"[img]\"id=\"[img]\" src=\"". THEME_PATH. "/icons/image.png\"></a>&nbsp;&nbsp;
-                        <a href=\"javascript:bbcodeclose()\"><img title=\"Alle Tags schließen\" alt=\"[X]\" id=\"[all]\" src=\"". THEME_PATH. "/icons/cross.png\"></a>
-                    </span></dd>
+                    <dd>
+                        <div style=\"width: 350px;\">
+                            <div style=\"float: left;\">
+                                <a class=\"iconLink\" href=\"javascript:bbcode(0)\"><img id=\"[b]\" 
+                                    src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\"></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(1)\"><img id=\"[u]\" 
+                                    src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\"></a>&nbsp;
+                                <a class=\"iconLink\" href=\"javascript:bbcode(2)\"><img id=\"[i]\" 
+                                    src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\"></a>&nbsp;
+                                <a href=\"javascript:bbcode(3)\"><img id=\"[big]\" 
+                                    src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\"></a>&nbsp;
+                                <a class=\"iconLink\" href=\"javascript:bbcode(4)\"><img id=\"[small]\" 
+                                    src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\"></a>&nbsp;
+                                <a class=\"iconLink\" href=\"javascript:bbcode(5)\"><img id=\"[center]\" 
+                                    src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\"></a>&nbsp;
+                                <a class=\"iconLink\" href=\"javascript:bbcode(6)\"><img id=\"[url=".$g_root_path."]\" 
+                                    src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\"></a>&nbsp;
+                                <a class=\"iconLink\" href=\"javascript:bbcode(7)\"><img id=\"[email=adresse@demo.de]\" 
+                                    src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\"></a>&nbsp;
+                                <a class=\"iconLink\" href=\"javascript:emoticon('[img]".$g_root_path."[/img]')\"><img id=\"[img]\" 
+                                    src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\"></a>&nbsp;&nbsp;
+                            </div>
+                            <div style=\"float: right;\"
+                                <a class=\"iconLink\" href=\"javascript:bbcodeclose()\"><img id=\"[all]\" 
+                                    src=\"". THEME_PATH. "/icons/cross.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\"></a>
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\" 
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" 
+                                    onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode',this);\" onmouseout=\"ajax_hideTooltip()\"  />
+                            </div>
+                        </div>
+                    </dd>
                 </dl>
             </li>";
          }
@@ -263,21 +282,30 @@ echo "
             <li>
                 <dl>
                     <dt><label for=\"gbo_text\">Text:</label>";
-                    //Einfügen der Smilies
+                        //Einfügen der Smilies
                         if ($g_preferences['enable_bbcode'] == 1)
                         {
-                    echo "<br /><br />&nbsp;&nbsp;
-                        <a href=\"javascript:emoticon(':)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(';)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':D')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':lol:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
-                        <br />&nbsp;&nbsp;
-                        <a href=\"javascript:emoticon(':(')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':p')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':o')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':twisted:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>";
-					}
-                    echo "</dt><dd>
+                            echo "<br /><br />&nbsp;&nbsp;
+                            <a class=\"iconLink\" href=\"javascript:emoticon(':)')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
+                            <a class=\"iconLink\" href=\"javascript:emoticon(';)')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
+                            <a class=\"iconLink\" href=\"javascript:emoticon(':D')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
+                            <a class=\"iconLink\" href=\"javascript:emoticon(':lol:')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
+                            <br />&nbsp;&nbsp;
+                            <a class=\"iconLink\" href=\"javascript:emoticon(':(')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
+                            <a class=\"iconLink\" href=\"javascript:emoticon(':p')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
+                            <a class=\"iconLink\" href=\"javascript:emoticon(':o')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
+                            <a class=\"iconLink\" href=\"javascript:emoticon(':twisted:')\"><img 
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>";
+					    }
+                    echo "</dt>
+                    <dd>
                         <textarea id=\"gbo_text\" name=\"gbo_text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $guestbook->getValue("gbo_text"). "</textarea>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
