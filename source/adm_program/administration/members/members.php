@@ -407,11 +407,9 @@ if($num_members > 0)
                         if($row['member'] > 0)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\"><img
                                 src=\"". THEME_PATH. "/icons/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"
-                                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" /></a>
-                            </span>";
+                                title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" /></a>";
                         }
                         else
                         {
@@ -431,20 +429,16 @@ if($num_members > 0)
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id'];
                             }
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$mail_link\"><img src=\"". THEME_PATH. "/icons/email.png\"
-                                alt=\"E-Mail an ". $row['email']. " schreiben\" title=\"E-Mail an ". $row['email']. " schreiben\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$mail_link\"><img src=\"". THEME_PATH. "/icons/email.png\"
+                                alt=\"E-Mail an ". $row['email']. " schreiben\" title=\"E-Mail an ". $row['email']. " schreiben\" /></a>";
                         }
                     echo "</td>
                     <td>";
                         if(strlen($row['homepage']) > 0)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"". $row['homepage']. "\" target=\"_blank\"><img
-                                src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Homepage\" title=\"Homepage\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"". $row['homepage']. "\" target=\"_blank\"><img
+                                src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Homepage\" title=\"Homepage\" /></a>";
                         }
                     echo "</td>
                     <td>". $row['usr_login_name']. "</td>
@@ -476,11 +470,9 @@ if($num_members > 0)
                         && $g_preferences['enable_system_mails'] == 1)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=5\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=5\"><img
                                 src=\"". THEME_PATH. "/icons/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
-                                title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>
-                            </span>";
+                                title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>";
                         }
                         else
                         {
@@ -495,10 +487,8 @@ if($num_members > 0)
                         if($row['member'] > 0 || $b_other_orga == false)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $row['usr_id']. "\"><img
-                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=". $row['usr_id']. "\"><img
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Benutzerdaten bearbeiten\" title=\"Benutzerdaten bearbeiten\" /></a>";
                         }
                         else
                         {
@@ -514,10 +504,8 @@ if($num_members > 0)
                         && $row['usr_id'] != $g_current_user->getValue("usr_id"))
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=6\"><img
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=6\"><img
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\" /></a>";
                         }
                         else
                         {

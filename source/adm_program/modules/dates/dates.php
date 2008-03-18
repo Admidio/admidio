@@ -83,10 +83,10 @@ if(array_key_exists("date", $_GET))
     {
         $g_message->show("invalid");
     }
-	else
-	{
-		$sql_datum = substr($_GET["date"],0,4). "-". substr($_GET["date"],4,2). "-". substr($_GET["date"],6,2);
-	}
+    else
+    {
+        $sql_datum = substr($_GET["date"],0,4). "-". substr($_GET["date"],4,2). "-". substr($_GET["date"],6,2);
+    }
 }
 
 if($g_preferences['enable_bbcode'] == 1)
@@ -151,29 +151,29 @@ if(strlen($organizations) == 0)
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
 {
-	$conditions = " AND dat_id = $req_id ";
+    $conditions = " AND dat_id = $req_id ";
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-	// Termine an einem Tag suchen
-	if(strlen($sql_datum) > 0)
-	{
-    	$conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') <= '$sql_datum'
+    // Termine an einem Tag suchen
+    if(strlen($sql_datum) > 0)
+    {
+        $conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') <= '$sql_datum'
                           AND DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$sql_datum' 
-                        ORDER BY dat_begin ASC ";		
-	}
+                        ORDER BY dat_begin ASC ";       
+    }
     //fuer alte Termine...
     elseif($req_mode == "old")
     {
-    	$conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') < '$act_date'
+        $conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') < '$act_date'
                           AND DATE_FORMAT(dat_end, '%Y-%m-%d')   < '$act_date' 
                         ORDER BY dat_begin DESC ";
     }
     //... ansonsten fuer neue Termine
     else
     {
-    	$conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d') >= '$act_date'
+        $conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d') >= '$act_date'
                               OR DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$act_date' ) 
                         ORDER BY dat_begin ASC ";
     }
@@ -189,42 +189,42 @@ $dates_result = $g_db->query($sql);
 
 if($req_id == 0)
 {
-	// Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-	$sql = "SELECT COUNT(1) as count
-			  FROM ". TBL_DATES. "
-			 WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-				   OR (   dat_global   = 1
-					  AND dat_org_shortname IN ($organizations) ))
-			       $conditions ";
-	$result = $g_db->query($sql);
-	$row    = $g_db->fetch_array($result);
-	$num_dates = $row['count'];
+    // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
+    $sql = "SELECT COUNT(1) as count
+              FROM ". TBL_DATES. "
+             WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+                   OR (   dat_global   = 1
+                      AND dat_org_shortname IN ($organizations) ))
+                   $conditions ";
+    $result = $g_db->query($sql);
+    $row    = $g_db->fetch_array($result);
+    $num_dates = $row['count'];
 }
 else
 {
-	$num_dates = 1;
+    $num_dates = 1;
 }
 
 // Neue Termine anlegen
 if($g_current_user->editDates())
 {
-	echo "
-	<ul class=\"iconTextLinkList\">
-		<li>
-			<span class=\"iconTextLink\">
-				<a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
-				src=\"". THEME_PATH. "/icons/add.png\" alt=\"Termin anlegen\" /></a>
-				<a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
-			</span>
-		</li>
-	</ul>";    
+    echo "
+    <ul class=\"iconTextLinkList\">
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
+                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Termin anlegen\" /></a>
+                <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
+            </span>
+        </li>
+    </ul>";    
 }
 
 if($num_dates > 10)
 {
-	// Navigation mit Vor- und Zurueck-Buttons
-	$base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
-	echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
+    // Navigation mit Vor- und Zurueck-Buttons
+    $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
+    echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
 }
 
 if($g_db->num_rows($dates_result) == 0)
@@ -258,13 +258,11 @@ else
                     {
                         echo ' - '. mysqldatetime("d.m.y", $date->getValue("dat_end"));
                     }
-                	echo $date->getValue("dat_headline"). "
-               	</div>
+                    echo $date->getValue("dat_headline"). "
+                </div>
                 <div class=\"boxHeadRight\">
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $date->getValue("dat_id"). "&amp;mode=4\"><img 
-                        src=\"". THEME_PATH. "/icons/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\" /></a>
-                    </span>";
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $date->getValue("dat_id"). "&amp;mode=4\"><img 
+                        src=\"". THEME_PATH. "/icons/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\" /></a>";
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editDates())
@@ -272,20 +270,16 @@ else
                         if($date->editRight() == true)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=". $date->getValue("dat_id"). "&amp;headline=$req_headline\"><img 
-                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=". $date->getValue("dat_id"). "&amp;headline=$req_headline\"><img 
+                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
                         }
 
                         // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
                         if($date->getValue("dat_org_shortname") == $g_organization)
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&amp;dat_id=". $date->getValue("dat_id"). "\"><img 
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&amp;dat_id=". $date->getValue("dat_id"). "\"><img 
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                         }
                     }
                 echo"</div>

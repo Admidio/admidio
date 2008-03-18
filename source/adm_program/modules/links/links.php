@@ -238,11 +238,9 @@ else
                 echo "<hr />";
             }
             echo "
-				<span class=\"iconLink\">
-					<a href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
-					alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-					<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
-				</span>
+                <a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
+                    alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
+                <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
 
                 <div style=\"margin-top: 10px;\">";
 
@@ -260,19 +258,15 @@ else
                 if($g_current_user->editWeblinksRight())
                 {
                     echo "
-                    <div class=\"editInformation\" style=\"text-align: left;\">";
+                    <div class=\"editInformation\">";
                         // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                         if ($g_current_user->editWeblinksRight())
                         {
                             echo "
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img 
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img 
                                 src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                            </span>
-                            <span class=\"iconLink\">
-                                <a href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img 
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
-                            </span>";
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img 
+                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                         }
                         $user_create = new User($g_db, $row->lnk_usr_id);
                         echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").

@@ -81,103 +81,103 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 //untere Zelle mit Buttons Bild und Fenster Schließen Button
 echo "
 <div class=\"formLayout\" id=\"photo_presenter\" style=\"width: ".$body_with."px;\">
-	<div class=\"formHead\">".$photo_album->getValue("pho_name")."</div>
-	<div class=\"formBody\">";
-		echo"Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
-		if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
-		&& strlen($photo_album->getValue("pho_end")) > 0)
-		{
-			echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
-		}
-		echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."<br /><br />";
-	
-		//Vor und zurueck buttons
-		echo"<ul class=\"iconTextLinkList\">";
-			if($prev_image > 0)
-			{
-				echo"<li>
-					<span class=\"iconTextLink\">
-						<a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
-						<a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
-					</span>
-				</li>";
-			}
-			if($next_image <= $photo_album->getValue("pho_quantity"))
-			{
-				echo"<li>
-					<span class=\"iconTextLink\">
-						<a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
-						<a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&aumlchstes Bild\" /></a>
-					</span>
-				</li>";
-			}
-			echo"
-		</ul>";
-	
-		//Ermittlung der Original Bildgroesse
-		$bildgroesse = getimagesize("$ordner/$bild.jpg");
-		//Entscheidung ueber scallierung
-		//Hochformat Bilder
-		if ($bildgroesse[0]<=$bildgroesse[1])
-		{
-			$side="y";
-			if ($bildgroesse[1]>$g_preferences['photo_show_height']){
-				$scal=$g_preferences['photo_show_height'];
-			}
-			else
-			{
-				$scal=$bildgroesse[1];
-			}
-		}
-	
-		//Querformat Bilder
-		if ($bildgroesse[0]>$bildgroesse[1])
-		{
-			$side="x";
-			if ($bildgroesse[0]>$g_preferences['photo_show_width'])
-			{
-				$scal=$g_preferences['photo_show_width'];
-			}
-			else{
-				$scal=$bildgroesse[0];
-			}
-		}
-	
-		//Ausgabe Bild
-		echo"
-			<div><a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">
-				<img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
-				</a>
-			</div>";
-	
-		//Fenster schliessen Button
-		//wenn Popupmode
-		if($g_preferences['photo_show_mode']==0)
-		{   
-			echo"<ul class=\"iconTextLinkList\">
-				<li>
-					<span class=\"iconTextLink\">
-						<a href=\"javascript:parent.window.close()\"><img class=\"iconLink\" src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Fenster schließen\" /></a>
-						<a href=\"javascript:parent.window.close()\">Fenster schließen</a>
-					</span>
-				</li>
-			</ul>";
-		}
-		
-		//Zurueck zur Uebersicht Button
-		//wenn Fenstermode
-		if($g_preferences['photo_show_mode']==2)
-		{   
-			echo"<ul class=\"iconTextLinkList\">
-				<li>
-					<span class=\"iconTextLink\">
-						<a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"zur &Uuml;bersicht\" /></a>
-						<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
-					</span>
-				</li>
-			</ul>";
-		}
-	echo"</div>
+    <div class=\"formHead\">".$photo_album->getValue("pho_name")."</div>
+    <div class=\"formBody\">";
+        echo"Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
+        if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
+        && strlen($photo_album->getValue("pho_end")) > 0)
+        {
+            echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
+        }
+        echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."<br /><br />";
+    
+        //Vor und zurueck buttons
+        echo"<ul class=\"iconTextLinkList\">";
+            if($prev_image > 0)
+            {
+                echo"<li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
+                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
+                    </span>
+                </li>";
+            }
+            if($next_image <= $photo_album->getValue("pho_quantity"))
+            {
+                echo"<li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
+                        <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&aumlchstes Bild\" /></a>
+                    </span>
+                </li>";
+            }
+            echo"
+        </ul>";
+    
+        //Ermittlung der Original Bildgroesse
+        $bildgroesse = getimagesize("$ordner/$bild.jpg");
+        //Entscheidung ueber scallierung
+        //Hochformat Bilder
+        if ($bildgroesse[0]<=$bildgroesse[1])
+        {
+            $side="y";
+            if ($bildgroesse[1]>$g_preferences['photo_show_height']){
+                $scal=$g_preferences['photo_show_height'];
+            }
+            else
+            {
+                $scal=$bildgroesse[1];
+            }
+        }
+    
+        //Querformat Bilder
+        if ($bildgroesse[0]>$bildgroesse[1])
+        {
+            $side="x";
+            if ($bildgroesse[0]>$g_preferences['photo_show_width'])
+            {
+                $scal=$g_preferences['photo_show_width'];
+            }
+            else{
+                $scal=$bildgroesse[0];
+            }
+        }
+    
+        //Ausgabe Bild
+        echo"
+            <div><a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">
+                <img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
+                </a>
+            </div>";
+    
+        //Fenster schliessen Button
+        //wenn Popupmode
+        if($g_preferences['photo_show_mode']==0)
+        {   
+            echo"<ul class=\"iconTextLinkList\">
+                <li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"javascript:parent.window.close()\"><img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Fenster schließen\" /></a>
+                        <a href=\"javascript:parent.window.close()\">Fenster schließen</a>
+                    </span>
+                </li>
+            </ul>";
+        }
+        
+        //Zurueck zur Uebersicht Button
+        //wenn Fenstermode
+        if($g_preferences['photo_show_mode']==2)
+        {   
+            echo"<ul class=\"iconTextLinkList\">
+                <li>
+                    <span class=\"iconTextLink\">
+                        <a href='$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id'\"><img src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"zur &Uuml;bersicht\" /></a>
+                        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$pho_id\">zur &Uuml;bersicht</a>
+                    </span>
+                </li>
+            </ul>";
+        }
+    echo"</div>
 </div>";
         
 require(THEME_SERVER_PATH. "/overall_footer.php");

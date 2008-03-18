@@ -41,18 +41,6 @@ unset($_SESSION['roles_request']);
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Rollenverwaltung";
-$g_layout['header'] = "<style type=\"text/css\">
-                           .iconLink li {
-                               padding: 15px;
-                               list-style-type: none;
-                               display: inline;
-                           }
-
-                           .iconLink img {
-                               vertical-align:   top;
-                               border-width:     0px;
-                           }
-                       </style>";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -214,12 +202,12 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                 }
-    			if($row->rol_this_list_view == 1)
+                if($row->rol_this_list_view == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
                     alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
                 }
-   				if($row->rol_all_lists_view == 1)
+                if($row->rol_all_lists_view == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
                     alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
@@ -233,32 +221,23 @@ echo "
                 }
             echo "</td>
             <td style=\"text-align: center;\">
-                <span class=\"iconLink\">
-                    <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img
-                    src=\"". THEME_PATH. "/icons/application_view_columns.png\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\" /></a>
-                </span>";
+                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&amp;mode=html&amp;rol_id=$row->rol_id\"><img
+                src=\"". THEME_PATH. "/icons/application_view_columns.png\" alt=\"Mitglieder anzeigen\" title=\"Mitglieder anzeigen\" /></a>";
 
                 if($req_valid == true)
                 {
-                    echo "
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
-                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
-                    </span>";
+                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=$row->rol_id\"><img 
+                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>";
                 }
                 else
                 {
-                    echo "
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img
-                        src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\" /></a>
-                    </span>";
+                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=5\"><img
+                        src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\" /></a>";
                 }
 
                 if($row->rol_name == "Webmaster")
                 {
-                    echo "
-                    <span class=\"iconLink\">
+                    echo "<span class=\"iconLink\">
                         <img src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" />
                     </span>";
                 }
@@ -266,19 +245,13 @@ echo "
                 {
                     if($req_valid == true)
                     {
-                        echo "
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
-                        </span>";
+                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
+                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                     }
                     else
                     {
-                        echo "
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\"><img 
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" title=\"Rolle l&ouml;schen\" /></a>
-                        </span>";
+                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\"><img 
+                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                     }
                 }
             echo "</td>

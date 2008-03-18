@@ -208,13 +208,13 @@ echo "
                 <dl>
                     <dt><label for=\"pho_begin\">Beginn:</label></dt>
                     <dd>
-						<script type=\"text/javascript\" id=\"js18\">
-							var cal18 = new CalendarPopup(\"calendardiv\");
-							cal18.setCssPrefix(\"calendar\");
-						</script>
-						<input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_begin")."\" />
-						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-						<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
+                        <script type=\"text/javascript\" id=\"js18\">
+                            var cal18 = new CalendarPopup(\"calendardiv\");
+                            cal18.setCssPrefix(\"calendar\");
+                        </script>
+                        <input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_begin")."\" />
+                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                        <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
@@ -226,8 +226,8 @@ echo "
                 <dl>
                     <dt><label for=\"pho_end\">Ende:</label></dt>
                     <dd>
-						<input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_end")."\">
-						<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                        <input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_end")."\">
+                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                     </dd>
                 </dl>
             </li>";
@@ -279,14 +279,14 @@ echo "
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
-	<li>
-		<span class=\"iconLink\">
-
-            <img src=\"". THEME_PATH. "/icons/help.png\" class=\"iconLink\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\" 
-onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
-            <a href=\"\" alt=\"Hilfe\" class=\"iconLink\" onclick=\"window.open('http://localhost/htdocs/admidio/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=310,top=200,scrollbars=yes')\">Hilfe</a>
+    <li>
+        <span class=\"iconTextLink\">
+            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\" 
+                onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
+            <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
-		</li>
+    </li>
 </ul>
 
 

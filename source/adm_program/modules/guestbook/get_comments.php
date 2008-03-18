@@ -70,10 +70,8 @@ if (isset($comment_result))
                 if (isValidEmailAddress($row->gbc_email))
                 {
                     echo "
-                    <span class=\"iconLink\">
-                        <a href=\"mailto:$row->gbc_email\"><img src=\"". THEME_PATH. "/icons/email.png\" 
-                        alt=\"Mail an $row->gbc_email\" title=\"Mail an $row->gbc_email\" /></a>
-                    </span>";
+                    <a class=\"iconLink\" href=\"mailto:$row->gbc_email\"><img src=\"". THEME_PATH. "/icons/email.png\" 
+                        alt=\"Mail an $row->gbc_email\" title=\"Mail an $row->gbc_email\" /></a>";
                 }
 
                 echo "
@@ -85,29 +83,25 @@ if (isset($comment_result))
                 if ($g_current_user->editGuestbookRight())
                 {
                     echo "
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid=$row->gbc_id\"><img 
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid=$row->gbc_id\"><img 
                         src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                    </span>
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=7\"><img 
-                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
-                    </span>";
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=7\"><img 
+                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                 }
 
                 echo "</div>
             </div>
 
             <div class=\"groupBoxBody\">";
-				// wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-				if ($g_preferences['enable_bbcode'] == 1)
-				{
-					echo $bbcode->parse($row->gbc_text);
-				}
-				else
-				{
-					echo nl2br($row->gbc_text);
-				}
+                // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
+                if ($g_preferences['enable_bbcode'] == 1)
+                {
+                    echo $bbcode->parse($row->gbc_text);
+                }
+                else
+                {
+                    echo nl2br($row->gbc_text);
+                }
 
                 // Falls der Kommentar editiert worden ist, wird dies angezeigt
                 if($row->gbc_usr_id_change > 0)

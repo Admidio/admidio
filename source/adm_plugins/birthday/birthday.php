@@ -206,19 +206,15 @@ if($anz_geb > 0)
                     if($g_valid_login)
                     {
                         $show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
-                             target="'. $plg_link_target. '">'. $show_name. '</a>
-                             <span class="iconLink">
-                                <a href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
-                                src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
-                            </span>';
+                            target="'. $plg_link_target. '">'. $show_name. '</a>
+                            <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
+                            src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>';
                     }
                     else
                     {
                         $show_name = $show_name. 
-                            '<span class="iconLink">
-                                <a href="mailto:'. $row['email']. '"><img 
-                                src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>
-                            </span>';
+                            '<a class="iconLink" href="mailto:'. $row['email']. '"><img 
+                            src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>';
                     }
                 }
                 else

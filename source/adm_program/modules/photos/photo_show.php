@@ -62,12 +62,13 @@ if(isset($_GET['scal']))
 }
 
 //Seite
-$_GET['side'] = strtolower($_GET['side']);
-
-if(isset($_GET['side'])
-&& ($_GET['side'] ==  "x" || $_GET['side'] == "y"))
+if(isset($_GET['side']))
 {
-    $side = $_GET['side'];
+    $_GET['side'] = strtolower($_GET['side']);
+    if($_GET['side'] ==  "x" || $_GET['side'] == "y")
+    {
+        $side = $_GET['side'];
+    }
 }
 
 // Bildpfad zusammensetzten
