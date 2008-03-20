@@ -386,26 +386,19 @@ echo "
                             <dt><label for=\"enable_password_recovery\">Passwort zusenden:</label>
                             </dt>
                             <dd>
-                            <select size=\"1\" id=\"enable_password_recovery\" name=\"enable_password_recovery\">
-                                    <option value=\"0\" ";
-                                    if($form_values['enable_password_recovery'] == 0)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['enable_password_recovery'] == 1)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Aktiviert</option>
-                                </select>
+								<input type=\"checkbox\" id=\"enable_password_recovery\" name=\"enable_password_recovery\" ";
+								if(isset($form_values['enable_password_recovery']) && $form_values['enable_password_recovery'] == 1)
+								{
+									echo " checked=\"checked\" ";
+								}
+								echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Der User kann sich wenn er sein Passwort vergessen hatt ein neu generiertes zu schicken!<br />
-                        Wenn die Option deaktiviert wurde kann der User nur eine Anfrage an den Webadmin stellen!
+                        Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch 
+						zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den 
+						Administrator stellen.
                     </li>
                 </ul>
             </div>
@@ -1124,25 +1117,19 @@ echo "
                         <dl>
                             <dt><label for=\"enable_ecard_module\">Grußkartenmodul aktivieren:</label></dt>
                             <dd>
-                            <select size=\"1\" id=\"enable_ecard_module\" name=\"enable_ecard_module\">
-                                    <option value=\"0\" ";
-                                    if($form_values['enable_ecard_module'] == 0)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['enable_ecard_module'] == 1)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Aktiviert</option>
-                                </select>
+                                <input type=\"checkbox\" id=\"enable_ecard_module\" name=\"enable_ecard_module\" ";
+                                if(isset($form_values['enable_ecard_module']) && $form_values['enable_ecard_module'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Grußkartenmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
+                        Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.
+						Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.
+						Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung.
                     </li>
                     <li>
                         <dl>
