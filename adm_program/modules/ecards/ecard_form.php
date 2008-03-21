@@ -1101,36 +1101,25 @@ if (empty($submit_action))
          				{
 							echo'
 							<div>
-								<a class="iconLink" href="javascript:bbcode(0)">
-									<img id="[b]" src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" />
-								</a>
-								<a class="iconLink" href="javascript:bbcode(1)">
-									<img id="[u]" src="'. THEME_PATH.'/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" />
-								</a>
-								<a class="iconLink" href="javascript:bbcode(2)">
-									<img id="[i]" src="'. THEME_PATH.'/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" />
-								</a>
-								<a class="iconLink" href="javascript:bbcode(3)">
-									<img id="[big]" src="'. THEME_PATH.'/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" />
-								</a>
-								<a class="iconLink" href="javascript:bbcode(4)">
-									<img id="[small]" src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" />
-								</a>
-								<a class="iconLink" href="javascript:bbcode(5)">
-									<img id="[center]" src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" />
-								</a>
-								<a class="iconLink" href="javascript:bbcode(6)">
-									<img id="[url='.$g_root_path.']" src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" />
-								</a>
-								<a class="iconLink" href="javascript:bbcode(7)">
-									<img id="[email=adresse@demo.de]" src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" />
-								</a>
-								<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')\'>
-									<img id="[img]" src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" />
-								</a>
-								<a class="iconLink" href="javascript:bbcodeclose()">
-									<img id="[all]" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" />
-								</a>
+								<a class="iconLink" href="javascript:bbcode(0)"><img id="[b]" 
+									src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
+								<a class="iconLink" href="javascript:bbcode(1)"><img id="[u]" 
+									src="'. THEME_PATH.'/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" /></a>
+								<a class="iconLink" href="javascript:bbcode(2)"><img id="[i]" 
+									src="'. THEME_PATH.'/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" /></a>
+								<a class="iconLink" href="javascript:bbcode(3)"><img id="[big]" 
+									src="'. THEME_PATH.'/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" /></a>
+								<a class="iconLink" href="javascript:bbcode(4)"><img id="[small]" 
+									src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
+								<a class="iconLink" href="javascript:bbcode(5)"><img id="[center]" 
+									src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
+								<a class="iconLink" href="javascript:bbcode(6)"><img id="[url='.$g_root_path.']" 
+									src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
+								<a class="iconLink" href="javascript:bbcode(7)"><img id="[email=adresse@demo.de]" 
+									src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
+								<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')\'><img id="[img]" 
+									src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
+								<a class="iconLink" href="javascript:bbcodeclose()"><img id="[all]" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
 							</div>
 							';
 						}
