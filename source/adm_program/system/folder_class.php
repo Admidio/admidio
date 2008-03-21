@@ -78,9 +78,9 @@ class File extends TableAccess
 	        {
 	        	$this->clear();
 	        }
-	        else if (!$this->getValue("fol_public"))
+	        else if (!$g_current_user->editDownloadRight() && !$this->getValue("fol_public"))
 	        {
-	        	//Wenn der Ordner nicht public ist, muessen die Rechte untersucht werden
+	        	//Wenn der Ordner nicht public ist und der Benutzer keine DownloadAdminrechte hat, muessen die Rechte untersucht werden
 	        	$sql_rights = "SELECT count(*)
                          FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
                         WHERE flr_fol_id		= ". $this->getValue("fol_id"). "
@@ -102,7 +102,7 @@ class File extends TableAccess
         }
     }
 
-    // Folder mit der uebergebenen ID aus der Datenbank auslesen
+    // Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
     function getFolderContentsForDownload()
 	{
         global $g_current_organization, $g_current_user;
@@ -204,17 +204,115 @@ class File extends TableAccess
         return $completeFolder;
     }
 
-    // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz und all seinen Unterordnern
-	function editPublicFlagOnFolder($public_flag)
+    // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
+    // und all seinen Unterordnern rekursiv
+	function editPublicFlagOnFolder($public_flag, $folder_id = 0)
     {
-		//TODO: Hier muss noch ein "bisschen" Code rein, der das attribut fol_public entsprechend der Uebergabe auf allen Unterordnern setzt
+		if ($folder_id = 0)
+		{
+			$folder_id = $this->getValue("fol_id");
+			$this->setValue("fol_public", $public_flag);
+		}
+
+		//Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
+        $sql_subfolders = "SELECT *
+                         	 FROM ". TBL_FOLDERS. "
+                            WHERE fol_fol_id_parent = $folder_id";
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+		{
+			//rekursiver Aufruf mit jedem einzelnen Unterordner
+			$this->editPublicFlagOnFolder($row_subfolders->fol_id);
+		}
+
+		//Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
+		$sql_update = "UPDATE ". TBL_FOLDERS. "
+						  SET fol_public = $public_flag
+                        WHERE fol_id = $folder_id";
+        $this->db->query($sql_update);
+
+    }
+
+	// Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
+	// und allen darin enthaltenen Unterordnern und Dateien rekursiv
+	function editLockedFlagOnFolder($locked_flag, $folder_id = 0)
+    {
+		if ($folder_id = 0)
+		{
+			$folder_id = $this->getValue("fol_id");
+			$this->setValue("fol_locked", $locked_flag);
+		}
+
+		//Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
+        $sql_subfolders = "SELECT *
+                         	 FROM ". TBL_FOLDERS. "
+                            WHERE fol_fol_id_parent = $folder_id";
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+		{
+			//rekursiver Aufruf mit jedem einzelnen Unterordner
+			$this->editLockedFlagOnFolder($row_subfolders->fol_id);
+		}
+
+		//Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
+		$sql_update = "UPDATE ". TBL_FOLDERS. "
+						  SET fol_locked = $locked_flag
+                        WHERE fol_id = $folder_id";
+        $this->db->query($sql_update);
+
+        //...und natuerlich auch fuer alle Files die in diesem Ordner sind
+        $sql_update = "UPDATE ". TBL_FILES. "
+						  SET fil_locked = $locked_flag
+                        WHERE fil_fol_id = $folder_id";
+        $this->db->query($sql_update);
     }
 
 
-    // die Methode wird innerhalb von delete() aufgerufen und entsorgt die Referenzen des Datensatzes...
-    function _delete()
+
+    // die Methode wird innerhalb von delete() aufgerufen und entsorgt die Referenzen des Datensatzes
+    // und loescht die Verzeichnisse auch physikalisch auf der Platte...
+    function _delete($folder_id = 0)
     {
-		//TODO: Hier muss noch ein "bisschen" Code rein, der alle untergeordneten Datein und Unterordner mit Inhalt und Berechtigungen löscht
+    	if ($folder_id = 0)
+		{
+			$folder_id = $this->getValue("fol_id");
+
+		}
+
+		//Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
+        $sql_subfolders = "SELECT *
+                         	 FROM ". TBL_FOLDERS. "
+                            WHERE fol_fol_id_parent = $folder_id";
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+		{
+			//rekursiver Aufruf mit jedem einzelnen Unterordner
+			$this->_delete($row_subfolders->fol_id);
+		}
+
+		//In der DB die Files der aktuellen folder_id loeschen
+		$sql_delete_files = "DELETE from ". TBL_FILES. "
+                        WHERE fil_fol_id = $folder_id";
+        $this->db->query($sql_delete_files);
+
+        //In der DB die verknuepften Berechtigungen zu dieser Folder_ID loeschen...
+		$sql_delete_fol_rol = "DELETE from ". TBL_FOLDER_ROLES. "
+                        WHERE flr_fol_id = $folder_id";
+        $this->db->query($sql_delete_fol_rol);
+
+        //In der DB den Eintrag des Ordners selber loeschen
+        $sql_delete_folder = "DELETE from ". TBL_FOLDERS. "
+                        WHERE fol_id = $folder_id";
+        $this->db->query($sql_delete_folder);
+
+
+        //TODO:Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
+
+        return true;
+
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

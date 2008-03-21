@@ -58,24 +58,22 @@ class File extends TableAccess
 
         $tables    = TBL_FOLDERS;
         $condition = "     fil_id     = $file_id
-        		       AND fil_fol_id = fol_id
+                       AND fil_fol_id = fol_id
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
         $this->readData($file_id, $condition, $tables);
     }
 
 
-	// File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
-	// Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
+    // File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
+    // Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
     function getFileForDownload($file_id)
     {
         global $g_current_organization, $g_current_user;
 
         $tables    = TBL_FOLDERS;
         $condition = "     fil_id     = $file_id
-        		       AND fil_fol_id = fol_id
-        		       AND fil_locked = 0
-        		       AND fol_locked = 0
-        		       AND fol_type   = 'DOWNLOAD'
+                       AND fil_fol_id = fol_id
+                       AND fol_type   = 'DOWNLOAD'
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
         $this->readData($file_id, $condition, $tables);
 
@@ -83,29 +81,45 @@ class File extends TableAccess
         //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
         if ($this->getValue('fil_id'))
         {
-	        if (!$this->getValue("fol_public"))
-	        {
-	        	//Wenn der Ordner nicht public ist, muessen die Rechte untersucht werden
-	        	$sql_rights = "SELECT count(*)
+
+            //Falls die Datei gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
+            if (!$g_current_user->editDownloadRight() && $this->getValue("fil_locked"))
+            {
+                $this->clear();
+            }
+            else if (!$g_current_user->editDownloadRight() && !$this->getValue("fol_public"))
+            {
+                //Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
+                $sql_rights = "SELECT count(*)
                          FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
-                        WHERE flr_fol_id		= ". $this->getValue("fol_id"). "
-                          AND flr_rol_id 		= mem_rol_id
-                          AND mem_usr_id 		= ". $g_current_user->getValue("usr_id"). "
-                          AND mem_valid 		= 1";
-        		$result_rights = $this->db->query($sql_rights);
-        		$row_rights = $g_db->fetch_array($result_rights);
-        		$row_count  = $row_rights[0];
+                        WHERE flr_fol_id        = ". $this->getValue("fol_id"). "
+                          AND flr_rol_id         = mem_rol_id
+                          AND mem_usr_id         = ". $g_current_user->getValue("usr_id"). "
+                          AND mem_valid         = 1";
+                $result_rights = $this->db->query($sql_rights);
+                $row_rights = $g_db->fetch_array($result_rights);
+                $row_count  = $row_rights[0];
 
-        		//Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
-        		//wird auch kein Ordner geliefert.
-        		if ($row_count == 0)
-        		{
-        			$this->clear();
-        		}
+                //Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
+                //wird auch kein Ordner geliefert.
+                if ($row_count == 0)
+                {
+                    $this->clear();
+                }
 
-	        }
+            }
         }
 
+    }
+
+    // die Methode wird innerhalb von delete() aufgerufen
+    //und loescht das File physikalisch von der Platte bevor es aus der DB geloescht wird
+    function _delete()
+    {
+        //TODO:File physikalisch loeschen
+
+
+        return true;
     }
 
 
