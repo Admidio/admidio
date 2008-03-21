@@ -427,14 +427,10 @@ echo "
 							</tr>
 							<tr>
 								<td align=\"right\">
-									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">
-										<img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" />
-									</a>
+									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>
 								</td>
 								<td align=\"left\">
-									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\">
-										<img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" />
-									</a>
+									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
 								</td>
 							</tr>
 						</table>
