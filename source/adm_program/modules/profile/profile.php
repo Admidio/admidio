@@ -419,11 +419,25 @@ echo "
                 echo"
                 <div class=\"groupBox\">
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
-                        <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\" />
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
-                            src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
+						<table width=\"100%\" summary=\"Profilfoto\" border=\"0\" style=\"border:0px;\" cellpadding=\"0\" cellspacing=\"0\" rules=\"none\">
+							<tr>
+								<td colspan=\"2\">
+								<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\" />
+								</td>
+							</tr>
+							<tr>
+								<td align=\"right\">
+									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\">
+										<img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" />
+									</a>
+								</td>
+								<td align=\"left\">
+									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\">
+										<img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" />
+									</a>
+								</td>
+							</tr>
+						</table>
                     </div>
                 </div>
             </div>
