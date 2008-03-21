@@ -251,8 +251,8 @@ class TableAccess
             {
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
-                if($this->db_fields_infos[$key]['extra'] != "auto_increment"
-                && strpos($key, $this->column_praefix. "_") === 0) 
+                if(strpos($key, $this->column_praefix. "_") === 0
+				&& $this->db_fields_infos[$key]['extra'] != "auto_increment") 
                 {
                     if($this->db_fields_infos[$key]['changed'] == true)
                     {

@@ -45,7 +45,10 @@ if(!$g_current_user->viewProfile($a_user_id))
 function getFieldCode($field, $user_id)
 {
     global $g_preferences, $g_root_path, $g_current_user;
-    $value = "";
+	$html      = "";
+    $value     = "";
+	$msg_image = "";
+	$messenger = false;
     
     if($g_current_user->editProfile($user_id) == false && $field['usf_hidden'] == 1)
     {
@@ -102,11 +105,14 @@ function getFieldCode($field, $user_id)
             break;
                                 
         case "TEXT":
-        case "TEXT_BIG":
             $value = $field['usd_value'];
             break;
+			
+        case "TEXT_BIG":
+            $value = nl2br($field['usd_value']);
+            break;
     }
-    
+	    
     if($field['cat_name'] == "Stammdaten")
     {
         if(strlen($field['usd_value']) > 25)
@@ -117,59 +123,72 @@ function getFieldCode($field, $user_id)
     else
     {
         // Icons der Messenger anzeigen
-        $image = "";
         if($field['usf_name'] == 'ICQ')
         {
-            // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-            preg_match_all("/\d+/", $field['usd_value'], $matches);
-            $icq_number = implode("", reset($matches));
+			if(strlen($field['usd_value']) > 0)
+			{
+	            // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
+	            preg_match_all("/\d+/", $field['usd_value'], $matches);
+	            $icq_number = implode("", reset($matches));
 
-            // ICQ Onlinestatus anzeigen
-            $value = "<a class=\"iconLink\" href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"><img 
-                        src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\" 
-                        alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
-                        title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
-                      $value";
+	            // ICQ Onlinestatus anzeigen
+	            $value = "<a class=\"iconLink\" href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"><img 
+	                        src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\" 
+	                        alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
+	                        title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
+	                      $value";
+			}
+			$messenger = true;
         }
         elseif($field['usf_name'] == 'Skype')
         {
-            // Skype Onlinestatus anzeigen
-            $value = "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
-            <a class=\"iconLink\" href=\"skype:". $field['usd_value']. "?add\"><img 
-                src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
-                title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
-                alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
-            $value";
+			if(strlen($field['usd_value']) > 0)
+			{
+	            // Skype Onlinestatus anzeigen
+	            $value = "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
+	            <a class=\"iconLink\" href=\"skype:". $field['usd_value']. "?add\"><img 
+	                src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
+	                title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
+	                alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
+	            $value";
+			}
+			$messenger = true;
         }
         elseif($field['usf_name'] == 'AIM')
         {
-            $image = "aim.png";
+            $msg_image = "aim.png";
         }
         elseif($field['usf_name'] == 'Google Talk')
         {
-            $image = "google.gif";
+            $msg_image = "google.gif";
         }
         elseif($field['usf_name'] == 'MSN')
         {
-            $image = "msn.png";
+            $msg_image = "msn.png";
         }
         elseif($field['usf_name'] == 'Yahoo')
         {
-            $image = "yahoo.png";
+            $msg_image = "yahoo.png";
         }
-        if(strlen($image) > 0)
+        if(strlen($msg_image) > 0)
         {
-            $value = '<img src="'. THEME_PATH. '/icons/'. $image. '" style="vertical-align: middle;" 
+            $value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;" 
                 alt="'. $field['usf_name']. '" title="'. $field['usf_name']. '" />&nbsp;&nbsp;'. $value;
+			$messenger = true;
         }
     }
     
-    $html = '<li>
-                <dl>
-                    <dt>'. $field['usf_name']. ':</dt>
-                    <dd>'. $value. '&nbsp;</dd>
-                </dl>
-            </li>';
+	// Feld anzeigen, außer bei Messenger, wenn dieser keine Daten enthält
+	if($messenger == false
+	|| ($messenger == true && strlen($field['usd_value']) > 0))
+	{
+	    $html = '<li>
+	                <dl>
+	                    <dt>'. $field['usf_name']. ':</dt>
+	                    <dd>'. $value. '&nbsp;</dd>
+	                </dl>
+	            </li>';
+	}
              
     return $html;
 }

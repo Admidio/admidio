@@ -505,7 +505,7 @@ elseif($req_mode == 7)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
                                            , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'USF', 'Zusätzliche Daten', 0, 2) ";
+                                           , (NULL, 'USF', 'Zusätzliche Daten', 0, 2) ";
     $db->query($sql);
 
     // User Webmaster anlegen
