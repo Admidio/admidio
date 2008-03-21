@@ -248,30 +248,29 @@ echo "
                         <div style=\"width: 350px;\">
                             <div style=\"float: left;\">
                                 <a class=\"iconLink\" href=\"javascript:bbcode(0)\"><img id=\"[b]\" 
-                                    src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\"></a>
+									src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(1)\"><img id=\"[u]\" 
-                                    src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\"></a>&nbsp;
+									src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(2)\"><img id=\"[i]\" 
-                                    src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\"></a>&nbsp;
-                                <a href=\"javascript:bbcode(3)\"><img id=\"[big]\" 
-                                    src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\"></a>&nbsp;
+									src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(3)\"><img id=\"[big]\" 
+                                    src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(4)\"><img id=\"[small]\" 
-                                    src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\"></a>&nbsp;
+                                    src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(5)\"><img id=\"[center]\" 
-                                    src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\"></a>&nbsp;
+                                    src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(6)\"><img id=\"[url=".$g_root_path."]\" 
-                                    src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\"></a>&nbsp;
+                                    src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(7)\"><img id=\"[email=adresse@demo.de]\" 
-                                    src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\"></a>&nbsp;
+                                    src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:emoticon('[img]".$g_root_path."[/img]')\"><img id=\"[img]\" 
-                                    src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\"></a>&nbsp;&nbsp;
+                                    src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
                             </div>
-                            <div style=\"float: right;\"
+                            <div style=\"float: right;\">
                                 <a class=\"iconLink\" href=\"javascript:bbcodeclose()\"><img id=\"[all]\" 
-                                    src=\"". THEME_PATH. "/icons/cross.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\"></a>
+                                    src=\"". THEME_PATH. "/icons/cross.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\" 
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" 
-                                    onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode',this);\" onmouseout=\"ajax_hideTooltip()\"  />
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" />
                             </div>
                         </div>
                     </dd>

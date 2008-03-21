@@ -320,23 +320,23 @@ $javascript='
 		var dropdiv = \'dropdownmenu\';
 		var externdiv = \'extern\';
 		var switchdiv = \'externSwitch\';
+		var textinputid = \'Nachricht\';
 		var max_recipients = '.$g_preferences['ecard_cc_recipients'].';
 		var now_recipients = 0;
-				
-		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
-		var bbcodes = Array("[b]","[\/b]","[u]","[\/u]","[i]","[\/i]","[big]","[\/big]","[small]","[\/small]","[center]","[\/center]","[url=http:\/\/www.Adresse.de]","[\/url]","[email=adresse@demo.de]","[\/email]","[img]","[\/img]");
-		var bbcodestext = Array("<img src=\''. THEME_PATH. '/icons/text_bold_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_bold.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/text_underline_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_underline.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/text_italic_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_italic.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/text_bigger_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_bigger.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/text_smaller_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_smaller.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/text_align_center_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/text_align_center.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/link_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/link.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/email_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/email.png\' border=\'0\'\/>",
-		"<img src=\''. THEME_PATH. '/icons/image_point.png\' border=\'0\'\/>","<img src=\''. THEME_PATH. '/icons/image.png\' border=\'0\'\/>");
 
-		
-         function popup_win(theURL,winName,winOptions) 
+		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
+		var bbcodes = Array(\'[b]\',\'[\/b]\',\'[u]\',\'[\/u]\',\'[i]\',\'[\/i]\',\'[big]\',\'[\/big]\',\'[small]\',\'[\/small]\',\'[center]\',\'[\/center]\',\'[url='.$g_root_path.']\',\'[\/url]\',\'[email=adresse@demo.de]\',\'[\/email]\',\'[img]\',\'[\/img]\');
+		var bbcodestext = Array(\'text_bold_point.png\',\'text_bold.png\',
+								\'text_underline_point.png\',\'text_underline.png\',
+								\'text_italic_point.png\',\'text_italic.png\',
+								\'text_bigger_point.png\',\'text_bigger.png\',
+								\'text_smaller_point.png\',\'text_smaller.png\',
+								\'text_align_center_point.png\',\'text_align_center.png\',
+								\'link_point.png\',\'link.png\',
+								\'email_point.png\',\'email.png\',
+								\'image_point.png\',\'image.png\');
+				
+        function popup_win(theURL,winName,winOptions) 
 		{
              win = window.open(theURL,winName,winOptions);
              win.focus();
@@ -852,21 +852,19 @@ $javascript='
 		}
 		function emoticon(text) 
 		{
-			var txtarea = document.ecard_form.Nachricht;
-			text = text + \' \';
+			var txtarea = document.getElementById(textinputid);		
 			if (txtarea.createTextRange && txtarea.caretPos) 
 			{
-				var caretPos = txtarea.caretPos;
-				caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == \'\' ? text + \'\' : text;
-				txtarea.focus();
+				txtarea.caretPos.text = text;
 			} 
 			else 
 			{
-				txtarea.value  += text;
-				txtarea.focus();
+				txtarea.value  += text +" ";
 			}
-		}
-		function bbcode(nummer) 
+			
+			txtarea.focus();
+		}	
+		function bbcode(nummer)
 		{
 			var arrayid;
 			if (vorbelegt[nummer]) 
@@ -876,9 +874,9 @@ $javascript='
 			else 
 			{
 				arrayid = nummer*2;
-			};
+			}
 			emoticon(bbcodes[arrayid]);
-			document.getElementById(bbcodes[nummer*2]).innerHTML = bbcodestext[arrayid];
+			document.getElementById(bbcodes[nummer*2]).src = \''. THEME_PATH.'/icons/\'+bbcodestext[arrayid];
 			vorbelegt[nummer] = !vorbelegt[nummer];
 		}
 		
@@ -963,7 +961,7 @@ if (empty($submit_action))
 					';
 					if($g_preferences['enable_ecard_cc_recipients'])
 					{	
-						echo '<div id="getmoreRecipient" style="padding-top:18px;">
+						echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
 						<a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
 						</div>';
 					}	
@@ -1088,13 +1086,13 @@ if (empty($submit_action))
 							echo '<div id="getmoreSettings" style="';
 							if($g_preferences['enable_ecard_text_length'])
 							{
-								echo 'padding-top:28px;';
+								echo 'padding-top:42px;';
 							}
 							else
 							{
-								echo 'padding-top:153px;';
+								echo 'padding-top:170px;';
 							}
-							echo '">
+							echo '  height:1px;">
 								<a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
 							</div>	
 						</dt>
@@ -1103,16 +1101,36 @@ if (empty($submit_action))
          				{
 							echo'
 							<div>
-							 <a href="javascript:bbcode(0)" id="[b]"><img src="'. THEME_PATH. '/icons/text_bold.png" border="0"/></a>&nbsp;
-							<a href="javascript:bbcode(1)" id="[u]"><img src="'. THEME_PATH. '/icons/text_underline.png" border="0"/></a>&nbsp;
-							<a href="javascript:bbcode(2)" id="[i]"><img src="'. THEME_PATH. '/icons/text_italic.png" border="0"/></a>&nbsp;
-							<a href="javascript:bbcode(3)" id="[big]"><img src="'. THEME_PATH. '/icons/text_bigger.png" border="0"/></a>&nbsp;
-							<a href="javascript:bbcode(4)" id="[small]"><img src="'. THEME_PATH. '/icons/text_smaller.png" border="0"/></a>&nbsp;
-							<a href="javascript:bbcode(5)" id="[center]"><img src="'. THEME_PATH. '/icons/text_align_center.png" border="0"/></a>&nbsp;
-							<a href="javascript:bbcode(6)" id="[url=http://www.Adresse.de]"><img src="'. THEME_PATH. '/icons/link.png" border="0"/></a>&nbsp;
-							<a href="javascript:bbcode(7)" id="[email=adresse@demo.de]"><img src="'. THEME_PATH. '/icons/email.png" border="0"/></a>&nbsp;
-							<a href="javascript:emoticon(\'[img]www.Bild-Adresse.de[/img]\')" id="[img]"><img src="'. THEME_PATH. '/icons/image.png" border="0"/></a>&nbsp;&nbsp;
-							<a href="javascript:bbcodeclose()" id="[img]"><img src="'. THEME_PATH. '/icons/cross.png" border="0"/></a>
+								<a class="iconLink" href="javascript:bbcode(0)">
+									<img id="[b]" src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" />
+								</a>
+								<a class="iconLink" href="javascript:bbcode(1)">
+									<img id="[u]" src="'. THEME_PATH.'/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" />
+								</a>
+								<a class="iconLink" href="javascript:bbcode(2)">
+									<img id="[i]" src="'. THEME_PATH.'/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" />
+								</a>
+								<a class="iconLink" href="javascript:bbcode(3)">
+									<img id="[big]" src="'. THEME_PATH.'/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" />
+								</a>
+								<a class="iconLink" href="javascript:bbcode(4)">
+									<img id="[small]" src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" />
+								</a>
+								<a class="iconLink" href="javascript:bbcode(5)">
+									<img id="[center]" src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" />
+								</a>
+								<a class="iconLink" href="javascript:bbcode(6)">
+									<img id="[url='.$g_root_path.']" src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" />
+								</a>
+								<a class="iconLink" href="javascript:bbcode(7)">
+									<img id="[email=adresse@demo.de]" src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" />
+								</a>
+								<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')\'>
+									<img id="[img]" src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" />
+								</a>
+								<a class="iconLink" href="javascript:bbcodeclose()">
+									<img id="[all]" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" />
+								</a>
 							</div>
 							';
 						}

@@ -91,62 +91,62 @@ else
     $g_layout['title'] = $req_headline. " anlegen";
 }
 $javascript = "";
-$javascript = '<script language="javascript" type="text/javascript">
+$javascript = "<script language=\"javascript\" type=\"text/javascript\">
+	var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
+	var bbcodes = Array(\"[b]\",\"[/b]\",\"[u]\",\"[/u]\",\"[i]\",\"[/i]\",\"[big]\",\"[/big]\",\"[small]\",\"[/small]\",\"[center]\",\"[/center]\",\"[url=".$g_root_path."]\",\"[/url]\",\"[email=adresse@demo.de]\",\"[/email]\",\"[img]\",\"[/img]\");
+	var bbcodestext = Array(\"text_bold_point.png\",\"text_bold.png\",
+							\"text_underline_point.png\",\"text_underline.png\",
+							\"text_italic_point.png\",\"text_italic.png\",
+							\"text_bigger_point.png\",\"text_bigger.png\",
+							\"text_smaller_point.png\",\"text_smaller.png\",
+							\"text_align_center_point.png\",\"text_align_center.png\",
+							\"link_point.png\",\"link.png\",
+							\"email_point.png\",\"email.png\",
+							\"image_point.png\",\"image.png\");
 
-		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
-		var bbcodes = Array("[b]","[\/b]","[u]","[\/u]","[i]","[\/i]","[big]","[\/big]","[small]","[\/small]","[center]","[\/center]","[url=http:\/\/www.Adresse.de]","[\/url]","[email=adresse@demo.de]","[\/email]","[img]","[\/img]");
-		var bbcodestext = Array("<img src=\''. THEME_PATH. '/icons/text_bold_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/text_bold.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/text_underline_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/text_underline.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/text_italic_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/text_italic.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/text_bigger_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/text_bigger.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/text_smaller_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/text_smaller.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/text_align_center_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/text_align_center.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/link_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/link.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/email_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/email.png\' border=\'0\'/>",
-		"<img src=\''. THEME_PATH. '/icons/image_point.png\' border=\'0\'/>","<img src=\''. THEME_PATH. '/icons/image.png\' border=\'0\'/>");
-		function emoticon(text) 
+	function emoticon(text) 
+	{
+		var txtarea = document.getElementById('ann_description');
+	
+		if (txtarea.createTextRange && txtarea.caretPos) 
 		{
-			var txtarea = document.post.ann_description;
-			text = text + \' \';
-			if (txtarea.createTextRange && txtarea.caretPos) 
-			{
-				var caretPos = txtarea.caretPos;
-				caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == \'\' ? text + \'\' : text;
-				txtarea.focus();
-			} 
-			else 
-			{
-				txtarea.value  += text;
-				txtarea.focus();
-			}
+			txtarea.caretPos.text = text;
+		} 
+		else 
+		{
+			txtarea.value  += text;
 		}
-		function bbcode(nummer) 
-		{
-			var arrayid;
-			if (vorbelegt[nummer]) 
-			{
-				arrayid = nummer*2+1;
-			} 
-			else 
-			{
-				arrayid = nummer*2;
-			};
-			emoticon(bbcodes[arrayid]);
-			document.getElementById(bbcodes[nummer*2]).innerHTML = bbcodestext[arrayid];
-			vorbelegt[nummer] = !vorbelegt[nummer];
-		}
-		
-		//Funktion schließt alle offnen Tags
-		function bbcodeclose() 
-		{
-			for (var i=0;i<9;i++) 
-			{
-				if (vorbelegt[i]) 
-				{
-					bbcode(i);
-				}
-			}
-		}</script>';
+		txtarea.focus();
+	}
+	
+	function bbcode(nummer)
+	{
+	   var arrayid;
+	   if (vorbelegt[nummer]) 
+	   {
+		  arrayid = nummer*2+1;
+	   } 
+	   else 
+	   {
+		  arrayid = nummer*2;
+	   }
+	   emoticon(bbcodes[arrayid]);
+	   document.getElementById(bbcodes[nummer*2]).src = '". THEME_PATH. "/icons/'+bbcodestext[arrayid];
+	   vorbelegt[nummer] = !vorbelegt[nummer];
+	}
+	
+	//Funktion schließt alle offnen Tags
+	function bbcodeclose() 
+	{
+	   for (var i=0;i<9;i++) 
+	   {
+		  if (vorbelegt[i]) 
+		  {
+			 bbcode(i);
+		  }
+	   }
+	}
+</script>";
 $g_layout['header'] = "";
 $g_layout['header'] .= $javascript;
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -175,16 +175,34 @@ echo "
                 <dl>
                     <dt>&nbsp;</dt>
                     <dd>
-                        <a href=\"javascript:bbcode(0)\" id=\"[b]\"><img src=\"". THEME_PATH. "/icons/text_bold.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:bbcode(1)\" id=\"[u]\"><img src=\"". THEME_PATH. "/icons/text_underline.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:bbcode(2)\" id=\"[i]\"><img src=\"". THEME_PATH. "/icons/text_italic.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:bbcode(3)\" id=\"[big]\"><img src=\"". THEME_PATH. "/icons/text_bigger.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:bbcode(4)\" id=\"[small]\"><img src=\"". THEME_PATH. "/icons/text_smaller.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:bbcode(5)\" id=\"[center]\"><img src=\"". THEME_PATH. "/icons/text_align_center.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:bbcode(6)\" id=\"[url=http://www.Adresse.de]\"><img src=\"". THEME_PATH. "/icons/link.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:bbcode(7)\" id=\"[email=adresse@demo.de]\"><img src=\"". THEME_PATH. "/icons/email.png\" border=\"0\"/></a>&nbsp;
-                        <a href=\"javascript:emoticon('[img]www.Bild-Adresse.de[/img]')\" id=\"[img]\"><img src=\"". THEME_PATH. "/icons/image.png\" border=\"0\"/></a>&nbsp;&nbsp;
-                        <a href=\"javascript:bbcodeclose()\" id=\"[img]\"><img src=\"". THEME_PATH. "/icons/cross.png\" border=\"0\"/></a>
+                       <div style=\"width: 350px;\">
+                            <div style=\"float: left;\">
+                                <a class=\"iconLink\" href=\"javascript:bbcode(0)\"><img id=\"[b]\" 
+									src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(1)\"><img id=\"[u]\" 
+									src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(2)\"><img id=\"[i]\" 
+									src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(3)\"><img id=\"[big]\" 
+                                    src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(4)\"><img id=\"[small]\" 
+                                    src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(5)\"><img id=\"[center]\" 
+                                    src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(6)\"><img id=\"[url=".$g_root_path."]\" 
+                                    src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:bbcode(7)\"><img id=\"[email=adresse@demo.de]\" 
+                                    src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\" /></a>
+                                <a class=\"iconLink\" href=\"javascript:emoticon('[img]".$g_root_path."[/img]')\"><img id=\"[img]\" 
+                                    src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
+                            </div>
+                            <div style=\"float: right;\">
+                                <a class=\"iconLink\" href=\"javascript:bbcodeclose()\"><img id=\"[all]\" 
+                                    src=\"". THEME_PATH. "/icons/cross.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\" 
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" />
+                            </div>
+                        </div>
                     </dd>
                 </dl>
             </li>";
@@ -198,15 +216,23 @@ echo "
                           //echo "<br /><br />
 //                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"5\">Text formatieren</a>";
 						  echo "<br /><br />&nbsp;&nbsp;
-                        <a href=\"javascript:emoticon(':)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(';)')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':D')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':lol:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
-                        <br />&nbsp;&nbsp;
-                        <a href=\"javascript:emoticon(':(')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':p')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':o')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
-                        <a href=\"javascript:emoticon(':twisted:')\"><img src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>";
+								<a class=\"iconLink\" href=\"javascript:emoticon(':)')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
+								<a class=\"iconLink\" href=\"javascript:emoticon(';)')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
+								<a class=\"iconLink\" href=\"javascript:emoticon(':D')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
+								<a class=\"iconLink\" href=\"javascript:emoticon(':lol:')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
+								<br />&nbsp;&nbsp;
+								<a class=\"iconLink\" href=\"javascript:emoticon(':(')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
+								<a class=\"iconLink\" href=\"javascript:emoticon(':p')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
+								<a class=\"iconLink\" href=\"javascript:emoticon(':o')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
+								<a class=\"iconLink\" href=\"javascript:emoticon(':twisted:')\"><img 
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>";
                         } 
                     echo "</dt>
                     <dd>
