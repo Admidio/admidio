@@ -20,7 +20,15 @@ define('ADMIDIO_VERSION', '2.0 Beta');
 
 // verschiedene Pfade
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
-define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+// Fallunterscheidung für HTTPS
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on")
+{
+	define('CURRENT_URL', "https://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+}
+else
+{
+	define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+}
 
 
 // Defines fuer alle Datenbanktabellen
