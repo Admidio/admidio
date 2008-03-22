@@ -97,5 +97,3 @@
      title="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen" /></a>
     <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - <? echo date('Y', time()); ?>&nbsp;&nbsp;Admidio Team</span>
 </p>
-
-<?php echo print_r($_SERVER); ?>
