@@ -3,6 +3,24 @@
 // WWW: http://www.mattkruse.com/
 // ===================================================================
 
+var n_from;
+var n_to;
+
+function check()
+   {
+
+      try {
+         var eindatum = document.getElementById(n_from).value.split(".");
+         from = new Date(eindatum[2], eindatum[1], eindatum[0]);
+         eindatum = document.getElementById(n_to).value.split(".");
+         to = new Date(eindatum[2], eindatum[1], eindatum[0]);
+         if (from > to) {
+            document.getElementById(n_to).value = document.getElementById(n_from).value;
+         }
+      } finally {
+      }
+   }
+
 // getAnchorPosition(anchorname)
 //   This function returns an object having .x and .y properties which are the coordinates
 //   of the named anchor, relative to the page.
@@ -88,7 +106,7 @@ function AnchorPosition_getPageOffsetLeft (el) {
 	}
 function AnchorPosition_getWindowOffsetLeft (el) {
 	return AnchorPosition_getPageOffsetLeft(el)-document.body.scrollLeft;
-	}	
+	}
 function AnchorPosition_getPageOffsetTop (el) {
 	var ot=el.offsetTop;
 	while((el=el.offsetParent) != null) { ot += el.offsetTop; }
@@ -195,7 +213,7 @@ function formatDate(date,format) {
 		}
 	return result;
 	}
-	
+
 // ------------------------------------------------------------------
 // Utility functions for parsing in getDateFromFormat()
 // ------------------------------------------------------------------
@@ -214,12 +232,12 @@ function _getInt(str,i,minlength,maxlength) {
 		}
 	return null;
 	}
-	
+
 // ------------------------------------------------------------------
 // getDateFromFormat( date_string , format_string )
 //
 // This function takes a date string and a format string. It matches
-// If the date string matches the format string, it returns the 
+// If the date string matches the format string, it returns the
 // getTime() of the date. If it does not match, it returns 0.
 // ------------------------------------------------------------------
 function getDateFromFormat(val,format) {
@@ -239,7 +257,7 @@ function getDateFromFormat(val,format) {
 	var mm=now.getMinutes();
 	var ss=now.getSeconds();
 	var ampm="";
-	
+
 	while (i_format < format.length) {
 		// Get next token from format string
 		c=format.charAt(i_format);
@@ -415,11 +433,11 @@ function PopupWindow_refresh() {
 		if (this.use_gebi) {
 			document.getElementById(this.divName).innerHTML = this.contents;
 			}
-		else if (this.use_css) { 
+		else if (this.use_css) {
 			document.all[this.divName].innerHTML = this.contents;
 			}
-		else if (this.use_layers) { 
-			var d = document.layers[this.divName]; 
+		else if (this.use_layers) {
+			var d = document.layers[this.divName];
 			d.document.open();
 			d.document.writeln(this.contents);
 			d.document.close();
@@ -594,7 +612,7 @@ function PopupWindow() {
 	this.populated = false;
 	this.visible = false;
 	this.autoHideEnabled = false;
-	
+
 	this.contents = "";
 	this.url="";
 	this.windowProperties="toolbar=no,location=no,status=no,menubar=no,scrollbars=auto,resizable,alwaysRaised,dependent,titlebar=no";
@@ -695,7 +713,7 @@ function CalendarPopup() {
 	return c;
 	}
 function CP_copyMonthNamesToWindow() {
-	// Copy these values over to the date.js 
+	// Copy these values over to the date.js
 	if (typeof(window.MONTH_NAMES)!="undefined" && window.MONTH_NAMES!=null) {
 		window.MONTH_NAMES = new Array();
 		for (var i=0; i<this.monthNames.length; i++) {
@@ -707,24 +725,24 @@ function CP_copyMonthNamesToWindow() {
 	}
 }
 // Temporary default functions to be called when items clicked, so no error is thrown
-function CP_tmpReturnFunction(y,m,d) { 
+function CP_tmpReturnFunction(y,m,d) {
 	if (window.CP_targetInput!=null) {
 		var dt = new Date(y,m-1,d,0,0,0);
 		if (window.CP_calendarObject!=null) { window.CP_calendarObject.copyMonthNamesToWindow(); }
 		window.CP_targetInput.value = formatDate(dt,window.CP_dateFormat);
 		}
 	else {
-		alert('Use setReturnFunction() to define which function will get the clicked results!'); 
+		alert('Use setReturnFunction() to define which function will get the clicked results!');
 		}
 	}
-function CP_tmpReturnMonthFunction(y,m) { 
-	alert('Use setReturnMonthFunction() to define which function will get the clicked results!\nYou clicked: year='+y+' , month='+m); 
+function CP_tmpReturnMonthFunction(y,m) {
+	alert('Use setReturnMonthFunction() to define which function will get the clicked results!\nYou clicked: year='+y+' , month='+m);
 	}
-function CP_tmpReturnQuarterFunction(y,q) { 
-	alert('Use setReturnQuarterFunction() to define which function will get the clicked results!\nYou clicked: year='+y+' , quarter='+q); 
+function CP_tmpReturnQuarterFunction(y,q) {
+	alert('Use setReturnQuarterFunction() to define which function will get the clicked results!\nYou clicked: year='+y+' , quarter='+q);
 	}
-function CP_tmpReturnYearFunction(y) { 
-	alert('Use setReturnYearFunction() to define which function will get the clicked results!\nYou clicked: year='+y); 
+function CP_tmpReturnYearFunction(y) {
+	alert('Use setReturnYearFunction() to define which function will get the clicked results!\nYou clicked: year='+y);
 	}
 
 // Set the name of the functions to call to get the clicked item
@@ -771,7 +789,7 @@ function CP_setDisabledWeekDays() {
 	this.disabledWeekDays = new Object();
 	for (var i=0; i<arguments.length; i++) { this.disabledWeekDays[arguments[i]] = true; }
 	}
-	
+
 // Disable individual dates or ranges
 // Builds an internal logical test which is run via eval() for efficiency
 function CP_addDisabledDates(start, end) {
@@ -784,15 +802,15 @@ function CP_addDisabledDates(start, end) {
 	else if (end  ==null) { this.disabledDatesExpression+="(ds>="+start+")"; }
 	else { this.disabledDatesExpression+="(ds>="+start+"&&ds<="+end+")"; }
 	}
-	
+
 // Set the text to use for the "Today" link
 function CP_setTodayText(text) {
 	this.todayText = text;
 	}
 
 // Set the prefix to be added to all CSS classes when writing output
-function CP_setCssPrefix(val) { 
-	this.cssPrefix = val; 
+function CP_setCssPrefix(val) {
+	this.cssPrefix = val;
 	}
 
 // Show the navigation as an dropdowns that can be manually changed
@@ -810,7 +828,7 @@ function CP_hideCalendar() {
 // Refresh the contents of the calendar display
 function CP_refreshCalendar(index) {
 	var calObject = window.popupWindowObjects[index];
-	if (arguments.length>1) { 
+	if (arguments.length>1) {
 		calObject.populate(calObject.getCalendar(arguments[1],arguments[2],arguments[3],arguments[4],arguments[5]));
 		}
 	else {
@@ -834,8 +852,10 @@ function CP_showCalendar(anchorname) {
 	}
 
 // Simple method to interface popup calendar with a text-entry box
-function CP_select(inputobj, linkname, format) {
+function CP_select(inputobj, linkname, format, from, to) {
 	var selectedDate=(arguments.length>3)?arguments[3]:null;
+	n_from = from;
+	n_to = to;
 	if (!window.getDateFromFormat) {
 		alert("calendar.select: To use this method you must also include 'date.js' for date formatting");
 		return;
@@ -844,8 +864,8 @@ function CP_select(inputobj, linkname, format) {
 		alert("calendar.select: This function can only be used with displayType 'date' or 'week-end'");
 		return;
 		}
-	if (inputobj.type!="text" && inputobj.type!="hidden" && inputobj.type!="textarea") { 
-		alert("calendar.select: Input object passed is not a valid form input object"); 
+	if (inputobj.type!="text" && inputobj.type!="hidden" && inputobj.type!="textarea") {
+		alert("calendar.select: Input object passed is not a valid form input object");
 		window.CP_targetInput=null;
 		return;
 		}
@@ -867,7 +887,7 @@ function CP_select(inputobj, linkname, format) {
 	window.CP_dateFormat = format;
 	this.showCalendar(linkname);
 	}
-	
+
 // Get style block needed to display the calendar correctly
 function getCalendarStyles() {
 	var result = "";
@@ -911,7 +931,7 @@ function CP_getCalendar() {
 		var display_date = 1;
 		var weekday= current_month.getDay();
 		var offset = 0;
-		
+
 		offset = (weekday >= this.weekStartDay) ? weekday-this.weekStartDay : 7-this.weekStartDay+weekday ;
 		if (offset > 0) {
 			display_month--;
@@ -1010,7 +1030,7 @@ function CP_getCalendar() {
 						selected_month = d.getMonth()+1;
 						selected_date = d.getDate();
 						}
-					result += '	<td id="'+this.cssPrefix+dateClass+'"><a  onclick="javascript:'+windowref+this.returnFunction+'('+selected_year+','+selected_month+','+selected_date+');'+windowref+'CP_hideCalendar(\''+this.index+'\');">'+display_date+'</a></td>\n';
+					result += '	<td id="'+this.cssPrefix+dateClass+'"><a  onclick="javascript:'+windowref+this.returnFunction+'('+selected_year+','+selected_month+','+selected_date+');'+windowref+'CP_hideCalendar(\''+this.index+'\');check();">'+display_date+'</a></td>\n';
 					}
 				display_date++;
 				if (display_date > daysinmonth[display_month]) {
@@ -1038,7 +1058,7 @@ function CP_getCalendar() {
 			result += '		<span id="'+this.cssPrefix+'cpTodayTextDisabled">'+this.todayText+'</span>\n';
 			}
 		else {
-			result += '		<a id="'+this.cssPrefix+'cpTodayText" onclick="javascript:'+windowref+this.returnFunction+'(\''+now.getFullYear()+'\',\''+(now.getMonth()+1)+'\',\''+now.getDate()+'\');'+windowref+'CP_hideCalendar(\''+this.index+'\');">'+this.todayText+'</a>\n';
+			result += '		<a id="'+this.cssPrefix+'cpTodayText" onclick="javascript:'+windowref+this.returnFunction+'(\''+now.getFullYear()+'\',\''+(now.getMonth()+1)+'\',\''+now.getDate()+'\');'+windowref+'CP_hideCalendar(\''+this.index+'\');check();">'+this.todayText+'</a>\n';
 			}
 		result += '		<br />\n';
 		result += '	</td></tr></table></center></td></tr></table>\n';
@@ -1048,7 +1068,7 @@ function CP_getCalendar() {
 	// ------------------------------------
 	if (this.displayType=="month" || this.displayType=="quarter" || this.displayType=="year") {
 		if (arguments.length > 0) { var year = arguments[0]; }
-		else { 
+		else {
 			if (this.displayType=="year") {	var year = now.getFullYear()-this.yearSelectStartOffset; }
 			else { var year = now.getFullYear(); }
 			}
@@ -1061,8 +1081,8 @@ function CP_getCalendar() {
 			result += '</tr></table>\n';
 			}
 		}
-		
-	// Code for MONTH display 
+
+	// Code for MONTH display
 	// ----------------------
 	if (this.displayType=="month") {
 		// If POPUP, write entire HTML document
@@ -1077,7 +1097,7 @@ function CP_getCalendar() {
 			}
 		result += '</table></center></td></tr></table>\n';
 		}
-	
+
 	// Code for QUARTER display
 	// ------------------------
 	if (this.displayType=="quarter") {
