@@ -55,7 +55,7 @@ $photo_album = new PhotoAlbum($g_db);
 if ($_GET["job"] == "change")
 {
     $photo_album->getPhotoAlbum($pho_id);
-    
+
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue("pho_org_shortname") != $g_organization)
     {
@@ -72,7 +72,7 @@ if(isset($_SESSION['photo_album_request']))
         if(strpos($key, "pho_") == 0)
         {
             $photo_album->setValue($key, stripslashes($value));
-        }        
+        }
     }
     unset($_SESSION['photo_album_request']);
 }
@@ -110,11 +110,11 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
     if($photo_album->getValue("pho_id") > 0)
     {
         $pho_id_condition = " AND pho_id <> ". $photo_album->getValue("pho_id");
-    }    
-    
+    }
+
     $sql = "SELECT *
             FROM ". TBL_PHOTOS. "
-            WHERE pho_pho_id_parent = $parent_id 
+            WHERE pho_pho_id_parent = $parent_id
             $pho_id_condition ";
     $result_child = $g_db->query($sql);
 
@@ -170,7 +170,7 @@ echo "
                     </dd>
                 </dl>
             </li>";
-                
+
             //Unterordnung
             echo"
             <li>
@@ -201,7 +201,7 @@ echo "
                     </dd>
                 </dl>
             </li>";
-    
+
             //Beginn
             echo"
             <li>
@@ -213,13 +213,13 @@ echo "
                             cal18.setCssPrefix(\"calendar\");
                         </script>
                         <input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_begin")."\" />
-                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy','pho_begin','pho_end'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                         <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
                 </dl>
             </li>";
-    
+
             //Ende
             echo"
             <li>
@@ -227,11 +227,11 @@ echo "
                     <dt><label for=\"pho_end\">Ende:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_end")."\">
-                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy','pho_begin','pho_end');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                     </dd>
                 </dl>
             </li>";
-    
+
             //Photographen
             echo"
             <li>
@@ -242,7 +242,7 @@ echo "
                     </dd>
                 </dl>
             </li>";
-    
+
             //Freigabe
             echo"
             <li>
@@ -266,7 +266,7 @@ echo "
         <div class=\"formSubmit\">
             <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
         </div>
-            
+
     </div>
 </div>
 </form>
@@ -274,16 +274,16 @@ echo "
 <ul class=\"iconTextLinkList\">
     <li>
         <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img
             src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
     <li>
         <span class=\"iconTextLink\">
-            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\" 
-                onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
+            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\"
+                onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
             <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
     </li>
