@@ -249,24 +249,22 @@ return (document.compatMode && document.compatMode!="BackCompat")? document.docu
 }
 function mouseMove(evt)
 {
-	if(positiontooltip == true)
+	if(positiontooltip == true && ajax_tooltipObj)
 	{
 		var offsetfromcursorX=15; //Customize x offset of tooltip
 		var offsetfromcursorY=15; //Customize y offset of tooltip
 		var ie=document.all;
 		var ns6=document.getElementById && !document.all;
-		var curX=(ns6)?evt.pageX : event.clientX+ietruebody().scrollLeft;
-		var curY=(ns6)?evt.pageY : event.clientY+ietruebody().scrollTop;
+		var curX=(ns6)?evt.pageX : evt.clientX+ietruebody().scrollLeft;
+		var curY=(ns6)?evt.pageY : evt.clientY+ietruebody().scrollTop;
 		var winwidth=ie&&!window.opera? ietruebody().clientWidth : window.innerWidth-20;
 		var winheight=ie&&!window.opera? ietruebody().clientHeight : window.innerHeight-20;
-		var rightedge=ie&&!window.opera? winwidth-event.clientX-offsetfromcursorX : winwidth-evt.clientX-offsetfromcursorX;
-		var bottomedge=ie&&!window.opera? winheight-event.clientY-offsetfromcursorY : winheight-evt.clientY-offsetfromcursorY;
+		var rightedge=ie&&!window.opera? winwidth-evt.clientX-offsetfromcursorX : winwidth-evt.clientX-offsetfromcursorX;
+		var bottomedge=ie&&!window.opera? winheight-evt.clientY-offsetfromcursorY : winheight-evt.clientY-offsetfromcursorY;
 		var leftedge=(offsetfromcursorX<0)? offsetfromcursorX*(-1) : -1000;
+
+		var tipobj = ajax_tooltipObj;
 		
-		if (ie||ns6)
-		{
-			var tipobj=document.all? document.all["ajax_tooltipObj"] : document.getElementById? document.getElementById("ajax_tooltipObj") : ""
-		}
 		//if the horizontal distance isn't enough to accomodate the width of the context menu
 		if (rightedge<tipobj.offsetWidth)
 		{

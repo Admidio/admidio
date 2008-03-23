@@ -325,16 +325,19 @@ $javascript='
 		var now_recipients = 0;
 
 		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
-		var bbcodes = Array(\'[b]\',\'[\/b]\',\'[u]\',\'[\/u]\',\'[i]\',\'[\/i]\',\'[big]\',\'[\/big]\',\'[small]\',\'[\/small]\',\'[center]\',\'[\/center]\',\'[url='.$g_root_path.']\',\'[\/url]\',\'[email=adresse@demo.de]\',\'[\/email]\',\'[img]\',\'[\/img]\');
+		var bbcodes = Array(\'[b]\',\'[\/b]\',\'[u]\',\'[\/u]\',\'[i]\',\'[\/i]\',\'[big]\',\'[\/big]\',\'[small]\',\'[\/small]\',\'[center]\',\'[\/center]\',\'[url=".$g_root_path."]\',\'[\/url]\',\'[email=adresse@demo.de]\',\'[\/email]\',\'[img]\',\'[\/img]\');
+		var bbids = Array(\'b\',\'u\',\'i\',\'big\',\'small\',\'center\',\'url\',\'email\',\'img\');
 		var bbcodestext = Array(\'text_bold_point.png\',\'text_bold.png\',
-								\'text_underline_point.png\',\'text_underline.png\',
-								\'text_italic_point.png\',\'text_italic.png\',
-								\'text_bigger_point.png\',\'text_bigger.png\',
-								\'text_smaller_point.png\',\'text_smaller.png\',
-								\'text_align_center_point.png\',\'text_align_center.png\',
-								\'link_point.png\',\'link.png\',
-								\'email_point.png\',\'email.png\',
-								\'image_point.png\',\'image.png\');
+						\'text_underline_point.png\',\'text_underline.png\',
+						\'text_italic_point.png\',\'text_italic.png\',
+						\'text_bigger_point.png\',\'text_bigger.png\',
+						\'text_smaller_point.png\',\'text_smaller.png\',
+						\'text_align_center_point.png\',\'text_align_center.png\',
+						\'link_point.png\',\'link.png\',
+						\'email_point.png\',\'email.png\',
+						\'image_point.png\',\'image.png\');
+			
+			
 				
         function popup_win(theURL,winName,winOptions) 
 		{
@@ -850,47 +853,47 @@ $javascript='
 			document.getElementById(textdiv).style.font = schrift_bold + \' \'+ schrift_italic + \' \'+ schrift_size + \'px \'+schrift;
 			document.getElementById(textdiv).style.color = schrift_farbe;	
 		}
-		function emoticon(text) 
-		{
-			var txtarea = document.getElementById(textinputid);		
-			if (txtarea.createTextRange && txtarea.caretPos) 
+			function emoticon(text)
 			{
-				txtarea.caretPos.text = text;
-			} 
-			else 
+				var txtarea = document.getElementById(textinputid);
+			
+				if (txtarea.createTextRange && txtarea.caretPos) 
+				{
+					txtarea.caretPos.text = text;
+				} 
+				else 
+				{
+					txtarea.value  += text + " ";
+				}
+				txtarea.focus();
+			}
+			function bbcode(nummer)
 			{
-				txtarea.value  += text +" ";
+			   var arrayid;
+			   if (vorbelegt[nummer]) 
+			   {
+				  arrayid = nummer*2+1;
+			   } 
+			   else 
+			   {
+				  arrayid = nummer*2;
+			   }
+			   emoticon(bbcodes[arrayid]);
+			   document.getElementById(bbids[nummer]).src = \''.THEME_PATH.'/icons/\'+bbcodestext[arrayid];
+			   vorbelegt[nummer] = !vorbelegt[nummer];
 			}
 			
-			txtarea.focus();
-		}	
-		function bbcode(nummer)
-		{
-			var arrayid;
-			if (vorbelegt[nummer]) 
+			//Funktion schließt alle offnen Tags
+			function bbcodeclose()
 			{
-				arrayid = nummer*2+1;
-			} 
-			else 
-			{
-				arrayid = nummer*2;
+			   for (var i=0;i<9;i++) 
+			   {
+				  if (vorbelegt[i]) 
+				  {
+					 bbcode(i);
+				  }
+			   }
 			}
-			emoticon(bbcodes[arrayid]);
-			document.getElementById(bbcodes[nummer*2]).src = \''. THEME_PATH.'/icons/\'+bbcodestext[arrayid];
-			vorbelegt[nummer] = !vorbelegt[nummer];
-		}
-		
-		//Funktion schließt alle offnen Tags
-		function bbcodeclose() 
-		{
-			for (var i=0;i<9;i++) 
-			{
-				if (vorbelegt[i]) 
-				{
-					bbcode(i);
-				}
-			}
-		}
 	</script>';
 $g_layout['header'] .= $javascript;
 
@@ -1101,25 +1104,25 @@ if (empty($submit_action))
          				{
 							echo'
 							<div>
-								<a class="iconLink" href="javascript:bbcode(0)"><img id="[b]" 
+								<a class="iconLink" href="javascript:bbcode(0)"><img id="b" 
 									src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(1)"><img id="[u]" 
+								<a class="iconLink" href="javascript:bbcode(1)"><img id="u" 
 									src="'. THEME_PATH.'/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" /></a>
-								<a class="iconLink" href="javascript:bbcode(2)"><img id="[i]" 
+								<a class="iconLink" href="javascript:bbcode(2)"><img id="i" 
 									src="'. THEME_PATH.'/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(3)"><img id="[big]" 
+								<a class="iconLink" href="javascript:bbcode(3)"><img id="big" 
 									src="'. THEME_PATH.'/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(4)"><img id="[small]" 
+								<a class="iconLink" href="javascript:bbcode(4)"><img id="small" 
 									src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(5)"><img id="[center]" 
+								<a class="iconLink" href="javascript:bbcode(5)"><img id="center" 
 									src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
-								<a class="iconLink" href="javascript:bbcode(6)"><img id="[url='.$g_root_path.']" 
+								<a class="iconLink" href="javascript:bbcode(6)"><img id="url" 
 									src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
-								<a class="iconLink" href="javascript:bbcode(7)"><img id="[email=adresse@demo.de]" 
+								<a class="iconLink" href="javascript:bbcode(7)"><img id="email" 
 									src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
-								<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')\'><img id="[img]" 
+								<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img" 
 									src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
-								<a class="iconLink" href="javascript:bbcodeclose()"><img id="[all]" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
+								<a class="iconLink" href="javascript:bbcodeclose()"><img id="all" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
 							</div>
 							';
 						}
