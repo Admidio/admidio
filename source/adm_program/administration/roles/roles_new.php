@@ -60,7 +60,6 @@ if($req_rol_id > 0)
         $g_message->show("norights");
     }
 }
-
 if(isset($_SESSION['roles_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
@@ -91,6 +90,8 @@ else
 	$g_layout['title'] = "Rolle anlegen";
 }
 $g_layout['header'] = "
+	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
+    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />
     <script type=\"text/javascript\"><!--
         function hinzufuegen()
         {
@@ -123,10 +124,9 @@ $g_layout['header'] = "
 
             form.submit();
         }
-    --></script>
-    
-	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
-	<link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />";
+		var cal18 = new CalendarPopup(\"calendardiv\");
+		cal18.setCssPrefix(\"calendar\");
+    --></script>";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -484,17 +484,12 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                         <dl>
                             <dt><label for=\"rol_start_date\">Gültig von:</label></dt>
                             <dd>
-								<script type=\"text/javascript\" id=\"js18\">
-									var cal18 = new CalendarPopup(\"calendardiv\");
-									cal18.setCssPrefix(\"calendar\");
-								</script>
 								<input type=\"text\" id=\"rol_start_date\" name=\"rol_start_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_start_date"). "\" />
-								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'anchor18','dd.MM.yyyy');\" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-								<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
-								
+								<img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'ico_cal_date_from','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                                 <label for=\"rol_end_date\">bis</label>
 								<input type=\"text\" id=\"rol_end_date\" name=\"rol_end_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_end_date"). "\" />
-								<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'anchor17','dd.MM.yyyy');\" id=\"anchor17\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
+								<img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'ico_cal_date_to','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
+								<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                             </dd>
                         </dl>
                     </li>

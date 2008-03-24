@@ -1122,7 +1122,7 @@ if (empty($submit_action))
 									src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
 								<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img" 
 									src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
-								<a class="iconLink" href="javascript:bbcodeclose()"><img id="all" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
+								<a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
 							</div>
 							';
 						}
