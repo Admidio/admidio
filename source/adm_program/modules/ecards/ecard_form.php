@@ -325,7 +325,7 @@ $javascript='
 		var now_recipients = 0;
 
 		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
-		var bbcodes = Array(\'[b]\',\'[\/b]\',\'[u]\',\'[\/u]\',\'[i]\',\'[\/i]\',\'[big]\',\'[\/big]\',\'[small]\',\'[\/small]\',\'[center]\',\'[\/center]\',\'[url=".$g_root_path."]\',\'[\/url]\',\'[email=adresse@demo.de]\',\'[\/email]\',\'[img]\',\'[\/img]\');
+		var bbcodes = Array(\'[b]\',\'[\/b]\',\'[u]\',\'[\/u]\',\'[i]\',\'[\/i]\',\'[big]\',\'[\/big]\',\'[small]\',\'[\/small]\',\'[center]\',\'[\/center]\',\'[url='.$g_root_path.']\',\'[\/url]\',\'[email=adresse@demo.de]\',\'[\/email]\',\'[img]\',\'[\/img]\');
 		var bbids = Array(\'b\',\'u\',\'i\',\'big\',\'small\',\'center\',\'url\',\'email\',\'img\');
 		var bbcodestext = Array(\'text_bold_point.png\',\'text_bold.png\',
 						\'text_underline_point.png\',\'text_underline.png\',
@@ -348,14 +348,14 @@ $javascript='
         {
             if (check()) 
             { 
-                document.ecard_form.action                 = "'.$HTTP_SERVER_VARS["PHP_SELF"].'?'.$_SERVER['QUERY_STRING'].'";
-                document.ecard_form.target                 = "_self";
-                document.ecard_form["submit_action"].value = "send";
-                document.ecard_form.submit(); 
+                document.getElementById("ecard_form").action                 = "'.$HTTP_SERVER_VARS["PHP_SELF"].'?'.$_SERVER['QUERY_STRING'].'";
+                document.getElementById("ecard_form").target                 = "_self";
+                document.getElementById("ecard_form")["submit_action"].value = "send";
+                document.getElementById("ecard_form").submit(); 
             }
             else
             {
-                document.ecard_form["submit_action"].value = "";
+                document.getElementById("ecard_form")["submit_action"].value = "";
             }
         } 
         function check() 
@@ -363,39 +363,39 @@ $javascript='
             var error         = false;
             var error_message = "Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:\n\n";
 
-            if (document.ecard_form["ecard[name_sender]"] && document.ecard_form["ecard[name_sender]"].value == "") 
+            if (document.getElementById("ecard_form")["ecard[name_sender]"] && document.getElementById("ecard_form")["ecard[name_sender]"].value == "") 
 			{
                 error = true;
                 error_message += "- Name des Absenders\n";
             } 
  
-            if (document.ecard_form["ecard[email_sender]"] && (document.ecard_form["ecard[email_sender]"].value == "") || 
-               (echeck(document.ecard_form["ecard[email_sender]"].value) == false)) 
+            if (document.getElementById("ecard_form")["ecard[email_sender]"] && (document.getElementById("ecard_form")["ecard[email_sender]"].value == "") || 
+               (echeck(document.getElementById("ecard_form")["ecard[email_sender]"].value) == false)) 
 			{
                 error = true;
                 error_message += "- E-Mail des Absenders\n";
             }
   
-            if (document.ecard_form["ecard[name_recipient]"].value == "" || document.ecard_form["ecard[name_recipient]"].value == "< Empfänger Name >") 
+            if (document.getElementById("ecard_form")["ecard[name_recipient]"].value == "" || document.getElementById("ecard_form")["ecard[name_recipient]"].value == "< Empfänger Name >") 
 			{
                 error = true;
                 error_message += "- Name des Empfängers\n";
             } 
-            if ((document.ecard_form["ecard[email_recipient]"].value == "") || 
-               (echeck(document.ecard_form["ecard[email_recipient]"].value) == false)) 
+            if ((document.getElementById("ecard_form")["ecard[email_recipient]"].value == "") || 
+               (echeck(document.getElementById("ecard_form")["ecard[email_recipient]"].value) == false)) 
 			{
                 error = true;
                 error_message += "- E-Mail des Empfängers\n";
         	}
-        	if (document.ecard_form["ecard[message]"].value == "") 
+        	if (document.getElementById("ecard_form")["ecard[message]"].value == "") 
 			{
 				error = true;
 				error_message += "- Eine Nachricht\n";
 			}
 			for(var i=1; i <= now_recipients; i++)
 			{
-				var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
-				var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+				var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
 				var message = "";
 				var goterror = false;		
 				if(namedoc)
@@ -485,10 +485,10 @@ $javascript='
 		}
 		function makePreview() 
 		{
-			document.ecard_form.action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'";
+			document.getElementById("ecard_form").action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'";
 			popup_win(\'\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=1024,height=1024\');
-			document.ecard_form.target = "ecard_preview";
-			document.ecard_form.submit();
+			document.getElementById("ecard_form").target = "ecard_preview";
+			document.getElementById("ecard_form").submit();
 		}
         function blendout(id)
 		{
@@ -575,11 +575,11 @@ $javascript='
 		}
 		function getMenuRecepientName()
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id=\'+ document.ecard_form.rol_id.value , \'dropdownmenu\' );
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id=\'+ document.getElementById("ecard_form").rol_id.value , \'dropdownmenu\' );
 		}
 		function getMenuRecepientNameEmail(usr_id)
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id + \'&rol_id=\'+ document.ecard_form.rol_id.value, \'dropdownmenu\' );
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id + \'&rol_id=\'+ document.getElementById("ecard_form").rol_id.value, \'dropdownmenu\' );
 			document.getElementById(externdiv).innerHTML = "&nbsp;";
 		}
 		function saveData()
@@ -587,11 +587,11 @@ $javascript='
 			var savedata = new Array();
 			for(var i=1; i <= now_recipients; i++)
 			{
-				var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
-				var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+				var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
 				if(namedoc)
 				{	
-					namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"].value;
+					namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"].value;
 				}
 				else
 				{
@@ -599,7 +599,7 @@ $javascript='
 				}
 				if(emaildoc)
 				{
-					emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"].value;
+					emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"].value;
 				}
 				else
 				{
@@ -616,8 +616,8 @@ $javascript='
 			var i = 0;
 			for (var i = 0; i < saved_data.length; i++)
 			{				
-				var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
-				var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+				var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
 				if(emaildoc)
 				{
 					emaildoc.value = saved_data[i][0];
@@ -670,15 +670,15 @@ $javascript='
 			{
 				for(var i=1; i <= now_recipients; i++)
 				{
-					var namedoc = document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"];	
-					var emaildoc = 	document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"];
+					var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
+					var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
 					if(namedoc)
 					{	
-						document.ecard_form["ecard[name_ccrecipient_"+[i]+"]"].value = "";
+						document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"].value = "";
 					}
 					if(emaildoc)
 					{
-						document.ecard_form["ecard[email_ccrecipient_"+[i]+"]"].value = "";
+						document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"].value = "";
 					}
 				}
 			}
@@ -733,7 +733,7 @@ $javascript='
 		}
 		function getSetting(name,input_value)
 		{		
-			document.ecard_form[name].value = input_value;	
+			document.getElementById("ecard_form")[name].value = input_value;	
 			getTextStyle(\'Nachricht\');	
 		}
 		function showHideMoreRecipient(divLayer,divMenu)
@@ -798,7 +798,7 @@ $javascript='
 		function countMax() 
 		{
 			max  = '.$g_preferences['ecard_text_length'].';
-			var text = document.ecard_form["ecard[message]"].value;
+			var text = document.getElementById("ecard_form")["ecard[message]"].value;
 			for(var i=0;i<bbcodes.length;i++)
 			{
 				text = text.replace(/\[.*?\]/gi,"").replace (/^\s+/,"").replace (/\s+$/,"");
@@ -807,14 +807,14 @@ $javascript='
 			wert = max - textlenght;
 			if(textlenght > max)
 			{
-				var txtvalue = document.ecard_form["ecard[message]"].value;
-				document.ecard_form["ecard[message]"].value = txtvalue.substr(0, max);
+				var txtvalue = document.getElementById("ecard_form")["ecard[message]"].value;
+				document.getElementById("ecard_form")["ecard[message]"].value = txtvalue.substr(0, max);
 			}
 			if (wert < 0) 
 			{
 				alert("Die Nachricht darf maximal " + max + " Zeichen lang sein.!");
 				wert = 0;
-				document.ecard_form["ecard[message]"].value = document.ecard_form["ecard[message]"].value.substring(0,max);
+				document.getElementById("ecard_form")["ecard[message]"].value = document.getElementById("ecard_form")["ecard[message]"].value.substring(0,max);
 				document.getElementById(\'counter\').innerHTML = \'<b>\' + wert + \'<\/b>\';
 				wert = 0;
 			} 
@@ -826,30 +826,30 @@ $javascript='
 		} // Ende function countMax()
 		function getTextStyle(textdiv)
 		{
-		 	var schrift_size = document.ecard_form["ecard[schrift_size]"].value;
-			var schrift = document.ecard_form["ecard[schriftart_name]"].value;
-			var schrift_farbe = document.ecard_form["ecard[schrift_farbe]"].value;
+		 	var schrift_size = document.getElementById("ecard_form")["ecard[schrift_size]"].value;
+			var schrift = document.getElementById("ecard_form")["ecard[schriftart_name]"].value;
+			var schrift_farbe = document.getElementById("ecard_form")["ecard[schrift_farbe]"].value;
 			var schrift_bold = "";
 			var schrift_italic = "";
-			if(document.ecard_form.Bold.checked)
+			if(document.getElementById("ecard_form").Bold.checked)
 			{
 				schrift_bold = "bold";
-				document.ecard_form["ecard[schrift_style_bold]"].value = "bold";
+				document.getElementById("ecard_form")["ecard[schrift_style_bold]"].value = "bold";
 			}
 			else
 			{
-				document.ecard_form["ecard[schrift_style_bold]"].value = "";
+				document.getElementById("ecard_form")["ecard[schrift_style_bold]"].value = "";
 			}
-			if(document.ecard_form.Italic.checked)
+			if(document.getElementById("ecard_form").Italic.checked)
 			{
 				schrift_italic = "italic";
-				document.ecard_form["ecard[schrift_style_italic]"].value = "italic";
+				document.getElementById("ecard_form")["ecard[schrift_style_italic]"].value = "italic";
 			}
 			else
 			{
-				document.ecard_form["ecard[schrift_style_italic]"].value = "";
+				document.getElementById("ecard_form")["ecard[schrift_style_italic]"].value = "";
 			}
-			var schrift_farbe = document.ecard_form["ecard[schrift_farbe]"].value;
+			var schrift_farbe = document.getElementById("ecard_form")["ecard[schrift_farbe]"].value;
 			document.getElementById(textdiv).style.font = schrift_bold + \' \'+ schrift_italic + \' \'+ schrift_size + \'px \'+schrift;
 			document.getElementById(textdiv).style.color = schrift_farbe;	
 		}
@@ -950,7 +950,7 @@ if (empty($submit_action))
 		$g_message->show($error_msg);
 	}
 	  
-		echo' <form name="ecard_form" action="#" method="post">
+		echo' <form id="ecard_form" action="#" method="post">
 			  <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
 			  <input type="hidden" name="submit_action" value="" />
 			  <ul class="formFieldList">
@@ -1190,10 +1190,10 @@ if (empty($submit_action))
                 </li>
 			</ul> 
 			<hr />
-			<div class=\"formSubmit\">
-				<button onclick="makePreview()" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
+			<div class="formSubmit">
+				<button onclick="javascript:makePreview();" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<button onclick="sendEcard()" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
+				<button onclick="javascript:sendEcard();" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
 			</div>
 			</form>';
 } 
