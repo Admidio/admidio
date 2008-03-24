@@ -210,8 +210,8 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
         if ( $on_page < $total_pages )
         {
             $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">Nächste</a>
-                            <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '" /><img 
-                                 src="'. THEME_PATH. '/icons/forward.png" alt="Nächste"></a>';
+                            <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
+                                 src="'. THEME_PATH. '/icons/forward.png" alt="Nächste" /></a>';
         }
 
     }

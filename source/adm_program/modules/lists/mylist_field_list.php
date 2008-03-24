@@ -64,8 +64,8 @@ echo "
                         }
                     
                         // Zusatzfelder z.B. usr_photo, mem_begin hinzufuegen
-                        echo '<option value="usr_login_name" $login_selected>Benutzername</option>
-                              <option value="usr_photo" $photo_selected>Foto</option>';
+                        echo '<option value="usr_login_name" '. $login_selected. '>Benutzername</option>
+                              <option value="usr_photo" '. $photo_selected. '>Foto</option>';
                     }
 
                     echo '</optgroup>';
