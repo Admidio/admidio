@@ -178,13 +178,13 @@ function getfilenames($directory)
 // Diese Funktion holt alle Variablen ab und speichert sie in einem array
 function getVars() 
 {
-  global $HTTP_POST_VARS,$HTTP_GET_VARS;
-  foreach ($HTTP_POST_VARS as $key => $value) 
+  global $_POST,$_GET;
+  foreach ($_POST as $key => $value) 
   {
     global $$key;
     $$key = $value;
   }
-  foreach ($HTTP_GET_VARS as $key => $value) 
+  foreach ($_GET as $key => $value) 
   {
     global $$key;
     $$key = $value;
@@ -248,7 +248,7 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 	  $empfaenger_email	= "< Empf&auml;nger E-Mail >";
 	}
 	// Falls die Nachricht nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-	if($ecard["message"] == "")
+	if(trim($ecard["message"]) == "")
 	{
 	  $ecard["message"]			= "< Deine Nachricht >";
 	}

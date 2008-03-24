@@ -418,11 +418,11 @@ $javascript='
 				}
 				if(goterror && i==1)
 				{
-					error_message += \'\nCC - Empfänger\n_________________________________\n\'+message;
+					error_message += \'\nCC - Empfänger\n_________________________________\n\n\'+message;
 				}
 				else if(goterror)
 				{
-					error_message += \'_________________________________\n\'+message;
+					error_message += \'_________________________________\n\n\'+message;
 				}
 			}
 			if (error) 
@@ -1191,9 +1191,9 @@ if (empty($submit_action))
 			</ul> 
 			<hr />
 			<div class="formSubmit">
-				<button onclick="javascript:makePreview();" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
+				<button onclick="javascript:makePreview();" type="button" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				<button onclick="javascript:sendEcard();" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
+				<button onclick="javascript:sendEcard();" type="button" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
 			</div>
 			</form>';
 } 
