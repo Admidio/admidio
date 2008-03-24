@@ -853,7 +853,7 @@ function CP_showCalendar(anchorname) {
 
 // Simple method to interface popup calendar with a text-entry box
 function CP_select(inputobj, linkname, format, from, to) {
-	var selectedDate=(arguments.length>3)?arguments[3]:null;
+	var selectedDate=(arguments.length>5)?arguments[5]:null;
 	n_from = from;
 	n_to = to;
 	if (!window.getDateFromFormat) {
