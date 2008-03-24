@@ -315,7 +315,7 @@ if($g_preferences['photo_show_mode']==1)
         <link rel=\"stylesheet\" href=\"".THEME_PATH."/css/photos.css\" type=\"text/css\" media=\"screen\" />";
 }
 $javascript='
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript"><!--
 	    var basedropdiv = \'basedropdownmenu\';
 		var dropdiv = \'dropdownmenu\';
 		var externdiv = \'extern\';
@@ -418,11 +418,11 @@ $javascript='
 				}
 				if(goterror && i==1)
 				{
-					error_message += "\nCC - Empfänger\n-------------------------------\n"+message;
+					error_message += \'\nCC - Empfänger\n_________________________________\n\'+message;
 				}
 				else if(goterror)
 				{
-					error_message += "-------------------------------\n"+message;
+					error_message += \'_________________________________\n\'+message;
 				}
 			}
 			if (error) 
@@ -637,7 +637,7 @@ $javascript='
 				var data	= \'<div id="\'+ [now_recipients] +\'">\';
 				data += \'<table id="table_\'+ [now_recipients] +\'" border="0" summary="data\'+ [now_recipients] +\'">\';
 				data += \'<tr>\';	
-				data += \'<td style="width:30px;" align="right">\'+ [now_recipients] +\'. <\/td>\';			
+				data += \'<td style="width:30px; text-align: right;">\'+ [now_recipients] +\'. <\/td>\';			
 				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[name_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td>\';    
 				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td>\';    
 				data += \'<\/tr><\/table>\';
@@ -691,7 +691,7 @@ $javascript='
 				var d = document.getElementById(\'ccrecipientContainer\');
 				var olddiv = document.getElementById(now_recipients);
 				d.removeChild(olddiv);
-				now_recipients--;
+				now_recipients = now_recipients - 1;
 			}
 			else
 			{
@@ -894,7 +894,7 @@ $javascript='
 				  }
 			   }
 			}
-	</script>';
+	--></script>';
 $g_layout['header'] .= $javascript;
 
 
@@ -909,7 +909,7 @@ echo '
 
 <div class="formLayout" id="profile_form">
 <noscript>
-	<div align="center">
+	<div style="text-align: center;">
 		<div style="background-image: url(\''.THEME_PATH.'/images/error.png\'); 
 					background-repeat: no-repeat;
 					background-position: 5px 5px;
@@ -990,7 +990,7 @@ if (empty($submit_action))
 										 <a href="javascript:getExtern()">externer Empfänger</a>
 								     </div>
 									 <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
-									     <script language="javascript" type="text/javascript">getMenu();</script>
+									     <script type="text/javascript">getMenu();</script>
 									 </div>
 									 <div id="dropdownmenu" style="display:block;">
 								     </div>
@@ -1029,8 +1029,8 @@ if (empty($submit_action))
 										</tr>
 									</table>
 								</div>
-								<div id="ccrecipientContainer" style="width:490px; border:0px;">
-								</div>
+								<div id="ccrecipientContainer" style="width:490px; border:0px;"></div>
+							</dd>
 						</dl>
 					</div>
 				</li>
@@ -1190,13 +1190,12 @@ if (empty($submit_action))
                 </li>
 			</ul> 
 			<hr />
-			</form>
-			<div style="display:inline;">
+			<div class=\"formSubmit\">
 				<button onclick="makePreview()" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
-			</div>
-			<div style="display:inline;">
+				&nbsp;&nbsp;&nbsp;&nbsp;
 				<button onclick="sendEcard()" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
-			</div>';
+			</div>
+			</form>';
 } 
 else 
 {     
@@ -1279,7 +1278,7 @@ if($photo_album->getValue("pho_id") > 0)
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\"></a>
+                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
         </li>

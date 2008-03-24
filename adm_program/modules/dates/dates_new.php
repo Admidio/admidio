@@ -113,7 +113,7 @@ $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
     <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />
 
-    <script type=\"text/javascript\">
+    <script type=\"text/javascript\"><!--
 
          //Kontrolliert ob das Anfangsdatum wirklich vor dem Enddatum liegt
 
@@ -198,12 +198,12 @@ $g_layout['header'] = "
 		  }
 	   }
 	}
-</script>";
+	--></script>";
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form method=\"post\" name=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
 <div class=\"formLayout\" id=\"edit_dates_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
@@ -234,7 +234,7 @@ echo "
                             }
                             echo " value=\"1\" />
                             <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  titel=\"Hilfe\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=date_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"Hilfe\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=date_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </dd>
                     </dl>
                 </li>";
@@ -293,7 +293,7 @@ echo "
                         <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 345px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />";
                         if($g_preferences['dates_show_map_link'])
                         {
-                        	echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" titel=\"Hilfe\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true','Message','width=300,height=180,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link',this);\" onmouseout=\"ajax_hideTooltip()\" />";
+                        	echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true','Message','width=300,height=180,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link',this);\" onmouseout=\"ajax_hideTooltip()\" />";
                         }
                     echo "</dd>
                 </dl>
@@ -328,7 +328,7 @@ echo "
                                     src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
                             </div>
                             <div style=\"float: right;\">
-                                <a class=\"iconLink\" href=\"javascript:bbcodeclose()\"><img id=\"[all]\"
+                                <a class=\"iconLink\" href=\"javascript:bbcodeclose()\"><img id=\"all\"
                                     src=\"". THEME_PATH. "/icons/cross.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" />
@@ -348,22 +348,22 @@ echo "
 //                            <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\" tabindex=\"6\">Text formatieren</a>";
 							 echo "<br /><br />&nbsp;&nbsp;
 									<a class=\"iconLink\" href=\"javascript:emoticon(':)')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" /></a>
 									<a class=\"iconLink\" href=\"javascript:emoticon(';)')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" /></a>
 									<a class=\"iconLink\" href=\"javascript:emoticon(':D')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" /></a>
 									<a class=\"iconLink\" href=\"javascript:emoticon(':lol:')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" /></a>
 									<br />&nbsp;&nbsp;
 									<a class=\"iconLink\" href=\"javascript:emoticon(':(')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" /></a>
 									<a class=\"iconLink\" href=\"javascript:emoticon(':p')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" /></a>
 									<a class=\"iconLink\" href=\"javascript:emoticon(':o')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" /></a>
 									<a class=\"iconLink\" href=\"javascript:emoticon(':twisted:')\"><img
-										src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>";
+										src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" /></a>";
                         }
                     echo "</dt>
                     <dd>

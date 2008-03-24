@@ -287,22 +287,22 @@ echo "
                         {
                             echo "<br /><br />&nbsp;&nbsp;
                             <a class=\"iconLink\" href=\"javascript:emoticon(':)')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" /></a>
                             <a class=\"iconLink\" href=\"javascript:emoticon(';)')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" /></a>
                             <a class=\"iconLink\" href=\"javascript:emoticon(':D')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" /></a>
                             <a class=\"iconLink\" href=\"javascript:emoticon(':lol:')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" /></a>
                             <br />&nbsp;&nbsp;
                             <a class=\"iconLink\" href=\"javascript:emoticon(':(')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" /></a>
                             <a class=\"iconLink\" href=\"javascript:emoticon(':p')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" /></a>
                             <a class=\"iconLink\" href=\"javascript:emoticon(':o')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" /></a>
                             <a class=\"iconLink\" href=\"javascript:emoticon(':twisted:')\"><img
-                                src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>";
+                                src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" /></a>";
 					    }
                     echo "</dt>
                     <dd>

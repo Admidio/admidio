@@ -91,7 +91,7 @@ else
     $g_layout['title'] = $req_headline. " anlegen";
 }
 $javascript = "";
-$javascript = "<script language=\"javascript\" type=\"text/javascript\">
+$javascript = "<script type=\"text/javascript\"><!--
 	var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
 	var bbids = Array(\"b\",\"u\",\"i\",\"big\",\"small\",\"center\",\"url\",\"email\",\"img\");
 	var bbcodes = Array(\"[b]\",\"[/b]\",\"[u]\",\"[/u]\",\"[i]\",\"[/i]\",\"[big]\",\"[/big]\",\"[small]\",\"[/small]\",\"[center]\",\"[/center]\",\"[url=".$g_root_path."]\",\"[/url]\",\"[email=adresse@demo.de]\",\"[/email]\",\"[img]\",\"[/img]\");
@@ -147,14 +147,14 @@ $javascript = "<script language=\"javascript\" type=\"text/javascript\">
 		  }
 	   }
 	}
-</script>";
+	--></script>";
 $g_layout['header'] = "";
 $g_layout['header'] .= $javascript;
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form method=\"post\" name=\"post\" action=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=1\" >
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=$req_ann_id&amp;headline=". $_GET['headline']. "&amp;mode=1\" >
 <div class=\"formLayout\" id=\"edit_announcements_form\">
     <div class=\"formHead\">". $g_layout['title']. "</div>
     <div class=\"formBody\">
@@ -198,7 +198,7 @@ echo "
                                     src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
                             </div>
                             <div style=\"float: right;\">
-                                <a class=\"iconLink\" href=\"javascript:bbcodeclose()\"><img id=\"[all]\"
+                                <a class=\"iconLink\" href=\"javascript:bbcodeclose()\"><img id=\"all\"
                                     src=\"". THEME_PATH. "/icons/cross.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" />
@@ -218,22 +218,22 @@ echo "
 //                          <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" tabindex=\"5\">Text formatieren</a>";
 						  echo "<br /><br />&nbsp;&nbsp;
 								<a class=\"iconLink\" href=\"javascript:emoticon(':)')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" border=\"0\" /></a>
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" /></a>
 								<a class=\"iconLink\" href=\"javascript:emoticon(';)')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" border=\"0\" /></a>
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" /></a>
 								<a class=\"iconLink\" href=\"javascript:emoticon(':D')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" border=\"0\" /></a>
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" /></a>
 								<a class=\"iconLink\" href=\"javascript:emoticon(':lol:')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" border=\"0\" /></a>
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" /></a>
 								<br />&nbsp;&nbsp;
 								<a class=\"iconLink\" href=\"javascript:emoticon(':(')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" border=\"0\" /></a>
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" /></a>
 								<a class=\"iconLink\" href=\"javascript:emoticon(':p')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" border=\"0\" /></a>
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" /></a>
 								<a class=\"iconLink\" href=\"javascript:emoticon(':o')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" border=\"0\" /></a>
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" /></a>
 								<a class=\"iconLink\" href=\"javascript:emoticon(':twisted:')\"><img
-									src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" border=\"0\" /></a>";
+									src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" /></a>";
                         }
                     echo "</dt>
                     <dd>
