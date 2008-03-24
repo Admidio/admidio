@@ -188,7 +188,7 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 		echo '<table summary="DataSender" style="border:0px;" border="0" cellpadding="0" cellspacing="0" cols="0" rules="none" width="100%">
 			<tr>
 			<td align="left"><input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" /></td>
-			<td align="right"><a href="javascript:getMenuRecepientName();">anderen Empf&auml;nger</a></td>
+			<td align="right"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></td>
 			</tr>
 			</table>
 			<input type="hidden" name="ecard[email_recipient]" value="'.$_GET['usrid'].'@rolle.com" />
