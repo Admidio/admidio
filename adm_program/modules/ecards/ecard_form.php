@@ -980,7 +980,7 @@ if (empty($submit_action))
 								     </div>
 									 <div id="extern">
 										<input type="text" class="readonly" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recipient]" style="width: 330px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
 									 </div>';
 								
                             }
@@ -1051,7 +1051,6 @@ if (empty($submit_action))
 							   echo $g_current_user->getValue("Vorname")." ".$g_current_user->getValue("Nachname");
 							}
 					      echo'" />
-						  <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
 			            </dd>
                     </dl>
                 </li>
@@ -1059,7 +1058,7 @@ if (empty($submit_action))
                     <dl>
                         <dt><label>E-Mail:</label></dt>
                         <dd>
-						   <input type="text" name="ecard[email_sender]" size="25" class="readonly" readonly="readonly" maxlength="40" style="width: 330px;"  value="';
+						   <input type="text" name="ecard[email_sender]" size="25" class="readonly" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
 							if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
 							{
 							  echo $ecard["email_sender"];
@@ -1069,13 +1068,52 @@ if (empty($submit_action))
 							  echo $g_current_user->getValue("E-Mail"); 
 							}
 						    echo'" />
-							<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
 			            </dd>
                     </dl>
                 </li>
                 <li>
                     <hr />
-                </li>
+                </li>';
+				if ($g_preferences['enable_bbcode'] == 1)
+				{
+				    echo '
+					<li>
+	                    <dl>
+	                        <dt>&nbsp;</dt>
+							<dd>
+								<div style="width: 350px;">
+		                            <div style="float: left;">
+										<a class="iconLink" href="javascript:bbcode(0)"><img id="b" 
+											src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
+										<a class="iconLink" href="javascript:bbcode(1)"><img id="u" 
+											src="'. THEME_PATH.'/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" /></a>
+										<a class="iconLink" href="javascript:bbcode(2)"><img id="i" 
+											src="'. THEME_PATH.'/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" /></a>
+										<a class="iconLink" href="javascript:bbcode(3)"><img id="big" 
+											src="'. THEME_PATH.'/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" /></a>
+										<a class="iconLink" href="javascript:bbcode(4)"><img id="small" 
+											src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
+										<a class="iconLink" href="javascript:bbcode(5)"><img id="center" 
+											src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
+										<a class="iconLink" href="javascript:bbcode(6)"><img id="url" 
+											src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
+										<a class="iconLink" href="javascript:bbcode(7)"><img id="email" 
+											src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
+										<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img" 
+											src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
+									</div>
+		                            <div style="float: right;">
+		                                <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
+		                                    src="'. THEME_PATH. '/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
+		                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe"
+		                                    onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\')" />
+		                            </div>
+								</div>
+							</dd>
+						</dl>
+					</li>';
+				}
+				echo '
 			    <li>
                     <dl>
                         <dt>
@@ -1099,34 +1137,8 @@ if (empty($submit_action))
 								<a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
 							</div>	
 						</dt>
-                        <dd>';
-						if ($g_preferences['enable_bbcode'] == 1)
-         				{
-							echo'
-							<div>
-								<a class="iconLink" href="javascript:bbcode(0)"><img id="b" 
-									src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(1)"><img id="u" 
-									src="'. THEME_PATH.'/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" /></a>
-								<a class="iconLink" href="javascript:bbcode(2)"><img id="i" 
-									src="'. THEME_PATH.'/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(3)"><img id="big" 
-									src="'. THEME_PATH.'/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(4)"><img id="small" 
-									src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
-								<a class="iconLink" href="javascript:bbcode(5)"><img id="center" 
-									src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
-								<a class="iconLink" href="javascript:bbcode(6)"><img id="url" 
-									src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
-								<a class="iconLink" href="javascript:bbcode(7)"><img id="email" 
-									src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
-								<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img" 
-									src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
-								<a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed" src="'. THEME_PATH.'/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
-							</div>
-							';
-						}
-						echo'<textarea id="Nachricht" style="width: 330px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
+                        <dd>
+							<textarea id="Nachricht" style="width: 350px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
 							if($g_preferences['enable_ecard_text_length'])
 							{
 							echo' onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();"';
