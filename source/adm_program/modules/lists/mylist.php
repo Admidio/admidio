@@ -105,33 +105,112 @@ if(isset($_SESSION['mylist_request']))
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Eigene Liste - Einstellungen";
-$g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
-    
-    <script type=\"text/javascript\">
-        var actFieldCount = $default_fields;
-        var resObject     = createXMLHttpRequest();
+$g_layout['header'] = '
+    <script type="text/javascript">
+        var actFieldCount = 0;
+		var roles         = new Array();
 
+		// Funktion fuegt eine neue Zeile zum Zuordnen von Profilfeldern hinzu
         function addField() 
         {
-            actFieldCount++;
+			var category = "";
+			var table = document.getElementById("mylist_fields_tbody");
+            var newTableRow = table.insertRow(actFieldCount);
+			var newCellCount = newTableRow.insertCell(-1);
+            newCellCount.innerHTML = (actFieldCount + 1) + ". Feld :";
+			
+			// neue Spalte zur Auswahl des Profilfeldes
+			var newCellField = newTableRow.insertCell(-1);
+            htmlCboFields = "<select size=\"1\" name=\"column" + actFieldCount + "\">" +
+					"<option value=\"\"></option>";
+			for(var counter = 0; counter < roles.length; counter++)
+			{
+				if(category != roles[counter]["cat_name"])
+				{
+					if(category.length > 0)
+					{
+						htmlCboFields += "</optgroup>";
+					}
+					htmlCboFields += "<optgroup label=\"" + roles[counter]["cat_name"] + "\">";
+					category = roles[counter]["cat_name"];
+				}
+				htmlCboFields += "<option value=\"" + roles[counter]["usf_id"] + "\">" + roles[counter]["usf_name"] + "</option>"; 
+			}
+			htmlCboFields += "</select>";
+			newCellField.innerHTML = htmlCboFields;
+			
+			// neue Spalte zur Einstellung der Sortierung
+			var newCellOrder = newTableRow.insertCell(-1);
+			newCellOrder.innerHTML = "<select size=\"1\" name=\"sort" + actFieldCount + "\">" +
+			        "<option value=\"\">&nbsp;</option>" +
+			        "<option value=\"ASC\">A bis Z</option>" +
+			        "<option value=\"DESC\">Z bis A</option>" +
+			    "</select>";
             
-            resObject.open('POST', '$g_root_path/adm_program/modules/lists/mylist_field_list.php', true);
-            resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            resObject.onreadystatechange = handleResponse;
-            resObject.send('field_number=' + actFieldCount);
-        }
+			// neue Spalte fuer Bedingungen
+			var newCellConditions = newTableRow.insertCell(-1);
+			newCellConditions.innerHTML = "<input type=\"text\" name=\"condition" + actFieldCount + "\" size=\"15\" maxlength=\"30\" value=\"\" />";
 
-        function handleResponse() 
-        {
-            if(resObject.readyState == 4) 
-            {
-                var table       = document.getElementById('mylist_fields_table');
-                var newTableRow = table.insertRow(actFieldCount);
-                newTableRow.innerHTML = resObject.responseText;
-            }
-        }
-    </script>";
+			actFieldCount++;
+        }';
+		
+		// Mehrdimensionales Array fuer alle anzuzeigenden Felder mit den noetigen Daten erstellen
+		$i = 0;
+		$old_cat_name = "";
+		$old_cat_id   = 0;
+
+        foreach($g_current_user->db_user_fields as $key => $value)
+        {    
+			// bei den Stammdaten noch Foto und Loginname anhaengen
+			if($old_cat_name == "Stammdaten"
+			&& $value['cat_name'] != "Stammdaten")
+			{
+				$g_layout['header'] .= '
+				roles['. $i. '] = new Object();
+				roles['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
+				roles['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
+				roles['. $i. '][\'usf_id\'] = \'usr_login_name\';
+				roles['. $i. '][\'usf_name\'] = \'Benutzername\';';
+				$i++;
+				
+				$g_layout['header'] .= '
+				roles['. $i. '] = new Object();
+				roles['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
+				roles['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
+				roles['. $i. '][\'usf_id\'] = \'usr_photo\';
+				roles['. $i. '][\'usf_name\'] = \'Foto\';';
+				$i++;
+			}
+			
+			$g_layout['header'] .= '
+			roles['. $i. '] = new Object();
+			roles['. $i. '][\'cat_id\'] = '. $value['cat_id']. ';
+			roles['. $i. '][\'cat_name\'] = \''. $value['cat_name']. '\';
+			roles['. $i. '][\'usf_id\'] = '. $value['usf_id']. ';
+			roles['. $i. '][\'usf_name\'] = \''. $value['usf_name']. '\';';
+			
+			$old_cat_id   = $value['cat_id'];
+			$old_cat_name = $value['cat_name'];
+			$i++;
+        } 		
+
+		// Anfangs- und Enddatum der Rollenmitgliedschaft als Felder noch anhaengen
+		$g_layout['header'] .= '
+		roles['. $i. '] = new Object();
+		roles['. $i. '][\'cat_id\'] = -1;
+		roles['. $i. '][\'cat_name\'] = \'Rollendaten\';
+		roles['. $i. '][\'usf_id\'] = \'mem_begin\';
+		roles['. $i. '][\'usf_name\'] = \'Mitgliedsbeginn\';';
+		
+		$i++;
+		$g_layout['header'] .= '
+		roles['. $i. '] = new Object();
+		roles['. $i. '][\'cat_id\'] = -1;
+		roles['. $i. '][\'cat_name\'] = \'Rollendaten\';
+		roles['. $i. '][\'usf_id\'] = \'mem_end\';
+		roles['. $i. '][\'usf_name\'] = \'Mitgliedsende\';';
+
+	$g_layout['header'] .= '</script>';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -170,20 +249,18 @@ echo "
                     </th>
                 </tr>
             </thead>
-            <tbody>";            
-                // Zeilen mit den einzelnen Feldern anzeigen
-                for($i = 1; $i <= $default_fields; $i++)
-                {
-                    echo "<tr>";
-                    include("mylist_field_list.php");
-                    echo "</tr>";
-                }
-                echo "
+            <tbody id=\"mylist_fields_tbody\">
+				<script type=\"text/javascript\">          
+					for(var counter = 0; counter < ". $default_fields. "; counter++)
+					{
+						addField();
+					}
+                </script>
                 <tr id=\"table_row_button\">
                     <td colspan=\"4\">
                         <span class=\"iconTextLink\">
                             <a href=\"javascript:addField()\"><img
-                            src=\"". THEME_PATH. "/icons/add.png\" alt=\"Feld hinzuf&uuml;gen\" /></a>
+                            src=\"". THEME_PATH. "/icons/add.png\" alt=\"Feld hinzufügen\" /></a>
                             <a href=\"javascript:addField()\">Feld hinzuf&uuml;gen</a>
                         </span>
                     </td>
