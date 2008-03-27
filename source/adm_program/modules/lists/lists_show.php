@@ -275,7 +275,7 @@ $num_members = $g_db->num_rows($result_list);
 if($num_members == 0)
 {
     // Es sind keine Daten vorhanden !
-    $g_message->show("nodata");
+    $g_message->show("nodata", "", "Hinweis");
 }
 
 if($num_members < $req_start)

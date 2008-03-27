@@ -23,7 +23,7 @@ require("../../system/common.php");
 if ($g_preferences['enable_photo_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    error_log("Das Fotomodul ist deaktiviert");
 }
 
 //Uebergaben pruefen

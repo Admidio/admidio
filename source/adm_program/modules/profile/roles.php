@@ -63,7 +63,7 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Rollen zuordnen";
+$g_layout['title']  = "Rollenzuordnung für \"". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "\"";
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
     <script type=\"text/javascript\"><!--
@@ -95,8 +95,7 @@ $g_layout['header'] = "
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo "
-<h1 class=\"moduleHeadline\">Rollen zuordnen</h1>
-<h3>Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "</h3>
+<h1 class=\"moduleHeadline\">". $g_layout['title']. "</h1>
 
 <form action=\"$g_root_path/adm_program/modules/profile/roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
     <table class=\"tableList\" cellspacing=\"0\">

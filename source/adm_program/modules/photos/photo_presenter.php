@@ -64,7 +64,7 @@ $ordner_url  = $g_root_path. $ordner_foto;
 $body_with   = $g_preferences['photo_show_width']  + 20;
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />";
 
 // Html-Kopf ausgeben
 $g_layout['title']    = "Fotogalerien";
@@ -82,17 +82,19 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <div class=\"formLayout\" id=\"photo_presenter\" style=\"width: ".$body_with."px;\">
     <div class=\"formHead\">".$photo_album->getValue("pho_name")."</div>
-    <div class=\"formBody\">";
-        echo"Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
-        if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
-        && strlen($photo_album->getValue("pho_end")) > 0)
-        {
-            echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
-        }
-        echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."<br /><br />";
+    <div class=\"formBody\">
+		<p>
+			Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
+	        if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
+	        && strlen($photo_album->getValue("pho_end")) > 0)
+	        {
+	            echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
+	        }
+	        echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."
+		</p>
     
-        //Vor und zurueck buttons
-        echo"<ul class=\"iconTextLinkList\">";
+        <ul class=\"iconTextLinkList\">";
+			//Vor und zurueck buttons
             if($prev_image > 0)
             {
                 echo"<li>
@@ -106,8 +108,8 @@ echo "
             {
                 echo"<li>
                     <span class=\"iconTextLink\">
-                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">N&auml;chstes Bild</a>
-                        <a  href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&aumlchstes Bild\" /></a>
+                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">Nächstes Bild</a>
+                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
                     </span>
                 </li>";
             }
@@ -144,16 +146,15 @@ echo "
         }
     
         //Ausgabe Bild
-        echo"
-            <div><a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">
-                <img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
-                </a>
-            </div>";
+        echo "
+		<div><a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">
+			<img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
+			</a>
+		</div>";
     
-        //Fenster schliessen Button
-        //wenn Popupmode
         if($g_preferences['photo_show_mode']==0)
         {   
+			// im Popupmodus Fenster schliessen Button
             echo"<ul class=\"iconTextLinkList\">
                 <li>
                     <span class=\"iconTextLink\">
@@ -163,11 +164,9 @@ echo "
                 </li>
             </ul>";
         }
-        
-        //Zurueck zur Uebersicht Button
-        //wenn Fenstermode
-        if($g_preferences['photo_show_mode']==2)
+        elseif($g_preferences['photo_show_mode']==2)
         {   
+			// im Fenstermodus zurueck zur Uebersicht Button
             echo"<ul class=\"iconTextLinkList\">
                 <li>
                     <span class=\"iconTextLink\">

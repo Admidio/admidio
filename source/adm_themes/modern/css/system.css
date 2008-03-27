@@ -31,8 +31,7 @@
 
 body {
     color:              #606465;
-    padding-bottom:     15px;
-    padding-top:        15px;
+    padding:     		15px;
     margin:             auto;
     font-size:          11pt;
     font-family:        Helvetica, Verdana, Arial, sans-serif;
@@ -188,8 +187,7 @@ a:hover, a:active {
 }
 
 .formSubmit {
-    padding-top:        5px;
-    padding-bottom:     5px;
+    padding-top:        10px;
 }
 
 
@@ -198,10 +196,11 @@ a:hover, a:active {
 
 .groupBox {
     color:              #555555;
-    border:             2px solid #449ba6;
+    border:             2px solid #bad8e2;
     padding:            5px 10px 5px 10px;
     text-align:         left;
     margin-top:         12px;
+	-moz-border-radius:	10px;
 }
 
 .groupBoxHeadline {
@@ -224,13 +223,16 @@ a:hover, a:active {
     width:              570px;         /* Optimale Breite von Listen */
     font-size:          10pt;
     color:              #555555;
+	border:             1px solid #7d7d7d;
+	-moz-border-radius-bottomleft:	10px;
+	-moz-border-radius-bottomright:	10px;
 }
 
 .tableList th {
     background-color:   #85C226;
     padding:            3px;
     background-repeat:  repeat-x;
-    background-image:   url(../images/stripe.png);    
+    background-image:   url(../images/stripe.png);   
 }
 
 .tableList td {

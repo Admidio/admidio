@@ -211,7 +211,7 @@ $row = $g_db->fetch_array($result);
 $count_valid_users = $row[0];
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Mitglieder zuordnen";
+$g_layout['title']  = "Mitgliederzuordnung für \"". $role->getValue("rol_name"). "\"";
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         function markMember(element)
@@ -293,8 +293,7 @@ $g_layout['header'] = "
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
-<h1>Mitglieder zuordnen</h1>
-<h3>Rolle ". $role->getValue("rol_name"). "</h3>";
+<h1>". $g_layout['title']. "</h1>";
 
 if(($count_valid_users != $user_anzahl || $restrict == "u")
 && ($g_current_user->assignRoles() || $g_current_user->editUser()))

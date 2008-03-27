@@ -75,12 +75,11 @@ echo"
 <div class=\"formLayout\" id=\"photo_upload_form\">
     <div class=\"formHead\">Bilder hochladen</div>
     <div class=\"formBody\">
-        <div class=\"formRow\">
-            Bilder zum Album <strong>".$photo_album->getValue("pho_name")."</strong> hinzufügen.<br />"
-            ."(Beginn: ". mysqldate("d.m.y", $photo_album->getValue("pho_begin")).")"
-            ."
-        </div>
-        <hr />
+        <p>
+			Die Bilder werden zu dem Album <strong>".$photo_album->getValue("pho_name")."</strong> hinzugefügt.<br />"
+            ."(Beginn: ". mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ")
+        </p>
+
         <ul class=\"formFieldList\">
             <li><dl>
                 <dt><label for=\"bilddatei1\">Bild 1:</label></dt>
