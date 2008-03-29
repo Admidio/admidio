@@ -306,7 +306,6 @@ create table %PRAEFIX%_roles
    rol_photo                      tinyint(1) unsigned            not null default 0,
    rol_profile                    tinyint(1) unsigned            not null default 0,
    rol_weblinks                   tinyint(1) unsigned            not null default 0,
-   rol_locked                     tinyint(1) unsigned            not null default 0,
    rol_this_list_view             tinyint(1) unsigned            not null default 0,
    rol_all_lists_view             tinyint(1) unsigned            not null default 0,
    rol_start_date                 date,

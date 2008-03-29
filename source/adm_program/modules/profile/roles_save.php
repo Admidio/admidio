@@ -53,15 +53,18 @@ if(isset($_GET["new_user"]))
 if($g_current_user->assignRoles() || $g_current_user->editUser())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    // Benutzer mit Benutzereditierrechten darf versteckte und 
-    // Rollen mit Rollenvergaberechten nicht sehen
+    // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
+    // aber auch keine Rollen mit Rollenvergaberechten 
     $sql_roles_condition = "";
-    if($g_current_user->editUser() && !$g_current_user->assignRoles())
+    if(!$g_current_user->assignRoles())
     {
-        $sql_roles_condition = "AND rol_assign_roles = 0
-                                AND rol_locked       = 0 ";
+        $sql_roles_condition = " AND rol_assign_roles = 0 ";
     }
-
+    if($g_current_user->editUser() && !$g_current_user->viewAllRoles())
+    {
+        $sql_roles_condition .= " AND rol_this_list_view = 1 ";
+    }
+    
     $sql    = "SELECT rol_id, rol_name, rol_max_members, mem_usr_id, mem_leader, mem_valid
                  FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
                  LEFT JOIN ". TBL_MEMBERS. "
@@ -88,7 +91,6 @@ else
                   AND bm.mem_leader  = 1
                   AND rol_id         = bm.mem_rol_id
                   AND rol_valid      = 1
-                  AND rol_locked     = 0
                   AND rol_cat_id     = cat_id
                   AND cat_org_id     = ". $g_current_organization->getValue("org_id"). "
                 ORDER BY cat_sequence, rol_name";

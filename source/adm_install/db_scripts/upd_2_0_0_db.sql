@@ -4,7 +4,10 @@ ALTER TABLE %PRAEFIX%_roles CHANGE COLUMN `rol_moderation` `rol_assign_roles` TI
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_approve_users` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `rol_assign_roles`;
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_system` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `rol_valid`;
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_all_lists_view` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `rol_locked`;
-ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_this_list_view` tinyint(1) unsigned NOT NULL DEFAULT 1 AFTER `rol_locked`;
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_this_list_view` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `rol_locked`;
+UPDATE %PRAEFIX%_roles SET `rol_this_list_view` = 1 WHERE `rol_locked` = 0;
+ALTER TABLE %PRAEFIX%_roles DROP COLUMN `rol_locked`;
+
 
 -- Tabelle user_fields erweitern
 ALTER TABLE %PRAEFIX%_user_fields DROP FOREIGN KEY %PRAEFIX%_FK_USF_ORG;

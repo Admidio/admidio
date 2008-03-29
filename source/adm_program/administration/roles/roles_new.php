@@ -225,16 +225,17 @@ echo "
                     </li>
                     <li>
                         <div>
-                            <input type=\"checkbox\" id=\"rol_locked\" name=\"rol_locked\" ";
-                                if($role->getValue("rol_locked") == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
-                            <label for=\"rol_locked\"><img src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Rolle nur f&uuml;r berechtige Benutzer sichtbar\" /></label>&nbsp;
-                            <label for=\"rol_locked\">Rolle nur f&uuml;r berechtige Benutzer sichtbar</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-							onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            <input type=\"checkbox\" id=\"rol_this_list_view\" name=\"rol_this_list_view\" ";
+                            if($role->getValue("rol_this_list_view") == 1)
+                            {
+                                echo " checked=\"checked\" ";
+                            }
+                            echo " value=\"1\" />
+                            <label for=\"rol_this_list_view\"><img src=\"". THEME_PATH. "/icons/page_white_text.png\" alt=\"Alle Mitglieder können die Mitgliederliste dieser Rolle einsehen\" /></label>&nbsp;
+                            <label for=\"rol_this_list_view\">Alle Mitglieder können die Mitgliederliste dieser Rolle einsehen</label>
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
+								onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_locked',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>";
 
@@ -253,9 +254,11 @@ echo "
                                         echo " disabled=\"disabled\" ";
                                     }                                
                                     echo " value=\"1\" />
-                                <label for=\"rol_mail_logout\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
-                                <label for=\"rol_mail_logout\">Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben</label>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                <label for=\"rol_mail_logout\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Besucher (ausgeloggt) können E-Mails an diese Rolle schreiben\" /></label>&nbsp;
+                                <label for=\"rol_mail_logout\">Besucher (ausgeloggt) können E-Mails an diese Rolle schreiben</label>
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  
+                                    onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_logout',this);\" onmouseout=\"ajax_hideTooltip()\" />
                             </div>
                         </li>
                         <li>
@@ -270,10 +273,11 @@ echo "
                                         echo " disabled=\"disabled\" ";
                                     }                                
                                     echo " value=\"1\" />
-                                <label for=\"rol_mail_login\"><img src=\"". THEME_PATH. "/icons/email_key.png\" alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" /></label>&nbsp;
-                                <label for=\"rol_mail_login\">Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben</label>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  
-onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                <label for=\"rol_mail_login\"><img src=\"". THEME_PATH. "/icons/email_key.png\" alt=\"Eingeloggte Benutzer können E-Mails an diese Rolle schreiben\" /></label>&nbsp;
+                                <label for=\"rol_mail_login\">Eingeloggte Benutzer können E-Mails an diese Rolle schreiben</label>
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                    onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_login',this);\" onmouseout=\"ajax_hideTooltip()\" />
                             </div>
                         </li>";
                     }
@@ -300,8 +304,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                             {
                                 echo " disabled=\"disabled\" ";
                             }
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rollen verwalten und zuordnen\" /></label>
+                            echo " value=\"1\" />
+                            <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rollen verwalten und zuordnen\" /></label>&nbsp;
                             <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
 onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen',this);\" onmouseout=\"ajax_hideTooltip()\" />
@@ -314,8 +318,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                             {
                                 echo " checked=\"checked\" ";
                             }
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_approve_users\"><img src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Registrierungen verwalten und zuordnen\" /></label>
+                            echo " value=\"1\" />
+                            <label for=\"rol_approve_users\"><img src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Registrierungen verwalten und zuordnen\" /></label>&nbsp;
                             <label for=\"rol_approve_users\">Registrierungen verwalten und zuordnen</label>
                         </div>
                     </li>
@@ -326,8 +330,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                             {
                                 echo " checked=\"checked\" ";
                             }
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_edit_user\"><img src=\"". THEME_PATH. "/icons/group.png\" alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" /></label>
+                            echo " value=\"1\" />
+                            <label for=\"rol_edit_user\"><img src=\"". THEME_PATH. "/icons/group.png\" alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" /></label>&nbsp;
                             <label for=\"rol_edit_user\">Profildaten und Rollenzuordnungen aller Benutzer bearbeiten</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
 onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer',this);\" onmouseout=\"ajax_hideTooltip()\" />
@@ -338,8 +342,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                             <input type=\"checkbox\" id=\"rol_profile\" name=\"rol_profile\" ";
                             if($role->getValue("rol_profile") == 1)
                                 echo " checked=\"checked\" ";
-                            echo " value=\"1\" />&nbsp;
-                            <label for=\"rol_profile\"><img src=\"". THEME_PATH. "/icons/user.png\" alt=\"Eigenes Profil bearbeiten\" /></label>
+                            echo " value=\"1\" />
+                            <label for=\"rol_profile\"><img src=\"". THEME_PATH. "/icons/user.png\" alt=\"Eigenes Profil bearbeiten\" /></label>&nbsp;
                             <label for=\"rol_profile\">Eigenes Profil bearbeiten</label>
                         </div>
                     </li>";
@@ -352,8 +356,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                                 <input type=\"checkbox\" id=\"rol_announcements\" name=\"rol_announcements\" ";
                                 if($role->getValue("rol_announcements") == 1)
                                     echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_announcements\"><img src=\"". THEME_PATH. "/icons/note.png\" alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" /></label>
+                                echo " value=\"1\" />
+                                <label for=\"rol_announcements\"><img src=\"". THEME_PATH. "/icons/note.png\" alt=\"Ank&uuml;ndigungen anlegen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_announcements\">Ank&uuml;ndigungen anlegen und bearbeiten&nbsp;</label>
                             </div>
                         </li>";
@@ -366,8 +370,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                                 <input type=\"checkbox\" id=\"rol_dates\" name=\"rol_dates\" ";
                                 if($role->getValue("rol_dates") == 1)
                                     echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_dates\"><img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Termine anlegen und bearbeiten\" /></label>
+                                echo " value=\"1\" />
+                                <label for=\"rol_dates\"><img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Termine anlegen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_dates\">Termine anlegen und bearbeiten</label>
                             </div>
                         </li>";
@@ -380,8 +384,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                                 <input type=\"checkbox\" id=\"rol_photo\" name=\"rol_photo\" ";
                                 if($role->getValue("rol_photo") == 1)
                                     echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_photo\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos hochladen und bearbeiten\" /></label>
+                                echo " value=\"1\" />
+                                <label for=\"rol_photo\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos hochladen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_photo\">Fotos hochladen und bearbeiten</label>
                             </div>
                         </li>";
@@ -394,8 +398,8 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                                 <input type=\"checkbox\" id=\"rol_download\" name=\"rol_download\" ";
                                 if($role->getValue("rol_download") == 1)
                                     echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_download\"><img src=\"". THEME_PATH. "/icons/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" /></label>
+                                echo " value=\"1\" />
+                                <label for=\"rol_download\"><img src=\"". THEME_PATH. "/icons/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_download\">Downloads hochladen und bearbeiten</label>
                             </div>
                         </li>";
@@ -408,9 +412,9 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                                 <input type=\"checkbox\" id=\"rol_guestbook\" name=\"rol_guestbook\" ";
                                 if($role->getValue("rol_guestbook") == 1)
                                     echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_guestbook\"><img src=\"". THEME_PATH. "/icons/comment.png\" alt=\"G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen\" /></label>
-                                <label for=\"rol_guestbook\">G&auml;stebucheintr&auml;ge bearbeiten und l&ouml;schen</label>
+                                echo " value=\"1\" />
+                                <label for=\"rol_guestbook\"><img src=\"". THEME_PATH. "/icons/comment.png\" alt=\"Gästebucheinträge bearbeiten und löschen\" /></label>&nbsp;
+                                <label for=\"rol_guestbook\">Gästebucheinträge bearbeiten und löschen</label>
                             </div>
                         </li>";
                         // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
@@ -422,9 +426,9 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                                     <input type=\"checkbox\" id=\"rol_guestbook_comments\" name=\"rol_guestbook_comments\" ";
                                     if($role->getValue("rol_guestbook_comments") == 1)
                                         echo " checked=\"checked\" ";
-                                    echo " value=\"1\" />&nbsp;
-                                    <label for=\"rol_guestbook_comments\"><img src=\"". THEME_PATH. "/icons/comments.png\" alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" /></label>
-                                    <label for=\"rol_guestbook_comments\">Kommentare zu G&auml;stebucheintr&auml;gen anlegen</label>
+                                    echo " value=\"1\" />
+                                    <label for=\"rol_guestbook_comments\"><img src=\"". THEME_PATH. "/icons/comments.png\" alt=\"Kommentare zu Gästebucheinträgen anlegen\" /></label>&nbsp;
+                                    <label for=\"rol_guestbook_comments\">Kommentare zu Gästebucheinträgen anlegen</label>
                                 </div>
                             </li>";
                         }
@@ -437,34 +441,21 @@ onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?e
                                 <input type=\"checkbox\" id=\"rol_weblinks\" name=\"rol_weblinks\" ";
                                 if($role->getValue("rol_weblinks") == 1)
                                     echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_weblinks\"><img src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Weblinks anlegen und bearbeiten\" /></label>
+                                echo " value=\"1\" />
+                                <label for=\"rol_weblinks\"><img src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Weblinks anlegen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_weblinks\">Weblinks anlegen und bearbeiten</label>
                             </div>
                         </li>";
                     }
-                    //Listenrechte
-                    //Diese Liste
-                    echo "
-                        <li>
-                            <div>
-                                <input type=\"checkbox\" id=\"rol_this_list_view\" name=\"rol_this_list_view\" ";
-                                if($role->getValue("rol_this_list_view") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_this_list_view\"><img src=\"". THEME_PATH. "/icons/page_white_text.png\" alt=\"Mitgliederliste dieser Rolle einsehen\" /></label>
-                                <label for=\"rol_this_list_view\">Mitgliederliste dieser Rolle einsehen</label>
-                            </div>
-                        </li>";
-                    //Alle Listen
+                    //Listenrechte Alle Listen einsehen
                     echo "
                         <li>
                             <div>
                                 <input type=\"checkbox\" id=\"rol_all_lists_view\" name=\"rol_all_lists_view\" ";
                                 if($role->getValue("rol_all_lists_view") == 1)
                                     echo " checked=\"checked\" ";
-                                echo " value=\"1\" />&nbsp;
-                                <label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>
+                                echo " value=\"1\" />
+                                <label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
                                 <label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
                             </div>
                         </li>";                 
