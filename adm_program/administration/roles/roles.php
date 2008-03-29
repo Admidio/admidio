@@ -202,7 +202,7 @@ echo "
                 if($row->rol_this_list_view == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
-                    alt=\"Alle Mitglieder können die Mitgliederliste dieser Rolle einsehen\" title=\"Alle Mitglieder können die Mitgliederliste dieser Rolle einsehen\" />";
+                    alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" title=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" />";
                 }
             	if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
                 {

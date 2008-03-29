@@ -205,15 +205,19 @@ echo "
             src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Benutzer importieren\" /></a>
             <a href=\"$g_root_path/adm_program/administration/members/import.php\">Benutzer importieren</a>
         </span>
-    </li>
-    <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/members/fields.php\"><img
-            src=\"". THEME_PATH. "/icons/application_form.png\" alt=\"Organisationsspezifische Profilfelder pflegen\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/members/fields.php\">Profilfelder pflegen</a>
-        </span>
-    </li>
-</ul>";
+    </li>";
+    if($g_current_user->isWebmaster())
+    {
+    	echo '
+		<li>
+			<span class="iconTextLink">
+				<a href="'. $g_root_path. '/adm_program/administration/members/fields.php"><img
+				src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
+				<a href="'. $g_root_path. '/adm_program/administration/members/fields.php">Profilfelder pflegen</a>
+			</span>
+		</li>';
+	}
+echo '</ul>';
 
 if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
 {

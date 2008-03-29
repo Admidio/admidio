@@ -23,7 +23,7 @@ require("../../system/login_valid.php");
 require("../../system/user_field_class.php");
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$g_current_user->editUser())
+if (!$g_current_user->isWebmaster())
 {
     $g_message->show("norights");
 }
