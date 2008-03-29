@@ -507,11 +507,11 @@ echo "
             // *******************************************************************************
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
-            $show_locked = "";
-            if($g_current_user->assignRoles() == false)
+            $show_this_role = "";
+            if($g_current_user->viewAllRoles() == false)
             {
-               // kein Moderator, dann keine gesperrten Rollen anzeigen
-               $show_locked = " AND rol_locked = 0 ";
+               // das Mitglied darf nicht alle Rollen sehen
+               $show_this_role = " AND rol_this_list_view = 1 ";
             }
             
             $sql    = "SELECT *
@@ -520,7 +520,7 @@ echo "
                           AND mem_valid  = 1
                           AND mem_usr_id = $a_user_id
                           AND rol_valid  = 1
-                              $show_locked
+                              $show_this_role
                           AND rol_cat_id = cat_id
                           AND cat_org_id = org_id
                           AND org_id     = ". $g_current_organization->getValue("org_id"). "
@@ -667,11 +667,11 @@ echo "
             // *******************************************************************************
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
-            $show_locked = "";
-            if($g_current_user->assignRoles() == false)
+            $show_this_role = "";
+            if($g_current_user->viewAllRoles() == false)
             {
-               // kein Moderator, dann keine gesperrten Rollen anzeigen
-               $show_locked = " AND rol_locked = 0 ";
+               // das Mitglied darf nicht alle Rollen sehen
+               $show_this_role = " AND rol_this_list_view = 1 ";
             }
             
             $sql    = "SELECT *
@@ -680,7 +680,7 @@ echo "
                           AND mem_valid  = 0
                           AND mem_usr_id = $a_user_id
                           AND rol_valid  = 1
-                              $show_locked
+                              $show_this_role
                           AND rol_cat_id = cat_id
                           AND cat_org_id = org_id
                           AND org_id     = ". $g_current_organization->getValue("org_id"). "
@@ -755,7 +755,7 @@ echo "
                        AND mem_valid  = 1
                        AND mem_usr_id = $a_user_id
                        AND rol_valid  = 1
-                       AND rol_locked = 0
+                       AND rol_this_list_view = 1
                        AND rol_cat_id = cat_id
                        AND cat_org_id = org_id
                        AND org_id    <> ". $g_current_organization->getValue("org_id"). "

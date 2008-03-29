@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Rollen mit Berechtigungen auflisten
+ * Rollen mit Berechtigungen auflisten 
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -91,7 +91,7 @@ echo "
         <tr>
             <th>$description_lst</th>
             <th>Berechtigungen</th>
-            <th style=\"text-align: center;\"><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\" /></th>
+            <th>Einst.</th>
             <th style=\"text-align: center;\">Funktionen</th>
         </tr>
     </thead>";
@@ -187,7 +187,24 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
                     alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" />";
                 }
-                if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
+                if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] > 0)
+                {
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
+                    alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
+                }
+                if($row->rol_all_lists_view == 1)
+                {
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
+                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
+                }
+            echo "</td>
+            <td>";
+                if($row->rol_this_list_view == 1)
+                {
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
+                    alt=\"Alle Mitglieder können die Mitgliederliste dieser Rolle einsehen\" title=\"Alle Mitglieder können die Mitgliederliste dieser Rolle einsehen\" />";
+                }
+            	if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
                     alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" />";
@@ -196,28 +213,6 @@ echo "
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email_key.png\"
                     alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" />";
-                }
-                if($row->rol_weblinks == 1 && $g_preferences['enable_weblinks_module'] > 0)
-                {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
-                    alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
-                }
-                if($row->rol_this_list_view == 1)
-                {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
-                    alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
-                }
-                if($row->rol_all_lists_view == 1)
-                {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
-                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
-                }
-            echo "</td>
-            <td style=\"text-align: center;\">";
-                if($row->rol_locked == 1)
-                {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lock.png\"
-                    alt=\"Rolle nur f&uuml;r Moderatoren sichtbar\" title=\"Rolle nur f&uuml;r Moderatoren sichtbar\" />";
                 }
             echo "</td>
             <td style=\"text-align: center;\">
@@ -237,9 +232,7 @@ echo "
 
                 if($row->rol_name == "Webmaster")
                 {
-                    echo "<span class=\"iconLink\">
-                        <img src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" />
-                    </span>";
+                    echo "<a class=\"iconLink\"><img src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" /></a>";
                 }
                 else
                 {

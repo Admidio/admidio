@@ -92,11 +92,6 @@ $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
          WHERE rol_valid  = $active_role
            AND rol_cat_id = cat_id 
            AND cat_org_id = ". $g_current_organization->getValue("org_id");
-if(!$g_current_user->assignRoles())
-{
-    // wenn nicht Moderator, dann keine versteckten Rollen anzeigen
-    $sql .= " AND rol_locked = 0 ";
-}
 if($g_valid_login == false)
 {
     $sql .= " AND cat_hidden = 0 ";

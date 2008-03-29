@@ -604,8 +604,7 @@ class User extends TableAccess
                         WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
                           AND mem_valid  = 1
                           AND mem_rol_id = rol_id
-						  AND rol_locked = 0
-                          AND rol_all_lists_view  = 1
+						  AND rol_all_lists_view  = 1
                           AND rol_valid  = 1 
                           AND rol_cat_id = cat_id
                           AND cat_org_id = ". $g_current_organization->getValue("org_id");
@@ -655,26 +654,16 @@ class User extends TableAccess
             {
 	            //Falls noch nicht im Array erfasst SQL-Abfrage
 	            global $g_current_organization;
-	            $sql    = "SELECT rol_id
-	                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-	                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
-	                          AND rol_id = ".$rol_id."
-							  AND mem_valid  = 1
-	                          AND mem_rol_id = rol_id
-							  AND rol_locked = 0
-	                          AND rol_valid  = 1 
+	            $sql    = "SELECT rol_id, rol_this_list_view
+	                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+	                        WHERE rol_valid  = 1 
 	                          AND rol_cat_id = cat_id
 	                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
-	            $this->db->query($sql);           
+	            $result = $this->db->query($sql);
 	            
-	            if($this->db->num_rows() > 0)
+	            while($row = $this->db->fetch_array($result))
 	            {
-	                $this->list_view_rights[$rol_id]=1;
-					$view_role = true;
-	            }
-	            else
-	            {
-	                $this->list_view_rights[$rol_id]=0;
+	            	$this->list_view_rights[$row['rol_id']] = $row['rol_this_list_view'];
 	            }
             }
         }
