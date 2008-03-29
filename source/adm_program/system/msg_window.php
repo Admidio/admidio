@@ -53,8 +53,8 @@ echo "
         switch ($req_err_code)
         {
             case "bbcode":
-                echo "Die Beschreibung bei einigen Modulen (Ank&uuml;ndigungen, Terminen, G&auml;stebuch und Weblinks)
-                      k&ouml;nnen mit verschiedenen Tags (BBCode) formatiert werden. Daf&uuml;r m&uuml;ssen die
+                echo "Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks)
+                      können mit verschiedenen Tags (BBCode) formatiert werden. Dafür müssen die
                       hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
                       Beispiele:<br /><br />
                       <table class=\"tableList\" style=\"width: auto;\" cellspacing=\"0\">
@@ -75,8 +75,8 @@ echo "
                             <td>Text <b>[i]</b>kursiv<b>[/i]</b> darstellen</td>
                          </tr>
                          <tr>
-                            <td>Text <span style=\"font-size: 14pt;\">gro&szlig;</span> darstellen</td>
-                            <td>Text <b>[big]</b>gro&szlig;<b>[/big]</b> darstellen</td>
+                            <td>Text <span style=\"font-size: 14pt;\">groß</span> darstellen</td>
+                            <td>Text <b>[big]</b>groß<b>[/big]</b> darstellen</td>
                          </tr>
                          <tr>
                             <td>Text <span style=\"font-size: 8pt;\">klein</span> darstellen</td>
@@ -100,17 +100,28 @@ echo "
                          </tr>
                       </table>";
                 break;
-
+                
+            case "category_global":
+                // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
+                $organizations = $g_current_organization->getValue("org_longname");
+                $organizations .= implode(",<br />- ", $g_current_organization->getReferenceOrganizations(true, true, true));
+                
+                echo "Profilfelder von Kategorien bei denen diese Option aktiviert ist, erscheinen im Profil
+                      folgender Organisationen:
+                      <p><strong>- $organizations</strong></p>
+                      Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.";
+                break;
+                
             case "condition":
                 echo "Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
-                      Damit wird die ausgew&auml;hlte Rolle noch einmal nach deinen Bedingungen
-                      eingeschr&auml;nkt.<br /><br />
+                      Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen
+                      eingeschränkt.<br /><br />
                       Beispiele:<br /><br />
                       <table class=\"tableList\" style=\"width: 100%;\" cellspacing=\"0\">
                          <tr>
                             <th style=\"width: 75px;\">Feld</th>
                             <th style=\"width: 110px;\">Bedingung</th>
-                            <th>Erkl&auml;rung</th>
+                            <th>Erklärung</th>
                          </tr>
                          <tr>
                             <td>Nachname</td>
@@ -120,7 +131,7 @@ echo "
                          <tr>
                             <td>Nachname</td>
                             <td><b>Mei*</b></td>
-                            <td>Sucht alle Benutzer deren Namen mit Mei anf&auml;ngt</td>
+                            <td>Sucht alle Benutzer deren Namen mit Mei anfängt</td>
                          </tr>
                          <tr>
                             <td>Geburtstag</td>
@@ -129,159 +140,146 @@ echo "
                          </tr>
                          <tr>
                             <td>Ort</td>
-                            <td><b>K&ouml;ln oder Bonn</b></td>
-                            <td>Sucht alle Benutzer, die aus K&ouml;ln oder Bonn kommen</td>
+                            <td><b>Köln oder Bonn</b></td>
+                            <td>Sucht alle Benutzer, die aus Köln oder Bonn kommen</td>
                          </tr>
                          <tr>
                             <td>Telefon</td>
                             <td><b>*241*&nbsp;&nbsp;*54</b></td>
-                            <td>Sucht alle Benutzer, deren Telefonnummer 241 enth&auml;lt und
+                            <td>Sucht alle Benutzer, deren Telefonnummer 241 enthält und
                                mit 54 endet</td>
                          </tr>
                          <tr>
                             <td>Ja/Nein Feld</td>
                             <td><b>Ja</b></td>
-                            <td>Sucht alle Benutzer bei denen ein H&auml;ckchen gesetzt wurde</td>
+                            <td>Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</td>
                          </tr>
                       </table>";
                 break;
 
-            case "enable_rss":
-                echo "Admidio kann RSS-Feeds f&uuml;r verschiedene Module (Ank&uuml;ndigungen,
-                      Termine, G&auml;stebuch und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
-                      bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
-                      werden k&ouml;nnen.";
-                break;
-
-            case "field":
-                echo "Es k&ouml;nnen beliebig viele zus&auml;tzliche Felder definiert werden. 
-                      Diese werden im Profil der einzelnen Benutzer angezeigt und k&ouml;nnen dort auch
-                      bearbeitet werden. Au&szlig;erdem stehen diese Felder bei den Eigenen Listen zur 
-                      Verf&uuml;gung.";
-                break;
-
-            case "field_hidden":
-                echo "Ein Feld ist normalerweise f&uuml;r alle Benutzer sichtbar. Wird diese Funktion
-                      nicht ausgew&auml;hlt, so k&ouml;nnen die Daten nur von Benutzern gesehen werden,
-                      die das Recht haben alle Benutzer zu editieren. Im eigenen Profil kann der Benutzer 
-                      diese Daten auch sehen.";
-                break;
-
-            case "field_disabled":
-                echo "Wird ein Feld gesperrt, so k&ouml;nnen Benutzer im eigenen Profil dieses Feld nicht
-                      bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht
-                      besitzen alle Benutzer zu editieren.";
-                break;
-
-            case "field_mandatory":
-                echo "Felder, die als Pflichtfelder markiert sind, m&uuml;ssen immer gef&uuml;llt werden.
-                      Dies gilt f&uuml;r die Registrierung, aber auch bei der gew&ouml;hnlichen 
-                      Profildatenbearbeitung.";
-                break;
-
-            case "file_size":
-                echo "Hier kannst Du die maximal zul&auml;ssige Gr&ouml;&szlig;e einer Datei f&uuml;r das
-                      jeweilige Modul in Kilobyte definieren.<br /><br />
-                      Wenn du 0 als Dateigr&ouml;&szlig;e eintr&auml;gst, deaktivierst du die entsprechende
-                      Funktion f&uuml;r alle Benutzer.";
-                break;
-
-            case "leader":
-                echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgef&uuml;hrt.<br /><br />
-                      Leiter haben au&szlig;erdem die M&ouml;glichkeit neue Mitglieder aus der Organisation
-                      der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
-                break;
-
-            case "nickname":
-                echo "Mit diesem Namen kannst du dich sp&auml;ter auf der Homepage anmelden.<br /><br />
-                      Damit du ihn dir leicht merken kannst, solltest du deinen Spitznamen oder Vornamen nehmen.
-                      Auch Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>, sind m&ouml;glich.";
-                break;
-
-            case "password":
-                echo "Das Passwort wird verschl&uuml;sselt gespeichert.
-                      Es ist sp&auml;ter nicht mehr m&ouml;glich dieses nachzuschauen.
-                      Aus diesem Grund solltest du es dir gut merken.";
-                break;
-
-            case "rolle_benutzer":
-                echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
-                      Benutzerdaten (au&szlig;er Passw&ouml;rter) und Rollenzugeh&ouml;rigkeiten
-                      anderer Mitglieder zu bearbeiten.<br />
-                      Au&szlig;erdem haben sie Zugriff auf die Benutzerverwaltung und k&ouml;nnen
-                      dort neue Benutzer anlegen oder alte Benutzer l&ouml;schen.";
-                break;
-
-            case "rolle_locked":
-                echo "Rollen, die diese Option aktiviert haben, sind <b>nur</b> f&uuml;r Benutzer
-                      sichtbar, die selber das Recht haben, Rollen zu editieren.<br />
-                      Benutzer, die dieses Recht nicht besitzen, k&ouml;nnen keine E-Mails an 
-                      diese Rolle schreiben, keine Listen dieser Rolle aufrufen und sehen auch 
-                      nicht im Profil einer Person, dass diese Mitglied dieser Rolle ist.";
-                break;
-
-            case "rolle_logout":
-                echo "Besucher der Homepage, die nicht eingeloggt sind, k&ouml;nnen E-Mails an diese Rolle
-                      schreiben, die dann automatisch an alle Mitglieder weitergeleitet wird.";
-                break;
-
-            case "rolle_login":
-                echo "Benutzer, die sich angemeldet haben, k&ouml;nnen E-Mails an diese Rolle schreiben, die
-                      dann automatisch an alle Mitglieder weitergeleitet wird.";
-                break;
-
-            case "rolle_zuordnen":
-                echo "Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und k&ouml;nnen neue 
-                      Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.";
-                break;
-
-            case "rolle_mail":
-                echo "Deine E-Mail wird an alle Mitglieder der ausgew&auml;hlten Rolle geschickt, sofern
-                      diese ihre E-Mail-Adresse im System hinterlegt haben.<br /><br />
-                      Wenn du eingeloggt bist stehen dir weitere Rollen zur Verf&uuml;gung, an die du E-Mails
-                      schreiben kannst.";
-                break;
-                
-            case "rolle_ecard":
-                echo "Deine Gru&szlig;karte wird an ein Mitglied der ausgew&auml;hlten Rolle geschickt, sofern
-                      diese ihre E-Mail-Adresse im System hinterlegt hat.<br /><br />
-                      Unter der Rollenauswahl besteht die M&ouml;glichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuw&auml;hlen.";
-                break;
-
-            case "role_assign":
-                echo "W&auml;hle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.";
-                break;
-
             case "date_global":
-                echo "Termine / Ank&uuml;ndigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
-                      folgender Organisationen:<p><b>";
-
                 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
                 $organizations = $g_current_organization->getValue("org_longname");
-                $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true, true);
-
-                while($orga = current($arr_ref_orgas))
-                {
-                    $organizations = $organizations. ",<br />- $orga";
-                    next($arr_ref_orgas);
-                }
-
-                echo "- $organizations</b></p>
-                      Moderatoren dieser Organisationen k&ouml;nnen den Termin / Ank&uuml;ndigung dann bearbeiten
-                      bzw. die Option zur&uuml;cksetzen.";
+                $organizations .= implode(",<br />- ", $g_current_organization->getReferenceOrganizations(true, true, true));
+                
+                echo "Termine / Ankündigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
+                      folgender Organisationen:
+                      <p><strong>- $organizations</strong></p>
+                      Moderatoren dieser Organisationen können den Termin / Ankündigung dann bearbeiten
+                      bzw. die Option zurücksetzen.";
                 break;
                 
             case "date_location_link":
             	echo "Geben Sie genügend Informationen zum Treffpunkt ein, so kann ein Link bzw. eine Route zu 
             	diesem Treffpunkt über Google-Maps erstellt werden."; 
             	break;
+            	
+            case "enable_rss":
+                echo "Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen,
+                      Termine, Gästebuch und Weblinks) auf den jeweiligen Übersichtsseiten
+                      bereitstellen, die dann über den Browser einem Feedreader zugeordnet
+                      werden können.";
+                break;
+
+            case "field":
+                echo "Es können beliebig viele zusätzliche Felder definiert werden. 
+                      Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch
+                      bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur 
+                      Verfügung.";
+                break;
+
+            case "field_hidden":
+                echo "Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion
+                      nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden,
+                      die das Recht haben alle Benutzer zu editieren. Im eigenen Profil kann der Benutzer 
+                      diese Daten auch sehen.";
+                break;
+
+            case "field_disabled":
+                echo "Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht
+                      bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht
+                      besitzen alle Benutzer zu editieren.";
+                break;
+
+            case "field_mandatory":
+                echo "Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden.
+                      Dies gilt für die Registrierung, aber auch bei der gewöhnlichen 
+                      Profildatenbearbeitung.";
+                break;
+
+            case "file_size":
+                echo "Hier kannst Du die maximal zulässige Größe einer Datei für das
+                      jeweilige Modul in Kilobyte definieren.<br /><br />
+                      Wenn du 0 als Dateigröße einträgst, deaktivierst du die entsprechende
+                      Funktion für alle Benutzer.";
+                break;
+
+            case "leader":
+                echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgeführt.<br /><br />
+                      Leiter haben außerdem die Möglichkeit neue Mitglieder aus der Organisation
+                      der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
+                break;
+
+            case "nickname":
+                echo "Mit diesem Namen kannst du dich später auf der Homepage anmelden.<br /><br />
+                      Damit du ihn dir leicht merken kannst, solltest du deinen Spitznamen oder Vornamen nehmen.
+                      Auch Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>, sind möglich.";
+                break;
+
+            case "password":
+                echo "Das Passwort wird verschlüsselt gespeichert.
+                      Es ist später nicht mehr möglich dieses nachzuschauen.
+                      Aus diesem Grund solltest du es dir gut merken.";
+                break;
+
+            case "rolle_benutzer":
+                echo "Rollen, die diese Option aktiviert haben, haben die Berechtigung
+                      Benutzerdaten (außer Passwörter) und Rollenzugehörigkeiten
+                      anderer Mitglieder zu bearbeiten.<br />
+                      Außerdem haben sie Zugriff auf die Benutzerverwaltung und können
+                      dort neue Benutzer anlegen oder alte Benutzer löschen.";
+                break;
+
+            case "role_show_list":
+            	echo "Alle angemeldeten Benutzer können die Mitgliederlisten der entsprechenden Rolle
+            	      aufrufen und die Profile der Mitglieder einsehen. 
+            	      Wird dieses Flag nicht gesetzt, so können normale Benutzer die Mitgliedschaft 
+            	      zu dieser Rolle nicht sehen. Sie wird auch nicht im Profil angezeigt.";
+                break;
+
+            case "role_mail_logout":
+                echo "Besucher der Homepage, die nicht eingeloggt sind, können E-Mails an diese Rolle
+                      schreiben, die dann automatisch an alle Mitglieder weitergeleitet wird.";
+                break;
+
+            case "rolle_zuordnen":
+                echo "Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue 
+                      Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.";
+                break;
+
+            case "rolle_mail":
+                echo "Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern
+                      diese ihre E-Mail-Adresse im System hinterlegt haben.<br /><br />
+                      Wenn du eingeloggt bist stehen dir weitere Rollen zur Verfügung, an die du E-Mails
+                      schreiben kannst.";
+                break;
+                
+            case "rolle_ecard":
+                echo "Deine Grußkarte wird an ein Mitglied der ausgewählten Rolle geschickt, sofern
+                      diese ihre E-Mail-Adresse im System hinterlegt hat.<br /><br />
+                      Unter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.";
+                break;
+
+            case "role_assign":
+                echo "Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.";
+                break;
 
             case "user_field_description":
                 echo $g_current_user->getProperty($req_err_text, "usf_description");
                 break;
 
             case "dateiname":
-                echo "   Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schlie&szlig;en kann.
+                echo "   Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann.
                    Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle
                    gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).";
                 break;
@@ -290,40 +288,40 @@ echo "
 
            case "photo_up_help":
                 echo " <h3>Was ist zu tun?</h3>
-                    Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gew&uuml;nschte Bilddatei auf der
-                    Festplatte ausw&auml;hlen. Den Vorgang ggf. bis zu f&uuml;nfmal wiederholen,
-                    bis alle Felder gef&uuml;llt sind. Dann auf &bdquo;Bilder hochladen&ldquo; klicken und ein wenig Geduld haben.
+                    Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Bilddatei auf der
+                    Festplatte auswählen. Den Vorgang ggf. bis zu fünfmal wiederholen,
+                    bis alle Felder gefüllt sind. Dann auf &bdquo;Bilder hochladen&ldquo; klicken und ein wenig Geduld haben.
                     <br />
                     <h3>Hinweise:</h3>
-                    Die Bilder m&uuml;ssen im JPG Format gespeichert sein.
-                    Die Bilder werden automatisch auf eine Aufl&ouml;sung von ".$g_preferences['photo_save_scale']." Pixel der
-                    l&auml;ngeren Seite skaliert (andere Seite im Verh&auml;ltnis) bevor sie gespeichert werden.
+                    Die Bilder müssen im JPG Format gespeichert sein.
+                    Die Bilder werden automatisch auf eine Auflösung von ".$g_preferences['photo_save_scale']." Pixel der
+                    längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.
                     Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender
                     Nummer benannt werden.<br />
-                    Da auch bei schnellen Internetanbindungen das Hochladen von gr&ouml;&szlig;eren Dateien einige
-                    Zeit in Anspruch nehmen kann, empfehlen wir zun&auml;chst alle hoch zu ladenden Bilder in einen
+                    Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
+                    Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Bilder in einen
                     Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf ".$g_preferences['photo_save_scale']." Pixel
-                    (l&auml;ngere Bildseite) zu skalieren. Die JPG-Qualit&auml;t sollte beim Abspeichern auf mindestens 90%
+                    (längere Bildseite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
                     (also geringe Komprimierung) gestellt werden.
-                    Die maximale Dateigr&ouml;&szlig;e eines hochgeladenen Bildes wird nur durch die Servereinstellungen beschr&auml;nkt.
+                    Die maximale Dateigröße eines hochgeladenen Bildes wird nur durch die Servereinstellungen beschränkt.
                     ";
                 break;
 
             case "veranst_help":
                 echo "<h3>Was ist zu tun?</h3>
-                    Alle offenen Felder ausf&uuml;llen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. ausw&auml;hlen
+                    Alle offenen Felder ausfüllen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. auswählen
                     welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
-                    Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind f&uuml;r Homepagebesucher sichtbar. M&ouml;chte man z.B. erst alle Bilder hochladen
-                    oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach sp&auml;ter setzen.
+                    Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind für Homepagebesucher sichtbar. Möchte man z.B. erst alle Bilder hochladen
+                    oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.
                     Danach auf Speichern klicken.
                     ";
                 break;
 
             case "folder_not_found":
                 echo " <h3>Warnung!!!</h3>
-                    Der zugeh&ouml;rige Ordner wurde nicht gefunden. Sollte er bewusst &uuml;ber FTP gel&ouml;scht worden sein
-                    oder nicht mehr die M&ouml;glichkeit bestehen ihn wieder herzustellen, bitte
-                    den Datensatz mit klick auf das (<img src=\"". THEME_PATH. "/icons/cross.png\" style=\"vertical-align: top;\" />)Icon l&ouml;schen.
+                    Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein
+                    oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
+                    den Datensatz mit klick auf das (<img src=\"". THEME_PATH. "/icons/cross.png\" style=\"vertical-align: top;\" />)Icon löschen.
                     Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
                 break;
 
@@ -336,9 +334,9 @@ echo "
 
             //Captcha-Hilfen
             case "captcha_help":
-                echo " <h3>Was ist das f&uuml;r ein Best&auml;tigungscode?</h3>
+                echo " <h3>Was ist das für ein Bestätigungscode?</h3>
                     Hierbei handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das
-                    Formular von einem User oder einem Script/Spambot ausgef&uuml;llt wurde. <br /> Bitte trage den im Bild angezeigten
+                    Formular von einem User oder einem Script/Spambot ausgefüllt wurde. <br /> Bitte trage den im Bild angezeigten
                     4- bis 6-stelligen Code in das Formularfeld ein.";
                 break;
 

@@ -629,11 +629,6 @@ echo "
                                                 echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
                                                 alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                                             }
-                                            if($row['rol_this_list_view'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
-                                                alt=\"Mitgliederliste dieser Rolle einsehen\" title=\"Mitgliederliste dieser Rolle einsehen\" />";
-                                            }
                                             if($row['rol_all_lists_view'] == 1)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
