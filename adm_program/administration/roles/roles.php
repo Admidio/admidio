@@ -123,7 +123,7 @@ echo "
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
-                        <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id','$g_root_path')\"><img 
+                        <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id','". THEME_PATH. "')\"><img 
                         id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name $image_hidden
                     </td>
                 </tr>

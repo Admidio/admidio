@@ -55,7 +55,7 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
                 || submit_button.value == \'Admidio installieren\')
                 {
                     submit_button.disabled  = true;
-                    document.btn_icon.src = imgLoader.src;
+                    document.getElementById(\'btn_icon\').src = imgLoader.src;
                     if(submit_button.value == \'Datenbank aktualisieren\')
                     {
                         document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird aktualisiert\';
@@ -65,12 +65,12 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
                         document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird eingerichtet\';
                     }
                 }
-                document.forms[0].submit();
+                document.getElementById(\'adm_install\').submit();
             }
         --></script>
     </head>
     <body>
-        <form action="'. $next_url. '" method="post">
+        <form id="adm_install" action="'. $next_url. '" method="post">
         <div id="page">
         <div><img class="img_border" src="layout/border_top_big.png" alt="border" /></div>
         <div id="content_left" class="content">&nbsp;
