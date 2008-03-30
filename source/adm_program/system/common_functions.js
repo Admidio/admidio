@@ -69,12 +69,12 @@ function showHideBlock(block_name, theme_path)
 	{
 		 document.getElementById(block_element).style.visibility = 'visible';
 		 document.getElementById(block_element).style.display    = '';
-		 document.images[image_element].src = theme_path + '/icons/triangle_open.gif';
+		 document.getElementById(image_element).src = theme_path + '/icons/triangle_open.gif';
 	}
 	else
 	{
 		 document.getElementById(block_element).style.visibility = 'hidden';
 		 document.getElementById(block_element).style.display    = 'none';
-		 document.images[image_element].src = theme_path + '/icons/triangle_close.gif';
+		 document.getElementById(image_element).src = theme_path + '/icons/triangle_close.gif';
 	}
 }
