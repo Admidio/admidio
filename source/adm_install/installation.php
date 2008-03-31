@@ -510,9 +510,9 @@ elseif($req_mode == 7)
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
     $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
-										   fol_locked, fol_public, fol_timestamp)
-	                                VALUES ($g_current_organization->getValue, 'DOWNLOAD', 'download', '/adm_my_files',
-	                                		0,1,SYSDATE())";
+                                           fol_locked, fol_public, fol_timestamp)
+                                    VALUES (". $g_current_organization->getValue("org_id"). ", 'DOWNLOAD', 'download', '/adm_my_files',
+                                            0,1,SYSDATE())";
     $db->query($sql);
 
 
@@ -546,8 +546,8 @@ elseif($req_mode == 7)
     $role_webmaster->setValue("rol_mail_logout", 1);
     $role_webmaster->setValue("rol_mail_login", 1);
     $role_webmaster->setValue("rol_profile", 1);
-	$role_webmaster->setValue("rol_this_list_view", 1);
-	$role_webmaster->setValue("rol_all_lists_view", 1);
+    $role_webmaster->setValue("rol_this_list_view", 1);
+    $role_webmaster->setValue("rol_all_lists_view", 1);
     $role_webmaster->save(0);
 
     // Mitglied
@@ -557,7 +557,7 @@ elseif($req_mode == 7)
     $role_member->setValue("rol_description", "Alle Mitglieder der Organisation");
     $role_member->setValue("rol_mail_login", 1);
     $role_member->setValue("rol_profile", 1);
-	$role_member->setValue("rol_this_list_view", 1);
+    $role_member->setValue("rol_this_list_view", 1);
     $role_member->save(0);
 
     // Vorstand
@@ -572,8 +572,8 @@ elseif($req_mode == 7)
     $role_management->setValue("rol_mail_logout", 1);
     $role_management->setValue("rol_mail_login", 1);
     $role_management->setValue("rol_profile", 1);
-	$role_management->setValue("rol_this_list_view", 1);
-	$role_management->setValue("rol_all_lists_view", 1);
+    $role_management->setValue("rol_this_list_view", 1);
+    $role_management->setValue("rol_all_lists_view", 1);
     $role_management->save(0);
 
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
