@@ -109,16 +109,31 @@ class File extends TableAccess
 
             }
         }
-
     }
+
+
+    //Gibt den kompletten Pfad der Datei zurueck
+    function getCompletePathOfFile()
+    {
+		//Dateinamen und Pfad zusammen setzen
+		$fileName     = $this->getValue("fil_name");
+		$folderPath   = $this->getValue("fol_path");
+		$folderName   = $this->getValue("fol_name");
+		$completePath = SERVER_PATH. $folderPath. "/". $folderName. "/". $fileName;
+
+		return $completePath;
+    }
+
 
     // die Methode wird innerhalb von delete() aufgerufen
     //und loescht das File physikalisch von der Platte bevor es aus der DB geloescht wird
     function _delete()
     {
-        //TODO:File physikalisch loeschen
+    	@chmod($this->getCompletePathOfFile(), 0777);
+        @unlink($this->getCompletePathOfFile());
 
-
+        //Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
+        //damit der Eintrag aus der DB verschwindet.
         return true;
     }
 

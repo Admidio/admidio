@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Datenkonvertierung fuer die Version 1.5
+ * Datenkonvertierung fuer die Version 2.0
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -87,7 +87,7 @@ $g_db->query($sql);
 $usf_id_gender = $g_db->insert_id();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_mandatory, usf_sequence)
-                                   VALUES ($cat_id_stammdaten, 'EMAIL',  'E-Mail', 'Es muss eine gültige E-Mail-Adresse angegeben werden.<br />' + 
+                                   VALUES ($cat_id_stammdaten, 'EMAIL',  'E-Mail', 'Es muss eine gültige E-Mail-Adresse angegeben werden.<br />' +
                                                                'Ohne diese kann das Programm nicht genutzt werden.', 1, 1, 12) ";
 $g_db->query($sql);
 $usf_id_email = $g_db->insert_id();
@@ -99,16 +99,16 @@ $usf_id_homepage = $g_db->insert_id();
 
 
 // Termine auf "ganztaegig" konvertieren
-$sql = "UPDATE ". TBL_DATES. " SET dat_all_day = 1 
+$sql = "UPDATE ". TBL_DATES. " SET dat_all_day = 1
          WHERE date_format(dat_begin, '%H:%i:%s') = '00:00:00'
            AND date_format(dat_end, '%H:%i:%s') = '00:00:00' ";
 $g_db->query($sql);
 
-$sql = "UPDATE ". TBL_DATES. " SET dat_end = date_add(dat_end, interval 1 day) 
+$sql = "UPDATE ". TBL_DATES. " SET dat_end = date_add(dat_end, interval 1 day)
          WHERE dat_all_day = 1 ";
 $g_db->query($sql);
 
-$sql = "DELETE FROM ". TBL_DATES. " 
+$sql = "DELETE FROM ". TBL_DATES. "
          WHERE dat_begin = '0000-00-00 00:00:00' ";
 $g_db->query($sql);
 
@@ -175,7 +175,7 @@ while($row_orga = $g_db->fetch_object($result_orga))
     $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '0'
              WHERE prf_name = 'lists_members_per_page' ";
     $g_db->query($sql);
-    
+
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_cat_id = $cat_id_data
              WHERE usf_org_shortname = '$row_orga->org_shortname' ";
     $g_db->query($sql);
@@ -183,7 +183,7 @@ while($row_orga = $g_db->fetch_object($result_orga))
     // Datenbank-Versionsnummer schreiben
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($row_orga->org_id, 'db_version', '2.0.0') ";
-    $g_db->query($sql);    
+    $g_db->query($sql);
 }
 
 // Messenger-Felder aktualisieren
@@ -201,8 +201,8 @@ $sql = "ALTER TABLE ". TBL_USER_FIELDS. " CHANGE COLUMN `usf_cat_id` `usf_cat_id
 $g_db->query($sql);
 
 // Orga-Felder zur Sortierung durchnummerieren
-$sql = "SELECT * FROM ". TBL_USER_FIELDS. " 
-         WHERE usf_sequence = 0 
+$sql = "SELECT * FROM ". TBL_USER_FIELDS. "
+         WHERE usf_sequence = 0
          ORDER BY usf_cat_id, usf_name ";
 $result_usf = $g_db->query($sql);
 $cat_id_merker = 0;
@@ -215,16 +215,16 @@ while($row_usf = $g_db->fetch_array($result_usf))
         $sequence = 1;
         $cat_id_merker = $row_usf['usf_cat_id'];
     }
-    $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_sequence = $sequence 
+    $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_sequence = $sequence
              WHERE usf_id = ". $row_usf['usf_id'];
     $g_db->query($sql);
-    
+
     $sequence++;
 }
 
 // Reihenfolgenummern bei den Kategorien anlegen (USF existiert schon)
-$sql = "SELECT * FROM ". TBL_CATEGORIES. " 
-         WHERE cat_sequence = 0 
+$sql = "SELECT * FROM ". TBL_CATEGORIES. "
+         WHERE cat_sequence = 0
            AND cat_type    <> 'USF'
          ORDER BY cat_type, cat_org_id, cat_name ";
 $result_cat = $g_db->query($sql);
@@ -241,10 +241,10 @@ while($row_cat = $g_db->fetch_array($result_cat))
         $org_id_merker = $row_cat['cat_org_id'];
         $type_merker = $row_cat['cat_type'];
     }
-    $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = $sequence 
+    $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = $sequence
              WHERE cat_id = ". $row_cat['cat_id'];
     $g_db->query($sql);
-    
+
     $sequence++;
 }
 
@@ -263,5 +263,23 @@ $sql = "ALTER TABLE ". TBL_USERS. " DROP COLUMN `usr_last_name`,
          DROP COLUMN `usr_email`,
          DROP COLUMN `usr_homepage` ";
 $g_db->query($sql);
+
+
+//Fuer das neue Downloadmodul wird der Root-Ordner schon einmal fuer jede Orga in der DB eingetragen
+$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
+$result_orga = $g_db->query($sql);
+
+while($g_db->fetch_object($result_orga))
+{
+
+	$sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type,
+										   fol_name, fol_path,
+										   fol_locked, fol_public,
+										   fol_timestamp)
+	                                VALUES ($row_orga->org_id, 'DOWNLOAD',
+	                                		'download', '/adm_my_files',
+	                                		0,1,SYSDATE())";
+	$g_db->query($sql);
+}
 
 ?>

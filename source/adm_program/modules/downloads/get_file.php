@@ -52,12 +52,9 @@ if (!$file->getValue('fil_id'))
 	$g_message->show("invalid");
 }
 
+//kompletten Pfad der Datei holen
+$completePath = $file->getCompletePathOfFile();
 
-//Dateinamen und Pfad zusammen setzen
-$fileName     = $file->getValue("fil_name");
-$folderPath   = $file->getValue("fol_path");
-$folderName   = $file->getValue("fol_name");
-$completePath = SERVER_PATH. "/adm_my_files/downloads/". $folderPath. "/". $folderName. "/". $fileName;
 
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
@@ -66,8 +63,7 @@ if (!file_exists($completePath))
 }
 
 //Downloadcounter inkrementieren
-$newCounter = $file->getValue("fil_counter") + 1;
-$file->setValue("fil_counter",$newCounter);
+$file->setValue("fil_counter",$file->getValue("fil_counter") + 1);
 $file->save();
 
 
