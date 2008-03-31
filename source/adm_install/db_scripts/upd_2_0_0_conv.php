@@ -184,6 +184,13 @@ while($row_orga = $g_db->fetch_object($result_orga))
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES ($row_orga->org_id, 'db_version', '2.0.0') ";
     $g_db->query($sql);
+
+    //Fuer das neue Downloadmodul wird der Root-Ordner in die DB eingetragen
+    $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
+										   fol_locked, fol_public, fol_timestamp)
+	                               VALUES ($row_orga->org_id, 'DOWNLOAD', 'download', '/adm_my_files',
+	                                		0,1,SYSDATE())";
+	$g_db->query($sql);
 }
 
 // Messenger-Felder aktualisieren
@@ -263,23 +270,5 @@ $sql = "ALTER TABLE ". TBL_USERS. " DROP COLUMN `usr_last_name`,
          DROP COLUMN `usr_email`,
          DROP COLUMN `usr_homepage` ";
 $g_db->query($sql);
-
-
-//Fuer das neue Downloadmodul wird der Root-Ordner schon einmal fuer jede Orga in der DB eingetragen
-$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
-$result_orga = $g_db->query($sql);
-
-while($g_db->fetch_object($result_orga))
-{
-
-	$sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type,
-										   fol_name, fol_path,
-										   fol_locked, fol_public,
-										   fol_timestamp)
-	                                VALUES ($row_orga->org_id, 'DOWNLOAD',
-	                                		'download', '/adm_my_files',
-	                                		0,1,SYSDATE())";
-	$g_db->query($sql);
-}
 
 ?>

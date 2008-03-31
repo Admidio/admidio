@@ -509,12 +509,9 @@ elseif($req_mode == 7)
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
-    $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type,
-										   fol_name, fol_path,
-										   fol_locked, fol_public,
-										   fol_timestamp)
-	                                VALUES ($g_current_organization->getValue, 'DOWNLOAD',
-	                                		'download', '/adm_my_files',
+    $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
+										   fol_locked, fol_public, fol_timestamp)
+	                                VALUES ($g_current_organization->getValue, 'DOWNLOAD', 'download', '/adm_my_files',
 	                                		0,1,SYSDATE())";
     $db->query($sql);
 
