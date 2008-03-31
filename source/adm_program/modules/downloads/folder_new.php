@@ -2,9 +2,9 @@
 /******************************************************************************
  * Neuen Ordner Anlegen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Martin Günzler
+ * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
@@ -40,8 +40,10 @@ if (array_key_exists("folder_id", $_GET))
 }
 else
 {
-    $folder_id = 0;
+    // ohne FolderId gehts auch nicht weiter
+    $g_message->show("invalid");
 }
+
 
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -56,8 +58,19 @@ else
    $form_values['new_folder'] = null;
 }
 
-//TODO: Informationen zum uebergeordnetenOrdner aus der DB holen
-$parentFolderName = "OrdnerName"; //fuellen mit krempel aus der DB...
+//Folderobject erstellen
+$folder = new Folder($g_db);
+$folder->getFolderForDownload($folder_id);
+
+//pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+if (!$folder->getValue('fol_id'))
+{
+    //Datensatz konnte nicht in DB gefunden werden...
+    $g_message->show("invalid");
+}
+
+$parentFolderName = $folder->getValue('fol_name');
+
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Ordner erstellen";

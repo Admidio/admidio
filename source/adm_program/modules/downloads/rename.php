@@ -17,6 +17,8 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/file_class.php");
+require("../../system/folder_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -60,9 +62,9 @@ else
 
 if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
 {
-	//Es muss entweder eine FileID ODER eine FolderId uebergeben werden
-	//beides ich auch nicht erlaubt
-	$g_message->show("invalid");
+    //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
+    //beides ist auch nicht erlaubt
+    $g_message->show("invalid");
 }
 
 
@@ -78,8 +80,37 @@ else
    $form_values['new_name'] = null;
 }
 
-//TODO: Informationen zur Datei/Ordner aus der DB holen
-$originalName = "AlterName"; //fuellen mit krempel aus der DB...
+//Informationen zur Datei/Ordner aus der DB holen,
+//falls keine Daten gefunden wurden gibt es die Standardfehlermeldung (invalid)
+if ($file_id) {
+    $class = new File($g_db);
+    $class->getFileForDownload($file_id);
+}
+else {
+    $class = new Folder($g_db);
+    $class->getFolderForDownload($folder_id);
+}
+
+if (is_a($class,'File')) {
+    if ($class->getValue('fil_id')) {
+        $originalName = $class->getValue('fil_name');
+    }
+    else {
+        $g_message->show("invalid");
+    }
+
+}
+else {
+if ($class->getValue('fol_id')) {
+        $originalName = $class->getValue('fol_name');
+    }
+    else {
+        $g_message->show("invalid");
+    }
+
+}
+
+
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Umbenennen";
