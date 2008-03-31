@@ -15,6 +15,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/folder_class.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -46,7 +47,8 @@ if (array_key_exists("folder_id", $_GET))
 }
 else
 {
-    $folder_id = 0;
+    // ohne FolderId gehts auch nicht weiter
+    $g_message->show("invalid");
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -61,8 +63,18 @@ else
    $form_values['new_name'] = null;
 }
 
-//TODO: Informationen zum Ordner aus der DB holen
-$parentFolderName = "OrdnerName"; //fuellen mit krempel aus der DB...
+//Folderobject erstellen
+$folder = new Folder($g_db);
+$folder->getFolderForDownload($folder_id);
+
+//pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+if (!$folder->getValue('fol_id'))
+{
+    //Datensatz konnte nicht in DB gefunden werden...
+    $g_message->show("invalid");
+}
+
+$parentFolderName = $folder->getValue('fol_name');
 
 
 // Html-Kopf ausgeben
@@ -96,7 +108,10 @@ echo "
                     <dt><label for=\"new_name\">Neuer Dateiname:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"". $form_values['new_name']. "\" />
-                        &nbsp;(optional)<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" titel=\"Hilfe\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                        &nbsp;(optional)
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" titel=\"Hilfe\"
+                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\"
+                        onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname',this);\" onmouseout=\"ajax_hideTooltip()\" />
                     </dd>
                 </dl>
             </li>
