@@ -102,7 +102,7 @@ create table %PRAEFIX%_folders
    fol_fol_id_parent              int(11) unsigned,
    fol_type                       varchar(10)                    not null,
    fol_name                       varchar(255)                   not null,
-   fol_path                       text                           not null,
+   fol_path                       varchar(255)                   not null,
    fol_locked                     tinyint (1) unsigned           not null default 0,
    fol_public                     tinyint (1) unsigned           not null default 0,
    fol_timestamp                  datetime                       not null,

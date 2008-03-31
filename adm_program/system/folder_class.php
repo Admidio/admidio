@@ -50,6 +50,7 @@ class File extends TableAccess
         }
     }
 
+
     // Folder mit der uebergebenen ID aus der Datenbank auslesen
     function getFolder($folder_id)
     {
@@ -59,6 +60,7 @@ class File extends TableAccess
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
         $this->readData($folder_id, $condition);
     }
+
 
 	// Folder mit der uebergebenen ID aus der Datenbank fuer das Downloadmodul auslesen
     function getFolderForDownload($folder_id)
@@ -101,6 +103,7 @@ class File extends TableAccess
 	        }
         }
     }
+
 
     // Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
     function getFolderContentsForDownload()
@@ -204,6 +207,19 @@ class File extends TableAccess
         return $completeFolder;
     }
 
+
+	//Gibt den kompletten Pfad des Ordners zurueck
+    function getCompletePathOfFolder()
+    {
+		//Pfad zusammen setzen
+		$folderPath   = $this->getValue("fol_path");
+		$folderName   = $this->getValue("fol_name");
+		$completePath = SERVER_PATH. $folderPath. "/". $folderName;
+
+		return $completePath;
+    }
+
+
     // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
     // und all seinen Unterordnern rekursiv
 	function editPublicFlagOnFolder($public_flag, $folder_id = 0)
@@ -234,7 +250,8 @@ class File extends TableAccess
 
     }
 
-	// Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
+
+    // Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
 	// und allen darin enthaltenen Unterordnern und Dateien rekursiv
 	function editLockedFlagOnFolder($locked_flag, $folder_id = 0)
     {
@@ -268,7 +285,6 @@ class File extends TableAccess
                         WHERE fil_fol_id = $folder_id";
         $this->db->query($sql_update);
     }
-
 
 
     // die Methode wird innerhalb von delete() aufgerufen und entsorgt die Referenzen des Datensatzes
@@ -309,11 +325,62 @@ class File extends TableAccess
         $this->db->query($sql_delete_folder);
 
 
-        //TODO:Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
+        //Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
+    	if ($folder_id = 0)
+		{
+			$folderPath = $this->getCompletePathOfFolder();
+			$this->_deleteInFilesystem($folderPath, true);
+		}
 
-        return true;
+        //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
+		return true;
 
     }
+
+	//interne Funktion, die einen Ordner mit allen Inhalten rekursiv loescht
+    function _deleteInFilesystem($folder, $initialCall = false)
+    {
+        $dh  = @opendir($folder);
+        if($dh)
+        {
+            while (false !== ($filename = readdir($dh)))
+            {
+                if($filename != "." && $filename != "..")
+                {
+                    $act_folder_entry = "$folder/$filename";
+
+                    if(is_dir($act_folder_entry))
+                    {
+                        // nun den entsprechenden Ordner loeschen
+                        $this->deleteInFilesystem($act_folder_entry);
+                        @chmod($act_folder_entry, 0777);
+                        @rmdir($act_folder_entry);
+
+                    }
+                    else
+                    {
+                        // die Datei loeschen
+                        if(file_exists($act_folder_entry))
+                        {
+                            @chmod($act_folder_entry, 0777);
+                            @unlink($act_folder_entry);
+
+                        }
+                    }
+                }
+            }
+            closedir($dh);
+        }
+
+        if ($initialCall)
+        {
+        	//Den Ursprungsordner natuerlich auch noch loeschen
+        	@chmod($folder, 0777);
+            @rmdir($folder);
+        }
+
+    }
+
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen

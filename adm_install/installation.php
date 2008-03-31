@@ -70,7 +70,7 @@ if($req_mode == 1)
     session_destroy();
     $message = '<strong>Willkommen zur Installation von Admidio</strong><br /><br />
                 Auf den nächsten Seiten müssen Sie einige notwendige Informationen für die Einrichtung
-                von Admidio eingeben. Sie benötigen dazu unter anderem die Zugangsdaten zu der 
+                von Admidio eingeben. Sie benötigen dazu unter anderem die Zugangsdaten zu der
                 Datenbank, auf der Admidio zukünftig laufen soll.';
     showPage($message, "installation.php?mode=2", "forward.png", "Datenbank Zugangsdaten");
 }
@@ -95,10 +95,10 @@ elseif($req_mode == 2)
     }
 
     $message = '<strong>Zugangsdaten zur Datenbank eingeben</strong><br /><br />
-                Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das 
-                Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere 
+                Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das
+                Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere
                 Admidio-Installationen auf derselben Datenbank einrichten möchten.
-                
+
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Zugangsdaten zur Datenbank</div>
                     <div class="groupBoxBody">
@@ -142,7 +142,7 @@ elseif($req_mode == 2)
 elseif($req_mode == 3)
 {
     // Organisationsnamen eingeben
-    
+
     if(isset($_POST['server']))
     {
         if(strlen($_POST['praefix']) == 0)
@@ -166,14 +166,14 @@ elseif($req_mode == 3)
                 showPage($message, "installation.php?mode=2", "back.png", "Zurück");
             }
         }
-        
+
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
         $_SESSION['server']   = strStripTags($_POST['server']);
         $_SESSION['user']     = strStripTags($_POST['user']);
         $_SESSION['password'] = strStripTags($_POST['password']);
         $_SESSION['database'] = strStripTags($_POST['database']);
         $_SESSION['praefix']  = strStripTags($_POST['praefix']);
-    
+
         if(strlen($_SESSION['server'])   == 0
         || strlen($_SESSION['user'])     == 0
         || strlen($_SESSION['database']) == 0 )
@@ -181,18 +181,18 @@ elseif($req_mode == 3)
             $message   = "Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !";
             showPage($message, "installation.php?mode=2", "back.png", "Zurück");
         }
-        
+
         // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
         $db = new MySqlDB();
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
             $message   = "Mit Ihren Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden !<br /><br />
-                          Korrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie, 
+                          Korrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie,
                           ob die Datenbank online ist.";
             showPage($message, "installation.php?mode=2", "back.png", "Zurück");
         }
     }
-    
+
     // Formular vorbelegen
     if(isset($_SESSION['orga_name_short']))
     {
@@ -204,11 +204,11 @@ elseif($req_mode == 3)
         $orga_name_short = "";
         $orga_name_long  = "";
     }
-    
+
     $message = '<strong>Organisation festlegen</strong><br /><br />
                 Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein
                 ein, für die Sie Admidio nutzen möchten.
-                
+
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Name der Organisation</div>
                     <div class="groupBoxBody">
@@ -229,18 +229,18 @@ elseif($req_mode == 3)
                     </div>
                 </div>
                 <br />';
-    showPage($message, "installation.php?mode=4", "forward.png", "Administrator anlegen", "orga_name_short");    
+    showPage($message, "installation.php?mode=4", "forward.png", "Administrator anlegen", "orga_name_short");
 }
 elseif($req_mode == 4)
 {
     // Daten des Administrator eingeben
-    
+
     if(isset($_POST['orga_name_short']))
     {
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
         $_SESSION['orga_name_short'] = strStripTags($_POST['orga_name_short']);
         $_SESSION['orga_name_long']  = strStripTags($_POST['orga_name_long']);
-    
+
         if(strlen($_SESSION['orga_name_short']) == 0
         || strlen($_SESSION['orga_name_long']) == 0 )
         {
@@ -248,7 +248,7 @@ elseif($req_mode == 4)
             showPage($message, "installation.php?mode=3", "back.png", "Zurück");
         }
     }
-    
+
     // Formular vorbelegen
     if(isset($_SESSION['user_last_name']))
     {
@@ -267,7 +267,7 @@ elseif($req_mode == 4)
     $message = '<strong>Administrator anlegen</strong><br /><br />
                 Geben Sie in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an.
                 Mit diesem Benutzer können Sie sich nach der Installation bei Admidio anmelden.
-                
+
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Daten des Administrators</div>
                     <div class="groupBoxBody">
@@ -312,7 +312,7 @@ elseif($req_mode == 4)
                     </div>
                 </div>
                 <br />';
-    showPage($message, "installation.php?mode=5", "forward.png", "Konfigurationsdatei erzeugen", "user_last_name");    
+    showPage($message, "installation.php?mode=5", "forward.png", "Konfigurationsdatei erzeugen", "user_last_name");
 }
 elseif($req_mode == 5)
 {
@@ -330,7 +330,7 @@ elseif($req_mode == 5)
 
         if(strlen($_SESSION['user_last_name'])  == 0
         || strlen($_SESSION['user_first_name']) == 0
-        || strlen($_SESSION['user_email'])      == 0 
+        || strlen($_SESSION['user_email'])      == 0
         || strlen($_SESSION['user_login'])      == 0
         || strlen($_SESSION['user_password'])   == 0 )
         {
@@ -344,19 +344,19 @@ elseif($req_mode == 5)
             showPage($message, "installation.php?mode=4", "back.png", "Zurück");
         }
     }
-    
+
     $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
                 Laden Sie die Konfigurationsdatei <strong>config.php</strong> herunter und kopieren Sie
                 diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine <i>config_default.php</i>.<br /><br />
                 Erst nachdem Sie die Datei dort abgelegt haben, können Sie mit der Installation fortfahren.<br /><br />
-                
+
                 <span class="iconTextLink">
                     <a href="installation.php?mode=6"><img
                     src="../adm_themes/classic/icons/page_white_put.png" alt="config.php herunterladen" /></a>
                     <a href="installation.php?mode=6">config.php herunterladen</a>
                 </span>
                 <br />';
-    showPage($message, "installation.php?mode=7", "database_in.png", "Admidio installieren", "next_page");    
+    showPage($message, "installation.php?mode=7", "database_in.png", "Admidio installieren", "next_page");
 }
 elseif($req_mode == 6)
 {
@@ -386,7 +386,7 @@ elseif($req_mode == 6)
     // die erstellte Config-Datei an den User schicken
     $file_name   = "config.php";
     $file_length = strlen($file_content);
-    
+
     header("Content-Type: text/plain; charset=utf-8");
     header("Content-Length: $file_length");
     header("Content-Disposition: attachment; filename=$file_name");
@@ -396,22 +396,22 @@ elseif($req_mode == 6)
 elseif($req_mode == 7)
 {
     // Installation starten
-    
+
     if(file_exists("../config.php") == false)
     {
         $message = "Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
                     Laden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.";
         showPage($message, "installation.php?mode=5", "back.png", "Zurück");
     }
-    
+
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(120);
-    
+
      // Verbindung zu Datenbank herstellen
     $db = new MySqlDB();
     $connection = $db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']);
- 
+
     $filename = "db_scripts/db.sql";
     $file     = fopen($filename, "r")
                 or showPage("Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.", "installation.php?mode=5", "back.png", "Zurück");
@@ -446,7 +446,7 @@ elseif($req_mode == 7)
     $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_disabled, usf_mandatory, usf_sequence)
                                        VALUES ($cat_id_stammdaten, 'TEXT', 'Nachname', NULL, 1, 1, 1, 1)
                                             , ($cat_id_stammdaten, 'TEXT', 'Vorname', NULL, 1, 1, 1, 2)
-                                            , ($cat_id_stammdaten, 'TEXT', 'Adresse', NULL, 1, 0, 0, 3) 
+                                            , ($cat_id_stammdaten, 'TEXT', 'Adresse', NULL, 1, 0, 0, 3)
                                             , ($cat_id_stammdaten, 'TEXT', 'PLZ', NULL, 1, 0, 0, 4)
                                             , ($cat_id_stammdaten, 'TEXT', 'Ort', NULL, 1, 0, 0, 5)
                                             , ($cat_id_stammdaten, 'TEXT', 'Land', NULL, 1, 0, 0, 6)
@@ -463,14 +463,14 @@ elseif($req_mode == 7)
 
     // Messenger anlegen
     $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_sequence)
-                                       VALUES ($cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 0, 1) 
+                                       VALUES ($cat_id_messenger, 'TEXT', 'AIM', 'AOL Instant Messenger', 0, 1)
                                             , ($cat_id_messenger, 'TEXT', 'Google Talk', 'Google Talk', 0, 2)
-                                            , ($cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 0, 3) 
+                                            , ($cat_id_messenger, 'TEXT', 'ICQ', 'ICQ', 0, 3)
                                             , ($cat_id_messenger, 'TEXT', 'MSN', 'MSN Messenger', 0, 4)
-                                            , ($cat_id_messenger, 'TEXT', 'Skype', 'Skype', 0, 5) 
+                                            , ($cat_id_messenger, 'TEXT', 'Skype', 'Skype', 0, 5)
                                             , ($cat_id_messenger, 'TEXT', 'Yahoo', 'Yahoo! Messenger', 0, 6)  ";
-    $db->query($sql); 
-    
+    $db->query($sql);
+
     // Organisationsobjekt erstellen
     $g_current_organization = new Organization($db, $_SESSION['orga_name_short']);
 
@@ -478,28 +478,28 @@ elseif($req_mode == 7)
     $g_current_organization->setValue("org_longname",  $_SESSION['orga_name_long']);
     $g_current_organization->setValue("org_homepage",  $_SERVER['HTTP_HOST']);
     $g_current_organization->save();
-    
+
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include("db_scripts/preferences.php");
-    
+
     foreach($orga_preferences as $key => $value)
     {
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                            VALUES (". $g_current_organization->getValue("org_id"). ", '$key', '$value') ";
         $db->query($sql);
     }
-    
+
     // Datenbank-Versionsnummer schreiben
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES (". $g_current_organization->getValue("org_id"). ", 'db_version', '". ADMIDIO_VERSION. "') ";
-    $db->query($sql);    
-    
+    $db->query($sql);
+
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                            VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";
     $db->query($sql);
     $category_common = $db->insert_id();
-    
+
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                       VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
@@ -507,6 +507,17 @@ elseif($req_mode == 7)
                                            , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
                                            , (NULL, 'USF', 'Zusätzliche Daten', 0, 2) ";
     $db->query($sql);
+
+    //DefaultOrdner fuer Downloadmodul in der DB anlegen:
+    $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type,
+										   fol_name, fol_path,
+										   fol_locked, fol_public,
+										   fol_timestamp)
+	                                VALUES ($g_current_organization->getValue, 'DOWNLOAD',
+	                                		'download', '/adm_my_files',
+	                                		0,1,SYSDATE())";
+    $db->query($sql);
+
 
     // User Webmaster anlegen
     $g_current_user = new User($db);
@@ -517,7 +528,7 @@ elseif($req_mode == 7)
     $g_current_user->setValue("usr_password", md5($_SESSION['user_password']));
     $g_current_user->b_set_last_change = false;
     $g_current_user->save();
-    
+
     // nun die Default-Rollen anlegen
 
     // Webmaster
@@ -567,18 +578,18 @@ elseif($req_mode == 7)
 	$role_management->setValue("rol_this_list_view", 1);
 	$role_management->setValue("rol_all_lists_view", 1);
     $role_management->save(0);
-    
+
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) 
+                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1)
                                         , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
     $db->query($sql);
-    
+
     // Daten der Session loeschen
     unset($_SESSION['g_current_organisation']);
     unset($_SESSION['g_preferences']);
     unset($_SESSION['g_current_user']);
-    
+
     $message = '<strong>Die Installation war erfolgreich</strong><br /><br />
                 Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet.
                 Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.';
@@ -587,7 +598,7 @@ elseif($req_mode == 7)
         $message = $message. '<br /><br />Zuvor sollten Sie allerdings dem Ordner <strong>adm_my_files</strong>
                    Schreibrechte geben. Ohne diese können Sie keine Fotos oder Dateien hochladen.';
     }
-    showPage($message, "../adm_program/index.php", "application_view_list.png", "Übersichtsseite");    
+    showPage($message, "../adm_program/index.php", "application_view_list.png", "Übersichtsseite");
 }
 
 ?>
