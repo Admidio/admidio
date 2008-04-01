@@ -59,26 +59,27 @@ function ajax_loadContent(divId,url)
 		url = url.replace(string,'');
 	}
 	
-	dynamicContent_ajaxObjects[ajaxIndex].requestFile = url;	// Specifying which file to get
-	dynamicContent_ajaxObjects[ajaxIndex].onCompletion = function(){ ajax_showContent(divId,ajaxIndex,url); };	// Specify function that will be executed after file has been found
-	dynamicContent_ajaxObjects[ajaxIndex].runAJAX();		// Execute AJAX function	
+	dynamicContent_ajaxObjects[ajaxIndex].requestFile = url;
+	dynamicContent_ajaxObjects[ajaxIndex].onCompletion = function(){ ajax_showContent(divId,ajaxIndex,url); };
+	dynamicContent_ajaxObjects[ajaxIndex].runAJAX();
 }
 
 function ajax_showTooltip(externalFile,inputObj)
 {
-	if(!ajax_tooltipObj)	/* Tooltip div not created yet ? */
+	if(!ajax_tooltipObj)
 	{
 		ajax_tooltipObj = document.createElement('DIV');
 		ajax_tooltipObj.style.position = 'absolute';
 		ajax_tooltipObj.id = 'ajax_tooltipObj';		
 		document.body.appendChild(ajax_tooltipObj);
 
-		var contentDiv = document.createElement('DIV'); /* Create tooltip content div */
+		var contentDiv = document.createElement('DIV');
 		contentDiv.className = 'ajax_tooltip_content';
 		ajax_tooltipObj.appendChild(contentDiv);
 		contentDiv.id = 'ajax_tooltip_content';
 		
-		if(ajax_tooltip_MSIE){	/* Create iframe object for MSIE in order to make the tooltip cover select boxes */
+		if(ajax_tooltip_MSIE)
+		{
 			ajax_tooltipObj_iframe = document.createElement('<IFRAME frameborder="0">');
 			ajax_tooltipObj_iframe.style.position = 'absolute';
 			ajax_tooltipObj_iframe.border='0';
@@ -92,7 +93,6 @@ function ajax_showTooltip(externalFile,inputObj)
 
 			
 	}
-	// Find position of tooltip
 	ajax_loadContent('ajax_tooltip_content',externalFile);
 	if(ajax_tooltip_MSIE){
 		ajax_tooltipObj_iframe.style.width = ajax_tooltipObj.clientWidth + 'px';
@@ -104,8 +104,6 @@ function ajax_positionTooltip()
 {
 	positiontooltip = true;
 }
-
-
 function ajax_hideTooltip()
 {
 	positiontooltip = false;
@@ -114,8 +112,8 @@ function ajax_hideTooltip()
 		ajax_tooltipObj.style.display='none';
 	}
 }
-
-function sack(file){
+function sack(file)
+{
 	this.AjaxFailedAlert = "Dein Browser unterstützt nicht die erweiterte Funktionalität der Website!\n";
 	this.requestFile = file;
 	this.method = "POST";
@@ -251,8 +249,8 @@ function mouseMove(evt)
 {
 	if(positiontooltip == true && ajax_tooltipObj)
 	{
-		var offsetfromcursorX=15; //Customize x offset of tooltip
-		var offsetfromcursorY=15; //Customize y offset of tooltip
+		var offsetfromcursorX=15;
+		var offsetfromcursorY=15;
 		var ie=document.all;
 		var ns6=document.getElementById && !document.all;
 		var curX=(ns6)?evt.pageX : evt.clientX+ietruebody().scrollLeft;
@@ -262,29 +260,36 @@ function mouseMove(evt)
 		var rightedge=ie&&!window.opera? winwidth-evt.clientX-offsetfromcursorX : winwidth-evt.clientX-offsetfromcursorX;
 		var bottomedge=ie&&!window.opera? winheight-evt.clientY-offsetfromcursorY : winheight-evt.clientY-offsetfromcursorY;
 		var leftedge=(offsetfromcursorX<0)? offsetfromcursorX*(-1) : -1000;
-
 		var tipobj = ajax_tooltipObj;
-		
-		//if the horizontal distance isn't enough to accomodate the width of the context menu
-		if (rightedge<tipobj.offsetWidth)
+		if (curX-offsetfromcursorX-tipobj.offsetWidth<0 && rightedge<tipobj.offsetWidth)
 		{
-			//move the horizontal position of the menu to the left by it's width
-			tipobj.style.left=curX-tipobj.offsetWidth+offsetfromcursorX+"px";
+			tipobj.style.left=ietruebody().scrollLeft+"5px";
 		}
-		else if (curX<leftedge)
+		else if(rightedge<tipobj.offsetWidth)
 		{
-			tipobj.style.left="50px";
+			tipobj.style.left=curX-tipobj.offsetWidth+offsetfromcursorX+"px";
 		}
 		else
 		{
-			//position the horizontal position of the menu where the mouse is positioned
 			tipobj.style.left=curX+offsetfromcursorX+"px";
 		}
-		
-		//same concept with the vertical position
-		if (bottomedge<tipobj.offsetHeight)
+		if(curY-offsetfromcursorY-tipobj.offsetHeight<0 && rightedge>tipobj.offsetWidth)
 		{
-			tipobj.style.top=curY-tipobj.offsetHeight-offsetfromcursorY+"px";
+			tipobj.style.top=ietruebody().scrollTop+"5px";
+		}
+		else if (curY-offsetfromcursorY-tipobj.offsetHeight<0 && rightedge<tipobj.offsetWidth)
+		{
+			tipobj.style.top=ietruebody().scrollTop+"5px";
+			tipobj.style.left=curX-tipobj.offsetWidth-offsetfromcursorX+"px";
+		}
+		else if (bottomedge<tipobj.offsetHeight && rightedge>tipobj.offsetWidth)
+		{
+			tipobj.style.top=ietruebody().scrollTop+offsetfromcursorY+"px";	
+		}
+		else if (bottomedge<tipobj.offsetHeight && rightedge<tipobj.offsetWidth)
+		{
+			tipobj.style.top=ietruebody().scrollTop+offsetfromcursorY+"px";
+			tipobj.style.left=curX-tipobj.offsetWidth-offsetfromcursorX+"px";
 		}
 		else
 		{
