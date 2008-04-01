@@ -321,8 +321,10 @@ $javascript='
 		var externdiv = \'extern\';
 		var switchdiv = \'externSwitch\';
 		var textinputid = \'Nachricht\';
+		var counterdiv	= \'counter\'
 		var max_recipients = '.$g_preferences['ecard_cc_recipients'].';
 		var now_recipients = 0;
+		var ecardformid = \'ecard_form\';
 
 		var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
 		var bbcodes = Array(\'[b]\',\'[\/b]\',\'[u]\',\'[\/u]\',\'[i]\',\'[\/i]\',\'[big]\',\'[\/big]\',\'[small]\',\'[\/small]\',\'[center]\',\'[\/center]\',\'[url='.$g_root_path.']\',\'[\/url]\',\'[email=adresse@demo.de]\',\'[\/email]\',\'[img]\',\'[\/img]\');
@@ -348,14 +350,14 @@ $javascript='
         {
             if (check()) 
             { 
-                document.getElementById("ecard_form").action                 = "'.$HTTP_SERVER_VARS["PHP_SELF"].'?'.$_SERVER['QUERY_STRING'].'";
-                document.getElementById("ecard_form").target                 = "_self";
-                document.getElementById("ecard_form")["submit_action"].value = "send";
-                document.getElementById("ecard_form").submit(); 
+                document.getElementById(ecardformid).action                 = "'.$HTTP_SERVER_VARS["PHP_SELF"].'?'.$_SERVER['QUERY_STRING'].'";
+                document.getElementById(ecardformid).target                 = "_self";
+                document.getElementById(ecardformid)["submit_action"].value = "send";
+                document.getElementById(ecardformid).submit(); 
             }
             else
             {
-                document.getElementById("ecard_form")["submit_action"].value = "";
+                document.getElementById(ecardformid)["submit_action"].value = "";
             }
         } 
         function check() 
@@ -363,39 +365,39 @@ $javascript='
             var error         = false;
             var error_message = "Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:\n\n";
 
-            if (document.getElementById("ecard_form")["ecard[name_sender]"] && document.getElementById("ecard_form")["ecard[name_sender]"].value == "") 
+            if (document.getElementById(ecardformid)["ecard[name_sender]"] && document.getElementById(ecardformid)["ecard[name_sender]"].value == "") 
 			{
                 error = true;
                 error_message += "- Name des Absenders\n";
             } 
  
-            if (document.getElementById("ecard_form")["ecard[email_sender]"] && (document.getElementById("ecard_form")["ecard[email_sender]"].value == "") || 
-               (echeck(document.getElementById("ecard_form")["ecard[email_sender]"].value) == false)) 
+            if (document.getElementById(ecardformid)["ecard[email_sender]"] && (document.getElementById(ecardformid)["ecard[email_sender]"].value == "") || 
+               (echeck(document.getElementById(ecardformid)["ecard[email_sender]"].value) == false)) 
 			{
                 error = true;
                 error_message += "- E-Mail des Absenders\n";
             }
   
-            if (document.getElementById("ecard_form")["ecard[name_recipient]"].value == "" || document.getElementById("ecard_form")["ecard[name_recipient]"].value == "< Empfänger Name >") 
+            if (document.getElementById(ecardformid)["ecard[name_recipient]"] && (document.getElementById(ecardformid)["ecard[name_recipient]"].value == "" || document.getElementById(ecardformid)["ecard[name_recipient]"].value == "< Empfänger Name >")) 
 			{
                 error = true;
                 error_message += "- Name des Empfängers\n";
             } 
-            if ((document.getElementById("ecard_form")["ecard[email_recipient]"].value == "") || 
-               (echeck(document.getElementById("ecard_form")["ecard[email_recipient]"].value) == false)) 
+            if ((document.getElementById(ecardformid)["ecard[email_recipient]"].value == "") || 
+               (echeck(document.getElementById(ecardformid)["ecard[email_recipient]"].value) == false)) 
 			{
                 error = true;
                 error_message += "- E-Mail des Empfängers\n";
         	}
-        	if (document.getElementById("ecard_form")["ecard[message]"].value == "") 
+        	if (document.getElementById(ecardformid)["ecard[message]"].value == "") 
 			{
 				error = true;
 				error_message += "- Eine Nachricht\n";
 			}
 			for(var i=1; i <= now_recipients; i++)
 			{
-				var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
-				var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
+				var namedoc = document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"];
 				var message = "";
 				var goterror = false;		
 				if(namedoc)
@@ -485,10 +487,10 @@ $javascript='
 		}
 		function makePreview() 
 		{
-			document.getElementById("ecard_form").action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'";
+			document.getElementById(ecardformid).action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'";
 			popup_win(\'\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=1024,height=1024\');
-			document.getElementById("ecard_form").target = "ecard_preview";
-			document.getElementById("ecard_form").submit();
+			document.getElementById(ecardformid).target = "ecard_preview";
+			document.getElementById(ecardformid).submit();
 		}
         function blendout(id)
 		{
@@ -575,11 +577,11 @@ $javascript='
 		}
 		function getMenuRecepientName()
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id=\'+ document.getElementById("ecard_form").rol_id.value , \'dropdownmenu\' );
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id=\'+ document.getElementById(ecardformid).rol_id.value , \'dropdownmenu\' );
 		}
 		function getMenuRecepientNameEmail(usr_id)
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id + \'&rol_id=\'+ document.getElementById("ecard_form").rol_id.value, \'dropdownmenu\' );
+			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id + \'&rol_id=\'+ document.getElementById(ecardformid).rol_id.value, \'dropdownmenu\' );
 			document.getElementById(externdiv).innerHTML = "&nbsp;";
 		}
 		function saveData()
@@ -587,11 +589,11 @@ $javascript='
 			var savedata = new Array();
 			for(var i=1; i <= now_recipients; i++)
 			{
-				var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
-				var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
+				var namedoc = document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"];
 				if(namedoc)
 				{	
-					namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"].value;
+					namedoc = document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"].value;
 				}
 				else
 				{
@@ -599,7 +601,7 @@ $javascript='
 				}
 				if(emaildoc)
 				{
-					emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"].value;
+					emaildoc = 	document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"].value;
 				}
 				else
 				{
@@ -616,8 +618,8 @@ $javascript='
 			var i = 0;
 			for (var i = 0; i < saved_data.length; i++)
 			{				
-				var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
-				var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
+				var namedoc = document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"];	
+				var emaildoc = 	document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"];
 				if(emaildoc)
 				{
 					emaildoc.value = saved_data[i][0];
@@ -670,15 +672,15 @@ $javascript='
 			{
 				for(var i=1; i <= now_recipients; i++)
 				{
-					var namedoc = document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"];	
-					var emaildoc = 	document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"];
+					var namedoc = document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"];	
+					var emaildoc = 	document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"];
 					if(namedoc)
 					{	
-						document.getElementById("ecard_form")["ecard[name_ccrecipient_"+[i]+"]"].value = "";
+						document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"].value = "";
 					}
 					if(emaildoc)
 					{
-						document.getElementById("ecard_form")["ecard[email_ccrecipient_"+[i]+"]"].value = "";
+						document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"].value = "";
 					}
 				}
 			}
@@ -733,8 +735,8 @@ $javascript='
 		}
 		function getSetting(name,input_value)
 		{		
-			document.getElementById("ecard_form")[name].value = input_value;	
-			getTextStyle(\'Nachricht\');	
+			document.getElementById(ecardformid)[name].value = input_value;	
+			getTextStyle(textinputid);	
 		}
 		function showHideMoreRecipient(divLayer,divMenu)
 		{
@@ -798,7 +800,7 @@ $javascript='
 		function countMax() 
 		{
 			max  = '.$g_preferences['ecard_text_length'].';
-			var text = document.getElementById("ecard_form")["ecard[message]"].value;
+			var text = document.getElementById(ecardformid)["ecard[message]"].value;
 			for(var i=0;i<bbcodes.length;i++)
 			{
 				text = text.replace(/\[.*?\]/gi,"").replace (/^\s+/,"").replace (/\s+$/,"");
@@ -807,49 +809,49 @@ $javascript='
 			wert = max - textlenght;
 			if(textlenght > max)
 			{
-				var txtvalue = document.getElementById("ecard_form")["ecard[message]"].value;
-				document.getElementById("ecard_form")["ecard[message]"].value = txtvalue.substr(0, max);
+				var txtvalue = document.getElementById(ecardformid)["ecard[message]"].value;
+				document.getElementById(ecardformid)["ecard[message]"].value = txtvalue.substr(0, max);
 			}
 			if (wert < 0) 
 			{
 				alert("Die Nachricht darf maximal " + max + " Zeichen lang sein.!");
 				wert = 0;
-				document.getElementById("ecard_form")["ecard[message]"].value = document.getElementById("ecard_form")["ecard[message]"].value.substring(0,max);
-				document.getElementById(\'counter\').innerHTML = \'<b>\' + wert + \'<\/b>\';
+				document.getElementById(ecardformid)["ecard[message]"].value = document.getElementById(ecardformid)["ecard[message]"].value.substring(0,max);
+				document.getElementById(counterdiv).innerHTML = \'<b>\' + wert + \'<\/b>\';
 				wert = 0;
 			} 
 			else 
 			{
 			    var zwprodukt = max - textlenght;
-				document.getElementById(\'counter\').innerHTML = \'<b>\' + zwprodukt + \'<\/b>\';
+				document.getElementById(counterdiv).innerHTML = \'<b>\' + zwprodukt + \'<\/b>\';
 			}
 		} // Ende function countMax()
 		function getTextStyle(textdiv)
 		{
-		 	var schrift_size = document.getElementById("ecard_form")["ecard[schrift_size]"].value;
-			var schrift = document.getElementById("ecard_form")["ecard[schriftart_name]"].value;
-			var schrift_farbe = document.getElementById("ecard_form")["ecard[schrift_farbe]"].value;
+		 	var schrift_size = document.getElementById(ecardformid)["ecard[schrift_size]"].value;
+			var schrift = document.getElementById(ecardformid)["ecard[schriftart_name]"].value;
+			var schrift_farbe = document.getElementById(ecardformid)["ecard[schrift_farbe]"].value;
 			var schrift_bold = "";
 			var schrift_italic = "";
-			if(document.getElementById("ecard_form").Bold.checked)
+			if(document.getElementById(ecardformid).Bold.checked)
 			{
 				schrift_bold = "bold";
-				document.getElementById("ecard_form")["ecard[schrift_style_bold]"].value = "bold";
+				document.getElementById(ecardformid)["ecard[schrift_style_bold]"].value = "bold";
 			}
 			else
 			{
-				document.getElementById("ecard_form")["ecard[schrift_style_bold]"].value = "";
+				document.getElementById(ecardformid)["ecard[schrift_style_bold]"].value = "";
 			}
-			if(document.getElementById("ecard_form").Italic.checked)
+			if(document.getElementById(ecardformid).Italic.checked)
 			{
 				schrift_italic = "italic";
-				document.getElementById("ecard_form")["ecard[schrift_style_italic]"].value = "italic";
+				document.getElementById(ecardformid)["ecard[schrift_style_italic]"].value = "italic";
 			}
 			else
 			{
-				document.getElementById("ecard_form")["ecard[schrift_style_italic]"].value = "";
+				document.getElementById(ecardformid)["ecard[schrift_style_italic]"].value = "";
 			}
-			var schrift_farbe = document.getElementById("ecard_form")["ecard[schrift_farbe]"].value;
+			var schrift_farbe = document.getElementById(ecardformid)["ecard[schrift_farbe]"].value;
 			document.getElementById(textdiv).style.font = schrift_bold + \' \'+ schrift_italic + \' \'+ schrift_size + \'px \'+schrift;
 			document.getElementById(textdiv).style.color = schrift_farbe;	
 		}
@@ -1106,7 +1108,7 @@ if (empty($submit_action))
 		                                <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
 		                                    src="'. THEME_PATH. '/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
 		                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe"
-		                                    onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\')" />
+		                                    onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\')" onmouseover="ajax_showTooltip(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" onmouseout="ajax_hideTooltip()" />
 		                            </div>
 								</div>
 							</dd>
@@ -1127,11 +1129,11 @@ if (empty($submit_action))
 							echo '<div id="getmoreSettings" style="';
 							if($g_preferences['enable_ecard_text_length'])
 							{
-								echo 'padding-top:42px;';
+								echo 'padding-top:28px;';
 							}
 							else
 							{
-								echo 'padding-top:170px;';
+								echo 'padding-top:155px;';
 							}
 							echo '  height:1px;">
 								<a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
