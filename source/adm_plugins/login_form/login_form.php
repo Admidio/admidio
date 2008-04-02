@@ -68,7 +68,7 @@ if(isset($plg_rank) == false)
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->select_db($g_adm_db);
+$g_db->setCurrentDB();
 
 if($g_valid_login == 1)
 {

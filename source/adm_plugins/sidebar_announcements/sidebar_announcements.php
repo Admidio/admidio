@@ -7,7 +7,7 @@
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatible ab Admidio-Versions 1.4.1
+ * Kompatible ab Admidio-Versions 2.0.0
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -68,7 +68,7 @@ else
 
 $act_date = date("Y.m.d 00:00:00", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->select_db($g_adm_db);
+$g_db->setCurrentDB();
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "

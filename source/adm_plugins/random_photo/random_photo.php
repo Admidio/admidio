@@ -2,12 +2,12 @@
 /******************************************************************************
  * Random Photo
  *
- * Version 1.0.2
+ * Version 1.1.0
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
  * und verlinkt neben dem Bild das dazugehörige Album
  *
- * Kompatible ab Admidio-Versions 1.4.1
+ * Kompatible ab Admidio-Versions 2.0.0
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -85,7 +85,7 @@ if(!isset($plg_photos_show_link))
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->select_db($g_adm_db);
+$g_db->setCurrentDB();
 
 //Versnstaltungen Aufrufen
 //Bedingungen: Vreigegeben,Anzahllimit, Bilder enthalten 
