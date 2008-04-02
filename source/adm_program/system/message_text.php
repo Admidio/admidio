@@ -154,17 +154,6 @@ $message_text = array(
         Damit du dich erfolgreich anmelden kannst, musst du in deinem Browser
         so einstellen, dass dieser Cookies von %VAR1% akzeptiert.",
 
-    "password_length" =>
-        "Das Passwort muss aus mindestens 6 Zeichen bestehen.",
-
-    "passwords_not_equal" =>
-        "Das Passwort stimmt nicht mit der Wiederholung überein.",
-
-    "password_unknown" =>
-        "Du hast ein falsches Passwort eingegeben und
-        konntest deshalb nicht angemeldet werden.<br /><br />
-        Überprüf bitte dein Passwort und gib dieses dann erneut ein.",
-
     "remove_member" =>
         "Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?",
 
@@ -286,7 +275,24 @@ $message_text = array(
         Dateigröße von %VAR1% B.",
  	//Ende Fehlermeldungen Profilfoto
 	
-	// Passwort verloren
+	// Passwort
+    "password_length" =>
+        "Das Passwort muss aus mindestens 6 Zeichen bestehen.",
+
+    "passwords_not_equal" =>
+        "Das Passwort stimmt nicht mit der Wiederholung überein.",
+
+    "password_unknown" =>
+        "Du hast ein falsches Passwort eingegeben und
+        konntest deshalb nicht angemeldet werden.<br /><br />
+        Überprüf bitte dein Passwort und gib dieses dann erneut ein.",
+		
+    "password_old_wrong" =>
+        "Das alte Passwort ist falsch.",
+
+    "password_changed" =>
+		"Das Passwort wurde erfolgreich geändert.",
+	
 	"lost_password_send" =>
 		"Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!",
 		
@@ -298,15 +304,13 @@ $message_text = array(
 	
 	"lost_password_allready_logged_in" =>
 		"Du bist am System angemeldet folglich kennst du ja dein Passwort!",
-	// Ende Passwort verloren
-	
-	// Password Aktivierung
+		
 	"password_activation_id_not_valid" =>
 		"Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!",
 	
 	"password_activation_password_saved"=>
 		"Das neue Passwort wurde nun übernommen!",
-	//Ende Password Aktivierung
+	//Ende Password
 	
 	// Grußkarte
 	"ecard_send_error"=>

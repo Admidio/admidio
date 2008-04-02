@@ -430,7 +430,9 @@ echo "
                                 if($new_user > 0)
                                 {
                                     echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
+                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+										onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+										onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
                                 }
                             echo "</dd>
                         </dl>
@@ -444,7 +446,9 @@ echo "
                                 <dd>
                                     <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
                                     <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+										onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+										onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
                                 </dd>
                             </dl>
                         </li>
@@ -467,7 +471,7 @@ echo "
                                 <dl>
                                     <dt><label for="password">Passwort:</label></dt>
                                     <dd>
-                                        <button id="password" name="password" type="button" value="Passwort ändern" onclick="window.open(\'password.php?user_id='. $usr_id. '\',\'Titel\',\'width=350,height=260,left=310,top=200\')"><img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" />&nbsp;Passwort ändern</button>
+                                        <button id="password" name="password" type="button" value="Passwort ändern" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=260,left=310,top=200\')"><img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" />&nbsp;Passwort ändern</button>
                                     </dd>
                                 </dl>
                             </li>';

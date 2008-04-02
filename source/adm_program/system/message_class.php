@@ -15,14 +15,18 @@ class Message
     var $variables;
     var $headline;
     var $content;
-    var $inline;
-    var $forward_url;
-    var $timer;
-    var $yes_no_buttons;
+    var $inline;			// wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
+    var $forward_url;		// Url auf die durch den Weiter-Button verwiesen wird
+    var $timer;				// Anzahl ms bis automatisch zu forward_url weitergeleitet wird
+    var $yes_no_buttons;	// Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
+	var $close_button;	// Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
     
     function Message()
     {
-        $this->inline = false;      
+		$this->includes = true;
+        $this->inline   = false;
+		$this->yes_no_buttons = false;
+		$this->close_button   = false;
     }
     
     // Inhalt fuer eine Variable hinzufuegen
@@ -91,14 +95,22 @@ class Message
         }       
         $this->yes_no_buttons = true;
     }
+	
+	function setCloseButton()
+	{
+		$this->close_button = true;
+	}
     
     // die Meldung wird ausgegeben
-    function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "")
+	// msg_key ist der Schluessel fuer die Nachricht, die angezeigt werden soll
+	// msg_variable1 : der erste Platzhalter kann direkt gesetzt werden
+	// msg_headline  : Ueberschrift der Nachricht setzen
+	// msg_includes  : Flag, ob my_body_top, my_body_bottom my_header eingebunden werden sollen
+    function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "", $msg_includes = true)
     {
         // noetig, da dies bei den includes benoetigt wird
-        global $g_forum, $g_layout;
+        global $g_forum, $g_layout, $g_db;
         global $g_valid_login, $g_root_path, $g_preferences, $g_homepage;
-        global $g_db, $g_adm_con, $g_adm_db;
         global $g_organization, $g_current_organization, $g_current_user;
         
         // Uebergabevariablen auswerten
@@ -160,7 +172,8 @@ class Message
         if($this->inline == false)
         {
             // Html-Kopf ausgeben
-            $g_layout['title']  = "Hinweis";
+            $g_layout['title']    = "Hinweis";
+			$g_layout['includes'] = $msg_includes;
             if ($this->timer > 0)
             {
                 $g_layout['header'] = '<script language="JavaScript1.2" type="text/javascript"><!--
@@ -194,8 +207,16 @@ class Message
                     }
                     else
                     {
-                        // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen
-                        echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurueck" />&nbsp;Zurück</button>';
+                        // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen 
+						// bzw. ggf. einen Fenster-Schließen-Button                       
+						if($this->close_button == true)
+						{
+							echo '<button name="close" type="button" value="schließen" onclick="window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Schließen" />&nbsp;Schließen</button>';
+						}
+						else
+						{
+							echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurueck" />&nbsp;Zurück</button>';
+						}
                     }
                 echo '</div>
             </div>
