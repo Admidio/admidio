@@ -508,7 +508,7 @@ echo "
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
             $show_this_role = "";
-            if($g_current_user->viewAllRoles() == false)
+            if($g_current_user->viewAllRoles() == false && $g_current_user->assignRoles() == false)
             {
                // das Mitglied darf nicht alle Rollen sehen
                $show_this_role = " AND rol_this_list_view = 1 ";
@@ -546,7 +546,7 @@ echo "
                     if($count_role == 0)
                     {
                         echo "Diese Person ist kein Mitglied der Organisation ". 
-                        $g_current_organization->getValue("org_longname"). ".";
+                        $g_current_organization->getValue("org_longname"). " bzw. es sind keine Rollen sichtbar.";
                     }
                     else
                     {
@@ -705,7 +705,7 @@ echo "
                                             $row['cat_name'];
                                              if($g_current_user->viewRole($row['mem_rol_id']))
                                             {
-                                                echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+                                                echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
                                             }
                                             else
                                             {

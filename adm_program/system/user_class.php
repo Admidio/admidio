@@ -645,14 +645,14 @@ class User extends TableAccess
             if(array_key_exists  ($rol_id, $this->list_view_rights))
             {
 				//Falls ja sehen ob Recht besteht und entsprechenden Wert zuückgeben
-				if($this->list_view_rights[$rol_id]==1)
+				if($this->list_view_rights[$rol_id] == 1)
 				{
 					$view_role = true;
 				}
             }
             else
             {
-	            //Falls noch nicht im Array erfasst SQL-Abfrage
+	            //Falls noch nicht im Array erfasst -> SQL-Abfrage ueber alle Rollen
 	            global $g_current_organization;
 	            $sql    = "SELECT rol_id, rol_this_list_view
 	                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
@@ -664,6 +664,12 @@ class User extends TableAccess
 	            while($row = $this->db->fetch_array($result))
 	            {
 	            	$this->list_view_rights[$row['rol_id']] = $row['rol_this_list_view'];
+					
+					// fuer die aktuell gesuchte Rolle schon mal den Status merken
+					if($row['rol_id'] == $rol_id && $row['rol_this_list_view'] == 1)
+					{
+						$view_role = true;
+					}
 	            }
             }
         }

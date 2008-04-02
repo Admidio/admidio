@@ -60,7 +60,7 @@ if($g_current_user->assignRoles() || $g_current_user->editUser())
     {
         $sql_roles_condition = " AND rol_assign_roles = 0 ";
     }
-    if($g_current_user->editUser() && !$g_current_user->viewAllRoles())
+    if($g_current_user->editUser() && !$g_current_user->viewAllRoles() && !$g_current_user->assignRoles())
     {
         $sql_roles_condition .= " AND rol_this_list_view = 1 ";
     }
