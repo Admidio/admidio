@@ -163,7 +163,7 @@ $g_layout['header'] = "
 	function emoticon(text)
 	{
 		var txtarea = document.getElementById('dat_description');
-	
+
 		if (txtarea.createTextRange && txtarea.caretPos)
 		{
 			txtarea.caretPos.text = text;
@@ -174,14 +174,14 @@ $g_layout['header'] = "
 		}
 		txtarea.focus();
 	}
-	
+
 	function bbcode(nummer)
 	{
 	  var arrayid;
 	  if (vorbelegt[nummer])
 	  {
 		 arrayid = nummer*2+1;
-	  } 
+	  }
 	  else
 	  {
 		 arrayid = nummer*2;
@@ -190,7 +190,7 @@ $g_layout['header'] = "
 	  document.getElementById(bbids[nummer]).src = '". THEME_PATH. "/icons/'+bbcodestext[arrayid];
 	  vorbelegt[nummer] = !vorbelegt[nummer];
 	}
-	
+
 	//Funktion schließt alle offnen Tags
 	function bbcodeclose()
 	{
@@ -240,8 +240,8 @@ echo "
                             }
                             echo " value=\"1\" />
                             <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"Hilfe\" 
-                            	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\" 
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"Hilfe\"
+                            	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\"
                             	onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=date_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </dd>
                     </dl>
@@ -256,7 +256,7 @@ echo "
                     <dd>
 						<span>
     						<input type=\"text\" id=\"date_from\" name=\"date_from\" onchange=\"javascript:setDateTo();\" size=\"10\" maxlength=\"10\" value=\"$date_from\" />
-    						<img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:calPopUp.select(document.forms[0].date_from,'ico_cal_date_from','dd.MM.yyyy','date_from','date_to');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+    						<img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:calPopUp.select(document.forms[0].date_from,'ico_cal_date_from','dd.MM.yyyy','date_from','date_to','time_from','time_to');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
     						<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
     				    </span>
                         <span style=\"margin-left: 10px;\">
@@ -281,7 +281,7 @@ echo "
                     <dd>
 						<span>
 						    <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\" />
-						    <img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:calPopUp.select(document.forms[0].date_to,'ico_cal_date_to','dd.MM.yyyy','date_from','date_to');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+						    <img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:calPopUp.select(document.forms[0].date_to,'ico_cal_date_to','dd.MM.yyyy','date_from','date_to','time_from','time_to');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 						</span>
                         <span style=\"margin-left: 10px;\">
                             <input type=\"text\" id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\" />

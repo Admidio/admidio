@@ -5,18 +5,34 @@
 
 var n_from;
 var n_to;
+var a_time;
+var e_time;
 
 function check()
    {
 
       try {
-         var eindatum = document.getElementById(n_from).value.split(".");
-         from = new Date(eindatum[2], eindatum[1], eindatum[0]);
-         eindatum = document.getElementById(n_to).value.split(".");
-         to = new Date(eindatum[2], eindatum[1], eindatum[0]);
-         if (from > to) {
-            document.getElementById(n_to).value = document.getElementById(n_from).value;
-         }
+            var eindatum = document.getElementById(n_from).value.split(".");
+            from = new Date(eindatum[2], eindatum[1], eindatum[0], "0", "0", "0");
+            eindatum = document.getElementById(n_to).value.split(".");
+            to = new Date(eindatum[2], eindatum[1], eindatum[0], "0", "0", "0");
+            if (from > to)
+            {
+               alert('test1');
+               document.getElementById(n_to).value = document.getElementById(n_from).value;
+               from = to;
+            }
+            if ((a_time != '') && (e_time != '') &&!(from < to)) {
+               alert('Es klappt!');
+               var eindatum = document.getElementById(a_time).value.split(":");
+               from = new Date("0", "0", "0", eindatum[0], eindatum[1], "0");
+               eindatum = document.getElementById(e_time).value.split(":");
+               to = new Date("0", "0", "0", eindatum[0], eindatum[1], "0");
+               if (from > to) {
+                  document.getElementById(e_time).value = document.getElementById(a_time).value;
+                  from = to;
+               }
+            }
       } finally {
       }
    }
@@ -852,10 +868,12 @@ function CP_showCalendar(anchorname) {
 	}
 
 // Simple method to interface popup calendar with a text-entry box
-function CP_select(inputobj, linkname, format, from, to) {
+function CP_select(inputobj, linkname, format, from, to, anfang, ende) {
 	var selectedDate=(arguments.length>5)?arguments[5]:null;
 	n_from = from;
 	n_to = to;
+	a_time = anfang || '';
+	e_time = ende || '';
 	if (!window.getDateFromFormat) {
 		alert("calendar.select: To use this method you must also include 'date.js' for date formatting");
 		return;
