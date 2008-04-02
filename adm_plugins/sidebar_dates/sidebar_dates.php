@@ -66,7 +66,7 @@ else
 
 $act_date = date("Y.m.d H:i:s", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->select_db($g_adm_db);
+$g_db->setCurrentDB();
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "

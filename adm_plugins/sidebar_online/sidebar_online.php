@@ -68,15 +68,12 @@ else
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->select_db($g_adm_db);
+$g_db->setCurrentDB();
 
 // Aktuelle Zeit setzten
 $act_date = date("Y.m.d H:i:s", time());
 // Referenzzeit setzen
 $ref_date = date("Y.m.d H:i:s", time() - 60 * $plg_time_online);
-
-// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->select_db($g_adm_db);
 
 // User IDs alles Sessons finden, die in genannter aktueller und referenz Zeit sind
 $sql = "SELECT ses_usr_id, usr_login_name

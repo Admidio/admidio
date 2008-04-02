@@ -95,7 +95,7 @@ else
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->select_db($g_adm_db);
+$g_db->setCurrentDB();
 
 $sql    = "SELECT DISTINCT usr_id, usr_login_name, 
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 

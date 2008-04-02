@@ -44,8 +44,14 @@ class MySqlDB extends DB
         return false;
     }
     
-    function select_db($database)
+	// setzt die urspruengliche DB wieder auf aktiv
+	// alternativ kann auch eine andere DB uebergeben werden
+    function setCurrentDB($database = "")
     {
+		if(strlen($database) == 0)
+		{
+			$database = $this->dbname;
+		}
         return mysql_select_db($database, $this->connect_id);
     }
     
