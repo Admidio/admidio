@@ -2,11 +2,11 @@
 /******************************************************************************
  * Sidebar Online
  *
- * Version 1.0.3
+ * Version 1.1.0
  *
  * Plugin zeigt Besucher und aktive registrierte Mitglieder der Homepage an
  *
- * Kompatible ab Admidio-Versions 1.4.1
+ * Kompatible ab Admidio-Versions 2.0.0
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
