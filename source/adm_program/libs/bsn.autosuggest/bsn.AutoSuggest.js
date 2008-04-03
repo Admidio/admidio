@@ -178,7 +178,11 @@ _bsn.AutoSuggest.prototype.createList = function(arr)
     for (var i=0;i<arr.length;i++)
     {
         var a = _bsn.DOM.createElement("a", { href:"#" }, arr[i]);
-        a.onclick = function () { pointer.setValue( this.childNodes[0].nodeValue ); return false; }
+        a.onclick = function () { 
+            pointer.setValue( this.childNodes[0].nodeValue ); 
+            document.getElementById('autosuggest').submit(); 
+            return false; 
+        }
         var li = _bsn.DOM.createElement(  "li", {}, a  );
         ul.appendChild(  li  );
     }

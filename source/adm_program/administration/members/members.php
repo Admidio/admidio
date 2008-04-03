@@ -90,8 +90,8 @@ if ($req_queryForm)
 {
     // Bedingung fuer die Suchanfrage
     $search_string = str_replace(',', '', $req_queryForm). '%';
-    $search_condition = " AND (  last_name.usd_value  LIKE '$search_string'
-                              OR first_name.usd_value LIKE '$search_string' ) ";    
+    $search_condition = " AND (  CONCAT_WS(' ', last_name.usd_value, first_name.usd_value) LIKE '$search_string'
+                              OR CONCAT_WS(' ', last_name.usd_value, first_name.usd_value) LIKE '$search_string' ) ";    
 }
 else
 {
@@ -109,7 +109,6 @@ if($req_members)
                 RIGHT JOIN ". TBL_USER_DATA. " as last_name
                    ON last_name.usd_usr_id = usr_id
                   AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      $search_condition
                  LEFT JOIN ". TBL_USER_DATA. " as first_name
                    ON first_name.usd_usr_id = usr_id
                   AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
@@ -126,6 +125,7 @@ if($req_members)
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                      $search_condition
                 ORDER BY last_name.usd_value ";
 }
 else
@@ -180,11 +180,10 @@ $count_mem_rol = $row['count'];
 // Html-Kopf ausgeben
 $g_layout['title']  = "Benutzerverwaltung";
 $g_layout['header'] = '
-    <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/autosuggest.css" />
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>';
-
+    
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -263,7 +262,7 @@ echo " werden angezeigt</p>";
 
 //Hier gibt es jetzt noch die Suchbox...
 echo "
-<form action=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\" method=\"post\">
+<form id=\"autosuggest\" action=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\" method=\"post\">
     <div id=\"search_members\">
         <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" style=\"width: 200px;\"  />
         <input type=\"submit\" value=\"Suchen\" />    
