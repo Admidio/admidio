@@ -138,7 +138,6 @@ else
                 RIGHT JOIN ". TBL_USER_DATA. " as last_name
                    ON last_name.usd_usr_id = usr_id
                   AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                      $search_condition
                  LEFT JOIN ". TBL_MEMBERS. "
                    ON mem_usr_id = usr_id
                   AND mem_valid  = 1
@@ -158,6 +157,7 @@ else
                    ON homepage.usd_usr_id = usr_id
                   AND homepage.usd_usf_id = ". $g_current_user->getProperty("Homepage", "usf_id"). "
                 WHERE usr_valid = 1
+                      $search_condition
                 GROUP BY usr_id
                 ORDER BY last_name.usd_value ";
 }

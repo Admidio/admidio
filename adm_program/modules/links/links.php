@@ -90,9 +90,8 @@ if($g_preferences['enable_rss'] == 1)
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo "
-<h1 class=\"moduleHeadline\">". $_GET["headline"]. "</h1>";
-
+echo '<h1 class="moduleHeadline">'. $_GET["headline"]. '</h1>
+<div id="links_overview">';
 
 // falls eine id fuer einen bestimmten Link uebergeben worden ist...
 if ($_GET['id'] > 0)
@@ -225,7 +224,7 @@ else
                 {
                     echo "</div></div><br />";
                 }
-                echo "<div class=\"formLayout\" id=\"links_overview\">
+                echo "<div class=\"formLayout\">
                     <div class=\"formHead\">$row->cat_name</div>
                     <div class=\"formBody\" style=\"overflow: hidden;\">";
             }
@@ -295,12 +294,13 @@ else
     // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
     if (!$did_write_something)
     {
-        echo "<!-- Versteckte Kategorie -->
-        <p>Es sind keine Einträge vorhanden.</p>";
+        echo "<p>Es sind keine Einträge vorhanden.</p>";
     }
 
     echo "</div></div>";
 } // Ende Wenn mehr als 0 Datensaetze
+
+echo '</div>';
 
 if ($g_db->num_rows($links_result) > 2)
 {

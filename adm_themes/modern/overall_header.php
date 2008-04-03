@@ -86,8 +86,11 @@ echo "</head>
     if($g_layout['includes'])
     {
         require(THEME_SERVER_PATH. "/my_body_top.php");
-		// falls Anwender andere DB nutzt, hier zur Sicherheit wieder zu Admidio-DB wechseln
-		$g_db->setCurrentDB();
+        if(isset($g_db))
+        {
+            // falls Anwender andere DB nutzt, hier zur Sicherheit wieder zu Admidio-DB wechseln
+            $g_db->setCurrentDB();
+        }
     }
 
  ?>
