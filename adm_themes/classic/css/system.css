@@ -273,6 +273,33 @@ a:hover, a:active {
 	background-color:   #d5d5d5;
 }
 
+/* Layout fuer die Autosuggestions bei Suchfeldern */
+ul.autosuggest {
+    position:           absolute;
+    list-style:         none;
+    margin:             0px;
+    padding:            0px;
+    text-align:         left;
+    overflow:           auto;
+    font-size:          10pt;
+    border:             1px solid #7d7d7d;
+}
+
+ul.autosuggest li a:link,
+ul.autosuggest li a:visited {
+    display:            block;
+    padding:            2px;
+    text-decoration:    none;
+    background-color:   #ffffff;
+}
+
+ul.autosuggest li a:hover,
+ul.autosuggest li a:active,
+ul.autosuggest li.highlight a:link,
+ul.autosuggest li.highlight a:visited  {
+    background-color:   #d5d5d5;
+}
+
 /*Links in Verbindung mit einem Icon (mit Text)*/
 .iconTextLinkList {
     list-style-type:    none;
