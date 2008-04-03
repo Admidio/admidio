@@ -27,28 +27,17 @@ unset($_SESSION['mylist_request']);
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
 
-if(array_key_exists("start", $_GET))
-{
-    if (is_numeric($_GET["start"]) == false)
-    {
-        $g_message->show("invalid");
-    }
-}
-else
+if(isset($_GET["start"]) == false || is_numeric($_GET["start"]) == false)
 {
     $_GET["start"] = 0;
 }
 
-if(isset($_GET['category']))
+if(isset($_GET['category']) == false)
 {
-    $category = strStripTags($_GET['category']);
-}
-else
-{
-    $category = "";
+    $_GET['category'] = "";
 }
 
-if(!isset($_GET['category-selection']))
+if(isset($_GET['category-selection']) == false)
 {
     $_GET['category-selection'] = "yes";
     $show_ctg_sel = 1;
@@ -65,7 +54,7 @@ else
     }
 }
 
-if(!isset($_GET['active_role']))
+if(isset($_GET['active_role']) == false)
 {
     $active_role = 1;
 }
@@ -96,11 +85,11 @@ if($g_valid_login == false)
 {
     $sql .= " AND cat_hidden = 0 ";
 }
-if(strlen($category) > 0 && $category != "Alle")
+if(strlen($_GET['category']) > 0 && $_GET['category'] != "Alle")
 {
     // wenn eine Kategorie uebergeben wurde, dann nur Rollen dieser anzeigen
     $sql .= " AND cat_type   = 'ROL'
-              AND cat_name   = '$category' ";
+              AND cat_name   = '". $_GET['category']. "' ";
 }
 $sql .= " ORDER BY cat_sequence, rol_name ";
 
@@ -114,12 +103,12 @@ if($num_roles == 0)
         // wenn User eingeloggt, dann Meldung, dass keine Rollen in der Kategorie existieren
         if($active_role == 0)
         {
-            $g_message->show("no_old_roles");
+            $g_message->show("no_old_roles", "", "Hinweis");
         }
         else
         {
             $g_message->addVariableContent("$g_root_path/adm_program/administration/roles/roles.php", 1, false);
-            $g_message->show("no_old_roles");
+            $g_message->show("no_category_roles", "", "Hinweis");
         }
     }
     else
@@ -130,7 +119,14 @@ if($num_roles == 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Listen";
+if($active_role)
+{
+    $g_layout['title']  = "Übersicht der aktiven Rollen";
+}
+else
+{
+    $g_layout['title']  = "Übersicht der inaktive Rollen";
+}
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         function showCategory()
@@ -170,17 +166,8 @@ $g_layout['header'] = "
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo "
-<h1 class=\"moduleHeadline\">";
-    if($active_role)
-    {
-        echo "Aktive Rollen";
-    }
-    else
-    {
-        echo "Inaktive Rollen";
-    }
-echo '</h1>';
+echo '<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
+<div id="lists_overview">';
 
 if($show_ctg_sel == 1)
 {
@@ -200,7 +187,7 @@ if($show_ctg_sel == 1)
         echo '<p>Kategorie w&auml;hlen:&nbsp;&nbsp;
         <select size="1" id="category" onchange="showCategory()">
             <option value="Alle" ';
-            if(strlen($category) == 0)
+            if(strlen($_GET['category']) == 0)
             {
                 echo " selected=\"selected\" ";
             }
@@ -209,7 +196,7 @@ if($show_ctg_sel == 1)
             while($row = $g_db->fetch_object($result))
             {
                 echo '<option value="'. urlencode($row->cat_name). '"';
-                if($category == $row->cat_name)
+                if($_GET['category'] == $row->cat_name)
                 {
                     echo " selected=\"selected\" ";
                 }
@@ -281,11 +268,11 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
             {
                 if($count_cat_entries == 0)
                 {
-                    echo"Diese Kategorie enth&auml;lt keine zur Ansicht freigegebenen Listen.";
+                    echo"Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.";
                 }
                 echo "</div></div><br />";
             }
-            echo "<div class=\"formLayout\" id=\"lists_overview\">
+            echo "<div class=\"formLayout\">
                 <div class=\"formHead\">". $row_lst['cat_name']. "</div>
                 <div class=\"formBody\">";
             $previous_cat_id = $row_lst['cat_id'];
@@ -480,12 +467,12 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
 
 if($count_cat_entries == 0)
 {
-    echo"Diese Kategorie enth&auml;lt keine zur Ansicht freigegebenen Listen.";
+    echo"Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.";
 }
-echo "</div></div>";
+echo "</div></div></div>";
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = "$g_root_path/adm_program/modules/lists/lists.php?category=$category&category-selection=". $_GET['category-selection']. "&active_role=$active_role";
+$base_url = "$g_root_path/adm_program/modules/lists/lists.php?category=". $_GET['category']. "&category-selection=". $_GET['category-selection']. "&active_role=$active_role";
 echo generatePagination($base_url, $num_roles, $roles_per_page, $_GET["start"], TRUE);
 
 require(THEME_SERVER_PATH. "/overall_footer.php");

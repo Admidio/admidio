@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Texte fuer Hinweistexten oder Fehlermeldungen
+ * Texte fuer Hinweistexte oder Fehlermeldungen
  *
  * Copyright    : (c) 2004 - 2007 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -131,7 +131,7 @@ $message_text = array(
 
     "no_category_roles" =>
         "Es sind noch keine Rollen für diese Kategorie erstellt worden.<br /><br />
-        Rollen können <a href=\"%VAR1%\">hier</a> erstellt und gepflegt werden.",
+        Rollen können in der <a href=\"%VAR1%\">Rollenverwaltung</a> erstellt und gepflegt werden.",
 
     "no_old_roles" =>
         "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
