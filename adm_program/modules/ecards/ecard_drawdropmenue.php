@@ -75,7 +75,7 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 	echo '</optgroup>
 	</select>
 	<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard&amp;window=true\',\'Message\',\'width=400,height=250,left=300,top=200,scrollbars=yes\')"
-	onmouseover="ajax_showTooltip(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()" />
+	onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()" />
 	<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
 	
 	';					

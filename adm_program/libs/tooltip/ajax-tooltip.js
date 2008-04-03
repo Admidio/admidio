@@ -1,12 +1,15 @@
 /************************************************************************************************************
 Ajax tooltip
 Copyright (C) 2006  DTHMLGoodies.com, Alf Magne Kalleland
+
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
 License as published by the Free Software Foundation; either
 version 2.1 of the License, or (at your option) any later version.
+
 Alf Magne Kalleland, 2006
 Owner of DHTMLgoodies.com
+	
 ************************************************************************************************************/	
 
 var enableCache = true;
@@ -19,20 +22,26 @@ var ajax_tooltipObj = false;
 var ajax_tooltipObj_iframe = false;
 
 var ajax_tooltip_MSIE = false;
+var divHeight = 0;
+var divWidth = 0;
 
 if(navigator.userAgent.indexOf('MSIE')>=0)ajax_tooltip_MSIE=true;
 
-
-function ajax_showContent(divId,ajaxIndex,url)
+function getDivProportions()
+{
+	divHeight = document.getElementById("ajax_tooltipObj").offsetHeight;
+	divWidth = document.getElementById("ajax_tooltipObj").offsetWidth;
+}
+function ajax_showContent(evt,inputObj,divId,ajaxIndex,url)
 {
 	document.getElementById(divId).innerHTML = dynamicContent_ajaxObjects[ajaxIndex].response;
 	if(enableCache){
 		jsCache[url] = 	dynamicContent_ajaxObjects[ajaxIndex].response;
 	}
 	dynamicContent_ajaxObjects[ajaxIndex] = false;
+	getDivProportions();
 }
-
-function ajax_loadContent(divId,url)
+function ajax_loadContent(evt,inputObj,divId,url)
 {
 	if(enableCache && jsCache[url]){
 		document.getElementById(divId).innerHTML = jsCache[url];
@@ -59,27 +68,27 @@ function ajax_loadContent(divId,url)
 		url = url.replace(string,'');
 	}
 	
-	dynamicContent_ajaxObjects[ajaxIndex].requestFile = url;
-	dynamicContent_ajaxObjects[ajaxIndex].onCompletion = function(){ ajax_showContent(divId,ajaxIndex,url); };
-	dynamicContent_ajaxObjects[ajaxIndex].runAJAX();
+	dynamicContent_ajaxObjects[ajaxIndex].requestFile = url;	// Specifying which file to get
+	dynamicContent_ajaxObjects[ajaxIndex].onCompletion = function(){ getDivProportions();ajax_showContent(evt,inputObj,divId,ajaxIndex,url); };	// Specify function that will be executed after file has been found
+	dynamicContent_ajaxObjects[ajaxIndex].runAJAX();		// Execute AJAX function	
+	ajax_positionTooltip(evt,inputObj);
+	
 }
-
-function ajax_showTooltip(externalFile,inputObj)
+function ajax_showTooltip(evt,externalFile,inputObj)
 {
-	if(!ajax_tooltipObj)
+	if(!ajax_tooltipObj)	/* Tooltip div not created yet ? */
 	{
 		ajax_tooltipObj = document.createElement('DIV');
 		ajax_tooltipObj.style.position = 'absolute';
 		ajax_tooltipObj.id = 'ajax_tooltipObj';		
 		document.body.appendChild(ajax_tooltipObj);
 
-		var contentDiv = document.createElement('DIV');
+		var contentDiv = document.createElement('DIV'); /* Create tooltip content div */
 		contentDiv.className = 'ajax_tooltip_content';
 		ajax_tooltipObj.appendChild(contentDiv);
 		contentDiv.id = 'ajax_tooltip_content';
 		
-		if(ajax_tooltip_MSIE)
-		{
+		if(ajax_tooltip_MSIE){	/* Create iframe object for MSIE in order to make the tooltip cover select boxes */
 			ajax_tooltipObj_iframe = document.createElement('<IFRAME frameborder="0">');
 			ajax_tooltipObj_iframe.style.position = 'absolute';
 			ajax_tooltipObj_iframe.border='0';
@@ -93,27 +102,97 @@ function ajax_showTooltip(externalFile,inputObj)
 
 			
 	}
-	ajax_loadContent('ajax_tooltip_content',externalFile);
+	// Find position of tooltip
+	ajax_tooltipObj.style.display='block';
+	ajax_loadContent(evt,inputObj,'ajax_tooltip_content',externalFile);
 	if(ajax_tooltip_MSIE){
 		ajax_tooltipObj_iframe.style.width = ajax_tooltipObj.clientWidth + 'px';
 		ajax_tooltipObj_iframe.style.height = ajax_tooltipObj.clientHeight + 'px';
 	}
+	
+}
+function ietruebody()
+{
+return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
+}
+function ajax_positionTooltip(evt,inputObj)
+{
+		if(divHeight != 0 && divWidth != 0)
+		{
+			var offsetfromcursorX=15;
+			var offsetfromcursorY=15;
+			var ie=document.all;
+			var ns6=document.getElementById && !document.all;
+			var curX=(ns6)?evt.pageX : evt.clientX+ietruebody().scrollLeft;
+			var curY=(ns6)?evt.pageY : evt.clientY+ietruebody().scrollTop;
+			var winwidth=ie&&!window.opera? ietruebody().clientWidth : window.innerWidth-20;
+			var winheight=ie&&!window.opera? ietruebody().clientHeight : window.innerHeight-20;
+			var rightedge=ie&&!window.opera? winwidth-evt.clientX-offsetfromcursorX : winwidth-evt.clientX-offsetfromcursorX;
+			var bottomedge=ie&&!window.opera? winheight-evt.clientY-offsetfromcursorY : winheight-evt.clientY-offsetfromcursorY;
+			var leftedge=(offsetfromcursorX<0)? offsetfromcursorX*(-1) : -1000;
+			var tipobj = ajax_tooltipObj;
+			if (curX-offsetfromcursorX-divWidth<0 && rightedge<divWidth)
+			{
+				tipobj.style.left="5px";
+			}
+			else if(rightedge<divWidth)
+			{
+				tipobj.style.left=curX-divWidth+offsetfromcursorX+"px";
+			}
+			else
+			{
+				tipobj.style.left=curX+offsetfromcursorX+"px";
+			}
+			if(curY-offsetfromcursorY-divHeight<0 && rightedge>divWidth)
+			{
+				tipobj.style.top=ietruebody().scrollTop+"5px";
+			}
+			else if (curY-offsetfromcursorY-divHeight<0 && rightedge<divWidth)
+			{
+				tipobj.style.top=ietruebody().scrollTop+"5px";
+				tipobj.style.left=curX-divWidth-offsetfromcursorX+"px";
+			}
+			else if (bottomedge<divHeight && rightedge>divWidth && curY-offsetfromcursorY-divHeight<0)
+			{
+				tipobj.style.top=ietruebody().scrollTop+offsetfromcursorY+"px";	
+			}
+			else if (bottomedge<divHeight && rightedge>divWidth && curY-offsetfromcursorY-divHeight>0)
+			{
+				tipobj.style.top=curY-divHeight-offsetfromcursorY+"px";
+			}
+			else if (bottomedge<divHeight && rightedge<divWidth  && curY-offsetfromcursorY-divHeight<0)
+			{
+				tipobj.style.top=ietruebody().scrollTop+offsetfromcursorY+"px";
+				tipobj.style.left=curX-divWidth-offsetfromcursorX+"px";
+			}
+			else if (bottomedge<divHeight && rightedge<divWidth  && curY-offsetfromcursorY-divHeight>0 && curX-offsetfromcursorX-divWidth>0)
+			{
+				tipobj.style.top=curY-divHeight-offsetfromcursorY+"px";
+				tipobj.style.left=curX-divWidth-offsetfromcursorX+"px";
+			}
+			else if (bottomedge<divHeight && rightedge<divWidth  && curY-offsetfromcursorY-divHeight>0 && curX-offsetfromcursorX-divWidth<0)
+			{
+				tipobj.style.top=curY-divHeight-offsetfromcursorY+"px";
+				tipobj.style.left=ietruebody().scrollLeft+"5px";
+			}
+			else
+			{
+				tipobj.style.top=curY+offsetfromcursorY+"px";
+			}
+		}
+		else
+		{
+			getDivProportions();	
+			ajax_positionTooltip(evt,inputObj);
+		}
 }
 
-function ajax_positionTooltip()
-{
-	positiontooltip = true;
-}
+
 function ajax_hideTooltip()
 {
-	positiontooltip = false;
-	if(ajax_tooltipObj)
-	{
-		ajax_tooltipObj.style.display='none';
-	}
+	ajax_tooltipObj.style.display='none';
 }
-function sack(file)
-{
+function sack(file){
 	this.AjaxFailedAlert = "Dein Browser unterstützt nicht die erweiterte Funktionalität der Website!\n";
 	this.requestFile = file;
 	this.method = "POST";
@@ -121,10 +200,10 @@ function sack(file)
 	this.encodeURIString = true;
 	this.execute = false;
 
-	this.onLoading = function() {ajax_hideTooltip(); };
-	this.onLoaded = function() {ajax_hideTooltip(); ajax_positionTooltip();};
-	this.onInteractive = function() {};
-	this.onCompletion = function() {};
+	this.onLoading = function() {getDivProportions(); };
+	this.onLoaded = function() {getDivProportions(); };
+	this.onInteractive = function() { getDivProportions();};
+	this.onCompletion = function() { getDivProportions();};
 
 	this.createAJAX = function() {
 		try {
@@ -232,7 +311,7 @@ function sack(file)
 									self.elementObj.innerHTML = self.response;
 								}
 							}
-							self.URLString = ""; 
+							self.URLString = "";
 						break;
 					}
 				};
@@ -241,75 +320,3 @@ function sack(file)
 	};
 this.createAJAX();
 }
-function ietruebody()
-{
-return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
-}
-function mouseMove(evt)
-{
-	if(positiontooltip == true && ajax_tooltipObj)
-	{
-		var offsetfromcursorX=15;
-		var offsetfromcursorY=15;
-		var ie=document.all;
-		var ns6=document.getElementById && !document.all;
-		var curX=(ns6)?evt.pageX : evt.clientX+ietruebody().scrollLeft;
-		var curY=(ns6)?evt.pageY : evt.clientY+ietruebody().scrollTop;
-		var winwidth=ie&&!window.opera? ietruebody().clientWidth : window.innerWidth-20;
-		var winheight=ie&&!window.opera? ietruebody().clientHeight : window.innerHeight-20;
-		var rightedge=ie&&!window.opera? winwidth-evt.clientX-offsetfromcursorX : winwidth-evt.clientX-offsetfromcursorX;
-		var bottomedge=ie&&!window.opera? winheight-evt.clientY-offsetfromcursorY : winheight-evt.clientY-offsetfromcursorY;
-		var leftedge=(offsetfromcursorX<0)? offsetfromcursorX*(-1) : -1000;
-		var tipobj = ajax_tooltipObj;
-		if (curX-offsetfromcursorX-tipobj.offsetWidth<0 && rightedge<tipobj.offsetWidth)
-		{
-			tipobj.style.left=ietruebody().scrollLeft+"5px";
-		}
-		else if(rightedge<tipobj.offsetWidth)
-		{
-			tipobj.style.left=curX-tipobj.offsetWidth+offsetfromcursorX+"px";
-		}
-		else
-		{
-			tipobj.style.left=curX+offsetfromcursorX+"px";
-		}
-		if(curY-offsetfromcursorY-tipobj.offsetHeight<0 && rightedge>tipobj.offsetWidth)
-		{
-			tipobj.style.top=ietruebody().scrollTop+"5px";
-		}
-		else if (curY-offsetfromcursorY-tipobj.offsetHeight<0 && rightedge<tipobj.offsetWidth)
-		{
-			tipobj.style.top=ietruebody().scrollTop+"5px";
-			tipobj.style.left=curX-tipobj.offsetWidth-offsetfromcursorX+"px";
-		}
-		else if (bottomedge<tipobj.offsetHeight && rightedge>tipobj.offsetWidth)
-		{
-			tipobj.style.top=ietruebody().scrollTop+offsetfromcursorY+"px";	
-		}
-		else if (bottomedge<tipobj.offsetHeight && rightedge<tipobj.offsetWidth)
-		{
-			tipobj.style.top=ietruebody().scrollTop+offsetfromcursorY+"px";
-			tipobj.style.left=curX-tipobj.offsetWidth-offsetfromcursorX+"px";
-		}
-		else
-		{
-			tipobj.style.top=curY+offsetfromcursorY+"px";
-		}
-		if(ajax_tooltipObj)
-		{
-			ajax_tooltipObj.style.display='block';
-		}
-	}
-	else
-	{
-		positiontooltip = false;
-		if(ajax_tooltipObj)	
-		{
-			ajax_hideTooltip();
-		}
-	}
-}
-document.onmousemove	= mouseMove;
-document.onmouseover	= ajax_hideTooltip;
-document.onmouseout		= ajax_hideTooltip;
-document.onclick		= ajax_hideTooltip;

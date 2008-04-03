@@ -237,7 +237,7 @@ echo "
                             <label for=\"rol_this_list_view\">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-								onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list',this);\" onmouseout=\"ajax_hideTooltip()\" />
+								onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>";
 
@@ -260,7 +260,7 @@ echo "
                                 <label for=\"rol_mail_logout\">Besucher (ausgeloggt) können E-Mails an diese Rolle schreiben</label>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_logout&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  
-                                    onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_logout',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_logout',this);\" onmouseout=\"ajax_hideTooltip()\" />
                             </div>
                         </li>
                         <li>
@@ -308,7 +308,7 @@ echo "
                             <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
                             	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-								onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen',this);\" onmouseout=\"ajax_hideTooltip()\" />
+								onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>
                     <li>
@@ -335,7 +335,7 @@ echo "
                             <label for=\"rol_edit_user\">Profildaten und Rollenzuordnungen aller Benutzer bearbeiten</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
                             	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-								onmouseover=\"ajax_showTooltip('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer',this);\" onmouseout=\"ajax_hideTooltip()\" />
+								onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>
                     <li>
