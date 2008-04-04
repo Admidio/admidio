@@ -18,12 +18,10 @@ function check()
             to = new Date(eindatum[2], eindatum[1], eindatum[0], "0", "0", "0");
             if (from > to)
             {
-               alert('test1');
                document.getElementById(n_to).value = document.getElementById(n_from).value;
                from = to;
             }
             if ((a_time != '') && (e_time != '') &&!(from < to)) {
-               alert('Es klappt!');
                var eindatum = document.getElementById(a_time).value.split(":");
                from = new Date("0", "0", "0", eindatum[0], eindatum[1], "0");
                eindatum = document.getElementById(e_time).value.split(":");
