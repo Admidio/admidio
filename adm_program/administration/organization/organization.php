@@ -1244,7 +1244,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standardwert: 150)
+                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standardwert: 500)
                     </li>
                     <li>
                         <dl>

@@ -277,11 +277,11 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 	if ($bbcode_enable)
 	{
 		$bbcode = new ubbParser();
-		$ecard_data = preg_replace ("/<%ecard_message%>/", 	preg_replace ("/\r?\n/", "<br />\n", $bbcode->parse($ecard["message"])), $ecard_data);
+		$ecard_data = preg_replace ("/<%ecard_message%>/", 	preg_replace ("/\r?\n/", "\n", $bbcode->parse($ecard["message"])), $ecard_data);
 	}
 	else
 	{
-		$ecard_data = preg_replace ("/<%ecard_message%>/", 	preg_replace ("/\r?\n/", "<br />\n", htmlspecialchars($ecard["message"])), $ecard_data);
+		$ecard_data = preg_replace ("/<%ecard_message%>/", 	preg_replace ("/\r?\n/", "\n", htmlspecialchars($ecard["message"])), $ecard_data);
 	}
     // Hier werden die Umlaute ersetzt
 	$ecard_data = preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $ecard_data);
