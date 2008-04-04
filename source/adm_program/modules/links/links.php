@@ -1,4 +1,4 @@
-<?php 
+<?php
 /******************************************************************************
  * Links auflisten
  *
@@ -8,6 +8,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * start     - Angabe, ab welchem Datensatz Links angezeigt werden sollen
+ * category  - Angabe der Kategorie damit auch nur eine angezeigt werden kann.
  * headline  - Ueberschrift, die ueber den Links steht
  *             (Default) Links
  * id        - Nur einen einzigen Link anzeigen lassen.
@@ -27,6 +28,11 @@ elseif($g_preferences['enable_weblinks_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require("../../system/login_valid.php");
+}
+//Kontrolle ob nur Kategorien angezeigt werden
+if(isset($_GET['category']) == false)
+{
+    $_GET['category'] = "";
 }
 
 // Uebergabevariablen pruefen
@@ -102,7 +108,15 @@ if ($_GET['id'] > 0)
              AND cat_org_id = ". $g_current_organization->getValue("org_id");
 }
 //...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
-else
+else if ($_GET['category'] != "") {
+   $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+             WHERE lnk_cat_id = cat_id
+             AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+             AND cat_type = 'LNK'
+             AND cat_name   = '". $_GET['category']. "'
+             ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
+             LIMIT ". $_GET['start']. ", ". $linksPerPage;
+} else
 {
     // Links bereits nach den Namen ihrer Kategorie sortiert.
     $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
@@ -123,12 +137,12 @@ if ($g_valid_login == false)
     $sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
             WHERE lnk_cat_id = cat_id
             AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            AND cat_type = 'LNK' 
+            AND cat_type = 'LNK'
             AND cat_hidden = 0
-            ORDER BY cat_sequence, lnk_name DESC";    
-} 
+            ORDER BY cat_sequence, lnk_name DESC";
+}
 else
-{   
+{
     // Alle Kategorien anzeigen
     $sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
             WHERE lnk_cat_id = cat_id
@@ -262,9 +276,9 @@ else
                         if ($g_current_user->editWeblinksRight())
                         {
                             echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img 
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img
                                 src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img 
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img
                                 src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                         }
                         $user_create = new User($g_db, $row->lnk_usr_id);
