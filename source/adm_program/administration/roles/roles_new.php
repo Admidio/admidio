@@ -95,6 +95,7 @@ $g_layout['header'] = "
 	<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
     <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />
     <script type=\"text/javascript\"><!--
+    	// Rollenabhaengigkeiten markieren
         function hinzufuegen()
         {
             var child_roles = document.getElementById('ChildRoles');
@@ -126,6 +127,28 @@ $g_layout['header'] = "
 
             form.submit();
         }
+        
+        // Rollenrechte markieren
+        // Uebergaben: 
+        // srcRight  - ID des Rechts, welches das Ereignis ausloest
+        // destRight - ID des Rechts, welches angepasst werden soll 
+        // checked   - true destRight wird auf checked gesetzt
+        //             false destRight wird auf unchecked gesetzt
+        function markRoleRight(srcRight, destRight, checked)
+        {
+            if(document.getElementById(srcRight).checked == true
+            && checked == true)
+            {
+            	document.getElementById(destRight).checked = true;
+            }
+            if(document.getElementById(srcRight).checked == false
+            && checked == false)
+            {
+            	document.getElementById(destRight).checked = false;
+            }
+        }
+                
+        // Calendarobjekt fuer das Popup anlegen
 		var cal18 = new CalendarPopup(\"calendardiv\");
 		cal18.setCssPrefix(\"calendar\");
     --></script>";
@@ -172,7 +195,7 @@ echo "
                                 {
                                     echo " selected=\"selected\"";
                                 }
-                                echo ">- Bitte w&auml;hlen -</option>";
+                                echo ">- Bitte wählen -</option>";
 
                             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                                      WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -203,44 +226,7 @@ echo "
             </div>
 
             <div class=\"groupBoxBody\" id=\"properties_body\">
-                <ul class=\"formFieldList\">
-                    <li>
-                        <dl>
-                            <dt><label for=\"rol_max_members\">max. Teilnehmer:</label></dt>
-                            <dd>
-                                <input type=\"text\" id=\"rol_max_members\" name=\"rol_max_members\" size=\"3\" maxlength=\"3\" value=\"";
-                                if($role->getValue("rol_max_members") > 0)
-                                {
-                                    echo $role->getValue("rol_max_members");
-                                }
-                                echo "\" />&nbsp;(ohne Leiter)
-                            </dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"rol_cost\">Beitrag:</label></dt>
-                            <dd>
-                                <input type=\"text\" id=\"rol_cost\" name=\"rol_cost\" size=\"6\" maxlength=\"6\" value=\"". $role->getValue("rol_cost"). "\" /> &euro;
-                            </dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <div>
-                            <input type=\"checkbox\" id=\"rol_this_list_view\" name=\"rol_this_list_view\" ";
-                            if($role->getValue("rol_this_list_view") == 1)
-                            {
-                                echo " checked=\"checked\" ";
-                            }
-                            echo " value=\"1\" />
-                            <label for=\"rol_this_list_view\"><img src=\"". THEME_PATH. "/icons/page_white_text.png\" alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" /></label>&nbsp;
-                            <label for=\"rol_this_list_view\">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-								onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list',this);\" onmouseout=\"ajax_hideTooltip()\" />
-                        </div>
-                    </li>";
-
+                <ul class=\"formFieldList\">";
                     if($g_preferences['enable_mail_module'])
                     {
                         echo "
@@ -255,7 +241,7 @@ echo "
                                     {
                                         echo " disabled=\"disabled\" ";
                                     }                                
-                                    echo " value=\"1\" />
+                                    echo " onchange=\"markRoleRight('rol_mail_logout', 'rol_mail_login', true)\" value=\"1\" />
                                 <label for=\"rol_mail_logout\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Besucher (ausgeloggt) können E-Mails an diese Rolle schreiben\" /></label>&nbsp;
                                 <label for=\"rol_mail_logout\">Besucher (ausgeloggt) können E-Mails an diese Rolle schreiben</label>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
@@ -280,7 +266,59 @@ echo "
                             </div>
                         </li>";
                     }
-                echo "</ul>
+                    echo "
+                    <li>
+                        <dl>
+                            <dt><label for=\"rol_this_list_view\">Listen ansehen:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"rol_this_list_view\" name=\"rol_this_list_view\">
+									<option value=\"0\" "; 
+										if($role->getValue("rol_this_list_view") == 0) 
+										{
+											echo " selected=\"selected\"";
+										}
+										echo ">Keiner</option>
+									<option value=\"1\" "; 
+										if($role->getValue("rol_this_list_view") == 1) 
+										{
+											echo " selected=\"selected\"";
+										}
+										echo ">Nur Rollenmitglieder</option>
+									<option value=\"2\" "; 
+										if($role->getValue("rol_this_list_view") == 2) 
+										{
+											echo " selected=\"selected\"";
+										}
+										echo ">Nur Angemeldete Benutzer</option>
+								</select>
+								<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
+                                	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
+									onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"rol_max_members\">max. Teilnehmer:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"rol_max_members\" name=\"rol_max_members\" size=\"3\" maxlength=\"3\" value=\"";
+                                if($role->getValue("rol_max_members") > 0)
+                                {
+                                    echo $role->getValue("rol_max_members");
+                                }
+                                echo "\" />&nbsp;(ohne Leiter)
+                            </dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"rol_cost\">Beitrag:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"rol_cost\" name=\"rol_cost\" size=\"6\" maxlength=\"6\" value=\"". $role->getValue("rol_cost"). "\" /> &euro;
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
             </div>
         </div>
         
@@ -303,7 +341,7 @@ echo "
                             {
                                 echo " disabled=\"disabled\" ";
                             }
-                            echo " value=\"1\" />
+                            echo " onchange=\"markRoleRight('rol_assign_roles', 'rol_all_lists_view', true)\" value=\"1\" />
                             <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rollen verwalten und zuordnen\" /></label>&nbsp;
                             <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
@@ -311,6 +349,16 @@ echo "
 								onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>
+					<li>
+						<div>
+							<input type=\"checkbox\" id=\"rol_all_lists_view\" name=\"rol_all_lists_view\" ";
+							if($role->getValue("rol_all_lists_view") == 1)
+								echo " checked=\"checked\" ";
+							echo " onchange=\"markRoleRight('rol_all_lists_view', 'rol_assign_roles', false)\" value=\"1\" />
+							<label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
+							<label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
+						</div>
+					</li>
                     <li>
                         <div>
                             <input type=\"checkbox\" id=\"rol_approve_users\" name=\"rol_approve_users\" ";
@@ -448,18 +496,6 @@ echo "
                             </div>
                         </li>";
                     }
-                    //Listenrechte Alle Listen einsehen
-                    echo "
-                        <li>
-                            <div>
-                                <input type=\"checkbox\" id=\"rol_all_lists_view\" name=\"rol_all_lists_view\" ";
-                                if($role->getValue("rol_all_lists_view") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
-                                <label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
-                            </div>
-                        </li>";                 
                 echo "</ul>
             </div>
         </div>
