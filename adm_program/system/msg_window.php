@@ -241,10 +241,10 @@ echo "
                 break;
 
             case "role_show_list":
-                echo "Alle angemeldeten Benutzer können die Mitgliederlisten der entsprechenden Rolle
-                      aufrufen und die Profile der Mitglieder einsehen.
-                      Wird dieses Flag nicht gesetzt, so können normale Benutzer die Mitgliedschaft
-                      zu dieser Rolle nicht sehen. Sie wird auch nicht im Profil angezeigt.";
+				echo "Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und
+            	      die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht
+            	      <strong>Mitgliederlisten aller Rollen einsehen</strong> steht allerdings noch
+            	      über dieser Einstellung.";            
                 break;
 
             case "role_mail_logout":

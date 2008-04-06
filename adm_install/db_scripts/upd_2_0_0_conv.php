@@ -144,7 +144,8 @@ $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = CONCAT('http://', usd_value)
            AND LOCATE('http', usd_value) = 0 ";
 $g_db->query($sql);
 
-$sql = "UPDATE ". TBL_ROLES. " SET rol_approve_users = 1
+$sql = "UPDATE ". TBL_ROLES. " SET rol_approve_users  = 1
+                                 , rol_all_lists_view = 1
          WHERE rol_assign_roles = 1 ";
 $g_db->query($sql);
 
