@@ -1,4 +1,4 @@
-<?php 
+<?php
 /******************************************************************************
  * Popup-Window mit Informationen
  *
@@ -9,7 +9,7 @@
  *
  * err_code - Code fuer die Information, die angezeigt werden soll
  * err_text - Text, der innerhalb einer Meldung angezeigt werden kann
- * window	- true wenn das script über window.open anstatt über das tooltip aufgerufen wird
+ * window    - true wenn das script über window.open anstatt über das tooltip aufgerufen wird
  *
  *****************************************************************************/
 
@@ -100,18 +100,18 @@ echo "
                          </tr>
                       </table>";
                 break;
-                
+
             case "category_global":
                 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
                 $organizations = $g_current_organization->getValue("org_longname");
                 $organizations .= implode(",<br />- ", $g_current_organization->getReferenceOrganizations(true, true, true));
-                
+
                 echo "Profilfelder von Kategorien bei denen diese Option aktiviert ist, erscheinen im Profil
                       folgender Organisationen:
                       <p><strong>- $organizations</strong></p>
                       Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.";
                 break;
-                
+
             case "condition":
                 echo "Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
                       Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen
@@ -161,19 +161,19 @@ echo "
                 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
                 $organizations = $g_current_organization->getValue("org_longname");
                 $organizations .= implode(",<br />- ", $g_current_organization->getReferenceOrganizations(true, true, true));
-                
+
                 echo "Termine / Ankündigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
                       folgender Organisationen:
                       <p><strong>- $organizations</strong></p>
                       Moderatoren dieser Organisationen können den Termin / Ankündigung dann bearbeiten
                       bzw. die Option zurücksetzen.";
                 break;
-                
+
             case "date_location_link":
-            	echo "Geben Sie genügend Informationen zum Treffpunkt ein, so kann ein Link bzw. eine Route zu 
-            	diesem Treffpunkt über Google-Maps erstellt werden."; 
-            	break;
-            	
+                echo "Geben Sie genügend Informationen zum Treffpunkt ein, so kann ein Link bzw. eine Route zu
+                diesem Treffpunkt über Google-Maps erstellt werden.";
+                break;
+
             case "enable_rss":
                 echo "Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen,
                       Termine, Gästebuch und Weblinks) auf den jeweiligen Übersichtsseiten
@@ -182,16 +182,16 @@ echo "
                 break;
 
             case "field":
-                echo "Es können beliebig viele zusätzliche Felder definiert werden. 
+                echo "Es können beliebig viele zusätzliche Felder definiert werden.
                       Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch
-                      bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur 
+                      bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur
                       Verfügung.";
                 break;
 
             case "field_hidden":
                 echo "Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion
                       nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden,
-                      die das Recht haben alle Benutzer zu editieren. Im eigenen Profil kann der Benutzer 
+                      die das Recht haben alle Benutzer zu editieren. Im eigenen Profil kann der Benutzer
                       diese Daten auch sehen.";
                 break;
 
@@ -203,7 +203,7 @@ echo "
 
             case "field_mandatory":
                 echo "Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden.
-                      Dies gilt für die Registrierung, aber auch bei der gewöhnlichen 
+                      Dies gilt für die Registrierung, aber auch bei der gewöhnlichen
                       Profildatenbearbeitung.";
                 break;
 
@@ -241,10 +241,10 @@ echo "
                 break;
 
             case "role_show_list":
-            	echo "Alle angemeldeten Benutzer können die Mitgliederlisten der entsprechenden Rolle
-            	      aufrufen und die Profile der Mitglieder einsehen. 
-            	      Wird dieses Flag nicht gesetzt, so können normale Benutzer die Mitgliedschaft 
-            	      zu dieser Rolle nicht sehen. Sie wird auch nicht im Profil angezeigt.";
+                echo "Alle angemeldeten Benutzer können die Mitgliederlisten der entsprechenden Rolle
+                      aufrufen und die Profile der Mitglieder einsehen.
+                      Wird dieses Flag nicht gesetzt, so können normale Benutzer die Mitgliedschaft
+                      zu dieser Rolle nicht sehen. Sie wird auch nicht im Profil angezeigt.";
                 break;
 
             case "role_mail_logout":
@@ -253,7 +253,7 @@ echo "
                 break;
 
             case "rolle_zuordnen":
-                echo "Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue 
+                echo "Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue
                       Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.";
                 break;
 
@@ -263,7 +263,7 @@ echo "
                       Wenn du eingeloggt bist stehen dir weitere Rollen zur Verfügung, an die du E-Mails
                       schreiben kannst.";
                 break;
-                
+
             case "rolle_ecard":
                 echo "Deine Grußkarte wird an ein Mitglied der ausgewählten Rolle geschickt, sofern
                       diese ihre E-Mail-Adresse im System hinterlegt hat.<br /><br />
@@ -278,10 +278,19 @@ echo "
                 echo $g_current_user->getProperty($req_err_text, "usf_description");
                 break;
 
+            //Downloadmodulhilfen
             case "dateiname":
-                echo "   Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann.
+                echo "Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann.
                    Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle
                    gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).";
+                break;
+
+            case "folderNotExists":
+                echo "Der Ordner existiert physikalisch nicht auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden";
+                break;
+
+            case "fileNotExists":
+                echo "Die Datei existiert physikalisch nicht auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden";
                 break;
 
             //Fotomodulhifen
@@ -358,7 +367,7 @@ echo "</div>
         </span>
     </li>
 </ul>";
-    
+
 require(THEME_SERVER_PATH. "/overall_footer.php");
 }
 ?>

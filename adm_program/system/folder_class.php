@@ -23,9 +23,9 @@
  * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
  * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
  * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - File wird mit den geaenderten Daten in die Datenbank
+ * save()                 - Folder wird mit den geaenderten Daten in die Datenbank
  *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Das aktuelle File wird aus der Datenbank geloescht
+ * delete()               - Der aktuelle Folder wird aus der Datenbank geloescht
  *
  *****************************************************************************/
 
@@ -67,13 +67,26 @@ class Folder extends TableAccess
     {
         global $g_current_organization, $g_current_user;
 
-        $condition = "     fol_id     = $folder_id
-                       AND fol_type   = 'DOWNLOAD'
-                       AND fol_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($folder_id, $condition);
+        if ($folder_id > 0) {
+            $condition = "     fol_id     = $folder_id
+                           AND fol_type   = 'DOWNLOAD'
+                           AND fol_org_id = ". $g_current_organization->getValue("org_id");
+            $this->readData($folder_id, $condition);
+
+        }
+        else {
+            $condition = "     fol_name   = 'download'
+                           AND fol_type   = 'DOWNLOAD'
+                           AND fol_path   = '/adm_my_files'
+                           AND fol_org_id = ". $g_current_organization->getValue("org_id");
+            $this->readData($folder_id, $condition);
+
+        }
+
+
 
         //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
-        if ($this->getValue('fil_id'))
+        if ($this->getValue('fol_id'))
         {
             //Falls der Ordner gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
             if (!$g_current_user->editDownloadRight() && $this->getValue("fol_locked"))
@@ -109,6 +122,9 @@ class Folder extends TableAccess
     function getFolderContentsForDownload()
     {
         global $g_current_organization, $g_current_user;
+
+        //RueckgabeArray initialisieren
+        $completeFolder = null;
 
         //Erst einmal alle Unterordner auslesen, die in diesem Verzeichnis enthalten sind
         $sql_folders = "SELECT *
@@ -159,17 +175,37 @@ class Folder extends TableAccess
                 //wird der Ordner natuerlich ins Array gepackt.
                 if ($row_count > 0)
                 {
-                    $addToArray;
+                    $addToArray = true;
                 }
 
             }
+
+            //Jetzt noch pruefen ob der Ordner physikalisch vorhanden ist
+            if (file_exists(SERVER_PATH. $row_folders->fol_path. "/". $row_folders->fol_name)) {
+                $folderExists = true;
+            }
+            else {
+                $folderExists = false;
+
+                if ($g_current_user->editDownloadRight()) {
+                    //falls der Ordner physikalisch nicht existiert wird er nur im Falle von AdminRechten dem Array hinzugefuegt
+                    $addToArray = true;
+                }
+                else {
+                    $addToArray = false;
+                }
+            }
+
 
             if ($addToArray)
             {
                 $completeFolder["folders"][] = array(
                                 'fol_id'        => $row_folders->fol_id,
                                 'fol_name'      => $row_folders->fol_name,
+                                'fol_path'      => $row_folders->fol_path,
+                                'fol_timestamp' => $row_folders->fol_timestamp,
                                 'fol_public'    => $row_folders->fol_public,
+                                'fol_exists'    => $folderExists,
                                 'fol_locked'    => $row_folders->fol_locked
                 );
             }
@@ -191,12 +227,36 @@ class Folder extends TableAccess
                 $addToArray = true;
             }
 
+            //Jetzt noch pruefen ob das File physikalisch vorhanden ist
+            if (file_exists(SERVER_PATH. $this->getValue('fol_path'). "/". $this->getValue('fol_name'). "/". $row_files->fil_name)) {
+                $fileExists = true;
+
+                //Filegroesse ermitteln
+                $fileSize = round(filesize(SERVER_PATH. $this->getValue('fol_path'). "/". $this->getValue('fol_name'). "/". $row_files->fil_name)/1024);
+            }
+            else {
+                $fileExists = false;
+                $fileSize   = 0;
+
+                if ($g_current_user->editDownloadRight()) {
+                    //falls das File physikalisch nicht existiert wird es nur im Falle von AdminRechten dem Array hinzugefuegt
+                    $addToArray = true;
+                }
+                else {
+                    $addToArray = false;
+                }
+            }
+
+
             if ($addToArray)
             {
                 $completeFolder["files"][] = array(
                                 'fil_id'        => $row_files->fil_id,
                                 'fil_name'      => $row_files->fil_name,
+                                'fil_timestamp' => $row_files->fil_timestamp,
                                 'fil_locked'    => $row_files->fil_locked,
+                                'fil_exists'    => $fileExists,
+                                'fil_size'      => $fileSize,
                                 'fil_counter'   => $row_files->fil_counter
                 );
             }
