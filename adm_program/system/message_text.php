@@ -273,9 +273,9 @@ $message_text = array(
     "profile_photo_2big" =>
         "Das hochgeladene Foto übersteigt die vom Server zugelassene
         Dateigröße von %VAR1% B.",
- 	//Ende Fehlermeldungen Profilfoto
-	
-	// Passwort
+     //Ende Fehlermeldungen Profilfoto
+
+    // Passwort
     "password_length" =>
         "Das Passwort muss aus mindestens 6 Zeichen bestehen.",
 
@@ -286,40 +286,40 @@ $message_text = array(
         "Du hast ein falsches Passwort eingegeben und
         konntest deshalb nicht angemeldet werden.<br /><br />
         Überprüf bitte dein Passwort und gib dieses dann erneut ein.",
-		
+
     "password_old_wrong" =>
         "Das alte Passwort ist falsch.",
 
     "password_changed" =>
-		"Das Passwort wurde erfolgreich geändert.",
-	
-	"lost_password_send" =>
-		"Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!",
-		
-	"lost_password_send_error" =>
-		"Es ist ein ERROR beim Senden an die Email Addresse %VAR1% aufgetreten!<br /> Bitte versuch es später wieder!",
-	
-	"lost_password_email_error" =>
-		"Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!",
-	
-	"lost_password_allready_logged_in" =>
-		"Du bist am System angemeldet folglich kennst du ja dein Passwort!",
-		
-	"password_activation_id_not_valid" =>
-		"Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!",
-	
-	"password_activation_password_saved"=>
-		"Das neue Passwort wurde nun übernommen!",
-	//Ende Password
-	
-	// Grußkarte
-	"ecard_send_error"=>
-		"Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.",
-		
-	"ecard_feld_error"=>
-		"Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.",
-	
-	//Ende Grußkarte
+        "Das Passwort wurde erfolgreich geändert.",
+
+    "lost_password_send" =>
+        "Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!",
+
+    "lost_password_send_error" =>
+        "Es ist ein ERROR beim Senden an die Email Addresse %VAR1% aufgetreten!<br /> Bitte versuch es später wieder!",
+
+    "lost_password_email_error" =>
+        "Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!",
+
+    "lost_password_allready_logged_in" =>
+        "Du bist am System angemeldet folglich kennst du ja dein Passwort!",
+
+    "password_activation_id_not_valid" =>
+        "Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!",
+
+    "password_activation_password_saved"=>
+        "Das neue Passwort wurde nun übernommen!",
+    //Ende Password
+
+    // Grußkarte
+    "ecard_send_error"=>
+        "Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.",
+
+    "ecard_feld_error"=>
+        "Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.",
+
+    //Ende Grußkarte
 
     //Fehlermeldungen Fotomodul
     "no_photo_folder"=>
@@ -366,26 +366,30 @@ $message_text = array(
         von %VAR1% B. übersteigen!",
     //Ende Fehlermeldungen Fotomodul
 
-	//Fehlermeldungen Forum
-	
-	"forum_access_data" =>
+    //Fehlermeldungen Forum
+
+    "forum_access_data" =>
         "Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!",
-		
-	"forum_db_connection_failed" =>
-		"Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!",
-		
-	// Ende Fehlermeldungen Forum
+
+    "forum_db_connection_failed" =>
+        "Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!",
+
+    // Ende Fehlermeldungen Forum
 
     //Fehlermeldungen Downloadmodul
     "invalid_folder" =>
         "Du hast einen ungültigen Ordner aufgerufen!",
 
-    "invalid_folder" =>
+    "invalid_file" =>
         "Du hast eine ungültigen Datei aufgerufen!",
 
     "invalid_file_name" =>
         "Der ausgwählte Dateiname enthält ungültige Zeichen!<br /><br />
         Wähle bitte einen anderen Namen für die Datei aus.",
+
+    "invalid_folder_name" =>
+        "Der ausgwählte Ordnername enthält ungültige Zeichen!<br /><br />
+        Wähle bitte einen anderen Namen für den Ordner aus.",
 
     "invalid_file_extension" =>
         "Du kannst keine PHP-, HTML- oder Perl-Dateien hochladen.",
@@ -434,7 +438,7 @@ $message_text = array(
 
     "file_2big_server" =>
         "Die hochgeladene Datei übersteigt die vom Server zugelassene
-        Dateigröße von %VAR1% B.",
+        Dateigröße von %VAR1%.",
 
     "empty_upload_post" =>
         "Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.<br />

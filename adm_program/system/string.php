@@ -9,7 +9,7 @@
  *
  *****************************************************************************/
 
-// entfernt Html-, PHP-Codes und Spaces am Anfang und Ende 
+// entfernt Html-, PHP-Codes und Spaces am Anfang und Ende
 // eines Strings oder aller Elemente eines Arrays
 
 function strStripTags($srcString, $checkChar = 0)
@@ -25,7 +25,7 @@ function strStripTags($srcString, $checkChar = 0)
         $srcString = trim($srcString);
         // HTML und PHP Tags entfernen
         $srcString = strip_tags($srcString);
-    
+
         if($checkChar)
         {
             $anz = strspn($srcString, "abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789.-_+ ");
@@ -48,7 +48,7 @@ function strAddSlashesDeep($value)
     }
     else
     {
-        $value = addslashes($value); 
+        $value = addslashes($value);
     }
     return $value;
 }
@@ -142,7 +142,7 @@ function isValidEmailAddress($emailAddress)
 
 function isValidFileName($file_name, $check_ext = false)
 {
-    // If the email address was not empty
+    // If the filename was not empty
     if(strlen(trim($file_name)) > 0)
     {
         // nur ungueltige Zeichen pruefen (gueltige Pruefung hat zu Problemen bei Sonderzeichen gefuehrt
@@ -154,6 +154,11 @@ function isValidFileName($file_name, $check_ext = false)
             && strpos($file_name, "..") === false
             && strpos($file_name, ":/") === false)
             {
+                if (substr($file_name, 0, 1) == ".") {
+                    return -2;
+                }
+
+
                 if($check_ext)
                 {
                     // auf gueltige Endungen pruefen

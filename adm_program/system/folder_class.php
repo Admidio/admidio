@@ -351,10 +351,11 @@ class Folder extends TableAccess
     // und loescht die Verzeichnisse auch physikalisch auf der Platte...
     function _delete($folder_id = 0)
     {
-        if ($folder_id = 0)
+
+        if ($folder_id == 0)
         {
             $folder_id = $this->getValue("fol_id");
-
+            $folderPath = $this->getCompletePathOfFolder();
         }
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
@@ -386,9 +387,8 @@ class Folder extends TableAccess
 
 
         //Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
-        if ($folder_id = 0)
+        if (isset($folderPath))
         {
-            $folderPath = $this->getCompletePathOfFolder();
             $this->_deleteInFilesystem($folderPath, true);
         }
 
@@ -401,6 +401,7 @@ class Folder extends TableAccess
     //interne Funktion, die einen Ordner mit allen Inhalten rekursiv loescht
     function _deleteInFilesystem($folder, $initialCall = false)
     {
+
         $dh  = @opendir($folder);
         if($dh)
         {
@@ -413,7 +414,7 @@ class Folder extends TableAccess
                     if(is_dir($act_folder_entry))
                     {
                         // nun den entsprechenden Ordner loeschen
-                        $this->deleteInFilesystem($act_folder_entry);
+                        $this->_deleteInFilesystem($act_folder_entry);
                         @chmod($act_folder_entry, 0777);
                         @rmdir($act_folder_entry);
 
@@ -453,6 +454,7 @@ class Folder extends TableAccess
         {
             $this->setValue("fol_timestamp", date("Y-m-d H:i:s", time()));
             $this->setValue("fol_usr_id", $g_current_user->getValue("usr_id"));
+            $this->setValue("fol_org_id", $g_current_organization->getValue("org_id"));
         }
 
     }

@@ -79,7 +79,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form method=\"post\" action=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=3&amp;folder=$folder_id\">
+<form method=\"post\" action=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id=$folder_id\">
 <div class=\"formLayout\" id=\"edit_download_folder_form\" style=\"width: 400px; margin-top: 60px;\">
     <div class=\"formHead\">Ordner erstellen</div>
     <div class=\"formBody\">
