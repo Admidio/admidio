@@ -29,13 +29,13 @@ if (array_key_exists("file_id", $_GET))
     if (is_numeric($_GET["file_id"]) == false)
     {
         //FileId ist nicht numerisch
-    	$g_message->show("invalid");
+        $g_message->show("invalid");
     }
 }
 else
 {
     // ohne FileId gehts auch nicht weiter
-	$g_message->show("invalid");
+    $g_message->show("invalid");
 }
 
 
@@ -48,8 +48,8 @@ $file->getFileForDownload($_GET['file_id']);
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
 if (!$file->getValue('fil_id'))
 {
-	//Datensatz konnte nicht in DB gefunden werden...
-	$g_message->show("invalid");
+    //Datensatz konnte nicht in DB gefunden werden...
+    $g_message->show("invalid");
 }
 
 //kompletten Pfad der Datei holen
@@ -73,7 +73,7 @@ $fileSize   = filesize($completePath);
 // Passenden Datentyp erzeugen.
 header("Content-Type: application/octet-stream");
 header("Content-Length: $fileSize");
-header("Content-Disposition: attachment; filename=\"$fileName\"");
+header("Content-Disposition: attachment; filename=\"". $file->getValue('fil_name'). "\"");
 // noetig fuer IE6, da sonst pdf und doc nicht direkt geoeffnet werden kann
 header('Cache-Control: private');
 

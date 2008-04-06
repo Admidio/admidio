@@ -24,6 +24,12 @@ if ($g_preferences['enable_download_module'] != 1)
     $g_message->show("module_disabled");
 }
 
+//maximaler Fileupload fuer das Downloadmodul muss groesser 0 sein
+if ($g_preferences['max_file_upload_size'] == 0) {
+
+    $g_message->show("invalid");
+}
+
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
@@ -83,7 +89,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=1&amp;folder=$folder_id\" method=\"post\" enctype=\"multipart/form-data\">
+<form action=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id=$folder_id\" method=\"post\" enctype=\"multipart/form-data\">
 <div class=\"formLayout\" id=\"upload_download_form\">
     <div class=\"formHead\">Datei hochladen</div>
     <div class=\"formBody\">
@@ -98,6 +104,7 @@ echo "
                 <dl>
                     <dt><label for=\"userfile\">Datei ausw&auml;hlen:</label></dt>
                     <dd>
+                        <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_file_upload_size'] * 1024) . "\" />
                         <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>

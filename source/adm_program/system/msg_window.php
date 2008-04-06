@@ -286,11 +286,11 @@ echo "
                 break;
 
             case "folderNotExists":
-                echo "Der Ordner existiert physikalisch nicht auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden";
+                echo "Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.";
                 break;
 
             case "fileNotExists":
-                echo "Die Datei existiert physikalisch nicht auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden";
+                echo "Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.";
                 break;
 
             //Fotomodulhifen
