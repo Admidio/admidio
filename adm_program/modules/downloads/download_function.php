@@ -196,7 +196,7 @@ if ($req_mode == 1)
     }
     else
     {
-        $g_message->show("file_upload_error");
+        $g_message->show("file_upload_error",$file_name);
     }
 }
 
@@ -306,7 +306,7 @@ elseif ($req_mode == 3)
 
     //Test ob der Ordner schon existiert im Filesystem
     if (file_exists($targetFolder->getCompletePathOfFolder(). "/$newFolderName")) {
-        $g_message->show("folder_exists");
+        $g_message->show("folder_exists", $newFolderName);
     }
     else
     {
@@ -346,118 +346,150 @@ elseif ($req_mode == 3)
 }
 
 
+//Datei / Ordner umbenennen
 elseif ($req_mode == 4)
 {
-    // Datei / Ordner umbenennen
-    $req_new_name = null;
-
-    if(strlen($_POST['new_name']) > 0)
+    if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
     {
-        $ret_code = isValidFileName($_POST['new_name']);
-        if($ret_code == 0)
-        {
-            $req_new_name = $_POST['new_name'];
-        }
-        else
-        {
-            if($ret_code == -1)
-            {
-                $g_message->show("feld", "Datei auswählen");
-            }
-            elseif($ret_code == -2)
-            {
-                $g_message->show("invalid_file_name");
-            }
-            elseif($ret_code == -3)
-            {
-                $g_message->show("invalid_file_extension");
-            }
-        }
-    }
-    else
-    {
-        $g_message->show("feld", "Name");
+        //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
+        //beides ist auch nicht erlaubt
+        $g_message->show("invalid");
     }
 
-    // Test ob der Ordner / Datei schon existiert
-    $ordnerinhalt = dir($act_folder);
-    while ($inhalt = $ordnerinhalt->read())
+    if($file_id > 0)
     {
-        if ($inhalt != "." AND $inhalt != "..")
-        {
-            $ordnerarray[] = $inhalt;
-        }
-    }
+        $file = new File($g_db);
+        $file->getFileForDownload($file_id);
 
-    //Datei oder Ordner?
-    if($is_folder)
-    {
-        //Gibt es den Ordner schon?
-        if(in_array($req_new_name, $ordnerarray))
-        {
-            $g_message->show("folder_exists", $req_new_name);
+        //Pruefen ob Datensatz gefunden
+        if ($file->getValue('fil_id')) {
+            $oldFile = $file->getCompletePathOfFile();
         }
-        else
+        else {
+            $g_message->show("invalid");
+        }
+
+        $newFile = null;
+
+        if (strlen($_POST['new_name']) > 0)
         {
-            //Umbenennen der Datei
-            if(rename("$act_folder/$req_file","$act_folder/$req_new_name"))
+            $ret_code = isValidFileName($_POST['new_name'], true);
+
+            if($ret_code != 0)
             {
-                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                $g_message->show("rename_folder",$req_file);
-            }
-        }
-    }
-    else
-    {
-        //Wegstreichen der Endung
-        If (strchr(strrev($req_new_name),'.'))
-        {
-            $req_new_name = strrev(substr(strchr(strrev($req_new_name),'.'),1));
-        };
-
-        if(strpos($req_file, ".") !== false)
-        {
-            $file_ext = substr($req_file, strrpos($req_file, "."));
-        }
-        else
-        {
-            $file_ext = "";
-        }
-        $req_new_name = $req_new_name. $file_ext;
-
-        //Gibt es die Datei schon?
-        if(in_array($req_new_name, $ordnerarray))
-        {
-            $g_message->show("file_exists",$req_file);
-        }
-        else
-        {
-            $ret_code = isValidFileName($req_new_name, true);
-            if($ret_code == 0)
-            {
-                //Umbenennen der Datei
-                if(rename("$act_folder/$req_file","$act_folder/$req_new_name"))
+                if($ret_code == -1)
                 {
-                    $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                    $g_message->show("rename_file",$req_file);
+                    $g_message->show("feld", "Neuer Name");
                 }
-            }
-            else
-            {
-                if($ret_code  == -2)
+                elseif($ret_code == -2)
                 {
                     $g_message->show("invalid_file_name");
                 }
-                elseif($ret_code  == -3)
+                elseif($ret_code == -3)
                 {
                     $g_message->show("invalid_file_extension");
                 }
             }
+            else {
+                $newFile = $_POST['new_name'];
+            }
         }
+        else
+        {
+            $g_message->show("feld", "Neuer Name");
+        }
+
+        //Test ob die Datei schon existiert im Filesystem
+        if (file_exists(SERVER_PATH. $file->getValue('fol_path'). "/". $file->getValue('fol_name'). "/$newFile")) {
+            $g_message->show("file_exists", $newFile);
+        }
+        else
+        {
+            $oldName = $file->getValue('fil_name');
+
+            // Datei umbenennen im Filesystem und in der Datenbank
+            if (rename($oldFile,SERVER_PATH. $file->getValue('fol_path'). "/". $file->getValue('fol_name'). "/$newFile"))
+            {
+                $file->setValue('fil_name', $newFile);
+                $file->save();
+
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
+                $g_message->show("rename_file",$oldName);
+            }
+            else {
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
+                $g_message->show("rename_file_error",$oldName);
+            }
+        }
+
+    }
+    else if ($folder_id > 0)
+    {
+        $folder = new Folder($g_db);
+        $folder->getFolderForDownload($folder_id);
+
+        //Pruefen ob Datensatz gefunden
+        if ($folder->getValue('fol_id')) {
+            $oldFolder = $folder->getCompletePathOfFolder();
+        }
+        else {
+            $g_message->show("invalid");
+        }
+
+        $newFolder = null;
+
+        if (strlen($_POST['new_name']) > 0)
+        {
+            $ret_code = isValidFileName($_POST['new_name']);
+
+            if ($ret_code == 0)
+            {
+                $newFolder = $_POST['new_name'];
+            }
+            else
+            {
+                if ($ret_code == -1)
+                {
+                    $g_message->show("feld", "Neuer Name");
+                }
+                elseif ($ret_code == -2)
+                {
+                    $g_message->show("invalid_folder_name");
+                }
+            }
+        }
+        else
+        {
+            $g_message->show("feld", "Neuer Name");
+        }
+
+        //Test ob der Ordner schon existiert im Filesystem
+        if (file_exists(SERVER_PATH. $folder->getValue('fol_path'). "/$newFolder")) {
+            $g_message->show("folder_exists", $newFolder);
+        }
+        else
+        {
+            $oldName = $folder->getValue('fol_name');
+
+            // Ordner umbenennen im Filesystem und in der Datenbank
+            if (rename($oldFolder,SERVER_PATH. $folder->getValue('fol_path'). "/$newFolder"))
+            {
+                $folder->rename($newFolder, $folder->getValue('fol_path'));
+
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
+                $g_message->show("rename_folder",$oldName);
+            }
+            else {
+                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
+                $g_message->show("rename_folder_error",$oldName);
+            }
+        }
+
     }
 }
 
 
+//Abfrage Datei / Ordner loeschen
 elseif ($req_mode == 5)
 {
     if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )

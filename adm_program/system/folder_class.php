@@ -282,18 +282,17 @@ class Folder extends TableAccess
 
 
     //Gibt die aktuellen Rollenbrechtigungen des Ordners als Array zurueck
-	function getRoleArrayOfFolder()
+    function getRoleArrayOfFolder()
     {
         //RueckgabeArray initialisieren
         $roleArray = null;
 
-		//Erst einmal die aktuellen Rollenberechtigungen fuer den Ordner auslesen
-		$sql_rolset = "SELECT *
-                              FROM ". TBL_FOLDER_ROLES. "
+        //Erst einmal die aktuellen Rollenberechtigungen fuer den Ordner auslesen
+        $sql_rolset = "SELECT * FROM ". TBL_FOLDER_ROLES. "
                             WHERE flr_fol_id = ". $this->getValue('fol_id');
         $result_roleset = $this->db->query($sql_rolset);
 
-    	while($row_roleset = $this->db->fetch_object($result_roleset))
+        while($row_roleset = $this->db->fetch_object($result_roleset))
         {
             $role = new Role($g_db, $row_roleset->flr_rol_id);
 
@@ -311,7 +310,7 @@ class Folder extends TableAccess
     // und all seinen Unterordnern rekursiv
     function editPublicFlagOnFolder($public_flag, $folder_id = 0)
     {
-        if ($folder_id = 0)
+        if ($folder_id == 0)
         {
             $folder_id = $this->getValue("fol_id");
             $this->setValue("fol_public", $public_flag);
@@ -338,11 +337,11 @@ class Folder extends TableAccess
     }
 
 
-	// Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
-	// und all seinen Unterordnern rekursiv
+    // Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
+    // und all seinen Unterordnern rekursiv
     function setRolesOnFolder($rolesArray, $folder_id = 0)
     {
-        if ($folder_id = 0)
+        if ($folder_id == 0)
         {
             $folder_id = $this->getValue("fol_id");
         }
@@ -361,16 +360,16 @@ class Folder extends TableAccess
 
         //Erst die alten Berechtigungen loeschen fuer die aktuelle OrdnerId
         $sql_delete  = "DELETE FROM ". TBL_FOLDER_ROLES. "
-        					WHERE flr_fol_id = $folder_id";
+                            WHERE flr_fol_id = $folder_id";
         $this->db->query($sql_delete);
 
         //Jetzt die neuen Berechtigungen schreiben
         if (count($rolesArray) > 0) {
-        	for($i=0; $i<count($rolesArray); $i++) {
-        		$sql_insert = "INSERT INTO ". TBL_FOLDER_ROLES. " (flr_fol_id, flr_rol_id)
-                          		VALUES (". $folder_id. ", ". $rolesArray[i]['rol_id']. ")";
-        		$this->db->query($sql_insert);
-        	}
+            for($i=0; $i<count($rolesArray); $i++) {
+                $sql_insert = "INSERT INTO ". TBL_FOLDER_ROLES. " (flr_fol_id, flr_rol_id)
+                                  VALUES (". $folder_id. ", ". $rolesArray[i]['rol_id']. ")";
+                $this->db->query($sql_insert);
+            }
         }
 
 
@@ -381,7 +380,7 @@ class Folder extends TableAccess
     // und allen darin enthaltenen Unterordnern und Dateien rekursiv
     function editLockedFlagOnFolder($locked_flag, $folder_id = 0)
     {
-        if ($folder_id = 0)
+        if ($folder_id == 0)
         {
             $folder_id = $this->getValue("fol_id");
             $this->setValue("fol_locked", $locked_flag);
@@ -410,6 +409,39 @@ class Folder extends TableAccess
                           SET fil_locked = $locked_flag
                         WHERE fil_fol_id = $folder_id";
         $this->db->query($sql_update);
+    }
+
+
+    //benennt eine Ordnerinstanz um
+    //und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
+    function rename($newName, $newPath, $folder_id = 0)
+    {
+        if ($folder_id == 0)
+        {
+            $folder_id = $this->getValue("fol_id");
+            $this->setValue("fol_name", $newName);
+            $this->save();
+         }
+
+        //Den neuen Pfad in der DB setzen fuer die aktuelle folder_id...
+        $sql_update = "UPDATE ". TBL_FOLDERS. "
+                          SET fol_path = '$newPath'
+                        WHERE fol_id = $folder_id";
+        $this->db->query($sql_update);
+
+
+        //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
+        $sql_subfolders = "SELECT *
+                              FROM ". TBL_FOLDERS. "
+                            WHERE fol_fol_id_parent = $folder_id";
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        {
+            //rekursiver Aufruf mit jedem einzelnen Unterordner
+            $this->rename($row_subfolders->fol_name, $newPath. "/". $newName, $row_subfolders->fol_id);
+        }
+
     }
 
 
