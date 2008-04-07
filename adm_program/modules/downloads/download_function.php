@@ -327,7 +327,8 @@ elseif ($req_mode == 3)
             $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
             $newFolder->save();
 
-            //ToDo: Ordnerberechtigungen des ParentOrdners uebernehmen
+            //Ordnerberechtigungen des ParentOrdners uebernehmen
+            $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
 
         }
         if($b_return == false)

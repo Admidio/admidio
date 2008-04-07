@@ -266,7 +266,7 @@ else
 //Ende der Tabelle
 echo"</table>";
 
-//ToDo: zusaetzliche Dateien und Ordner im Filesystem anzeigen
+//TODO: zusaetzliche Dateien und Ordner im Filesystem anzeigen
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
