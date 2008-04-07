@@ -30,6 +30,7 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
+require_once(SERVER_PATH. "/adm_program/system/role_class.php");
 
 class Folder extends TableAccess
 {
@@ -280,6 +281,32 @@ class Folder extends TableAccess
     }
 
 
+    //Gibt die aktuellen Rollenbrechtigungen des Ordners als Array zurueck
+	function getRoleArrayOfFolder()
+    {
+        //RueckgabeArray initialisieren
+        $roleArray = null;
+
+		//Erst einmal die aktuellen Rollenberechtigungen fuer den Ordner auslesen
+		$sql_rolset = "SELECT *
+                              FROM ". TBL_FOLDER_ROLES. "
+                            WHERE flr_fol_id = ". $this->getValue('fol_id');
+        $result_roleset = $this->db->query($sql_rolset);
+
+    	while($row_roleset = $this->db->fetch_object($result_roleset))
+        {
+            $role = new Role($g_db, $row_roleset->flr_rol_id);
+
+            //Jede Rolle wird nun dem Array hinzugefuegt
+            $roleArray[] = array(
+                                'rol_id'        => $row_roleset->rol_id,
+                                'rol_name'      => $row_roleset->rol_name);
+        }
+
+        return $roleArray;
+    }
+
+
     // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
     // und all seinen Unterordnern rekursiv
     function editPublicFlagOnFolder($public_flag, $folder_id = 0)
@@ -307,6 +334,45 @@ class Folder extends TableAccess
                           SET fol_public = $public_flag
                         WHERE fol_id = $folder_id";
         $this->db->query($sql_update);
+
+    }
+
+
+	// Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
+	// und all seinen Unterordnern rekursiv
+    function setRolesOnFolder($rolesArray, $folder_id = 0)
+    {
+        if ($folder_id = 0)
+        {
+            $folder_id = $this->getValue("fol_id");
+        }
+
+        //Alle Unterordner auslesen, die im uebergebenen Ordner enthalten sind
+        $sql_subfolders = "SELECT *
+                              FROM ". TBL_FOLDERS. "
+                            WHERE fol_fol_id_parent = $folder_id";
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        {
+            //rekursiver Aufruf mit jedem einzelnen Unterordner
+            $this->setRolesOnFolder($rolesArray, $row_subfolders->fol_id);
+        }
+
+        //Erst die alten Berechtigungen loeschen fuer die aktuelle OrdnerId
+        $sql_delete  = "DELETE FROM ". TBL_FOLDER_ROLES. "
+        					WHERE flr_fol_id = $folder_id";
+        $this->db->query($sql_delete);
+
+        //Jetzt die neuen Berechtigungen schreiben
+        if (count($rolesArray) > 0) {
+        	for($i=0; $i<count($rolesArray); $i++) {
+        		$sql_insert = "INSERT INTO ". TBL_FOLDER_ROLES. " (flr_fol_id, flr_rol_id)
+                          		VALUES (". $folder_id. ", ". $rolesArray[i]['rol_id']. ")";
+        		$this->db->query($sql_insert);
+        	}
+        }
+
 
     }
 
