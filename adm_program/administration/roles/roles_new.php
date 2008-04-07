@@ -353,7 +353,13 @@ echo "
 						<div>
 							<input type=\"checkbox\" id=\"rol_all_lists_view\" name=\"rol_all_lists_view\" ";
 							if($role->getValue("rol_all_lists_view") == 1)
+							{
 								echo " checked=\"checked\" ";
+							}
+							if($role->getValue("rol_name") == "Webmaster")
+							{
+								echo " disabled=\"disabled\" ";
+							} 
 							echo " onchange=\"markRoleRight('rol_all_lists_view', 'rol_assign_roles', false)\" value=\"1\" />
 							<label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
 							<label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>

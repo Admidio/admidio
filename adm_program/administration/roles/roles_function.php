@@ -145,9 +145,10 @@ elseif($_GET["mode"] == 2)
     // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
     if(strcmp($_POST['rol_name'], "Webmaster") == 0)
     {
-        $_POST['rol_assign_roles'] = 1;
-        $_POST['rol_mail_logout']  = 1;
-        $_POST['rol_mail_login']   = 1;
+        $_POST['rol_assign_roles']   = 1;
+        $_POST['rol_all_lists_view'] = 1;
+        $_POST['rol_mail_logout']    = 1;
+        $_POST['rol_mail_login']     = 1;
     }
 
 	// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
@@ -165,7 +166,6 @@ elseif($_GET["mode"] == 2)
 					   ,'rol_mail_logout'
 					   ,'rol_mail_login'
 					   ,'rol_weblinks'
-					   ,'rol_this_list_view'
 					   ,'rol_all_lists_view'
 					   ,'rol_profile');
 	
