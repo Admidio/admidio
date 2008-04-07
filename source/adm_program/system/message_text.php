@@ -392,7 +392,7 @@ $message_text = array(
         Wähle bitte einen anderen Namen für den Ordner aus.",
 
     "invalid_file_extension" =>
-        "Du kannst keine PHP-, HTML- oder Perl-Dateien hochladen.",
+        "Bestimmte Dateiendungen sind auf dem Server nicht erlaubt.",
 
     "file_not_exist" =>
         "Die ausgewählte Datei existiert nicht auf dem Server.",
@@ -420,7 +420,7 @@ $message_text = array(
 
     "folder_exists" =>
         "Der Ordner %VAR1% existiert bereits!<br /><br />
-        Wähle bitte einen anderen Namen für den neuen Ordner aus.",
+        Wähle bitte einen anderen Namen für den Ordner aus.",
 
     "file_exists" =>
         "Die Datei %VAR1% existiert bereits!<br /><br />
@@ -431,6 +431,12 @@ $message_text = array(
 
     "rename_file" =>
         "Die Datei %VAR1% wurde umbenannt.",
+
+    "rename_folder_error" =>
+        "Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.",
+
+    "rename_file_error" =>
+        "Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.",
 
     "file_2big" =>
         "Die hochgeladene Datei übersteigt die zulässige
