@@ -79,7 +79,7 @@ function Email()
     $this->headerOptions['Content-Type'] = "text/plain; charset=iso-8859-1";
     $this->headerOptions['Content-Transfer-Encoding'] = "quoted-printable";
     $this->contentType = "text/plain; charset=iso-8859-1";
-    
+
     $this->headerOptions['Return-Path'] = $g_preferences['email_administrator'];
     $this->headerOptions['Sender']      = $g_preferences['email_administrator'];
 
@@ -99,7 +99,8 @@ function setSender($address, $name='')
 {
     if (isValidEmailAddress($address))
     {
-        $this->headerOptions['From'] = $name. " <". $address. ">";
+        //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+    	$this->headerOptions['From'] = "\"". $name. "\" <". $address. ">";
         return true;
     }
     return false;
@@ -259,36 +260,36 @@ function prepareBody()
 			else
 			{
 				$this->mail_body = $this->mail_body. "Content-Disposition: attachment;\n";
-			}			
+			}
             $this->mail_body = $this->mail_body. "\tfilename=\"". $this->attachments[$i]['orig_filename']. "\"\n";
 			if (!empty($this->attachments[$i]['file_id']))
 			{
 				$this->mail_body = $this->mail_body. "Content-Id: <".$this->attachments[$i]['file_id'].">\n\n";
 			}
 
-			// File öffnen und base64 konvertieren
+			// File ï¿½ffnen und base64 konvertieren
 			$return = "";
 			$data	= "";
 			$thePart = "";
-			if ($fp = fopen($this->attachments[$i]['tmp_filename'], 'rb')) 
+			if ($fp = fopen($this->attachments[$i]['tmp_filename'], 'rb'))
 			{
-				while (!feof($fp)) 
+				while (!feof($fp))
 				{
 					$return .= fread($fp, 1024);
 				}
 				fclose($fp);
 				$data = base64_encode($return);
-	
-			} 
-	
+
+			}
+
 			if (function_exists("chunk_split"))
 			{
 			   $thePart	.= chunk_split($data,76,"\n");
 			}
-			else 
+			else
 			{
 				$theData	= $data;
-				while (strlen($theData)>76) 
+				while (strlen($theData)>76)
 				{
 					$thePart.=substr($theData,0,76)."\n";
 					$theData=substr($theData,76);
@@ -311,7 +312,7 @@ function sendEmail()
 	{
 		$this->contentType = "text/html; charset=iso-8859-1";
 	}
-	
+
     // Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelaende...
     if (!isset($this->headerOptions['From']))
     {
@@ -370,7 +371,7 @@ function sendEmail()
 
                 // Mail wird jetzt versendet...
                 // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-                if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)), 
+                if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)),
                           utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
                 {
                      return false;
@@ -395,7 +396,7 @@ function sendEmail()
 
         // Mail wird jetzt versendet...
         // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-        if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)), 
+        if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)),
                   utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
         {
              return false;
@@ -432,7 +433,7 @@ function sendEmail()
 
          // Kopie versenden an den originalen Absender...
          // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-         if (!mail(utf8_decode(stripslashes($this->headerOptions['From'])), utf8_decode(stripslashes($subject)), 
+         if (!mail(utf8_decode(stripslashes($this->headerOptions['From'])), utf8_decode(stripslashes($subject)),
                    utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
          {
              return false;
