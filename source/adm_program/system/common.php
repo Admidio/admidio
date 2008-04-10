@@ -130,6 +130,10 @@ else
 }
 
 // Pfad zum gewaehlten Theme zusammensetzen
+if(isset($g_preferences['theme']) == false)
+{
+    $g_preferences['theme'] = "classic";
+}
 define('THEME_SERVER_PATH', SERVER_PATH. "/adm_themes/". $g_preferences['theme']);
 define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
 

@@ -225,7 +225,8 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 // Die Rollen werden dabei nach Kategorie gruppiert
 //
 // Uebergaben:
-// field_id   : Id und Name der Select-Box
+// default_role : Id der Rolle die markiert wird
+// field_id     : Id und Name der Select-Box
 
 function generateRoleSelectBox($default_role = 0, $field_id = "")
 {
@@ -240,18 +241,10 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
             <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
             // Rollen selektieren
 
-            // Webmaster und Moderatoren duerfen Listen zu allen Rollen sehen
-            if($g_current_user->assignRoles())
+            // Benutzer mit den Recht alle Listen einzusehen, bekommen auch alle Rollen aufgelistet
+            if($g_current_user->viewAllLists())
             {
                 $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                             WHERE rol_valid  = 1
-                               AND rol_cat_id = cat_id
-                               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                             ORDER BY cat_sequence, rol_name";
-            }
-            elseif($g_current_user->viewAllRoles()) //User mit dem Recht alle Listen einzusehen duerfen alle Uebrigen Listen sehen
-            {
-				$sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                              WHERE rol_valid  = 1
                                AND rol_cat_id = cat_id
                                AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -264,7 +257,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
 	                        WHERE mem_usr_id = ". $g_current_user->db_fields['usr_id']. "
 							  AND mem_valid  = 1
 	                          AND mem_rol_id = rol_id
-							  AND rol_this_list_view  = 1
+							  AND rol_this_list_view  > 0
 	                          AND rol_valid  = 1 
 	                          AND rol_cat_id = cat_id
 	                          AND cat_org_id = ". $g_current_organization->getValue("org_id");

@@ -75,36 +75,36 @@ if($_GET["mode"] == 1)
     require(THEME_SERVER_PATH. "/overall_header.php");
 
     // Html des Modules ausgeben
-echo"
-<div class=\"formLayout\" id=\"edit_announcements_form\">
-	<div class=\"formHead\">Rolle l&ouml;schen</div>
-    <div class=\"formBody\">
-        <p align=\"left\">
-            <img src=\"". THEME_PATH. "/icons/wand_gray.png\" alt=\"Inaktive Rolle\" />
-            Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
-            (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
-            zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
-        </p>
-        <p align=\"left\">
-            <img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" />
-            Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
-            entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
-        </p>
-        <button name=\"delete\" type=\"button\" value=\"delete\"onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" />&nbsp;L&ouml;schen</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button name=\"inactive\" type=\"button\" value=\"inactive\" onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/wand_gray.png\" alt=\"Inaktive Rolle\" />&nbsp;Inaktive Rolle</button>
+    echo"
+    <div class=\"formLayout\" id=\"edit_announcements_form\">
+    	<div class=\"formHead\">Rolle l&ouml;schen</div>
+        <div class=\"formBody\">
+            <p align=\"left\">
+                <img src=\"". THEME_PATH. "/icons/wand_gray.png\" alt=\"Inaktive Rolle\" />
+                Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
+                (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
+                zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
+            </p>
+            <p align=\"left\">
+                <img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" />
+                Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
+                entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
+            </p>
+            <button name=\"delete\" type=\"button\" value=\"delete\"onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" />&nbsp;L&ouml;schen</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button name=\"inactive\" type=\"button\" value=\"inactive\" onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/wand_gray.png\" alt=\"Inaktive Rolle\" />&nbsp;Inaktive Rolle</button>
 
-	    <ul class=\"iconTextLinkList\">
-	        <li>
-	            <span class=\"iconTextLink\">
-	                <a href=\"#\" onclick=\"history.back()\"><img 
-	                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-	                <a href=\"#\" onclick=\"history.back()\">Zurück</a>
-	            </span>
-	        </li>
-	    </ul>
-	</div>
-</div>";
+    	    <ul class=\"iconTextLinkList\">
+    	        <li>
+    	            <span class=\"iconTextLink\">
+    	                <a href=\"#\" onclick=\"history.back()\"><img 
+    	                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
+    	                <a href=\"#\" onclick=\"history.back()\">Zurück</a>
+    	            </span>
+    	        </li>
+    	    </ul>
+    	</div>
+    </div>";
 
     require(THEME_SERVER_PATH. "/overall_footer.php");
     exit();
@@ -275,9 +275,6 @@ elseif($_GET["mode"] == 2)
         $req_rol_id = $role->getValue("rol_id");
     }
 
-    //Reset des Rechtecache in der UserKlasse für den aendernen User
-    $g_current_user->clearRights();
-
     //Rollenabhaengigkeiten setzten
     if(array_key_exists("ChildRoles", $_POST))
     {
@@ -342,7 +339,7 @@ elseif($_GET["mode"] == 3)
     {
         $g_message->show("norights");
     }
-
+    
     $msg_code = "role_inactive";
     $g_message->addVariableContent($role->getValue("rol_name"));
 }
@@ -355,7 +352,7 @@ elseif($_GET["mode"] == 4)
     {
         $g_message->show("norights");
     }
-
+    
     $msg_code = "delete";
 }
 elseif($_GET["mode"] == 5)
@@ -367,7 +364,7 @@ elseif($_GET["mode"] == 5)
     {
         $g_message->show("norights");
     }
-
+    
     $msg_code = "role_active";
     $g_message->addVariableContent($role->getValue("rol_name"));
 }

@@ -199,7 +199,7 @@ echo "
                 }
             echo "</td>
             <td>";
-                if($row->rol_this_list_view == 1)
+                if($row->rol_this_list_view > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/page_white_text.png\"
                     alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" title=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" />";

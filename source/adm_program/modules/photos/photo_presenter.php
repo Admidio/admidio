@@ -55,6 +55,17 @@ else
 //Naechstes und Letztes Bild
 $prev_image = $bild-1;
 $next_image = $bild+1;
+$url_prev_image = "#";
+$url_next_image = "#";
+
+if($prev_image > 0)
+{
+    $url_prev_image = $g_root_path. "/adm_program/modules/photos/photo_presenter.php?bild=". $prev_image. "&pho_id=". $pho_id;
+}
+if($next_image <= $photo_album->getValue("pho_quantity"))
+{
+    $url_next_image = $g_root_path. "/adm_program/modules/photos/photo_presenter.php?bild=". $next_image. "&pho_id=". $pho_id;
+}
 
 //Ordnerpfad zusammensetzen
 $ordner_foto = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
@@ -99,8 +110,8 @@ echo "
             {
                 echo"<li>
                     <span class=\"iconTextLink\">
-                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
-                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$prev_image&pho_id=$pho_id\">Vorheriges Bild</a>
+                        <a href=\"$url_prev_image\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
+                        <a href=\"$url_prev_image\">Vorheriges Bild</a>
                     </span>
                 </li>";
             }
@@ -108,8 +119,8 @@ echo "
             {
                 echo"<li>
                     <span class=\"iconTextLink\">
-                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">Nächstes Bild</a>
-                        <a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
+                        <a href=\"$url_next_image\">Nächstes Bild</a>
+                        <a href=\"$url_next_image\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
                     </span>
                 </li>";
             }
@@ -147,7 +158,7 @@ echo "
     
         //Ausgabe Bild
         echo "
-		<div><a href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$next_image&pho_id=$pho_id\">
+		<div><a href=\"$url_next_image\">
 			<img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
 			</a>
 		</div>";
