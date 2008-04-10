@@ -36,12 +36,11 @@
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
  * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
  *                        Rolle "Webmaster" ist
+ * hasMembership(rol_id)- Ueberprueft, ob der User Mitglied der uebergebenen Rolle ist
  * viewProfile			- Ueberprueft ob der User das Profil eines uebrgebenen
  * 						  Users einsehen darf
  * viewRole				- Ueberprueft ob der User eine Uebergebene Rolle(Liste)
  * 						  einsehen darf
- * vielAllRolese		- Ueberprueft ob der User das Recht besitzt alle Rolle
- * 						  (Listen) einsehen darf
  *
  *****************************************************************************/
 
@@ -54,7 +53,8 @@ class User extends TableAccess
     
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-	var $list_view_rights   = array();  // Array ueber Listenrechte einzelner Rollen
+    var $roles_membership = array();  // Array ueber alle Rollen bei denen der User Mitglied ist mit der entsprechenden Listenansichteinstellung
+	var $list_view_rights = array();  // Array ueber Listenrechte einzelner Rollen
     
     // Konstruktor
     function User(&$db, $user_id = 0)
@@ -158,26 +158,8 @@ class User extends TableAccess
             $this->fillUserFieldArray();
         }
         
-        // User Rechte vorbelegen
-        $this->clearRights();
-    }
-
-    // alle Rechtevariablen wieder zuruecksetzen
-    function clearRights()
-    {
-        // die Array-Keys muessen genauso wie die DB-Spalten heissen
-        $this->roles_rights['rol_announcements'] = -1;
-        $this->roles_rights['rol_approve_users'] = -1;
-        $this->roles_rights['rol_assign_roles']  = -1;
-        $this->roles_rights['rol_dates']         = -1;
-        $this->roles_rights['rol_download']      = -1;
-        $this->roles_rights['rol_edit_user']     = -1;
-        $this->roles_rights['rol_guestbook']     = -1;
-        $this->roles_rights['rol_guestbook_comments'] = -1;
-        $this->roles_rights['rol_photo']         = -1;
-        $this->roles_rights['rol_profile']       = -1;
-        $this->roles_rights['rol_weblinks']      = -1;
-        $this->roles_rights['rol_all_lists_view']= -1;
+        // Userrechte initialisieren
+        $this->roles_rights = array();
     }
 
     // interne Methode, die bei setValue den uebergebenen Wert prueft
@@ -256,6 +238,8 @@ class User extends TableAccess
     // alle Profilfelder aus adm_user_fields
     function _afterSave()
     {
+        global $g_current_session;
+        
         // nun noch Updates fuer alle geaenderten User-Fields machen
         foreach($this->db_user_fields as $key => $value)
         {
@@ -289,6 +273,13 @@ class User extends TableAccess
                 $this->db_user_fields[$key]['changed'] = false;
             }
         }
+        
+        if($this->db_fields_changed)
+        {
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+            // eine Rechteaenderung vorgenommen wurde
+            $g_current_session->renewUserObject();
+        }        
     }
 
     // Referenzen zum aktuellen Benutzer loeschen
@@ -429,43 +420,90 @@ class User extends TableAccess
     }
     
     // Funktion prueft, ob der User das uebergebene Rollenrecht besitzt
-    function checkRolesRight($right)
+    function checkRolesRight($right = "")
     {
-		if($this->roles_rights[$right] == -1 && $this->db_fields['usr_id'] > 0)
+        if($this->db_fields['usr_id'] > 0)
         {
-            global $g_current_organization;
-
-            $sql    = "SELECT *
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
-                          AND mem_rol_id = rol_id
-                          AND mem_valid  = 1
-                          AND $right     = 1
-                          AND rol_valid  = 1 
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
-            $this->db->query($sql);
-            $num_rows = $this->db->num_rows();
-
-            if($num_rows > 0)
+    		if(count($this->roles_rights) == 0)
             {
-                $this->roles_rights[$right] = 1;
+                global $g_current_organization;
+                $tmp_roles_rights  = array("rol_assign_roles" => "0", "rol_approve_users" => "0", 
+                                            "rol_announcements" => "0", "rol_dates" => "0", 
+                                            "rol_download" => "0", "rol_edit_user" => "0", 
+                                            "rol_guestbook" => "0", "rol_guestbook_comments" => "0", 
+                                            "rol_mail_logout" => "0", "rol_mail_login" => "0", 
+                                            "rol_photo" => "0", "rol_profile" => "0", 
+                                            "rol_weblinks" => "0", "rol_all_lists_view" => "0");
+
+                // Alle Rollen einlesen, denen der User zugeordnet ist
+                $sql    = "SELECT *
+                             FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
+                             LEFT JOIN ". TBL_MEMBERS. "
+                               ON mem_usr_id = ". $this->db_fields['usr_id']. "
+                              AND mem_rol_id = rol_id
+                              AND mem_valid  = 1
+                            WHERE rol_valid  = 1 
+                              AND rol_cat_id = cat_id
+                              AND cat_org_id = ". $g_current_organization->getValue("org_id");
+                $this->db->query($sql);
+                
+                while($row = $this->db->fetch_array())
+                {
+                    // Rechte nur beruecksichtigen, wenn auch Rollenmitglied
+                    if($row['mem_usr_id'] > 0)
+                    {
+                        // Rechte der Rollen in das Array uebertragen, 
+                        // falls diese noch nicht durch andere Rollen gesetzt wurden
+                        foreach($tmp_roles_rights as $key => $value)
+                        {
+                            if($value == "0" && $row[$key] == "1")
+                            {
+                                $tmp_roles_rights[$key] = "1";
+                            }
+                        }
+                    }
+                    
+                    // Rollenmitgliedschaft und Listenansichtseinstellung merken
+                    if($row['mem_usr_id'] > 0 && $row['rol_this_list_view'] > 0)
+                    {
+                        // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
+                        $this->roles_membership[$row['rol_id']] = 1;
+                    }
+                    elseif($row['rol_this_list_view'] == 2)
+                    {
+                        // andere Rollen anschauen, wenn jeder sie sehen darf
+                        $this->roles_membership[$row['rol_id']] = 1;
+                    }
+                    else
+                    {
+                        $this->roles_membership[$row['rol_id']] = 0;
+                    }
+                }
+                $this->roles_rights = $tmp_roles_rights;
             }
-            else
+
+            if($this->roles_rights[$right] == 1)
             {
-                $this->roles_rights[$right] = 0;
+                return true;
             }
         }
-
-        if ($this->roles_rights[$right] == 1)
+        return false;
+    }
+    
+    function hasMembership($rol_id)
+    {
+        // Arrays fuellen
+        if(count($this->roles_rights) == 0)
+        {
+            checkRolesRight();
+        }
+        // pruefen, ob Rolle in Rollenarray vorhanden
+        if(array_key_exists($rol_id, $this->roles_membership))
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
-    }    
+        return false;
+    }
 
     // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
     function editAnnouncements()
@@ -483,6 +521,12 @@ class User extends TableAccess
     function assignRoles()
     {
         return $this->checkRolesRight('rol_assign_roles');
+    }
+
+    //Ueberprueft ob der User das Recht besitzt, alle Rollenlisten einsehen zu duerfen 
+    function viewAllLists()
+    {
+        return $this->checkRolesRight('rol_all_lists_view'); 
     }
     
     // Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
@@ -550,84 +594,62 @@ class User extends TableAccess
         return $this->checkRolesRight('rol_photo');
     }
 
+    // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
+    function editWeblinksRight()
+    {
+        return $this->checkRolesRight('rol_weblinks');
+    }
+    
     // Funktion prueft, ob der User ein Profil einsehen darf    
     function viewProfile($usr_id)
     {
-		//Hat ein User Profileedit rechte, darf er es nauerlich auch sehen
+        global $g_current_organization;
+        $view_profile = false;
+        
+		//Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
 		if($this->editProfile($usr_id))
 		{
 			$view_profile = true;
 		}
-		else //ist das nicht der Fall, alle Rollen des uebergeben Users aufrufen, und fuer diese die Funktion viewRole aufrufen
+		else
 		{
-		 	$view_profile = false;
-			global $g_current_organization;
-            
-            $sql    = "SELECT rol_id
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id = ".$usr_id. "
-                          AND mem_valid  = 1
-                          AND mem_rol_id = rol_id
-                          AND rol_valid  = 1 
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
-            $this->db->query($sql);
-			
-            if($this->db->num_rows() > 0)
-            {             
-				while($check_role = $this->db->fetch_array())
-                {
-					//Rollenrechte fur Rolle ueberpruefen
-					if($this->viewRole($check_role[0]))
-					{
-						$view_profile = true;
-					}
-				}
+            // Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
+            if($this->viewAllLists())
+            {
+                $view_profile = true;
             }
             else
             {
-                $view_profile = false;
+                $sql    = "SELECT rol_id, rol_this_list_view
+                             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                            WHERE mem_usr_id = ".$usr_id. "
+                              AND mem_valid  = 1
+                              AND mem_rol_id = rol_id
+                              AND rol_valid  = 1 
+                              AND rol_cat_id = cat_id
+                              AND cat_org_id = ". $g_current_organization->getValue("org_id");
+                $this->db->query($sql);
+    			
+                if($this->db->num_rows() > 0)
+                {             
+    				while($row = $this->db->fetch_array())
+                    {
+                        if($row['rol_this_list_view'] == 2)
+                        {
+                            // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
+                            $view_profile = true;
+                        }
+                        elseif($row['rol_this_list_view'] == 1
+                        && array_key_exists($row['rol_id'], $this->roles_membership))
+                        {
+                            // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
+                            $view_profile = true;
+                        }
+    				}
+                }
             }
 		}
 		return $view_profile;
-    }
-    
-    //Ueberprueft ob der User das Recht besitzt alle Rolle (Listen) einsehen darf 
-    function viewAllRoles()
-    {
-    	if($this->roles_rights['rol_all_lists_view'] == -1 && $this->db_fields['usr_id'] > 0)
-        {
-            global $g_current_organization;
-            
-            $sql    = "SELECT rol_id
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
-                          AND mem_valid  = 1
-                          AND mem_rol_id = rol_id
-						  AND rol_all_lists_view  = 1
-                          AND rol_valid  = 1 
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
-            $this->db->query($sql);           
-            
-            if($this->db->num_rows() > 0)
-            {
-                $this->roles_rights['rol_all_lists_view'] = 1;
-            }
-            else
-            {
-                $this->roles_rights['rol_all_lists_view'] = 0;
-            }
-        }
-        //Falls er das Recht hat alle Listen einzusehen true zurueckgeben
-        if ($this->roles_rights['rol_all_lists_view'] == 1)
-        {
-            return true;
-        } 
- 		else
- 		{
-			return false;
- 		}   
     }
     
     // Funktion prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf    
@@ -635,51 +657,20 @@ class User extends TableAccess
     {
     	$view_role = false;
 		//Zunaechst abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
-		if($this->viewAllRoles())
+		if($this->viewAllLists())
 		{
 			$view_role = true;
 		}
         else  //Falls er das Recht nicht hat Kontrolle fuer eine bestimmte Rolle
         {
-            //nachschauen ob Wert fuer Rolle schon ins Array geschrieben wurde
-            if(array_key_exists  ($rol_id, $this->list_view_rights))
+            // im Array nach der Rolleneinstellung schauen
+            if(array_key_exists($rol_id, $this->roles_membership)
+            && $this->roles_membership[$rol_id] > 0)
             {
-				//Falls ja sehen ob Recht besteht und entsprechenden Wert zuückgeben
-				if($this->list_view_rights[$rol_id] == 1)
-				{
-					$view_role = true;
-				}
-            }
-            else
-            {
-	            //Falls noch nicht im Array erfasst -> SQL-Abfrage ueber alle Rollen
-	            global $g_current_organization;
-	            $sql    = "SELECT rol_id, rol_this_list_view
-	                         FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-	                        WHERE rol_valid  = 1 
-	                          AND rol_cat_id = cat_id
-	                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
-	            $result = $this->db->query($sql);
-	            
-	            while($row = $this->db->fetch_array($result))
-	            {
-	            	$this->list_view_rights[$row['rol_id']] = $row['rol_this_list_view'];
-					
-					// fuer die aktuell gesuchte Rolle schon mal den Status merken
-					if($row['rol_id'] == $rol_id && $row['rol_this_list_view'] == 1)
-					{
-						$view_role = true;
-					}
-	            }
+                $view_role = true;
             }
         }
         return $view_role;
-    }
-
-    // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
-    function editWeblinksRight()
-    {
-        return $this->checkRolesRight('rol_weblinks');
     }
 
     function isWebmaster()

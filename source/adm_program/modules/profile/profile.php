@@ -508,10 +508,10 @@ echo "
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
             $show_this_role = "";
-            if($g_current_user->viewAllRoles() == false && $g_current_user->assignRoles() == false)
+            if($g_current_user->viewAllLists() == false)
             {
                // das Mitglied darf nicht alle Rollen sehen
-               $show_this_role = " AND rol_this_list_view = 1 ";
+               $show_this_role = " AND rol_this_list_view > 0 ";
             }
             
             $sql    = "SELECT *
@@ -555,99 +555,102 @@ echo "
                             while($row = $g_db->fetch_array($result_role))
                             {
                                 // jede einzelne Rolle anzeigen
-                                echo '<li id="role_'. $row['mem_rol_id']. '">
-                                    <dl>
-                                        <dt>
-                                            '. $row['cat_name']. ' - ';
-                                                if($g_current_user->viewRole($row['mem_rol_id']))
+                                if($g_current_user->viewAllLists() || $g_current_user->viewRole($row['mem_rol_id']))
+                                {
+                                    echo '<li id="role_'. $row['mem_rol_id']. '">
+                                        <dl>
+                                            <dt>
+                                                '. $row['cat_name']. ' - ';
+                                                    if($g_current_user->viewRole($row['mem_rol_id']))
+                                                    {
+                                                        echo'<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                                    }
+                                                    else
+                                                    {
+                                                        echo $row['rol_name'];  
+                                                    }
+                                                    if($row['mem_leader'] == 1)
+                                                    {
+                                                        echo ' - Leiter';
+                                                    }
+                                                echo '&nbsp;';
+                                                
+                                                // nun fuer alle Rollenrechte die Icons anzeigen
+                                                if($row['rol_assign_roles'] == 1)
                                                 {
-                                                    echo'<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/wand.png\"
+                                                    alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
                                                 }
-                                                else
+                                                if($row['rol_approve_users'] == 1)
                                                 {
-                                                    echo $row['rol_name'];  
-                                                }
-                                                if($row['mem_leader'] == 1)
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/properties.png\"
+                                                    alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
+                                                }                                                    
+                                                if($row['rol_edit_user'] == 1)
                                                 {
-                                                    echo ' - Leiter';
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
+                                                    alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
                                                 }
-                                            echo '&nbsp;';
-                                            
-                                            // nun fuer alle Rollenrechte die Icons anzeigen
-                                            if($row['rol_assign_roles'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/wand.png\"
-                                                alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
-                                            }
-                                            if($row['rol_approve_users'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/properties.png\"
-                                                alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
-                                            }                                                    
-                                            if($row['rol_edit_user'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
-                                                alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
-                                            }
-                                            if($row['rol_profile'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user.png\"
-                                                alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
-                                            }
-                                            if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\"
-                                                alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/date.png\"
-                                                alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
-                                                alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/folder_down.png\"
-                                                alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comment.png\"
-                                                alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
-                                            }
-                                            if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
-                                                alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
-                                            }
-                                            if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
-                                                alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_all_lists_view'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
-                                                alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
-                                            }
-                                                                    echo "</dt>
-                                        <dd>
-                                            seit ". mysqldate('d.m.y', $row['mem_begin']);
-                                            if($g_current_user->assignRoles() || $g_current_user->editUser())
+                                                if($row['rol_profile'] == 1)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user.png\"
+                                                    alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
+                                                }
+                                                if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] > 0)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\"
+                                                    alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
+                                                }
+                                                if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] > 0)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/date.png\"
+                                                    alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
+                                                }
+                                                if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] > 0)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
+                                                    alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
+                                                }
+                                                if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] > 0)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/folder_down.png\"
+                                                    alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
+                                                }
+                                                if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comment.png\"
+                                                    alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
+                                                }
+                                                if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
+                                                    alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
+                                                }
+                                                if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] > 0)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
+                                                    alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
+                                                }
+                                                if($row['rol_all_lists_view'] == 1)
+                                                {
+                                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
+                                                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
+                                                }
+                                                                        echo "</dt>
+                                            <dd>
+                                                seit ". mysqldate('d.m.y', $row['mem_begin']);
+                                                if($g_current_user->assignRoles() || $g_current_user->editUser())
 
-                                            {
-                                                echo "
-                                                <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
-                                                    mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ", '". $g_root_path. "', '". $g_preferences['theme']. "')\"><img 
-                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
-                                            }
-                                        echo "</dd>
-                                    </dl>
-                                </li>";
+                                                {
+                                                    echo "
+                                                    <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
+                                                        mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ", '". $g_root_path. "', '". $g_preferences['theme']. "')\"><img 
+                                                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                                                }
+                                            echo "</dd>
+                                        </dl>
+                                    </li>";
+                                }
                             }
                         echo "</ul>";
                     }
@@ -663,7 +666,7 @@ echo "
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
             $show_this_role = "";
-            if($g_current_user->viewAllRoles() == false)
+            if($g_current_user->viewAllLists() == false)
             {
                // das Mitglied darf nicht alle Rollen sehen
                $show_this_role = " AND rol_this_list_view = 1 ";
