@@ -13,16 +13,17 @@
 #calendarcpYearNavigation,
 #calendarcpMonthNavigation
 {
-background-color:#85C226;
-text-align:center;
-vertical-align:center;
-text-decoration:none;
-color:#333333;
-border-bottom:0px;
-font-weight:bold;
-font-size:10pt;
-font-family:arial;
-cursor:pointer;
+    text-align:center;
+    vertical-align:center;
+    text-decoration:none;
+    color:#333333;
+    border-bottom:0px;
+    font-weight:bold;
+    font-size:10pt;
+    font-family:arial;
+    cursor:pointer;
+    background-repeat:repeat-x;
+    background-image:url(../images/stripe.png); 
 }
 #calendarcpDayColumnHeader,
 #calendarcpCurrentMonthDate,
@@ -35,89 +36,85 @@ cursor:pointer;
 #calendarcpTodayTextDisabled,
 #calendarcpText
 {
-font-family:arial;
-font-size:10pt;
-padding-right:2px;
-cursor:pointer;
+    font-family:arial;
+    font-size:10pt;
+    padding-right:2px;
+    cursor:pointer;
 }
 #calendarcpDayColumnHeader
 {
-border-bottom:1px solid black;
-padding:2px;
-font-weight:bold;
-padding-right:5px;
-cursor:default;
+    border-bottom:1px solid black;
+    padding:2px;
+    font-weight:bold;
+    padding-right:5px;
+    cursor:default;
 }
 #calendarcpCurrentMonthDate,
 #calendarcpOtherMonthDate,
 #calendarcpCurrentDate
 {
-text-align:right;
-text-decoration:none;
+    text-align:right;
+    text-decoration:none;
 }
 #calendarcpCurrentMonthDateDisabled,
 #calendarcpOtherMonthDateDisabled,
 #calendarcpCurrentDateDisabled
 {
-color:#D0D0D0;
-text-align:right;
-text-decoration:line-through;
+    color:#D0D0D0;
+    text-align:right;
+    text-decoration:line-through;
 }
-#calendarcpCurrentMonthDate
+#calendarcpCurrentMonthDate,
+#calendarcpTodayText 
 {
-color:#6677DD;
-font-weight:bold;
+    color:#222222;
+    font-weight:bold;
 }
 #calendarcpCurrentDate
 {
-color: #E0791F;
-font-weight:bold;
+    color: #E0791F;
+    font-weight:bold;
 }
 #calendarcpOtherMonthDate
 {
-color:#808080;
+    color:#808080;
 }
 #calendarcpCurrentDate
 {
-color:#FFFFFF;
-background-color: #6677DD;
+    color:#FFFFFF;
+    background-color: #459ba6;
 }
 #calendarcpCurrentDateDisabled
 {
-border:1px solid thin #FF;
+    border:1px solid thin #FF;
 }
 #calendarcpTodayText ,
 #calendarcpTodayTextDisabled
 {
-height:20px;
-padding-top:10px;
-}
-#calendarcpTodayText 
-{
-color:#E0791F;
-font-weight:bold;
+    height:20px;
+    padding-top:10px;
 }
 #calendarcpTodayTextDisabled 
 {
-color:#D0D0D0;
+    color:#D0D0D0;
 }
 #calendarcpBorder
 {
-border-right:0px;
-background-color: #EAEAEA;
-border:1px solid black;
-left:0px;
-width:170px;
+    border-right:0px;
+    background-color: #deebef;
+    border:1px solid #7d7d7d;
+    left:0px;
+    width:170px;
 }
 #daynames
 {
-margin-top:10px;
-border-bottom:0px;
-border-left:0px;
-border-top:0px;
-border-right:0px;
+    margin-top:10px;
+    border-bottom:0px;
+    border-left:0px;
+    border-top:0px;
+    border-right:0px;
 }
 #navigationbar
 {
-border-bottom:1px solid black;
+    border-bottom:1px solid black;
 }

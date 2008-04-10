@@ -688,7 +688,8 @@ function CalendarPopup() {
 	c.displayType = "date";
 	c.disabledWeekDays = new Object();
 	c.disabledDatesExpression = "";
-	c.yearSelectStartOffset = 2;
+	c.yearSelectStartOffset = 30;
+    c.yearSelectEndOffset = 10;
 	c.currentDate = null;
 	c.todayText="Heute";
 	c.cssPrefix="";
@@ -711,6 +712,7 @@ function CalendarPopup() {
 	c.setDisabledWeekDays = CP_setDisabledWeekDays;
 	c.addDisabledDates = CP_addDisabledDates;
 	c.setYearSelectStartOffset = CP_setYearSelectStartOffset;
+    c.setYearSelectEndOffset = CP_setYearSelectEndOffset;
 	c.setTodayText = CP_setTodayText;
 	c.showYearNavigation = CP_showYearNavigation;
 	c.showCalendar = CP_showCalendar;
@@ -797,6 +799,9 @@ function CP_setDisplayType(type) {
 
 // How many years back to start by default for year display
 function CP_setYearSelectStartOffset(num) { this.yearSelectStartOffset=num; }
+
+// How many years forward to end by default for year display
+function CP_setYearSelectEndOffset(num) { this.yearSelectEndOffset=num; }
 
 // Set which weekdays should not be clickable
 function CP_setDisabledWeekDays() {
@@ -977,7 +982,8 @@ function CP_getCalendar() {
 			result += '<td id="'+this.cssPrefix+'cpMonthNavigation" width="10">&nbsp;</td>';
 
 			result += '<td id="'+this.cssPrefix+'cpYearNavigation" width="56" colspan="3"><select id="'+this.cssPrefix+'cpYearNavigation" name="cpYear" onChange="'+refresh+'('+this.index+','+month+',this.options[this.selectedIndex].value-0);">';
-			for( var yearCounter=year-this.yearSelectStartOffset; yearCounter<=year+this.yearSelectStartOffset; yearCounter++ ) {
+
+			for( var yearCounter=year-this.yearSelectStartOffset; yearCounter<=year+this.yearSelectEndOffset; yearCounter++ ) {
 				var selected = (yearCounter==year) ? 'SELECTED' : '';
 				result += '<option value="'+yearCounter+'" '+selected+'>'+yearCounter+'</option>';
 				}
