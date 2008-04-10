@@ -27,7 +27,8 @@
  * save($login_user_id)   - Rolle wird mit den geaenderten Daten in die Datenbank
  *                          zurueckgeschrieben bwz. angelegt
  * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
- * renewUserObject()      - diese Funktion stoesst ein Neueinlesen des User-Objekts an
+ * renewUserObject($usr_id = 0)
+ *                        - diese Funktion stoesst ein Neueinlesen des User-Objekts an
  * renewOrganizationObject() 
  *                        - diese Funktion stoesst ein Neueinlesen des Organisations-Objekts an
  * tableCleanup($max_inactive_time)         
@@ -91,9 +92,15 @@ class Session extends TableAccess
 
     // diese Funktion stoesst ein Neueinlesen des User-Objekts bei allen angemeldeten
     // Usern beim naechsten Seitenaufruf an
-    function renewUserObject()
+    // wird usr_id uebergeben, dann nur das Einlesen fuer diese usr_id anstossen
+    function renewUserObject($usr_id = 0)
     {
-        $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 1 ";
+        $sql_usr_id = "";
+        if($usr_id > 0)
+        {
+            $sql_usr_id = " WHERE ses_usr_id = ". $usr_id;
+        }
+        $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 1 ". $sql_usr_id;
         $this->db->query($sql);
     }
     

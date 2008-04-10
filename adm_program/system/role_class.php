@@ -87,10 +87,29 @@ class Role extends TableAccess
         $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
     }
 
+    // Methode wird erst nach dem Speichern der Rolle aufgerufen
+    function _afterSave()
+    {
+        global $g_current_session;
+        
+        if($this->db_fields_changed)
+        {
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+            // eine Rechteaenderung vorgenommen wurde
+            $g_current_session->renewUserObject();
+        }
+    }
+    
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
     // die Funktion wird innerhalb von delete() aufgerufen
     function _delete()
     {
+        global $g_current_session;
+        
+        // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+        // eine Rechteaenderung vorgenommen wurde
+        $g_current_session->renewUserObject();
+            
         // die Rolle "Webmaster" darf nicht geloescht werden
         if($this->db_fields['rol_name'] != "Webmaster")
         {
@@ -114,6 +133,8 @@ class Role extends TableAccess
     // aktuelle Rolle wird auf inaktiv gesetzt
     function setInactive()
     {
+        global $g_current_session;
+        
         // die Rolle "Webmaster" darf nicht auf inaktiv gesetzt werden
         if($this->db_fields['rol_name'] != "Webmaster")
         {
@@ -127,6 +148,10 @@ class Role extends TableAccess
                         WHERE rol_id = ". $this->db_fields['rol_id'];
             $this->db->query($sql);
             
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+            // eine Rechteaenderung vorgenommen wurde
+            $g_current_session->renewUserObject();
+        
             return 0;
         }
         return -1;
@@ -135,6 +160,8 @@ class Role extends TableAccess
     // aktuelle Rolle wird auf aktiv gesetzt
     function setActive()
     {
+        global $g_current_session;
+        
         // die Rolle "Webmaster" ist immer aktiv
         if($this->db_fields['rol_name'] != "Webmaster")
         {
@@ -146,6 +173,10 @@ class Role extends TableAccess
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
                         WHERE rol_id = ". $this->db_fields['rol_id'];
             $this->db->query($sql);
+            
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+            // eine Rechteaenderung vorgenommen wurde
+            $g_current_session->renewUserObject();
             
             return 0;
         }
