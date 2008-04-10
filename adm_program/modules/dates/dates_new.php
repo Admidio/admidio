@@ -239,7 +239,7 @@ echo "
                                 echo " checked=\"checked\" ";
                             }
                             echo " value=\"1\" />
-                            <label for=\"dat_global\">". $_GET['headline']. " ist f&uuml;r mehrere Organisationen sichtbar</label>
+                            <label for=\"dat_global\">". $_GET['headline']. " für mehrere Organisationen sichtbar</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"Hilfe\"
                             	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\"
                             	onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=date_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
