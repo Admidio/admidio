@@ -25,7 +25,12 @@ parse_str($main_uebergabe);
 // die uebergebene Datei linken
 if(strlen($_SERVER['QUERY_STRING']) > 0)
 {
-  	$query_string =  substr($_SERVER['QUERY_STRING'], strrpos($_SERVER['QUERY_STRING'], "=")+1);
+  	$query_string = substr($_SERVER['QUERY_STRING'], strrpos($_SERVER['QUERY_STRING'], "=")+1);
+  	$query_string = str_replace  ( "../"  , ""  , $query_string );
+  	$query_string = str_replace  ( "./"  , ""  , $query_string );
+  	$query_string = str_replace  ( "http"  , ""  , $query_string );
+  	$query_string = str_replace  ( ":"  , ""  , $query_string );
+  	$query_string = str_replace  ( "//"  , ""  , $query_string );
         
     if(strpos($_SERVER['QUERY_STRING'], "?") > 0)
     {
@@ -36,8 +41,8 @@ if(strlen($_SERVER['QUERY_STRING']) > 0)
         $main_link_seite = $g_root_path."/adm_my_files/content/". $query_string;
     }  
 	
-    $content=fopen($main_link_seite, "r");
-	fpassthru($content);
+	$content_string = file_get_contents($main_link_seite);
+    echo $content_string;
 }
 else
 {
