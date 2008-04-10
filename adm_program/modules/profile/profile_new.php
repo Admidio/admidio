@@ -255,26 +255,34 @@ function getFieldCode($field, $user, $new_user)
             $width = "200px";
             $maxlength = "50";
         }
-        if($field['usf_type'] == "DATE" && $field['usf_name'] != 'Geburtstag')
+        if($field['usf_type'] == "DATE")
 		{
-			$value = "<script type=\"text/javascript\" id=\"js18\">
-						var cal18 = new CalendarPopup(\"calendardiv\");
-						cal18.setCssPrefix(\"calendar\");
-					</script>
+            if($field['usf_name'] == 'Geburtstag')
+            {
+                $value = "<script type=\"text/javascript\">
+    						var calBirthday = new CalendarPopup('calendardiv');
+    						calBirthday.setCssPrefix('calendar');
+                            calBirthday.showNavigationDropdowns();
+                            calBirthday.setYearSelectStartOffset(90);
+                            calBirthday.setYearSelectEndOffset(0);
+    					</script>";
+                $calObject = "calBirthday";
+            }
+            else
+            {
+                $value = "<script type=\"text/javascript\">
+    						var calDate = new CalendarPopup('calendardiv');
+    						calDate.setCssPrefix('calendar');
+                            calDate.showNavigationDropdowns();
+                            calDate.setYearSelectStartOffset(50);
+                            calDate.setYearSelectEndOffset(10);
+    					</script>";
+                $calObject = "calDate";
+            }
+			$value .= "
 					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
-		}
-		else if ($field['usf_name'] == 'Geburtstag')
-		{
-			$value = "<script type=\"text/javascript\" id=\"js18\">
-						var cal19 = new CalendarPopup(\"calendardiv\");
-						cal19.showNavigationDropdowns();
-						cal19.setCssPrefix(\"calendar\");
-						cal19.setYearSelectStartOffset(30)
-					</script>
-					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal19.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:$calObject.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" 
+                        id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
 		}
 		else
