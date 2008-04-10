@@ -98,11 +98,26 @@ class Category extends TableAccess
             }
         }
     }
+
+    // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
+    function _afterSave()
+    {
+        global $g_current_session;
+        
+        if($this->db_fields_changed && $this->db_fields['cat_type'] == 'USF')
+        {
+            // einlesen aller Userobjekte der angemeldeten User anstossen, 
+            // da Aenderungen in den Profilfeldern vorgenommen wurden 
+            $g_current_session->renewUserObject();
+        }
+    }
     
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
     // die Funktion wird innerhalb von delete() aufgerufen
     function _delete()
     {
+        global $g_current_session;
+        
         if($this->db_fields['cat_type'] == 'ROL')
         {
             $sql    = "DELETE FROM ". TBL_ROLES. "
@@ -120,6 +135,10 @@ class Category extends TableAccess
             $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
                         WHERE usf_cat_id = ". $this->db_fields['cat_id'];
             $this->db->query($sql);
+            
+            // einlesen aller Userobjekte der angemeldeten User anstossen, 
+            // da Aenderungen in den Profilfeldern vorgenommen wurden 
+            $g_current_session->renewUserObject();
         }
         return true;    
     }

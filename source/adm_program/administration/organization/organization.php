@@ -604,6 +604,38 @@ echo "
                     </li>
                     <li>
                         <dl>
+                            <dt><label for=\"photo_show_mode\">Fotodarstellung:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"photo_show_mode\" name=\"photo_show_mode\">
+                                    <option value=\"0\" ";
+                                    if($form_values['photo_show_mode'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Popupfenster</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['photo_show_mode'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Lightbox</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['photo_show_mode'] == 2)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Gleiches Fenster</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann eingestellt werden, wie die Bilder im Fotomodul präsentiert werden sollen. 
+                        dies kann über ein Popup-Fenster, über eine Javascript-Animation (Lightbox) oder auf 
+                        dergleichen Seite in normalem HTML erfolgen.
+                    </li>
+                    <li>
+                        <dl>
                             <dt><label for=\"photo_thumbs_row\">Thumbnailzeilen:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\" />
@@ -706,41 +738,8 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
-                        eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
-                        erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"photo_show_mode\">Fotodarstellung:</label></dt>
-                            <dd>
-                                <select size=\"1\" id=\"photo_show_mode\" name=\"photo_show_mode\">
-                                    <option value=\"0\" ";
-                                    if($form_values['photo_show_mode'] == 0)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Popupfenster</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['photo_show_mode'] == 1)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Lightbox</option>
-                                    <option value=\"2\" ";
-                                    if($form_values['photo_show_mode'] == 2)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Gleiches Fenster</option>
-                                </select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Wie sollen die Bilder in der Gro&szlig;enansicht angezeigt werden?<br/>
-                        1) in einem Popupfenster<br/>
-                        2) mit Lightbox (der rest der Seite wird ausgegraut)<br/>
-                        3) im gleichen Fenster
+                        mit eingeblendet, sobald die Bilder eine Größe von 200 Pixeln überschreiten. In der Regel 
+                        sollten Thumbnails davon nicht betroffen sein.
                     </li>
                 </ul>
             </div>

@@ -56,13 +56,9 @@ if($g_current_user->assignRoles() || $g_current_user->editUser())
     // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
     // aber auch keine Rollen mit Rollenvergaberechten 
     $sql_roles_condition = "";
-    if(!$g_current_user->assignRoles())
+    if($g_current_user->editUser() && !$g_current_user->viewAllLists())
     {
-        $sql_roles_condition = " AND rol_assign_roles = 0 ";
-    }
-    if($g_current_user->editUser() && !$g_current_user->viewAllRoles() && !$g_current_user->assignRoles())
-    {
-        $sql_roles_condition .= " AND rol_this_list_view = 1 ";
+        $sql_roles_condition .= " AND rol_this_list_view > 0 ";
     }
     
     $sql    = "SELECT rol_id, rol_name, rol_max_members, mem_usr_id, mem_leader, mem_valid
@@ -148,39 +144,39 @@ if($g_db->num_rows($result_rolle)>0)
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = $g_db->fetch_object($result_rolle))
 {
-    // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
-    if($row->rol_name != 'Webmaster' || $g_current_user->isWebmaster())
+    if($g_current_user->assignRoles() || $g_current_user->viewRole($row->rol_id))
     {
-        $role_assign = 0;
-        if(isset($_POST["role-$row->rol_id"]) && $_POST["role-$row->rol_id"] == 1)
+        // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
+        if($row->rol_name != 'Webmaster' || $g_current_user->isWebmaster())
         {
-            $role_assign = 1;
-        }
-
-        $role_leader = 0;
-        if(isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == 1)
-        {
-            $role_leader = 1;
-        }
-
-        // Rollenmitgliedschaften aktualisieren
-        if(is_null($row->mem_usr_id))
-        {
-            // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
-            if($role_assign == 1)
+            $role_assign = 0;
+            if(isset($_POST["role-$row->rol_id"]) && $_POST["role-$row->rol_id"] == 1)
             {
-                $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-                          VALUES ($row->rol_id, $req_usr_id, NOW(),NULL, 1, $role_leader) ";
-                $g_db->query($sql);
-                $count_assigned++;
+                $role_assign = 1;
             }
-        }
-        else
-        {
-            // neue Rollenmitgliederdaten zurueckschreiben, falls sich diese geaendert haben
-            if($role_assign == 1)
+
+            $role_leader = 0;
+            if(isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == 1)
             {
-                if($row->mem_valid == 0)
+                $role_leader = 1;
+            }
+
+            // Rollenmitgliedschaften aktualisieren
+            if(is_null($row->mem_usr_id))
+            {
+                // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
+                if($role_assign == 1)
+                {
+                    $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
+                              VALUES ($row->rol_id, $req_usr_id, NOW(),NULL, 1, $role_leader) ";
+                    $g_db->query($sql);
+                    $count_assigned++;
+                }
+            }
+            else
+            {
+                // neue Rollenmitgliederdaten zurueckschreiben, falls sich diese geaendert haben
+                if($role_assign == 1)
                 {
                     $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
                                                        , mem_end    = NULL
@@ -190,10 +186,7 @@ while($row = $g_db->fetch_object($result_rolle))
                     $g_db->query($sql);
                     $count_assigned++;
                 }
-            }
-            else
-            {
-                if($row->mem_valid == 1)
+                else
                 {
                     $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
                                                        , mem_end    = NOW()
@@ -203,20 +196,18 @@ while($row = $g_db->fetch_object($result_rolle))
                     $g_db->query($sql);
                 }
             }
-        }
 
-        // find the parent roles
-        if($role_assign == 1)
-        {
-            $tmpRoles = RoleDependency::getParentRoles($g_db,$row->rol_id);
-            foreach($tmpRoles as $tmpRole)
+            // find the parent roles
+            if($role_assign == 1)
             {
-                if(!in_array($tmpRole,$parentRoles))
-                $parentRoles[] = $tmpRole;
+                $tmpRoles = RoleDependency::getParentRoles($g_db,$row->rol_id);
+                foreach($tmpRoles as $tmpRole)
+                {
+                    if(!in_array($tmpRole,$parentRoles))
+                    $parentRoles[] = $tmpRole;
+                }
             }
-
         }
-
     }
 }
 
@@ -224,10 +215,7 @@ $_SESSION['navigation']->deleteLastUrl();
 
 // falls Rollen dem eingeloggten User neu zugewiesen wurden, 
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
-if($g_current_user->getValue("usr_id") != $req_usr_id)
-{
-    $g_current_user->clearRights();
-}
+$g_current_session->renewUserObject();
 
 if(count($parentRoles) > 0 )
 {

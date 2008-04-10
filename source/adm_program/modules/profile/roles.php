@@ -97,7 +97,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">". $g_layout['title']. "</h1>
 
-<form action=\"$g_root_path/adm_program/modules/profile/roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\" name=\"Funktionen\">
+<form action=\"$g_root_path/adm_program/modules/profile/roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\">
     <table class=\"tableList\" cellspacing=\"0\">
         <thead>
             <tr>
@@ -116,13 +116,9 @@ echo "
 		    // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
 		    // aber auch keine Rollen mit Rollenvergaberechten 
 		    $sql_roles_condition = "";
-		    if(!$g_current_user->assignRoles())
+		    if($g_current_user->editUser() && !$g_current_user->viewAllLists())
 		    {
-		        $sql_roles_condition = " AND rol_assign_roles = 0 ";
-		    }
-		    if($g_current_user->editUser() && !$g_current_user->viewAllRoles() && !$g_current_user->assignRoles())
-		    {
-		        $sql_roles_condition = " AND rol_this_list_view = 1 ";
+		        $sql_roles_condition = " AND rol_this_list_view > 0 ";
 		    }
             
             $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
@@ -161,67 +157,70 @@ echo "
 
         while($row = $g_db->fetch_object($result))
         {
-            if($category != $row->cat_name)
+            if($g_current_user->assignRoles() || $g_current_user->viewRole($row->rol_id))
             {
-                if(strlen($category) > 0)
+                if($category != $row->cat_name)
                 {
-                    echo "</tbody>";
+                    if(strlen($category) > 0)
+                    {
+                        echo "</tbody>";
+                    }
+                    $block_id = "cat_$row->cat_id";
+                    echo "<tbody>
+                        <tr>
+                            <td class=\"tableSubHeader\" colspan=\"4\">
+                                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id','". THEME_PATH. "')\"><img
+                                id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody id=\"$block_id\">";
+
+                    $category = $row->cat_name;
                 }
-                $block_id = "cat_$row->cat_id";
-                echo "<tbody>
-                    <tr>
-                        <td class=\"tableSubHeader\" colspan=\"4\">
-                            <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id','". THEME_PATH. "')\"><img
-                            id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody id=\"$block_id\">";
-
-                $category = $row->cat_name;
-            }
-            echo "
-            <tr class=\"tableMouseOver\">
-               <td style=\"text-align: center;\">
-                  <input type=\"checkbox\" id=\"role-$row->rol_id\" name=\"role-$row->rol_id\" ";
-                     if($row->mem_usr_id > 0)
-                     {
-                        echo " checked=\"checked\" ";
-                     }
-
-                     // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
-                     // entsprechende Rolle sofort hinzufuegen
-                     if($row->rol_id == $set_rol_id)
-                     {
-                        echo " checked=\"checked\" ";
-                     }
-
-                     // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                     if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
-                     {
-                        echo " disabled=\"disabled\" ";
-                     }
-
-                     echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
-               </td>
-               <td><label for=\"role-$row->rol_id\">$row->rol_name</label></td>
-               <td>$row->rol_description</td>
-               <td style=\"text-align: center;\">
-                        <input type=\"checkbox\" id=\"leader-$row->rol_id\" name=\"leader-$row->rol_id\" ";
-                        if($row->mem_leader > 0)
-                        {
+                echo "
+                <tr class=\"tableMouseOver\">
+                   <td style=\"text-align: center;\">
+                      <input type=\"checkbox\" id=\"role-$row->rol_id\" name=\"role-$row->rol_id\" ";
+                         if($row->mem_usr_id > 0)
+                         {
                             echo " checked=\"checked\" ";
-                        }
+                         }
 
-                        // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                        if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
-                        {
+                         // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
+                         // entsprechende Rolle sofort hinzufuegen
+                         if($row->rol_id == $set_rol_id)
+                         {
+                            echo " checked=\"checked\" ";
+                         }
+
+                         // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
+                         if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
+                         {
                             echo " disabled=\"disabled\" ";
-                        }
+                         }
 
-                        echo " onclick=\"markMember(this)\" value=\"1\" />
-               </td>
-            </tr>";
+                         echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
+                   </td>
+                   <td><label for=\"role-$row->rol_id\">$row->rol_name</label></td>
+                   <td>$row->rol_description</td>
+                   <td style=\"text-align: center;\">
+                            <input type=\"checkbox\" id=\"leader-$row->rol_id\" name=\"leader-$row->rol_id\" ";
+                            if($row->mem_leader > 0)
+                            {
+                                echo " checked=\"checked\" ";
+                            }
+
+                            // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
+                            if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
+                            {
+                                echo " disabled=\"disabled\" ";
+                            }
+
+                            echo " onclick=\"markMember(this)\" value=\"1\" />
+                   </td>
+                </tr>";
+            }
         }
     echo "</table>
 

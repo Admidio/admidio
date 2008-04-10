@@ -222,12 +222,6 @@ elseif($_GET['mode'] == 4)
     {
         $category->setValue("cat_sequence", $_GET['sequence']);
         $category->save();
-        
-        // Alle Userobjekte der Benutzer neu einlesen
-        if($_GET['type'] == "USF")
-        {
-            $g_current_session->renewUserObject();
-        }
     }
     exit();
 }
