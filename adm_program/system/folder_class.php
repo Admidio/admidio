@@ -281,6 +281,56 @@ class Folder extends TableAccess
     }
 
 
+    //Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
+    function getNavigationForDownload($folderId = 0, $currentNavigation = null)
+    {
+    	$originalCall = false;
+
+    	if ($folderId == 0)
+        {
+            $originalCall = true;
+        	$folderId = $this->getValue('fol_id');
+        	$parentId = $this->getValue('fol_fol_id_parent');
+
+        	if ($parent_id) {
+
+        		//wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
+        		$sql_parent = "SELECT * FROM ". TBL_FOLDERS. "
+                            	WHERE fol_name   = 'download'
+                           		  AND fol_type   = 'DOWNLOAD'
+                                  AND fol_path   = '/adm_my_files'
+                                  AND fol_org_id = ". $g_current_organization->getValue("org_id");
+
+                $result_parent = $this->db->query($sql_parent);
+
+                $parentRow = $this->db->fetch_object($result_parent);
+
+        		$currentNavigation =	"<a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $parentRow->fol_id. "\">
+            						 	<img src=\"". THEME_PATH. "/icons/application_view_list.png\" alt=\"Downloads\" /></a>
+             						 	<a href=\"$g_root_path/adm_program/modules/download/download.php?folder_id=". $parentRow->fol_id. "\">". $parentRow->fol_name. "</a>";
+        	}
+        	else {
+
+        		//Wenn es keinen Elternordner gibt, wird auch keine Navigationsleite benoetigt
+        		return "";
+
+        	}
+
+        }
+        else
+        {
+
+        }
+
+
+        if ($originalCall) {
+		    $link = "<div class=\"navigationPath\">$current_navigation &gt; $this->getValue('fol_name')</div>";
+        }
+
+
+    }
+
+
     //Gibt die aktuellen Rollenbrechtigungen des Ordners als Array zurueck
     function getRoleArrayOfFolder()
     {
