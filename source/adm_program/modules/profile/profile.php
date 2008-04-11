@@ -508,7 +508,7 @@ echo "
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
             $show_this_role = "";
-            if($g_current_user->viewAllLists() == false)
+            if($g_current_user->viewAllRoles() == false)
             {
                // das Mitglied darf nicht alle Rollen sehen
                $show_this_role = " AND rol_this_list_view > 0 ";
@@ -555,7 +555,7 @@ echo "
                             while($row = $g_db->fetch_array($result_role))
                             {
                                 // jede einzelne Rolle anzeigen
-                                if($g_current_user->viewAllLists() || $g_current_user->viewRole($row['mem_rol_id']))
+                                if($g_current_user->viewAllRoles() || $g_current_user->viewRole($row['mem_rol_id']))
                                 {
                                     echo '<li id="role_'. $row['mem_rol_id']. '">
                                         <dl>
@@ -666,7 +666,7 @@ echo "
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
             $show_this_role = "";
-            if($g_current_user->viewAllLists() == false)
+            if($g_current_user->viewAllRoles() == false)
             {
                // das Mitglied darf nicht alle Rollen sehen
                $show_this_role = " AND rol_this_list_view = 1 ";
