@@ -673,7 +673,7 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen:</label></dt>
+                            <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen und im LBmodus:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
                              </dd>
@@ -704,8 +704,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
-                        haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
+                        Die hier angegeben Werte bestimmen die maximale Breite die ein Bild im Anzeigefenster
+                        haben darf, au&szlig;er Lightboxmodus. Das Fenster im Popupmodus wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
                         ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
                         sein muss. (Standardwert: 500)
                     </li>
@@ -719,7 +719,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
-                        haben darf. Das Fenster wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
+                        haben darf, au&szlig;er Lightboxmodus. Das Fenster  im Popupmodus wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
                         ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
                         sein muss. (Standardwert: 380)
                     </li>
@@ -738,8 +738,9 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
-                        mit eingeblendet, sobald die Bilder eine Größe von 200 Pixeln überschreiten. In der Regel 
-                        sollten Thumbnails davon nicht betroffen sein.
+                        eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
+                        erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
+						Diese Funktion steht im Lightboxmodus nicht zur Verfügung.
                     </li>
                 </ul>
             </div>
