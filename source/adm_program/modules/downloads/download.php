@@ -62,6 +62,9 @@ $folderId = $currentFolder->getValue('fol_id');
 //Ordnerinhalt zur Darstellung auslesen
 $folderContent = $currentFolder->getFolderContentsForDownload();
 
+//NavigationsLink erhalten
+$navigationBar = $currentFolder->getNavigationForDownload();
+
 
 
 // Html-Kopf ausgeben
@@ -71,6 +74,9 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 // Html des Modules ausgeben
 echo "
 <h1 class=\"moduleHeadline\">Downloadbereich</h1>";
+
+
+echo "$navigationBar";
 
 
 //Button Upload und Neuer Ordner

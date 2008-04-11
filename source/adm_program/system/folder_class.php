@@ -282,49 +282,84 @@ class Folder extends TableAccess
 
 
     //Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
-    function getNavigationForDownload($folderId = 0, $currentNavigation = null)
+    function getNavigationForDownload($folderId = 0, $currentNavigation = "")
     {
-    	$originalCall = false;
+        global $g_current_organization, $g_root_path;
+        
+        $originalCall = false;
 
-    	if ($folderId == 0)
+        if ($folderId == 0)
         {
             $originalCall = true;
-        	$folderId = $this->getValue('fol_id');
-        	$parentId = $this->getValue('fol_fol_id_parent');
+            $folderId = $this->getValue('fol_id');
+            $parentId = $this->getValue('fol_fol_id_parent');
 
-        	if ($parent_id) {
 
-        		//wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
-        		$sql_parent = "SELECT * FROM ". TBL_FOLDERS. "
-                            	WHERE fol_name   = 'download'
-                           		  AND fol_type   = 'DOWNLOAD'
-                                  AND fol_path   = '/adm_my_files'
-                                  AND fol_org_id = ". $g_current_organization->getValue("org_id");
+            if ($parentId) {
 
-                $result_parent = $this->db->query($sql_parent);
+                //wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
+                $sql_rootFolder = "SELECT * FROM ". TBL_FOLDERS. "
+                                        WHERE fol_name   = 'download'
+                                       AND fol_type   = 'DOWNLOAD'
+                                       AND fol_path   = '/adm_my_files'
+                                       AND fol_org_id = ". $g_current_organization->getValue("org_id");
 
-                $parentRow = $this->db->fetch_object($result_parent);
+                $result_rootFolder = $this->db->query($sql_rootFolder);
+                $rootFolderRow = $this->db->fetch_object($result_rootFolder);
 
-        		$currentNavigation =	"<a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $parentRow->fol_id. "\">
-            						 	<img src=\"". THEME_PATH. "/icons/application_view_list.png\" alt=\"Downloads\" /></a>
-             						 	<a href=\"$g_root_path/adm_program/modules/download/download.php?folder_id=". $parentRow->fol_id. "\">". $parentRow->fol_name. "</a>";
-        	}
-        	else {
+                $rootFolderId = $rootFolderRow->fol_id;
 
-        		//Wenn es keinen Elternordner gibt, wird auch keine Navigationsleite benoetigt
-        		return "";
+                $navigationPrefix =    "<a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $rootFolderRow->fol_id. "\">
+                                         <img src=\"". THEME_PATH. "/icons/application_view_list.png\" alt=\"Downloads\" /></a>
+                                          <a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $rootFolderRow->fol_id. "\">Downloads</a>";
 
-        	}
+                $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
+
+            }
+            else {
+
+                //Wenn es keinen Elternordner gibt, wird auch keine Navigationsleite benoetigt
+                return "";
+
+            }
 
         }
         else
         {
+            //Informationen zur uebergebenen OrdnerId aus der DB holen
+            $sql_currentFolder = "SELECT * FROM ". TBL_FOLDERS. "
+                                        WHERE fol_id   = $folderId";
 
+            $result_currentFolder = $this->db->query($sql_currentFolder);
+            $currentFolderRow = $this->db->fetch_object($result_currentFolder);
+
+            if ($currentFolderRow->fol_fol_id_parent) {
+            
+            	$currentNavigation = " &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". 
+            						   $currentFolderRow->fol_id. "\">". $currentFolderRow->fol_name. "</a>". $currentNavigation;
+            	
+            	
+            	//naechster Aufruf mit ParentFolder
+            	return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
+            
+            }
+            else {
+            
+            	return $currentNavigation;
+            
+            }
+            
         }
 
 
+
+
+
         if ($originalCall) {
-		    $link = "<div class=\"navigationPath\">$current_navigation &gt; $this->getValue('fol_name')</div>";
+            $link = "<div class=\"navigationPath\">$navigationPrefix $currentNavigation &gt; ". $this->getValue('fol_name'). "</div>";
+            
+            return $link;
+            
         }
 
 
