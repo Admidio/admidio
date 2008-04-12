@@ -267,69 +267,69 @@ class Folder extends TableAccess
         //ob Sachen drin sind die nicht in der DB sind...
         if ($g_current_user->editDownloadRight()) {
 
-	        $fileHandle    = opendir($this->getCompletePathOfFolder());
-    	    if($fileHandle) {
-				while($file = readdir($fileHandle)) {
-					if ($file == "." || $file == ".." || substr($file, 0, 1) == ".") {
-						continue;
-					}
- 					else {
-						
-						//Gucken ob Datei oder Ordner
-						if (is_dir($this->getCompletePathOfFolder(). "/". $file)) {
-						
-							$addToArray = false;
-						
-							//Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
-							for($i=0; $i<count($completeFolder["folders"]); $i++) {
+            $fileHandle    = opendir($this->getCompletePathOfFolder());
+            if($fileHandle) {
+                while($file = readdir($fileHandle)) {
+                    if ($file == "." || $file == ".." || substr($file, 0, 1) == ".") {
+                        continue;
+                    }
+                     else {
 
-					            $nextFolder = $completeFolder["folders"][$i];
-					            
-					            if ($nextFolder['fol_name'] == $file) {
-					            
-					            	$addToArray = true;
-					            }
-					            
-					        }
+                        //Gucken ob Datei oder Ordner
+                        if (is_dir($this->getCompletePathOfFolder(). "/". $file)) {
 
-							if (!$addToArray) {
-								
-								//wenn nicht bereits enthalten wird es nun hinzugefuegt
-								$completeFolder["additionalFolders"][] = array('fol_name' => $file);
-							}
-						
-						}
-						else if (is_file($this->getCompletePathOfFolder(). "/". $file)) {
-						
-							$addToArray = false;
-						
-							//Gucken ob die Datei bereits bei den regurlären Files dabei ist.
-							for($i=0; $i<count($completeFolder["files"]); $i++) {
+                            $addToArray = false;
 
-					            $nextFile = $completeFolder["files"][$i];
-					            
-					            if ($nextFile['fil_name'] == $file) {
-					            
-					            	$addToArray = true;
-					            }
-					            
-					        }
-							
-							if (!$addToArray) {
-								
-								//wenn nicht bereits enthalten wird es nun hinzugefuegt
-								$completeFolder["additionalFiles"][] = array('fil_name' => $file);
-							}
-						}
- 					}
-            	}
+                            //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
+                            for($i=0; $i<count($completeFolder["folders"]); $i++) {
 
-           	closedir($fileHandle);
-        	
-        	}
+                                $nextFolder = $completeFolder["folders"][$i];
 
-		}
-		
+                                if ($nextFolder['fol_name'] == $file) {
+
+                                    $addToArray = true;
+                                }
+
+                            }
+
+                            if (!$addToArray) {
+
+                                //wenn nicht bereits enthalten wird es nun hinzugefuegt
+                                $completeFolder["additionalFolders"][] = array('fol_name' => $file);
+                            }
+
+                        }
+                        else if (is_file($this->getCompletePathOfFolder(). "/". $file)) {
+
+                            $addToArray = false;
+
+                            //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
+                            for($i=0; $i<count($completeFolder["files"]); $i++) {
+
+                                $nextFile = $completeFolder["files"][$i];
+
+                                if ($nextFile['fil_name'] == $file) {
+
+                                    $addToArray = true;
+                                }
+
+                            }
+
+                            if (!$addToArray) {
+
+                                //wenn nicht bereits enthalten wird es nun hinzugefuegt
+                                $completeFolder["additionalFiles"][] = array('fil_name' => $file);
+                            }
+                        }
+                     }
+                }
+
+               closedir($fileHandle);
+
+            }
+
+        }
+
         // Das Array mit dem Ordnerinhalt zurueckgeben
         return $completeFolder;
     }
@@ -375,9 +375,9 @@ class Folder extends TableAccess
 
                 $rootFolderId = $rootFolderRow->fol_id;
 
-                $navigationPrefix =    "<a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $rootFolderRow->fol_id. "\">
+                $navigationPrefix =    "<a href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $rootFolderRow->fol_id. "\">
                                          <img src=\"". THEME_PATH. "/icons/application_view_list.png\" alt=\"Downloads\" /></a>
-                                          <a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $rootFolderRow->fol_id. "\">Downloads</a>";
+                                          <a href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $rootFolderRow->fol_id. "\">Downloads</a>";
 
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
 
@@ -401,7 +401,7 @@ class Folder extends TableAccess
 
             if ($currentFolderRow->fol_fol_id_parent) {
 
-                $currentNavigation = " &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=".
+                $currentNavigation = " &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=".
                                        $currentFolderRow->fol_id. "\">". $currentFolderRow->fol_name. "</a>". $currentNavigation;
 
 
@@ -604,7 +604,12 @@ class Folder extends TableAccess
         if ($folder_id == 0)
         {
             $folder_id = $this->getValue("fol_id");
+
+            if (!strlen($this->getValue('fol_name')) > 0) {
+               return false;
+            }
             $folderPath = $this->getCompletePathOfFolder();
+
         }
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
