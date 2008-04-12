@@ -292,6 +292,11 @@ echo "
             case "fileNotExists":
                 echo "Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.";
                 break;
+                
+            case "additionalFiles":
+            	echo "In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden.
+            		Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.";
+            	break;
 
             //Fotomodulhifen
 

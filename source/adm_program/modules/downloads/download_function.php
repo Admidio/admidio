@@ -534,4 +534,14 @@ elseif ($req_mode == 5)
     $g_message->setForwardYesNo("$g_root_path/adm_program/modules/downloads/download_function.php?mode=2&amp;folder_id=$folder_id&amp;file_id=$file_id");
     $g_message->show("delete_file_folder",$originalName);
 }
+
+
+//Datei/Ordner zur DB hinzufeuegen
+elseif ($req_mode == 6)
+{
+	//TODO
+
+}
+
+
 ?>
