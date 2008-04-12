@@ -536,7 +536,7 @@ elseif ($req_mode == 5)
 }
 
 
-//Datei/Ordner zur DB hinzufeuegen
+//Datei / Ordner zur DB hinzufeuegen
 elseif ($req_mode == 6)
 {
     if ($folder_id == 0) {
@@ -587,15 +587,26 @@ elseif ($req_mode == 6)
         $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
         $g_message->show("add_file",$name);
 
-
-
-
     }
     else if (is_dir($targetFolder->getCompletePathOfFolder(). "/". $name)) {
 
-        //TODO
+        //Ordner der DB hinzufuegen
+        $newFolder = new Folder($g_db);
+        $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
+        $newFolder->setValue('fol_type', 'DOWNLOAD');
+        $newFolder->setValue('fol_name', $name);
+        $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). "/".$targetFolder->getValue('fol_name'));
+        $newFolder->setValue('fol_locked', $targetFolder->getValue('fol_locked'));
+        $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
+        $newFolder->save();
 
-    }
+        //Ordnerberechtigungen des ParentOrdners uebernehmen
+        $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
+
+        $_SESSION['navigation']->addUrl(CURRENT_URL);
+        $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
+        $g_message->show("add_folder",$name);
+   }
 
 }
 
