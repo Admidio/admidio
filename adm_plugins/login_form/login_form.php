@@ -151,43 +151,18 @@ else
 {
     // Login-Formular
     echo '
-    <script type="text/javascript"><!--
-        function loadPageLogin()
-        {
-            var loginname  = document.getElementById(\'plg_usr_login_name\').value;
-            var password   = document.getElementById(\'plg_usr_password\').value;
-			var auto_login = 0;
-			if(document.getElementById(\'plg_auto_login\').checked)
-			{
-				auto_login = 1;
-			}
-            var link       = \''. $g_root_path. '/adm_program/system/login_check.php?usr_login_name=\' + loginname + \'&usr_password=\' + password + \'&auto_login=\' + auto_login;';
-
-            if(strlen($plg_link_target) > 0 && strpos($plg_link_target, "_") === false)
-            {
-                echo 'parent.'. $plg_link_target. '.location.href = link;
-                self.location.reload(); ';
-            }
-            else
-            {
-                echo 'self.location.href = link;';
-            }
-        echo '
-        }
-    --></script>
-    
-    <form id="plugin_'. $plugin_folder. '" style="display: inline;" action="javascript:loadPageLogin()" method="get">
+    <form id="plugin_'. $plugin_folder. '" style="display: inline;" action="'. $g_root_path. '/adm_program/system/login_check.php" method="post">
         <ul class="formFieldList" id="plgLoginFormFieldList">
             <li>
                 <dl>
-                    <dt><label for="usr_login_name">Login-Name:</label></dt>
-                    <dd><input type="text" id="plg_usr_login_name" name="usr_login_name" size="10" maxlength="35" tabindex="95" /></dd>
+                    <dt><label for="plg_usr_login_name">Login-Name:</label></dt>
+                    <dd><input type="text" id="plg_usr_login_name" name="plg_usr_login_name" size="10" maxlength="35" tabindex="95" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="usr_password">Passwort:</label></dt>
-                    <dd><input type="password" id="plg_usr_password" name="usr_password" size="10" maxlength="25" tabindex="96" /></dd>
+                    <dt><label for="plg_usr_password">Passwort:</label></dt>
+                    <dd><input type="password" id="plg_usr_password" name="plg_usr_password" size="10" maxlength="25" tabindex="96" /></dd>
                 </dl>
             </li>';
             
@@ -197,7 +172,7 @@ else
                 <li>
                     <dl>
                         <dt><label for="plg_auto_login">Angemeldet bleiben:</label></dt>
-                        <dd><input type="checkbox" id="plg_auto_login" name="auto_login" value="1" tabindex="97" /></dd>
+                        <dd><input type="checkbox" id="plg_auto_login" name="plg_auto_login" value="1" tabindex="97" /></dd>
                     </dl>
                 </li>';
             } 

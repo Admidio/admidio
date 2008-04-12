@@ -25,7 +25,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo "
-<form action=\"$g_root_path/adm_program/system/login_check.php\" method=\"get\">
+<form action=\"$g_root_path/adm_program/system/login_check.php\" method=\"post\">
 <div class=\"formLayout\" id=\"login_form\" style=\"width: 300px; margin-top: 60px;\">
     <div class=\"formHead\">Login</div>
     <div class=\"formBody\">

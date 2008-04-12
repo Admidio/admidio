@@ -14,29 +14,55 @@ require_once("common.php");
 require_once("auto_login_class.php");
 
 // Variablen initialisieren
-$user_found = 0;
+$user_found   = 0;
 $b_auto_login = false;
+$loginname    = "";
+$password     = "";
 
 // Uebergabevariablen filtern
-$req_password_crypt = md5($_GET['usr_password']);
+// hierbei muss beruecksichtigt werden, dass diese evtl. von dem Loginplugin
+// oder vom Standarddialog kommen
+if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
+{
+	$loginname = $_POST['usr_login_name'];
+	$password  = $_POST['usr_password'];
 
-if(strlen($_GET['usr_login_name']) == 0)
+	if($g_preferences['enable_auto_login'] == 1
+	&& isset($_POST['auto_login']) && $_POST['auto_login'] == 1)
+	{
+		$b_auto_login = true;
+	}
+}
+
+if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) > 0)
+{
+	$loginname = $_POST['plg_usr_login_name'];
+	$password  = $_POST['plg_usr_password'];
+
+	if($g_preferences['enable_auto_login'] == 1
+	&& isset($_POST['plg_auto_login']) && $_POST['plg_auto_login'] == 1)
+	{
+		$b_auto_login = true;
+	}
+}
+
+if(strlen($loginname) == 0)
 {
     $g_message->show("feld", "Benutzername");
 }
 
-if($g_preferences['enable_auto_login'] == 1
-&& isset($_GET['auto_login']) && $_GET['auto_login'] == 1)
+if(strlen($password) == 0)
 {
-    $b_auto_login = true;
+    $g_message->show("feld", "Passwort");
 }
+$password = md5($password);
 
 // Name und Passwort pruefen
 // Rolle muss mind. Mitglied sein
 
 $sql    = "SELECT usr_id
              FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE usr_login_name LIKE '". $_GET['usr_login_name']. "'
+            WHERE usr_login_name LIKE '". $loginname. "'
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
@@ -65,7 +91,7 @@ if ($user_found >= 1)
         }
     }
 
-    if($g_current_user->getValue("usr_password") == $req_password_crypt)
+    if($g_current_user->getValue("usr_password") == $password)
     {
         $g_current_session->setValue("ses_usr_id", $g_current_user->getValue("usr_id"));
         $g_current_session->save();
@@ -104,7 +130,7 @@ if ($user_found >= 1)
         // Paralell im Forum einloggen, wenn g_forum gesetzt ist
         if($g_preferences['enable_forum_interface'])
         {
-            $g_forum->userLogin($g_current_user->getValue("usr_id"), $_GET['usr_login_name'], $req_password_crypt, 
+            $g_forum->userLogin($g_current_user->getValue("usr_id"), $loginname, $password, 
                                 $g_current_user->getValue("usr_login_name"), $g_current_user->getValue("usr_password"), 
                                 $g_current_user->getValue("E-Mail"));
 
