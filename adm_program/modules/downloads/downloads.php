@@ -79,7 +79,7 @@ echo "
 echo "$navigationBar";
 
 
-//Button Upload und Neuer Ordner
+//Button Upload, Neuer Ordner und Ordnerkonfiguration
 if ($g_current_user->editDownloadRight())
 {
     echo "
@@ -96,6 +96,13 @@ if ($g_current_user->editDownloadRight())
                 <a href=\"$g_root_path/adm_program/modules/downloads/upload.php?folder_id=$folderId\"><img
                 src=\"". THEME_PATH. "/icons/page_white_get.png\" alt=\"Hochladen\" /></a>
                 <a href=\"$g_root_path/adm_program/modules/downloads/upload.php?folder_id=$folderId\">Datei hochladen</a>
+            </span>
+        </li>
+        <li>
+            <span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/modules/downloads/folder_config.php?folder_id=$folderId\"><img
+                src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Ordnerberechtigung setzen\" /></a>
+                <a href=\"$g_root_path/adm_program/modules/downloads/folder_config.php?folder_id=$folderId\">Berechtigungen setzen</a>
             </span>
         </li>
     </ul>";
@@ -167,7 +174,7 @@ else
                         </span>
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;folder_id=". $nextFolder['fol_id']. "\">
-                            <img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                            <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                         </span>";
                         if (!$nextFolder['fol_exists']) {
                             echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning16.png\" alt=\"Warnung\" title=\"Warnung\"
@@ -251,7 +258,7 @@ else
                         </span>
                         <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;file_id=". $nextFile['fil_id']. "\">
-                            <img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
+                            <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
                         </span>";
                         if (!$nextFile['fil_exists']) {
                             echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning16.png\" alt=\"Warnung\" title=\"Warnung\"
@@ -275,123 +282,122 @@ echo"</table>";
 //Falls der User DownloadAdmin ist werden jetzt noch die zusaetzlich im Ordner enthaltenen Files angezeigt.
 if ($g_current_user->editDownloadRight())
 {
-	//gucken ob ueberhaupt zusaetzliche Ordnerinhalte gefunden wurden
-	if (isset($folderContent["additionalFolders"]) || isset($folderContent["additionalFiles"])) 
-	{
-	
-		echo "
-		<h3 class=\"moduleHeadline\">
-			Nicht verwaltete Dateien
-			<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" titel=\"Hilfe\"
-         	 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=additionalFiles&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\";
-         	 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=additionalFiles',this);\" onmouseout=\"ajax_hideTooltip()\" 
-        	/>
-        </h3>"
-		;
+    //gucken ob ueberhaupt zusaetzliche Ordnerinhalte gefunden wurden
+    if (isset($folderContent["additionalFolders"]) || isset($folderContent["additionalFiles"]))
+    {
+
+        echo "
+        <h3>
+            Nicht verwaltete Dateien
+            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" titel=\"Hilfe\"
+              onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=additionalFiles&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\";
+              onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=additionalFiles',this);\" onmouseout=\"ajax_hideTooltip()\"
+            />
+        </h3>";
 
 
-		echo "
-		<table class=\"tableList\" cellspacing=\"0\">
-    		<tr>
-        		<th style=\"width: 25px;\"><img class=\"iconInformation\"
-            		src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\" />
-        		</th>
-        		<th>Name</th>
-        		<th style=\"text-align: right;\">Aktionen</th>
-			</tr>";
-			
-		
-		//Erst die Ordner
-		if (isset($folderContent["additionalFolders"])) {
-    	    for($i=0; $i<count($folderContent["additionalFolders"]); $i++) {
-    	    
-    	    	$nextFolder = $folderContent["additionalFolders"][$i];
-	
-				echo "
-				<tr class=\"tableMouseOver\">
-					<td><img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></td>
-					<td>". $nextFolder['fol_name']. "</td>
-            		<td style=\"text-align: right;\">
-            			<span class=\"iconLink\">
+        echo "
+        <table class=\"tableList\" cellspacing=\"0\">
+            <tr>
+                <th style=\"width: 25px;\"><img class=\"iconInformation\"
+                    src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\" />
+                </th>
+                <th>Name</th>
+                <th style=\"text-align: right;\">Aktionen</th>
+            </tr>";
+
+
+        //Erst die Ordner
+        if (isset($folderContent["additionalFolders"])) {
+            for($i=0; $i<count($folderContent["additionalFolders"]); $i++) {
+
+                $nextFolder = $folderContent["additionalFolders"][$i];
+
+                echo "
+                <tr class=\"tableMouseOver\">
+                    <td><img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></td>
+                    <td>". $nextFolder['fol_name']. "</td>
+                    <td style=\"text-align: right;\">
+                        <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFolder['fol_name']). "\">
                             <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Zur Datenbank hinzuf&uuml;gen\" title=\"Zur Datenbank hinzuf&uuml;gen\" /></a>
                         </span>
                     </td>
-				</tr>";
-			}
-			
-			
-		}
+                </tr>";
+            }
 
-		//Jetzt noch die Dateien
-		if (isset($folderContent["additionalFiles"])) {
-    	    for($i=0; $i<count($folderContent["additionalFiles"]); $i++) {
-    	    
-    	    	$nextFile = $folderContent["additionalFiles"][$i];
-    	    	
-    	    	//Ermittlung der dateiendung
-				$dateiendung  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], ".")+1));
 
-				//Auszugebendes Icon
-				if($dateiendung=="gif"
-				|| $dateiendung=="cdr"
-				|| $dateiendung=="jpg"
-				|| $dateiendung=="png"
-				|| $dateiendung=="bmp"
-				|| $dateiendung=="wmf" )
-					$dateiendung = "page_white_camera";
-				elseif($dateiendung=="doc"
-				||     $dateiendung=="dot"
-				||     $dateiendung=="rtf")
-					$dateiendung = "page_white_word";
-				elseif($dateiendung=="xls"
-				||     $dateiendung=="xlt"
-				||     $dateiendung=="csv")
-					$dateiendung = "page_white_excel";
-            	elseif($dateiendung=="pps"
-            	||     $dateiendung=="ppt")
-               		$dateiendung = "page_white_powerpoint";
-            	elseif($dateiendung=="txt"
-            	||     $dateiendung=="php"
-            	||     $dateiendung=="sql"
-            	||     $dateiendung=="log")
-               		$dateiendung = "page_white_text";
-            	elseif($dateiendung=="pdf")
-               		$dateiendung = "page_white_acrobat";
-            	elseif($dateiendung=="zip"
-            	||     $dateiendung=="gz"
-            	||     $dateiendung=="rar"
-            	||     $dateiendung=="tar")
-               		$dateiendung = "page_white_compressed";
-            	elseif($dateiendung=="swf")
-               		$dateiendung = "page_white_flash";
-            	else
-               		$dateiendung = "page_white_question";
-	
-				echo "
-				<tr class=\"tableMouseOver\">
-					<td><img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a></td>
-					<td>". $nextFile['fil_name']. "</td>
-            		<td style=\"text-align: right;\">
-            			<span class=\"iconLink\">
+        }
+
+        //Jetzt noch die Dateien
+        if (isset($folderContent["additionalFiles"])) {
+            for($i=0; $i<count($folderContent["additionalFiles"]); $i++) {
+
+                $nextFile = $folderContent["additionalFiles"][$i];
+
+                //Ermittlung der dateiendung
+                $dateiendung  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], ".")+1));
+
+                //Auszugebendes Icon
+                if($dateiendung=="gif"
+                || $dateiendung=="cdr"
+                || $dateiendung=="jpg"
+                || $dateiendung=="png"
+                || $dateiendung=="bmp"
+                || $dateiendung=="wmf" )
+                    $dateiendung = "page_white_camera";
+                elseif($dateiendung=="doc"
+                ||     $dateiendung=="dot"
+                ||     $dateiendung=="rtf")
+                    $dateiendung = "page_white_word";
+                elseif($dateiendung=="xls"
+                ||     $dateiendung=="xlt"
+                ||     $dateiendung=="csv")
+                    $dateiendung = "page_white_excel";
+                elseif($dateiendung=="pps"
+                ||     $dateiendung=="ppt")
+                       $dateiendung = "page_white_powerpoint";
+                elseif($dateiendung=="txt"
+                ||     $dateiendung=="php"
+                ||     $dateiendung=="sql"
+                ||     $dateiendung=="log")
+                       $dateiendung = "page_white_text";
+                elseif($dateiendung=="pdf")
+                       $dateiendung = "page_white_acrobat";
+                elseif($dateiendung=="zip"
+                ||     $dateiendung=="gz"
+                ||     $dateiendung=="rar"
+                ||     $dateiendung=="tar")
+                       $dateiendung = "page_white_compressed";
+                elseif($dateiendung=="swf")
+                       $dateiendung = "page_white_flash";
+                else
+                       $dateiendung = "page_white_question";
+
+                echo "
+                <tr class=\"tableMouseOver\">
+                    <td><img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a></td>
+                    <td>". $nextFile['fil_name']. "</td>
+                    <td style=\"text-align: right;\">
+                        <span class=\"iconLink\">
                             <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFile['fil_name']). "\">
                             <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Zur Datenbank hinzuf&uuml;gen\" title=\"Zur Datenbank hinzuf&uuml;gen\" /></a>
                         </span>
                     </td>
-				</tr>";
-			}
-			
-			
-		}	
-		
-	
-	
-	
-	
-		echo "
-		</table>";
-	
-	}
+                </tr>";
+            }
+
+
+        }
+
+
+
+
+
+        echo "
+        </table>";
+
+    }
 
 }
 
