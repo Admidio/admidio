@@ -128,6 +128,13 @@ if ($req_mode == 1)
     $targetFolder = new Folder($g_db);
     $targetFolder->getFolderForDownload($folder_id);
 
+    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+    if (!$targetFolder->getValue('fol_id'))
+    {
+        //Datensatz konnte nicht in DB gefunden werden...
+        $g_message->show("invalid");
+    }
+
     if (empty($_POST))
     {
         $g_message->show("empty_upload_post",ini_get('upload_max_filesize'));
@@ -269,13 +276,20 @@ elseif ($req_mode == 3)
 {
 
     if ($folder_id == 0) {
-        //FolderId ist Anlegen eines Unterordners erforderlich
+        //FolderId ist zum Anlegen eines Unterordners erforderlich
         $g_message->show("invalid");
     }
 
     //Informationen zum Zielordner aus der DB holen
     $targetFolder = new Folder($g_db);
     $targetFolder->getFolderForDownload($folder_id);
+
+    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+    if (!$targetFolder->getValue('fol_id'))
+    {
+        //Datensatz konnte nicht in DB gefunden werden...
+        $g_message->show("invalid");
+    }
 
     $newFolderName = null;
 
@@ -520,8 +534,8 @@ elseif ($req_mode == 5)
 
     }
     else {
-    if ($class->getValue('fol_id')) {
-            $originalName = $class->getValue('fol_name');
+        if ($class->getValue('fol_id')) {
+                $originalName = $class->getValue('fol_name');
         }
         else {
             $g_message->show("invalid");
@@ -572,6 +586,13 @@ elseif ($req_mode == 6)
     //Informationen zum Zielordner aus der DB holen
     $targetFolder = new Folder($g_db);
     $targetFolder->getFolderForDownload($folder_id);
+
+    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+    if (!$targetFolder->getValue('fol_id'))
+    {
+        //Datensatz konnte nicht in DB gefunden werden...
+        $g_message->show("invalid");
+    }
 
     //Pruefen ob das neue Element eine Datei order ein Ordner ist.
     if (is_file($targetFolder->getCompletePathOfFolder(). "/". $name)) {
