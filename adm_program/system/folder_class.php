@@ -263,7 +263,73 @@ class Folder extends TableAccess
             }
         }
 
+        //Falls der User Downloadadmin ist, wird jetzt noch im physikalischen Verzeichnis geschaut,
+        //ob Sachen drin sind die nicht in der DB sind...
+        if ($g_current_user->editDownloadRight()) {
 
+	        $fileHandle    = opendir($this->getCompletePathOfFolder());
+    	    if($fileHandle) {
+				while($file = readdir($fileHandle)) {
+					if ($file == "." || $file == ".." || substr($file, 0, 1) == ".") {
+						continue;
+					}
+ 					else {
+						
+						//Gucken ob Datei oder Ordner
+						if (is_dir($this->getCompletePathOfFolder(). "/". $file)) {
+						
+							$addToArray = false;
+						
+							//Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
+							for($i=0; $i<count($completeFolder["folders"]); $i++) {
+
+					            $nextFolder = $completeFolder["folders"][$i];
+					            
+					            if ($nextFolder['fol_name'] == $file) {
+					            
+					            	$addToArray = true;
+					            }
+					            
+					        }
+
+							if (!$addToArray) {
+								
+								//wenn nicht bereits enthalten wird es nun hinzugefuegt
+								$completeFolder["additionalFolders"][] = array('fol_name' => $file);
+							}
+						
+						}
+						else if (is_file($this->getCompletePathOfFolder(). "/". $file)) {
+						
+							$addToArray = false;
+						
+							//Gucken ob die Datei bereits bei den regurlären Files dabei ist.
+							for($i=0; $i<count($completeFolder["files"]); $i++) {
+
+					            $nextFile = $completeFolder["files"][$i];
+					            
+					            if ($nextFile['fil_name'] == $file) {
+					            
+					            	$addToArray = true;
+					            }
+					            
+					        }
+							
+							if (!$addToArray) {
+								
+								//wenn nicht bereits enthalten wird es nun hinzugefuegt
+								$completeFolder["additionalFiles"][] = array('fil_name' => $file);
+							}
+						}
+ 					}
+            	}
+
+           	closedir($fileHandle);
+        	
+        	}
+
+		}
+		
         // Das Array mit dem Ordnerinhalt zurueckgeben
         return $completeFolder;
     }
@@ -285,7 +351,7 @@ class Folder extends TableAccess
     function getNavigationForDownload($folderId = 0, $currentNavigation = "")
     {
         global $g_current_organization, $g_root_path;
-        
+
         $originalCall = false;
 
         if ($folderId == 0)
@@ -334,21 +400,21 @@ class Folder extends TableAccess
             $currentFolderRow = $this->db->fetch_object($result_currentFolder);
 
             if ($currentFolderRow->fol_fol_id_parent) {
-            
-            	$currentNavigation = " &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". 
-            						   $currentFolderRow->fol_id. "\">". $currentFolderRow->fol_name. "</a>". $currentNavigation;
-            	
-            	
-            	//naechster Aufruf mit ParentFolder
-            	return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
-            
+
+                $currentNavigation = " &gt; <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=".
+                                       $currentFolderRow->fol_id. "\">". $currentFolderRow->fol_name. "</a>". $currentNavigation;
+
+
+                //naechster Aufruf mit ParentFolder
+                return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
+
             }
             else {
-            
-            	return $currentNavigation;
-            
+
+                return $currentNavigation;
+
             }
-            
+
         }
 
 
@@ -357,9 +423,9 @@ class Folder extends TableAccess
 
         if ($originalCall) {
             $link = "<div class=\"navigationPath\">$navigationPrefix $currentNavigation &gt; ". $this->getValue('fol_name'). "</div>";
-            
+
             return $link;
-            
+
         }
 
 
