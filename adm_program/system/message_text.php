@@ -415,6 +415,9 @@ $message_text = array(
     "upload_file" =>
         "Die Datei %VAR1% wurde hochgeladen.",
 
+    "add_file" =>
+        "Die Datei %VAR1% wurde der Datenbank hinzugefuegt.",
+
     "create_folder" =>
         "Der Ordner %VAR1% wurde angelegt.",
 

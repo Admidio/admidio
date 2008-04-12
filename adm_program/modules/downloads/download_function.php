@@ -539,7 +539,63 @@ elseif ($req_mode == 5)
 //Datei/Ordner zur DB hinzufeuegen
 elseif ($req_mode == 6)
 {
-	//TODO
+    if ($folder_id == 0) {
+        //FolderId ist zum hinzufuegen erforderlich
+        $g_message->show("invalid");
+    }
+
+    if (isset($_GET['name']))
+    {
+        $ret_code = isValidFileName(urldecode($_GET['name']), true);
+        if($ret_code == 0)
+        {
+            $name = urldecode($_GET['name']);
+        }
+        else
+        {
+            if($ret_code == -2)
+            {
+                $g_message->show("invalid_file_name");
+            }
+            elseif($ret_code == -3)
+            {
+                $g_message->show("invalid_file_extension");
+            }
+        }
+    }
+    else
+    {
+        //name ist zum hinzufuegen erforderlich
+        $g_message->show("invalid");
+    }
+
+    //Informationen zum Zielordner aus der DB holen
+    $targetFolder = new Folder($g_db);
+    $targetFolder->getFolderForDownload($folder_id);
+
+    //Pruefen ob das neue Element eine Datei order ein Ordner ist.
+    if (is_file($targetFolder->getCompletePathOfFolder(). "/". $name)) {
+        //Datei hinzufuegen
+        $newFile = new File($g_db);
+        $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
+        $newFile->setValue('fil_name',$name);
+        $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
+        $newFile->setValue('fil_counter','0');
+        $newFile->save();
+
+        $_SESSION['navigation']->addUrl(CURRENT_URL);
+        $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
+        $g_message->show("add_file",$name);
+
+
+
+
+    }
+    else if (is_dir($targetFolder->getCompletePathOfFolder(). "/". $name)) {
+
+        //TODO
+
+    }
 
 }
 
