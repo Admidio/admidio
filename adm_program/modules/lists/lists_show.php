@@ -400,8 +400,44 @@ if($req_mode != "csv")
                         <option value=\"csv-oo\">CSV-Datei (OpenOffice)</option>
                     </select>
                 </span>
-            </li>
-        </ul>";
+            </li>";
+        	            
+            //Leute mit entsprechenden Rechten sollenten auch von hier aus die Mitgliedschaftändern können
+            if($g_current_user->assignRoles() 
+               || isGroupLeader($g_current_user->getValue("usr_id"), $role->getValue("rol_id")) 
+               || $g_current_user->editUser())
+               {
+                   if($role->getValue("rol_name") != "Webmaster"
+                   || ($role->getValue("rol_name") == "Webmaster" && $g_current_user->isWebmaster()))
+                   {
+                       if($g_current_user->assignRoles())
+                       {
+                           // nur Moderatoren duerfen Rollen editieren
+                           echo "
+							<li>
+								<span class=\"iconTextLink\">
+                           			<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=". $role->getValue("rol_id"). "\"><img
+                               			src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Einstellungen\" title=\"Einstellungen\" /></a>
+									<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=". $role->getValue("rol_id"). "\">Rolle bearbeiten</a>
+				                </span>
+							</li>";
+
+                       }
+                       // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
+                       if($role->getValue("rol_valid") == 1)
+                       {
+                           echo "
+							<li>
+								<span class=\"iconTextLink\">
+                           			<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=". $role->getValue("rol_id"). "\"><img 
+                               			src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
+									<a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=". $role->getValue("rol_id"). "\">Mitglieder zuordnen</a>
+                           		</span>
+							</li>";
+                       }
+                   }
+               }
+		echo"</ul>";
     }
 }
 
