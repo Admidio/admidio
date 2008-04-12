@@ -148,11 +148,11 @@ else
             <tr class=\"tableMouseOver\">
                 <td>
                     <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $nextFolder['fol_id']. "\">
+                        <a href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">
                         <img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></a>
                     </span>
                 </td>
-                <td><a href=\"$g_root_path/adm_program/modules/downloads/download.php?folder_id=". $nextFolder['fol_id']. "\">". $nextFolder['fol_name']. "</a></td>
+                <td><a href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">". $nextFolder['fol_name']. "</a></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>";

@@ -53,7 +53,7 @@ if (is_writeable(SERVER_PATH. "/adm_my_files"))
             // der entsprechende Ordner konnte nicht angelegt werden
             $g_message->addVariableContent("adm_my_files/download", 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-            $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/download.php");
+            $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/downloads.php");
             $g_message->show("write_access");
         }
     }
@@ -63,7 +63,7 @@ else
     // der entsprechende Ordner konnte nicht angelegt werden
     $g_message->addVariableContent("adm_my_files", 1);
     $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/download.php");
+    $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/downloads.php");
     $g_message->show("write_access");
 }
 
@@ -336,7 +336,7 @@ elseif ($req_mode == 3)
             // der entsprechende Ordner konnte nicht angelegt werden
             $g_message->addVariableContent($targetFolder->getValue('fol_path'). "/". $targetFolder->getValue('fol_name'). "/$newFolderName", 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-            $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/download.php");
+            $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/downloads.php");
             $g_message->show("write_access");
         }
 
