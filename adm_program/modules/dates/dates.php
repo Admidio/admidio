@@ -258,7 +258,7 @@ else
                     {
                         echo ' - '. mysqldatetime("d.m.y", $date->getValue("dat_end"));
                     }
-                    echo $date->getValue("dat_headline"). "
+                    echo ' ' . $date->getValue("dat_headline"). "
                 </div>
                 <div class=\"boxHeadRight\">
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $date->getValue("dat_id"). "&amp;mode=4\"><img 
