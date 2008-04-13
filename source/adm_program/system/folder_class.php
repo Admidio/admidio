@@ -268,64 +268,71 @@ class Folder extends TableAccess
         //ob Sachen drin sind die nicht in der DB sind...
         if ($g_current_user->editDownloadRight()) {
 
-            $fileHandle    = opendir($this->getCompletePathOfFolder());
-            if($fileHandle) {
-                while($file = readdir($fileHandle)) {
-                    if ($file == "." || $file == ".." || substr($file, 0, 1) == ".") {
-                        continue;
+            //pruefen ob der Ordner wirklich existiert
+            if (file_exists($this->getCompletePathOfFolder()))
+            {
+
+                $fileHandle    = opendir($this->getCompletePathOfFolder());
+                if($fileHandle) {
+                    while($file = readdir($fileHandle)) {
+                        if ($file == "." || $file == ".." || substr($file, 0, 1) == ".") {
+                            continue;
+                        }
+                         else {
+
+                            //Gucken ob Datei oder Ordner
+                            if (is_dir($this->getCompletePathOfFolder(). "/". $file)) {
+
+                                $addToArray = false;
+
+                                //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
+                                for($i=0; $i<count($completeFolder["folders"]); $i++) {
+
+                                    $nextFolder = $completeFolder["folders"][$i];
+
+                                    if ($nextFolder['fol_name'] == $file) {
+
+                                        $addToArray = true;
+                                    }
+
+                                }
+
+                                if (!$addToArray) {
+
+                                    //wenn nicht bereits enthalten wird es nun hinzugefuegt
+                                    $completeFolder["additionalFolders"][] = array('fol_name' => $file);
+                                }
+
+                            }
+                            else if (is_file($this->getCompletePathOfFolder(). "/". $file)) {
+
+                                $addToArray = false;
+
+                                //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
+                                for($i=0; $i<count($completeFolder["files"]); $i++) {
+
+                                    $nextFile = $completeFolder["files"][$i];
+
+                                    if ($nextFile['fil_name'] == $file) {
+
+                                        $addToArray = true;
+                                    }
+
+                                }
+
+                                if (!$addToArray) {
+
+                                    //wenn nicht bereits enthalten wird es nun hinzugefuegt
+                                    $completeFolder["additionalFiles"][] = array('fil_name' => $file);
+                                }
+                            }
+                         }
                     }
-                     else {
 
-                        //Gucken ob Datei oder Ordner
-                        if (is_dir($this->getCompletePathOfFolder(). "/". $file)) {
+                   closedir($fileHandle);
 
-                            $addToArray = false;
-
-                            //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
-                            for($i=0; $i<count($completeFolder["folders"]); $i++) {
-
-                                $nextFolder = $completeFolder["folders"][$i];
-
-                                if ($nextFolder['fol_name'] == $file) {
-
-                                    $addToArray = true;
-                                }
-
-                            }
-
-                            if (!$addToArray) {
-
-                                //wenn nicht bereits enthalten wird es nun hinzugefuegt
-                                $completeFolder["additionalFolders"][] = array('fol_name' => $file);
-                            }
-
-                        }
-                        else if (is_file($this->getCompletePathOfFolder(). "/". $file)) {
-
-                            $addToArray = false;
-
-                            //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
-                            for($i=0; $i<count($completeFolder["files"]); $i++) {
-
-                                $nextFile = $completeFolder["files"][$i];
-
-                                if ($nextFile['fil_name'] == $file) {
-
-                                    $addToArray = true;
-                                }
-
-                            }
-
-                            if (!$addToArray) {
-
-                                //wenn nicht bereits enthalten wird es nun hinzugefuegt
-                                $completeFolder["additionalFiles"][] = array('fil_name' => $file);
-                            }
-                        }
-                     }
                 }
 
-               closedir($fileHandle);
 
             }
 
