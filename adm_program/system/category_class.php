@@ -104,7 +104,7 @@ class Category extends TableAccess
     {
         global $g_current_session;
         
-        if($this->db_fields_changed && $this->db_fields['cat_type'] == 'USF')
+        if($this->db_fields_changed && $this->db_fields['cat_type'] == 'USF' && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, 
             // da Aenderungen in den Profilfeldern vorgenommen wurden 

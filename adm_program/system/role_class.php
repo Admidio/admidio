@@ -92,7 +92,7 @@ class Role extends TableAccess
     {
         global $g_current_session;
         
-        if($this->db_fields_changed)
+        if($this->db_fields_changed && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
             // eine Rechteaenderung vorgenommen wurde
