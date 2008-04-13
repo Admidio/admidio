@@ -162,7 +162,7 @@ echo "
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                if($parentFolder->getValue("fol_public") == 0)
+                                if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue("fol_public") == 0)
                                 {
                                     echo " disabled=\"disabled\" ";
                                 }
