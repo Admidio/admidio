@@ -40,11 +40,11 @@
  * Nun kann man ein Attachment hinzufuegen:
  * (optional und mehrfach aufrufbar)
  * function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream',  $file_disposition = 'attachment',$file_id = '')
- * Uebergaben: $tmp_filename		- Der Pfad und Name der Datei auf dem Server
- *             $orig_filename		- Der Name der datei auf dem Rechner des Users
- *             $file_type			- Den Contenttype der Datei. (optional)
- *			   $file_disposition	- Damit kann mann festlegen ob mann das Attachment als Anhang (=> 'attachment') oder in der Mail verwendent (=> 'inline')
- *			   $file_id				- Damit kann mann die id jeden Attachments festlegen
+ * Uebergaben: $tmp_filename        - Der Pfad und Name der Datei auf dem Server
+ *             $orig_filename        - Der Name der datei auf dem Rechner des Users
+ *             $file_type            - Den Contenttype der Datei. (optional)
+ *               $file_disposition    - Damit kann mann festlegen ob mann das Attachment als Anhang (=> 'attachment') oder in der Mail verwendent (=> 'inline')
+ *               $file_id                - Damit kann mann die id jeden Attachments festlegen
  *
  * Bei Bedarf kann man sich eine Kopie der Mail zuschicken lassen (optional):
  * function setCopyToSenderFlag()
@@ -69,7 +69,7 @@ class Email
 //Konstruktor der Klasse.
 function Email()
 {
-	global $g_preferences;
+    global $g_preferences;
 
     //Wichtig ist das die MimeVersion das erste Element im Header ist...
     $this->headerOptions['MIME-Version'] = '1.0';
@@ -83,10 +83,10 @@ function Email()
     $this->headerOptions['Return-Path'] = $g_preferences['email_administrator'];
     $this->headerOptions['Sender']      = $g_preferences['email_administrator'];
 
-    $this->mailBoundary		= "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
-    $this->copyToSender		= false;
-    $this->listRecipients	= false;
-	$this->sendasHTML		= false;
+    $this->mailBoundary        = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
+    $this->copyToSender        = false;
+    $this->listRecipients    = false;
+    $this->sendasHTML        = false;
 
     //Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
     //fuer den Fall das eine Kopie der Mail angefordert wird...
@@ -99,8 +99,16 @@ function setSender($address, $name='')
 {
     if (isValidEmailAddress($address))
     {
-        //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
-    	$this->headerOptions['From'] = "\"". $name. "\" <". $address. ">";
+
+        if (strlen($name) > 0) {
+            //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+            $this->headerOptions['From'] = "\"". $name. "\" <". $address. ">";
+        }
+        else {
+            //Kein Name gesetzt...
+            $this->headerOptions['From'] = " <". $address. ">";
+        }
+
         return true;
     }
     return false;
@@ -185,8 +193,8 @@ function addAttachment($tmp_filename, $orig_filename = '', $file_type='applicati
             'orig_filename' => $orig_filename,
             'tmp_filename'  => $tmp_filename,
             'file_type' => $file_type,
-			'file_disposition' => $file_disposition,
-			'file_id' => $file_id);
+            'file_disposition' => $file_disposition,
+            'file_id' => $file_id);
     $this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"". $this->mailBoundary. "\"";
 }
 
@@ -205,7 +213,7 @@ function setListRecipientsFlag()
 // Funktion um die zu sendenden Daten als HTML Code zu inerpretieren zu lassen.
 function setDataAsHtml()
 {
-	$this->sendasHTML = true;
+    $this->sendasHTML = true;
 }
 
 // Funktion um den Header aufzubereiten
@@ -231,10 +239,10 @@ function prepareBody()
         $this->mail_body    = $this->mail_body. "This message is in MIME format.\n";
         $this->mail_body    = $this->mail_body. "Since your mail reader does not understand this format,\n";
         $this->mail_body    = $this->mail_body. "some or all of this message may not be legible.\n\n";
-		if($this->sendasHTML)
-		{
-			 $this->mail_body    = $this->mail_body.strip_tags($this->text)."\n\n";
-		}
+        if($this->sendasHTML)
+        {
+             $this->mail_body    = $this->mail_body.strip_tags($this->text)."\n\n";
+        }
         $this->mail_body    = $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: ". $this->contentType. "\n\n";
     }
 
@@ -254,49 +262,49 @@ function prepareBody()
             $this->mail_body = $this->mail_body. "\tname=\"". $this->attachments[$i]['orig_filename']. "\"\n";
             $this->mail_body = $this->mail_body. "Content-Transfer-Encoding: base64\n";
             if (!empty($this->attachments[$i]['file_disposition']))
-			{
-				$this->mail_body = $this->mail_body. "Content-Disposition: ".$this->attachments[$i]['file_disposition'].";\n";
-			}
-			else
-			{
-				$this->mail_body = $this->mail_body. "Content-Disposition: attachment;\n";
-			}
+            {
+                $this->mail_body = $this->mail_body. "Content-Disposition: ".$this->attachments[$i]['file_disposition'].";\n";
+            }
+            else
+            {
+                $this->mail_body = $this->mail_body. "Content-Disposition: attachment;\n";
+            }
             $this->mail_body = $this->mail_body. "\tfilename=\"". $this->attachments[$i]['orig_filename']. "\"\n";
-			if (!empty($this->attachments[$i]['file_id']))
-			{
-				$this->mail_body = $this->mail_body. "Content-Id: <".$this->attachments[$i]['file_id'].">\n\n";
-			}
+            if (!empty($this->attachments[$i]['file_id']))
+            {
+                $this->mail_body = $this->mail_body. "Content-Id: <".$this->attachments[$i]['file_id'].">\n\n";
+            }
 
-			// File �ffnen und base64 konvertieren
-			$return = "";
-			$data	= "";
-			$thePart = "";
-			if ($fp = fopen($this->attachments[$i]['tmp_filename'], 'rb'))
-			{
-				while (!feof($fp))
-				{
-					$return .= fread($fp, 1024);
-				}
-				fclose($fp);
-				$data = base64_encode($return);
+            // File �ffnen und base64 konvertieren
+            $return = "";
+            $data    = "";
+            $thePart = "";
+            if ($fp = fopen($this->attachments[$i]['tmp_filename'], 'rb'))
+            {
+                while (!feof($fp))
+                {
+                    $return .= fread($fp, 1024);
+                }
+                fclose($fp);
+                $data = base64_encode($return);
 
-			}
+            }
 
-			if (function_exists("chunk_split"))
-			{
-			   $thePart	.= chunk_split($data,76,"\n");
-			}
-			else
-			{
-				$theData	= $data;
-				while (strlen($theData)>76)
-				{
-					$thePart.=substr($theData,0,76)."\n";
-					$theData=substr($theData,76);
-				}
-				$thePart	.= $theData."\n";
-			}
-			$this->mail_body = $this->mail_body. $thePart. "\n\n";
+            if (function_exists("chunk_split"))
+            {
+               $thePart    .= chunk_split($data,76,"\n");
+            }
+            else
+            {
+                $theData    = $data;
+                while (strlen($theData)>76)
+                {
+                    $thePart.=substr($theData,0,76)."\n";
+                    $theData=substr($theData,76);
+                }
+                $thePart    .= $theData."\n";
+            }
+            $this->mail_body = $this->mail_body. $thePart. "\n\n";
         }
         // Das Ende der Mail mit der Boundary kennzeichnen...
         $this->mail_body = $this->mail_body. "--". $this->mailBoundary. "--";
@@ -307,11 +315,11 @@ function prepareBody()
 // Funktion um die Email endgueltig zu versenden...
 function sendEmail()
 {
-	// Wenn true wird der Content Type umgeaendert damit die E-mail als HMTL Email verstanden wird.
-	if($this->sendasHTML)
-	{
-		$this->contentType = "text/html; charset=iso-8859-1";
-	}
+    // Wenn true wird der Content Type umgeaendert damit die E-mail als HMTL Email verstanden wird.
+    if($this->sendasHTML)
+    {
+        $this->contentType = "text/html; charset=iso-8859-1";
+    }
 
     // Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelaende...
     if (!isset($this->headerOptions['From']))
