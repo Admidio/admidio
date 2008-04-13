@@ -24,7 +24,7 @@ $sql_orderby = "";
 
 // Uebergabevariablen pruefen
 
-if(isset($_POST["column1"]) == false || strlen($_POST["column1"]) == 0)
+if(isset($_POST["column0"]) == false || strlen($_POST["column0"]) == 0)
 {
     $g_message->show("feld", "Feld 1");
 }
@@ -175,10 +175,11 @@ $main_sql = "SELECT mem_leader, usr_id, $sql_select
                 AND mem_valid  = $act_members
                 AND mem_usr_id = usr_id
                 AND usr_valid  = 1
-                    $sql_where ";
+                    $sql_where 
+              ORDER BY mem_leader DESC ";
 if(strlen($sql_orderby) > 0)
 {
-    $main_sql = $main_sql. " ORDER BY mem_leader DESC, $sql_orderby ";
+    $main_sql = $main_sql. ", ". $sql_orderby;
 }
 
 // SQL-Statement in Session-Variable schreiben

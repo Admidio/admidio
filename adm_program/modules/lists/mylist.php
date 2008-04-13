@@ -134,17 +134,29 @@ $g_layout['header'] = '
 					htmlCboFields += "<optgroup label=\"" + roles[counter]["cat_name"] + "\">";
 					category = roles[counter]["cat_name"];
 				}
-				htmlCboFields += "<option value=\"" + roles[counter]["usf_id"] + "\">" + roles[counter]["usf_name"] + "</option>"; 
+				var selected = \'\';
+				if((actFieldCount == 0 && roles[counter]["usf_name"] == \'Nachname\')
+				|| (actFieldCount == 1 && roles[counter]["usf_name"] == \'Vorname\'))
+				{
+					selected = \' selected="selected" \';
+				}
+				htmlCboFields += "<option value=\"" + roles[counter]["usf_id"] + "\" " + selected + ">" + roles[counter]["usf_name"] + "</option>"; 
 			}
 			htmlCboFields += "</select>";
 			newCellField.innerHTML = htmlCboFields;
 			
 			// neue Spalte zur Einstellung der Sortierung
+			var selectAsc  = \'\';
+			var selectDesc = \'\';
+			if(actFieldCount == 0)
+			{
+				selectAsc = \' selected="selected" \';
+			}
 			var newCellOrder = newTableRow.insertCell(-1);
 			newCellOrder.innerHTML = "<select size=\"1\" name=\"sort" + actFieldCount + "\">" +
 			        "<option value=\"\">&nbsp;</option>" +
-			        "<option value=\"ASC\">A bis Z</option>" +
-			        "<option value=\"DESC\">Z bis A</option>" +
+			        "<option value=\"ASC\" " + selectAsc + ">A bis Z</option>" +
+			        "<option value=\"DESC\" " + selectDesc + ">Z bis A</option>" +
 			    "</select>";
             
 			// neue Spalte fuer Bedingungen
