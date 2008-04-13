@@ -94,12 +94,53 @@ if ($parentRoleSet == null) {
     }
 
 
-
 //aktuelles Rollenset des Ordners holen
 $roleSet = $folder->getRoleArrayOfFolder();
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Ordnerberechtigungen setzen";
+
+$g_layout['header'] = "
+    <script type=\"text/javascript\"><!--
+        // Scripts fuer Rollenbox
+        function hinzufuegen()
+        {
+            var allowed_roles = document.getElementById('AllowedRoles');
+            var denied_roles  = document.getElementById('DeniedRoles');
+
+            NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
+            denied_roles.options[denied_roles.selectedIndex] = null;
+            allowed_roles.options[allowed_roles.length] = NeuerEintrag;
+        }
+
+        function entfernen()
+        {
+            var allowed_roles = document.getElementById('AllowedRoles');
+            var denied_roles  = document.getElementById('DeniedRoles');
+
+            NeuerEintrag = new Option(allowed_roles.options[allowed_roles.selectedIndex].text, allowed_roles.options[allowed_roles.selectedIndex].value, false, true);
+            allowed_roles.options[allowed_roles.selectedIndex] = null;
+            denied_roles.options[denied_roles.length] = NeuerEintrag;
+        }
+
+        function absenden()
+        {
+            var allowed_roles = document.getElementById('AllowedRoles');
+
+            allowed_roles.multiple = true;
+
+            for (var i = 0; i < allowed_roles.options.length; i++)
+            {
+                allowed_roles.options[i].selected = true;
+            }
+
+            form.submit();
+        }
+
+    --></script>";
+
+
+
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -108,78 +149,96 @@ echo "
 <div class=\"formLayout\" id=\"edit_download_folder_form\" >
     <div class=\"formHead\">Ordnerberechtigungen setzen</div>
     <div class=\"formBody\">
-        <ul class=\"formFieldList\">
-            <li>
-                <div>
-                    <input type=\"checkbox\" id=\"rol_mail_logout\" name=\"rol_mail_logout\" ";
 
-                    //TODO!!!!
-                    if($role->getValue("rol_mail_logout") == 1)
-                    {
-                        echo " checked=\"checked\" ";
-                    }
-                    if($role->getValue("rol_name") == "Webmaster")
-                    {
-                        echo " disabled=\"disabled\" ";
-                    }
-                    echo " onchange=\"markRoleRight('rol_mail_logout', 'rol_mail_login', true)\" value=\"1\" />
-                    <label for=\"rol_mail_logout\">Der Ordner ist &ouml;ffentlich.</label>
-                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
-                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-                     onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag',this);\" onmouseout=\"ajax_hideTooltip()\" />
+        <div class=\"groupBox\" style=\"width: 90%;\">
+            <div class=\"groupBoxBody\" >
+                <div style=\"margin-top: 6px;\">
+                    <ul class=\"formFieldList\">
+                        <li>
+                            <div>
+                                <input type=\"checkbox\" id=\"fol_public\" name=\"fol_public\" ";
+
+                                if($folder->getValue("fol_public") == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                if($parentFolder->getValue("fol_public") == 0)
+                                {
+                                    echo " disabled=\"disabled\" ";
+                                }
+                                echo " value=\"1\" />
+                                <label for=\"fol_public\"><img src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Der Ordner ist &ouml;ffentlich.\" /></label>&nbsp;
+                                <label for=\"fol_public\">Der Ordner ist &ouml;ffentlich.</label>
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
+                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
+                                 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </li>
-        </ul>
-
-        <div style=\"text-align: left; float: left; padding-right: 5%;\">";
-
-            echo "<div>kein Zugriff</div>
-            <div>
-                <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
-                //TODO!!!!
-                while($row = $g_db->fetch_object($allRoles))
-                {
-                    if(in_array($row->rol_id,$childRoles)  )
-                        $childRoleObjects[] = $row;
-                    elseif ($row->rol_id == $req_rol_id)
-                        continue;
-                    else
-                        echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
-                }
-                echo "
-                </select>
-            </div>
-            <div>
-                <span class=\"iconTextLink\">
-                    <a href=\"javascript:hinzufuegen()\">
-                    <img src=\"". THEME_PATH. "/icons/add.png\" alt=\"Rolle hinzufügen\" /></a>
-                    <a href=\"javascript:hinzufuegen()\">Rolle hinzufügen</a>
-                </span>
             </div>
         </div>
-        <div>
-            <div>Zugriff</div>
-            <div>
-                <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
-                    foreach ($childRoleObjects as $childRoleObject)
-                    {
-                        echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
-                    }
-                    echo "
-                </select>
-            </div>
-            <div>
-                <span class=\"iconTextLink\">
-                    <a href=\"javascript:entfernen()\">
-                    <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle entfernen\" /></a>
-                    <a href=\"javascript:entfernen()\">Rolle entfernen</a>
-                </span>
+
+        <div class=\"groupBox\" style=\"width: 90%;\">
+            <div class=\"groupBoxBody\" >
+                <div style=\"margin-top: 6px;\">
+
+                    <div style=\"text-align: left; float: left; padding-right: 5%;\">";
+
+                        echo "<div>kein Zugriff</div>
+                        <div>
+                            <select id=\"DeniedRoles\" size=\"8\" style=\"width: 200px;\">";
+                            for($i=0; $i<count($parentRoleSet); $i++) {
+
+                                $nextRole = $parentRoleSet[$i];
+
+                                if ($roleSet != null && in_array($nextRole, $roleSet)) {
+                                    continue;
+                                }
+                                else {
+                                    echo "<option value=\"". $nextRole['rol_id']. "\">". $nextRole['rol_name']. "</option>";
+                                }
+
+                            }
+
+                            echo "
+                            </select>
+                        </div>
+                        <div>
+                            <span class=\"iconTextLink\">
+                                <a href=\"javascript:hinzufuegen()\">
+                                <img src=\"". THEME_PATH. "/icons/add.png\" alt=\"Rolle hinzufügen\" /></a>
+                                <a href=\"javascript:hinzufuegen()\">Rolle hinzufügen</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div>Zugriff</div>
+                        <div>
+                            <select id=\"AllowedRoles\" name=\"AllowedRoles[]\" size=\"8\" style=\"width: 200px;\">";
+                            for($i=0; $i<count($roleSet); $i++) {
+
+                                $nextRole = $roleSet[$i];
+                                echo "<option value=\"". $nextRole['rol_id']. "\">". $nextRole['rol_name']. "</option>";
+                            }
+                            echo "
+                            </select>
+                        </div>
+                        <div>
+                            <span class=\"iconTextLink\">
+                                <a href=\"javascript:entfernen()\">
+                                <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle entfernen\" /></a>
+                                <a href=\"javascript:entfernen()\">Rolle entfernen</a>
+                            </span>
+                        </div>
+                    </div>
+                 </div>
             </div>
         </div>
 
 
         <div class=\"formSubmit\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\">
+            <button name=\"speichern\" type=\"submit\" value=\"speichern\" onclick=\"absenden()\">
             <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Berechtigungen speichern\" />
             &nbsp;Berechtigungen speichern</button>
         </div>
@@ -195,11 +254,7 @@ echo "
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
-</ul>
-
-<script type=\"text/javascript\"><!--
-    document.getElementById('new_folder').focus();
---></script>";
+</ul>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

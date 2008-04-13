@@ -631,5 +631,60 @@ elseif ($req_mode == 6)
 
 }
 
+//Berechtigungen fuer einen Ordner speichern
+elseif ($req_mode == 7)
+{
+    if ($folder_id == 0) {
+        //FolderId ist zum hinzufuegen erforderlich
+        $g_message->show("invalid");
+    }
+
+    //Informationen zum Zielordner aus der DB holen
+    $targetFolder = new Folder($g_db);
+    $targetFolder->getFolderForDownload($folder_id);
+
+    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
+    if (!$targetFolder->getValue('fol_id'))
+    {
+        //Datensatz konnte nicht in DB gefunden werden...
+        $g_message->show("invalid");
+    }
+
+    //Formularinhalt aufbereiten
+    if(isset($_POST['fol_public']) == false || $_POST['fol_public'] != 1)
+    {
+        $_POST['fol_public'] = 0;
+    }
+
+    //setze schon einmal das Public_Flag
+    $targetFolder->editPublicFlagOnFolder($_POST['fol_public']);
+
+    //Jetzt die Rollenberechtigungen aufbereiten
+    $rolesArray = null;
+
+    if(array_key_exists("AllowedRoles", $_POST))
+    {
+        $sentAllowedRoles = $_POST['AllowedRoles'];
+
+        //fuege alle neuen Rollen hinzu
+        foreach ($sentAllowedRoles as $newRole)
+        {
+
+            $rolesArray[] = array('rol_id'        => $newRole,
+                                  'rol_name'      => "");
+
+        }
+    }
+
+    //jetzt noch die Rollenberechtigungen in die DB schreiben
+    $targetFolder->setRolesOnFolder($rolesArray);
+
+
+    $targetFolder->save();
+
+    $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
+    $g_message->show("save");
+}
+
 
 ?>
