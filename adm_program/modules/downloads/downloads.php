@@ -154,10 +154,8 @@ else
             echo "
             <tr class=\"tableMouseOver\">
                 <td>
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">
-                        <img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></a>
-                    </span>
+                  	<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">
+                    <img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></a>
                 </td>
                 <td><a href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">". $nextFolder['fol_name']. "</a></td>
                 <td>&nbsp;</td>
@@ -167,15 +165,11 @@ else
                 {
                     //Hier noch die Links zum Aendern und Loeschen
                     echo "
-                    <td style=\"text-align: left;\">
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/downloads/rename.php?folder_id=". $nextFolder['fol_id']. "\">
-                            <img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Umbenennen\" title=\"Umbenennen\" /></a>
-                        </span>
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;folder_id=". $nextFolder['fol_id']. "\">
-                            <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
-                        </span>";
+                    <td style=\"text-align: center;\">
+						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/rename.php?folder_id=". $nextFolder['fol_id']. "\">
+						<img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Umbenennen\" title=\"Umbenennen\" /></a>
+						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;folder_id=". $nextFolder['fol_id']. "\">
+						<img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                         if (!$nextFolder['fol_exists']) {
                             echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning16.png\" alt=\"Warnung\" title=\"Warnung\"
                           onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=folderNotExists',this);\"
@@ -238,10 +232,8 @@ else
             echo "
             <tr class=\"tableMouseOver\">
                 <td>
-                    <span class=\"iconLink\">
-                        <a href=\"$g_root_path/adm_program/modules/downloads/get_file.php?file_id=". $nextFile['fil_id']. "\">
-                        <img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a>
-                    </span>
+					<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/get_file.php?file_id=". $nextFile['fil_id']. "\">
+					<img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a>
                 </td>
                 <td><a href=\"$g_root_path/adm_program/modules/downloads/get_file.php?file_id=". $nextFile['fil_id']. "\">". $nextFile['fil_name']. "</a></td>
                 <td>". $nextFile['fil_timestamp']. "</td>
@@ -251,15 +243,11 @@ else
                 {
                     //Hier noch die Links zum Aendern und Loeschen
                     echo "
-                    <td style=\"text-align: left;\">
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/downloads/rename.php?file_id=". $nextFile['fil_id']. "\">
-                            <img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Umbenennen\" title=\"Umbenennen\" /></a>
-                        </span>
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;file_id=". $nextFile['fil_id']. "\">
-                            <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
-                        </span>";
+                    <td style=\"text-align: center;\">
+						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/rename.php?file_id=". $nextFile['fil_id']. "\">
+						<img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Umbenennen\" title=\"Umbenennen\" /></a>
+						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;file_id=". $nextFile['fil_id']. "\">
+						<img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>";
                         if (!$nextFile['fil_exists']) {
                             echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning16.png\" alt=\"Warnung\" title=\"Warnung\"
                           onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=fileNotExists',this);\"
@@ -318,10 +306,8 @@ if ($g_current_user->editDownloadRight())
                     <td><img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></td>
                     <td>". $nextFolder['fol_name']. "</td>
                     <td style=\"text-align: right;\">
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFolder['fol_name']). "\">
-                            <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Zur Datenbank hinzuf&uuml;gen\" title=\"Zur Datenbank hinzuf&uuml;gen\" /></a>
-                        </span>
+						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFolder['fol_name']). "\">
+						<img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Zur Datenbank hinzuf&uuml;gen\" title=\"Zur Datenbank hinzuf&uuml;gen\" /></a>
                     </td>
                 </tr>";
             }
@@ -379,10 +365,8 @@ if ($g_current_user->editDownloadRight())
                     <td><img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a></td>
                     <td>". $nextFile['fil_name']. "</td>
                     <td style=\"text-align: right;\">
-                        <span class=\"iconLink\">
-                            <a href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFile['fil_name']). "\">
-                            <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Zur Datenbank hinzuf&uuml;gen\" title=\"Zur Datenbank hinzuf&uuml;gen\" /></a>
-                        </span>
+						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFile['fil_name']). "\">
+						<img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Zur Datenbank hinzuf&uuml;gen\" title=\"Zur Datenbank hinzuf&uuml;gen\" /></a>
                     </td>
                 </tr>";
             }
