@@ -147,7 +147,11 @@ $g_layout['header'] = "
             {
                 self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=telephone&mode=html&rol_id=' + rol_id;
             }
-            else if(sel_list == 'mylist')
+            else if(sel_list == 'teilnehmer')
+            {
+                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=teilnehmer&mode=html&rol_id=' + rol_id;
+            }
+			else if(sel_list == 'mylist')
             {
                 self.location.href = '$g_root_path/adm_program/modules/lists/mylist.php?rol_id=' + rol_id";
             if($active_role)
@@ -342,7 +346,8 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                         <select size=\"1\" name=\"list$i\" onchange=\"showList(this, ". $row_lst['rol_id']. ")\">
                             <option value=\"\" selected=\"selected\">Liste anzeigen ...</option>
                             <option value=\"address\">Adressliste</option>
-                            <option value=\"telefon\">Telefonliste</option>";
+                            <option value=\"telefon\">Telefonliste</option>
+                            <option value=\"teilnehmer\">Teilnehmerliste</option>";
                             if($active_role && $num_former > 0)
                             {
                                 echo "<option value=\"former\">Ehemaligenliste</option>";
