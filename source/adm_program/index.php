@@ -61,7 +61,7 @@ echo "
                 <a href=\"$g_root_path/adm_program/system/login.php\">Login</a>
             </span>
         </li>";
-        
+
         if($g_preferences['registration_mode'] > 0)
         {
             echo "<li>
@@ -79,14 +79,14 @@ echo "</ul>
     <div class=\"formHead\">Module</div>
     <div class=\"formBody\">
         <ul class=\"formFieldList\">";
-            if( $g_preferences['enable_announcements_module'] == 1 
+            if( $g_preferences['enable_announcements_module'] == 1
             || ($g_preferences['enable_announcements_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/announcements/announcements.php\"><img
                             src=\"". THEME_PATH. "/icons/announcements_big.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
                         </dt>
                         <dd>
@@ -103,11 +103,11 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/download/download.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/downloads/downloads.php\"><img
                             src=\"". THEME_PATH. "/icons/download_big.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
                         </dt>
                         <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/download/download.php\">Downloads</a></span><br />
+                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/downloads/downloads.php\">Downloads</a></span><br />
                             <span class=\"smallFontSize\">Benutzer können Dateien aus bestimmten Verzeichnissen herunterladen.</span>
                         </dd>
                     </dl>
@@ -120,7 +120,7 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/mail/mail.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/mail/mail.php\"><img
                             src=\"". THEME_PATH. "/icons/email_big.png\" alt=\"E-Mail\" title=\"E-Mail\" /></a>
                         </dt>
                         <dd>
@@ -137,7 +137,7 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img
                             src=\"". THEME_PATH. "/icons/photo_big.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
                         </dt>
                         <dd>
@@ -148,14 +148,14 @@ echo "</ul>
                 </li>";
             }
 
-            if( $g_preferences['enable_guestbook_module'] == 1 
+            if( $g_preferences['enable_guestbook_module'] == 1
             || ($g_preferences['enable_guestbook_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/guestbook/guestbook.php\"><img
                             src=\"". THEME_PATH. "/icons/guestbook_big.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
                         </dt>
                         <dd>
@@ -170,7 +170,7 @@ echo "</ul>
             <li>
                 <dl>
                     <dt>
-                        <a href=\"$g_root_path/adm_program/modules/lists/lists.php\"><img 
+                        <a href=\"$g_root_path/adm_program/modules/lists/lists.php\"><img
                         src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Listen\" title=\"Listen\" /></a>
                     </dt>
                     <dd>
@@ -186,7 +186,7 @@ echo "</ul>
             <li>
                 <dl>
                     <dt>
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile.php\"><img 
+                        <a href=\"$g_root_path/adm_program/modules/profile/profile.php\"><img
                         src=\"". THEME_PATH. "/icons/profile_big.png\" alt=\"Mein Profil\" title=\"Mein Profil\" /></a>
                     </dt>
                     <dd>
@@ -202,14 +202,14 @@ echo "</ul>
                 </dl>
             </li>";
 
-            if( $g_preferences['enable_dates_module'] == 1 
+            if( $g_preferences['enable_dates_module'] == 1
             || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/dates/dates_big.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/dates/dates_big.php\"><img
                             src=\"". THEME_PATH. "/icons/dates_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
                         </dt>
                         <dd>
@@ -228,7 +228,7 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/links/links.php\"><img 
+                            <a href=\"$g_root_path/adm_program/modules/links/links.php\"><img
                             src=\"". THEME_PATH. "/icons/weblinks_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
                         </dt>
                         <dd>
@@ -255,7 +255,7 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"". $g_forum->url. "\"><img 
+                            <a href=\"". $g_forum->url. "\"><img
                             src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" title=\"Forum\" /></a>
                         </dt>
                         <dd>
@@ -283,7 +283,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                     <li>
                         <dl>
                             <dt>
-                                <a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\"><img 
+                                <a href=\"$g_root_path/adm_program/administration/new_user/new_user.php\"><img
                                 src=\"". THEME_PATH. "/icons/new_registrations_big.png\" alt=\"Web-Anmeldungen\" title=\"Web-Anmeldungen\" /></a>
                             </dt>
                             <dd>
@@ -300,7 +300,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                     <li>
                         <dl>
                             <dt>
-                                <a href=\"$g_root_path/adm_program/administration/members/members.php\"><img 
+                                <a href=\"$g_root_path/adm_program/administration/members/members.php\"><img
                                 src=\"". THEME_PATH. "/icons/user_administration_big.png\" alt=\"Benutzerverwaltung\" title=\"Benutzerverwaltung\" /></a>
                             </dt>
                             <dd>
@@ -317,13 +317,13 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                     <li>
                         <dl>
                             <dt>
-                                <a href=\"$g_root_path/adm_program/administration/roles/roles.php\"><img 
+                                <a href=\"$g_root_path/adm_program/administration/roles/roles.php\"><img
                                 src=\"". THEME_PATH. "/icons/roles_administration_big.png\" alt=\"Rollenverwaltung\" title=\"Rollenverwaltung\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
                                 <span class=\"smallFontSize\">Rollen (Gruppen / Kurse / Abteilungen) können hier erstellt oder bearbeitet, sowie deren
-                                 	Rechtebereich definiert werden.</span>
+                                     Rechtebereich definiert werden.</span>
                             </dd>
                         </dl>
                     </li>";
@@ -335,7 +335,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                     <li>
                         <dl>
                             <dt>
-                                <a href=\"$g_root_path/adm_program/administration/organization/organization.php\"><img 
+                                <a href=\"$g_root_path/adm_program/administration/organization/organization.php\"><img
                                 src=\"". THEME_PATH. "/icons/options_big.png\" alt=\"Organisationseinstellungen\" title=\"Organisationseinstellungen\" /></a>
                             </dt>
                             <dd>

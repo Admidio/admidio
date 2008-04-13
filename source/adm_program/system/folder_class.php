@@ -159,14 +159,15 @@ class Folder extends TableAccess
                 //Falls der User editDownloadRechte hat, bekommt er den Ordner natuerlich auch zu sehen
                 $addToArray = true;
             }
-            else
+            else if ($g_valid_login)
             {
+
                 //Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
                 $sql_rights = "SELECT count(*)
                          FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
                         WHERE flr_fol_id        = ". $row_folders->fol_id. "
-                          AND flr_rol_id         = mem_rol_id
-                          AND mem_usr_id         = ". $g_current_user->getValue("usr_id"). "
+                          AND flr_rol_id        = mem_rol_id
+                          AND mem_usr_id        = ". $g_current_user->getValue("usr_id"). "
                           AND mem_valid         = 1";
                 $result_rights = $this->db->query($sql_rights);
                 $row_rights = $g_db->fetch_array($result_rights);
@@ -439,14 +440,14 @@ class Folder extends TableAccess
         $roleArray = null;
 
         //Erst einmal die aktuellen Rollenberechtigungen fuer den Ordner auslesen
-        $sql_rolset = "SELECT * FROM ". TBL_FOLDER_ROLES. "
-                            WHERE flr_fol_id = ". $this->getValue('fol_id');
+        $sql_rolset = "SELECT * FROM ". TBL_FOLDER_ROLES. ", ". TBL_ROLES. "
+                            WHERE flr_fol_id = ". $this->getValue('fol_id'). "
+                              AND flr_rol_id = rol_id";
+
         $result_roleset = $this->db->query($sql_rolset);
 
         while($row_roleset = $this->db->fetch_object($result_roleset))
         {
-            $role = new Role($g_db, $row_roleset->flr_rol_id);
-
             //Jede Rolle wird nun dem Array hinzugefuegt
             $roleArray[] = array(
                                 'rol_id'        => $row_roleset->rol_id,
@@ -476,7 +477,7 @@ class Folder extends TableAccess
         while($row_subfolders = $this->db->fetch_object($result_subfolders))
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->editPublicFlagOnFolder($row_subfolders->fol_id);
+            $this->editPublicFlagOnFolder($public_flag, $row_subfolders->fol_id);
         }
 
         //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
@@ -518,7 +519,7 @@ class Folder extends TableAccess
         if (count($rolesArray) > 0) {
             for($i=0; $i<count($rolesArray); $i++) {
                 $sql_insert = "INSERT INTO ". TBL_FOLDER_ROLES. " (flr_fol_id, flr_rol_id)
-                                  VALUES (". $folder_id. ", ". $rolesArray[i]['rol_id']. ")";
+                                  VALUES (". $folder_id. ", ". $rolesArray[$i]['rol_id']. ")";
                 $this->db->query($sql_insert);
             }
         }
@@ -546,7 +547,7 @@ class Folder extends TableAccess
         while($row_subfolders = $this->db->fetch_object($result_subfolders))
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->editLockedFlagOnFolder($row_subfolders->fol_id);
+            $this->editLockedFlagOnFolder($locked_flag, $row_subfolders->fol_id);
         }
 
         //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...

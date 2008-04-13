@@ -241,10 +241,10 @@ echo "
                 break;
 
             case "role_show_list":
-				echo "Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und
-            	      die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht
-            	      <strong>Mitgliederlisten aller Rollen einsehen</strong> steht allerdings noch
-            	      über dieser Einstellung.";            
+                echo "Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und
+                      die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht
+                      <strong>Mitgliederlisten aller Rollen einsehen</strong> steht allerdings noch
+                      über dieser Einstellung.";
                 break;
 
             case "role_mail_logout":
@@ -292,11 +292,18 @@ echo "
             case "fileNotExists":
                 echo "Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.";
                 break;
-                
+
             case "additionalFiles":
-            	echo "In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden.
-            		Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.";
-            	break;
+                echo "In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden.
+                    Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.";
+                break;
+
+            case "publicDownloadFlag":
+                echo "Wenn diese Option aktiviert ist, kann jeder Besucher den Inhalt des Ordners sehen. Unabhängig von der Rollenberechtigung.";
+                break;
+
+
+
 
             //Fotomodulhifen
 
