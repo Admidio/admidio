@@ -22,7 +22,7 @@ require("../../system/role_class.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $arr_mode   = array("csv-ms", "csv-ms-2k", "csv-oo", "html", "print");
-$arr_type   = array("mylist", "address", "telephone", "former");
+$arr_type   = array("mylist", "address", "telephone", "teilnehmer", "former");
 $req_rol_id = 0;
 $req_start  = 0;
 
@@ -212,7 +212,55 @@ switch($req_type)
                       AND usr_valid  = 1
                     ORDER BY mem_leader DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
         break;
-
+    
+    case "teilnehmer":
+        $usf_last_name  = $g_current_user->getProperty("Nachname", "usf_id");
+        $usf_first_name = $g_current_user->getProperty("Vorname", "usf_id");
+        $usf_birthday   = $g_current_user->getProperty("Geburtstag", "usf_id");
+        $usf_address    = $g_current_user->getProperty("Adresse", "usf_id");
+        $usf_zip_code   = $g_current_user->getProperty("PLZ", "usf_id");
+        $usf_city       = $g_current_user->getProperty("Ort", "usf_id");
+        $usf_phone      = $g_current_user->getProperty("Telefon", "usf_id");
+        $usf_email      = $g_current_user->getProperty("E-Mail", "usf_id");
+        
+        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
+                            f$usf_birthday.usd_value, f$usf_address.usd_value, 
+                            f$usf_zip_code.usd_value, f$usf_city.usd_value,
+							f$usf_phone.usd_value, f$usf_email.usd_value
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
+                       ON f$usf_last_name.usd_usr_id = usr_id
+                      AND f$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
+                       ON f$usf_first_name.usd_usr_id = usr_id
+                      AND f$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_birthday
+                       ON f$usf_birthday.usd_usr_id = usr_id
+                      AND f$usf_birthday.usd_usf_id = $usf_birthday
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_address
+                       ON f$usf_address.usd_usr_id = usr_id
+                      AND f$usf_address.usd_usf_id = $usf_address
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_zip_code
+                       ON f$usf_zip_code.usd_usr_id = usr_id
+                      AND f$usf_zip_code.usd_usf_id = $usf_zip_code
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_city
+                       ON f$usf_city.usd_usr_id = usr_id
+                      AND f$usf_city.usd_usf_id = $usf_city
+                     LEFT JOIN ". TBL_USER_DATA ." f$usf_phone
+                       ON f$usf_phone.usd_usr_id = usr_id
+                      AND f$usf_phone.usd_usf_id = $usf_phone
+        			 LEFT JOIN ". TBL_USER_DATA ." f$usf_email
+                       ON f$usf_email.usd_usr_id = usr_id
+                      AND f$usf_email.usd_usf_id = $usf_email
+					 WHERE rol_id     = $req_rol_id
+                      AND rol_cat_id = cat_id
+                      AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                      AND rol_id     = mem_rol_id
+                      AND mem_valid  = ". $role->getValue("rol_valid"). "
+                      AND mem_usr_id = usr_id
+                      AND usr_valid  = 1
+                    ORDER BY mem_leader DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+        break;
     case "former":
         $usf_last_name  = $g_current_user->getProperty("Nachname", "usf_id");
         $usf_first_name = $g_current_user->getProperty("Vorname", "usf_id");
