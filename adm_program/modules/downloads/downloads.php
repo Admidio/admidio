@@ -101,7 +101,7 @@ if ($g_current_user->editDownloadRight())
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/downloads/folder_config.php?folder_id=$folderId\"><img
-                src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Ordnerberechtigung setzen\" /></a>
+                src=\"". THEME_PATH. "/icons/wrench.png\" alt=\"Ordnerberechtigung setzen\" /></a>
                 <a href=\"$g_root_path/adm_program/modules/downloads/folder_config.php?folder_id=$folderId\">Berechtigungen setzen</a>
             </span>
         </li>
