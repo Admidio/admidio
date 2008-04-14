@@ -224,8 +224,6 @@ a:hover, a:active {
     font-size:          10pt;
     color:              #555555;
 	border:             1px solid #7d7d7d;
-	-moz-border-radius-bottomleft:	10px;
-	-moz-border-radius-bottomright:	10px;
 }
 
 .tableList th {
