@@ -22,7 +22,7 @@ require_once("ecard_function.php");
 
 
 $email_versand_liste		= array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
-$email_versand_liste_all	= array(); // Array wo alle Empfaenger aufgelistet werden (inklusive zusaetzlichen);
+$email_versand_liste_cc		= array(); // Array wo alle CC Empfaenger aufgelistet werden;
 $error_msg					= "";
 $font_sizes 				= array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"); 
 $font_colors 				= getElementsFromFile('../../system/schriftfarben.txt');  
@@ -209,9 +209,9 @@ if (! empty($submit_action))
 			if(!is_numeric($rolle))
 			{
 				array_push($email_versand_liste,array($ecard["name_recipient"],$ecard["email_recipient"]));
-				$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
+				$email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
 				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"],$bbcode_enable);
-				$result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],$email_versand_liste_all);
+				$result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],$email_versand_liste_cc);
 				// Wenn die Grußkarte erfolgreich gesendet wurde 
 				if ($result) 
 				{
@@ -264,9 +264,9 @@ if (! empty($submit_action))
 					array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
 					$i++;
 				}
-				$email_versand_liste_all = array_merge($email_versand_liste,getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']));
+				$email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
 				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$firstvalue_name,$firstvalue_email,$bbcode_enable);
-				$result = sendEcard($ecard,$ecard_html_data,$firstvalue_name,$firstvalue_email,$email_versand_liste_all);
+				$result = sendEcard($ecard,$ecard_html_data,$firstvalue_name,$firstvalue_email,$email_versand_liste_cc);
 				// Wenn die Grußkarte erfolgreich gesendet wurde 
 				if ($result) 
 				{
