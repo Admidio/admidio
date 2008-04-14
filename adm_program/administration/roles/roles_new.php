@@ -289,7 +289,7 @@ echo "
 										{
 											echo " selected=\"selected\"";
 										}
-										echo ">Nur Angemeldete Benutzer</option>
+										echo ">Alle angemeldeten Benutzer</option>
 								</select>
 								<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
                                 	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
