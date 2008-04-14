@@ -84,21 +84,22 @@ $g_layout['header'] =  "
             // window.blur();
         }
         // Versteckt oder zeigt weitere Einstellungsmöglichkeiten
-        function showHideMoreSettings(LayerSetting,LayerSwith)
+        function showHideMoreSettings(LayerSetting,LayerSwith,LayerSettingName,Setting)
         {
-            if(document.getElementById(LayerSwith).value == \"1\")
+            if(document.getElementById(LayerSwith).value == \"1\" && document.getElementById(LayerSetting))
             {
-                if(document.getElementById(LayerSetting))
-                {
-                    document.getElementById(LayerSetting).style.display = \"inline\";
-                }
+				if(Setting == 0)
+				{
+                    document.getElementById(LayerSetting).innerHTML = \"<input type='text' id='LayerSettingName' name='LayerSettingName' size='4' maxlength='4' value='". $form_values['ecard_cc_recipients']. "' />\";
+				}
+				else if(Setting == 1)
+				{
+					document.getElementById(LayerSetting).innerHTML = \"<input type='text' id='LayerSettingName' name='LayerSettingName' size='4' maxlength='4' value='". $form_values['ecard_text_length']. "' />\";
+				}
             }
-            else
-            {
-                if(document.getElementById(LayerSetting))
-                {
-                    document.getElementById(LayerSetting).style.display = \"none\";
-                }
+            else if(document.getElementById(LayerSetting))
+            {            
+                    document.getElementById(LayerSetting).innerHTML = \"\";
             }
         }
         function drawForumAccessDataTable(LayerSetting,LayerSwith)
@@ -107,7 +108,7 @@ $g_layout['header'] =  "
             {
                     document.getElementById(LayerSetting).innerHTML = \"<li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
             }
-            else
+            else if (document.getElementById(LayerSetting))
             {
                     document.getElementById(LayerSetting).innerHTML = \"\";
                     document.getElementById(LayerSetting).innerHTML += \"<li><dl><dt><label for='forum_srv'>Server:<\/label><\/dt><dd><input type='text' id='forum_srv' name='forum_srv' style='width: 200px;' maxlength='50' value='". $form_values['forum_srv']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_usr'>Username:<\/label><\/dt><dd><input type='text' id='forum_usr' name='forum_usr' style='width: 200px;' maxlength='50' value='". $form_values['forum_usr']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_pw'>Passwort:<\/label><\/dt><dd><input type='password' id='forum_pw' name='forum_pw' style='width: 200px;' maxlength='50' value='". $form_values['forum_pw']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
@@ -843,7 +844,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Falls mann die gleiche DB benutzt wie Admidio.
-                    </li>";
+                    </li><div id=\"Forum_Zugangsdaten\">";
                     
                     if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 0)
                     {
@@ -882,7 +883,7 @@ echo "
                             </dl>
                         </li>";
                     }
-                    echo"
+                    echo"</div>
                     <li class=\"smallFontSize\">
                         Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
                     </li>                
@@ -1192,7 +1193,7 @@ echo "
                             </dt>
                             <dd>
                             <div style=\"display:inline;\">
-                            <select size=\"1\" id=\"enable_ecard_cc_recipients\" name=\"enable_ecard_cc_recipients\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('ecard_cc_recipients','enable_ecard_cc_recipients');\">
+                            <select size=\"1\" id=\"enable_ecard_cc_recipients\" name=\"enable_ecard_cc_recipients\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('cc_recipients_count','enable_ecard_cc_recipients','ecard_cc_recipients',0);\">
                                     <option value=\"0\" ";
                                     if($form_values['enable_ecard_cc_recipients'] == 0)
                                     {
@@ -1205,12 +1206,12 @@ echo "
                                         echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
-                                </select>";
+                                </select><div id=\"cc_recipients_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_cc_recipients'] == 1)
                                 {
                                 echo "<input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />";
                                 }
-                            echo "</div>
+                            echo "</div></div>
                              </dd>
                         </dl>
                     </li>
@@ -1221,7 +1222,7 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_text_length\">Max. L&auml;nge des Mitteilungstextes:</label></dt>
                             <dd>
-                             <select size=\"1\" id=\"enable_ecard_text_length\" name=\"enable_ecard_text_length\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('ecard_text_length','enable_ecard_text_length');\">
+                             <select size=\"1\" id=\"enable_ecard_text_length\" name=\"enable_ecard_text_length\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('text_length_count','enable_ecard_text_length','ecard_text_length',1);\">
                                     <option value=\"0\" ";
                                     if($form_values['enable_ecard_text_length'] == 0)
                                     {
@@ -1234,12 +1235,12 @@ echo "
                                         echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
-                                </select>";
+                                </select><div id=\"text_length_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_text_length'] == 1)
                                 {
                                echo "<input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />";
                                 }
-                            echo "
+                            echo "</div>
                              </dd>
                         </dl>
                     </li>
