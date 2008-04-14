@@ -362,11 +362,11 @@ class User extends TableAccess
     {
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
-        $vcard .= (string) "N:" . $this->getValue("Nachname"). ";". $this->getValue("Vorname") . ";;;\r\n";
-        $vcard .= (string) "FN:". $this->getValue("Vorname") . " ". $this->getValue("Nachname") . "\r\n";
+        $vcard .= (string) "N;CHARSET=UTF-8:" . $this->getValue("Nachname"). ";". $this->getValue("Vorname") . ";;;\r\n";
+        $vcard .= (string) "FN;CHARSET=UTF-8:". $this->getValue("Vorname") . " ". $this->getValue("Nachname") . "\r\n";
         if (strlen($this->getValue("usr_login_name")) > 0)
         {
-            $vcard .= (string) "NICKNAME:" . $this->getValue("usr_login_name"). "\r\n";
+            $vcard .= (string) "NICKNAME;CHARSET=UTF-8:" . $this->getValue("usr_login_name"). "\r\n";
         }
         if (strlen($this->getValue("Telefon")) > 0)
         {
@@ -380,10 +380,10 @@ class User extends TableAccess
         {
             $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue("Fax"). "\r\n";
         }
-        $vcard .= (string) "ADR;HOME:;;" . $this->getValue("Adresse"). ";" . $this->getValue("Ort"). ";;" . $this->getValue("PLZ"). ";" . $this->getValue("Land"). "\r\n";
+        $vcard .= (string) "ADR;CHARSET=UTF-8;HOME:;;" . $this->getValue("Adresse"). ";" . $this->getValue("Ort"). ";;" . $this->getValue("PLZ"). ";" . $this->getValue("Land"). "\r\n";
         if (strlen($this->getValue("Homepage")) > 0)
         {
-            $vcard .= (string) "URL;HOME:" . $this->getValue("Homepage"). "\r\n";
+            $vcard .= (string) "URL;CHARSET=UTF-8;HOME:" . $this->getValue("Homepage"). "\r\n";
         }
         if (strlen($this->getValue("Geburtstag")) > 0)
         {
@@ -391,7 +391,7 @@ class User extends TableAccess
         }
         if (strlen($this->getValue("E-Mail")) > 0)
         {
-            $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
+            $vcard .= (string) "EMAIL;CHARSET=UTF-8;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
         }
         if (strlen($this->getValue("usr_photo")) > 0)
         {
