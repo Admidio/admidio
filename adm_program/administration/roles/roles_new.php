@@ -585,8 +585,7 @@ echo "
                     <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen 
                     Rolle Mitglied in der aktuellen Rolle. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften 
                     nicht aufgehoben!</p>
-                    <div style=\"text-align: left; float: left; padding-right: 5%;\">";
-
+                    <div style=\"text-align: left; float: left;\">";
                         // holt eine Liste der ausgewählten Rolen
                         $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
 
@@ -620,15 +619,14 @@ echo "
                                 }
                             echo "</select>
                         </div>
-                        <div>
-                            <span class=\"iconTextLink\">
-                                <a href=\"javascript:hinzufuegen()\"><img
-                                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Rolle hinzufügen\" /></a>
-                                <a href=\"javascript:hinzufuegen()\">Rolle hinzufügen</a>
-                            </span>
-                        </div>
                     </div>
-                    <div>
+					<div style=\"float: left;\" class=\"verticalIconList\">
+						<ul>
+                            <li><a class=\"iconLinkVertical\" href=\"javascript:hinzufuegen()\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzufügen\" /></a></li>
+                            <li><a class=\"iconLinkVertical\" href=\"javascript:entfernen()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Rolle entfernen\" /></a></li>
+						</ul>
+                    </div>
+					<div>
                         <div>abhängig</div>
                         <div>
                             <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
@@ -638,14 +636,7 @@ echo "
                                 }
                             echo "</select>
                         </div>
-                        <div>
-                            <span class=\"iconTextLink\">
-                                <a href=\"javascript:entfernen()\"><img
-                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle entfernen\" /></a>
-                                <a href=\"javascript:entfernen()\">Rolle entfernen</a>
-                            </span>
-                        </div>
-                    </div>
+                    </div 
                 </div>
             </div>
         </div>";

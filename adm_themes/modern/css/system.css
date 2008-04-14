@@ -318,6 +318,26 @@ ul.autosuggest li.highlight a:visited  {
     vertical-align:     top;
 }
 
+/* Iconlinks um Funktionen aufzurufen (ohne Text) in vertikaler Anordnung*/
+.iconLinkVertical {
+    margin-left:        10px;
+    margin-right:       8px;
+}
+
+.verticalIconList ul{
+	padding-left: 		0px;
+	padding-bottom: 	0px;
+	padding-right: 		0px;
+	padding-top: 		20px;
+	margin-right: 		6px;
+	margin-left: 		3px;
+	list-style-type: 	none;
+}
+
+.verticalIconList li{
+	margin-top: 		10px;
+}
+
 /* Icon um Bereiche auf und zu zuklappen */
 .iconShowHide img {
     border:             none;
