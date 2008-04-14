@@ -104,14 +104,14 @@ $g_layout['header'] =  "
         }
         function drawForumAccessDataTable(LayerSetting,LayerSwith)
         {
-            if(document.getElementById(LayerSwith).checked == true && document.getElementById(LayerSetting))
+			var layerSetting = document.getElementById(LayerSetting);
+            if(document.getElementById(LayerSwith).checked == true && layerSetting)
             {
-                    document.getElementById(LayerSetting).innerHTML = \"<li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
+                    layerSetting.innerHTML = '<li><dl><dt><label for=\'forum_db\'>Datenbank:<\/label><\/dt><dd><input type=\'text\' id=\'forum_db\' name=\'forum_db\' style=\'width: 200px;\' maxlength=\'50\' value=\'". $form_values['forum_db']. "\' \/><\/dd><\/dl><\/li>';
             }
-            else if (document.getElementById(LayerSetting))
+            else if (document.getElementById(LayerSwith).checked == false && layerSetting)
             {
-                    document.getElementById(LayerSetting).innerHTML = \"\";
-                    document.getElementById(LayerSetting).innerHTML += \"<li><dl><dt><label for='forum_srv'>Server:<\/label><\/dt><dd><input type='text' id='forum_srv' name='forum_srv' style='width: 200px;' maxlength='50' value='". $form_values['forum_srv']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_usr'>Username:<\/label><\/dt><dd><input type='text' id='forum_usr' name='forum_usr' style='width: 200px;' maxlength='50' value='". $form_values['forum_usr']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_pw'>Passwort:<\/label><\/dt><dd><input type='password' id='forum_pw' name='forum_pw' style='width: 200px;' maxlength='50' value='". $form_values['forum_pw']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
+                    layerSetting.innerHTML = \"<li><dl><dt><label for='forum_srv'>Server:<\/label><\/dt><dd><input type='text' id='forum_srv' name='forum_srv' style='width: 200px;' maxlength='50' value='". $form_values['forum_srv']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_usr'>Username:<\/label><\/dt><dd><input type='text' id='forum_usr' name='forum_usr' style='width: 200px;' maxlength='50' value='". $form_values['forum_usr']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_pw'>Passwort:<\/label><\/dt><dd><input type='password' id='forum_pw' name='forum_pw' style='width: 200px;' maxlength='50' value='". $form_values['forum_pw']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
             }
         }
     --></script>";
@@ -831,59 +831,23 @@ echo "
                         <dl>
                             <dt><label for=\"forum_sqldata_from_admidio\">Zugangsdaten von Admidio verwenden:</label></dt>
                             <dd>
-                                <div style=\"display:inline;\">
-                                <input type=\"checkbox\" id=\"forum_sqldata_from_admidio\" name=\"forum_sqldata_from_admidio\" onchange=\"javascript:drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');\" ";
+                                <input type=\"checkbox\" id=\"forum_sqldata_from_admidio\" name=\"forum_sqldata_from_admidio\" onclick=\"javascript:drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');\" ";
                                 if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                                </div>
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Falls mann die gleiche DB benutzt wie Admidio.
-                    </li><div id=\"Forum_Zugangsdaten\">";
-                    
-                    if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 0)
-                    {
-                        echo "<li>
-                        
-                            <dl>
-                                <dt><label for=\"forum_srv\">Server:</label></dt>
-                                <dd><input type=\"text\" id=\"forum_srv\" name=\"forum_srv\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_srv']. "\" /></dd>
-                            </dl>
-                        </li>
-                        <li>
-                            <dl>
-                                <dt><label for=\"forum_usr\">Username:</label></dt>
-                                <dd><input type=\"text\" id=\"forum_usr\" name=\"forum_usr\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_usr']. "\" /></dd>
-                            </dl>
-                        </li>
-                        <li>
-                            <dl>
-                                <dt><label for=\"forum_pw\">Passwort:</label></dt>
-                                <dd><input type=\"password\" id=\"forum_pw\" name=\"forum_pw\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_pw']. "\" /></dd>
-                            </dl>
-                        </li>
-                        <li>
-                            <dl>
-                                <dt><label for=\"forum_db\">Datenbank:</label></dt>
-                                <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
-                            </dl>
-                        </li>";
-                    }
-                    else
-                    {
-                        echo "<li>
-                            <dl>
-                                <dt><label for=\"forum_db\">Datenbank:</label></dt>
-                                <dd><input type=\"text\" id=\"forum_db\" name=\"forum_db\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['forum_db']. "\" /></dd>
-                            </dl>
-                        </li>";
-                    }
-                    echo"</div>
+                    </li>
+					<li id=\"Forum_Zugangsdaten\">
+						<script type=\"text/javascript\"><!--
+							drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');
+						--></script>
+					</li>
                     <li class=\"smallFontSize\">
                         Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
                     </li>                
@@ -1192,7 +1156,6 @@ echo "
                             <dt><label for=\"ecard_cc_recipients\">Max. weitere Empf&auml;nger</label>
                             </dt>
                             <dd>
-                            <div style=\"display:inline;\">
                             <select size=\"1\" id=\"enable_ecard_cc_recipients\" name=\"enable_ecard_cc_recipients\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('cc_recipients_count','enable_ecard_cc_recipients','ecard_cc_recipients',0);\">
                                     <option value=\"0\" ";
                                     if($form_values['enable_ecard_cc_recipients'] == 0)
@@ -1206,12 +1169,13 @@ echo "
                                         echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
-                                </select><div id=\"cc_recipients_count\" style=\"display:inline;\">";
+                                </select>
+								<div id=\"cc_recipients_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_cc_recipients'] == 1)
                                 {
                                 echo "<input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />";
                                 }
-                            echo "</div></div>
+                            echo "</div>
                              </dd>
                         </dl>
                     </li>
@@ -1235,7 +1199,8 @@ echo "
                                         echo " selected=\"selected\" ";
                                     }
                                     echo ">Aktiviert</option>
-                                </select><div id=\"text_length_count\" style=\"display:inline;\">";
+                                </select>
+								<div id=\"text_length_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_text_length'] == 1)
                                 {
                                echo "<input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />";
