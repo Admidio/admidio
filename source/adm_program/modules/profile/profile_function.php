@@ -43,7 +43,7 @@ if($_REQUEST['mode'] == 1)
     // Userdaten aus Datenbank holen
     $user = new User($g_db, $_REQUEST['user_id']);
 
-    header('Content-Type: text/x-vcard; charset=utf-8');
+    header('Content-Type: text/x-vcard; charset=iso-8859-1');
     header('Content-Disposition: attachment; filename="'. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). '.vcf"');
 
     echo $user->getVCard();
