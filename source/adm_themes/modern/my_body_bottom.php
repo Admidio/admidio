@@ -20,8 +20,12 @@
             }
             include(SERVER_PATH. "/adm_plugins/login_form/login_form.php"); ?>
 
-            <br />
+			<br />
+            
             <h3>Module</h3>
+            <span class="menu" style="margin-bottom: 10px;"><a href="<?php echo $g_root_path; ?>/adm_program/index.php"><img
+                style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/home_small.png" alt="Übersicht" title="Übersicht" /></a>
+                <a href="<?php echo $g_root_path; ?>/adm_program/index.php">Übersicht</a></span>
             <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/announcements/announcements.php"><img
                 style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/announcements_small.png" alt="Ankündigungen" title="Ankündigungen" /></a>
                 <a href="<?php echo $g_root_path; ?>/adm_program/modules/announcements/announcements.php">Ankündigungen</a></span>
