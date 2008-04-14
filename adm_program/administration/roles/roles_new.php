@@ -622,8 +622,16 @@ echo "
                     </div>
 					<div style=\"float: left;\" class=\"verticalIconList\">
 						<ul>
-                            <li><a class=\"iconLinkVertical\" href=\"javascript:hinzufuegen()\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzufügen\" /></a></li>
-                            <li><a class=\"iconLinkVertical\" href=\"javascript:entfernen()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Rolle entfernen\" /></a></li>
+                            <li>
+								<a class=\"iconLink\" href=\"javascript:hinzufuegen()\">
+									<img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzufügen\" title=\"Rolle hinzufügen\" />
+								</a>
+							</li>
+                            <li>
+								<a class=\"iconLink\" href=\"javascript:entfernen()\">
+									<img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Rolle entfernen\" title=\"Rolle entfernen\" />
+								</a>
+							</li>
 						</ul>
                     </div>
 					<div>

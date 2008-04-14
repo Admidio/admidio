@@ -334,11 +334,6 @@ ul.autosuggest li.highlight a:visited  {
 
 
 /* Iconlinks um Funktionen aufzurufen (ohne Text) in vertikaler Anordnung*/
-.iconLinkVertical {
-    margin-left:        10px;
-    margin-right:       8px;
-}
-
 .verticalIconList ul{
 	padding-left: 		0px;
 	padding-bottom:		0px;
