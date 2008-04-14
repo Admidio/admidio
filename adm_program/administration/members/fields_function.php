@@ -90,7 +90,14 @@ if($_GET['mode'] == 1)
     if(isset($_POST['usf_name']) && $_POST['usf_cat_id'] == 0)
     {
         $g_message->show("Kategorie", "Name");
-    }    
+    }
+    
+    // Nachname und Vorname sollen immer Pflichtfeld bleiben
+    if($user_field->getValue("usf_name") == "Nachname"
+    || $user_field->getValue("usf_name") == "Vorname")
+    {
+        $_POST['usf_mandatory'] = 1;
+    }
     
     if($_GET['usf_id'] == 0)
     {
