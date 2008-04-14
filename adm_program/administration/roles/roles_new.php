@@ -101,9 +101,12 @@ $g_layout['header'] = "
             var child_roles = document.getElementById('ChildRoles');
             var all_roles   = document.getElementById('AllRoles');
             
-            NeuerEintrag = new Option(all_roles.options[all_roles.selectedIndex].text, all_roles.options[all_roles.selectedIndex].value, false, true);
-            all_roles.options[all_roles.selectedIndex] = null;
-            child_roles.options[child_roles.length] = NeuerEintrag;
+            if(all_roles.selectedIndex >= 0)
+            {
+            	NeuerEintrag = new Option(all_roles.options[all_roles.selectedIndex].text, all_roles.options[all_roles.selectedIndex].value, false, true);
+            	all_roles.options[all_roles.selectedIndex] = null;
+            	child_roles.options[child_roles.length] = NeuerEintrag;
+           	}
         }
 
         function entfernen()
@@ -111,9 +114,12 @@ $g_layout['header'] = "
             var child_roles = document.getElementById('ChildRoles');
             var all_roles   = document.getElementById('AllRoles');
             
-            NeuerEintrag = new Option(child_roles.options[child_roles.selectedIndex].text, child_roles.options[child_roles.selectedIndex].value, false, true);
-            child_roles.options[child_roles.selectedIndex] = null;
-            all_roles.options[all_roles.length] = NeuerEintrag;
+            if(child_roles.selectedIndex >= 0)
+            {
+            	NeuerEintrag = new Option(child_roles.options[child_roles.selectedIndex].text, child_roles.options[child_roles.selectedIndex].value, false, true);
+            	child_roles.options[child_roles.selectedIndex] = null;
+            	all_roles.options[all_roles.length] = NeuerEintrag;
+            }
         }
 
         function absenden()
