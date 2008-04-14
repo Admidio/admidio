@@ -81,7 +81,8 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 	if($email->sendEmail())
 	{
 		saveActivationlinkAndNewPassword($activation_id,md5($neues_passwort),$user_id);
-		$g_message->show('password_send',$empfaenger_email);
+		$g_message->setForwardUrl($g_root_path."/adm_program/system/login.php");
+		$g_message->show('lost_password_send',$empfaenger_email);
 	}
 	else
 	{
@@ -144,20 +145,16 @@ else
 			</form>
 			</div>
 		</div>
-	';
-}
-/************************Buttons********************************/
-//Uebersicht
-echo "
-    <ul class=\"iconTextLinkList\">
+    <ul class="iconTextLinkList">
         <li>
-            <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\"></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+            <span class="iconTextLink">
+                <a href="$g_root_path/adm_program/system/back.php"><img 
+                src="'. THEME_PATH. '/icons/back.png" alt="Zurück"></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
             </span>
         </li>
-    </ul>";
+    </ul>';
+}
 
 /***************************Seitenende***************************/
 require(THEME_SERVER_PATH. "/overall_footer.php");
