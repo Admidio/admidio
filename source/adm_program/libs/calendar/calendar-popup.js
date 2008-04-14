@@ -563,12 +563,14 @@ function PopupWindow_isClicked(e) {
 			}
 		else if (this.use_gebi && e) {
 			var t = e.originalTarget;
-			while (t.parentNode != null) {
-				if (t.id==this.divName) {
+			while (t.parentNode != null) 
+			{
+				if (t.id==this.divName) 
+				{
 					return true;
-					}
-				t = t.parentNode;
 				}
+				t = t.parentNode;
+			}
 			return false;
 			}
 		return false;
@@ -871,8 +873,8 @@ function CP_showCalendar(anchorname) {
 	}
 
 // Simple method to interface popup calendar with a text-entry box
-function CP_select(inputobj, linkname, format, from, to, anfang, ende) {
-	var selectedDate=(arguments.length>5)?arguments[5]:null;
+function CP_select(inputobj, linkname, format, from, to, anfang, ende,anfang_from,anfang_to) {
+	var selectedDate=(arguments.length>7)?arguments[7]:null;
 	n_from = from;
 	n_to = to;
 	a_time = anfang || '';
