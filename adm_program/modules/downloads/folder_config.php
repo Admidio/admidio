@@ -109,9 +109,9 @@ $g_layout['header'] = "
             var denied_roles  = document.getElementById('DeniedRoles');
 
             if (denied_roles.selectedIndex >= 0) {
-	            NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
-	            denied_roles.options[denied_roles.selectedIndex] = null;
-	            allowed_roles.options[allowed_roles.length] = NeuerEintrag;
+                NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
+                denied_roles.options[denied_roles.selectedIndex] = null;
+                allowed_roles.options[allowed_roles.length] = NeuerEintrag;
             }
         }
 
@@ -122,9 +122,9 @@ $g_layout['header'] = "
 
             if (allowed_roles.selectedIndex >= 0)
             {
-	            NeuerEintrag = new Option(allowed_roles.options[allowed_roles.selectedIndex].text, allowed_roles.options[allowed_roles.selectedIndex].value, false, true);
-	            allowed_roles.options[allowed_roles.selectedIndex] = null;
-	            denied_roles.options[denied_roles.length] = NeuerEintrag;
+                NeuerEintrag = new Option(allowed_roles.options[allowed_roles.selectedIndex].text, allowed_roles.options[allowed_roles.selectedIndex].value, false, true);
+                allowed_roles.options[allowed_roles.selectedIndex] = null;
+                denied_roles.options[denied_roles.length] = NeuerEintrag;
             }
         }
 
@@ -176,7 +176,15 @@ echo "
                                 <label for=\"fol_public\">&Ouml;ffentlicher Zugriff ist nicht erlaubt.</label>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
                                  onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-                                 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag',this);\" onmouseout=\"ajax_hideTooltip()\" />";
+
+                                //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.
+                                if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue("fol_public") == 0)
+                                {
+                                    echo "<input type=hidden id=\"fol_public_hidden\" name=\"fol_public\" value=". $parentFolder->getValue("fol_public"). " />";
+                                }
+
+                            echo "
                             </div>
                         </li>
                     </ul>

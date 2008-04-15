@@ -653,11 +653,14 @@ elseif ($req_mode == 7)
     //Formularinhalt aufbereiten
     if(isset($_POST['fol_public']) == false || $_POST['fol_public'] != 0)
     {
-        $_POST['fol_public'] = 1;
+        $publicFlag = 1;
+    }
+    else {
+        $publicFlag = 0;
     }
 
     //setze schon einmal das Public_Flag
-    $targetFolder->editPublicFlagOnFolder($_POST['fol_public']);
+    $targetFolder->editPublicFlagOnFolder($publicFlag);
 
     //Jetzt die Rollenberechtigungen aufbereiten
     $rolesArray = null;
