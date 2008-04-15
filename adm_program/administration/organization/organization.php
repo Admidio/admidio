@@ -841,7 +841,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Falls mann die gleiche DB benutzt wie Admidio.
+                        Falls man die gleiche DB benutzt wie Admidio.
                     </li>
 					<li id=\"Forum_Zugangsdaten\">
 						<script type=\"text/javascript\"><!--
