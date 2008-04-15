@@ -103,6 +103,8 @@ html.* #right_block div {
 #content, #content_left {
     padding-left: 13px;
     padding-right: 12px;
+    min-height: 450px;
+    min-width: 574px;
 }
 
 .content {
