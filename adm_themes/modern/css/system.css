@@ -227,7 +227,6 @@ a:hover, a:active {
 }
 
 .tableList th {
-    background-color:   #85C226;
     padding:            3px;
     background-repeat:  repeat-x;
     background-image:   url(../images/stripe.png);   

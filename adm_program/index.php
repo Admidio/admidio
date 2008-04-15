@@ -33,7 +33,7 @@ $_SESSION['navigation']->clear();
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Admidio Übersicht";
-$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/mainpage.css" type="text/css" />';
+$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
