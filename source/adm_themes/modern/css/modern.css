@@ -95,6 +95,10 @@ html.* #right_block div {
     margin-left: 622px;
     width: 268px;
 }
+/* spezieller Hack, damit die Menuelinks im IE6 nicht so weit auseinander springen */
+html.* #right_block span { 
+    height: 15px;
+}
 
 /* damit unter den Rahmenbildern keine 2px Abstand sind */
 .img_border {
