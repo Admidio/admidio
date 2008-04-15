@@ -305,9 +305,19 @@ else
                         {
                             echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;<strong></div>
                             <div style="float: left;">'. $date->getValue("dat_location"). '</strong><br />';
-                                // eventuell Karte- und Routenlink anhaengen
+                                // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind, 
+                                // die jeweils laenger als 3 Zeichen sind
+                                $map_info_count = 0;
+                                foreach(split("[,; ]", $date->getValue("dat_location")) as $key => $value)
+                                {
+                                    if(strlen($value) > 3)
+                                    {
+                                        $map_info_count++;
+                                    }
+                                }
+                                
                                 if($g_preferences['dates_show_map_link']
-                                && count(split("[,; ]", $date->getValue("dat_location"))) > 1)
+                                && $map_info_count > 1)
                                 {
                                     echo '<span class="iconTextLink">
                                         <a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank"><img
