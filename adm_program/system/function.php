@@ -242,27 +242,12 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
             // Rollen selektieren
 
             // Benutzer mit den Recht alle Listen einzusehen, bekommen auch alle Rollen aufgelistet
-            if($g_current_user->viewAllLists())
-            {
-                $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+           $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                              WHERE rol_valid  = 1
                                AND rol_cat_id = cat_id
                                AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                              ORDER BY cat_sequence, rol_name";
-            }
-            else
-            {
-                $sql     = "SELECT *
-							FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-	                        WHERE mem_usr_id = ". $g_current_user->db_fields['usr_id']. "
-							  AND mem_valid  = 1
-	                          AND mem_rol_id = rol_id
-							  AND rol_this_list_view  > 0
-	                          AND rol_valid  = 1 
-	                          AND rol_cat_id = cat_id
-	                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
-							
-			}
+           
             $result_lst = $g_db->query($sql);
             $act_category = "";
 
