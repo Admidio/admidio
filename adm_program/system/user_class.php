@@ -10,13 +10,6 @@
  * Diese Klasse dient dazu einen Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $user = new User($g_db);
- *
- * Mit der Funktion getUser($user_id) kann nun der gewuenschte User ausgelesen
- * werden.
- *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
  * getUser($user_id)    - ermittelt die Daten des uebergebenen Benutzers
@@ -184,8 +177,8 @@ class User extends TableAccess
                 // Homepage noch mit http vorbelegen
                 if($this->getProperty($field_name, "usf_type") == "URL")
                 {
-                    if(substr_count(strtolower($field_value), "http://")  == 0
-                    || substr_count(strtolower($field_value), "https://") == 0 )
+                    if(strpos(strtolower($field_value), "http://")  === false
+                    && strpos(strtolower($field_value), "https://") === false )
                     {
                         $field_value = "http://". $field_value;
                     }
