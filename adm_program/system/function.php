@@ -283,7 +283,10 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
                 {
                     $selected = " selected=\"selected\" ";
                 }
-                $box_string .= "<option $selected value=\"$row->rol_id\">$row->rol_name</option>";
+                if($g_current_user->viewRole($row->rol_id))
+                {
+                    $box_string .= "<option $selected value=\"$row->rol_id\">$row->rol_name</option>";
+                }
             }
             $box_string .= "</optgroup>
         </select>";
