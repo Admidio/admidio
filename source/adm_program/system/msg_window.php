@@ -299,7 +299,8 @@ echo "
                 break;
 
             case "publicDownloadFlag":
-                echo "Wenn diese Option aktiviert ist, kann jeder Besucher den Inhalt des Ordners sehen. Unabhängig von der Rollenberechtigung.";
+                echo "Wenn diese Option aktiviert ist, können nur eingeloggte Besucher,
+                	die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.";
                 break;
 
 
