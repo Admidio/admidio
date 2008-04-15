@@ -651,9 +651,9 @@ elseif ($req_mode == 7)
     }
 
     //Formularinhalt aufbereiten
-    if(isset($_POST['fol_public']) == false || $_POST['fol_public'] != 1)
+    if(isset($_POST['fol_public']) == false || $_POST['fol_public'] != 0)
     {
-        $_POST['fol_public'] = 0;
+        $_POST['fol_public'] = 1;
     }
 
     //setze schon einmal das Public_Flag

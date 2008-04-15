@@ -108,9 +108,11 @@ $g_layout['header'] = "
             var allowed_roles = document.getElementById('AllowedRoles');
             var denied_roles  = document.getElementById('DeniedRoles');
 
-            NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
-            denied_roles.options[denied_roles.selectedIndex] = null;
-            allowed_roles.options[allowed_roles.length] = NeuerEintrag;
+            if (denied_roles.selectedIndex >= 0) {
+	            NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
+	            denied_roles.options[denied_roles.selectedIndex] = null;
+	            allowed_roles.options[allowed_roles.length] = NeuerEintrag;
+            }
         }
 
         function entfernen()
@@ -118,9 +120,12 @@ $g_layout['header'] = "
             var allowed_roles = document.getElementById('AllowedRoles');
             var denied_roles  = document.getElementById('DeniedRoles');
 
-            NeuerEintrag = new Option(allowed_roles.options[allowed_roles.selectedIndex].text, allowed_roles.options[allowed_roles.selectedIndex].value, false, true);
-            allowed_roles.options[allowed_roles.selectedIndex] = null;
-            denied_roles.options[denied_roles.length] = NeuerEintrag;
+            if (allowed_roles.selectedIndex >= 0)
+            {
+	            NeuerEintrag = new Option(allowed_roles.options[allowed_roles.selectedIndex].text, allowed_roles.options[allowed_roles.selectedIndex].value, false, true);
+	            allowed_roles.options[allowed_roles.selectedIndex] = null;
+	            denied_roles.options[denied_roles.length] = NeuerEintrag;
+            }
         }
 
         function absenden()
@@ -158,7 +163,7 @@ echo "
                             <div>
                                 <input type=\"checkbox\" id=\"fol_public\" name=\"fol_public\" ";
 
-                                if($folder->getValue("fol_public") == 1)
+                                if($folder->getValue("fol_public") == 0)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
@@ -166,9 +171,9 @@ echo "
                                 {
                                     echo " disabled=\"disabled\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo " value=\"0\" />
                                 <label for=\"fol_public\"><img src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Der Ordner ist &ouml;ffentlich.\" /></label>&nbsp;
-                                <label for=\"fol_public\">Der Ordner ist &ouml;ffentlich.</label>
+                                <label for=\"fol_public\">&Ouml;ffentlicher Zugriff ist nicht erlaubt.</label>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
                                  onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
                                  onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=publicDownloadFlag',this);\" onmouseout=\"ajax_hideTooltip()\" />
