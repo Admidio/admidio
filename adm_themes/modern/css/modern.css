@@ -90,9 +90,10 @@ img {
     margin-left: 625px;
 }
 
-/* spezieller Hack, damit der Block im IE6 auch richtig neben den anderem positioniert sind */
+/* spezieller Hack, damit der Block im IE6 auch richtig neben den anderem positioniert ist */
 html.* #right_block div { 
     margin-left: 622px;
+    width: 268px;
 }
 
 /* damit unter den Rahmenbildern keine 2px Abstand sind */
