@@ -100,7 +100,7 @@ function getFieldCode($field, $user_id)
             // Homepage als Link darstellen
             if(strlen($field['usd_value']) > 0)
             {
-                $value = '<a href="'. $field['usd_value']. '" target="_blank">'. substr($field['usd_value'], 7). '</a>';
+                $value = '<a href="'. $field['usd_value']. '" target="_blank">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2). '</a>';
             }
             break;
                                 
@@ -132,7 +132,7 @@ function getFieldCode($field, $user_id)
 	            $icq_number = implode("", reset($matches));
 
 	            // ICQ Onlinestatus anzeigen
-	            $value = "<a class=\"iconLink\" href=\"http://www.icq.com/whitepages/cmd.php?uin=$icq_number&amp;action=add\"><img 
+	            $value = "<a class=\"iconLink\" href=\"http://www.icq.com/people/cmd.php?uin=$icq_number&amp;action=add\"><img 
 	                        src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\" 
 	                        alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
 	                        title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>

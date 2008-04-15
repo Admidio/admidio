@@ -984,8 +984,10 @@ function CP_getCalendar() {
 			result += '<td id="'+this.cssPrefix+'cpMonthNavigation" width="10">&nbsp;</td>';
 
 			result += '<td id="'+this.cssPrefix+'cpYearNavigation" width="56" colspan="3"><select id="'+this.cssPrefix+'cpYearNavigation" name="cpYear" onChange="'+refresh+'('+this.index+','+month+',this.options[this.selectedIndex].value-0);">';
+            var actDate = new Date();
+            var actYear = actDate.getFullYear();
 
-			for( var yearCounter=year-this.yearSelectStartOffset; yearCounter<=year+this.yearSelectEndOffset; yearCounter++ ) {
+			for( var yearCounter=actYear-this.yearSelectStartOffset; yearCounter<=actYear+this.yearSelectEndOffset; yearCounter++ ) {
 				var selected = (yearCounter==year) ? 'SELECTED' : '';
 				result += '<option value="'+yearCounter+'" '+selected+'>'+yearCounter+'</option>';
 				}
