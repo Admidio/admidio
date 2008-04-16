@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------
-                               Admidio 
+                                Admidio 
      	        Copyright (c) 2004 - 2008 The Admidio Team
-           Admidio is a open source user management software
+            Admidio is a open source user management software
 -------------------------------------------------------------------------
 
  1. Einleitung
@@ -21,30 +21,27 @@ haben.
 Unterstützung bei der Installation und Einrichten erhalten Sie auf 
 unserer Webseite http://www.admidio.org. 
 
-Schauen Sie dort in der Hilfe nach oder Suchen Sie im Forum nach Ihrem
+Schauen Sie dort in der Hilfe nach oder suchen Sie im Forum nach Ihrem
 Problem. Vielleicht wurde es dort bereits behandelt. Ansonsten können 
-Sie aber auch gerne selber Fragen im Forum stellen.
+Sie aber auch gerne selber Fragen im Forum stellen. Supportanfragen per
+E-Mail an die Entwickler können leider nicht beantwortet werden.
 
-Geben Sie bitte bei Supportanfragen folgendes mit an:
-
-  - Admidio Version
-  - MySQL Version
-  - PHP Version
-    -- register_globals = ?
-    -- safe_mode = ?
-    -- file_uploads = ?
+Geben Sie bitte bei Supportanfragen immer Ihre Admidio-Version an.
+Zusätzlich ist auch die MySQL- und PHP-Version für uns eine wichtige
+Information.
 
 Bevor Sie Admidio benutzen, sollten Sie sich die Lizenz (gpl-de.html) 
 durchlesen.
 
 Falls Sie mit dieser Open Source Mitgliederverwaltung zufrieden sind,
-wäre es schön, wenn Sie uns weiterempfehlen würden.
+freuen wir uns, wenn Sie das Programm weiterempfehlen oder uns über 
+die Homepage eine kleine Spende zukommen lassen würden.
 
 
  2. Installation
 -------------------------------------------------------------------------
 Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
-http://www.admidio.de/index.php?help/installation.php
+http://www.admidio.de/dokuwiki/doku.php
 
 Dort wird Ihnen Schritt für Schritt die Installation erklärt. 
 
@@ -55,23 +52,22 @@ Ordner adm_install löschen.
  3. Update
 -------------------------------------------------------------------------
 Beachten Sie bitte für ein fehlerfreies Update unsere Onlinehilfe !
-http://www.admidio.de/index.php?help/update.php
+http://www.admidio.de/dokuwiki/doku.php
 
-Wichtig !!!
-Falls Sie ein Bugfix-Update einspielen (diese ändern nur die 3. Stelle 
-der Versionsnummer z.B. 1.4.0 nach 1.4.1) brauchen Sie nur das Verzeichnis 
-adm_program auf Ihrem Webserver zu ersetzen und haben damit das Update 
-erfolgreich durchgeführt.
+!!! Wichtig !!!
+Bei einem Update von einer 1.x Version auf eine 2.x Version gibt es einige
+zusätzliche Anpassungen, die Sie durchführen müssen. Dazu gibt es in
+unserer Onlinehilfe ein Kapitel, welches Ihnen alle nötigen Änderungen 
+Schritt für Schritt erklärt.
 
-Kurzanleitung bei einen Versionswechsel:    					
-(z.B. Version 1.3.x nach 1.4.x)
+Kurzanleitung bei einen Versionswechsel:
 
 - Löschen Sie bitte die Ordner adm_install (falls nicht schon geschehen) 
   und adm_program der bisherigen Version
 - Kopieren Sie die Ordner adm_install und adm_program der neuen Version
   an diese Stelle
-- Rufen Sie die Datei index.php im Verzeichnis adm_install auf und
-  gehen dort das Update Schritt für Schritt durch
+- Rufen Sie die Datei update.php im Verzeichnis adm_install auf und
+  starten Sie dort das Update der Datenbank
 
 
  4. Bugs
@@ -87,22 +83,24 @@ http://forum.admidio.org
 
  5. Lizenz
 -------------------------------------------------------------------------
-Die Admidio Mitgliederverwaltung steht unter der GNU General Public License 2. 
-Bevor Sie Admidio benutzen, sollten Sie unbedingt die gpl-de.html durchlesen.
-Mit der Installation und Benutzung der Admidio Mitgliederverwaltung 
-akteptieren Sie die Bedingungen der GNU General Public License.
+Die Admidio Mitgliederverwaltung steht unter der GNU General Public 
+License 2. Bevor Sie Admidio benutzen, sollten Sie unbedingt die 
+gpl-de.html durchlesen. Mit der Installation und Benutzung der Admidio 
+Mitgliederverwaltung akteptieren Sie die Bedingungen der GNU General 
+Public License.
 http://www.gnu.org/licenses/gpl-2.0.html
 
 Teile von Admidio stehen unter der Creative Commons Lizenz. Dies sind die 
 Icons der Tango-Bibliothek (Creative Commons Attribution Share-Alike license),
-die Icons der Silk-Bibliothek und Lightbox2 (Creative Commons Attribution 2.5 License).
+die Icons der Silk-Bibliothek und Lightbox2 (Creative Commons Attribution 2.5 
+License).
 
 
  6. Copyright
 -------------------------------------------------------------------------
 Damit sich die Admidio Mitgliederverwaltung möglichst weit verbreitet, 
-wären wir sehr froh, wenn Sie den sichtbaren Hinweis mit Link im Logindialog
-stehen lassen würden.
+wären wir sehr froh, wenn Sie den sichtbaren Hinweis mit Link im 
+Logindialog stehen lassen würden.
 
 Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
 Für weitere Informationen sollten Sie die gpl-de.html durchlesen.
@@ -152,6 +150,6 @@ Tango Desktop Project
 	Icon Bibliothek Tango
 
 -------------------------------------------------------------------------
-       	      Copyright (c) 2004 - 2008 The Admidio Team
-           Admidio is a open source user management software
+       	        Copyright (c) 2004 - 2008 The Admidio Team
+            Admidio is a open source user management software
 -------------------------------------------------------------------------
