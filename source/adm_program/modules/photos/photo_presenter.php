@@ -18,10 +18,15 @@ require("../../system/photo_album_class.php");
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] != 1)
+if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
+}
+elseif($g_preferences['enable_photo_module'] == 2)
+{
+    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    require("../../system/login_valid.php");
 }
 
 // Uebergabevariablen pruefen
