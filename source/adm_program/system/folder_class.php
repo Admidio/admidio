@@ -122,7 +122,7 @@ class Folder extends TableAccess
     // Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
     function getFolderContentsForDownload()
     {
-        global $g_current_organization, $g_current_user;
+        global $g_current_organization, $g_current_user, $g_valid_login;
 
         //RueckgabeArray initialisieren
         $completeFolder = null;
