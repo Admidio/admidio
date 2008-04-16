@@ -590,18 +590,37 @@ echo "
                         <dl>
                             <dt><label for=\"enable_photo_module\">Fotomodul aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_photo_module\" name=\"enable_photo_module\" ";
-                                if(isset($form_values['enable_photo_module']) && $form_values['enable_photo_module'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
+                                <select size=\"1\" id=\"enable_photo_module\" name=\"enable_photo_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_photo_module'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_photo_module'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['enable_photo_module'] == 2)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Nur für registrierte Benutzer</option>
+                                </select>
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
+                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
+                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
+                        für beide Gruppen dann nicht mehr aufrufbar.<br /><br />
+						<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning16.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\">&nbsp;
+						Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur f&uuml;r registrierte Benutzer&rdquo;, wird nur der Zugriff &uuml;ber
+						die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt. 		
                     </li>
                     <li>
                         <dl>
