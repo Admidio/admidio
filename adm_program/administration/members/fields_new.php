@@ -266,8 +266,7 @@ echo "
                             echo " checked=\"checked\" ";
                         }
                         if($user_field->getValue("usf_name") == "Nachname"
-                        || $user_field->getValue("usf_name") == "Vorname"
-						|| $user_field->getValue("usf_name") == "E-Mail")
+                        || $user_field->getValue("usf_name") == "Vorname")
                         {
                             echo " disabled=\"disabled\" ";
                         }
