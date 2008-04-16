@@ -184,8 +184,8 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 // Namen und Empfaenger geboten
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-	echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" maxlength="50" value="< Empf&auml;nger Name >"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-	echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" maxlength="50" value="< Empf&auml;nger E-Mail >"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+	echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< Empf&auml;nger Name >"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+	echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< Empf&auml;nger E-Mail >"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 
 ?>
