@@ -60,6 +60,9 @@ if (!$folder->getValue('fol_id'))
     $g_message->show("invalid");
 }
 
+//NavigationsLink erhalten
+$navigationBar = $folder->getNavigationForDownload();
+
 //Parentordner holen
 $parentRoleSet = null;
 if ($folder->getValue('fol_fol_id_parent')) {
@@ -142,6 +145,20 @@ $g_layout['header'] = "
             form.submit();
         }
 
+        function toggleDiv(objectId)
+        {
+            if (document.getElementById(objectId).style.visibility == 'hidden')
+            {
+                document.getElementById(objectId).style.visibility = 'visible';
+                document.getElementById(objectId).style.display    = 'block';
+            }
+            else
+            {
+                document.getElementById(objectId).style.visibility = 'hidden';
+                document.getElementById(objectId).style.display    = 'none';
+            }
+        }
+
     --></script>";
 
 
@@ -153,8 +170,11 @@ echo "
 <form method=\"post\" action=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id=$folder_id\">
 <div class=\"formLayout\" id=\"edit_download_folder_form\" >
     <div class=\"formHead\">Ordnerberechtigungen setzen</div>
-    <div class=\"formBody\">
+    <div class=\"formBody\">";
 
+    echo "$navigationBar";
+
+        echo "
         <div class=\"groupBox\" style=\"width: 90%;\">
             <div class=\"groupBoxBody\" >
                 <div style=\"margin-top: 6px;\">
@@ -171,7 +191,7 @@ echo "
                                 {
                                     echo " disabled=\"disabled\" ";
                                 }
-                                echo " value=\"0\" />
+                                echo " value=\"0\" onclick=\"toggleDiv('rolesBox');\"/>
                                 <label for=\"fol_public\"><img src=\"". THEME_PATH. "/icons/lock.png\" alt=\"Der Ordner ist &ouml;ffentlich.\" /></label>&nbsp;
                                 <label for=\"fol_public\">&Ouml;ffentlicher Zugriff ist nicht erlaubt.</label>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"
@@ -192,13 +212,22 @@ echo "
             </div>
         </div>
 
-        <div class=\"groupBox\" style=\"width: 90%;\">
+        <div class=\"groupBox\" id=\"rolesBox\" style=\"width: 90%; ";
+            if($folder->getValue("fol_public") == 1)
+            {
+                echo " visibility: hidden; display: none;";
+            }
+            echo " \">
             <div class=\"groupBoxBody\" >
                 <div style=\"margin-top: 6px;\">
+                    <p>Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben d&uuml;rfen.
+                       Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene
+                       Berechtigungen in Unterordnern werden &uuml;berschrieben. Es stehen nur Rollen
+                       zur Verf&uuml;gung die auf den &uuml;bergeordneten Ordner Zugriff haben.</p>
 
-                    <div style=\"text-align: left; float: left; padding-right: 5%;\">";
-
-                        echo "<div>kein Zugriff</div>
+                    <div style=\"text-align: left; float: left;\">";
+                        echo "
+                        <div>kein Zugriff</div>
                         <div>
                             <select id=\"DeniedRoles\" size=\"8\" style=\"width: 200px;\">";
                             for($i=0; $i<count($parentRoleSet); $i++) {
@@ -217,13 +246,20 @@ echo "
                             echo "
                             </select>
                         </div>
-                        <div>
-                            <span class=\"iconTextLink\">
-                                <a href=\"javascript:hinzufuegen()\">
-                                <img src=\"". THEME_PATH. "/icons/add.png\" alt=\"Rolle hinzufügen\" /></a>
-                                <a href=\"javascript:hinzufuegen()\">Rolle hinzufügen</a>
-                            </span>
-                        </div>
+                    </div>
+                    <div style=\"float: left;\" class=\"verticalIconList\">
+                        <ul>
+                            <li>
+                                <a class=\"iconLink\" href=\"javascript:hinzufuegen()\">
+                                    <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzufügen\" title=\"Rolle hinzufügen\" />
+                                </a>
+                            </li>
+                            <li>
+                                <a class=\"iconLink\" href=\"javascript:entfernen()\">
+                                    <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Rolle entfernen\" title=\"Rolle entfernen\" />
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                     <div>
                         <div>Zugriff</div>
@@ -236,13 +272,6 @@ echo "
                             }
                             echo "
                             </select>
-                        </div>
-                        <div>
-                            <span class=\"iconTextLink\">
-                                <a href=\"javascript:entfernen()\">
-                                <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle entfernen\" /></a>
-                                <a href=\"javascript:entfernen()\">Rolle entfernen</a>
-                            </span>
                         </div>
                     </div>
                  </div>
