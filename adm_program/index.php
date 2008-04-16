@@ -131,7 +131,8 @@ echo "</ul>
                 </li>";
             }
 
-            if($g_preferences['enable_photo_module'] == 1)
+            if($g_preferences['enable_photo_module'] == 1 
+            || ($g_preferences['enable_photo_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>
