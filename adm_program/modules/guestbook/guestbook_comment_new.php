@@ -168,7 +168,7 @@ echo "
 //Die Funktion fügt in das Textarea den übergebenen Text ein
 function emoticon(text)
 {
-	var txtarea = document.post.gbc_text;
+	var txtarea = document.getElementById('gbc_text');
 
 	if (txtarea.createTextRange && txtarea.caretPos) {
 		txtarea.caretPos.text = text;
@@ -368,11 +368,11 @@ echo "
 
 if ($g_current_user->getValue("usr_id") == 0)
 {
-    $focusField = "name";
+    $focusField = "gbc_name";
 }
 else
 {
-    $focusField = "text";
+    $focusField = "gbc_text";
 }
 
 echo"
