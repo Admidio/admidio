@@ -417,10 +417,10 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             <thead>
                 <tr>
                     <th>Info</th>
+                    <th style=\"text-align: center;\">Mitglied</th>
                     <th>Name</th>
                     <th>Vorname</th>
                     <th>Geburtsdatum</th>
-                    <th style=\"text-align: center;\">Mitglied</th>
                     <th style=\"text-align: center;\">Leiter</th>
                 </tr>
             </thead>";
@@ -508,18 +508,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             echo"
             <tr class=\"tableMouseOver\">
                 <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
-                <td>". $user['last_name']."</td>
-                <td>". $user['first_name']."</td>
-
-                <td>";
-                    //Geburtstag nur ausgeben wenn bekannt
-                    if(strlen($user['birthday']) > 0)
-                    {
-                        echo mysqldate("d.m.y", $user['birthday']);
-                    }
-                echo"</td>
-
-                <td style=\"text-align: center;\">";
+                
+				<td style=\"text-align: center;\">";
                     //Haekchen setzen ob jemand Mitglied ist oder nicht
                     if(in_array($user['usr_id'], $role_member))
                     {
@@ -528,6 +518,17 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     else
                     {
                         echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\" />";
+                    }
+                echo"</td>
+                
+				<td>". $user['last_name']."</td>
+                <td>". $user['first_name']."</td>
+
+                <td>";
+                    //Geburtstag nur ausgeben wenn bekannt
+                    if(strlen($user['birthday']) > 0)
+                    {
+                        echo mysqldate("d.m.y", $user['birthday']);
                     }
                 echo"</td>
 
