@@ -99,8 +99,8 @@ else
 				<ul class="formFieldList">
 					<li>
 						<div>
-							Wenn Sie Ihr Passwort vergessen haben, kann das System ein Neues erstellen und an Ihre E-Mail Adresse senden. 
-							Geben Sie dazu Ihre E-Mail-Adresse in das untenstehende Formular ein und klicken Sie auf die Schaltfläche "Neues Passwort zusenden".
+							Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden. 
+							Gib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".
 						</div>
 					</li>
 					<li>&nbsp;</li>
