@@ -562,16 +562,19 @@ function PopupWindow_isClicked(e) {
 			return false;
 			}
 		else if (this.use_gebi && e) {
-			var t = e.originalTarget;
-			while (t.parentNode != null) 
-			{
-				if (t.id==this.divName) 
+				var t = e.originalTarget;
+				if(t == "[object HTMLImageElement]" || t != "[object HTMLDivElement]")
 				{
-					return true;
+					while (t.parentNode != null) 
+					{
+						if (t.id==this.divName) 
+						{
+							return true;
+						}
+						t = t.parentNode;
+					}
+					return false;
 				}
-				t = t.parentNode;
-			}
-			return false;
 			}
 		return false;
 		}
