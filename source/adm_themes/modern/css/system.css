@@ -228,11 +228,13 @@ a:hover, a:active {
 
 .tableList th {
     padding:            3px;
+    text-align:         left;
     background-repeat:  repeat-x;
     background-image:   url(../images/stripe.png);   
 }
 
 .tableList td {
+    text-align:         left;
     vertical-align:     top;
     padding:            3px;
 }

@@ -56,7 +56,7 @@ class GuestbookComment extends TableAccess
         $tables    = TBL_GUESTBOOK;
         $condition = "       gbc_gbo_id = gbo_id 
                          AND gbc_id     = $gbc_id ";
-        $this->readData($gbc_id);
+        $this->readData($gbc_id, $condition, $tables);
     }
     
     // interne Methode, die bei setValue den uebergebenen Wert prueft
