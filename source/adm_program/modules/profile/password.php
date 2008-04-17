@@ -19,7 +19,7 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
  
 // nur Webmaster duerfen fremde Passwoerter aendern
-if(!$g_current_user->isWebmaster() && $g_current_user->getValue("usr_id") != $_GET['user_id'])
+if(!$g_current_user->isWebmaster() && $g_current_user->getValue("usr_id") != $_GET['usr_id'])
 {
     $g_message->show("norights", "", "", false);
 }
