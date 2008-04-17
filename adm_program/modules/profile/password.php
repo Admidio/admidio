@@ -18,17 +18,17 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
  
-// nur Webmaster d&uuml;rfen fremde Passwoerter aendern
+// nur Webmaster duerfen fremde Passwoerter aendern
 if(!$g_current_user->isWebmaster() && $g_current_user->getValue("usr_id") != $_GET['user_id'])
 {
-    $g_message->show("norights");
+    $g_message->show("norights", "", "", false);
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
-	$g_message->show("invalid");
+	$g_message->show("invalid", "", "", false);
 }
 
 if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
