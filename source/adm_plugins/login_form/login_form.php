@@ -141,7 +141,10 @@ if($g_valid_login == 1)
         {
             echo "<li>
                 <dl>
-                    <dt><a href=\"javascript:loadPageLogout()\">Logout</a></dt>
+                    <dt class=\"iconTextLink\"><a href=\"javascript:loadPageLogout()\">
+							<img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Logout\" /></a>
+						<a href=\"javascript:loadPageLogout()\">Logout</a>
+					</dt>
                 </dl>
             </li>";
         }
