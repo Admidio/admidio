@@ -3,12 +3,7 @@
 // WWW: http://www.mattkruse.com/
 // ===================================================================
 
-var n_from;
-var n_to;
-var a_time;
-var e_time;
-
-function check()
+function check(n_from, n_to, a_time, e_time)
    {
 
       try {
@@ -21,7 +16,7 @@ function check()
                document.getElementById(n_to).value = document.getElementById(n_from).value;
                from = to;
             }
-            if ((a_time != '') && (e_time != '') &&!(from < to)) {
+            if (a_time != '' && e_time != '' && (from == to)) {
                var eindatum = document.getElementById(a_time).value.split(":");
                from = new Date("0", "0", "0", eindatum[0], eindatum[1], "0");
                eindatum = document.getElementById(e_time).value.split(":");
@@ -700,6 +695,10 @@ function CalendarPopup() {
 	c.cssPrefix="";
 	c.isShowNavigationDropdowns=false;
 	c.isShowYearNavigationInput=false;
+    c.date_from = "";
+	c.date_to = "";
+	c.time_from = "";
+	c.time_to = "";
 	window.CP_calendarObject = null;
 	window.CP_targetInput = null;
 	window.CP_dateFormat = "dd.mm.yyyy";
@@ -845,8 +844,21 @@ function CP_showYearNavigationInput() { this.isShowYearNavigationInput = (argume
 
 // Hide a calendar object
 function CP_hideCalendar() {
-	if (arguments.length > 0) { window.popupWindowObjects[arguments[0]].hidePopup(); }
-	else { this.hidePopup(); }
+	if (arguments.length > 0) { 
+        window.popupWindowObjects[arguments[0]].hidePopup(); 
+        if(window.popupWindowObjects[arguments[0]].date_from.length > 0) {
+            // Datumsfelder im Formular untereinander plausibilisieren
+            check(window.popupWindowObjects[arguments[0]].date_from, window.popupWindowObjects[arguments[0]].date_to, window.popupWindowObjects[arguments[0]].time_from, window.popupWindowObjects[arguments[0]].time_to);
+        }
+    }
+	else { 
+        this.hidePopup(); 
+        if(this.date_from.length > 0)
+        {
+            // Datumsfelder im Formular untereinander plausibilisieren
+            check(this.date_from, this.date_to, this.time_from, this.time_to);
+        }
+    }
 	}
 
 // Refresh the contents of the calendar display
@@ -876,12 +888,20 @@ function CP_showCalendar(anchorname) {
 	}
 
 // Simple method to interface popup calendar with a text-entry box
-function CP_select(inputobj, linkname, format, from, to, anfang, ende,anfang_from,anfang_to) {
+function CP_select(inputobj, linkname, format) {
 	var selectedDate=(arguments.length>7)?arguments[7]:null;
-	n_from = from;
-	n_to = to;
-	a_time = anfang || '';
-	e_time = ende || '';
+    // Datum und Uhrzeit wird nicht immer uebergeben, deshalb hier dynamisch fuellen
+    for (var i = 0; i < arguments.length; i++)
+    {
+        if(i == 3)
+            this.date_from = arguments[i];
+        else if(i == 4)
+            this.date_to = arguments[i];
+        else if(i == 5)
+            this.time_from = arguments[i];
+        else if(i == 6)
+            this.time_to = arguments[i];
+    }
 	if (!window.getDateFromFormat) {
 		alert("calendar.select: To use this method you must also include 'date.js' for date formatting");
 		return;
@@ -1059,7 +1079,7 @@ function CP_getCalendar() {
 						selected_month = d.getMonth()+1;
 						selected_date = d.getDate();
 						}
-					result += '	<td id="'+this.cssPrefix+dateClass+'"><a  onclick="javascript:'+windowref+this.returnFunction+'('+selected_year+','+selected_month+','+selected_date+');'+windowref+'CP_hideCalendar(\''+this.index+'\');check();">'+display_date+'</a></td>\n';
+					result += '	<td id="'+this.cssPrefix+dateClass+'"><a  onclick="javascript:'+windowref+this.returnFunction+'('+selected_year+','+selected_month+','+selected_date+');'+windowref+'CP_hideCalendar(\''+this.index+'\');">'+display_date+'</a></td>\n';
 					}
 				display_date++;
 				if (display_date > daysinmonth[display_month]) {
@@ -1087,7 +1107,7 @@ function CP_getCalendar() {
 			result += '		<span id="'+this.cssPrefix+'cpTodayTextDisabled">'+this.todayText+'</span>\n';
 			}
 		else {
-			result += '		<a id="'+this.cssPrefix+'cpTodayText" onclick="javascript:'+windowref+this.returnFunction+'(\''+now.getFullYear()+'\',\''+(now.getMonth()+1)+'\',\''+now.getDate()+'\');'+windowref+'CP_hideCalendar(\''+this.index+'\');check();">'+this.todayText+'</a>\n';
+			result += '		<a id="'+this.cssPrefix+'cpTodayText" onclick="javascript:'+windowref+this.returnFunction+'(\''+now.getFullYear()+'\',\''+(now.getMonth()+1)+'\',\''+now.getDate()+'\');'+windowref+'CP_hideCalendar(\''+this.index+'\');">'+this.todayText+'</a>\n';
 			}
 		result += '		<br />\n';
 		result += '	</td></tr></table></center></td></tr></table>\n';
