@@ -138,7 +138,7 @@ else
         $guestbook_comment->getGuestbookComment($_GET['id']);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+        if($guestbook_comment->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
         {
             $g_message->show("norights");
         }
