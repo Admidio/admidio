@@ -484,6 +484,11 @@ elseif($req_mode == 7)
 
     foreach($orga_preferences as $key => $value)
     {
+        if($key == 'email_administrator')
+        {
+            // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
+            $value = $_SESSION['user_email'];
+        }
         $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                            VALUES (". $g_current_organization->getValue("org_id"). ", '$key', '$value') ";
         $db->query($sql);
