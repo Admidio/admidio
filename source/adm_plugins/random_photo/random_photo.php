@@ -26,6 +26,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
+require_once(PLUGIN_PATH. "/../adm_program/system/photo_album_class.php");
 require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -87,8 +88,10 @@ if(!isset($plg_photos_show_link))
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
-//Versnstaltungen Aufrufen
-//Bedingungen: Vreigegeben,Anzahllimit, Bilder enthalten 
+echo '<div id="plugin_'. $plugin_folder. '">';
+
+// Fotoalben Aufrufen
+// Bedingungen: freigegeben,Anzahllimit, Bilder enthalten 
 $sql="      SELECT *
             FROM ". TBL_PHOTOS. "
             WHERE pho_org_shortname ='$g_organization' 
@@ -104,17 +107,26 @@ if($plg_photos_albums != 0)
 
 $result = $g_db->query($sql);
 
-do{
+// Variablen initialisieren
+$i         = 0;
+$picnr     = 0;
+$picpath   = THEME_SERVER_PATH. "/images/nopix.jpg";
+$link_text = "";
+$album = new PhotoAlbum($g_db);
+
+// Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
+while(!file_exists($picpath) && $i < 20 && $g_db->num_rows($result) > 0)
+{
     //Zeiger per Zufall auf ein Album setzen
     $g_db->data_seek($result, mt_rand(0, $g_db->num_rows($result)-1));
     
     //Ausgewähltendatendatz holen
-    $event =  $g_db->fetch_array($result);
+    $album->setArray($g_db->fetch_array($result));
     
     //Falls gewuensch Bild per Zufall auswaehlen
     if($plg_photos_picnr ==0)
     {
-        $picnr = mt_rand(1, $event['pho_quantity']);
+        $picnr = mt_rand(1, $album->getValue('pho_quantity'));
     }
     else
     {
@@ -122,8 +134,9 @@ do{
     }
     
     //Bilpfad zusammensetzen
-    $picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$event['pho_begin']."_".$event['pho_id']."/".$picnr.".jpg";
-}while(!file_exists($picpath));
+    $picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$album->getValue('pho_begin')."_".$album->getValue('pho_id')."/".$picnr.".jpg";
+    $i++;
+}
 
 //Ermittlung der Original Bildgroesse
 $bildgroesse = getimagesize($picpath);
@@ -131,12 +144,11 @@ $bildgroesse = getimagesize($picpath);
 //Popupfenstergröße
 $popup_height = $g_preferences['photo_show_height']+210;
 $popup_width  = $g_preferences['photo_show_width']+70;
-$link_text    = "";
 
 if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {
     //Linktext umbrechen wenn noetig
-    $words = explode(" ", $event['pho_name']);
+    $words = explode(" ", $album->getValue('pho_name'));
     
     for($i = 0; $i < count($words); $i++)
     {
@@ -153,21 +165,21 @@ if($plg_photos_show_link && $plg_max_char_per_word > 0)
 }
 else
 {
-    $link_text = $event['pho_name'];
+    $link_text = $album->getValue('pho_name');
 }
 
 //Ausgabe
-$pho_id = $event['pho_id'];
-echo '<div id="plugin_'. $plugin_folder. '">
-    <a class="$plg_link_class" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'. $plg_link_target. '">';
+$pho_id = $album->getValue('pho_id');
+echo '<a class="$plg_link_class" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'. $plg_link_target. '">';
+
 //Entscheidung ueber scallierung
 if($bildgroesse[0]/$plg_photos_max_width > $bildgroesse[1]/$plg_photos_max_height)
 {
-   echo "<img style=\"vertical-align: middle; cursor: pointer;\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\" />";
+   echo "<img style=\"vertical-align: middle; cursor: pointer;\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$album->getValue('pho_begin')."&amp;scal=".$plg_photos_max_width."&amp;side=x\"  border=\"0\" alt=\"Zufallsbild\" />";
 }
 else
 {
-   echo "<img style=\"vertical-align: middle; cursor: pointer;\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$event['pho_begin']."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\" />";
+   echo "<img style=\"vertical-align: middle; cursor: pointer;\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$picnr."&amp;pho_begin=".$album->getValue('pho_begin')."&amp;scal=".$plg_photos_max_height."&amp;side=y\"  border=\"0\" alt=\"Zufallsbild\" />";
 }
 
 echo "</a>";
