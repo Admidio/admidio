@@ -206,7 +206,7 @@ if($anz_geb > 0)
                     if($g_valid_login)
                     {
                         $show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
-                            target="'. $plg_link_target. '">'. $show_name. '</a>
+                            target="'. $plg_link_target. '" title="Profil aufrufen" alt="Profil aufrufen">'. $show_name. '</a>
                             <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
                             src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>';
                     }
