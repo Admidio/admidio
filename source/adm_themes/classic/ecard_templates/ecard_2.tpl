@@ -18,29 +18,39 @@ font-size:<%ecard_font_size%>px;
 </head>
 <body>
 <table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grukarte">
-<tbody><tr><td>
-<table align="center" border="0" cellpadding="0" width="100%" cellspacing="0" summary="Grukarte Bild">
-   <tbody><tr>
-    <td id="card_form_image" colspan="2" style="border: 1px solid rgb(0, 0, 0); background:url('<%ecard_hintergrund_name%>'); padding: 10px; vertical-align:middle;" align="center">
-		<table border="0" cellpadding="0" cellspacing="0" summary="Bild">
-	 <tbody><tr>
-	  <td align="center" style=" vertical-align:middle;">
-	  <table  border="0" cellpadding="0" cellspacing="2" summary="Bild">
-	   <tbody>
-	   <tr>
-	    <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Grußkarte" /></td>
-	   </tr>
-	   	  </tbody></table></td>
-	 </tr>
-	</tbody></table>
-	</td>
-   </tr>
-  </tbody></table>
-  </td></tr>
-  <tr>
-    <td style="height:10px;"></td>
-  </tr>
-  <tr><td>
+  <tbody>
+    <tr>
+      <td>
+        <table align="center" border="0" cellpadding="0" width="100%" cellspacing="0" summary="Grukarte Bild">
+          <tbody>
+            <tr>
+              <td id="card_form_image" colspan="2" style="border: 1px solid rgb(0, 0, 0); background:url('<%ecard_hintergrund_name%>'); padding: 10px; vertical-align:middle;" align="center">
+                <table border="0" cellpadding="0" cellspacing="0" summary="Bild">
+                  <tbody>
+                    <tr>
+                      <td align="center" style=" vertical-align:middle;">
+                        <table  border="0" cellpadding="0" cellspacing="2" summary="Bild">
+                          <tbody>
+                            <tr>
+                              <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Grußkarte" /></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+        	  </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:10px;"></td>
+    </tr>
+    <tr>
+      <td>
   <table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grukarte Text" style="min-height:300px;">
    <tbody><tr>
     <td id="card_form" colspan="2" style="border: 1px solid rgb(0, 0, 0); padding: 10px; ">
@@ -64,7 +74,7 @@ font-size:<%ecard_font_size%>px;
 	   	  </tbody></table>
        </td>
 	  <td style="width: 8px; vertical-align:bottom; min-height:300px;">
-	       <img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;" />
+	       <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;" /></a>
 	  </td>	  
 	  <td style="background: rgb(0, 0, 0); width:1px;"><br/></td>
 	  <td style="width: 8px;">&nbsp;</td>

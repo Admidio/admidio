@@ -36,7 +36,7 @@ font-size:<%ecard_font_size%>px;
 	   </tr>
 	   	  </tbody></table></td>
 	  <td style="width: 8px; vertical-align:bottom;">
-	  	<img src="<%theme_root_path%>/images/ownertext.png" width="30px" border="0" />
+	  	<a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" border="0" /></a>
 	  </td>
 
 	  <td style="background: rgb(0, 0, 0) none repeat scroll 0%; width: 1px; min-width:1px;"><br /></td>
