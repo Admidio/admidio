@@ -19,9 +19,9 @@
     text-align:         left;
     float:              none;       /* left : Alles in einer Zeile anzeigen */
     overflow:           hidden;
-    padding-bottom:     5px;
-    margin-bottom:      5px;
-    border-bottom:      1px dashed gray;
+    padding-bottom:     8px;
+    margin-bottom:      3px;
+    border-bottom:      1px dashed #d7d7d7;
 }
 
 /* Hack, da der IE mit diesem CSS nicht klar kommt */
