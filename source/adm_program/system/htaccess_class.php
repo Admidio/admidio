@@ -1,0 +1,69 @@
+<?php
+/******************************************************************************
+ * Klasse um htaccessFiles anzulegen
+ *
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Elmar Meuthen
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese Klasse dient dazu ein .htaccessFile zu erstellen.
+ * Ein Ordner kann ueber diese Klasse mit einem htaccess-File geschuetzt werden.
+ * Von aussen ist dann kan Zugriff mehr erlaubt.
+ *
+ * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe des
+ * Ordnerspfades Datenbankverbindung:
+ * $htaccess = new Htaccess($folderpath);
+ *
+ *
+ *
+ * Folgende Funktionen stehen zur Verfuegung:
+ *
+ * protectFolder()      - Platziert ein htaccess-File im übergebenen Ordner
+ * unprotectFolder()	- Löscht das htaccess-File im übergebenen Ordner
+ *
+ *****************************************************************************/
+
+class Htaccess {
+
+	var $folderPath;
+	var $htaccessFileExistsAlready = false;
+	var $folderExists              = false;
+
+	//Konstruktor
+    function Htaccess($folderPath)
+    {
+        $this->$folderPath = $folderPath;
+
+        if (file_exists($this->$folderPath)) {
+        	$this->folderExists = true;
+
+        	if (file_exists($folderPath. "/.htaccess")) {
+        		$this->htaccessFileExistsAlready = true;
+        	}
+        }
+    }
+
+
+    //Schuetzt den uebergebenen Ordner
+    function protectFolder()
+    {
+    	if ($this->folderExists && !$this->htaccessFileExistsAlready) {
+			@$file=fopen($this->folderPath. "/.htaccess","w+");
+       		@fputs($file,"Order deny,allow\n");
+       		@fputs($file,"Deny from all\n");
+       		@fclose($file);
+    	}
+    }
+
+    //Entfernt den Ordnerschutz (loeschen der htaccessDatei)
+    function unprotectFolder()
+    {
+    	if ($this->folderExists && $this->htaccessFileExistsAlready) {
+			@unlink($this->folderPath. "/.htaccess","w+");
+    	}
+    }
+
+
+}
+?>
