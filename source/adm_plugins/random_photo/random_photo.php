@@ -110,7 +110,7 @@ $result = $g_db->query($sql);
 // Variablen initialisieren
 $i         = 0;
 $picnr     = 0;
-$picpath   = THEME_SERVER_PATH. "/images/nopix.jpg";
+$picpath   = "";
 $link_text = "";
 $album = new PhotoAlbum($g_db);
 
@@ -136,6 +136,11 @@ while(!file_exists($picpath) && $i < 20 && $g_db->num_rows($result) > 0)
     //Bilpfad zusammensetzen
     $picpath = PLUGIN_PATH. "/../adm_my_files/photos/".$album->getValue('pho_begin')."_".$album->getValue('pho_id')."/".$picnr.".jpg";
     $i++;
+}
+
+if(!file_exists($picpath))
+{
+	$picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
 }
 
 //Ermittlung der Original Bildgroesse
