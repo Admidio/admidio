@@ -47,36 +47,37 @@ function getMenueSettings($data_array,$name_ecard_input,$first_value,$width,$sch
 	echo  '<select size="1" onchange="getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
 	for($i=0; $i<count($data_array);$i++)
 	{
-		$temp = explode(".", $data_array[$i]);
-		$temp_name = explode("_", $temp[0]);
 		$name = "";
-		if(isset($temp_name[1]) && $temp_name[1] != "" && is_numeric($temp_name[1]))
+		if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
 		{
-			$name = $temp_name[1].". Template";
+			$name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
 		}
-		else if(isset($temp_name[1]) && $temp_name[1] != "" && !is_numeric($temp_name[1]))
+		elseif(is_integer($data_array[$i]))
 		{
-			$name = ucfirst($temp_name[1]);
+			$name = $data_array[$i];
 		}
-		else
+		else if(strpos($data_array[$i],'.') === false)
 		{
-			$name = $temp_name[0];
+			$name = $data_array[$i];
 		}
-		if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true")
+		if($name != "")
 		{
-			echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
-		}
-		else if($schowfont != "true")
-		{
-			echo '<option value="'.$data_array[$i].'">'.$name.'</option>';
-		}
-		else if (strcmp($data_array[$i],$first_value) == 0)
-		{
-			echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
-		}
-		else
-		{
-			echo '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+			if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true")
+			{
+				echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+			}
+			else if($schowfont != "true")
+			{
+				echo '<option value="'.$data_array[$i].'">'.$name.'</option>';
+			}
+			else if (strcmp($data_array[$i],$first_value) == 0)
+			{
+				echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+			}
+			else
+			{
+				echo '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+			}
 		}
 		
 	}
@@ -160,8 +161,7 @@ function getfilenames($directory)
 	{
 		while($file = readdir($curdir)) 
 		{
-			$string = split('_',$file);
-			if($file != '.' && $file != '..' && strcmp($string[0],$file) != "0") 
+			if($file != '.' && $file != '..') 
 			{	
 				$array_files[$i] = $file;
 				$i++;
