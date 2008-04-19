@@ -215,9 +215,10 @@ echo "
                 break;
 
             case "leader":
-                echo "Leiter werden in den Mitgliederlisten dieser Rolle gesondert aufgeführt.<br /><br />
-                      Leiter haben außerdem die Möglichkeit neue Mitglieder aus der Organisation
-                      der Rolle zu zuordnen oder vorhandene Mitglieder zu entfernen.";
+                echo "Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen
+                	  haben Leiter mehr Rechte als ein normales Rollenmitglied.<br /><br />
+                	  Leiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten
+                	  immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.";
                 break;
 
             case "nickname":

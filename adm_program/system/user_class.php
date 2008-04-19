@@ -458,7 +458,8 @@ class User extends TableAccess
                     }
                     
                     // Rollenmitgliedschaft und Listenansichtseinstellung merken
-                    if($row['mem_usr_id'] > 0 && $row['rol_this_list_view'] > 0)
+                    // Leiter duerfen die Rolle sehen
+                    if($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $row['mem_leader'] == 1))
                     {
                         // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
                         $this->roles_membership[$row['rol_id']] = 1;
