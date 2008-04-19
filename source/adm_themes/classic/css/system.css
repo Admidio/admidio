@@ -366,7 +366,7 @@ ul.autosuggest li.highlight a:visited  {
 .iconHelpLink {
     border:             none;
     cursor:             pointer;
-    vertical-align:     top;
+    vertical-align:     middle;
     margin:             0px 3px 0px 3px;
 }
 
