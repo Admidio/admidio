@@ -1287,8 +1287,7 @@ echo "
             {
                 while($file = readdir($curdir))
                 {
-                    $string = split('_',$file);
-                    if($file != '.' && $file != '..' && strcmp($string[0],$file) != "0")
+                    if($file != '.' && $file != '..')
                     {
                         $array_files[$i] = $file;
                         $i++;
@@ -1327,46 +1326,46 @@ echo "
             $temp_data .=  '<select size="1" id="'.$name.'" name="'.$name.'" style="width:'.$width.'px;">';
             for($i=0; $i<count($data_array);$i++)
             {
-                $temp = explode(".", $data_array[$i]);
-                $temp_name = explode("_", $temp[0]);
                 $name = "";
-                if(isset($temp_name[1]) && $temp_name[1] != "" && is_numeric($temp_name[1]))
-                {
-                    $name = $temp_name[1].". Template";
-                }
-                else if(isset($temp_name[1]) && $temp_name[1] != "" && !is_numeric($temp_name[1]))
-                {
-                    $name = ucfirst($temp_name[1]);
-                }
-                else
-                {
-                    $name = $temp_name[0];
-                }
-
-                if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
-                {
-                    $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
-                }
-                else if($schowfont != "true" && $showcolor != "true")
-                {
-                    $temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
-                }
-                else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
-                {
-                    $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
-                }
-                else if($showcolor != "true")
-                {
-                    $temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
-                }
-                else if (strcmp($data_array[$i],$first_value) == 0)
-                {
-                    $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
-                }
-                else
-                {
-                    $temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
-                }
+				if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
+				{
+					$name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
+				}
+				elseif(is_integer($data_array[$i]))
+				{
+					$name = $data_array[$i];
+				}
+				else if(strpos($data_array[$i],'.') === false)
+				{
+					$name = $data_array[$i];
+				}
+				if($name != "")
+				{	
+					if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
+					{
+						$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+					}
+					else if($schowfont != "true" && $showcolor != "true")
+					{
+						$temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
+					}
+					else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
+					{
+						$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+					}
+					else if($showcolor != "true")
+					{
+						$temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+					}
+					else if (strcmp($data_array[$i],$first_value) == 0)
+					{
+						$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
+					}
+					else
+					{
+						$temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
+					}
+				}
             }
             $temp_data .='</select>';
             return $temp_data;
