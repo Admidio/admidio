@@ -636,8 +636,8 @@ echo "
 										echo "</dd>
 									</dl>
 								</li>";
-							}
-							$count_show_roles++;         
+								$count_show_roles++;  
+							}       
 						}
 						
 						if($count_show_roles == 0)
@@ -657,15 +657,14 @@ echo "
             // *******************************************************************************
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
-            $show_this_role = "";
             
+            $count_show_roles = 0;
             $sql    = "SELECT *
                          FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                         WHERE mem_rol_id = rol_id
                           AND mem_valid  = 0
                           AND mem_usr_id = $a_user_id
                           AND rol_valid  = 1
-                              $show_this_role
                           AND rol_cat_id = cat_id
                           AND cat_org_id = org_id
                           AND org_id     = ". $g_current_organization->getValue("org_id"). "
@@ -683,43 +682,48 @@ echo "
                 <div class=\"groupBoxHeadline\">Ehemalige Rollenmitgliedschaften&nbsp;</div>
                 <div class=\"groupBoxBody\">
                     <ul class=\"formFieldList\" id=\"former_role_list\">";
-                        if($count_role > 0)
-                        {
-                            while($row = $g_db->fetch_array($result_role))
-                            {
-                                // jede einzelne Rolle anzeigen
-                                echo "
-                                <li id=\"former_role_". $row['mem_rol_id']. "\">
-                                    <dl>
-                                        <dt>".
-                                            $row['cat_name'];
-                                            if($g_current_user->viewRole($row['mem_rol_id']))
-                                            {
-                                                echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
-                                            }
-                                            else
-                                            {
-                                                echo" - ".$row['rol_name']; 
-                                            }
-                                            if($row['mem_leader'] == 1)
-                                            {
-                                                echo " - Leiter";
-                                            }
-                                        echo "</dt>
-                                        <dd>
-                                            vom ". mysqldate('d.m.y', $row['mem_begin']). "
-                                            bis ". mysqldate('d.m.y', $row['mem_end']);
-                                            if($g_current_user->isWebmaster())
-                                            {
-                                                echo "
-                                                <a class=\"iconLink\" href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
-                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
-                                            }
-                                        echo "</dd>
-                                    </dl>
-                                </li>";
-                            }
-                        }
+						while($row = $g_db->fetch_array($result_role))
+						{
+							if($g_current_user->viewRole($row['mem_rol_id']))
+							{
+								// jede einzelne Rolle anzeigen
+								echo "
+								<li id=\"former_role_". $row['mem_rol_id']. "\">
+									<dl>
+										<dt>".
+											$row['cat_name'];
+											if($g_current_user->viewRole($row['mem_rol_id']))
+											{
+												echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+											}
+											else
+											{
+												echo" - ".$row['rol_name']; 
+											}
+											if($row['mem_leader'] == 1)
+											{
+												echo " - Leiter";
+											}
+										echo "</dt>
+										<dd>
+											vom ". mysqldate('d.m.y', $row['mem_begin']). "
+											bis ". mysqldate('d.m.y', $row['mem_end']);
+											if($g_current_user->isWebmaster())
+											{
+												echo "
+												<a class=\"iconLink\" href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
+													src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+											}
+										echo "</dd>
+									</dl>
+								</li>";
+								$count_show_roles++;
+							}
+							if($count_show_roles == 0)
+							{
+								echo 'Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.';
+							}							
+						}
                     echo "</ul>
                 </div>
             </div>";
@@ -740,7 +744,7 @@ echo "
                        AND mem_valid  = 1
                        AND mem_usr_id = $a_user_id
                        AND rol_valid  = 1
-                       AND rol_this_list_view = 1
+                       AND rol_this_list_view = 2
                        AND rol_cat_id = cat_id
                        AND cat_org_id = org_id
                        AND org_id    <> ". $g_current_organization->getValue("org_id"). "
