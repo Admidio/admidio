@@ -213,8 +213,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Eine Stylesheet-Datei aus dem adm_config-Ordner kann hier ausgewählt werden.
-                        Diese überschreibt die System-Stylesheet-Einstellungen.
+                    	Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
+                    	aus dem Ordner adm_themes angezeigt.
                     </li>                    
                     <li>
                         <dl>
