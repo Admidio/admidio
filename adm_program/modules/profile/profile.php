@@ -104,12 +104,12 @@ function getFieldCode($field, $user_id)
             }
             break;
                                 
-        case "TEXT":
-            $value = $field['usd_value'];
-            break;
-			
         case "TEXT_BIG":
             $value = nl2br($field['usd_value']);
+            break;
+            
+        default:
+            $value = $field['usd_value'];
             break;
     }
 	    
