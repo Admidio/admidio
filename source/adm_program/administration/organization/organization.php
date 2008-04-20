@@ -1167,12 +1167,12 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                       Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Grußkarten-Bildes skaliert werden soll.
+                       Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll.
                        (Standardwert: Breite 400 | H&ouml;he 250)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_cc_recipients\">Max. weitere Empf&auml;nger</label>
+                            <dt><label for=\"ecard_cc_recipients\">Max. weitere Empfänger</label>
                             </dt>
                             <dd>
                             <select size=\"1\" id=\"enable_ecard_cc_recipients\" name=\"enable_ecard_cc_recipients\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('cc_recipients_count','enable_ecard_cc_recipients','ecard_cc_recipients',0);\">
@@ -1203,7 +1203,7 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_text_length\">Max. L&auml;nge des Mitteilungstextes:</label></dt>
+                            <dt><label for=\"ecard_text_length\">Max. Länge des Mitteilungstextes:</label></dt>
                             <dd>
                              <select size=\"1\" id=\"enable_ecard_text_length\" name=\"enable_ecard_text_length\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('text_length_count','enable_ecard_text_length','ecard_text_length',1);\">
                                     <option value=\"0\" ";
@@ -1235,7 +1235,7 @@ echo "
                         <dl>
                             <dt><label for=\"ecard_text_length\">Template:</label></dt>
                             <dd>";
-                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH. '/ecard_templates'),'ecard_template',$form_values['ecard_template'],'120','false','false');
+                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH. '/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
                              echo "</dd>
                         </dl>
                     </li>
