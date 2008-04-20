@@ -227,7 +227,7 @@ echo "
 
                     <div style=\"text-align: left; float: left;\">";
                         echo "
-                        <div>kein Zugriff</div>
+                        <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Kein Zugriff\" title=\"Kein Zugriff\" />Kein Zugriff</div>
                         <div>
                             <select id=\"DeniedRoles\" size=\"8\" style=\"width: 200px;\">";
                             for($i=0; $i<count($parentRoleSet); $i++) {
@@ -262,7 +262,7 @@ echo "
                         </ul>
                     </div>
                     <div>
-                        <div>Zugriff</div>
+                        <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/ok.png\" alt=\"Zugriff erlaubt\" title=\"Zugriff erlaubt\" />Zugriff erlaubt</div>
                         <div>
                             <select id=\"AllowedRoles\" name=\"AllowedRoles[]\" size=\"8\" style=\"width: 200px;\">";
                             for($i=0; $i<count($roleSet); $i++) {
