@@ -218,7 +218,7 @@ elseif($req_mode == 2)
     unset($_SESSION['g_preferences']);
     unset($_SESSION['g_current_user']);
 
-    $message   = '<strong>Die Aktualisierung war erfolgreich</strong><br /><br />
+    $message   = '<img src="layout/ok.png" /> <strong>Die Aktualisierung war erfolgreich</strong><br /><br />
                   Die Admidio-Datenbank ist jetzt auf die Version '. ADMIDIO_VERSION. ' aktualisiert worden.<br />
                   Sie können nun wieder mit Admidio arbeiten.';
     showPage($message, "$g_root_path/index.html", "application_view_list.png", "Übersichtsseite", false);
