@@ -12,7 +12,7 @@
  * Von aussen ist dann kan Zugriff mehr erlaubt.
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe des
- * Ordnerspfades Datenbankverbindung:
+ * Ordnerspfades:
  * $htaccess = new Htaccess($folderpath);
  *
  *
@@ -20,48 +20,47 @@
  * Folgende Funktionen stehen zur Verfuegung:
  *
  * protectFolder()      - Platziert ein htaccess-File im übergebenen Ordner
- * unprotectFolder()	- Löscht das htaccess-File im übergebenen Ordner
+ * unprotectFolder()    - Löscht das htaccess-File im übergebenen Ordner
  *
  *****************************************************************************/
 
 class Htaccess {
 
-	var $folderPath;
-	var $htaccessFileExistsAlready = false;
-	var $folderExists              = false;
+    var $folderPath;
+    var $htaccessFileExistsAlready = false;
+    var $folderExists              = false;
 
-	//Konstruktor
-    function Htaccess($folderPath)
+    //Konstruktor
+    function Htaccess($folderPathParam)
     {
-        $this->$folderPath = $folderPath;
+        $this->folderPath = $folderPathParam;
 
-        if (file_exists($this->$folderPath)) {
-        	$this->folderExists = true;
+        if (file_exists($this->folderPath)) {
+            $this->folderExists = true;
 
-        	if (file_exists($folderPath. "/.htaccess")) {
-        		$this->htaccessFileExistsAlready = true;
-        	}
+            if (file_exists($folderPathParam. "/.htaccess")) {
+                $this->htaccessFileExistsAlready = true;
+            }
         }
     }
-
 
     //Schuetzt den uebergebenen Ordner
     function protectFolder()
     {
-    	if ($this->folderExists && !$this->htaccessFileExistsAlready) {
-			@$file=fopen($this->folderPath. "/.htaccess","w+");
-       		@fputs($file,"Order deny,allow\n");
-       		@fputs($file,"Deny from all\n");
-       		@fclose($file);
-    	}
+        if ($this->folderExists && !$this->htaccessFileExistsAlready) {
+            $file=fopen($this->folderPath. "/.htaccess","w+");
+            fputs($file,"Order deny,allow\n");
+            fputs($file,"Deny from all\n");
+            fclose($file);
+        }
     }
 
     //Entfernt den Ordnerschutz (loeschen der htaccessDatei)
     function unprotectFolder()
     {
-    	if ($this->folderExists && $this->htaccessFileExistsAlready) {
-			@unlink($this->folderPath. "/.htaccess","w+");
-    	}
+        if ($this->folderExists && $this->htaccessFileExistsAlready) {
+            @unlink($this->folderPath. "/.htaccess","w+");
+        }
     }
 
 
