@@ -48,12 +48,10 @@ else
 {
     $act_members = 0;
 }
-
-$value = reset($_POST);
-$key   = key($_POST);
+$field_row = 0;
 
 // Felder zusammenstringen
-for($i = 0; $i < count($_POST); $i++)
+foreach($_POST as $key => $value)
 {
     if(strlen($value) > 0)
     {
@@ -67,7 +65,7 @@ for($i = 0; $i < count($_POST); $i++)
             if(is_numeric($value))
             {
                 // dynamisches Profilfeld
-                $table_alias = "f". $value;
+                $table_alias = "row". $field_row. "id". $value;
                 
                 // JOIN - Syntax erstellen
                 $sql_join = $sql_join. " LEFT JOIN ". TBL_USER_DATA ." $table_alias
@@ -159,9 +157,7 @@ for($i = 0; $i < count($_POST); $i++)
             $act_field = "";
         }
     }
-
-    $value = next($_POST);
-    $key   = key($_POST);
+    $field_row++;
 }
 
 $main_sql = "SELECT mem_leader, usr_id, $sql_select

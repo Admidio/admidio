@@ -213,6 +213,19 @@ class User extends TableAccess
         return $this->db_user_fields[$field_name][$property];
     }    
     
+    // aehnlich getProperty, allerdings suche ueber usf_id
+    function getPropertyById($field_id, $property)
+    {
+    	foreach($this->db_user_fields as $key => $value)
+    	{
+    		if($value['usf_id'] == $field_id)
+    		{
+    			return $value[$property];
+    		}
+    	}
+        return false;
+    } 
+        
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
     function _save()
