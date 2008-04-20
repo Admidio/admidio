@@ -501,10 +501,10 @@ if($num_members > 0)
                             </span>";
                         }
 
-                        // wenn der User nicht mehr Mitglied der aktuellen Orga, aber noch Mitglied einer anderen Orga ist,
-                        // dann darf er nicht aus der DB geloescht werden
-                        if(($b_other_orga == false || $row['member'] > 0)
-                        && $row['usr_id'] != $g_current_user->getValue("usr_id"))
+                        // Mitglieder entfernen
+                        if( (($b_other_orga == false && $g_current_user->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
+                          || $row['member'] > 0)                                        // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
+                        && $row['usr_id'] != $g_current_user->getValue("usr_id"))       // das eigene Profil darf keiner entfernen
                         {
                             echo "
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=6\"><img
