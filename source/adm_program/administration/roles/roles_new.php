@@ -134,6 +134,48 @@ $g_layout['header'] = "
             form.submit();
         }
         
+        //Prüfe Mitgliederanzahl
+        function checkMaxMemberCount(inputValue)
+        {
+        
+        	// Alle abhängigen Rollen werden für die Darstellung gesichert
+        	var child_roles = document.getElementById('ChildRoles');
+        
+            //Wenn eine Maximale Mitgliederzahl angeben wurde, düren keine Rollenabhängigkeiten bestehem         
+            if(inputValue > 0)
+            {
+            	// Die Box zum konfigurieren der Rollenabhängig wird ausgeblendet
+            	document.getElementById('dependancies_box').style.visibility = 'hidden';
+		 		document.getElementById('dependancies_box').style.display    = 'none';
+
+		 		// Alle Abhängigen Rollen werden markiert und auf unabhängig gesetzt
+		 		for (var i = 0; i < child_roles.options.length; i++)
+            	{
+                	child_roles.options[i].selected = true;
+            	}
+            	entfernen();
+            	
+            	alert('Achtung! Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.');
+            	
+            }
+            else
+            {
+            	
+            	// Alle Abhängigen Rollen werden markiert und auf abhängig gesetzt
+		 		for (var i = 0; i < child_roles.options.length; i++)
+            	{
+                	child_roles.options[i].selected = true;
+            	}
+            	hinzufuegen();
+            
+            	// Die Box zum konfigurieren der Rollenabhängigkeit wird wieder eingeblendet
+            	document.getElementById('dependancies_box').style.visibility = 'visible';
+		 		document.getElementById('dependancies_box').style.display    = '';
+		 		
+		 		
+            }
+        }
+        
         // Rollenrechte markieren
         // Uebergaben: 
         // srcRight  - ID des Rechts, welches das Ereignis ausloest
@@ -307,7 +349,7 @@ echo "
                         <dl>
                             <dt><label for=\"rol_max_members\">max. Teilnehmer:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"rol_max_members\" name=\"rol_max_members\" size=\"3\" maxlength=\"3\" value=\"";
+                                <input type=\"text\" id=\"rol_max_members\" name=\"rol_max_members\" size=\"3\" maxlength=\"3\" onchange=\"checkMaxMemberCount(this.value)\" value=\"";
                                 if($role->getValue("rol_max_members") > 0)
                                 {
                                     echo $role->getValue("rol_max_members");
@@ -577,9 +619,12 @@ echo "
                     </li>
                 </ul>
             </div>
-        </div>
-        
-        <div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
+        </div>";
+				
+        echo "<div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;";
+        if($role->getValue("rol_max_members") > 0) 
+        	echo "visibility:hidden";
+        echo "\">
             <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
                 <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','". THEME_PATH. "')\"><img
                 id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
@@ -654,6 +699,7 @@ echo "
                 </div>
             </div>
         </div>";
+                           
 
         if($req_rol_id > 0 && $role->getValue("rol_usr_id_change") > 0)
         {
