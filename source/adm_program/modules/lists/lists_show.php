@@ -972,6 +972,17 @@ else
     }
     else
     {    
+		echo "
+		<ul class=\"iconTextLinkList\">
+			<li>
+				<span class=\"iconTextLink\">
+					<a href=\"$g_root_path/adm_program/system/back.php\"><img 
+					src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
+					<a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+				</span>
+			</li>
+		</ul>";
+    
         require(THEME_SERVER_PATH. "/overall_footer.php");
     }
 }
