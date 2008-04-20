@@ -91,7 +91,7 @@ $orga_preferences = array(
     'ecard_text_font'				=> 'Comic Sans MS',
     'ecard_text_size'				=> '20',
     'ecard_text_color'				=> 'black',
-    'ecard_template'				=> 'ecard_1.tpl',
+    'ecard_template'				=> 'brief_standard.tpl',
 
     // Profil
     'default_country'           => 'Deutschland',
