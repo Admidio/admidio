@@ -116,8 +116,6 @@ else if($req_mode == "print")
 $main_sql  = "";   // enthaelt das Haupt-Sql-Statement fuer die Liste
 $str_csv   = "";   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
-$arr_usf_types = array();    // speichert zu jeder usf_id den usf_type
-$arr_usf_names = array();    // speichert zu jeder usf_id den usf_name
 
 // Rollenobjekt erzeugen
 $role = new Role($g_db, $req_rol_id);
@@ -142,28 +140,28 @@ switch($req_type)
         $usf_zip_code   = $g_current_user->getProperty("PLZ", "usf_id");
         $usf_city       = $g_current_user->getProperty("Ort", "usf_id");
         
-        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
-                            f$usf_birthday.usd_value, f$usf_address.usd_value, 
-                            f$usf_zip_code.usd_value, f$usf_city.usd_value
+        $main_sql = "SELECT mem_leader, usr_id, row0id$usf_last_name.usd_value, row1id$usf_first_name.usd_value, 
+                            row2id$usf_birthday.usd_value, row3id$usf_address.usd_value, 
+                            row4id$usf_zip_code.usd_value, row5id$usf_city.usd_value
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
-                       ON f$usf_last_name.usd_usr_id = usr_id
-                      AND f$usf_last_name.usd_usf_id = $usf_last_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
-                       ON f$usf_first_name.usd_usr_id = usr_id
-                      AND f$usf_first_name.usd_usf_id = $usf_first_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_birthday
-                       ON f$usf_birthday.usd_usr_id = usr_id
-                      AND f$usf_birthday.usd_usf_id = $usf_birthday
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_address
-                       ON f$usf_address.usd_usr_id = usr_id
-                      AND f$usf_address.usd_usf_id = $usf_address
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_zip_code
-                       ON f$usf_zip_code.usd_usr_id = usr_id
-                      AND f$usf_zip_code.usd_usf_id = $usf_zip_code
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_city
-                       ON f$usf_city.usd_usr_id = usr_id
-                      AND f$usf_city.usd_usf_id = $usf_city
+                     LEFT JOIN ". TBL_USER_DATA ." row0id$usf_last_name
+                       ON row0id$usf_last_name.usd_usr_id = usr_id
+                      AND row0id$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." row1id$usf_first_name
+                       ON row1id$usf_first_name.usd_usr_id = usr_id
+                      AND row1id$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." row2id$usf_birthday
+                       ON row2id$usf_birthday.usd_usr_id = usr_id
+                      AND row2id$usf_birthday.usd_usf_id = $usf_birthday
+                     LEFT JOIN ". TBL_USER_DATA ." row3id$usf_address
+                       ON row3id$usf_address.usd_usr_id = usr_id
+                      AND row3id$usf_address.usd_usf_id = $usf_address
+                     LEFT JOIN ". TBL_USER_DATA ." row4id$usf_zip_code
+                       ON row4id$usf_zip_code.usd_usr_id = usr_id
+                      AND row4id$usf_zip_code.usd_usf_id = $usf_zip_code
+                     LEFT JOIN ". TBL_USER_DATA ." row5id$usf_city
+                       ON row5id$usf_city.usd_usr_id = usr_id
+                      AND row5id$usf_city.usd_usf_id = $usf_city
                     WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -171,7 +169,7 @@ switch($req_type)
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
-                    ORDER BY mem_leader DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+                    ORDER BY mem_leader DESC, row0id$usf_last_name.usd_value ASC, row1id$usf_first_name.usd_value ASC ";
         break;
 
     case "telephone":
@@ -182,27 +180,27 @@ switch($req_type)
         $usf_email      = $g_current_user->getProperty("E-Mail", "usf_id");
         $usf_fax        = $g_current_user->getProperty("Fax", "usf_id");
         
-        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
-                            f$usf_phone.usd_value, f$usf_mobile.usd_value, f$usf_email.usd_value, f$usf_fax.usd_value
+        $main_sql = "SELECT mem_leader, usr_id, row0id$usf_last_name.usd_value, row1id$usf_first_name.usd_value, 
+                            row2id$usf_phone.usd_value, row3id$usf_mobile.usd_value, row4id$usf_email.usd_value, row5id$usf_fax.usd_value
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
-                       ON f$usf_last_name.usd_usr_id = usr_id
-                      AND f$usf_last_name.usd_usf_id = $usf_last_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
-                       ON f$usf_first_name.usd_usr_id = usr_id
-                      AND f$usf_first_name.usd_usf_id = $usf_first_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_phone
-                       ON f$usf_phone.usd_usr_id = usr_id
-                      AND f$usf_phone.usd_usf_id = $usf_phone
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_mobile
-                       ON f$usf_mobile.usd_usr_id = usr_id
-                      AND f$usf_mobile.usd_usf_id = $usf_mobile
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_email
-                       ON f$usf_email.usd_usr_id = usr_id
-                      AND f$usf_email.usd_usf_id = $usf_email
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_fax
-                       ON f$usf_fax.usd_usr_id = usr_id
-                      AND f$usf_fax.usd_usf_id = $usf_fax
+                     LEFT JOIN ". TBL_USER_DATA ." row0id$usf_last_name
+                       ON row0id$usf_last_name.usd_usr_id = usr_id
+                      AND row0id$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." row1id$usf_first_name
+                       ON row1id$usf_first_name.usd_usr_id = usr_id
+                      AND row1id$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." row2id$usf_phone
+                       ON row2id$usf_phone.usd_usr_id = usr_id
+                      AND row2id$usf_phone.usd_usf_id = $usf_phone
+                     LEFT JOIN ". TBL_USER_DATA ." row3id$usf_mobile
+                       ON row3id$usf_mobile.usd_usr_id = usr_id
+                      AND row3id$usf_mobile.usd_usf_id = $usf_mobile
+                     LEFT JOIN ". TBL_USER_DATA ." row4id$usf_email
+                       ON row4id$usf_email.usd_usr_id = usr_id
+                      AND row4id$usf_email.usd_usf_id = $usf_email
+                     LEFT JOIN ". TBL_USER_DATA ." row5id$usf_fax
+                       ON row5id$usf_fax.usd_usr_id = usr_id
+                      AND row5id$usf_fax.usd_usf_id = $usf_fax
                     WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -210,7 +208,7 @@ switch($req_type)
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
-                    ORDER BY mem_leader DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+                    ORDER BY mem_leader DESC, row0id$usf_last_name.usd_value ASC, row1id$usf_first_name.usd_value ASC ";
         break;
     
     case "teilnehmer":
@@ -223,35 +221,35 @@ switch($req_type)
         $usf_phone      = $g_current_user->getProperty("Telefon", "usf_id");
         $usf_email      = $g_current_user->getProperty("E-Mail", "usf_id");
         
-        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
-                            f$usf_birthday.usd_value, f$usf_address.usd_value, 
-                            f$usf_zip_code.usd_value, f$usf_city.usd_value,
-							f$usf_phone.usd_value, f$usf_email.usd_value
+        $main_sql = "SELECT mem_leader, usr_id, row0id$usf_last_name.usd_value, row1id$usf_first_name.usd_value, 
+                            row2id$usf_birthday.usd_value, row3id$usf_address.usd_value, 
+                            row4id$usf_zip_code.usd_value, row5id$usf_city.usd_value,
+							row6id$usf_phone.usd_value, row7id$usf_email.usd_value
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
-                       ON f$usf_last_name.usd_usr_id = usr_id
-                      AND f$usf_last_name.usd_usf_id = $usf_last_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
-                       ON f$usf_first_name.usd_usr_id = usr_id
-                      AND f$usf_first_name.usd_usf_id = $usf_first_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_birthday
-                       ON f$usf_birthday.usd_usr_id = usr_id
-                      AND f$usf_birthday.usd_usf_id = $usf_birthday
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_address
-                       ON f$usf_address.usd_usr_id = usr_id
-                      AND f$usf_address.usd_usf_id = $usf_address
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_zip_code
-                       ON f$usf_zip_code.usd_usr_id = usr_id
-                      AND f$usf_zip_code.usd_usf_id = $usf_zip_code
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_city
-                       ON f$usf_city.usd_usr_id = usr_id
-                      AND f$usf_city.usd_usf_id = $usf_city
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_phone
-                       ON f$usf_phone.usd_usr_id = usr_id
-                      AND f$usf_phone.usd_usf_id = $usf_phone
-        			 LEFT JOIN ". TBL_USER_DATA ." f$usf_email
-                       ON f$usf_email.usd_usr_id = usr_id
-                      AND f$usf_email.usd_usf_id = $usf_email
+                     LEFT JOIN ". TBL_USER_DATA ." row0id$usf_last_name
+                       ON row0id$usf_last_name.usd_usr_id = usr_id
+                      AND row0id$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." row1id$usf_first_name
+                       ON row1id$usf_first_name.usd_usr_id = usr_id
+                      AND row1id$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." row2id$usf_birthday
+                       ON row2id$usf_birthday.usd_usr_id = usr_id
+                      AND row2id$usf_birthday.usd_usf_id = $usf_birthday
+                     LEFT JOIN ". TBL_USER_DATA ." row3id$usf_address
+                       ON row3id$usf_address.usd_usr_id = usr_id
+                      AND row3id$usf_address.usd_usf_id = $usf_address
+                     LEFT JOIN ". TBL_USER_DATA ." row4id$usf_zip_code
+                       ON row4id$usf_zip_code.usd_usr_id = usr_id
+                      AND row4id$usf_zip_code.usd_usf_id = $usf_zip_code
+                     LEFT JOIN ". TBL_USER_DATA ." row5id$usf_city
+                       ON row5id$usf_city.usd_usr_id = usr_id
+                      AND row5id$usf_city.usd_usf_id = $usf_city
+                     LEFT JOIN ". TBL_USER_DATA ." row6id$usf_phone
+                       ON row6id$usf_phone.usd_usr_id = usr_id
+                      AND row6id$usf_phone.usd_usf_id = $usf_phone
+        			 LEFT JOIN ". TBL_USER_DATA ." row7id$usf_email
+                       ON row7id$usf_email.usd_usr_id = usr_id
+                      AND row7id$usf_email.usd_usf_id = $usf_email
 					 WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -259,25 +257,25 @@ switch($req_type)
                       AND mem_valid  = ". $role->getValue("rol_valid"). "
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
-                    ORDER BY mem_leader DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+                    ORDER BY mem_leader DESC, row0id$usf_last_name.usd_value ASC, row1id$usf_first_name.usd_value ASC ";
         break;
     case "former":
         $usf_last_name  = $g_current_user->getProperty("Nachname", "usf_id");
         $usf_first_name = $g_current_user->getProperty("Vorname", "usf_id");
         $usf_birthday   = $g_current_user->getProperty("Geburtstag", "usf_id");
         
-        $main_sql = "SELECT mem_leader, usr_id, f$usf_last_name.usd_value, f$usf_first_name.usd_value, 
-                            f$usf_birthday.usd_value, mem_begin, mem_end
+        $main_sql = "SELECT mem_leader, usr_id, row0id$usf_last_name.usd_value, row1id$usf_first_name.usd_value, 
+                            row2id$usf_birthday.usd_value, mem_begin, mem_end
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_last_name
-                       ON f$usf_last_name.usd_usr_id = usr_id
-                      AND f$usf_last_name.usd_usf_id = $usf_last_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_first_name
-                       ON f$usf_first_name.usd_usr_id = usr_id
-                      AND f$usf_first_name.usd_usf_id = $usf_first_name
-                     LEFT JOIN ". TBL_USER_DATA ." f$usf_birthday
-                       ON f$usf_birthday.usd_usr_id = usr_id
-                      AND f$usf_birthday.usd_usf_id = $usf_birthday
+                     LEFT JOIN ". TBL_USER_DATA ." row0id$usf_last_name
+                       ON row0id$usf_last_name.usd_usr_id = usr_id
+                      AND row0id$usf_last_name.usd_usf_id = $usf_last_name
+                     LEFT JOIN ". TBL_USER_DATA ." row1id$usf_first_name
+                       ON row1id$usf_first_name.usd_usr_id = usr_id
+                      AND row1id$usf_first_name.usd_usf_id = $usf_first_name
+                     LEFT JOIN ". TBL_USER_DATA ." row2id$usf_birthday
+                       ON row2id$usf_birthday.usd_usr_id = usr_id
+                      AND row2id$usf_birthday.usd_usf_id = $usf_birthday
                     WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -285,7 +283,7 @@ switch($req_type)
                       AND mem_valid  = 0
                       AND mem_usr_id = usr_id
                       AND usr_valid  = 1
-                    ORDER BY mem_leader DESC, mem_end DESC, f$usf_last_name.usd_value ASC, f$usf_first_name.usd_value ASC ";
+                    ORDER BY mem_leader DESC, mem_end DESC, row0id$usf_last_name.usd_value ASC, row1id$usf_first_name.usd_value ASC ";
         break;
 }
 
@@ -409,7 +407,7 @@ if($req_mode != "csv")
         else
         {
             $image = "application_view_list.png";
-            $text  = "Listen&uuml;bersicht";            
+            $text  = "Listenübersicht";            
         }
 
         echo "
@@ -506,49 +504,50 @@ for($i = $start_column; $i < count($arr_fields); $i++)
     {
         // benutzerdefiniertes Feld
         // die usf_id steht im Tabellen-Alias hinter dem f
-        $usf_id = substr($arr_fields[$i], 1, strpos($arr_fields[$i], "."));
-        $sql = "SELECT usf_name, usf_type FROM ". TBL_USER_FIELDS. "
-                 WHERE usf_id = $usf_id ";
-        $result_user_fields = $g_db->query($sql);
+        $tmp_str = substr($arr_fields[$i], strpos($arr_fields[$i], "id") + 2);
+        $usf_id = substr($tmp_str, 0, strpos($tmp_str, "."));
+        $col_name = $g_current_user->getPropertyById($usf_id, "usf_name");
 
-        $row = $g_db->fetch_object($result_user_fields);
-        $col_name = $row->usf_name;
-        $arr_usf_types[$usf_id] = $row->usf_type;
-        $arr_usf_names[$usf_id] = $row->usf_name;
-
-        if($arr_usf_types[$usf_id] == "CHECKBOX"
-        || $arr_usf_names[$usf_id] == "Geschlecht")
+        if($g_current_user->getPropertyById($usf_id, "usf_type") == "CHECKBOX"
+        || $g_current_user->getPropertyById($usf_id, "usf_name") == "Geschlecht")
         {
             $align = "center";
         }
-        elseif($arr_usf_types[$usf_id] == "NUMERIC")
+        elseif($g_current_user->getPropertyById($usf_id, "usf_type") == "NUMERIC")
         {
             $align = "right";
         }
     }
     else
     {
+    	$usf_id = 0;
         $col_name = $arr_col_name[$arr_fields[$i]];
     }
 
-    if($req_mode == "csv")
-    {
-        if($i == $start_column)
-        {
-            // die Laufende Nummer noch davorsetzen
-            $str_csv = $str_csv. $value_quotes. "Nr.". $value_quotes;
-        }
-        $str_csv = $str_csv. $separator. $value_quotes. $col_name. $value_quotes;
-    }
-    else
-    {                
-        if($i == $start_column)
-        {
-            // die Laufende Nummer noch davorsetzen
-            echo "<th style=\"text-align: $align;\">Nr.</th>";
-        }
-        echo "<th style=\"text-align: $align;\">$col_name</th>\n";
-    }
+	// versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
+	if($usf_id == 0
+	|| $g_current_user->editUser()
+	|| $g_current_user->getPropertyById($usf_id, "usf_hidden") == 0)
+	{
+		if($req_mode == "csv")
+		{
+			if($i == $start_column)
+			{
+				// die Laufende Nummer noch davorsetzen
+				$str_csv = $str_csv. $value_quotes. "Nr.". $value_quotes;
+			}
+			$str_csv = $str_csv. $separator. $value_quotes. $col_name. $value_quotes;
+		}
+		else
+		{                
+			if($i == $start_column)
+			{
+				// die Laufende Nummer noch davorsetzen
+				echo "<th style=\"text-align: $align;\">Nr.</th>";
+			}
+			echo "<th style=\"text-align: $align;\">$col_name</th>\n";
+		}
+	}
 }  // End-For
 
 if($req_mode == "csv")
@@ -624,7 +623,8 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 $b_user_field = true;
 
                 // die usf_id steht im Tabellen-Alias hinter dem f
-                $usf_id = substr($arr_fields[$i], 1, strpos($arr_fields[$i], "."));
+                $tmp_str = substr($arr_fields[$i], strpos($arr_fields[$i], "id") + 2);
+        		$usf_id = substr($tmp_str, 0, strpos($tmp_str, "."));
             }
             else
             {
@@ -632,194 +632,201 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 $usf_id = 0;
             }
 
-            if($req_mode != "csv")
-            {
-                $align = "left";
-                if($b_user_field == true)
-                {
-                    if($arr_usf_types[$usf_id] == "CHECKBOX"
-                    || $arr_usf_names[$usf_id] == "Geschlecht")
-                    {
-                        $align = "center";
-                    }
-                    elseif($arr_usf_types[$usf_id] == "NUMERIC")
-                    {
-                        $align = "right";
-                    }
-                }
+        	// versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
+			if($usf_id == 0
+			|| $g_current_user->editUser()
+			|| $g_current_user->getPropertyById($usf_id, "usf_hidden") == 0)
+			{
+				if($req_mode != "csv")
+				{
+					$align = "left";
+					if($b_user_field == true)
+					{
+						if($g_current_user->getPropertyById($usf_id, "usf_type") == "CHECKBOX"
+						|| $g_current_user->getPropertyById($usf_id, "usf_name") == "Geschlecht")
+						{
+							$align = "center";
+						}
+						elseif($g_current_user->getPropertyById($usf_id, "usf_type") == "NUMERIC")
+						{
+							$align = "right";
+						}
+					}
+	
+					if($i == $start_column)
+					{
+						// die Laufende Nummer noch davorsetzen
+						echo "<td style=\"text-align: $align;\">$irow</td>";
+					}
+					echo "<td style=\"text-align: $align;\">";
+				}
+				else
+				{
+					if($i == $start_column)
+					{
+						// erste Spalte zeigt lfd. Nummer an
+						$str_csv = $str_csv. $value_quotes. "$irow". $value_quotes;
+					}
+				}
+	
+				$content  = "";
+				$usf_type = "";
+	
+				// Feldtyp bei Spezialfeldern setzen
+				if($arr_fields[$i] == "mem_begin" || $arr_fields[$i] == "mem_end")
+				{
+					$usf_type = "DATE";
+				}
+				elseif($arr_fields[$i] == "usr_login_name")
+				{
+					$usf_type = "TEXT";
+				}
+				elseif($usf_id > 0)
+				{
+					$usf_type = $g_current_user->getPropertyById($usf_id, "usf_type");
+				}
+							
+				// Ausgabe je nach Feldtyp aufbereiten
+				if($usf_id == $g_current_user->getProperty("Geschlecht", "usf_id"))
+				{
+					// Geschlecht anzeigen
+					if($row[$i] == 1)
+					{
+						if($req_mode == "csv" || $req_mode == "print")
+						{
+							$content = "männlich";
+						}
+						else
+						{
+							$content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png"
+										title="männlich" alt="männlich" />';
+						}
+					}
+					elseif($row[$i] == 2)
+					{
+						if($req_mode == "csv" || $req_mode == "print")
+						{
+							$content = "weiblich";
+						}
+						else
+						{
+							$content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png"
+										alt="weiblich" alt="weiblich" />';
+						}
+					}
+					else
+					{
+						if($req_mode != "csv")
+						{
+							$content = "&nbsp;";
+						}
+					}
+				}
+				elseif($arr_fields[$i] == "usr_photo")
+				{
+					// Benutzerfoto anzeigen
+					if(($req_mode == "html" || $req_mode == "print") && $row[$i] != NULL)
+					{
+						$_SESSION['profilphoto'][$row['usr_id']]=$row[$i];
+						$content = "<img src=\"photo_show.php?usr_id=".$row['usr_id']."\"
+									style=\"vertical-align: middle;\" alt=\"Benutzerfoto\" />";
+					}
+					if ($req_mode == "csv" && $row[$i] != NULL)
+					{
+						$content = "Profilfoto Online";
+					}
+				}
+				else
+				{
+					switch($usf_type)
+					{
+						case "CHECKBOX":
+							// Checkboxen werden durch ein Bildchen dargestellt
+							if($row[$i] == 1)
+							{
+								if($req_mode == "csv")
+								{
+									$content = "ja";
+								}
+								else
+								{
+									echo "<img src=\"". THEME_PATH. "/icons/checkbox_checked.gif\"
+										style=\"vertical-align: middle;\" alt=\"on\" />";
+								}
+							}
+							else
+							{
+								if($req_mode == "csv")
+								{
+									$content = "nein";
+								}
+								else
+								{
+									echo "<img src=\"". THEME_PATH. "/icons/checkbox.gif\"
+										style=\"vertical-align: middle;\" alt=\"off\" />";
+								}
+							}
+							break;
+	
+						case "DATE":
+							// Datum muss noch formatiert werden
+							$content = mysqldate('d.m.y', $row[$i]);
+							break;
+	
+						case "EMAIL":
+							// E-Mail als Link darstellen
+							if(strlen($row[$i]) > 0)
+							{
+								if($req_mode == "html")
+								{
+									if($g_preferences['enable_mail_module'] == 1 
+									&& $g_current_user->getPropertyById($usf_id, "usf_name") == "E-Mail")
+									{
+										$content = "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id']. "\">". $row[$i]. "</a>";
+									}
+									else
+									{
+										$content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
+									}
+								}
+								else
+								{
+									$content = $row[$i];
+								}
+							}
+							break;
+	
+						case "URL":
+							// Homepage als Link darstellen
+							if(strlen($row[$i]) > 0)
+							{
+								if($req_mode == "html")
+								{
+									$content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";
+								}
+								else
+								{
+									$content = substr($row[$i], 7);
+								}
+							}
+							break;
+	
+						default:
+							$content = $row[$i];
+							break;                            
+					}
+				}
 
-                if($i == $start_column)
-                {
-                    // die Laufende Nummer noch davorsetzen
-                    echo "<td style=\"text-align: $align;\">$irow</td>";
-                }
-                echo "<td style=\"text-align: $align;\">";
-            }
-            else
-            {
-                if($i == $start_column)
-                {
-                    // erste Spalte zeigt lfd. Nummer an
-                    $str_csv = $str_csv. $value_quotes. "$irow". $value_quotes;
-                }
-            }
-
-            $content  = "";
-            $usf_type = "";
-
-            // Feldtyp bei Spezialfeldern setzen
-            if($arr_fields[$i] == "mem_begin" || $arr_fields[$i] == "mem_end")
-            {
-                $usf_type = "DATE";
-            }
-            elseif($arr_fields[$i] == "usr_login_name")
-            {
-                $usf_type = "TEXT";
-            }
-            elseif($usf_id > 0)
-            {
-                $usf_type = $arr_usf_types[$usf_id];
-            }
-                        
-            // Ausgabe je nach Feldtyp aufbereiten
-            if($usf_id == $g_current_user->getProperty("Geschlecht", "usf_id"))
-            {
-                // Geschlecht anzeigen
-                if($row[$i] == 1)
-                {
-                    if($req_mode == "csv" || $req_mode == "print")
-                    {
-                        $content = "männlich";
-                    }
-                    else
-                    {
-                        $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png"
-                                    title="männlich" alt="männlich" />';
-                    }
-                }
-                elseif($row[$i] == 2)
-                {
-                    if($req_mode == "csv" || $req_mode == "print")
-                    {
-                        $content = "weiblich";
-                    }
-                    else
-                    {
-                        $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png"
-                                    alt="weiblich" alt="weiblich" />';
-                    }
-                }
-                else
-                {
-                    if($req_mode != "csv")
-                    {
-                        $content = "&nbsp;";
-                    }
-                }
-            }
-            elseif($arr_fields[$i] == "usr_photo")
-            {
-                // Benutzerfoto anzeigen
-                if(($req_mode == "html" || $req_mode == "print") && $row[$i] != NULL)
-                {
-                    $_SESSION['profilphoto'][$row['usr_id']]=$row[$i];
-                    $content = "<img src=\"photo_show.php?usr_id=".$row['usr_id']."\"
-                                style=\"vertical-align: middle;\" alt=\"Benutzerfoto\" />";
-                }
-                if ($req_mode == "csv" && $row[$i] != NULL)
-                {
-                    $content = "Profilfoto Online";
-                }
-            }
-            else
-            {
-                switch($usf_type)
-                {
-                    case "CHECKBOX":
-                        // Checkboxen werden durch ein Bildchen dargestellt
-                        if($row[$i] == 1)
-                        {
-                            if($req_mode == "csv")
-                            {
-                                $content = "ja";
-                            }
-                            else
-                            {
-                                echo "<img src=\"". THEME_PATH. "/icons/checkbox_checked.gif\"
-                                    style=\"vertical-align: middle;\" alt=\"on\" />";
-                            }
-                        }
-                        else
-                        {
-                            if($req_mode == "csv")
-                            {
-                                $content = "nein";
-                            }
-                            else
-                            {
-                                echo "<img src=\"". THEME_PATH. "/icons/checkbox.gif\"
-                                    style=\"vertical-align: middle;\" alt=\"off\" />";
-                            }
-                        }
-                        break;
-
-                    case "DATE":
-                        // Datum muss noch formatiert werden
-                        $content = mysqldate('d.m.y', $row[$i]);
-                        break;
-
-                    case "EMAIL":
-                        // E-Mail als Link darstellen
-                        if(strlen($row[$i]) > 0)
-                        {
-                            if($req_mode == "html")
-                            {
-                                if($g_preferences['enable_mail_module'] == 1 && $arr_usf_names[$usf_id] == "E-Mail")
-                                {
-                                    $content = "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=". $row['usr_id']. "\">". $row[$i]. "</a>";
-                                }
-                                else
-                                {
-                                    $content = "<a href=\"mailto:". $row[$i]. "\">". $row[$i]. "</a>";
-                                }
-                            }
-                            else
-                            {
-                                $content = $row[$i];
-                            }
-                        }
-                        break;
-
-                    case "URL":
-                        // Homepage als Link darstellen
-                        if(strlen($row[$i]) > 0)
-                        {
-                            if($req_mode == "html")
-                            {
-                                $content = "<a href=\"". $row[$i]. "\" target=\"_blank\">". substr($row[$i], 7). "</a>";
-                            }
-                            else
-                            {
-                                $content = substr($row[$i], 7);
-                            }
-                        }
-                        break;
-
-                    default:
-                        $content = $row[$i];
-                        break;                            
-                }
-            }
-
-            if($req_mode == "csv")
-            {
-                $str_csv = $str_csv. $separator. $value_quotes. "$content". $value_quotes;
-            }
-
-            else
-            {
-                echo $content. "</td>\n";
-            }
+				if($req_mode == "csv")
+				{
+					$str_csv = $str_csv. $separator. $value_quotes. "$content". $value_quotes;
+				}
+	
+				else
+				{
+					echo $content. "</td>\n";
+				}
+			}
         }
 
         if($req_mode == "csv")

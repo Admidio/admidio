@@ -194,16 +194,19 @@ $g_layout['header'] = '
 				$i++;
 			}
 			
-			$g_layout['header'] .= '
-			roles['. $i. '] = new Object();
-			roles['. $i. '][\'cat_id\'] = '. $value['cat_id']. ';
-			roles['. $i. '][\'cat_name\'] = \''. $value['cat_name']. '\';
-			roles['. $i. '][\'usf_id\'] = '. $value['usf_id']. ';
-			roles['. $i. '][\'usf_name\'] = \''. $value['usf_name']. '\';';
+			if($value['usf_hidden'] == 0 || $g_current_user->editUser())
+			{
+				$g_layout['header'] .= '
+				roles['. $i. '] = new Object();
+				roles['. $i. '][\'cat_id\'] = '. $value['cat_id']. ';
+				roles['. $i. '][\'cat_name\'] = \''. $value['cat_name']. '\';
+				roles['. $i. '][\'usf_id\'] = '. $value['usf_id']. ';
+				roles['. $i. '][\'usf_name\'] = \''. $value['usf_name']. '\';';
 			
-			$old_cat_id   = $value['cat_id'];
-			$old_cat_name = $value['cat_name'];
-			$i++;
+				$old_cat_id   = $value['cat_id'];
+				$old_cat_name = $value['cat_name'];
+				$i++;
+			}
         } 		
 
 		// Anfangs- und Enddatum der Rollenmitgliedschaft als Felder noch anhaengen
