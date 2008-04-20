@@ -345,7 +345,7 @@ if($new_user == 3)
         $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
         $email->setSubject("Anmeldung auf ". $g_current_organization->getValue("org_homepage"));
         $email->setText("Hallo ". $user->getValue("Vorname"). ",\n\ndeine Anmeldung auf ".
-            $g_current_organization->getValue("org_homepage"). "wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ".
+            $g_current_organization->getValue("org_homepage"). " wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ".
             $user->getValue("usr_login_name"). "\nund dem Passwort auf der Homepage einloggen.\n\n".
             "Sollten noch Fragen bestehen, schreib eine E-Mail an ". $g_preferences['email_administrator'].
             " .\n\nViele Grüße\nDie Webmaster");
