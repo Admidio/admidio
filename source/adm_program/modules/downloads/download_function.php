@@ -13,7 +13,9 @@
  *           2 - Datei / Ordner loeschen
  *           3 - Ordner erstellen
  *           4 - Datei / Ordner umbenennen
- *           5 - Datei /Ordner loeschen abfrage
+ *           5 - Datei / Ordner loeschen abfrage
+ *           6 - Datei / Ordner zur DB hinzufuegen
+ *           7 - Berechtigungen ffür Ordner speichern
  * folder_id :  OrdnerId in der DB
  * file_id   :  FileId in der DB
  *
@@ -662,20 +664,26 @@ elseif ($req_mode == 7)
     //setze schon einmal das Public_Flag
     $targetFolder->editPublicFlagOnFolder($publicFlag);
 
-    //Jetzt die Rollenberechtigungen aufbereiten
     $rolesArray = null;
 
-    if(array_key_exists("AllowedRoles", $_POST))
-    {
-        $sentAllowedRoles = $_POST['AllowedRoles'];
+    //Nur wenn der Ordner oeffentlich nicht zugaenglich ist
+    //werden die Rollenbrechtigungen gespeichert.
+    //Ansonsten wird ein leeres Rollenset gespeichert...
+    if ($publicFlag == 0) {
 
-        //fuege alle neuen Rollen hinzu
-        foreach ($sentAllowedRoles as $newRole)
+        //Rollenberechtigungen aufbereiten
+        if(array_key_exists("AllowedRoles", $_POST))
         {
+            $sentAllowedRoles = $_POST['AllowedRoles'];
 
-            $rolesArray[] = array('rol_id'        => $newRole,
-                                  'rol_name'      => "");
+            //fuege alle neuen Rollen hinzu
+            foreach ($sentAllowedRoles as $newRole)
+            {
 
+                $rolesArray[] = array('rol_id'        => $newRole,
+                                      'rol_name'      => "");
+
+            }
         }
     }
 
