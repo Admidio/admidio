@@ -611,7 +611,7 @@ echo "
 
                         $childRoleObjects = array();
 
-                        echo "<div>unabhängig</div>
+                        echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/delete.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
                         <div>
                             <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
                                 while($row = $g_db->fetch_object($allRoles))
@@ -630,7 +630,7 @@ echo "
 						<ul>
                             <li>
 								<a class=\"iconLink\" href=\"javascript:hinzufuegen()\">
-									<img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzufügen\" title=\"Rolle hinzufügen\" />
+									<img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzuf&uuml;gen\" title=\"Rolle hinzuf&uuml;gen\" />
 								</a>
 							</li>
                             <li>
@@ -641,7 +641,7 @@ echo "
 						</ul>
                     </div>
 					<div>
-                        <div>abhängig</div>
+                        <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/ok.png\" alt=\"abh&auml;ngig\" title=\"abh&auml;ngig\" />abh&auml;ngig</div>
                         <div>
                             <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
                                 foreach ($childRoleObjects as $childRoleObject)
