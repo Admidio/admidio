@@ -21,7 +21,8 @@ require_once("../../system/common.php");
 // zur Auswahl
 if ($g_valid_login && isset($_GET['base']) =="1")
 {
-	echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:getMenuRecepientName()">';
+		global $g_current_user;
+	echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:getMenuRecepientName()" style="width:190px;">';
 	if (isset($form_values['rol_id']) == "")
 	{
 		echo '<option value="" selected="selected" disabled="disabled">- Bitte w&auml;hlen -</option>';
@@ -64,19 +65,24 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 			echo '<optgroup label="'.$row->cat_name.'">';
 			$act_category = $row->cat_name;
 		}
-		echo '<option value='.$row->rol_id.' ';
-		if ($row->rol_id == isset($form_values['rol_id']))
-		{
-			echo 'selected="selected"';
+		if($g_current_user->viewRole($row->rol_id))
+        {
+			echo '<option value='.$row->rol_id.' ';
+			if ($row->rol_id == isset($form_values['rol_id']))
+			{
+				echo 'selected="selected"';
+			}
+			echo '>'.$row->rol_name.'</option>';
 		}
-		echo '>'.$row->rol_name.'</option>';
 	}
 	
 	echo '</optgroup>
 	</select>
+	<div style="vertical-align:top; display:inline;">
 	<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard&amp;window=true\',\'Message\',\'width=400,height=250,left=300,top=200,scrollbars=yes\')"
-	onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()" />
-	<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+	onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()" style="vertical-align:middle;" />
+	</div>
+	<span class="mandatoryFieldMarker" title="Pflichtfeld" >*</span>
 	
 	';					
 }
@@ -85,6 +91,7 @@ if ($g_valid_login && isset($_GET['base']) =="1")
 // E-mail besitzen und stehen bereit zur Auswahl
 else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !isset($_GET['usrid']))
 {
+
     if(is_numeric($_GET['rol_id']))
 	{
 		$sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
@@ -118,16 +125,16 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
 		}
 		if (!empty($menudata))
 		{
-			echo $menuheader.'<option value="" selected="selected">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
+			echo $menuheader.'<option value="bw" selected="selected" disabled="disabled">- Bitte w&auml;hlen -</option>'.$menudata.$menubody;
 		}
 		else
 		{
-		    echo '<div style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:    1px;	border:	      1px solid #ccc;padding:          5px; background-color: #FFFFE0; padding-left:     28px;\">Kein User vorhanden der eine g&uuml;ltige E-mail besitzt!</div>';
+		    echo '<div style="width:340px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:    1px;	border:	      1px solid #ccc;padding:          5px; background-color: #FFFFE0; padding-left:     28px;\">Kein User vorhanden der eine g&uuml;ltige E-mail besitzt!</div>';
 		}
 	}
 	else
 	{
-	    echo '<div style="width:300px; background-image: url(\''.THEME_PATH.'/icons/error.png\');background-repeat: no-repeat; background-position:5px 5px;margin-top:1px;	border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left:28px;\">Bitte w&auml;hlen Sie eine g&uuml;ltige Rolle aus!</div>';
+	    echo '<div style="width:340px; background-image: url(\''.THEME_PATH.'/icons/error.png\');background-repeat: no-repeat; background-position:5px 5px;margin-top:1px;	border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left:28px;\">Bitte w&auml;hlen Sie eine g&uuml;ltige Rolle aus!</div>';
 	}
 }
 // Wenn ein User ausgewaehlt worden ist werden zwei input Boxen ausgegeben
@@ -157,25 +164,13 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 		while ($row = $g_db->fetch_object($result))
 		{
 			$full_name	= ''.$row->first_name.' '.$row->last_name.'';
-			echo '<table summary="DataSender" style="border:0px;" border="0" cellpadding="0" cellspacing="0" cols="0" rules="none" width="100%">
-			<tr>
-			<td align="left"><input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="'.$full_name.'" /></td>
-			<td align="right"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></td>
-			</tr>
-			</table>
-			<input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />
+			echo '<input type="hidden" name="ecard[name_recipient]" value="'.$full_name.'" /><input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />
 			';
 		}
 	}
-	else
+	else if($_GET['usrid'] != "bw")
 	{
-		echo '<table summary="DataSender" style="border:0px;" border="0" cellpadding="0" cellspacing="0" cols="0" rules="none" width="100%">
-			<tr>
-			<td align="left"><input type="text" name="ecard[name_recipient]" size="25" class="readonly" readonly="readonly"  maxlength="40" style="width: 200px;" value="die gesamte Rolle" /></td>
-			<td align="right"><a href="javascript:getMenuRecepientName();">anderer Empf&auml;nger</a></td>
-			</tr>
-			</table>
-			<input type="hidden" name="ecard[email_recipient]" value="'.$_GET['usrid'].'@rolle.com" />
+		echo '<input type="hidden" name="ecard[name_recipient]" value="die gesamte Rolle" /><input type="hidden" name="ecard[email_recipient]" value="'.$_GET['usrid'].'@rolle.com" />
 			';
 	}
 }

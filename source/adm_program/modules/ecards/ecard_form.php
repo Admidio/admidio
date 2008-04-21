@@ -257,7 +257,7 @@ if (! empty($submit_action))
 				{
 					if($i<1)
 					{
-						$firstvalue_name  = "Gruppe: \"".$row->rol_name."\"";
+						$firstvalue_name  = "Rolle: \"".$row->rol_name."\"";
 						$firstvalue_email = "-";
 
 					}
@@ -581,8 +581,14 @@ $javascript='
 		}
 		function getMenuRecepientNameEmail(usr_id)
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id + \'&rol_id=\'+ document.getElementById(ecardformid).rol_id.value, \'dropdownmenu\' );
-			document.getElementById(externdiv).innerHTML = "&nbsp;";
+			if(usr_id != "bw")
+			{
+				macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=\'+ usr_id + \'&rol_id=\'+ document.getElementById(ecardformid).rol_id.value, externdiv );
+			}
+			else
+			{
+				document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recipient]" value="" \/><input type="hidden" name="ecard[name_recipient]"  value="" \/>\';
+			}
 		}
 		function saveData()
 		{
@@ -639,9 +645,8 @@ $javascript='
 				var data	= \'<div id="\'+ [now_recipients] +\'">\';
 				data += \'<table id="table_\'+ [now_recipients] +\'" border="0" summary="data\'+ [now_recipients] +\'">\';
 				data += \'<tr>\';
-				data += \'<td style="width:30px; text-align: right;">\'+ [now_recipients] +\'. <\/td>\';
 				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[name_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td>\';
-				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td>\';
+				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td><td><span class="iconTextLink"><a href="javascript:delContent(\'+ [now_recipients] +\')"><img src="'.THEME_PATH.'/icons/delete.png" alt="Inhalt löschen" \/><\/a><\/span><\/td>\';
 				data += \'<\/tr><\/table>\';
 				data += \'<\/div>\';
 				var saved_data = new Array();
@@ -651,38 +656,22 @@ $javascript='
 				saved_data = "";
 				if (now_recipients > 0)
 				{
-					document.getElementById(\'btn_del\').style.display = "block";
-					document.getElementById(\'btn_delall\').style.display = "block";
-					document.getElementById(\'btn_delContent\').style.display = "block";
 					document.getElementById(\'moreRecipient\').style.display = "block";
 					document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Keine weiteren Empf.<\/a>";
 				}
 			}
-			if (now_recipients+1 > max_recipients)
-			{
-				document.getElementById(\'btn_add\').disabled = true;
-			}
-
 		}
-		function delContent()
+		function delContent(id)
 		{
-			var anzrecipients = now_recipients;
-			var x = window.confirm("Bist du sicher das du den Inhalt von allen löschen willst?")
-			if (x)
+			var namedoc = document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[id]+"]"];
+			var emaildoc = 	document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[id]+"]"];
+			if(namedoc)
 			{
-				for(var i=1; i <= now_recipients; i++)
-				{
-					var namedoc = document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"];
-					var emaildoc = 	document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"];
-					if(namedoc)
-					{
-						document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[i]+"]"].value = "";
-					}
-					if(emaildoc)
-					{
-						document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[i]+"]"].value = "";
-					}
-				}
+				document.getElementById(ecardformid)["ecard[name_ccrecipient_"+[id]+"]"].value = "";
+			}
+			if(emaildoc)
+			{
+				document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[id]+"]"].value = "";
 			}
 		}
 		function delRecipient()
@@ -705,18 +694,9 @@ $javascript='
 				{
 					showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');
 				}
-				document.getElementById(\'btn_del\').style.display = "none";
-				document.getElementById(\'btn_delall\').style.display = "none";
-				document.getElementById(\'btn_delContent\').style.display = "none";
 				document.getElementById(\'moreRecipient\').style.display = "none";
 				document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Mehr Empfänger<\/a>";
 			}
-
-			if (now_recipients <= max_recipients)
-			{
-				document.getElementById(\'btn_add\').disabled = false;
-			}
-
 		}
 		function delAllRecipients(t)
 		{
@@ -759,7 +739,7 @@ $javascript='
 			{
 				document.getElementById(divLayerSetting).style.display = "block";
 				document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen ausblenden<\/a>";
-				window.scrollBy(0,5000);
+				window.scrollBy(0,200);
 			}
 			else
 			{
@@ -1012,26 +992,19 @@ if (empty($submit_action))
 						<dl>
 							<dt>Weitere Empfänger:</dt>
 							<dd>
-								<div id="buttons" style="width:370px; border:0px;">
-									<table summary="TableButtons" border="0" style="width:370px;">
-										<tr>
-										<td><a href="javascript:addRecipient();" id="btn_add" >hinzufügen</a></td>
-										<td style="padding-left:10px;"><a href="javascript:delRecipient();" id="btn_del" style="display:none;">löschen</a></td>
-										<td style="padding-left:10px;"><a href="javascript:delAllRecipients();" id="btn_delall" style="display:none;">alle löschen</a></td>
-										<td style="padding-left:10px;"><a href="javascript:delContent();" id="btn_delContent" style="display:none;">Inhalt löschen</a></td>
-										</tr>
-									</table>
-								</div>
-								<div id="TableTitle" style="width:350px; border:0px; padding-top:10px;">
-									<table summary="TableccContailer" border="0">
-										<tr>
-											<td style="width:30px;">Anzahl</td>
-											<td style="width:150px;" align="center">Name</td>
-											<td style="width:150px;" align="center">Email</td>
-										</tr>
-									</table>
-								</div>
+								<table summary="TableccContainer" border="0">
+									<tr>
+										<td style="width:150px;" align="center">Name</td>
+										<td style="width:150px;" align="center">Email</td>
+									</tr>
+								</table>
 								<div id="ccrecipientContainer" style="width:490px; border:0px;"></div>
+								<table summary="TableCCRecipientSettings" border="0">
+										<tr>
+											<td align="center" style="padding-left:10px;"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="Empfänger hinzufügen" /></a><a href="javascript:addRecipient()">Empfänger hinzufügen</a></span></td>
+											<td align="center" style="padding-left:10px;"><span class="iconTextLink"><a href="javascript:delRecipient()"><img src="'. THEME_PATH.'/icons/delete.png" alt="Empfänger löschen" /></a><a href="javascript:delRecipient()">Empfänger löschen</a></span></td>
+										</tr>
+								</table>
 							</dd>
 						</dl>
 					</div>
@@ -1084,7 +1057,7 @@ if (empty($submit_action))
 	                        <dt>&nbsp;</dt>
 							<dd>
 								<div style="width: 350px;">
-		                            <div style="float: left;">
+		                            <div style="float:left;" >
 										<a class="iconLink" href="javascript:bbcode(0)"><img id="b"
 											src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
 										<a class="iconLink" href="javascript:bbcode(1)"><img id="u"
@@ -1097,14 +1070,14 @@ if (empty($submit_action))
 											src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
 										<a class="iconLink" href="javascript:bbcode(5)"><img id="center"
 											src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
-										<a class=\"iconLink\" href=\"javascript:emoticon('[url=".$g_root_path."]Linktext[/url]')\"><img id=\"url\"
-                                    src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:emoticon('[email=adresse@demo.de]Linktext[/email]')\"><img id=\"email\"
-                                    src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\" /></a>
-                                <a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img"
+										<a class="iconLink" href="javascript:emoticon(\'[url='.$g_root_path.']Linktext[/url]\')"><img id="url"
+                                    		src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
+                                		<a class="iconLink" href="javascript:emoticon(\'[email=adresse@demo.de]Linktext[/email]\')"><img id="email"
+                                    		src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
+                                		<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img"
 											src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
 									</div>
-		                            <div style="float: right;">
+		                            <div>
 		                                <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
 		                                    src="'. THEME_PATH. '/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
 		                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe"
