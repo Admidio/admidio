@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Organisationseinstellungen
  *
@@ -810,7 +810,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Welches Forum soll genutzt werden?<br/>
                         <table summary=\"Forum_Auflistung\" border=\"0\">
-                            <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standart)</td></tr>                    
+                            <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>                    
                         </table>
                     </li>
                     <li>
@@ -827,7 +827,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Users ins Forum exportiert und dort ein Forumbenutzer angelegt. (Standardwert: ja)
+                        Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standardwert: ja)
                     </li>
                     <li>
                         <dl>
@@ -860,7 +860,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Falls man die gleiche DB benutzt wie Admidio.
+                        Falls das Forum über die gleiche Datenbank wie auch Admidio betrieben wird.
                     </li>
 					<li id=\"Forum_Zugangsdaten\">
 						<script type=\"text/javascript\"><!--
@@ -868,7 +868,7 @@ echo "
 						--></script>
 					</li>
                     <li class=\"smallFontSize\">
-                        Hier müssen wenn eines der obrigen Foren ausgewählt und es aktiviert wurde die Zugangsdaten dessen eingetragen werden.
+                        Hier müssen die Zugangsdaten des Forums eingegeben werden, falls ein soclhes ausgewählt und aktiviert wurde.
                     </li>                
                 </ul>
             </div>
