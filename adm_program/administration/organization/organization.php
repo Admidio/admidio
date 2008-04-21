@@ -123,33 +123,33 @@ echo "
 <h1 class=\"moduleHeadline\">Organisationseinstellungen</h1>
 
 <div class=\"formLayout\" id=\"organization_menu\">
-    <div class=\"formBody\">
-        <a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
-         
-         &#124; <a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('mail-module');\">Mails</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
-
-         &#124; <a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
-    </div>
+    <div class=\"formBody\"><center>
+        <a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options_big.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations_big.png\" alt=\"Registrierungen\" title=\"Registrierungen\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements_big.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download_big.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo_big.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" title=\"Forum\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook_big.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/smile_big.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Listen\" title=\"Listen\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email_big.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile_big.png\" alt=\"Profil\" title=\"Profil\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
+	&nbsp;
+        <a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
+    </center></div>
 </div>
 
 <form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\">
