@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /******************************************************************************
  * Organisationseinstellungen
  *
@@ -156,6 +156,7 @@ echo "
 <div class=\"formLayout\" id=\"organization_form\">
     <div class=\"formBody\">
         <div class=\"groupBox\" id=\"general\">
+
             <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -1616,5 +1617,4 @@ echo "
 --></script>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
-
 ?>
