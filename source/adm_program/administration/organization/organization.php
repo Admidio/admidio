@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /******************************************************************************
  * Organisationseinstellungen
  *
@@ -157,7 +157,7 @@ echo "
     <div class=\"formBody\">
         <div class=\"groupBox\" id=\"general\">
 
-            <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Allgemeine Einstellungen\" title=\"Allgemeine Einstellungen\" /> Allgemeine Einstellungen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -414,7 +414,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"register\">
-            <div class=\"groupBoxHeadline\">Einstellungen Registrierung&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/new_registrations_small.png\" alt=\"Einstellungen Registrierung\" title=\"Einstellungen Registrierung\" /> Einstellungen Registrierung&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -494,7 +494,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"announcement-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/announcements_small.png\" alt=\"Einstellungen Ankündigungsmodul\" title=\"Einstellungen Ankündigungsmodul\" /> Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -541,7 +541,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"download-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/download_small.png\" alt=\"Einstellungen Downloadmodul\" title=\"Einstellungen Downloadmodul\" /> Einstellungen Downloadmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -584,7 +584,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"photo-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/photo_small.png\" alt=\"Einstellungen Fotomodul\" title=\"Einstellungen Fotomodul\" /> Einstellungen Fotomodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -773,7 +773,7 @@ echo "
 
          echo"
         <div class=\"groupBox\" id=\"forum\">
-            <div class=\"groupBoxHeadline\">Einstellungen Forum&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/forum_small.png\" alt=\"Einstellungen Forum\" title=\"Einstellungen Forum\" /> Einstellungen Forum&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li> 
@@ -881,7 +881,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"guestbook-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/guestbook_small.png\" alt=\"Einstellungen Gästebuchmodul\" title=\"Einstellungen Gästebuchmodul\" /> Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -994,7 +994,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"list-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Listen&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Einstellungen Listenmodul\" title=\"Einstellungen Listenmodul\" /> Einstellungen Listen&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1035,7 +1035,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"mail-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/email_small.png\" alt=\"Einstellungen Mailmodul\" title=\"Einstellungen Mailmodul\" /> Einstellungen Mailmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1095,7 +1095,7 @@ echo "
         /**************************************************************************************/
         echo"
         <div class=\"groupBox\" id=\"ecard-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Grußkartenmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Einstellungen Grußkartenmodell\" title=\"Einstellungen Grußkartenmodell\" /> Einstellungen Grußkartenmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1378,7 +1378,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"profile-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Profilmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/profile_small.png\" alt=\"Einstellungen Profilmodul\" title=\"Einstellungen Profilmodul\" /> Einstellungen Profilmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1500,7 +1500,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"dates-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Terminmodul</div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/dates_small.png\" alt=\"Einstellungen Terminmodul\" title=\"Einstellungen Terminmodul\" /> Einstellungen Terminmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1564,7 +1564,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"links-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Weblinkmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img style=\"vertical-align: top;\" src=\"". THEME_PATH. "/icons/weblinks_small.png\" alt=\"Einstellungen Weblinkmodul\" title=\"Einstellungen Weblinkmodul\" /> Einstellungen Weblinkmodul&nbsp;&nbsp; </div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
