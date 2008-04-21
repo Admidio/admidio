@@ -592,7 +592,7 @@ elseif($req_mode == 7)
     unset($_SESSION['g_preferences']);
     unset($_SESSION['g_current_user']);
 
-    $message = '<img src="layout/ok.png" /> <strong>Die Installation war erfolgreich</strong><br /><br />
+    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Installation war erfolgreich</strong><br /><br />
                 Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet.
                 Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.';
     if(is_writeable("../adm_my_files") == false)
