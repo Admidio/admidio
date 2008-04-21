@@ -97,7 +97,7 @@ class File extends TableAccess
                           AND mem_usr_id         = ". $g_current_user->getValue("usr_id"). "
                           AND mem_valid         = 1";
                 $result_rights = $this->db->query($sql_rights);
-                $row_rights = $g_db->fetch_array($result_rights);
+                $row_rights = $this->db->fetch_array($result_rights);
                 $row_count  = $row_rights[0];
 
                 //Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Ordner besitzt
