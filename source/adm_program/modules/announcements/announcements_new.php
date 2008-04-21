@@ -190,9 +190,9 @@ echo "
                                     src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(5)\"><img id=\"center\"
                                     src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:bbcode(6)\"><img id=\"url\"
+                                <a class=\"iconLink\" href=\"javascript:emoticon('[url=".$g_root_path."]Linktext[/url]')\"><img id=\"url\"
                                     src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:bbcode(7)\"><img id=\"email\"
+                                <a class=\"iconLink\" href=\"javascript:emoticon('[email=adresse@demo.de]Linktext[/email]')\"><img id=\"email\"
                                     src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:emoticon('[img]".$g_root_path."[/img]')\"><img id=\"img\"
                                     src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
@@ -260,7 +260,7 @@ echo "
                             echo " value=\"1\" />
                             <label for=\"ann_global\">$req_headline für mehrere Organisationen sichtbar</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" 
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\"
                                 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=date_global',this);\" onmouseout=\"ajax_hideTooltip()\"  />
                         </dd>
                     </dl>
