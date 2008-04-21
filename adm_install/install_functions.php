@@ -83,7 +83,7 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
 					'</p>
 	
 					<div class="formSubmit">
-						<button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="../adm_themes/classic/icons/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
+						<button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
 					</div>            
 				</div>
 			</div>
