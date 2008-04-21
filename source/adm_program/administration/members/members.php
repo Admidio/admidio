@@ -470,7 +470,8 @@ if($num_members > 0)
                         && $g_current_user->isWebmaster()
                         && strlen($row['usr_login_name']) > 0
                         && strlen($row['email']) > 0
-                        && $g_preferences['enable_system_mails'] == 1)
+                        && $g_preferences['enable_system_mails'] == 1
+                        && $row['usr_id'] != $g_current_user->getValue("usr_id"))
                         {
                             echo "
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=5\"><img
