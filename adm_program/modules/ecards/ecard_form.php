@@ -568,6 +568,10 @@ $javascript='
 			}
 			xmlHttp.onreadystatechange=function()
 			{
+				if(xmlHttp.readyState==1)
+				{
+					document.getElementById(divId).innerHTML = "Inhalt wird geladen - Bitte warten!";
+				}
 				if(xmlHttp.readyState==4)
 				{
 					document.getElementById(divId).innerHTML = xmlHttp.responseText;
