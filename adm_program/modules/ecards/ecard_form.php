@@ -31,7 +31,6 @@ $templates 					= getfilenames(THEME_SERVER_PATH. "/ecard_templates/");
 $template 					= THEME_SERVER_PATH. "/ecard_templates/";
 $msg_error_1				= "ecard_send_error";
 $msg_error_2 				= "ecard_feld_error";
-$bbcode_enable				= false;
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_ecard_module'] != 1)
@@ -169,14 +168,6 @@ if(isset($bild_url))
 	$propotional_size_card	= getPropotionalSize($width, $height, $g_preferences['ecard_card_picture_width'], $g_preferences['ecard_card_picture_height']);
 	$propotional_size_view	= getPropotionalSize($width, $height, $g_preferences['ecard_view_width'], $g_preferences['ecard_view_height']);
 }
-if($g_preferences['enable_bbcode'] == 1)
-{
-	$bbcode_enable_enable = true;
-}
-else
-{
-	$bbcode_enable_enable = false;
-}
 
 // ruf die Funktion auf die alle Post und Get Variablen parsed
 getVars();
@@ -210,7 +201,7 @@ if (! empty($submit_action))
 			{
 				array_push($email_versand_liste,array($ecard["name_recipient"],$ecard["email_recipient"]));
 				$email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"],$bbcode_enable);
+				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"],$g_preferences['enable_bbcode']);
 				$result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],$email_versand_liste_cc);
 				// Wenn die Grußkarte erfolgreich gesendet wurde
 				if ($result)
@@ -257,25 +248,40 @@ if (! empty($submit_action))
 				{
 					if($i<1)
 					{
-						$firstvalue_name  = "Rolle: \"".$row->rol_name."\"";
+						$firstvalue_name  = "Rolle: ".$row->rol_name;
 						$firstvalue_email = "-";
 
 					}
-					array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
+					if($row->first_name != "" && $row->last_name != "" && $row->email !="")
+					{
+						array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
+					}
 					$i++;
 				}
 				$email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$firstvalue_name,$firstvalue_email,$bbcode_enable);
-				$result = sendEcard($ecard,$ecard_html_data,$firstvalue_name,$firstvalue_email,$email_versand_liste_cc);
-				// Wenn die Grußkarte erfolgreich gesendet wurde
-				if ($result)
-				{
-					$ecard_send = true;
-				}
-				// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
-				else
-				{
-					$error_msg = $msg_error_1;
+				$ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$firstvalue_name,$firstvalue_email,$g_preferences['enable_bbcode']);
+				$b=0;
+				foreach($email_versand_liste as $item)
+				{						
+					if($b<1)
+					{
+						$result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],$email_versand_liste_cc);
+					}
+					else
+					{
+						$result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],array());
+					}
+					// Wenn die Grußkarte erfolgreich gesendet wurde
+					if ($result)
+					{
+						$ecard_send = true;
+					}
+					// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
+					else
+					{
+						$error_msg = $msg_error_1;
+					}
+					$b++;				
 				}
 
 			}
@@ -577,7 +583,14 @@ $javascript='
 		}
 		function getMenuRecepientName()
 		{
-			macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id=\'+ document.getElementById(ecardformid).rol_id.value , \'dropdownmenu\' );
+			if(document.getElementById(ecardformid).rol_id.value != "externMail")
+			{
+				macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id=\'+ document.getElementById(ecardformid).rol_id.value , \'dropdownmenu\' );
+			}
+			else
+			{
+				getExtern()
+			}
 		}
 		function getMenuRecepientNameEmail(usr_id)
 		{
@@ -645,8 +658,8 @@ $javascript='
 				var data	= \'<div id="\'+ [now_recipients] +\'">\';
 				data += \'<table id="table_\'+ [now_recipients] +\'" border="0" summary="data\'+ [now_recipients] +\'">\';
 				data += \'<tr>\';
-				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[name_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td>\';
-				data += \'<td style="width:150px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td><td><span class="iconTextLink"><a href="javascript:delContent(\'+ [now_recipients] +\')"><img src="'.THEME_PATH.'/icons/delete.png" alt="Inhalt löschen" \/><\/a><\/span><\/td>\';
+				data += \'<td style="width:150px;"><input name="ecard[name_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td>\';
+				data += \'<td style="width:200px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 200px;" value="" type="text" /><\/td><td><span class="iconTextLink"><a href="javascript:delRecipient(\'+ [now_recipients] +\')"><img src="'.THEME_PATH.'/icons/cross.png" alt="Inhalt löschen" \/><\/a><\/span><\/td>\';
 				data += \'<\/tr><\/table>\';
 				data += \'<\/div>\';
 				var saved_data = new Array();
@@ -674,13 +687,21 @@ $javascript='
 				document.getElementById(ecardformid)["ecard[email_ccrecipient_"+[id]+"]"].value = "";
 			}
 		}
-		function delRecipient()
+		function delRecipient(id)
 		{
 			if (now_recipients > 0)
 			{
 
 				var d = document.getElementById(\'ccrecipientContainer\');
-				var olddiv = document.getElementById(now_recipients);
+				var olddiv = "";
+				if(typeof(id) == "number")
+				{
+					var olddiv = document.getElementById(id);
+				}
+				else
+				{
+				    var olddiv = document.getElementById(now_recipients );
+				}
 				d.removeChild(olddiv);
 				now_recipients = now_recipients - 1;
 			}
@@ -756,7 +777,7 @@ $javascript='
 				document.getElementById(externdiv).style.display = \'none\';
 				document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recipient]" value="< Empfänger E-Mail >" /><input type="hidden" name="ecard[name_recipient]"  value="< Empfänger Name >" />\';
 				getMenu();
-				document.getElementById(switchdiv).innerHTML = \'<a href="javascript:getExtern();">externer Empfänger<\/a>\';
+				document.getElementById(switchdiv).innerHTML = \'&nbsp;\';
 			}
 			else if(document.getElementById(basedropdiv).style.display == "block")
 			{
@@ -969,7 +990,6 @@ if (empty($submit_action))
                             else
                             {
 							   echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
-										 <a href="javascript:getExtern()">externer Empfänger</a>
 								     </div>
 									 <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
 									     <script type="text/javascript">getMenu();</script>
@@ -992,17 +1012,16 @@ if (empty($submit_action))
 						<dl>
 							<dt>Weitere Empfänger:</dt>
 							<dd>
-								<table summary="TableccContainer" border="0">
+								<table summary="TableccContainer" border="0" >
 									<tr>
-										<td style="width:150px;" align="center">Name</td>
-										<td style="width:150px;" align="center">Email</td>
+										<td style="width:150px;" align="left">Name</td>
+										<td style="width:200px; padding-left:14px;" align="left">Email</td>
 									</tr>
 								</table>
-								<div id="ccrecipientContainer" style="width:490px; border:0px;"></div>
+								<div id="ccrecipientContainer" style="width:490px; border:0px;" align="left"></div>
 								<table summary="TableCCRecipientSettings" border="0">
 										<tr>
-											<td align="center" style="padding-left:10px;"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="Empfänger hinzufügen" /></a><a href="javascript:addRecipient()">Empfänger hinzufügen</a></span></td>
-											<td align="center" style="padding-left:10px;"><span class="iconTextLink"><a href="javascript:delRecipient()"><img src="'. THEME_PATH.'/icons/delete.png" alt="Empfänger löschen" /></a><a href="javascript:delRecipient()">Empfänger löschen</a></span></td>
+											<td align="left"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="Empfänger hinzufügen" /></a><a href="javascript:addRecipient()">Empfänger hinzufügen</a></span></td>
 										</tr>
 								</table>
 							</dd>
@@ -1076,12 +1095,9 @@ if (empty($submit_action))
                                     		src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
                                 		<a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img"
 											src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
-									</div>
-		                            <div>
 		                                <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
 		                                    src="'. THEME_PATH. '/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
-		                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe"
-		                                    onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\')" onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" onmouseout="ajax_hideTooltip()" />
+		                                <a class="iconLink" href="javascript:window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\');" onmouseover="javascript:ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" onmouseout="javascript:ajax_hideTooltip()"><img src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe" /></a>
 		                            </div>
 								</div>
 							</dd>
