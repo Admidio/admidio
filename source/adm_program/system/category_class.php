@@ -86,7 +86,7 @@ class Category extends TableAccess
 
             $row = $this->db->fetch_array();
 
-            $this->setValue("cat_sequence", $row['count']);
+            $this->setValue("cat_sequence", $row['count'] + 1);
             
             if($this->db_fields['cat_org_id'] == 0)
             {
