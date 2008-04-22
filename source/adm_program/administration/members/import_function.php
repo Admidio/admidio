@@ -47,6 +47,12 @@ $_SESSION["rol_id"]           = $_POST["rol_id"];
 $_SESSION["user_import_mode"] = $_POST["user_import_mode"];
 $_SESSION["file_lines"]       = file($_FILES['userfile']['tmp_name']);
 
+// Daten der Datei erst einmal in UTF8 konvertieren, damit es damit spaeter keine Probleme gibt
+foreach($_SESSION["file_lines"] as $key => $value)
+{
+    $_SESSION["file_lines"][$key] = utf8_encode($value);
+}
+
 // CSV-Import (im Moment gibt es nur diesen, spaeter muss hier dann unterschieden werden)
 $location = "Location: $g_root_path/adm_program/administration/members/import_csv_config.php";
 header($location);

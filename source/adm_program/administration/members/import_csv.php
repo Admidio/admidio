@@ -67,7 +67,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         // dieser dann den Wert zuordnen
         foreach($user->db_user_fields as $key => $value)
         {
-            if($col_key > 0 && $col_key == $_POST['usf-'. $value['usf_id']])
+            if(strlen($_POST['usf-'. $value['usf_id']]) > 0 && $col_key == $_POST['usf-'. $value['usf_id']])
             {
                 // importiertes Feld merken
                 if(!isset($imported_fields[$value['usf_id']]))
