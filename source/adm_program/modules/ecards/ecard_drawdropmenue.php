@@ -22,10 +22,12 @@ require_once("../../system/common.php");
 if ($g_valid_login && isset($_GET['base']) =="1")
 {
 		global $g_current_user;
-	echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:getMenuRecepientName()" style="width:190px;">';
+	echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:getMenuRecepientName()">';
 	if (isset($form_values['rol_id']) == "")
 	{
 		echo '<option value="" selected="selected" disabled="disabled">- Bitte w&auml;hlen -</option>';
+		echo '<optgroup label="Anderer Empf&auml;nger">';
+		echo '<option value="externMail" >Externer Empf&auml;nger</option>';
 	}
 	
 	if ($g_valid_login)
