@@ -309,15 +309,22 @@ function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$c
 	
 	if (preg_match_all("/(<img.*src=\")(.*)(\".*>)/Uim", $ecard_html_data, $matchArray)) 
 	{
+		$matchArray[2] = DoppelteWerteEntfernen($matchArray[2]);
+		$matchArray[0] = DoppelteWerteEntfernen($matchArray[0]);
 		for ($i=0; $i < count($matchArray[0]); ++$i) 
 		{	
 			$tmp_ext  = substr(strrchr($matchArray[2][$i], '.'), 1);
 			$tmp_img_name_array  = explode('/',$matchArray[2][$i]);
 			$tmp_img_name = $tmp_img_name_array[count($tmp_img_name_array)-1];	
 			$tmp_img_name_tmp = explode('?',$tmp_img_name);
-			$tmp_img_name = $tmp_img_name_tmp[0];
+			$tmp_img_name = $tmp_img_name_tmp[0];			
 			$tmp_ext_tmp = explode('?',$tmp_ext);
 			$tmp_ext = $tmp_ext_tmp[0];
+			if($tmp_ext == "php")
+			{
+				$tmp_ext = "jpg";
+				$tmp_img_name = str_replace("photo_show.php","picture.$tmp_ext",$tmp_img_name_tmp[0]); 
+			}
 			if($tmp_img_name != "none.jpg" && $tmp_img_name != "")
 			{
 				$uid = md5(uniqid($tmp_img_name.time()));
@@ -329,6 +336,19 @@ function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$c
 	$email->setText($ecard_html_data);
 	$email->setDataAsHtml();
 	return $email->sendEmail();
+}
+function DoppelteWerteEntfernen($AlterArray)
+{
+    $AlterArray = array_unique($AlterArray);
+    $i = 0;
+
+    foreach($AlterArray as $Wert)
+    {
+        $NeuerArray[$i] = $Wert;
+        $i++;
+    }
+
+    return $NeuerArray;
 }
 // Diese Funktion ueberprueft den uebergebenen String auf eine gueltige E-mail Addresse und gibt True oder False zurueck
 // Uebergabe
