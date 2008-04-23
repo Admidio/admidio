@@ -631,10 +631,16 @@ echo "
             </div>
 
             <div class=\"groupBoxBody\" id=\"dependancies_body\">  
-                <div style=\"margin-top: 6px;\">
-                    <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der Rolle <b>".$role->getValue("rol_name")."</b> sein!</p>
+                <div style=\"margin-top: 6px;\">";
+                    $rolename_var = "neuen Rolle";
+                    if($role->getValue("rol_name")!="")
+                    {
+                        $rolename_var = "Rolle <b>".$role->getValue("rol_name")."</b>";
+                    }
+                    echo"
+                    <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der ".$rolename_var." sein!</p>
                     <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen 
-                    Rolle Mitglied in der Rolle <b>".$role->getValue("rol_name")."</b>. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften 
+                    Rolle Mitglied der ".$rolename_var.". Beim Entfernen einer Abhängigkeit werden Mitgliedschaften 
                     nicht aufgehoben!</p>
                     <div style=\"text-align: left; float: left;\">";
                         // holt eine Liste der ausgewählten Rolen
