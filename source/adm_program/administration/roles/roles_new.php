@@ -620,92 +620,90 @@ echo "
                 </ul>
             </div>
         </div>";
-				
-        echo "<div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;";
-        if($role->getValue("rol_max_members") > 0) 
-        	echo "visibility:hidden";
-        echo "\">
-            <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','". THEME_PATH. "')\"><img
-                id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
-            </div>
-
-            <div class=\"groupBoxBody\" id=\"dependancies_body\">  
-                <div style=\"margin-top: 6px;\">";
-                    $rolename_var = "neuen Rolle";
-                    if($role->getValue("rol_name")!="")
-                    {
-                        $rolename_var = "Rolle <b>".$role->getValue("rol_name")."</b>";
-                    }
-                    echo"
-                    <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der ".$rolename_var." sein!</p>
-                    <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen 
-                    Rolle Mitglied der ".$rolename_var.". Beim Entfernen einer Abhängigkeit werden Mitgliedschaften 
-                    nicht aufgehoben!</p>
-                    <div style=\"text-align: left; float: left;\">";
-                        // holt eine Liste der ausgewählten Rolen
-                        $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
-
-                        // Alle Rollen auflisten, die der Benutzer sehen darf
-                        $sql = "SELECT * 
-                                  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                 WHERE rol_valid  = 1
-                                   AND rol_cat_id = cat_id
-                                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                                 ORDER BY rol_name ";
-                        $allRoles = $g_db->query($sql);
-
-                        if($childRoles == -1)
-                            $noChildRoles = true;
-                        else
-                            $noChildRoles = false;
-
-                        $childRoleObjects = array();
-
-                        echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/delete.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
-                        <div>
-                            <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
-                                while($row = $g_db->fetch_object($allRoles))
-                                {
-                                    if(in_array($row->rol_id,$childRoles)  )
-                                        $childRoleObjects[] = $row;
-                                    elseif ($row->rol_id == $req_rol_id)
-                                        continue;
-                                    else
-                                    echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
-                                }
-                            echo "</select>
-                        </div>
-                    </div>
-					<div style=\"float: left;\" class=\"verticalIconList\">
-						<ul>
-                            <li>
-								<a class=\"iconLink\" href=\"javascript:hinzufuegen()\">
-									<img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzuf&uuml;gen\" title=\"Rolle hinzuf&uuml;gen\" />
-								</a>
-							</li>
-                            <li>
-								<a class=\"iconLink\" href=\"javascript:entfernen()\">
-									<img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Rolle entfernen\" title=\"Rolle entfernen\" />
-								</a>
-							</li>
-						</ul>
-                    </div>
-					<div>
-                        <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/ok.png\" alt=\"abh&auml;ngig\" title=\"abh&auml;ngig\" />abh&auml;ngig</div>
-                        <div>
-                            <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
-                                foreach ($childRoleObjects as $childRoleObject)
-                                {
-                                    echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
-                                }
-                            echo "</select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>";
-                           
+		if($role->getValue("rol_max_members") == 0)
+		{ 		
+	        echo "<div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
+	            <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
+	                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','". THEME_PATH. "')\"><img
+	                id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
+	            </div>
+	
+	            <div class=\"groupBoxBody\" id=\"dependancies_body\">  
+	                <div style=\"margin-top: 6px;\">";
+	                    $rolename_var = "neuen Rolle";
+	                    if($role->getValue("rol_name")!="")
+	                    {
+	                        $rolename_var = "Rolle <b>".$role->getValue("rol_name")."</b>";
+	                    }
+	                    echo"
+	                    <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der ".$rolename_var." sein!</p>
+	                    <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen 
+	                    Rolle Mitglied der ".$rolename_var.". Beim Entfernen einer Abhängigkeit werden Mitgliedschaften 
+	                    nicht aufgehoben!</p>
+	                    <div style=\"text-align: left; float: left;\">";
+	                        // holt eine Liste der ausgewählten Rolen
+	                        $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
+	
+	                        // Alle Rollen auflisten, die der Benutzer sehen darf
+	                        $sql = "SELECT * 
+	                                  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+	                                 WHERE rol_valid  = 1
+	                                   AND rol_cat_id = cat_id
+	                                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+	                                 ORDER BY rol_name ";
+	                        $allRoles = $g_db->query($sql);
+	
+	                        if($childRoles == -1)
+	                            $noChildRoles = true;
+	                        else
+	                            $noChildRoles = false;
+	
+	                        $childRoleObjects = array();
+	
+	                        echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/delete.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
+	                        <div>
+	                            <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
+	                                while($row = $g_db->fetch_object($allRoles))
+	                                {
+	                                    if(in_array($row->rol_id,$childRoles)  )
+	                                        $childRoleObjects[] = $row;
+	                                    elseif ($row->rol_id == $req_rol_id)
+	                                        continue;
+	                                    else
+	                                    echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
+	                                }
+	                            echo "</select>
+	                        </div>
+	                    </div>
+						<div style=\"float: left;\" class=\"verticalIconList\">
+							<ul>
+	                            <li>
+									<a class=\"iconLink\" href=\"javascript:hinzufuegen()\">
+										<img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzuf&uuml;gen\" title=\"Rolle hinzuf&uuml;gen\" />
+									</a>
+								</li>
+	                            <li>
+									<a class=\"iconLink\" href=\"javascript:entfernen()\">
+										<img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Rolle entfernen\" title=\"Rolle entfernen\" />
+									</a>
+								</li>
+							</ul>
+	                    </div>
+						<div>
+	                        <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/ok.png\" alt=\"abh&auml;ngig\" title=\"abh&auml;ngig\" />abh&auml;ngig</div>
+	                        <div>
+	                            <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
+	                                foreach ($childRoleObjects as $childRoleObject)
+	                                {
+	                                    echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
+	                                }
+	                            echo "</select>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>";
+		}                   
 
         if($req_rol_id > 0 && $role->getValue("rol_usr_id_change") > 0)
         {
