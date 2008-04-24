@@ -12,7 +12,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("search_parser_class.php");
+require("../../system/condition_parser_class.php");
 
 $_SESSION['mylist_request'] = $_REQUEST;
 
@@ -146,8 +146,12 @@ foreach($_POST as $key => $value)
                 $type = "string";
             }
             
-            $parser    = new CParser;
+            $parser    = new CConditionParser;
             $sql_where = $sql_where. $parser->makeSqlStatement($value, $act_field, $type);
+            if($parser->error() < 0)
+            {
+                $g_message->show("mylist_condition");
+            }
         }
     }
     else
@@ -177,7 +181,6 @@ if(strlen($sql_orderby) > 0)
 {
     $main_sql = $main_sql. ", ". $sql_orderby;
 }
-
 // SQL-Statement in Session-Variable schreiben
 $_SESSION['mylist_sql'] = $main_sql;
 

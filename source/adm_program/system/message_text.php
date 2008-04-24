@@ -109,6 +109,10 @@ $message_text = array(
 
     "logout" =>
         "Du wurdest erfolgreich abgemeldet.",
+        
+    "mylist_condition" =>
+        "Bei der Verarbeitung der Bedingungen ist ein Fehler aufgetreten.<br /><br />
+        Prüfe bitte, ob die Syntax bei allen Bedingungen korrekt ist.",
 
     "module_disabled" =>
         "Dieses Modul ist nicht freigegeben.",
