@@ -9,12 +9,15 @@
  *
  *****************************************************************************/
 
-class CParser
+require_once(SERVER_PATH. "/adm_program/system/date.php");
+ 
+class CConditionParser
 {
     var $m_src;
     var $m_dest;
     var $m_str_arr;   // m_src aufgesplittet in ein Array
     var $m_count;     // aktueller interne Position in m_str_arr -Array
+    var $m_error;     // enthaelt den Fehlercode, ansonsten 0
 
     // Ersetzt alle Bedingungen der User-Eingabe durch eine Standardbedingung
     // str_src = String mit der Bedingung, die der User eingegeben hat
@@ -62,6 +65,7 @@ class CParser
         $b_new_cond   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
         $b_math_start = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
         $date         = "";     // Variable speichert bei Datumsfeldern das gesamte Datum
+        $m_error      = 0;
 
         $this->m_src     = $this->makeStandardSrc($str_src);
         $this->m_str_arr = strsplit($this->m_src);
@@ -90,6 +94,7 @@ class CParser
             $this->m_dest = " AND ( $field_name ";
         }
 
+        // Zeichen fuer Zeichen aus dem Bedingungsstring wird hier verarbeitet
         for($this->m_count = 0; $this->m_count < strlen($this->m_src); $this->m_count++)
         {
             if($this->m_str_arr[$this->m_count] == "&"
@@ -122,6 +127,7 @@ class CParser
             }
             else
             {
+                // Verleich der Werte wird hier verarbeitet
                 if($this->m_str_arr[$this->m_count] == "<"
                 || $this->m_str_arr[$this->m_count] == ">"
                 || $this->m_str_arr[$this->m_count] == "!"
@@ -158,11 +164,16 @@ class CParser
                         {
                             $this->m_dest = $this->m_dest. "' ";
                         }
-                        elseif($field_type == "date"
-                        &&     strlen($date) >= 8 )
+                        elseif($field_type == "date")
                         {
-                            $dateArray    = split("[- :.]", $date);
-                            $this->m_dest = $this->m_dest. "'$dateArray[2]-$dateArray[1]-$dateArray[0]'";
+                            if(strlen($this->getFormatDate($date)) > 0)
+                            {
+                                $this->m_dest = $this->m_dest. $this->getFormatDate($date);
+                            }
+                            else
+                            {
+                                $this->m_error = -1;
+                            }
                             $date = "";
                         }
                         $b_new_cond = true;
@@ -206,11 +217,16 @@ class CParser
         }
 
         // Falls als letztes ein Datum verglichen wurde, dann dieses noch einbauen
-        if($field_type == "date"
-        && strlen($date) >= 8 )
+        if($field_type == "date")
         {
-            $dateArray    = split("[- :.]", $date);
-            $this->m_dest = $this->m_dest. "'$dateArray[2]-$dateArray[1]-$dateArray[0]'";
+            if(strlen($this->getFormatDate($date)) > 0)
+            {
+                $this->m_dest = $this->m_dest. $this->getFormatDate($date);
+            }
+            else
+            {
+                $this->m_error = -1;
+            }
         }
 
         if($field_type == "string")
@@ -222,6 +238,39 @@ class CParser
         $this->m_dest = $this->m_dest. ") ";
 
         return $this->m_dest;
+    }
+    
+    // liefert das Datum fertig formatiert fuer das SQL-Statement 'YYYY-MM-DD'
+    function getFormatDate($date)
+    {
+        $format_date = "";
+        
+        if(strlen($date) <= 10 && strlen($date) >= 8)
+        {
+            $dateArray    = split("[- :.]", $date);
+            // zweistelliges Jahr in 4 stelliges Jahr umwandeln
+            if(strlen($dateArray[2]) == 2)
+            {
+                if($dateArray[2] < 30)
+                {
+                    $dateArray[2] = "20". $dateArray[2];
+                }
+                else
+                {
+                    $dateArray[2] = "19". $dateArray[2];
+                }
+            }
+            if(dtCheckDate($dateArray[0]. ".". $dateArray[1]. ".". $dateArray[2]))
+            {
+                $format_date = "'$dateArray[2]-$dateArray[1]-$dateArray[0]'";
+            }
+        }
+        return $format_date;
+    }
+    
+    function error()
+    {
+        return $this->m_error;
     }
 }
 ?>
