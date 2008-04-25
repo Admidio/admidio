@@ -482,7 +482,7 @@ echo "
                                     	<span class="iconTextLink">
 											<a style="cursor:pointer;" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=260,left=310,top=200\')">
 												<img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" />
-											<a />
+											</a>
 								            <a href="" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=260,left=310,top=200\')">Passwort ändern</a>
 								        </span>
                                     </dd>
