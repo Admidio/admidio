@@ -219,12 +219,14 @@ switch($req_type)
         $usf_zip_code   = $g_current_user->getProperty("PLZ", "usf_id");
         $usf_city       = $g_current_user->getProperty("Ort", "usf_id");
         $usf_phone      = $g_current_user->getProperty("Telefon", "usf_id");
+        $usf_mobile     = $g_current_user->getProperty("Handy", "usf_id");
         $usf_email      = $g_current_user->getProperty("E-Mail", "usf_id");
         
         $main_sql = "SELECT mem_leader, usr_id, row0id$usf_last_name.usd_value, row1id$usf_first_name.usd_value, 
                             row2id$usf_birthday.usd_value, row3id$usf_address.usd_value, 
                             row4id$usf_zip_code.usd_value, row5id$usf_city.usd_value,
-							row6id$usf_phone.usd_value, row7id$usf_email.usd_value
+							row6id$usf_phone.usd_value, row7id$usf_mobile.usd_value,
+							row8id$usf_email.usd_value
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                      LEFT JOIN ". TBL_USER_DATA ." row0id$usf_last_name
                        ON row0id$usf_last_name.usd_usr_id = usr_id
@@ -247,9 +249,12 @@ switch($req_type)
                      LEFT JOIN ". TBL_USER_DATA ." row6id$usf_phone
                        ON row6id$usf_phone.usd_usr_id = usr_id
                       AND row6id$usf_phone.usd_usf_id = $usf_phone
-        			 LEFT JOIN ". TBL_USER_DATA ." row7id$usf_email
-                       ON row7id$usf_email.usd_usr_id = usr_id
-                      AND row7id$usf_email.usd_usf_id = $usf_email
+                     LEFT JOIN ". TBL_USER_DATA ." row7id$usf_mobile
+                       ON row7id$usf_mobile.usd_usr_id = usr_id
+                      AND row7id$usf_mobile.usd_usf_id = $usf_mobile
+        			 LEFT JOIN ". TBL_USER_DATA ." row8id$usf_email
+                       ON row8id$usf_email.usd_usr_id = usr_id
+                      AND row8id$usf_email.usd_usf_id = $usf_email
 					 WHERE rol_id     = $req_rol_id
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
