@@ -109,7 +109,7 @@ class Message
     function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "", $msg_includes = true)
     {
         // noetig, da dies bei den includes benoetigt wird
-        global $g_forum, $g_layout, $g_db;
+        global $g_forum, $g_layout, $g_db, $g_adm_con;
         global $g_valid_login, $g_root_path, $g_preferences, $g_homepage;
         global $g_organization, $g_current_organization, $g_current_user;
         
