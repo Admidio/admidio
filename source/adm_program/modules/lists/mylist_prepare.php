@@ -81,7 +81,7 @@ foreach($_POST as $key => $value)
                 $act_field = $value;
             }
 
-            $act_field_name = $value;   // im Gegensatz zu $act_field steht hier IMMER der Feldname drin
+            $act_field_id = $value;   // im Gegensatz zu $act_field steht hier IMMER der Feldname drin
             $sql_select = $sql_select. $act_field;
         }
         elseif(substr_count($key, "sort") > 0)
@@ -98,18 +98,7 @@ foreach($_POST as $key => $value)
             {
                 // ein benutzerdefiniertes Feld
                 
-                // Datentyp ermitteln
-                $sql = "SELECT usf_type 
-                          FROM ". TBL_USER_FIELDS. ", ". TBL_CATEGORIES. "
-                         WHERE usf_cat_id = cat_id
-                           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                               OR cat_org_id IS NULL )
-                           AND usf_id     = '$act_field_name' ";
-                $result = $g_db->query($sql);
-                
-                $row = $g_db->fetch_object($result);
-                
-                if($row->usf_type == "CHECKBOX")
+                if($g_current_user->getPropertyById($act_field_id, "usf_type") == "CHECKBOX")
                 {
                     $type = "checkbox";
                     $value = strtoupper($value);
@@ -124,11 +113,11 @@ foreach($_POST as $key => $value)
                         $value = "0";
                     }
                 }
-                elseif($row->usf_type == "NUMERIC")
+                elseif($g_current_user->getPropertyById($act_field_id, "usf_type") == "NUMERIC")
                 {
                     $type = "int";
                 }
-                elseif($row->usf_type == "DATE")
+                elseif($g_current_user->getPropertyById($act_field_id, "usf_type") == "DATE")
                 {
                     $type = "date";
                 }
@@ -144,6 +133,10 @@ foreach($_POST as $key => $value)
             elseif($act_field == "usr_login_name")
             {
                 $type = "string";
+            }
+            elseif($act_field == "usr_photo")
+            {
+                $type = "";
             }
             
             // Bedingungen aus dem Bedingungsfeld als SQL darstellen
