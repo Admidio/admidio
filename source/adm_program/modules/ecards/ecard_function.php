@@ -309,8 +309,8 @@ function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$c
 	
 	if (preg_match_all("/(<img.*src=\")(.*)(\".*>)/Uim", $ecard_html_data, $matchArray)) 
 	{
-		$matchArray[2] = DoppelteWerteEntfernen($matchArray[2]);
-		$matchArray[0] = DoppelteWerteEntfernen($matchArray[0]);
+		$matchArray[0] = deleteDoubleEntries($matchArray[0]);
+		$matchArray[2] = deleteDoubleEntries($matchArray[2]);
 		for ($i=0; $i < count($matchArray[0]); ++$i) 
 		{	
 			$tmp_ext  = substr(strrchr($matchArray[2][$i], '.'), 1);
@@ -337,18 +337,21 @@ function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$c
 	$email->setDataAsHtml();
 	return $email->sendEmail();
 }
-function DoppelteWerteEntfernen($AlterArray)
+// Diese Funktion eleminiert in einem einfachen Array doppelte Einträge
+// Uebergabe
+//		$array	.. Das zu dursuchende Array()
+function deleteDoubleEntries($array)
 {
-    $AlterArray = array_unique($AlterArray);
+    $array = array_unique($array);
+	$new_array = array();
     $i = 0;
-
-    foreach($AlterArray as $Wert)
+    foreach($array as $item)
     {
-        $NeuerArray[$i] = $Wert;
+        $new_array[$i] = $item;
         $i++;
     }
 
-    return $NeuerArray;
+    return $new_array;
 }
 // Diese Funktion ueberprueft den uebergebenen String auf eine gueltige E-mail Addresse und gibt True oder False zurueck
 // Uebergabe
