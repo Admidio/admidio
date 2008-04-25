@@ -156,10 +156,7 @@ $g_layout['header'] = '
 			// neue Spalte zur Einstellung der Sortierung
 			var selectAsc  = \'\';
 			var selectDesc = \'\';
-			if(actFieldCount == 0)
-			{
-				selectAsc = \' selected="selected" \';
-			}
+			
             if(arr_default_fields[actFieldCount])
             {
                 if(arr_default_fields[actFieldCount][\'sort\'] == "ASC")
@@ -171,6 +168,11 @@ $g_layout['header'] = '
                     selectDesc = \' selected="selected" \';
                 }
             }
+            else if(actFieldCount == 0)
+			{
+				selectAsc = \' selected="selected" \';
+			}
+			
 			var newCellOrder = newTableRow.insertCell(-1);
 			newCellOrder.innerHTML = "<select size=\"1\" name=\"sort" + actFieldCount + "\">" +
 			        "<option value=\"\">&nbsp;</option>" +
