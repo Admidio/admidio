@@ -1101,7 +1101,7 @@ if (empty($submit_action))
 											src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
 		                                <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
 		                                    src="'. THEME_PATH. '/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
-		                                <a class="iconLink" href="javascript:window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\');" onmouseover="javascript:ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" onmouseout="javascript:ajax_hideTooltip()"><img src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe" /></a>
+		                                <a class="iconLink" href="javascript:popup_win(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\');" onmouseover="javascript:ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" onmouseout="javascript:ajax_hideTooltip();"><img src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="Hilfe" /></a>
 		                            </div>
 								</div>
 							</dd>
