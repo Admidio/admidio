@@ -122,7 +122,7 @@ $g_layout['header'] = '
 			
 			// neue Spalte zur Auswahl des Profilfeldes
 			var newCellField = newTableRow.insertCell(-1);
-            htmlCboFields = "<select size=\"1\" name=\"column" + actFieldCount + "\">" +
+            htmlCboFields = "<select size=\"1\" id=\"column" + actFieldCount + "\" name=\"column" + actFieldCount + "\">" +
 					"<option value=\"\"></option>";
 			for(var counter = 0; counter < arr_user_fields.length; counter++)
 			{
@@ -174,7 +174,7 @@ $g_layout['header'] = '
 			}
 			
 			var newCellOrder = newTableRow.insertCell(-1);
-			newCellOrder.innerHTML = "<select size=\"1\" name=\"sort" + actFieldCount + "\">" +
+			newCellOrder.innerHTML = "<select size=\"1\" id=\"sort" + actFieldCount + "\" name=\"sort" + actFieldCount + "\">" +
 			        "<option value=\"\">&nbsp;</option>" +
 			        "<option value=\"ASC\" " + selectAsc + ">A bis Z</option>" +
 			        "<option value=\"DESC\" " + selectDesc + ">Z bis A</option>" +
@@ -187,10 +187,12 @@ $g_layout['header'] = '
                 if(arr_default_fields[actFieldCount][\'condition\'])
                 {
                     condition = arr_default_fields[actFieldCount][\'condition\'];
+                    condition = condition.replace(/{/g, "<");
+					condition = condition.replace(/}/g, ">");
                 }
             }            
 			var newCellConditions = newTableRow.insertCell(-1);
-			newCellConditions.innerHTML = "<input type=\"text\" name=\"condition" + actFieldCount + "\" size=\"15\" maxlength=\"30\" value=\"" + condition + "\" />";
+			newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + actFieldCount + "\" name=\"condition" + actFieldCount + "\" size=\"15\" maxlength=\"30\" value=\"" + condition + "\" />";
 
 			actFieldCount++;
         }
@@ -288,12 +290,28 @@ $g_layout['header'] = '
             $g_layout['header'] .= '
             return default_fields;
         }
+        
+        function send()
+        {
+        	for(var i = 0; i < actFieldCount; i++)
+        	{
+				if(document.getElementById("condition" + i))
+				{
+					var condition = document.getElementById("condition" + i);
+					condition.value = condition.value.replace(/</g, "{");
+					condition.value = condition.value.replace(/>/g, "}");
+				}
+        	}
+        
+			document.getElementById("form_mylist").action  = "'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php";
+			document.getElementById("form_mylist").submit();
+        }
     </script>';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo '
-<form action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
+<form id="form_mylist" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
 <div class="formLayout" id="mylist_form">
     <div class="formHead">Eigene Liste</div>
     <div class="formBody">
@@ -349,7 +367,7 @@ echo '
         <hr />
 
         <div class=\"formSubmit\">
-            <button name=\"anzeigen\" type=\"submit\" value=\"anzeigen\"><img src=\"". THEME_PATH. "/icons/application_view_columns.png\" alt=\"Liste anzeigen\" />&nbsp;Liste anzeigen</button>            
+            <button name=\"anzeigen\" type=\"button\" onclick=\"javascript:send();\" value=\"anzeigen\"><img src=\"". THEME_PATH. "/icons/application_view_columns.png\" alt=\"Liste anzeigen\" />&nbsp;Liste anzeigen</button>            
         </div>
     </div>
 </div>
