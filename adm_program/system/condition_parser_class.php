@@ -11,7 +11,7 @@
 
 require_once(SERVER_PATH. "/adm_program/system/date.php");
  
-class CConditionParser
+class ConditionParser
 {
     var $m_src;
     var $m_dest;
@@ -28,11 +28,11 @@ class CConditionParser
         $this->m_src = strtr($this->m_src, "*", "%");
 
         // gueltiges "ungleich" ist "!"
-        $this->m_src = str_replace("<>", "!", $this->m_src);
-        $this->m_src = str_replace("!=", "!", $this->m_src);
+        $this->m_src = str_replace("<>", " ! ", $this->m_src);
+        $this->m_src = str_replace("!=", " ! ", $this->m_src);
 
         // gueltiges "gleich" ist "="
-        $this->m_src = str_replace("==",     "=",   $this->m_src);
+        $this->m_src = str_replace("==",     " = ",   $this->m_src);
         $this->m_src = str_replace(" LIKE ", " = ", $this->m_src);
         $this->m_src = str_replace(" IS ",   " = ", $this->m_src);
         $this->m_src = str_replace(" IST ",  " = ", $this->m_src);
@@ -40,17 +40,25 @@ class CConditionParser
         // gueltiges "nicht" ist "/"
         $this->m_src = str_replace(" NOT ",   " # ", $this->m_src);
         $this->m_src = str_replace(" NICHT ", " # ", $this->m_src);
+        
+        // gueltiges "kleiner gleich" is "{"
+        $this->m_src = str_replace("<=",   " { ", $this->m_src);
+        $this->m_src = str_replace("=<",   " { ", $this->m_src);
+
+        // gueltiges "groesser gleich" is "{"
+        $this->m_src = str_replace(">=",   " } ", $this->m_src);
+        $this->m_src = str_replace("=>",   " } ", $this->m_src);
 
         // gueltiges "und" ist "&"
         $this->m_src = str_replace(" AND ", " & ", $this->m_src);
         $this->m_src = str_replace(" UND ", " & ", $this->m_src);
-        $this->m_src = str_replace("&&",    "&",   $this->m_src);
-        $this->m_src = str_replace("+",     "&",   $this->m_src);
+        $this->m_src = str_replace("&&",    " & ",   $this->m_src);
+        $this->m_src = str_replace("+",     " & ",   $this->m_src);
 
         // gueltiges "oder" ist "|"
         $this->m_src = str_replace(" OR ",   " | ", $this->m_src);
         $this->m_src = str_replace(" ODER ", " | ", $this->m_src);
-        $this->m_src = str_replace("||",     "|",   $this->m_src);
+        $this->m_src = str_replace("||",     " | ",   $this->m_src);
 
         return $this->m_src;
     }
@@ -131,7 +139,9 @@ class CConditionParser
                 if($this->m_str_arr[$this->m_count] == "<"
                 || $this->m_str_arr[$this->m_count] == ">"
                 || $this->m_str_arr[$this->m_count] == "!"
-                || $this->m_str_arr[$this->m_count] == "=" )
+                || $this->m_str_arr[$this->m_count] == "="
+                || $this->m_str_arr[$this->m_count] == "{"
+                || $this->m_str_arr[$this->m_count] == "}" )
                 {
                     if(!$b_cond_start)
                     {
@@ -143,9 +153,13 @@ class CConditionParser
                     {
                         $this->m_dest = $this->m_dest. " <> ";
                     }
-                    elseif($this->m_str_arr[$this->m_count] == "=")
+                    elseif($this->m_str_arr[$this->m_count] == "{")
                     {
-                        $this->m_dest = $this->m_dest. " <> ";
+                        $this->m_dest = $this->m_dest. " <= ";
+                    }
+                    elseif($this->m_str_arr[$this->m_count] == "}")
+                    {
+                        $this->m_dest = $this->m_dest. " >= ";
                     }
                     else
                     {
@@ -245,7 +259,7 @@ class CConditionParser
     {
         $format_date = "";
         
-        if(strlen($date) <= 10 && strlen($date) >= 8)
+        if(strlen($date) <= 10 && strlen($date) >= 6)
         {
             $dateArray    = split("[- :.]", $date);
             // zweistelliges Jahr in 4 stelliges Jahr umwandeln
@@ -262,10 +276,10 @@ class CConditionParser
             }
             if(dtCheckDate($dateArray[0]. ".". $dateArray[1]. ".". $dateArray[2]))
             {
-                $format_date = "'$dateArray[2]-$dateArray[1]-$dateArray[0]'";
+                $format_date = date("Y-m-d", strtotime("$dateArray[2]-$dateArray[1]-$dateArray[0]"));
             }
         }
-        return $format_date;
+        return "'". $format_date. "'";
     }
     
     function error()

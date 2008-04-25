@@ -146,9 +146,10 @@ foreach($_POST as $key => $value)
                 $type = "string";
             }
             
-            $parser    = new CConditionParser;
+            // Bedingungen aus dem Bedingungsfeld als SQL darstellen
+            $parser    = new ConditionParser;
             $sql_where = $sql_where. $parser->makeSqlStatement($value, $act_field, $type);
-            if($parser->error() < 0)
+            if($parser->error() <> 0)
             {
                 $g_message->show("mylist_condition");
             }
