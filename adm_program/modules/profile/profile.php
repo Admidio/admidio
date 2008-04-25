@@ -265,6 +265,13 @@ echo "
                                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id\"><img
                                     src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Profildaten bearbeiten\" title=\"Profildaten bearbeiten\" /></a>";
                             }
+                            //gleiches gild für das Passwort
+                            if($a_user_id == $g_current_user->getValue("usr_id") || $g_current_user->isWebmaster())
+                            {
+                                echo'<a  class="iconLink" style="cursor:pointer;" onclick="window.open(\'password.php?usr_id='. $a_user_id. '\',\'Titel\',\'width=350,height=260,left=310,top=200\')">
+									<img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" />
+								</a>';
+                            }
                         echo "</div>
                     </div>
                     <div class=\"groupBoxBody\">
