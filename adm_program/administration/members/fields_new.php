@@ -109,7 +109,7 @@ echo "
             <li>
                 <dl>
                     <dt><label for=\"usf_name\">Name:</label></dt>
-                    <dd><input type=\"text\" name=\"usf_name\" id=\"usf_name\" $html_disabled style=\"width: 150px;\" maxlength=\"15\"
+                    <dd><input type=\"text\" name=\"usf_name\" id=\"usf_name\" $html_disabled style=\"width: 150px;\" maxlength=\"30\"
                         value=\"". $user_field->getValue("usf_name"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
