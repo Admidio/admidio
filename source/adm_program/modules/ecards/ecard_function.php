@@ -300,7 +300,7 @@ function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$c
 {
 	$email = new Email();
 	$email->setSender($ecard["email_sender"],$ecard["name_sender"]);
-	$email->setSubject('Grußkarte von '.$ecard["name_sender"].'');
+	$email->setSubject('Nachricht von '.$ecard["name_sender"].'');
 	$email->addRecipient($empfaenger_email,$empfaenger_name);
 	for($i=0;$i<count($cc_empfaenger);$i++)
 	{

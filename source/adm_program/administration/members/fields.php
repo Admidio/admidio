@@ -92,7 +92,7 @@ echo "
     <thead>
         <tr>
             <th colspan=\"2\">Feld<img 
-                class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=field',this);\" onmouseout=\"ajax_hideTooltip()\" /></th>
+                class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=field',this);\" onmouseout=\"ajax_hideTooltip()\" /></th>
             <th>Beschreibung</th>
             <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" /></th>
             <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" title=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" /></th>

@@ -105,9 +105,7 @@ echo "
                 <th>Rolle</th>
                 <th>Beschreibung</th>
                 <th style=\"text-align: center; width: 80px;\">Leiter<img 
-                    class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" 
-                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" 
-                    onmouseout=\"ajax_hideTooltip()\"/>
+                    class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/>
                 </th>
             </tr>
         </thead>";
