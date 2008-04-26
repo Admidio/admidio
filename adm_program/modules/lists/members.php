@@ -422,9 +422,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     <th>Vorname</th>
                     <th>Geburtsdatum</th>
                     <th style=\"text-align: center;\">Leiter<img 
-						class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" 
-						onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" 
-						onmouseout=\"ajax_hideTooltip()\"/></th>
+						class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/></th>
                 </tr>
             </thead>";
 

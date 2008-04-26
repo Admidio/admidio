@@ -339,7 +339,7 @@ echo '
                     <th style=\"width: 37%;\">Feld</th>
                     <th style=\"width: 18%;\">Sortierung</th>
                     <th style=\"width: 27%;\">Bedingung
-                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
                             onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=condition&amp;window=true','Message','width=650,height=400,left=310,top=200,scrollbars=no')\" 
                             onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=condition',this);\" onmouseout=\"ajax_hideTooltip()\"/>
                     </th>

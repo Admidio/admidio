@@ -126,7 +126,7 @@ echo "
     </li>    
     <li>
         <span class=\"iconTextLink\">
-            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
+            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\"  
                 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help',this);\" onmouseout=\"ajax_hideTooltip()\" />   
             <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true','Message','width=600,height=600,left=310,top=200,scrollbars=yes')\">Hilfe</a>

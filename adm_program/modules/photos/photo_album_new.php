@@ -286,9 +286,8 @@ echo "
     </li>
     <li>
         <span class=\"iconTextLink\">
-            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"Hilfe\"
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\"
-                onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
+            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
             <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
     </li>
