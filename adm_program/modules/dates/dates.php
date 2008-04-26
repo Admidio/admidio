@@ -96,7 +96,7 @@ if($g_preferences['enable_bbcode'] == 1)
 }
 
 unset($_SESSION['dates_request']);
-$act_date = date("Y-m-d H:i:s", time());
+$act_date = date("Y-m-d", time());
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -172,8 +172,8 @@ else
     //... ansonsten fuer neue Termine
     else
     {
-        $conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d %H:%i:%s') >= '$act_date'
-                              OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s')   >= '$act_date' ) 
+        $conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d') >= '$act_date'
+                              OR DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$act_date' ) 
                         ORDER BY dat_begin ASC ";
     }
 }
