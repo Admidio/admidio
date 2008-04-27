@@ -96,7 +96,7 @@ if($g_valid_login == 1)
                 <dt>Benutzer:</dt>
                 <dd>
                     <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $g_current_user->getValue("usr_id"). '" 
-                    '. $plg_link_target. ' alt="Profil aufrufen" title="Profil aufrufen">'. $g_current_user->getValue("Vorname"). ' '. $g_current_user->getValue("Nachname"). '</a>
+                    '. $plg_link_target. ' title="Profil aufrufen">'. $g_current_user->getValue("Vorname"). ' '. $g_current_user->getValue("Nachname"). '</a>
                 </dd>
             </dl>
         </li>
