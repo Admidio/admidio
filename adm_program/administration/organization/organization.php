@@ -123,33 +123,94 @@ echo "
 <h1 class=\"moduleHeadline\">Organisationseinstellungen</h1>
 
 <div class=\"formLayout\" id=\"organization_menu\">
-    <div class=\"formBody\"><center>
-        <a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options_big.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations_big.png\" alt=\"Registrierungen\" title=\"Registrierungen\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements_big.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download_big.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo_big.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" title=\"Forum\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook_big.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/smile_big.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Listen\" title=\"Listen\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email_big.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile_big.png\" alt=\"Profil\" title=\"Profil\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
-	&nbsp;
-        <a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
-    </center></div>
+    <div class=\"formBody\">
+    	<table style=\"border-width: 0px; width: 100%; text-align: left;\">
+    	<tr>
+    	<td>
+    	<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
+       	</span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations_small.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements_small.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download_small.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo_small.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
+        </span>
+		</td>
+		</tr>
+		<tr>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum_small.png\" alt=\"Forum\" title=\"Forum\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook_small.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/smile_small.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Listen\" title=\"Listen\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email_small.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a>
+        </span>
+		</td>
+		</tr>
+		<tr>
+		<td>
+		<span class=\"iconTextLink\">
+        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile_small.png\" alt=\"Profil\" title=\"Profil\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
+        </span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+			<a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates_small.png\" alt=\"Termine\" title=\"Termine\" /></a>
+			<a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
+		</span>
+		</td>
+		<td>
+		<span class=\"iconTextLink\">
+			<a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks_small.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
+			<a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
+		</span>
+		</td>
+		</tr>
+		</table>
+    </div>
 </div>
 
 <form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\">
@@ -157,7 +218,8 @@ echo "
     <div class=\"formBody\">
         <div class=\"groupBox\" id=\"general\">
 
-            <div class=\"groupBoxHeadline\">Allgemeine Einstellungen</div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Allgemein\" />
+            	Allgemeine Einstellungen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -414,7 +476,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"register\">
-            <div class=\"groupBoxHeadline\">Einstellungen Registrierung&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/new_registrations_small.png\" alt=\"Registrierung\" />
+            	Einstellungen Registrierung</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -494,7 +557,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"announcement-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Ank&uuml;ndigungsmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/announcements_small.png\" alt=\"Ankündigungen\" />
+            	Einstellungen Ankündigungsmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -541,7 +605,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"download-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Downloadmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/download_small.png\" alt=\"Downloads\" />
+            	Einstellungen Downloadmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -584,7 +649,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"photo-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Fotomodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/photo_small.png\" alt=\"Fotos\" />
+            	Einstellungen Fotomodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -619,7 +685,7 @@ echo "
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.<br /><br />
-						<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning16.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\">&nbsp;
+						<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning16.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
 						Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur f&uuml;r registrierte Benutzer&rdquo;, wird nur der Zugriff &uuml;ber
 						die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt. 		
                     </li>
@@ -773,7 +839,8 @@ echo "
 
          echo"
         <div class=\"groupBox\" id=\"forum\">
-            <div class=\"groupBoxHeadline\">Einstellungen Forum&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/forum_small.png\" alt=\"Forum\" />
+            	Einstellungen Forum</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li> 
@@ -881,7 +948,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"guestbook-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen G&auml;stebuchmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/guestbook_small.png\" alt=\"Gästebuch\" />
+            	Einstellungen Gästebuchmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -994,7 +1062,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"list-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Listen&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Listen\" />
+            	Einstellungen Listen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1035,7 +1104,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"mail-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Mailmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/email_small.png\" alt=\"E-Mails\" />
+            	Einstellungen Mailmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1095,7 +1165,8 @@ echo "
         /**************************************************************************************/
         echo"
         <div class=\"groupBox\" id=\"ecard-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Grußkartenmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/smile_small.png\" alt=\"Grußkarten\" />
+            	Einstellungen Grußkartenmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1378,7 +1449,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"profile-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Profilmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/profile_small.png\" alt=\"Profil\" />
+            	Einstellungen Profilmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1500,7 +1572,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"dates-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Terminmodul</div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/dates_small.png\" alt=\"Termine\" />
+            	Einstellungen Terminmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1564,7 +1637,8 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"links-module\">
-            <div class=\"groupBoxHeadline\">Einstellungen Weblinkmodul&nbsp;&nbsp; </div>
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/weblinks_small.png\" alt=\"Weblinks\" />
+            	Einstellungen Weblinkmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
