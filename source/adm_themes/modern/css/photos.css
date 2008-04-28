@@ -93,6 +93,11 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 	line-height: 0;
 	}
 
+#lightbox img{ 
+	width: auto; 
+	height: auto;
+}
+
 #lightbox a img{ border: none; }
 
 #outerImageContainer{
@@ -101,11 +106,11 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 	width: 250px;
 	height: 250px;
 	margin: 0 auto;
-	}
+}
 
 #imageContainer{
 	padding: 10px;
-	}
+}
 
 #loading{
 	position: absolute;
@@ -115,7 +120,8 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 	width: 100%;
 	text-align: center;
 	line-height: 0;
-	}
+}
+
 #hoverNav{
 	position: absolute;
 	top: 0;
@@ -123,14 +129,20 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 	height: 100%;
 	width: 100%;
 	z-index: 10;
-	}
-#imageContainer>#hoverNav{ left: 0;}
-#hoverNav a{ outline: none;}
+}
+
+#imageContainer>#hoverNav{
+	 left: 0;
+}
+
+#hoverNav a{
+	outline: none;
+}
 
 #prevLink, #nextLink{
 	width: 49%;
 	height: 100%;
-	background: transparent url(../icons/blank.gif) no-repeat; /* Trick IE into showing hover */
+	background:  background-image: url(data:image/gif;base64,AAAA); /* Trick IE into showing hover */
 	display: block;
 	}
 #prevLink { left: 0; float: left;}
@@ -152,7 +164,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 #imageData #imageDetails{ width: 70%; float: left; text-align: left; }	
 #imageData #caption{ font-weight: bold;	}
 #imageData #numberDisplay{ display: block; clear: left; padding-bottom: 1.0em;	}			
-#imageData #bottomNavClose{ width: 113px; float: right;  padding-bottom: 0.7em;	}	
+#imageData #bottomNavClose{ width: 66px; float: right;  padding-bottom: 0.7em;	outline: none;}	
 		
 #overlay{
 	position: absolute;
