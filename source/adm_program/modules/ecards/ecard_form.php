@@ -316,7 +316,7 @@ if($g_preferences['photo_show_mode']==1)
 {
     $g_layout['header'] .= "
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
-        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
+        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects,builder\"></script>
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
         <link rel=\"stylesheet\" href=\"".THEME_PATH."/css/photos.css\" type=\"text/css\" media=\"screen\" />";
 }
