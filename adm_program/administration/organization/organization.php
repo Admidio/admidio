@@ -106,14 +106,49 @@ $g_layout['header'] =  "
         {
 			var layerSetting = document.getElementById(LayerSetting);
             if(document.getElementById(LayerSwith).checked == true && layerSetting)
-            {
-                    layerSetting.innerHTML = '<li><dl><dt><label for=\'forum_db\'>Datenbank:<\/label><\/dt><dd><input type=\'text\' id=\'forum_db\' name=\'forum_db\' style=\'width: 200px;\' maxlength=\'50\' value=\'". $form_values['forum_db']. "\' \/><\/dd><\/dl><\/li>';
+            {				
+					var ElementsArray = Array(\"forum_db\");
+					var ValuesArray = Array();
+					ValuesArray[0] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
+					appendElements(ElementsArray,ValuesArray,layerSetting);
             }
             else if (document.getElementById(LayerSwith).checked == false && layerSetting)
             {
-                    layerSetting.innerHTML = \"<li><dl><dt><label for='forum_srv'>Server:<\/label><\/dt><dd><input type='text' id='forum_srv' name='forum_srv' style='width: 200px;' maxlength='50' value='". $form_values['forum_srv']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_usr'>Username:<\/label><\/dt><dd><input type='text' id='forum_usr' name='forum_usr' style='width: 200px;' maxlength='50' value='". $form_values['forum_usr']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_pw'>Passwort:<\/label><\/dt><dd><input type='password' id='forum_pw' name='forum_pw' style='width: 200px;' maxlength='50' value='". $form_values['forum_pw']. "' \/><\/dd><\/dl><\/li><li><dl><dt><label for='forum_db'>Datenbank:<\/label><\/dt><dd><input type='text' id='forum_db' name='forum_db' style='width: 200px;' maxlength='50' value='". $form_values['forum_db']. "' \/><\/dd><\/dl><\/li>\";
+					var ElementsArray = Array(\"forum_srv\",\"forum_usr\",\"forum_pw\",\"forum_db\");
+					var ValuesArray = Array();
+					ValuesArray[0] = Array(\"Server:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_srv']. "\");
+					ValuesArray[1] = Array(\"User:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_usr']. "\");
+					ValuesArray[2] = Array(\"Passwort:\",\"PASSWORD\",\"200px\",\"50\",\"". $form_values['forum_pw']. "\");
+					ValuesArray[3] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
+					appendElements(ElementsArray,ValuesArray,layerSetting);
             }
         }
+		function appendElements(array,valuesArray,layer)
+		{
+			layer.innerHTML='';
+			for(var i = 0; i < array.length;i++)
+			{
+					var li = document.createElement(\"LI\");
+					var dl = document.createElement(\"DL\");
+					var dt = document.createElement(\"DT\");
+					var dd = document.createElement(\"DD\");
+					var label = document.createElement(\"label\");
+					var input = document.createElement(\"input\");
+					label.appendChild(document.createTextNode(valuesArray[i][0]));
+					input.type=valuesArray[i][1];
+					input.id = array[i];
+					input.name = array[i];
+					input.style.width = valuesArray[i][2];
+					input.maxlength = valuesArray[i][3];
+					input.value = valuesArray[i][4];
+					li.appendChild(dl);
+					dl.appendChild(dt);
+					dl.appendChild(dd);
+					dd.appendChild(input);
+					dt.appendChild(label);
+					layer.appendChild(li);
+			}
+		}
     --></script>";
 
 // Html-Kopf ausgeben
