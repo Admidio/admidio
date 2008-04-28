@@ -247,62 +247,7 @@ echo "
 		</table>
     </div>
 </div>
-<div class=\"formLayout\" id=\"organization_menu\">
-    <div class=\"formBody\">
-    	<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
-       	</span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations_small.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements_small.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download_small.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo_small.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum_small.png\" alt=\"Forum\" title=\"Forum\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook_small.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/smile_small.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Listen\" title=\"Listen\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email_small.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a>
-        </span>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile_small.png\" alt=\"Profil\" title=\"Profil\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
-        </span>
-		<span class=\"iconTextLink\">
-			<a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates_small.png\" alt=\"Termine\" title=\"Termine\" /></a>
-			<a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
-		</span>
-		<span class=\"iconTextLink\">
-			<a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks_small.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
-			<a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
-		</span>
-    </div>
-</div>
+
 <form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\">
 <div class=\"formLayout\" id=\"organization_form\">
     <div class=\"formBody\">

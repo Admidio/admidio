@@ -440,16 +440,6 @@ ul.autosuggest li.highlight a:visited  {
     margin-left:        55%;
 }
 
-#organization_menu{
- 	line-height: 20px;
-}
-
-#organization_menu span{
-	margin-right: 15px;
-	white-space: nowrap;
-	display: inline-block;
-
-
 #search_members {
     margin-top:         10px;
     padding-bottom:     10px;   
