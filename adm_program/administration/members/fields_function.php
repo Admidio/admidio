@@ -176,7 +176,7 @@ elseif($_GET['mode'] == 2 || $_GET["mode"] == 3)
     {
         // Frage, ob Feld geloescht werden soll
 
-        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/organization/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2");
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/fields_function.php?usf_id=". $_GET['usf_id']. "&mode=2");
         $g_message->show("delete_field", $user_field->getValue("usf_name"), "Löschen");
     }
 }
