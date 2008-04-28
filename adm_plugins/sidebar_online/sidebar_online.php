@@ -96,7 +96,7 @@ echo '<div id="plugin_'. $plugin_folder. '">';
 
 if($g_db->num_rows($result) > 0)
 {
-    echo "Seit ".$plg_time_online." Minuten online:<br />";
+    echo $plg_online_text;
     $usr_id_merker  = 0;
     $count_visitors = 0;
     

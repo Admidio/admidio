@@ -35,4 +35,7 @@ $plg_link_class = '';
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';
 
+//Text der über den angezeigten Benutzern steht (Default = "Online sind:<br />"
+$plg_online_text = "Online sind:<br />";
+
 ?>
