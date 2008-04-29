@@ -283,21 +283,23 @@ class Folder extends TableAccess
                             //Gucken ob Datei oder Ordner
                             if (is_dir($this->getCompletePathOfFolder(). "/". $file)) {
 
-                                $addToArray = false;
+                                $alreadyAdded = false;
 
                                 //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
-                                for($i=0; $i<count($completeFolder["folders"]); $i++) {
+                                if (isset($completeFolder["folders"])) {
+	                                for($i=0; $i<count($completeFolder["folders"]); $i++) {
 
-                                    $nextFolder = $completeFolder["folders"][$i];
+	                                    $nextFolder = $completeFolder["folders"][$i];
 
-                                    if ($nextFolder['fol_name'] == $file) {
+	                                    if ($nextFolder['fol_name'] == $file) {
 
-                                        $addToArray = true;
-                                    }
+	                                        $alreadyAdded = true;
+	                                    }
 
+	                                }
                                 }
 
-                                if (!$addToArray) {
+                                if (!$alreadyAdded) {
 
                                     //wenn nicht bereits enthalten wird es nun hinzugefuegt
                                     $completeFolder["additionalFolders"][] = array('fol_name' => $file);
@@ -306,21 +308,23 @@ class Folder extends TableAccess
                             }
                             else if (is_file($this->getCompletePathOfFolder(). "/". $file)) {
 
-                                $addToArray = false;
+                                $alreadyAdded = false;
 
                                 //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
-                                for($i=0; $i<count($completeFolder["files"]); $i++) {
+                                if (isset($completeFolder["files"])) {
+	                                for($i=0; $i<count($completeFolder["files"]); $i++) {
 
-                                    $nextFile = $completeFolder["files"][$i];
+	                                    $nextFile = $completeFolder["files"][$i];
 
-                                    if ($nextFile['fil_name'] == $file) {
+	                                    if ($nextFile['fil_name'] == $file) {
 
-                                        $addToArray = true;
-                                    }
+	                                        $alreadyAdded = true;
+	                                    }
 
+	                                }
                                 }
 
-                                if (!$addToArray) {
+                                if (!$alreadyAdded) {
 
                                     //wenn nicht bereits enthalten wird es nun hinzugefuegt
                                     $completeFolder["additionalFiles"][] = array('fil_name' => $file);
