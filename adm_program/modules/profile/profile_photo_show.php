@@ -39,6 +39,11 @@ if(isset($_GET["tmp_photo"]) && $_GET["tmp_photo"] == 1)
     $req_tmp_photo = 1;
 }
 
+//Testen ob Recht besteht Profil einzusehn
+if(!$g_current_user->viewProfile($req_usr_id))
+{
+    $g_message->show("norights");
+}
 // Foto aus der Datenbank lesen und ausgeben
 
 header("Content-Type: image/jpeg");
