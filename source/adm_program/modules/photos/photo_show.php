@@ -11,7 +11,7 @@
  *
  * pho_id    : Id des Albums, aus dem das Bild kommen soll
  * pho_begin : Datum des Albums
- * bild      : Nummer des Bildes, das angezeigt werden soll
+ * pic_nr    : Nummer des Bildes, das angezeigt werden soll
  * scal      : Pixelanzahl auf die die Bildseite scaliert werden soll
  * side      : Seite des Bildes die skaliert werden soll (x oder y)
  *
@@ -77,22 +77,21 @@ if(isset($_GET['side']))
 }
 
 // Bildpfad zusammensetzten
-if(!is_numeric($pho_id) || $pho_begin == 0 || !is_numeric($pic_nr) || !is_numeric($scal))
-{
-    $bild = THEME_SERVER_PATH. "/images/nopix.jpg";
-}
-else
-{
-    $bild = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
-}
+$picpath = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
+
 // im Debug-Modus den ermittelten Bildpfad ausgeben
 if($g_debug == 1)
 {
-    error_log($bild);
+    error_log($picpath);
+}
+
+if(file_exists($picpath) == false)
+{
+	$picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
 }
 
 //Ermittlung der Original Bildgroesse
-$bildgroesse = getimagesize($bild);
+$bildgroesse = getimagesize($picpath);
 
 //Errechnung seitenverhaeltniss
 $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
@@ -127,7 +126,7 @@ if(strlen($side) == 0)
 $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
 
 //Aufrufen des Originalbildes
-$bilddaten = imagecreatefromjpeg("$bild");
+$bilddaten = imagecreatefromjpeg($picpath);
 
 //kopieren der Daten in neues Bild
 imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
