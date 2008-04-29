@@ -308,8 +308,6 @@ echo "
                                                     <dl>
                                                         <dt>Adresse:</dt>
                                                         <dd>";
-                                                            if(strlen($user->getValue("Adresse")) == 0 && strlen($user->getValue("PLZ")) == 0 && strlen($user->getValue("Ort")) == 0)
-                                                                echo "<i>keine Daten vorhanden</i>";
                                                             if(strlen($user->getValue("Adresse")) > 0)
                                                                 echo $user->getValue("Adresse");
                                                             if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
@@ -386,6 +384,17 @@ echo "
                                                                         }
                                                                         echo " - <a href=\"$route_url\" target=\"_blank\">Route anzeigen</a>";
                                                                     }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                // Freiraeume ausgeben, damit es layoutmaessig mit dem Bild keine Probleme gibt
+                                                                if(strlen($user->getValue("Adresse")) == 0)
+                                                                    echo "<br />&nbsp;";
+                                                                else
+                                                                {
+                                                                    if(strlen($user->getValue("PLZ")) == 0 && strlen($user->getValue("Ort")) == 0 && strlen($g_current_user->getValue("Land"))  > 0)
+                                                                        echo "<br />&nbsp;";
                                                                 }
                                                             }
                                                         echo "</dd>
