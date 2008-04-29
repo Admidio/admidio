@@ -428,19 +428,31 @@ echo "
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
 						<table width=\"100%\" summary=\"Profilfoto\" border=\"0\" style=\"border:0px;\" cellpadding=\"0\" cellspacing=\"0\" rules=\"none\">
 							<tr>
-								<td colspan=\"2\">
+								<td>
 								<img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\" />
 								</td>
-							</tr>
-							<tr>
-								<td align=\"right\">
-									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>
-								</td>
-								<td align=\"left\">
-									<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
-								</td>
-							</tr>
-						</table>
+							</tr>";
+                             // Nur berechtigte User duerfen das Profilfoto editieren
+                            if($g_current_user->editProfile($a_user_id) == true)
+                            {
+                                echo "
+                                <tr>
+									<td align=\"center\">
+										<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>";
+                                    //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
+	                                if(strlen($user->getValue("usr_photo")) > 0)
+	                                {
+	                                    echo"
+											<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
+										</td>";
+	                                }
+	                                else
+	                                {
+	                                    echo"</td>";
+	                                }
+								echo "</tr>";
+                            }   
+						echo"</table>
                     </div>
                 </div>
             </div>
