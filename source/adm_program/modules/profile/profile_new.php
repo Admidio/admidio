@@ -384,13 +384,27 @@ echo "
         
         foreach($user->db_user_fields as $key => $value)
         {
+            $show_field = false;
+            
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-            if($new_user == 2 && $g_preferences['registration_mode'] == 1 && $value['usf_mandatory'] == 0)
+            // E-Mail ist Ausnahme und muss immer angezeigt werden
+            if($new_user == 2 
+            && $g_preferences['registration_mode'] == 1 
+            && ($value['usf_mandatory'] == 1 || $value['usf_name'] == "E-Mail"))
             {
-                $show_field = false;
+                $show_field = true;
             }
-            else
+            elseif($new_user == 2
+            && $g_preferences['registration_mode'] == 2)
             {
+                // bei der vollstaendigen Registrierung alle Felder anzeigen
+                $show_field = true;
+            }
+            elseif($new_user != 2 
+            && ($usr_id == $g_current_user->getValue("usr_id") || $g_current_user->editUser()))
+            {
+                // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
+                // Leiter duerfen dies nicht !!!
                 $show_field = true;
             }
         

@@ -152,16 +152,29 @@ foreach($user->db_user_fields as $key => $value)
     
     if(isset($_POST[$post_id])) 
     {
+        $update_field = true;
+        
         // gesperrte Felder duerfen nur von berechtigten Benutzern geaendert werden 
         // Ausnahme bei der Registrierung
         if($value['usf_disabled'] == 1 && $g_current_user->editUser() == false && $new_user != 2)
         {
-            $i = 0;
+            $update_field = false;
         }
-        else
+
+        // versteckte Felder duerfen nur im eigenen Profil, oder mit dem Recht alle User
+        // zu bearbeiten, geaendert werden
+        if($value['usf_hidden'] == 1 && $g_current_user->editUser() == false 
+        && $usr_id != $g_current_user->getValue("usr_id"))
+        {
+            $update_field = false;
+        }
+        
+        if($update_field)
         {    
 			// Pflichtfelder muessen gefuellt sein
-			if($value['usf_mandatory'] == 1 && strlen($_POST[$post_id]) == 0)
+            // E-Mail bei Restrierung immer !!!
+			if(($value['usf_mandatory'] == 1 && strlen($_POST[$post_id]) == 0)
+            || ($new_user == 2 && $value['usf_name'] == "E-Mail" && strlen($_POST[$post_id]) == 0))
 			{
 				$g_message->show("feld", $value['usf_name']);
 			}
