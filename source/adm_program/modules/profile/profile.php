@@ -92,7 +92,14 @@ function getFieldCode($field, $user_id)
                 {
                     $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user_id";
                 }
-                $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;">'. $field['usd_value']. '</a>';
+                if(strlen($field['usd_value']) > 25)
+                {
+                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], 0, 25). '...</a>';   
+                }
+                else
+                {
+                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$field['usd_value'].'">'. $field['usd_value']. '</a>';;                    
+                }               
             }
             break;
 
@@ -100,7 +107,14 @@ function getFieldCode($field, $user_id)
             // Homepage als Link darstellen
             if(strlen($field['usd_value']) > 0)
             {
-                $value = '<a href="'. $field['usd_value']. '" target="_blank">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2). '</a>';
+                if(strlen($field['usd_value']) > 25)
+                {
+                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2, 25). '...</a>';   
+                }
+                else
+                {
+                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2). '</a>';                    
+                }
             }
             break;
                                 
@@ -113,14 +127,7 @@ function getFieldCode($field, $user_id)
             break;
     }
 	    
-    if($field['cat_name'] == "Stammdaten")
-    {
-        if(strlen($field['usd_value']) > 25)
-        {
-            $value = '<span class="smallFontSize">'. $value. '</span>';
-        }
-    }
-    else
+    if($field['cat_name'] != "Stammdaten")
     {
         // Icons der Messenger anzeigen
         if($field['usf_name'] == 'ICQ')
