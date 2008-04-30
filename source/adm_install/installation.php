@@ -352,7 +352,7 @@ elseif($req_mode == 5)
 
                 <span class="iconTextLink">
                     <a href="installation.php?mode=6"><img
-                    src="../adm_themes/classic/icons/page_white_put.png" alt="config.php herunterladen" /></a>
+                    src="layout/page_white_get.png" alt="config.php herunterladen" /></a>
                     <a href="installation.php?mode=6">config.php herunterladen</a>
                 </span>
                 <br />';
