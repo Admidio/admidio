@@ -201,7 +201,7 @@ if($_POST["upload"])
             <li>
                 <span class=\"iconTextLink\">
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img 
-                    src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Weitere Bilder hochladen\" /></a>
+                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Weitere Bilder hochladen\" /></a>
                     <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Weitere Bilder hochladen</a>
                 </span>
             </li>

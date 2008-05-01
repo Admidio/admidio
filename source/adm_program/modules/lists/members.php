@@ -316,7 +316,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             echo "<li>
                 <span class=\"iconTextLink\">
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
-                    src=\"". THEME_PATH. "/icons/user.png\" alt=\"Nur Mitglieder anzeigen\" /></a>
+                    src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Nur Mitglieder anzeigen\" /></a>
                     <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
                 </span>
             </li>";
@@ -508,7 +508,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             
             echo"
             <tr class=\"tableMouseOver\">
-                <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
+                <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                 
 				<td style=\"text-align: center;\">";
                     //Haekchen setzen ob jemand Mitglied ist oder nicht

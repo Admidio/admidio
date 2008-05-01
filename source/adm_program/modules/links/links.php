@@ -251,7 +251,7 @@ else
                 echo "<hr />";
             }
             echo "
-                <a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
+                <a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
                     alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
                 <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
 

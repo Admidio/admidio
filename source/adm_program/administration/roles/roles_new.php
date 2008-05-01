@@ -390,7 +390,7 @@ echo "
                                 echo " disabled=\"disabled\" ";
                             }
                             echo " onchange=\"markRoleRight('rol_assign_roles', 'rol_all_lists_view', true)\" value=\"1\" />
-                            <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/wand.png\" alt=\"Rollen verwalten und zuordnen\" /></label>&nbsp;
+                            <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/roles.png\" alt=\"Rollen verwalten und zuordnen\" /></label>&nbsp;
                             <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
                             	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
@@ -409,7 +409,7 @@ echo "
 								echo " disabled=\"disabled\" ";
 							} 
 							echo " onchange=\"markRoleRight('rol_all_lists_view', 'rol_assign_roles', false)\" value=\"1\" />
-							<label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/pages_white_text.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
+							<label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/lists.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
 							<label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
 						</div>
 					</li>
@@ -421,7 +421,7 @@ echo "
                                 echo " checked=\"checked\" ";
                             }
                             echo " value=\"1\" />
-                            <label for=\"rol_approve_users\"><img src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Registrierungen verwalten und zuordnen\" /></label>&nbsp;
+                            <label for=\"rol_approve_users\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierungen verwalten und zuordnen\" /></label>&nbsp;
                             <label for=\"rol_approve_users\">Registrierungen verwalten und zuordnen</label>
                         </div>
                     </li>
@@ -446,7 +446,7 @@ echo "
                             if($role->getValue("rol_profile") == 1)
                                 echo " checked=\"checked\" ";
                             echo " value=\"1\" />
-                            <label for=\"rol_profile\"><img src=\"". THEME_PATH. "/icons/user.png\" alt=\"Eigenes Profil bearbeiten\" /></label>&nbsp;
+                            <label for=\"rol_profile\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Eigenes Profil bearbeiten\" /></label>&nbsp;
                             <label for=\"rol_profile\">Eigenes Profil bearbeiten</label>
                         </div>
                     </li>";
@@ -460,7 +460,7 @@ echo "
                                 if($role->getValue("rol_announcements") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />
-                                <label for=\"rol_announcements\"><img src=\"". THEME_PATH. "/icons/note.png\" alt=\"Ankündigungen anlegen und bearbeiten\" /></label>&nbsp;
+                                <label for=\"rol_announcements\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen anlegen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_announcements\">Ankündigungen anlegen und bearbeiten&nbsp;</label>
                             </div>
                         </li>";
@@ -474,7 +474,7 @@ echo "
                                 if($role->getValue("rol_dates") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />
-                                <label for=\"rol_dates\"><img src=\"". THEME_PATH. "/icons/date.png\" alt=\"Termine anlegen und bearbeiten\" /></label>&nbsp;
+                                <label for=\"rol_dates\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine anlegen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_dates\">Termine anlegen und bearbeiten</label>
                             </div>
                         </li>";
@@ -502,7 +502,7 @@ echo "
                                 if($role->getValue("rol_download") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />
-                                <label for=\"rol_download\"><img src=\"". THEME_PATH. "/icons/folder_down.png\" alt=\"Downloads hochladen und bearbeiten\" /></label>&nbsp;
+                                <label for=\"rol_download\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads hochladen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_download\">Downloads hochladen und bearbeiten</label>
                             </div>
                         </li>";
@@ -516,7 +516,7 @@ echo "
                                 if($role->getValue("rol_guestbook") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />
-                                <label for=\"rol_guestbook\"><img src=\"". THEME_PATH. "/icons/comment.png\" alt=\"Gästebucheinträge bearbeiten und löschen\" /></label>&nbsp;
+                                <label for=\"rol_guestbook\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebucheinträge bearbeiten und löschen\" /></label>&nbsp;
                                 <label for=\"rol_guestbook\">Gästebucheinträge bearbeiten und löschen</label>
                             </div>
                         </li>";
@@ -545,7 +545,7 @@ echo "
                                 if($role->getValue("rol_weblinks") == 1)
                                     echo " checked=\"checked\" ";
                                 echo " value=\"1\" />
-                                <label for=\"rol_weblinks\"><img src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Weblinks anlegen und bearbeiten\" /></label>&nbsp;
+                                <label for=\"rol_weblinks\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks anlegen und bearbeiten\" /></label>&nbsp;
                                 <label for=\"rol_weblinks\">Weblinks anlegen und bearbeiten</label>
                             </div>
                         </li>";
@@ -567,10 +567,10 @@ echo "
                             <dt><label for=\"rol_start_date\">Gültig von:</label></dt>
                             <dd>
 								<input type=\"text\" id=\"rol_start_date\" name=\"rol_start_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_start_date"). "\" />
-								<img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'ico_cal_date_from','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+								<img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'ico_cal_date_from','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                                 <label for=\"rol_end_date\">bis</label>
 								<input type=\"text\" id=\"rol_end_date\" name=\"rol_end_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_end_date"). "\" />
-								<img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'ico_cal_date_to','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
+								<img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'ico_cal_date_to','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
 								<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                             </dd>
                         </dl>

@@ -155,7 +155,7 @@ echo "
 
                                 <span class=\"iconTextLink\">
                                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
-                                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Zugangsdaten zuordnen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Zugangsdaten zuordnen\" /></a>
                                     <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
                                 </span>";
                             }
@@ -172,7 +172,7 @@ echo "
                                 besitzt aber bereits Logindaten.<br />
 
                                 <span class=\"iconTextLink\">
-                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/properties.png\" 
+                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" 
                                         alt=\"Mitgliedschaft zuweisen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft zuweisen</a>
                                 </span>";
@@ -184,7 +184,7 @@ echo "
                                 besitzt auch keine Logindaten.<br />
                                 
                                 <span class=\"iconTextLink\">
-                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/properties.png\" 
+                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" 
                                         alt=\"Rollen und Logindaten diesem Benutzer zuordnen\" /></a>
                                     <a href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
                                 </span>";

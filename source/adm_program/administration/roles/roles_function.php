@@ -80,7 +80,7 @@ if($_GET["mode"] == 1)
     	<div class=\"formHead\">Rolle l&ouml;schen</div>
         <div class=\"formBody\">
             <p align=\"left\">
-                <img src=\"". THEME_PATH. "/icons/wand_gray.png\" alt=\"Inaktive Rolle\" />
+                <img src=\"". THEME_PATH. "/icons/roles_gray.png\" alt=\"Inaktive Rolle\" />
                 Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
                 (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
                 zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
@@ -92,7 +92,7 @@ if($_GET["mode"] == 1)
             </p>
             <button name=\"delete\" type=\"button\" value=\"delete\"onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" />&nbsp;L&ouml;schen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"inactive\" type=\"button\" value=\"inactive\" onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/wand_gray.png\" alt=\"Inaktive Rolle\" />&nbsp;Inaktive Rolle</button>
+            <button name=\"inactive\" type=\"button\" value=\"inactive\" onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/roles_gray.png\" alt=\"Inaktive Rolle\" />&nbsp;Inaktive Rolle</button>
 
     	    <ul class=\"iconTextLinkList\">
     	        <li>

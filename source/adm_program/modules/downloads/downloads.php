@@ -100,14 +100,14 @@ if ($g_current_user->editDownloadRight())
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/downloads/upload.php?folder_id=$folderId\"><img
-                src=\"". THEME_PATH. "/icons/page_white_get.png\" alt=\"Hochladen\" /></a>
+                src=\"". THEME_PATH. "/icons/page_white_upload.png\" alt=\"Hochladen\" /></a>
                 <a href=\"$g_root_path/adm_program/modules/downloads/upload.php?folder_id=$folderId\">Datei hochladen</a>
             </span>
         </li>
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/downloads/folder_config.php?folder_id=$folderId\"><img
-                src=\"". THEME_PATH. "/icons/wrench.png\" alt=\"Ordnerberechtigung setzen\" /></a>
+                src=\"". THEME_PATH. "/icons/options.png\" alt=\"Ordnerberechtigung setzen\" /></a>
                 <a href=\"$g_root_path/adm_program/modules/downloads/folder_config.php?folder_id=$folderId\">Berechtigungen setzen</a>
             </span>
         </li>
@@ -119,11 +119,11 @@ echo "
 <table class=\"tableList\" cellspacing=\"0\">
     <tr>
         <th style=\"width: 25px;\"><img class=\"iconInformation\"
-            src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\" />
+            src=\"". THEME_PATH. "/icons/download.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\" />
         </th>
         <th>Name</th>
-        <th>&Auml;nderungsdatum</th>
-        <th>Gr&ouml;&szlig;e</th>
+        <th>Änderungsdatum</th>
+        <th>Größe</th>
         <th>Counter</th>";
         if ($g_current_user->editDownloadRight())
         {
@@ -161,7 +161,7 @@ else
             <tr class=\"tableMouseOver\">
                 <td>
                       <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">
-                    <img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></a>
+                    <img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Ordner\" title=\"Ordner\" /></a>
                 </td>
                 <td><a href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">". $nextFolder['fol_name']. "</a></td>
                 <td>&nbsp;</td>
@@ -292,7 +292,7 @@ if ($g_current_user->editDownloadRight())
         <table class=\"tableList\" cellspacing=\"0\">
             <tr>
                 <th style=\"width: 25px;\"><img class=\"iconInformation\"
-                    src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\" />
+                    src=\"". THEME_PATH. "/icons/download.png\" alt=\"Ordner / Dateityp\" title=\"Ordner / Dateityp\" />
                 </th>
                 <th>Name</th>
                 <th style=\"text-align: right;\">Aktionen</th>
@@ -307,7 +307,7 @@ if ($g_current_user->editDownloadRight())
 
                 echo "
                 <tr class=\"tableMouseOver\">
-                    <td><img src=\"". THEME_PATH. "/icons/folder.png\" alt=\"Ordner\" title=\"Ordner\" /></td>
+                    <td><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Ordner\" title=\"Ordner\" /></td>
                     <td>". $nextFolder['fol_name']. "</td>
                     <td style=\"text-align: right;\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFolder['fol_name']). "\">

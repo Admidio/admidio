@@ -281,7 +281,7 @@ function getFieldCode($field, $user, $new_user)
             }
 			$value .= "
 					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:$calObject.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" 
+					<img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:$calObject.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" 
                         id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
 					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
 		}

@@ -218,7 +218,7 @@ echo "
                             cal18.setCssPrefix(\"calendar\");
                         </script>
                         <input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_begin")."\" />
-                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy','pho_begin','pho_end'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                        <img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy','pho_begin','pho_end'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                         <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                     </dd>
@@ -232,7 +232,7 @@ echo "
                     <dt><label for=\"pho_end\">Ende:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_end")."\">
-                        <img src=\"". THEME_PATH. "/icons/date.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy','pho_begin','pho_end');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                        <img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy','pho_begin','pho_end');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
                     </dd>
                 </dl>
             </li>";
