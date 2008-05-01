@@ -454,12 +454,14 @@ echo "
                                 echo "
                                 <tr>
 									<td align=\"center\">
-										<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>";
+										<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img 
+											src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>";
                                     //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
 	                                if(strlen($user->getValue("usr_photo")) > 0)
 	                                {
 	                                    echo"
-											<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
+											<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img 
+												src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
 										</td>";
 	                                }
 	                                else
@@ -599,12 +601,12 @@ echo "
 											// nun fuer alle Rollenrechte die Icons anzeigen
 											if($row['rol_assign_roles'] == 1)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/wand.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
 												alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
 											}
 											if($row['rol_approve_users'] == 1)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/properties.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
 												alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
 											}                                                    
 											if($row['rol_edit_user'] == 1)
@@ -614,17 +616,17 @@ echo "
 											}
 											if($row['rol_profile'] == 1)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
 												alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
 											}
 											if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] > 0)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/note.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
 												alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
 											}
 											if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] > 0)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/date.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
 												alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
 											}
 											if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] > 0)
@@ -634,12 +636,12 @@ echo "
 											}
 											if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] > 0)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/folder_down.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
 												alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
 											}
 											if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comment.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
 												alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
 											}
 											if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
@@ -649,12 +651,12 @@ echo "
 											}
 											if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] > 0)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/globe.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
 												alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
 											}
 											if($row['rol_all_lists_view'] == 1)
 											{
-												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/pages_white_text.png\"
+												echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
 												alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
 											}
 																	echo "</dt>

@@ -233,14 +233,14 @@ else
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"". THEME_PATH. "/icons/comment.png\" alt=\"$row->gbo_name\" />
+                    <img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"$row->gbo_name\" />
                     $row->gbo_name";
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
                     if (strlen(trim($row->gbo_homepage)) > 0)
                     {
                         echo "
-                        <a class=\"iconLink\" href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/globe.png\"
+                        <a class=\"iconLink\" href=\"$row->gbo_homepage\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
                             alt=\"Gehe zu $row->gbo_homepage\" title=\"Gehe zu $row->gbo_homepage\" /></a>";
                     }
 

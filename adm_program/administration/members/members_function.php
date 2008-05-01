@@ -85,7 +85,7 @@ if($_GET["mode"] == 1)
         <div class=\"formHead\">Mitglied l&ouml;schen</div>
         <div class=\"formBody\">
             <p align=\"left\">
-                <img src=\"". THEME_PATH. "/icons/user.png\" alt=\"Ehemaliger\" />
+                <img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Ehemaliger\" />
                 Du kannst den Benutzer zu einem <b>Ehemaligen</b> machen. Dies hat den Vorteil, dass die Daten
                 erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welchen Rollen diese Person
                 zugeordnet war.
@@ -97,9 +97,9 @@ if($_GET["mode"] == 1)
             </p>
             <button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"delete\" type=\"button\" value=\"delete\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Benutzer l&ouml;schen\" />&nbsp;L&ouml;schen</button>
+            <button name=\"delete\" type=\"button\" value=\"delete\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Benutzer löschen\" />&nbsp;Löschen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"former\" type=\"button\" value=\"former\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\"><img src=\"". THEME_PATH. "/icons/user.png\" alt=\"Ehemaliger\" />&nbsp;Ehemaliger</button>
+            <button name=\"former\" type=\"button\" value=\"former\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Ehemaliger\" />&nbsp;Ehemaliger</button>
         </div>
     </div>";
 

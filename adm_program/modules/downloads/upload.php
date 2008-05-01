@@ -128,7 +128,7 @@ echo "
 
         <div class=\"formSubmit\">
             <button name=\"hochladen\" type=\"submit\" value=\"hochladen\" tabindex=\"2\">
-            <img src=\"". THEME_PATH. "/icons/page_white_get.png\" alt=\"Hochladen\" />
+            <img src=\"". THEME_PATH. "/icons/page_white_upload.png\" alt=\"Hochladen\" />
             &nbsp;Hochladen</button>
         </div>
     </div>

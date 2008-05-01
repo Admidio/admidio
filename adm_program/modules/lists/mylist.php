@@ -367,7 +367,7 @@ echo '
         <hr />
 
         <div class=\"formSubmit\">
-            <button name=\"anzeigen\" type=\"button\" onclick=\"javascript:send();\" value=\"anzeigen\"><img src=\"". THEME_PATH. "/icons/application_view_columns.png\" alt=\"Liste anzeigen\" />&nbsp;Liste anzeigen</button>            
+            <button name=\"anzeigen\" type=\"button\" onclick=\"javascript:send();\" value=\"anzeigen\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Liste anzeigen\" />&nbsp;Liste anzeigen</button>            
         </div>
     </div>
 </div>

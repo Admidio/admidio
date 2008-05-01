@@ -87,7 +87,7 @@ echo "
             echo "</td>
             <td style=\"text-align: center;\">
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=$row->usr_id\"><img 
-                    src=\"". THEME_PATH. "/icons/properties.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\" /></a>
+                    src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\" /></a>
                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\"><img 
                     src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Anmeldung löschen\" title=\"Anmeldung löschen\" /></a>
             </td>

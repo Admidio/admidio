@@ -230,7 +230,7 @@ if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
     else
     {
         $link_text = "Nur Mitglieder anzeigen";
-        $link_icon = "user.png";
+        $link_icon = "profile.png";
         $link_members = 1;
     }
     echo "
@@ -380,13 +380,13 @@ if($num_members > 0)
         <tr>
             <th>Nr.</th>
             <th><img class=\"iconInformation\" 
-                src=\"". THEME_PATH. "/icons/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
+                src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
                 title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" /></th>
             <th>Name</th>
             <th><img class=\"iconInformation\" 
                 src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mail\" title=\"E-Mail\" /></th>
             <th><img class=\"iconInformation\" 
-                src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Homepage\" title=\"Homepage\" /></th>
+                src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Homepage\" title=\"Homepage\" /></th>
             <th>Benutzer</th>
             <th>Aktualisiert am</th>
             <th style=\"text-align: center;\">Funktionen</th>
@@ -411,7 +411,7 @@ if($num_members > 0)
                         {
                             echo "
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=". $row['usr_id']. "\"><img
-                                src=\"". THEME_PATH. "/icons/user.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"
+                                src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"
                                 title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" /></a>";
                         }
                         else
@@ -441,7 +441,7 @@ if($num_members > 0)
                         {
                             echo "
                             <a class=\"iconLink\" href=\"". $row['homepage']. "\" target=\"_blank\"><img
-                                src=\"". THEME_PATH. "/icons/globe.png\" alt=\"Homepage\" title=\"Homepage\" /></a>";
+                                src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Homepage\" title=\"Homepage\" /></a>";
                         }
                     echo "</td>
                     <td>". $row['usr_login_name']. "</td>

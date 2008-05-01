@@ -210,7 +210,7 @@ else
         <div class=\"boxLayout\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
-                    <img src=\"". THEME_PATH. "/icons/note.png\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
+                    <img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
                     $announcement->getValue("ann_headline"). "
                 </div>
                 <div class=\"boxHeadRight\">".

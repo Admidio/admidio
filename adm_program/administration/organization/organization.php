@@ -163,31 +163,31 @@ echo "
     	<tr>
     	<td>
     	<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
        	</span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations_small.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements_small.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download_small.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo_small.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
         </span>
 		</td>
@@ -195,31 +195,31 @@ echo "
 		<tr>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum_small.png\" alt=\"Forum\" title=\"Forum\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" title=\"Forum\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook_small.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/smile_small.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/smile.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Listen\" title=\"Listen\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" title=\"Listen\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email_small.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a>
         </span>
 		</td>
@@ -227,19 +227,19 @@ echo "
 		<tr>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile_small.png\" alt=\"Profil\" title=\"Profil\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" title=\"Profil\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
         </span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-			<a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates_small.png\" alt=\"Termine\" title=\"Termine\" /></a>
+			<a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" title=\"Termine\" /></a>
 			<a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
 		</span>
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-			<a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks_small.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
+			<a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
 			<a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
 		</span>
 		</td>
@@ -253,7 +253,7 @@ echo "
     <div class=\"formBody\">
         <div class=\"groupBox\" id=\"general\">
 
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/options_small.png\" alt=\"Allgemein\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" />
             	Allgemeine Einstellungen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -511,7 +511,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"register\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/new_registrations_small.png\" alt=\"Registrierung\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" />
             	Einstellungen Registrierung</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -592,7 +592,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"announcement-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/announcements_small.png\" alt=\"Ankündigungen\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" />
             	Einstellungen Ankündigungsmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -640,7 +640,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"download-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/download_small.png\" alt=\"Downloads\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" />
             	Einstellungen Downloadmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -684,7 +684,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"photo-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/photo_small.png\" alt=\"Fotos\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" />
             	Einstellungen Fotomodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -874,7 +874,7 @@ echo "
 
          echo"
         <div class=\"groupBox\" id=\"forum\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/forum_small.png\" alt=\"Forum\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" />
             	Einstellungen Forum</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -983,7 +983,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"guestbook-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/guestbook_small.png\" alt=\"Gästebuch\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" />
             	Einstellungen Gästebuchmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -1097,7 +1097,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"list-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Listen\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" />
             	Einstellungen Listen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -1139,7 +1139,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"mail-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/email_small.png\" alt=\"E-Mails\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" />
             	Einstellungen Mailmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -1200,7 +1200,7 @@ echo "
         /**************************************************************************************/
         echo"
         <div class=\"groupBox\" id=\"ecard-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/smile_small.png\" alt=\"Grußkarten\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/smile.png\" alt=\"Grußkarten\" />
             	Einstellungen Grußkartenmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -1484,7 +1484,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"profile-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/profile_small.png\" alt=\"Profil\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" />
             	Einstellungen Profilmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -1607,7 +1607,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"dates-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/dates_small.png\" alt=\"Termine\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" />
             	Einstellungen Terminmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
@@ -1672,7 +1672,7 @@ echo "
 
         echo"
         <div class=\"groupBox\" id=\"links-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/weblinks_small.png\" alt=\"Weblinks\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" />
             	Einstellungen Weblinkmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">

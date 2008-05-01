@@ -172,7 +172,7 @@ echo "</ul>
                 <dl>
                     <dt>
                         <a href=\"$g_root_path/adm_program/modules/lists/lists.php\"><img
-                        src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Listen\" title=\"Listen\" /></a>
+                        src=\"". THEME_PATH. "/icons/lists_big.png\" alt=\"Listen\" title=\"Listen\" /></a>
                     </dt>
                     <dd>
                         <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/lists/lists.php\">Listen</a></span>&nbsp;&nbsp;
