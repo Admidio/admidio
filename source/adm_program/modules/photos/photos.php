@@ -387,7 +387,7 @@ echo "<div class=\"photoModuleContainer\">";
                             {
                                 echo"
                                 <a class=\"iconLink\" href=\"".$g_root_path."/adm_program/modules/ecards/ecard_form.php?photo=".$bild."&amp;pho_id=".$pho_id."\"><img 
-                                    src=\"". THEME_PATH. "/icons/email.png\" alt=\"Foto als Grußkarte versenden\" title=\"Foto als Grußkarte versenden\" /></a>";
+                                    src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Foto als Grußkarte versenden\" title=\"Foto als Grußkarte versenden\" /></a>";
                             }
                         
                     }//if
@@ -598,7 +598,7 @@ echo "<div class=\"photoModuleContainer\">";
                         //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                         if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                         {
-                            echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/warning16.png" alt="Warnhinweis" title=""
+                            echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnhinweis" title=""
                             onmouseover="ajax_showTooltip(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=folder_not_found\',this);" onmouseout="ajax_hideTooltip()"
                             onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=folder_not_found&amp;window=true\',\'Message\',\'width=400, height=400, left=310,top=200,scrollbars=no\')" />';
                         }

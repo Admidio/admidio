@@ -46,6 +46,11 @@ h1 {
      font-size: 		20pt;
 }
 
+
+img {
+    border: 0px;
+}
+
 .readonly {
     color:              #666666;
 }

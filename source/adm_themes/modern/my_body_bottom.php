@@ -45,7 +45,7 @@
                 style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/lists.png" alt="Listen" title="Listen" /></a>
                 <a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/lists.php">Listen</a></span>
             <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/mylist.php"><img
-                style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/lists.png" alt="Eigene Listen" title="Eigene Listen" /></a>
+                style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/mylist.png" alt="Eigene Listen" title="Eigene Listen" /></a>
                 <a href="<?php echo $g_root_path; ?>/adm_program/modules/lists/mylist.php">Eigene Listen</a></span>
             <span class="menu"><a href="<?php echo $g_root_path; ?>/adm_program/modules/profile/profile.php"><img
                 style="vertical-align: middle;" src="<?php echo THEME_PATH; ?>/icons/profile.png" alt="Mein Profil" title="Mein Profil" /></a>

@@ -177,7 +177,7 @@ else
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;folder_id=". $nextFolder['fol_id']. "\">
                         <img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                         if (!$nextFolder['fol_exists']) {
-                            echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning16.png\" alt=\"Warnung\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folderNotExists&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=folderNotExists',this);\"
+                            echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning.png\" alt=\"Warnung\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folderNotExists&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=folderNotExists',this);\"
                           onmouseout=\"ajax_hideTooltip()\" />";
                         }
 
@@ -254,7 +254,7 @@ else
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;file_id=". $nextFile['fil_id']. "\">
                         <img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>";
                         if (!$nextFile['fil_exists']) {
-                            echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning16.png\" alt=\"Warnung\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=fileNotExists&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=fileNotExists',this);\"
+                            echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning.png\" alt=\"Warnung\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=fileNotExists&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=fileNotExists',this);\"
                           onmouseout=\"ajax_hideTooltip()\" />";
                         }
 
