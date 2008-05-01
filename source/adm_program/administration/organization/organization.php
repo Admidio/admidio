@@ -2,7 +2,7 @@
 /******************************************************************************
  * Organisationseinstellungen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -88,14 +88,14 @@ $g_layout['header'] =  "
         {
             if(document.getElementById(LayerSwith).value == \"1\" && document.getElementById(LayerSetting))
             {
-				if(Setting == 0)
-				{
+                if(Setting == 0)
+                {
                     document.getElementById(LayerSetting).innerHTML = \"<input type='text' id='LayerSettingName' name='LayerSettingName' size='4' maxlength='4' value='". $form_values['ecard_cc_recipients']. "' />\";
-				}
-				else if(Setting == 1)
-				{
-					document.getElementById(LayerSetting).innerHTML = \"<input type='text' id='LayerSettingName' name='LayerSettingName' size='4' maxlength='4' value='". $form_values['ecard_text_length']. "' />\";
-				}
+                }
+                else if(Setting == 1)
+                {
+                    document.getElementById(LayerSetting).innerHTML = \"<input type='text' id='LayerSettingName' name='LayerSettingName' size='4' maxlength='4' value='". $form_values['ecard_text_length']. "' />\";
+                }
             }
             else if(document.getElementById(LayerSetting))
             {            
@@ -104,51 +104,51 @@ $g_layout['header'] =  "
         }
         function drawForumAccessDataTable(LayerSetting,LayerSwith)
         {
-			var layerSetting = document.getElementById(LayerSetting);
+            var layerSetting = document.getElementById(LayerSetting);
             if(document.getElementById(LayerSwith).checked == true && layerSetting)
-            {				
-					var ElementsArray = Array(\"forum_db\");
-					var ValuesArray = Array();
-					ValuesArray[0] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
-					appendElements(ElementsArray,ValuesArray,layerSetting);
+            {               
+                    var ElementsArray = Array(\"forum_db\");
+                    var ValuesArray = Array();
+                    ValuesArray[0] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
+                    appendElements(ElementsArray,ValuesArray,layerSetting);
             }
             else if (document.getElementById(LayerSwith).checked == false && layerSetting)
             {
-					var ElementsArray = Array(\"forum_srv\",\"forum_usr\",\"forum_pw\",\"forum_db\");
-					var ValuesArray = Array();
-					ValuesArray[0] = Array(\"Server:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_srv']. "\");
-					ValuesArray[1] = Array(\"User:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_usr']. "\");
-					ValuesArray[2] = Array(\"Passwort:\",\"PASSWORD\",\"200px\",\"50\",\"". $form_values['forum_pw']. "\");
-					ValuesArray[3] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
-					appendElements(ElementsArray,ValuesArray,layerSetting);
+                    var ElementsArray = Array(\"forum_srv\",\"forum_usr\",\"forum_pw\",\"forum_db\");
+                    var ValuesArray = Array();
+                    ValuesArray[0] = Array(\"Server:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_srv']. "\");
+                    ValuesArray[1] = Array(\"User:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_usr']. "\");
+                    ValuesArray[2] = Array(\"Passwort:\",\"PASSWORD\",\"200px\",\"50\",\"". $form_values['forum_pw']. "\");
+                    ValuesArray[3] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
+                    appendElements(ElementsArray,ValuesArray,layerSetting);
             }
         }
-		function appendElements(array,valuesArray,layer)
-		{
-			layer.innerHTML='';
-			for(var i = 0; i < array.length;i++)
-			{
-					var li = document.createElement(\"LI\");
-					var dl = document.createElement(\"DL\");
-					var dt = document.createElement(\"DT\");
-					var dd = document.createElement(\"DD\");
-					var label = document.createElement(\"label\");
-					var input = document.createElement(\"input\");
-					label.appendChild(document.createTextNode(valuesArray[i][0]));
-					input.type=valuesArray[i][1];
-					input.id = array[i];
-					input.name = array[i];
-					input.style.width = valuesArray[i][2];
-					input.maxlength = valuesArray[i][3];
-					input.value = valuesArray[i][4];
-					li.appendChild(dl);
-					dl.appendChild(dt);
-					dl.appendChild(dd);
-					dd.appendChild(input);
-					dt.appendChild(label);
-					layer.appendChild(li);
-			}
-		}
+        function appendElements(array,valuesArray,layer)
+        {
+            layer.innerHTML='';
+            for(var i = 0; i < array.length;i++)
+            {
+                    var li = document.createElement(\"LI\");
+                    var dl = document.createElement(\"DL\");
+                    var dt = document.createElement(\"DT\");
+                    var dd = document.createElement(\"DD\");
+                    var label = document.createElement(\"label\");
+                    var input = document.createElement(\"input\");
+                    label.appendChild(document.createTextNode(valuesArray[i][0]));
+                    input.type=valuesArray[i][1];
+                    input.id = array[i];
+                    input.name = array[i];
+                    input.style.width = valuesArray[i][2];
+                    input.maxlength = valuesArray[i][3];
+                    input.value = valuesArray[i][4];
+                    li.appendChild(dl);
+                    dl.appendChild(dt);
+                    dl.appendChild(dd);
+                    dd.appendChild(input);
+                    dt.appendChild(label);
+                    layer.appendChild(li);
+            }
+        }
     --></script>";
 
 // Html-Kopf ausgeben
@@ -159,92 +159,92 @@ echo "
 
 <div class=\"formLayout\" id=\"organization_menu\">
     <div class=\"formBody\">
-    	<table style=\"border-width: 0px; width: 100%; text-align: left;\">
-    	<tr>
-    	<td>
-    	<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
-       	</span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
+        <table style=\"border-width: 0px; width: 100%; text-align: left;\">
+        <tr>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
         </span>
-		</td>
-		</tr>
-		<tr>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" title=\"Forum\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
+        </td>
+        </tr>
+        <tr>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" title=\"Forum\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" title=\"Listen\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" title=\"Listen\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
         </span>
-		</td>
-		</tr>
-		<tr>
-		<td>
-		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" title=\"Profil\" /></a>
-        	<a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a>
         </span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-			<a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" title=\"Termine\" /></a>
-			<a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
-		</span>
-		</td>
-		<td>
-		<span class=\"iconTextLink\">
-			<a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
-			<a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
-		</span>
-		</td>
-		</tr>
-		</table>
+        </td>
+        </tr>
+        <tr>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" title=\"Profil\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
+        </span>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" title=\"Termine\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
+        </span>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
+        </span>
+        </td>
+        </tr>
+        </table>
     </div>
 </div>
 
@@ -254,7 +254,7 @@ echo "
         <div class=\"groupBox\" id=\"general\">
 
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" />
-            	Allgemeine Einstellungen</div>
+                Allgemeine Einstellungen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -311,8 +311,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                    	Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
-                    	aus dem Ordner adm_themes angezeigt.
+                        Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
+                        aus dem Ordner adm_themes angezeigt.
                     </li>                    
                     <li>
                         <dl>
@@ -485,19 +485,19 @@ echo "
                             <dt><label for=\"enable_password_recovery\">Passwort zusenden:</label>
                             </dt>
                             <dd>
-								<input type=\"checkbox\" id=\"enable_password_recovery\" name=\"enable_password_recovery\" ";
-								if(isset($form_values['enable_password_recovery']) && $form_values['enable_password_recovery'] == 1)
-								{
-									echo " checked=\"checked\" ";
-								}
-								echo " value=\"1\" />
+                                <input type=\"checkbox\" id=\"enable_password_recovery\" name=\"enable_password_recovery\" ";
+                                if(isset($form_values['enable_password_recovery']) && $form_values['enable_password_recovery'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch 
-						zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den 
-						Administrator stellen.
+                        zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den 
+                        Administrator stellen.
                     </li>
                 </ul>
             </div>
@@ -512,7 +512,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"register\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" />
-            	Einstellungen Registrierung</div>
+                Einstellungen Registrierung</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -593,7 +593,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"announcement-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" />
-            	Einstellungen Ankündigungsmodul</div>
+                Einstellungen Ankündigungsmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -641,7 +641,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"download-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" />
-            	Einstellungen Downloadmodul</div>
+                Einstellungen Downloadmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -685,7 +685,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"photo-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" />
-            	Einstellungen Fotomodul</div>
+                Einstellungen Fotomodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -720,9 +720,9 @@ echo "
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.<br /><br />
-						<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning16.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
-						Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur f&uuml;r registrierte Benutzer&rdquo;, wird nur der Zugriff &uuml;ber
-						die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt. 		
+                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning16.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
+                        Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur f&uuml;r registrierte Benutzer&rdquo;, wird nur der Zugriff &uuml;ber
+                        die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt.        
                     </li>
                     <li>
                         <dl>
@@ -862,7 +862,7 @@ echo "
                         Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
                         eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
                         erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
-						Diese Funktion steht im Lightboxmodus nicht zur Verfügung.
+                        Diese Funktion steht im Lightboxmodus nicht zur Verfügung.
                     </li>
                 </ul>
             </div>
@@ -875,7 +875,7 @@ echo "
          echo"
         <div class=\"groupBox\" id=\"forum\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" />
-            	Einstellungen Forum</div>
+                Einstellungen Forum</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li> 
@@ -965,11 +965,11 @@ echo "
                     <li class=\"smallFontSize\">
                         Falls das Forum über die gleiche Datenbank wie auch Admidio betrieben wird.
                     </li>
-					<li id=\"Forum_Zugangsdaten\">
-						<script type=\"text/javascript\"><!--
-							drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');
-						--></script>
-					</li>
+                    <li id=\"Forum_Zugangsdaten\">
+                        <script type=\"text/javascript\"><!--
+                            drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');
+                        --></script>
+                    </li>
                     <li class=\"smallFontSize\">
                         Hier müssen die Zugangsdaten des Forums eingegeben werden, falls ein solches ausgewählt und aktiviert wurde.
                     </li>                
@@ -984,7 +984,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"guestbook-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" />
-            	Einstellungen Gästebuchmodul</div>
+                Einstellungen Gästebuchmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1098,7 +1098,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"list-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" />
-            	Einstellungen Listen</div>
+                Einstellungen Listen</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1140,7 +1140,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"mail-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" />
-            	Einstellungen Mailmodul</div>
+                Einstellungen Mailmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1201,7 +1201,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"ecard-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" />
-            	Einstellungen Grußkartenmodul</div>
+                Einstellungen Grußkartenmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1219,8 +1219,8 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.
-						Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.
-						Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung.
+                        Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.
+                        Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung.
                     </li>
                     <li>
                         <dl>
@@ -1296,7 +1296,7 @@ echo "
                                     }
                                     echo ">Aktiviert</option>
                                 </select>
-								<div id=\"cc_recipients_count\" style=\"display:inline;\">";
+                                <div id=\"cc_recipients_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_cc_recipients'] == 1)
                                 {
                                 echo "<input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />";
@@ -1326,7 +1326,7 @@ echo "
                                     }
                                     echo ">Aktiviert</option>
                                 </select>
-								<div id=\"text_length_count\" style=\"display:inline;\">";
+                                <div id=\"text_length_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_text_length'] == 1)
                                 {
                                echo "<input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />";
@@ -1434,45 +1434,45 @@ echo "
             for($i=0; $i<count($data_array);$i++)
             {
                 $name = "";
-				if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
-				{
-					$name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
-				}
-				elseif(is_integer($data_array[$i]))
-				{
-					$name = $data_array[$i];
-				}
-				else if(strpos($data_array[$i],'.') === false)
-				{
-					$name = $data_array[$i];
-				}
-				if($name != "")
-				{	
-					if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
-					{
-						$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
-					}
-					else if($schowfont != "true" && $showcolor != "true")
-					{
-						$temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
-					}
-					else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
-					{
-						$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
-					}
-					else if($showcolor != "true")
-					{
-						$temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
-					}
-					else if (strcmp($data_array[$i],$first_value) == 0)
-					{
-						$temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
-					}
-					else
-					{
-						$temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
-					}
-				}
+                if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
+                {
+                    $name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
+                }
+                elseif(is_integer($data_array[$i]))
+                {
+                    $name = $data_array[$i];
+                }
+                else if(strpos($data_array[$i],'.') === false)
+                {
+                    $name = $data_array[$i];
+                }
+                if($name != "")
+                {   
+                    if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
+                    {
+                        $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+                    }
+                    else if($schowfont != "true" && $showcolor != "true")
+                    {
+                        $temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
+                    }
+                    else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
+                    {
+                        $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+                    }
+                    else if($showcolor != "true")
+                    {
+                        $temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+                    }
+                    else if (strcmp($data_array[$i],$first_value) == 0)
+                    {
+                        $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
+                    }
+                    else
+                    {
+                        $temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
+                    }
+                }
             }
             $temp_data .='</select>';
             return $temp_data;
@@ -1485,7 +1485,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"profile-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" />
-            	Einstellungen Profilmodul</div>
+                Einstellungen Profilmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1608,7 +1608,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"dates-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" />
-            	Einstellungen Terminmodul</div>
+                Einstellungen Terminmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>
@@ -1673,7 +1673,7 @@ echo "
         echo"
         <div class=\"groupBox\" id=\"links-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" />
-            	Einstellungen Weblinkmodul</div>
+                Einstellungen Weblinkmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
                     <li>

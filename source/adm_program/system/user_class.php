@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_users
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -30,10 +30,10 @@
  * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
  *                        Rolle "Webmaster" ist
  * hasMembership(rol_id)- Ueberprueft, ob der User Mitglied der uebergebenen Rolle ist
- * viewProfile			- Ueberprueft ob der User das Profil eines uebrgebenen
- * 						  Users einsehen darf
- * viewRole				- Ueberprueft ob der User eine Uebergebene Rolle(Liste)
- * 						  einsehen darf
+ * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
+ *                        Users einsehen darf
+ * viewRole             - Ueberprueft ob der User eine Uebergebene Rolle(Liste)
+ *                        einsehen darf
  *
  *****************************************************************************/
 
@@ -47,7 +47,7 @@ class User extends TableAccess
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     var $roles_membership = array();  // Array ueber alle Rollen bei denen der User Mitglied ist mit der entsprechenden Listenansichteinstellung
-	var $list_view_rights = array();  // Array ueber Listenrechte einzelner Rollen
+    var $list_view_rights = array();  // Array ueber Listenrechte einzelner Rollen
     
     // Konstruktor
     function User(&$db, $user_id = 0)
@@ -216,13 +216,13 @@ class User extends TableAccess
     // aehnlich getProperty, allerdings suche ueber usf_id
     function getPropertyById($field_id, $property)
     {
-    	foreach($this->db_user_fields as $key => $value)
-    	{
-    		if($value['usf_id'] == $field_id)
-    		{
-    			return $value[$property];
-    		}
-    	}
+        foreach($this->db_user_fields as $key => $value)
+        {
+            if($value['usf_id'] == $field_id)
+            {
+                return $value[$property];
+            }
+        }
         return false;
     } 
         
@@ -431,7 +431,7 @@ class User extends TableAccess
     {
         if($this->db_fields['usr_id'] > 0)
         {
-    		if(count($this->roles_rights) == 0)
+            if(count($this->roles_rights) == 0)
             {
                 global $g_current_organization;
                 $tmp_roles_rights  = array("rol_assign_roles" => "0", "rol_approve_users" => "0", 
@@ -614,13 +614,13 @@ class User extends TableAccess
         global $g_current_organization;
         $view_profile = false;
         
-		//Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
-		if($this->editProfile($usr_id))
-		{
-			$view_profile = true;
-		}
-		else
-		{
+        //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
+        if($this->editProfile($usr_id))
+        {
+            $view_profile = true;
+        }
+        else
+        {
             // Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
             if($this->viewAllLists())
             {
@@ -637,10 +637,10 @@ class User extends TableAccess
                               AND rol_cat_id = cat_id
                               AND cat_org_id = ". $g_current_organization->getValue("org_id");
                 $this->db->query($sql);
-    			
+                
                 if($this->db->num_rows() > 0)
                 {             
-    				while($row = $this->db->fetch_array())
+                    while($row = $this->db->fetch_array())
                     {
                         if($row['rol_this_list_view'] == 2)
                         {
@@ -653,22 +653,22 @@ class User extends TableAccess
                             // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
                             $view_profile = true;
                         }
-    				}
+                    }
                 }
             }
-		}
-		return $view_profile;
+        }
+        return $view_profile;
     }
     
     // Funktion prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf    
     function viewRole($rol_id)
     {
-    	$view_role = false;
-		//Zunaechst abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
-		if($this->viewAllLists())
-		{
-			$view_role = true;
-		}
+        $view_role = false;
+        //Zunaechst abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
+        if($this->viewAllLists())
+        {
+            $view_role = true;
+        }
         else  //Falls er das Recht nicht hat Kontrolle fuer eine bestimmte Rolle
         {
             // im Array nach der Rolleneinstellung schauen

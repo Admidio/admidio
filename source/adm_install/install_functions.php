@@ -2,7 +2,7 @@
 /******************************************************************************
  * Gemeinsame Funktionen fuer Update und Installation
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,18 +16,18 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
     
     if($install)
     {
-    	$title = "Installation der Version ". ADMIDIO_VERSION;
+        $title = "Installation der Version ". ADMIDIO_VERSION;
     }
     else
     {
-    	$title = "Update auf Version ". ADMIDIO_VERSION;
+        $title = "Update auf Version ". ADMIDIO_VERSION;
     }
     
     echo '
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
     <head>
-        <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
+        <!-- (c) 2004 - 2008 The Admidio Team - http://www.admidio.org -->
         
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="author"   content="Admidio Team" />
@@ -74,22 +74,22 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
         <div id="page">
         <div><img class="img_border" src="layout/border_top_big.png" alt="border" /></div>
         <div id="content_left" class="content">&nbsp;
-			<div class="formLayout" id="installation_form">
-				<div class="formHead" style="text-align: left; letter-spacing: 0em;">'. $title. '</div>
-	
-				<div class="formBody" style="text-align: left;">
-					<p class="bigFontSize">'.
-						$message.
-					'</p>
-	
-					<div class="formSubmit">
-						<button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
-					</div>            
-				</div>
-			</div>
-		</div>
-		<div><img class="img_border" src="layout/border_bottom_big.png" alt="border" /></div>
-		</div>
+            <div class="formLayout" id="installation_form">
+                <div class="formHead" style="text-align: left; letter-spacing: 0em;">'. $title. '</div>
+    
+                <div class="formBody" style="text-align: left;">
+                    <p class="bigFontSize">'.
+                        $message.
+                    '</p>
+    
+                    <div class="formSubmit">
+                        <button type="button" id="next_page" name="next_page" value="'. $icon_text. '" onclick="startUpdate()"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
+                    </div>            
+                </div>
+            </div>
+        </div>
+        <div><img class="img_border" src="layout/border_bottom_big.png" alt="border" /></div>
+        </div>
         </form>
 
         <script type="text/javascript"><!--

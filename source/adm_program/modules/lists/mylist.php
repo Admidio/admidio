@@ -2,7 +2,7 @@
 /******************************************************************************
  * Eigene Listen erstellen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -108,39 +108,39 @@ $g_layout['title']  = "Eigene Liste - Einstellungen";
 $g_layout['header'] = '
     <script type="text/javascript">
         var actFieldCount      = 0;
-		var arr_user_fields    = createUserFieldsArray();
+        var arr_user_fields    = createUserFieldsArray();
         var arr_default_fields = createDefaultFieldsArray();
 
-		// Funktion fuegt eine neue Zeile zum Zuordnen von Profilfeldern hinzu
+        // Funktion fuegt eine neue Zeile zum Zuordnen von Profilfeldern hinzu
         function addField() 
         {
-			var category = "";
-			var table = document.getElementById("mylist_fields_tbody");
+            var category = "";
+            var table = document.getElementById("mylist_fields_tbody");
             var newTableRow = table.insertRow(actFieldCount);
-			var newCellCount = newTableRow.insertCell(-1);
+            var newCellCount = newTableRow.insertCell(-1);
             newCellCount.innerHTML = (actFieldCount + 1) + ". Feld :";
-			
-			// neue Spalte zur Auswahl des Profilfeldes
-			var newCellField = newTableRow.insertCell(-1);
+            
+            // neue Spalte zur Auswahl des Profilfeldes
+            var newCellField = newTableRow.insertCell(-1);
             htmlCboFields = "<select size=\"1\" id=\"column" + actFieldCount + "\" name=\"column" + actFieldCount + "\">" +
-					"<option value=\"\"></option>";
-			for(var counter = 0; counter < arr_user_fields.length; counter++)
-			{
-				if(category != arr_user_fields[counter]["cat_name"])
-				{
-					if(category.length > 0)
-					{
-						htmlCboFields += "</optgroup>";
-					}
-					htmlCboFields += "<optgroup label=\"" + arr_user_fields[counter]["cat_name"] + "\">";
-					category = arr_user_fields[counter]["cat_name"];
-				}
-				var selected = \'\';
-				if((actFieldCount == 0 && arr_user_fields[counter]["usf_name"] == \'Nachname\')
-				|| (actFieldCount == 1 && arr_user_fields[counter]["usf_name"] == \'Vorname\'))
-				{
-					selected = \' selected="selected" \';
-				}
+                    "<option value=\"\"></option>";
+            for(var counter = 0; counter < arr_user_fields.length; counter++)
+            {
+                if(category != arr_user_fields[counter]["cat_name"])
+                {
+                    if(category.length > 0)
+                    {
+                        htmlCboFields += "</optgroup>";
+                    }
+                    htmlCboFields += "<optgroup label=\"" + arr_user_fields[counter]["cat_name"] + "\">";
+                    category = arr_user_fields[counter]["cat_name"];
+                }
+                var selected = \'\';
+                if((actFieldCount == 0 && arr_user_fields[counter]["usf_name"] == \'Nachname\')
+                || (actFieldCount == 1 && arr_user_fields[counter]["usf_name"] == \'Vorname\'))
+                {
+                    selected = \' selected="selected" \';
+                }
                 if(arr_default_fields[actFieldCount])
                 {
                     if(arr_user_fields[counter]["usf_id"] == arr_default_fields[actFieldCount][\'usf_id\'])
@@ -148,15 +148,15 @@ $g_layout['header'] = '
                         selected = \' selected="selected" \';
                     }
                 }
-				htmlCboFields += "<option value=\"" + arr_user_fields[counter]["usf_id"] + "\" " + selected + ">" + arr_user_fields[counter]["usf_name"] + "</option>"; 
-			}
-			htmlCboFields += "</select>";
-			newCellField.innerHTML = htmlCboFields;
-			
-			// neue Spalte zur Einstellung der Sortierung
-			var selectAsc  = \'\';
-			var selectDesc = \'\';
-			
+                htmlCboFields += "<option value=\"" + arr_user_fields[counter]["usf_id"] + "\" " + selected + ">" + arr_user_fields[counter]["usf_name"] + "</option>"; 
+            }
+            htmlCboFields += "</select>";
+            newCellField.innerHTML = htmlCboFields;
+            
+            // neue Spalte zur Einstellung der Sortierung
+            var selectAsc  = \'\';
+            var selectDesc = \'\';
+            
             if(arr_default_fields[actFieldCount])
             {
                 if(arr_default_fields[actFieldCount][\'sort\'] == "ASC")
@@ -169,18 +169,18 @@ $g_layout['header'] = '
                 }
             }
             else if(actFieldCount == 0)
-			{
-				selectAsc = \' selected="selected" \';
-			}
-			
-			var newCellOrder = newTableRow.insertCell(-1);
-			newCellOrder.innerHTML = "<select size=\"1\" id=\"sort" + actFieldCount + "\" name=\"sort" + actFieldCount + "\">" +
-			        "<option value=\"\">&nbsp;</option>" +
-			        "<option value=\"ASC\" " + selectAsc + ">A bis Z</option>" +
-			        "<option value=\"DESC\" " + selectDesc + ">Z bis A</option>" +
-			    "</select>";
+            {
+                selectAsc = \' selected="selected" \';
+            }
             
-			// neue Spalte fuer Bedingungen
+            var newCellOrder = newTableRow.insertCell(-1);
+            newCellOrder.innerHTML = "<select size=\"1\" id=\"sort" + actFieldCount + "\" name=\"sort" + actFieldCount + "\">" +
+                    "<option value=\"\">&nbsp;</option>" +
+                    "<option value=\"ASC\" " + selectAsc + ">A bis Z</option>" +
+                    "<option value=\"DESC\" " + selectDesc + ">Z bis A</option>" +
+                "</select>";
+            
+            // neue Spalte fuer Bedingungen
             condition = \'\';
             if(arr_default_fields[actFieldCount])
             {
@@ -188,77 +188,77 @@ $g_layout['header'] = '
                 {
                     condition = arr_default_fields[actFieldCount][\'condition\'];
                     condition = condition.replace(/{/g, "<");
-					condition = condition.replace(/}/g, ">");
+                    condition = condition.replace(/}/g, ">");
                 }
             }            
-			var newCellConditions = newTableRow.insertCell(-1);
-			newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + actFieldCount + "\" name=\"condition" + actFieldCount + "\" size=\"15\" maxlength=\"30\" value=\"" + condition + "\" />";
+            var newCellConditions = newTableRow.insertCell(-1);
+            newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + actFieldCount + "\" name=\"condition" + actFieldCount + "\" size=\"15\" maxlength=\"30\" value=\"" + condition + "\" />";
 
-			actFieldCount++;
+            actFieldCount++;
         }
         
         function createUserFieldsArray()
         { 
             var user_fields = new Array(); ';
-		
-    		// Mehrdimensionales Array fuer alle anzuzeigenden Felder mit den noetigen Daten erstellen
-    		$i = 0;
-    		$old_cat_name = "";
-    		$old_cat_id   = 0;
+        
+            // Mehrdimensionales Array fuer alle anzuzeigenden Felder mit den noetigen Daten erstellen
+            $i = 0;
+            $old_cat_name = "";
+            $old_cat_id   = 0;
 
             foreach($g_current_user->db_user_fields as $key => $value)
             {    
-    			// bei den Stammdaten noch Foto und Loginname anhaengen
-    			if($old_cat_name == "Stammdaten"
-    			&& $value['cat_name'] != "Stammdaten")
-    			{
-    				$g_layout['header'] .= '
-    				user_fields['. $i. '] = new Object();
-    				user_fields['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
-    				user_fields['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
-    				user_fields['. $i. '][\'usf_id\'] = \'usr_login_name\';
-    				user_fields['. $i. '][\'usf_name\'] = \'Benutzername\';';
-    				$i++;
-    				
-    				$g_layout['header'] .= '
-    				user_fields['. $i. '] = new Object();
-    				user_fields['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
-    				user_fields['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
-    				user_fields['. $i. '][\'usf_id\'] = \'usr_photo\';
-    				user_fields['. $i. '][\'usf_name\'] = \'Foto\';';
-    				$i++;
-    			}
-    			
-    			if($value['usf_hidden'] == 0 || $g_current_user->editUser())
-    			{
-    				$g_layout['header'] .= '
-    				user_fields['. $i. '] = new Object();
-    				user_fields['. $i. '][\'cat_id\'] = '. $value['cat_id']. ';
-    				user_fields['. $i. '][\'cat_name\'] = \''. $value['cat_name']. '\';
-    				user_fields['. $i. '][\'usf_id\'] = '. $value['usf_id']. ';
-    				user_fields['. $i. '][\'usf_name\'] = \''. $value['usf_name']. '\';';
-    			
-    				$old_cat_id   = $value['cat_id'];
-    				$old_cat_name = $value['cat_name'];
-    				$i++;
-    			}
-            } 		
+                // bei den Stammdaten noch Foto und Loginname anhaengen
+                if($old_cat_name == "Stammdaten"
+                && $value['cat_name'] != "Stammdaten")
+                {
+                    $g_layout['header'] .= '
+                    user_fields['. $i. '] = new Object();
+                    user_fields['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
+                    user_fields['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
+                    user_fields['. $i. '][\'usf_id\'] = \'usr_login_name\';
+                    user_fields['. $i. '][\'usf_name\'] = \'Benutzername\';';
+                    $i++;
+                    
+                    $g_layout['header'] .= '
+                    user_fields['. $i. '] = new Object();
+                    user_fields['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
+                    user_fields['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
+                    user_fields['. $i. '][\'usf_id\'] = \'usr_photo\';
+                    user_fields['. $i. '][\'usf_name\'] = \'Foto\';';
+                    $i++;
+                }
+                
+                if($value['usf_hidden'] == 0 || $g_current_user->editUser())
+                {
+                    $g_layout['header'] .= '
+                    user_fields['. $i. '] = new Object();
+                    user_fields['. $i. '][\'cat_id\'] = '. $value['cat_id']. ';
+                    user_fields['. $i. '][\'cat_name\'] = \''. $value['cat_name']. '\';
+                    user_fields['. $i. '][\'usf_id\'] = '. $value['usf_id']. ';
+                    user_fields['. $i. '][\'usf_name\'] = \''. $value['usf_name']. '\';';
+                
+                    $old_cat_id   = $value['cat_id'];
+                    $old_cat_name = $value['cat_name'];
+                    $i++;
+                }
+            }       
 
-    		// Anfangs- und Enddatum der Rollenmitgliedschaft als Felder noch anhaengen
-    		$g_layout['header'] .= '
-    		user_fields['. $i. '] = new Object();
-    		user_fields['. $i. '][\'cat_id\'] = -1;
-    		user_fields['. $i. '][\'cat_name\'] = \'Rollendaten\';
-    		user_fields['. $i. '][\'usf_id\'] = \'mem_begin\';
-    		user_fields['. $i. '][\'usf_name\'] = \'Mitgliedsbeginn\';';
-    		
-    		$i++;
-    		$g_layout['header'] .= '
-    		user_fields['. $i. '] = new Object();
-    		user_fields['. $i. '][\'cat_id\'] = -1;
-    		user_fields['. $i. '][\'cat_name\'] = \'Rollendaten\';
-    		user_fields['. $i. '][\'usf_id\'] = \'mem_end\';
-    		user_fields['. $i. '][\'usf_name\'] = \'Mitgliedsende\';
+            // Anfangs- und Enddatum der Rollenmitgliedschaft als Felder noch anhaengen
+            $g_layout['header'] .= '
+            user_fields['. $i. '] = new Object();
+            user_fields['. $i. '][\'cat_id\'] = -1;
+            user_fields['. $i. '][\'cat_name\'] = \'Rollendaten\';
+            user_fields['. $i. '][\'usf_id\'] = \'mem_begin\';
+            user_fields['. $i. '][\'usf_name\'] = \'Mitgliedsbeginn\';';
+            
+            $i++;
+            $g_layout['header'] .= '
+            user_fields['. $i. '] = new Object();
+            user_fields['. $i. '][\'cat_id\'] = -1;
+            user_fields['. $i. '][\'cat_name\'] = \'Rollendaten\';
+            user_fields['. $i. '][\'usf_id\'] = \'mem_end\';
+            user_fields['. $i. '][\'usf_name\'] = \'Mitgliedsende\';
             
             return user_fields;
         }
@@ -293,18 +293,18 @@ $g_layout['header'] = '
         
         function send()
         {
-        	for(var i = 0; i < actFieldCount; i++)
-        	{
-				if(document.getElementById("condition" + i))
-				{
-					var condition = document.getElementById("condition" + i);
-					condition.value = condition.value.replace(/</g, "{");
-					condition.value = condition.value.replace(/>/g, "}");
-				}
-        	}
+            for(var i = 0; i < actFieldCount; i++)
+            {
+                if(document.getElementById("condition" + i))
+                {
+                    var condition = document.getElementById("condition" + i);
+                    condition.value = condition.value.replace(/</g, "{");
+                    condition.value = condition.value.replace(/>/g, "}");
+                }
+            }
         
-			document.getElementById("form_mylist").action  = "'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php";
-			document.getElementById("form_mylist").submit();
+            document.getElementById("form_mylist").action  = "'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php";
+            document.getElementById("form_mylist").submit();
         }
     </script>';
 
@@ -346,11 +346,11 @@ echo '
                 </tr>
             </thead>
             <tbody id=\"mylist_fields_tbody\">
-				<script type=\"text/javascript\">          
-					for(var counter = 0; counter < ". $default_fields. "; counter++)
-					{
-						addField();
-					}
+                <script type=\"text/javascript\">          
+                    for(var counter = 0; counter < ". $default_fields. "; counter++)
+                    {
+                        addField();
+                    }
                 </script>
                 <tr id=\"table_row_button\">
                     <td colspan=\"4\">

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verwaltung der aller Mitglieder in der Datenbank
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -207,15 +207,15 @@ echo "
     </li>";
     if($g_current_user->isWebmaster())
     {
-    	echo '
-		<li>
-			<span class="iconTextLink">
-				<a href="'. $g_root_path. '/adm_program/administration/members/fields.php"><img
-				src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
-				<a href="'. $g_root_path. '/adm_program/administration/members/fields.php">Profilfelder pflegen</a>
-			</span>
-		</li>';
-	}
+        echo '
+        <li>
+            <span class="iconTextLink">
+                <a href="'. $g_root_path. '/adm_program/administration/members/fields.php"><img
+                src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
+                <a href="'. $g_root_path. '/adm_program/administration/members/fields.php">Profilfelder pflegen</a>
+            </span>
+        </li>';
+    }
 echo '</ul>';
 
 if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)

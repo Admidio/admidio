@@ -2,7 +2,7 @@
 /******************************************************************************
  * Organisationseinstellungen speichern
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,30 +56,30 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 {
     if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
     {
-    	$g_message->show("forum_access_data");
+        $g_message->show("forum_access_data");
     }
     else
     {
-    	// Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
-    	if($_POST['forum_pw'] == "0000")
-    	{
-    		$_POST['forum_pw'] = $g_preferences['forum_pw'];
-    	}
-    	
-    	$forum_test = createForumObject($_POST['forum_version']);
-    	
-    	if($_POST['forum_sqldata_from_admidio'] == 0)
-    	{
-    		$connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
-    	}
-    	else
-    	{
-    		$connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
-    	}
-    	if($connect_id == false)
-    	{
-    		$g_message->show("forum_db_connection_failed");
-    	}
+        // Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
+        if($_POST['forum_pw'] == "0000")
+        {
+            $_POST['forum_pw'] = $g_preferences['forum_pw'];
+        }
+        
+        $forum_test = createForumObject($_POST['forum_version']);
+        
+        if($_POST['forum_sqldata_from_admidio'] == 0)
+        {
+            $connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
+        }
+        else
+        {
+            $connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
+        }
+        if($connect_id == false)
+        {
+            $g_message->show("forum_db_connection_failed");
+        }
     }
 }
 
@@ -91,24 +91,24 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
 $checkboxes = array('dates_show_map_link'
-				   ,'enable_system_mails'
+                   ,'enable_system_mails'
                    ,'enable_mail_captcha'
                    ,'enable_registration_captcha'
                    ,'enable_registration_admin_mail'
                    ,'enable_bbcode'
                    ,'enable_rss'
                    ,'enable_auto_login'
-				   ,'enable_password_recovery'
+                   ,'enable_password_recovery'
                    ,'enable_download_module'
                    ,'enable_intial_comments_loading'
                    ,'enable_mail_module'
                    ,'enable_guestbook_captcha'
-				   ,'enable_ecard_module'
+                   ,'enable_ecard_module'
                    ,'enable_forum_interface'
                    ,'enable_gbook_comments4all'
                    ,'enable_ecard_module'
                    ,'forum_export_user'
-				   ,'forum_sqldata_from_admidio'
+                   ,'forum_sqldata_from_admidio'
                    ,'photo_image_text'
                    ,'profile_show_map_link'
                    ,'profile_show_roles'
@@ -117,10 +117,10 @@ $checkboxes = array('dates_show_map_link'
 
 foreach($checkboxes as $key => $value)
 {
-	if(isset($_POST[$value]) == false || $_POST[$value] != 1)
-	{
-		$_POST[$value] = 0;
-	}
+    if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+    {
+        $_POST[$value] = 0;
+    }
 }
 
 
@@ -153,15 +153,15 @@ foreach($_POST as $key => $value)
     && $key != "version"
     && $key != "save")
     {
-    	// Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
-    	// 0000 bedeutet, dass das PW sich nicht veraendert hat
-    	if($key == "forum_pw" && $value == "0000")
-    	{
-    		$g_preferences[$key] = $g_preferences[$key]; 
-    	}
-    	else
-    	{
-        	$g_preferences[$key] = $value;
+        // Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
+        // 0000 bedeutet, dass das PW sich nicht veraendert hat
+        if($key == "forum_pw" && $value == "0000")
+        {
+            $g_preferences[$key] = $g_preferences[$key]; 
+        }
+        else
+        {
+            $g_preferences[$key] = $value;
         }
     }
 }

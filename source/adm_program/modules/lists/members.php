@@ -2,7 +2,7 @@
 /******************************************************************************
  * Mitglieder einer Rolle zuordnen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -422,7 +422,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     <th>Vorname</th>
                     <th>Geburtsdatum</th>
                     <th style=\"text-align: center;\">Leiter<img 
-						class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/></th>
+                        class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/></th>
                 </tr>
             </thead>";
 
@@ -510,7 +510,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             <tr class=\"tableMouseOver\">
                 <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
                 
-				<td style=\"text-align: center;\">";
+                <td style=\"text-align: center;\">";
                     //Haekchen setzen ob jemand Mitglied ist oder nicht
                     if(in_array($user['usr_id'], $role_member))
                     {
@@ -522,7 +522,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     }
                 echo"</td>
                 
-				<td>". $user['last_name']."</td>
+                <td>". $user['last_name']."</td>
                 <td>". $user['first_name']."</td>
 
                 <td>";

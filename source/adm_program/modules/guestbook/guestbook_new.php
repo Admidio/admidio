@@ -2,7 +2,7 @@
 /******************************************************************************
  * Gaestebucheintraege anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -140,14 +140,14 @@ echo "
 <script type=\"text/javascript\"><!--
 function emoticon(text)
 {
-	var txtarea = document.getElementById('gbo_text');
+    var txtarea = document.getElementById('gbo_text');
 
-	if (txtarea.createTextRange && txtarea.caretPos) {
-		txtarea.caretPos.text = text;
-	} else {
-		txtarea.value  += text;
-	}
-	txtarea.focus();
+    if (txtarea.createTextRange && txtarea.caretPos) {
+        txtarea.caretPos.text = text;
+    } else {
+        txtarea.value  += text;
+    }
+    txtarea.focus();
 }
 
 var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
@@ -249,11 +249,11 @@ echo "
                         <div style=\"width: 350px;\">
                             <div style=\"float: left;\">
                                 <a class=\"iconLink\" href=\"javascript:bbcode(0)\"><img id=\"b\"
-									src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\" /></a>
+                                    src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(1)\"><img id=\"u\"
-									src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(2)\"><img id=\"i\"
-									src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\" /></a>
+                                    src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(3)\"><img id=\"big\"
                                     src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\" /></a>
                                 <a class=\"iconLink\" href=\"javascript:bbcode(4)\"><img id=\"small\"
@@ -305,7 +305,7 @@ echo "
                                 src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" /></a>
                             <a class=\"iconLink\" href=\"javascript:emoticon(':twisted:')\"><img
                                 src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" /></a>";
-					    }
+                        }
                     echo "</dt>
                     <dd>
                         <textarea id=\"gbo_text\" name=\"gbo_text\" tabindex=\"4\" style=\"width: 350px;\" rows=\"10\" cols=\"40\">". $guestbook->getValue("gbo_text"). "</textarea>

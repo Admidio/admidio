@@ -2,7 +2,7 @@
 /******************************************************************************
  * Anzeigen von Listen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -151,7 +151,7 @@ $g_layout['header'] = "
             {
                 self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=teilnehmer&mode=html&rol_id=' + rol_id;
             }
-			else if(sel_list == 'mylist')
+            else if(sel_list == 'mylist')
             {
                 self.location.href = '$g_root_path/adm_program/modules/lists/mylist.php?rol_id=' + rol_id";
             if($active_role)

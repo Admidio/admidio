@@ -2,7 +2,7 @@
 /******************************************************************************
  * Html-Kopf der in allen Admidio-Dateien integriert wird
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -52,7 +52,7 @@ echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
 <head>
-    <!-- (c) 2004 - 2007 The Admidio Team - http://www.admidio.org -->
+    <!-- (c) 2004 - 2008 The Admidio Team - http://www.admidio.org -->
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     
@@ -65,14 +65,14 @@ echo '
     
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
-	';
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
+    ';
     
     echo $g_layout['header']. '
 
     <!--[if lt IE 7]>
     <script type="text/javascript">
-    	window.attachEvent("onload", correctPNG);
+        window.attachEvent("onload", correctPNG);
     </script>
     <![endif]-->';
 

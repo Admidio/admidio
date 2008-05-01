@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer die Ausgabe von Hinweistexten oder Fehlermeldungen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,18 +15,18 @@ class Message
     var $variables;
     var $headline;
     var $content;
-    var $inline;			// wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
-    var $forward_url;		// Url auf die durch den Weiter-Button verwiesen wird
-    var $timer;				// Anzahl ms bis automatisch zu forward_url weitergeleitet wird
-    var $yes_no_buttons;	// Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
-	var $close_button;	// Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
+    var $inline;            // wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
+    var $forward_url;       // Url auf die durch den Weiter-Button verwiesen wird
+    var $timer;             // Anzahl ms bis automatisch zu forward_url weitergeleitet wird
+    var $yes_no_buttons;    // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
+    var $close_button;  // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
     
     function Message()
     {
-		$this->includes = true;
+        $this->includes = true;
         $this->inline   = false;
-		$this->yes_no_buttons = false;
-		$this->close_button   = false;
+        $this->yes_no_buttons = false;
+        $this->close_button   = false;
     }
     
     // Inhalt fuer eine Variable hinzufuegen
@@ -95,17 +95,17 @@ class Message
         }       
         $this->yes_no_buttons = true;
     }
-	
-	function setCloseButton()
-	{
-		$this->close_button = true;
-	}
+    
+    function setCloseButton()
+    {
+        $this->close_button = true;
+    }
     
     // die Meldung wird ausgegeben
-	// msg_key ist der Schluessel fuer die Nachricht, die angezeigt werden soll
-	// msg_variable1 : der erste Platzhalter kann direkt gesetzt werden
-	// msg_headline  : Ueberschrift der Nachricht setzen
-	// msg_includes  : Flag, ob my_body_top, my_body_bottom my_header eingebunden werden sollen
+    // msg_key ist der Schluessel fuer die Nachricht, die angezeigt werden soll
+    // msg_variable1 : der erste Platzhalter kann direkt gesetzt werden
+    // msg_headline  : Ueberschrift der Nachricht setzen
+    // msg_includes  : Flag, ob my_body_top, my_body_bottom my_header eingebunden werden sollen
     function show($msg_key = "" , $msg_variable1 = "", $msg_headline = "", $msg_includes = true)
     {
         // noetig, da dies bei den includes benoetigt wird
@@ -173,7 +173,7 @@ class Message
         {
             // Html-Kopf ausgeben
             $g_layout['title']    = "Hinweis";
-			$g_layout['includes'] = $msg_includes;
+            $g_layout['includes'] = $msg_includes;
             if ($this->timer > 0)
             {
                 $g_layout['header'] = '<script language="JavaScript1.2" type="text/javascript"><!--
@@ -208,15 +208,15 @@ class Message
                     else
                     {
                         // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen 
-						// bzw. ggf. einen Fenster-Schließen-Button                       
-						if($this->close_button == true)
-						{
-							echo '<button name="close" type="button" value="schließen" onclick="window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Schließen" />&nbsp;Schließen</button>';
-						}
-						else
-						{
-							echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurueck" />&nbsp;Zurück</button>';
-						}
+                        // bzw. ggf. einen Fenster-Schließen-Button                       
+                        if($this->close_button == true)
+                        {
+                            echo '<button name="close" type="button" value="schließen" onclick="window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Schließen" />&nbsp;Schließen</button>';
+                        }
+                        else
+                        {
+                            echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurueck" />&nbsp;Zurück</button>';
+                        }
                     }
                 echo '</div>
             </div>

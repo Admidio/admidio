@@ -2,7 +2,7 @@
 /******************************************************************************
  * Import-Assistent fuer Benutzerdaten
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,7 +56,7 @@ echo "
                         echo generateRoleSelectBox();
 
                         echo "&nbsp;
-						<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_assign',this);\" onmouseout=\"ajax_hideTooltip()\" />
                     </dd>
                 </dl>

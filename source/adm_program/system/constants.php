@@ -2,7 +2,7 @@
 /******************************************************************************
  * Konstanten die innerhalb Admidios benoetigt werden
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,11 +23,11 @@ define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
 // Fallunterscheidung für HTTPS
 if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on")
 {
-	define('CURRENT_URL', "https://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+    define('CURRENT_URL', "https://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
 }
 else
 {
-	define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+    define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
 }
 
 

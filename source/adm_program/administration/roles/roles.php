@@ -2,7 +2,7 @@
 /******************************************************************************
  * Rollen mit Berechtigungen auflisten 
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -204,7 +204,7 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list.png\"
                     alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" title=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" />";
                 }
-            	if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
+                if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
                     alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" />";

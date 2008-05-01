@@ -3,7 +3,7 @@
  * Script beinhaltet allgemeine Daten / Variablen, die fuer alle anderen
  * Scripte notwendig sind
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -279,11 +279,11 @@ else
 // Homepageseite festlegen
 if($g_valid_login)
 {
-	$g_homepage = $g_root_path. "/". $g_preferences['homepage_login'];
+    $g_homepage = $g_root_path. "/". $g_preferences['homepage_login'];
 }
 else
 {
-	$g_homepage = $g_root_path. "/". $g_preferences['homepage_logout'];
+    $g_homepage = $g_root_path. "/". $g_preferences['homepage_logout'];
 }
 
 /*********************************************************************************
@@ -297,7 +297,7 @@ if($g_preferences['enable_forum_interface'])
     if(isset($_SESSION['g_forum']))
     {
         $g_forum =& $_SESSION['g_forum'];
-		$g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db);
+        $g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db);
     }
     else
     {

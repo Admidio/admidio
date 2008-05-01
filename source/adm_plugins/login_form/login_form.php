@@ -11,7 +11,7 @@
  *
  * Kompatible ab Admidio-Versions 2.0.0
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender 
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -142,9 +142,9 @@ if($g_valid_login == 1)
             echo "<li>
                 <dl>
                     <dt class=\"iconTextLink\"><a href=\"javascript:loadPageLogout()\">
-							<img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Logout\" /></a>
-						<a href=\"javascript:loadPageLogout()\">Logout</a>
-					</dt>
+                            <img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Logout\" /></a>
+                        <a href=\"javascript:loadPageLogout()\">Logout</a>
+                    </dt>
                 </dl>
             </li>";
         }
@@ -198,7 +198,7 @@ else
                         if($plg_show_register_link && $g_preferences['registration_mode'])
                         {
                             echo '<dt><a href="'. $g_root_path. '/adm_program/system/registration.php" 
-                                	'. $plg_link_target. '>Registrieren</a></dt>
+                                    '. $plg_link_target. '>Registrieren</a></dt>
                                  <dd>&nbsp;</dd>';
                         }
                         if($plg_show_register_link && $plg_show_email_link)
@@ -211,20 +211,20 @@ else
                             $role_webmaster = new Role($g_db, 'Webmaster');
 
                             // E-Mail intern oder extern verschicken
-							if($g_preferences['enable_mail_module'] != 1 
-							|| $role_webmaster->getValue("rol_mail_logout") != 1 )
-							{
-								$mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
-							}
-							else if($g_preferences['enable_password_recovery'] != 1) 
-							{
-								$mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
-							}
-							else
-							{
-								$mail_link = "$g_root_path/adm_program/system/lost_password.php";
-							}
-							
+                            if($g_preferences['enable_mail_module'] != 1 
+                            || $role_webmaster->getValue("rol_mail_logout") != 1 )
+                            {
+                                $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
+                            }
+                            else if($g_preferences['enable_password_recovery'] != 1) 
+                            {
+                                $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
+                            }
+                            else
+                            {
+                                $mail_link = "$g_root_path/adm_program/system/lost_password.php";
+                            }
+                            
                             echo '<dt><a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a></dt>
                             <dd>&nbsp;</dd>';
                         }

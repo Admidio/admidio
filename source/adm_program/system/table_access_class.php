@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_organizations
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -252,7 +252,7 @@ class TableAccess
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
                 if(strpos($key, $this->column_praefix. "_") === 0
-				&& $this->db_fields_infos[$key]['extra'] != "auto_increment") 
+                && $this->db_fields_infos[$key]['extra'] != "auto_increment") 
                 {
                     if($this->db_fields_infos[$key]['changed'] == true)
                     {

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Kategorien anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -120,51 +120,51 @@ echo "
             
             if($_GET['type'] == "USF" && $category->getValue("cat_system") == 0)
             {
-				// besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
-				if($g_current_organization->getValue("org_org_id_parent") > 0
-				|| $g_current_organization->hasChildOrganizations())
-				{
-					echo "
-					<li>
-						<dl>
-							<dt>&nbsp;</dt>
-							<dd>
-								<input type=\"checkbox\" id=\"cat_org_id\" name=\"cat_org_id\" tabindex=\"3\" ";
-								if($category->getValue("cat_org_id") == 0)
-								{
-									echo " checked=\"checked\" ";
-								}
-								echo " value=\"1\" />
-								<label for=\"cat_org_id\">Kategorie für mehrere Organisationen sichtbar</label>
-								<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"\" 
-									onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=category_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\" 
-									onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=category_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
-							</dd>
-						</dl>
-					</li>";
-				}
-			}
-			else
-			{
-	            echo "
-				<li>
-	                <dl>
-	                    <dt>
-	                        <label for=\"cat_hidden\"><img src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" /></label>
-	                    </dt>
-	                    <dd>
-	                        <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
-	                            if($category->getValue("cat_hidden") == 1)
-	                            {
-	                                echo " checked=\"checked\" ";
-	                            }
-	                            echo " value=\"1\" />
-	                        <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar</label>
-	                    </dd>
-	                </dl>
-	            </li>";
-			}
-		echo "</ul>
+                // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
+                if($g_current_organization->getValue("org_org_id_parent") > 0
+                || $g_current_organization->hasChildOrganizations())
+                {
+                    echo "
+                    <li>
+                        <dl>
+                            <dt>&nbsp;</dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"cat_org_id\" name=\"cat_org_id\" tabindex=\"3\" ";
+                                if($category->getValue("cat_org_id") == 0)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                                <label for=\"cat_org_id\">Kategorie für mehrere Organisationen sichtbar</label>
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"\" 
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=category_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\" 
+                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=category_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            </dd>
+                        </dl>
+                    </li>";
+                }
+            }
+            else
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>
+                            <label for=\"cat_hidden\"><img src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" /></label>
+                        </dt>
+                        <dd>
+                            <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
+                                if($category->getValue("cat_hidden") == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar</label>
+                        </dd>
+                    </dl>
+                </li>";
+            }
+        echo "</ul>
 
         <hr />
 

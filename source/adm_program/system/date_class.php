@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_dates
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -106,25 +106,25 @@ class Date extends TableAccess
         $prodid = "-//www.admidio.org//Admidio" . ADMIDIO_VERSION . "//DE";
         $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
         
-    	$ical = "BEGIN:VCALENDAR\n".
-    	        "METHOD:PUBLISH\n".
-    	        "PRODID:". $prodid. "\n".
-    	        "VERSION:2.0\n".
-    	        "BEGIN:VEVENT\n".
-    	        "UID:". $uid. "\n".
-    	        "SUMMARY:". $this->db_fields['dat_headline']. "\n".
-    	        "DESCRIPTION:". $this->db_fields['dat_description']. "\n".
-    	        "DTSTAMP:". mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']). "\n".
-    	        "LOCATION:". $this->db_fields['dat_location']. "\n";
-		if($this->db_fields['dat_all_day'] == 1)
-		{
-			$ical .= "DTSTART;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_begin']). "\n".
-			         "DTEND;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_end']). "\n";
-		}
-		else
-		{
-			$ical .= "DTSTART:". mysqldatetime("ymdThis", $this->db_fields['dat_begin']). "\n".
-			         "DTEND:". mysqldatetime("ymdThis", $this->db_fields['dat_end']). "\n";
+        $ical = "BEGIN:VCALENDAR\n".
+                "METHOD:PUBLISH\n".
+                "PRODID:". $prodid. "\n".
+                "VERSION:2.0\n".
+                "BEGIN:VEVENT\n".
+                "UID:". $uid. "\n".
+                "SUMMARY:". $this->db_fields['dat_headline']. "\n".
+                "DESCRIPTION:". $this->db_fields['dat_description']. "\n".
+                "DTSTAMP:". mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']). "\n".
+                "LOCATION:". $this->db_fields['dat_location']. "\n";
+        if($this->db_fields['dat_all_day'] == 1)
+        {
+            $ical .= "DTSTART;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_begin']). "\n".
+                     "DTEND;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_end']). "\n";
+        }
+        else
+        {
+            $ical .= "DTSTART:". mysqldatetime("ymdThis", $this->db_fields['dat_begin']). "\n".
+                     "DTEND:". mysqldatetime("ymdThis", $this->db_fields['dat_end']). "\n";
         }
         $ical .= "END:VEVENT\n".
                  "END:VCALENDAR";

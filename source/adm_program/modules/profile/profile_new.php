@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profil bearbeiten
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -158,11 +158,11 @@ function getFieldCode($field, $user, $new_user)
     {
         if($field['usf_type'] == "CHECKBOX" || $field['usf_name'] == "Geschlecht")
         {
-        	$readonly = ' disabled="disabled" ';
+            $readonly = ' disabled="disabled" ';
         }
         else
         {
-        	$readonly = ' class="readonly" readonly="readonly" ';
+            $readonly = ' class="readonly" readonly="readonly" ';
         }
     }
 
@@ -256,39 +256,39 @@ function getFieldCode($field, $user, $new_user)
             $maxlength = "50";
         }
         if($field['usf_type'] == "DATE")
-		{
+        {
             if($field['usf_name'] == 'Geburtstag')
             {
                 $value = "<script type=\"text/javascript\">
-    						var calBirthday = new CalendarPopup('calendardiv');
-    						calBirthday.setCssPrefix('calendar');
+                            var calBirthday = new CalendarPopup('calendardiv');
+                            calBirthday.setCssPrefix('calendar');
                             calBirthday.showNavigationDropdowns();
                             calBirthday.setYearSelectStartOffset(90);
                             calBirthday.setYearSelectEndOffset(0);
-    					</script>";
+                        </script>";
                 $calObject = "calBirthday";
             }
             else
             {
                 $value = "<script type=\"text/javascript\">
-    						var calDate = new CalendarPopup('calendardiv');
-    						calDate.setCssPrefix('calendar');
+                            var calDate = new CalendarPopup('calendardiv');
+                            calDate.setCssPrefix('calendar');
                             calDate.showNavigationDropdowns();
                             calDate.setYearSelectStartOffset(50);
                             calDate.setYearSelectEndOffset(10);
-    					</script>";
+                        </script>";
                 $calObject = "calDate";
             }
-			$value .= "
-					<input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-					<img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:$calObject.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" 
+            $value .= "
+                    <input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
+                    <img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:$calObject.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" 
                         id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-					<span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
-		}
-		else
-		{
-        	$value = "<input type=\"text\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />";
-		}
+                    <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
+        }
+        else
+        {
+            $value = "<input type=\"text\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />";
+        }
     }
     
     // Icons der Messenger anzeigen
@@ -334,7 +334,7 @@ function getFieldCode($field, $user, $new_user)
     if(strlen($field['usf_description']) > 0 && $field['cat_name'] != "Messenger")
     {
         $description = "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-		onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "',this);\" onmouseout=\"ajax_hideTooltip()\" />";
+        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "',this);\" onmouseout=\"ajax_hideTooltip()\" />";
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
@@ -453,8 +453,8 @@ echo "
                                 {
                                     echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                                     <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-										onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-										onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
+                                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
                                 }
                             echo "</dd>
                         </dl>
@@ -469,8 +469,8 @@ echo "
                                     <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
                                     <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                                     <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-										onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-										onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
                                 </dd>
                             </dl>
                         </li>
@@ -493,11 +493,11 @@ echo "
                                 <dl>
                                     <dt><label for="password">Passwort:</label></dt>
                                     <dd>
-                                    	<span class="iconTextLink">
-											<a style="cursor:pointer;" href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">
-												<img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
-								            <a href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">Passwort ändern</a>
-								        </span>
+                                        <span class="iconTextLink">
+                                            <a style="cursor:pointer;" href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">
+                                                <img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
+                                            <a href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">Passwort ändern</a>
+                                        </span>
                                     </dd>
                                 </dl>
                             </li>';
