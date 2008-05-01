@@ -50,6 +50,11 @@ h1 {
     color:              #449ba6;
 }
 
+
+img {
+    border: 0px;
+}
+
 .readonly {
     color:              #666666;
 }

@@ -207,7 +207,7 @@ echo "
 		</td>
 		<td>
 		<span class=\"iconTextLink\">
-        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/smile.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
+        	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
         	<a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
         </span>
 		</td>
@@ -1200,7 +1200,7 @@ echo "
         /**************************************************************************************/
         echo"
         <div class=\"groupBox\" id=\"ecard-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/smile.png\" alt=\"Grußkarten\" />
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" />
             	Einstellungen Grußkartenmodul</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
