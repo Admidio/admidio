@@ -9,7 +9,7 @@
  *
  * Kompatible ab Admidio-Versions 2.0.0
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -140,7 +140,7 @@ while(!file_exists($picpath) && $i < 20 && $g_db->num_rows($result) > 0)
 
 if(!file_exists($picpath))
 {
-	$picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
+    $picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
 }
 
 //Ermittlung der Original Bildgroesse

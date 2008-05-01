@@ -2,7 +2,7 @@
 /******************************************************************************
  * Datenkonvertierung fuer die Version 2.0
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -188,10 +188,10 @@ while($row_orga = $g_db->fetch_object($result_orga))
 
     //Fuer das neue Downloadmodul wird der Root-Ordner in die DB eingetragen
     $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
-										   fol_locked, fol_public, fol_timestamp)
-	                               VALUES ($row_orga->org_id, 'DOWNLOAD', 'download', '/adm_my_files',
-	                                		0,1,SYSDATE())";
-	$g_db->query($sql);
+                                           fol_locked, fol_public, fol_timestamp)
+                                   VALUES ($row_orga->org_id, 'DOWNLOAD', 'download', '/adm_my_files',
+                                            0,1,SYSDATE())";
+    $g_db->query($sql);
 }
 
 // Messenger-Felder aktualisieren

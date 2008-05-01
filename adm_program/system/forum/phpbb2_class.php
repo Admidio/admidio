@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer das Forum phpBB
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Thomas Thoss
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -151,56 +151,56 @@ class Forum
     // Die Preferences des Forums werden in die Allgemeine Forums Umgebungsdaten eingelesen.
     function preferences($session_id, $table_praefix, $user_export)
     {
-    	$this->session_id = $session_id;
-    	$this->praefix    = $table_praefix;
-    	$this->export     = $user_export;
-    	$server_name      = "";
-    	$script_path      = "";
+        $this->session_id = $session_id;
+        $this->praefix    = $table_praefix;
+        $this->export     = $user_export;
+        $server_name      = "";
+        $script_path      = "";
     
-     	$sql    = "SELECT config_name, config_value 
+        $sql    = "SELECT config_name, config_value 
                      FROM ". $this->praefix. "_config 
                     WHERE config_name IN ('sitename','cookie_name','cookie_path','cookie_domain',
                                           'cookie_secure','server_name','script_path') ";
         $result = $this->forum_db->query($sql);
         while($row = $this->forum_db->fetch_array($result))
         {
-        	switch($row['config_name'])
-        	{
-        		case "sitename":
-		        	$this->sitename = $row['config_value'];
-		        	break;
+            switch($row['config_name'])
+            {
+                case "sitename":
+                    $this->sitename = $row['config_value'];
+                    break;
 
-        		case "cookie_name":
-		        	$this->cookie_name = $row['config_value'];
-		        	break;
+                case "cookie_name":
+                    $this->cookie_name = $row['config_value'];
+                    break;
 
-        		case "cookie_path":
-		        	$this->cookie_path = $row['config_value'];
-		        	break;
+                case "cookie_path":
+                    $this->cookie_path = $row['config_value'];
+                    break;
 
-        		case "cookie_domain":
-		        	$this->cookie_domain = $row['config_value'];
-		        	break;
+                case "cookie_domain":
+                    $this->cookie_domain = $row['config_value'];
+                    break;
 
-        		case "cookie_secure":
-		        	$this->cookie_secure = $row['config_value'];
-		        	break;
+                case "cookie_secure":
+                    $this->cookie_secure = $row['config_value'];
+                    break;
 
-        		case "server_name":
-		        	$server_name = $row['config_value'];
-		        	break;
+                case "server_name":
+                    $server_name = $row['config_value'];
+                    break;
 
-        		case "script_path":
-		        	$script_path = $row['config_value'];
-		        	break;
-		    }
+                case "script_path":
+                    $script_path = $row['config_value'];
+                    break;
+            }
         }
         
-		// Url zum Forum ermitteln
+        // Url zum Forum ermitteln
         $this->url .= str_replace('http://', '', strtolower($server_name));
         if(strlen($script_path) > 1)
         {
-        	$this->url .= '/'. $script_path;
+            $this->url .= '/'. $script_path;
         }
         $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
         $this->url = 'http://'. $this->url;
@@ -243,7 +243,7 @@ class Forum
                 $this->message = "login_forum_admin";
             }
         }
-		
+        
         // Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
         if(!$this->userCheck($login_name))
         {
@@ -461,103 +461,103 @@ class Forum
             $row    = $this->forum_db->fetch_array($result);
             $forum_userid = $row[0];
 
-			if($forum_userid > 0)
-			{
-				// Gruppen ID des Users holen
-				$sql    = "SELECT g.group_id 
-							FROM ". $this->praefix. "_user_group ug, ". $this->praefix. "_groups g  
-							WHERE ug.user_id = ". $forum_userid ."
-								AND g.group_id = ug.group_id 
-								AND g.group_single_user = 1";
-				$result = $this->forum_db->query($sql);
-				$row    = $this->forum_db->fetch_array($result);
-				$forum_group = $row[0];
-	
-				// Alle Post des Users mit Gast Username versehen
-				$sql = "UPDATE ". $this->praefix. "_posts
-						SET poster_id = -1, post_username = '" . $forum_username . "' 
-						WHERE poster_id = $forum_userid";
-				$result = $this->forum_db->query($sql);
-	
-				// Alle Topics des User auf geloescht setzten
-				$sql = "UPDATE ". $this->praefix. "_topics
-							SET topic_poster = -1 
-							WHERE topic_poster = $forum_userid";
-				$result = $this->forum_db->query($sql);
-	
-				// Alle Votes des Users auf geloescht setzten
-				$sql = "UPDATE ". $this->praefix. "_vote_voters
-						SET vote_user_id = -1
-						WHERE vote_user_id = $forum_userid";
-				$result = $this->forum_db->query($sql);
-	
-				// GroupID der der Group holen, in denen der User Mod Rechte hat
-				$sql = "SELECT group_id
-						FROM ". $this->praefix. "_groups
-						WHERE group_moderator = $forum_userid";
-				$result = $this->forum_db->query($sql);
-	
-				$group_moderator[] = 0;
-	
-				while ( $row_group = $this->forum_db->fetch_array($result) )
-				{
-					$group_moderator[] = $row_group['group_id'];
-				}
-	
-				if ( count($group_moderator) )
-				{
-					$update_moderator_id = implode(', ', $group_moderator);
-	
-					$sql = "UPDATE ". $this->praefix. "_groups
-						SET group_moderator = 2
-						WHERE group_moderator IN ($update_moderator_id)";
-						$result = $this->forum_db->query($sql);
-				}
-	
-				// User im Forum loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_users 
-						WHERE user_id = $forum_userid ";
-				$result = $this->forum_db->query($sql);
-	
-				// User aus den Gruppen loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_user_group 
-						WHERE user_id = $forum_userid ";
-				$result = $this->forum_db->query($sql);
-	
-				// Single User Group loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_groups
-						WHERE group_id =  $forum_group ";
-				$result = $this->forum_db->query($sql);
-	
-				// User aus der Auth Tabelle loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_auth_access
-						WHERE group_id = $forum_group ";
-				$result = $this->forum_db->query($sql);
-	
-				// User aus den zu beobachteten Topics Tabelle loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_topics_watch
-						WHERE user_id = $forum_userid ";
-				$result = $this->forum_db->query($sql);
-	
-				// User aus der Banlist Tabelle loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_banlist
-						WHERE ban_userid = $forum_userid ";
-				$result = $this->forum_db->query($sql);
-	
-				// Session des Users loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_sessions
-						WHERE session_user_id = $forum_userid ";
-				$result = $this->forum_db->query($sql);
-	
-				// Session_Keys des User loeschen
-				$sql = "DELETE FROM ". $this->praefix. "_sessions_keys
-						WHERE user_id = $forum_userid ";
-				$result = $this->forum_db->query($sql);
-				
-				return true;
-			}
+            if($forum_userid > 0)
+            {
+                // Gruppen ID des Users holen
+                $sql    = "SELECT g.group_id 
+                            FROM ". $this->praefix. "_user_group ug, ". $this->praefix. "_groups g  
+                            WHERE ug.user_id = ". $forum_userid ."
+                                AND g.group_id = ug.group_id 
+                                AND g.group_single_user = 1";
+                $result = $this->forum_db->query($sql);
+                $row    = $this->forum_db->fetch_array($result);
+                $forum_group = $row[0];
+    
+                // Alle Post des Users mit Gast Username versehen
+                $sql = "UPDATE ". $this->praefix. "_posts
+                        SET poster_id = -1, post_username = '" . $forum_username . "' 
+                        WHERE poster_id = $forum_userid";
+                $result = $this->forum_db->query($sql);
+    
+                // Alle Topics des User auf geloescht setzten
+                $sql = "UPDATE ". $this->praefix. "_topics
+                            SET topic_poster = -1 
+                            WHERE topic_poster = $forum_userid";
+                $result = $this->forum_db->query($sql);
+    
+                // Alle Votes des Users auf geloescht setzten
+                $sql = "UPDATE ". $this->praefix. "_vote_voters
+                        SET vote_user_id = -1
+                        WHERE vote_user_id = $forum_userid";
+                $result = $this->forum_db->query($sql);
+    
+                // GroupID der der Group holen, in denen der User Mod Rechte hat
+                $sql = "SELECT group_id
+                        FROM ". $this->praefix. "_groups
+                        WHERE group_moderator = $forum_userid";
+                $result = $this->forum_db->query($sql);
+    
+                $group_moderator[] = 0;
+    
+                while ( $row_group = $this->forum_db->fetch_array($result) )
+                {
+                    $group_moderator[] = $row_group['group_id'];
+                }
+    
+                if ( count($group_moderator) )
+                {
+                    $update_moderator_id = implode(', ', $group_moderator);
+    
+                    $sql = "UPDATE ". $this->praefix. "_groups
+                        SET group_moderator = 2
+                        WHERE group_moderator IN ($update_moderator_id)";
+                        $result = $this->forum_db->query($sql);
+                }
+    
+                // User im Forum loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_users 
+                        WHERE user_id = $forum_userid ";
+                $result = $this->forum_db->query($sql);
+    
+                // User aus den Gruppen loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_user_group 
+                        WHERE user_id = $forum_userid ";
+                $result = $this->forum_db->query($sql);
+    
+                // Single User Group loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_groups
+                        WHERE group_id =  $forum_group ";
+                $result = $this->forum_db->query($sql);
+    
+                // User aus der Auth Tabelle loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_auth_access
+                        WHERE group_id = $forum_group ";
+                $result = $this->forum_db->query($sql);
+    
+                // User aus den zu beobachteten Topics Tabelle loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_topics_watch
+                        WHERE user_id = $forum_userid ";
+                $result = $this->forum_db->query($sql);
+    
+                // User aus der Banlist Tabelle loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_banlist
+                        WHERE ban_userid = $forum_userid ";
+                $result = $this->forum_db->query($sql);
+    
+                // Session des Users loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_sessions
+                        WHERE session_user_id = $forum_userid ";
+                $result = $this->forum_db->query($sql);
+    
+                // Session_Keys des User loeschen
+                $sql = "DELETE FROM ". $this->praefix. "_sessions_keys
+                        WHERE user_id = $forum_userid ";
+                $result = $this->forum_db->query($sql);
+                
+                return true;
+            }
         }
-		return false;
+        return false;
     }
 
 

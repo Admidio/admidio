@@ -2,7 +2,7 @@
  * Cascading-Style-Sheets-Datei um das Aussehen des Installationsassistenten 
  * anzupassen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -11,57 +11,57 @@
  *****************************************************************************/
  
 body {
-	color: #606465;
-	padding-bottom: 15px;
-	padding-top: 15px;
-	margin: auto;
-	font-size: 11pt;
-	font-family: Helvetica, Verdana, Arial, sans-serif;
-	text-align: center;
-	background-color: #96c4cb; 
-	background-repeat: repeat-x;
-	background-attachment: fixed;
-	background-image: url(background.png);
+    color: #606465;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    margin: auto;
+    font-size: 11pt;
+    font-family: Helvetica, Verdana, Arial, sans-serif;
+    text-align: center;
+    background-color: #96c4cb; 
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    background-image: url(background.png);
 }
 
 #page {
-	text-align: left;
-	margin: 0px auto;
-	width: 601px;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	display: block;
+    text-align: left;
+    margin: 0px auto;
+    width: 601px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: block;
 }
 
 #content_left {
-	padding-left: 13px;
-	padding-right: 12px;
+    padding-left: 13px;
+    padding-right: 12px;
 }
 
 .content {
-	border-right: 1px solid #7d7d7d;
-	border-left: 1px solid #7d7d7d;
-	background-color: white;
-	background-position: 0 bottom;
-	background-repeat: repeat-x;
-	background-image: url(background_in_borders.png);
+    border-right: 1px solid #7d7d7d;
+    border-left: 1px solid #7d7d7d;
+    background-color: white;
+    background-position: 0 bottom;
+    background-repeat: repeat-x;
+    background-image: url(background_in_borders.png);
 }
 
 /* Links */
 
 a:link, a:visited {
     color: #222222;
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 a:hover, a:active {
-	text-decoration: underline;
-	color: #FF9C00;
+    text-decoration: underline;
+    color: #FF9C00;
 }
 
 /* damit unter den Rahmenbildern keine 2px Abstand sind */
 .img_border {
-	display: block;
+    display: block;
 }
 
 /* Hack fuer IE6, damit dieser lange Buttons vernuenftig darstellt */
@@ -138,7 +138,7 @@ button img {
 
 .formSubmit {
     padding-top:        25px;
-    text-align: 		center;
+    text-align:         center;
 }
 
 /* weitere CSS-Klassen */

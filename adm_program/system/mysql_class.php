@@ -2,7 +2,7 @@
 /******************************************************************************
  * Datenbankschnittstelle zu einer MySql-Datenbank
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -44,14 +44,14 @@ class MySqlDB extends DB
         return false;
     }
     
-	// setzt die urspruengliche DB wieder auf aktiv
-	// alternativ kann auch eine andere DB uebergeben werden
+    // setzt die urspruengliche DB wieder auf aktiv
+    // alternativ kann auch eine andere DB uebergeben werden
     function setCurrentDB($database = "")
     {
-		if(strlen($database) == 0)
-		{
-			$database = $this->dbname;
-		}
+        if(strlen($database) == 0)
+        {
+            $database = $this->dbname;
+        }
         return mysql_select_db($database, $this->connect_id);
     }
     

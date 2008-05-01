@@ -2,7 +2,7 @@
 /******************************************************************************
  * Popup-Window mit Informationen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -216,9 +216,9 @@ echo "
 
             case "leader":
                 echo "Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen
-                	  haben Leiter mehr Rechte als ein normales Rollenmitglied.<br /><br />
-                	  Leiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten
-                	  immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.";
+                      haben Leiter mehr Rechte als ein normales Rollenmitglied.<br /><br />
+                      Leiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten
+                      immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.";
                 break;
 
             case "nickname":
@@ -301,7 +301,7 @@ echo "
 
             case "publicDownloadFlag":
                 echo "Wenn diese Option aktiviert ist, können nur eingeloggte Besucher,
-                	die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.";
+                    die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.";
                 break;
 
 

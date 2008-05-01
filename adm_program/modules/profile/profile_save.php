@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profil/Registrierung wird angelegt bzw. gespeichert
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,54 +171,54 @@ foreach($user->db_user_fields as $key => $value)
         
         if($update_field)
         {    
-			// Pflichtfelder muessen gefuellt sein
+            // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Restrierung immer !!!
-			if(($value['usf_mandatory'] == 1 && strlen($_POST[$post_id]) == 0)
+            if(($value['usf_mandatory'] == 1 && strlen($_POST[$post_id]) == 0)
             || ($new_user == 2 && $value['usf_name'] == "E-Mail" && strlen($_POST[$post_id]) == 0))
-			{
-				$g_message->show("feld", $value['usf_name']);
-			}
-			
-			if(strlen($_POST[$post_id]) > 0)
-			{
-				// Pruefungen fuer die entsprechenden Datentypen
-				if($value['usf_type'] == "CHECKBOX")
-				{
-					// Checkbox darf nur 1 oder 0 haben
-					if($_POST[$post_id] != 0 && $_POST[$post_id] != 1)
-					{
-						$g_message->show("invalid");
-					}
-				}
-				elseif($value['usf_type'] == "DATE")
-				{
-					// Datum muss gueltig sein und formatiert werden
-					if(dtCheckDate($_POST[$post_id]) == false)
-					{
-						$g_message->show("date_invalid", $value['usf_name']);
-					}
-					$_POST[$post_id] = dtFormatDate($_POST[$post_id], "Y-m-d");
-				}
-				elseif($value['usf_type'] == "EMAIL")
-				{
-					// Pruefung auf gueltige E-Mail-Adresse
-					if(!isValidEmailAddress($_POST[$post_id]))
-					{
-						$g_message->show("email_invalid");
-					}        
-				}
-				elseif($value['usf_type'] == "NUMERIC")
-				{
-					// Zahl muss numerisch sein
-					if(is_numeric(strtr($_POST[$post_id], ",.", "00")) == false)
-					{
-						$g_message->show("field_numeric", $value['usf_name']);
-					}
-				}
-			}
-	
-			$user->setValue($value['usf_name'], $_POST[$post_id]);
-		}
+            {
+                $g_message->show("feld", $value['usf_name']);
+            }
+            
+            if(strlen($_POST[$post_id]) > 0)
+            {
+                // Pruefungen fuer die entsprechenden Datentypen
+                if($value['usf_type'] == "CHECKBOX")
+                {
+                    // Checkbox darf nur 1 oder 0 haben
+                    if($_POST[$post_id] != 0 && $_POST[$post_id] != 1)
+                    {
+                        $g_message->show("invalid");
+                    }
+                }
+                elseif($value['usf_type'] == "DATE")
+                {
+                    // Datum muss gueltig sein und formatiert werden
+                    if(dtCheckDate($_POST[$post_id]) == false)
+                    {
+                        $g_message->show("date_invalid", $value['usf_name']);
+                    }
+                    $_POST[$post_id] = dtFormatDate($_POST[$post_id], "Y-m-d");
+                }
+                elseif($value['usf_type'] == "EMAIL")
+                {
+                    // Pruefung auf gueltige E-Mail-Adresse
+                    if(!isValidEmailAddress($_POST[$post_id]))
+                    {
+                        $g_message->show("email_invalid");
+                    }        
+                }
+                elseif($value['usf_type'] == "NUMERIC")
+                {
+                    // Zahl muss numerisch sein
+                    if(is_numeric(strtr($_POST[$post_id], ",.", "00")) == false)
+                    {
+                        $g_message->show("field_numeric", $value['usf_name']);
+                    }
+                }
+            }
+    
+            $user->setValue($value['usf_name'], $_POST[$post_id]);
+        }
     }
     else
     {

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Loginseite
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -76,10 +76,10 @@ echo "
         {
             $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
         }
-		else
-		{
-			$mail_link = "$g_root_path/adm_program/system/lost_password.php";
-		}
+        else
+        {
+            $mail_link = "$g_root_path/adm_program/system/lost_password.php";
+        }
         echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
             <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
         </div>

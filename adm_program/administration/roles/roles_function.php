@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Rollen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -77,7 +77,7 @@ if($_GET["mode"] == 1)
     // Html des Modules ausgeben
     echo"
     <div class=\"formLayout\" id=\"edit_announcements_form\">
-    	<div class=\"formHead\">Rolle l&ouml;schen</div>
+        <div class=\"formHead\">Rolle l&ouml;schen</div>
         <div class=\"formBody\">
             <p align=\"left\">
                 <img src=\"". THEME_PATH. "/icons/roles_gray.png\" alt=\"Inaktive Rolle\" />
@@ -94,16 +94,16 @@ if($_GET["mode"] == 1)
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"inactive\" type=\"button\" value=\"inactive\" onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/roles_gray.png\" alt=\"Inaktive Rolle\" />&nbsp;Inaktive Rolle</button>
 
-    	    <ul class=\"iconTextLinkList\">
-    	        <li>
-    	            <span class=\"iconTextLink\">
-    	                <a href=\"#\" onclick=\"history.back()\"><img 
-    	                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-    	                <a href=\"#\" onclick=\"history.back()\">Zurück</a>
-    	            </span>
-    	        </li>
-    	    </ul>
-    	</div>
+            <ul class=\"iconTextLinkList\">
+                <li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"#\" onclick=\"history.back()\"><img 
+                        src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
+                        <a href=\"#\" onclick=\"history.back()\">Zurück</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
     </div>";
 
     require(THEME_SERVER_PATH. "/overall_footer.php");
@@ -151,31 +151,31 @@ elseif($_GET["mode"] == 2)
         $_POST['rol_mail_login']     = 1;
     }
 
-	// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
-	// falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
+    // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
-	$checkboxes = array('rol_assign_roles'
-					   ,'rol_approve_users'
-					   ,'rol_announcements'
-					   ,'rol_dates'
-					   ,'rol_photo'
-					   ,'rol_download'
-					   ,'rol_guestbook'
-					   ,'rol_guestbook_comments'
-					   ,'rol_edit_user'
-					   ,'rol_mail_logout'
-					   ,'rol_mail_login'
-					   ,'rol_weblinks'
-					   ,'rol_all_lists_view'
-					   ,'rol_profile');
-	
-	foreach($checkboxes as $key => $value)
-	{
-		if(isset($_POST[$value]) == false || $_POST[$value] != 1)
-		{
-			$_POST[$value] = 0;
-		}
-	}
+    $checkboxes = array('rol_assign_roles'
+                       ,'rol_approve_users'
+                       ,'rol_announcements'
+                       ,'rol_dates'
+                       ,'rol_photo'
+                       ,'rol_download'
+                       ,'rol_guestbook'
+                       ,'rol_guestbook_comments'
+                       ,'rol_edit_user'
+                       ,'rol_mail_logout'
+                       ,'rol_mail_login'
+                       ,'rol_weblinks'
+                       ,'rol_all_lists_view'
+                       ,'rol_profile');
+    
+    foreach($checkboxes as $key => $value)
+    {
+        if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+        {
+            $_POST[$value] = 0;
+        }
+    }
 
     
     // Zeitraum von/bis auf Gueltigkeit pruefen

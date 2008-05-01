@@ -2,7 +2,7 @@
 /******************************************************************************
  * Funktionen zuordnen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -113,13 +113,13 @@ echo "
         if($g_current_user->assignRoles() || $g_current_user->editUser())
         {
             // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-		    // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
-		    // aber auch keine Rollen mit Rollenvergaberechten 
-		    $sql_roles_condition = "";
-		    if($g_current_user->editUser() && !$g_current_user->viewAllLists())
-		    {
-		        $sql_roles_condition = " AND rol_this_list_view > 0 ";
-		    }
+            // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
+            // aber auch keine Rollen mit Rollenvergaberechten 
+            $sql_roles_condition = "";
+            if($g_current_user->editUser() && !$g_current_user->viewAllLists())
+            {
+                $sql_roles_condition = " AND rol_this_list_view > 0 ";
+            }
             
             $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
                          FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 

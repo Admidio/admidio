@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profil bearbeiten
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -217,9 +217,9 @@ if($job=="upload")
             || $bildgroesse[1] > $photo_max_y_size)
             {
                 //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
-				ini_set('memory_limit', '50M');
-				
-				//x-Seite soll scalliert werden
+                ini_set('memory_limit', '50M');
+                
+                //x-Seite soll scalliert werden
                 if(($bildgroesse[0]/$photo_max_x_size) >= ($bildgroesse[1]/$photo_max_y_size))
                 {
                     $photo_x_size = $photo_max_x_size;

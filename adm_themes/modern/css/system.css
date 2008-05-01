@@ -1,7 +1,7 @@
 /******************************************************************************
  * Cascading-Style-Sheets-Datei um das Aussehen von Admidio anzupassen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -31,7 +31,7 @@
 
 body {
     color:              #606465;
-    padding:     		15px;
+    padding:            15px;
     margin:             auto;
     font-size:          11pt;
     font-family:        Helvetica, Verdana, Arial, sans-serif;
@@ -205,7 +205,7 @@ a:hover, a:active {
     padding:            5px 10px 5px 10px;
     text-align:         left;
     margin-top:         12px;
-	-moz-border-radius:	10px;
+    -moz-border-radius: 10px;
 }
 
 .groupBoxHeadline {
@@ -228,7 +228,7 @@ a:hover, a:active {
     width:              570px;         /* Optimale Breite von Listen */
     font-size:          10pt;
     color:              #555555;
-	border:             1px solid #7d7d7d;
+    border:             1px solid #7d7d7d;
 }
 
 .tableList th {
@@ -324,17 +324,17 @@ ul.autosuggest li.highlight a:visited  {
 
 /* Iconlinks um Funktionen aufzurufen (ohne Text) in vertikaler Anordnung*/
 .verticalIconList ul{
-	padding-left: 		0px;
-	padding-bottom: 	0px;
-	padding-right: 		0px;
-	padding-top: 		20px;
-	margin-right: 		5px;
-	margin-left: 		5px;
-	list-style-type: 	none;
+    padding-left:       0px;
+    padding-bottom:     0px;
+    padding-right:      0px;
+    padding-top:        20px;
+    margin-right:       5px;
+    margin-left:        5px;
+    list-style-type:    none;
 }
 
 .verticalIconList li{
-	margin-top: 		10px;
+    margin-top:         10px;
 }
 
 /* Icon um Bereiche auf und zu zuklappen */

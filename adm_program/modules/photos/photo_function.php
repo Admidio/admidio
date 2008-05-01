@@ -2,7 +2,7 @@
    /******************************************************************************
  * Photofunktionen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -79,9 +79,9 @@ function image_save($orig_path, $scale, $destination_path)
     if(file_exists($orig_path))
     {
         //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
-		ini_set('memory_limit', '50M');
-		
-		//Ermittlung der Original Bildgroesse
+        ini_set('memory_limit', '50M');
+        
+        //Ermittlung der Original Bildgroesse
         $bildgroesse = getimagesize($orig_path);
 
         //Errechnung seitenverhaeltniss

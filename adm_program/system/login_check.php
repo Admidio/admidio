@@ -3,7 +3,7 @@
  * Meldet den User bei Admidio an, wenn sich dieser einloggen darf
  * Cookies setzen
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,26 +24,26 @@ $password     = "";
 // oder vom Standarddialog kommen
 if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
 {
-	$loginname = $_POST['usr_login_name'];
-	$password  = $_POST['usr_password'];
+    $loginname = $_POST['usr_login_name'];
+    $password  = $_POST['usr_password'];
 
-	if($g_preferences['enable_auto_login'] == 1
-	&& isset($_POST['auto_login']) && $_POST['auto_login'] == 1)
-	{
-		$b_auto_login = true;
-	}
+    if($g_preferences['enable_auto_login'] == 1
+    && isset($_POST['auto_login']) && $_POST['auto_login'] == 1)
+    {
+        $b_auto_login = true;
+    }
 }
 
 if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) > 0)
 {
-	$loginname = $_POST['plg_usr_login_name'];
-	$password  = $_POST['plg_usr_password'];
+    $loginname = $_POST['plg_usr_login_name'];
+    $password  = $_POST['plg_usr_password'];
 
-	if($g_preferences['enable_auto_login'] == 1
-	&& isset($_POST['plg_auto_login']) && $_POST['plg_auto_login'] == 1)
-	{
-		$b_auto_login = true;
-	}
+    if($g_preferences['enable_auto_login'] == 1
+    && isset($_POST['plg_auto_login']) && $_POST['plg_auto_login'] == 1)
+    {
+        $b_auto_login = true;
+    }
 }
 
 if(strlen($loginname) == 0)

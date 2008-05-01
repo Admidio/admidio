@@ -2,7 +2,7 @@
 /******************************************************************************
  * E-Mails verschicken
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -218,7 +218,7 @@ if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
     href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />
-	";
+    ";
 };
 require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
@@ -261,9 +261,9 @@ echo "
 
                                 if ($g_valid_login)
                                 {
-                                	// alle Rollen auflisten,
+                                    // alle Rollen auflisten,
                                     // an die im eingeloggten Zustand Mails versendet werden duerfen
-                                	$sql    = "SELECT rol_name, rol_id, cat_name 
+                                    $sql    = "SELECT rol_name, rol_id, cat_name 
                                                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                                WHERE rol_mail_login = 1
                                                AND rol_valid        = 1

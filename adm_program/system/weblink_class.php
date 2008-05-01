@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_links
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,7 +56,7 @@ class Weblink extends TableAccess
         
         $tables    = TBL_CATEGORIES;
         $condition = "     lnk_id     = $lnk_id 
-        		       AND lnk_cat_id = cat_id
+                       AND lnk_cat_id = cat_id
                        AND cat_org_id = ". $g_current_organization->getValue("org_id");
         $this->readData($lnk_id, $condition, $tables);
     }

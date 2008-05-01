@@ -2,7 +2,7 @@
  /******************************************************************************
  * Photoresizer
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -87,7 +87,7 @@ if($g_debug == 1)
 
 if(file_exists($picpath) == false)
 {
-	$picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
+    $picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
 }
 
 //Ermittlung der Original Bildgroesse

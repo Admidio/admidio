@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photogalerien
  *
- * Copyright    : (c) 2004 - 2007 The Admidio Team
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -99,18 +99,18 @@ echo "
 <div class=\"formLayout\" id=\"photo_presenter\" style=\"width: ".$body_with."px;\">
     <div class=\"formHead\">".$photo_album->getValue("pho_name")."</div>
     <div class=\"formBody\">
-		<p>
-			Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
-	        if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
-	        && strlen($photo_album->getValue("pho_end")) > 0)
-	        {
-	            echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
-	        }
-	        echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."
-		</p>
+        <p>
+            Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
+            if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
+            && strlen($photo_album->getValue("pho_end")) > 0)
+            {
+                echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
+            }
+            echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."
+        </p>
     
         <ul class=\"iconTextLinkList\">";
-			//Vor und zurueck buttons
+            //Vor und zurueck buttons
             if($prev_image > 0)
             {
                 echo"<li>
@@ -163,14 +163,14 @@ echo "
     
         //Ausgabe Bild
         echo "
-		<div><a href=\"$url_next_image\">
-			<img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
-			</a>
-		</div>";
+        <div><a href=\"$url_next_image\">
+            <img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
+            </a>
+        </div>";
     
         if($g_preferences['photo_show_mode']==0)
         {   
-			// im Popupmodus Fenster schliessen Button
+            // im Popupmodus Fenster schliessen Button
             echo"<ul class=\"iconTextLinkList\">
                 <li>
                     <span class=\"iconTextLink\">
@@ -182,7 +182,7 @@ echo "
         }
         elseif($g_preferences['photo_show_mode']==2)
         {   
-			// im Fenstermodus zurueck zur Uebersicht Button
+            // im Fenstermodus zurueck zur Uebersicht Button
             echo"<ul class=\"iconTextLinkList\">
                 <li>
                     <span class=\"iconTextLink\">
