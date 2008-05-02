@@ -199,9 +199,14 @@ echo "
                 }
             echo "</td>
             <td>";
-                if($row->rol_this_list_view > 0)
+                if($row->rol_this_list_view == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list.png\"
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list_role.png\"
+                    alt=\"Nur Mitglieder dieser Rolle können die Mitgliederliste\" title=\"Nur Mitglieder dieser Rolle können die Mitgliederliste\" />";
+                }
+                if($row->rol_this_list_view == 2)
+                {
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list_key.png\"
                     alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" title=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" />";
                 }
                 if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)

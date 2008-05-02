@@ -319,7 +319,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href=\"$g_root_path/adm_program/administration/roles/roles.php\"><img
-                                src=\"". THEME_PATH. "/icons/roles_administration_big.png\" alt=\"Rollenverwaltung\" title=\"Rollenverwaltung\" /></a>
+                                src=\"". THEME_PATH. "/icons/roles_big.png\" alt=\"Rollenverwaltung\" title=\"Rollenverwaltung\" /></a>
                             </dt>
                             <dd>
                                 <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/roles/roles.php\">Rollenverwaltung</a></span><br />
