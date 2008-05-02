@@ -51,7 +51,7 @@ if($_REQUEST['mode'] == 1)
 elseif($_REQUEST['mode'] == 2)
 {
     // Mitgliedschaft bei einer aktuellen Rolle beenden
-    if($g_current_user->assignRoles() || $g_current_user->editUser())
+    if($g_current_user->assignRoles() || $g_current_user->editUsers())
     {
         $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0 
                                            , mem_end   = NOW()

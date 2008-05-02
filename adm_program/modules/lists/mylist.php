@@ -229,7 +229,7 @@ $g_layout['header'] = '
                     $i++;
                 }
                 
-                if($value['usf_hidden'] == 0 || $g_current_user->editUser())
+                if($value['usf_hidden'] == 0 || $g_current_user->editUsers())
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();

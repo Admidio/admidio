@@ -154,7 +154,7 @@ function getFieldCode($field, $user, $new_user)
     
     // Felder sperren, falls dies so eingestellt wurde
     $readonly = "";
-    if($field['usf_disabled'] == 1 && $g_current_user->editUser() == false && $new_user == 0)
+    if($field['usf_disabled'] == 1 && $g_current_user->editUsers() == false && $new_user == 0)
     {
         if($field['usf_type'] == "CHECKBOX" || $field['usf_name'] == "Geschlecht")
         {
@@ -401,7 +401,7 @@ echo "
                 $show_field = true;
             }
             elseif($new_user != 2 
-            && ($usr_id == $g_current_user->getValue("usr_id") || $g_current_user->editUser()))
+            && ($usr_id == $g_current_user->getValue("usr_id") || $g_current_user->editUsers()))
             {
                 // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
                 // Leiter duerfen dies nicht !!!
@@ -587,7 +587,7 @@ echo "
 </ul>
 
 <script type="text/javascript"><!--\n';
-    if($g_current_user->editUser() || $new_user > 0)
+    if($g_current_user->editUsers() || $new_user > 0)
     {
         echo 'document.getElementById(\'usf-'. $g_current_user->getProperty("Nachname", "usf_id"). '\').focus();';
     }

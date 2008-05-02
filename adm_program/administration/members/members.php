@@ -21,7 +21,7 @@ require("../../system/common.php");
 require("../../system/login_valid.php");
 
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
-if (!$g_current_user->editUser())
+if (!$g_current_user->editUsers())
 {
     $g_message->show("norights");
 }

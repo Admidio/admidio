@@ -56,7 +56,7 @@ if(isset($_GET['type']))
     {
         $g_message->show("norights");
     }
-    if($_GET['type'] == "USF" && $g_current_user->editUser() == false)
+    if($_GET['type'] == "USF" && $g_current_user->editUsers() == false)
     {
         $g_message->show("norights");
     }

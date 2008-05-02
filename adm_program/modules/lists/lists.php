@@ -315,7 +315,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
     
                     if($g_current_user->assignRoles() 
                     || isGroupLeader($g_current_user->getValue("usr_id"), $row_lst['rol_id']) 
-                    || $g_current_user->editUser())
+                    || $g_current_user->editUsers())
                     {
                         if($row_lst['rol_name'] != "Webmaster"
                         || ($row_lst['rol_name'] == "Webmaster" && $g_current_user->isWebmaster()))

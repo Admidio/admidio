@@ -27,7 +27,7 @@ $err_code = "";
 $err_text = "";
 
 // nur berechtigte User duerfen Funktionen aufrufen
-if(!$g_current_user->editUser())
+if(!$g_current_user->editUsers())
 {
     $g_message->show("norights");
 }

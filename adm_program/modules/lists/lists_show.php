@@ -456,7 +456,7 @@ if($req_mode != "csv")
             //Leute mit entsprechenden Rechten sollenten auch von hier aus die Mitgliedschaftändern können
             if($g_current_user->assignRoles() 
                || isGroupLeader($g_current_user->getValue("usr_id"), $role->getValue("rol_id")) 
-               || $g_current_user->editUser())
+               || $g_current_user->editUsers())
                {
                    if($role->getValue("rol_name") != "Webmaster"
                    || ($role->getValue("rol_name") == "Webmaster" && $g_current_user->isWebmaster()))
@@ -531,7 +531,7 @@ for($i = $start_column; $i < count($arr_fields); $i++)
 
     // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
     if($usf_id == 0
-    || $g_current_user->editUser()
+    || $g_current_user->editUsers()
     || $g_current_user->getPropertyById($usf_id, "usf_hidden") == 0)
     {
         if($req_mode == "csv")
@@ -639,7 +639,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
 
             // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
             if($usf_id == 0
-            || $g_current_user->editUser()
+            || $g_current_user->editUsers()
             || $g_current_user->getPropertyById($usf_id, "usf_hidden") == 0)
             {
                 if($req_mode != "csv")

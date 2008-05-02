@@ -44,7 +44,7 @@ $role = new Role($g_db, $role_id);
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($g_current_user->getValue("usr_id"), $role_id) 
-   && !$g_current_user->editUser()) 
+   && !$g_current_user->editUsers()) 
 || (  !$g_current_user->isWebmaster()
    && $role->getValue("rol_name") == "Webmaster") 
 || $role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
