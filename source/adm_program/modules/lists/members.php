@@ -56,7 +56,7 @@ $role = new Role($g_db, $role_id);
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($g_current_user->getValue("usr_id"), $role_id) 
-   && !$g_current_user->editUser()) 
+   && !$g_current_user->editUsers()) 
 || (  !$g_current_user->isWebmaster() 
    && $role->getValue("rol_name") == "Webmaster") 
 || $role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
@@ -296,7 +296,7 @@ echo "
 <h1>". $g_layout['title']. "</h1>";
 
 if(($count_valid_users != $user_anzahl || $restrict == "u")
-&& ($g_current_user->assignRoles() || $g_current_user->editUser()))
+&& ($g_current_user->assignRoles() || $g_current_user->editUsers()))
 {
     //Button Alle bzw. nur Mitglieder anzeigen
     echo "<ul class=\"iconTextLinkList\">";

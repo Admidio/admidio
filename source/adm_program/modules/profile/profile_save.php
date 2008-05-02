@@ -156,14 +156,14 @@ foreach($user->db_user_fields as $key => $value)
         
         // gesperrte Felder duerfen nur von berechtigten Benutzern geaendert werden 
         // Ausnahme bei der Registrierung
-        if($value['usf_disabled'] == 1 && $g_current_user->editUser() == false && $new_user != 2)
+        if($value['usf_disabled'] == 1 && $g_current_user->editUsers() == false && $new_user != 2)
         {
             $update_field = false;
         }
 
         // versteckte Felder duerfen nur im eigenen Profil, oder mit dem Recht alle User
         // zu bearbeiten, geaendert werden
-        if($value['usf_hidden'] == 1 && $g_current_user->editUser() == false 
+        if($value['usf_hidden'] == 1 && $g_current_user->editUsers() == false 
         && $usr_id != $g_current_user->getValue("usr_id"))
         {
             $update_field = false;

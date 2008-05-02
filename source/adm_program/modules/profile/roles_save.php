@@ -21,7 +21,7 @@ require("../../system/role_dependency_class.php");
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")) && !$g_current_user->editUser())
+if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")) && !$g_current_user->editUsers())
 {
     $g_message->show("norights");
 }
@@ -50,13 +50,13 @@ if(isset($_GET["new_user"]))
     $req_new_usr = $_GET["new_user"];
 }
 
-if($g_current_user->assignRoles() || $g_current_user->editUser())
+if($g_current_user->assignRoles() || $g_current_user->editUsers())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
     // aber auch keine Rollen mit Rollenvergaberechten 
     $sql_roles_condition = "";
-    if($g_current_user->editUser() && !$g_current_user->viewAllLists())
+    if($g_current_user->editUsers() && !$g_current_user->viewAllLists())
     {
         $sql_roles_condition .= " AND rol_this_list_view > 0 ";
     }

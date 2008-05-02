@@ -24,7 +24,7 @@ if(isset($_POST["user_import_mode"]) == false || is_numeric($_POST["user_import_
 }
 
 // nur berechtigte User duerfen User importieren
-if(!$g_current_user->editUser())
+if(!$g_current_user->editUsers())
 {
     $g_message->show("norights");
 }

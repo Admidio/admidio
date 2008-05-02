@@ -295,7 +295,9 @@ echo "
                             foreach($user->db_user_fields as $key => $value)
                             {
                                 // nur Felder der Stammdaten anzeigen
-                                if($value['cat_name'] == "Stammdaten")
+                                if($value['cat_name'] != "Stammdaten"
+                                && (  $g_current_user->editProfile($a_user_id) == true
+                                    || ($g_current_user->editProfile($a_user_id) == false && $value['usf_hidden'] == 0 )))
                                 {
                                     switch($value['usf_name'])
                                     {
@@ -563,7 +565,7 @@ echo "
                 <div class=\"groupBoxHeadline\">
                     <div style=\"float: left;\">Rollenmitgliedschaften und Berechtigungen&nbsp;</div>";
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                        if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue("usr_id")) || $g_current_user->editUser())
+                        if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue("usr_id")) || $g_current_user->editUsers())
                         && $user->getValue("usr_reg_org_shortname") != $g_current_organization->getValue("org_shortname"))
                         {
                             echo "
@@ -662,7 +664,7 @@ echo "
                                                                     echo "</dt>
                                         <dd>
                                             seit ". mysqldate('d.m.y', $row['mem_begin']);
-                                            if($g_current_user->assignRoles() || $g_current_user->editUser())
+                                            if($g_current_user->assignRoles() || $g_current_user->editUsers())
 
                                             {
                                                 echo "

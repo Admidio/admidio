@@ -568,18 +568,18 @@ class User extends TableAccess
             }
             else
             {
-                return $this->editUser();
+                return $this->editUsers();
             }
 
         }
         else
         {
-            return $this->editUser();
+            return $this->editUsers();
         }
     }
 
     // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
-    function editUser()
+    function editUsers()
     {
         return $this->checkRolesRight('rol_edit_user');
     }

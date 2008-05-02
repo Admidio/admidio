@@ -65,7 +65,7 @@ if (isset($_GET["usr_id"]))
     $user = new User($g_db, $_GET['usr_id']);
 
     // darf auf die User-Id zugegriffen werden    
-    if((  $g_current_user->editUser() == false
+    if((  $g_current_user->editUsers() == false
        && isMember($user->getValue("usr_id")) == false)
     || strlen($user->getValue("usr_id")) == 0 )
     {
