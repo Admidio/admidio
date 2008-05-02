@@ -291,11 +291,12 @@ echo "
                             </li>";
 
                             // Schleife ueber alle Felder der Stammdaten
+                            //print_r($user->db_user_fields); exit();
 
                             foreach($user->db_user_fields as $key => $value)
                             {
                                 // nur Felder der Stammdaten anzeigen
-                                if($value['cat_name'] != "Stammdaten"
+                                if($value['cat_name'] == "Stammdaten"
                                 && (  $g_current_user->editProfile($a_user_id) == true
                                     || ($g_current_user->editProfile($a_user_id) == false && $value['usf_hidden'] == 0 )))
                                 {
@@ -416,11 +417,6 @@ echo "
                                             echo getFieldCode($value, $a_user_id);
                                             break;
                                     }
-                                }
-                                else
-                                {
-                                    // keine Stammdaten mehr also diese Schleife erst einmal abbrechen
-                                    break;
                                 }
                             }
                         echo "</ul>
