@@ -28,7 +28,8 @@ Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
 http://www.admidio.de/index.php?help/plugins.php
 
 Dort wird Ihnen Schritt für Schritt die Installation und Einrichtung
-eines Plugins erklärt.
+eines Plugins erklärt. Vergessen Sie bei der Installation das Einfügen 
+der CSS-Datei in Ihren Dateikopf nicht.
 
 
  3. Update
