@@ -379,7 +379,7 @@ echo "<div class=\"photoModuleContainer\">";
                                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=rotate&amp;direction=left\"><img 
                                     src=\"". THEME_PATH. "/icons/arrow_turn_left.png\" alt=\"nach links drehen\" title=\"nach links drehen\" /></a>
                                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=delete_request\"><img 
-                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
+                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
                                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=rotate&amp;direction=right\"><img 
                                     src=\"". THEME_PATH. "/icons/arrow_turn_right.png\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\" /></a>";
                             }
@@ -646,7 +646,7 @@ echo "<div class=\"photoModuleContainer\">";
 
                             echo"
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_function.php?job=delete_request&amp;pho_id=$this_pho_id\"><img 
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Album löschen\" title=\"Album löschen\" /></a>";
+                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Album löschen\" title=\"Album löschen\" /></a>";
 
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                             {

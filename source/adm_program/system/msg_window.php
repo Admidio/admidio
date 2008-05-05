@@ -344,7 +344,7 @@ echo "
                 echo " <h3>Warnung!!!</h3>
                     Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein
                     oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
-                    den Datensatz mit klick auf das (<img src=\"". THEME_PATH. "/icons/cross.png\" style=\"vertical-align: top;\" />)Icon löschen.
+                    den Datensatz mit klick auf das (<img src=\"". THEME_PATH. "/icons/delete.png\" style=\"vertical-align: top;\" />)Icon löschen.
                     Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
                 break;
 

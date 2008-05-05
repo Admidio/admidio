@@ -509,7 +509,7 @@ if($num_members > 0)
                         {
                             echo "
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=6\"><img
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\" /></a>";
+                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\" /></a>";
                         }
                         else
                         {

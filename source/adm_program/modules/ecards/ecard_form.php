@@ -663,7 +663,7 @@ $javascript='
                 data += \'<table id="table_\'+ [now_recipients] +\'" border="0" summary="data\'+ [now_recipients] +\'">\';
                 data += \'<tr>\';
                 data += \'<td style="width:150px;"><input name="ecard[name_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 150px;" value="" type="text" /><\/td>\';
-                data += \'<td style="width:200px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 200px;" value="" type="text" /><\/td><td><span class="iconTextLink"><a href="javascript:delRecipient(\'+ [now_recipients] +\')"><img src="'.THEME_PATH.'/icons/cross.png" alt="Inhalt löschen" \/><\/a><\/span><\/td>\';
+                data += \'<td style="width:200px; padding-left:10px;"><input name="ecard[email_ccrecipient_\'+ [now_recipients] +\']" size="15" maxlength="50" style="width: 200px;" value="" type="text" /><\/td><td><span class="iconTextLink"><a href="javascript:delRecipient(\'+ [now_recipients] +\')"><img src="'.THEME_PATH.'/icons/delete.png" alt="Inhalt löschen" \/><\/a><\/span><\/td>\';
                 data += \'<\/tr><\/table>\';
                 data += \'<\/div>\';
                 var saved_data = new Array();
@@ -1102,7 +1102,7 @@ if (empty($submit_action))
                                     </div>
                                     <div style="float: right;">
                                         <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
-                                            src="'. THEME_PATH. '/icons/cross.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
+                                            src="'. THEME_PATH. '/icons/delete.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
                                         <a class="iconLink" href="javascript:popup_win(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\');" 
                                             onmouseover="javascript:ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" 
                                             onmouseout="javascript:ajax_hideTooltip();"><img src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>

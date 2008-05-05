@@ -459,7 +459,7 @@ echo "
                                     {
                                         echo"
                                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img 
-                                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
+                                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
                                         </td>";
                                     }
                                     else
@@ -666,7 +666,7 @@ echo "
                                                 echo "
                                                 <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". $row['cat_name']. "', '". 
                                                     mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ", '". $g_root_path. "', '". $g_preferences['theme']. "')\"><img 
-                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                                             }
                                         echo "</dd>
                                     </dl>
@@ -747,7 +747,7 @@ echo "
                                             {
                                                 echo "
                                                 <a class=\"iconLink\" href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ", '". $g_root_path. "')\"><img 
-                                                    src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                                             }
                                         echo "</dd>
                                     </dl>

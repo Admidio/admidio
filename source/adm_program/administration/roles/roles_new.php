@@ -660,7 +660,7 @@ echo "
     
                             $childRoleObjects = array();
     
-                            echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/delete.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
+                            echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/no.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
                             <div>
                                 <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
                                     while($row = $g_db->fetch_object($allRoles))

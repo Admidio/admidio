@@ -86,11 +86,11 @@ if($_GET["mode"] == 1)
                 zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
             </p>
             <p align=\"left\">
-                <img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" />
+                <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle l&ouml;schen\" />
                 Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
                 entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
             </p>
-            <button name=\"delete\" type=\"button\" value=\"delete\"onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\"><img src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle l&ouml;schen\" />&nbsp;L&ouml;schen</button>
+            <button name=\"delete\" type=\"button\" value=\"delete\"onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle l&ouml;schen\" />&nbsp;L&ouml;schen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"inactive\" type=\"button\" value=\"inactive\" onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/roles_gray.png\" alt=\"Inaktive Rolle\" />&nbsp;Inaktive Rolle</button>
 
