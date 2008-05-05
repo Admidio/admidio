@@ -244,12 +244,12 @@ echo "
                     if($req_valid == true)
                     {
                         echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=1\"><img 
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                            src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                     }
                     else
                     {
                         echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$row->rol_id&amp;mode=6\"><img 
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                            src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                     }
                 }
             echo "</td>

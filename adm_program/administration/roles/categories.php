@@ -183,7 +183,7 @@ echo "
                 else
                 {
                     echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
-                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                        src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                 }
             echo "</td>
         </tr>";

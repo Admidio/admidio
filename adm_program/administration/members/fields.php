@@ -207,7 +207,7 @@ echo "
                     {
                         echo "
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/fields_function.php?mode=3&amp;usf_id=$row->usf_id\"><img
-                            src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                            src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                     }
                 echo "</td>
             </tr>";

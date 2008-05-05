@@ -86,7 +86,7 @@ if (isset($comment_result))
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid=$row->gbc_id\"><img 
                         src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=7\"><img 
-                        src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                        src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                 }
 
                 echo "</div>

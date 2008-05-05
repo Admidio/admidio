@@ -231,7 +231,7 @@ else
                         {
                             echo "
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=". $announcement->getValue("ann_id"). "\"><img 
-                                src=\"". THEME_PATH. "/icons/cross.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                         }    
                     }
                     echo "</div>

@@ -227,7 +227,7 @@ echo "
 
                     <div style=\"text-align: left; float: left;\">";
                         echo "
-                        <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Kein Zugriff\" title=\"Kein Zugriff\" />Kein Zugriff</div>
+                        <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/no.png\" alt=\"Kein Zugriff\" title=\"Kein Zugriff\" />Kein Zugriff</div>
                         <div>
                             <select id=\"DeniedRoles\" size=\"8\" style=\"width: 200px;\">";
                             for($i=0; $i<count($parentRoleSet); $i++) {
