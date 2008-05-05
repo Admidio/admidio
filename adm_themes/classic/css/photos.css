@@ -33,22 +33,32 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 
 
-/*Auch die Fotoalben werden in einer Tabelle angezeigt*/
-#photo_album_table{
-    width: 550px;
+/*Die Fotoalben werden in einer Definitionsliste angezeigt*/
+.photoAlbumTable dl{
+	width: 550px;
 }
 
-/*Einstellung fuer die FotoalbentabellenBILDERspalte*/
-.photoAlbumTablePicColumn{
-    padding: 5px;
-    text-align: right;
-    width: 47%;
+/*dabei bildet ein Vorschaubild den Term*/
+.photoAlbumTable dt{
+	width: 160px;
+	text-align: right;
+	margin-bottom: 5px;
+	float: left;
+	padding: 0px;
+}
+/*die sonstigen Angaben bilden die Definition*/
+.photoAlbumTable dd{
+	margin-left: 170px;
+	margin-bottom: 5px;
+	height: 110px;
+	padding: 0px;
+	text-align: left;
 }
 
-/*Einstellung fuer die FotoalbentabellenTextspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photoAlbumTableTextColumn{
-    text-align: left;
-    padding-left: 15px;
+/*die Definition ist selbst wieder eine List*/
+.photoAlbumTable ul{
+	padding: 0px;
+	list-style-type: none;
 }
 
 /*Umramender Container um Thumbnail- und Fotoalbentabelle, sowie Uploadbericht*/
