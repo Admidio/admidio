@@ -308,7 +308,7 @@ if($g_preferences['enable_forum_interface'])
     }
     
     // Forum Session auf Gueltigkeit pruefen
-    $g_forum->checkSession($g_valid_login);
+    $g_forum->checkSession($g_valid_login, $g_current_user->getValue("usr_login_name"));
 }
 
 ?>

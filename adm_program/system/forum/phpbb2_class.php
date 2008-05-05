@@ -44,7 +44,7 @@
  *                          RETURNCODE = TRUE  - User abgemeldet
  *                          RETURNCODE = FALSE - User nicht abgemeldet
  *
- * user($username)            - Funktion holt die Userdaten
+ * userDaten($username)   - Funktion holt die Userdaten
  *                          $username = Der aktuelle login_name des Users
  *
  * getUserPM($username)   - Funktion prueft auf neue Private Messages (PM) vorliegen und 
@@ -269,7 +269,7 @@ class Forum
         if($this->session_valid)
         {
             // Userdaten holen
-            $this->user($login_name);
+            $this->userDaten($login_name);
 
             // Password Admidio und Forum pruefen, ggf. zuruecksetzen
             if(!($this->checkPassword($password_crypt, $this->password, $this->userid)))
@@ -311,7 +311,7 @@ class Forum
 
 
     // Funktion holt die Userdaten
-    function user($forum_user)
+    function userDaten($forum_user)
     {
         $sql    = "SELECT user_id, username, user_password FROM ". $this->praefix. "_users WHERE username LIKE '$forum_user' ";
         $result = $this->forum_db->query($sql);
@@ -611,8 +611,12 @@ class Forum
 
     // diese Funktion bekommt den Admidio-Session-Status (eingeloggt ja/nein) uebergeben und
     // prueft dann, ob die Session im Forum aktualisiert werden muss
-    function checkSession($admidio_login_valid)
+    function checkSession($admidio_login_valid, $admidio_usr_login_name)
     {
+        // Userdaten holen
+        $this->userDaten($admidio_usr_login_name);
+        $this->getUserPM($admidio_usr_login_name);
+        
         // Forum Session auf Gueltigkeit pruefen
         // Nur wenn die Admidio Session valid ist, wird auf die Forum Session valid sein
         if($admidio_login_valid)
