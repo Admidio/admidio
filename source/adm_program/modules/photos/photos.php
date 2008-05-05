@@ -540,7 +540,7 @@ echo "<div class=\"photoModuleContainer\">";
         {
             if($counter == 0)
             {
-                echo '<table id="photo_album_table">';
+                echo '<dl class="photoAlbumTable">';
             }
 
             //Summe der Bilder erfassen und zufaelliges Beispeilbild auswaehlen
@@ -577,22 +577,18 @@ echo "<div class=\"photoModuleContainer\">";
 
             //Ausgabe
             echo"
-            <tr class=\"photoAlbumTableRow\">
-                <td class=\"photoAlbumTablePicColumn\">";
+            <dt>";
                     if(file_exists($ordner))
                     {
-                        //beispielbild nur anzeigen wenn x-seite unter 3+ y-seite ist
-                        $bildgroesse = getimagesize($bsp_pic_path);
-                        if($bildgroesse[0]<$bildgroesse[1]*3)
-                        {
-                            echo"
-                                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
-                                <img  class=\"photoPreviewPic\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$bsp_pho_id."&amp;pic_nr=".$bsp_pic_nr."&amp;pho_begin=".$bsp_pic_begin."&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" alt=\"Zufallsbild\" /></a>
-                            ";
-                        }
+	                    echo"
+	                        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">
+	                        <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$bsp_pho_id."&amp;pic_nr=".$bsp_pic_nr."&amp;pho_begin=".$bsp_pic_begin."&amp;scal=".$g_preferences['photo_preview_scale']."&amp;side=y\" alt=\"Zufallsbild\" /></a>
+	                    ";
+
                     }
-                echo"</td>
-                <td class=\"photoAlbumTableTextColumn\">";
+                echo"</dt>
+                <dd>
+				<ul><li>";
                     if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($adm_photo_list["pho_locked"]==1 && file_exists($ordner)))
                     {                   
                         //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
@@ -622,18 +618,20 @@ echo "<div class=\"photoModuleContainer\">";
                         echo $adm_photo_list["pho_name"];
                     }
 
-                    echo"
-                        Bilder: ".$bildersumme." <br />
-                        Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
+                    echo"</li>
+                        <li>Bilder: ".$bildersumme." </li>
+                        <li>Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
                         if($adm_photo_list["pho_end"] != $adm_photo_list["pho_begin"])
                         {
                             echo " bis ".mysqldate("d.m.y", $adm_photo_list["pho_end"]);
                         }
-                        echo "<br />Fotos von: ".$adm_photo_list["pho_photographers"]."<br/>";
+                        echo "</li> 
+						<li>Fotos von: ".$adm_photo_list["pho_photographers"]."</li>";
 
                         //bei Moderationrecheten
                         if ($g_current_user->editPhotoRight())
                         {
+                            echo"<li>";
                             $this_pho_id = $adm_photo_list["pho_id"];
                             if(file_exists($ordner))
                             {
@@ -660,10 +658,10 @@ echo "<div class=\"photoModuleContainer\">";
                                 <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&amp;locked=1\"><img 
                                     src=\"". THEME_PATH. "/icons/key.png\" alt=\"Sperren\" title=\"Sperren\" /></a>";
                             }
+                            echo"</li>";
                         }
                     echo"
-                </td>
-            </tr>";
+                </ul></dd>";
             $counter++;
         }//Ende wenn Ordner existiert
     };//for
@@ -671,7 +669,7 @@ echo "<div class=\"photoModuleContainer\">";
     if($counter > 0)
     {
         //Tabellenende
-        echo "</table>";
+        echo "</dl>";
     }
         
     /****************************Leeres Album****************/

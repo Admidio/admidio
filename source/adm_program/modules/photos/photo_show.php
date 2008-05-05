@@ -105,7 +105,14 @@ if($side=="x")
 //y-Seite soll scalliert werden
 if($side=="y")
 {
-    $neubildsize =  array (round($scal*$seitenverhaeltnis), $scal);
+    if($seitenverhaeltnis>1.6)
+    {
+        $neubildsize =  array (round($scal*1.6), round($scal*(1.6/$seitenverhaeltnis)));
+    }
+    else
+    {
+        $neubildsize =  array (round($scal*$seitenverhaeltnis), $scal);
+    }
 }
 
 //laengere seite soll scallirt werden
