@@ -317,7 +317,7 @@ ul.autosuggest li.highlight a:visited  {
     margin-right:       2px;
 }
 
-.iconLink img {
+.iconLink img, .boxHead img {
     border:             none;
     vertical-align:     top;
 }
