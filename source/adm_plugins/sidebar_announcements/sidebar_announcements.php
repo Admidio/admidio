@@ -66,7 +66,6 @@ else
     $plg_headline = "Ank&uuml;ndigungen";
 }
 
-$act_date = date("Y.m.d 00:00:00", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 

@@ -64,7 +64,7 @@ else
     $plg_link_target = "_self";
 }
 
-$act_date = date("Y.m.d H:i:s", time());
+$plg_act_date = date("Y.m.d H:i:s", time());
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
@@ -96,7 +96,7 @@ if(strlen($plg_organizations) > 0)
                 WHERE (  dat_org_shortname = '$g_organization'
                       OR (   dat_global   = 1
                          AND dat_org_shortname IN ($plg_organizations) ))
-                  AND dat_end   >= '$act_date'
+                  AND dat_end   >= '$plg_act_date'
                 ORDER BY dat_begin ASC
                 LIMIT $plg_dates_count";
 }
@@ -104,7 +104,7 @@ else
 {
     $sql    = "SELECT * FROM ". TBL_DATES. "
                 WHERE dat_org_shortname = '$g_organization'
-                  AND dat_end   >= '$act_date'
+                  AND dat_end   >= '$plg_act_date'
                 ORDER BY dat_begin ASC
                 LIMIT $plg_dates_count";
 }
