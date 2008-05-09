@@ -75,27 +75,27 @@ if($g_current_organization->getValue("org_org_id_parent") > 0)
 {
     $sql = $sql. " OR org_id = ". $g_current_organization->getValue("org_org_id_parent");
 }
-$result = $g_db->query($sql);
+$plg_result = $g_db->query($sql);
 
-$organizations = null;
+$plg_organizations = null;
 $i             = 0;
 
-while($row = $g_db->fetch_object($result))
+while($plg_row = $g_db->fetch_object($plg_result))
 {
     if($i > 0) 
     {
-        $organizations = $organizations. ", ";
+        $plg_organizations = $plg_organizations. ", ";
     }
-    $organizations = $organizations. "'$row->org_shortname'";
+    $plg_organizations = $plg_organizations. "'$plg_row->org_shortname'";
     $i++;
 }
 
-if(strlen($organizations) > 0)
+if(strlen($plg_organizations) > 0)
 {
     $sql    = "SELECT * FROM ". TBL_DATES. "
                 WHERE (  dat_org_shortname = '$g_organization'
                       OR (   dat_global   = 1
-                         AND dat_org_shortname IN ($organizations) ))
+                         AND dat_org_shortname IN ($plg_organizations) ))
                   AND dat_end   >= '$act_date'
                 ORDER BY dat_begin ASC
                 LIMIT $plg_dates_count";
@@ -108,70 +108,70 @@ else
                 ORDER BY dat_begin ASC
                 LIMIT $plg_dates_count";
 }
-$result = $g_db->query($sql);
-$date = new Date($g_db);
+$plg_result = $g_db->query($sql);
+$plg_date = new Date($g_db);
 
 echo '<div id="plugin_'. $plugin_folder. '">';
 
-if($g_db->num_rows($result) > 0)
+if($g_db->num_rows($plg_result) > 0)
 {
-    while($row = $g_db->fetch_object($result))
+    while($plg_row = $g_db->fetch_object($plg_result))
     {
-        $date->clear();
-        $date->setArray($row);
-        $html_end_date = "";
+        $plg_date->clear();
+        $plg_date->setArray($plg_row);
+        $plg_html_end_date = "";
         
-        echo mysqldatetime("d.m.y", $date->getValue("dat_begin")). '&nbsp;&nbsp;';
+        echo mysqldatetime("d.m.y", $plg_date->getValue("dat_begin")). '&nbsp;&nbsp;';
     
-        if ($date->getValue("dat_all_day") != 1)
+        if ($plg_date->getValue("dat_all_day") != 1)
         {
-            echo mysqldatetime("h:i", $date->getValue("dat_begin"));
+            echo mysqldatetime("h:i", $plg_date->getValue("dat_begin"));
         }
         
         // Bis-Datum und Uhrzeit anzeigen
         if($plg_show_date_end)
         {
-            if(mysqldatetime("d.m.y", $date->getValue("dat_begin")) != mysqldatetime("d.m.y", $date->getValue("dat_end")))
+            if(mysqldatetime("d.m.y", $plg_date->getValue("dat_begin")) != mysqldatetime("d.m.y", $plg_date->getValue("dat_end")))
             {
-                $html_end_date .= mysqldatetime("d.m.y", $date->getValue("dat_end"));
+                $plg_html_end_date .= mysqldatetime("d.m.y", $plg_date->getValue("dat_end"));
             }
-            if ($date->getValue("dat_all_day") != 1)
+            if ($plg_date->getValue("dat_all_day") != 1)
             {
-                $html_end_date .= mysqldatetime("h:i", $date->getValue("dat_end"));
+                $plg_html_end_date .= mysqldatetime("h:i", $plg_date->getValue("dat_end"));
             }
-            if(strlen($html_end_date) > 0)
+            if(strlen($plg_html_end_date) > 0)
             {
-                $html_end_date = ' - '. $html_end_date;
+                $plg_html_end_date = ' - '. $plg_html_end_date;
             }
         }
     
-        echo $html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php?id='. $date->getValue("dat_id"). '" target="'. $plg_link_target. '">';
+        echo $plg_html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php?id='. $plg_date->getValue("dat_id"). '" target="'. $plg_link_target. '">';
     
         if($plg_max_char_per_word > 0)
         {
-            $new_headline = "";
-            unset($words);
+            $plg_new_headline = "";
+            unset($plg_words);
             
             // Woerter unterbrechen, wenn sie zu lang sind
-            $words = explode(" ", $date->getValue("dat_headline"));
+            $plg_words = explode(" ", $plg_date->getValue("dat_headline"));
             
-            for($i = 0; $i < count($words); $i++)
+            for($i = 0; $i < count($plg_words); $i++)
             {
-                if(strlen($words[$i]) > $plg_max_char_per_word)
+                if(strlen($plg_words[$i]) > $plg_max_char_per_word)
                 {
-                    $new_headline = "$new_headline ". substr($date->getValue("dat_headline"), 0, $plg_max_char_per_word). "-<br />". 
-                                    substr($date->getValue("dat_headline"), $plg_max_char_per_word);
+                    $plg_new_headline = "$plg_new_headline ". substr($plg_date->getValue("dat_headline"), 0, $plg_max_char_per_word). "-<br />". 
+                                    substr($plg_date->getValue("dat_headline"), $plg_max_char_per_word);
                 }
                 else
                 {
-                    $new_headline = "$new_headline ". $words[$i];
+                    $plg_new_headline = "$plg_new_headline ". $plg_words[$i];
                 }
             }
-            echo $new_headline. '</a><hr />';
+            echo $plg_new_headline. '</a><hr />';
         }
         else
         {
-            echo $date->getValue("dat_headline"). '</a><hr />';
+            echo $plg_date->getValue("dat_headline"). '</a><hr />';
         }
     }
     

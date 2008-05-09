@@ -77,27 +77,27 @@ if($g_current_organization->getValue("org_org_id_parent") > 0)
 {
     $sql = $sql. " OR org_id = ". $g_current_organization->getValue("org_org_id_parent");
 }
-$result = $g_db->query($sql);
+$plg_result = $g_db->query($sql);
 
-$organizations = null;
+$plg_organizations = null;
 $i             = 0;
 
-while($row = $g_db->fetch_object($result))
+while($plg_row = $g_db->fetch_object($plg_result))
 {
     if($i > 0) 
     {
-        $organizations = $organizations. ", ";
+        $plg_organizations = $plg_organizations. ", ";
     }
-    $organizations = $organizations. "'$row->org_shortname'";
+    $plg_organizations = $plg_organizations. "'$plg_row->org_shortname'";
     $i++;
 }
 
-if(strlen($organizations) > 0)
+if(strlen($plg_organizations) > 0)
 {
     $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                 WHERE (  ann_org_shortname = '$g_organization'
                       OR (   ann_global   = 1
-                         AND ann_org_shortname IN ($organizations) ))
+                         AND ann_org_shortname IN ($plg_organizations) ))
                 ORDER BY ann_timestamp DESC
                 LIMIT $plg_announcements_count";
 }
@@ -108,44 +108,44 @@ else
                 ORDER BY ann_timestamp DESC
                 LIMIT $plg_announcements_count";
 }
-$result = $g_db->query($sql);
+$plg_result = $g_db->query($sql);
 
 echo '<div id="plugin_'. $plugin_folder. '">';
 
-if($g_db->num_rows($result) > 0)
+if($g_db->num_rows($plg_result) > 0)
 {
-    while($row = $g_db->fetch_object($result))
+    while($plg_row = $g_db->fetch_object($plg_result))
     {
-        echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $row->ann_id. '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
+        echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_row->ann_id. '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
         
         if($plg_max_char_per_word > 0)
         {
-            $new_headline = "";
-            unset($words);
+            $plg_new_headline = "";
+            unset($plg_words);
         
             // Woerter unterbrechen, wenn sie zu lang sind
-            $words = explode(" ", $row->ann_headline);
+            $plg_words = explode(" ", $plg_row->ann_headline);
             
-            for($i = 0; $i < count($words); $i++)
+            for($i = 0; $i < count($plg_words); $i++)
             {
-                if(strlen($words[$i]) > $plg_max_char_per_word)
+                if(strlen($plg_words[$i]) > $plg_max_char_per_word)
                 {
-                    $new_headline = "$new_headline ". substr($words[$i], 0, $plg_max_char_per_word). "-<br />". 
-                                    substr($words[$i], $plg_max_char_per_word);
+                    $plg_new_headline = "$plg_new_headline ". substr($plg_words[$i], 0, $plg_max_char_per_word). "-<br />". 
+                                    substr($plg_words[$i], $plg_max_char_per_word);
                 }
                 else
                 {
-                    $new_headline = "$new_headline ". $words[$i];
+                    $plg_new_headline = "$plg_new_headline ". $plg_words[$i];
                 }
             }
-            echo "$new_headline</a><br />";
+            echo "$plg_new_headline</a><br />";
         }
         else
         {
-            echo "$row->ann_headline</a><br />";
+            echo "$plg_row->ann_headline</a><br />";
         }
          
-        echo "(&nbsp;". mysqldatetime("d.m.y", $row->ann_timestamp). "&nbsp;)<hr />";
+        echo "(&nbsp;". mysqldatetime("d.m.y", $plg_row->ann_timestamp). "&nbsp;)<hr />";
     }
     
     echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?headline=$plg_headline\" target=\"$plg_link_target\">Alle $plg_headline</a>";
