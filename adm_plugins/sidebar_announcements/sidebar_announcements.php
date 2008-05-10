@@ -69,44 +69,23 @@ else
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
-// alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-         WHERE org_org_id_parent = ". $g_current_organization->getValue("org_id");
-if($g_current_organization->getValue("org_org_id_parent") > 0)
-{
-    $sql = $sql. " OR org_id = ". $g_current_organization->getValue("org_org_id_parent");
-}
-$plg_result = $g_db->query($sql);
+// alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
+$plg_organizations = "";
+$plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-$plg_organizations = null;
-$i             = 0;
+foreach($plg_arr_orgas as $key => $value)
+{
+	$plg_organizations = $plg_organizations. "'$value', ";
+}
+$plg_organizations = $plg_organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
 
-while($plg_row = $g_db->fetch_object($plg_result))
-{
-    if($i > 0) 
-    {
-        $plg_organizations = $plg_organizations. ", ";
-    }
-    $plg_organizations = $plg_organizations. "'$plg_row->org_shortname'";
-    $i++;
-}
-
-if(strlen($plg_organizations) > 0)
-{
-    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                WHERE (  ann_org_shortname = '$g_organization'
-                      OR (   ann_global   = 1
-                         AND ann_org_shortname IN ($plg_organizations) ))
-                ORDER BY ann_timestamp DESC
-                LIMIT $plg_announcements_count";
-}
-else
-{
-    $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-                WHERE ann_org_shortname = '$g_organization'
-                ORDER BY ann_timestamp DESC
-                LIMIT $plg_announcements_count";
-}
+// nun alle relevanten Ankuendigungen finden
+$sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
+			WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+				  OR (   ann_global   = 1
+					 AND ann_org_shortname IN ($plg_organizations) ))
+			ORDER BY ann_timestamp DESC
+			LIMIT $plg_announcements_count";
 $plg_result = $g_db->query($sql);
 
 echo '<div id="plugin_'. $plugin_folder. '">';
