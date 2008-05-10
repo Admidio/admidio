@@ -25,7 +25,7 @@ Admidio (http://www.admidio.org) und kann nicht ohne diese benutzt werden.
  2. Installation
 -------------------------------------------------------------------------
 Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
-http://www.admidio.de/index.php?help/plugins.php
+http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:plugins
 
 Dort wird Ihnen Schritt für Schritt die Installation und Einrichtung
 eines Plugins erklärt. Vergessen Sie bei der Installation das Einfügen 

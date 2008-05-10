@@ -41,7 +41,7 @@ die Homepage eine kleine Spende zukommen lassen würden.
  2. Installation
 -------------------------------------------------------------------------
 Beachten Sie bitte für eine fehlerfreie Installation unsere Onlinehilfe !
-http://www.admidio.de/dokuwiki/doku.php
+http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:installation
 
 Dort wird Ihnen Schritt für Schritt die Installation erklärt. 
 
@@ -52,7 +52,7 @@ Ordner adm_install löschen.
  3. Update
 -------------------------------------------------------------------------
 Beachten Sie bitte für ein fehlerfreies Update unsere Onlinehilfe !
-http://www.admidio.de/dokuwiki/doku.php
+http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:update
 
 !!! Wichtig !!!
 Bei einem Update von einer 1.x Version auf eine 2.x Version gibt es einige
