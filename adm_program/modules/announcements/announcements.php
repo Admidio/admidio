@@ -102,26 +102,14 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "<h1 class=\"moduleHeadline\">$req_headline</h1>";
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
 $organizations = "";
-$i             = 0;
+$arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-while($orga = current($arr_ref_orgas))
+foreach($arr_ref_orgas as $key => $value)
 {
-    if($i > 0)
-    {
-        $organizations = $organizations. ", ";
-    }
-    $organizations = $organizations. "'$orga'";
-    next($arr_ref_orgas);
-    $i++;
+	$organizations = $organizations. "'$value', ";
 }
-
-// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
-if(strlen($organizations) == 0)
-{
-    $organizations = "'". $g_current_organization->getValue("org_shortname"). "'";
-}
+$organizations = $organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
