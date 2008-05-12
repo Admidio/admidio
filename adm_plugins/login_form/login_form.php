@@ -158,7 +158,7 @@ else
         <ul class="formFieldList" id="plgLoginFormFieldList">
             <li>
                 <dl>
-                    <dt><label for="plg_usr_login_name">Login-Name:</label></dt>
+                    <dt><label for="plg_usr_login_name">Benutzername:</label></dt>
                     <dd><input type="text" id="plg_usr_login_name" name="plg_usr_login_name" size="10" maxlength="35" tabindex="95" /></dd>
                 </dl>
             </li>
