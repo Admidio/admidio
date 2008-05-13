@@ -160,7 +160,7 @@ class TableAccess
         // Plausibilitaets-Check des Wertes vornehmen
         if(method_exists($this, "_setValue"))
         {
-            $this->_setValue($field_name, &$field_value);
+            $this->_setValue($field_name, $field_value);
         }
     
         if(isset($this->db_fields[$field_name]))

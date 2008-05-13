@@ -66,7 +66,7 @@ class UserField extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
+    function _setValue($field_name, &$field_value)
     {
         if($field_name == "usf_cat_id"
         && $this->db_fields[$field_name] != $field_value)
