@@ -79,6 +79,9 @@ class User extends TableAccess
     {
         global $g_current_organization;
         
+        // erst mal alles bisherige entfernen
+        $this->db_user_fields = array();
+        
         if(is_numeric($user_id) && $user_id > 0)
         {        
             $field_usd_value = "usd_value";
@@ -135,21 +138,9 @@ class User extends TableAccess
         // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
         $this->setValue("usr_valid", 1);
         
-        // user_data-Array initialisieren
-        if(count($this->db_user_fields) > 0)
-        {
-            foreach($this->db_user_fields as $key => $value)
-            {
-                $this->db_user_fields[$key]['usd_value'] = "";
-                $this->db_user_fields[$key]['new']       = true;
-                $this->db_user_fields[$key]['changed']   = false;
-            }
-        }
-        else
-        {
-            // user_data-Array aufbauen
-            $this->fillUserFieldArray();
-        }
+        // user_data-Array komplett neu aufbauen
+        // vorher wurde nur alles geleert, dadurch aber keine geloeschten Felder entfernt
+        $this->fillUserFieldArray();
         
         // Userrechte initialisieren
         $this->roles_rights = array();
