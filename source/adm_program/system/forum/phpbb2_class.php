@@ -115,11 +115,11 @@ class Forum
         $this->forum_db    = new MySqlDB();
     }
     
-    function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $admidio_db = 0)
+    function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $admidio_db = NULL)
     {
         // falls die Admidio-DB sich von der Forum-DB unterscheidet, 
         // muss eine neue DB-Verbindung aufgemacht werden
-        if($admidio_db != 0
+        if(is_null($admidio_db)  == false
         && $admidio_db->server   == $this->forum_db->server
         && $admidio_db->user     == $this->forum_db->user
         && $admidio_db->password == $this->forum_db->password
