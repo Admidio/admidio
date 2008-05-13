@@ -139,7 +139,7 @@ define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
 
 // pruefen, ob Datenbank-Version zu den Scripten passt
 if(isset($g_preferences['db_version']) == false
-|| version_compare(substr($g_preferences['db_version'], 0, 3), substr(ADMIDIO_VERSION, 0, 3)) != 0)
+|| version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
 {
     $g_message->addVariableContent($g_preferences['email_administrator'], 1, false);
     $g_message->show("database_invalid");
