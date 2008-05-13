@@ -66,7 +66,7 @@ class Folder extends TableAccess
     // Folder mit der uebergebenen ID aus der Datenbank fuer das Downloadmodul auslesen
     function getFolderForDownload($folder_id)
     {
-        global $g_current_organization, $g_current_user;
+        global $g_current_organization, $g_current_user, $g_valid_login;
 
         if ($folder_id > 0) {
             $condition = "     fol_id     = $folder_id
@@ -92,6 +92,11 @@ class Folder extends TableAccess
             //Falls der Ordner gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
             if (!$g_current_user->editDownloadRight() && $this->getValue("fol_locked"))
             {
+                $this->clear();
+            }
+            else if (!$g_valid_login && !$this->getValue("fol_public"))
+            {
+                //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
             }
             else if (!$g_current_user->editDownloadRight() && !$this->getValue("fol_public"))
@@ -287,16 +292,16 @@ class Folder extends TableAccess
 
                                 //Gucken ob das Verzeichnis bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder["folders"])) {
-	                                for($i=0; $i<count($completeFolder["folders"]); $i++) {
+                                    for($i=0; $i<count($completeFolder["folders"]); $i++) {
 
-	                                    $nextFolder = $completeFolder["folders"][$i];
+                                        $nextFolder = $completeFolder["folders"][$i];
 
-	                                    if ($nextFolder['fol_name'] == $file) {
+                                        if ($nextFolder['fol_name'] == $file) {
 
-	                                        $alreadyAdded = true;
-	                                    }
+                                            $alreadyAdded = true;
+                                        }
 
-	                                }
+                                    }
                                 }
 
                                 if (!$alreadyAdded) {
@@ -312,16 +317,16 @@ class Folder extends TableAccess
 
                                 //Gucken ob die Datei bereits bei den regurlären Files dabei ist.
                                 if (isset($completeFolder["files"])) {
-	                                for($i=0; $i<count($completeFolder["files"]); $i++) {
+                                    for($i=0; $i<count($completeFolder["files"]); $i++) {
 
-	                                    $nextFile = $completeFolder["files"][$i];
+                                        $nextFile = $completeFolder["files"][$i];
 
-	                                    if ($nextFile['fil_name'] == $file) {
+                                        if ($nextFile['fil_name'] == $file) {
 
-	                                        $alreadyAdded = true;
-	                                    }
+                                            $alreadyAdded = true;
+                                        }
 
-	                                }
+                                    }
                                 }
 
                                 if (!$alreadyAdded) {
