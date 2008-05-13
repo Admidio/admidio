@@ -62,7 +62,7 @@ class GuestbookComment extends TableAccess
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Methode wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, $field_value)
+    function _setValue($field_name, &$field_value)
     {
         if(strlen($field_value) > 0)
         {
