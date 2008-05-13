@@ -68,7 +68,7 @@ class File extends TableAccess
     // Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
     function getFileForDownload($file_id)
     {
-        global $g_current_organization, $g_current_user;
+        global $g_current_organization, $g_current_user, $g_valid_login;
 
         $tables    = TBL_FOLDERS;
         $condition = "     fil_id     = $file_id
@@ -85,6 +85,11 @@ class File extends TableAccess
             //Falls die Datei gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
             if (!$g_current_user->editDownloadRight() && $this->getValue("fil_locked"))
             {
+                $this->clear();
+            }
+            else if (!$g_valid_login && !$this->getValue("fol_public"))
+            {
+                //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
             }
             else if (!$g_current_user->editDownloadRight() && !$this->getValue("fol_public"))
@@ -115,13 +120,13 @@ class File extends TableAccess
     //Gibt den kompletten Pfad der Datei zurueck
     function getCompletePathOfFile()
     {
-		//Dateinamen und Pfad zusammen setzen
-		$fileName     = $this->getValue("fil_name");
-		$folderPath   = $this->getValue("fol_path");
-		$folderName   = $this->getValue("fol_name");
-		$completePath = SERVER_PATH. $folderPath. "/". $folderName. "/". $fileName;
+        //Dateinamen und Pfad zusammen setzen
+        $fileName     = $this->getValue("fil_name");
+        $folderPath   = $this->getValue("fol_path");
+        $folderName   = $this->getValue("fol_name");
+        $completePath = SERVER_PATH. $folderPath. "/". $folderName. "/". $fileName;
 
-		return $completePath;
+        return $completePath;
     }
 
 
@@ -129,7 +134,7 @@ class File extends TableAccess
     //und loescht das File physikalisch von der Platte bevor es aus der DB geloescht wird
     function _delete()
     {
-    	@chmod($this->getCompletePathOfFile(), 0777);
+        @chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
 
         //Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
