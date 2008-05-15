@@ -55,7 +55,7 @@ class MySqlDB extends DB
         return mysql_select_db($database, $this->connect_id);
     }
     
-    function query($sql)
+    function query($sql, $encode = true)
     {
         global $g_debug;
         
@@ -65,7 +65,7 @@ class MySqlDB extends DB
             error_log($sql);
         }
         
-        if($this->utf8 == false)
+        if($this->utf8 == false && $encode == true)
         {
             $sql = utf8_decode($sql);
         }
@@ -97,7 +97,11 @@ class MySqlDB extends DB
         {
             foreach($values as $key => $value)
             {
-                $values[$key] = utf8_encode($value);
+                // Blob-Felder duerfen nicht encodiert werden !!!
+                if($key != "ses_blob" || $key != "usr_photo")
+                {
+                    $values[$key] = utf8_encode($value);
+                }
             }
         }
         return $values;
@@ -120,7 +124,11 @@ class MySqlDB extends DB
             {
                 foreach($values as $key => $value)
                 {
-                    $object->{$key} = utf8_encode($value);
+                    // Blob-Felder duerfen nicht encodiert werden !!!
+                    if($key != "ses_blob" || $key != "usr_photo")
+                    {
+                        $object->{$key} = utf8_encode($value);
+                    }
                 }
             }
         }

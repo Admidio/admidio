@@ -72,7 +72,7 @@ if($job=="save")
         $sql = "UPDATE ". TBL_USERS. "
                    SET usr_photo = '". addslashes($g_current_session->getValue("ses_blob")). "'
                  WHERE usr_id    = $req_usr_id ";
-        $g_db->query($sql);
+        $g_db->query($sql, false);
 
         $g_current_session->setValue("ses_blob", "");
         $g_current_session->setValue("ses_renew", 1);
@@ -253,7 +253,7 @@ if($job=="upload")
             $sql = "UPDATE ". TBL_SESSIONS. "
                        SET ses_blob   = '$user_photo'
                      WHERE ses_usr_id = ". $g_current_user->getValue("usr_id");
-            $result = $g_db->query($sql);
+            $result = $g_db->query($sql, false);
 
             //neues und altes Bild anzeigen
             echo"
