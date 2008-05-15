@@ -199,16 +199,9 @@ elseif($req_mode == 2)
     }
 
     // nach einem erfolgreichen Update noch die neue Versionsnummer in DB schreiben
-    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
-    $result_orga = $g_db->query($sql);
-
-    while($row_orga = $g_db->fetch_array($result_orga))
-    {
-        $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". ADMIDIO_VERSION. "'
-                 WHERE prf_org_id  = ". $row_orga['org_id']. "
-                   AND prf_name    = 'db_version' ";
-        $g_db->query($sql);                
-    }
+	$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". ADMIDIO_VERSION. "'
+			 WHERE prf_name    = 'db_version' ";
+	$g_db->query($sql);                
 
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
     // damit diese neu eingelesen werden muessen
