@@ -136,6 +136,9 @@ elseif($req_mode == 2)
                         </ul>
                     </div>
                 </div>
+                <br />
+                <img src="layout/warning.png" alt="Warnung" /> Bereits vorhandene Daten unter dem
+                gewählten Tabellenpräfix werden überschrieben !
                 <br />';
     showPage($message, "installation.php?mode=3", "forward.png", "Organisation festlegen", "server");
 }
@@ -433,12 +436,12 @@ elseif($req_mode == 7)
 
     // Orga-Uebergreifende Kategorien anlegen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                      VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 0) ";
+                                      VALUES (NULL, 'USF', 'Stammdaten', 0, 1, 1) ";
     $db->query($sql);
     $cat_id_stammdaten = $db->insert_id();
 
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                      VALUES (NULL, 'USF', 'Messenger', 0, 0, 1) ";
+                                      VALUES (NULL, 'USF', 'Messenger', 0, 0, 2) ";
     $db->query($sql);
     $cat_id_messenger = $db->insert_id();
 
@@ -510,7 +513,7 @@ elseif($req_mode == 7)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
                                            , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
-                                           , (NULL, 'USF', 'Zusätzliche Daten', 0, 2) ";
+                                           , (NULL, 'USF', 'Zusätzliche Daten', 0, 3) ";
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
