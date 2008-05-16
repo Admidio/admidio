@@ -576,7 +576,7 @@ else
 }
 
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!$g_db->data_seek($result_list, 0))
+if(!$g_db->data_seek($result_list, $req_start))
 {
     $g_message->show("invalid");
 }
@@ -824,7 +824,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
 
                 if($req_mode == "csv")
                 {
-                    $str_csv = $str_csv. $separator. $value_quotes. "$content". $value_quotes;
+                    $str_csv = $str_csv. $separator. $value_quotes. $content. $value_quotes;
                 }
     
                 else
@@ -853,7 +853,7 @@ if($req_mode == "csv")
     $filename = $g_organization. "-". str_replace(" ", "_", str_replace(".", "", $role->getValue("rol_name"))). ".csv";
     header("Content-Type: text/comma-separated-values; charset=ISO-8859-1");
     header("Content-Disposition: attachment; filename=\"$filename\"");
-    echo $str_csv;
+    echo utf8_decode($str_csv);
 }
 else
 {
