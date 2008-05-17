@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen zuordnen
+ * Funktionen zuordnen 
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
