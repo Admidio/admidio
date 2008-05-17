@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen des Benutzers speichern
+ * Funktionen des Benutzers speichern 
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
