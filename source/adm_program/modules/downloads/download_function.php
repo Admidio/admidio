@@ -606,10 +606,11 @@ elseif ($req_mode == 6)
         $newFile->setValue('fil_counter','0');
         $newFile->save();
 
+        //Zurueck zur letzten Seite
         $_SESSION['navigation']->addUrl(CURRENT_URL);
-        $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-        $g_message->show("add_file",$name);
-
+        $location = "Location: $g_root_path/adm_program/system/back.php";
+        header($location);
+        exit();
     }
     else if (is_dir($targetFolder->getCompletePathOfFolder(). "/". $name)) {
 
@@ -626,9 +627,11 @@ elseif ($req_mode == 6)
         //Ordnerberechtigungen des ParentOrdners uebernehmen
         $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
 
+        //Zurueck zur letzten Seite
         $_SESSION['navigation']->addUrl(CURRENT_URL);
-        $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-        $g_message->show("add_folder",$name);
+        $location = "Location: $g_root_path/adm_program/system/back.php";
+        header($location);
+        exit();
    }
 
 }
