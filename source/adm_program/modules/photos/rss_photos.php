@@ -141,8 +141,8 @@ while ($row = $g_db->fetch_object($result))
        || $row->pho_usr_id_change != $row->pho_usr_id ) )
     {
         //Angaben zum Updater
-        $update_user = new User($g_db, $row->pho_usr_id_change);
-        $description = $description. "<br /><i>Letztes Update durch ". strSpecialChars2Html($update_user->getValue("Vorname")). " ". strSpecialChars2Html($create_user->getValue("Nachname"));
+        $user_change = new User($g_db, $row->pho_usr_id_change);
+        $description = $description. "<br /><i>Letztes Update durch ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_last_change). "</i>";
     }
 
