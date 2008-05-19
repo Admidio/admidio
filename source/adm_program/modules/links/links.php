@@ -99,58 +99,49 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo '<h1 class="moduleHeadline">'. $_GET["headline"]. '</h1>
 <div id="links_overview">';
 
-// falls eine id fuer einen bestimmten Link uebergeben worden ist...
+// SQL-Statement zusammenbasteln
+
+$condition = "";
+$hidden    = "";
+
 if ($_GET['id'] > 0)
 {
-    $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-             WHERE lnk_id = ". $_GET['id']. "
-             AND lnk_cat_id = cat_id
-             AND cat_org_id = ". $g_current_organization->getValue("org_id");
+	// falls eine id fuer einen bestimmten Link uebergeben worden ist...
+	$condition = " AND lnk_id = ". $_GET['id'];
 }
-//...ansonsten alle fuer die Gruppierung passenden Links aus der DB holen.
-else if ($_GET['category'] != "") {
-   $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-             WHERE lnk_cat_id = cat_id
-             AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-             AND cat_type = 'LNK'
-             AND cat_name   = '". $_GET['category']. "'
-             ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
-             LIMIT ". $_GET['start']. ", ". $linksPerPage;
-} else
+else if (strlen($_GET['category']) > 0) 
 {
-    // Links bereits nach den Namen ihrer Kategorie sortiert.
-    $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-             WHERE lnk_cat_id = cat_id
-             AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-             AND cat_type = 'LNK'
-             ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
-             LIMIT ". $_GET['start']. ", ". $linksPerPage;
+	// alle Links zu einer Kategorie anzeigen
+	$condition = " AND cat_name   = '". $_GET['category']. "' ";
+} 
+
+if ($g_valid_login == false)
+{
+	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+	$hidden = " AND cat_hidden = 0 ";
 }
 
+// Links entsprechend der Einschraenkung suchen
+$sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+  		  WHERE lnk_cat_id = cat_id
+		    AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+		    AND cat_type = 'LNK'
+		        $condition
+  		        $hidden
+		  ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
+		  LIMIT ". $_GET['start']. ", ". $linksPerPage;
 $links_result = $g_db->query($sql1);
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
 // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
-if ($g_valid_login == false)
-{
-    // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-            WHERE lnk_cat_id = cat_id
-            AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            AND cat_type = 'LNK'
-            AND cat_hidden = 0
-            ORDER BY cat_sequence, lnk_name DESC";
-}
-else
-{
-    // Alle Kategorien anzeigen
-    $sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-            WHERE lnk_cat_id = cat_id
-            AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            AND cat_type = 'LNK'
-            ORDER BY cat_sequence, lnk_name DESC";
-}
-
+// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+$sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+		WHERE lnk_cat_id = cat_id
+		AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+		AND cat_type = 'LNK'
+			$condition
+		    $hidden
+		ORDER BY cat_sequence, lnk_name DESC";
 $result = $g_db->query($sql);
 $row = $g_db->fetch_array($result);
 $numLinks = $row[0];
@@ -205,14 +196,10 @@ else
     $j = 0;
     // Zaehlervariable fuer Anzahl der Links in einer Kategorie
     $i = 0;
-    // Ueberhaupt etwas geschrieben? -> Wichtig, wenn es nur versteckte Kategorien gibt.
-    $did_write_something = false;
     // Vorherige Kategorie-ID.
     $previous_cat_id = -1;
     // Kommt jetzt eine neue Kategorie?
     $new_category = true;
-    // Schreibe diese Kategorie nicht! Sie ist versteckt und der User nicht eingeloggt
-    $dont_write = false;
 
     // Solange die vorherige Kategorie-ID sich nicht veraendert...
     // Sonst in die neue Kategorie springen
@@ -221,92 +208,76 @@ else
 
         if ($row->lnk_cat_id != $previous_cat_id)
         {
-            if (($row->cat_hidden == 1) && ($g_valid_login == false))
-            {
-                // Nichts anzeigen, weil Kategorie versteckt ist und User nicht eingeloggt
-                $dont_write = true;
-            } else {
-                $dont_write = false;
-            }
-
-            if (!$dont_write)
-            {
-                $i = 0;
-                $new_category = true;
-                $did_write_something = true;
-                if ($j>0)
-                {
-                    echo "</div></div><br />";
-                }
-                echo "<div class=\"formLayout\">
-                    <div class=\"formHead\">$row->cat_name</div>
-                    <div class=\"formBody\" style=\"overflow: hidden;\">";
-            }
+			$i = 0;
+			$new_category = true;
+			if ($j>0)
+			{
+				echo "</div></div><br />";
+			}
+			echo "<div class=\"formLayout\">
+				<div class=\"formHead\">$row->cat_name</div>
+				<div class=\"formBody\" style=\"overflow: hidden;\">";
         }
 
-        if (!$dont_write)
-        {
-            if($i > 0)
-            {
-                echo "<hr />";
-            }
-            echo "
-                <a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
-                    alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-                <a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+		if($i > 0)
+		{
+			echo "<hr />";
+		}
+		echo "
+		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
+			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
+		<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
 
-                <div style=\"margin-top: 10px;\">";
+		<div style=\"margin-top: 10px;\">";
 
-                    // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-                    if ($g_preferences['enable_bbcode'] == 1)
-                    {
-                        echo $bbcode->parse($row->lnk_description);
-                    }
-                    else
-                    {
-                        echo nl2br($row->lnk_description);
-                    }
-                echo "</div>";
+			// wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+			if ($g_preferences['enable_bbcode'] == 1)
+			{
+				echo $bbcode->parse($row->lnk_description);
+			}
+			else
+			{
+				echo nl2br($row->lnk_description);
+			}
+		echo "</div>";
 
-                if($g_current_user->editWeblinksRight())
-                {
-                    echo "
-                    <div class=\"editInformation\">";
-                        // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                        if ($g_current_user->editWeblinksRight())
-                        {
-                            echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img
-                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img
-                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
-                        }
-                        $user_create = new User($g_db, $row->lnk_usr_id);
-                        echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp);
+		if($g_current_user->editWeblinksRight())
+		{
+			echo "
+			<div class=\"editInformation\">";
+				// aendern & loeschen duerfen nur User mit den gesetzten Rechten
+				if ($g_current_user->editWeblinksRight())
+				{
+					echo "
+					<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img
+						src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+					<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img
+						src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+				}
+				$user_create = new User($g_db, $row->lnk_usr_id);
+				echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
+				" am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp);
 
-                        if($row->lnk_usr_id_change > 0)
-                        {
-                            $user_change = new User($g_db, $row->lnk_usr_id_change);
-                            echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                            " am ". mysqldatetime("d.m.y h:i", $row->lnk_last_change);
-                        }
-                    echo "</div>";
-                }
+				if($row->lnk_usr_id_change > 0)
+				{
+					$user_change = new User($g_db, $row->lnk_usr_id_change);
+					echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+					" am ". mysqldatetime("d.m.y h:i", $row->lnk_last_change);
+				}
+			echo "</div>";
+		}
 
-            $j++;
-         }  // Ende Wenn !dont_write
+		$j++;
+        $i++;
 
-         $i++;
+        // Jetzt wird die jtzige die vorherige Kategorie
+        $previous_cat_id = $row->lnk_cat_id;
 
-         // Jetzt wird die jtzige die vorherige Kategorie
-         $previous_cat_id = $row->lnk_cat_id;
-
-         $new_category = false;
+        $new_category = false;
     }  // Ende While-Schleife
 
     // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
-    if (!$did_write_something)
+    if ($numLinks == 0)
     {
         echo "<p>Es sind keine Einträge vorhanden.</p>";
     }
