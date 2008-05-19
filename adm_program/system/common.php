@@ -322,13 +322,9 @@ if($g_preferences['enable_forum_interface'])
     {
         // Einstellungen des Forums einlesen
         $g_forum->preferences(session_id(), $g_preferences['forum_praefix'], $g_preferences['forum_export_user']);
-    }    
-    
-    if($g_preferences['enable_forum_interface'])
-    {
         // Forum Session auf Gueltigkeit pruefen
         $g_forum->checkSession($g_valid_login, $g_current_user->getValue("usr_login_name"));
-    }
+    }    
 }
 
 ?>
