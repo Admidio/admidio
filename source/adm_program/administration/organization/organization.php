@@ -106,21 +106,30 @@ $g_layout['header'] =  "
         {
             var layerSetting = document.getElementById(LayerSetting);
             if(document.getElementById(LayerSwith).checked == true && layerSetting)
-            {               
-                    var ElementsArray = Array(\"forum_db\");
-                    var ValuesArray = Array();
-                    ValuesArray[0] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
-                    appendElements(ElementsArray,ValuesArray,layerSetting);
+            {
+                document.getElementById('forum_access_data').style.visibility = 'hidden';
+                document.getElementById('forum_access_data').style.display    = 'none';
+                document.getElementById('forum_access_data_text').style.visibility = 'hidden';
+                document.getElementById('forum_access_data_text').style.display    = 'none';
+                document.getElementById('forum_srv').value = '';
+                document.getElementById('forum_usr').value = '';
+                document.getElementById('forum_pw').value = '';
+                document.getElementById('forum_db').value = '';
             }
             else if (document.getElementById(LayerSwith).checked == false && layerSetting)
-            {
-                    var ElementsArray = Array(\"forum_srv\",\"forum_usr\",\"forum_pw\",\"forum_db\");
-                    var ValuesArray = Array();
-                    ValuesArray[0] = Array(\"Server:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_srv']. "\");
-                    ValuesArray[1] = Array(\"User:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_usr']. "\");
-                    ValuesArray[2] = Array(\"Passwort:\",\"PASSWORD\",\"200px\",\"50\",\"". $form_values['forum_pw']. "\");
-                    ValuesArray[3] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
-                    appendElements(ElementsArray,ValuesArray,layerSetting);
+            {             
+                var ElementsArray = Array('forum_srv','forum_usr','forum_pw','forum_db');
+                var ValuesArray = Array();
+                ValuesArray[0] = Array(\"Server:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_srv']. "\");
+                ValuesArray[1] = Array(\"User:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_usr']. "\");
+                ValuesArray[2] = Array(\"Passwort:\",\"PASSWORD\",\"200px\",\"50\",\"". $form_values['forum_pw']. "\");
+                ValuesArray[3] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
+                appendElements(ElementsArray,ValuesArray,layerSetting);
+                
+                document.getElementById('forum_access_data').style.visibility = 'visible';
+                document.getElementById('forum_access_data').style.display    = '';
+                document.getElementById('forum_access_data_text').style.visibility = 'visible';
+                document.getElementById('forum_access_data_text').style.display    = '';
             }
         }
         function appendElements(array,valuesArray,layer)
@@ -945,7 +954,7 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label>Zugangsdaten zur Datenbank des Forums:</label></dt>
+                            <dt><strong>Zugangsdaten zur Datenbank des Forums</strong></dt>
                             <dd>&nbsp;</dd>
                         </dl>
                     </li>
@@ -953,7 +962,7 @@ echo "
                         <dl>
                             <dt><label for=\"forum_sqldata_from_admidio\">Zugangsdaten von Admidio verwenden:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"forum_sqldata_from_admidio\" name=\"forum_sqldata_from_admidio\" onclick=\"javascript:drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');\" ";
+                                <input type=\"checkbox\" id=\"forum_sqldata_from_admidio\" name=\"forum_sqldata_from_admidio\" onclick=\"javascript:drawForumAccessDataTable('forum_access_data','forum_sqldata_from_admidio');\" ";
                                 if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -963,14 +972,15 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Falls das Forum über die gleiche Datenbank wie auch Admidio betrieben wird.
+                        Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und
+                        die Zugangsdaten müssen nicht mehr eingegeben werden.
                     </li>
-                    <li id=\"Forum_Zugangsdaten\">
+                    <li id=\"forum_access_data\">
                         <script type=\"text/javascript\"><!--
-                            drawForumAccessDataTable('Forum_Zugangsdaten','forum_sqldata_from_admidio');
+                            drawForumAccessDataTable('forum_access_data','forum_sqldata_from_admidio');
                         --></script>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li id=\"forum_access_data_text\" class=\"smallFontSize\">
                         Hier müssen die Zugangsdaten des Forums eingegeben werden, falls ein solches ausgewählt und aktiviert wurde.
                     </li>                
                 </ul>

@@ -51,42 +51,6 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
     $g_message->show("feld", "Automatischer Logout");
 }
 
-// Forumverbindung testen
-if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] == 1)
-{
-    if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
-    {
-        $g_message->show("forum_access_data");
-    }
-    else
-    {
-        // Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
-        if($_POST['forum_pw'] == "0000")
-        {
-            $_POST['forum_pw'] = $g_preferences['forum_pw'];
-        }
-        
-        $forum_test = createForumObject($_POST['forum_version']);
-        
-        if($_POST['forum_sqldata_from_admidio'] == 0)
-        {
-            $connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
-        }
-        else
-        {
-            $connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
-        }
-        if($connect_id == false)
-        {
-            $g_message->show("forum_db_connection_failed");
-        }
-    }
-}
-
-// *******************************************************************************
-// Daten speichern
-// *******************************************************************************
-
 // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
 // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
@@ -123,6 +87,37 @@ foreach($checkboxes as $key => $value)
     }
 }
 
+// Forumverbindung testen
+if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] == 1 && $_POST['forum_sqldata_from_admidio'] == 0)
+{
+    if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
+    {
+        $g_message->show("forum_access_data");
+    }
+    else
+    {
+        // Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
+        if($_POST['forum_pw'] == "0000")
+        {
+            $_POST['forum_pw'] = $g_preferences['forum_pw'];
+        }
+        
+        $forum_test = createForumObject($_POST['forum_version']);
+        
+        if($_POST['forum_sqldata_from_admidio'] == 0)
+        {
+            $connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
+        }
+        else
+        {
+            $connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
+        }
+        if($connect_id == false)
+        {
+            $g_message->show("forum_db_connection_failed");
+        }
+    }
+}
 
 // *******************************************************************************
 // Organisation updaten
