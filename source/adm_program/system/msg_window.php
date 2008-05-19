@@ -170,7 +170,7 @@ echo "
                 break;
 
             case "date_location_link":
-                echo "Geben Sie genügend Informationen zum Treffpunkt ein, so kann ein Link bzw. eine Route zu
+                echo "Werden genügend Informationen zum Treffpunkt eingegeben, so kann ein Link bzw. eine Route zu
                 diesem Treffpunkt über Google-Maps erstellt werden.";
                 break;
 
