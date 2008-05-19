@@ -119,7 +119,7 @@ class Forum
     {
         // falls die Admidio-DB sich von der Forum-DB unterscheidet, 
         // muss eine neue DB-Verbindung aufgemacht werden
-        if(is_null($admidio_db)  == false
+        if(is_null($admidio_db) == false
         && $admidio_db->server   == $this->forum_db->server
         && $admidio_db->user     == $this->forum_db->user
         && $admidio_db->password == $this->forum_db->password
@@ -151,59 +151,62 @@ class Forum
     // Die Preferences des Forums werden in die Allgemeine Forums Umgebungsdaten eingelesen.
     function preferences($session_id, $table_praefix, $user_export)
     {
-        $this->session_id = $session_id;
-        $this->praefix    = $table_praefix;
-        $this->export     = $user_export;
-        $server_name      = "";
-        $script_path      = "";
-    
-        $sql    = "SELECT config_name, config_value 
-                     FROM ". $this->praefix. "_config 
-                    WHERE config_name IN ('sitename','cookie_name','cookie_path','cookie_domain',
-                                          'cookie_secure','server_name','script_path') ";
-        $result = $this->forum_db->query($sql);
-        while($row = $this->forum_db->fetch_array($result))
+        if($session_id != $this->session_id)
         {
-            switch($row['config_name'])
-            {
-                case "sitename":
-                    $this->sitename = $row['config_value'];
-                    break;
-
-                case "cookie_name":
-                    $this->cookie_name = $row['config_value'];
-                    break;
-
-                case "cookie_path":
-                    $this->cookie_path = $row['config_value'];
-                    break;
-
-                case "cookie_domain":
-                    $this->cookie_domain = $row['config_value'];
-                    break;
-
-                case "cookie_secure":
-                    $this->cookie_secure = $row['config_value'];
-                    break;
-
-                case "server_name":
-                    $server_name = $row['config_value'];
-                    break;
-
-                case "script_path":
-                    $script_path = $row['config_value'];
-                    break;
-            }
-        }
+            $this->session_id = $session_id;
+            $this->praefix    = $table_praefix;
+            $this->export     = $user_export;
+            $server_name      = "";
+            $script_path      = "";
         
-        // Url zum Forum ermitteln
-        $this->url .= str_replace('http://', '', strtolower($server_name));
-        if(strlen($script_path) > 1)
-        {
-            $this->url .= '/'. $script_path;
+            $sql    = "SELECT config_name, config_value 
+                         FROM ". $this->praefix. "_config 
+                        WHERE config_name IN ('sitename','cookie_name','cookie_path','cookie_domain',
+                                              'cookie_secure','server_name','script_path') ";
+            $result = $this->forum_db->query($sql);
+            while($row = $this->forum_db->fetch_array($result))
+            {
+                switch($row['config_name'])
+                {
+                    case "sitename":
+                        $this->sitename = $row['config_value'];
+                        break;
+
+                    case "cookie_name":
+                        $this->cookie_name = $row['config_value'];
+                        break;
+
+                    case "cookie_path":
+                        $this->cookie_path = $row['config_value'];
+                        break;
+
+                    case "cookie_domain":
+                        $this->cookie_domain = $row['config_value'];
+                        break;
+
+                    case "cookie_secure":
+                        $this->cookie_secure = $row['config_value'];
+                        break;
+
+                    case "server_name":
+                        $server_name = $row['config_value'];
+                        break;
+
+                    case "script_path":
+                        $script_path = $row['config_value'];
+                        break;
+                }
+            }
+            
+            // Url zum Forum ermitteln
+            $this->url .= str_replace('http://', '', strtolower($server_name));
+            if(strlen($script_path) > 1)
+            {
+                $this->url .= '/'. $script_path;
+            }
+            $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
+            $this->url = 'http://'. $this->url;
         }
-        $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
-        $this->url = 'http://'. $this->url;
     }
 
 

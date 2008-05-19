@@ -292,23 +292,43 @@ Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des
 
 if($g_preferences['enable_forum_interface']) 
 {
+    // Admidio-Zugangsdaten nehmen, wenn entsprechende Einstellung gesetzt ist
+    if($g_preferences['forum_sqldata_from_admidio']) 
+    {
+        $g_preferences['forum_srv'] = $g_db->server;
+        $g_preferences['forum_usr'] = $g_db->user;
+        $g_preferences['forum_pw']  = $g_db->password;
+        $g_preferences['forum_db']  = $g_db->dbname;
+    }
+    
     // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
     // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
     if(isset($_SESSION['g_forum']))
     {
         $g_forum =& $_SESSION['g_forum'];
-        $g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db);
     }
     else
     {
         $g_forum = createForumObject($g_preferences['forum_version']);
-        $g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db);
-        $g_forum->preferences(session_id(), $g_preferences['forum_praefix'], $g_preferences['forum_export']);
         $_SESSION['g_forum'] =& $g_forum;
     }
+        
+    if(!$g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db))
+    {
+        // Verbindungsprobleme, deshalb Forum deaktivieren, damit Admidio ggf. noch funktioniert
+        $g_preferences['enable_forum_interface'] = 0;
+    }
+    else
+    {
+        // Einstellungen des Forums einlesen
+        $g_forum->preferences(session_id(), $g_preferences['forum_praefix'], $g_preferences['forum_export_user']);
+    }    
     
-    // Forum Session auf Gueltigkeit pruefen
-    $g_forum->checkSession($g_valid_login, $g_current_user->getValue("usr_login_name"));
+    if($g_preferences['enable_forum_interface'])
+    {
+        // Forum Session auf Gueltigkeit pruefen
+        $g_forum->checkSession($g_valid_login, $g_current_user->getValue("usr_login_name"));
+    }
 }
 
 ?>
