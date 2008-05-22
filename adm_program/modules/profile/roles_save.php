@@ -162,18 +162,7 @@ while($row = $g_db->fetch_object($result_rolle))
             }
 
             // Rollenmitgliedschaften aktualisieren
-            if(is_null($row->mem_usr_id))
-            {
-                // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
-                if($role_assign == 1)
-                {
-                    $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-                              VALUES ($row->rol_id, $req_usr_id, NOW(),NULL, 1, $role_leader) ";
-                    $g_db->query($sql);
-                    $count_assigned++;
-                }
-            }
-            else
+            if($row->mem_usr_id > 0)
             {
                 // neue Rollenmitgliederdaten zurueckschreiben, falls sich diese geaendert haben
                 if($role_assign == 1)
@@ -194,6 +183,17 @@ while($row = $g_db->fetch_object($result_rolle))
                                 WHERE mem_rol_id = $row->rol_id
                                   AND mem_usr_id = $req_usr_id ";
                     $g_db->query($sql);
+                }
+            }
+            else
+            {
+                // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
+                if($role_assign == 1)
+                {
+                    $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
+                              VALUES ($row->rol_id, $req_usr_id, NOW(),NULL, 1, $role_leader) ";
+                    $g_db->query($sql);
+                    $count_assigned++;
                 }
             }
 
