@@ -39,7 +39,7 @@ if(isset($_GET['err_text']))
 if(isset($_GET['window']))
 {
 $g_layout['title']    = "Hinweis";
-$g_layout['onload']   = "windowresize()";
+$g_layout['onload']   = "windowresize();";
 $g_layout['includes'] = false;
 require(THEME_SERVER_PATH. "/overall_header.php");
 
