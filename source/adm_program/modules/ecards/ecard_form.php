@@ -145,9 +145,9 @@ $bild         = $_REQUEST['photo'];
 // gültig ist dann wird der komplete Pfad für das Bild generiert
 if(is_numeric($bild) && isset($_GET['pho_id']))
 {
-    $ordner_foto        = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
-    $ordner_url         = $g_root_path.$ordner_foto;
-    $bild_url           = "".$ordner_url."/".$_REQUEST['photo'].".jpg";
+    $ordner_foto      = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id")."/".$_REQUEST['photo'].".jpg";
+    $bild_server_path = SERVER_PATH. "/". $ordner_foto;
+    $bild_link        = $g_root_path. "/". $ordner_foto;
 }
 // Wenn nur der Bildernamen übergeben wird ist die Übergabe ungültig
 if(is_numeric($bild) && !isset($_GET['pho_id']))
@@ -160,9 +160,9 @@ if(!is_numeric($bild) || !is_numeric($_GET['pho_id']))
     $g_message->show("invalid");
 }
 // Wenn ein Bilderpfad generiert worden ist dann können die Proportionalen Größen berechnet werden
-if(isset($bild_url))
+if(isset($bild_server_path))
 {
-    list($width, $height)   = getimagesize($bild_url);
+    list($width, $height)   = getimagesize($bild_server_path);
     $propotional_size_card  = array();
     $propotional_size_view  = array();
     $propotional_size_card  = getPropotionalSize($width, $height, $g_preferences['ecard_card_picture_width'], $g_preferences['ecard_card_picture_height']);
@@ -944,7 +944,7 @@ if (empty($submit_action))
     //Lightbox-Mode
     if($g_preferences['photo_show_mode']==1)
     {
-        echo "<a href=\"".$bild_url."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_album->getValue("pho_name")."\"><img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" /></a>";
+        echo "<a href=\"".$bild_link."\" rel=\"lightbox[roadtrip]\" title=\"".$photo_album->getValue("pho_name")."\"><img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" /></a>";
     }
 
     //Gleichesfenster-Mode
