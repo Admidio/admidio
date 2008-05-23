@@ -137,8 +137,7 @@ elseif($req_mode == 2)
                     </div>
                 </div>
                 <br />
-                <img src="layout/warning.png" alt="Warnung" /> Bereits vorhandene Daten unter dem
-                gewählten Tabellenpräfix werden überschrieben !
+                <img src="layout/warning.png" alt="Warnung" /> Bereits vorhandene Daten unter diesem Tabellenpräfix werden überschrieben !
                 <br />';
     showPage($message, "installation.php?mode=3", "forward.png", "Organisation festlegen", "server");
 }
