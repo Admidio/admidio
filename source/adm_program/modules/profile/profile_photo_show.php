@@ -1,6 +1,6 @@
 <?php
    /******************************************************************************
- * Photoresizer
+ * Photoresizer 
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -69,7 +69,7 @@ else
     else
     {
         // es wurde kein Bild gefunden, dann ein Dummy-Bild zurueckgeben
-        $no_profile_pic = imagecreatefrompng(THEME_PATH. "/images/no_profile_pic.png");
+        $no_profile_pic = imagecreatefrompng(THEME_SERVER_PATH. "/images/no_profile_pic.png");
         echo imagepng($no_profile_pic);
     }
 }
