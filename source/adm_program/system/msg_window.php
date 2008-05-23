@@ -88,15 +88,15 @@ echo "
                          </tr>
                          <tr>
                             <td>Einen <a href=\"http://". $g_current_organization->getValue("org_homepage"). "\">Link</a> setzen</td>
-                            <td>Einen <b>[url=</b>http://www.beispiel.de<b>]</b>Link<b>[/url]</b> setzen</td>
+                            <td>Einen <b>[url=</b>http://www.admidio.org<b>]</b>Link<b>[/url]</b> setzen</td>
                          </tr>
                          <tr>
                             <td>Eine <a href=\"mailto:". $g_preferences['email_administrator']. "\">Mailadresse</a> angeben</td>
-                            <td>Eine <b>[email=</b>webmaster@demo.de<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
+                            <td>Eine <b>[email=</b>webmaster@admidio.org<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                          </tr>
                          <tr>
                             <td>Ein Bild <img src=\"". THEME_PATH. "/images/admidio_logo_20.png\" /> anzeigen</td>
-                            <td>Ein Bild <b>[img]</b>http://www.beispiel.de/bild.jpg<b>[/img]</b> anzeigen</td>
+                            <td>Ein Bild <b>[img]</b>http://www.admidio.org/bild.jpg<b>[/img]</b> anzeigen</td>
                          </tr>
                       </table>";
                 break;

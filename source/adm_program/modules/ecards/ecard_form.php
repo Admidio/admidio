@@ -1071,7 +1071,7 @@ if (empty($submit_action))
                 </li>
                 <li>
                     <hr />
-                </li>';
+                </li>'; 
                 if ($g_preferences['enable_bbcode'] == 1)
                 {
                     echo '
@@ -1093,11 +1093,11 @@ if (empty($submit_action))
                                             src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
                                         <a class="iconLink" href="javascript:bbcode(5)"><img id="center"
                                             src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
-                                        <a class="iconLink" href="javascript:emoticon(\'[url='.$g_root_path.']Linktext[/url]\')"><img id="url"
+                                        <a class="iconLink" href="javascript:emoticon(\'[url=www.admidio.org]Linktext[/url]\')"><img id="url"
                                             src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
-                                        <a class="iconLink" href="javascript:emoticon(\'[email=adresse@demo.de]Linktext[/email]\')"><img id="email"
+                                        <a class="iconLink" href="javascript:emoticon(\'[email=name@admidio.org]Linktext[/email]\')"><img id="email"
                                             src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
-                                        <a class="iconLink" href="javascript:emoticon(\'[img]'.$g_root_path.'[/img]\')"><img id="img"
+                                        <a class="iconLink" href="javascript:emoticon(\'[img]www.admidio.org/images/admidio_small.png[/img]\')"><img id="img"
                                             src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
                                     </div>
                                     <div style="float: right;">
