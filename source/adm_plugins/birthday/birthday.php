@@ -2,7 +2,7 @@
 /******************************************************************************
  * Birthday
  *
- * Version 2.0.0
+ * Version 1.3.1
  *
  * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
  * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
