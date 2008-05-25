@@ -131,7 +131,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
                ON rol_cat_id = cat_id
               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
             WHERE usr_valid = 1
-            ORDER BY Month(birthday) DESC, DayOfMonth(birthday) DESC, last_name, first_name ";
+            ORDER BY Month(birthday.usd_value) DESC, DayOfMonth(birthday.usd_value) DESC, last_name, first_name ";
 $result = $g_db->query($sql);
 
 $anz_geb = $g_db->num_rows($result);
