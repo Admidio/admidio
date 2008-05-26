@@ -210,8 +210,8 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
             
             if($row['count'] > 0)
             {
-                $sql = "UPDATE ". TBL_USERS. " SET mem_end   = NULL
-                                                 , mem_valid = 1 
+                $sql = "UPDATE ". TBL_MEMBERS. " SET mem_end   = NULL
+                                                   , mem_valid = 1 
                          WHERE mem_usr_id = ". $user->getValue("usr_id");
                 $result = $g_db->query($sql);
                 $mem_exists = true;
