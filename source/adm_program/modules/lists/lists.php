@@ -75,10 +75,27 @@ else
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// SQL-Statement zusammensetzen
+// Alle Rollen-IDs ermitteln, die der User sehen darf
+$rol_id_list = "";
+if($active_role)
+{
+    foreach($g_current_user->list_view_rights as $key => $value)
+    {
+        if($value == 1)
+        {
+            $rol_id_list = $rol_id_list. $key. ", ";
+        }
+    }
+    if(strlen($rol_id_list) > 0)
+    {
+        $rol_id_list = " AND rol_id IN (". substr($rol_id_list, 0, strlen($rol_id_list)-2). ") ";
+    }
+}
 
+// SQL-Statement zusammensetzen
 $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
          WHERE rol_valid  = $active_role
+               $rol_id_list
            AND rol_cat_id = cat_id 
            AND cat_org_id = ". $g_current_organization->getValue("org_id");
 if($g_valid_login == false)
@@ -188,7 +205,7 @@ if($show_ctg_sel == 1)
 
     if($g_db->num_rows($result) > 0)
     {
-        echo '<p>Kategorie w&auml;hlen:&nbsp;&nbsp;
+        echo '<p>Kategorie wählen:&nbsp;&nbsp;
         <select size="1" id="category" onchange="showCategory()">
             <option value="Alle" ';
             if(strlen($_GET['category']) == 0)
@@ -284,7 +301,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
         }
 
         
-        //Nur anzeigen, wenn Usser auch die Liste einsehen darf
+        //Nur anzeigen, wenn User auch die Liste einsehen darf
         if($g_current_user->viewRole($row_lst['rol_id']))
         {
             if($count_cat_entries > 0)
@@ -465,14 +482,18 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                     </li>";
                 }
             echo "</ul>";
-        $count_cat_entries++;
+            $count_cat_entries++;
+        }
+        else
+        {
+            $num_roles--;
         }
     }
 }
 
 if($count_cat_entries == 0)
 {
-    echo"Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.";
+    echo "Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.";
 }
 echo "</div></div></div>";
 
