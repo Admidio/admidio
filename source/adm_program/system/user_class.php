@@ -29,7 +29,6 @@
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
  * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
  *                        Rolle "Webmaster" ist
- * hasMembership(rol_id)- Ueberprueft, ob der User Mitglied der uebergebenen Rolle ist
  * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
  *                        Users einsehen darf
  * viewRole             - Ueberprueft ob der User eine Uebergebene Rolle(Liste)
@@ -46,7 +45,6 @@ class User extends TableAccess
     
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-    var $roles_membership = array();  // Array ueber alle Rollen bei denen der User Mitglied ist mit der entsprechenden Listenansichteinstellung
     var $list_view_rights = array();  // Array ueber Listenrechte einzelner Rollen
     
     // Konstruktor
@@ -142,8 +140,9 @@ class User extends TableAccess
         // vorher wurde nur alles geleert, dadurch aber keine geloeschten Felder entfernt
         $this->fillUserFieldArray();
         
-        // Userrechte initialisieren
+        // Arrays initialisieren
         $this->roles_rights = array();
+        $this->list_view_rights = array();
     }
 
     // interne Methode, die bei setValue den uebergebenen Wert prueft
@@ -417,7 +416,8 @@ class User extends TableAccess
         return $vcard;
     }
     
-    // Funktion prueft, ob der User das uebergebene Rollenrecht besitzt
+    // Funktion prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags, 
+    // welche Rollen der User einsehen darf
     function checkRolesRight($right = "")
     {
         if($this->db_fields['usr_id'] > 0)
@@ -433,7 +433,7 @@ class User extends TableAccess
                                             "rol_photo" => "0", "rol_profile" => "0", 
                                             "rol_weblinks" => "0", "rol_all_lists_view" => "0");
 
-                // Alle Rollen einlesen, denen der User zugeordnet ist
+                // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql    = "SELECT *
                              FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                              LEFT JOIN ". TBL_MEMBERS. "
@@ -461,45 +461,40 @@ class User extends TableAccess
                         }
                     }
                     
-                    // Rollenmitgliedschaft und Listenansichtseinstellung merken
+                    // Listenansichtseinstellung merken
+                    
                     // Leiter duerfen die Rolle sehen
                     if($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $row['mem_leader'] == 1))
                     {
                         // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
-                        $this->roles_membership[$row['rol_id']] = 1;
+                        $this->list_view_rights[$row['rol_id']] = 1;
                     }
                     elseif($row['rol_this_list_view'] == 2)
                     {
                         // andere Rollen anschauen, wenn jeder sie sehen darf
-                        $this->roles_membership[$row['rol_id']] = 1;
+                        $this->list_view_rights[$row['rol_id']] = 1;
                     }
                     else
                     {
-                        $this->roles_membership[$row['rol_id']] = 0;
+                        $this->list_view_rights[$row['rol_id']] = 0;
                     }
                 }
                 $this->roles_rights = $tmp_roles_rights;
+                
+                // ist das Recht "alle Listen einsehen" gesetzt, dann dies auch im Array bei allen Rollen setzen
+                if($this->roles_rights['rol_all_lists_view'])
+                {
+                    foreach($this->list_view_rights as $key => $value)
+                    {
+                        $this->list_view_rights[$key] = 1;
+                    }
+                }
             }
 
             if($this->roles_rights[$right] == 1)
             {
                 return true;
             }
-        }
-        return false;
-    }
-    
-    function hasMembership($rol_id)
-    {
-        // Arrays fuellen
-        if(count($this->roles_rights) == 0)
-        {
-            checkRolesRight();
-        }
-        // pruefen, ob Rolle in Rollenarray vorhanden
-        if(array_key_exists($rol_id, $this->roles_membership))
-        {
-            return true;
         }
         return false;
     }
@@ -639,7 +634,7 @@ class User extends TableAccess
                             $view_profile = true;
                         }
                         elseif($row['rol_this_list_view'] == 1
-                        && array_key_exists($row['rol_id'], $this->roles_membership))
+                        && isset($this->list_view_rights[$row['rol_id']]))
                         {
                             // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
                             $view_profile = true;
@@ -655,16 +650,15 @@ class User extends TableAccess
     function viewRole($rol_id)
     {
         $view_role = false;
-        //Zunaechst abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
+        // Abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
         if($this->viewAllLists())
         {
             $view_role = true;
         }
-        else  //Falls er das Recht nicht hat Kontrolle fuer eine bestimmte Rolle
+        else
         {
-            // im Array nach der Rolleneinstellung schauen
-            if(array_key_exists($rol_id, $this->roles_membership)
-            && $this->roles_membership[$rol_id] > 0)
+            // Falls er das Recht nicht hat Kontrolle ob fuer eine bestimmte Rolle
+            if(isset($this->list_view_rights[$rol_id]) && $this->list_view_rights[$rol_id] > 0)
             {
                 $view_role = true;
             }

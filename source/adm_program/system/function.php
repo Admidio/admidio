@@ -11,9 +11,10 @@
 
 
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
-// Inhalt der Variable "$function" muss gleich dem DB-Feld "rolle.funktion" sein
+// $role_name - Name der zu pruefenden Rolle
+// $user_id   - Id des Users, fuer den die Mitgliedschaft geprueft werden soll
 
-function hasRole($function, $user_id = 0)
+function hasRole($role_name, $user_id = 0)
 {
     global $g_current_user, $g_current_organization, $g_db;
 
@@ -25,14 +26,13 @@ function hasRole($function, $user_id = 0)
     {
         return -1;
     }
-    $function = addslashes($function);
 
     $sql    = "SELECT *
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                 WHERE mem_usr_id = $user_id
                   AND mem_valid  = 1
                   AND mem_rol_id = rol_id
-                  AND rol_name   = '$function'
+                  AND rol_name   = '$role_name'
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id");
