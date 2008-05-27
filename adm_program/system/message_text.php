@@ -484,7 +484,7 @@ $message_text = array(
         "Bitte wähle eine Rolle als Adressat der E-Mail aus!",
 
     "profile_mail" =>
-        "In Ihrem <a href=\"%VAR1%\">Profil</a>
+        "In deinem <a href=\"%VAR1%\">Profil</a>
         ist keine gültige E-Mailadresse hinterlegt!",
 
     "role_empty" =>
