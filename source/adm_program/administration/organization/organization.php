@@ -729,7 +729,7 @@ echo "
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.<br /><br />
-                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning16.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
+                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
                         Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur f&uuml;r registrierte Benutzer&rdquo;, wird nur der Zugriff &uuml;ber
                         die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt.        
                     </li>
