@@ -32,6 +32,9 @@ if(isset($_COOKIE['admidio_data']))
 
 unset($_SESSION['g_current_user']);
 
+// da der Inhalt noch auf der eingeloggten Seite steht, hier umsetzen
+$g_homepage = $g_root_path. "/". $g_preferences['homepage_logout'];
+
 $message_code = "logout";
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
