@@ -28,14 +28,9 @@ else
     $req_mode = 1;
 }
 
-$admidio_path = substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1);
-
 // Konstanten und Konfigurationsdatei einbinden
-require_once($admidio_path. "/config.php");
-require_once($admidio_path. "/adm_program/system/constants.php");
-require_once(SERVER_PATH. "/adm_program/system/string.php");
-require_once(SERVER_PATH. "/adm_program/system/function.php");
-require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
+require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1). "/config.php");
+require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1). "/adm_program/system/constants.php");
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
@@ -50,6 +45,9 @@ if(!isset($g_db_type))
 }
 
 require_once(SERVER_PATH. "/adm_program/system/". $g_db_type. "_class.php");
+require_once(SERVER_PATH. "/adm_program/system/string.php");
+require_once(SERVER_PATH. "/adm_program/system/function.php");
+require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
 
  // Verbindung zu Datenbank herstellen
 $g_db = new MySqlDB();
@@ -76,10 +74,11 @@ if($req_mode == 1)
     {
         // bei einem Update von Admidio 1.x muss die spezielle Version noch erfragt werden,
         // da in Admidio 1.x die Version noch nicht in der DB gepflegt wurde
-        $message   = '<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />
-                      Sie haben bisher eine Version 1.x von Admidio verwendet. Um Ihre Datenbank
+        $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
+                      <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />
+                      Bisher wurde eine Version 1.x von Admidio verwendet. Um die Datenbank
                       erfolgreich auf Admidio '. ADMIDIO_VERSION. ' zu migrieren, ist es erforderlich,
-                      dass Sie Ihre bisherige Version angeben:<br /><br />
+                      dass du deine bisherige Version angibst:<br /><br />
                       Bisherige Admidio-Version:&nbsp;
                       <select id="old_version" name="old_version" size="1">
                           <option value="0" selected="selected">- Bitte wählen -</option>
@@ -87,18 +86,20 @@ if($req_mode == 1)
                           <option value="1.3">Version 1.3.*</option>
                           <option value="1.2">Version 1.2.*</option>
                       </select>';
-        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", false);
+        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
     }
     elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
     {
-        $message   = "<strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />";
-        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", false);
+        $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
+                      <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />';
+        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
     }
     elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0)
     {
-        $message   = "<strong>Eine Aktualisierung ist nicht erforderlich</strong><br /><br />
-                      Die Admidio-Datenbank ist aktuell.";
-        showPage($message, "$g_root_path/index.html", "application_view_list.png", "Übersichtsseite", false);
+        $message   = '<img style="vertical-align: top;" src="layout/ok.png" /> 
+                      <strong>Eine Aktualisierung ist nicht erforderlich</strong><br /><br />
+                      Die Admidio-Datenbank ist aktuell.';
+        showPage($message, "$g_root_path/index.html", "application_view_list.png", "Übersichtsseite", 2);
     }
 }
 elseif($req_mode == 2)
@@ -112,7 +113,7 @@ elseif($req_mode == 2)
         || $_POST['old_version'] == 0)
         {
             $message   = "Das Feld <strong>bisherige Admidio-Version</strong> ist nicht gefüllt.";
-            showPage($message, "update.php", "back.png", "Zurück", false);
+            showPage($message, "update.php", "back.png", "Zurück", 2);
         }
         $old_version = $_POST['old_version'];
     }
@@ -213,8 +214,8 @@ elseif($req_mode == 2)
 
     $message   = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Aktualisierung war erfolgreich</strong><br /><br />
                   Die Admidio-Datenbank ist jetzt auf die Version '. ADMIDIO_VERSION. ' aktualisiert worden.<br />
-                  Sie können nun wieder mit Admidio arbeiten.';
-    showPage($message, "$g_root_path/index.html", "application_view_list.png", "Übersichtsseite", false);
+                  Du kannst nun wieder mit Admidio arbeiten.';
+    showPage($message, "$g_root_path/index.html", "application_view_list.png", "Übersichtsseite", 2);
 }
 
 ?>

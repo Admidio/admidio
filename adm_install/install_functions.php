@@ -9,18 +9,25 @@
  *
  *****************************************************************************/
 
-function showPage($message, $next_url, $icon, $icon_text, $install = true)
+function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
 {
     // Html des Modules ausgeben
     global $g_root_path;
     
-    if($install)
+    if($mode == 1)
     {
-        $title = "Installation der Version ". ADMIDIO_VERSION;
+        $headline = "Installation der Version ". ADMIDIO_VERSION;
+        $title    = "Installation";
     }
-    else
+    elseif($mode == 2)
     {
-        $title = "Update auf Version ". ADMIDIO_VERSION;
+        $headline = "Update auf Version ". ADMIDIO_VERSION;
+        $title    = "Update";
+    }
+    elseif($mode == 3)
+    {
+        $headline = "Weitere Organisation hinzufügen";
+        $title    = "Organisation hinzufügen";
     }
     
     echo '
@@ -33,7 +40,7 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
         <meta name="author"   content="Admidio Team" />
         <meta name="robots"   content="noindex" />
         
-        <title>Admidio - Update</title>
+        <title>Admidio - '. $title. '</title>
 
         <link rel="stylesheet" type="text/css" href="layout/install.css" />
         <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
@@ -75,7 +82,7 @@ function showPage($message, $next_url, $icon, $icon_text, $install = true)
         <div><img class="img_border" src="layout/border_top_big.png" alt="border" /></div>
         <div id="content_left" class="content">&nbsp;
             <div class="formLayout" id="installation_form">
-                <div class="formHead" style="text-align: left; letter-spacing: 0em;">'. $title. '</div>
+                <div class="formHead" style="text-align: left; letter-spacing: 0em;">'. $headline. '</div>
     
                 <div class="formBody" style="text-align: left;">
                     <p class="bigFontSize">'.

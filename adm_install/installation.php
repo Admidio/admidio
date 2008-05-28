@@ -69,8 +69,8 @@ if($req_mode == 1)
     // Willkommen zur Installation
     session_destroy();
     $message = '<strong>Willkommen zur Installation von Admidio</strong><br /><br />
-                Auf den nächsten Seiten müssen Sie einige notwendige Informationen für die Einrichtung
-                von Admidio eingeben. Sie benötigen dazu unter anderem die Zugangsdaten zu der
+                Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung
+                von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der
                 Datenbank, auf der Admidio zukünftig laufen soll.';
     showPage($message, "installation.php?mode=2", "forward.png", "Datenbank Zugangsdaten");
 }
@@ -95,8 +95,8 @@ elseif($req_mode == 2)
     }
 
     $message = '<strong>Zugangsdaten zur Datenbank eingeben</strong><br /><br />
-                Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das
-                Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere
+                Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das
+                Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere
                 Admidio-Installationen auf derselben Datenbank einrichten möchten.
 
                 <div class="groupBox">
@@ -188,8 +188,8 @@ elseif($req_mode == 3)
         $db = new MySqlDB();
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
-            $message   = "Mit Ihren Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden !<br /><br />
-                          Korrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie,
+            $message   = "Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden !<br /><br />
+                          Korrigiere gegebenenfalls deine Zugangsdaten bzw. kontrolliere,
                           ob die Datenbank online ist.";
             showPage($message, "installation.php?mode=2", "back.png", "Zurück");
         }
@@ -208,8 +208,8 @@ elseif($req_mode == 3)
     }
 
     $message = '<strong>Organisation festlegen</strong><br /><br />
-                Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein
-                ein, für die Sie Admidio nutzen möchten.
+                Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein
+                ein, für die du Admidio nutzen möchtest.
 
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Name der Organisation</div>
@@ -267,8 +267,8 @@ elseif($req_mode == 4)
         $user_login      = "";
     }
     $message = '<strong>Administrator anlegen</strong><br /><br />
-                Geben Sie in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an.
-                Mit diesem Benutzer können Sie sich nach der Installation bei Admidio anmelden.
+                Gib in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an.
+                Mit diesem Benutzer kannst du dich nach der Installation bei Admidio anmelden.
 
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Daten des Administrators</div>
@@ -295,19 +295,19 @@ elseif($req_mode == 4)
                             <li>
                                 <dl>
                                     <dt><label for="user_login">Benutzername:</label></dt>
-                                    <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="50" value="'. $user_login. '" /></dd>
+                                    <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="35" value="'. $user_login. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_password">Passwort:</label></dt>
-                                    <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="50" /></dd>
+                                    <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="20" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_password_confirm">Passwort bestätigen:</label></dt>
-                                    <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="50" /></dd>
+                                    <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="20" /></dd>
                                 </dl>
                             </li>
                         </ul>
@@ -348,9 +348,9 @@ elseif($req_mode == 5)
     }
 
     $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
-                Laden Sie die Konfigurationsdatei <strong>config.php</strong> herunter und kopieren Sie
+                Lade die Konfigurationsdatei <strong>config.php</strong> herunter und kopiere
                 diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine <i>config_default.php</i>.<br /><br />
-                Erst nachdem Sie die Datei dort abgelegt haben, können Sie mit der Installation fortfahren.<br /><br />
+                Erst nachdem die Datei dort abgelegt wurde, kannst du mit der Installation fortfahren.<br /><br />
 
                 <span class="iconTextLink">
                     <a href="installation.php?mode=6"><img
@@ -402,7 +402,7 @@ elseif($req_mode == 7)
     if(file_exists("../config.php") == false)
     {
         $message = "Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
-                    Laden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.";
+                    Lade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.";
         showPage($message, "installation.php?mode=5", "back.png", "Zurück");
     }
 
@@ -596,11 +596,11 @@ elseif($req_mode == 7)
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Installation war erfolgreich</strong><br /><br />
                 Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet.
-                Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.';
+                Du kannst nun mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.';
     if(is_writeable("../adm_my_files") == false)
     {
-        $message = $message. '<br /><br />Zuvor sollten Sie allerdings dem Ordner <strong>adm_my_files</strong>
-                   Schreibrechte geben. Ohne diese können Sie keine Fotos oder Dateien hochladen.';
+        $message = $message. '<br /><br />Zuvor solltest du allerdings dem Ordner <strong>adm_my_files</strong>
+                   Schreibrechte geben. Ohne diese können keine Fotos oder Dateien hochgeladen werden.';
     }
     showPage($message, "../adm_program/index.php", "application_view_list.png", "Übersichtsseite");
 }
