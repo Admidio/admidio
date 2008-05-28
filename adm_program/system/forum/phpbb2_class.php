@@ -140,7 +140,7 @@ class Forum
     function userClear()
     {
         // Session-Valid und Userdaten loeschen
-        $this->session_valid    = FALSE;
+        $this->session_valid    = false;
         $this->userid           = -1;
         $this->user             = "Gast";
         $this->password         = "";
@@ -148,65 +148,82 @@ class Forum
     }
 
 
-    // Die Preferences des Forums werden in die Allgemeine Forums Umgebungsdaten eingelesen.
-    function preferences($session_id, $table_praefix, $user_export)
+    // Notwendige Einstellungen des Forums werden eingelesen.
+    function initialize($session_id, $table_praefix, $user_export, $admidio_login_name)
     {
         if($session_id != $this->session_id)
         {
-            $this->session_id = $session_id;
-            $this->praefix    = $table_praefix;
-            $this->export     = $user_export;
-            $server_name      = "";
-            $script_path      = "";
-        
-            $sql    = "SELECT config_name, config_value 
-                         FROM ". $this->praefix. "_config 
-                        WHERE config_name IN ('sitename','cookie_name','cookie_path','cookie_domain',
-                                              'cookie_secure','server_name','script_path') ";
-            $result = $this->forum_db->query($sql);
-            while($row = $this->forum_db->fetch_array($result))
-            {
-                switch($row['config_name'])
-                {
-                    case "sitename":
-                        $this->sitename = $row['config_value'];
-                        break;
-
-                    case "cookie_name":
-                        $this->cookie_name = $row['config_value'];
-                        break;
-
-                    case "cookie_path":
-                        $this->cookie_path = $row['config_value'];
-                        break;
-
-                    case "cookie_domain":
-                        $this->cookie_domain = $row['config_value'];
-                        break;
-
-                    case "cookie_secure":
-                        $this->cookie_secure = $row['config_value'];
-                        break;
-
-                    case "server_name":
-                        $server_name = $row['config_value'];
-                        break;
-
-                    case "script_path":
-                        $script_path = $row['config_value'];
-                        break;
-                }
-            }
+            // pruefen, ob das Praefix richtig gesetzt wurde und die Config-Tabelle gefunden werden kann
+            $sql = "SHOW TABLE STATUS LIKE '". $table_praefix. "_config' ";
+            $this->forum_db->query($sql);
             
-            // Url zum Forum ermitteln
-            $this->url .= str_replace('http://', '', strtolower($server_name));
-            if(strlen($script_path) > 1)
+            if($this->forum_db->num_rows() == 1)
             {
-                $this->url .= '/'. $script_path;
+                $this->session_id = $session_id;
+                $this->praefix    = $table_praefix;
+                $this->export     = $user_export;
+                $server_name      = "";
+                $script_path      = "";
+                        
+                // wichtige Einstellungen des Forums werden eingelesen
+                $sql    = "SELECT config_name, config_value 
+                             FROM ". $this->praefix. "_config 
+                            WHERE config_name IN ('sitename','cookie_name','cookie_path','cookie_domain',
+                                                  'cookie_secure','server_name','script_path') ";
+                $result = $this->forum_db->query($sql);
+                
+                while($row = $this->forum_db->fetch_array($result))
+                {
+                    switch($row['config_name'])
+                    {
+                        case "sitename":
+                            $this->sitename = $row['config_value'];
+                            break;
+
+                        case "cookie_name":
+                            $this->cookie_name = $row['config_value'];
+                            break;
+
+                        case "cookie_path":
+                            $this->cookie_path = $row['config_value'];
+                            break;
+
+                        case "cookie_domain":
+                            $this->cookie_domain = $row['config_value'];
+                            break;
+
+                        case "cookie_secure":
+                            $this->cookie_secure = $row['config_value'];
+                            break;
+
+                        case "server_name":
+                            $server_name = $row['config_value'];
+                            break;
+
+                        case "script_path":
+                            $script_path = $row['config_value'];
+                            break;
+                    }
+                }
+                
+                // Url zum Forum ermitteln
+                $this->url .= str_replace('http://', '', strtolower($server_name));
+                if(strlen($script_path) > 1)
+                {
+                    $this->url .= '/'. $script_path;
+                }
+                $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
+                $this->url = 'http://'. $this->url;
             }
-            $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
-            $this->url = 'http://'. $this->url;
+            else
+            {
+                return false;
+            }
         }
+        
+        // Forumsession pruefen und aktualisieren
+        $this->checkSession($admidio_login_name);
+        return true;
     }
 
 
@@ -614,18 +631,18 @@ class Forum
 
     // diese Funktion bekommt den Admidio-Session-Status (eingeloggt ja/nein) uebergeben und
     // prueft dann, ob die Session im Forum aktualisiert werden muss
-    function checkSession($admidio_login_valid, $admidio_usr_login_name)
+    function checkSession($admidio_usr_login_name)
     {
-        // Userdaten holen
-        $this->userDaten($admidio_usr_login_name);
-        $this->getUserPM($admidio_usr_login_name);
-        
         // Forum Session auf Gueltigkeit pruefen
         // Nur wenn die Admidio Session valid ist, wird auf die Forum Session valid sein
-        if($admidio_login_valid)
+        if(strlen($admidio_usr_login_name) > 0)
         {
+            // Userdaten holen
+            $this->userDaten($admidio_usr_login_name);
+            $this->getUserPM($admidio_usr_login_name);
+        
             // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
-            if($this->session_valid != TRUE)
+            if($this->session_valid != true)
             { 
                 $this->session_valid = $this->userCheck($this->user);
             }
@@ -645,7 +662,7 @@ class Forum
                 // Admidio Session ist abgelaufen, ungueltig oder ein logoff, also im Forum logoff
                 $this->session("logoff", $this->userid);
             }
-            $this->session_valid = FALSE;
+            $this->session_valid = false;
         }
     }
 
