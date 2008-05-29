@@ -141,6 +141,7 @@ define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
 if(isset($g_preferences['db_version']) == false
 || version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
 {
+    unset($_SESSION['g_current_organization']);
     $g_message->addVariableContent($g_preferences['email_administrator'], 1, false);
     $g_message->show("database_invalid");
 }
@@ -217,13 +218,13 @@ if($g_current_session->getValue("ses_id") > 0)
 {
     // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
     // da die Daten evtl. von anderen Usern in der DB geaendert wurden
-    if($g_current_session->getValue("ses_renew") == 1)
+    if($g_current_session->getValue("ses_renew") == 1 || $g_current_session->getValue("ses_renew") == 3)
     {
         // Userobjekt neu einlesen
         $g_current_user->getUser($g_current_user->getValue("usr_id"));
         $g_current_session->setValue("ses_renew", 0);
     }
-    if($g_current_session->getValue("ses_renew") == 2)
+    if($g_current_session->getValue("ses_renew") == 2 || $g_current_session->getValue("ses_renew") == 3)
     {
         // Organisationsobjekt neu einlesen
         $g_current_organization->getOrganization($g_organization);
