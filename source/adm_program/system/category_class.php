@@ -118,6 +118,15 @@ class Category extends TableAccess
     {
         global $g_current_session;
         
+        // Luecke in der Reihenfolge schliessen
+        $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence - 1 
+                 WHERE (  cat_org_id = ". $g_current_session->getValue("ses_org_id"). "
+                       OR cat_org_id IS NULL )
+                   AND cat_sequence > ". $this->getValue("cat_sequence"). "
+                   AND cat_type     = '". $this->getValue("cat_type"). "'";
+        $this->db->query($sql);
+
+        // Abhaenigigkeiten loeschen
         if($this->db_fields['cat_type'] == 'ROL')
         {
             $sql    = "DELETE FROM ". TBL_ROLES. "
