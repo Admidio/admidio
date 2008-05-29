@@ -102,6 +102,13 @@ class UserField extends TableAccess
     {
         global $g_current_session;
         
+        // Luecke in der Reihenfolge schliessen
+        $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_sequence = usf_sequence - 1 
+                 WHERE usf_cat_id   = ". $this->getValue("usf_cat_id"). "
+                   AND usf_sequence > ". $this->getValue("usf_sequence");
+        $this->db->query($sql);
+
+        // Abhaenigigkeiten loeschen
         $sql    = "DELETE FROM ". TBL_USER_DATA. "
                     WHERE usd_usf_id = ". $this->db_fields['usf_id'];
         $this->db->query($sql);
