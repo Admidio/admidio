@@ -82,9 +82,9 @@ if($req_mode == 1)
                       Bisherige Admidio-Version:&nbsp;
                       <select id="old_version" name="old_version" size="1">
                           <option value="0" selected="selected">- Bitte wählen -</option>
-                          <option value="1.4">Version 1.4.*</option>
-                          <option value="1.3">Version 1.3.*</option>
-                          <option value="1.2">Version 1.2.*</option>
+                          <option value="1.4.9">Version 1.4.*</option>
+                          <option value="1.3.9">Version 1.3.*</option>
+                          <option value="1.2.9">Version 1.2.*</option>
                       </select>';
         showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
     }
@@ -109,7 +109,7 @@ elseif($req_mode == 2)
     if(isset($g_preferences['db_version']) == false)
     {
         if(isset($_POST['old_version']) == false 
-        || strlen($_POST['old_version']) > 3
+        || strlen($_POST['old_version']) > 5
         || $_POST['old_version'] == 0)
         {
             $message   = "Das Feld <strong>bisherige Admidio-Version</strong> ist nicht gefüllt.";
@@ -119,16 +119,18 @@ elseif($req_mode == 2)
     }
     else
     {
-        $old_version = substr($g_preferences['db_version'], 0, 3);
+        $old_version = $g_preferences['db_version'];
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(120);
 
-    // vor dem Update erst einmal alle Session loeschen, damit User ausgeloggt sind
-    $sql = "DELETE FROM ". TBL_SESSIONS;
-    $g_db->query($sql);
+    // vor dem Update die Versionsnummer umsetzen, damit keiner mehr was machen kann
+    $temp_version = substr(ADMIDIO_VERSION, 0, 4). "u";
+	$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". $temp_version. "'
+			 WHERE prf_name    = 'db_version' ";
+	$g_db->query($sql);                
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     include("db_scripts/preferences.php");
@@ -144,17 +146,18 @@ elseif($req_mode == 2)
 
     $main_version      = substr($old_version, 0, 1);
     $sub_version       = substr($old_version, 2, 1);
+    $micro_version     = substr($old_version, 4, 1);
+    $micro_version     = $micro_version + 1;
     $flag_next_version = true;
 
     // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
     while($flag_next_version)
     {
         $flag_next_version = false;
-        $sub_version   = $sub_version + 1;
         
         // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
         // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-        for($micro_version = 0; $micro_version < 15; $micro_version++)
+        for($micro_version = $micro_version; $micro_version < 15; $micro_version++)
         {
             // Update-Datei der naechsten hoeheren Version ermitteln
             $sql_file  = "db_scripts/upd_". $main_version. "_". $sub_version. "_". $micro_version. "_db.sql";
@@ -190,15 +193,30 @@ elseif($req_mode == 2)
             }
         }
 
-        // keine Datei mit der Subversion gefunden, dann die Mainversion hochsetzen
-        if($flag_next_version == false && $main_version < 2)
+        // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
+        // solange bis die aktuelle Versionsnummer erreicht wurde
+        if($flag_next_version == false
+        && version_compare($main_version. ".". $sub_version. ".". $micro_version , ADMIDIO_VERSION) == -1)
         {
-            $main_version  = $main_version + 1;
-            $sub_version   = -1;
+            if($sub_version == 9)
+            {
+                $main_version  = $main_version + 1;
+                $sub_version   = 0;
+            }
+            else
+            {
+                $sub_version   = $sub_version + 1;
+            }
+            
+            $micro_version     = 0;
             $flag_next_version = true;
         }
     }
 
+    // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
+    $sql = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 1 ";
+    $g_db->query($sql);
+    
     // nach einem erfolgreichen Update noch die neue Versionsnummer in DB schreiben
 	$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". ADMIDIO_VERSION. "'
 			 WHERE prf_name    = 'db_version' ";
