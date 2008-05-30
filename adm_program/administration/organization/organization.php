@@ -901,8 +901,9 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Forum kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
+                    	<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
+                    	Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0)
+                    	eingebunden werden.
                     </li>
                     <li>
                         <dl>
