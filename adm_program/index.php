@@ -210,7 +210,7 @@ echo "</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href=\"$g_root_path/adm_program/modules/dates/dates_big.php\"><img
+                            <a href=\"$g_root_path/adm_program/modules/dates/dates.php\"><img
                             src=\"". THEME_PATH. "/icons/dates_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
                         </dt>
                         <dd>
