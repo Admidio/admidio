@@ -320,7 +320,7 @@ if($g_preferences['photo_show_mode']==1)
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>
         <link rel=\"stylesheet\" href=\"".THEME_PATH."/css/photos.css\" type=\"text/css\" media=\"screen\" />";
 }
-$javascript='
+$javascript = '
     <script type="text/javascript"><!--
         var basedropdiv = \'basedropdownmenu\';
         var dropdiv = \'dropdownmenu\';
@@ -346,7 +346,7 @@ $javascript='
                         \'image_point.png\',\'image.png\');
 
 
-
+		document.onload = getMenu();
         function popup_win(theURL,winName,winOptions)
         {
              win = window.open(theURL,winName,winOptions);
@@ -568,11 +568,11 @@ $javascript='
             }
             xmlHttp.onreadystatechange=function()
             {
-                if(xmlHttp.readyState==1)
+                if(xmlHttp.readyState==1 && document.getElementById(divId))
                 {
                     document.getElementById(divId).innerHTML = "Inhalt wird geladen - Bitte warten!";
                 }
-                if(xmlHttp.readyState==4)
+                if(xmlHttp.readyState==4 && document.getElementById(divId))
                 {
                     document.getElementById(divId).innerHTML = xmlHttp.responseText;
                 }
@@ -583,7 +583,6 @@ $javascript='
         function getMenu()
         {
             macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1\' , \'basedropdownmenu\' );
-
         }
         function getMenuRecepientName()
         {
@@ -902,20 +901,20 @@ $javascript='
                }
             }
     --></script>';
-$g_layout['header'] .= $javascript;
-
-
-
-//Photomodulspezifische CSS laden
-$g_layout["header"] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/photos.css\" type=\"text/css\" media=\"screen\" />";
-
+if (empty($submit_action))
+{
+	$g_layout['header'] .= $javascript;
+}
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo '
 
 <div class="formLayout" id="profile_form">
-<noscript>
+    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formBody">
+    <div>
+	<noscript>
     <div style="text-align: center;">
         <div style="background-image: url(\''.THEME_PATH.'/images/error.png\');
                     background-repeat: no-repeat;
@@ -929,10 +928,7 @@ echo '
          Bitte aktiviere Javascript um eine Grußkarte versenden zu können!
          </div>
     </div>
-</noscript>
-    <div class="formHead">'. $g_layout['title']. '</div>
-    <div class="formBody">
-    <div>';
+</noscript>';
 if (empty($submit_action))
 {
      //Popup-Mode
@@ -981,11 +977,7 @@ if (empty($submit_action))
                             if (array_key_exists("usr_id", $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                                echo '<div id="basedropdownmenu" style="display:block; margin-bottom:3px;">
-                                     </div>
-                                     <div id="dropdownmenu" style="display:block;">
-                                     </div>
-                                     <div id="extern">
+                                echo '<div id="extern">
                                         <input type="text" class="readonly" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
                                 echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                      </div>';
@@ -996,7 +988,6 @@ if (empty($submit_action))
                                echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
                                      </div>
                                      <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
-                                         <script type="text/javascript">getMenu();</script>
                                      </div>
                                      <div id="dropdownmenu" style="display:block;">
                                      </div>
