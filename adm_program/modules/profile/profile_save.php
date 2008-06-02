@@ -235,44 +235,45 @@ $login_name_changed = false;
 if($g_current_user->isWebmaster() || $new_user > 0)
 {
     // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden    
-    if(strlen($_POST['usr_login_name']) > 0
-    && $_POST['usr_login_name'] != $user->getValue("usr_login_name"))
+    if($_POST['usr_login_name'] != $user->getValue("usr_login_name"))
     {
-        // pruefen, ob der Benutzername bereits vergeben ist
-        $sql = "SELECT usr_id FROM ". TBL_USERS. "
-                 WHERE usr_login_name = '". $_POST['usr_login_name']. "'";
-        $g_db->query($sql);
-
-        if($g_db->num_rows() > 0)
+        if(strlen($_POST['usr_login_name']) > 0)
         {
-            $row = $g_db->fetch_array();
+            // pruefen, ob der Benutzername bereits vergeben ist
+            $sql = "SELECT usr_id FROM ". TBL_USERS. "
+                     WHERE usr_login_name LIKE '". $_POST['usr_login_name']. "'";
+            $g_db->query($sql);
 
-            if(strcmp($row['usr_id'], $usr_id) != 0)
+            if($g_db->num_rows() > 0)
             {
-                $g_message->show("login_name");
+                $row = $g_db->fetch_array();
+
+                if(strcmp($row['usr_id'], $usr_id) != 0)
+                {
+                    $g_message->show("login_name");
+                }
+            }
+
+            // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
+            // Benutzernamenswechesel und diese Dinge
+            if($g_preferences['enable_forum_interface'])
+            {
+                // pruefen, ob der Benutzername bereits im Forum vergeben ist
+                if($g_forum->userCheck($user->login_name))
+                {
+                    $g_message->show("login_name_forum");
+                }
+                
+                // bisherigen Loginnamen merken, damit dieser spaeter im Forum geaendert werden kann
+                $forum_old_username = "";
+                if(strlen($user->getValue("usr_login_name")) > 0)
+                {
+                    $forum_old_username = $user->getValue("usr_login_name");
+                }
             }
         }
-        
+
         $login_name_changed = true;
-
-        // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
-        // Benutzernamenswechesel und diese Dinge
-        if($g_preferences['enable_forum_interface'])
-        {
-            // pruefen, ob der Benutzername bereits im Forum vergeben ist
-            if($g_forum->userCheck($user->login_name))
-            {
-                $g_message->show("login_name_forum");
-            }
-            
-            // bisherigen Loginnamen merken, damit dieser spaeter im Forum geaendert werden kann
-            $forum_old_username = "";
-            if(strlen($user->getValue("usr_login_name")) > 0)
-            {
-                $forum_old_username = $user->getValue("usr_login_name");
-            }
-        }
-
         $user->setValue("usr_login_name", $_POST['usr_login_name']);
     }    
 }

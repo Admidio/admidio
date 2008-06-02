@@ -286,7 +286,16 @@ echo "
                             <li>
                                 <dl>
                                     <dt>Benutzername:</dt>
-                                    <dd><i>". $user->getValue("usr_login_name"). "&nbsp;</i></dd>
+                                    <dd><i>"; 
+                                    if(strlen($user->getValue("usr_login_name")) > 0) 
+                                    {
+                                        $user->getValue("usr_login_name");
+                                    }
+                                    else 
+                                    {
+                                        echo "nicht registriert";
+                                    }
+                                    echo "&nbsp;</i></dd>
                                 </dl>
                             </li>";
 
