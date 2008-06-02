@@ -87,8 +87,7 @@ $g_db->query($sql);
 $usf_id_gender = $g_db->insert_id();
 
 $sql = "INSERT INTO ". TBL_USER_FIELDS. " (usf_cat_id, usf_type, usf_name, usf_description, usf_system, usf_mandatory, usf_sequence)
-                                   VALUES ($cat_id_stammdaten, 'EMAIL',  'E-Mail', 'Es muss eine gültige E-Mail-Adresse angegeben werden.<br />' +
-                                                               'Ohne diese kann das Programm nicht genutzt werden.', 1, 1, 12) ";
+                                   VALUES ($cat_id_stammdaten, 'EMAIL',  'E-Mail', 'Es muss eine gültige E-Mail-Adresse angegeben werden.<br />Ohne diese kann das Programm nicht genutzt werden.', 1, 1, 12) ";
 $g_db->query($sql);
 $usf_id_email = $g_db->insert_id();
 
