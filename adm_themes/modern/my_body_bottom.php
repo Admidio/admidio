@@ -102,13 +102,13 @@
             if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUsers())
             {
                 echo '<h3>Administration</h3>';
-                if($g_current_user->editUsers())
+                if($g_current_user->approveUsers())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php"><img
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/new_registrations.png" alt="Neue Anmeldungen" title="Neue Anmeldungen" /></a>
                     <a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php">Neue Anmeldungen</a></span>';
                 }
-                if($g_current_user->approveUsers())
+                if($g_current_user->editUsers())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/members/members.php"><img
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/user_administration.png" alt="Benutzerverwaltung" title="Benutzerverwaltung" /></a>
@@ -138,8 +138,8 @@
 
 <p>
     <a href="http://www.admidio.org"><img
-    src="<?php echo THEME_PATH ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
+    src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
      alt="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen"
      title="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen" /></a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - <? echo date('Y', time()); ?>&nbsp;&nbsp;Admidio Team</span>
+    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2008&nbsp;&nbsp;Admidio Team</span>
 </p>
