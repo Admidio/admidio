@@ -148,7 +148,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 #prevLink, #nextLink{
     width: 49%;
     height: 100%;
-    background:  background-image: url(data:image/gif;base64,AAAA); /* Trick IE into showing hover */
+    background-image: url(data:image/gif;base64,AAAA); /* Trick IE into showing hover */
     display: block;
     }
 #prevLink { left: 0; float: left;}
