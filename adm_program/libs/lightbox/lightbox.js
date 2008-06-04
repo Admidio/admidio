@@ -401,12 +401,12 @@ Lightbox.prototype = {
         
         if (key.match(/x|o|c/) || (keycode == escapeKey)){ // close lightbox
             this.end();
-        } else if ((key == 'p') || (keycode == 37)){ // display previous image
+        } else if ((key == 'w') || (keycode == 37)){ // display previous image
             if (this.activeImage != 0){
                 this.disableKeyboardNav();
                 this.changeImage(this.activeImage - 1);
             }
-        } else if ((key == 'n') || (keycode == 39)){ // display next image
+        } else if ((key == 'z') || (keycode == 39)){ // display next image
             if (this.activeImage != (this.imageArray.length - 1)){
                 this.disableKeyboardNav();
                 this.changeImage(this.activeImage + 1);
