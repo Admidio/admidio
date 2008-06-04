@@ -309,21 +309,20 @@ echo "<div class=\"photoModuleContainer\">";
                     <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&auml;chste\" />
                 </a>";
             }
-        echo"</div>";
+        echo '</div>';
             
         //Thumbnailtabelle
-        echo"
-        <table id=\"photoThumbnailTable\">";
+        echo '<table id="photoThumbnailTable">';
             for($zeile=1;$zeile<=$g_preferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
             {
-                echo "<tr class=\"photoThumbnailTableRow\">";
+                echo '<tr class="photoThumbnailTableRow">';
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
-                    echo "<td class=\"photoThumbnailTableColumn\">";
-                    $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;//Errechnug welches Bild ausgegeben wird
+                    echo '<td class="photoThumbnailTableColumn">';
+                    //Errechnug welches Bild ausgegeben wird
+                    $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
                     {
-                        
                         //Wenn Thumbnail existiert laengere Seite ermitteln
                         $thumb_length=1;
                         if(file_exists($ordner."/thumbnails/".$bild.".jpg"))
@@ -344,62 +343,60 @@ echo "<div class=\"photoModuleContainer\">";
                         {
                             image_save($ordner."/".$bild.".jpg", $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bild.".jpg");
                         }
-                         
-                        
-                        
-                            //Popup-Mode
-                            if($g_preferences['photo_show_mode']==0)
-                            {
-                                echo "<div>
-                                    <img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id','msg', 'height=".$popup_height.", width=".$popup_width.",left=162,top=5')\" 
-                                     src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\" />
-                                </div>";
-                            }
 
-                            //Lightbox-Mode
-                            elseif($g_preferences['photo_show_mode']==1)
-                            {
-                                echo "<div>
-                                    <a href=\"".$ordner_url."/".$bild.".jpg\" rel=\"lightbox[roadtrip]\" title=\"".$photo_album->getValue("pho_name")."\"><img src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\" /></a>
-                                </div>";
-                            }
+                        //Popup-Mode
+                        if($g_preferences['photo_show_mode']==0)
+                        {
+                            echo '<div>
+                                <img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
+                                    src="'.$ordner_url.'/thumbnails/'.$bild.'.jpg" class="photoThumbnail" alt="$bild" />
+                            </div>';
+                        }
 
-                            //Gleichesfenster-Mode
-                            elseif($g_preferences['photo_show_mode']==2)
-                            {
-                                echo "<div>
-                                    <img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=$bild&pho_id=$pho_id'\" src=\"".$ordner_url."/thumbnails/".$bild.".jpg\" class=\"photoThumbnail\" alt=\"$bild\" />
-                                </div>";
-                            }   
-                            
-                            //Buttons fuer moderatoren
-                            if($g_current_user->editPhotoRight())
-                            {
-                                echo"
-                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=rotate&amp;direction=left\"><img 
-                                    src=\"". THEME_PATH. "/icons/arrow_turn_left.png\" alt=\"nach links drehen\" title=\"nach links drehen\" /></a>
-                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=delete_request\"><img 
-                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Foto l&ouml;schen\" title=\"Foto l&ouml;schen\" /></a>
-                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&amp;bild=$bild&amp;thumb_seite=$thumb_seite&amp;job=rotate&amp;direction=right\"><img 
-                                    src=\"". THEME_PATH. "/icons/arrow_turn_right.png\" alt=\"nach rechts drehen\" title=\"nach rechts drehen\" /></a>";
-                            }
-                            if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
-                            {
-                                echo"
-                                <a class=\"iconLink\" href=\"".$g_root_path."/adm_program/modules/ecards/ecard_form.php?photo=".$bild."&amp;pho_id=".$pho_id."\"><img 
-                                    src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Foto als Grußkarte versenden\" title=\"Foto als Grußkarte versenden\" /></a>";
-                            }
+                        //Lightbox-Mode
+                        elseif($g_preferences['photo_show_mode']==1)
+                        {
+                            echo '<div>
+                                <a href="'.$ordner_url.'/'.$bild.'.jpg" rel="lightbox[roadtrip]" title="'.$photo_album->getValue("pho_name").'"><img 
+                                    src="'.$ordner_url.'/thumbnails/'.$bild.'.jpg" class="photoThumbnail" alt="'.$bild.'" /></a>
+                            </div>';
+                        }
+
+                        //Gleichesfenster-Mode
+                        elseif($g_preferences['photo_show_mode']==2)
+                        {
+                            echo '<div>
+                                <img onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&pho_id='.$pho_id.'\'" 
+                                    src="'.$ordner_url.'/thumbnails/'.$bild.'.jpg" class="photoThumbnail" alt="'.$bild.'" />
+                            </div>';
+                        }   
                         
+                        //Buttons fuer moderatoren
+                        if($g_current_user->editPhotoRight())
+                        {
+                            echo '
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;thumb_seite='.$thumb_seite.'&amp;job=rotate&amp;direction=left"><img 
+                                src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="Gegen den Uhrzeigersinn drehen" title="Gegen den Uhrzeigersinn drehen" /></a>
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;thumb_seite='.$thumb_seite.'&amp;job=rotate&amp;direction=right"><img 
+                                src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="Mit dem Uhrzeigersinn drehen" title="Mit dem Uhrzeigersinn drehen" /></a>
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;thumb_seite='.$thumb_seite.'&amp;job=delete_request"><img 
+                                src="'. THEME_PATH. '/icons/delete.png" alt="Foto löschen" title="Foto löschen" /></a>';
+                        }
+                        if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
+                        {
+                            echo '
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo='.$bild.'&amp;pho_id='.$pho_id.'"><img 
+                                src="'. THEME_PATH. '/icons/ecard.png" alt="Foto als Grußkarte versenden" title="Foto als Grußkarte versenden" /></a>';
+                        }
                     }//if
-                    echo"</td>";
+                    echo '</td>';
                 }//for
-                echo "
-                </tr>";//Zeilenende
+                echo '</tr>'; //Zeilenende
             }//for
-        echo "</table>";
+        echo '</table>';
 
         //Anleger und Veraendererinfos
-        echo"
+        echo "
         <div class=\"editInformation\">";
             if($photo_album->getValue("pho_usr_id") > 0)
             {
