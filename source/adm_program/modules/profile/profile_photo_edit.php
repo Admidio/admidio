@@ -217,7 +217,7 @@ if($job=="upload")
             || $bildgroesse[1] > $photo_max_y_size)
             {
                 //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
-                ini_set('memory_limit', '50M');
+                @ini_set('memory_limit', '50M');
                 
                 //x-Seite soll scalliert werden
                 if(($bildgroesse[0]/$photo_max_x_size) >= ($bildgroesse[1]/$photo_max_y_size))
