@@ -127,8 +127,8 @@ function image_save($orig_path, $scale, $destination_path)
 
 
 //Loeschen eines Thumbnails
-//photo_album : Referenz auf Objekt des relevanten Albums
-//bild        : Nr des Bildes dessen Thumbnail geloescht werden soll
+// photo_album : Referenz auf Objekt des relevanten Albums
+// pic_nr      : Nr des Bildes dessen Thumbnail geloescht werden soll
 function deleteThumbnail(&$photo_album, $pic_nr)
 {
     //Ordnerpfad zusammensetzen
@@ -226,7 +226,7 @@ function deletePhoto($pho_id, $pic_nr)
         }
 
         // Umbenennen der Restbilder und Thumbnails loeschen
-        $new_pic_nr = 1;
+        $new_pic_nr = $pic_nr;
         $thumbnail_delete = false;
 
         for($act_pic_nr = 1; $act_pic_nr <= $photo_album->getValue("pho_quantity"); $act_pic_nr++)
@@ -237,8 +237,8 @@ function deletePhoto($pho_id, $pic_nr)
                 {
                     chmod("$album_path/$act_pic_nr.jpg", 0777);
                     rename("$album_path/$act_pic_nr.jpg", "$album_path/$new_pic_nr.jpg");
-                }
-                $new_pic_nr++;
+                    $new_pic_nr++;
+                }                
             }
             else
             {
