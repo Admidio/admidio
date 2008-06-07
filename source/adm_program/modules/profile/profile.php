@@ -289,7 +289,7 @@ echo "
                                     <dd><i>"; 
                                     if(strlen($user->getValue("usr_login_name")) > 0) 
                                     {
-                                        $user->getValue("usr_login_name");
+                                        echo $user->getValue("usr_login_name");
                                     }
                                     else 
                                     {
