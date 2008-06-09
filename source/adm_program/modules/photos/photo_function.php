@@ -9,13 +9,12 @@
  *
  * Uebergaben:
  *
- * pho_id: id des Albums
+ * pho_id:      Id des Albums
  * job: - do_delete
  *      - rotate
  *      - delete_request
- * direction: drehrichtung links oder rechts
- * bild: Nr. des Bildes welches verarbeitet werden soll
- * thumb_seite: von welcher Thumnailseite aus wurde die Funktion aufgerufen
+ * direction:   Drehrichtung links oder rechts
+ * bild:        Nr des Bildes welches verarbeitet werden soll
  *
  *****************************************************************************/
 
@@ -25,14 +24,12 @@ require_once("../../system/photo_album_class.php");
 // die Funktionen sollten auch ausgeloggt irgendwo benutzt werden koennen
 if(isset($_GET["job"]))
 {
-    require_once("../../system/login_valid.php");
-
     if ($g_preferences['enable_photo_module'] == 0)
     {
         // das Modul ist deaktiviert
         $g_message->show("module_disabled");
     }
-    elseif($g_preferences['enable_photo_module'] == 2)
+    else
     {
         // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
         require("../../system/login_valid.php");
@@ -95,22 +92,22 @@ function image_save($orig_path, $scale, $destination_path)
         //Errechnug neuen Bildgroesse Querformat
         if($bildgroesse[0]>=$bildgroesse[1])
         {
-            $neubildsize = array ($scale, round($scale/$seitenverhaeltnis));
+            $photo_new_size = array ($scale, round($scale/$seitenverhaeltnis));
         }
         //Errechnug neuen Bildgroesse Hochformat
         if($bildgroesse[0]<$bildgroesse[1]){
-            $neubildsize = array (round($scale*$seitenverhaeltnis), $scale);
+            $photo_new_size = array (round($scale*$seitenverhaeltnis), $scale);
         }
                     
 
         // Erzeugung neues Bild
-        $neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
+        $photo_new = imagecreatetruecolor($photo_new_size[0], $photo_new_size[1]);
 
         //Aufrufen des Originalbildes
-        $bilddaten = imagecreatefromjpeg($orig_path);
+        $photo_original = imagecreatefromjpeg($orig_path);
 
         //kopieren der Daten in neues Bild
-        imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
+        imagecopyresampled($photo_new, $photo_original, 0, 0, 0, 0, $photo_new_size[0], $photo_new_size[1], $bildgroesse[0], $bildgroesse[1]);
 
         //falls Bild existiert: Loeschen
         if(file_exists($destination_path)){
@@ -118,10 +115,10 @@ function image_save($orig_path, $scale, $destination_path)
         }
 
         //Bild in Zielordner abspeichern
-        imagejpeg($neubild, $destination_path, 90);
+        imagejpeg($photo_new, $destination_path, 90);
         chmod($destination_path,0777);
 
-        imagedestroy($neubild);
+        imagedestroy($photo_new);
     }    
 }
 
@@ -131,14 +128,17 @@ function image_save($orig_path, $scale, $destination_path)
 // pic_nr      : Nr des Bildes dessen Thumbnail geloescht werden soll
 function deleteThumbnail(&$photo_album, $pic_nr)
 {
-    //Ordnerpfad zusammensetzen
-    $photo_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id")."/thumbnails/".$pic_nr.".jpg";
-    
-    //Thumbnail loeschen
-    if(file_exists($photo_path))
+    if(is_numeric($pic_nr))
     {
-        chmod($photo_path, 0777);
-        unlink($photo_path);
+        //Ordnerpfad zusammensetzen
+        $photo_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id")."/thumbnails/".$pic_nr.".jpg";
+        
+        //Thumbnail loeschen
+        if(file_exists($photo_path))
+        {
+            chmod($photo_path, 0777);
+            unlink($photo_path);
+        }
     }
 }
 

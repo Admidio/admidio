@@ -375,11 +375,11 @@ echo "<div class=\"photoModuleContainer\">";
                         if($g_current_user->editPhotoRight())
                         {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;thumb_seite='.$thumb_seite.'&amp;job=rotate&amp;direction=left"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=rotate&amp;direction=left"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="Gegen den Uhrzeigersinn drehen" title="Gegen den Uhrzeigersinn drehen" /></a>
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;thumb_seite='.$thumb_seite.'&amp;job=rotate&amp;direction=right"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=rotate&amp;direction=right"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="Mit dem Uhrzeigersinn drehen" title="Mit dem Uhrzeigersinn drehen" /></a>
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;thumb_seite='.$thumb_seite.'&amp;job=delete_request"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=delete_request"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="Foto löschen" title="Foto löschen" /></a>';
                         }
                         if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
