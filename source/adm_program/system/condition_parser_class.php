@@ -96,7 +96,7 @@ class ConditionParser
                 }
                 else
                 {
-                    $this->m_dest = " AND $field_name IS NULL ";
+                    $this->m_dest = " AND ($field_name IS NULL OR $field_name = '0') ";
                 }
                 return $this->m_dest;
             }
