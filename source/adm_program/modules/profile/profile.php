@@ -90,11 +90,11 @@ function getFieldCode($field, $user_id)
                 }
                 else
                 {
-                    $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?usr_id=$user_id";
+                    $mail_link = $g_root_path. "/adm_program/modules/mail/mail.php?usr_id=". $user_id;
                 }
                 if(strlen($field['usd_value']) > 25)
                 {
-                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], 0, 25). '...</a>';   
+                    $value = '<a href="'. $mail_link. '" title="'. $field['usd_value'].'">'. substr($field['usd_value'], 0, 25). '...</a>';   
                 }
                 else
                 {
