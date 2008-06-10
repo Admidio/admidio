@@ -212,58 +212,55 @@ if($a_user_id != $g_current_user->getValue("usr_id") && isset($_GET['user_id']) 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Profil";
-$g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
-    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/prototype.js\" type=\"text/javascript\"></script>
-    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\" type=\"text/javascript\"></script>
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/modules/profile/profile.js\"></script>";
+if($a_user_id == $g_current_user->getValue("usr_id"))
+{
+    $g_layout['title'] = "Mein Profil";
+}
+else
+{
+    $g_layout['title'] = "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
+}
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
-echo "
-<div class=\"formLayout\" id=\"profile_form\">
-    <div class=\"formHead\">";
-        if($a_user_id == $g_current_user->getValue("usr_id"))
-        {
-            echo "Mein Profil";
-        }
-        else
-        {
-            echo "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-        }
-    echo "</div>
-
-    <div class=\"formBody\">
-        <div>";
+echo '
+<div class="formLayout" id="profile_form">
+    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formBody">
+        <div>';
             // *******************************************************************************
             // Userdaten-Block
             // *******************************************************************************
 
-            echo "
-            <div style=\"width: 65%; float: left;\">
-                <div class=\"groupBox\">
-                    <div class=\"groupBoxHeadline\">
-                        <div style=\"float: left;\">". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
+            echo '
+            <div style="width: 65%; float: left;">
+                <div class="groupBox">
+                    <div class="groupBoxHeadline">
+                        <div style="float: left;">'. $user->getValue("Vorname"). ' '. $user->getValue("Nachname");
                         
                             // Icon des Geschlechts anzeigen
                             if($user->getValue("Geschlecht") > 0)
                             {
                                 if($user->getValue("Geschlecht") == 1)
                                 {
-                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\" />";
+                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" />';
                                 }
                                 elseif($user->getValue("Geschlecht") == 2)
                                 {
-                                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/female.png\" title=\"weiblich\" alt=\"weiblich\" />";
+                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png" title="weiblich" alt="weiblich" />';
                                 }
                             }
-                        echo "</div>
-                        <div style=\"text-align: right;\">
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id=". $user->getValue("usr_id"). "\"><img
-                                src=\"". THEME_PATH. "/icons/vcard.png\" 
-                                alt=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" 
-                                title=\"vCard von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " exportieren\" /></a>";
+                        echo '</div>
+                        <div style="text-align: right;">
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue("usr_id"). '"><img
+                                src="'. THEME_PATH. '/icons/vcard.png" 
+                                alt="vCard von '. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). ' exportieren" 
+                                title="vCard von '. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). ' exportieren" /></a>';
                             
                             // Nur berechtigte User duerfen das Passwort editieren
                             if($a_user_id == $g_current_user->getValue("usr_id") || $g_current_user->isWebmaster())
@@ -279,14 +276,14 @@ echo "
                                 <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='. $a_user_id. '"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="Profildaten bearbeiten" title="Profildaten bearbeiten" /></a>';
                             }
-                        echo "</div>
+                        echo '</div>
                     </div>
-                    <div class=\"groupBoxBody\">
-                        <ul class=\"formFieldList\">
+                    <div class="groupBoxBody">
+                        <ul class="formFieldList">
                             <li>
                                 <dl>
                                     <dt>Benutzername:</dt>
-                                    <dd><i>"; 
+                                    <dd><i>'; 
                                     if(strlen($user->getValue("usr_login_name")) > 0) 
                                     {
                                         echo $user->getValue("usr_login_name");
@@ -295,9 +292,9 @@ echo "
                                     {
                                         echo "nicht registriert";
                                     }
-                                    echo "&nbsp;</i></dd>
+                                    echo '&nbsp;</i></dd>
                                 </dl>
-                            </li>";
+                            </li>';
 
                             // Schleife ueber alle Felder der Stammdaten
                             //print_r($user->db_user_fields); exit();
@@ -323,10 +320,10 @@ echo "
                                         case "Adresse":
                                             if($value['usf_name'] == "Adresse")   // nur 1x bei Adresse schreiben
                                             {
-                                                echo "<li>
+                                                echo '<li>
                                                     <dl>
                                                         <dt>Adresse:</dt>
-                                                        <dd>";
+                                                        <dd>';
                                                             if(strlen($user->getValue("Adresse")) > 0)
                                                                 echo $user->getValue("Adresse");
                                                             if(strlen($user->getValue("PLZ")) > 0 || strlen($user->getValue("Ort")) > 0)
@@ -409,16 +406,20 @@ echo "
                                                             {
                                                                 // Freiraeume ausgeben, damit es layoutmaessig mit dem Bild keine Probleme gibt
                                                                 if(strlen($user->getValue("Adresse")) == 0)
-                                                                    echo "<br />&nbsp;";
+                                                                {
+                                                                    echo '<br />&nbsp;';
+                                                                }
                                                                 else
                                                                 {
                                                                     if(strlen($user->getValue("PLZ")) == 0 && strlen($user->getValue("Ort")) == 0 && strlen($g_current_user->getValue("Land"))  > 0)
-                                                                        echo "<br />&nbsp;";
+                                                                    {
+                                                                        echo '<br />&nbsp;';
+                                                                    }
                                                                 }
                                                             }
-                                                        echo "</dd>
+                                                        echo '</dd>
                                                     </dl>
-                                                </li>";
+                                                </li>';
                                             }
                                             break;
 
@@ -428,12 +429,12 @@ echo "
                                     }
                                 }
                             }
-                        echo "</ul>
+                        echo '</ul>
                     </div>
                 </div>
-            </div>";
+            </div>';
 
-            echo "<div style=\"width: 28%; float: right\">";
+            echo '<div style="width: 28%; float: right">';
 
                 // *******************************************************************************
                 // Bild-Block
@@ -843,8 +844,5 @@ if(isset($_GET['user_id']) == true)
 }
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
-
-//Habs mal rausgenommen Gruss Jochen
-//echo "<div onclick=\"new Effect.Highlight(this)\">Test</div>";
 
 ?>

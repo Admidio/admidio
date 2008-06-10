@@ -183,7 +183,7 @@ function getFieldCode($field, $user, $new_user)
             <label for=\"female\"><img src=\"". THEME_PATH. "/icons/female.png\" title=\"weiblich\" alt=\"weiblich\" /></label>
             &nbsp;
             <input type=\"radio\" id=\"male\" name=\"usf-". $field['usf_id']. "\" value=\"1\" $checked_male $readonly />
-            <label for=\"male\"><img src=\"". THEME_PATH. "/icons/male.png\" title=\"m&auml;nnlich\" alt=\"m&auml;nnlich\" /></label>";
+            <label for=\"male\"><img src=\"". THEME_PATH. "/icons/male.png\" title=\"männlich\" alt=\"männlich\" /></label>";
     }
     elseif($field['usf_name'] == "Land")
     {
@@ -326,15 +326,16 @@ function getFieldCode($field, $user, $new_user)
     $mandatory = "";
     if($field['usf_mandatory'] == 1)
     {
-        $mandatory = "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>";
+        $mandatory = '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
     $description = "";
     if(strlen($field['usf_description']) > 0 && $field['cat_name'] != "Messenger")
     {
-        $description = "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text=". urlencode($field['usf_name']). "',this);\" onmouseout=\"ajax_hideTooltip()\" />";
+        $description = '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
+            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field['usf_name']. '&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+            onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field['usf_name']. '\',this);" onmouseout="ajax_hideTooltip()" />';
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
