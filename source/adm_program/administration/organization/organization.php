@@ -326,7 +326,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"homepage_logout\">Startseite (Besucher):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['homepage_logout']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_logout']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -337,7 +337,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"homepage_login\">Startseite (angemeldete Benutzer):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['homepage_login']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_login']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
