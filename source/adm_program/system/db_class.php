@@ -43,7 +43,7 @@ class DB
         }
 
         $this->transactions = 1;
-        return result;
+        return $result;
     }
     
     function endTransaction($rollback = false)
