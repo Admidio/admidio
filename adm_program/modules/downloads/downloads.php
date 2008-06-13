@@ -241,7 +241,7 @@ else
                     <img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a>
                 </td>
                 <td><a href=\"$g_root_path/adm_program/modules/downloads/get_file.php?file_id=". $nextFile['fil_id']. "\">". $nextFile['fil_name']. "</a></td>
-                <td>". $nextFile['fil_timestamp']. "</td>
+                <td>". mysqldatetime("d.m.y h:i", $nextFile['fil_timestamp']). "</td>
                 <td>". $nextFile['fil_size']. " KB&nbsp;</td>
                 <td>". $nextFile['fil_counter'];
                 if ($g_current_user->editDownloadRight())
