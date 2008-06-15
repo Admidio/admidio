@@ -27,15 +27,12 @@ $plg_show_alter_anrede = 18;
 // 1 = Hinweis wird nicht angezeigt
 $plg_show_hinweis_keiner = 0;
 
-// Sollen nicht nur die Geburtstagskinder des aktuellen Tages sondern die der
-// zurückliegenden Tage angezeigt und der Meldungstext entsprechend angepasst werden?
-// 0 = (Default) Nur die des aktuellen Tages/ohne Textanpassung
-// n = Anzahl der Tage des zu berücksichtigenden zurückliegenden Zeitraumes (max. 28)
-//
-// Wird ein Zeitraum > 28 angegeben, dann setzt das PlugIn den Wert auf 0 zurück, da es 
-// sonst bei der Bestimmung der Bezugszeitpunkte für die sql-Abfrage "auf die Nase fällt".
-// 28 Tage sollten an dieser Stelle aber ausreichen ;-)
-$plg_show_zeitraum = 0;
+// zeige alle geburtstage in den letzten x tagen
+$plg_show_zeitraum = 5;
+// zeige zukünftige geburtstage
+$plg_show_future = 10;
+// verstecke hinweis "(nachtraeglich)", schliesslich wurde ja schon gratuliert
+$plg_show_nachtraeglich = 0;
 
 // Soll die E-Mail-Adresse fuer Besucher verlinkt sein ?
 // Bei registrierten Benutzern wird immer ein Link auf das Mailmodul gesetzt

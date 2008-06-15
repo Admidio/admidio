@@ -35,6 +35,11 @@ if(isset($plg_show_names_extern) == false || is_numeric($plg_show_names_extern) 
     $plg_show_names_extern = 1;
 }
 
+if(isset($plg_show_nachtraeglich) == false || is_numeric($plg_show_nachtraeglich) == false)
+{
+    $plg_show_nachtraeglich = 0;
+}
+
 if(isset($plg_show_email_extern) == false || is_numeric($plg_show_email_extern) == false)
 {
     $plg_show_email_extern = 0;
@@ -64,34 +69,21 @@ if(isset($plg_show_alter_anrede) == false || is_numeric($plg_show_names_extern) 
     $plg_show_names_extern = 18;
 }
 
-if(isset($plg_show_zeitraum) == false || is_numeric($plg_show_names_extern) == false || $plg_show_zeitraum > 28)
+if(isset($plg_show_zeitraum) == false || is_numeric($plg_show_names_extern) == false)
 {
-    $plg_show_zeitraum = 0;
+    $plg_show_zeitraum = 5;
+}
+
+if(isset($plg_show_future) == false || is_numeric($plg_show_names_extern) == false)
+{
+    $plg_show_future = 10;
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
 if($plg_show_names_extern == 0 && $g_session_valid == 0)
 {
     $plg_show_zeitraum = 0;
-}
-
-// Bleiben wir im aktuellen Monat?
-if ((date("d",mktime(0, 0, 0, date("m"), date ("d"), date("Y"))) - $plg_show_zeitraum) > 0)
-{
-    $stichtag_aktueller_monat = date("d",mktime(0, 0, 0, date("m"), date ("d")-$plg_show_zeitraum, date("Y")));
-    $sql_prev_month = "";
-}
-else
-{
-    // Hier wird sichergestellt, dass alle Geburtstagskinder des aktuellen Monats abgeholt werden.
-    $stichtag_aktueller_monat = 1;
-    // Hier holen wir die Geburtstagskinder aus dem Vormonat ab, sofern sie in den festgelegten Zeitraum fallen.
-    $stichmonat = date("m",mktime(0, 0, 0, date("m"), date ("d")-$plg_show_zeitraum, date("Y")));
-    $stichtag_vormonat = date("d",mktime(0, 0, 0, date("m"), date ("d")-$plg_show_zeitraum, date("Y")));
-    
-    // Sql-Bedingung fuer den Vormonat zusammensetzen
-    $sql_prev_month = " OR (   Month(birthday.usd_value)       = '$stichmonat'
-                           AND DayOfMonth(birthday.usd_value) >= '$stichtag_vormonat' ) ";
+    $plg_show_future = 0;
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
@@ -105,10 +97,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
             RIGHT JOIN ". TBL_USER_DATA. " as birthday
                ON birthday.usd_usr_id = usr_id
               AND birthday.usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). "
-              AND (  (   Month(birthday.usd_value)       = Month(SYSDATE())
-                     AND DayOfMonth(birthday.usd_value) <= DayOfMonth(SYSDATE())
-                     AND DayOfMonth(birthday.usd_value) >= '$stichtag_aktueller_monat' )
-                  $sql_prev_month )
+	        AND (TO_DAYS(DATE(birthday.usd_value) - INTERVAL YEAR(birthday.usd_value) YEAR + INTERVAL YEAR(NOW()) YEAR) - TO_DAYS(NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future)
              LEFT JOIN ". TBL_USER_DATA. " as last_name
                ON last_name.usd_usr_id = usr_id
               AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
@@ -144,7 +133,7 @@ if($anz_geb > 0)
     {
         $later = "";
         // Hier fügen wir Text ein, der an die Auflistung von Geburtstagskindern eines Zeitraumes > 1 Tag angepasst ist.
-        if ($plg_show_zeitraum > 0)
+        if (($plg_show_zeitraum > 0) && ($plg_show_nachtraeglich == 1))
         {
             $later = "(nachtr&auml;glich)";
         }
@@ -248,11 +237,11 @@ if($anz_geb > 0)
                     // Geburtstagskinder am aktuellen Tag bekommen anderen Text
                     if($geb_day == date("d", time()))
                     {
-                        echo "<li>$show_name wird heute $age Jahre alt.</li>";
+                        echo "<li><b>$show_name wird heute $age Jahre alt.</b></li>";
                     }
                     else
                     {
-                        echo "<li>$show_name zum $age.</li>";
+                        echo "<li>$show_name<br/> zum $age. am $geb_day.$geb_month.</li>";
                     }
                 }
             }
