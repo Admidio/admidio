@@ -102,11 +102,16 @@ if ($user_found >= 1)
         if($b_auto_login == true)
         {
             $timestamp_expired = time() + 60*60*24*365;
+            $auto_login = new AutoLogin($g_db, $g_session_id);
             
-            $auto_login = new AutoLogin($g_db);
-            $auto_login->setValue("atl_session_id", $g_session_id);
-            $auto_login->setValue("atl_usr_id", $user_row['usr_id']);            
-            $auto_login->save();
+            // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser), 
+            // dann kein Neues anlegen, da dies zu "Duplicate Key" fuehrt
+            if(strlen($auto_login->getValue("atl_usr_id")) == 0)
+            {
+                $auto_login->setValue("atl_session_id", $g_session_id);
+                $auto_login->setValue("atl_usr_id", $user_row['usr_id']);            
+                $auto_login->save();
+            }
         }
         else
         {
