@@ -259,7 +259,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
             if($g_preferences['enable_forum_interface'])
             {
                 // pruefen, ob der Benutzername bereits im Forum vergeben ist
-                if($g_forum->userCheck($user->login_name))
+                if($g_forum->userExists($user->getValue("usr_login_name")))
                 {
                     $g_message->show("login_name_forum");
                 }
@@ -308,19 +308,11 @@ if($ret_code != 0)
     $g_message->show("mysql", $ret_code);
 }
 
-// Nachdem der User erfolgreich aktualisiert den Usernamen im Forum aktualisieren
-if($g_preferences['enable_forum_interface'] && $login_name_changed)
+// wurde der Loginname vergeben oder geaendert, so muss ein Forumaccount gepflegt werden
+// bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
+if($g_preferences['enable_forum_interface'] && ($login_name_changed || $new_user == 3))
 {
-    if(strlen($forum_old_username) > 0)
-    {
-        // Ein Update eines bestehenden Forumusers
-        $g_forum->usernameUpdate($user->getValue("usr_login_name"), $forum_old_username, $user->getValue("usr_password"), $user->getValue("E-Mail"));
-    }
-    else
-    {
-        // Eine Neuanmeldung im Forum
-        $g_forum->userInsert($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"));
-    }
+    $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"), $forum_old_username);
 }
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
@@ -343,12 +335,6 @@ if($new_user == 3)
     $user->setValue("usr_valid", 1);
     $user->setValue("usr_reg_org_shortname", "");
     $user->save();
-
-    // Den User nun im Forum auch als Aktiv updaten, wenn g_forum gesetzt ist
-    if($g_preferences['enable_forum_interface'])
-    {
-        $g_forum->userUpdate($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"));
-    }
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($g_preferences['enable_system_mails'] == 1)

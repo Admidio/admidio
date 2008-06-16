@@ -599,8 +599,9 @@ elseif($req_mode == 7)
                 Du kannst nun mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.';
     if(is_writeable("../adm_my_files") == false)
     {
-        $message = $message. '<br /><br />Zuvor solltest du allerdings dem Ordner <strong>adm_my_files</strong>
-                   Schreibrechte geben. Ohne diese können keine Fotos oder Dateien hochgeladen werden.';
+        $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> Der Ordner <strong>adm_my_files</strong>
+                   besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien 
+                   für das Downloadmodul hochgeladen werden können.';
     }
     showPage($message, "../adm_program/index.php", "application_view_list.png", "Übersichtsseite");
 }
