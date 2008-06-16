@@ -21,10 +21,10 @@
  *
  * userClear()            - Userdaten und Session_Valid loeschen
  *
- * preferences()          - Die Preferences des Forums werden in die Allgemeine 
- *                          Forums Umgebungsdaten eingelesen.
+ * initialize()           - Die notwendigen Einstellungen des Forums werden eingelesen und die
+ *                          Session im Forum registriert.
  *
- * userCheck($username)   - Es wird geprueft, ob es den User (Username) schon im Forum gibt.
+ * userExists($username)  - Es wird geprueft, ob es den User (Username) schon im Forum gibt.
  *                          $username = Der login_name des Users
  *                          RETURNCODE = TRUE  - Den User gibt es
  *                          RETURNCODE = FALSE - Den User gibt es nicht
@@ -64,19 +64,23 @@
  *                          $password_forum     = Crypt Forum Password 
  *                          $forum_userid       = UserID im Forum
  *
+ * userSave($username, $forum_useraktiv, $forum_password, $forum_email, $forum_old_username)
+ *                        - Funktion speichert die Daten eines Users
+ *                          existiert der User noch nicht, wird er angelegt, ansonsten aktualisiert
+ *
  * userInsert($username, $forum_useraktiv, $forum_password, $forum_email)
  *
  * userDelete($username)          - Loescht einen User im Forum
  *                          $username  = Der login_name des Users, der geloescht werden soll
  *                          RETURNCODE = TRUE  - User geloescht
  *                          RETURNCODE = FALSE - User nicht geloescht
+ * 
+ * checkSession($admidio_usr_login_name)
+ *                        - diese Funktion bekommt den Admidio-Session-Status (eingeloggt ja/nein) uebergeben
+ *                          und prueft dann, ob die Session im Forum aktualisiert werden muss
  *
- * userUpdate($username, $forum_useraktiv, $forum_password, $forum_email)
- *
- * usernameUpdate($forum_new_username, $forum_old_username, $forum_useraktiv, $forum_password, $forum_email)
- *
- * session($aktion, $id)              - Kuemmert sich um die Sessions und das Cookie des Forums
- *                              $aktion = "logoff"  Die Session wird abgemeldet
+ * session($aktion, $id)  - Kuemmert sich um die Sessions und das Cookie des Forums
+ *                          $aktion = "logoff"  Die Session wird abgemeldet
  *                          $aktion = "update"  Die Session wird aktualisiert
  *                          $aktion = "insert"  Die Session wird angemeldet
  *
@@ -228,21 +232,21 @@ class Forum
 
 
     // Funktion ueberprueft, ob der User schon im Forum existiert
-    function userCheck($forum_username)
+    function userExists($username)
     {
         // User im Forum suchen
         $sql    = "SELECT user_id FROM ". $this->praefix. "_users 
-                    WHERE username LIKE '$forum_username' ";
+                    WHERE username LIKE '$username' ";
         $result = $this->forum_db->query($sql);
 
         // Wenn ein Ergebis groesser 0 vorliegt, existiert der User bereits.
         if($this->forum_db->num_rows($result) > 0)
         {
-            return TRUE;
+            return true;
         }
         else
         {
-            return FALSE;
+            return false;
         }
     }
 
@@ -265,7 +269,7 @@ class Forum
         }
         
         // Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
-        if(!$this->userCheck($login_name))
+        if(!$this->userExists($login_name))
         {
             if($this->export)
             {
@@ -410,14 +414,51 @@ class Forum
         {
             // Password in Foren-Tabelle auf das Password in Admidio setzen
             $sql    = "UPDATE ". $this->praefix. "_users 
-                       SET user_password = '". $password_admidio ."'
-                       WHERE user_id = $forum_userid";
+                          SET user_password = '". $password_admidio ."'
+                        WHERE user_id = $forum_userid";
             $result = $this->forum_db->query($sql);
 
             return FALSE;
         }
     }
 
+    // Funktion speichert die Daten eines Users
+    // existiert der User noch nicht, wird er angelegt, ansonsten aktualisiert
+    function userSave($username, $password, $email, $old_username = "")
+    {
+        // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
+        // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
+        if(strlen($username) > 0 and strlen($password) > 0 and strlen($email) > 0)
+        {
+            $user_aktiv = 1;
+        }
+        else
+        {
+            $user_aktiv = 0;
+        }
+        
+        if(strlen($old_username) == 0)
+        {
+            $old_username = $username;
+        }
+
+        if($this->userExists($old_username))
+        {
+            // User im Forum updaten
+            $sql    = "UPDATE ". $this->praefix. "_users
+                          SET username      = '$username'
+                            , user_password = '$password'
+                            , user_active   = $user_aktiv
+                            , user_email    = '$email'
+                        WHERE username LIKE '$old_username' ";
+            $this->forum_db->query($sql);
+        }
+        else
+        {
+            // User anlegen
+            $this->userInsert($username, $password, $email);
+        }
+    }
 
     // Funktion legt einen neuen Benutzer im Forum an
     function userInsert($forum_username, $forum_password, $forum_email)
@@ -580,55 +621,6 @@ class Forum
         return false;
     }
 
-
-    // Funktion updated einen bestehenden User im Forum
-    function userUpdate($forum_username, $forum_password, $forum_email)
-    {
-        // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
-        // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
-        if(strlen($forum_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
-        {
-            $forum_useraktiv = 1;
-        }
-        else
-        {
-            $forum_useraktiv = 0;
-        }
-
-        // User im Forum updaten
-        $sql    = "UPDATE ". $this->praefix. "_users
-                      SET user_password = '$forum_password'
-                        , user_active   = $forum_useraktiv
-                        , user_email    = '$forum_email'
-                   WHERE username = '". $forum_username. "' ";
-        $result = $this->forum_db->query($sql);
-    }
-
-
-    // Funktion updated einen bestehenden User im Forum
-    function usernameUpdate($forum_new_username, $forum_old_username, $forum_password, $forum_email)
-    {
-        // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
-        // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
-        if(strlen($forum_new_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
-        {
-            $forum_useraktiv = 1;
-        }
-        else
-        {
-            $forum_useraktiv = 0;
-        }
-
-        // User im Forum updaten
-        $sql    = "UPDATE ". $this->praefix. "_users
-                      SET username      = '$forum_new_username'
-                        , user_password = '$forum_password'
-                        , user_active   = $forum_useraktiv
-                        , user_email    = '$forum_email'
-                    WHERE username = '". $forum_old_username. "' ";
-        $result = $this->forum_db->query($sql);
-    }
-
     // diese Funktion bekommt den Admidio-Session-Status (eingeloggt ja/nein) uebergeben und
     // prueft dann, ob die Session im Forum aktualisiert werden muss
     function checkSession($admidio_usr_login_name)
@@ -644,7 +636,7 @@ class Forum
             // Wenn die Forum Session bereits valid ist, wird diese Abfrage uebersprungen
             if($this->session_valid != true)
             { 
-                $this->session_valid = $this->userCheck($this->user);
+                $this->session_valid = $this->userExists($this->user);
             }
 
             // Wenn die Forumssession gueltig ist, Userdaten holen und gueltige Session im Forum updaten. 
@@ -695,25 +687,29 @@ class Forum
             if($aktion == "logoff")
             {
                 $sql    = "UPDATE ". $this->praefix. "_sessions 
-                           SET session_time = ". $current_time .", session_ip = '". $user_ip ."', session_user_id = ". $forum_userid .",  session_logged_in = 0
-                           WHERE session_id = '". $this->session_id. "'";
-                $result = $this->forum_db->query($sql);
+                              SET session_time    = ". $current_time ."
+                                , session_ip      = '". $user_ip ."'
+                                , session_user_id = ". $forum_userid .",  session_logged_in = 0
+                            WHERE session_id = '". $this->session_id. "'";
+                $this->forum_db->query($sql);
             }
-
-            if($aktion == "update")
+            elseif($aktion == "update")
             {
                 $sql    = "UPDATE ". $this->praefix. "_sessions
-                           SET session_time = ". $current_time .", session_ip = '". $user_ip ."' 
-                           WHERE session_id = '". $this->session_id. "'";
-                $result = $this->forum_db->query($sql);
+                              SET session_time = ". $current_time ."
+                                , session_ip   = '". $user_ip ."' 
+                            WHERE session_id = '". $this->session_id. "'";
+                $this->forum_db->query($sql);
             }
-
-            if($aktion == "insert")
+            elseif($aktion == "insert")
             {
                 $sql    = "UPDATE ". $this->praefix. "_sessions 
-                           SET session_time = ". $current_time .", session_start = ". $current_time .", session_ip = '". $user_ip ."', session_user_id = ". $forum_userid .",  session_logged_in = 1
-                           WHERE session_id = '". $this->session_id. "'";
-                $result = $this->forum_db->query($sql);
+                              SET session_time    = ". $current_time ."
+                                , session_start   = ". $current_time ."
+                                , session_ip      = '". $user_ip ."'
+                                , session_user_id = ". $forum_userid .",  session_logged_in = 1
+                            WHERE session_id = '". $this->session_id. "'";
+                $this->forum_db->query($sql);
             }
         }
         else
@@ -722,7 +718,7 @@ class Forum
             $sql    = "INSERT INTO " .$this->praefix. "_sessions
                       (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
                       VALUES ('$this->session_id', $forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
-            $result = $this->forum_db->query($sql);
+            $this->forum_db->query($sql);
         }   
 
         // Cookie des Forums einlesen
