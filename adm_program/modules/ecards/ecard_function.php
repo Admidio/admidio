@@ -273,6 +273,7 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
     $ecard_data = preg_replace ("/<%ecard_image_width%>/",      $propotional_width, $ecard_data);
     $ecard_data = preg_replace ("/<%ecard_image_height%>/",     $propotional_height, $ecard_data);
     $ecard_data = preg_replace ("/<%ecard_image_name%>/",       $ecard["image_name"], $ecard_data);
+
     // Hier wird die Nachricht ersetzt
     if ($bbcode_enable)
     {
@@ -296,7 +297,7 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 //      $sender_email       .. die Email des Senders
 //      $empfaenger_name    .. der Name des Empfaengers
 //      $empfaenger_email   .. die Email des Empfaengers
-function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger) 
+function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger, $photo_server_path = "") 
 {
     $email = new Email();
     $email->setSender($ecard["email_sender"],$ecard["name_sender"]);
@@ -307,32 +308,40 @@ function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$c
         $email->addCopy($cc_empfaenger[$i][1],$cc_empfaenger[$i][0]);
     }
     
+    // alle Bilder werden aus dem Template herausgeholt, damit diese als Anhang verschickt werden koennen
     if (preg_match_all("/(<img.*src=\")(.*)(\".*>)/Uim", $ecard_html_data, $matchArray)) 
     {
         $matchArray[0] = deleteDoubleEntries($matchArray[0]);
         $matchArray[2] = deleteDoubleEntries($matchArray[2]);
         for ($i=0; $i < count($matchArray[0]); ++$i) 
-        {   
-            $tmp_ext  = substr(strrchr($matchArray[2][$i], '.'), 1);
-            $tmp_img_name_array  = explode('/',$matchArray[2][$i]);
-            $tmp_img_name = $tmp_img_name_array[count($tmp_img_name_array)-1];  
-            $tmp_img_name_tmp = explode('?',$tmp_img_name);
-            $tmp_img_name = $tmp_img_name_tmp[0];           
-            $tmp_ext_tmp = explode('?',$tmp_ext);
-            $tmp_ext = $tmp_ext_tmp[0];
-            if($tmp_ext == "php")
+        {
+            // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
+            $img_server_path = str_replace(THEME_PATH, THEME_SERVER_PATH, $matchArray[2][$i]);
+            $img_server_path = str_replace($GLOBALS['g_root_path'], SERVER_PATH, $img_server_path);
+            // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
+            if(strpos($img_server_path, "photo_show.php") !== false && strlen($photo_server_path) > 0)
             {
-                $tmp_ext = "jpg";
-                $tmp_img_name = str_replace("photo_show.php","picture.$tmp_ext",$tmp_img_name_tmp[0]); 
+                $img_server_path = $photo_server_path;
             }
-            if($tmp_img_name != "none.jpg" && $tmp_img_name != "")
+
+            // Bildnamen und Typ ermitteln
+            $img_name = substr(strrchr($img_server_path, "/"), 1);
+            $img_type = substr(strrchr($img_name, "."), 1);
+            if(strpos($matchArray[2][$i], "photo_show.php") !== false)
             {
-                $uid = md5(uniqid($tmp_img_name.time()));
-                $email->addAttachment($matchArray[2][$i],$tmp_img_name,"image/".$tmp_ext."","inline",$uid);
+                $img_name = "picture.". $img_type;
+            }
+
+            // Bild als Anhang an die Mail haengen
+            if($img_name != "none.jpg" && strlen($img_name) > 0)
+            {
+                $uid = md5(uniqid($img_name.time()));
+                $email->addAttachment($img_server_path, $img_name, "image/".$img_type."", "inline", $uid);
                 $ecard_html_data = str_replace($matchArray[2][$i],"cid:".$uid,$ecard_html_data);
             }
         }
     }
+    
     $email->setText($ecard_html_data);
     $email->setDataAsHtml();
     return $email->sendEmail();

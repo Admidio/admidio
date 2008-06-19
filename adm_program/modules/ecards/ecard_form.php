@@ -145,8 +145,8 @@ $bild         = $_REQUEST['photo'];
 if(is_numeric($bild) && isset($_GET['pho_id']))
 {
     $ordner_foto      = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id")."/".$_REQUEST['photo'].".jpg";
-    $bild_server_path = SERVER_PATH. "/". $ordner_foto;
-    $bild_link        = $g_root_path. "/". $ordner_foto;
+    $bild_server_path = SERVER_PATH. $ordner_foto;
+    $bild_link        = $g_root_path. $ordner_foto;
 }
 // Wenn nur der Bildernamen übergeben wird ist die Übergabe ungültig
 if(is_numeric($bild) && !isset($_GET['pho_id']))
@@ -201,7 +201,7 @@ if (! empty($submit_action))
                 array_push($email_versand_liste,array($ecard["name_recipient"],$ecard["email_recipient"]));
                 $email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
                 $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"],$g_preferences['enable_bbcode']);
-                $result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],$email_versand_liste_cc);
+                $result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],$email_versand_liste_cc, $bild_server_path);
                 // Wenn die Grußkarte erfolgreich gesendet wurde
                 if ($result)
                 {
@@ -264,11 +264,11 @@ if (! empty($submit_action))
                 {                       
                     if($b<1)
                     {
-                        $result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],$email_versand_liste_cc);
+                        $result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],$email_versand_liste_cc,$bild_server_path);
                     }
                     else
                     {
-                        $result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],array());
+                        $result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],array(), $bild_server_path);
                     }
                     // Wenn die Grußkarte erfolgreich gesendet wurde
                     if ($result)
