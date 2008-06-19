@@ -231,6 +231,7 @@ foreach($user->db_user_fields as $key => $value)
 }
 
 $login_name_changed = false;
+$forum_old_username = "";
 
 if($g_current_user->isWebmaster() || $new_user > 0)
 {

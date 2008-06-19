@@ -139,7 +139,7 @@ elseif($req_mode == 2)
                 <br />
                 <img src="layout/warning.png" alt="Warnung" /> Bereits vorhandene Daten unter diesem Tabellenpräfix werden überschrieben !
                 <br />';
-    showPage($message, "installation.php?mode=3", "forward.png", "Organisation festlegen", "server");
+    showPage($message, "installation.php?mode=3", "forward.png", "Organisation festlegen");
 }
 elseif($req_mode == 3)
 {
@@ -231,7 +231,7 @@ elseif($req_mode == 3)
                     </div>
                 </div>
                 <br />';
-    showPage($message, "installation.php?mode=4", "forward.png", "Administrator anlegen", "orga_name_short");
+    showPage($message, "installation.php?mode=4", "forward.png", "Administrator anlegen");
 }
 elseif($req_mode == 4)
 {
@@ -314,7 +314,7 @@ elseif($req_mode == 4)
                     </div>
                 </div>
                 <br />';
-    showPage($message, "installation.php?mode=5", "forward.png", "Konfigurationsdatei erzeugen", "user_last_name");
+    showPage($message, "installation.php?mode=5", "forward.png", "Konfigurationsdatei erzeugen");
 }
 elseif($req_mode == 5)
 {
@@ -358,7 +358,7 @@ elseif($req_mode == 5)
                     <a href="installation.php?mode=6">config.php herunterladen</a>
                 </span>
                 <br />';
-    showPage($message, "installation.php?mode=7", "database_in.png", "Admidio installieren", "next_page");
+    showPage($message, "installation.php?mode=7", "database_in.png", "Admidio installieren");
 }
 elseif($req_mode == 6)
 {
