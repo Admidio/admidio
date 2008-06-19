@@ -25,6 +25,11 @@ $plg_show_email_link = 1;
 // 0 = Link wird nicht angezeigt
 $plg_show_logout_link = 1;
 
+// Zeigt vor den Links noch zusaetzlich kleine Icons an
+// 1 = (Default) Icons werden angezeigt
+// 0 = Icons werden nicht angezeigt
+$plg_show_icons = 1;
+
 // Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';

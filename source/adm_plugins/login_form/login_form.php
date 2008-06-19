@@ -2,7 +2,7 @@
 /******************************************************************************
  * Login Form
  *
- * Version 2.0.0
+ * Version 1.2.1
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
@@ -69,6 +69,8 @@ if(isset($plg_rank) == false)
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
+
+$plg_icon_code = "";
 
 if($g_valid_login == 1)
 {
@@ -139,14 +141,17 @@ if($g_valid_login == 1)
         // Link zum Ausloggen
         if($plg_show_logout_link)
         {
-            echo "<li>
+            if($plg_show_icons)
+            {
+                $plg_icon_code = '<a href="javascript:loadPageLogout()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Logout" /></a>';
+            }
+            echo '<li>
                 <dl>
-                    <dt class=\"iconTextLink\"><a href=\"javascript:loadPageLogout()\">
-                            <img src=\"". THEME_PATH. "/icons/door_in.png\" alt=\"Logout\" /></a>
-                        <a href=\"javascript:loadPageLogout()\">Logout</a>
+                    <dt class="iconTextLink">'. $plg_icon_code. '
+                        <a href="javascript:loadPageLogout()">Logout</a>
                     </dt>
                 </dl>
-            </li>";
+            </li>';
         }
     echo "</ul>";
 }
@@ -180,11 +185,15 @@ else
                 </li>';
             } 
             
+            if($plg_show_icons)
+            {
+                $plg_icon_code = '<img src="'. THEME_PATH. '/icons/key.png" alt="Login" />&nbsp;';
+            }
             echo '
             <li id="plgRowLoginButton">
                 <dl>
                     <dt>
-                        <button type="submit" value="Login" tabindex="98">Login</button>
+                        <button type="submit" value="Login" tabindex="98">'.$plg_icon_code.'Login</button>
                     </dt>
                     <dd>&nbsp;</dd>
                 </dl>
@@ -197,9 +206,19 @@ else
                     <dl>';
                         if($plg_show_register_link && $g_preferences['registration_mode'])
                         {
-                            echo '<dt><a href="'. $g_root_path. '/adm_program/system/registration.php" 
-                                    '. $plg_link_target. '>Registrieren</a></dt>
-                                 <dd>&nbsp;</dd>';
+                            if($plg_show_icons)
+                            {
+                                $plg_icon_code = '<span class="iconTextLink">
+                                    <a href="'. $g_root_path. '/adm_program/system/registration.php"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="Registrierung" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/system/registration.php" '. $plg_link_target. '>Registrieren</a>
+                                </span>';
+                            }
+                            else
+                            {
+                                $plg_icon_code = '<a href="'. $g_root_path. '/adm_program/system/registration.php" '. $plg_link_target. '>Registrieren</a>';
+                            }
+                            echo '<dt>'.$plg_icon_code.'</dt>
+                                <dd>&nbsp;</dd>';
                         }
                         if($plg_show_register_link && $plg_show_email_link)
                         {
@@ -224,15 +243,26 @@ else
                             {
                                 $mail_link = "$g_root_path/adm_program/system/lost_password.php";
                             }
+
+                            if($plg_show_icons)
+                            {
+                                $plg_icon_code = '<span class="iconTextLink">
+                                    <a href="'. $mail_link. '"><img src="'. THEME_PATH. '/icons/email_key.png" alt="Loginprobleme" /></a>
+                                    <a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a>
+                                </span>';
+                            }
+                            else
+                            {
+                                $plg_icon_code = '<a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a>';
+                            }
                             
-                            echo '<dt><a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a></dt>
-                            <dd>&nbsp;</dd>';
+                            echo '<dt>'.$plg_icon_code.'<dd>&nbsp;</dd>';
                         }
                     echo '</dl>
                 </li>';
             }    
-        echo "</ul>
-    </form>";   
+        echo '</ul>
+    </form>';   
 }
 
 ?>
