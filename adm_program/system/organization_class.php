@@ -17,18 +17,14 @@
  * Mit der Funktion getOrganization($shortname) kann die gewuenschte Organisation
  * ausgelesen werden.
  *
- * Folgende Funktionen stehen nun zur Verfuegung:
+ * Folgende Methoden stehen neben den Standardmethoden aus der table_access_class zur Verfuegung:
  *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) 
- *                        - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save($login_user_id)   - Rolle wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Die aktuelle Orga wird aus der Datenbank geloescht
  * getPreferences()       - gibt ein Array mit allen organisationsspezifischen Einstellungen
  *                          aus adm_preferences zurueck
+ * setPreferences($preferences, $update = true)
+ *                        - schreibt alle Parameter aus dem uebergebenen Array
+ *                          zurueck in die Datenbank, dabei werden nur die veraenderten oder
+ *                          neuen Parameter geschrieben
  * getReferenceOrganizations($child = true, $parent = true)
  *                        - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
  * isChildOrganization($organization)
@@ -101,7 +97,7 @@ class Organization extends TableAccess
         return $preferences;
     }
     
-    // die Funktion schreibt alle Parameter aus dem uebergebenen Array
+    // die Methode schreibt alle Parameter aus dem uebergebenen Array
     // zurueck in die Datenbank, dabei werden nur die veraenderten oder
     // neuen Parameter geschrieben
     // $update : bestimmt, ob vorhandene Werte aktualisiert werden

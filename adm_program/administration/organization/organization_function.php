@@ -11,6 +11,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/text_class.php");
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
@@ -123,42 +124,47 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 // Organisation updaten
 // *******************************************************************************
 
-// POST Variablen in das UserField-Objekt schreiben
-foreach($_POST as $key => $value)
-{
-    if(strpos($key, "org_") === 0)
-    {
-        $g_current_organization->setValue($key, $value);
-    }
-}
-
-$ret_code = $g_current_organization->save();
-if($ret_code != 0)
-{
-    $g_current_organization->clear();
-    $g_message->show("mysql", $ret_code);
-}
+$text = new Text($g_db);
 
 // Einstellungen speichern
 
 foreach($_POST as $key => $value)
 {
     // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
-    if(strpos($key, "org_") === false
-    && $key != "version"
-    && $key != "save")
+    if($key != "version" && $key != "save")
     {
-        // Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
-        // 0000 bedeutet, dass das PW sich nicht veraendert hat
-        if($key == "forum_pw" && $value == "0000")
+        if(strpos($key, "org_") === 0)
         {
-            $g_preferences[$key] = $g_preferences[$key]; 
+            $g_current_organization->setValue($key, $value);
+        }
+        elseif(strpos($key, "SYSMAIL_") === 0)
+        {
+            $text->getText($key);
+            $text->setValue("txt_text", $value);
+            $text->save();
         }
         else
         {
-            $g_preferences[$key] = $value;
+            // Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
+            // 0000 bedeutet, dass das PW sich nicht veraendert hat
+            if($key == "forum_pw" && $value == "0000")
+            {
+                $g_preferences[$key] = $g_preferences[$key]; 
+            }
+            else
+            {
+                $g_preferences[$key] = $value;
+            }
         }
     }
+}
+
+// alle Daten nun speichern
+$ret_code = $g_current_organization->save();
+if($ret_code != 0)
+{
+    $g_current_organization->clear();
+    $g_message->show("mysql", $ret_code);
 }
 
 $g_current_organization->setPreferences($g_preferences);

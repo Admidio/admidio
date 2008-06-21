@@ -15,7 +15,7 @@ if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
 }
 
 // Admidio-Versionsnummer bitte nicht aendern !!!
-define('ADMIDIO_VERSION', '2.0.4');  
+define('ADMIDIO_VERSION', '2.1.0');  
 
 
 // verschiedene Pfade
