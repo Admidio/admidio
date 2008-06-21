@@ -64,13 +64,13 @@ echo "
 
         if($g_preferences['registration_mode'] > 0)
         {
-            echo "<li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/system/registration.php\"><img
-                    src=\"". THEME_PATH. "/icons/add.png\" alt=\"Registrieren\" /></a>
-                    <a href=\"$g_root_path/adm_program/system/registration.php\">Registrieren</a>
+            echo '<li>
+                <span class="iconTextLink">
+                    <a href="'.$g_root_path.'/adm_program/system/registration.php"><img
+                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="Registrieren" /></a>
+                    <a href="'.$g_root_path.'/adm_program/system/registration.php">Registrieren</a>
                 </span>
-            </li>";
+            </li>';
         }
     }
 echo "</ul>

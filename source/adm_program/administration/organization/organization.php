@@ -11,6 +11,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/text_class.php");
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
@@ -64,8 +65,8 @@ $g_layout['header'] =  "
     <script type=\"text/javascript\"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 'forum',
-                        'guestbook-module', 'list-module', 'mail-module', 'ecard-module', 'profile-module', 'dates-module',
-                        'links-module');
+                        'guestbook-module', 'list-module', 'mail-module', 'system-mail', 'ecard-module', 'profile-module', 
+                        'dates-module', 'links-module');
 
 
         // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -236,6 +237,12 @@ echo "
         <tr>
         <td>
         <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('system-mail');\"><img src=\"". THEME_PATH. "/icons/system_mail.png\" alt=\"Systemmails\" title=\"Systemmails\" /></a>
+            <a href=\"#\" onclick=\"toggleDiv('system-mail');\">Systemmails</a>
+        </span>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" title=\"Profil\" /></a>
             <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
         </span>
@@ -402,19 +409,6 @@ echo "
                     }
 
                     echo "
-                    <li>
-                        <dl>
-                            <dt><label for=\"enable_system_mails\">Systemmails aktivieren:</label></dt>
-                            <dd>
-                                <input type=\"checkbox\" id=\"enable_system_mails\" name=\"enable_system_mails\" ";
-                                if(isset($form_values['enable_system_mails']) && $form_values['enable_system_mails'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
-                            </dd>
-                        </dl>
-                    </li>
                     <li class=\"smallFontSize\">
                         Hier können die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen,
                         wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen
@@ -992,7 +986,7 @@ echo "
         //Einstellungen Gaestebuchmodul
         /**************************************************************************************/
 
-        echo"
+        echo "
         <div class=\"groupBox\" id=\"guestbook-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" />
                 Einstellungen Gästebuchmodul</div>
@@ -1106,7 +1100,7 @@ echo "
         //Einstellungen Listenmodul
         /**************************************************************************************/
 
-        echo"
+        echo "
         <div class=\"groupBox\" id=\"list-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" />
                 Einstellungen Listen</div>
@@ -1148,7 +1142,7 @@ echo "
         //Einstellungen Mailmodul
         /**************************************************************************************/
 
-        echo"
+        echo "
         <div class=\"groupBox\" id=\"mail-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" />
                 Einstellungen Mailmodul</div>
@@ -1192,24 +1186,76 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"max_email_attachment_size\">Maximale Dateigr&ouml;&szlig;e f&uuml;r Anh&auml;nge:</label></dt>
+                            <dt><label for=\"max_email_attachment_size\">Maximale Dateigröße für Anhänge:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\" /> KB
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Benutzer k&ouml;nnen nur Dateien anh&auml;ngen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so sind keine Anh&auml;nge im Mailmodul m&ouml;glich.
+                        Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier
+                        angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich.
                     </li>
                 </ul>
             </div>
         </div>";
 
+
+        /**************************************************************************************/
+        //Einstellungen Systemmails
+        /**************************************************************************************/
+
+        $text = new Text($g_db);
+        echo '
+        <div class="groupBox" id="system-mail">
+            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/system_mail.png" alt="Systemmails" />
+                Einstellungen Systemmails</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
+                    <li>
+                        <dl>
+                            <dt><label for="enable_system_mails">Systemmails aktivieren:</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_system_mails" name="enable_system_mails" ';
+                                if(isset($form_values['enable_system_mails']) && $form_values['enable_system_mails'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und 
+                        werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann 
+                        der jeweilige Inhalt für diesen Bereich.<br /><br />
+                        In jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden:<br />
+                        <strong>%first_name%</strong> - Vorname des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%last_name%</strong> - Nachname des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%email_user%</strong> - E-Mail des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%email_webmaster%</strong> - Systememailadresse der Organisation<br />
+                        <strong>%homepage%</strong> - URL der Webseite der Organisation<br /><br />
+                    </li>';
+
+                    $text->getText("SYSMAIL_REGISTRATION_USER");
+                    echo '<li>
+                        Bestätigung der Anmeldung nach der manuellen Freigabe:<br />
+                        <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                    </li>';
+                    $text->getText("SYSMAIL_REGISTRATION_WEBMASTER");
+                    echo '<li>
+                        Benachrichtung des Webmasters nach einer Registrierung:<br />
+                        <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                    </li>                    
+                </ul>
+            </div>
+        </div>';
+
+        
         /**************************************************************************************/
         //Einstellungen Grußkartenmodul
         /**************************************************************************************/
-        echo"
+        echo "
         <div class=\"groupBox\" id=\"ecard-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" />
                 Einstellungen Grußkartenmodul</div>
@@ -1493,7 +1539,7 @@ echo "
         //Einstellungen Profilmodul
         /**************************************************************************************/
 
-        echo"
+        echo "
         <div class=\"groupBox\" id=\"profile-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" />
                 Einstellungen Profilmodul</div>
@@ -1616,7 +1662,7 @@ echo "
         //Einstellungen Terminmodul
         /**************************************************************************************/
 
-        echo"
+        echo "
         <div class=\"groupBox\" id=\"dates-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" />
                 Einstellungen Terminmodul</div>
@@ -1681,7 +1727,7 @@ echo "
         //Einstellungen Weblinksmodul
         /**************************************************************************************/
 
-        echo"
+        echo "
         <div class=\"groupBox\" id=\"links-module\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" />
                 Einstellungen Weblinkmodul</div>

@@ -27,7 +27,7 @@ $message_text = array(
 
     "database_invalid" =>
         "<p>Die Datenbankversion stimmt nicht mit der Version der Admidio-Scripte überein.</p>
-        <p>Wende dich bitte an den <a href=\"mailto:%VAR1%\">Webmaster</a>.</p>",
+        <p>Wende dich bitte an den <a href=\"mailto:%VAR1%\">Webmaster</a> dieser Webseite.</p>",
 
     "date_invalid" =>
         "<p>Es wurde kein gültiges Datum in das Feld %VAR1% eingegeben.</p>

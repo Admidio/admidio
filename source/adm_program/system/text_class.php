@@ -1,0 +1,63 @@
+<?php
+/******************************************************************************
+ * Klasse fuer Datenbanktabelle adm_texts
+ *
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese Klasse dient dazu ein Textobjekt zu erstellen.
+ * Texte koennen ueber diese Klasse in der Datenbank verwaltet werden.
+ *
+ *****************************************************************************/
+
+require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
+
+class Text extends TableAccess
+{
+    // Konstruktor
+    function Text(&$db, $name = "")
+    {
+        $this->db            =& $db;
+        $this->table_name     = TBL_TEXTS;
+        $this->column_praefix = "txt";
+        
+        if(strlen($name) > 0)
+        {
+            $this->getText($name);
+        }
+        else
+        {
+            $this->clear();
+        }
+    }
+
+    // AutoLogin mit der uebergebenen Session-ID aus der Datenbank auslesen
+    function getText($name)
+    {
+        global $g_current_organization;
+    
+        // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
+        if(is_numeric($name) == false)
+        {
+            $condition = "    txt_name = '$name' 
+                          AND txt_org_id = ". $g_current_organization->getValue("org_id");
+        }
+        
+        $this->readData($name, $condition);
+    }
+
+    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
+    // die Funktion wird innerhalb von save() aufgerufen
+    function _save()
+    {
+        if($this->new_record)
+        {
+            // Insert
+            global $g_current_organization;
+            $this->setValue("txt_org_id", $g_current_organization->getValue("org_id"));
+        }
+    }    
+}
+?>

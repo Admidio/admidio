@@ -18,7 +18,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/email_class.php");
+require("../../system/system_mail_class.php");
 
 // Registrierung muss ausgeloggt moeglich sein
 if($_GET['new_user'] != 2)
@@ -341,16 +341,9 @@ if($new_user == 3)
     if($g_preferences['enable_system_mails'] == 1)
     {
         // Mail an den User schicken, um die Anmeldung zu bestaetigen
-        $email = new Email();
-        $email->setSender($g_preferences['email_administrator']);
-        $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        $email->setSubject("Anmeldung auf ". $g_current_organization->getValue("org_homepage"));
-        $email->setText("Hallo ". $user->getValue("Vorname"). ",\n\ndeine Anmeldung auf ".
-            $g_current_organization->getValue("org_homepage"). " wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ".
-            $user->getValue("usr_login_name"). "\nund dem Passwort auf der Homepage einloggen.\n\n".
-            "Sollten noch Fragen bestehen, schreib eine E-Mail an ". $g_preferences['email_administrator'].
-            " .\n\nViele Grüße\nDie Webmaster");
-        $email->sendEmail();
+        $sysmail = new SystemMail($g_db);
+        $sysmail->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+        $sysmail->sendSystemMail("SYSMAIL_REGISTRATION_USER", $user);
     }
 
     // neuer User -> Rollen zuordnen
@@ -394,15 +387,10 @@ elseif($new_user == 2)
         while($row = $g_db->fetch_array($result))
         {
             // Mail an die Webmaster schicken, dass sich ein neuer User angemeldet hat
-            $email = new Email();
-            $email->setSender($g_preferences['email_administrator']);
-            $email->addRecipient($row['email'], $row['first_name']. " ". $row['last_name']);
-            $email->setSubject("Neue Registrierung");
-            $email->setText("Es hat sich ein neuer User auf ". $g_current_organization->getValue("org_homepage").
-                " registriert.\n\nNachname: ". $user->getValue("Nachname"). "\nVorname:  ".
-                $user->getValue("Vorname"). "\nE-Mail:   ". $user->getValue("E-Mail").
-                "\n\n\nDiese Nachricht wurde automatisch erzeugt.");
-            if($email->sendEmail() == false)
+            $sysmail = new SystemMail($g_db);
+            $sysmail->addRecipient($row['email'], $row['first_name']. " ". $row['last_name']);
+
+            if($sysmail->sendSystemMail("SYSMAIL_REGISTRATION_WEBMASTER", $user) == false)
             {
                 $err_code = "mail_not_send";
                 $err_text = $row['email'];

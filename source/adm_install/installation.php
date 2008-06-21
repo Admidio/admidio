@@ -53,6 +53,7 @@ require_once(SERVER_PATH. "/adm_program/system/function.php");
 require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
 require_once(SERVER_PATH. "/adm_program/system/user_class.php");
 require_once(SERVER_PATH. "/adm_program/system/role_class.php");
+require_once(SERVER_PATH. "/adm_program/system/text_class.php");
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
@@ -483,19 +484,24 @@ elseif($req_mode == 7)
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include("db_scripts/preferences.php");
+    
+    // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
+    $orga_preferences['email_administrator'] = $_SESSION['user_email'];
 
-    foreach($orga_preferences as $key => $value)
+    $g_current_organization->setPreferences($orga_preferences, false);
+    
+    // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
+    include("db_scripts/systemmails_texts.php");
+    $text = new Text($db);
+
+    foreach($systemmails_texts as $key => $value)
     {
-        if($key == 'email_administrator')
-        {
-            // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
-            $value = $_SESSION['user_email'];
-        }
-        $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                           VALUES (". $g_current_organization->getValue("org_id"). ", '$key', '$value') ";
-        $db->query($sql);
+        $text->clear();
+        $text->setValue("txt_name", $key);
+        $text->setValue("txt_text", $value);
+        $text->save();
     }
-
+    
     // Datenbank-Versionsnummer schreiben
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
                                        VALUES (". $g_current_organization->getValue("org_id"). ", 'db_version', '". ADMIDIO_VERSION. "') ";

@@ -20,7 +20,6 @@ $orga_preferences = array(
     'enable_bbcode'                 => '1',
     'enable_auto_login'             => '1',
     'logout_minutes'                => '20',
-    'enable_system_mails'           => '1',
     'email_administrator'           => 'webmaster@'. $_SERVER['HTTP_HOST'],
     'homepage_logout'               => 'index.html',
     'homepage_login'                => 'index.html',
@@ -77,6 +76,9 @@ $orga_preferences = array(
     'enable_mail_module'        => '1',
     'max_email_attachment_size' => '1024',
     'enable_mail_captcha'       => '1',
+    
+    // Systemmail
+    'enable_system_mails'       => '1',
 
     // Grußkartenmodul
     'enable_ecard_module'           => '1',
@@ -106,5 +108,5 @@ $orga_preferences = array(
 
     // Weblinks
     'enable_weblinks_module' => '1'
- )
+ );
 ?>

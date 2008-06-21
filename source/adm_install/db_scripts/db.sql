@@ -80,7 +80,7 @@ alter table %PRAEFIX%_organizations add constraint %PRAEFIX%_FK_ORG_ORG_PARENT f
 /*==============================================================*/
 create table %PRAEFIX%_texts
 (
-   txt_id                         int(11) unsigned               not null,
+   txt_id                         int(11) unsigned               not null AUTO_INCREMENT,
    txt_org_id                     tinyint(4)                     not null,
    txt_name                       varchar(30)                    not null,
    txt_text                       text,
