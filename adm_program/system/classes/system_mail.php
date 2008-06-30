@@ -109,7 +109,6 @@ class SystemMail extends Email
         $this->setSubject($this->mailHeader);
         $this->setText($this->mailText);
 
-        echo $this->mailText; exit();
         return $this->sendEmail();
     }
 }
