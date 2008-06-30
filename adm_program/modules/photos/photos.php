@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-require_once("../../system/photo_album_class.php");
+require_once("../../system/classes/photo_album.php");
 require_once("../../system/common.php");
 require_once("photo_function.php");
 

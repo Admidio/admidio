@@ -50,10 +50,10 @@ $admidio_path = substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1);
 require_once($admidio_path. "/adm_program/system/constants.php");
 require_once(SERVER_PATH. "/adm_program/system/string.php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
-require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
-require_once(SERVER_PATH. "/adm_program/system/user_class.php");
-require_once(SERVER_PATH. "/adm_program/system/role_class.php");
-require_once(SERVER_PATH. "/adm_program/system/text_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/text.php");
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
@@ -61,7 +61,7 @@ if(!isset($g_db_type))
     $g_db_type = "mysql";
 }
 
-require_once(SERVER_PATH. "/adm_program/system/". $g_db_type. "_class.php");
+require_once(SERVER_PATH. "/adm_program/system/db/". $g_db_type. ".php");
 
 $message = "";
 
@@ -525,7 +525,7 @@ elseif($req_mode == 7)
     $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
                                            fol_locked, fol_public, fol_timestamp)
                                     VALUES (". $g_current_organization->getValue("org_id"). ", 'DOWNLOAD', 'download', '/adm_my_files',
-                                            0,1,SYSDATE())";
+                                            0,1,'".date("Y-m-d h:i:s", time())."')";
     $db->query($sql);
 
 
@@ -535,7 +535,7 @@ elseif($req_mode == 7)
     $g_current_user->setValue("Vorname", $_SESSION['user_first_name']);
     $g_current_user->setValue("E-Mail", $_SESSION['user_email']);
     $g_current_user->setValue("usr_login_name", $_SESSION['user_login']);
-    $g_current_user->setValue("usr_password", md5($_SESSION['user_password']));
+    $g_current_user->setValue("usr_password", $_SESSION['user_password']);
     $g_current_user->b_set_last_change = false;
     $g_current_user->save();
 
@@ -591,8 +591,8 @@ elseif($req_mode == 7)
 
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1)
-                                        , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", NOW(), 1) ";
+                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", '". date("Y-m-d", time()). "', 1)
+                                        , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", '". date("Y-m-d", time()). "', 1) ";
     $db->query($sql);
 
     // Daten der Session loeschen

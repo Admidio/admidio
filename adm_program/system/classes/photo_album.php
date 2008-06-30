@@ -32,7 +32,7 @@
  *****************************************************************************/
 
 $absolute_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
-require_once("$absolute_path/adm_program/system/table_access_class.php");
+require_once("$absolute_path/adm_program/system/classes/table_access.php");
 
 class PhotoAlbum extends TableAccess
 {

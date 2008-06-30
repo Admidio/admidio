@@ -10,7 +10,7 @@
  *****************************************************************************/
 
 require("common.php");
-require("role_class.php");
+require("classes/role.php");
 
 // Url merken (wird in cookie_check wieder entfernt)
 $_SESSION['navigation']->addUrl(CURRENT_URL);

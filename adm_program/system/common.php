@@ -45,16 +45,16 @@ if(!isset($g_db_type))
 }
 
 // includes OHNE Datenbankverbindung
-require_once(SERVER_PATH. "/adm_program/system/". $g_db_type. "_class.php");
+require_once(SERVER_PATH. "/adm_program/system/db/". $g_db_type. ".php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
 require_once(SERVER_PATH. "/adm_program/system/date.php");
 require_once(SERVER_PATH. "/adm_program/system/string.php");
-require_once(SERVER_PATH. "/adm_program/system/message_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/message.php");
 require_once(SERVER_PATH. "/adm_program/system/message_text.php");
-require_once(SERVER_PATH. "/adm_program/system/navigation_class.php");
-require_once(SERVER_PATH. "/adm_program/system/user_class.php");
-require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
-require_once(SERVER_PATH. "/adm_program/system/session_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/navigation.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/session.php");
 require_once(SERVER_PATH. "/adm_program/system/forum/forum.php");
 
 // Variablen von HMTL & PHP-Code befreien
@@ -185,7 +185,7 @@ if($g_preferences['enable_auto_login'] == 1 && isset($_COOKIE['admidio_data']))
         if($g_current_user->getValue("usr_id") != $admidio_data[1])
         {
             // User aus der Autologin-Session wiederherstellen
-            require_once(SERVER_PATH. "/adm_program/system/auto_login_class.php");
+            require_once(SERVER_PATH. "/adm_program/system/classes/auto_login.php");
             $auto_login = new AutoLogin($g_db, $g_session_id);
             
             // User nur herstellen, wenn Cookie-User-Id == gespeicherte DB-User-Id

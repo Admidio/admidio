@@ -9,7 +9,7 @@
  *****************************************************************************/
  
 require("common.php");
-require("email_class.php");
+require("classes/system_mail.php");
 
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -42,45 +42,43 @@ if($g_valid_login)
 
 if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 {
-    $sender_email   = $g_preferences['email_administrator'];
-    $sender_name    = "Administrator";
+    $sql = "SELECT MAX(usr_id) as usr_id
+              FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
+              LEFT JOIN ". TBL_USER_DATA. " as email
+                ON email.usd_usr_id = usr_id
+               AND email.usd_usf_id = ".$g_current_user->getProperty("E-Mail", "usf_id")."
+               AND email.usd_value  = '".$empfaenger_email."'
+             WHERE rol_cat_id = cat_id
+               AND cat_org_id = ".$g_current_organization->getValue("org_id")."
+               AND rol_id     = mem_rol_id
+               AND mem_valid  = 1
+               AND mem_usr_id = usr_id
+               AND usr_valid  = 1
+               AND email.usd_value = '".$empfaenger_email."'";   
+    $result = $g_db->query($sql);
+    $row    = $g_db->fetch_array($result);
     
-    $user_id        = "";
-    $benutzername   = "";
-    $empfaengername = "";
-    
-    list($user_id,$benutzername,$empfaengername) = getUserDataFromEmail($empfaenger_email);
-    if($user_id == "" || $empfaengername == "")
+    if(strlen($row['usr_id']) == 0)
     {
         $g_message->show('lost_password_email_error',$empfaenger_email);    
         die();
     }
-    
-    $neues_passwort = generatePassword();
-    $activation_id  = generateActivationId($empfaenger_email);
-    
-    $email_text     .= " Hallo ".$empfaengername."!\n\n";
-    $email_text     .= " Du hast ein neues Passwort angefordert!\n\n";
-    $email_text     .= " Hier sind deine Daten:\n";
-    $email_text     .= " Benutzername: ".$benutzername."\n";
-    $email_text     .= " Passwort: ".$neues_passwort."\n\n";
-    $email_text     .= " Um jetzt dein neues Passwort benutzen zu können musst du jetzt nur noch auf den Link klicken!"."\n\n";
-    $email_text     .= "".$g_root_path."/adm_program/system/password_activation.php?usr_id=3D".$user_id."&aid=3D".$activation_id.""."\n\n";
-    $email_text     .= " Du kannst jederzeit das generierte Passwort ändern!\n\n";
-    $email_text     .= "*******************************************************************\n";
-    $email_text     .= " Bitte halte in Errinnerung das wir dich nie um deine Benutzerdaten fragen!\n";
-    $email_text     .= "*******************************************************************\n";
 
-    $email = new Email();
-    $email->setSender($sender_email,$sender_name);
-    $email->setSubject('Neues Passwort!');
-    $email->addRecipient($empfaenger_email,$empfaengername);
-    $email->setText($email_text);
+    $user = new User($g_db, $row['usr_id']);
+
+    // Passwort und Aktivierungs-ID erzeugen und speichern
+    $neues_passwort = generatePassword();
+    $activation_id  = generateActivationId($user->getValue("E-Mail"));
+    $user->setValue("usr_password", $neues_passwort);
+    $user->setValue("usr_activation_code", $activation_id);
     
-    
-    if($email->sendEmail())
+    $sysmail = new SystemMail($g_db);
+    $sysmail->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+    $sysmail->setVariable(1, $g_root_path."/adm_program/system/password_activation.php?usr_id=3D".$user->getValue("usr_id")."&aid=3D".$activation_id);
+    if($sysmail->sendSystemMail("SYSMAIL_ACTIVATION_LINK", $user) == true)
     {
-        saveActivationlinkAndNewPassword($activation_id,md5($neues_passwort),$user_id);
+        $user->save();
+
         $g_message->setForwardUrl($g_root_path."/adm_program/system/login.php");
         $g_message->show('lost_password_send',$empfaenger_email);
     }
@@ -124,7 +122,7 @@ else
                         <dl>
                             <dt>&nbsp;</dt>
                             <dd>
-                                <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" alt=\"Captcha\" />
+                                <img src=\"$g_root_path/adm_program/system/classes/captcha.php?id=". time(). "\" alt=\"Captcha\" />
                             </dd>
                         </dl>
                     </li>
@@ -171,6 +169,7 @@ function getVars()
     $$key = $value;
   }
 }
+
 function generatePassword()
 {
     // neues Passwort generieren
@@ -178,47 +177,11 @@ function generatePassword()
     $password = substr(md5(time()), 0, 8);
     return $password;
 }
+
 function generateActivationId($text)
 {
     $aid = "";
     $aid = substr(md5(uniqid($text.time())),0,10);
     return $aid;
-}
-function getUserDataFromEmail($empfaenger_email)
-{
-    global $g_current_organization;
-    global $g_current_user;
-    global $g_db;
-    
-    $sql = "SELECT distinct usr_id, usr_login_name, last_name.usd_value as last_name, first_name.usd_value as first_name
-            FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-            LEFT JOIN ". TBL_USER_DATA. " as email
-                ON email.usd_usr_id = usr_id
-                AND email.usd_usf_id = ".$g_current_user->getProperty("E-Mail", "usf_id")."
-                AND email.usd_value = \"".$empfaenger_email."\"
-            LEFT JOIN ". TBL_USER_DATA. " as last_name
-                ON last_name.usd_usr_id = usr_id
-                AND last_name.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
-            LEFT JOIN ". TBL_USER_DATA. " as first_name
-                ON first_name.usd_usr_id = usr_id
-                AND first_name.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
-            WHERE rol_cat_id = cat_id
-            AND cat_org_id = ".$g_current_organization->getValue("org_id")."
-            AND rol_id = mem_rol_id
-            AND mem_valid = 1
-            AND mem_usr_id = usr_id
-            AND usr_valid = 1
-            AND email.usd_value = \"".$empfaenger_email."\"";   
-    $result = $g_db->query($sql);
-    while ($row = $g_db->fetch_object($result))
-    {
-        return array($row->usr_id,$row->usr_login_name,$row->first_name);
-    }
-}
-function saveActivationlinkAndNewPassword($activation_id,$neues_passwort,$usr_id)
-{
-    global $g_db;
-    $sql = "UPDATE ". TBL_USERS. " SET `usr_activation_code` = '".$activation_id."',`usr_new_password` = '".$neues_passwort."'  WHERE `". TBL_USERS. "`.`usr_id` =".$usr_id." LIMIT 1";
-    $result = $g_db->query($sql);
 }
 ?>

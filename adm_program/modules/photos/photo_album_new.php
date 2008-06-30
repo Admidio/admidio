@@ -16,7 +16,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/photo_album_class.php");
+require("../../system/classes/photo_album.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)

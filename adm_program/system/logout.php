@@ -11,7 +11,7 @@
  *****************************************************************************/
 
 require_once("common.php");
-require_once("auto_login_class.php");
+require_once("classes/auto_login.php");
 
 // User aus der Session entfernen 
 $g_current_session->setValue("ses_usr_id", "");

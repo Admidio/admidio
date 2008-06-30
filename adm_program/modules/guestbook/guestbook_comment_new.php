@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/guestbook_comment_class.php");
+require("../../system/classes/guestbook_comment.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -332,7 +332,7 @@ echo "
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <img src=\"$g_root_path/adm_program/system/captcha_class.php?id=". time(). "\" alt=\"Captcha\" />
+                            <img src=\"$g_root_path/adm_program/system/classes/captcha.php?id=". time(). "\" alt=\"Captcha\" />
                         </dd>
                     </dl>
                 </li>

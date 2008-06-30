@@ -21,7 +21,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/email_class.php");
+require("../../system/classes/system_mail.php");
 
 $err_code = ""; 
 $err_text = "";
@@ -139,7 +139,7 @@ elseif($_GET["mode"] == 2)
     {
         // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
         $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
-                                              , mem_end   = NOW()
+                                              , mem_end   = '".date("Y-m-d", time())."'
                     WHERE mem_id = ". $row['mem_id'];
         $result = $g_db->query($sql);
     }
@@ -194,27 +194,15 @@ elseif($_GET["mode"] == 4)
 
     if($g_preferences['enable_system_mails'] == 1)
     {
-        // neues Passwort generieren
+        // neues Passwort generieren und abspeichern
         $password = substr(md5(time()), 0, 8);
-        $password_md5 = md5($password);
-
-        // Passwort des Users updaten
-        $sql    = "UPDATE ". TBL_USERS. " SET usr_password = '$password_md5'
-                    WHERE usr_id = ". $user->getValue("usr_id");
-        $result = $g_db->query($sql);
+        $user->setValue("usr_password", $password);
+        $user->save();
 
         // Mail an den User mit den Loginaten schicken
-        $email = new Email();
-        $email->setSender($g_preferences['email_administrator']);
-        $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        $email->setSubject("Logindaten für ". $g_current_organization->getValue("org_homepage"));
-        $email->setText("Hallo ". $user->getValue("Vorname"). ",\n\ndu erhälst deine Logindaten für ".
-            $g_current_organization->getValue("org_homepage"). ".\n\nBenutzername: ".
-            $user->getValue("usr_login_name"). "\nPasswort: $password\n\n".
-            "Das Passwort wurde automatisch generiert.\n".
-            "Du solltest es nach dem Login in deinem Profil ändern.\n\n" .
-            "Viele Grüße\nDie Webmaster");
-        if($email->sendEmail() == true)
+        $sysmail = new SystemMail($g_db);
+        $sysmail->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+        if($sysmail->sendSystemMail("SYSMAIL_NEW_LOGIN_DATA", $user) == true)
         {
             $err_code = "mail_send";
             $err_text = $user->getValue("E-Mail");

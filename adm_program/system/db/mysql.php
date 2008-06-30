@@ -9,7 +9,7 @@
  *
  *****************************************************************************/
  
-require_once(SERVER_PATH. "/adm_program/system/db_class.php");
+require_once(SERVER_PATH. "/adm_program/system/db/db.php");
  
 class MySqlDB extends DB
 {

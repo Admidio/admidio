@@ -15,8 +15,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/bbcode.php");
-require("../../system/rss_class.php");
+require("../../system/classes/ubb_parser.php");
+require("../../system/classes/rss.php");
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if ($g_preferences['enable_rss'] != 1)
@@ -39,33 +39,21 @@ if ($g_preferences['enable_bbcode'] == 1)
     $bbcode = new ubbParser();
 }
 
-// alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
+// alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = "";
-$i             = 0;
+$arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-while ($orga = current($arr_ref_orgas))
+foreach($arr_orgas as $key => $value)
 {
-    if ($i > 0)
-    {
-        $organizations = $organizations. ", ";
-    }
-    $organizations = $organizations. "'$orga'";
-    next($arr_ref_orgas);
-    $i++;
+	$organizations = $organizations. "'$value', ";
 }
-
-// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
-if (strlen($organizations) == 0)
-{
-    $organizations = "'$g_current_organization->shortname'";
-}
+$organizations = $organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
 
 // aktuelle Termine aus DB holen die zur Orga passen
 $sql = "SELECT * FROM ". TBL_DATES. "
-        WHERE ( dat_org_shortname = '$g_current_organization->shortname'
+        WHERE ( dat_org_shortname = '".$g_current_organization->getValue("org_shortname")."'
         OR ( dat_global = 1 AND dat_org_shortname IN ($organizations) ))
-        AND ( dat_begin >= sysdate() OR dat_end >= sysdate() )
+        AND ( dat_begin >= '".date("Y-m-d h:i:s", time())."' OR dat_end >= '".date("Y-m-d h:i:s", time())."' )
         ORDER BY dat_begin ASC
         LIMIT 10 ";
 $result = $g_db->query($sql);

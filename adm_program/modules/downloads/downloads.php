@@ -14,8 +14,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/folder_class.php");
-require("../../system/htaccess_class.php");
+require("../../system/classes/folder.php");
+require("../../system/classes/htaccess.php");
 
 
 // pruefen ob das Modul ueberhaupt aktiviert ist

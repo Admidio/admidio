@@ -230,7 +230,7 @@ class RoleDependency
 
                 while ($row = $this->db->fetch_object($result))
                 {
-                    $sql .= "($this->role_id_parent, $row->mem_usr_id, NOW(), 1, 0),";
+                    $sql .= "($this->role_id_parent, $row->mem_usr_id, '".date("Y-m-d", time())."', 1, 0),";
                 }
                 //Das letzte Komma wieder wegschneiden
                 $sql = substr($sql,0,-1);

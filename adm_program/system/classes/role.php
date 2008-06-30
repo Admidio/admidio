@@ -35,7 +35,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
 class Role extends TableAccess
 {
@@ -139,7 +139,7 @@ class Role extends TableAccess
         if($this->db_fields['rol_name'] != "Webmaster")
         {
             $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
-                                                  , mem_end   = SYSDATE()
+                                                  , mem_end   = '".date("Y-m-d", time())."'
                         WHERE mem_rol_id = ". $this->db_fields['rol_id']. "
                           AND mem_valid  = 1 ";
             $this->db->query($sql);

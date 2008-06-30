@@ -222,7 +222,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         {
             // Rolle dem User zuordnen
             $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                           VALUES (". $_SESSION['rol_id']. ", ". $user->getValue("usr_id"). ", NOW(), 1) ";
+                                           VALUES (". $_SESSION['rol_id']. ", ". $user->getValue("usr_id"). ", '".date("Y-m-d", time())."', 1) ";
             $result = $g_db->query($sql);
         }
     }

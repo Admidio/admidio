@@ -30,7 +30,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
 class UserField extends TableAccess
 {

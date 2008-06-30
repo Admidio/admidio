@@ -13,14 +13,17 @@
  *                  - diese Methode liest den Mailtext aus der DB und ersetzt 
  *                    vorkommende Platzhalter durch den gewuenschten Inhalt
  *
+ * setVariable($number, $value)
+ *                  - hier kann der Inhalt fuer zusaetzliche Variablen gesetzt werden
+ *
  * sendSystemMail($sysmail_id, &$user)
  *                  - diese Methode sendet eine Systemmail nachdem der Mailtext 
  *                    ausgelesen und Platzhalter ersetzt wurden
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/email_class.php");
-require_once(SERVER_PATH. "/adm_program/system/text_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/email.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/text.php");
 
 class SystemMail extends Email
 {
@@ -28,6 +31,7 @@ class SystemMail extends Email
     var $db;
     var $mailText;
     var $mailHeader;
+    var $variables = array();   // speichert zusaetzliche Variablen fuer den Mailtext
 
     // Konstruktor
     function SystemMail(&$db)
@@ -51,12 +55,19 @@ class SystemMail extends Email
         $mailSrcText = $this->textObject->getValue("txt_text");
         
         // jetzt alle Variablen ersetzen
-        $mailSrcText = preg_replace ("/%first_name%/", $user->getValue("Vorname"),  $mailSrcText);
-        $mailSrcText = preg_replace ("/%last_name%/",  $user->getValue("Nachname"), $mailSrcText);
-        $mailSrcText = preg_replace ("/%login_name%/", $user->getValue("usr_login_name"), $mailSrcText);
-        $mailSrcText = preg_replace ("/%email_user%/", $user->getValue("E-Mail"),   $mailSrcText);
-        $mailSrcText = preg_replace ("/%email_webmaster%/", $g_preferences['email_administrator'],  $mailSrcText);
-        $mailSrcText = preg_replace ("/%homepage%/",   $g_current_organization->getValue("org_homepage"), $mailSrcText);
+        $mailSrcText = preg_replace ("/%user_first_name%/", $user->getValue("Vorname"),  $mailSrcText);
+        $mailSrcText = preg_replace ("/%user_last_name%/",  $user->getValue("Nachname"), $mailSrcText);
+        $mailSrcText = preg_replace ("/%user_login_name%/", $user->getValue("usr_login_name"), $mailSrcText);
+        $mailSrcText = preg_replace ("/%user_password%/", $user->real_password, $mailSrcText);
+        $mailSrcText = preg_replace ("/%user_email%/", $user->getValue("E-Mail"),   $mailSrcText);
+        $mailSrcText = preg_replace ("/%webmaster_email%/", $g_preferences['email_administrator'],  $mailSrcText);
+        $mailSrcText = preg_replace ("/%organization_homepage%/",   $g_current_organization->getValue("org_homepage"), $mailSrcText);
+        
+        // zusaetzliche Variablen ersetzen
+        for($i = 1; $i <= count($this->variables); $i++)
+        {
+            $mailSrcText = preg_replace ("/%variable".$i."%/", $this->variables[$i],  $mailSrcText);
+        }
         
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
         if(strpos($mailSrcText, "#Betreff#") !== false)
@@ -80,6 +91,12 @@ class SystemMail extends Email
         return $this->mailText;
     }
     
+    // die Methode setzt den Inhalt fuer spezielle Variablen
+    function setVariable($number, $value)
+    {
+        $this->variables[$number] = $value;
+    }
+    
     // diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
     // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden    
@@ -92,6 +109,7 @@ class SystemMail extends Email
         $this->setSubject($this->mailHeader);
         $this->setText($this->mailText);
 
+        echo $this->mailText; exit();
         return $this->sendEmail();
     }
 }

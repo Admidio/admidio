@@ -12,7 +12,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/condition_parser_class.php");
+require("../../system/classes/condition_parser.php");
 
 $_SESSION['mylist_request'] = $_REQUEST;
 
