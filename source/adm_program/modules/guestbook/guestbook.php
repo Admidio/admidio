@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/bbcode.php");
+require("../../system/classes/ubb_parser.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)

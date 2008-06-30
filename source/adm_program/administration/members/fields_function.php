@@ -20,7 +20,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/user_field_class.php");
+require("../../system/classes/user_field.php");
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())

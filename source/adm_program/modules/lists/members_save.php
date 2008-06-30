@@ -17,8 +17,8 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/role_class.php");
-require("../../system/role_dependency_class.php");
+require("../../system/classes/role.php");
+require("../../system/classes/role_dependency.php");
 
 // Uebergabevariablen pruefen
 
@@ -133,7 +133,7 @@ while($user= $g_db->fetch_array($result_user))
             $mem_id = $mitglieder_array[$user["usr_id"]][0];
             $sql =" UPDATE ". TBL_MEMBERS. "
                        SET mem_valid  = 0
-                         , mem_end    = NOW()
+                         , mem_end    = '".date("Y-m-d", time())."'
                          , mem_leader = 0
                      WHERE mem_id     = $mem_id ";
             $result = $g_db->query($sql);
@@ -194,7 +194,7 @@ while($user= $g_db->fetch_array($result_user))
     {
         $usr_id = $user["usr_id"];
         $sql="  INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
-                VALUES ($role_id, $usr_id, NOW(), 1";
+                VALUES ($role_id, $usr_id, '".date("Y-m-d", time())."', 1";
 
         //Falls jemand direkt Leiter werden soll
         if($_POST["leader_".$user["usr_id"]]==true)
@@ -223,7 +223,7 @@ while($user= $g_db->fetch_array($result_user))
         // alle einzufuegenden Rollen anhaengen
         foreach($parentRoles as $actRole)
         {
-            $sql .= " ($actRole, ". $user['usr_id']. ", NOW(), NULL, 1, 0),";
+            $sql .= " ($actRole, ". $user['usr_id']. ", '".date("Y-m-d", time())."', NULL, 1, 0),";
         }
 
         //Das letzte Komma wieder wegschneiden

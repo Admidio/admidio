@@ -20,7 +20,7 @@ if (isset($_GET['cid']) && is_numeric($_GET['cid']))
     $cid = $_GET['cid'];
 
     require("../../system/common.php");
-    require("../../system/bbcode.php");
+    require("../../system/classes/ubb_parser.php");
 
     if ($g_preferences['enable_bbcode'] == 1)
     {

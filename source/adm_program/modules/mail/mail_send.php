@@ -15,8 +15,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/email_class.php");
-require("../../system/role_class.php");
+require("../../system/classes/email.php");
+require("../../system/classes/role.php");
 
 if ($g_preferences['enable_mail_module'] != 1)
 {

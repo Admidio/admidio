@@ -19,8 +19,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/bbcode.php");
-require("../../system/announcement_class.php");
+require("../../system/classes/ubb_parser.php");
+require("../../system/classes/announcement.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)

@@ -14,7 +14,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/file_class.php");
+require("../../system/classes/file.php");
 
 //pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -76,6 +76,7 @@ header("Content-Length: $fileSize");
 header("Content-Disposition: attachment; filename=\"". $file->getValue('fil_name'). "\"");
 // noetig fuer IE6, da sonst pdf und doc nicht direkt geoeffnet werden kann
 header('Cache-Control: private');
+header('Pragma: public');
 
 // Datei ausgeben.
 readfile($completePath);

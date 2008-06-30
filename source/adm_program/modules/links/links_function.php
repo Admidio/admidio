@@ -22,7 +22,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/weblink_class.php");
+require("../../system/classes/weblink.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_weblinks_module'] == 0)

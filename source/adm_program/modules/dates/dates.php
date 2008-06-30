@@ -21,8 +21,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/bbcode.php");
-require("../../system/date_class.php");
+require("../../system/classes/ubb_parser.php");
+require("../../system/classes/date.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($g_preferences['enable_dates_module'] == 0)

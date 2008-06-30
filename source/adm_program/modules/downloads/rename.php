@@ -17,8 +17,8 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/file_class.php");
-require("../../system/folder_class.php");
+require("../../system/classes/file.php");
+require("../../system/classes/folder.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)

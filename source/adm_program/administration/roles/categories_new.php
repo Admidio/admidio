@@ -18,7 +18,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/category_class.php");
+require("../../system/classes/category.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_cat_id = 0;

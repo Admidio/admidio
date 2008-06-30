@@ -18,7 +18,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/role_class.php");
+require("../../system/classes/role.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $arr_mode   = array("csv-ms", "csv-ms-2k", "csv-oo", "html", "print");

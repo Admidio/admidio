@@ -14,7 +14,7 @@
  *
  *****************************************************************************/
 
-require("../../system/photo_album_class.php");
+require("../../system/classes/photo_album.php");
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist

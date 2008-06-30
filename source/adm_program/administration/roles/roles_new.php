@@ -15,8 +15,8 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/role_class.php");
-require("../../system/role_dependency_class.php");
+require("../../system/classes/role.php");
+require("../../system/classes/role_dependency.php");
 
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!$g_current_user->assignRoles())

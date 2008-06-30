@@ -9,8 +9,8 @@
  *****************************************************************************/
  
 /****************** includes *************************************************/
-require("../../system/email_class.php");
-require("../../system/bbcode.php");
+require("../../system/classes/email.php");
+require("../../system/classes/ubb_parser.php");
 /****************** Funktionen fuer ecard_form ********************************/
  
 // rechnet die propotionale Groeße eines Bildes aus

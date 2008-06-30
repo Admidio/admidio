@@ -25,8 +25,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/guestbook_class.php");
-require("../../system/guestbook_comment_class.php");
+require("../../system/classes/guestbook.php");
+require("../../system/classes/guestbook_comment.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)

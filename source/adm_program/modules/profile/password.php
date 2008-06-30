@@ -52,7 +52,7 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
                 // Webmaster duerfen Passwort so aendern
                 if($user->getValue("usr_password") == $old_password_crypt || $g_current_user->isWebmaster())
                 {
-                    $user->setValue("usr_password", md5($_POST["new_password"]));
+                    $user->setValue("usr_password", $_POST["new_password"]);
                     $user->save();
 
                     // Paralell im Forum aendern, wenn Forum aktiviert ist

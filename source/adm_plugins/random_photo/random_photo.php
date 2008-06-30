@@ -26,7 +26,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/../adm_program/system/photo_album_class.php");
+require_once(PLUGIN_PATH. "/../adm_program/system/classes/photo_album.php");
 require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden

@@ -18,7 +18,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/system_mail_class.php");
+require("../../system/classes/system_mail.php");
 
 // Registrierung muss ausgeloggt moeglich sein
 if($_GET['new_user'] != 2)
@@ -284,7 +284,7 @@ if($new_user == 2)
 {
     $user->setValue("usr_valid", 0);
     $user->setValue("usr_reg_org_shortname", $g_current_organization->getValue("org_shortname"));
-    $user->setValue("usr_password", md5($_POST['usr_password']));
+    $user->setValue("usr_password", $_POST['usr_password']);
 }
 
 

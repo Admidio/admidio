@@ -54,7 +54,7 @@ elseif($_REQUEST['mode'] == 2)
     if($g_current_user->assignRoles() || $g_current_user->editUsers())
     {
         $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0 
-                                           , mem_end   = NOW()
+                                           , mem_end   = '".date("Y-m-d", time())."'
                  WHERE mem_usr_id = ". $_REQUEST['user_id']. "
                    AND mem_rol_id = ". $_REQUEST['rol_id'];
         $g_db->query($sql);

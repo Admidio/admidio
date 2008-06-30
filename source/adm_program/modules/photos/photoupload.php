@@ -13,7 +13,7 @@
  *
  *****************************************************************************/
 
-require("../../system/photo_album_class.php");
+require("../../system/classes/photo_album.php");
 require("../../system/common.php");
 require("../../system/login_valid.php");
 

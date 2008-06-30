@@ -17,7 +17,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/announcement_class.php");
+require("../../system/classes/announcement.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)

@@ -11,7 +11,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/text_class.php");
+require("../../system/classes/text.php");
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
@@ -1230,11 +1230,13 @@ echo "
                         werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann 
                         der jeweilige Inhalt für diesen Bereich.<br /><br />
                         In jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden:<br />
-                        <strong>%first_name%</strong> - Vorname des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%last_name%</strong> - Nachname des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%email_user%</strong> - E-Mail des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%email_webmaster%</strong> - Systememailadresse der Organisation<br />
-                        <strong>%homepage%</strong> - URL der Webseite der Organisation<br /><br />
+                        <strong>%user_first_name%</strong> - Vorname des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%user_last_name%</strong> - Nachname des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%user_login_name%</strong> - Benutzername des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%user_password%</strong> - Passwort des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%user_email%</strong> - E-Mail des Benutzers aus dem jeweiligen Mailkontext<br />
+                        <strong>%webmaster_email%</strong> - Systememailadresse der Organisation<br />
+                        <strong>%organization_homepage%</strong> - URL der Webseite der Organisation<br /><br />
                     </li>';
 
                     $text->getText("SYSMAIL_REGISTRATION_USER");

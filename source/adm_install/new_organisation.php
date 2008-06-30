@@ -51,12 +51,12 @@ if(!isset($g_db_type))
     $g_db_type = "mysql";
 }
 
-require_once(SERVER_PATH. "/adm_program/system/". $g_db_type. "_class.php");
+require_once(SERVER_PATH. "/adm_program/system/db/". $g_db_type. ".php");
 require_once(SERVER_PATH. "/adm_program/system/string.php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
-require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
-require_once(SERVER_PATH. "/adm_program/system/user_class.php");
-require_once(SERVER_PATH. "/adm_program/system/role_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
 
 $message  = "";
 $act_date     = date("Y-m-d", time());
@@ -188,7 +188,7 @@ elseif($req_mode == 4)
         $sql    = "SELECT DISTINCT usr_id
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
                     WHERE usr_login_name LIKE '". $_SESSION['user_login']. "'
-                      AND usr_password   = '". md5($_SESSION['user_password']). "'
+                      AND usr_password   = '". $_SESSION['user_password']. "'
                       AND usr_valid      = 1
                       AND mem_usr_id     = usr_id
                       AND mem_rol_id     = rol_id

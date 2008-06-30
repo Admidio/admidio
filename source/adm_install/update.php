@@ -44,10 +44,10 @@ if(!isset($g_db_type))
     $g_db_type = "mysql";
 }
 
-require_once(SERVER_PATH. "/adm_program/system/". $g_db_type. "_class.php");
+require_once(SERVER_PATH. "/adm_program/system/db/". $g_db_type. ".php");
 require_once(SERVER_PATH. "/adm_program/system/string.php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
-require_once(SERVER_PATH. "/adm_program/system/organization_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 
  // Verbindung zu Datenbank herstellen
 $g_db = new MySqlDB();

@@ -16,7 +16,7 @@
 
 require("../../system/common.php");
 require("../../system/bbcode.php");
-require("../../system/rss_class.php");
+require("../../system/classes/rss.php");
 
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...

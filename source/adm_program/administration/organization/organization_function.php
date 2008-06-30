@@ -11,7 +11,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/text_class.php");
+require("../../system/classes/text.php");
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)

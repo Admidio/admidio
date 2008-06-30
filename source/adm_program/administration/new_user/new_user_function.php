@@ -20,7 +20,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/email_class.php");
+require("../../system/classes/email.php");
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)

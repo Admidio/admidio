@@ -189,7 +189,7 @@ while($row_orga = $g_db->fetch_object($result_orga))
     $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
                                            fol_locked, fol_public, fol_timestamp)
                                    VALUES ($row_orga->org_id, 'DOWNLOAD', 'download', '/adm_my_files',
-                                            0,1,SYSDATE())";
+                                            0,1,'".date("Y-m-d h:i:s", time())."')";
     $g_db->query($sql);
 }
 

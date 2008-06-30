@@ -29,8 +29,8 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/table_access_class.php");
-require_once(SERVER_PATH. "/adm_program/system/role_class.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
 
 class Folder extends TableAccess
 {

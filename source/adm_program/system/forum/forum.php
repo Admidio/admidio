@@ -40,7 +40,7 @@ function includeForumScript($db)
         switch ($forum_version)
         {
             case "phpBB2":
-                require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2_class.php");
+                require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
                 
             default:
                 return false;
@@ -56,7 +56,7 @@ function createForumObject($forum_type)
     switch ($forum_type)
     {
         case "phpBB2":
-            require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2_class.php");
+            require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
             return new Forum;
             
         default:
