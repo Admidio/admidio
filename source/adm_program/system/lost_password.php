@@ -162,8 +162,8 @@ require(THEME_SERVER_PATH. "/overall_footer.php");
 // Diese Funktion holt alle Variablen ab und speichert sie in einem array
 function getVars() 
 {
-  global $HTTP_POST_VARS;
-  foreach ($HTTP_POST_VARS as $key => $value) 
+  global $_POST;
+  foreach ($_POST as $key => $value) 
   {
     global $$key;
     $$key = $value;
