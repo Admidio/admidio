@@ -260,7 +260,8 @@ else
                                 $plg_icon_code = '<a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a>';
                             }
                             
-                            echo '<dt>'.$plg_icon_code.'<dd>&nbsp;</dd>';
+                            echo '<dt>'.$plg_icon_code.'</dt>
+                            <dd>&nbsp;</dd>';
                         }
                     echo '</dl>
                 </li>';
