@@ -15,12 +15,12 @@
  
 require_once("common.php");
 getVars();
-/*********************HTML_TEIL*******************************/
 
-// Html-Kopf ausgeben
-$g_layout['title'] = $g_organization." - Passwort aktivieren";
-
-require(THEME_SERVER_PATH. "/overall_header.php");
+// Systemmails und Passwort zusenden muessen aktiviert sein
+if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password_recovery'] != 1)
+{
+    $g_message->show("module_disabled");
+}
 
 if(isset($aid) && isset($usr_id))
 {
@@ -47,22 +47,17 @@ if(isset($aid) && isset($usr_id))
     else
     {
         $g_message->show("password_activation_id_not_valid");
-        die();
     }
 }
 else
 {
     $g_message->show("invalid");
-    die();
 }
-
-/***************************Seitenende***************************/
-require(THEME_SERVER_PATH. "/overall_footer.php");
 
 function getVars() 
 {
-  global $HTTP_GET_VARS;
-  foreach ($HTTP_GET_VARS as $key => $value) 
+  global $_GET;
+  foreach ($_GET as $key => $value) 
   {
     global $$key;
     $$key = $value;

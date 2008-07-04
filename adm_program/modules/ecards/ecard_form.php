@@ -355,7 +355,7 @@ $javascript = '
         {
             if (check())
             {
-                document.getElementById(ecardformid).action                 = "'.$HTTP_SERVER_VARS["PHP_SELF"].'?'.$_SERVER['QUERY_STRING'].'";
+                document.getElementById(ecardformid).action                 = "'.$_SERVER["PHP_SELF"].'?'.$_SERVER['QUERY_STRING'].'";
                 document.getElementById(ecardformid).target                 = "_self";
                 document.getElementById(ecardformid)["submit_action"].value = "send";
                 document.getElementById(ecardformid).submit();
