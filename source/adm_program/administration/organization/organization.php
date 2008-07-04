@@ -1226,6 +1226,12 @@ echo "
                         </dl>
                     </li>
                     <li class="smallFontSize">
+                        Hier können die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen,
+                        wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen
+                        werden als Systemmail verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden.
+                        Es sei denn der Server unterstützt keinen Mailversand.
+                        Das E-Mailmodul ist durch die Deaktivierung nicht betroffen.<br /><br />
+                        
                         Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und 
                         werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann 
                         der jeweilige Inhalt für diesen Bereich.<br /><br />

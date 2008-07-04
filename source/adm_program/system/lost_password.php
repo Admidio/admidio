@@ -14,14 +14,13 @@ require("classes/system_mail.php");
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-
-/*********************HTML_TEIL*******************************/
-
-// Html-Kopf ausgeben
-$g_layout['title'] = $g_organization." - Passwort vergessen?";
-
-require(THEME_SERVER_PATH. "/overall_header.php");
 getVars();
+
+// Systemmails und Passwort zusenden muessen aktiviert sein
+if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password_recovery'] != 1)
+{
+    $g_message->show("module_disabled");
+}
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
@@ -30,14 +29,12 @@ if (! empty($abschicken) && !$g_valid_login && $g_preferences['enable_mail_captc
     if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
     {
         $g_message->show("captcha_code");
-        die();
     }
 }
 if($g_valid_login)
 {
     $g_message->setForwardUrl("".$g_root_path."/adm_program/", 2000);
     $g_message->show("lost_password_allready_logged_in");   
-    die();
 }
 
 if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
@@ -61,7 +58,6 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
     if(strlen($row['usr_id']) == 0)
     {
         $g_message->show('lost_password_email_error',$empfaenger_email);    
-        die();
     }
 
     $user = new User($g_db, $row['usr_id']);
@@ -89,6 +85,13 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 }
 else
 {
+    /*********************HTML_TEIL*******************************/
+
+    // Html-Kopf ausgeben
+    $g_layout['title'] = $g_organization." - Passwort vergessen?";
+
+    require(THEME_SERVER_PATH. "/overall_header.php");
+
     echo'
     <div class="formLayout" id="profile_form">
         <div class="formHead">Passwort vergessen?</div>
@@ -152,10 +155,9 @@ else
             </span>
         </li>
     </ul>';
-}
 
-/***************************Seitenende***************************/
-require(THEME_SERVER_PATH. "/overall_footer.php");
+    require(THEME_SERVER_PATH. "/overall_footer.php");
+}
 
 //************************* Funktionen/Unterprogramme ***********/
 

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Login Form
  *
- * Version 1.2.1
+ * Version 1.2.2
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
@@ -229,19 +229,23 @@ else
                             // Rollenobjekt fuer 'Webmaster' anlegen
                             $role_webmaster = new Role($g_db, 'Webmaster');
 
-                            // E-Mail intern oder extern verschicken
-                            if($g_preferences['enable_mail_module'] != 1 
-                            || $role_webmaster->getValue("rol_mail_logout") != 1 )
+                            // Link bei Loginproblemen
+                            if($g_preferences['enable_password_recovery'] == 1
+                            && $g_preferences['enable_system_mails'] == 1)
                             {
-                                $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
+                                // neues Passwort zusenden
+                                $mail_link = "$g_root_path/adm_program/system/lost_password.php";
                             }
-                            else if($g_preferences['enable_password_recovery'] != 1) 
+                            elseif($g_preferences['enable_mail_module'] == 1 
+                            && $role_webmaster->getValue("rol_mail_logout") == 1)
                             {
+                                // Mailmodul aufrufen mit Webmaster als Ansprechpartner
                                 $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
                             }
                             else
                             {
-                                $mail_link = "$g_root_path/adm_program/system/lost_password.php";
+                                // direkte Mail an den Webmaster ueber einen externen Mailclient
+                                $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
                             }
 
                             if($plg_show_icons)
