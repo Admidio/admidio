@@ -150,9 +150,13 @@ elseif($_GET["job"]=="change")
 {
     $g_layout['title'] = "Album bearbeiten";
 }
-$g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
-    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />";
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+    <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
+    <script type="text/javascript">
+        var calPopUp = new CalendarPopup("calendardiv");
+        calPopUp.setCssPrefix("calendar");
+    </script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 
@@ -207,35 +211,30 @@ echo "
                 </dl>
             </li>";
 
-            //Beginn
-            echo"
+            // Beginn / Ende
+            echo '
             <li>
                 <dl>
-                    <dt><label for=\"pho_begin\">Beginn:</label></dt>
+                    <dt><label for="pho_begin">Beginn:</label></dt>
                     <dd>
-                        <script type=\"text/javascript\" id=\"js18\">
-                            var cal18 = new CalendarPopup(\"calendardiv\");
-                            cal18.setCssPrefix(\"calendar\");
-                        </script>
-                        <input type=\"text\" id=\"pho_begin\" name=\"pho_begin\" size=\"10\" tabindex=\"3\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_begin")."\" />
-                        <img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_begin,'anchor18','dd.MM.yyyy','pho_begin','pho_end'); \" id=\"anchor18\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-                        <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <input type="text" id="pho_begin" name="pho_begin" size="10" tabindex="3" maxlength="10" value="'. $photo_album->getValue("pho_begin").'" />
+                        <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:calPopUp.select(document.forms[0].pho_begin,\'ico_cal_pho_begin\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\'); " 
+                            id="ico_cal_pho_begin" style="vertical-align:middle; cursor:pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
+                        <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
-            </li>";
-
-            //Ende
-            echo"
+            </li>
             <li>
                 <dl>
-                    <dt><label for=\"pho_end\">Ende:</label></dt>
+                    <dt><label for="pho_end">Ende:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_end\" name=\"pho_end\" size=\"10\" maxlength=\"10\" value=\"". $photo_album->getValue("pho_end")."\">
-                        <img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].pho_end,'anchor17','dd.MM.yyyy','pho_begin','pho_end');\" id=\"anchor17\" style=\"vertical-align:middle;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                        <input type="text" id="pho_end" name="pho_end" size="10" maxlength="10" value="'. $photo_album->getValue("pho_end").'">
+                        <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:calPopUp.select(document.forms[0].pho_end,\'ico_cal_pho_end\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\');" 
+                            id="ico_cal_pho_end" style="vertical-align:middle; cursor:pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
                     </dd>
                 </dl>
-            </li>";
+            </li>';
 
             //Photographen
             echo"
