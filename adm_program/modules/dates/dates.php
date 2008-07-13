@@ -290,8 +290,8 @@ else
     
                         if ($date->getValue("dat_location") != "")
                         {
-                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;<strong></div>
-                            <div style="float: left;">'. $date->getValue("dat_location"). '</strong><br />';
+                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;</div>
+                            <div style="float: left;"><strong>'. $date->getValue("dat_location"). '</strong><br />';
                                 // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind, 
                                 // die jeweils laenger als 3 Zeichen sind
                                 $map_info_count = 0;
