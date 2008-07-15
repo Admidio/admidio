@@ -1,32 +1,30 @@
 <?php 
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_organizations
+ * Abstrakte Klasse steuert den Zugriff auf die entsprechenden Datenbanktabellen
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu einen Objekt einer Organisation zu erstellen. 
- * Eine Organisation kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Von dieser Klasse werden saemtliche Datenbankzugriffsklassen abgeleitet.
+ * Es stehen diverse Methoden zur Verfuegung, welche in den abgeleiteten Klassen
+ * durch vordefinierte Methoden angepasst werden koennen
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $orga = new TblOrganization($g_db);
+ * Folgende Funktionen stehen zur Verfuegung:
  *
- * Mit der Funktion getOrganization($shortname) kann die gewuenschte Organisation
- * ausgelesen werden.
- *
- * Folgende Funktionen stehen nun zur Verfuegung:
- *
- * update()         - Die Organisation wird mit den geaenderten Daten in die Datenbank 
- *                    zurueckgeschrieben
- * insert()         - Eine neue Organisation wird in die Datenbank geschrieben
  * clear()          - Die Klassenvariablen werden neu initialisiert
- * getPreferences() - gibt ein Array mit allen organisationsspezifischen Einstellungen
- *                    aus adm_preferences zurueck
- * getReferenceOrganizations($child = true, $parent = true)
- *                  - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
+ * countAllRecords()- Anzahl aller Datensaetze der Tabelle werden zurueckgegeben
+ * setArray($field_array)
+ *                  - es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
+ *                    uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
+ *                    Mit dieser Methode kann das Einlesen der Werte umgangen werden.
+ * setValue($field_name, $field_value) 
+ *                  - setzt einen Wert fuer ein bestimmtes Feld der Tabelle
+ * getValue($field_name)- gibt den Wert eines Feldes der Tabelle zurueck
+ * save()           - die aktuellen Daten werden in die Datenbank zurueckgeschrieben
+ *                    Es wird automatisch ein Update oder Insert erstellt
+ * delete()         - der aktuelle Datensatz wird aus der Tabelle geloescht
  *
  *****************************************************************************/
 
@@ -144,7 +142,9 @@ class TableAccess
         return $row['count'];
     }
     
-    // Methode uebernimmt alle Werte eines Arrays in das Field-Array
+    // es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
+    // uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
+    // Mit dieser Methode kann das Einlesen der Werte umgangen werden.
     function setArray($field_array)
     {
         foreach($field_array as $field => $value)

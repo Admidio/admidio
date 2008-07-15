@@ -7,32 +7,23 @@
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu einen Userobjekt zu erstellen.
+ * Diese Klasse dient dazu ein Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Folgende Funktionen stehen nun zur Verfuegung:
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
  * getUser($user_id)    - ermittelt die Daten des uebergebenen Benutzers
- * clear()              - Die Klassenvariablen werden neu initialisiert
- * setValue($field_name, $field_value) 
- *                      - setzt einen Wert fuer ein bestimmtes Feld
- *                        der adm_user oder der adm_user_fields Tabelle
- * getValue($field_name)- gibt den Wert eines Feldes aus adm_user oder der 
- *                        adm_user_fields zurueck
  * getProperty($field_name, $property) 
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
- * save($set_change_date = true) 
- *                      - User wird mit den geaenderten Daten in die Datenbank
- *                        zurueckgeschrieben bwz. angelegt
- * delete()             - Der gewaehlte User wird aus der Datenbank geloescht
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
- * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
- *                        Rolle "Webmaster" ist
  * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
  *                        Users einsehen darf
- * viewRole             - Ueberprueft ob der User eine Uebergebene Rolle(Liste)
+ * viewRole             - Ueberprueft ob der User eine uebergebene Rolle(Liste)
  *                        einsehen darf
+ * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
+ *                        Rolle "Webmaster" ist
  *
  *****************************************************************************/
 
@@ -423,7 +414,7 @@ class User extends TableAccess
         return $vcard;
     }
     
-    // Funktion prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags, 
+    // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags, 
     // welche Rollen der User einsehen darf
     function checkRolesRight($right = "")
     {
@@ -439,6 +430,7 @@ class User extends TableAccess
                                             "rol_mail_logout" => "0", "rol_mail_login" => "0", 
                                             "rol_photo" => "0", "rol_profile" => "0", 
                                             "rol_weblinks" => "0", "rol_all_lists_view" => "0");
+                $this->b_webmaster = 0;
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql    = "SELECT *
@@ -466,6 +458,12 @@ class User extends TableAccess
                                 $tmp_roles_rights[$key] = "1";
                             }
                         }
+                    }
+                    
+                    // Webmasterflag setzen
+                    if($row['rol_name'] == "Webmaster")
+                    {
+                        $this->b_webmaster = 1;
                     }
                     
                     // Listenansichtseinstellung merken
@@ -498,12 +496,12 @@ class User extends TableAccess
                 }
             }
 
-            if($this->roles_rights[$right] == 1)
+            if(strlen($right) == 0 || $this->roles_rights[$right] == 1)
             {
                 return true;
             }
         }
-        return false;
+        return 0;
     }
 
     // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
@@ -653,7 +651,7 @@ class User extends TableAccess
         return $view_profile;
     }
     
-    // Funktion prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf    
+    // Methode prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf    
     function viewRole($rol_id)
     {
         $view_role = false;
@@ -673,42 +671,11 @@ class User extends TableAccess
         return $view_role;
     }
 
+    // Methode liefert true zurueck, wenn der User Mitglied der Rolle "Webmaster" ist
     function isWebmaster()
     {
-        if($this->webmaster == -1 && $this->db_fields['usr_id'] > 0)
-        {
-            // Status wurde noch nicht ausgelesen
-            global $g_current_organization;
-            
-            $sql    = "SELECT rol_id
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                        WHERE mem_usr_id = ". $this->db_fields['usr_id']. "
-                          AND mem_valid  = 1
-                          AND mem_rol_id = rol_id
-                          AND rol_name   = 'Webmaster'
-                          AND rol_valid  = 1 
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = ". $g_current_organization->getValue("org_id");
-            $this->db->query($sql);           
-            
-            if($this->db->num_rows() > 0)
-            {
-                $this->webmaster = 1;
-            }
-            else
-            {
-                $this->webmaster = 0;
-            }
-        }
-        
-        if ($this->webmaster == 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        $this->checkRolesRight();
+        return $this->webmaster;
     }
 }
 ?>
