@@ -1,13 +1,14 @@
 <?php
 /******************************************************************************
- * Diese Klasse dient dazu ein Systemmails zu verschicken
+ * Diese Klasse dient dazu Systemmails zu verschicken
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  * 
- * Methoden:
+ * Neben den Methoden der Elternklasse Email, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
  * getMailText($sysmail_id, &$user)
  *                  - diese Methode liest den Mailtext aus der DB und ersetzt 
@@ -58,9 +59,10 @@ class SystemMail extends Email
         $mailSrcText = preg_replace ("/%user_first_name%/", $user->getValue("Vorname"),  $mailSrcText);
         $mailSrcText = preg_replace ("/%user_last_name%/",  $user->getValue("Nachname"), $mailSrcText);
         $mailSrcText = preg_replace ("/%user_login_name%/", $user->getValue("usr_login_name"), $mailSrcText);
-        $mailSrcText = preg_replace ("/%user_password%/", $user->real_password, $mailSrcText);
         $mailSrcText = preg_replace ("/%user_email%/", $user->getValue("E-Mail"),   $mailSrcText);
         $mailSrcText = preg_replace ("/%webmaster_email%/", $g_preferences['email_administrator'],  $mailSrcText);
+        $mailSrcText = preg_replace ("/%organization_short_name%/", $g_current_organization->getValue("org_shortname"), $mailSrcText);
+        $mailSrcText = preg_replace ("/%organization_long_name%/",  $g_current_organization->getValue("org_longname"), $mailSrcText);
         $mailSrcText = preg_replace ("/%organization_homepage%/",   $g_current_organization->getValue("org_homepage"), $mailSrcText);
         
         // zusaetzliche Variablen ersetzen

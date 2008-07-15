@@ -20,7 +20,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/email.php");
+require("../../system/classes/system_mail.php");
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
@@ -115,16 +115,9 @@ if($req_mode == 1 || $req_mode == 3)
     if($g_preferences['enable_system_mails'] == 1)
     {
         // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
-        $email = new Email();
-        $email->setSender($g_preferences['email_administrator']);
-        $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        $email->setSubject("Anmeldung auf ". $g_current_organization->getValue("org_homepage"));
-        $email->setText("Hallo ". $user->getValue("Vorname"). ",\n\ndeine Anmeldung auf ".
-            $g_current_organization->getValue("org_homepage"). " wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : ".
-            $user->getValue("usr_login_name"). "\nund dem Passwort auf der Homepage einloggen.\n\n".
-            "Sollten noch Fragen bestehen, schreib eine E-Mail an ". $g_preferences['email_administrator'].
-            " .\n\nViele Grüße\nDie Webmaster");
-        if($email->sendEmail() == true)
+        $sysmail = new SystemMail($g_db);
+        $sysmail->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+        if($sysmail->sendSystemMail("SYSMAIL_REGISTRATION_USER", $user) == true)
         {
             $err_code = "assign_login_mail";
         }

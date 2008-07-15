@@ -1239,9 +1239,10 @@ echo "
                         <strong>%user_first_name%</strong> - Vorname des Benutzers aus dem jeweiligen Mailkontext<br />
                         <strong>%user_last_name%</strong> - Nachname des Benutzers aus dem jeweiligen Mailkontext<br />
                         <strong>%user_login_name%</strong> - Benutzername des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%user_password%</strong> - Passwort des Benutzers aus dem jeweiligen Mailkontext<br />
                         <strong>%user_email%</strong> - E-Mail des Benutzers aus dem jeweiligen Mailkontext<br />
                         <strong>%webmaster_email%</strong> - Systememailadresse der Organisation<br />
+                        <strong>%organization_short_name%</strong> - Kurzbezeichnung der Organisation<br />
+                        <strong>%organization_long_name%</strong> - Name der Organisation<br />
                         <strong>%organization_homepage%</strong> - URL der Webseite der Organisation<br /><br />
                     </li>';
 
@@ -1252,9 +1253,32 @@ echo "
                     </li>';
                     $text->getText("SYSMAIL_REGISTRATION_WEBMASTER");
                     echo '<li>
-                        Benachrichtung des Webmasters nach einer Registrierung:<br />
+                        <br />Benachrichtung des Webmasters nach einer Registrierung:<br />
                         <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
-                    </li>                    
+                    </li>';                  
+                    $text->getText("SYSMAIL_NEW_PASSWORD");
+                    echo '<li>
+                        <br />Neues Passwort zuschicken:<br />
+                    </li>
+                    <li class="smallFontSize">
+                        Zusätzliche Variablen:<br />
+                        <strong>%variable1%</strong> - Neues Passwort des Benutzers<br />
+                    </li>
+                    <li>
+                        <textarea id="SYSMAIL_NEW_PASSWORD" name="SYSMAIL_NEW_PASSWORD" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                    </li>';
+                    $text->getText("SYSMAIL_ACTIVATION_LINK");
+                    echo '<li>
+                        <br />Neues Passwort mit Aktivierungslink:<br />
+                    </li>
+                    <li class="smallFontSize">
+                        Zusätzliche Variablen:<br />
+                        <strong>%variable1%</strong> - Neues Passwort des Benutzers<br />
+                        <strong>%variable2%</strong> - Aktivierungslink für das neue Passwort<br />
+                    </li>
+                    <li>
+                        <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                    </li>
                 </ul>
             </div>
         </div>';
