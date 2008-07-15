@@ -202,7 +202,8 @@ elseif($_GET["mode"] == 4)
         // Mail an den User mit den Loginaten schicken
         $sysmail = new SystemMail($g_db);
         $sysmail->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        if($sysmail->sendSystemMail("SYSMAIL_NEW_LOGIN_DATA", $user) == true)
+        $sysmail->setVariable(1, $user->real_password);
+        if($sysmail->sendSystemMail("SYSMAIL_NEW_PASSWORD", $user) == true)
         {
             $err_code = "mail_send";
             $err_text = $user->getValue("E-Mail");

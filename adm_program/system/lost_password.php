@@ -70,7 +70,8 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
     
     $sysmail = new SystemMail($g_db);
     $sysmail->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-    $sysmail->setVariable(1, $g_root_path."/adm_program/system/password_activation.php?usr_id=3D".$user->getValue("usr_id")."&aid=3D".$activation_id);
+    $sysmail->setVariable(1, $user->real_password);
+    $sysmail->setVariable(2, $g_root_path."/adm_program/system/password_activation.php?usr_id=3D".$user->getValue("usr_id")."&aid=3D".$activation_id);
     if($sysmail->sendSystemMail("SYSMAIL_ACTIVATION_LINK", $user) == true)
     {
         $user->save();

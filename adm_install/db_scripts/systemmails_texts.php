@@ -11,7 +11,7 @@
 
 $systemmails_texts = array(
 
-    'SYSMAIL_REGISTRATION_USER' => '#Betreff# Anmeldung auf %organization_homepage%
+    'SYSMAIL_REGISTRATION_USER' => '#Betreff# Anmeldung bei %organization_long_name%
 #Inhalt# Hallo %user_first_name%,
 
 deine Anmeldung auf %organization_homepage% wurde bestätigt.
@@ -24,7 +24,7 @@ Sollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .
 Viele Grüße
 Die Webmaster',
 
-    'SYSMAIL_REGISTRATION_WEBMASTER' => '#Betreff# Neue Registrierung auf %organization_homepage%
+    'SYSMAIL_REGISTRATION_WEBMASTER' => '#Betreff# Neue Registrierung bei %organization_long_name%
 #Inhalt# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.
 
 Nachname: %user_last_name%
@@ -34,12 +34,12 @@ E-Mail:   %user_email%
 
 Diese Nachricht wurde automatisch erzeugt.',
 
-    'SYSMAIL_NEW_LOGIN_DATA' => '#Betreff# Logindaten für %organization_homepage%
+    'SYSMAIL_NEW_PASSWORD' => '#Betreff# Logindaten für %organization_homepage%
 #Inhalt# Hallo %user_first_name%,
 
 du erhälst deine Logindaten für %organization_homepage% .
 Benutzername: %user_login_name%
-Passwort: %user_password%
+Passwort: %variable1%
 
 Das Passwort wurde automatisch generiert.
 Du solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.
@@ -54,11 +54,11 @@ du hast ein neues Passwort angefordert!
 
 Hier sind deine Daten:
 Benutzername: %user_login_name%
-Passwort: %user_password%
+Passwort: %variable1%
 
 Damit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:
 
-%variable1%
+%variable2%
 
 Das Passwort wurde automatisch generiert.
 Du solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.
