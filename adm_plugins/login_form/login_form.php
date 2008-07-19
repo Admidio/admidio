@@ -2,7 +2,7 @@
 /******************************************************************************
  * Login Form
  *
- * Version 1.2.2
+ * Version 1.2.3
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
@@ -104,8 +104,8 @@ if($g_valid_login == 1)
         </li>
         <li>
             <dl>
-                <dt>Eingeloggt seit:</dt>
-                <dd>'. mysqldatetime("h:i", $g_current_user->getValue("usr_actual_login")). ' Uhr</dd>
+                <dt>Aktiv seit:</dt>
+                <dd>'. mysqldatetime("h:i", $g_current_session->getValue("ses_begin")). ' Uhr</dd>
             </dl>
         </li>
         <li>

@@ -241,9 +241,14 @@ if($g_current_session->getValue("ses_id") > 0)
             $time_gap = time() - mysqlmaketimestamp($g_current_session->getValue("ses_timestamp"));
             
             // wenn länger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
-            if ($time_gap < $g_preferences['logout_minutes'] * 60
-            || $b_auto_login == true) 
+            if($time_gap < $g_preferences['logout_minutes'] * 60 || $b_auto_login == true) 
             {
+                // bei Autologin ggf. den Beginn aktualisieren, wenn die Luecke zu gross geworden ist
+                if($time_gap > $g_preferences['logout_minutes'] * 60 && $b_auto_login == true)
+                {
+                    $g_current_session->setValue("ses_begin", date("Y-m-d H:i:s", time()));
+                }
+
                 // User-Login ist gueltig
                 $g_valid_login = true;
                 $g_current_session->setValue("ses_timestamp", date("Y-m-d H:i:s", time()));
