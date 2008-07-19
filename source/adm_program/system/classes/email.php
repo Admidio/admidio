@@ -304,7 +304,7 @@ function prepareBody()
                 }
                 $thePart    .= $theData."\n";
             }
-            $this->mail_body = $this->mail_body. $thePart. "\n\n";
+            $this->mail_body = $this->mail_body. "\n". $thePart. "\n\n";
         }
         // Das Ende der Mail mit der Boundary kennzeichnen...
         $this->mail_body = $this->mail_body. "--". $this->mailBoundary. "--";
