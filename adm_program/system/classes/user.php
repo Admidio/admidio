@@ -122,7 +122,7 @@ class User extends TableAccess
     // die Methode wird innerhalb von clear() aufgerufen
     function _clear()
     {
-        $this->webmaster = -1;
+        $this->webmaster = 0;
         $this->b_set_last_change = true;
         
         // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
@@ -430,7 +430,6 @@ class User extends TableAccess
                                             "rol_mail_logout" => "0", "rol_mail_login" => "0", 
                                             "rol_photo" => "0", "rol_profile" => "0", 
                                             "rol_weblinks" => "0", "rol_all_lists_view" => "0");
-                $this->b_webmaster = 0;
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql    = "SELECT *
@@ -461,9 +460,9 @@ class User extends TableAccess
                     }
                     
                     // Webmasterflag setzen
-                    if($row['rol_name'] == "Webmaster")
+                    if($row['mem_usr_id'] > 0 && $row['rol_name'] == "Webmaster")
                     {
-                        $this->b_webmaster = 1;
+                        $this->webmaster = 1;
                     }
                     
                     // Listenansichtseinstellung merken
