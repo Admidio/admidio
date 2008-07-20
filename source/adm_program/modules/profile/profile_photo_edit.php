@@ -19,6 +19,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/classes/image.php");
 
 //pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
@@ -119,14 +120,14 @@ elseif( isset($_POST["upload"]))
     }
 
     //Kontrolle ob Bilder ausgewaehlt wurden
-    if(!file_exists($_FILES["bilddatei"]["tmp_name"]))
+    if(file_exists($_FILES["bilddatei"]["tmp_name"]) == false)
     {
         $g_message->show("profile_photo_nopic");
     }
 
     //Dateiendung
-    $bildinfo=getimagesize($_FILES["bilddatei"]["tmp_name"]);
-    if ($_FILES["bilddatei"]["name"]!=NULL && $bildinfo['mime']!="image/jpeg")
+    $bildinfo = getimagesize($_FILES["bilddatei"]["tmp_name"]);
+    if ($bildinfo['mime'] != "image/jpeg" && $bildinfo['mime'] != "image/png")
     {
         $g_message->show("dateiendungphotoup");
     }
@@ -203,48 +204,9 @@ if($job=="upload")
         echo "</div>
 
         <div class=\"formBody\">";
-            $photo_max_x_size = 130;
-            $photo_max_y_size = 170;
-
-            //Ermittlung der Original Bildgroesse
-            $bildgroesse = getimagesize($_FILES["bilddatei"]["tmp_name"]);
-
-            //Errechnung seitenverhaeltniss
-            $seitenverhaeltnis = $bildgroesse[0] / $bildgroesse[1];
-
-            // schauen, ob das Bild von der Groesse geaendert werden muss
-            if($bildgroesse[0] > $photo_max_x_size
-            || $bildgroesse[1] > $photo_max_y_size)
-            {
-                //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
-                @ini_set('memory_limit', '50M');
-                
-                //x-Seite soll scalliert werden
-                if(($bildgroesse[0]/$photo_max_x_size) >= ($bildgroesse[1]/$photo_max_y_size))
-                {
-                    $photo_x_size = $photo_max_x_size;
-                    $photo_y_size = round($photo_max_x_size / $seitenverhaeltnis);
-                }
-
-                //y-Seite soll scalliert werden
-                if(($bildgroesse[0] / $photo_max_x_size) < ($bildgroesse[1] / $photo_max_y_size))
-                {
-                    $photo_x_size = round($photo_max_y_size * $seitenverhaeltnis);
-                    $photo_y_size = $photo_max_y_size;
-                }
-
-                // Erzeugung neues Bild
-                $resized_user_photo = imagecreatetruecolor($photo_x_size, $photo_y_size);
-
-                //Aufrufen des Originalbildes
-                $bilddaten = imagecreatefromjpeg($_FILES["bilddatei"]["tmp_name"]);
-
-                //kopieren der Daten in neues Bild
-                imagecopyresampled($resized_user_photo, $bilddaten, 0, 0, 0, 0, $photo_x_size, $photo_y_size, $bildgroesse[0], $bildgroesse[1]);
-
-                imagejpeg($resized_user_photo, $_FILES["bilddatei"]["tmp_name"], 95);
-                imagedestroy($resized_user_photo);
-            }
+            // Bild auf entsprechende Groesse anpassen
+            $user_image = Image::getImageObject($_FILES["bilddatei"]["tmp_name"]);
+            $user_image->resize(130, 170);
 
             // Foto aus PHP-Temp-Ordner einlesen
             $user_photo = addslashes(fread(fopen($_FILES["bilddatei"]["tmp_name"], "r"), $_FILES["bilddatei"]["size"]));
