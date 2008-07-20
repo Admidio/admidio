@@ -12,6 +12,10 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
+// setzt die Ausfuehrungszeit des Scripts auf 8 Min., falls viele Daten importiert werden
+// allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
+@set_time_limit(500);
+
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
