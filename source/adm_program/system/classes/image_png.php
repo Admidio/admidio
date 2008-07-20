@@ -43,7 +43,7 @@ class ImagePNG extends ImageMain
         {
             $pathAndFilename = $this->imagePath;
         }
-        return imagepng($image, $pathAndFilename, $quality);
+        return imagepng($image, $pathAndFilename);
     }
 }
 ?>
