@@ -20,15 +20,8 @@ define('ADMIDIO_VERSION', '2.1.0b');
 
 // verschiedene Pfade
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
-// Fallunterscheidung für HTTPS
-if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on")
-{
-    define('CURRENT_URL', "https://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
-}
-else
-{
-    define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
-}
+// aktuelle aufgerufene Url (klappt nur so, da SSL-Proxies nicht ueber _SERVER ausgelesen werden koennen)
+define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). "?". $_SERVER['QUERY_STRING']);
 
 
 // Defines fuer alle Datenbanktabellen
