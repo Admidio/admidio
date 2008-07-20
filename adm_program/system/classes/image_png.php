@@ -36,8 +36,9 @@ class ImagePNG extends ImageMain
     
     // Methode kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der 
     // hinterlegten Datei des Objekts
+    // Quality fuerht bei PNGs zu Problemen, deshalb hier nur als Dummy-Uebergabe
     // Rueckgabe: true, falls erfolgreich
-    function copyToFile($image, $pathAndFilename = "", $quality = 95)
+    function copyToFile($image, $pathAndFilename = "", $quality = 100)
     {
         if(strlen($pathAndFilename) == 0)
         {
