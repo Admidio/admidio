@@ -18,7 +18,7 @@ class Image
 {
     // Methode prueft, welcher Bildtyp (JPG,PNG,GIF) vorhanden ist und gibt das
     // entsprechende Objekt zurueck
-    function getImageObject($pathAndFilename)
+    function createImageObject($pathAndFilename)
     {
         if(file_exists($pathAndFilename))
         {

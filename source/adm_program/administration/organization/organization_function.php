@@ -103,7 +103,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
             $_POST['forum_pw'] = $g_preferences['forum_pw'];
         }
         
-        $forum_test = createForumObject($_POST['forum_version']);
+        $forum_test = Forum::createForumObject($_POST['forum_version']);
         
         if($_POST['forum_sqldata_from_admidio'] == 0)
         {

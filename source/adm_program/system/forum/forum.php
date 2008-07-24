@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktion zum Erstellen eines Forenobjektes
+ * Factory-Klasse welches das relevante Forumobjekt erstellt
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -9,58 +9,60 @@
  *
  *****************************************************************************/
 
-
-function includeForumScript($db)
+class Forum
 {
-    global $g_organization;
-    $forum_enable  = 0;
-    $forum_version = 0;
-    
-    $sql    = "SELECT prf_name, prf_value 
-                 FROM ". TBL_PREFERENCES. ", ". TBL_ORGANIZATIONS. "
-                WHERE org_shortname = '". $g_organization. "'
-                  AND prf_org_id = org_id 
-                  AND prf_name IN ('forum_version','enable_forum_interface')";
-    $result = $db->query($sql);
-    
-    while($row = $db->fetch_array($result))
+    function includeForumScript($db)
     {
-        if($row['prf_name'] == 'forum_version')
+        global $g_organization;
+        $forum_enable  = 0;
+        $forum_version = 0;
+        
+        $sql    = "SELECT prf_name, prf_value 
+                     FROM ". TBL_PREFERENCES. ", ". TBL_ORGANIZATIONS. "
+                    WHERE org_shortname = '". $g_organization. "'
+                      AND prf_org_id = org_id 
+                      AND prf_name IN ('forum_version','enable_forum_interface')";
+        $result = $db->query($sql);
+        
+        while($row = $db->fetch_array($result))
         {
-            $forum_version = $row['prf_value'];
+            if($row['prf_name'] == 'forum_version')
+            {
+                $forum_version = $row['prf_value'];
+            }
+            else
+            {
+                $forum_enable = $row['prf_value'];
+            }
         }
-        else
+        
+        if($forum_enable)
         {
-            $forum_enable = $row['prf_value'];
+            switch ($forum_version)
+            {
+                case "phpBB2":
+                    require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
+                    
+                default:
+                    return false;
+            }    
         }
     }
-    
-    if($forum_enable)
+
+
+    // Funktion erstellt die Schnittstelle zum entsprechenden Forum
+
+    function createForumObject($forum_type)
     {
-        switch ($forum_version)
+        switch ($forum_type)
         {
             case "phpBB2":
                 require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
+                return new Forum;
                 
             default:
                 return false;
-        }    
-    }
-}
-
-
-// Funktion erstellt die Schnittstelle zum entsprechenden Forum
-
-function createForumObject($forum_type)
-{
-    switch ($forum_type)
-    {
-        case "phpBB2":
-            require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
-            return new Forum;
-            
-        default:
-            return false;
+        }
     }
 }
 
