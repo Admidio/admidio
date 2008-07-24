@@ -58,7 +58,7 @@ class Forum
         {
             case "phpBB2":
                 require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
-                return new Forum;
+                return new PhpBB2;
                 
             default:
                 return false;
