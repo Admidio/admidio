@@ -82,7 +82,7 @@ $g_db = new MySqlDB();
 $g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 // Script fuer das Forum ermitteln und includen, bevor die Session erstellt wird
-includeForumScript($g_db);
+Forum::includeForumScript($g_db);
 
 // PHP-Session starten
 if(headers_sent() == false)
@@ -315,7 +315,7 @@ if($g_preferences['enable_forum_interface'])
     }
     else
     {
-        $g_forum = createForumObject($g_preferences['forum_version']);
+        $g_forum = Forum::createForumObject($g_preferences['forum_version']);
         $_SESSION['g_forum'] =& $g_forum;
     }
         

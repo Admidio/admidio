@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer das Forum phpBB
+ * Klasse fuer das Forum phpBB Version 2.0.x
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -10,25 +10,21 @@
  * Diese Klasse dient dazu einen Forumsobjekt zu erstellen.
  * Das Forum kann ueber diese Klasse verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $forum = new Forum($server, $database, $db_user, $db_password);
+ * Das Objekt wird erzeugt durch Aufruf der Factory-Klassenmethode mit Angabe 
+ * der entsprechenden Forumschnittstelle:
+ * $forum = Forum::createForumObject("phpBB2");
  *
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
  * connect()              - Stellt die Verbindung zur Datenbank her
- *
  * userClear()            - Userdaten und Session_Valid loeschen
- *
  * initialize()           - Die notwendigen Einstellungen des Forums werden eingelesen und die
  *                          Session im Forum registriert.
- *
  * userExists($username)  - Es wird geprueft, ob es den User (Username) schon im Forum gibt.
  *                          $username = Der login_name des Users
  *                          RETURNCODE = TRUE  - Den User gibt es
  *                          RETURNCODE = FALSE - Den User gibt es nicht
- *
  * userLogin($usr_id, $login_name, $password_crypt, $forum_user, $forum_password, $forum_email)
  *                        - Meldet den User (Username) im Forum an.
  *                          $usr_id             = Der aktuelle Admidio user_id des Users
@@ -39,46 +35,36 @@
  *                          $forum_email        = Der aktuelle Admidio email des Users
  *                          RETURNCODE  = TRUE  - User angemeldet
  *                          RETURNCODE  = FALSE - User nicht angemeldet
- *
  * userLogoff()               - Meldet den aktuellen User im Forum ab.
  *                          RETURNCODE = TRUE  - User abgemeldet
  *                          RETURNCODE = FALSE - User nicht abgemeldet
- *
  * userDaten($username)   - Funktion holt die Userdaten
  *                          $username = Der aktuelle login_name des Users
- *
  * getUserPM($username)   - Funktion prueft auf neue Private Messages (PM) vorliegen und 
  *                          gibt diese als String zurueck
- *
  * checkAdmin($username, $password_crypt)
  *                        - Funktion ueberprueft ob der Admin Account im Forum ungleich des 
  *                          Admidio Accounts ist. Falls ja wird der Admidio Account 
  *                          (Username & Password) ins Forum uebernommen.
  *                          $username       = Login_name des Webmasters
  *                          $password_crypt = Crypt Password des Webmasters
- *
  * checkPassword($password_admidio, $password_forum, $forum_userid)
  *                        - Funktion ueberprueft ob das Password im Forum ungleich des Admidio Passwords ist.
  *                          Falls ja wird das Admidio Password ins Forum uebernommen.
  *                          $password_admidio   = Crypt Admidio Password
  *                          $password_forum     = Crypt Forum Password 
  *                          $forum_userid       = UserID im Forum
- *
  * userSave($username, $forum_useraktiv, $forum_password, $forum_email, $forum_old_username)
  *                        - Funktion speichert die Daten eines Users
  *                          existiert der User noch nicht, wird er angelegt, ansonsten aktualisiert
- *
  * userInsert($username, $forum_useraktiv, $forum_password, $forum_email)
- *
  * userDelete($username)          - Loescht einen User im Forum
  *                          $username  = Der login_name des Users, der geloescht werden soll
  *                          RETURNCODE = TRUE  - User geloescht
  *                          RETURNCODE = FALSE - User nicht geloescht
- * 
  * checkSession($admidio_usr_login_name)
  *                        - diese Funktion bekommt den Admidio-Session-Status (eingeloggt ja/nein) uebergeben
  *                          und prueft dann, ob die Session im Forum aktualisiert werden muss
- *
  * session($aktion, $id)  - Kuemmert sich um die Sessions und das Cookie des Forums
  *                          $aktion = "logoff"  Die Session wird abgemeldet
  *                          $aktion = "update"  Die Session wird aktualisiert
@@ -86,7 +72,7 @@
  *
  *****************************************************************************/
 
-class Forum
+class PhpBB2
 {
     // Allgemeine Variablen
     var $session_valid;
@@ -114,7 +100,7 @@ class Forum
     var $neuePM;                    // Nachrichten im Forum
 
     // Konstruktor
-    function Forum()
+    function PhpBB2()
     {
         $this->forum_db    = new MySqlDB();
     }

@@ -205,7 +205,7 @@ if($job=="upload")
 
         <div class=\"formBody\">";
             // Bild auf entsprechende Groesse anpassen
-            $user_image = Image::getImageObject($_FILES["bilddatei"]["tmp_name"]);
+            $user_image = Image::createImageObject($_FILES["bilddatei"]["tmp_name"]);
             $user_image->resize(130, 170);
 
             // Foto aus PHP-Temp-Ordner einlesen
