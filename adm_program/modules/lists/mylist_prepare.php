@@ -116,6 +116,23 @@ foreach($_POST as $key => $value)
                 elseif($g_current_user->getPropertyById($act_field_id, "usf_type") == "NUMERIC")
                 {
                     $type = "int";
+                    if($g_current_user->getPropertyById($act_field_id, "usf_name") == "Geschlecht")
+                    {
+                        // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
+                        $value = strtoupper($value);
+                        if($value == "U" )
+                        {
+                            $value = "0";
+                        }
+                        elseif($value == "M" )
+                        {
+                            $value = "1";
+                        }
+                        elseif($value == "W" )
+                        {
+                            $value = "2";
+                        }
+                    }
                 }
                 elseif($g_current_user->getPropertyById($act_field_id, "usf_type") == "DATE")
                 {

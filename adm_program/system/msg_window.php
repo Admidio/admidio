@@ -139,6 +139,16 @@ echo "
                             <td>Sucht alle Benutzer, die nach dem 01.03.1986 geboren wurden</td>
                          </tr>
                          <tr>
+                            <td>Geb. Alter</td>
+                            <td><b>&gt; 18j</b></td>
+                            <td>Sucht alle Benutzer, die älter als 18 Jahre sind</td>
+                         </tr>
+                         <tr>
+                            <td>Geschlecht</td>
+                            <td><b>M/W/U</b></td>
+                            <td>Sucht nach Männlich, Weiblich, Unbekannt</td>
+                         </tr>
+                         <tr>
                             <td>Ort</td>
                             <td><b>Köln oder Bonn</b></td>
                             <td>Sucht alle Benutzer, die aus Köln oder Bonn kommen</td>

@@ -158,19 +158,51 @@ class ConditionParser
                         }
                         elseif($this->m_str_arr[$this->m_count] == "{")
                         {
-                            $this->m_dest = $this->m_dest. " < ";
+                            // bastwe: invert condition on age search
+                            if( $field_type == "date" && strstr(strtoupper($str_src), "J") != FALSE )
+                            {
+                                $this->m_dest = $this->m_dest. " > ";
+                            } 
+                            else 
+                            { 
+                                $this->m_dest = $this->m_dest. " < ";
+                            }
                         }
                         elseif($this->m_str_arr[$this->m_count] == "}")
                         {
-                            $this->m_dest = $this->m_dest. " > ";
+                            // bastwe: invert condition on age search
+                            if( $field_type == "date" && strstr(strtoupper($str_src), "J") != FALSE ) 
+                            {
+                                $this->m_dest = $this->m_dest. " < ";
+                            } 
+                            else 
+                            { 
+                                $this->m_dest = $this->m_dest. " > ";
+                            }
                         }
                         elseif($this->m_str_arr[$this->m_count] == "[")
                         {
-                            $this->m_dest = $this->m_dest. " <= ";
+                            // bastwe: invert condition on age search
+                            if( $field_type == "date" && strstr(strtoupper($str_src), "J") != FALSE ) 
+                            {
+                                $this->m_dest = $this->m_dest. " >= ";
+                            } 
+                            else 
+                            {
+                                $this->m_dest = $this->m_dest. " <= ";
+                            }
                         }
                         elseif($this->m_str_arr[$this->m_count] == "]")
                         {
-                            $this->m_dest = $this->m_dest. " >= ";
+                            // bastwe: invert condition on age search
+                            if( $field_type == "date" && strstr(strtoupper($str_src), "J") != FALSE ) 
+                            {
+                                $this->m_dest = $this->m_dest. " <= ";
+                            } 
+                            else 
+                            {
+                                $this->m_dest = $this->m_dest. " >= ";
+                            }
                         }
                         else
                         {
@@ -271,6 +303,19 @@ class ConditionParser
     function getFormatDate($date)
     {
         $format_date = "";
+
+        // bastwe: check if user searches for age
+        $last = substr($date, -1);
+        $last = strtoupper($last);
+        if( $last == "J" ) 
+        {
+            $age = substr($date, 0, -1);
+            $now_year= date("Y");
+            $now_day = date("d");
+            $now_month = date("m");
+            $ret = date("Y-m-d", mktime(0,0,0, $now_month, $now_day, $now_year - $age));
+            return "'". $ret. "'";
+        }
         
         if(strlen($date) <= 10 && strlen($date) >= 6)
         {
