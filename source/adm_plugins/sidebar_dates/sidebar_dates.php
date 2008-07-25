@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.1.0
+ * Version 1.1.1
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -65,6 +65,7 @@ else
 }
 
 $plg_act_date = date("Y-m-d", time());
+
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
@@ -83,8 +84,8 @@ $sql    = "SELECT * FROM ". TBL_DATES. "
 			WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
 				  OR (   dat_global   = 1
 					 AND dat_org_shortname IN ($plg_organizations) ))
-			  AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d') >= '$plg_act_date'
-                  OR DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$plg_act_date' ) 
+			  AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '$plg_act_date'
+                  OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$plg_act_date 00:00:00' ) 
 			ORDER BY dat_begin ASC
 			LIMIT $plg_dates_count";
 $plg_result = $g_db->query($sql);
