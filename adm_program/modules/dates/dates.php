@@ -146,8 +146,8 @@ else
     // Termine an einem Tag suchen
     if(strlen($sql_datum) > 0)
     {
-        $conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') <= '$sql_datum'
-                          AND DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$sql_datum' 
+        $conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d')       <= '$sql_datum'
+                          AND DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$sql_datum 00:00:00' 
                         ORDER BY dat_begin ASC ";       
     }
     //fuer alte Termine...
@@ -157,11 +157,11 @@ else
                           AND DATE_FORMAT(dat_end, '%Y-%m-%d')   < '$act_date' 
                         ORDER BY dat_begin DESC ";
     }
-    //... ansonsten fuer neue Termine
+    //... ansonsten fuer kommende Termine
     else
     {
-        $conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d') >= '$act_date'
-                              OR DATE_FORMAT(dat_end, '%Y-%m-%d')   >= '$act_date' ) 
+        $conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '$act_date'
+                              OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$act_date 00:00:00' ) 
                         ORDER BY dat_begin ASC ";
     }
 }
