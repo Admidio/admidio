@@ -10,12 +10,11 @@
  * Uebergaben:
  *
  * mode     = 1 : (Default) Willkommen zur Installation
- *            2 : Zugangsdaten zur Datenbank eingeben
- *            3 : Organisationsnamen eingeben
- *            4 : Daten des Administrator eingeben
- *            5 : Konfigurationsdatei erzeugen
- *            6 : Konfigurationsdatei herunterladen
- *            7 : Installation starten
+ *            2 : Organisationsnamen eingeben
+ *            3 : Administrator anlegen
+ *            4 : Konfigurationsdatei erzeugen
+ *            5 : Konfigurationsdatei herunterladen
+ *            6 : Installation starten
  *
  *****************************************************************************/
 
@@ -57,6 +56,7 @@ require_once(SERVER_PATH. "/adm_program/system/function.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/text.php");
 
 $message  = "";
 $act_date     = date("Y-m-d", time());
@@ -139,7 +139,7 @@ elseif($req_mode == 3)
     }
     $message = '<strong>Administrator anlegen</strong><br /><br />
                 Gib in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein.
-                Dies wird dann zugleich der Administrator der neuen Organisation mit dem du dich direkt an der Organisation anmelden kannst. 
+                Dieser wird der neue Administrator der neuen Organisation mit dem du dich direkt an der Organisation anmelden kannst. 
 
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Zugangsdaten eines Webmasters</div>
