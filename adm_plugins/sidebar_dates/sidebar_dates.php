@@ -135,16 +135,16 @@ if($g_db->num_rows($plg_result) > 0)
             // Woerter unterbrechen, wenn sie zu lang sind
             $plg_words = explode(" ", $plg_date->getValue("dat_headline"));
             
-            for($i = 0; $i < count($plg_words); $i++)
+            foreach($plg_words as $plg_key => $plg_value)
             {
-                if(strlen($plg_words[$i]) > $plg_max_char_per_word)
+                if(strlen($plg_value) > $plg_max_char_per_word)
                 {
-                    $plg_new_headline = "$plg_new_headline ". substr($plg_date->getValue("dat_headline"), 0, $plg_max_char_per_word). "-<br />". 
-                                    substr($plg_date->getValue("dat_headline"), $plg_max_char_per_word);
+                    $plg_new_headline = $plg_new_headline.' '. substr($plg_value, 0, $plg_max_char_per_word). '-<br />'. 
+                                    substr($plg_value, $plg_max_char_per_word);
                 }
                 else
                 {
-                    $plg_new_headline = "$plg_new_headline ". $plg_words[$i];
+                    $plg_new_headline = $plg_new_headline.' '. $plg_value;
                 }
             }
             echo $plg_new_headline. '</a><hr />';
