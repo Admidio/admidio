@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Announcements
  *
- * Version 1.1.0
+ * Version 1.1.1
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -26,6 +26,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
+require_once(PLUGIN_PATH. "/../adm_program/system/classes/announcement.php");
 require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -87,6 +88,7 @@ $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
 			ORDER BY ann_timestamp DESC
 			LIMIT $plg_announcements_count";
 $plg_result = $g_db->query($sql);
+$plg_announcement = new Announcement($g_db);
 
 echo '<div id="plugin_'. $plugin_folder. '">';
 
@@ -94,7 +96,10 @@ if($g_db->num_rows($plg_result) > 0)
 {
     while($plg_row = $g_db->fetch_object($plg_result))
     {
-        echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_row->ann_id. '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
+        $plg_announcement->clear();
+        $plg_announcement->setArray($plg_row);
+        
+        echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
         
         if($plg_max_char_per_word > 0)
         {
@@ -102,35 +107,35 @@ if($g_db->num_rows($plg_result) > 0)
             unset($plg_words);
         
             // Woerter unterbrechen, wenn sie zu lang sind
-            $plg_words = explode(" ", $plg_row->ann_headline);
+            $plg_words = explode(" ", $plg_announcement->getValue("ann_headline"));
             
-            for($i = 0; $i < count($plg_words); $i++)
+            foreach($plg_words as $plg_key => $plg_value)
             {
-                if(strlen($plg_words[$i]) > $plg_max_char_per_word)
+                if(strlen($plg_value) > $plg_max_char_per_word)
                 {
-                    $plg_new_headline = "$plg_new_headline ". substr($plg_words[$i], 0, $plg_max_char_per_word). "-<br />". 
-                                    substr($plg_words[$i], $plg_max_char_per_word);
+                    $plg_new_headline = $plg_new_headline.' '. substr($plg_value, 0, $plg_max_char_per_word). '-<br />'. 
+                                    substr($plg_value, $plg_max_char_per_word);
                 }
                 else
                 {
-                    $plg_new_headline = "$plg_new_headline ". $plg_words[$i];
+                    $plg_new_headline = $plg_new_headline.' '. $plg_value;
                 }
             }
-            echo "$plg_new_headline</a><br />";
+            echo $plg_new_headline.'</a><br />';
         }
         else
         {
-            echo "$plg_row->ann_headline</a><br />";
+            echo $plg_announcement->getValue("ann_headline")."</a><br />";
         }
          
-        echo "(&nbsp;". mysqldatetime("d.m.y", $plg_row->ann_timestamp). "&nbsp;)<hr />";
+        echo '(&nbsp;'. mysqldatetime("d.m.y", $plg_announcement->getValue("ann_timestamp")). '&nbsp;)<hr />';
     }
     
-    echo "<a class=\"$plg_link_class\" href=\"$g_root_path/adm_program/modules/announcements/announcements.php?headline=$plg_headline\" target=\"$plg_link_target\">Alle $plg_headline</a>";
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">Alle '.$plg_headline.'</a>';
 }
 else
 {
-    echo "Es wurden noch keine $plg_headline erfasst.";
+    echo 'Es wurden noch keine '.$plg_headline.' erfasst.';
 }
 
 echo '</div>';
