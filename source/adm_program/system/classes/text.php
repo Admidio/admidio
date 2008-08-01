@@ -33,12 +33,12 @@ class Text extends TableAccess
         }
     }
 
-    // AutoLogin mit der uebergebenen Session-ID aus der Datenbank auslesen
+    // Text mit dem uebergebenen Text-Id oder Namen aus der Datenbank auslesen
     function getText($name)
     {
         global $g_current_organization;
     
-        // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
+        // wurde txt_name uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($name) == false)
         {
             $condition = "    txt_name = '$name' 

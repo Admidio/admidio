@@ -16,10 +16,12 @@
  *****************************************************************************/
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/classes/image.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_usr_id    = 0;
 $req_tmp_photo = 0;
+$image         = null;
 
 // Uebergabevariablen pruefen
 
@@ -39,6 +41,8 @@ if(isset($_GET["tmp_photo"]) && $_GET["tmp_photo"] == 1)
     $req_tmp_photo = 1;
 }
 
+$image = new Image();
+
 //Testen ob Recht besteht Profil einzusehn
 if(!$g_current_user->viewProfile($req_usr_id))
 {
@@ -46,10 +50,9 @@ if(!$g_current_user->viewProfile($req_usr_id))
 }
 // Foto aus der Datenbank lesen und ausgeben
 
-header("Content-Type: image/jpeg");
 if($req_tmp_photo == true)
 {
-    echo $g_current_session->getValue("ses_blob");
+    $image->setImageFromData(addslashes($g_current_session->getValue("ses_blob")));
 }
 else
 {
@@ -64,14 +67,17 @@ else
     
     if(strlen($user->getValue("usr_photo")) > 0)
     {
-        echo $user->getValue("usr_photo");
+        $image->setImageFromData(addslashes($user->getValue("usr_photo")));
     }
     else
     {
         // es wurde kein Bild gefunden, dann ein Dummy-Bild zurueckgeben
-        $no_profile_pic = imagecreatefrompng(THEME_SERVER_PATH. "/images/no_profile_pic.png");
-        echo imagepng($no_profile_pic);
+        
+        $image->setImageFromPath(THEME_SERVER_PATH. "/images/no_profile_pic.png");
     }
 }
+
+header("Content-Type: ". $image->getMimeType());
+$image->copyToBrowser();
 
 ?>

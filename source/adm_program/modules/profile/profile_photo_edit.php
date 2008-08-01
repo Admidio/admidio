@@ -147,11 +147,11 @@ if($job==NULL)
 
     if($req_usr_id == $g_current_user->getValue("usr_id"))
     {
-        $headline = "Mein Profilfoto &auml;ndern";
+        $headline = "Mein Profilfoto ändern";
     }
     else
     {
-        $headline = "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " &auml;ndern";
+        $headline = "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " ändern";
     }
     
     echo "
@@ -205,7 +205,7 @@ if($job=="upload")
 
         <div class=\"formBody\">";
             // Bild auf entsprechende Groesse anpassen
-            $user_image = Image::createImageObject($_FILES["bilddatei"]["tmp_name"]);
+            $user_image = new Image($_FILES["bilddatei"]["tmp_name"]);
             $user_image->resize(130, 170);
 
             // Foto aus PHP-Temp-Ordner einlesen
