@@ -134,15 +134,11 @@ elseif( isset($_POST["upload"]))
 
 }//Kontrollmechanismen
 
-
-/***************************** HTML-Kopf *************************************/
-
-$g_layout['title'] = "Profilfoto";
-require(THEME_SERVER_PATH. "/overall_header.php");    
     
-/*****************************Bild hochladen*************************************/
 if($job==NULL)
 {
+    /*****************************Bild hochladen*************************************/
+    
     $_SESSION['navigation']->addUrl(CURRENT_URL);
 
     if($req_usr_id == $g_current_user->getValue("usr_id"))
@@ -153,110 +149,104 @@ if($job==NULL)
     {
         $headline = "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). " ändern";
     }
-    
-    echo "
-    <form method=\"post\" action=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
-    <div class=\"formLayout\" id=\"profile_photo_upload_form\">
-        <div class=\"formHead\">$headline</div>
 
-        <div class=\"formBody\">
+    $g_layout['title'] = $headline;
+    require(THEME_SERVER_PATH. "/overall_header.php");
+    
+    echo '
+    <form method="post" action="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id='.$req_usr_id.'" enctype="multipart/form-data">
+    <div class="formLayout" id="profile_photo_upload_form">
+        <div class="formHead">'.$headline.'</div>
+        <div class="formBody">
             <p>Aktuelles Bild:</p>
 
-            <img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\" alt=\"Aktuelles Bild\" />
+            <img src="profile_photo_show.php?usr_id='.$req_usr_id.'&amp;id='. time(). '" alt="Aktuelles Bild" />
 
-            <p>Bitte hier ein neues Bild ausw&auml;hlen:</p>
-            <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\" /></p>
+            <p>Bitte hier ein neues Bild auswählen:</p>
+            <p><input type="file" id="bilddatei" name="bilddatei" size="40" value="durchsuchen" /></p>
 
             <hr />
 
-            <div class=\"formSubmit\">
-                <button name=\"upload\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Speichern\" />&nbsp;Bild Hochladen</button>
-             </div>
+            <div class="formSubmit">
+                <button name="upload" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Speichern" />&nbsp;Bild Hochladen</button>
+            </div>
         </div>
     </div>
     </form>
     
-    <ul class=\"iconTextLinkList\">
+    <ul class="iconTextLinkList">
         <li>
-            <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+            <span class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
+                src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
             </span>
         </li>
-    </ul>";
+    </ul>
+    
+    <script type="text/javascript"><!--
+        document.getElementById("bilddatei").focus();
+    --></script>';    
 }
-
-/*****************************Bild zwischenspeichern bestaetigen***********************************/
-if($job=="upload")
+elseif($job=="upload")
 {
-    echo "
-    <div class=\"formLayout\" id=\"profile_photo_after_upload_form\">
-        <div class=\"formHead\">";
-            if($req_usr_id == $g_current_user->getValue("usr_id"))
-            {
-                echo "Mein Profilfoto";
-            }
-            else
-            {
-                echo "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-            }
-        echo "</div>
+    /*****************************Bild zwischenspeichern bestaetigen***********************************/
+    
+    // Bild auf entsprechende Groesse anpassen
+    $user_image = new Image($_FILES["bilddatei"]["tmp_name"]);
+    $user_image->resize(130, 170);
 
-        <div class=\"formBody\">";
-            // Bild auf entsprechende Groesse anpassen
-            $user_image = new Image($_FILES["bilddatei"]["tmp_name"]);
-            $user_image->resize(130, 170);
+    // Foto aus PHP-Temp-Ordner einlesen
+    $user_photo = addslashes(fread(fopen($_FILES["bilddatei"]["tmp_name"], "r"), $_FILES["bilddatei"]["size"]));
 
-            // Foto aus PHP-Temp-Ordner einlesen
-            $user_photo = addslashes(fread(fopen($_FILES["bilddatei"]["tmp_name"], "r"), $_FILES["bilddatei"]["size"]));
+    // Zwischenspeichern des neuen Bildes in der Session
+    $sql = "UPDATE ". TBL_SESSIONS. "
+               SET ses_blob   = '$user_photo'
+             WHERE ses_usr_id = ". $g_current_user->getValue("usr_id");
+    $result = $g_db->query($sql, false);
 
-            // Zwischenspeichern des neuen Bildes in der Session
-            $sql = "UPDATE ". TBL_SESSIONS. "
-                       SET ses_blob   = '$user_photo'
-                     WHERE ses_usr_id = ". $g_current_user->getValue("usr_id");
-            $result = $g_db->query($sql, false);
-
-            //neues und altes Bild anzeigen
-            echo"
-            <table style=\"border: none; width: 100%; padding: 5px;\">
-                <tr style=\"text-align: center;\">
+    if($req_usr_id == $g_current_user->getValue("usr_id"))
+    {
+        $headline = "Mein Profilfoto";
+    }
+    else
+    {
+        $headline = "Profilfoto von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
+    }
+    
+    $g_layout['title'] = $headline;
+    require(THEME_SERVER_PATH. "/overall_header.php");    
+    
+    echo '
+    <div class="formLayout" id="profile_photo_after_upload_form">
+        <div class="formHead">'. $headline. '</div>
+        <div class="formBody">
+            <table style="border: none; width: 100%; padding: 5px;">
+                <tr style="text-align: center;">
                     <td>Aktuelles Bild:</td>
                     <td>Neues Bild:</td>
                 </tr>
-                <tr style=\"text-align: center;\">
-                    <td>";
-                        // Falls vorhanden Bild ausgeben
-
-                        // es wird eine id uebergeben, damit immer ein eindeutiger Pfad vorhanden ist 
-                        // und nicht ein altes Bild aus dem Cache genommen wird
-                        echo"<img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;id=". time(). "\" alt=\"Aktuelles Bild\" />
-                        
-                    </td>
-                    <td><img src=\"profile_photo_show.php?usr_id=$req_usr_id&amp;tmp_photo=1&amp;id=". time(). "\" alt=\"Neues Bild\" /></td>
+                <tr style="text-align: center;">
+                    <td><img src="profile_photo_show.php?usr_id='. $req_usr_id. '&amp;id='. time(). '" alt="Aktuelles Bild" /></td>
+                    <td><img src="profile_photo_show.php?usr_id='. $req_usr_id. '&amp;tmp_photo=1&amp;id='. time(). '" alt="Neues Bild" /></td>
                 </tr>
             </table>
 
             <hr />
             
-            <div class=\"formSubmit\">
-                <button name=\"cancel\" type=\"button\" value=\"abbrechen\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id=".$req_usr_id."'\">
-                    <img src=\"". THEME_PATH. "/icons/error.png\" alt=\"Abbrechen\" />
+            <div class="formSubmit">
+                <button name="cancel" type="button" value="abbrechen" onclick="self.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$req_usr_id.'\'">
+                    <img src="'. THEME_PATH. '/icons/error.png" alt="Abbrechen" />
                     &nbsp;Abbrechen
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id=".$req_usr_id."'\">
-                    <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Update\" />
-                    &nbsp;Neues Bild &uuml;bernehmen
+                <button name="update" type="button" value="update" onclick="self.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$req_usr_id.'\'">
+                    <img src="'. THEME_PATH. '/icons/database_in.png" alt="Update" />
+                    &nbsp;Neues Bild übernehmen
                 </button>
             </div>
         </div>
-    </div>";
+    </div>';
 }
-
-echo "
-<script type=\"text/javascript\"><!--
-    document.getElementById('bilddatei').focus();
---></script>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

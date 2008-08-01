@@ -103,6 +103,9 @@ class Image
     
     // Methode kopiert die uebergebene Bildresource in die uebergebene Datei bzw. der 
     // hinterlegten Datei des Objekts
+    // Optional: - eine andere Bild-Resource kann uebergeben werden
+    //           - ein andere Datei kann zur Ausgabe angegeben werden
+    //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
     // Rueckgabe: true, falls erfolgreich
     function copyToFile($imageResource = null, $pathAndFilename = "", $quality = 95)
     {
@@ -132,6 +135,8 @@ class Image
     }
     
     // Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
+    // Optional: - eine andere Bild-Resource kann uebergeben werden
+    //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
     function copyToBrowser($imageResource = null, $quality = 95)
     {
         if($imageResource == null)
@@ -213,8 +218,6 @@ class Image
             {
                 $this->copyToFile($resized_user_photo);
             }
-            
-            imagedestroy($resized_user_photo);
         }        
     }
 }
