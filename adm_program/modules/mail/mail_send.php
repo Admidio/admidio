@@ -310,7 +310,7 @@ if ($email->sendEmail())
     }
     else
     {
-        $g_message->setForwardUrl("home");
+        $g_message->setForwardUrl($g_homepage);
     }
     $g_message->show($err_code, $err_text, "Hinweis");
 }

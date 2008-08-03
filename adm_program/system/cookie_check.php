@@ -19,7 +19,7 @@ require("common.php");
 if(isset($_COOKIE['admidio_session_id']) == false)
 {
     unset($_SESSION['login_forward_url']);
-    $g_message->setForwardUrl("home");
+    $g_message->setForwardUrl($g_homepage);
     $g_message->show("no_cookie", $g_current_organization->getValue("org_homepage"));
 }
 else
@@ -51,7 +51,7 @@ else
     // pruefen ob eine Weiterleitungsseite gesetzt wurde, anonsten auf die Startseite verweisen
     if(strlen($_SESSION['login_forward_url']) == 0)
     {
-        $_SESSION['login_forward_url'] = "home";
+        $_SESSION['login_forward_url'] = $g_homepage;
     }
     $g_message->setForwardUrl($_SESSION['login_forward_url'], $show_time);
     unset($_SESSION['login_forward_url']);  

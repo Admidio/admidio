@@ -45,6 +45,6 @@ if($g_preferences['enable_forum_interface'] && $g_forum->session_valid)
 }
 
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite
-$g_message->setForwardUrl("home", 2000);
+$g_message->setForwardUrl($g_homepage, 2000);
 $g_message->show($message_code);
 ?>

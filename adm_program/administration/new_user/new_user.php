@@ -49,7 +49,7 @@ $member_found = $g_db->num_rows($usr_result);
 
 if ($member_found == 0)
 {
-    $g_message->setForwardUrl("home");
+    $g_message->setForwardUrl($g_homepage);
     $g_message->show("nomembers", "", "Anmeldungen");
 }
 
