@@ -19,7 +19,7 @@ class Message
     var $forward_url;       // Url auf die durch den Weiter-Button verwiesen wird
     var $timer;             // Anzahl ms bis automatisch zu forward_url weitergeleitet wird
     var $yes_no_buttons;    // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
-    var $close_button;  // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
+    var $close_button;      // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
     
     function Message()
     {
@@ -59,15 +59,7 @@ class Message
     // ist timer > 0 wird nach x Millisec. automatisch auf die URL weitergeleitet
     function setForwardUrl($url, $timer = 0)
     {
-        if ($url == "home" || strlen($url) == 0)
-        {
-            // auf die Startseite verweisen
-            $this->forward_url = $GLOBALS['g_homepage'];
-        }
-        else
-        {
-            $this->forward_url = $url;
-        }
+        $this->forward_url = $url;
         
         if($timer > 0 && is_numeric($timer))
         {
@@ -84,15 +76,7 @@ class Message
     // uebergebene Url weitergeleitet, bei "Nein" geht es zurueck
     function setForwardYesNo($url)
     {
-        if ($url == "home")
-        {
-            // auf die Startseite verweisen
-            $this->forward_url = $GLOBALS['g_homepage'];
-        }
-        else
-        {
-            $this->forward_url = $url;
-        }       
+        $this->forward_url    = $url;
         $this->yes_no_buttons = true;
     }
     

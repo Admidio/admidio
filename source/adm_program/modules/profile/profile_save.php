@@ -399,7 +399,7 @@ elseif($new_user == 2)
     }
 
     // nach Registrierung auf die Startseite verweisen
-    $g_message->setForwardUrl("home");
+    $g_message->setForwardUrl($g_homepage);
     $g_message->show($err_code, $err_text);
 }
 

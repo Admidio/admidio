@@ -21,7 +21,7 @@ require("../../system/classes/rss.php");
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($g_preferences['enable_rss'] != 1)
 {
-    $g_message->setForwardUrl("home");
+    $g_message->setForwardUrl($g_homepage);
     $g_message->show("rss_disabled");
 }
 
