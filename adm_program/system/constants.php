@@ -20,8 +20,15 @@ define('ADMIDIO_VERSION', '2.1.0b');
 
 // verschiedene Pfade
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1));
-// aktuelle aufgerufene Url (klappt nur so, da SSL-Proxies nicht ueber _SERVER ausgelesen werden koennen)
-define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). "?". $_SERVER['QUERY_STRING']);
+if(strpos($_SERVER['SCRIPT_FILENAME'], "/adm_") !== false)
+{
+    // aktuelle aufgerufene Url (klappt nur so, da SSL-Proxies nicht ueber _SERVER ausgelesen werden koennen)
+    define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). "?". $_SERVER['QUERY_STRING']);
+}
+else
+{
+    define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
+}
 
 
 // Defines fuer alle Datenbanktabellen
