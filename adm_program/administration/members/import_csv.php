@@ -152,15 +152,15 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
     // schauen, ob schon User mit dem Namen existieren
     $sql = "SELECT usr_id 
               FROM ". TBL_USERS. "
-             RIGHT JOIN ". TBL_USER_DATA. " last_name
+              JOIN ". TBL_USER_DATA. " last_name
                 ON last_name.usd_usr_id = usr_id
                AND last_name.usd_usf_id = ".  $user->getProperty("Nachname", "usf_id"). "
                AND last_name.usd_value  = '". $user->getValue("Nachname"). "'
-             RIGHT JOIN ". TBL_USER_DATA. " first_name
+              JOIN ". TBL_USER_DATA. " first_name
                 ON first_name.usd_usr_id = usr_id
                AND first_name.usd_usf_id = ".  $user->getProperty("Vorname", "usf_id"). "
                AND first_name.usd_value  = '". $user->getValue("Vorname"). "'
-             WHERE usr_valid      = 1 ";
+             WHERE usr_valid = 1 ";
     $result = $g_db->query($sql);
     $dup_users = $g_db->num_rows($result);
 
