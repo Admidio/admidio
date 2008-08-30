@@ -175,7 +175,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
     //Bearbeiten Anfangsdatum und Ordner ge&auml;ndert
     elseif ($_GET["job"]=="change" && $ordner != SERVER_PATH. "/adm_my_files/photos/".$_POST['pho_begin']."_"."$pho_id")
     {
-        $ordnerneu = "$beginn"."_".$photo_album->getValue("pho_id");
+        $ordnerneu = $_POST['pho_begin']."_".$photo_album->getValue("pho_id");
         //testen ob Schreibrechte fuer adm_my_files bestehen
         if(is_writeable(SERVER_PATH. "/adm_my_files/photos") == false)
         {
@@ -189,17 +189,29 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         {
             mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu",0777);
             chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu", 0777);
+            mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails",0777);
+            chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails", 0777);
         }
 
-        //Dateien verschieben
+        //Fotos verschieben
         for($x=1; $x<=$photo_album->getValue("pho_quantity"); $x++)
         {
             chmod("$ordner/$x.jpg", 0777);
             copy("$ordner/$x.jpg", SERVER_PATH. "/adm_my_files/photos/$ordnerneu/$x.jpg");
             unlink("$ordner/$x.jpg");
         }
+        
+        //Thumbnails verschieben
+        for($x=1; $x<=$photo_album->getValue("pho_quantity"); $x++)
+        {
+            chmod("$ordner/thumbnails/$x.jpg", 0777);
+            copy("$ordner/thumbnails/$x.jpg", SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails/$x.jpg");
+            unlink("$ordner/thumbnails/$x.jpg");
+        }
 
         //alten ordner loeschen
+        chmod("$ordner/thumbnails", 0777);
+        rmdir("$ordner/thumbnails");
         chmod("$ordner", 0777);
         rmdir("$ordner");
         
