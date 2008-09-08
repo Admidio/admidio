@@ -148,12 +148,12 @@ alter table %PRAEFIX%_categories add constraint %PRAEFIX%_FK_CAT_ORG foreign key
 create table %PRAEFIX%_users
 (
    usr_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   usr_login_name                 varchar(20),
+   usr_login_name                 varchar(35),
    usr_password                   varchar(35),
-   usr_new_password 			        varchar(35),
+   usr_new_password 			  varchar(35),
    usr_photo                      blob,
    usr_text                       text,
-   usr_activation_code			      varchar(10),
+   usr_activation_code			  varchar(10),
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
