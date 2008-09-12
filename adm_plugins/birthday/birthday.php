@@ -2,7 +2,7 @@
 /******************************************************************************
  * Birthday
  *
- * Version 1.4.0
+ * Version 1.4.2
  *
  * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
  * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
@@ -33,11 +33,6 @@ require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
 if(isset($plg_show_names_extern) == false || is_numeric($plg_show_names_extern) == false)
 {
     $plg_show_names_extern = 1;
-}
-
-if(isset($plg_show_nachtraeglich) == false || is_numeric($plg_show_nachtraeglich) == false)
-{
-    $plg_show_nachtraeglich = 0;
 }
 
 if(isset($plg_show_email_extern) == false || is_numeric($plg_show_email_extern) == false)
@@ -89,15 +84,50 @@ if($plg_show_names_extern == 0 && $g_session_valid == 0)
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
+/*$sql = "SELECT 'dsf' as temp
+FROM adm_users a right join adm_user_data birthday
+on usd_usr_id = usr_id and usd_usf_id = 21
+where usr_login_name = 'fasse' " ;
+         $result = $g_db->query($sql);
+         $row = $g_db->fetch_array($result);
+         echo $row['temp']. "blubb"; exit();*/
+
 $sql    = "SELECT DISTINCT usr_id, usr_login_name, 
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 
-                           birthday.usd_value as birthday, email.usd_value as email,
+                           birthday.bday as birthday,
+			   birthday.bdate,
+			   DATEDIFF(birthday.bdate, NOW()) AS days_to_bdate,
+			   YEAR(bdate) - YEAR(bday) AS age,
+			   email.usd_value as email,
                            gender.usd_value as gender
-             FROM ". TBL_USERS. " 
-            RIGHT JOIN ". TBL_USER_DATA. " as birthday
+             FROM ". TBL_USERS. " users
+            RIGHT JOIN 
+	    	(
+			(SELECT 
+				usd_usr_id,
+				usd_value AS bday,
+				CONCAT(year(NOW()), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)) AS bdate
+				FROM ". TBL_USER_DATA. " bd1
+				WHERE DATEDIFF(CONCAT(year(NOW()), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)), NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future
+              			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+		UNION
+			(SELECT 
+				usd_usr_id,
+				usd_value AS bday,
+				CONCAT(year(NOW())-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)) AS bdate
+				FROM ". TBL_USER_DATA. " bd2
+				WHERE DATEDIFF(CONCAT(year(NOW())-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)), NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future
+              			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+		UNION
+			(SELECT 
+				usd_usr_id,
+				usd_value AS bday,
+				CONCAT(year(NOW())+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)) AS bdate
+				FROM ". TBL_USER_DATA. " bd3
+				WHERE DATEDIFF(CONCAT(year(NOW())+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)), NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future
+              			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+		 ) AS birthday
                ON birthday.usd_usr_id = usr_id
-              AND birthday.usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). "
-	        AND (TO_DAYS(DATE(birthday.usd_value) - INTERVAL YEAR(birthday.usd_value) YEAR + INTERVAL YEAR(NOW()) YEAR) - TO_DAYS(NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future)
              LEFT JOIN ". TBL_USER_DATA. " as last_name
                ON last_name.usd_usr_id = usr_id
               AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
@@ -120,7 +150,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
                ON rol_cat_id = cat_id
               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
             WHERE usr_valid = 1
-            ORDER BY Month(birthday.usd_value) DESC, DayOfMonth(birthday.usd_value) DESC, last_name, first_name ";
+            ORDER BY days_to_bdate, last_name, first_name ";
 $result = $g_db->query($sql);
 
 $anz_geb = $g_db->num_rows($result);
@@ -131,61 +161,28 @@ if($anz_geb > 0)
 {
     if($plg_show_names_extern == 1 || $g_valid_login == 1)
     {
-        $later = "";
-        // Hier fügen wir Text ein, der an die Auflistung von Geburtstagskindern eines Zeitraumes > 1 Tag angepasst ist.
-        if (($plg_show_zeitraum > 0) && ($plg_show_nachtraeglich == 1))
-        {
-            $later = "(nachtr&auml;glich)";
-        }
-        echo '<p>Zum Geburtstag gratulieren wir '. $later. ':</p>
         
-        <ul id="plgBirthdayNameList">';
+	    echo '<ul id="plgBirthdayNameList">';
             while($row = $g_db->fetch_array($result))
             {
-                // Alter berechnen
-                // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!
-                $act_date  = getDate(time());
-                $geb_day   = mysqldatetime("d", $row['birthday']);
-                $geb_month = mysqldatetime("m", $row['birthday']);
-                $geb_year  = mysqldatetime("y", $row['birthday']);
-                $birthday = false;
-
-                if($act_date['mon'] >= $geb_month)
-                {
-                    if($act_date['mon'] == $geb_month)
-                    {
-                        if($act_date['mday'] >= $geb_day)
-                        {
-                            $birthday = true;
-                        }
-                    }
-                    else
-                    {
-                        $birthday = true;
-                    }
-                }
-                $age = $act_date['year'] - $geb_year;
-                if($birthday == false)
-                {
-                    $age--;
-                }
+                $plg_age = $row["age"]; 
 
                 // Anzeigeart des Namens beruecksichtigen
                 if($plg_show_names == 2)        // Nachname, Vorname
                 {
-                    $show_name = $row['last_name']. ", ". $row['first_name'];
+                    $plg_show_name = $row['last_name']. ", ". $row['first_name'];
                 }
                 elseif($plg_show_names == 3)    // Vorname
                 {
-                    $show_name = $row['first_name'];
+                    $plg_show_name = $row['first_name'];
                 }
                 elseif($plg_show_names == 4)    // Loginname
                 {
-                    $show_name = $row['usr_login_name'];
+                    $plg_show_name = $row['usr_login_name'];
                 }
                 else                            // Vorname Nachname
                 {
-                    $show_name = $row['first_name']. " ". $row['last_name'];
+                    $plg_show_name = $row['first_name']. " ". $row['last_name'];
                 }
 
                 // Namen mit Alter und Mail-Link anzeigen
@@ -194,14 +191,14 @@ if($anz_geb > 0)
                 {
                     if($g_valid_login)
                     {
-                        $show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
-                            target="'. $plg_link_target. '" title="Profil aufrufen" alt="Profil aufrufen">'. $show_name. '</a>
+                        $plg_show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
+                            target="'. $plg_link_target. '" title="Profil aufrufen" alt="Profil aufrufen">'. $plg_show_name. '</a>
                             <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
                             src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>';
                     }
                     else
                     {
-                        $show_name = $show_name. 
+                        $plg_show_name = $plg_show_name. 
                             '<a class="iconLink" href="mailto:'. $row['email']. '"><img 
                             src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden"></a>';
                     }
@@ -210,22 +207,22 @@ if($anz_geb > 0)
                 {
                     // Soll der Name auch für nicht angemeldete Benutzer angezeigt werden, dann ab festgelegtem Alter statt Vorname die Anrede verwenden.
                     if($g_valid_login == false
-                    && $plg_show_alter_anrede <= $age)
+                    && $plg_show_alter_anrede <= $plg_age)
                     {
                         if (($row->gender) > 1)
                         {
-                            $show_name = "Frau $row->last_name";
+                            $plg_show_name = "Frau $row->last_name";
                         }
                         else
                         {
                             // Eine kleine Feinheit zur Textanpassung bei den Herren ;-)
                             if ($plg_show_zeitraum > 0)
                             {
-                                $show_name = "Herrn $row->last_name";
+                                $plg_show_name = "Herrn $row->last_name";
                             }
                             else
                             {
-                                $show_name = "Herr $row->last_name";
+                                $plg_show_name = "Herr $row->last_name";
                             }
                         }
                     }
@@ -235,18 +232,47 @@ if($anz_geb > 0)
                 if($plg_show_names_extern < 2 || $g_valid_login == true)
                 {
                     // Geburtstagskinder am aktuellen Tag bekommen anderen Text
-                    if($geb_day == date("d", time()))
+                    if($row["days_to_bdate"] == 0)
                     {
-                        echo "<li><b>$show_name wird heute $age Jahre alt.</b></li>";
+                        echo "<li>$plg_show_name<br/>wird heute $plg_age</li>";
                     }
                     else
                     {
-                        echo "<li>$show_name<br/> zum $age. am $geb_day.$geb_month.</li>";
+                        $plg_date = mysqldatetime("d.m.y", $row['bdate']);
+            			$plg_age = $row['age'];
+            			$plg_dtb = $row['days_to_bdate'];
+            			$plg_tage = "";
+            			$plg_alter_text = "";
+            			if ($plg_dtb < 0) 
+                        {
+                            if($plg_dtb == -1)
+                            {
+                                $plg_alter_text = "wurde gestern";
+                            }
+                            else
+                            {
+                                $plg_alter_text = "wurde";
+                                $plg_tage = "vor ". -$plg_dtb. " Tagen";
+                            }
+            			} 
+                        elseif ($plg_dtb > 0) 
+                        {
+                            if($plg_dtb == 1)
+                            {
+                                $plg_alter_text = "wird morgen";
+                            }
+                            else
+                            {
+                                $plg_alter_text = "wird";
+                                $plg_tage = "in ". $plg_dtb. " Tagen";
+                            }
+            			}
+                        echo "<li>$plg_show_name $plg_alter_text $plg_age<br/>$plg_tage, am <b>$plg_date</b><br/></li>";
                     }
                 }
+		
             }
-        echo "</ul>
-        <p>Herzlichen Gl&uuml;ckwunsch !</p>";
+        echo "</ul>";
     }
     else
     {
