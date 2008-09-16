@@ -260,7 +260,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
             if($g_preferences['enable_forum_interface'])
             {
                 // pruefen, ob der Benutzername bereits im Forum vergeben ist
-                if($g_forum->userExists($user->getValue("usr_login_name")))
+                if($g_forum->userExists($_POST['usr_login_name']))
                 {
                     $g_message->show("login_name_forum");
                 }
