@@ -16,6 +16,7 @@
 require("../../system/classes/photo_album.php");
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require_once("../../libs/flexupload/class.flexupload.inc.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -64,6 +65,12 @@ else
     $_SESSION['photo_album'] =& $photo_album;
 }
 
+//ordner fuer Flexupload anlegen, falls dieser nicht existiert
+if(!file_exists(SERVER_PATH. "/adm_my_files/photos/upload"))
+{
+    mkdir(SERVER_PATH. "/adm_my_files/photos/upload",0777);
+}
+
 // pruefen, ob Album zur aktuellen Organisation gehoert
 if($photo_album->getValue("pho_org_shortname") != $g_organization)
 {
@@ -75,7 +82,7 @@ $g_layout['title'] = "Fotos hochladen";
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 /**************************Formular********************************************************/
-echo"
+/*echo"
 <form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
 <div class=\"formLayout\" id=\"photo_upload_form\">
     <div class=\"formHead\">Bilder hochladen</div>
@@ -113,9 +120,37 @@ echo"
         </div>
    </div>
 </div>
-</form>";
+</form>";*/
+
+
+//neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
+$fup = new FlexUpload("$g_root_path/adm_program/modules/photos/photoflexupload_do.php?pho_id=".$_GET['pho_id']."");
+
+//Pfad zum swf-File
+$fup->setPathToSWF("$g_root_path/adm_program/libs/flexupload/");
+//Pfad der Sprachdatei
+$fup->setLocale("$g_root_path/adm_program/libs/flexupload/de.xml");
+//maximale Dateigröße
+$fup->setMaxFileSize(5*1024*1024);
+//maximale Dateianzahl
+$fup->setMaxFiles(10);
+//breite des Uploaders
+$fup->setWidth(560);
+//breite des Uploaders
+$fup->setHeight(400);
+//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
+$fup->setFileExtensions("*.jpg;*.jpeg;*");
+
+
+//Ausgabe des Uploaders
+$fup->printHTML(true, 'flexupload');
+
+
+
+
 
 echo "
+</div>
 <ul class=\"iconTextLinkList\">
     <li>
         <span class=\"iconTextLink\">
