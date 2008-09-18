@@ -313,7 +313,12 @@ if($ret_code != 0)
 // bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
 if($g_preferences['enable_forum_interface'] && ($login_name_changed || $new_user == 3))
 {
-    $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"), $forum_old_username);
+    $set_admin = false;
+    if($g_preferences['forum_set_admin'] == 1 && $user->isWebmaster())
+    {
+        $set_admin = true;
+    }
+    $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"), $forum_old_username, $set_admin);
 }
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren

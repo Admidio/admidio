@@ -938,6 +938,22 @@ echo "
                     </li>
                     <li>
                         <dl>
+                            <dt><label for=\"forum_set_admin\">Webmasterstatus ins Forum exportieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"forum_set_admin\" name=\"forum_set_admin\" ";
+                                if(isset($form_values['forum_set_admin']) && $form_values['forum_set_admin'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>                            
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators.
+                    </li>
+                    <li>
+                        <dl>
                             <dt><label for=\"forum_praefix\">Forum Tabellen praefix:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"forum_praefix\" name=\"forum_praefix\" style=\"width: 50px;\" value=\"". $form_values['forum_praefix']. "\" />
