@@ -60,6 +60,7 @@ $orga_preferences = array(
     'forum_srv'             => '',
     'forum_usr'             => '',
     'forum_pw'              => '',
+    'forum_set_admin'       => '1',
     
     // Gaestebuch
     'enable_guestbook_module'           => '1',

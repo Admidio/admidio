@@ -25,14 +25,13 @@
  *                          $username = Der login_name des Users
  *                          RETURNCODE = TRUE  - Den User gibt es
  *                          RETURNCODE = FALSE - Den User gibt es nicht
- * userLogin($usr_id, $login_name, $password_crypt, $forum_user, $forum_password, $forum_email)
+ * userLogin($login_name, $password_crypt, $email, $webmaster = 0)
  *                        - Meldet den User (Username) im Forum an.
- *                          $usr_id             = Der aktuelle Admidio user_id des Users
- *                          $login_name         = Der aktuelle Admidio Login reg_login_name des Users
- *                          $password_crypt     = Der aktuelle Admidio Login reg_password Crypt des Users
- *                          $forum_user     = Der aktuelle Admidio login_name des Users
- *                          $forum_password = Das aktuelle Admidio password des Users
- *                          $forum_email        = Der aktuelle Admidio email des Users
+ *                          $login_name     = Der aktuelle Admidio Login reg_login_name des Users
+ *                          $password_crypt = Der aktuelle Admidio Login reg_password Crypt des Users
+ *                          $email          = Der aktuelle Admidio email des Users
+ *                          $webmaster      = Kennzeichen, ob User ein Admidio-Webmaster ist true/false
+ *                                            dann wird er auch im Forum zum Administrator gemacht
  *                          RETURNCODE  = TRUE  - User angemeldet
  *                          RETURNCODE  = FALSE - User nicht angemeldet
  * userLogoff()               - Meldet den aktuellen User im Forum ab.
@@ -42,19 +41,16 @@
  *                          $username = Der aktuelle login_name des Users
  * getUserPM($username)   - Funktion prueft auf neue Private Messages (PM) vorliegen und 
  *                          gibt diese als String zurueck
- * checkAdmin($username, $password_crypt)
- *                        - Funktion ueberprueft ob der Admin Account im Forum ungleich des 
- *                          Admidio Accounts ist. Falls ja wird der Admidio Account 
- *                          (Username & Password) ins Forum uebernommen.
+ * setAdmin($username)  - Funktion ueberprueft ob der uebergebene User Admin im Forum ist und 
+ *                          passt dies ggf. an
  *                          $username       = Login_name des Webmasters
- *                          $password_crypt = Crypt Password des Webmasters
  * checkPassword($password_admidio, $password_forum, $forum_userid)
  *                        - Funktion ueberprueft ob das Password im Forum ungleich des Admidio Passwords ist.
  *                          Falls ja wird das Admidio Password ins Forum uebernommen.
  *                          $password_admidio   = Crypt Admidio Password
  *                          $password_forum     = Crypt Forum Password 
  *                          $forum_userid       = UserID im Forum
- * userSave($username, $forum_useraktiv, $forum_password, $forum_email, $forum_old_username)
+ * userSave($username, $forum_useraktiv, $forum_password, $forum_email, $forum_old_username = "", $set_admin = 0)
  *                        - Funktion speichert die Daten eines Users
  *                          existiert der User noch nicht, wird er angelegt, ansonsten aktualisiert
  * userInsert($username, $forum_useraktiv, $forum_password, $forum_email)
@@ -238,29 +234,15 @@ class PhpBB2
 
 
     // Funktion meldet den aktuellen User im Forum an
-    function userLogin($usr_id, $login_name, $password_crypt, $forum_user, $forum_password, $forum_email)
+    function userLogin($login_name, $password_crypt, $email, $set_admin = 0)
     {
-        /* Ueberpruefen, ob User ID =1 (Administrator) angemeldet ist. 
-        Falls ja, wird geprueft, ob im Forum der gleiche Username und Password fuer die UserID 2 
-        (Standard ID fuer den Administrator im Forum) besteht.
-        Dieser wird im nein Fall (neue Installation des Boards) auf den Username und das Password des 
-        Admidio UserID Accounts 1 (Standard fuer Administartor) geaendert und eine Meldung ausgegegen.
-        */
-        if($usr_id == 1)
-        {
-            if($this->checkAdmin($login_name, $password_crypt))
-            {
-                $this->message = "login_forum_admin";
-            }
-        }
-        
         // Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
         if(!$this->userExists($login_name))
         {
             if($this->export)
             {
                 // Export der Admido Daten ins Forum und einen Forum Account erstellen
-                $this->userInsert($forum_user, 1, $forum_password, $forum_email);
+                $this->userInsert($login_name, 1, $password_crypt, $email);
 
                 $this->message = "login_forum_new";
                 $this->session_valid = TRUE;        
@@ -276,6 +258,16 @@ class PhpBB2
             $this->session_valid = TRUE;
         }
 
+        // Falls ein Admidio-Webmaster angemeldet wird, so sollte dieser automatisch im Forum 
+        // auch zum Webmaster gemacht werden
+        if($set_admin)
+        {
+            if($this->setAdmin($login_name))
+            {
+                $this->message = "login_forum_admin";
+            }
+        }
+        
         if($this->session_valid)
         {
             // Userdaten holen
@@ -361,28 +353,35 @@ class PhpBB2
     }
 
 
-    // Funktion ueberprueft ob der Admin Account im Forum ungleich des Admidio Accounts ist.
-    // Falls ja wird der Admidio Account (Username & Password) ins Forum uebernommen.
-    function checkAdmin($username, $password_crypt)
+    // Funktion ueberprueft ob der uebergebene User Admin im Forum ist und passt dies ggf. an
+    function setAdmin($username, $admin = true)
     {
         // Administrator nun in Foren-Tabelle suchen und dort das Password, Username & UserID auslesen
-        $sql    = "SELECT username, user_password, user_id FROM ". $this->praefix. "_users WHERE user_id = 2";
-        $result = $this->forum_db->query($sql);
-        $row    = $this->forum_db->fetch_array($result);
-
-        if($username == $row[0] AND $password_crypt == $row[1])
+        $sql    = "SELECT user_id 
+                     FROM ". $this->praefix. "_users 
+                    WHERE username   = '". $username. "'
+                      AND user_level = 1";
+        $this->forum_db->query($sql);
+        
+        if($this->forum_db->num_rows() == 0)
         {
-            return FALSE;
+            // Administratorlevel setzen oder zuruecknehmen
+            $user_level = 0;
+            if($admin)
+            {
+                $user_level = 1;
+            }
+            
+            $sql    = "UPDATE ". $this->praefix. "_users 
+                          SET user_level = ". $user_level. "
+                        WHERE username = '". $username. "'";
+            $this->forum_db->query($sql);
+
+            return true;
         }
         else
         {
-            // Password in Foren-Tabelle auf das Password in Admidio setzen
-            $sql    = "UPDATE ". $this->praefix. "_users 
-                       SET user_password = '". $password_crypt ."', username = '". $username ."'
-                       WHERE user_id = 2";
-            $result = $this->forum_db->query($sql);
-
-            return TRUE;
+            return false;
         }
     }
 
@@ -402,7 +401,7 @@ class PhpBB2
             $sql    = "UPDATE ". $this->praefix. "_users 
                           SET user_password = '". $password_admidio ."'
                         WHERE user_id = $forum_userid";
-            $result = $this->forum_db->query($sql);
+            $this->forum_db->query($sql);
 
             return FALSE;
         }
@@ -410,7 +409,7 @@ class PhpBB2
 
     // Funktion speichert die Daten eines Users
     // existiert der User noch nicht, wird er angelegt, ansonsten aktualisiert
-    function userSave($username, $password, $email, $old_username = "")
+    function userSave($username, $password, $email, $old_username = "", $set_admin = 0)
     {
         // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
         // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
@@ -444,6 +443,13 @@ class PhpBB2
             // User anlegen
             $this->userInsert($username, $password, $email);
         }
+        
+        // Falls ein Admidio-Webmaster angemeldet wird, so sollte dieser automatisch im Forum 
+        // auch zum Webmaster gemacht werden
+        if($set_admin)
+        {
+            $this->setAdmin($username);
+        }        
     }
 
     // Funktion legt einen neuen Benutzer im Forum an

@@ -132,18 +132,20 @@ if ($user_found >= 1)
         $g_current_user->b_set_last_change = false;
         $g_current_user->save();
 
-        // Paralell im Forum einloggen, wenn g_forum gesetzt ist
+        // Parallel im Forum einloggen
         if($g_preferences['enable_forum_interface'])
         {
-            $g_forum->userLogin($g_current_user->getValue("usr_id"), $loginname, $password, 
-                                $g_current_user->getValue("usr_login_name"), $g_current_user->getValue("usr_password"), 
-                                $g_current_user->getValue("E-Mail"));
-
+            $set_admin = false;
+            if($g_preferences['forum_set_admin'] == 1 && $g_current_user->isWebmaster())
+            {
+                $set_admin = true;
+            }
+            $g_forum->userLogin($loginname, $password, $g_current_user->getValue("E-Mail"), $set_admin);
             $login_message = $g_forum->message;
         }
         else
         {
-            // User gibt es im Forum nicht, also eine reine Admidio anmeldung.
+            // User gibt es im Forum nicht, also eine reine Admidio-Anmeldung.
             $login_message = "login";
         }
 
