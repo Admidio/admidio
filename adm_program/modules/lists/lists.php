@@ -182,7 +182,27 @@ $g_layout['header'] = "
                 self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=former&mode=html&rol_id=' + rol_id;
             }
         }
-    //--></script>";
+    //--></script>
+
+	<script type=\"text/javascript\">
+	    function toggleDetails(role_details_ID, triangle_ID)
+        {
+            if (document.getElementById(role_details_ID).style.visibility == 'hidden')
+            {
+                document.getElementById(role_details_ID).style.visibility = 'visible';
+                document.getElementById(role_details_ID).style.display    = 'block';
+				document.getElementById(triangle_ID).src = '". THEME_PATH. "/icons/triangle_open.gif';	
+            }
+            else
+            {
+                document.getElementById(role_details_ID).style.visibility = 'hidden';
+                document.getElementById(role_details_ID).style.display    = 'none';
+				document.getElementById(triangle_ID).src = '". THEME_PATH. "/icons/triangle_close.gif';	
+
+            }
+        }
+    </script>
+";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -311,6 +331,10 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
             echo "
             <div>
                 <div style=\"float: left;\">";
+                    //Dreieck zum ein und ausblenden der Details
+	                echo "<a class=\"iconLink\" href=\"javascript:toggleDetails('role_details_".$row_lst['rol_id']."', 'triangle_".$row_lst['rol_id']."')\">
+							<img id=\"triangle_".$row_lst['rol_id']."\"  src=\"". THEME_PATH. "/icons/triangle_close.gif\" alt=\"Details einblende\" title=\"Details einblende\" /></a>";
+
                     // Link nur anzeigen, wenn Rolle auch Mitglieder hat
                     if($num_member > 0 || $num_leader > 0)
                     {
@@ -379,7 +403,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                 echo "</div>
             </div>
             
-            <ul class=\"formFieldList\">";
+            <ul id=\"role_details_".$row_lst['rol_id']."\" style=\"visibility: hidden; display: none;\" class=\"formFieldList\">";
                 if(strlen($row_lst['rol_description']) > 0)
                 {
                     echo "
