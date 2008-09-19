@@ -9,8 +9,9 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
 
 // setzt die Ausfuehrungszeit des Scripts auf 8 Min., falls viele Daten importiert werden
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
@@ -45,6 +46,7 @@ else
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION["file_lines"]);
 $user = new User($g_db);
+$member = new TableMembers($g_db);
 $start_row    = 0;
 $count_import = 0;
 $imported_fields = array();
@@ -173,7 +175,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
             // alle vorhandene User mit dem Namen loeschen            
             while($row = $g_db->fetch_array($result))
             {
-                $duplicate_user->GetUser($row['usr_id']);
+                $duplicate_user->readData($row['usr_id']);
                 $duplicate_user->delete();
             }
         }
@@ -181,7 +183,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         {
             // Daten des Nutzers werden angepasst
             $row = $g_db->fetch_array($result);
-            $duplicate_user->GetUser($row['usr_id']);
+            $duplicate_user->readData($row['usr_id']);
             
             foreach($imported_fields as $key => $field_name)
             {
@@ -201,34 +203,8 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         // Usersatz anlegen
         $user->save();
         $count_import++;
-        $mem_exists = false;
-        
-        if($_SESSION["user_import_mode"] == 1 || $_SESSION["user_import_mode"] == 4)
-        {
-            // Benutzer existierte schon, dann schauen, ob Mitgliedschaft nicht bereits existiert
-            $sql = "SELECT COUNT(*) as count FROM ". TBL_MEMBERS. "
-                     WHERE mem_rol_id = ". $_SESSION['rol_id']. "
-                       AND mem_usr_id = ". $user->getValue("usr_id");
-            $result = $g_db->query($sql);
-            $row = $g_db->fetch_array($result);
-            
-            if($row['count'] > 0)
-            {
-                $sql = "UPDATE ". TBL_MEMBERS. " SET mem_end   = NULL
-                                                   , mem_valid = 1 
-                         WHERE mem_usr_id = ". $user->getValue("usr_id");
-                $result = $g_db->query($sql);
-                $mem_exists = true;
-            }
-        }
-
-        if($mem_exists == false)
-        {
-            // Rolle dem User zuordnen
-            $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                           VALUES (". $_SESSION['rol_id']. ", ". $user->getValue("usr_id"). ", '".date("Y-m-d", time())."', 1) ";
-            $result = $g_db->query($sql);
-        }
+        // Rollenmitgliedschaft zuordnen
+        $member->startMembership($_SESSION['rol_id'], $user->getValue("usr_id"));
     }
 
     $line = next($_SESSION["file_lines"]);

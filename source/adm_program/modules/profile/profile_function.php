@@ -17,8 +17,9 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
+require_once("../../system/classes/table_members.php");
 
 // Uebergabevariablen pruefen
 
@@ -53,11 +54,8 @@ elseif($_REQUEST['mode'] == 2)
     // Mitgliedschaft bei einer aktuellen Rolle beenden
     if($g_current_user->assignRoles() || $g_current_user->editUsers())
     {
-        $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0 
-                                           , mem_end   = '".date("Y-m-d", time())."'
-                 WHERE mem_usr_id = ". $_REQUEST['user_id']. "
-                   AND mem_rol_id = ". $_REQUEST['rol_id'];
-        $g_db->query($sql);
+        $member = new TableMembers($g_db);
+        $member->stopMembership($_REQUEST['rol_id'], $_REQUEST['user_id']);
     }
 }
 elseif($_REQUEST['mode'] == 3)
@@ -65,10 +63,9 @@ elseif($_REQUEST['mode'] == 3)
     // Ehemalige Rollenzuordnung entfernen
     if($g_current_user->isWebmaster())
     {
-        $sql = "DELETE FROM ". TBL_MEMBERS. "
-                 WHERE mem_usr_id = ". $_REQUEST['user_id']. "
-                   AND mem_rol_id = ". $_REQUEST['rol_id'];
-        $g_db->query($sql);
+        $member = new TableMembers($g_db);
+        $member->readData($_REQUEST['rol_id'], $_REQUEST['user_id']);
+        $member->delete();
     }
 }
 

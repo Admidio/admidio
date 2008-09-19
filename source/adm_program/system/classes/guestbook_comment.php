@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $guestbook_comment = new GuestbookComment($g_db);
  *
- * Mit der Funktion getGuestbookComment($gbc_id) kann nun der gewuenschte Gaestebuchkommentar ausgelesen
+ * Mit der Funktion readData($gbc_id) kann nun der gewuenschte Gaestebuchkommentar ausgelesen
  * werden.
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
@@ -42,7 +42,7 @@ class GuestbookComment extends TableAccess
         
         if($gbc_id > 0)
         {
-            $this->getGuestbookComment($gbc_id);
+            $this->readData($gbc_id);
         }
         else
         {
@@ -51,12 +51,12 @@ class GuestbookComment extends TableAccess
     }
 
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function getGuestbookComment($gbc_id)
+    function readData($gbc_id)
     {
         $tables    = TBL_GUESTBOOK;
         $condition = "       gbc_gbo_id = gbo_id 
                          AND gbc_id     = $gbc_id ";
-        $this->readData($gbc_id, $condition, $tables);
+        parent::readData($gbc_id, $condition, $tables);
     }
     
     // interne Methode, die bei setValue den uebergebenen Wert prueft

@@ -106,7 +106,7 @@ else
     $photo_album = new PhotoAlbum($g_db);
     if($pho_id > 0)
     {
-        $photo_album->getPhotoAlbum($pho_id);
+        $photo_album->readData($pho_id);
     }
 
     $_SESSION['photo_album'] =& $photo_album;
@@ -133,7 +133,7 @@ if($locked=="1" || $locked=="0")
 
     //Zurueck zum Elternalbum    
     $pho_id = $photo_album->getValue("pho_pho_id_parent");
-    $photo_album->getPhotoAlbum($pho_id);
+    $photo_album->readData($pho_id);
 }
 
 /*********************HTML_TEIL*******************************/
@@ -180,7 +180,7 @@ $photo_album_parent = new PhotoAlbum($g_db);
 while ($pho_parent_id > 0)
 {
     // Einlesen des Eltern Albums
-    $photo_album_parent->getPhotoAlbum($pho_parent_id);
+    $photo_album_parent->readData($pho_parent_id);
     
     //Link zusammensetzen
     $navilink = "&nbsp;&gt;&nbsp;<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$photo_album_parent->getValue("pho_id")."\">".

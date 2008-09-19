@@ -10,13 +10,6 @@
  * Diese Klasse dient dazu ein Ankuendigungsobjekt zu erstellen. 
  * Eine Ankuendigung kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $date = new Announcement($g_db);
- *
- * Mit der Funktion getAnnouncement($ann_id) kann nun die gewuenschte Ankuendigung ausgelesen
- * werden.
- *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
  * clear()                - Die Klassenvariablen werden neu initialisiert
@@ -42,18 +35,12 @@ class Announcement extends TableAccess
         
         if($ann_id > 0)
         {
-            $this->getAnnouncement($ann_id);
+            $this->readData($ann_id);
         }
         else
         {
             $this->clear();
         }
-    }
-
-    // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function getAnnouncement($ann_id)
-    {
-        $this->readData($ann_id);
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

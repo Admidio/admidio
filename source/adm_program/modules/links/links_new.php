@@ -62,7 +62,7 @@ $link = new Weblink($g_db);
 
 if($_GET["lnk_id"] > 0)
 {
-    $link->getWeblink($_GET["lnk_id"]);
+    $link->readData($_GET["lnk_id"]);
 }
 
 if(isset($_SESSION['links_request']))

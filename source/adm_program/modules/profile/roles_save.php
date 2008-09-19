@@ -17,6 +17,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/classes/table_members.php");
 require("../../system/classes/role_dependency.php");
 
 
@@ -141,6 +142,8 @@ if($g_db->num_rows($result_rolle)>0)
     $g_db->data_seek($result_rolle, 0);
 }
 
+$member = new TableMembers($g_db);
+
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = $g_db->fetch_object($result_rolle))
 {
@@ -160,41 +163,15 @@ while($row = $g_db->fetch_object($result_rolle))
             {
                 $role_leader = 1;
             }
-
+            
             // Rollenmitgliedschaften aktualisieren
-            if($row->mem_usr_id > 0)
+            if($role_assign == 1)
             {
-                // neue Rollenmitgliederdaten zurueckschreiben, falls sich diese geaendert haben
-                if($role_assign == 1)
-                {
-                    $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 1
-                                                       , mem_end    = NULL
-                                                       , mem_leader = $role_leader
-                                WHERE mem_rol_id = $row->rol_id
-                                  AND mem_usr_id = $req_usr_id ";
-                    $g_db->query($sql);
-                    $count_assigned++;
-                }
-                else
-                {
-                    $sql = "UPDATE ". TBL_MEMBERS. " SET mem_valid  = 0
-                                                       , mem_end    = '".date("Y-m-d", time())."'
-                                                       , mem_leader = $role_leader
-                                WHERE mem_rol_id = $row->rol_id
-                                  AND mem_usr_id = $req_usr_id ";
-                    $g_db->query($sql);
-                }
+                $member->startMembership($row->rol_id, $req_usr_id, $role_leader);
             }
             else
             {
-                // neue Mitgliederdaten einfuegen, aber nur, wenn auch ein Haeckchen da ist
-                if($role_assign == 1)
-                {
-                    $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader)
-                              VALUES ($row->rol_id, $req_usr_id, '".date("Y-m-d", time())."',NULL, 1, $role_leader) ";
-                    $g_db->query($sql);
-                    $count_assigned++;
-                }
+                $member->stopMembership($row->rol_id, $req_usr_id);
             }
 
             // find the parent roles

@@ -119,7 +119,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mod
     
     if($_GET['id'] > 0)
     {
-        $guestbook->getGuestbookEntry($_GET['id']);
+        $guestbook->readData($_GET['id']);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
@@ -135,7 +135,7 @@ else
     
     if($_GET['id'] > 0 && $_GET['mode'] != 4)
     {
-        $guestbook_comment->getGuestbookComment($_GET['id']);
+        $guestbook_comment->readData($_GET['id']);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook_comment->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))

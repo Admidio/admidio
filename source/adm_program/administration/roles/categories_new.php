@@ -66,7 +66,7 @@ $category = new Category($g_db);
 
 if($req_cat_id > 0)
 {
-    $category->getCategory($req_cat_id);
+    $category->readData($req_cat_id);
     
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue("cat_org_id") >  0

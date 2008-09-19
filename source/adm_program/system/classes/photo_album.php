@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $photo_album = new PhotoAlbum($g_db);
  *
- * Mit der Funktion getPhotoAlbum($pho_id) kann die gewuenschte Fotoveranstaltung 
+ * Mit der Funktion readData($pho_id) kann die gewuenschte Fotoveranstaltung 
  * ausgelesen werden. 
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
@@ -45,18 +45,12 @@ class PhotoAlbum extends TableAccess
         
         if(is_numeric($photo_id))
         {
-            $this->getPhotoAlbum($photo_id);
+            $this->readData($photo_id);
         }
         else
         {
             $this->clear();
         }
-    }
-
-    // Fotoalbum mit der uebergebenen Foto-ID aus der Datenbank auslesen
-    function getPhotoAlbum($photo_id)
-    {
-        $this->readData($photo_id);
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

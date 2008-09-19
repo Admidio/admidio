@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $folder = new File($g_db);
  *
- * Mit der Funktion getFolder($folder_id) kann nun alle Informationen zum Folder
+ * Mit der Funktion readData($folder_id) kann nun alle Informationen zum Folder
  * aus der Db ausgelesen werden.
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
@@ -43,7 +43,7 @@ class Folder extends TableAccess
 
         if($folder_id > 0)
         {
-            $this->getFolder($folder_id);
+            $this->readData($folder_id);
         }
         else
         {
@@ -53,13 +53,13 @@ class Folder extends TableAccess
 
 
     // Folder mit der uebergebenen ID aus der Datenbank auslesen
-    function getFolder($folder_id)
+    function readData($folder_id)
     {
         global $g_current_organization;
 
         $condition = "     fol_id     = $folder_id
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($folder_id, $condition);
+        parent::readData($folder_id, $condition);
     }
 
 

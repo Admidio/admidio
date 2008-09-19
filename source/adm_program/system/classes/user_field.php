@@ -15,7 +15,7 @@
  * aktuellen Datenbankverbindung:
  * $user_field = new UserField($g_db);
  *
- * Mit der Funktion getUserField($user_id) kann das gewuenschte Feld ausgelesen
+ * Mit der Funktion readData($user_id) kann das gewuenschte Feld ausgelesen
  * werden.
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
@@ -43,7 +43,7 @@ class UserField extends TableAccess
         
         if($usf_id > 0)
         {
-            $this->getUserField($usf_id);
+            $this->readData($usf_id);
         }
         else
         {
@@ -52,14 +52,14 @@ class UserField extends TableAccess
     }
 
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    function getUserField($usf_id)
+    function readData($usf_id)
     {
         if(is_numeric($usf_id))
         {
             $tables    = TBL_CATEGORIES;
             $condition = "       usf_cat_id = cat_id
                              AND usf_id     = $usf_id ";
-            $this->readData($usf_id, $condition, $tables);
+            parent::readData($usf_id, $condition, $tables);
         }
     }
     

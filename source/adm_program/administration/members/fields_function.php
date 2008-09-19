@@ -57,7 +57,7 @@ $user_field = new UserField($g_db);
 
 if($_GET['usf_id'] > 0)
 {
-    $user_field->getUserField($_GET['usf_id']);
+    $user_field->readData($_GET['usf_id']);
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($user_field->getValue("cat_org_id") >  0

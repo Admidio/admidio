@@ -22,6 +22,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/classes/system_mail.php");
+require("../../system/classes/table_members.php");
 
 $err_code = ""; 
 $err_text = "";
@@ -124,8 +125,10 @@ elseif($_GET["mode"] == 2)
     {
         $g_message->show("norights");
     }
+    
+    $member = new TableMembers($g_db);
 
-    $sql = "SELECT mem_id
+    $sql = "SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_valid, mem_leader
               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
              WHERE rol_valid  = 1
                AND rol_cat_id = cat_id
@@ -138,10 +141,8 @@ elseif($_GET["mode"] == 2)
     while($row = $g_db->fetch_array($result_mgl))
     {
         // alle Rollen der aktuellen Gliedgemeinschaft auf ungueltig setzen
-        $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
-                                              , mem_end   = '".date("Y-m-d", time())."'
-                    WHERE mem_id = ". $row['mem_id'];
-        $result = $g_db->query($sql);
+        $member->setArray($row);
+        $member->stopMembership($row['mem_rol_id'], $row['mem_usr_id']);
     }
 
     $err_code = "remove_member_ok";

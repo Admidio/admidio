@@ -288,7 +288,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
     $photo_album = new PhotoAlbum($g_db);
     if($pho_id > 0)
     {
-        $photo_album->getPhotoAlbum($pho_id);
+        $photo_album->readData($pho_id);
     }
 
     $_SESSION['photo_album'] =& $photo_album;

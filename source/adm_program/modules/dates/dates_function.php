@@ -64,7 +64,7 @@ $date = new Date($g_db);
 
 if($req_dat_id > 0)
 {
-    $date->getDate($req_dat_id);
+    $date->readData($req_dat_id);
     
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false )

@@ -73,7 +73,7 @@ $guestbook = new Guestbook($g_db);
 
 if($_GET["id"] > 0)
 {
-    $guestbook->getGuestbookEntry($_GET["id"]);
+    $guestbook->readData($_GET["id"]);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))

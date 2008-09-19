@@ -97,7 +97,7 @@ $guestbook_comment = new GuestbookComment($g_db);
 
 if(isset($_GET["cid"]) && $_GET["cid"] > 0)
 {
-    $guestbook_comment->getGuestbookComment($_GET["cid"]);
+    $guestbook_comment->readData($_GET["cid"]);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook_comment->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))

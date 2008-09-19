@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $session = new Session($g_db);
  *
- * Mit der Funktion getSession($session_id) kann die gewuenschte Session ausgelesen
+ * Mit der Funktion readData($session_id) kann die gewuenschte Session ausgelesen
  * werden. Die Session ID ist hierbei allerdings der eindeutige String aus der PHP-Session
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
@@ -50,7 +50,7 @@ class Session extends TableAccess
         
         if(strlen($session) > 0)
         {
-            $this->getSession($session);
+            $this->readData($session);
         }
         else
         {
@@ -59,7 +59,7 @@ class Session extends TableAccess
     }
 
     // Session mit der uebergebenen Session-ID aus der Datenbank auslesen
-    function getSession($session)
+    function readData($session)
     {
         // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
@@ -67,7 +67,7 @@ class Session extends TableAccess
             $condition = " ses_session_id = '$session' ";
         }       
         
-        $this->readData($session, $condition);
+        parent::readData($session, $condition);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

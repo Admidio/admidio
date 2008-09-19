@@ -13,7 +13,6 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getUser($user_id)    - ermittelt die Daten des uebergebenen Benutzers
  * getProperty($field_name, $property) 
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
@@ -48,7 +47,7 @@ class User extends TableAccess
         
         if(strlen($user_id) > 0)
         {
-            $this->getUser($user_id);
+            $this->readData($user_id);
         }
         else
         {
@@ -57,9 +56,9 @@ class User extends TableAccess
     }
 
     // User mit der uebergebenen ID aus der Datenbank auslesen
-    function getUser($user_id)
+    function readData($user_id)
     {
-        $this->readData($user_id);
+        parent::readData($user_id);
                     
         // user_data-Array aufbauen
         $this->fillUserFieldArray($user_id);

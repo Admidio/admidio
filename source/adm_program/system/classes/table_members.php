@@ -1,0 +1,140 @@
+<?php
+/******************************************************************************
+ * Klasse fuer Datenbanktabelle adm_members
+ *
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese Klasse dient dazu ein Memberobjekt zu erstellen. 
+ * Eine Mitgliedschaft kann ueber diese Klasse in der Datenbank verwaltet werden
+ *
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
+ *
+ * startMembership($rol_id, $usr_id, $leader = "")
+ *                      - Methode setzt alle notwendigen Daten um eine 
+ *                        Mitgliedschaft zu beginnen bzw. zu aktualisieren
+ * stopMembership($rol_id, $usr_id)
+ *                      - Methode setzt alle notwendigen Daten um eine 
+ *                        Mitgliedschaft zu beginnen
+ *
+ *****************************************************************************/
+
+require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+
+class TableMembers extends TableAccess
+{
+    // Konstruktor
+    function TableMembers(&$db, $mem_id = 0)
+    {
+        $this->db            =& $db;
+        $this->table_name     = TBL_MEMBERS;
+        $this->column_praefix = "mem";
+        
+        if($mem_id > 0)
+        {
+            $this->readData($date_id);
+        }
+        else
+        {
+            $this->clear();
+        }
+    }
+    
+    function readData($rol_id, $usr_id)
+    {
+        if(is_numeric($rol_id) && is_numeric($usr_id))
+        {
+            $condition = "       mem_rol_id = $rol_id
+                             AND mem_usr_id = $usr_id ";
+            parent::readData(0, $condition);
+            
+            $this->setValue("mem_rol_id", $rol_id);
+            $this->setValue("mem_usr_id", $usr_id);
+        }
+    }    
+    
+    // interne Funktion, die bei setValue den uebergebenen Wert prueft
+    // und ungueltige Werte auf leer setzt
+    // die Funktion wird innerhalb von setValue() aufgerufen
+    function _setValue($field_name, &$field_value)
+    {
+        if($field_name == "mem_valid"
+        && $this->db_fields[$field_name] != $field_value)
+        {
+            if($field_value == 1)
+            {
+                $this->setValue("mem_end", NULL);
+            }
+            elseif($field_value == 0)
+            {
+                $this->setValue("mem_end", date("Y-m-d", time()));
+            }
+        }     
+        return true;
+    }    
+    
+    // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
+    function _afterSave()
+    {
+        global $g_current_session;
+        
+        if($this->db_fields_changed && is_object($g_current_session))
+        {
+            // einlesen aller Userobjekte der angemeldeten User anstossen, 
+            // da Aenderungen in den Profilfeldern vorgenommen wurden 
+            $g_current_session->renewUserObject();
+        }
+    } 
+    
+    // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beginnen bzw. zu aktualisieren
+    function startMembership($rol_id, $usr_id, $leader = "")
+    {
+        if($this->db_fields['mem_rol_id'] != $rol_id
+        || $this->db_fields['mem_usr_id'] != $usr_id)
+        {
+            $this->readData($rol_id, $usr_id);
+        }
+
+        // Beginn nicht ueberschreiben, wenn schon existiert
+        if(strlen($this->db_fields['mem_begin']) == 0)
+        {
+            $this->setValue("mem_begin", date("Y-m-d", time()));
+        }
+        // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
+        if(strlen($leader) == 0)
+        {
+            if($this->new_record == true)
+            {
+                $this->setValue("mem_leader", 0);
+            }
+        }
+        else
+        {
+            $this->setValue("mem_leader", $leader);
+        }
+        $this->setValue("mem_end", NULL);
+        $this->setValue("mem_valid", 1);
+        $this->save();
+    }
+
+    // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beginnen
+    function stopMembership($rol_id, $usr_id)
+    {
+        if($this->db_fields['mem_rol_id'] != $rol_id
+        || $this->db_fields['mem_usr_id'] != $usr_id)
+        {
+            $this->readData($rol_id, $usr_id);
+        }
+
+        if($this->new_record == false)
+        {
+            $this->setValue("mem_end", date("Y-m-d", time()));
+            $this->setValue("mem_valid", 0);
+            $this->save();
+        }
+    }
+}
+?>

@@ -51,7 +51,7 @@ $announcement = new Announcement($g_db);
 
 if($_GET["ann_id"] > 0)
 {
-    $announcement->getAnnouncement($_GET["ann_id"]);
+    $announcement->readData($_GET["ann_id"]);
     
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)

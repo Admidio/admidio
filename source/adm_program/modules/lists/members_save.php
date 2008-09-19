@@ -15,10 +15,11 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/role.php");
-require("../../system/classes/role_dependency.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
+require_once("../../system/classes/role.php");
+require_once("../../system/classes/role_dependency.php");
+require_once("../../system/classes/table_members.php");
 
 // Uebergabevariablen pruefen
 
@@ -52,20 +53,21 @@ if(  (!$g_current_user->assignRoles()
    $g_message->show("norights");
 }
 
-//Veraarbeitung der Daten
-//Abfrag aller Datensaetze die mit der Rolle zu tun haben
-$sql =" SELECT *
-        FROM ". TBL_MEMBERS. "
-        WHERE mem_rol_id = $role_id";
+// Verarbeitung der Daten
+// Ermittlung aller bisherigen aktiven Mitgliedschaften
+$sql = " SELECT *
+           FROM ". TBL_MEMBERS. "
+          WHERE mem_rol_id = $role_id
+            AND mem_valid  = 1";
 $result_mem_role = $g_db->query($sql);
 
 //Schreiben der Datensaetze in Array sortiert nach zugewiesenen Benutzern (id)
 $mitglieder_array= array(array());
 for($x=0; $mem_role= $g_db->fetch_array($result_mem_role); $x++)
 {
-    for($y=0; $y<=6; $y++)
+    foreach($mem_role as $key => $value)
     {
-        $mitglieder_array["$mem_role[2]"][$y]=$mem_role[$y];
+        $mitglieder_array[$mem_role['mem_usr_id']][$key] = $value;
     }
 }
 
@@ -75,7 +77,7 @@ $sql =" SELECT *
         WHERE usr_valid = 1 ";
 $result_user = $g_db->query($sql);
 
-//Kontrolle ob nicht am ende die Mitgliederzahl ueberstigen wird
+//Kontrolle ob nicht am Ende die Mitgliederzahl ueberstiegen wird
 if($role->getValue("rol_max_members") != NULL)
 {
     //Zaehler fuer die Mitgliederzahl
@@ -96,66 +98,38 @@ if($role->getValue("rol_max_members") != NULL)
     $g_db->data_seek($result_user,0);
 }
 
-//Kontrolle der member und leader Felder
+$member = new TableMembers($g_db);
+
+// Datensaetze durchgehen und sehen, ob fuer den Benutzer eine Aenderung vorliegt
 while($user= $g_db->fetch_array($result_user))
 {
-    //Kontrolle für membervariablen
-    if(!isset($_POST["member_".$user["usr_id"]]))
-    {
-        $_POST["member_".$user["usr_id"]]=false;
-    }
-
-    //Kontrolle für leadervariablen
-    if(!isset($_POST["leader_".$user["usr_id"]]))
-    {
-        $_POST["leader_".$user["usr_id"]]=false;
-    }
-}
-//Dateizeiger zurueck zum Anfang
-$g_db->data_seek($result_user,0);
-
-
-
-//Datensaetze durchgehen und sehen ob faer den Benutzer eine aenderung vorliegt
-while($user= $g_db->fetch_array($result_user))
-{
-
     $parentRoles = array();
-    
-    //Falls User Mitglied der Rolle ist oder schonmal war
-    if(isset($_POST["member_".$user["usr_id"]]) && array_key_exists($user["usr_id"], $mitglieder_array))
+
+    // Mitgliedschaft bearbeiten, aber nur wenn die Mitgliedschaft sich veraendert hat
+    if((isset($_POST["member_".$user["usr_id"]]) == false && array_key_exists($user["usr_id"], $mitglieder_array) == true)
+    || (isset($_POST["member_".$user["usr_id"]]) == true  && array_key_exists($user["usr_id"], $mitglieder_array) == false)
+    || (isset($_POST["member_".$user["usr_id"]]) == true  && isset($_POST["leader_".$user["usr_id"]]) == true  && $mitglieder_array[$user["usr_id"]]['mem_leader'] == 0)
+    || (isset($_POST["member_".$user["usr_id"]]) == true  && isset($_POST["leader_".$user["usr_id"]]) == false && $mitglieder_array[$user["usr_id"]]['mem_leader'] == 1) )
     {
-        //Kontolle ob Zuweisung geaendert wurde wen ja entsprechenden SQL-Befehl zusammensetzen
-
-        //Falls abgewaehlt wurde (automatisch auch als Leiter abmelden)
-        if($mitglieder_array[$user["usr_id"]][5]==1 && $_POST["member_".$user["usr_id"]]==false)
+        if(isset($_POST["member_".$user["usr_id"]]) == true)
         {
-            $mem_id = $mitglieder_array[$user["usr_id"]][0];
-            $sql =" UPDATE ". TBL_MEMBERS. "
-                       SET mem_valid  = 0
-                         , mem_end    = '".date("Y-m-d", time())."'
-                         , mem_leader = 0
-                     WHERE mem_id     = $mem_id ";
-            $result = $g_db->query($sql);
-        }
-
-        //Falls wieder angemeldet wurde
-        if($mitglieder_array[$user["usr_id"]][5]==0 && $_POST["member_".$user["usr_id"]]==true)
-        {
-            $mem_id = $mitglieder_array[$user["usr_id"]][0];
-            $sql =" UPDATE ". TBL_MEMBERS. "
-                    SET mem_valid = 1,
-                        mem_end   = '0000-00-00'";
-
-            //Falls jemand auch Leiter werden soll
-            if($_POST["leader_".$user["usr_id"]]==true)
+            // Leiterstatus noch entsprechend weitergeben
+            if(isset($_POST["leader_".$user["usr_id"]]) == true)
             {
-                $sql .=", mem_leader = 1 ";
+                $member->startMembership($role_id, $user["usr_id"], 1);
             }
-
-            $sql .= "WHERE mem_id = $mem_id ";
-            $result = $g_db->query($sql);
-            
+            else
+            {
+                $member->startMembership($role_id, $user["usr_id"], 0);
+            }
+        }
+        else
+        {
+            $member->stopMembership($role_id, $user["usr_id"]);
+        }
+        
+        if(isset($_POST["member_".$user["usr_id"]]) == true  && array_key_exists($user["usr_id"], $mitglieder_array) == false)
+        {
             // abhaengige Rollen finden
             $tmpRoles = RoleDependency::getParentRoles($g_db,$role_id);
             foreach($tmpRoles as $tmpRole)
@@ -163,56 +137,6 @@ while($user= $g_db->fetch_array($result_user))
                 if(!in_array($tmpRole,$parentRoles))
                 $parentRoles[] = $tmpRole;
             }
-            
-        }
-
-        //Falls nur Leiterfunktion hinzugefuegt/entfernt werden soll under der user Mitglied ist/bleibt
-        if($mitglieder_array[$user["usr_id"]][5]==1 && $_POST["member_".$user["usr_id"]]==true)
-        {
-            $mem_id = $mitglieder_array[$user["usr_id"]][0];
-
-            //Falls Leiter hinzugefuegt werden soll
-                if($_POST["leader_".$user["usr_id"]]==true && $mitglieder_array[$user["usr_id"]][6]==0)
-                {
-                    $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 1
-                            WHERE mem_id = $mem_id ";
-                    $result = $g_db->query($sql);
-                }
-
-                //Falls Leiter entfernt werden soll
-                if($_POST["leader_".$user["usr_id"]]==false && $mitglieder_array[$user["usr_id"]][6]==1)
-                {
-                    $sql =" UPDATE ". TBL_MEMBERS. " SET mem_leader  = 0
-                            WHERE mem_id = $mem_id ";
-                    $result = $g_db->query($sql);
-                }
-        }
-    }
-
-    //Falls noch nie angemeldet gewesen aber jetzt werden soll
-    else if(!array_key_exists($user["usr_id"], $mitglieder_array) && $_POST["member_".$user["usr_id"]]==true)
-    {
-        $usr_id = $user["usr_id"];
-        $sql="  INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader)
-                VALUES ($role_id, $usr_id, '".date("Y-m-d", time())."', 1";
-
-        //Falls jemand direkt Leiter werden soll
-        if($_POST["leader_".$user["usr_id"]]==true)
-        {
-            $sql .=", 1) ";
-        }
-        else 
-        {
-            $sql .=", 0) ";
-        }
-        $result = $g_db->query($sql);
-        
-        // abhaengige Rollen finden
-        $tmpRoles = RoleDependency::getParentRoles($g_db,$role_id);
-        foreach($tmpRoles as $tmpRole)
-        {
-            if(!in_array($tmpRole,$parentRoles))
-            $parentRoles[] = $tmpRole;
         }
     }
     
