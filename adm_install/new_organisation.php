@@ -57,6 +57,7 @@ require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/text.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
 
 $message  = "";
 $act_date     = date("Y-m-d", time());
@@ -388,10 +389,9 @@ elseif($req_mode == 6)
     $role_management->save(0);
 
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
-    $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $_SESSION['webmaster_id']. ", '". $act_date. "', 1)
-                                        , (". $role_member->getValue("rol_id"). ", ". $_SESSION['webmaster_id']. ", '". $act_date. "', 1) ";
-    $db->query($sql);
+    $member = new TableMembers($db);
+    $member->startMembership($role_webmaster->getValue("rol_id"), $g_current_user->getValue("usr_id"));
+    $member->startMembership($role_member->getValue("rol_id"), $g_current_user->getValue("usr_id"));    
     
     $db->endTransaction();
 

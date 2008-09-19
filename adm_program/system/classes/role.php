@@ -16,7 +16,7 @@
  * aktuellen Datenbankverbindung:
  * $role = new Role($g_db);
  *
- * Mit der Funktion getRole($user_id) kann die gewuenschte Rolle ausgelesen
+ * Mit der Funktion readData($user_id) kann die gewuenschte Rolle ausgelesen
  * werden.
  *
  * Folgende Funktionen stehen weiter zur Verfuegung:
@@ -48,7 +48,7 @@ class Role extends TableAccess
         
         if(strlen($role) > 0)
         {
-            $this->getRole($role);
+            $this->readData($role);
         }
         else
         {
@@ -57,7 +57,7 @@ class Role extends TableAccess
     }
 
     // Rolle mit der uebergebenen ID oder dem Rollennamen aus der Datenbank auslesen
-    function getRole($role)
+    function readData($role)
     {
         global $g_current_organization;
 
@@ -74,7 +74,7 @@ class Role extends TableAccess
         $tables    = TBL_CATEGORIES;
         $condition = $condition. " AND rol_cat_id = cat_id
                                    AND cat_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($role, $condition, $tables);
+        parent::readData($role, $condition, $tables);
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

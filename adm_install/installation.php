@@ -54,6 +54,7 @@ require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/text.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
@@ -590,10 +591,9 @@ elseif($req_mode == 7)
     $role_management->save(0);
 
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
-    $sql = "INSERT INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid)
-                                   VALUES (". $role_webmaster->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", '". date("Y-m-d", time()). "', 1)
-                                        , (". $role_member->getValue("rol_id"). ", ". $g_current_user->getValue("usr_id"). ", '". date("Y-m-d", time()). "', 1) ";
-    $db->query($sql);
+    $member = new TableMembers($db);
+    $member->startMembership($role_webmaster->getValue("rol_id"), $g_current_user->getValue("usr_id"));
+    $member->startMembership($role_member->getValue("rol_id"), $g_current_user->getValue("usr_id"));
 
     // Daten der Session loeschen
     unset($_SESSION['g_current_organisation']);

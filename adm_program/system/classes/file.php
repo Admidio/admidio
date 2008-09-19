@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $file = new File($g_db);
  *
- * Mit der Funktion getFile($file_id) kann nun alle Informationen zum File
+ * Mit der Funktion readData($file_id) kann nun alle Informationen zum File
  * aus der Db ausgelsen werden.
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
@@ -42,7 +42,7 @@ class File extends TableAccess
 
         if($file_id > 0)
         {
-            $this->getFile($file_id);
+            $this->readData($file_id);
         }
         else
         {
@@ -52,7 +52,7 @@ class File extends TableAccess
 
 
     // File mit der uebergebenen ID aus der Datenbank auslesen
-    function getFile($file_id)
+    function readData($file_id)
     {
         global $g_current_organization;
 
@@ -60,7 +60,7 @@ class File extends TableAccess
         $condition = "     fil_id     = $file_id
                        AND fil_fol_id = fol_id
                        AND fol_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($file_id, $condition, $tables);
+        parent::readData($file_id, $condition, $tables);
     }
 
 

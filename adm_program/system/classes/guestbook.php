@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $guestbook = new Guestbook($g_db);
  *
- * Mit der Funktion getGuestbookEntry($gbo_id) kann nun der gewuenschte Gaestebucheintrag ausgelesen
+ * Mit der Funktion readData($gbo_id) kann nun der gewuenschte Gaestebucheintrag ausgelesen
  * werden.
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
@@ -42,18 +42,12 @@ class Guestbook extends TableAccess
         
         if($gbo_id > 0)
         {
-            $this->getGuestbookEntry($gbo_id);
+            $this->readData($gbo_id);
         }
         else
         {
             $this->clear();
         }
-    }
-
-    // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function getGuestbookEntry($gbo_id)
-    {
-        $this->readData($gbo_id);
     }
     
     // interne Methode, die bei setValue den uebergebenen Wert prueft

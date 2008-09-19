@@ -191,7 +191,7 @@ if($g_preferences['enable_auto_login'] == 1 && isset($_COOKIE['admidio_data']))
             // User nur herstellen, wenn Cookie-User-Id == gespeicherte DB-User-Id
             if($auto_login->getValue("atl_usr_id") == $admidio_data[1])
             {
-                $g_current_user->getUser($auto_login->getValue("atl_usr_id"));
+                $g_current_user->readData($auto_login->getValue("atl_usr_id"));
                 $b_auto_login = true;
             }
             else
@@ -221,7 +221,7 @@ if($g_current_session->getValue("ses_id") > 0)
     if($g_current_session->getValue("ses_renew") == 1 || $g_current_session->getValue("ses_renew") == 3)
     {
         // Userobjekt neu einlesen
-        $g_current_user->getUser($g_current_user->getValue("usr_id"));
+        $g_current_user->readData($g_current_user->getValue("usr_id"));
         $g_current_session->setValue("ses_renew", 0);
     }
     if($g_current_session->getValue("ses_renew") == 2 || $g_current_session->getValue("ses_renew") == 3)

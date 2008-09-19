@@ -139,7 +139,7 @@ foreach($_POST as $key => $value)
         }
         elseif(strpos($key, "SYSMAIL_") === 0)
         {
-            $text->getText($key);
+            $text->readData($key);
             $text->setValue("txt_text", $value);
             $text->save();
         }

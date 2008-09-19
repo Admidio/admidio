@@ -62,7 +62,7 @@ $photo_album = new PhotoAlbum($g_db);
 
 if($_GET["job"] != "new")
 {
-    $photo_album->getPhotoAlbum($pho_id);
+    $photo_album->readData($pho_id);
     
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue("pho_org_shortname") != $g_organization)

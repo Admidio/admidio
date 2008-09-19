@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $link = new Weblink($g_db);
  *
- * Mit der Funktion getWeblink($lnk_id) kann nun der gewuenschte Link ausgelesen werden.
+ * Mit der Funktion readData($lnk_id) kann nun der gewuenschte Link ausgelesen werden.
  *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
@@ -41,7 +41,7 @@ class Weblink extends TableAccess
         
         if($lnk_id > 0)
         {
-            $this->getWeblink($lnk_id);
+            $this->readData($lnk_id);
         }
         else
         {
@@ -50,7 +50,7 @@ class Weblink extends TableAccess
     }
 
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function getWeblink($lnk_id)
+    function readData($lnk_id)
     {
         global $g_current_organization;
         
@@ -58,7 +58,7 @@ class Weblink extends TableAccess
         $condition = "     lnk_id     = $lnk_id 
                        AND lnk_cat_id = cat_id
                        AND cat_org_id = ". $g_current_organization->getValue("org_id");
-        $this->readData($lnk_id, $condition, $tables);
+        parent::readData($lnk_id, $condition, $tables);
     }
     
     // interne Methode, die bei setValue den uebergebenen Wert prueft

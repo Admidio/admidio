@@ -25,7 +25,7 @@ class Text extends TableAccess
         
         if(strlen($name) > 0)
         {
-            $this->getText($name);
+            $this->readData($name);
         }
         else
         {
@@ -34,7 +34,7 @@ class Text extends TableAccess
     }
 
     // Text mit dem uebergebenen Text-Id oder Namen aus der Datenbank auslesen
-    function getText($name)
+    function readData($name)
     {
         global $g_current_organization;
     
@@ -45,7 +45,7 @@ class Text extends TableAccess
                           AND txt_org_id = ". $g_current_organization->getValue("org_id");
         }
         
-        $this->readData($name, $condition);
+        parent::readData($name, $condition);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

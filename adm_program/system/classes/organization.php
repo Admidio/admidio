@@ -14,7 +14,7 @@
  * aktuellen Datenbankverbindung:
  * $orga = new TblOrganization($g_db);
  *
- * Mit der Funktion getOrganization($shortname) kann die gewuenschte Organisation
+ * Mit der Funktion readData($shortname) kann die gewuenschte Organisation
  * ausgelesen werden.
  *
  * Folgende Methoden stehen neben den Standardmethoden aus der table_access_class zur Verfuegung:
@@ -49,7 +49,7 @@ class Organization extends TableAccess
         
         if(strlen($organization) > 0)
         {
-            $this->getOrganization($organization);
+            $this->readData($organization);
         }
         else
         {
@@ -58,7 +58,7 @@ class Organization extends TableAccess
     }
 
     // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
-    function getOrganization($organization)
+    function readData($organization)
     {
         $condition = "";
         
@@ -69,7 +69,7 @@ class Organization extends TableAccess
             $condition = " org_shortname LIKE '$organization' ";
         }
         
-        $this->readData($organization, $condition);
+        parent::readData($organization, $condition);
     }
     
     // interne Funktion, die spezielle Daten des Organizationobjekts loescht

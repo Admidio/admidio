@@ -25,18 +25,12 @@ class AutoLogin extends TableAccess
         
         if(strlen($session) > 0)
         {
-            $this->getAutoLogin($session);
+            $this->readData($session);
         }
         else
         {
             $this->clear();
         }
-    }
-
-    // AutoLogin mit der uebergebenen Session-ID aus der Datenbank auslesen
-    function getAutoLogin($session)
-    {
-        $this->readData($session);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

@@ -1262,17 +1262,17 @@ echo "
                         <strong>%organization_homepage%</strong> - URL der Webseite der Organisation<br /><br />
                     </li>';
 
-                    $text->getText("SYSMAIL_REGISTRATION_USER");
+                    $text->readData("SYSMAIL_REGISTRATION_USER");
                     echo '<li>
                         Bestätigung der Anmeldung nach der manuellen Freigabe:<br />
                         <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
                     </li>';
-                    $text->getText("SYSMAIL_REGISTRATION_WEBMASTER");
+                    $text->readData("SYSMAIL_REGISTRATION_WEBMASTER");
                     echo '<li>
                         <br />Benachrichtung des Webmasters nach einer Registrierung:<br />
                         <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
                     </li>';                  
-                    $text->getText("SYSMAIL_NEW_PASSWORD");
+                    $text->readData("SYSMAIL_NEW_PASSWORD");
                     echo '<li>
                         <br />Neues Passwort zuschicken:<br />
                     </li>
@@ -1283,7 +1283,7 @@ echo "
                     <li>
                         <textarea id="SYSMAIL_NEW_PASSWORD" name="SYSMAIL_NEW_PASSWORD" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
                     </li>';
-                    $text->getText("SYSMAIL_ACTIVATION_LINK");
+                    $text->readData("SYSMAIL_ACTIVATION_LINK");
                     echo '<li>
                         <br />Neues Passwort mit Aktivierungslink:<br />
                     </li>

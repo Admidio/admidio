@@ -10,13 +10,6 @@
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $category = new Category($g_db);
- *
- * Mit der Funktion getCategory($cat_id) kann das gewuenschte Feld ausgelesen
- * werden.
- *
  * Folgende Funktionen stehen weiter zur Verfuegung:
  *
  * clear()                - Die Klassenvariablen werden neu initialisiert
@@ -44,18 +37,12 @@ class Category extends TableAccess
         
         if($cat_id > 0)
         {
-            $this->getCategory($cat_id);
+            $this->readData($cat_id);
         }
         else
         {
             $this->clear();
         }
-    }
-
-    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    function getCategory($cat_id)
-    {
-        $this->readData($cat_id);
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

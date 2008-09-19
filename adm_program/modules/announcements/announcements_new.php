@@ -58,7 +58,7 @@ $announcement = new Announcement($g_db);
 
 if($req_ann_id > 0)
 {
-    $announcement->getAnnouncement($req_ann_id);
+    $announcement->readData($req_ann_id);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)

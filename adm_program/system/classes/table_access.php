@@ -13,6 +13,8 @@
  *
  * Folgende Funktionen stehen zur Verfuegung:
  *
+ * readData($id, $sql_where_condition = "", $sql_additional_tables = "")
+ *                  - Liest den Datensatz zur uebergebenen ID ($key_value) ein
  * clear()          - Die Klassenvariablen werden neu initialisiert
  * countAllRecords()- Anzahl aller Datensaetze der Tabelle werden zurueckgegeben
  * setArray($field_array)
@@ -39,23 +41,23 @@ class TableAccess
     var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
     var $db_fields = array();       // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
     var $db_fields_infos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
-    
-    // liest den Datensatz von $key_value ein
-    // key_value : Schluesselwert von dem der Datensatz gelesen werden soll
+
+    // liest den Datensatz von $id ein
+    // id : Schluesselwert von dem der Datensatz gelesen werden soll
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
     // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
     //                          eingelesen werden soll, dabei muessen die Verknuepfungen
     //                          in sql_where_condition stehen
-    function readData($key_value, $sql_where_condition = "", $sql_additional_tables = "")
+    function readData($id, $sql_where_condition = "", $sql_additional_tables = "")
     {
         // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
         $this->clear();
 
         // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen, 
         // falls diese sinnvoll gefuellt ist
-        if(strlen($sql_where_condition) == 0 && strlen($key_value) > 0 && $key_value != "0")
+        if(strlen($sql_where_condition) == 0 && strlen($id) > 0 && $id != "0")
         {
-            $sql_where_condition = " $this->key_name = '$key_value' ";
+            $sql_where_condition = " $this->key_name = '$id' ";
         }
         if(strlen($sql_additional_tables) > 0)
         {

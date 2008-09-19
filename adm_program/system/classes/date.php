@@ -10,13 +10,6 @@
  * Diese Klasse dient dazu ein Terminobjekt zu erstellen. 
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $date = new Date($g_db);
- *
- * Mit der Funktion getDate($dat_id) kann nun der gewuenschte Termin ausgelesen
- * werden.
- *
  * Folgende Funktionen stehen nun zur Verfuegung:
  *
  * clear()                - Die Klassenvariablen werden neu initialisiert
@@ -49,12 +42,6 @@ class Date extends TableAccess
         {
             $this->clear();
         }
-    }
-
-    // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function getDate($date_id)
-    {
-        $this->readData($date_id);
     }
     
     function _setValue($field_name, &$field_value)
