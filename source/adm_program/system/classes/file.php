@@ -132,20 +132,20 @@ class File extends TableAccess
 
     // die Methode wird innerhalb von delete() aufgerufen
     //und loescht das File physikalisch von der Platte bevor es aus der DB geloescht wird
-    function _delete()
+    function delete()
     {
         @chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
 
         //Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
         //damit der Eintrag aus der DB verschwindet.
-        return true;
+        return parent::delete();
     }
 
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         global $g_current_organization, $g_current_user;
 
@@ -154,7 +154,7 @@ class File extends TableAccess
             $this->setValue("fil_timestamp", date("Y-m-d H:i:s", time()));
             $this->setValue("fil_usr_id", $g_current_user->getValue("usr_id"));
         }
-
+        parent::save();
     }
 }
 ?>

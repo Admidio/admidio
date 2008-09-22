@@ -59,7 +59,7 @@ class TableMembers extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, &$field_value)
+    function setValue($field_name, $field_value)
     {
         if($field_name == "mem_valid"
         && $this->db_fields[$field_name] != $field_value)
@@ -73,15 +73,18 @@ class TableMembers extends TableAccess
                 $this->setValue("mem_end", date("Y-m-d", time()));
             }
         }     
-        return true;
+        parent::setValue($field_name, $field_value);
     }    
     
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
-    function _afterSave()
+    function save()
     {
         global $g_current_session;
+        $fields_changed = $this->db_fields_changed;
         
-        if($this->db_fields_changed && is_object($g_current_session))
+        parent::save();
+        
+        if($fields_changed && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, 
             // da Aenderungen in den Profilfeldern vorgenommen wurden 

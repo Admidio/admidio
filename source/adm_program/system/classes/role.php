@@ -79,20 +79,18 @@ class Role extends TableAccess
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
-        global $g_current_user;
+        global $g_current_user, $g_current_session;
+        $fields_changed = $this->db_fields_changed;
         
         $this->setValue("rol_last_change", date("Y-m-d H:i:s", time()));
         $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
-    }
 
-    // Methode wird erst nach dem Speichern der Rolle aufgerufen
-    function _afterSave()
-    {
-        global $g_current_session;
-        
-        if($this->db_fields_changed && is_object($g_current_session))
+        parent::save();
+
+        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
+        if($fields_changed && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
             // eine Rechteaenderung vorgenommen wurde
@@ -102,7 +100,7 @@ class Role extends TableAccess
     
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
     // die Funktion wird innerhalb von delete() aufgerufen
-    function _delete()
+    function delete()
     {
         global $g_current_session;
         
@@ -122,7 +120,7 @@ class Role extends TableAccess
                         WHERE mem_rol_id = ". $this->db_fields['rol_id'];
             $this->db->query($sql);
             
-            return true;
+            return parent::delete();
         }
         else
         {

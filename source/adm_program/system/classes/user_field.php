@@ -66,7 +66,7 @@ class UserField extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, &$field_value)
+    function setValue($field_name, $field_value)
     {
         if($field_name == "usf_cat_id"
         && $this->db_fields[$field_name] != $field_value)
@@ -80,15 +80,18 @@ class UserField extends TableAccess
 
             $this->setValue("usf_sequence", $row['count'] + 1);
         }     
-        return true;
+        parent::setValue($field_name, $field_value);
     }
 
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
-    function _afterSave()
+    function save()
     {
         global $g_current_session;
+        $fields_changed = $this->db_fields_changed;
         
-        if($this->db_fields_changed && is_object($g_current_session))
+        parent::save();
+        
+        if($fields_changed && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, 
             // da Aenderungen in den Profilfeldern vorgenommen wurden 
@@ -98,7 +101,7 @@ class UserField extends TableAccess
     
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
     // die Funktion wird innerhalb von delete() aufgerufen
-    function _delete()
+    function delete()
     {
         global $g_current_session;
         
@@ -117,7 +120,7 @@ class UserField extends TableAccess
         // da Aenderungen in den Profilfeldern vorgenommen wurden 
         $g_current_session->renewUserObject();
             
-        return true;
+        return parent::delete();
     }    
 }
 ?>
