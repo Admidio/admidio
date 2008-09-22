@@ -47,9 +47,10 @@ class Category extends TableAccess
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
-        global $g_current_organization;
+        global $g_current_organization, $g_current_session;
+        $fields_changed = $this->db_fields_changed;
         
         $this->calc_sequence = false;
             
@@ -84,24 +85,21 @@ class Category extends TableAccess
                 $this->db->query($sql);                 
             }
         }
-    }
-
-    // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
-    function _afterSave()
-    {
-        global $g_current_session;
         
-        if($this->db_fields_changed && $this->db_fields['cat_type'] == 'USF' && is_object($g_current_session))
+        parent::save();
+
+        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
+        if($fields_changed && $this->db_fields['cat_type'] == 'USF' && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, 
             // da Aenderungen in den Profilfeldern vorgenommen wurden 
             $g_current_session->renewUserObject();
-        }
+        }        
     }
     
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
     // die Funktion wird innerhalb von delete() aufgerufen
-    function _delete()
+    function delete()
     {
         global $g_current_session;
         
@@ -136,7 +134,7 @@ class Category extends TableAccess
             // da Aenderungen in den Profilfeldern vorgenommen wurden 
             $g_current_session->renewUserObject();
         }
-        return true;    
+        return parent::delete();    
     }
 }
 ?>

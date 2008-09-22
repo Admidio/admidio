@@ -45,7 +45,7 @@ class Announcement extends TableAccess
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         global $g_current_organization, $g_current_user;
         
@@ -60,6 +60,7 @@ class Announcement extends TableAccess
             $this->setValue("ann_last_change", date("Y-m-d H:i:s", time()));
             $this->setValue("ann_usr_id_change", $g_current_user->getValue("usr_id"));
         }
+        parent::save();
     }
     
     // prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf

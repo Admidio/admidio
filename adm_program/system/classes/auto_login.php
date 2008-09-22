@@ -35,7 +35,7 @@ class AutoLogin extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         if($this->new_record)
         {
@@ -54,6 +54,7 @@ class AutoLogin extends TableAccess
             $this->setValue("atl_last_login", date("Y-m-d H:i:s", time()));
             $this->setValue("atl_ip_address", $_SERVER['REMOTE_ADDR']);
         }
+        parent::save();
     }  
     
     // diese Funktion loescht Datensaetze aus der AutoLogin-Tabelle die nicht mehr gebraucht werden

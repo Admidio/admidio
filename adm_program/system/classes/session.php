@@ -72,7 +72,7 @@ class Session extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         if($this->new_record)
         {
@@ -88,6 +88,7 @@ class Session extends TableAccess
             // Update
             $this->setValue("ses_timestamp", date("Y-m-d H:i:s", time()));
         }
+        parent::save();
     }  
 
     // diese Funktion stoesst ein Neueinlesen des User-Objekts bei allen angemeldeten

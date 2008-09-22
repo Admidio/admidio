@@ -50,7 +50,7 @@ class Text extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         if($this->new_record)
         {
@@ -58,6 +58,7 @@ class Text extends TableAccess
             global $g_current_organization;
             $this->setValue("txt_org_id", $g_current_organization->getValue("org_id"));
         }
+        parent::save();
     }    
 }
 ?>

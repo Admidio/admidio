@@ -119,8 +119,10 @@ class User extends TableAccess
 
     // alle Klassenvariablen wieder zuruecksetzen
     // die Methode wird innerhalb von clear() aufgerufen
-    function _clear()
+    function clear()
     {
+        parent::clear();
+
         $this->webmaster = 0;
         $this->b_set_last_change = true;
         
@@ -139,7 +141,7 @@ class User extends TableAccess
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Methode wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, &$field_value)
+    function setValue($field_name, $field_value)
     {        
         if(strpos($field_name, "usr_") !== 0)
         {
@@ -174,12 +176,13 @@ class User extends TableAccess
             $this->real_password = $field_value;
             $field_value = md5($field_value);
         }
+        parent::setValue($field_name, $field_value);
     }
     
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
     // angefordert wurde und gibt diesen zurueck
     // die Funktion wird innerhalb von getValue() aufgerufen
-    function _getValue($field_name)
+    function getValue($field_name)
     {
         if(strpos($field_name, "usr_") === 0)
         {
@@ -189,7 +192,7 @@ class User extends TableAccess
         {
             $value = $this->getProperty($field_name, "usd_value");
         }
-        return $value;
+        return parent::getValue($field_name, $value);
     }    
 
     // Methode gibt den Wert eines Profilfeldes zurueck
@@ -215,8 +218,11 @@ class User extends TableAccess
         
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    function _save()
+    function save()
     {
+        global $g_current_session;
+        $fields_changed = $this->db_fields_changed;
+        
         if($this->b_set_last_change)
         {
             global $g_current_user;
@@ -225,13 +231,7 @@ class User extends TableAccess
         }
 
         $this->b_set_last_change = true;
-    }
-    
-    // Methode wird erst nach dem Speichern des Users aufgerufen und speichert
-    // alle Profilfelder aus adm_user_fields
-    function _afterSave()
-    {
-        global $g_current_session;
+        parent::save();
         
         // nun noch Updates fuer alle geaenderten User-Fields machen
         foreach($this->db_user_fields as $key => $value)
@@ -267,17 +267,17 @@ class User extends TableAccess
             }
         }
         
-        if($this->db_fields_changed && is_object($g_current_session))
+        if($fields_changed && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
             // eine Rechteaenderung vorgenommen wurde
             $g_current_session->renewUserObject();
-        }        
+        }           
     }
 
     // Referenzen zum aktuellen Benutzer loeschen
     // die Methode wird innerhalb von delete() aufgerufen
-    function _delete()
+    function delete()
     {
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
                     WHERE ann_usr_id = ". $this->db_fields['usr_id'];
@@ -347,7 +347,7 @@ class User extends TableAccess
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
         
-        return true;
+        return parent::delete();
     }
 
     // gibt die Userdaten als VCard zurueck

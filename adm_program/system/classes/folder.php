@@ -72,7 +72,7 @@ class Folder extends TableAccess
             $condition = "     fol_id     = $folder_id
                            AND fol_type   = 'DOWNLOAD'
                            AND fol_org_id = ". $g_current_organization->getValue("org_id");
-            $this->readData($folder_id, $condition);
+            parent::readData($folder_id, $condition);
 
         }
         else {
@@ -80,7 +80,7 @@ class Folder extends TableAccess
                            AND fol_type   = 'DOWNLOAD'
                            AND fol_path   = '/adm_my_files'
                            AND fol_org_id = ". $g_current_organization->getValue("org_id");
-            $this->readData($folder_id, $condition);
+            parent::readData($folder_id, $condition);
 
         }
 
@@ -615,7 +615,7 @@ class Folder extends TableAccess
 
     // die Methode wird innerhalb von delete() aufgerufen und entsorgt die Referenzen des Datensatzes
     // und loescht die Verzeichnisse auch physikalisch auf der Platte...
-    function _delete($folder_id = 0)
+    function delete($folder_id = 0)
     {
 
         if ($folder_id == 0)
@@ -638,7 +638,7 @@ class Folder extends TableAccess
         while($row_subfolders = $this->db->fetch_object($result_subfolders))
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->_delete($row_subfolders->fol_id);
+            $this->delete($row_subfolders->fol_id);
         }
 
         //In der DB die Files der aktuellen folder_id loeschen
@@ -664,7 +664,7 @@ class Folder extends TableAccess
         }
 
         //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
-        return true;
+        return parent::delete();
 
     }
 
@@ -717,7 +717,7 @@ class Folder extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         global $g_current_organization, $g_current_user;
 
@@ -727,7 +727,7 @@ class Folder extends TableAccess
             $this->setValue("fol_usr_id", $g_current_user->getValue("usr_id"));
             $this->setValue("fol_org_id", $g_current_organization->getValue("org_id"));
         }
-
+        parent::save();
     }
 }
 ?>

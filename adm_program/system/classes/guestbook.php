@@ -53,7 +53,7 @@ class Guestbook extends TableAccess
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Methode wird innerhalb von setValue() aufgerufen
-    function _setValue($field_name, &$field_value)
+    function setValue($field_name, $field_value)
     {
         if(strlen($field_value) > 0)
         {
@@ -74,11 +74,12 @@ class Guestbook extends TableAccess
                 }
             }
         }
+        parent::setValue($field_name, $field_value);
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         global $g_current_organization, $g_current_user;
         
@@ -94,16 +95,17 @@ class Guestbook extends TableAccess
             $this->setValue("gbo_last_change", date("Y-m-d H:i:s", time()));
             $this->setValue("gbo_usr_id_change", $g_current_user->getValue("usr_id"));
         }
+        parent::save();
     }
     
     // die Methode wird innerhalb von delete() aufgerufen
-    function _delete()
+    function delete()
     {
         //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
         $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_gbo_id = ". $this->db_fields['gbo_id'];
         $result = $this->db->query($sql);
         
-        return true;
+        return parent::delete();
     }    
 }
 ?>

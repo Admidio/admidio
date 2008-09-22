@@ -74,8 +74,10 @@ class Organization extends TableAccess
     
     // interne Funktion, die spezielle Daten des Organizationobjekts loescht
     // die Funktion wird innerhalb von clear() aufgerufen
-    function _clear()
+    function clear()
     {
+        parent::clear();
+
         $this->b_check_childs = false;
         $this->child_orgas    = array();
     }

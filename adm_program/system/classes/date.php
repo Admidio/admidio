@@ -44,7 +44,7 @@ class Date extends TableAccess
         }
     }
     
-    function _setValue($field_name, &$field_value)
+    function setValue($field_name, $field_value)
     {
         if($field_name == "dat_end" && $this->db_fields['dat_all_day'] == 1)
         {
@@ -53,9 +53,10 @@ class Date extends TableAccess
             list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $field_value);
             $field_value = date("Y-m-d H:i:s", mktime($hour, $minute, $second, $month, $day, $year) + 86400);
         }
+        parent::setValue($field_name, $field_value);
     }
     
-    function _getValue($field_name)
+    function getValue($field_name)
     {
         $value = $this->db_fields[$field_name];
         
@@ -64,13 +65,12 @@ class Date extends TableAccess
             list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $this->db_fields['dat_end']);
             $value = date("Y-m-d H:i:s", mktime($hour, $minute, $second, $month, $day, $year) - 86400);
         }
-        
-        return $value;
+        return parent::getValue($field_name, $value);
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function _save()
+    function save()
     {
         global $g_current_organization, $g_current_user;
         
@@ -85,6 +85,7 @@ class Date extends TableAccess
             $this->setValue("dat_last_change", date("Y-m-d H:i:s", time()));
             $this->setValue("dat_usr_id_change", $g_current_user->getValue("usr_id"));
         }
+        parent::save();
     }
    
     // gibt einen Termin im iCal-Format zurueck

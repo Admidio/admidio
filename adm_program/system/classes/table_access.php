@@ -127,12 +127,6 @@ class TableAccess
                 }
             }
         }
-        
-        // Zusaetzliche Daten der abgeleiteten Klasse loeschen
-        if(method_exists($this, "_clear"))
-        {
-            $this->_clear();
-        }
     }
     
     // Methode gibt die Anzahl aller Datensaetze dieser Tabelle zurueck
@@ -159,12 +153,6 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
-        // Plausibilitaets-Check des Wertes vornehmen
-        if(method_exists($this, "_setValue"))
-        {
-            $this->_setValue($field_name, $field_value);
-        }
-    
         if(isset($this->db_fields[$field_name]))
         {            
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
@@ -205,29 +193,25 @@ class TableAccess
         }
     }    
     
-    // Methode gibt den Wert eines Feldes zurueck
-    function getValue($field_name)
+    // Methode gibt den Wert eines Feldes ($field_name) zurueck
+    // $field_value dient als Uebergabe aus ueberschreibenden Methoden heraus
+    function getValue($field_name, $field_value = "")
     {
-        $value = "";
-        if(method_exists($this, "_getValue"))
+        if(strlen($field_value) == 0)
         {
-            $value = $this->_getValue($field_name);
+            $field_value = $this->db_fields[$field_name];
         }
-        elseif(isset($this->db_fields[$field_name]))
-        {
-            $value = $this->db_fields[$field_name];
-        }
-         
+        
         // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
         if(isset($this->db_fields_infos[$field_name]) == false
         || strpos($this->db_fields_infos[$field_name]['type'], "char") !== false
         || strpos($this->db_fields_infos[$field_name]['type'], "text") !== false)
         {
-            return htmlspecialchars($value, ENT_QUOTES);
+            return htmlspecialchars($field_value, ENT_QUOTES);
         }
         else
         {
-            return $value;
+            return $field_value;
         }
     }    
     
@@ -235,12 +219,6 @@ class TableAccess
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
-        // Defaultdaten vorbelegen
-        if(method_exists($this, "_save"))
-        {
-            $this->_save();
-        }
-
         if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
         {
             // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
@@ -322,12 +300,6 @@ class TableAccess
             }
         }
 
-        // Nach dem Speichern eine Funktion aufrufen um evtl. abhaenige Daten noch anzupassen
-        if(method_exists($this, "_afterSave"))
-        {
-            $this->_afterSave();
-        }
-
         $this->db_fields_changed = false;
         return 0;
     }
@@ -335,23 +307,12 @@ class TableAccess
     // aktuelle Datensatz loeschen und ggf. noch die Referenzen
     function delete()
     {
-        $ret_code = true;
-        
-        // erst einmal die Referenzen verarbeiten
-        if(method_exists($this, "_delete"))
-        {
-            $ret_code = $this->_delete();
-        }
-                        
-        if($ret_code == true)
-        {
-            $sql    = "DELETE FROM $this->table_name 
-                        WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
-            $this->db->query($sql);
-    
-            $this->clear();
-        }
-        return $ret_code;
+        $sql    = "DELETE FROM $this->table_name 
+                    WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
+        $this->db->query($sql);
+
+        $this->clear();
+        return true;
     }    
 }
 ?>
