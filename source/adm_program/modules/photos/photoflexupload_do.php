@@ -13,9 +13,9 @@
  *
  *****************************************************************************/
 
-require("../../system/classes/photo_album.php");
-require("../../system/common.php");
-require("photo_function.php");
+require_once("../../system/classes/photo_album.php");
+require_once("../../system/common.php");
+require_once("../../system/classes/image.php");
 
 // kontrolle ob das Upload funktioniert hat
 if (! isset($_FILES['Filedata'])) {
@@ -74,7 +74,9 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
 	if (move_uploaded_file($_FILES['Filedata']['tmp_name'], $image)) 
 	{
 		//Bild skalliert speichern
-        image_save($image, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
+        $image = new Image($image);
+        $image->scale($g_preferences['photo_save_scale']);
+        $image->copyToFile(null, $ordner."/".$bildnr.".jpg");
 	    
         //Nachsehen ob Thumnailordner existiert
         if(!file_exists($ordner."/thumbnails"))
@@ -84,7 +86,9 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
         }
         
         //Thumbnail speichern
-        image_save($image, $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bildnr.".jpg");
+        $image = new Image($image);
+        $image->scale($g_preferences['photo_thumbs_scale']);
+        $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");        
         
         //Loeschen des Bildes aus Arbeitsspeicher
         if(file_exists($image))

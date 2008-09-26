@@ -20,6 +20,7 @@
 
 require_once("../../system/common.php");
 require_once("../../system/classes/photo_album.php");
+require_once("../../system/classes/image.php");
 
 // die Funktionen sollten auch ausgeloggt irgendwo benutzt werden koennen
 if(isset($_GET["job"]))
@@ -72,56 +73,6 @@ if(isset($_GET["job"]) && (isset($_GET["bild"]) == false || is_numeric($_GET["bi
     $g_message->show("invalid");
 }
 
-//Funktion zum Speichern von Bildern
-//Kind (upload, thumb)
-
-function image_save($orig_path, $scale, $destination_path)
-{
-    if(file_exists($orig_path))
-    {
-        //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
-        @ini_set('memory_limit', '50M');
-        
-        //Ermittlung der Original Bildgroesse
-        $bildgroesse = getimagesize($orig_path);
-
-        //Errechnung seitenverhaeltniss
-        $seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
-
-        //laengere seite soll skalliert werden
-        //Errechnug neuen Bildgroesse Querformat
-        if($bildgroesse[0]>=$bildgroesse[1])
-        {
-            $photo_new_size = array ($scale, round($scale/$seitenverhaeltnis));
-        }
-        //Errechnug neuen Bildgroesse Hochformat
-        if($bildgroesse[0]<$bildgroesse[1]){
-            $photo_new_size = array (round($scale*$seitenverhaeltnis), $scale);
-        }
-                    
-
-        // Erzeugung neues Bild
-        $photo_new = imagecreatetruecolor($photo_new_size[0], $photo_new_size[1]);
-
-        //Aufrufen des Originalbildes
-        $photo_original = imagecreatefromjpeg($orig_path);
-
-        //kopieren der Daten in neues Bild
-        imagecopyresampled($photo_new, $photo_original, 0, 0, 0, 0, $photo_new_size[0], $photo_new_size[1], $bildgroesse[0], $bildgroesse[1]);
-
-        //falls Bild existiert: Loeschen
-        if(file_exists($destination_path)){
-            unlink($destination_path);
-        }
-
-        //Bild in Zielordner abspeichern
-        imagejpeg($photo_new, $destination_path, 90);
-        chmod($destination_path,0777);
-
-        imagedestroy($photo_new);
-    }    
-}
-
 
 //Loeschen eines Thumbnails
 // photo_album : Referenz auf Objekt des relevanten Albums
@@ -141,68 +92,6 @@ function deleteThumbnail(&$photo_album, $pic_nr)
         }
     }
 }
-
-// Bild entsprechend der Uebergabe drehen
-// pho_id: Albumid
-// pic_nr: nr des Bildes das gedreht werden soll
-// direction: left/right in die Richtung um 90° drehen
-function rotatePhoto($pho_id, $pic_nr, $direction)
-{
-    global $g_db;
-
-    // nur bei gueltigen Uebergaben weiterarbeiten
-    if(is_numeric($pho_id) && is_numeric($pic_nr) && ($direction == "left" || $direction == "right"))
-    {
-        //Aufruf des ggf. uebergebenen Albums
-        $photo_album = new PhotoAlbum($g_db, $pho_id);
-
-        //Thumbnail loeschen
-        deleteThumbnail($photo_album, $pic_nr);
-        
-        //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id"). "/". $pic_nr. ".jpg";
-      
-        //Ermittlung der Original Bildgroessee
-        $bildgroesse = getimagesize($photo_path);
-
-        // Erzeugung neues Bild
-        $photo_rotate = imagecreatetruecolor($bildgroesse[1], $bildgroesse[0]);
-
-        //Aufrufen des Originalbildes
-        $photo_original = imagecreatefromjpeg($photo_path);
-
-        //kopieren der Daten in neues Bild
-        for($y=0; $y<$bildgroesse[1]; $y++)
-        {
-            for($x=0; $x<$bildgroesse[0]; $x++)
-            {
-                if($direction == "right")
-                {
-                    imagecopy($photo_rotate, $photo_original, $bildgroesse[1]-$y-1, $x, $x, $y, 1,1 );
-                }
-                elseif($direction == "left")
-                {
-                    imagecopy($photo_rotate, $photo_original, $y, $bildgroesse[0]-$x-1, $x, $y, 1,1 );
-                }
-            }
-        }
-      
-        //Ursprungsdatei loeschen
-        if(file_exists($photo_path))
-        {
-            chmod($photo_path, 0777);
-            unlink($photo_path);
-        }
-
-        //speichern
-        imagejpeg($photo_rotate, $photo_path, 90);
-        chmod($photo_path,0777);
-
-        //Loeschen des Bildes aus Arbeitsspeicher
-        imagedestroy($photo_rotate);
-        imagedestroy($photo_original);
-    }
-};
 
 //Loeschen eines Bildes
 function deletePhoto($pho_id, $pic_nr)
@@ -259,11 +148,25 @@ function deletePhoto($pho_id, $pic_nr)
 };
 
 
-//Nutzung der rotatefunktion
+// Foto um 90° drehen
 if(isset($_GET["job"]) && $_GET["job"]=="rotate")
 {
-    // Foto um 90° drehen
-    rotatePhoto($pho_id, $_GET["bild"], $_GET["direction"]);
+    // nur bei gueltigen Uebergaben weiterarbeiten
+    if(is_numeric($pho_id) && is_numeric($_GET["bild"]) && ($_GET["direction"] == "left" || $_GET["direction"] == "right"))
+    {
+        //Aufruf des ggf. uebergebenen Albums
+        $photo_album = new PhotoAlbum($g_db, $pho_id);
+
+        //Thumbnail loeschen
+        deleteThumbnail($photo_album, $_GET["bild"]);
+        
+        //Ordnerpfad zusammensetzen
+        $photo_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id"). "/". $_GET["bild"]. ".jpg";
+        
+        // Bild drehen
+        $image = new Image($photo_path);
+        $image->rotate($_GET["direction"]);
+    }    
     
     // zur Ausgangsseite zurueck
     $location = "Location: $g_root_path/adm_program/system/back.php";

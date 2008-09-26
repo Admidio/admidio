@@ -18,7 +18,7 @@
 
 require_once("../../system/classes/photo_album.php");
 require_once("../../system/common.php");
-require_once("photo_function.php");
+require_once("../../system/classes/image.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -341,7 +341,9 @@ echo "<div class=\"photoModuleContainer\">";
                         //Wenn nicht und nicht SafeMode anlegen
                         if(!file_exists($ordner."/thumbnails/".$bild.".jpg") || $thumb_length !=$g_preferences['photo_thumbs_scale'])
                         {
-                            image_save($ordner."/".$bild.".jpg", $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bild.".jpg");
+                            $image = new Image($ordner."/".$bild.".jpg");
+                            $image->scale($g_preferences['photo_thumbs_scale']);
+                            $image->copyToFile(null, $ordner."/thumbnails/".$bild.".jpg");                        
                         }
 
                         //Popup-Mode

@@ -13,10 +13,10 @@
  *
  *****************************************************************************/
 
-require("../../system/classes/photo_album.php");
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("photo_function.php");
+require_once("../../system/classes/photo_album.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
+require_once("../../system/classes/image.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -146,7 +146,9 @@ if($_POST["upload"])
                     $temp_bild=SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg";
 
                     //Bild skalliert speichern
-                    image_save($temp_bild, $g_preferences['photo_save_scale'], $ordner."/".$bildnr.".jpg");
+                    $image = new Image($temp_bild);
+                    $image->scale($g_preferences['photo_save_scale']);
+                    $image->copyToFile(null, $ordner."/".$bildnr.".jpg");                        
                     
                     //Nachsehen ob Thumnailordner existiert
                     if(!file_exists($ordner."/thumbnails"))
@@ -156,9 +158,11 @@ if($_POST["upload"])
                     }
                     
                     //Thumbnail speichern
-                    image_save($temp_bild, $g_preferences['photo_thumbs_scale'], $ordner."/thumbnails/".$bildnr.".jpg");
+                    $image = new Image($temp_bild);
+                    $image->scale($g_preferences['photo_thumbs_scale']);
+                    $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");   
+
                     //Loeschen des Bildes aus Arbeitsspeicher
-                    
                     if(file_exists(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg"))
                     {
                         unlink(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg");
