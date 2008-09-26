@@ -20,6 +20,10 @@
  * copyToBrowser($imageResource = null, $quality = 95)
  *                  - gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
  * getMimeType()    - gibt den Mime-Type (image/png) des Bildes zurueck
+ * rotate($direction = "right")
+ *                  - dreht das Bild um 90° in eine Richtung ("left"/"right")
+ * scale($new_max_size)
+ *                  - skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
  * resize($new_x_size, $new_y_size, $seitenveraehltnis_beibehalten = true, $enlarge = false)
  *                  - veraendert die Bildgroesse
  *
@@ -29,9 +33,9 @@ class Image
 {
     var $imagePath;
     var $imageResource = false;
-    var $imageWidth = 0;
-    var $imageHeight = 0;
-    var $imageType = null;
+    var $imageWidth    = 0;
+    var $imageHeight   = 0;
+    var $imageType     = null;
     
     function Image($pathAndFilename = "")
     {
@@ -147,7 +151,7 @@ class Image
         switch ($this->imageType)
         {
             case IMAGETYPE_JPEG:
-                echo imagejpeg($imageResource, $quality);
+                echo imagejpeg($imageResource, null, $quality);
                 break;
 
             case IMAGETYPE_PNG:
@@ -160,6 +164,62 @@ class Image
     function getMimeType()
     {
         return image_type_to_mime_type($this->imageType);
+    }
+    
+    // Methode dreht das Bild um 90° in eine Richtung
+    // direction : "right" o. "left" Richtung, in die gedreht wird
+    function rotate($direction = "right")
+    {
+        // nur bei gueltigen Uebergaben weiterarbeiten
+        if(($direction == "left" || $direction == "right"))
+        {
+            // Erzeugung neues Bild
+            $photo_rotate = imagecreatetruecolor($this->imageHeight, $this->imageWidth);
+
+            //kopieren der Daten in neues Bild
+            for($y = 0; $y < $this->imageHeight; $y++)
+            {
+                for($x = 0; $x < $this->imageWidth; $x++)
+                {
+                    if($direction == "right")
+                    {
+                        imagecopy($photo_rotate, $this->imageResource, $this->imageHeight - $y - 1, $x, $x, $y, 1,1 );
+                    }
+                    elseif($direction == "left")
+                    {
+                        imagecopy($photo_rotate, $this->imageResource, $y, $this->imageWidth - $x - 1, $x, $y, 1,1 );
+                    }
+                }
+            }
+
+            //speichern
+            $this->copyToFile($photo_rotate);
+
+            //Loeschen des Bildes aus Arbeitsspeicher
+            imagedestroy($photo_rotate);
+        }
+    }
+    
+    // Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
+    // die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
+    function scale($new_max_size)
+    {
+        // Errechnung Seitenverhaeltnis
+        $seitenverhaeltnis = $this->imageWidth / $this->imageHeight;
+            
+        if($this->imageWidth >= $this->imageHeight)
+        {
+            // x-Seite soll scalliert werden
+            $photo_x_size = $new_max_size;
+            $photo_y_size = round($new_max_size / $seitenverhaeltnis);
+        }
+        else
+        {
+            // y-Seite soll scalliert werden
+            $photo_x_size = round($new_max_size * $seitenverhaeltnis);
+            $photo_y_size = $new_max_size;
+        }
+        $this->resize($photo_x_size, $photo_y_size, false);
     }
 
     // Methode veraendert die Bildgroesse
@@ -200,7 +260,7 @@ class Image
             else
             {
                 $photo_x_size = $new_x_size;
-                $photo_x_size = $new_y_size;
+                $photo_y_size = $new_y_size;
             }
 
             // Erzeugung neues Bild
@@ -209,15 +269,11 @@ class Image
             //kopieren der Daten in neues Bild
             imagecopyresampled($resized_user_photo, $this->imageResource, 0, 0, 0, 0, $photo_x_size, $photo_y_size, $this->imageWidth, $this->imageHeight);
 
-            // nun die interne Bildresource updaten
+            // nun die internen Bilddaten updaten
             imagedestroy($this->imageResource);
             $this->imageResource = $resized_user_photo;
-            
-            // falls das Bild im Dateisystem abgelegt ist, dann auch dort abspeichern
-            if(strlen($this->imagePath) > 0)
-            {
-                $this->copyToFile($resized_user_photo);
-            }
+            $this->imageWidht    = $photo_x_size;
+            $this->imageHeight   = $photo_y_size;
         }        
     }
 }

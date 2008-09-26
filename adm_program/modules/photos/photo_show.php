@@ -16,8 +16,9 @@
  * side      : Seite des Bildes die skaliert werden soll (x oder y)
  *
  *****************************************************************************/
-require("../../system/classes/photo_album.php");
-require("../../system/common.php");
+require_once("../../system/classes/photo_album.php");
+require_once("../../system/common.php");
+require_once("../../system/classes/image.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -32,7 +33,6 @@ elseif($g_preferences['enable_photo_module'] == 2)
 }
 
 //Uebergaben pruefen
-
 $pho_id    = NULL;
 $pho_begin = 0;
 $pic_nr    = NULL;
@@ -90,69 +90,23 @@ if(file_exists($picpath) == false)
     $picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
 }
 
-//Ermittlung der Original Bildgroesse
-$bildgroesse = getimagesize($picpath);
+// Bild einlesen und scalieren
+$image = new Image($picpath);
+$image->resize($scal*($image->imageWidth/$image->imageHeight), $scal);
 
-//Errechnung seitenverhaeltniss
-$seitenverhaeltnis = $bildgroesse[0]/$bildgroesse[1];
-
-//x-Seite soll scalliert werden
-if($side=="x")
-{
-    $neubildsize = array ($scal, round($scal/$seitenverhaeltnis));
-}
-
-//y-Seite soll scalliert werden
-if($side=="y")
-{
-    if($seitenverhaeltnis>1.6)
-    {
-        $neubildsize =  array (round($scal*1.6), round($scal*(1.6/$seitenverhaeltnis)));
-    }
-    else
-    {
-        $neubildsize =  array (round($scal*$seitenverhaeltnis), $scal);
-    }
-}
-
-//laengere seite soll scallirt werden
-if(strlen($side) == 0)
-{
-    //Errechnug neuen Bildgroesse Querformat
-    if($bildgroesse[0]>=$bildgroesse[1])
-    {
-        $neubildsize = array ($scal, round($scal/$seitenverhaeltnis));
-    }
-    //Errechnug neuen Bildgroesse Hochformat
-    if($bildgroesse[0]<$bildgroesse[1]){
-        $neubildsize = array (round($scal*$seitenverhaeltnis), $scal);
-    }
-}
-
-// Erzeugung neues Bild
-$neubild = imagecreatetruecolor($neubildsize[0], $neubildsize[1]);
-
-//Aufrufen des Originalbildes
-$bilddaten = imagecreatefromjpeg($picpath);
-
-//kopieren der Daten in neues Bild
-imagecopyresampled($neubild, $bilddaten, 0, 0, 0, 0, $neubildsize[0], $neubildsize[1], $bildgroesse[0], $bildgroesse[1]);
-
-//Einfuegen des textes bei bilder die in der Ausgabe groesser als 200px sind
+// Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
 if ($scal>200 && $g_preferences['photo_image_text'] == 1)
 {
-    $font_c = imagecolorallocate($neubild,255,255,255);
+    $font_c = imagecolorallocate($image->imageResource,255,255,255);
     $font_ttf = THEME_SERVER_PATH."/font.ttf";
     $font_s = $scal/40;
     $font_x = $font_s;
-    $font_y = $neubildsize[1]-$font_s;
-    $text="&#169;&#32;".$g_current_organization->getValue("org_homepage");
-    imagettftext($neubild, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
+    $font_y = $image->imageHeight-$font_s;
+    $text = "&#169;&#32;".$g_current_organization->getValue("org_homepage");
+    imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
 }
 
-//Rueckgabe des Neuen Bildes
-header("Content-Type: image/jpeg");
-imagejpeg($neubild,"",90);
-
-imagedestroy($neubild);
+// Rueckgabe des neuen Bildes
+header("Content-Type: ". $image->getMimeType());
+$image->copyToBrowser();
 ?>

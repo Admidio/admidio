@@ -227,7 +227,7 @@ if($g_current_session->getValue("ses_id") > 0)
     if($g_current_session->getValue("ses_renew") == 2 || $g_current_session->getValue("ses_renew") == 3)
     {
         // Organisationsobjekt neu einlesen
-        $g_current_organization->getOrganization($g_organization);
+        $g_current_organization->readData($g_organization);
         $g_preferences = $g_current_organization->getPreferences();
         $g_current_session->setValue("ses_renew", 0);
     }
