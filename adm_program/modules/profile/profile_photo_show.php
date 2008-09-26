@@ -79,5 +79,6 @@ else
 
 header("Content-Type: ". $image->getMimeType());
 $image->copyToBrowser();
+$image->delete();
 
 ?>

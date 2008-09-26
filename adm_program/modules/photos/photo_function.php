@@ -166,6 +166,7 @@ if(isset($_GET["job"]) && $_GET["job"]=="rotate")
         // Bild drehen
         $image = new Image($photo_path);
         $image->rotate($_GET["direction"]);
+        $image->delete();
     }    
     
     // zur Ausgangsseite zurueck
