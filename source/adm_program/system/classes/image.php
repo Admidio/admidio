@@ -26,6 +26,7 @@
  *                  - skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
  * resize($new_x_size, $new_y_size, $seitenveraehltnis_beibehalten = true, $enlarge = false)
  *                  - veraendert die Bildgroesse
+ * delete()         - entfernt das Bild aus dem Speicher
  *
  *****************************************************************************/
 
@@ -274,7 +275,15 @@ class Image
             $this->imageResource = $resized_user_photo;
             $this->imageWidht    = $photo_x_size;
             $this->imageHeight   = $photo_y_size;
-        }        
+        }
+    }
+    
+    // entfernt das Bild aus dem Speicher
+    function delete()
+    {
+    	imagedestroy($this->imageResource);
+    	$this->imageResource = null;
+    	$this->imagePath = "";
     }
 }
 ?>

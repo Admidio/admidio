@@ -148,7 +148,8 @@ if($_POST["upload"])
                     //Bild skalliert speichern
                     $image = new Image($temp_bild);
                     $image->scale($g_preferences['photo_save_scale']);
-                    $image->copyToFile(null, $ordner."/".$bildnr.".jpg");                        
+                    $image->copyToFile(null, $ordner."/".$bildnr.".jpg");
+                    $image->delete();
                     
                     //Nachsehen ob Thumnailordner existiert
                     if(!file_exists($ordner."/thumbnails"))
@@ -160,7 +161,8 @@ if($_POST["upload"])
                     //Thumbnail speichern
                     $image = new Image($temp_bild);
                     $image->scale($g_preferences['photo_thumbs_scale']);
-                    $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");   
+                    $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");
+                    $image->delete();
 
                     //Loeschen des Bildes aus Arbeitsspeicher
                     if(file_exists(SERVER_PATH. "/adm_my_files/photos/temp".$y.".jpg"))

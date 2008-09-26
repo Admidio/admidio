@@ -77,6 +77,7 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
         $image = new Image($image);
         $image->scale($g_preferences['photo_save_scale']);
         $image->copyToFile(null, $ordner."/".$bildnr.".jpg");
+        $image->delete();
 	    
         //Nachsehen ob Thumnailordner existiert
         if(!file_exists($ordner."/thumbnails"))
@@ -88,7 +89,8 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
         //Thumbnail speichern
         $image = new Image($image);
         $image->scale($g_preferences['photo_thumbs_scale']);
-        $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");        
+        $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");
+        $image->delete(); 
         
         //Loeschen des Bildes aus Arbeitsspeicher
         if(file_exists($image))

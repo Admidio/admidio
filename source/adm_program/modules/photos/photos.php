@@ -343,7 +343,8 @@ echo "<div class=\"photoModuleContainer\">";
                         {
                             $image = new Image($ordner."/".$bild.".jpg");
                             $image->scale($g_preferences['photo_thumbs_scale']);
-                            $image->copyToFile(null, $ordner."/thumbnails/".$bild.".jpg");                        
+                            $image->copyToFile(null, $ordner."/thumbnails/".$bild.".jpg");
+                            $image->delete();
                         }
 
                         //Popup-Mode

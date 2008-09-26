@@ -109,4 +109,5 @@ if ($scal>200 && $g_preferences['photo_image_text'] == 1)
 // Rueckgabe des neuen Bildes
 header("Content-Type: ". $image->getMimeType());
 $image->copyToBrowser();
+$image->delete();
 ?>
