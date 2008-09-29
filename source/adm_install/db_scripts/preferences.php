@@ -49,6 +49,7 @@ $orga_preferences = array(
     'photo_image_text'    => '1',
     'photo_preview_scale' => '100',
     'photo_show_mode'     => '1',
+    'photo_upload_mode'     => '0',
 
     // Forum
     'enable_forum_interface'=> '0',
