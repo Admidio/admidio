@@ -22,7 +22,12 @@ while($row_orga = $g_db->fetch_array($result_orga))
                       , (".$row_orga['org_id'].", 'SYSMAIL_REGISTRATION_WEBMASTER', '".$systemmails_texts['SYSMAIL_REGISTRATION_WEBMASTER']."')
                       , (".$row_orga['org_id'].", 'SYSMAIL_NEW_PASSWORD', '".$systemmails_texts['SYSMAIL_NEW_PASSWORD']."') 
                       , (".$row_orga['org_id'].", 'SYSMAIL_ACTIVATION_LINK', '".$systemmails_texts['SYSMAIL_ACTIVATION_LINK']."') ";
-    $g_db->query($sql);    
+    $g_db->query($sql); 
+
+    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+            VALUES ($row_orga->org_id, 'photo_upload_mode', $row_orga->photo_upload_mode)";
+    $g_db->query($sql);
+
 }
 
 ?>

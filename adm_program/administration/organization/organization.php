@@ -796,7 +796,40 @@ echo "
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
                         Ggf. weniger Thumbnailspalten einstellen. (Standardwert: 100)
                     </li>
-                    <li>
+                     <li>
+                        <dl>
+                            <dt><label for=\"photo_upload_mode\">Uploadmethode:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"photo_show_mode\" name=\"photo_upload_mode\">
+                                    <option value=\"0\" ";
+                                    if($form_values['photo_upload_mode'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Benutzerauswahl</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['photo_upload_mode'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Multiupload</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['photo_upload_mode'] == 2)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Einzeldateiauswahl</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann eingestellt werden, welche Möglichkeiten zum Bilderupload berechtigten Benutzern zur Verfügung gestellt werden.<br>
+						Benutzerauswahl - Der Benutzer kann selbst eine Methode wählen.<br>
+						Multiupload - Über ein Flashplugin können mehrere Dateien gleichzeitig ausgewählt werden. Wären dem Upload wir der Benutzer laufend über den Status und die Verarbeitung informiert.<br>
+						Einzeldateiauswahl - Der Benutzer muss jede datei einzeln auswählen, bis zu fünf pro Uploadvorgang.<br>
+                    </li>
+					<li>
                         <dl>
                             <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen und im LBmodus:</label></dt>
                             <dd>
