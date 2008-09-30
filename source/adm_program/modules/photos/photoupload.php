@@ -10,7 +10,9 @@
  * Uebergaben:
  *
  * pho_id: id des Albums zu dem die Bilder hinzugefuegt werden sollen
- *
+ * mode: 1 - Klassisches Formular zur Bilderazswahl
+ * 		 2 - Flexuploder 
+ * 
  *****************************************************************************/
 
 require("../../system/classes/photo_album.php");
@@ -39,6 +41,11 @@ if(!$g_current_user->editPhotoRight())
 // Uebergabevariablen pruefen
 
 if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
+{
+    $g_message->show("invalid");
+}
+
+if(is_numeric($_GET["mode"]) == false || $_GET["mode"] < 1 || $_GET["mode"] > 2)
 {
     $g_message->show("invalid");
 }
@@ -81,73 +88,78 @@ if($photo_album->getValue("pho_org_shortname") != $g_organization)
 $g_layout['title'] = "Fotos hochladen";
 require(THEME_SERVER_PATH. "/overall_header.php");
 
-/**************************Formular********************************************************/
-/*echo"
-<form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
-<div class=\"formLayout\" id=\"photo_upload_form\">
-    <div class=\"formHead\">Bilder hochladen</div>
-    <div class=\"formBody\">
-        <p>
-            Die Bilder werden zu dem Album <strong>".$photo_album->getValue("pho_name")."</strong> hinzugefügt.<br />"
-            ."(Beginn: ". mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ")
-        </p>
-
-        <ul class=\"formFieldList\">
-            <li><dl>
-                <dt><label for=\"bilddatei1\">Bild 1:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
-            </dl></li>
-            <li><dl>
-                <dt><label for=\"bilddatei1\">Bild 2:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei2\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
-            </dl></li>
-            <li><dl>
-                <dt><label for=\"bilddatei1\">Bild 3:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei3\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
-            </dl></li>
-            <li><dl>
-                <dt><label for=\"bilddatei1\">Bild 4:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei4\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
-            </dl></li>
-            <li><dl>
-                <dt><label for=\"bilddatei1\">Bild 5:</label></dt>
-                <dd><input type=\"file\" id=\"bilddatei5\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
-            </dl></li>
-        </ul>
-        <hr />
-        <div class=\"formSubmit\">
-            <button name=\"upload\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Speichern\" />&nbsp;Bilder hochladen</button>
-        </div>
-   </div>
-</div>
-</form>";*/
-
-
-//neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
-$fup = new FlexUpload("$g_root_path/adm_program/modules/photos/photoflexupload_do.php?pho_id=".$_GET['pho_id']."");
-
-//Pfad zum swf-File
-$fup->setPathToSWF("$g_root_path/adm_program/libs/flexupload/");
-//Pfad der Sprachdatei
-$fup->setLocale("$g_root_path/adm_program/libs/flexupload/de.xml");
-//maximale Dateigröße
-$fup->setMaxFileSize(5*1024*1024);
-//maximale Dateianzahl
-$fup->setMaxFiles(10);
-//breite des Uploaders
-$fup->setWidth(560);
-//breite des Uploaders
-$fup->setHeight(400);
-//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
-$fup->setFileExtensions("*.jpg;*.jpeg;*");
-
-
-//Ausgabe des Uploaders
-$fup->printHTML(true, 'flexupload');
-
-
-
-
+/**************************Klassisches Formular********************************************************/
+if($_GET["mode"] == 1 && ($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2))
+{
+	echo"
+	<form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photoupload_do.php?pho_id=". $_GET['pho_id']. "\" enctype=\"multipart/form-data\">
+	<div class=\"formLayout\" id=\"photo_upload_form\">
+	    <div class=\"formHead\">Bilder hochladen</div>
+	    <div class=\"formBody\">
+	        <p>
+	            Die Bilder werden zu dem Album <strong>".$photo_album->getValue("pho_name")."</strong> hinzugefügt.<br />"
+	            ."(Beginn: ". mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ")
+	        </p>
+	
+	        <ul class=\"formFieldList\">
+	            <li><dl>
+	                <dt><label for=\"bilddatei1\">Bild 1:</label></dt>
+	                <dd><input type=\"file\" id=\"bilddatei1\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
+	            </dl></li>
+	            <li><dl>
+	                <dt><label for=\"bilddatei1\">Bild 2:</label></dt>
+	                <dd><input type=\"file\" id=\"bilddatei2\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
+	            </dl></li>
+	            <li><dl>
+	                <dt><label for=\"bilddatei1\">Bild 3:</label></dt>
+	                <dd><input type=\"file\" id=\"bilddatei3\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
+	            </dl></li>
+	            <li><dl>
+	                <dt><label for=\"bilddatei1\">Bild 4:</label></dt>
+	                <dd><input type=\"file\" id=\"bilddatei4\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
+	            </dl></li>
+	            <li><dl>
+	                <dt><label for=\"bilddatei1\">Bild 5:</label></dt>
+	                <dd><input type=\"file\" id=\"bilddatei5\" name=\"bilddatei[]\" value=\"durchsuchen\" /></dd>
+	            </dl></li>
+	        </ul>
+	        <hr />
+	        <div class=\"formSubmit\">
+	            <button name=\"upload\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Speichern\" />&nbsp;Bilder hochladen</button>
+	        </div>
+	   </div>
+	</form>";
+}
+/**************************Flexuploader********************************************************/
+elseif($_GET["mode"] == 2 && ($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 1))
+{
+	echo"<h2>Bilder hochladen</h2>
+		<p>
+	        Die Bilder werden zu dem Album <strong>".$photo_album->getValue("pho_name")."</strong> hinzugefügt. (Beginn: ". mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ")
+	    </p>";
+    //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
+	$fup = new FlexUpload("$g_root_path/adm_program/modules/photos/photoflexupload_do.php?pho_id=".$_GET['pho_id']."");
+	//Pfad zum swf-File
+	$fup->setPathToSWF("$g_root_path/adm_program/libs/flexupload/");
+	//Pfad der Sprachdatei
+	$fup->setLocale("$g_root_path/adm_program/libs/flexupload/de.xml");
+	//maximale Dateigröße
+	$fup->setMaxFileSize(5*1024*1024);
+	//maximale Dateianzahl
+	$fup->setMaxFiles(10);
+	//breite des Uploaders
+	$fup->setWidth(560);
+	//breite des Uploaders
+	$fup->setHeight(400);
+	//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
+	$fup->setFileExtensions("*.jpg;*.jpeg;*");
+	//Ausgabe des Uploaders
+	$fup->printHTML(true, 'flexupload');
+}
+else
+{
+    $g_message->show("invalid");
+}
 
 echo "
 </div>

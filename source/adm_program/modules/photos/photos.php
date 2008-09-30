@@ -635,30 +635,42 @@ echo "<div class=\"photoModuleContainer\">";
                             $this_pho_id = $adm_photo_list["pho_id"];
                             if(file_exists($ordner))
                             {
+                                if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
+                                {
+	                                echo"
+	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id&mode=1\"><img 
+	                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Einzelbilder hochladen\" title=\"Einzelbilder hochladen\" /></a>";
+                                }
+                                
+                                if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 1)
+                                {
+	                                echo"
+	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id&mode=2\"><img 
+	                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Multibilderupload\" title=\"Multibilderupload\" /></a>";
+                                }
+                                
                                 echo"
-                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id\"><img 
-                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Bilder hochladen\" title=\"Bilder hochladen\" /></a>
-                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?pho_id=$this_pho_id&amp;job=change\"><img 
+								<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?pho_id=$this_pho_id&amp;job=change\"><img 
                                     src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
+	                            
+                                if($adm_photo_list["pho_locked"]==1)
+	                            {
+	                                echo"
+	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&amp;locked=0\"><img 
+	                                    src=\"". THEME_PATH. "/icons/key.png\"  alt=\"Freigeben\" title=\"Freigeben\" /></a>";
+	                            }
+	                            elseif($adm_photo_list["pho_locked"]==0)
+	                            {
+	                                echo"
+	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&amp;locked=1\"><img 
+	                                    src=\"". THEME_PATH. "/icons/key.png\" alt=\"Sperren\" title=\"Sperren\" /></a>";
+	                            }
                             }
 
                             echo"
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_function.php?job=delete_request&amp;pho_id=$this_pho_id\"><img 
-                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Album löschen\" title=\"Album löschen\" /></a>";
-
-                            if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
-                            {
-                                echo"
-                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&amp;locked=0\"><img 
-                                    src=\"". THEME_PATH. "/icons/key.png\"  alt=\"Freigeben\" title=\"Freigeben\" /></a>";
-                            }
-                            elseif($adm_photo_list["pho_locked"]==0 && file_exists($ordner))
-                            {
-                                echo"
-                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=$this_pho_id&amp;locked=1\"><img 
-                                    src=\"". THEME_PATH. "/icons/key.png\" alt=\"Sperren\" title=\"Sperren\" /></a>";
-                            }
-                            echo"</li>";
+                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Album löschen\" title=\"Album löschen\" /></a>
+							</li>";
                         }
                     echo"
                 </ul></dd>";
