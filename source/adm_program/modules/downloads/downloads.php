@@ -13,9 +13,10 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/classes/folder.php");
-require("../../system/classes/htaccess.php");
+require_once("../../system/common.php");
+require_once("../../system/classes/folder.php");
+require_once("../../system/classes/htaccess.php");
+require_once("../../system/file_extension_icons.php");
 
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -195,50 +196,21 @@ else
 
             $nextFile = $folderContent["files"][$i];
 
-            //Ermittlung der dateiendung
-            $dateiendung  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], ".")+1));
+            //Ermittlung der Dateiendung
+            $fileExtension  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], ".")+1));
 
-            //Auszugebendes Icon
-            if($dateiendung=="gif"
-            || $dateiendung=="cdr"
-            || $dateiendung=="jpg"
-            || $dateiendung=="png"
-            || $dateiendung=="bmp"
-            || $dateiendung=="wmf" )
-               $dateiendung = "page_white_camera";
-            elseif($dateiendung=="doc"
-            ||     $dateiendung=="dot"
-            ||     $dateiendung=="rtf")
-               $dateiendung = "page_white_word";
-            elseif($dateiendung=="xls"
-            ||     $dateiendung=="xlt"
-            ||     $dateiendung=="csv")
-               $dateiendung = "page_white_excel";
-            elseif($dateiendung=="pps"
-            ||     $dateiendung=="ppt")
-               $dateiendung = "page_white_powerpoint";
-            elseif($dateiendung=="txt"
-            ||     $dateiendung=="php"
-            ||     $dateiendung=="sql"
-            ||     $dateiendung=="log")
-               $dateiendung = "page_white_text";
-            elseif($dateiendung=="pdf")
-               $dateiendung = "page_white_acrobat";
-            elseif($dateiendung=="zip"
-            ||     $dateiendung=="gz"
-            ||     $dateiendung=="rar"
-            ||     $dateiendung=="tar")
-               $dateiendung = "page_white_compressed";
-            elseif($dateiendung=="swf")
-               $dateiendung = "page_white_flash";
-            else
-               $dateiendung = "page_white_question";
+            //Auszugebendes Icon ermitteln
+            $iconFile = "page_white_question.png";
+            if(array_key_exists($fileExtension, $icon_file_extension))
+            {
+                $iconFile = $icon_file_extension[$fileExtension];
+            }
 
             echo "
             <tr class=\"tableMouseOver\">
                 <td>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/get_file.php?file_id=". $nextFile['fil_id']. "\">
-                    <img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a>
+                    <img src=\"". THEME_PATH. "/icons/$iconFile\" alt=\"Datei\" title=\"Datei\" /></a>
                 </td>
                 <td><a href=\"$g_root_path/adm_program/modules/downloads/get_file.php?file_id=". $nextFile['fil_id']. "\">". $nextFile['fil_name']. "</a></td>
                 <td>". mysqldatetime("d.m.y h:i", $nextFile['fil_timestamp']). "</td>
@@ -325,48 +297,19 @@ if ($g_current_user->editDownloadRight())
 
                 $nextFile = $folderContent["additionalFiles"][$i];
 
-                //Ermittlung der dateiendung
-                $dateiendung  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], ".")+1));
+                //Ermittlung der Dateiendung
+                $fileExtension  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], ".")+1));
 
-                //Auszugebendes Icon
-                if($dateiendung=="gif"
-                || $dateiendung=="cdr"
-                || $dateiendung=="jpg"
-                || $dateiendung=="png"
-                || $dateiendung=="bmp"
-                || $dateiendung=="wmf" )
-                    $dateiendung = "page_white_camera";
-                elseif($dateiendung=="doc"
-                ||     $dateiendung=="dot"
-                ||     $dateiendung=="rtf")
-                    $dateiendung = "page_white_word";
-                elseif($dateiendung=="xls"
-                ||     $dateiendung=="xlt"
-                ||     $dateiendung=="csv")
-                    $dateiendung = "page_white_excel";
-                elseif($dateiendung=="pps"
-                ||     $dateiendung=="ppt")
-                       $dateiendung = "page_white_powerpoint";
-                elseif($dateiendung=="txt"
-                ||     $dateiendung=="php"
-                ||     $dateiendung=="sql"
-                ||     $dateiendung=="log")
-                       $dateiendung = "page_white_text";
-                elseif($dateiendung=="pdf")
-                       $dateiendung = "page_white_acrobat";
-                elseif($dateiendung=="zip"
-                ||     $dateiendung=="gz"
-                ||     $dateiendung=="rar"
-                ||     $dateiendung=="tar")
-                       $dateiendung = "page_white_compressed";
-                elseif($dateiendung=="swf")
-                       $dateiendung = "page_white_flash";
-                else
-                       $dateiendung = "page_white_question";
+                //Auszugebendes Icon ermitteln
+                $iconFile = "page_white_question.png";
+                if(array_key_exists($fileExtension, $icon_file_extension))
+                {
+                    $iconFile = $icon_file_extension[$fileExtension];
+                }
 
                 echo "
                 <tr class=\"tableMouseOver\">
-                    <td><img src=\"". THEME_PATH. "/icons/$dateiendung.png\" alt=\"Datei\" title=\"Datei\" /></a></td>
+                    <td><img src=\"". THEME_PATH. "/icons/$iconFile\" alt=\"Datei\" title=\"Datei\" /></a></td>
                     <td>". $nextFile['fil_name']. "</td>
                     <td style=\"text-align: right;\">
                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id=$folderId&amp;name=". urlencode($nextFile['fil_name']). "\">
