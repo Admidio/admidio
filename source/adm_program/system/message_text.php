@@ -133,15 +133,6 @@ $message_text = array(
     "nodata" =>
         "Es sind keine Daten vorhanden!",
 
-    "no_category_roles" =>
-        "Es sind noch keine Rollen für diese Kategorie erstellt worden.<br /><br />
-        Rollen können in der <a href=\"%VAR1%\">Rollenverwaltung</a> erstellt und gepflegt werden.",
-
-    "no_old_roles" =>
-        "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
-        Erst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei
-        den \"Entfernten Rollen\".",
-
     "norights" =>
         "Du hast keine Rechte, diese Aktion auszuführen",
 
@@ -200,6 +191,17 @@ $message_text = array(
         <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">Schreibrechte</acronym>
         setzen kann.",
 
+    // Meldungen Listen
+    
+    "no_old_roles" =>
+        "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
+        Erst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei
+        den \"Entfernten Rollen\".",
+    
+    "no_enabled_lists" =>
+        "Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.",
+    
+    // Ende Meldungen Listen
 
     //Meldungen Anmeldung im Forum
     "login_forum" =>

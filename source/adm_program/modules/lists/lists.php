@@ -90,6 +90,10 @@ if($active_role)
     {
         $rol_id_list = " AND rol_id IN (". substr($rol_id_list, 0, strlen($rol_id_list)-2). ") ";
     }
+    else
+    {
+        $rol_id_list = " AND rol_id = 0 ";
+    }
 }
 
 // SQL-Statement zusammensetzen
@@ -117,15 +121,14 @@ if($num_roles == 0)
 {
     if($g_valid_login == true)
     {
-        // wenn User eingeloggt, dann Meldung, dass keine Rollen in der Kategorie existieren
+        // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
         if($active_role == 0)
         {
             $g_message->show("no_old_roles", "", "Hinweis");
         }
         else
         {
-            $g_message->addVariableContent("$g_root_path/adm_program/administration/roles/roles.php", 1, false);
-            $g_message->show("no_category_roles", "", "Hinweis");
+            $g_message->show("no_enabled_lists", "", "Hinweis");
         }
     }
     else
@@ -213,9 +216,12 @@ echo '<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 if($show_ctg_sel == 1)
 {
     // Combobox mit allen Kategorien anzeigen
-    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+    $sql = "SELECT DISTINCT cat_name 
+              FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
              WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
-               AND cat_type   = 'ROL' ";
+               AND cat_type   = 'ROL' 
+               AND rol_cat_id = cat_id 
+                   $rol_id_list ";
     if($g_valid_login == false)
     {
         $sql .= " AND cat_hidden = 0 ";
@@ -230,7 +236,7 @@ if($show_ctg_sel == 1)
             <option value="Alle" ';
             if(strlen($_GET['category']) == 0)
             {
-                echo " selected=\"selected\" ";
+                echo ' selected="selected" ';
             }
             echo '>Alle</option>';
 
@@ -239,9 +245,9 @@ if($show_ctg_sel == 1)
                 echo '<option value="'. urlencode($row->cat_name). '"';
                 if($_GET['category'] == $row->cat_name)
                 {
-                    echo " selected=\"selected\" ";
+                    echo ' selected="selected" ';
                 }
-                echo ">$row->cat_name</option>";
+                echo '>'.$row->cat_name.'</option>';
             }
         echo '</select></p>';
     }
@@ -309,7 +315,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
             {
                 if($count_cat_entries == 0)
                 {
-                    echo"Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.";
+                    echo "Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.";
                 }
                 echo "</div></div><br />";
             }
