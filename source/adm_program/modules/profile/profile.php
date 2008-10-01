@@ -764,11 +764,11 @@ echo '
                                 </li>";
                                 $count_show_roles++;
                             }
-                            if($count_show_roles == 0)
-                            {
-                                echo 'Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.';
-                            }                           
                         }
+                        if($count_show_roles == 0)
+                        {
+                            echo 'Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.';
+                        }                           
                     echo "</ul>
                 </div>
             </div>";
