@@ -195,6 +195,7 @@ elseif($job=="upload")
     // Bild auf entsprechende Groesse anpassen
     $user_image = new Image($_FILES["bilddatei"]["tmp_name"]);
     $user_image->resize(130, 170);
+    $user_image->copyToFile();
     $user_image->delete();
 
     // Foto aus PHP-Temp-Ordner einlesen
