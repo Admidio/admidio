@@ -353,36 +353,56 @@ class User extends TableAccess
     // da das Windows-Adressbuch einschliesslich XP kein UTF8 verarbeiten kann, alles in ISO-8859-1 ausgeben
     function getVCard()
     {
+        global $g_current_user;
+
+        $editAllUsers = $g_current_user->editProfile($this->db_fields['usr_id']);
+        
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
-        $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("Nachname")). ";". utf8_decode($this->getValue("Vorname")) . ";;;\r\n";
-        $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue("Vorname")) . " ". utf8_decode($this->getValue("Nachname")) . "\r\n";
+        if($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Vorname']['usf_hidden'] == 0))
+        {
+            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("Nachname")). ";". utf8_decode($this->getValue("Vorname")) . ";;;\r\n";
+        }
+        if($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Nachname']['usf_hidden'] == 0))
+        {
+            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue("Vorname")) . " ". utf8_decode($this->getValue("Nachname")) . "\r\n";
+        }
         if (strlen($this->getValue("usr_login_name")) > 0)
         {
             $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
         }
-        if (strlen($this->getValue("Telefon")) > 0)
+        if (strlen($this->getValue("Telefon")) > 0 
+        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Telefon']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue("Telefon"). "\r\n";
         }
-        if (strlen($this->getValue("Handy")) > 0)
+        if (strlen($this->getValue("Handy")) > 0 
+        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Handy']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue("Handy"). "\r\n";
         }
-        if (strlen($this->getValue("Fax")) > 0)
+        if (strlen($this->getValue("Fax")) > 0 
+        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Fax']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue("Fax"). "\r\n";
         }
-        $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue("Adresse")). ";" . utf8_decode($this->getValue("Ort")). ";;" . utf8_decode($this->getValue("PLZ")). ";" . utf8_decode($this->getValue("Land")). "\r\n";
-        if (strlen($this->getValue("Homepage")) > 0)
+        if($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Adresse']['usf_hidden'] == 0 && $this->db_user_fields['Ort']['usf_hidden'] == 0
+        && $this->db_user_fields['PLZ']['usf_hidden'] == 0  && $this->db_user_fields['Land']['usf_hidden'] == 0))
+        {
+            $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue("Adresse")). ";" . utf8_decode($this->getValue("Ort")). ";;" . utf8_decode($this->getValue("PLZ")). ";" . utf8_decode($this->getValue("Land")). "\r\n";
+        }
+        if (strlen($this->getValue("Homepage")) > 0 
+        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Homepage']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "URL;HOME:" . $this->getValue("Homepage"). "\r\n";
         }
-        if (strlen($this->getValue("Geburtstag")) > 0)
+        if (strlen($this->getValue("Geburtstag")) > 0 
+        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Geburtstag']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "BDAY:" . mysqldatetime("ymd", $this->getValue("Geburtstag")) . "\r\n";
         }
-        if (strlen($this->getValue("E-Mail")) > 0)
+        if (strlen($this->getValue("E-Mail")) > 0 
+        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['E-Mail']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
         }
@@ -391,7 +411,8 @@ class User extends TableAccess
             $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->getValue("Geschlecht") > 0)
+        if ($this->getValue("Geschlecht") > 0 
+        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Geschlecht']['usf_hidden'] == 0)))
         {
             if($this->getValue("Geschlecht") == 1)
             {
