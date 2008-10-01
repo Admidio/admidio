@@ -212,13 +212,26 @@ if($g_current_user->editPhotoRight())
             </li>";
         if($pho_id > 0)
         {
-            echo "<li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\"><img
-                         src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Bilder hochladen\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id\">Bilder hochladen</a>
-                </span>
-            </li>";
+            if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
+            {
+	            echo "<li>
+	                <span class=\"iconTextLink\">
+	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&mode=1\"><img
+	                         src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Einzelbilder hochladen\" /></a>
+	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&mode=1\">Einzelbilder hochladen</a>
+	                </span>
+	            </li>";
+            }
+            if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
+            {
+	            echo "<li>
+	                <span class=\"iconTextLink\">
+	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&mode=2\"><img
+	                         src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Komfortupload\" /></a>
+	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&mode=2\">Komfortupload</a>
+	                </span>
+	            </li>";
+            }
         }
     echo "</ul>";
 }
@@ -646,7 +659,7 @@ echo "<div class=\"photoModuleContainer\">";
                                 {
 	                                echo"
 	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id&mode=2\"><img 
-	                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Multibilderupload\" title=\"Multibilderupload\" /></a>";
+	                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Komfortupload\" title=\"Komfortupload\" /></a>";
                                 }
                                 
                                 echo"
