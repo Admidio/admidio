@@ -186,13 +186,12 @@ class User extends TableAccess
     {
         if(strpos($field_name, "usr_") === 0)
         {
-            $value = $this->db_fields[$field_name];
+            return parent::getValue($field_name);
         }
         else
         {
-            $value = $this->getProperty($field_name, "usd_value");
+            return htmlspecialchars($this->getProperty($field_name, "usd_value"), ENT_QUOTES);
         }
-        return parent::getValue($field_name, $value);
     }    
 
     // Methode gibt den Wert eines Profilfeldes zurueck
