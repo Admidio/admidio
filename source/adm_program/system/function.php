@@ -236,45 +236,45 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
     {
         $field_id = "rol_id";
     }
-    $box_string = "
-        <select size=\"1\" id=\"$field_id\" name=\"$field_id\">
-            <option value=\"0\" selected=\"selected\">- Bitte w&auml;hlen -</option>";
-            // Rollen selektieren
+    
+    $box_string = '
+    <select size="1" id="'.$field_id.'" name="'.$field_id.'">
+        <option value="0" selected="selected">- Bitte wählen -</option>';
+        // Rollen selektieren
 
-            // Benutzer mit den Recht alle Listen einzusehen, bekommen auch alle Rollen aufgelistet
-           $sql     = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                             WHERE rol_valid  = 1
-                               AND rol_cat_id = cat_id
-                               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                             ORDER BY cat_sequence, rol_name";
-           
-            $result_lst = $g_db->query($sql);
-            $act_category = "";
+        // Benutzer mit den Recht alle Listen einzusehen, bekommen auch alle Rollen aufgelistet
+        $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+                 WHERE rol_valid  = 1
+                   AND rol_cat_id = cat_id
+                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                 ORDER BY cat_sequence, rol_name";
+        $result_lst = $g_db->query($sql);
+        $act_category = "";
 
-            while($row = $g_db->fetch_object($result_lst))
+        while($row = $g_db->fetch_object($result_lst))
+        {
+            if($g_current_user->viewRole($row->rol_id))
             {
                 if($act_category != $row->cat_name)
                 {
                     if(strlen($act_category) > 0)
                     {
-                        $box_string .= "</optgroup>";
+                        $box_string .= '</optgroup>';
                     }
-                    $box_string .= "<optgroup label=\"$row->cat_name\">";
+                    $box_string .= '<optgroup label="'.$row->cat_name.'">';
                     $act_category = $row->cat_name;
                 }
                 // wurde eine Rollen-Id uebergeben, dann Combobox mit dieser vorbelegen
                 $selected = "";
                 if($row->rol_id == $default_role)
                 {
-                    $selected = " selected=\"selected\" ";
+                    $selected = ' selected="selected" ';
                 }
-                if($g_current_user->viewRole($row->rol_id))
-                {
-                    $box_string .= "<option $selected value=\"$row->rol_id\">$row->rol_name</option>";
-                }
+                $box_string .= '<option '.$selected.' value="'.$row->rol_id.'">'.$row->rol_name.'</option>';
             }
-            $box_string .= "</optgroup>
-        </select>";
+        }
+        $box_string .= '</optgroup>
+    </select>';
     return $box_string;
 }
 
