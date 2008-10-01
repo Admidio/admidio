@@ -45,7 +45,7 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
 
 if (empty($_POST))
 {
-    $g_message->show("empty_photo_post", ini_get(post_max_size));
+    $g_message->show("empty_photo_post", ini_get('post_max_size'));
 }
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
