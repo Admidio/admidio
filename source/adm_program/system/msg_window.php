@@ -139,7 +139,7 @@ echo "
                             <td>Sucht alle Benutzer, die nach dem 01.03.1986 geboren wurden</td>
                          </tr>
                          <tr>
-                            <td>Geb. Alter</td>
+                            <td>Geburtstag</td>
                             <td><b>&gt; 18j</b></td>
                             <td>Sucht alle Benutzer, die älter als 18 Jahre sind</td>
                          </tr>
