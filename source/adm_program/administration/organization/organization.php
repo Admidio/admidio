@@ -682,7 +682,7 @@ echo "
 
 
         /**************************************************************************************/
-        //Einstellungen Photomodul
+        //Einstellungen Fotomodul
         /**************************************************************************************/
 
         echo"
@@ -824,23 +824,23 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, welche Möglichkeiten zum Bilderupload berechtigten Benutzern zur Verfügung gestellt werden.<br>
-						Benutzerauswahl - Der Benutzer kann selbst eine Methode wählen.<br>
-						Multiupload - Über ein Flashplugin können mehrere Dateien gleichzeitig ausgewählt werden. Wären dem Upload wir der Benutzer laufend über den Status und die Verarbeitung informiert.<br>
-						Einzeldateiauswahl - Der Benutzer muss jede datei einzeln auswählen, bis zu fünf pro Uploadvorgang.<br>
+                        Hier kann eingestellt werden, welche Möglichkeiten zum Bilderupload berechtigten Benutzern zur Verfügung gestellt werden.<br />
+						<i>Benutzerauswahl</i> - Der Benutzer kann selbst eine Methode wählen.<br />
+						<i>Multiupload</i> - Über ein Flashplugin können mehrere Dateien gleichzeitig ausgewählt werden. Während dem Upload wird der Benutzer laufend über den Status und die Verarbeitung informiert.<br />
+						<i>Einzeldateiauswahl</i> - Der Benutzer kann bis zu fünf Dateien pro Uploadvorgang auswählen. Es ist kein Plugin notwendig.<br />
                     </li>
 					<li>
                         <dl>
-                            <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen und im LBmodus:</label></dt>
+                            <dt><label for=\"photo_save_scale\">Skalierung beim Upload und im LBmodus:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Beim hochladen werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
-                        ist der Parameter f&uuml;r die l&auml;ngere Seite des Bildes, egal ob das Bild im Hoch-
-                        oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verh&auml;ltnis berechnet.(Standardwert: 640)
+                        Beim Upload werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
+                        ist der Parameter für die längere Seite des Bildes, egal ob das Bild im Hoch-
+                        oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verhältnis berechnet.(Standardwert: 640)
                     </li>
                     <li>
                         <dl>
