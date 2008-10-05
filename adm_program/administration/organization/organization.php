@@ -1182,6 +1182,22 @@ echo "
                         Die Druckvorschau und der Export sind von diesem Wert nicht betroffen.
                         Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
                     </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"hide_list_overview_details\">Details in Übersicht einklappen:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"hide_list_overview_details\" name=\"hide_list_overview_details\" ";
+                                if(isset($form_values['hide_list_overview_details']) && $form_values['hide_list_overview_details'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Bei Aaktivierung dieser Option werden die Details in der Listeübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen.
+                    </li>
                 </ul>
             </div>
         </div>";
