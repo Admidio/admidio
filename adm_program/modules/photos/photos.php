@@ -227,7 +227,7 @@ if($g_current_user->editPhotoRight())
 	            echo "<li>
 	                <span class=\"iconTextLink\">
 	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&mode=2\"><img
-	                         src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Komfortupload\" /></a>
+	                         src=\"". THEME_PATH. "/icons/photo_upload_multi.png\" alt=\"Komfortupload\" /></a>
 	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&mode=2\">Komfortupload</a>
 	                </span>
 	            </li>";
@@ -659,7 +659,7 @@ echo "<div class=\"photoModuleContainer\">";
                                 {
 	                                echo"
 	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$this_pho_id&mode=2\"><img 
-	                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Komfortupload\" title=\"Komfortupload\" /></a>";
+	                                    src=\"". THEME_PATH. "/icons/photo_upload_multi.png\" alt=\"Komfortupload\" title=\"Komfortupload\" /></a>";
                                 }
                                 
                                 echo"
