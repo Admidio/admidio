@@ -99,7 +99,7 @@ if($_GET['mode'] == 1)
         $_POST['usf_mandatory'] = 1;
     }
     
-    if($_GET['usf_id'] == 0)
+    if($user_field->getValue("usf_name") != $_POST['usf_name'])
     {
         // Schauen, ob das Feld bereits existiert
         $sql    = "SELECT COUNT(*) as count 
@@ -108,7 +108,8 @@ if($_GET['mode'] == 1)
                        ON usf_cat_id = cat_id
                       AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                           OR cat_org_id IS NULL )
-                    WHERE usf_name LIKE '". $_POST['usf_name']. "'";
+                    WHERE usf_name LIKE '". $_POST['usf_name']. "'
+                      AND usf_id     <> ". $_GET['usf_id'];
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);
 
