@@ -128,7 +128,7 @@ if($_GET['mode'] == 1)
         $_POST['cat_org_id'] = $g_current_organization->getValue("org_id");
     }
         
-    if($req_cat_id == 0)
+    if($category->getValue("cat_name") != $_POST['cat_name'])
     {
         // Schauen, ob die Kategorie bereits existiert
         $search_orga = "";
@@ -141,6 +141,7 @@ if($_GET['mode'] == 1)
                      FROM ". TBL_CATEGORIES. "
                     WHERE cat_type = '". $_GET['type']. "'
                       AND cat_name LIKE '". $_POST['cat_name']. "'
+                      AND cat_id   <> ". $_GET['cat_id']. "
                           $search_orga ";
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);

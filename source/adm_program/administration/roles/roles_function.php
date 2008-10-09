@@ -75,36 +75,40 @@ if($_GET["mode"] == 1)
     require(THEME_SERVER_PATH. "/overall_header.php");
 
     // Html des Modules ausgeben
-    echo"
-    <div class=\"formLayout\" id=\"edit_announcements_form\">
-        <div class=\"formHead\">Rolle l&ouml;schen</div>
-        <div class=\"formBody\">
-            <p align=\"left\">
-                <img src=\"". THEME_PATH. "/icons/roles_gray.png\" alt=\"Inaktive Rolle\" />
+    echo '
+    <div class="formLayout" id="edit_announcements_form">
+        <div class="formHead">Rolle löschen</div>
+        <div class="formBody">
+            <p align="left">
+                <img src="'. THEME_PATH. '/icons/roles_gray.png" alt="Inaktive Rolle" />
                 Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
-                (Mitgliederzuordnung) erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welche Personen dieser Rolle
-                zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den &uuml;blichen &Uuml;bersichten.
+                (Mitgliederzuordnung) erhalten bleiben und du später immer wieder sehen kannst, welche Personen dieser Rolle
+                zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.
             </p>
-            <p align=\"left\">
-                <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle l&ouml;schen\" />
-                Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird die Rolle und alle Mitgliedszuordnungen entg&uuml;ltig aus der Datenbank
-                entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Rolle einzusehen.
+            <p align="left">
+                <img src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" />
+                Wenn du <b>Löschen</b> auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank
+                entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.
             </p>
-            <button name=\"delete\" type=\"button\" value=\"delete\"onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=4'\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle l&ouml;schen\" />&nbsp;L&ouml;schen</button>
+            <button name="delete" type="button" value="delete" 
+                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=4\'"><img 
+                src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" />&nbsp;Löschen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"inactive\" type=\"button\" value=\"inactive\" onclick=\"self.location.href='$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=". $_GET['rol_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/roles_gray.png\" alt=\"Inaktive Rolle\" />&nbsp;Inaktive Rolle</button>
+            <button name="inactive" type="button" value="inactive" 
+                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=3\'"><img 
+                src="'. THEME_PATH. '/icons/roles_gray.png" alt="Inaktive Rolle" />&nbsp;Inaktive Rolle</button>
 
-            <ul class=\"iconTextLinkList\">
+            <ul class="iconTextLinkList">
                 <li>
-                    <span class=\"iconTextLink\">
-                        <a href=\"#\" onclick=\"history.back()\"><img 
-                        src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-                        <a href=\"#\" onclick=\"history.back()\">Zurück</a>
+                    <span class="iconTextLink">
+                        <a href="#" onclick="history.back()"><img 
+                        src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+                        <a href="#" onclick="history.back()">Zurück</a>
                     </span>
                 </li>
             </ul>
         </div>
-    </div>";
+    </div>';
 
     require(THEME_SERVER_PATH. "/overall_footer.php");
     exit();
@@ -124,13 +128,14 @@ elseif($_GET["mode"] == 2)
         $g_message->show("feld", "Kategorie");
     }
         
-    if($req_rol_id == 0)
+    if($role->getValue("rol_name") != $_POST['rol_name'])
     {
         // Schauen, ob die Rolle bereits existiert
         $sql    = "SELECT COUNT(*) as count 
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_name   LIKE '". $_POST['rol_name']. "'
                       AND rol_cat_id = ". $_POST['rol_cat_id']. "
+                      AND rol_id    <> ". $req_rol_id. "
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id");
         $result = $g_db->query($sql);
