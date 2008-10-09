@@ -17,6 +17,7 @@ require_once("../../system/classes/photo_album.php");
 require_once("../../system/common.php");
 require_once("../../system/classes/image.php");
 
+
 // kontrolle ob das Upload funktioniert hat
 if (! isset($_FILES['Filedata'])) {
 	echo "Whooops! There is no file! (maybe filesize is greater than POST_MAX_SIZE directive in php.ini)";
@@ -40,64 +41,51 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
     $g_message->show("invalid");
 }
 
-// Fotoalbums-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $_GET["pho_id"])
-{
-    $photo_album =& $_SESSION['photo_album'];
-    $photo_album->db =& $g_db;
-}
-else
-{
-    $photo_album = new PhotoAlbum($g_db, $_GET["pho_id"]);
-    $_SESSION['photo_album'] =& $photo_album;
-}
 
 //bei Bedarf Uploadodner erzeugen
-if(!file_exists($ordner."/ad_my_files/upload"))
+if(!file_exists(SERVER_PATH. "/adm_my_files/photos/upload"))
 {
-    mkdir($ordner."/ad_my_files/upload", 0777);
-    chmod($ordner."/ad_my_files/upload", 0777);
+    mkdir(SERVER_PATH. "/adm_my_files/photos/upload", 0777);
+    chmod(SERVER_PATH. "/adm_my_files/photos/upload", 0777);
 }
 
 //Ordnerpfad
 $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
 
 // Sonderzeichen aus Dateinamen entfernen
-$image = preg_replace("/[^a-zA-Z0-9._-]/", "_", $_FILES['Filedata']['name']);
+$image_file = preg_replace("/[^a-zA-Z0-9._-]/", "_", $_FILES['Filedata']['name']);
 // and set the directory
-$image = SERVER_PATH. "/adm_my_files/photos/upload/".$image;
+$image_file = SERVER_PATH. "/adm_my_files/photos/upload/".$image_file;
 //neue Bilderanzahl
 $bildnr=$photo_album->getValue("pho_quantity")+1;
 
 // Verarbeitung
 if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
-	if (move_uploaded_file($_FILES['Filedata']['tmp_name'], $image)) 
+	if (move_uploaded_file($_FILES['Filedata']['tmp_name'], $image_file)) 
 	{
 		//Bild skalliert speichern
-        $image = new Image($image);
+        $image = new Image($image_file);
         $image->scale($g_preferences['photo_save_scale']);
         $image->copyToFile(null, $ordner."/".$bildnr.".jpg");
-        $image->delete();
-	    
+
         //Nachsehen ob Thumnailordner existiert
         if(!file_exists($ordner."/thumbnails"))
         {
             mkdir($ordner."/thumbnails", 0777);
             chmod($ordner."/thumbnails", 0777);
         }
-        
+
         //Thumbnail speichern
-        $image = new Image($image);
         $image->scale($g_preferences['photo_thumbs_scale']);
         $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");
         $image->delete(); 
-        
+  
         //Loeschen des Bildes aus Arbeitsspeicher
-        if(file_exists($image))
+        if(file_exists($image_file))
         {
-            unlink($image);
+            unlink($image_file);
         } 
-        
+
         //Endkontrolle
         if(file_exists($ordner."/".$bildnr.".jpg"))
         {
