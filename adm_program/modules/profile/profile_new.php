@@ -173,53 +173,53 @@ function getFieldCode($field, $user, $new_user)
         $checked_male   = "";
         if($field['usd_value'] == 2)
         {
-            $checked_female = " checked=\"checked\" ";
+            $checked_female = ' checked="checked" ';
         }
         elseif($field['usd_value'] == 1)
         {
-            $checked_male = " checked=\"checked\" ";
+            $checked_male = ' checked="checked" ';
         }
-        $value = "<input type=\"radio\" id=\"female\" name=\"usf-". $field['usf_id']. "\" value=\"2\" $checked_female $readonly />
-            <label for=\"female\"><img src=\"". THEME_PATH. "/icons/female.png\" title=\"weiblich\" alt=\"weiblich\" /></label>
+        $value = '<input type="radio" id="female" name="usf-'. $field['usf_id']. '" value="2" '.$checked_female.' '.$readonly.' />
+            <label for="female"><img src="'. THEME_PATH. '/icons/female.png" title="weiblich" alt="weiblich" /></label>
             &nbsp;
-            <input type=\"radio\" id=\"male\" name=\"usf-". $field['usf_id']. "\" value=\"1\" $checked_male $readonly />
-            <label for=\"male\"><img src=\"". THEME_PATH. "/icons/male.png\" title=\"männlich\" alt=\"männlich\" /></label>";
+            <input type="radio" id="male" name="usf-'. $field['usf_id']. '" value="1" '.$checked_male.' '.$readonly.' />
+            <label for="male"><img src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" /></label>';
     }
     elseif($field['usf_name'] == "Land")
     {
         //Laenderliste oeffnen
         $landlist = fopen(SERVER_PATH. "/adm_program/system/staaten.txt", "r");
-        $value = "
-        <select size=\"1\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\">
-            <option value=\"\"";
+        $value = '
+        <select size="1" id="usf-'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '">
+            <option value="" ';
                 if(strlen($g_preferences['default_country']) == 0
                 && strlen($field['usd_value']) == 0)
                 {
-                    $value = $value. " selected=\"selected\" ";
+                    $value = $value. ' selected="selected" ';
                 }
-            $value = $value. "></option>";
+            $value = $value. '></option>';
             if(strlen($g_preferences['default_country']) > 0)
             {
-                $value = $value. "<option value=\"". $g_preferences['default_country']. "\">". $g_preferences['default_country']. "</option>
-                <option value=\"\">--------------------------------</option>\n";
+                $value = $value. '<option value="'. $g_preferences['default_country']. '">'. $g_preferences['default_country']. '</option>
+                <option value="">--------------------------------</option>\n';
             }
 
             $land = trim(fgets($landlist));
             while (!feof($landlist))
             {
-                $value = $value. "<option value=\"$land\"";
+                $value = $value. '<option value="'.$land.'"';
                      if($new_user > 0 && $land == $g_preferences['default_country'])
                      {
-                        $value = $value. " selected=\"selected\" ";
+                        $value = $value. ' selected="selected" ';
                      }
                      if(!$new_user > 0 && $land == $field['usd_value'])
                      {
-                        $value = $value. " selected=\"selected\" ";
+                        $value = $value. ' selected="selected" ';
                      }
-                $value = $value. ">$land</option>\n";
+                $value = $value. '>'.$land.'</option>\n';
                 $land = trim(fgets($landlist));
             }
-        $value = $value. "</select>";
+        $value = $value. '</select>';
     }
     elseif($field['usf_type'] == "CHECKBOX")
     {
@@ -228,11 +228,11 @@ function getFieldCode($field, $user, $new_user)
         {
             $mode = "checked";
         }
-        $value = "<input type=\"checkbox\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" $mode $readonly value=\"1\" />";
+        $value = '<input type="checkbox" id="usf-'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '" '.$mode.' '.$readonly.' value="1" />';
     }
     elseif($field['usf_type'] == "TEXT_BIG")
     {
-        $value = "<textarea name=\"usf-". $field['usf_id']. "\" id=\"usf-". $field['usf_id']. "\" style=\"width: 300px;\" rows=\"2\" cols=\"40\">". $field['usd_value']. "</textarea>";
+        $value = '<textarea name="usf-'. $field['usf_id']. '" id="usf-'. $field['usf_id']. '" style="width: 300px;" rows="2" cols="40">'. $field['usd_value']. '</textarea>';
     }
     else
     {
@@ -259,35 +259,36 @@ function getFieldCode($field, $user, $new_user)
         {
             if($field['usf_name'] == 'Geburtstag')
             {
-                $value = "<script type=\"text/javascript\">
-                            var calBirthday = new CalendarPopup('calendardiv');
-                            calBirthday.setCssPrefix('calendar');
+                $value = '<script type="text/javascript">
+                            var calBirthday = new CalendarPopup("calendardiv");
+                            calBirthday.setCssPrefix("calendar");
                             calBirthday.showNavigationDropdowns();
                             calBirthday.setYearSelectStartOffset(90);
                             calBirthday.setYearSelectEndOffset(0);
-                        </script>";
+                        </script>';
                 $calObject = "calBirthday";
             }
             else
             {
-                $value = "<script type=\"text/javascript\">
-                            var calDate = new CalendarPopup('calendardiv');
-                            calDate.setCssPrefix('calendar');
+                $value = '<script type="text/javascript">
+                            var calDate = new CalendarPopup("calendardiv");
+                            calDate.setCssPrefix("calendar");
                             calDate.showNavigationDropdowns();
                             calDate.setYearSelectStartOffset(50);
                             calDate.setYearSelectEndOffset(10);
-                        </script>";
+                        </script>';
                 $calObject = "calDate";
             }
-            $value .= "
-                    <input type=\"text\" id=\"usf". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />
-                    <img src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:$calObject.select(document.forms[0].usf". $field['usf_id']. ",'anchor". $field['usf_id']. "','dd.MM.yyyy');\" 
-                        id=\"anchor". $field['usf_id']. "\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-                    <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>";
+            $value .= '
+                    <input type="text" id="usf'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '" style="width: '.$width.';" 
+                        maxlength="'.$maxlength.'" '.$readonly.' value="'. $field['usd_value']. '" '.$readonly.' />
+                    <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:'.$calObject.'.select(document.forms[0].usf'. $field['usf_id']. ',\'anchor'. $field['usf_id']. '\',\'dd.MM.yyyy\');" 
+                        id="anchor'. $field['usf_id']. '" style="vertical-align: middle; cursor: pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
+                    <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
         else
         {
-            $value = "<input type=\"text\" id=\"usf-". $field['usf_id']. "\" name=\"usf-". $field['usf_id']. "\" style=\"width: $width;\" maxlength=\"$maxlength\" $readonly value=\"". $field['usd_value']. "\" $readonly />";
+            $value = '<input type="text" id="usf-'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '" style="width: '.$width.';" maxlength="$maxlength" '.$readonly.' value="'. $field['usd_value']. '" '.$readonly.' />';
         }
     }
     
@@ -426,6 +427,79 @@ echo "
                     <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
                     <div class=\"groupBoxBody\">
                         <ul class=\"formFieldList\">";
+                        
+                if($value['cat_name'] == "Stammdaten")
+                {
+                    // bei den Stammdaten erst einmal Benutzername und Passwort anzeigen
+                    if($usr_id > 0 || $new_user == 2)
+                    {
+                        echo "<li>
+                            <dl>
+                                <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
+                                <dd>
+                                    <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"35\" value=\"". $user->getValue("usr_login_name"). "\" ";
+                                    if($g_current_user->isWebmaster() == false && $new_user == 0)
+                                    {
+                                        echo " class=\"readonly\" readonly=\"readonly\" ";
+                                    }
+                                    echo " />";
+                                    if($new_user > 0)
+                                    {
+                                        echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
+                                    }
+                                echo "</dd>
+                            </dl>
+                        </li>";
+
+                        if($new_user == 2)
+                        {
+                            echo "<li>
+                                <dl>
+                                    <dt><label for=\"usr_password\">Passwort:</label></dt>
+                                    <dd>
+                                        <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
+                                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                    </dd>
+                                </dl>
+                            </li>
+                            <li>
+                                <dl>
+                                    <dt><label for=\"password2\">Passwort (Wdh):</label></dt>
+                                    <dd>
+                                        <input type=\"password\" id=\"password2\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />
+                                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                                    </dd>
+                                </dl>
+                            </li>";
+                        }
+                        else
+                        {
+                            // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
+                            if($g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $usr_id )
+                            {
+                                echo '<li>
+                                    <dl>
+                                        <dt><label for="password">Passwort:</label></dt>
+                                        <dd>
+                                            <span class="iconTextLink">
+                                                <a style="cursor:pointer;" href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">
+                                                    <img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
+                                                <a href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">Passwort ändern</a>
+                                            </span>
+                                        </dd>
+                                    </dl>
+                                </li>';
+                            }
+                        }
+                        echo '<li><hr /></li>';
+                    }
+                }
             }
 
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
@@ -433,79 +507,6 @@ echo "
             {
                 // Html des Feldes ausgeben
                 echo getFieldCode($value, $user, $new_user);
-            }
-
-            if($value['usf_name'] == "Vorname")
-            {
-                // Nach dem Vornamen noch Benutzername und Passwort anzeigen
-                if($usr_id > 0 || $new_user == 2)
-                {
-                    echo "<li>
-                        <dl>
-                            <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
-                            <dd>
-                                <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"35\" value=\"". $user->getValue("usr_login_name"). "\" ";
-                                if($g_current_user->isWebmaster() == false && $new_user == 0)
-                                {
-                                    echo " class=\"readonly\" readonly=\"readonly\" ";
-                                }
-                                echo " />";
-                                if($new_user > 0)
-                                {
-                                    echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-                                        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
-                                }
-                            echo "</dd>
-                        </dl>
-                    </li>";
-
-                    if($new_user == 2)
-                    {
-                        echo "<li>
-                            <dl>
-                                <dt><label for=\"usr_password\">Passwort:</label></dt>
-                                <dd>
-                                    <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
-                                    <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                    <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-                                        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
-                                </dd>
-                            </dl>
-                        </li>
-                        <li>
-                            <dl>
-                                <dt><label for=\"password2\">Passwort (Wdh):</label></dt>
-                                <dd>
-                                    <input type=\"password\" id=\"password2\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />
-                                    <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                </dd>
-                            </dl>
-                        </li>";
-                    }
-                    else
-                    {
-                        // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                        if($g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $usr_id )
-                        {
-                            echo '<li>
-                                <dl>
-                                    <dt><label for="password">Passwort:</label></dt>
-                                    <dd>
-                                        <span class="iconTextLink">
-                                            <a style="cursor:pointer;" href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">
-                                                <img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
-                                            <a href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">Passwort ändern</a>
-                                        </span>
-                                    </dd>
-                                </dl>
-                            </li>';
-                        }
-                    }
-                    echo '<li><hr /></li>';
-                }
             }
         }
         
@@ -526,11 +527,13 @@ echo "
                 </li>
                 <li>
                     <dl>
-                        <dt>Best&auml;tigungscode:</dt>
+                        <dt>Bestätigungscode:</dt>
                         <dd>
                             <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                             <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" 
+                                onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </dd>
                     </dl>
                 </li>
