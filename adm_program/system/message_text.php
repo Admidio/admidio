@@ -36,10 +36,6 @@ $message_text = array(
     "delete" =>
         "Die Daten wurden gelöscht!",
 
-    "delete_announcement" =>
-        "Willst du die Ankündigung<br />
-        %VAR1%<br />wirklich löschen?",
-
     "delete_category" =>
         "<p>Soll die Kategorie %VAR1% wirklich gelöscht werden ?</p>
         <p>Es werden alle Daten, die dieser Kategorie zugeordnet sind
@@ -339,7 +335,7 @@ $message_text = array(
         "Nur eingeloggte Benutzer mit Fotoverwaltungsrecht dürfen Fotos verwalten.<br />",
 
     "dateiendungphotoup" =>
-        "Die ausgewählte Datei ist nicht im JPG-Format gespeichert.<br />",
+        "Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.<br />",
 
     "startvorend" =>
         "Das eingegebene Enddatum liegt vor dem Anfangsdatum.<br />",

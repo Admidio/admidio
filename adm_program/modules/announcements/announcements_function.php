@@ -12,7 +12,6 @@
  * ann_id:   ID der Ankuendigung, die angezeigt werden soll
  * mode:     1 - Neue Ankuendigung anlegen/aendern
  *           2 - Ankuendigung loeschen
- *           4 - Frage, ob Ankuendigung geloescht werden soll
  *
  *****************************************************************************/
 
@@ -41,7 +40,7 @@ if(isset($_GET["ann_id"]) && is_numeric($_GET["ann_id"]) == false)
 }
 
 if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 4)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 3)
 {
     $g_message->show("invalid");
 }
@@ -115,11 +114,6 @@ elseif($_GET["mode"] == 2)
     {
         $g_message->show("norights");
     }
-}
-elseif($_GET["mode"] == 4)
-{
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/announcements/announcements_function.php?ann_id=". $_GET["ann_id"]. "&amp;mode=2");
-    $g_message->show("delete_announcement", $announcement->getValue("ann_headline"), "Löschen");
 }
 
 ?>

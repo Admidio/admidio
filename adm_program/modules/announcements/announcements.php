@@ -90,10 +90,41 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $req_headline;
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>
+    
+    <script type="text/javascript"><!--
+        var resObject     = createXMLHttpRequest();
+        var id;
+        
+        function deleteObject(annID, headline)
+        {
+            var msg_result = confirm("Willst du die Ankündigung \n\n" + headline + "\n\nwirklich löschen ?");
+            id = "ann_" + annID;
+            if(msg_result)
+            {
+                resObject.open("GET", "'.$g_root_path.'/adm_program/modules/announcements/announcements_function.php?mode=2&ann_id=" + annID, true);
+                resObject.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                resObject.onreadystatechange = handleResponse;
+                resObject.send(null);
+            }
+        }
+
+        function handleResponse()
+        {
+            if(resObject.readyState == 4) 
+            {
+            	Effect.DropOut(id);
+            }
+        }        
+    --></script>';
+
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] = "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
-    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />";
+    $g_layout['header'] .= '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue("org_longname"). ' - Ankuendigungen"
+        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php" />';
 };
 
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -194,15 +225,15 @@ else
     {
         $announcement->clear();
         $announcement->setArray($row);
-        echo "
-        <div class=\"boxLayout\">
-            <div class=\"boxHead\">
-                <div class=\"boxHeadLeft\">
-                    <img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"". $announcement->getValue("ann_headline"). "\" />".
-                    $announcement->getValue("ann_headline"). "
+        echo '
+        <div class="boxLayout" id="ann_'.$row['ann_id'].'">
+            <div class="boxHead">
+                <div class="boxHeadLeft">
+                    <img src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
+                    $announcement->getValue("ann_headline"). '
                 </div>
-                <div class=\"boxHeadRight\">".
-                    mysqldatetime("d.m.y", $announcement->getValue("ann_timestamp")). "&nbsp;";
+                <div class="boxHeadRight">'.
+                    mysqldatetime("d.m.y", $announcement->getValue("ann_timestamp")). '&nbsp;';
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($g_current_user->editAnnouncements())
@@ -217,15 +248,15 @@ else
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
                         if($announcement->getValue("ann_org_shortname") == $g_organization)
                         {
-                            echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/announcements_function.php?mode=4&amp;ann_id=". $announcement->getValue("ann_id"). "\"><img 
-                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                            echo '
+                            <a class="iconLink" href="javascript:deleteObject('.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
+                                src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         }    
                     }
-                    echo "</div>
+                    echo '</div>
             </div>
 
-            <div class=\"boxBody\">";
+            <div class="boxBody">';
                 // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
                 if($g_preferences['enable_bbcode'] == 1)
                 {
