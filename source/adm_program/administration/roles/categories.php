@@ -58,8 +58,6 @@ unset($_SESSION['categories_request']);
 $g_layout['title']  = "Kategorien";
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
-    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/prototype.js\" type=\"text/javascript\"></script>
-    <script src=\"$g_root_path/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects,dragdrop\" type=\"text/javascript\"></script>
     
     <style type=\"text/css\">
         .drag {
@@ -70,23 +68,74 @@ $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         var resObject     = createXMLHttpRequest();
         
-        function updateDB(element)
+        function moveCategory(direction, catID)
         {
-            var childs = element.childNodes;
-            var this_orga = 0;
+            var actRow = document.getElementById('row_' + catID);
+            var childs = actRow.parentNode.childNodes;
+            var prevNode    = null;
+            var nextNode    = null;
+            var actRowCount = 0;
+            var actSequence = 0;
+            var secondCatId = 0;
+            var secondSequence = 0;
+            var this_orga   = 0;
             
-            if(element.id == 'cat_list')
+            // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
+            for(i=0;i < childs.length; i++)
+            {
+                if(childs[i].tagName == 'TR')
+                {
+                    actRowCount++;
+                    if(actSequence > 0 && nextNode == null)
+                    {
+                        nextNode = childs[i];
+                    }
+                    
+                    if(childs[i].id == 'row_' + catID)
+                    {
+                        actSequence = actRowCount;
+                    }
+                    
+                    if(actSequence == 0)
+                    {
+                        prevNode = childs[i];
+                    }
+                }
+            }
+            
+            if(actRow.parentNode.id == 'cat_list')
             {
                 this_orga = 1;
             }
-                        
-            for(i=0;i < childs.length; i++)
+            
+            // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
+            if(direction == 'up')
             {
-                var id = childs[i].getAttribute('id');
-                var cat_id = id.substr(4);
-                var sequence = i + 1;
-                // Synchroner Request, da ansonsten Scriptaculous verrueckt spielt
-                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + cat_id + '&type=". $_GET['type']. "&mode=4&sequence=' + sequence + '&this_orga=' + this_orga, false);
+                if(prevNode != null)
+                {
+                    actRow.parentNode.insertBefore(actRow, prevNode);
+                    secondCatId = prevNode.getAttribute('id').substr(4);
+                    secondSequence = actSequence - 1;
+                }
+            }
+            else
+            {
+                if(nextNode != null)
+                {
+                    actRow.parentNode.insertBefore(nextNode, actRow);
+                    secondCatId = nextNode.getAttribute('id').substr(4);
+                    secondSequence = actSequence + 1;
+                }
+            }
+
+            if(secondSequence > 0)
+            {
+                // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
+                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + catID + '&type=". $_GET['type']. "&mode=4&sequence=' + secondSequence + '&this_orga=' + this_orga, true);
+                resObject.send(null);
+                
+                // jetzt die neue Position von jeweils verschobenen Kategorie aktualisieren
+                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + secondCatId + '&type=". $_GET['type']. "&mode=4&sequence=' + actSequence + '&this_orga=' + this_orga, true);
                 resObject.send(null);
             }
         }
@@ -108,10 +157,11 @@ echo "
     </li>
 </ul>
 
-<table class=\"tableList\" style=\"width: 300px;\" cellspacing=\"0\">
+<table class=\"tableList\" id=\"tableCategories\" style=\"width: 300px;\" cellspacing=\"0\">
     <thead>
         <tr>
-            <th colspan=\"2\">Bezeichnung</th>
+            <th>Bezeichnung</th>
+            <th>&nbsp;</th>
             <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" /></th>
             <th>&nbsp;</th>
         </tr>
@@ -130,20 +180,18 @@ echo "
     {
         if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")
         {
-                // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
-            $drag_icon = "&nbsp;";
-            echo "<tbody id=\"cat_stammdaten\">";
+            // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
+            echo '<tbody id="cat_stammdaten">';
         }
         elseif($cat_row['cat_org_id'] == 0 && $_GET['type'] == "USF")
         {
-                // Kategorien über alle Organisationen kommen immer zuerst
+            // Kategorien über alle Organisationen kommen immer zuerst
             if($write_all_orgas == false)
             {
                 $write_all_orgas = true;
-                echo "</tbody>
-                <tbody id=\"cat_all_orgas\">";
-            }
-            $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge ändern\" title=\"Reihenfolge ändern\" />";             
+                echo '</tbody>
+                <tbody id="cat_all_orgas">';
+            }           
         }
         else
         {
@@ -152,41 +200,49 @@ echo "
                 $write_tbody = true;
                 if($_GET['type'] == "USF")
                 {
-                    echo "</tbody>";
+                    echo '</tbody>';
                 }
-                echo "<tbody id=\"cat_list\">";
+                echo '<tbody id="cat_list">';
             }
-            $drag_icon = "<img class=\"dragable\" src=\"". THEME_PATH. "/icons/arrow_out.png\" alt=\"Reihenfolge ändern\" title=\"Reihenfolge ändern\" />";
         }
-        echo "
-        <tr id=\"row_". $cat_row['cat_id']. "\" class=\"tableMouseOver\">
-            <td style=\"width: 5%;\">$drag_icon</td>
-            <td><a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\">". $cat_row['cat_name']. "</a></td>
-            <td>";
+        echo '
+        <tr id="row_'. $cat_row['cat_id']. '" class="tableMouseOver">
+            <td><a href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type=$req_type">'. $cat_row['cat_name']. '</a></td>
+            <td style="text-align: right; width: 45px;"> ';
+                if($cat_row['cat_name'] != "Stammdaten" || $_GET['type'] != "USF")
+                {
+                    echo '
+                    <a class="iconLink" href="javascript:moveCategory(\'up\', '.$cat_row['cat_id'].')"><img
+                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="Kategorie nach oben schieben" title="Kategorie nach oben schieben" /></a>
+                    <a class="iconLink" href="javascript:moveCategory(\'down\', '.$cat_row['cat_id'].')"><img
+                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="Kategorie nach unten schieben" title="Kategorie nach unten schieben" /></a>';
+                }
+            echo '</td>
+            <td>';
                 if($cat_row['cat_hidden'] == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur für eingeloggte Benutzer sichtbar\" title=\"Kategorie nur für eingeloggte Benutzer sichtbar\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="Kategorie nur für eingeloggte Benutzer sichtbar" title="Kategorie nur für eingeloggte Benutzer sichtbar" />';
                 }
                 else
                 {
-                    echo "&nbsp;";
+                    echo '&nbsp;';
                 }
-            echo "</td>
-            <td style=\"text-align: right; width: 45px;\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_new.php?cat_id=". $cat_row['cat_id']. "&amp;type=$req_type\"><img 
-                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
+            echo '</td>
+            <td style="text-align: right; width: 90px;">
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'"><img 
+                src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
 
                 if($cat_row['cat_system'] == 1)
                 {
-                    echo "<img class=\"iconLink\" src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" />";
+                    echo '<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
                 }
                 else
                 {
-                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=". $cat_row['cat_id']. "&amp;mode=3&amp;type=$req_type\"><img
-                        src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/categories_function.php?cat_id='. $cat_row['cat_id']. '&amp;mode=3&amp;type='.$req_type.'"><img
+                        src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                 }
-            echo "</td>
-        </tr>";
+            echo '</td>
+        </tr>';
     }
     echo "</tbody>
 </table>
@@ -199,15 +255,7 @@ echo "
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
-</ul>
-
-<script type=\"text/javascript\"><!--\n";
-    if($_GET['type'] == "USF")
-    {
-        echo "Sortable.create('cat_all_orgas',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_all_orgas'],hoverclass:'drag'});";
-    }
-    echo "Sortable.create('cat_list',{tag:'tr',onUpdate:updateDB,ghosting:true,dropOnEmpty:true,containment:['cat_list'],hoverclass:'drag'});
-\n--></script>";
+</ul>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
