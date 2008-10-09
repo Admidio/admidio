@@ -73,6 +73,7 @@ $orga_preferences = array(
     // Listen
     'lists_roles_per_page'   => '10',
     'lists_members_per_page' => '20',
+    'hide_list_overview_details' => '0',
 
     // Mailmodul
     'enable_mail_module'        => '1',
