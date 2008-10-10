@@ -57,7 +57,7 @@ unset($_SESSION['categories_request']);
 // Html-Kopf ausgeben
 $g_layout['title']  = "Kategorien";
 $g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/js/ajax.js\"></script>
     
     <style type=\"text/css\">
         .drag {
@@ -66,8 +66,6 @@ $g_layout['header'] = "
     </style>
     
     <script type=\"text/javascript\"><!--
-        var resObject     = createXMLHttpRequest();
-        
         function moveCategory(direction, catID)
         {
             var actRow = document.getElementById('row_' + catID);
