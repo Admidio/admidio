@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
  * Funktionen zum entfernen von Rollen im Profil
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
@@ -8,7 +8,6 @@
  *
  *****************************************************************************/
  
-var resObject     = createXMLHttpRequest();
 var id;
 
 function deleteFormerRole(rol_id, rol_name, usr_id, root_path) 

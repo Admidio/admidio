@@ -90,36 +90,11 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $req_headline;
-$g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/ajax.js"></script>
+$g_layout['header'] = $g_js_vars. '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>
-    
-    <script type="text/javascript"><!--
-        var resObject     = createXMLHttpRequest();
-        var id;
-        
-        function deleteObject(annID, headline)
-        {
-            var msg_result = confirm("Willst du die Ankündigung \n\n" + headline + "\n\nwirklich löschen ?");
-            id = "ann_" + annID;
-            if(msg_result)
-            {
-                resObject.open("GET", "'.$g_root_path.'/adm_program/modules/announcements/announcements_function.php?mode=2&ann_id=" + annID, true);
-                resObject.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                resObject.onreadystatechange = handleResponse;
-                resObject.send(null);
-            }
-        }
-
-        function handleResponse()
-        {
-            if(resObject.readyState == 4) 
-            {
-            	Effect.DropOut(id);
-            }
-        }        
-    --></script>';
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>';
 
 if($g_preferences['enable_rss'] == 1)
 {
@@ -185,16 +160,16 @@ $num_announcements = $row['count'];
 // Neue Ankuendigung anlegen
 if($g_current_user->editAnnouncements())
 {
-    echo "
-    <ul class=\"iconTextLinkList\">
+    echo '
+    <ul class="iconTextLinkList">
         <li>
-            <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\"><img
-                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neu anlegen\" /></a>
-                <a href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?headline=$req_headline\">Anlegen</a>
+            <span class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'"><img
+                src="'. THEME_PATH. '/icons/add.png" alt="Neu anlegen" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">Anlegen</a>
             </span>
         </li>
-    </ul>";        
+    </ul>';        
 }
 
 if($num_announcements > 10)
@@ -249,7 +224,7 @@ else
                         if($announcement->getValue("ann_org_shortname") == $g_organization)
                         {
                             echo '
-                            <a class="iconLink" href="javascript:deleteObject('.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
+                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$row['ann_id'].'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         }    
                     }

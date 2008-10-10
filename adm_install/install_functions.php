@@ -44,7 +44,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
         <title>Admidio - '. $title. '</title>
 
         <link rel="stylesheet" type="text/css" href="layout/install.css" />
-        <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/common_functions.js"></script>
+        <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
 
         <!--[if lt IE 7]>
         <script type="text/javascript"><!--

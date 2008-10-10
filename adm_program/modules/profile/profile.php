@@ -221,7 +221,7 @@ else
     $g_layout['title'] = "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
 }
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>';

@@ -92,11 +92,10 @@ if($g_preferences['enable_rss'] == 1)
 };
 
 $g_layout['header'] = $g_layout['header']. "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/ajax.js\"></script>
+    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/js/ajax.js\"></script>
 
     <script type=\"text/javascript\">
-        var resObject     = createXMLHttpRequest();
-        var gbookId          = 0;
+        var gbookId = 0;
 
         function getComments(commentId)
         {

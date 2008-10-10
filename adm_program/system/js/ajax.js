@@ -29,3 +29,6 @@ function createXMLHttpRequest()
  	}
  	return resObject;
 }
+
+// schon mal ein HttpRequest-Objekt anlegen, welches in den Scripten genutzt werden kann
+var resObject = createXMLHttpRequest(); 
