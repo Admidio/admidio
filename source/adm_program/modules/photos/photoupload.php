@@ -134,7 +134,19 @@ if($_GET["mode"] == 1 && ($g_preferences['photo_upload_mode'] == 0 || $g_prefere
 /**************************Flexuploader********************************************************/
 elseif($_GET["mode"] == 2 && ($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 1))
 {
-	echo '<h2>Bilder hochladen</h2>
+	//Ermittlung der maximalen Dateigröße
+    $max_file_size = trim(ini_get('post_max_size'));
+    switch(strtolower(substr($max_file_size,strlen($max_file_size/1),1)))
+    {
+	    case 'g':
+	        $max_file_size *= 1024;
+	    case 'm':
+	        $max_file_size *= 1024;
+	    case 'k':
+	        $max_file_size *= 1024;
+    }
+	
+    echo '<h2>Bilder hochladen</h2>
 		<p>
 	        Die Bilder werden zu dem Album <strong>'.$photo_album->getValue("pho_name").'</strong> hinzugefügt.<br />
             (Beginn: '. mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ')
@@ -146,15 +158,15 @@ elseif($_GET["mode"] == 2 && ($g_preferences['photo_upload_mode'] == 0 || $g_pre
 	//Pfad der Sprachdatei
 	$fup->setLocale($g_root_path."/adm_program/libs/flexupload/de.xml");
 	//maximale Dateigröße
-	$fup->setMaxFileSize(5*1024*1024);
+	$fup->setMaxFileSize($max_file_size);
 	//maximale Dateianzahl
-	$fup->setMaxFiles(10);
+	$fup->setMaxFiles(999);
 	//breite des Uploaders
 	$fup->setWidth(560);
 	//breite des Uploaders
 	$fup->setHeight(400);
 	//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
-	$fup->setFileExtensions("*.jpg;*.jpeg;*");
+	$fup->setFileExtensions("*.jpg;*.jpeg;*.png");
 	//Ausgabe des Uploaders
 	$fup->printHTML(true, 'flexupload');
 }
