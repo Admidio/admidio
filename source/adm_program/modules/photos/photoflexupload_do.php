@@ -56,35 +56,20 @@ $ordner = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin
 $image_file = preg_replace("/[^a-zA-Z0-9._-]/", "_", $_FILES['Filedata']['name']);
 // and set the directory
 $image_file = SERVER_PATH. "/adm_my_files/photos/upload/".$image_file;
-//neue Bilderanzahl
-$bildnr=$photo_album->getValue("pho_quantity")+1;
-//Bildeigenschaften
+
+//Bildeigenschaften und Kontrolle
+//Die Kontrolle muss vor der Objekterzeugung stattfinden
 $image_properties = getimagesize($_FILES['Filedata']['tmp_name']);
 //Größenkontrolle
 $image_dimensions = $image_properties[0]*$image_properties[1];
-$memory_limit = trim(ini_get('memory_limit'));
-switch(strtolower(substr($memory_limit,strlen($memory_limit/1),1)))
+if($image_dimensions > processableImageSize())
 {
- case 'g':
-     $memory_limit *= 1024;
- case 'm':
-     $memory_limit *= 1024;
- case 'k':
-     $memory_limit *= 1024;
-}
-//Für jeden Pixel werden 3Byte benötigt (RGB)
-//der Speicher muss doppelt zur Verfügung stehen
-$max_dimensions = $memory_limit/(3*2);
-	    
-if($image_dimensions > $max_dimensions)
-{
-    //Umrechnung in Megapixel
-    $max_dimensions = round($max_dimensions/1000000, 2);
-    //Fehlermeldung
-    echo"Bild größer $max_dimensions MPixel";
+    echo"Bild größer ".round(processableImageSize()/1000000, 2)." MPixel";
     exit();
 }
 
+//neue Bilderanzahl
+$bildnr=$photo_album->getValue("pho_quantity")+1;
 // Verarbeitung
 if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
 	if (move_uploaded_file($_FILES['Filedata']['tmp_name'], $image_file)) 
@@ -125,7 +110,6 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
         {
             echo":-(";
         }
-
 	} 
 } 
 ?>
