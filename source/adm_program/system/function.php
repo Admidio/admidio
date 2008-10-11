@@ -372,4 +372,22 @@ function maxUploadSize()
         return $post_max_size; 
     }
 }
+
+//Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
+function processableImageSize()
+{
+	$memory_limit = trim(ini_get('memory_limit'));
+	switch(strtolower(substr($memory_limit,strlen($memory_limit/1),1)))
+	{
+	 case 'g':
+	     $memory_limit *= 1024;
+	 case 'm':
+	     $memory_limit *= 1024;
+	 case 'k':
+	     $memory_limit *= 1024;
+	}
+	//Für jeden Pixel werden 3Byte benötigt (RGB)
+	//der Speicher muss doppelt zur Verfügung stehen
+	return $memory_limit/(3*2); 
+}
 ?>
