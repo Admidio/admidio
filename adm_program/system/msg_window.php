@@ -321,22 +321,29 @@ echo "
 
            case "photo_up_help":
                 echo " <h3>Was ist zu tun?</h3>
-                    Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Bilddatei auf der
-                    Festplatte auswählen. Den Vorgang ggf. bis zu fünfmal wiederholen,
-                    bis alle Felder gefüllt sind. Dann auf &bdquo;Bilder hochladen&ldquo; klicken und ein wenig Geduld haben.
-                    <br />
-                    <h3>Hinweise:</h3>
-                    Die Bilder müssen im JPG Format gespeichert sein.
-                    Die Bilder werden automatisch auf eine Auflösung von ".$g_preferences['photo_save_scale']." Pixel der
-                    längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.
-                    Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender
-                    Nummer benannt werden.<br />
-                    Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
-                    Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Bilder in einen
-                    Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf ".$g_preferences['photo_save_scale']." Pixel
-                    (längere Bildseite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
-                    (also geringe Komprimierung) gestellt werden.
-                    Die maximale Dateigröße eines hochgeladenen Bildes wird nur durch die Servereinstellungen beschränkt.
+                    <ul>
+						<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte(n) Bilddatei(en) von der Festplatte auswählen.</li>
+						<li>Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</li>
+						<li>Dann auf &bdquo;Bilder hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+					</ul>  
+                    <h3>Einschränkungen:</h3>
+                    <ul>
+						<li>Die Bilder müssen im Format JPG oder PNG gespeichert sein.</li>
+						<li>Der Server kann Bilder mit einer maximalen Auflösung von ".round(processableImageSize()/1000000, 2)." MegaPixeln verarbeiten.</li>
+						<li>Die hochgeladenen Dateien dürfen nicht größer als ".round(maxUploadSize()/pow(1024, 2), 2)."MB sein.</li>
+	                    <li>
+							Die Bilder werden automatisch auf eine Auflösung von ".$g_preferences['photo_save_scale']." Pixel der
+	                    	längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.
+						</li>
+						<li>Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender Nummer benannt werden.</li>
+	                    <li>
+							Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
+	                    	Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Bilder in einen
+	                    	Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf ".$g_preferences['photo_save_scale']." Pixel
+	                    	(längere Bildseite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
+	                    	(also geringe Komprimierung) gestellt werden.
+						</li>
+					</ul>
                     ";
                 break;
 
