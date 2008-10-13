@@ -388,6 +388,7 @@ function processableImageSize()
 	}
 	//Für jeden Pixel werden 3Byte benötigt (RGB)
 	//der Speicher muss doppelt zur Verfügung stehen
-	return $memory_limit/(3*2); 
+	//nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
+	return $memory_limit/(3*2.5); 
 }
 ?>
