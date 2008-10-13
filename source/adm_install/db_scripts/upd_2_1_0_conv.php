@@ -25,4 +25,11 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $g_db->query($sql); 
 }
 
+
+// konvertierung von Org -> Cat
+
+/*
+$sql = "ALTER TABLE adm_dates DROP COLUMN dat_org_shortname ";
+$g_db->query($sql);
+*/
 ?>

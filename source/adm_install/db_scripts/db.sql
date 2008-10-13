@@ -24,6 +24,10 @@ drop table if exists %PRAEFIX%_files;
 
 drop table if exists %PRAEFIX%_folders;
 
+drop table if exists %PRAEFIX%_list_fields;
+
+drop table if exists %PRAEFIX%_lists;
+
 drop table if exists %PRAEFIX%_dates;
 
 drop table if exists %PRAEFIX%_announcements;
@@ -428,7 +432,7 @@ alter table %PRAEFIX%_announcements add constraint %PRAEFIX%_FK_ANN_USR_CHANGE f
 create table %PRAEFIX%_dates
 (
    dat_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   dat_org_shortname              varchar(10)                    not null,
+   dat_cat_id                     int(11) unsigned               not null,
    dat_global                     tinyint(1) unsigned            not null default 0,
    dat_begin                      datetime                       not null,
    dat_end                        datetime                       not null,
@@ -451,12 +455,64 @@ alter table %PRAEFIX%_dates add index DAT_USR_FK (dat_usr_id);
 alter table %PRAEFIX%_dates add index DAT_USR_CHANGE_FK (dat_usr_id_change);
 
 -- Constraints
-alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_ORG foreign key (dat_org_shortname)
-      references %PRAEFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_CAT foreign key (dat_cat_id)
+      references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR foreign key (dat_usr_id)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+      
+/*==============================================================*/
+/* Table: adm_lists                                             */
+/*==============================================================*/
+create table %PRAEFIX%_lists
+(
+   lst_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   lst_org_id                     tinyint(4)                     not null,
+   lst_usr_id                     int(11) unsigned               not null,
+   lst_name                       varchar(255)                   not null,
+   lst_global                     tinyint(1) unsigned            not null default 0,
+   primary key (lst_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_lists add index LST_USR_FK (lst_usr_id);
+alter table %PRAEFIX%_lists add index LST_ORG_FK (lst_org_id);
+
+-- Constraints
+alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_USR foreign key (lst_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_ORG foreign key (lst_org_id)
+      references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
+      
+/*==============================================================*/
+/* Table: adm_list_fields                                       */
+/*==============================================================*/
+create table %PRAEFIX%_list_fields
+(
+   lsf_lst_id                     int(11) unsigned               not null,
+   lsf_column                     smallint                       not null,
+   lsf_usf_id                     int(11) unsigned,
+   lsf_special_field              varchar(255),
+   lsf_sort                       varchar(5)                     default '0',
+   lsf_filter                     varchar(255),
+   primary key ()
+)
+type = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_list_fields add index LSF_LST_FK (lsf_lst_id);
+alter table %PRAEFIX%_list_fields add index LSF_USF_FK (lsf_usf_id);
+
+-- Constraints
+alter table %PRAEFIX%_list_fields add constraint FK_LSF_LST foreign key (lsf_lst_id)
+      references adm_lists (lst_id) on delete restrict on update restrict;
+
+alter table %PRAEFIX%_list_fields add constraint FK_LSF_USF foreign key (lsf_usf_id)
+      references adm_user_fields (usf_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_folders                                           */
