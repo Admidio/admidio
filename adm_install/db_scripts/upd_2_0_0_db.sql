@@ -44,6 +44,7 @@ ALTER TABLE %PRAEFIX%_announcements ADD constraint %PRAEFIX%_FK_ANN_USR foreign 
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 
 -- Session-Tabelle ergaenzen
+DELETE FROM %PRAEFIX%_sessions;
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_begin` datetime NOT NULL AFTER `ses_session`;
 ALTER TABLE %PRAEFIX%_sessions ADD COLUMN `ses_renew` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `ses_blob`;
 ALTER TABLE %PRAEFIX%_sessions MODIFY COLUMN `ses_usr_id` INTEGER UNSIGNED DEFAULT NULL;
