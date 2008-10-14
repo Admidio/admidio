@@ -87,9 +87,15 @@ $linksPerPage = 10;
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $_GET["headline"];
+$g_layout['header'] = $g_js_vars. "
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/system/js/ajax.js\"></script>
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/system/js/delete.js\"></script>
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>";
+
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Links\"
+    $g_layout['header'] = $g_layout['header']. "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Links\"
         href=\"$g_root_path/adm_program/modules/links/rss_links.php\" />";
 };
 
@@ -215,57 +221,59 @@ else
 				echo "</div></div><br />";
 			}
 			echo "<div class=\"formLayout\">
-				<div class=\"formHead\">$row->cat_name</div>
+				<div class=\"formHead\">".$row->cat_name."</div>
 				<div class=\"formBody\" style=\"overflow: hidden;\">";
         }
+        
+        echo "<div id=\"lnk_".$row->lnk_id."\">";
+    		if($i > 0)
+    		{
+    			echo "<hr />";
+    		}
+    		echo "
+    		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
+    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
+    		<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
 
-		if($i > 0)
-		{
-			echo "<hr />";
-		}
-		echo "
-		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
-			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-		<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+    		<div style=\"margin-top: 10px;\">";
 
-		<div style=\"margin-top: 10px;\">";
+    			// wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+    			if ($g_preferences['enable_bbcode'] == 1)
+    			{
+    				echo $bbcode->parse($row->lnk_description);
+    			}
+    			else
+    			{
+    				echo nl2br($row->lnk_description);
+    			}
+    		echo "</div>";
 
-			// wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-			if ($g_preferences['enable_bbcode'] == 1)
-			{
-				echo $bbcode->parse($row->lnk_description);
-			}
-			else
-			{
-				echo nl2br($row->lnk_description);
-			}
-		echo "</div>";
+    		if($g_current_user->editWeblinksRight())
+    		{
+    			echo "
+    			<div class=\"editInformation\">";
+    				// aendern & loeschen duerfen nur User mit den gesetzten Rechten
+    				if ($g_current_user->editWeblinksRight())
+    				{
+    					echo "
+    					<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img
+    						src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+    					<a class=\"iconLink\" href=\"javascript:deleteObject('lnk', 'lnk_".$row->lnk_id."',".$row->lnk_id.",'".$row->lnk_name."')\"><img
+    						src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+    				}
+    				$user_create = new User($g_db, $row->lnk_usr_id_create);
+    				echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
+    				" am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create);
 
-		if($g_current_user->editWeblinksRight())
-		{
-			echo "
-			<div class=\"editInformation\">";
-				// aendern & loeschen duerfen nur User mit den gesetzten Rechten
-				if ($g_current_user->editWeblinksRight())
-				{
-					echo "
-					<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img
-						src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-					<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$row->lnk_id&amp;mode=4\"><img
-						src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
-				}
-				$user_create = new User($g_db, $row->lnk_usr_id);
-				echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-				" am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp);
-
-				if($row->lnk_usr_id_change > 0)
-				{
-					$user_change = new User($g_db, $row->lnk_usr_id_change);
-					echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-					" am ". mysqldatetime("d.m.y h:i", $row->lnk_last_change);
-				}
-			echo "</div>";
-		}
+    				if($row->lnk_usr_id_change > 0)
+    				{
+    					$user_change = new User($g_db, $row->lnk_usr_id_change);
+    					echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
+    					" am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change);
+    				}
+    			echo "</div>";
+    		}
+        echo "</div>";
 
 		$j++;
         $i++;

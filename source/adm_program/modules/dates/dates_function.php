@@ -13,7 +13,6 @@
  * mode:   1 - Neuen Termin anlegen/aendern
  *         2 - Termin loeschen
  *         4 - Termin im iCal-Format exportieren
- *         5 - Frage, ob Termin geloescht werden soll
  *
  *****************************************************************************/
 
@@ -225,11 +224,6 @@ elseif($_GET["mode"] == 4)
 
     echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();
-}
-elseif($_GET["mode"] == 5)
-{
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $_GET["dat_id"]. "&amp;mode=2");
-    $g_message->show("delete_date", $date->getValue("dat_headline"), "Löschen");
 }
 
 ?>

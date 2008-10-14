@@ -15,8 +15,6 @@
  *           3 - Gaestebucheintrag editieren
  *           4 - Kommentar zu einem Eintrag anlegen
  *           5 - Kommentar eines Gaestebucheintrages loeschen
- *           6 - Nachfrage ob Gaestebucheintrag geloescht werden soll
- *           7 - Nachfrage ob Gaestebuchkommentar geloescht werden soll
  *           8 - Kommentar eines Gaestebucheintrages editieren
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Gaestebuch steht
@@ -352,20 +350,6 @@ elseif ($_GET["mode"] == 5)
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
-}
-
-elseif ($_GET["mode"] == 6)
-{
-    //Nachfrage ob Gaestebucheintrag geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=2");
-    $g_message->show("delete_gbook_entry", $guestbook->getValue("gbo_name"));
-}
-
-elseif ($_GET["mode"] == 7)
-{
-    //Nachfrage ob Gaestebucheintrag geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$_GET[id]&mode=5");
-    $g_message->show("delete_gbook_comment", $guestbook_comment->getValue("gbc_name"));
 }
 
 else

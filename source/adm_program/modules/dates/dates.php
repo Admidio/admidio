@@ -103,10 +103,15 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $g_layout['title'] = $req_headline;
+$g_layout['header'] = $g_js_vars. '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>';
 
 if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] == 1)
 {
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Termine\"
+    $g_layout['header'] .=  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Termine\"
         href=\"$g_root_path/adm_program/modules/dates/rss_dates.php\" />";
 };
 
@@ -131,9 +136,9 @@ $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $key => $value)
 {
-	$organizations = $organizations. "'$value', ";
+	$organizations = $organizations. $key. ", ";
 }
-$organizations = $organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
+$organizations = $organizations. $g_current_organization->getValue("org_id");
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
@@ -166,10 +171,11 @@ else
     }
 }
 
-$sql = "SELECT * FROM ". TBL_DATES. "
-         WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+$sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
+         WHERE dat_cat_id = cat_id
+           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                OR (   dat_global   = 1
-                  AND dat_org_shortname IN ($organizations) ))
+                  AND cat_org_id IN ($organizations) ))
                $conditions 
          LIMIT $req_start, 10";
 $dates_result = $g_db->query($sql);
@@ -178,10 +184,11 @@ if($req_id == 0)
 {
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
     $sql = "SELECT COUNT(1) as count
-              FROM ". TBL_DATES. "
-             WHERE (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+              FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
+             WHERE dat_cat_id = cat_id
+               AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                    OR (   dat_global   = 1
-                      AND dat_org_shortname IN ($organizations) ))
+                      AND cat_org_id IN ($organizations) ))
                    $conditions ";
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
@@ -236,7 +243,7 @@ else
         $date->clear();
         $date->setArray($row);
         echo "
-        <div class=\"boxLayout\">
+        <div class=\"boxLayout\" id=\"dat_".$date->getValue("dat_id")."\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
                     <img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"". $date->getValue("dat_headline"). "\" />
@@ -262,11 +269,11 @@ else
                         }
 
                         // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
-                        if($date->getValue("dat_org_shortname") == $g_organization)
+                        if($date->getValue("cat_org_id") == $g_current_organization->getValue("org_id"))
                         {
-                            echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_function.php?mode=5&amp;dat_id=". $date->getValue("dat_id"). "\"><img 
-                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                            echo '
+                            <a class="iconLink" href="javascript:deleteObject(\'dat\', \'dat_'.$date->getValue("dat_id").'\','.$date->getValue("dat_id").',\''.$date->getValue("dat_headline").'\')"><img 
+                                src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         }
                     }
                 echo"</div>
@@ -350,18 +357,15 @@ else
                     }
                 echo "</div>
                 <div class=\"editInformation\">";
-                    $user_create = new User($g_db, $date->getValue("dat_usr_id"));
+                    $user_create = new User($g_db, $date->getValue("dat_usr_id_create"));
                     echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp"));
+                    " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_create"));
 
-                    // Zuletzt geaendert nur anzeigen, wenn Aenderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-                    if($date->getValue("dat_usr_id_change") > 0
-                    && (  strtotime($date->getValue("dat_last_change")) > (strtotime($date->getValue("dat_timestamp")) + 900)
-                       || $date->getValue("dat_usr_id_change") != $date->getValue("dat_usr_id") ) )
+                    if($date->getValue("dat_usr_id_change") > 0)
                     {
                         $user_change = new User($g_db, $date->getValue("dat_usr_id_change"));
                         echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_last_change"));
+                        " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_change"));
                     }
                 echo "</div>
             </div>

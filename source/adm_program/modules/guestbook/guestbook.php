@@ -91,8 +91,11 @@ if($g_preferences['enable_rss'] == 1)
         href=\"$g_root_path/adm_program/modules/guestbook/rss_guestbook.php\" />";
 };
 
-$g_layout['header'] = $g_layout['header']. "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/js/ajax.js\"></script>
+$g_layout['header'] = $g_layout['header']. $g_js_vars. "
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/system/js/ajax.js\"></script>
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/system/js/delete.js\"></script>
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
+    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects\"></script>
 
     <script type=\"text/javascript\">
         var gbookId = 0;
@@ -229,7 +232,7 @@ else
     while ($row = $g_db->fetch_object($guestbook_result))
     {
         echo "
-        <div class=\"boxLayout\">
+        <div class=\"boxLayout\" id=\"gbo_".$row->gbo_id."\">
             <div class=\"boxHead\">
                 <div class=\"boxHeadLeft\">
                     <img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"$row->gbo_name\" />
@@ -261,8 +264,8 @@ else
                             echo "
                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_new.php?id=$row->gbo_id&amp;headline=". $_GET['headline']. "\"><img
                                 src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbo_id&amp;mode=6\"><img
-                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>";
+                            <a class=\"iconLink\" href=\"javascript:deleteObject('gbo', 'gbo_".$row->gbo_id."',".$row->gbo_id.",'".$row->gbo_name."')\"><img
+                                src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                     }
 
                 echo "</div>
@@ -290,7 +293,7 @@ else
                     <div class=\"editInformation\">
                         Zuletzt bearbeitet von ".
                         $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $row->gbo_last_change). "
+                        " am ". mysqldatetime("d.m.y h:i", $row->gbo_timestamp_change). "
                     </div>";
                 }
 

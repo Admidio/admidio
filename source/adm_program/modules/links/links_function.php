@@ -13,7 +13,6 @@
  * mode:     1 - Neuen Link anlegen
  *           2 - Link loeschen
  *           3 - Link editieren
- *           4 - Nachfrage ob Link geloescht werden soll
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Links steht
  *           (Default) Links
@@ -130,13 +129,6 @@ elseif ($_GET["mode"] == 2 && $_GET["lnk_id"] > 0)
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show("delete");
-}
-
-elseif ($_GET["mode"] == 4 && $_GET["lnk_id"] > 0)
-{
-    //Nachfrage ob Weblinkeintrag geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/links/links_function.php?lnk_id=$_GET[lnk_id]&mode=2");
-    $g_message->show("delete_link", $link->getValue("lnk_name"));
 }
 
 else
