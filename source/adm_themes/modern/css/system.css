@@ -52,7 +52,7 @@ h1 {
 
 
 img {
-    border: 0px;
+    border-width:       0px;
 }
 
 .readonly {
@@ -79,7 +79,7 @@ html.* button {
 
 button img {
      vertical-align:    middle;
-     border-width:      none;
+     border-width:      0px;
 }
 
 
@@ -119,7 +119,7 @@ a:hover, a:active {
 .boxHeadLeft img {
     margin-right:       5px;
     vertical-align:     bottom;
-    border-width:       none;
+    border-width:       0px;
 }
 
 .boxHeadLeft{
@@ -214,8 +214,8 @@ a:hover, a:active {
 }
 
 .groupBoxBody {
-    padding-top: 7px;
-    clear: both;
+    padding-top:        7px;
+    clear:              both;
 }
 
 /* Layout fuer Listen

@@ -48,7 +48,7 @@ h1 {
 
 
 img {
-    border: 0px;
+    border-width:       0px;
 }
 
 .readonly {
@@ -57,7 +57,7 @@ img {
 
 /* Elemente, die fuer ein Drag&Drop angefasst werden koennen */
 .dragable {
-    cursor:     move;
+    cursor:             move;
     border-width:       0px;
 }
 
@@ -75,7 +75,7 @@ html.* button {
 
 button img {
      vertical-align:    middle;
-     border-width:      none;
+     border-width:      0px;
 }
 
 
@@ -120,7 +120,7 @@ a:hover, a:active {
 .boxHead img {
     margin-right:       4px;
     vertical-align:     bottom;
-    border:             none;
+    border-width:       0px;
 }
 
 .boxHeadLeft{
@@ -228,8 +228,8 @@ a:hover, a:active {
 }
 
 .groupBoxBody {
-    padding-top: 7px;
-    clear: both;
+    padding-top:        7px;
+    clear:              both;
 }
 
 /* Layout fuer Listen
