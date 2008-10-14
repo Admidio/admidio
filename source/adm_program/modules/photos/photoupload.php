@@ -90,7 +90,7 @@ $g_layout['title'] = "Fotos hochladen";
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 /**************************Klassisches Formular********************************************************/
-if($_GET["mode"] == 1 && ($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2))
+if($_GET["mode"] == 1 && $g_preferences['photo_upload_mode'] <> 1)
 {
 	echo '
 	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '" enctype="multipart/form-data">
@@ -129,10 +129,14 @@ if($_GET["mode"] == 1 && ($g_preferences['photo_upload_mode'] == 0 || $g_prefere
 	            <button name="upload" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Speichern" />&nbsp;Bilder hochladen</button>
 	        </div>
 	   </div>
-	</form>';
+	</form>
+
+    <script type="text/javascript"><!--
+        document.getElementById(\'bilddatei1\').focus();
+    --></script>';
 }
 /**************************Flexuploader********************************************************/
-if($_GET["mode"] == 2 && ($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 1))
+elseif($_GET["mode"] == 2 && $g_preferences['photo_upload_mode'] <> 2)
 {
 	echo '<h2>Bilder hochladen</h2>
 		<p>
@@ -182,12 +186,6 @@ echo '
         </span>
     </li>
 </ul>';
-
-//Seitenende
-echo '
-<script type="text/javascript"><!--
-        document.getElementById(\'bilddatei1\').focus();
---></script>';
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
