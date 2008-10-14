@@ -96,13 +96,7 @@ $g_db->query($sql);
 $sql = "ALTER TABLE ". TBL_USERS. " MODIFY COLUMN usr_timestamp_create datetime NOT NULL ";
 $g_db->query($sql);
 
-$sql = "ALTER TABLE ". TBL_ROLES. " MODIFY COLUMN rol_usr_id_create int(11) unsigned NOT NULL ";
-$g_db->query($sql);
-
 $sql = "ALTER TABLE ". TBL_ROLES. " MODIFY COLUMN rol_timestamp_create datetime NOT NULL ";
-$g_db->query($sql);
-
-$sql = "ALTER TABLE ". TBL_PHOTOS. " MODIFY COLUMN pho_usr_id_create int(11) unsigned NOT NULL ";
 $g_db->query($sql);
 
 $sql = "ALTER TABLE ". TBL_PHOTOS. " MODIFY COLUMN pho_timestamp_create datetime NOT NULL ";
