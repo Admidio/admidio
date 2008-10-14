@@ -326,7 +326,7 @@ create table %PRAEFIX%_roles
    rol_max_members                smallint(3) unsigned,
    rol_cost                       float unsigned,
    rol_usr_id_create              int(11) unsigned,
-   rol_timestamp_create           datetime,
+   rol_timestamp_create           datetime                       not null,
    rol_usr_id_change              int(11) unsigned,
    rol_timestamp_change           datetime,
    rol_valid                      tinyint(1) unsigned            not null default 1,

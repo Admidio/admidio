@@ -346,12 +346,20 @@ class User extends TableAccess
                     WHERE rol_usr_id_change = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
+        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_create = NULL
+                    WHERE rol_usr_id_create = ". $this->db_fields['usr_id'];
+        $this->db->query($sql);
+
         $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
                     WHERE rld_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
                     WHERE usr_usr_id_change = ". $this->db_fields['usr_id'];
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_create = NULL
+                    WHERE usr_usr_id_create = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = ". $this->db_fields['usr_id'];
