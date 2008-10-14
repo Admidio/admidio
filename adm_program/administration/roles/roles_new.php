@@ -705,39 +705,41 @@ echo "
             </div>";
         }                   
 
-        if($req_rol_id > 0 && $role->getValue("rol_usr_id_change") > 0)
-        {
-            // Angabe ueber die letzten Aenderungen
-            $user_change = new User($g_db, $role->getValue("rol_usr_id_change"));
+        // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+        echo '<div class="editInformation">';
+            $user_create = new User($g_db, $role->getValue("rol_usr_id_create"));
+            echo 'Angelegt von '. $user_create->getValue("Vorname"). ' '. $user_create->getValue("Nachname").
+            ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_create"));
 
-            echo "<div class=\"editInformation\">
-                Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $role->getValue("rol_last_change")).
-                " durch ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname"). "
-            </div>";
-        }
+            if($role->getValue("rol_usr_id_change") > 0)
+            {
+                $user_change = new User($g_db, $role->getValue("rol_usr_id_change"));
+                echo '<br />Zuletzt bearbeitet von '. $user_change->getValue("Vorname"). ' '. $user_change->getValue("Nachname").
+                ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_change"));
+            }
+        echo '</div>
 
-        echo "
-        <div class=\"formSubmit\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\" onclick=\"absenden()\">
-                <img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />
+        <div class="formSubmit">
+            <button name="speichern" type="submit" value="speichern" onclick="absenden()">
+                <img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />
                 &nbsp;Speichern</button>
         </div>    
     </div>
 </div>
 </form>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
 </ul>
 
-<script type=\"text/javascript\"><!--\n
-    document.getElementById('rol_name').focus();\n";
+<script type="text/javascript"><!--
+    document.getElementById("rol_name").focus(); ';
     // Bloecke anzeigen/verstecken
     if($req_rol_id > 0)
     {
@@ -748,14 +750,15 @@ echo "
         && $role->getValue("rol_weekday") == 0
         && strlen($role->getValue("rol_location")) == 0)
         {
-            echo "showHideBlock('dates_body','". THEME_PATH. "');\n";
+            echo "showHideBlock('dates_body','". THEME_PATH. "'); ";
         }
         if(count($childRoles) == 0)
         {
-            echo "showHideBlock('dependancies_body','". THEME_PATH. "');\n";
+            echo "showHideBlock('dependancies_body','". THEME_PATH. "'); ";
         }
     }
-echo "\n--></script>";
+echo '
+--></script>';
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

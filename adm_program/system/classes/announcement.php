@@ -10,15 +10,10 @@
  * Diese Klasse dient dazu ein Ankuendigungsobjekt zu erstellen. 
  * Eine Ankuendigung kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Folgende Funktionen stehen nun zur Verfuegung:
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array 
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Ankuendigung wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Die aktuelle Ankuendigung wird aus der Datenbank geloescht
+ * editRight()       - prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
  *
  *****************************************************************************/
 
@@ -51,14 +46,19 @@ class Announcement extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("ann_timestamp", date("Y-m-d H:i:s", time()));
-            $this->setValue("ann_usr_id", $g_current_user->getValue("usr_id"));
+            $this->setValue("ann_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("ann_usr_id_create", $g_current_user->getValue("usr_id"));
             $this->setValue("ann_org_shortname", $g_current_organization->getValue("org_shortname"));
         }
         else
         {
-            $this->setValue("ann_last_change", date("Y-m-d H:i:s", time()));
-            $this->setValue("ann_usr_id_change", $g_current_user->getValue("usr_id"));
+            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+            if(strtotime($this->getValue("ann_timestamp_change")) > (strtotime($this->getValue("ann_timestamp_create")) + 900)
+            || $this->getValue("ann_usr_id_change") != $this->getValue("ann_usr_id_create") )
+            {
+                $this->setValue("ann_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("ann_usr_id_change", $g_current_user->getValue("usr_id"));
+            }
         }
         parent::save();
     }

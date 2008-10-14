@@ -61,7 +61,7 @@ class TableAccess
         }
         if(strlen($sql_additional_tables) > 0)
         {
-            $sql_additional_tables = ", $sql_additional_tables";
+            $sql_additional_tables = ", ". $sql_additional_tables;
         }
         
         if(strlen($sql_where_condition) > 0)
@@ -203,15 +203,13 @@ class TableAccess
         }
         
         // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
-        if(isset($this->db_fields_infos[$field_name]) == false
-        || strpos($this->db_fields_infos[$field_name]['type'], "char") !== false
-        || strpos($this->db_fields_infos[$field_name]['type'], "text") !== false)
+        if(is_numeric($field_value))
         {
-            return htmlspecialchars($field_value, ENT_QUOTES);
+            return $field_value;
         }
         else
         {
-            return $field_value;
+            return htmlspecialchars($field_value, ENT_QUOTES);
         }
     }    
     

@@ -10,24 +10,14 @@
  * Diese Klasse dient dazu ein Fotoveranstaltungsobjekt zu erstellen.
  * Eine Fotoveranstaltung kann ueber diese Klasse in der Datenbank verwaltet werden.
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $photo_album = new PhotoAlbum($g_db);
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
- * Mit der Funktion readData($pho_id) kann die gewuenschte Fotoveranstaltung 
- * ausgelesen werden. 
- *
- * Folgende Funktionen stehen weiter zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) 
- *                        - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Veranstaltung wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Die gewaehlte Veranstaltung wird aus der Datenbank geloescht
- * createFolder()         - erzeugt den entsprechenden Ordner unter adm_my_files/photos
+ * deleteInDatabase($photo_id) - Rekursive Funktion die die uebergebene Veranstaltung
+ *                               und alle Unterveranstaltungen loescht
+ * deleteInFilesystem($folder) - Rekursive Funktion die alles innerhalb des uebergebenen
+ *                               Ordners mit Unterordnern und allen Dateien loescht
+ * createFolder()      - erzeugt den entsprechenden Ordner unter adm_my_files/photos
  *
  *****************************************************************************/
 
@@ -61,14 +51,19 @@ class PhotoAlbum extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("pho_timestamp", date("Y-m-d H:i:s", time()));
-            $this->setValue("pho_usr_id", $g_current_user->getValue("usr_id"));
+            $this->setValue("pho_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("pho_usr_id_create", $g_current_user->getValue("usr_id"));
             $this->setValue("pho_org_shortname", $g_current_organization->getValue("org_shortname"));
         }
         else
         {
-            $this->setValue("pho_last_change", date("Y-m-d H:i:s", time()));
-            $this->setValue("pho_usr_id_change", $g_current_user->getValue("usr_id"));
+            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+            if(strtotime($this->getValue("pho_timestamp_change")) > (strtotime($this->getValue("pho_timestamp_create")) + 900)
+            || $this->getValue("pho_usr_id_change") != $this->getValue("pho_usr_id_create") )
+            {
+                $this->setValue("pho_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("pho_usr_id_change", $g_current_user->getValue("usr_id"));
+            }
         }
         parent::save();
     }

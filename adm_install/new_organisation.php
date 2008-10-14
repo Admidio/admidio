@@ -328,7 +328,8 @@ elseif($req_mode == 6)
                                       VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1) ";
+                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1) 
+                                           , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Allgemein', 0, 1) ";
     $db->query($sql);
 
     //Default-Ordner fuer Downloadmodul in der DB anlegen:

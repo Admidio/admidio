@@ -12,22 +12,9 @@
  * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie
  * ausgelesen. Geschrieben werden aber nur die Rollendaten
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $role = new Role($g_db);
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
- * Mit der Funktion readData($user_id) kann die gewuenschte Rolle ausgelesen
- * werden.
- *
- * Folgende Funktionen stehen weiter zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save($login_user_id)   - Rolle wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
  * setInactive()          - setzt die Rolle auf inaktiv
  * setActive()            - setzt die Rolle wieder auf aktiv
  * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
@@ -84,8 +71,22 @@ class Role extends TableAccess
         global $g_current_user, $g_current_session;
         $fields_changed = $this->db_fields_changed;
         
-        $this->setValue("rol_last_change", date("Y-m-d H:i:s", time()));
-        $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
+        
+        if($this->new_record)
+        {
+            $this->setValue("rol_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("rol_usr_id_create", $g_current_user->getValue("usr_id"));
+        }
+        else
+        {
+            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+            if(strtotime($this->getValue("rol_timestamp_change")) > (strtotime($this->getValue("rol_timestamp_create")) + 900)
+            || $this->getValue("rol_usr_id_change") != $this->getValue("rol_usr_id_create") )
+            {
+                $this->setValue("rol_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
+            }
+        }        
 
         parent::save();
 

@@ -97,22 +97,19 @@ while ($row = $g_db->fetch_object($result))
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
-    // Den Autor der Ankuendigung ermitteln und ausgeben
-    $user = new User($g_db, $row->ann_usr_id);
+    // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
+    $user = new User($g_db, $row->ann_usr_id_create);
     $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp). "</i>";
+    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp_create). "</i>";
 
-    // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-    if($row->ann_usr_id_change > 0
-    && (  strtotime($row->ann_last_change) > (strtotime($row->ann_timestamp) + 900)
-       || $row->ann_usr_id_change != $row->ann_usr_id ) )
+    if($row->ann_usr_id_change > 0)
     {
         $user_change = new User($g_db, $row->ann_usr_id_change);
-        $description = $description. "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_last_change);
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp_change). "</i>";
     }
                 
-    $pubDate = date('r',strtotime($row->ann_timestamp));
+    $pubDate = date('r',strtotime($row->ann_timestamp_create));
 
 
     // Item hinzufuegen

@@ -10,22 +10,6 @@
  * Diese Klasse dient dazu ein Linkobjekt zu erstellen. 
  * Eine Weblink kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $link = new Weblink($g_db);
- *
- * Mit der Funktion readData($lnk_id) kann nun der gewuenschte Link ausgelesen werden.
- *
- * Folgende Funktionen stehen nun zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array 
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Link wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Der aktuelle Link wird aus der Datenbank geloescht
- *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
@@ -88,13 +72,18 @@ class Weblink extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("lnk_timestamp", date("Y-m-d H:i:s", time()));
-            $this->setValue("lnk_usr_id", $g_current_user->getValue("usr_id"));
+            $this->setValue("lnk_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("lnk_usr_id_create", $g_current_user->getValue("usr_id"));
         }
         else
         {
-            $this->setValue("lnk_last_change", date("Y-m-d H:i:s", time()));
-            $this->setValue("lnk_usr_id_change", $g_current_user->getValue("usr_id"));
+            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+            if(strtotime($this->getValue("lnk_timestamp_change")) > (strtotime($this->getValue("lnk_timestamp_create")) + 900)
+            || $this->getValue("lnk_usr_id_change") != $this->getValue("lnk_usr_id_create") )
+            {
+                $this->setValue("lnk_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("lnk_usr_id_change", $g_current_user->getValue("usr_id"));
+            }
         }
         parent::save();
     }   

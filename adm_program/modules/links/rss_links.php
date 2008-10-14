@@ -76,11 +76,18 @@ while ($row = $g_db->fetch_object($result))
 
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
-    // Den Autor der Links ermitteln und ausgeben
+    // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
     $user = new User($g_db, $row->lnk_usr_id);
     $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp). "</i>";
 
+    if($row->lnk_usr_id_change > 0)
+    {
+        $user_change = new User($g_db, $row->lnk_usr_id_change);
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change). "</i>";
+    }
+    
     $pubDate = date('r', strtotime($row->lnk_timestamp));
 
 

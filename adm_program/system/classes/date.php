@@ -10,16 +10,11 @@
  * Diese Klasse dient dazu ein Terminobjekt zu erstellen. 
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Folgende Funktionen stehen nun zur Verfuegung:
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array 
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Termin wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Der gewaehlte Termin wird aus der Datenbank geloescht
- * getIcal()              - gibt einen Termin im iCal-Format zurueck
+ * getIcal($domain)  - gibt String mit dem Termin im iCal-Format zurueck
+ * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
  *
  *****************************************************************************/
 
@@ -41,6 +36,18 @@ class Date extends TableAccess
         else
         {
             $this->clear();
+        }
+    }
+
+    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
+    function readData($dat_id)
+    {
+        if(is_numeric($dat_id))
+        {
+            $tables    = TBL_CATEGORIES;
+            $condition = "       dat_cat_id = cat_id
+                             AND dat_id     = $dat_id ";
+            parent::readData($dat_id, $condition, $tables);
         }
     }
     
@@ -76,14 +83,18 @@ class Date extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("dat_timestamp", date("Y-m-d H:i:s", time()));
-            $this->setValue("dat_usr_id", $g_current_user->getValue("usr_id"));
-            $this->setValue("dat_org_shortname", $g_current_organization->getValue("org_shortname"));
+            $this->setValue("dat_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("dat_usr_id_create", $g_current_user->getValue("usr_id"));
         }
         else
         {
-            $this->setValue("dat_last_change", date("Y-m-d H:i:s", time()));
-            $this->setValue("dat_usr_id_change", $g_current_user->getValue("usr_id"));
+            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+            if(strtotime($this->getValue("dat_timestamp_change")) > (strtotime($this->getValue("dat_timestamp_create")) + 900)
+            || $this->getValue("dat_usr_id_change") != $this->getValue("dat_usr_id_create") )
+            {
+                $this->setValue("dat_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("dat_usr_id_change", $g_current_user->getValue("usr_id"));
+            }
         }
         parent::save();
     }
@@ -126,13 +137,13 @@ class Date extends TableAccess
         global $g_current_organization;
         
         // Termine der eigenen Orga darf bearbeitet werden
-        if($this->db_fields['dat_org_shortname'] == $g_current_organization->getValue("org_shortname"))
+        if($this->db_fields['cat_org_id'] == $g_current_organization->getValue("org_id"))
         {
             return true;
         }
         // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
         elseif($this->db_fields['dat_global'] == true
-        && $g_current_organization->isChildOrganization($this->db_fields['dat_org_shortname']))
+        && $g_current_organization->isChildOrganization($this->db_fields['cat_org_id']))
         {
             return true;
         }

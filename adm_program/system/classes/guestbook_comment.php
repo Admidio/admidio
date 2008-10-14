@@ -10,23 +10,6 @@
  * Diese Klasse dient dazu ein Gaestebuchkommentarobjekt zu erstellen. 
  * Eine Gaestebuchkommentar kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $guestbook_comment = new GuestbookComment($g_db);
- *
- * Mit der Funktion readData($gbc_id) kann nun der gewuenschte Gaestebuchkommentar ausgelesen
- * werden.
- *
- * Folgende Funktionen stehen nun zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array 
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Gaestebuchkommentar wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Der aktuelle Gaestebuchkommentar wird aus der Datenbank geloescht
- *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
@@ -93,8 +76,13 @@ class GuestbookComment extends TableAccess
         }
         else
         {
-            $this->setValue("gbc_last_change", date("Y-m-d H:i:s", time()));
-            $this->setValue("gbc_usr_id_change", $g_current_user->getValue("usr_id"));
+            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+            if(strtotime($this->getValue("gbc_timestamp_change")) > (strtotime($this->getValue("gbc_timestamp")) + 900)
+            || $this->getValue("gbc_usr_id_change") != $this->getValue("gbc_usr_id") )
+            {
+                $this->setValue("gbc_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("gbc_usr_id_change", $g_current_user->getValue("usr_id"));
+            }
         }
         parent::save();
     }   
