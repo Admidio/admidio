@@ -41,10 +41,6 @@ $message_text = array(
         <p>Es werden alle Daten, die dieser Kategorie zugeordnet sind
         (Felder, Rollen, Links), mit gelöscht.</p>",
 
-    "delete_date" =>
-        "Willst du den Termin<br />
-        %VAR1%<br />wirklich löschen?",
-
     "delete_role" =>
         "Willst du die Rolle %VAR1% wirklich löschen?<br /><br />
         Es werden damit auch alle Mitgliedschaften entgütig entfernt.",
@@ -57,10 +53,6 @@ $message_text = array(
         "<p>Willst du %VAR1% wirklich löschen?</p>
         <p>Der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf
         seine Daten ist nicht mehr möglich.</p>",
-
-    "delete_new_user" =>
-        "<p>Willst du die Web-Registrierung von
-        %VAR1% wirklich löschen?</p>",
 
     "email_invalid" =>
         "Die E-Mail-Adresse ist nicht gültig.",
@@ -238,22 +230,9 @@ $message_text = array(
     //Fehlermeldungen Mitgliederzuordnung
     "members_changed" =>
         "Die Änderungen wurden erfolgreich gespeichert.",
-
-    //Fehlermeldungen Linkmodul
-    "delete_link" =>
-        "Willst du den Link<br />
-        %VAR1%<br />wirklich löschen?",
-
+    //Ende Fehlermeldungen Mitgliederzuordnung
 
     //Fehlermeldungen Gästebuchmodul
-    "delete_gbook_entry" =>
-        "Willst du den Gästebucheintrag von<br />
-        %VAR1%<br />wirklich löschen?",
-
-    "delete_gbook_comment" =>
-        "Willst du den Kommentar von<br />
-        %VAR1%<br />wirklich löschen?",
-
     "flooding_protection" =>
         "Dein letzter Eintrag im Gästebuch <br />
          liegt weniger als %VAR1% Sekunden zurück.",

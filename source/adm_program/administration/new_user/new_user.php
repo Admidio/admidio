@@ -29,7 +29,7 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Neue Mitglieder der Gruppierung selektieren
-$sql    = "SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
+$sql    = "SELECT usr_id, usr_login_name, usr_timestamp_create, last_name.usd_value as last_name,
                   first_name.usd_value as first_name, email.usd_value as email
              FROM ". TBL_USERS. " 
              LEFT JOIN ". TBL_USER_DATA. " as last_name
@@ -54,47 +54,55 @@ if ($member_found == 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Neue Anmeldungen";
+$g_layout['title']  = "Neue Anmeldungen";
+$g_layout['header'] = $g_js_vars. '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>';
+
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo "
-<h1 class=\"moduleHeadline\">Neue Anmeldungen</h1>
+echo '
+<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
-<table class=\"tableList\" cellspacing=\"0\">
+<table class="tableList" cellspacing="0">
     <tr>
-        <th>Name</th>
+        <th colspan="2">Name</th>
         <th>Benutzername</th>
         <th>E-Mail</th>
-        <th style=\"text-align: center;\">Funktionen</th>
-    </tr>";
+        <th style="text-align: center;">Funktionen</th>
+    </tr>';
 
-    while($row = $g_db->fetch_object($usr_result))
+    while($row = $g_db->fetch_array($usr_result))
     {
-        echo "
-        <tr class=\"tableMouseOver\">
-            <td><a href=\"$g_root_path/adm_program/modules/profile/profile.php?user_id=$row->usr_id\">$row->last_name, $row->first_name</a></td>
-            <td>$row->usr_login_name</td>
-            <td>";
+        echo '
+        <tr class="tableMouseOver" id="row_user_'.$row['usr_id'].'">
+            <td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a></td>
+            <td><img class="iconInformation" src="'. THEME_PATH. '/icons/calendar_time.png"
+                    alt="Registriert am '. mysqldatetime("d.m.y h:i", $row['usr_timestamp_create']). '" title="Registriert am '. mysqldatetime("d.m.y h:i", $row['usr_timestamp_create']). '" /></td>
+            <td>'.$row['usr_login_name'].'</td>
+            <td>';
                 if($g_preferences['enable_mail_module'] == 1)
                 {
-                    echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->email</a>";
+                    echo '<a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
                 }
                 else
                 {
-                    echo "<a href=\"mailto:$row->email\">$row->email</a>";
+                    echo '<a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
                 }
-            echo "</td>
-            <td style=\"text-align: center;\">
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_assign.php?new_user_id=$row->usr_id\"><img 
-                    src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Anmeldung zuordnen\" title=\"Anmeldung zuordnen\" /></a>
-                <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$row->usr_id&amp;mode=5\"><img 
-                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Anmeldung löschen\" title=\"Anmeldung löschen\" /></a>
+            echo '</td>
+            <td style="text-align: center;">
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
+                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="Anmeldung zuordnen" title="Anmeldung zuordnen" /></a>
+                <a class="iconLink" href="javascript:deleteObject(\'new_user\', \'row_user_'.$row['usr_id'].'\','.$row['usr_id'].',\''.$row['first_name'].' '.$row['last_name'].'\')"><img 
+                    src="'. THEME_PATH. '/icons/delete.png" alt="Anmeldung löschen" title="Anmeldung löschen" /></a>
             </td>
-        </tr>";
+        </tr>';
     }
 
-echo "</table>";
+echo '</table>';
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

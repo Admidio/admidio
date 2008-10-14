@@ -23,12 +23,30 @@ function deleteObject(type, elementId, databaseId, description)
             case "ann":
                 url = gRootPath + "/adm_program/modules/announcements/announcements_function.php?mode=2&ann_id=" + databaseId;
                 break;
+            case "dat":
+                url = gRootPath + "/adm_program/modules/dates/dates_function.php?mode=2&dat_id=" + databaseId;
+                break;
+            case "gbo":
+                url = gRootPath + "/adm_program/modules/guestbook/guestbook_function.php?mode=2&id=" + databaseId;
+                break;
+            case "gbc":
+                url = gRootPath + "/adm_program/modules/guestbook/guestbook_function.php?mode=5&id=" + databaseId;
+                break;
+            case "lnk":
+                url = gRootPath + "/adm_program/modules/links/links_function.php?mode=2&lnk_id=" + databaseId;
+                break;
+            case "new_user":
+                url = gRootPath + "/adm_program/administration/new_user/new_user_function.php?mode=4&new_user_id=" + databaseId;
+                break;
         }
-        // RequestObjekt abschicken und Eintrag loeschen
-        resObject.open("GET", url, true);
-        resObject.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        resObject.onreadystatechange = afterDeleteObject;
-        resObject.send(null);
+        if(url.length > 0)
+        {
+            // RequestObjekt abschicken und Eintrag loeschen
+            resObject.open("GET", url, true);
+            resObject.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            resObject.onreadystatechange = afterDeleteObject;
+            resObject.send(null);
+        }
     }
 }
 

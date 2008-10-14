@@ -11,7 +11,6 @@
  *       2 - Registrierung einem Benutzer zuordnen, der noch KEIN Mitglied der Orga ist
  *       3 - Benachrichtigung an den User, dass er nun fuer die aktuelle Orga freigeschaltet wurde
  *       4 - User-Account loeschen
- *       5 - Frage, ob User-Account geloescht werden soll
  *       6 - Registrierung muss nicht zugeordnet werden, einfach Logindaten verschicken
  * new_user_id: Id des Logins, das verarbeitet werden soll
  * user_id:     Id des Benutzers, dem das neue Login zugeordnet werden soll
@@ -151,12 +150,6 @@ elseif($req_mode == 4)
     $location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
     header($location);
     exit();
-}
-elseif($req_mode == 5)
-{
-    // Fragen, ob die Registrierung geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;mode=4");
-    $g_message->show("delete_new_user", $new_user->getValue("Vorname"). " ". $new_user->getValue("Nachname"), "Löschen");
 }
 elseif($req_mode == 6)
 {
