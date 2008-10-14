@@ -554,22 +554,21 @@ echo "
             $btn_text  = "Speichern";
         }
 
-        if($new_user == 0 && $user->getValue("usr_usr_id_change") > 0)
+        if($new_user == 0)
         {
-            // Angabe ueber die letzten Aenderungen
-            if($user->getValue("usr_usr_id_change") == $g_current_user->getValue("usr_id"))
-            {
-                $user_last_change = $g_current_user;
-            }
-            else
-            {
-                $user_last_change = new User($g_db, $user->getValue("usr_usr_id_change"));
-            }
+            // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+            echo '<div class="editInformation">';
+                $user_create = new User($g_db, $user->getValue("usr_usr_id_create"));
+                echo 'Angelegt von '. $user_create->getValue("Vorname"). ' '. $user_create->getValue("Nachname").
+                ' am '. mysqldatetime("d.m.y h:i", $user->getValue("usr_timestamp_create"));
 
-            echo "<div class=\"editInformation\">
-                Letzte &Auml;nderung am ". mysqldatetime("d.m.y h:i", $user->getValue("usr_last_change")).
-                " durch ". $user_last_change->getValue("Vorname"). " ". $user_last_change->getValue("Nachname"). "
-            </div>";
+                if($user->getValue("usr_usr_id_change") > 0)
+                {
+                    $user_change = new User($g_db, $user->getValue("usr_usr_id_change"));
+                    echo '<br />Zuletzt bearbeitet von '. $user_change->getValue("Vorname"). ' '. $user_change->getValue("Nachname").
+                    ' am '. mysqldatetime("d.m.y h:i", $user->getValue("usr_timestamp_change"));
+                }
+            echo '</div>';
         }
 
         echo '

@@ -411,26 +411,18 @@ echo "<div class=\"photoModuleContainer\">";
             }//for
         echo '</table>';
 
-        //Anleger und Veraendererinfos
+        // Anleger und Veraendererinfos
         echo "
         <div class=\"editInformation\">";
-            if($photo_album->getValue("pho_usr_id") > 0)
-            {
-                $user_create = new User($g_db, $photo_album->getValue("pho_usr_id"));
-                echo"Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname")
-                ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp"));
-            }
+            $user_create = new User($g_db, $photo_album->getValue("pho_usr_id_create"));
+            echo"Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname")
+            ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp_create"));
             
-            // Zuletzt geaendert nur anzeigen, wenn ?Ñnderung nach 1 Stunde oder durch anderen Nutzer gemacht wurde
-            if($photo_album->getValue("pho_usr_id_change") > 0
-            && $photo_album->getValue("pho_last_change") > 0
-            && (  strtotime($photo_album->getValue("pho_last_change")) > (strtotime($photo_album->getValue("pho_timestamp")) + 3600)
-               || $photo_album->getValue("pho_usr_id_change") != $photo_album->getValue("pho_usr_id") ) )
+            if($photo_album->getValue("pho_usr_id_change") > 0)
             {
                 $user_change = new User($g_db, $photo_album->getValue("pho_usr_id_change"));
-                echo"<br />
-                Letztes Update durch ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname")
-                ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_last_change"));
+                echo"<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname")
+                ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp_change"));
             }
         echo "</div>";
     }

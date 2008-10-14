@@ -104,7 +104,7 @@ if($req_members)
 {
     $sql    = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
                       email.usd_value as email, homepage.usd_value as homepage,
-                      usr_login_name, usr_last_change, 1 member
+                      usr_login_name, usr_timestamp_change, 1 member
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
                 RIGHT JOIN ". TBL_USER_DATA. " as last_name
                    ON last_name.usd_usr_id = usr_id
@@ -133,7 +133,7 @@ else
     // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
     $sql    = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
                       email.usd_value as email, homepage.usd_value as homepage,
-                      usr_login_name, usr_last_change, count(cat_id) member
+                      usr_login_name, usr_timestamp_change, count(cat_id) member
                  FROM ". TBL_USERS. "
                 RIGHT JOIN ". TBL_USER_DATA. " as last_name
                    ON last_name.usd_usr_id = usr_id
@@ -445,7 +445,7 @@ if($num_members > 0)
                         }
                     echo "</td>
                     <td>". $row['usr_login_name']. "</td>
-                    <td>". mysqldatetime("d.m.y h:i" , $row['usr_last_change']). "</td>
+                    <td>". mysqldatetime("d.m.y h:i" , $row['usr_timestamp_change']). "</td>
                     <td style=\"text-align: center;\">";
                         // pruefen, ob der User noch in anderen Organisationen aktiv ist
                         $sql    = "SELECT *

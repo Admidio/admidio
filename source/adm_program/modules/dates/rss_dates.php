@@ -116,22 +116,19 @@ while ($row = $g_db->fetch_object($result))
     //i-cal downloadlink
     $description = $description. "<br /><br /><a href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$row->dat_id&mode=4\">Termin in meinen Kalender &uuml;bernehmen</a>";
     
-    // Den Autor des Termins ermitteln und ausgeben
-    $user = new User($g_db, $row->dat_usr_id);
+    // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
+    $user = new User($g_db, $row->dat_usr_id_create);
     $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp). "</i>";
+    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp_create). "</i>";
 
-    // Zuletzt geaendert nur anzeigen, wenn Änderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-    if($row->dat_usr_id_change > 0
-    && (  strtotime($row->dat_last_change) > (strtotime($row->dat_timestamp) + 900)
-       || $row->dat_usr_id_change != $row->dat_usr_id ) )
+    if($row->dat_usr_id_change > 0)
     {
         $user_change = new User($g_db, $row->dat_usr_id_change);
-        $description = $description. "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_last_change);
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->dat_timestamp_change). "</i>";
     }
     
-    $pubDate = date('r',strtotime($row->dat_timestamp));
+    $pubDate = date('r',strtotime($row->dat_timestamp_create));
 
 
     //Item hinzufuegen

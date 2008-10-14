@@ -186,7 +186,14 @@ class User extends TableAccess
     {
         if(strpos($field_name, "usr_") === 0)
         {
-            return parent::getValue($field_name);
+            $field_value = parent::getValue($field_name);
+            
+            // ist die Create-Id leer, so wurde der Datensatz durch Registierung angelegt und gehoert dem User selber
+            if($field_name == "usr_usr_id_create" && strlen($field_value) == 0)
+            {
+                $field_value = parent::getValue("usr_id");
+            }
+            return $field_value;
         }
         else
         {
@@ -225,8 +232,21 @@ class User extends TableAccess
         if($this->b_set_last_change)
         {
             global $g_current_user;
-            $this->setValue("usr_last_change", date("Y-m-d H:i:s", time()));
-            $this->setValue("usr_usr_id_change", $g_current_user->getValue("usr_id"));
+            if($this->new_record)
+            {
+                $this->setValue("usr_timestamp_create", date("Y-m-d H:i:s", time()));
+                $this->setValue("usr_usr_id_create", $g_current_user->getValue("usr_id"));
+            }
+            else
+            {
+                // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+                if(strtotime($this->getValue("usr_timestamp_change")) > (strtotime($this->getValue("usr_timestamp_create")) + 900)
+                || $this->getValue("usr_usr_id_change") != $this->getValue("usr_usr_id_create") )
+                {
+                    $this->setValue("usr_timestamp_change", date("Y-m-d H:i:s", time()));
+                    $this->setValue("usr_usr_id_change", $g_current_user->getValue("usr_id"));
+                }
+            }
         }
 
         $this->b_set_last_change = true;
@@ -424,9 +444,9 @@ class User extends TableAccess
             }
             $vcard .= (string) "X-WAB-GENDER:" . $wab_gender . "\r\n";
         }
-        if (strlen($this->getValue("usr_last_change")) > 0)
+        if (strlen($this->getValue("usr_timestamp_change")) > 0)
         {
-            $vcard .= (string) "REV:" . mysqldatetime("ymdThis", $this->getValue("usr_last_change")) . "\r\n";
+            $vcard .= (string) "REV:" . mysqldatetime("ymdThis", $this->getValue("usr_timestamp_change")) . "\r\n";
         }
 
         $vcard .= (string) "END:VCARD\r\n";

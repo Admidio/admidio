@@ -60,7 +60,7 @@ if (isset($comment_result))
         $cid = $row->gbc_gbo_id;
 
         echo "
-        <div class=\"groupBox\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
+        <div class=\"groupBox\" id=\"gbc_".$row->gbc_id."\" style=\"overflow: hidden; margin-left: 20px; margin-right: 20px;\">
             <div class=\"groupBoxHeadline\">
                 <div class=\"boxHeadLeft\">
                     <img src=\"". THEME_PATH. "/icons/comments.png\" style=\"vertical-align: top;\" alt=\"Kommentar ". $commentNumber. "\" />&nbsp;".
@@ -85,7 +85,7 @@ if (isset($comment_result))
                     echo "
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid=$row->gbc_id\"><img 
                         src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/guestbook/guestbook_function.php?id=$row->gbc_id&amp;mode=7\"><img 
+                    <a class=\"iconLink\" href=\"javascript:deleteObject('gbc', 'gbc_".$row->gbc_id."',".$row->gbc_id.",'".$row->gbc_name."')\"><img 
                         src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
                 }
 
@@ -113,7 +113,7 @@ if (isset($comment_result))
                     <div class=\"editInformation\">
                         Zuletzt bearbeitet von ".
                         $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $row->gbc_last_change). "
+                        " am ". mysqldatetime("d.m.y h:i", $row->gbc_timestamp_change). "
                     </div>";
                 }
             echo "

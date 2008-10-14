@@ -131,22 +131,19 @@ while ($row = $g_db->fetch_object($result))
     //Link zur Momepage
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
-    //Angaben zum Anleger
-    $create_user = new User($g_db, $row->pho_usr_id);
+    // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
+    $create_user = new User($g_db, $row->pho_usr_id_create);
     $description = $description. "<br /><br /><i>Angelegt von ". $create_user->getValue("Vorname"). " ". $create_user->getValue("Nachname");
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp). "</i>";
+    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp_create). "</i>";
 
-    if($row->pho_usr_id_change > 0
-    && (  strtotime($row->pho_last_change) > (strtotime($row->pho_timestamp) + 3600)
-       || $row->pho_usr_id_change != $row->pho_usr_id ) )
+    if($row->pho_usr_id_change > 0)
     {
-        //Angaben zum Updater
         $user_change = new User($g_db, $row->pho_usr_id_change);
-        $description = $description. "<br /><i>Letztes Update durch ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_last_change). "</i>";
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
+        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp_change). "</i>";
     }
 
-    $pubDate = date('r',strtotime($row->pho_timestamp));
+    $pubDate = date('r',strtotime($row->pho_timestamp_create));
 
     // Item hinzufuegen
     $rss->addItem($title, $description, $pubDate, $link);

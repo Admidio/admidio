@@ -201,7 +201,7 @@ else
         $announcement->clear();
         $announcement->setArray($row);
         echo '
-        <div class="boxLayout" id="ann_'.$row['ann_id'].'">
+        <div class="boxLayout" id="ann_'.$announcement->getValue("ann_id").'">
             <div class="boxHead">
                 <div class="boxHeadLeft">
                     <img src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
@@ -224,7 +224,7 @@ else
                         if($announcement->getValue("ann_org_shortname") == $g_organization)
                         {
                             echo '
-                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$row['ann_id'].'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
+                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue("ann_id").'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         }    
                     }
@@ -244,18 +244,15 @@ else
             
                 echo "
                 <div class=\"editInformation\">";
-                    $user_create = new User($g_db, $announcement->getValue("ann_usr_id"));
+                    $user_create = new User($g_db, $announcement->getValue("ann_usr_id_create"));
                     echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp"));
+                    " am ". mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp_create"));
 
-                    // Zuletzt geaendert nur anzeigen, wenn Aenderung nach 15 Minuten oder durch anderen Nutzer gemacht wurde
-                    if($announcement->getValue("ann_usr_id_change") > 0
-                    && (  strtotime($announcement->getValue("ann_last_change")) > (strtotime($announcement->getValue("ann_timestamp")) + 900)
-                       || $announcement->getValue("ann_usr_id_change") != $announcement->getValue("ann_usr_id") ) )
+                    if($announcement->getValue("ann_usr_id_change") > 0)
                     {
                         $user_change = new User($g_db, $announcement->getValue("ann_usr_id_change"));
                         echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $announcement->getValue("ann_last_change"));
+                        " am ". mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp_change"));
                     }
                 echo "</div>
             </div>
