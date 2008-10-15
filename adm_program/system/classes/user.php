@@ -298,16 +298,16 @@ class User extends TableAccess
     // die Methode wird innerhalb von delete() aufgerufen
     function delete()
     {
-        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id = NULL
-                    WHERE ann_usr_id = ". $this->db_fields['usr_id'];
+        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_create = NULL
+                    WHERE ann_usr_id_create = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_change = NULL
                     WHERE ann_usr_id_change = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
-        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id = NULL
-                    WHERE dat_usr_id = ". $this->db_fields['usr_id'];
+        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_create = NULL
+                    WHERE dat_usr_id_create = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_change = NULL
@@ -330,42 +330,49 @@ class User extends TableAccess
                     WHERE gbo_usr_id_change = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
-        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id = NULL
-                    WHERE lnk_usr_id = ". $this->db_fields['usr_id'];
+        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id_create = NULL
+                    WHERE lnk_usr_id_create = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
-        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id = NULL
-                    WHERE pho_usr_id = ". $this->db_fields['usr_id'];
+        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id_change = NULL
+                    WHERE lnk_usr_id_change = ". $this->db_fields['usr_id'];
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_create = NULL
+                    WHERE pho_usr_id_create = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_change = NULL
                     WHERE pho_usr_id_change = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
-        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
-                    WHERE rol_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
         $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_create = NULL
                     WHERE rol_usr_id_create = ". $this->db_fields['usr_id'];
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
+                    WHERE rol_usr_id_change = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
                     WHERE rld_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
-        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
-                    WHERE usr_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
         $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_create = NULL
                     WHERE usr_usr_id_create = ". $this->db_fields['usr_id'];
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
+                    WHERE usr_usr_id_change = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = ". $this->db_fields['usr_id'];
+        $this->db->query($sql);
+
+        $sql    = "DELETE FROM ". TBL_AUTO_LOGIN. " WHERE atl_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
         
         $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = ". $this->db_fields['usr_id'];
