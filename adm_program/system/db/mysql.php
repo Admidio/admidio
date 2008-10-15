@@ -175,22 +175,17 @@ class MySqlDB extends DB
         return mysql_data_seek($result, $row_number);
     }   
     
-    // gibt ein Array mit Fehlernummer und Beschreibung zurueck    
-    // diese Funktion wird aus db_error() aufgerufen
-    function _db_error()
+    // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
+    function db_error()
     {
         if (!$this->connect_id)
         {
-            return array(
-                'message'   => @mysql_error(),
-                'code'      => @mysql_errno()
-            );
+            parent::db_error(@mysql_errno(), @mysql_error());
         }
-
-        return array(
-            'message'   => @mysql_error($this->connect_id),
-            'code'      => @mysql_errno($this->connect_id)
-        );
+        else
+        {
+            parent::db_error(@mysql_errno($this->connect_id), @mysql_error($this->connect_id));
+        }
     }   
 }
  
