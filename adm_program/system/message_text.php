@@ -381,15 +381,6 @@ $message_text = array(
     "folder_not_exist" =>
         "Der aufgerufene Ordner existiert nicht.",
 
-    "delete_file_folder" =>
-        "Willst du die Datei / den Ordner %VAR1% wirklich löschen?",
-
-    "delete_file" =>
-        "Die Datei %VAR1% wurde gelöscht.",
-
-    "delete_folder" =>
-        "Der Ordner %VAR1% wurde gelöscht.",
-
     "delete_error" =>
         "Beim Löschen ist ein unbekannter Fehler aufgetreten.",
 

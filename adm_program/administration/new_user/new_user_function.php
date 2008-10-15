@@ -147,9 +147,8 @@ elseif($req_mode == 4)
     // nun aus Admidio-DB loeschen
     $new_user->delete();
 
-    $location = "Location: $g_root_path/adm_program/administration/new_user/new_user.php";
-    header($location);
-    exit();
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo "done";
 }
 elseif($req_mode == 6)
 {

@@ -204,17 +204,13 @@ if($_GET["mode"] == 1)
 }
 elseif($_GET["mode"] == 2)
 {
-    // Termin loeschen, wenn sie zur aktuellen Orga gehoert
+    // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if($date->getValue("dat_org_shortname") == $g_current_organization->getValue("org_shortname"))
     {
         $date->delete();
-    
-        $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-        $g_message->show("delete");
-    }
-    else
-    {
-        $g_message->show("norights");
+
+        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+        echo "done";
     }
 }
 elseif($_GET["mode"] == 4)

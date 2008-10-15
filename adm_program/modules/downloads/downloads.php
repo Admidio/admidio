@@ -76,6 +76,11 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 
 // Html-Kopf ausgeben
 $g_layout['title'] = "Downloadbereich";
+$g_layout['header'] = $g_js_vars. '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -159,7 +164,7 @@ else
             $nextFolder = $folderContent["folders"][$i];
 
             echo "
-            <tr class=\"tableMouseOver\">
+            <tr class=\"tableMouseOver\" id=\"row_folder_".$nextFolder['fol_id']."\">
                 <td>
                       <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/downloads.php?folder_id=". $nextFolder['fol_id']. "\">
                     <img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Ordner\" title=\"Ordner\" /></a>
@@ -171,12 +176,12 @@ else
                 if ($g_current_user->editDownloadRight())
                 {
                     //Hier noch die Links zum Aendern und Loeschen
-                    echo "
-                    <td style=\"text-align: center;\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/rename.php?folder_id=". $nextFolder['fol_id']. "\">
-                        <img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Umbenennen\" title=\"Umbenennen\" /></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;folder_id=". $nextFolder['fol_id']. "\">
-                        <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
+                    echo '
+                    <td style="text-align: center;">
+                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
+                        <img src="'. THEME_PATH. '/icons/edit.png" alt="Umbenennen" title="Umbenennen" /></a>
+                        <a class="iconLink" href="javascript:deleteObject(\'fol\', \'row_folder_'.$nextFolder['fol_id'].'\','.$nextFolder['fol_id'].',\''.$nextFolder['fol_name'].'\')">
+                        <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         if (!$nextFolder['fol_exists']) {
                             echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning.png\" alt=\"Warnung\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=folderNotExists&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=folderNotExists',this);\"
                           onmouseout=\"ajax_hideTooltip()\" />";
@@ -207,7 +212,7 @@ else
             }
 
             echo "
-            <tr class=\"tableMouseOver\">
+            <tr class=\"tableMouseOver\" id=\"row_file_".$nextFile['fil_id']."\">
                 <td>
                     <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/get_file.php?file_id=". $nextFile['fil_id']. "\">
                     <img src=\"". THEME_PATH. "/icons/$iconFile\" alt=\"Datei\" title=\"Datei\" /></a>
@@ -219,12 +224,12 @@ else
                 if ($g_current_user->editDownloadRight())
                 {
                     //Hier noch die Links zum Aendern und Loeschen
-                    echo "
-                    <td style=\"text-align: center;\">
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/rename.php?file_id=". $nextFile['fil_id']. "\">
-                        <img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Umbenennen\" title=\"Umbenennen\" /></a>
-                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=5&amp;file_id=". $nextFile['fil_id']. "\">
-                        <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>";
+                    echo '
+                    <td style="text-align: center;">
+                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '">
+                        <img src="'. THEME_PATH. '/icons/edit.png" alt="Umbenennen" title="Umbenennen" /></a>
+                        <a class="iconLink" href="javascript:deleteObject(\'fil\', \'row_file_'.$nextFile['fil_id'].'\','.$nextFile['fil_id'].',\''.$nextFile['fil_name'].'\')">
+                        <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         if (!$nextFile['fil_exists']) {
                             echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/warning.png\" alt=\"Warnung\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=fileNotExists&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=fileNotExists',this);\"
                           onmouseout=\"ajax_hideTooltip()\" />";

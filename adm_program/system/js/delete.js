@@ -26,6 +26,12 @@ function deleteObject(type, elementId, databaseId, description)
             case "dat":
                 url = gRootPath + "/adm_program/modules/dates/dates_function.php?mode=2&dat_id=" + databaseId;
                 break;
+            case "fil":
+                url = gRootPath + "/adm_program/modules/downloads/download_function.php?mode=2&file_id=" + databaseId;
+                break;
+            case "fol":
+                url = gRootPath + "/adm_program/modules/downloads/download_function.php?mode=5&folder_id=" + databaseId;
+                break;
             case "gbo":
                 url = gRootPath + "/adm_program/modules/guestbook/guestbook_function.php?mode=2&id=" + databaseId;
                 break;
@@ -52,8 +58,15 @@ function deleteObject(type, elementId, databaseId, description)
 
 function afterDeleteObject()
 {
-    if(resObject.readyState == 4) 
+    if(resObject.readyState == 4 && resObject.status == 200) 
     {
-        Effect.DropOut(objectId);
+        if(resObject.responseText == "done")
+        {
+            Effect.DropOut(objectId);
+        }
+        else
+        {
+            alert("Es ist ein Fehler aufgetreten !\n\nDer Eintrag konnte nicht gelöscht werden.");
+        }
     }
 }

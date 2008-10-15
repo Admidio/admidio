@@ -127,8 +127,8 @@ elseif ($_GET["mode"] == 2 && $_GET["lnk_id"] > 0)
     // Loeschen von Weblinks...
     $link->delete();
 
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show("delete");
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo "done";
 }
 
 else

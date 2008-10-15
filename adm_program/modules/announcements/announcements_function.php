@@ -102,17 +102,13 @@ if($_GET["mode"] == 1)
 }
 elseif($_GET["mode"] == 2)
 {
-    // Ankuendigung loeschen, wenn sie zur aktuellen Orga gehoert
+    // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
     if($announcement->getValue("ann_org_shortname") == $g_current_organization->getValue("org_shortname"))
     {
         $announcement->delete();
-    
-        $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-        $g_message->show("delete");
-    }
-    else
-    {
-        $g_message->show("norights");
+
+        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+        echo "done";
     }
 }
 
