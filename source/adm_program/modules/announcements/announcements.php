@@ -128,7 +128,7 @@ else
     // Ankuendigungen an einem Tag suchen
     if(strlen($sql_datum) > 0)
     {
-        $conditions = " AND DATE_FORMAT(ann_timestamp, '%Y-%m-%d') = '$sql_datum' ";        
+        $conditions = " AND DATE_FORMAT(ann_timestamp_create, '%Y-%m-%d') = '$sql_datum' ";        
     }
     //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
     else
@@ -142,7 +142,7 @@ $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
                OR (   ann_global   = 1
                   AND ann_org_shortname IN ($organizations) ))
                $conditions 
-         ORDER BY ann_timestamp DESC
+         ORDER BY ann_timestamp_create DESC
          LIMIT $req_start, 10";
 $announcements_result = $g_db->query($sql);
 
@@ -208,7 +208,7 @@ else
                     $announcement->getValue("ann_headline"). '
                 </div>
                 <div class="boxHeadRight">'.
-                    mysqldatetime("d.m.y", $announcement->getValue("ann_timestamp")). '&nbsp;';
+                    mysqldatetime("d.m.y", $announcement->getValue("ann_timestamp_create")). '&nbsp;';
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($g_current_user->editAnnouncements())

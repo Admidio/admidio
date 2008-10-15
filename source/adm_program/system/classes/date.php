@@ -103,7 +103,7 @@ class Date extends TableAccess
     function getIcal($domain)
     {
         $prodid = "-//www.admidio.org//Admidio" . ADMIDIO_VERSION . "//DE";
-        $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
+        $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp_create']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
         
         $ical = "BEGIN:VCALENDAR\n".
                 "METHOD:PUBLISH\n".
@@ -113,7 +113,7 @@ class Date extends TableAccess
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->db_fields['dat_headline']. "\n".
                 "DESCRIPTION:". $this->db_fields['dat_description']. "\n".
-                "DTSTAMP:". mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp']). "\n".
+                "DTSTAMP:". mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp_create']). "\n".
                 "LOCATION:". $this->db_fields['dat_location']. "\n";
         if($this->db_fields['dat_all_day'] == 1)
         {

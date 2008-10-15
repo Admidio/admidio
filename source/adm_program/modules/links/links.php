@@ -134,7 +134,7 @@ $sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
 		    AND cat_type = 'LNK'
 		        $condition
   		        $hidden
-		  ORDER BY cat_sequence, lnk_name, lnk_timestamp DESC
+		  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
 		  LIMIT ". $_GET['start']. ", ". $linksPerPage;
 $links_result = $g_db->query($sql1);
 
