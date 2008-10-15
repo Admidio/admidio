@@ -67,7 +67,7 @@ if (strlen($organizations) == 0)
 $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
         WHERE ( ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
         OR ( ann_global = 1 AND ann_org_shortname IN ($organizations) ))
-        ORDER BY ann_timestamp DESC
+        ORDER BY ann_timestamp_create DESC
         LIMIT 10 ";
 $result = $g_db->query($sql);
 

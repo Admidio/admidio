@@ -85,7 +85,7 @@ $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
 			WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
 				  OR (   ann_global   = 1
 					 AND ann_org_shortname IN ($plg_organizations) ))
-			ORDER BY ann_timestamp DESC
+			ORDER BY ann_timestamp_create DESC
 			LIMIT $plg_announcements_count";
 $plg_result = $g_db->query($sql);
 $plg_announcement = new Announcement($g_db);
@@ -128,7 +128,7 @@ if($g_db->num_rows($plg_result) > 0)
             echo $plg_announcement->getValue("ann_headline")."</a><br />";
         }
          
-        echo '(&nbsp;'. mysqldatetime("d.m.y", $plg_announcement->getValue("ann_timestamp")). '&nbsp;)<hr />';
+        echo '(&nbsp;'. mysqldatetime("d.m.y", $plg_announcement->getValue("ann_timestamp_create")). '&nbsp;)<hr />';
     }
     
     echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">Alle '.$plg_headline.'</a>';

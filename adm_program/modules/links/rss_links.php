@@ -45,7 +45,7 @@ $sql = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
            AND cat_type = 'LNK'
-         ORDER BY lnk_timestamp DESC";
+         ORDER BY lnk_timestamp_create DESC";
 $result = $g_db->query($sql);
 
 
@@ -79,7 +79,7 @@ while ($row = $g_db->fetch_object($result))
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
     $user = new User($g_db, $row->lnk_usr_id);
     $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp). "</i>";
+    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create). "</i>";
 
     if($row->lnk_usr_id_change > 0)
     {
@@ -88,7 +88,7 @@ while ($row = $g_db->fetch_object($result))
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change). "</i>";
     }
     
-    $pubDate = date('r', strtotime($row->lnk_timestamp));
+    $pubDate = date('r', strtotime($row->lnk_timestamp_create));
 
 
     // Item hinzufuegen
