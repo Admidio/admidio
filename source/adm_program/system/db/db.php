@@ -74,11 +74,10 @@ class DB
     }   
     
     // Ausgabe der Datenbank-Fehlermeldung
-    function db_error()
+    function db_error($code, $message)
     {
-        global $g_root_path, $g_message, $g_preferences, $g_current_organization;        
+        global $g_root_path, $g_message, $g_preferences, $g_current_organization, $g_debug;
 
-        $error = $this->_db_error();
         $backtrace = getBacktrace();
 
         // Rollback bei einer offenen Transaktion
@@ -93,15 +92,22 @@ class DB
             $g_layout['title']  = "Datenbank-Fehler";
             require(THEME_SERVER_PATH. "/overall_header.php");       
         }
-                    
+        
+        // Ausgabe des Fehlers an Browser
         $error_string = "<div style=\"font-family: monospace;\">
                          <p><b>S Q L - E R R O R</b></p>
-                         <p><b>CODE:</b> ". $error['code']. "</p>
-                         ". $error['message']. "<br /><br />
+                         <p><b>CODE:</b> ". $code. "</p>
+                         ". $message. "<br /><br />
                          <b>B A C K T R A C E</b><br />
                          $backtrace
                          </div>";
         echo $error_string;
+        
+        // ggf. Ausgabe des Fehlers in Log-Datei
+        if($g_debug == 1)
+        {
+            error_log($code. ": ". $message);
+        }
         
         if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
         {
