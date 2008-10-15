@@ -243,8 +243,8 @@ elseif($_GET["mode"] == 2)
     // den Gaestebucheintrag loeschen...
     $guestbook->delete();
 
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show("delete");
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo "done";
 }
 
 elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
@@ -348,8 +348,8 @@ elseif ($_GET["mode"] == 5)
     //Gaestebuchkommentar loeschen...
     $guestbook_comment->delete();
 
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show("delete");
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo "done";
 }
 
 else

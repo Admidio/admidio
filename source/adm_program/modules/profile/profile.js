@@ -19,7 +19,7 @@ function deleteFormerRole(rol_id, rol_name, usr_id, root_path)
 
         resObject.open('POST', root_path + '/adm_program/modules/profile/profile_function.php', true);
         resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        resObject.onreadystatechange = handleResponse;
+        resObject.onreadystatechange = afterRemoveRole;
         resObject.send('mode=3&user_id=' + usr_id + '&rol_id=' + rol_id);
     }
 }
@@ -58,15 +58,22 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
 
         resObject.open('POST', root_path + '/adm_program/modules/profile/profile_function.php', true);
         resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        resObject.onreadystatechange = handleResponse;
+        resObject.onreadystatechange = afterRemoveRole;
         resObject.send('mode=2&user_id=' + usr_id + '&rol_id=' + rol_id);
     }
 }
 
-function handleResponse() 
+function afterRemoveRole()
 {
-    if(resObject.readyState == 4) 
+    if(resObject.readyState == 4 && resObject.status == 200) 
     {
-    	Effect.DropOut(id);
+        if(resObject.responseText == "done")
+        {
+            Effect.DropOut(id);
+        }
+        else
+        {
+            alert("Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.");
+        }
     }
 }

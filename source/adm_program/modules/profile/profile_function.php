@@ -56,6 +56,9 @@ elseif($_REQUEST['mode'] == 2)
     {
         $member = new TableMembers($g_db);
         $member->stopMembership($_REQUEST['rol_id'], $_REQUEST['user_id']);
+
+        // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest
+        echo "done";
     }
 }
 elseif($_REQUEST['mode'] == 3)
@@ -66,6 +69,9 @@ elseif($_REQUEST['mode'] == 3)
         $member = new TableMembers($g_db);
         $member->readData($_REQUEST['rol_id'], $_REQUEST['user_id']);
         $member->delete();
+
+        // Entfernen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+        echo "done";
     }
 }
 

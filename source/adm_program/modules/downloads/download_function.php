@@ -10,10 +10,10 @@
  * Uebergaben:
  *
  * mode   :  1 - Datei hochladen
- *           2 - Datei / Ordner loeschen
+ *           2 - Datei loeschen
  *           3 - Ordner erstellen
  *           4 - Datei / Ordner umbenennen
- *           5 - Datei / Ordner loeschen abfrage
+ *           5 - Ordner loeschen
  *           6 - Datei / Ordner zur DB hinzufuegen
  *           7 - Berechtigungen ffür Ordner speichern
  * folder_id :  OrdnerId in der DB
@@ -213,7 +213,6 @@ if ($req_mode == 1)
 //Datei loeschen
 elseif ($req_mode == 2)
 {
-
     if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
     {
         //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
@@ -227,48 +226,14 @@ elseif ($req_mode == 2)
         $file->getFileForDownload($file_id);
 
         //Pruefen ob Datensatz gefunden
-        if ($file->getValue('fil_id')) {
-            $name = $file->getValue('fil_name');
-        }
-        else {
-            $g_message->show("invalid");
-        }
-
-
-        if ($file->delete())
+        if ($file->getValue('fil_id')) 
         {
-                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                $g_message->show("delete_file",$name);
+            if ($file->delete())
+            {
+                // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+                echo "done";
+            }
         }
-        else
-        {
-            $g_message->show("delete_error");
-        }
-    }
-    else if ($folder_id > 0)
-    {
-        $folder = new Folder($g_db);
-        $folder->getFolderForDownload($folder_id);
-
-        //Pruefen ob Datensatz gefunden
-        if ($folder->getValue('fol_id')) {
-            $name = $folder->getValue('fol_name');
-        }
-        else {
-            $g_message->show("invalid");
-        }
-
-
-        if ($folder->delete())
-        {
-                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                $g_message->show("delete_folder",$name);
-        }
-        else
-        {
-            $g_message->show("delete_error");
-        }
-
     }
 }
 
@@ -505,7 +470,7 @@ elseif ($req_mode == 4)
 }
 
 
-//Abfrage Datei / Ordner loeschen
+//Folder loeschen
 elseif ($req_mode == 5)
 {
     if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
@@ -514,41 +479,21 @@ elseif ($req_mode == 5)
         //beides ist auch nicht erlaubt
         $g_message->show("invalid");
     }
+    else if ($folder_id > 0)
+    {
+        $folder = new Folder($g_db);
+        $folder->getFolderForDownload($folder_id);
 
-    //Informationen zur Datei/Ordner aus der DB holen,
-    //falls keine Daten gefunden wurden gibt es die Standardfehlermeldung (invalid)
-    if ($file_id) {
-        $class = new File($g_db);
-        $class->getFileForDownload($file_id);
-    }
-    else {
-        $class = new Folder($g_db);
-        $class->getFolderForDownload($folder_id);
-    }
-
-    if (is_a($class,'File')) {
-        if ($class->getValue('fil_id')) {
-            $originalName = $class->getValue('fil_name');
+        //Pruefen ob Datensatz gefunden
+        if ($folder->getValue('fol_id')) 
+        {
+            if ($folder->delete())
+            {
+                // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+                echo "done";
+            }
         }
-        else {
-            $g_message->show("invalid");
-        }
-
     }
-    else {
-        if ($class->getValue('fol_id')) {
-                $originalName = $class->getValue('fol_name');
-        }
-        else {
-            $g_message->show("invalid");
-        }
-
-    }
-
-
-    $_SESSION['navigation']->addUrl(CURRENT_URL);
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/downloads/download_function.php?mode=2&amp;folder_id=$folder_id&amp;file_id=$file_id");
-    $g_message->show("delete_file_folder",$originalName);
 }
 
 
