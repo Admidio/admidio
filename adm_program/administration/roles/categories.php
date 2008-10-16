@@ -56,14 +56,8 @@ unset($_SESSION['categories_request']);
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Kategorien";
-$g_layout['header'] = "
+$g_layout['header'] = $g_js_vars. "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/js/ajax.js\"></script>
-    
-    <style type=\"text/css\">
-        .drag {
-            background-color: #e9ec79;
-        }
-    </style>
     
     <script type=\"text/javascript\"><!--
         function moveCategory(direction, catID)
@@ -76,7 +70,6 @@ $g_layout['header'] = "
             var actSequence = 0;
             var secondCatId = 0;
             var secondSequence = 0;
-            var this_orga   = 0;
             
             // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
             for(i=0;i < childs.length; i++)
@@ -100,12 +93,7 @@ $g_layout['header'] = "
                     }
                 }
             }
-            
-            if(actRow.parentNode.id == 'cat_list')
-            {
-                this_orga = 1;
-            }
-            
+
             // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
             if(direction == 'up')
             {
@@ -129,11 +117,11 @@ $g_layout['header'] = "
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + catID + '&type=". $_GET['type']. "&mode=4&sequence=' + secondSequence + '&this_orga=' + this_orga, true);
+                resObject.open('GET', gRootPath + '/adm_program/administration/roles/categories_function.php?cat_id=' + catID + '&type=". $_GET['type']. "&mode=4&sequence=' + secondSequence, true);
                 resObject.send(null);
                 
                 // jetzt die neue Position von jeweils verschobenen Kategorie aktualisieren
-                resObject.open('GET', '$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=' + secondCatId + '&type=". $_GET['type']. "&mode=4&sequence=' + actSequence + '&this_orga=' + this_orga, true);
+                resObject.open('GET', gRootPath + '/adm_program/administration/roles/categories_function.php?cat_id=' + secondCatId + '&type=". $_GET['type']. "&mode=4&sequence=' + actSequence, true);
                 resObject.send(null);
             }
         }

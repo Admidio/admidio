@@ -54,8 +54,7 @@ class Category extends TableAccess
         
         $this->calc_sequence = false;
             
-        if($this->new_record
-        || $this->db_fields_infos['cat_org_id']['changed'] == true)
+        if($this->new_record)
         {
             if($this->db_fields['cat_org_id'] > 0)
             {
