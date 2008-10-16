@@ -10,21 +10,21 @@
  
 var id;
 
-function deleteFormerRole(rol_id, rol_name, usr_id, root_path) 
+function deleteFormerRole(rol_id, rol_name, usr_id) 
 {
     var msg_result = confirm('Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich entfernen ?');
     if(msg_result)
     {
         id      = 'former_role_' + rol_id;
 
-        resObject.open('POST', root_path + '/adm_program/modules/profile/profile_function.php', true);
+        resObject.open('POST', gRootPath + '/adm_program/modules/profile/profile_function.php', true);
         resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         resObject.onreadystatechange = afterRemoveRole;
         resObject.send('mode=3&user_id=' + usr_id + '&rol_id=' + rol_id);
     }
 }
 
-function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, mem_leader, b_webmaster, root_path, theme)
+function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, mem_leader, b_webmaster, theme)
 {
     var msg_result = confirm('Willst du die Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich beenden ?');
     if(msg_result)
@@ -43,10 +43,10 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
         }
         if(b_webmaster)
         {
-            webmaster = ' <a class=\"iconLink\" href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\', \'' + usr_id + '\', \'' + root_path + '\')\"><img ' +
-            'src=\"' + root_path + '/adm_themes/' + theme + '/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\"></a>';
+            webmaster = ' <a class=\"iconLink\" href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\', \'' + usr_id + '\')\"><img ' +
+            'src=\"' + gRootPath + '/adm_themes/' + theme + '/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\"></a>';
         }
-        var html = '<dl><dt>' + cat_name + ' - ' + '<a href=\"' + root_path + '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=' + rol_id + '\">' + rol_name + '</a>' + 
+        var html = '<dl><dt>' + cat_name + ' - ' + '<a href=\"' + gRootPath + '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=' + rol_id + '\">' + rol_name + '</a>' + 
                     leader + '</dt><dd>vom ' + mem_begin + ' bis ' + 
                     end_date + webmaster + '</dd></dl>';
         
@@ -56,7 +56,7 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
         newListElement.innerHTML = html;
         document.getElementById('former_role_list').appendChild(newListElement);
 
-        resObject.open('POST', root_path + '/adm_program/modules/profile/profile_function.php', true);
+        resObject.open('POST', gRootPath + '/adm_program/modules/profile/profile_function.php', true);
         resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         resObject.onreadystatechange = afterRemoveRole;
         resObject.send('mode=2&user_id=' + usr_id + '&rol_id=' + rol_id);
