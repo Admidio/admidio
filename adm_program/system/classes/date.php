@@ -89,8 +89,8 @@ class Date extends TableAccess
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(strtotime($this->getValue("dat_timestamp_change")) > (strtotime($this->getValue("dat_timestamp_create")) + 900)
-            || $this->getValue("dat_usr_id_change") != $this->getValue("dat_usr_id_create") )
+            if(time() > (strtotime($this->getValue("dat_timestamp_create")) + 900)
+            || $g_current_user->getValue("usr_id") != $this->getValue("dat_usr_id_create") )
             {
                 $this->setValue("dat_timestamp_change", date("Y-m-d H:i:s", time()));
                 $this->setValue("dat_usr_id_change", $g_current_user->getValue("usr_id"));

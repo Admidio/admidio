@@ -41,7 +41,7 @@ elseif($g_preferences['enable_photo_module'] == 2)
 $sql = "SELECT * FROM ". TBL_PHOTOS. "
         WHERE ( pho_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
         AND pho_locked = 0)
-        ORDER BY pho_timestamp DESC
+        ORDER BY pho_timestamp_create DESC
         LIMIT 10";
 $result = $g_db->query($sql);
 

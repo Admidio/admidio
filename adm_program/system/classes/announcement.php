@@ -53,8 +53,8 @@ class Announcement extends TableAccess
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(strtotime($this->getValue("ann_timestamp_change")) > (strtotime($this->getValue("ann_timestamp_create")) + 900)
-            || $this->getValue("ann_usr_id_change") != $this->getValue("ann_usr_id_create") )
+            if(time() > (strtotime($this->getValue("ann_timestamp_create")) + 900)
+            || $g_current_user->getValue("usr_id") != $this->getValue("ann_usr_id_create") )
             {
                 $this->setValue("ann_timestamp_change", date("Y-m-d H:i:s", time()));
                 $this->setValue("ann_usr_id_change", $g_current_user->getValue("usr_id"));

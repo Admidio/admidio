@@ -226,12 +226,11 @@ class User extends TableAccess
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
-        global $g_current_session;
+        global $g_current_session, $g_current_user;
         $fields_changed = $this->db_fields_changed;
         
         if($this->b_set_last_change)
         {
-            global $g_current_user;
             if($this->new_record)
             {
                 $this->setValue("usr_timestamp_create", date("Y-m-d H:i:s", time()));
@@ -240,8 +239,8 @@ class User extends TableAccess
             else
             {
                 // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-                if(strtotime($this->getValue("usr_timestamp_change")) > (strtotime($this->getValue("usr_timestamp_create")) + 900)
-                || $this->getValue("usr_usr_id_change") != $this->getValue("usr_usr_id_create") )
+                if(time() > (strtotime($this->getValue("usr_timestamp_create")) + 900)
+                || $g_current_user->getValue("usr_id") != $this->getValue("usr_usr_id_create") )
                 {
                     $this->setValue("usr_timestamp_change", date("Y-m-d H:i:s", time()));
                     $this->setValue("usr_usr_id_change", $g_current_user->getValue("usr_id"));

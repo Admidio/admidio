@@ -77,8 +77,8 @@ class GuestbookComment extends TableAccess
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(strtotime($this->getValue("gbc_timestamp_change")) > (strtotime($this->getValue("gbc_timestamp")) + 900)
-            || $this->getValue("gbc_usr_id_change") != $this->getValue("gbc_usr_id") )
+            if(time() > (strtotime($this->getValue("gbc_timestamp")) + 900)
+            || $g_current_user->getValue("usr_id") != $this->getValue("gbc_usr_id") )
             {
                 $this->setValue("gbc_timestamp_change", date("Y-m-d H:i:s", time()));
                 $this->setValue("gbc_usr_id_change", $g_current_user->getValue("usr_id"));

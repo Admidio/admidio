@@ -80,8 +80,8 @@ class Role extends TableAccess
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(strtotime($this->getValue("rol_timestamp_change")) > (strtotime($this->getValue("rol_timestamp_create")) + 900)
-            || $this->getValue("rol_usr_id_change") != $this->getValue("rol_usr_id_create") )
+            if(time() > (strtotime($this->getValue("rol_timestamp_create")) + 900)
+            || $g_current_user->getValue("usr_id") != $this->getValue("rol_usr_id_create") )
             {
                 $this->setValue("rol_timestamp_change", date("Y-m-d H:i:s", time()));
                 $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
