@@ -765,7 +765,7 @@ echo '
                                 $count_show_roles++;
                             }
                         }
-                        if($count_show_roles == 0)
+                        if($count_show_roles == 0 && $count_role > 0)
                         {
                             echo 'Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.';
                         }                           
