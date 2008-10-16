@@ -12,11 +12,16 @@
  * pho_id: id des Albums zu dem die Bilder hinzugefuegt werden sollen
  *
  *****************************************************************************/
-//require_once("../../system/login_valid.php");
 require_once("../../system/classes/photo_album.php");
 require_once("../../system/common.php");
 require_once("../../system/classes/image.php");
 
+// pruefen ob das Modul ueberhaupt aktiviert ist
+if ($g_preferences['enable_photo_module'] == 0)
+{
+    // das Modul ist deaktiviert
+    $g_message->show("module_disabled");
+}
 
 // kontrolle ob das Upload funktioniert hat
 if (! isset($_FILES['Filedata'])) {
@@ -74,11 +79,13 @@ $bildnr=$photo_album->getValue("pho_quantity")+1;
 if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
 	if (move_uploaded_file($_FILES['Filedata']['tmp_name'], $image_file)) 
 	{ 
-        //Bildobjekt erzeugen
+
+		//Bildobjekt erzeugen
 	    $image = new Image($image_file);
 	    //Bild skalliert speichern
         $image->scale($g_preferences['photo_save_scale']);
         $image->copyToFile(null, $ordner."/".$bildnr.".jpg");
+        $image->delete();
         
         //Nachsehen ob Thumnailordner existiert
         if(!file_exists($ordner."/thumbnails"))
@@ -88,6 +95,7 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
         }
 
         //Thumbnail speichern
+        $image = new Image($image_file);
         $image->scale($g_preferences['photo_thumbs_scale']);
         $image->copyToFile(null, $ordner."/thumbnails/".$bildnr.".jpg");
         $image->delete(); 
@@ -101,14 +109,14 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
         //Endkontrolle
         if(file_exists($ordner."/".$bildnr.".jpg"))
         {
-            echo":-)";
+            echo"Bild erfolgreich gespeichert.";
             //Aendern der Datenbankeintaege
             $photo_album->setValue("pho_quantity", $photo_album->getValue("pho_quantity")+1);
             $photo_album->save();            
         }
         else
         {
-            echo":-(";
+            echo"Unbekannter Fehler!";
         }
 	} 
 } 
