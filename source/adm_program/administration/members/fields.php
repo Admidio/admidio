@@ -23,14 +23,8 @@ unset($_SESSION['fields_request']);
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $g_layout['title']  = "Profilfelder";
-$g_layout['header'] = "
+$g_layout['header'] = $g_js_vars. "
     <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/js/ajax.js\"></script>
-    
-    <style type=\"text/css\">
-        .drag {
-            background-color: #e9ec79;
-        }
-    </style>
     
     <script type=\"text/javascript\"><!--
         function moveCategory(direction, usfID)
@@ -91,11 +85,11 @@ $g_layout['header'] = "
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-                resObject.open('GET', '$g_root_path/adm_program/administration/members/fields_function.php?usf_id=' + usfID + '&mode=4&sequence=' + secondSequence, true);
+                resObject.open('GET', gRootPath + '/adm_program/administration/members/fields_function.php?usf_id=' + usfID + '&mode=4&sequence=' + secondSequence, true);
                 resObject.send(null);
                 
                 // jetzt die neue Position von jeweils verschobenen Feld aktualisieren
-                resObject.open('GET', '$g_root_path/adm_program/administration/members/fields_function.php?usf_id=' + secondUsfId + '&mode=4&sequence=' + actSequence, true);
+                resObject.open('GET', gRootPath + '/adm_program/administration/members/fields_function.php?usf_id=' + secondUsfId + '&mode=4&sequence=' + actSequence, true);
                 resObject.send(null);
             }
         }
