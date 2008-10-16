@@ -18,8 +18,6 @@
  *         3 - Frage, ob Kategorie geloescht werden soll
  *         4 - Reihenfolge fuer die uebergebene usf_id anpassen
  * sequence: neue Reihenfolge fuer die uebergebene usf_id
- * this_orga: 0 - Reihenfolge von orga-unabhaenigen Kategorien wird veraendert
- *            1 - 0 - Reihenfolge von orga-abhaenigen Kategorien wird veraendert
  *
  *****************************************************************************/
  
@@ -80,7 +78,7 @@ if(isset($_GET['sequence']))
     }
 }
 
-// UserField-objekt anlegen
+// Kategorie-Objekt anlegen
 $category = new Category($g_db);
 
 if($req_cat_id > 0)
@@ -166,6 +164,8 @@ if($_GET['mode'] == 1)
         }
     }
     
+    $cat_org_merker = $category->getValue("cat_org_id");
+    
     // Daten in Datenbank schreiben
     $return_code = $category->save();
 
@@ -174,6 +174,32 @@ if($_GET['mode'] == 1)
         $g_message->show("norights");
     } 
 
+    // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
+    // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
+    if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] <> $cat_org_merker)
+    {
+        $sequence_category = new Category($g_db);
+        $sequence = 0;
+        
+        $sql    = "SELECT *
+                     FROM ". TBL_CATEGORIES. "
+                    WHERE cat_type = '". $_GET['type']. "'
+                      AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+                          OR cat_org_id IS NULL ) 
+                    ORDER BY cat_org_id ASC, cat_sequence ASC";
+        $result = $g_db->query($sql);
+        
+        while($row = $g_db->fetch_array($result))
+        {
+            $sequence++;
+            $sequence_category->clear();
+            $sequence_category->setArray($row);
+            
+            $sequence_category->setValue("cat_sequence", $sequence);
+            $sequence_category->save();
+        }
+    }
+    
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
@@ -208,15 +234,22 @@ elseif($_GET['mode'] == 4)
     // Kategoriereihenfolge aktualisieren
     $sequence_old = $category->getValue("cat_sequence");
 
-    if($_GET['type'] == "USF" && $_GET['this_orga'] == 1)
+    // Sonderbehandlung fuer Profilfeldkategorien
+    if($_GET['type'] == "USF")
     {
-        $sql = "SELECT COUNT(1) as count FROM ". TBL_CATEGORIES. "
-                 WHERE cat_type   = 'USF'
-                   AND cat_org_id IS NULL
-                   AND cat_system = 0 ";
-        $g_db->query($sql);
-        $row = $g_db->fetch_array();
-        $_GET['sequence'] = $_GET['sequence'] + $row['count'];
+        if($category->getValue("cat_org_id") > 0)
+        {
+            // Orgauebergreifende Kategorien muessen bei der Sequenzermittlung noch hinzugefuegt werden
+            $sql = "SELECT COUNT(1) as count FROM ". TBL_CATEGORIES. "
+                     WHERE cat_type   = 'USF'
+                       AND cat_org_id IS NULL
+                       AND cat_system = 0 ";
+            $g_db->query($sql);
+            $row = $g_db->fetch_array();
+            $_GET['sequence'] = $_GET['sequence'] + $row['count'];
+        }
+        // die Stammdaten existieren immer und muessen auch noch beruecksichtigt werden
+        $_GET['sequence']++;
     }
     
     if($sequence_old != $_GET['sequence'])

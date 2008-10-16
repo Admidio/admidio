@@ -147,6 +147,7 @@ class TableAccess
         {
             $this->db_fields[$field] = $value;
         }
+        $this->new_record = false;
     }
 
     // Methode setzt den Wert eines Feldes neu, 
