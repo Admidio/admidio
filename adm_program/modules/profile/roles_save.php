@@ -48,7 +48,7 @@ if(isset($_GET["new_user"]))
     {
         $g_message->show("invalid");
     }
-    $req_new_usr = $_GET["new_user"];
+    $req_new_user = $_GET["new_user"];
 }
 
 if($g_current_user->assignRoles() || $g_current_user->editUsers())
@@ -76,8 +76,7 @@ if($g_current_user->assignRoles() || $g_current_user->editUsers())
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql    = "SELECT rol_id, rol_name, rol_max_members,
-                      mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader, mgl.mem_valid as mem_valid
+    $sql    = "SELECT rol_id, rol_name, rol_max_members, mgl.mem_usr_id, mgl.mem_leader, mgl.mem_valid
                  FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                  LEFT JOIN ". TBL_MEMBERS. " mgl
                    ON rol_id         = mgl.mem_rol_id
@@ -168,6 +167,7 @@ while($row = $g_db->fetch_object($result_rolle))
             if($role_assign == 1)
             {
                 $member->startMembership($row->rol_id, $req_usr_id, $role_leader);
+                $count_assigned++;
             }
             else
             {
