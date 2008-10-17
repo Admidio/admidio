@@ -8,14 +8,14 @@
  *
  *****************************************************************************/
  
-var id;
+var objectRemoveId;
 
 function deleteFormerRole(rol_id, rol_name, usr_id) 
 {
     var msg_result = confirm('Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich entfernen ?');
     if(msg_result)
     {
-        id      = 'former_role_' + rol_id;
+        objectRemoveId = 'former_role_' + rol_id;
 
         resObject.open('POST', gRootPath + '/adm_program/modules/profile/profile_function.php', true);
         resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -24,7 +24,7 @@ function deleteFormerRole(rol_id, rol_name, usr_id)
     }
 }
 
-function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, mem_leader, b_webmaster, theme)
+function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, mem_leader, b_webmaster)
 {
     var msg_result = confirm('Willst du die Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich beenden ?');
     if(msg_result)
@@ -35,7 +35,7 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
         var leader    = '';
         var webmaster = '';
         
-        id      = 'role_' + rol_id;
+        objectRemoveId = 'role_' + rol_id;
 
         if(mem_leader == 1)
         {
@@ -44,7 +44,7 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
         if(b_webmaster)
         {
             webmaster = ' <a class=\"iconLink\" href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\', \'' + usr_id + '\')\"><img ' +
-            'src=\"' + gRootPath + '/adm_themes/' + theme + '/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\"></a>';
+            'src=\"' + gThemePath + '/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\"></a>';
         }
         var html = '<dl><dt>' + cat_name + ' - ' + '<a href=\"' + gRootPath + '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=' + rol_id + '\">' + rol_name + '</a>' + 
                     leader + '</dt><dd>vom ' + mem_begin + ' bis ' + 
@@ -69,7 +69,7 @@ function afterRemoveRole()
     {
         if(resObject.responseText == "done")
         {
-            Effect.DropOut(id);
+            Effect.DropOut(objectRemoveId);
         }
         else
         {
