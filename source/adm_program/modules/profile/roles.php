@@ -45,7 +45,7 @@ if(isset($_GET["new_user"]))
     {
         $g_message->show("invalid");
     }
-    $req_new_usr = $_GET["new_user"];
+    $req_new_user = $_GET["new_user"];
 }
 
 $user     = new User($g_db, $req_usr_id);
