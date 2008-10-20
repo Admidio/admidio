@@ -14,6 +14,7 @@
  *****************************************************************************/
 require_once("../../system/classes/photo_album.php");
 require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
 require_once("../../system/classes/image.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -21,6 +22,12 @@ if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
+}
+
+// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+if(!$g_current_user->editPhotoRight())
+{
+    $g_message->show("photoverwaltunsrecht");
 }
 
 // kontrolle ob das Upload funktioniert hat
