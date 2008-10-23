@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-require_once("../../system/classes/photo_album.php");
+require_once("../../system/classes/table_photos.php");
 require_once("../../system/common.php");
 require_once("../../system/classes/image.php");
 
@@ -103,7 +103,7 @@ if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id
 else
 {
     // einlesen des Albums falls noch nicht in Session gespeichert
-    $photo_album = new PhotoAlbum($g_db);
+    $photo_album = new TablePhotos($g_db);
     if($pho_id > 0)
     {
         $photo_album->readData($pho_id);
@@ -175,7 +175,7 @@ echo "</h1>";
 //solange nach Unteralben suchen bis es keine mehr gibt
 $navilink = "";
 $pho_parent_id = $photo_album->getValue("pho_pho_id_parent");
-$photo_album_parent = new PhotoAlbum($g_db);
+$photo_album_parent = new TablePhotos($g_db);
 
 while ($pho_parent_id > 0)
 {

@@ -15,7 +15,7 @@
  *
  *****************************************************************************/
 
-require_once("../../system/classes/photo_album.php");
+require_once("../../system/classes/table_photos.php");
 require_once("../../system/common.php");
 require_once("ecard_function.php");
 
@@ -72,7 +72,7 @@ if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id
 else
 {
     // einlesen der Veranstaltung falls noch nicht in Session gespeichert
-    $photo_album = new PhotoAlbum($g_db);
+    $photo_album = new TablePhotos($g_db);
     if($pho_id > 0)
     {
         $photo_album->readData($pho_id);

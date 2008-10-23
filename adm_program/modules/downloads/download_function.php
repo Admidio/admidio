@@ -23,8 +23,8 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/folder.php");
-require("../../system/classes/file.php");
+require("../../system/classes/table_folder.php");
+require("../../system/classes/table_file.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -127,7 +127,7 @@ if ($req_mode == 1)
     }
 
     //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new Folder($g_db);
+    $targetFolder = new TableFolder($g_db);
     $targetFolder->getFolderForDownload($folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
@@ -193,7 +193,7 @@ if ($req_mode == 1)
     if(move_uploaded_file($_FILES['userfile']['tmp_name'], $targetFolder->getCompletePathOfFolder(). "/$file_name"))
     {
         //Neue Datei noch in der DB eintragen
-        $newFile = new File($g_db);
+        $newFile = new TableFile($g_db);
         $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
         $newFile->setValue('fil_name',$file_name);
         $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
@@ -222,7 +222,7 @@ elseif ($req_mode == 2)
 
     if($file_id > 0)
     {
-        $file = new File($g_db);
+        $file = new TableFile($g_db);
         $file->getFileForDownload($file_id);
 
         //Pruefen ob Datensatz gefunden
@@ -248,7 +248,7 @@ elseif ($req_mode == 3)
     }
 
     //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new Folder($g_db);
+    $targetFolder = new TableFolder($g_db);
     $targetFolder->getFolderForDownload($folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
@@ -298,7 +298,7 @@ elseif ($req_mode == 3)
             $b_return = @chmod($targetFolder->getCompletePathOfFolder(). "/$newFolderName", 0777);
 
             //Jetzt noch den Ordner der DB hinzufuegen...
-            $newFolder = new Folder($g_db);
+            $newFolder = new TableFolder($g_db);
 
             $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
             $newFolder->setValue('fol_type', 'DOWNLOAD');
@@ -339,7 +339,7 @@ elseif ($req_mode == 4)
 
     if($file_id > 0)
     {
-        $file = new File($g_db);
+        $file = new TableFile($g_db);
         $file->getFileForDownload($file_id);
 
         //Pruefen ob Datensatz gefunden
@@ -406,7 +406,7 @@ elseif ($req_mode == 4)
     }
     else if ($folder_id > 0)
     {
-        $folder = new Folder($g_db);
+        $folder = new TableFolder($g_db);
         $folder->getFolderForDownload($folder_id);
 
         //Pruefen ob Datensatz gefunden
@@ -481,7 +481,7 @@ elseif ($req_mode == 5)
     }
     else if ($folder_id > 0)
     {
-        $folder = new Folder($g_db);
+        $folder = new TableFolder($g_db);
         $folder->getFolderForDownload($folder_id);
 
         //Pruefen ob Datensatz gefunden
@@ -531,7 +531,7 @@ elseif ($req_mode == 6)
     }
 
     //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new Folder($g_db);
+    $targetFolder = new TableFolder($g_db);
     $targetFolder->getFolderForDownload($folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
@@ -544,7 +544,7 @@ elseif ($req_mode == 6)
     //Pruefen ob das neue Element eine Datei order ein Ordner ist.
     if (is_file($targetFolder->getCompletePathOfFolder(). "/". $name)) {
         //Datei hinzufuegen
-        $newFile = new File($g_db);
+        $newFile = new TableFile($g_db);
         $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
         $newFile->setValue('fil_name',$name);
         $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
@@ -560,7 +560,7 @@ elseif ($req_mode == 6)
     else if (is_dir($targetFolder->getCompletePathOfFolder(). "/". $name)) {
 
         //Ordner der DB hinzufuegen
-        $newFolder = new Folder($g_db);
+        $newFolder = new TableFolder($g_db);
         $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
         $newFolder->setValue('fol_type', 'DOWNLOAD');
         $newFolder->setValue('fol_name', $name);
@@ -590,7 +590,7 @@ elseif ($req_mode == 7)
     }
 
     //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new Folder($g_db);
+    $targetFolder = new TableFolder($g_db);
     $targetFolder->getFolderForDownload($folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...

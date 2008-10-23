@@ -27,20 +27,13 @@ require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 class TableMembers extends TableAccess
 {
     // Konstruktor
-    function TableMembers(&$db, $mem_id = 0)
+    function TableMembers(&$db)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_MEMBERS;
         $this->column_praefix = "mem";
         
-        if($mem_id > 0)
-        {
-            $this->readData($date_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        $this->clear();
     }
     
     function readData($rol_id, $usr_id)
@@ -58,7 +51,6 @@ class TableMembers extends TableAccess
     
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
     function setValue($field_name, $field_value)
     {
         if($field_name == "mem_valid"
@@ -75,8 +67,8 @@ class TableMembers extends TableAccess
         }     
         parent::setValue($field_name, $field_value);
     }    
-    
-    // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
+
+    // Speichert die Mitgliedschaft und aktualisiert das
     function save()
     {
         global $g_current_session;
@@ -86,9 +78,9 @@ class TableMembers extends TableAccess
         
         if($fields_changed && is_object($g_current_session))
         {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, 
-            // da Aenderungen in den Profilfeldern vorgenommen wurden 
-            $g_current_session->renewUserObject();
+            // einlesen des entsprechenden Userobjekts, da Aenderungen 
+            // bei den Rollen vorgenommen wurden 
+            $g_current_session->renewUserObject($this->db_fields['mem_usr_id']);
         }
     } 
     

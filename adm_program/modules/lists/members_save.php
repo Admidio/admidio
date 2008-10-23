@@ -17,9 +17,9 @@
 
 require_once("../../system/common.php");
 require_once("../../system/login_valid.php");
-require_once("../../system/classes/role.php");
 require_once("../../system/classes/role_dependency.php");
 require_once("../../system/classes/table_members.php");
+require_once("../../system/classes/table_role.php");
 
 // Uebergabevariablen pruefen
 
@@ -38,7 +38,7 @@ else
 }
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new Role($g_db, $role_id);
+$role = new TableRole($g_db, $role_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen

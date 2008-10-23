@@ -18,7 +18,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/role.php");
+require("../../system/classes/table_role.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $arr_mode   = array("csv-ms", "csv-ms-2k", "csv-oo", "html", "print");
@@ -118,7 +118,7 @@ $str_csv   = "";   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Rollenobjekt erzeugen
-$role = new Role($g_db, $req_rol_id);
+$role = new TableRole($g_db, $req_rol_id);
 
 // Nummer der Spalte, ab der die Anzeigefelder anfangen (beginnend mit 0)
 $start_column = 2;

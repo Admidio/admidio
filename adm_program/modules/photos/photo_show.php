@@ -16,7 +16,7 @@
  * side      : Seite des Bildes die skaliert werden soll (x oder y)
  *
  *****************************************************************************/
-require_once("../../system/classes/photo_album.php");
+require_once("../../system/classes/table_photos.php");
 require_once("../../system/common.php");
 require_once("../../system/classes/image.php");
 

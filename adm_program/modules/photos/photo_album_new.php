@@ -14,20 +14,15 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/photo_album.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
+require_once("../../system/classes/table_photos.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
-}
-elseif($g_preferences['enable_photo_module'] == 2)
-{
-    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -54,7 +49,7 @@ $pho_id = $_GET["pho_id"];
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoalbumobjekt anlegen
-$photo_album = new PhotoAlbum($g_db);
+$photo_album = new TablePhotos($g_db);
 
 // nur Daten holen, wenn Album editiert werden soll
 if ($_GET["job"] == "change")

@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/email.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/text.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_text.php");
 
 class SystemMail extends Email
 {
@@ -37,7 +37,7 @@ class SystemMail extends Email
     // Konstruktor
     function SystemMail(&$db)
     {
-        $this->textObject = new Text($db);
+        $this->textObject = new TableText($db);
         $this->Email();
     }
     

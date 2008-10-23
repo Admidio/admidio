@@ -23,7 +23,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/category.php");
+require("../../system/classes/table_category.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_cat_id = 0;
@@ -79,7 +79,7 @@ if(isset($_GET['sequence']))
 }
 
 // Kategorie-Objekt anlegen
-$category = new Category($g_db);
+$category = new TableCategory($g_db);
 
 if($req_cat_id > 0)
 {
@@ -178,7 +178,7 @@ if($_GET['mode'] == 1)
     // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
     if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] <> $cat_org_merker)
     {
-        $sequence_category = new Category($g_db);
+        $sequence_category = new TableCategory($g_db);
         $sequence = 0;
         
         $sql    = "SELECT *

@@ -24,7 +24,7 @@ drop table if exists %PRAEFIX%_files;
 
 drop table if exists %PRAEFIX%_folders;
 
-drop table if exists %PRAEFIX%_list_fields;
+drop table if exists %PRAEFIX%_list_columns;
 
 drop table if exists %PRAEFIX%_lists;
 
@@ -480,7 +480,8 @@ create table %PRAEFIX%_lists
    lst_id                         int(11) unsigned               not null AUTO_INCREMENT,
    lst_org_id                     tinyint(4)                     not null,
    lst_usr_id                     int(11) unsigned               not null,
-   lst_name                       varchar(255)                   not null,
+   lst_name                       varchar(255),
+   lst_timestamp                  datetime                       not null,
    lst_global                     tinyint(1) unsigned            not null default 0,
    primary key (lst_id)
 )
@@ -498,29 +499,29 @@ alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_ORG foreign key (lst
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
       
 /*==============================================================*/
-/* Table: adm_list_fields                                       */
+/* Table: adm_list_columns                                       */
 /*==============================================================*/
-create table %PRAEFIX%_list_fields
+create table %PRAEFIX%_list_columns
 (
-   lsf_lst_id                     int(11) unsigned               not null,
-   lsf_column                     smallint                       not null,
-   lsf_usf_id                     int(11) unsigned,
-   lsf_special_field              varchar(255),
-   lsf_sort                       varchar(5)                     default '0',
-   lsf_filter                     varchar(255)
+   lsc_lst_id                     int(11) unsigned               not null,
+   lsc_number                     smallint                       not null,
+   lsc_usf_id                     int(11) unsigned,
+   lsc_special_field              varchar(255),
+   lsc_sort                       varchar(5)                     default '0',
+   lsc_filter                     varchar(255)
 )
 type = InnoDB
 auto_increment = 1;
 
 -- Index
-alter table %PRAEFIX%_list_fields add index LSF_LST_FK (lsf_lst_id);
-alter table %PRAEFIX%_list_fields add index LSF_USF_FK (lsf_usf_id);
+alter table %PRAEFIX%_list_columns add index LSC_LST_FK (lsc_lst_id);
+alter table %PRAEFIX%_list_columns add index LSC_USF_FK (lsc_usf_id);
 
 -- Constraints
-alter table %PRAEFIX%_list_fields add constraint FK_LSF_LST foreign key (lsf_lst_id)
+alter table %PRAEFIX%_list_columns add constraint FK_LSC_LST foreign key (lsc_lst_id)
       references adm_lists (lst_id) on delete restrict on update restrict;
 
-alter table %PRAEFIX%_list_fields add constraint FK_LSF_USF foreign key (lsf_usf_id)
+alter table %PRAEFIX%_list_columns add constraint FK_LSC_USF foreign key (lsc_usf_id)
       references adm_user_fields (usf_id) on delete restrict on update restrict;
 
 /*==============================================================*/

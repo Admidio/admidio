@@ -20,7 +20,7 @@
 
 require("../../system/common.php");
 require("../../system/classes/ubb_parser.php");
-require("../../system/classes/announcement.php");
+require("../../system/classes/table_announcement.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -193,7 +193,7 @@ if ($g_db->num_rows($announcements_result) == 0)
 }
 else
 {
-    $announcement = new Announcement($g_db);
+    $announcement = new TableAnnouncement($g_db);
 
     // Ankuendigungen auflisten
     while($row = $g_db->fetch_array($announcements_result))

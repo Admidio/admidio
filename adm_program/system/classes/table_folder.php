@@ -10,32 +10,26 @@
  * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
  * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $folder = new File($g_db);
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
- * Mit der Funktion readData($folder_id) kann nun alle Informationen zum Folder
- * aus der Db ausgelesen werden.
- *
- * Folgende Funktionen stehen nun zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Folder wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Der aktuelle Folder wird aus der Datenbank geloescht
+ * getFolderForDownload($folder_id)
+ *                         - Folder mit der uebergebenen ID aus der Datenbank 
+ *                           fuer das Downloadmodul auslesen
+ * getFolderContentsForDownload()
+ *                         - Inhalt des aktuellen Ordners, abhaengig von den 
+ *                           Benutzerrechten, als Array zurueckliefern
+ * ...
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_role.php");
 
-class Folder extends TableAccess
+class TableFolder extends TableAccess
 {
     // Konstruktor
-    function Folder(&$db, $folder_id = 0)
+    function TableFolder(&$db, $folder_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_FOLDERS;

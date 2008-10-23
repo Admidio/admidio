@@ -16,7 +16,7 @@
 
 require("../../system/common.php");
 require("../../system/classes/email.php");
-require("../../system/classes/role.php");
+require("../../system/classes/table_role.php");
 
 if ($g_preferences['enable_mail_module'] != 1)
 {
@@ -164,7 +164,7 @@ if (array_key_exists("rol_id", $_POST))
         $g_message->show("mail_rolle");
     }
     
-    $role = new Role($g_db, $_POST['rol_id']);
+    $role = new TableRole($g_db, $_POST['rol_id']);
 
     if ($g_valid_login && $role->getValue("rol_mail_login") == false)
     {

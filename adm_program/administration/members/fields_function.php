@@ -20,7 +20,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/user_field.php");
+require("../../system/classes/table_user_field.php");
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
@@ -53,7 +53,7 @@ if(isset($_GET['sequence']))
 }
 
 // UserField-objekt anlegen
-$user_field = new UserField($g_db);
+$user_field = new TableUserField($g_db);
 
 if($_GET['usf_id'] > 0)
 {

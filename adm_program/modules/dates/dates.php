@@ -22,7 +22,7 @@
 
 require("../../system/common.php");
 require("../../system/classes/ubb_parser.php");
-require("../../system/classes/date.php");
+require("../../system/classes/table_date.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($g_preferences['enable_dates_module'] == 0)
@@ -235,7 +235,7 @@ if($g_db->num_rows($dates_result) == 0)
 }
 else
 {
-    $date = new Date($g_db);
+    $date = new TableDate($g_db);
 
     // Termine auflisten
     while($row = $g_db->fetch_array($dates_result))

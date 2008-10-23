@@ -26,7 +26,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/../adm_program/system/classes/announcement.php");
+require_once(PLUGIN_PATH. "/../adm_program/system/classes/table_announcement.php");
 require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -88,7 +88,7 @@ $sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
 			ORDER BY ann_timestamp_create DESC
 			LIMIT $plg_announcements_count";
 $plg_result = $g_db->query($sql);
-$plg_announcement = new Announcement($g_db);
+$plg_announcement = new TableAnnouncement($g_db);
 
 echo '<div id="plugin_'. $plugin_folder. '">';
 

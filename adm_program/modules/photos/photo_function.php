@@ -19,7 +19,8 @@
  *****************************************************************************/
 
 require_once("../../system/common.php");
-require_once("../../system/classes/photo_album.php");
+require_once("../../system/login_valid.php");
+require_once("../../system/classes/table_photos.php");
 require_once("../../system/classes/image.php");
 
 // die Funktionen sollten auch ausgeloggt irgendwo benutzt werden koennen
@@ -29,11 +30,6 @@ if(isset($_GET["job"]))
     {
         // das Modul ist deaktiviert
         $g_message->show("module_disabled");
-    }
-    else
-    {
-        // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-        require("../../system/login_valid.php");
     }
 
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -58,7 +54,8 @@ else
     $pho_id = NULL;
 }
 
-if(isset($_GET["job"]) && $_GET["job"] != "rotate" && $_GET["job"] != "delete_request" && $_GET["job"] != "do_delete")
+if(isset($_GET["job"]) == false 
+|| ($_GET["job"] != "rotate" && $_GET["job"] != "delete_request" && $_GET["job"] != "do_delete"))
 {
     $g_message->show("invalid");
 }
@@ -102,7 +99,7 @@ function deletePhoto($pho_id, $pic_nr)
     if(is_numeric($pho_id) && is_numeric($pic_nr))
     {
         // einlesen des Albums
-        $photo_album = new PhotoAlbum($g_db, $pho_id);
+        $photo_album = new TablePhotos($g_db, $pho_id);
         
         //Speicherort
         $album_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
@@ -149,13 +146,13 @@ function deletePhoto($pho_id, $pic_nr)
 
 
 // Foto um 90° drehen
-if(isset($_GET["job"]) && $_GET["job"]=="rotate")
+if($_GET["job"] == "rotate")
 {
     // nur bei gueltigen Uebergaben weiterarbeiten
     if(is_numeric($pho_id) && is_numeric($_GET["bild"]) && ($_GET["direction"] == "left" || $_GET["direction"] == "right"))
     {
         //Aufruf des ggf. uebergebenen Albums
-        $photo_album = new PhotoAlbum($g_db, $pho_id);
+        $photo_album = new TablePhotos($g_db, $pho_id);
 
         //Thumbnail loeschen
         deleteThumbnail($photo_album, $_GET["bild"]);
@@ -174,22 +171,19 @@ if(isset($_GET["job"]) && $_GET["job"]=="rotate")
     header($location);
     exit();
 }
-
-//Nachfrage ob geloescht werden soll
-if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
+elseif($_GET["job"] == "delete_request")
 {
+    // Nachfrage ob geloescht werden soll
    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=". $_GET["bild"]."&job=do_delete");
    $g_message->show("delete_photo");
 }
-
-//Nutzung der Loeschfunktion
-if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
+elseif($_GET["job"] == "do_delete")
 {
-    //Aufruf der entsprechenden Funktion
+    // das entsprechende Bild wird physikalisch und in der DB geloescht
     deletePhoto($pho_id, $_GET["bild"]);
     
     //Neu laden der Albumdaten
-    $photo_album = new PhotoAlbum($g_db);
+    $photo_album = new TablePhotos($g_db);
     if($pho_id > 0)
     {
         $photo_album->readData($pho_id);

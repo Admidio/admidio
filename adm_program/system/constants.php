@@ -42,6 +42,8 @@ define("TBL_FOLDER_ROLES",      $g_tbl_praefix. "_folder_roles");
 define("TBL_GUESTBOOK",         $g_tbl_praefix. "_guestbook");
 define("TBL_GUESTBOOK_COMMENTS",$g_tbl_praefix. "_guestbook_comments");
 define("TBL_LINKS",             $g_tbl_praefix. "_links");
+define("TBL_LIST_COLUMNS",      $g_tbl_praefix. "_list_columns");
+define("TBL_LISTS",             $g_tbl_praefix. "_lists");
 define("TBL_MEMBERS",           $g_tbl_praefix. "_members");
 define("TBL_ORGANIZATIONS",     $g_tbl_praefix. "_organizations");
 define("TBL_PHOTOS",            $g_tbl_praefix. "_photos");

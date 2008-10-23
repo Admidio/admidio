@@ -21,7 +21,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/role.php");
+require("../../system/classes/table_role.php");
 require("../../system/classes/role_dependency.php");
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
@@ -52,7 +52,7 @@ if(isset($_GET["rol_id"]))
 }
 
 // Rollenobjekt anlegen
-$role = new Role($g_db);
+$role = new TableRole($g_db);
 
 if($req_rol_id > 0)
 {

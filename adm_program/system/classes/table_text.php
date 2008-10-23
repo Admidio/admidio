@@ -10,14 +10,16 @@
  * Diese Klasse dient dazu ein Textobjekt zu erstellen.
  * Texte koennen ueber diese Klasse in der Datenbank verwaltet werden.
  *
+ * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung.
+ *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class Text extends TableAccess
+class TableText extends TableAccess
 {
     // Konstruktor
-    function Text(&$db, $name = "")
+    function TableText(&$db, $name = "")
     {
         $this->db            =& $db;
         $this->table_name     = TBL_TEXTS;

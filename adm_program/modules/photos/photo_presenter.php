@@ -14,7 +14,7 @@
  *
  *****************************************************************************/
 
-require("../../system/classes/photo_album.php");
+require("../../system/classes/table_photos.php");
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -53,7 +53,7 @@ if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id
 }
 else
 {
-    $photo_album = new PhotoAlbum($g_db, $pho_id);
+    $photo_album = new TablePhotos($g_db, $pho_id);
     $_SESSION['photo_album'] =& $photo_album;
 }
 

@@ -17,8 +17,8 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/file.php");
-require("../../system/classes/folder.php");
+require("../../system/classes/table_file.php");
+require("../../system/classes/table_folder.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -83,11 +83,11 @@ else
 //Informationen zur Datei/Ordner aus der DB holen,
 //falls keine Daten gefunden wurden gibt es die Standardfehlermeldung (invalid)
 if ($file_id) {
-    $class = new File($g_db);
+    $class = new TableFile($g_db);
     $class->getFileForDownload($file_id);
 }
 else {
-    $class = new Folder($g_db);
+    $class = new TableFolder($g_db);
     $class->getFolderForDownload($folder_id);
 }
 

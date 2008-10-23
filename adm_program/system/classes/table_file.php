@@ -10,31 +10,23 @@
  * Diese Klasse dient dazu ein Fileobjekt zu erstellen.
  * Eine Datei kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $file = new File($g_db);
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
- * Mit der Funktion readData($file_id) kann nun alle Informationen zum File
- * aus der Db ausgelsen werden.
- *
- * Folgende Funktionen stehen nun zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - File wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Das aktuelle File wird aus der Datenbank geloescht
+ * getFileForDownload($file_id)
+ *                         - File mit der uebergebenen ID aus der Datenbank auslesen fuer 
+ *                           das Downloadmodul. Hier wird auch direkt ueberprueft ob die 
+ *                           Datei oder der Ordner gesperrt ist.
+ * getCompletePathOfFile() - Gibt den kompletten Pfad der Datei zurueck
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class File extends TableAccess
+class TableFile extends TableAccess
 {
     // Konstruktor
-    function File(&$db, $file_id = 0)
+    function TableFile(&$db, $file_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_FILES;

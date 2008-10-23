@@ -54,7 +54,7 @@ require_once(SERVER_PATH. "/adm_program/system/message_text.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/navigation.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/session.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_session.php");
 require_once(SERVER_PATH. "/adm_program/system/forum/forum.php");
 
 // Variablen von HMTL & PHP-Code befreien
@@ -175,7 +175,7 @@ if(isset($_SESSION['navigation']) == false)
 Session auf Gueltigkeit pruefen bzw. anlegen
 /********************************************************************************/
 
-$g_current_session = new Session($g_db, $g_session_id);
+$g_current_session = new TableSession($g_db, $g_session_id);
 
 // erst einmal pruefen, ob evtl. frueher ein Autologin-Cookie gesetzt wurde
 // dann diese Session wiederherstellen
@@ -191,8 +191,8 @@ if($g_preferences['enable_auto_login'] == 1 && isset($_COOKIE['admidio_data']))
         if($g_current_user->getValue("usr_id") != $admidio_data[1])
         {
             // User aus der Autologin-Session wiederherstellen
-            require_once(SERVER_PATH. "/adm_program/system/classes/auto_login.php");
-            $auto_login = new AutoLogin($g_db, $g_session_id);
+            require_once(SERVER_PATH. "/adm_program/system/classes/table_auto_login.php");
+            $auto_login = new TableAutoLogin($g_db, $g_session_id);
             
             // User nur herstellen, wenn Cookie-User-Id == gespeicherte DB-User-Id
             if($auto_login->getValue("atl_usr_id") == $admidio_data[1])
