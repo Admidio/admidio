@@ -11,7 +11,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/text.php");
+require("../../system/classes/table_text.php");
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
@@ -1270,7 +1270,7 @@ echo "
         //Einstellungen Systemmails
         /**************************************************************************************/
 
-        $text = new Text($g_db);
+        $text = new TableText($g_db);
         echo '
         <div class="groupBox" id="system-mail">
             <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/system_mail.png" alt="Systemmails" />

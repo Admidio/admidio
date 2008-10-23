@@ -17,7 +17,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/announcement.php");
+require("../../system/classes/table_announcement.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -46,7 +46,7 @@ if(is_numeric($_GET["mode"]) == false
 }
 
 // Ankuendigungsobjekt anlegen
-$announcement = new Announcement($g_db);
+$announcement = new TableAnnouncement($g_db);
 
 if($_GET["ann_id"] > 0)
 {

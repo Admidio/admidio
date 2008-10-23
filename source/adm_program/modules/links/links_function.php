@@ -21,7 +21,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/weblink.php");
+require("../../system/classes/table_weblink.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_weblinks_module'] == 0)
@@ -68,12 +68,7 @@ else
 }
 
 // Linkobjekt anlegen
-$link = new Weblink($g_db);
-
-if($_GET["lnk_id"] > 0)
-{
-    $link->readData($_GET["lnk_id"]);
-}
+$link = new TableWeblink($g_db, $_GET["lnk_id"]);
 
 $_SESSION['links_request'] = $_REQUEST;
 

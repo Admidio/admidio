@@ -14,8 +14,8 @@
  *****************************************************************************/
 
 require_once("../../system/common.php");
-require_once("../../system/classes/folder.php");
 require_once("../../system/classes/htaccess.php");
+require_once("../../system/classes/table_folder.php");
 require_once("../../system/file_extension_icons.php");
 
 
@@ -53,7 +53,7 @@ unset($_SESSION['download_request']);
 
 
 //Informationen zum aktuellen Ordner aus der DB holen
-$currentFolder = new Folder($g_db);
+$currentFolder = new TableFolder($g_db);
 $currentFolder->getFolderForDownload($folderId);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...

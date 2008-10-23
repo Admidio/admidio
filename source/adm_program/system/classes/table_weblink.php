@@ -14,10 +14,10 @@
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class Weblink extends TableAccess
+class TableWeblink extends TableAccess
 {
     // Konstruktor
-    function Weblink(&$db, $lnk_id = 0)
+    function TableWeblink(&$db, $lnk_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_LINKS;

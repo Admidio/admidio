@@ -11,7 +11,7 @@
  *****************************************************************************/
 
 require_once("common.php");
-require_once("classes/auto_login.php");
+require_once("classes/table_auto_login.php");
 
 // User aus der Session entfernen 
 $g_current_session->setValue("ses_usr_id", "");
@@ -26,7 +26,7 @@ if(isset($_COOKIE['admidio_data']))
 {
     setcookie("admidio_data",       "" , time() - 1000, "/", $domain, 0);
     
-    $auto_login = new AutoLogin($g_db, $g_session_id);
+    $auto_login = new TableAutoLogin($g_db, $g_session_id);
     $auto_login->delete(); 
 }
 

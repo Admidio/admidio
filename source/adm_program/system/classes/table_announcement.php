@@ -19,10 +19,10 @@
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class Announcement extends TableAccess
+class TableAnnouncement extends TableAccess
 {
     // Konstruktor
-    function Announcement(&$db, $ann_id = 0)
+    function TableAnnouncement(&$db, $ann_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ANNOUNCEMENTS;

@@ -17,7 +17,7 @@
 require("../../system/common.php");
 require("../../system/classes/ubb_parser.php");
 require("../../system/classes/rss.php");
-require("../../system/classes/date.php");
+require("../../system/classes/table_date.php");
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if ($g_preferences['enable_rss'] != 1)
@@ -63,7 +63,7 @@ $result = $g_db->query($sql);
 
 // Ein RSSfeed-Objekt erstellen
 $rss  = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Termine", "Die 10 naechsten Termine");
-$date = new Date($g_db);
+$date = new TableDate($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_object($result))

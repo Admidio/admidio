@@ -52,9 +52,9 @@ require_once(SERVER_PATH. "/adm_program/system/string.php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/role.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/text.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_role.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_text.php");
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
@@ -493,7 +493,7 @@ elseif($req_mode == 7)
     
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
     include("db_scripts/systemmails_texts.php");
-    $text = new Text($db);
+    $text = new TableText($db);
 
     foreach($systemmails_texts as $key => $value)
     {
@@ -545,7 +545,7 @@ elseif($req_mode == 7)
     // nun die Default-Rollen anlegen
 
     // Webmaster
-    $role_webmaster = new Role($db);
+    $role_webmaster = new TableRole($db);
     $role_webmaster->setValue("rol_cat_id", $category_common);
     $role_webmaster->setValue("rol_name", "Webmaster");
     $role_webmaster->setValue("rol_description", "Gruppe der Administratoren des Systems");
@@ -567,7 +567,7 @@ elseif($req_mode == 7)
     $role_webmaster->save(0);
 
     // Mitglied
-    $role_member = new Role($db);
+    $role_member = new TableRole($db);
     $role_member->setValue("rol_cat_id", $category_common);
     $role_member->setValue("rol_name", "Mitglied");
     $role_member->setValue("rol_description", "Alle Mitglieder der Organisation");
@@ -577,7 +577,7 @@ elseif($req_mode == 7)
     $role_member->save(0);
 
     // Vorstand
-    $role_management = new Role($db);
+    $role_management = new TableRole($db);
     $role_management->setValue("rol_cat_id", $category_common);
     $role_management->setValue("rol_name", "Vorstand");
     $role_management->setValue("rol_description", "Vorstand des Vereins");

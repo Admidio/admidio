@@ -17,7 +17,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/date.php");
+require("../../system/classes/table_date.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_dates_module'] == 0)
@@ -53,7 +53,7 @@ if(!isset($_GET['headline']))
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Terminobjekt anlegen
-$date = new Date($g_db);
+$date = new TableDate($g_db);
 
 if($req_dat_id > 0)
 {

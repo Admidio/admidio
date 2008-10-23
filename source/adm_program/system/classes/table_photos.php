@@ -24,10 +24,10 @@
 $absolute_path = substr(__FILE__, 0, strpos(__FILE__, "adm_program")-1);
 require_once("$absolute_path/adm_program/system/classes/table_access.php");
 
-class PhotoAlbum extends TableAccess
+class TablePhotos extends TableAccess
 {
     // Konstruktor
-    function PhotoAlbum(&$db, $photo_id = 0)
+    function TablePhotos(&$db, $photo_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_PHOTOS;

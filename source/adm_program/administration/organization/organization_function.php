@@ -11,7 +11,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/text.php");
+require("../../system/classes/table_text.php");
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
@@ -125,7 +125,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 // Organisation updaten
 // *******************************************************************************
 
-$text = new Text($g_db);
+$text = new TableText($g_db);
 
 // Einstellungen speichern
 

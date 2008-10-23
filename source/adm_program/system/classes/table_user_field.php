@@ -11,31 +11,16 @@
  * Eine Benutzerdefiniertes Feldobjekt kann ueber diese Klasse in der Datenbank 
  * verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $user_field = new UserField($g_db);
- *
- * Mit der Funktion readData($user_id) kann das gewuenschte Feld ausgelesen
- * werden.
- *
- * Folgende Funktionen stehen weiter zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Feld wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben oder angelegt
- * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
+ * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class UserField extends TableAccess
+class TableUserField extends TableAccess
 {
     // Konstruktor
-    function UserField(&$db, $usf_id = 0)
+    function TableUserField(&$db, $usf_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_USER_FIELDS;

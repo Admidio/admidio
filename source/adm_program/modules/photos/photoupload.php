@@ -15,7 +15,7 @@
  * 
  *****************************************************************************/
 
-require_once("../../system/classes/photo_album.php");
+require_once("../../system/classes/table_photos.php");
 require_once("../../system/common.php");
 require_once("../../system/login_valid.php");
 require_once("../../libs/flexupload/class.flexupload.inc.php");
@@ -25,11 +25,6 @@ if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
-}
-elseif($g_preferences['enable_photo_module'] == 2)
-{
-    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -69,7 +64,7 @@ if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id
 }
 else
 {
-    $photo_album = new PhotoAlbum($g_db, $_GET["pho_id"]);
+    $photo_album = new TablePhotos($g_db, $_GET["pho_id"]);
     $_SESSION['photo_album'] =& $photo_album;
 }
 

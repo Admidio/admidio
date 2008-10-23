@@ -10,14 +10,20 @@
  * Diese Klasse dient dazu ein Autologinobjekt zu erstellen.
  * Das Autologin kann ueber diese Klasse in der Datenbank verwaltet werden.
  *
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
+ *
+ * tableCleanup()       - loescht Datensaetze aus der AutoLogin-Tabelle die nicht
+ *                        mehr gebraucht werden
+ *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class AutoLogin extends TableAccess
+class TableAutoLogin extends TableAccess
 {
     // Konstruktor
-    function AutoLogin(&$db, $session = "")
+    function TableAutoLogin(&$db, $session = "")
     {
         $this->db            =& $db;
         $this->table_name     = TBL_AUTO_LOGIN;
@@ -33,8 +39,7 @@ class AutoLogin extends TableAccess
         }
     }
 
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
+    // interne Methode, die Defaultdaten fur Insert und Update vorbelegt
     function save()
     {
         if($this->new_record)
@@ -57,7 +62,7 @@ class AutoLogin extends TableAccess
         parent::save();
     }  
     
-    // diese Funktion loescht Datensaetze aus der AutoLogin-Tabelle die nicht mehr gebraucht werden
+    // diese Methode loescht Datensaetze aus der AutoLogin-Tabelle die nicht mehr gebraucht werden
     function tableCleanup()
     {
         // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt

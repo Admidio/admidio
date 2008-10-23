@@ -23,8 +23,8 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/classes/guestbook.php");
-require("../../system/classes/guestbook_comment.php");
+require("../../system/classes/table_guestbook.php");
+require("../../system/classes/table_guestbook_comment.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -113,7 +113,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 6)
 {
     // Gaestebuchobjekt anlegen
-    $guestbook = new Guestbook($g_db);
+    $guestbook = new TableGuestbook($g_db);
     
     if($_GET['id'] > 0)
     {
@@ -129,7 +129,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mod
 else
 {
     // Gaestebuchobjekt anlegen
-    $guestbook_comment = new GuestbookComment($g_db);
+    $guestbook_comment = new TableGuestbookComment($g_db);
     
     if($_GET['id'] > 0 && $_GET['mode'] != 4)
     {

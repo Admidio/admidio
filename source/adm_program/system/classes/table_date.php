@@ -20,10 +20,10 @@
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class Date extends TableAccess
+class TableDate extends TableAccess
 {
     // Konstruktor
-    function Date(&$db, $date_id = 0)
+    function TableDate(&$db, $date_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_DATES;

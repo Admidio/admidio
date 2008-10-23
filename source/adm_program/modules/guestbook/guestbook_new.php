@@ -16,7 +16,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/classes/guestbook.php");
+require("../../system/classes/table_guestbook.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -69,7 +69,7 @@ if ($_GET["id"] != 0)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Gaestebuchobjekt anlegen
-$guestbook = new Guestbook($g_db);
+$guestbook = new TableGuestbook($g_db);
 
 if($_GET["id"] > 0)
 {

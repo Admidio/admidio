@@ -10,23 +10,9 @@
  * Diese Klasse dient dazu ein Sessionobjekt zu erstellen.
  * Eine Session kann ueber diese Klasse in der Datenbank verwaltet werden.
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $session = new Session($g_db);
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
  *
- * Mit der Funktion readData($session_id) kann die gewuenschte Session ausgelesen
- * werden. Die Session ID ist hierbei allerdings der eindeutige String aus der PHP-Session
- *
- * Folgende Funktionen stehen weiter zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) 
- *                         - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save($login_user_id)   - Rolle wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben bwz. angelegt
- * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
  * renewUserObject($usr_id = 0)
  *                        - diese Funktion stoesst ein Neueinlesen des User-Objekts an
  * renewOrganizationObject() 
@@ -39,10 +25,10 @@
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class Session extends TableAccess
+class TableSession extends TableAccess
 {
     // Konstruktor
-    function Session(&$db, $session = 0)
+    function TableSession(&$db, $session = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_SESSIONS;
@@ -71,7 +57,6 @@ class Session extends TableAccess
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
     function save()
     {
         if($this->new_record)

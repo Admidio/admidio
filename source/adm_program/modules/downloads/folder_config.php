@@ -15,7 +15,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/folder.php");
+require("../../system/classes/table_folder.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -50,7 +50,7 @@ else
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 //Folderobject erstellen
-$folder = new Folder($g_db);
+$folder = new TableFolder($g_db);
 $folder->getFolderForDownload($folder_id);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
@@ -66,7 +66,7 @@ $navigationBar = $folder->getNavigationForDownload();
 //Parentordner holen
 $parentRoleSet = null;
 if ($folder->getValue('fol_fol_id_parent')) {
-    $parentFolder = new Folder($g_db);
+    $parentFolder = new TableFolder($g_db);
     $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
     //Rollen des uebergeordneten Ordners holen
     $parentRoleSet = $parentFolder->getRoleArrayOfFolder();

@@ -17,7 +17,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/announcement.php");
+require("../../system/classes/table_announcement.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -54,7 +54,7 @@ if(isset($_GET['headline']))
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Ankuendigungsobjekt anlegen
-$announcement = new Announcement($g_db);
+$announcement = new TableAnnouncement($g_db);
 
 if($req_ann_id > 0)
 {

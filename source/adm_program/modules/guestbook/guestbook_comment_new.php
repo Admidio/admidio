@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/classes/guestbook_comment.php");
+require("../../system/classes/table_guestbook_comment.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -93,7 +93,7 @@ else
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Gaestebuchkommentarobjekt anlegen
-$guestbook_comment = new GuestbookComment($g_db);
+$guestbook_comment = new TableGuestbookComment($g_db);
 
 if(isset($_GET["cid"]) && $_GET["cid"] > 0)
 {

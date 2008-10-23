@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/classes/date.php");
+require("../../system/classes/table_date.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_dates_module'] == 0)
@@ -59,7 +59,7 @@ if(is_numeric($_GET["mode"]) == false
 }
 
 // Terminobjekt anlegen
-$date = new Date($g_db);
+$date = new TableDate($g_db);
 
 if($req_dat_id > 0)
 {

@@ -10,26 +10,18 @@
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Folgende Funktionen stehen weiter zur Verfuegung:
- *
- * clear()                - Die Klassenvariablen werden neu initialisiert
- * setArray($field_arra)  - uebernimmt alle Werte aus einem Array in das Field-Array
- * setValue($field_name, $field_value) - setzt einen Wert fuer ein bestimmtes Feld
- * getValue($field_name)  - gibt den Wert eines Feldes zurueck
- * save()                 - Kategorie wird mit den geaenderten Daten in die Datenbank
- *                          zurueckgeschrieben oder angelegt
- * delete()               - Die gewaehlte Rolle wird aus der Datenbank geloescht
+ * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung.
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class Category extends TableAccess
+class TableCategory extends TableAccess
 {
     var $calc_sequence;
 
     // Konstruktor
-    function Category(&$db, $cat_id = 0)
+    function TableCategory(&$db, $cat_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_CATEGORIES;
@@ -111,16 +103,22 @@ class Category extends TableAccess
         $this->db->query($sql);
 
         // Abhaenigigkeiten loeschen
-        if($this->db_fields['cat_type'] == 'ROL')
+        if($this->db_fields['cat_type'] == 'DAT')
         {
-            $sql    = "DELETE FROM ". TBL_ROLES. "
-                        WHERE rol_cat_id = ". $this->db_fields['cat_id'];
+            $sql    = "DELETE FROM ". TBL_DATES. "
+                        WHERE dat_cat_id = ". $this->db_fields['cat_id'];
             $this->db->query($sql);
         }
         elseif($this->db_fields['cat_type'] == 'LNK')
         {
             $sql    = "DELETE FROM ". TBL_LINKS. "
                         WHERE lnk_cat_id = ". $this->db_fields['cat_id'];
+            $this->db->query($sql);
+        }
+        elseif($this->db_fields['cat_type'] == 'ROL')
+        {
+            $sql    = "DELETE FROM ". TBL_ROLES. "
+                        WHERE rol_cat_id = ". $this->db_fields['cat_id'];
             $this->db->query($sql);
         }
         elseif($this->db_fields['cat_type'] == 'USF')

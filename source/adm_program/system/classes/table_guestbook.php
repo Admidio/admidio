@@ -14,10 +14,10 @@
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class Guestbook extends TableAccess
+class TableGuestbook extends TableAccess
 {
     // Konstruktor
-    function Guestbook(&$db, $gbo_id = 0)
+    function TableGuestbook(&$db, $gbo_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_GUESTBOOK;

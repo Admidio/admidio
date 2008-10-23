@@ -16,20 +16,15 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/photo_album.php");
+require_once("../../system/common.php");
+require_once("../../system/login_valid.php");
+require_once("../../system/classes/table_photos.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");
-}
-elseif($g_preferences['enable_photo_module'] == 2)
-{
-    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -58,7 +53,7 @@ $_SESSION['photo_album_request'] = $_REQUEST;
 $pho_id  = $_GET['pho_id'];
 
 // Fotoalbumobjekt anlegen
-$photo_album = new PhotoAlbum($g_db);
+$photo_album = new TablePhotos($g_db);
 
 if($_GET["job"] != "new")
 {
@@ -250,7 +245,7 @@ if(isset($_POST["submit"]) && $_POST["submit"])
                     <dd>";
                         if($photo_album->getValue("pho_pho_id_parent") > 0)
                         {
-                            $photo_album_parent = new PhotoAlbum($g_db, $photo_album->getValue("pho_pho_id_parent"));
+                            $photo_album_parent = new TablePhotos($g_db, $photo_album->getValue("pho_pho_id_parent"));
                             echo $photo_album_parent->getValue("pho_name");
                         }
                         else

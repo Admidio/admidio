@@ -14,7 +14,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
-require("../../system/classes/file.php");
+require("../../system/classes/table_file.php");
 
 //pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -40,7 +40,7 @@ else
 
 
 //Fileobject erstellen
-$file = new File($g_db);
+$file = new TableFile($g_db);
 
 //Fileproperties aus DB lesen fuer den Download
 $file->getFileForDownload($_GET['file_id']);

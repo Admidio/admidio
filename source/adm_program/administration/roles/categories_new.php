@@ -18,7 +18,7 @@
  
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/category.php");
+require("../../system/classes/table_category.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_cat_id = 0;
@@ -62,7 +62,7 @@ if(isset($_GET['cat_id']))
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // UserField-objekt anlegen
-$category = new Category($g_db);
+$category = new TableCategory($g_db);
 
 if($req_cat_id > 0)
 {
