@@ -582,7 +582,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Alle Webmaster erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat.
+                        Mitglieder aller Rollen mit der Berechtigung <strong>Registrierungen verwalten und zuordnen</strong> erhalten eine E-Mail, 
+                        sobald sich ein neuer User im System registriert hat.
                     </li>
                 </ul>
             </div>

@@ -368,7 +368,7 @@ elseif($new_user == 2)
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
     if($g_preferences['enable_system_mails'] == 1 && $g_preferences['enable_registration_admin_mail'] == 1)
     {
-        $sql = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
+        $sql = "SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                  RIGHT JOIN ". TBL_USER_DATA. " email
                     ON email.usd_usr_id = usr_id
@@ -380,7 +380,7 @@ elseif($new_user == 2)
                   LEFT JOIN ". TBL_USER_DATA. " last_name
                     ON last_name.usd_usr_id = usr_id
                    AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                 WHERE rol_name          = 'Webmaster'
+                 WHERE rol_approve_users = 1
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                    AND mem_rol_id        = rol_id
