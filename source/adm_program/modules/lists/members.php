@@ -214,6 +214,7 @@ $count_valid_users = $row[0];
 $g_layout['title']  = "Mitgliederzuordnung für \"". $role->getValue("rol_name"). "\"";
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
+        var member_count = -1;   
         function markMember(element)
         {
             if(element.checked == true)
@@ -223,6 +224,11 @@ $g_layout['header'] = "
                 var number = name.substr(pos_number, name.length - pos_number);
                 var role_name = 'member_' + number;
                 document.getElementById(role_name).checked = true;
+                increaseMemberCount();
+            }
+            else
+            {
+            	decreaseMemberCount();	
             }
         }
 
@@ -235,7 +241,74 @@ $g_layout['header'] = "
                 var number = name.substr(pos_number, name.length - pos_number);
                 var role_name = 'leader_' + number;
                 document.getElementById(role_name).checked = false;
+     			//
+     			decreaseMemberCount();
             }
+            else
+            {
+            	increaseMemberCount();
+            }
+        }
+    
+	 	function decreaseMemberCount()	
+	 	{
+	 		if(member_count==-1)
+	 		{
+	 			initializeMemberCount(+1);
+	 		}
+	 		member_count--;	 		
+	 	}
+	 	
+	 	function increaseMemberCount()
+	 	{
+	 		if(member_count==-1)
+	 		{
+	 			initializeMemberCount(-1);
+	 		}
+	 		member_count++;	 		
+	 	}";
+if($role->getValue("rol_name") == "Webmaster")
+{
+$g_layout['header'] =  $g_layout['header'] ."	 			
+	 	function chkMemberCount()
+	 	{
+	 		if(member_count == 0)
+	 		{
+	 			alert('Die Rolle Webmaster muss mindestens ein Mitglied haben!');
+	 			return false;
+	 		}
+	 		else
+	 			return true;	
+	 	}";
+}
+else
+{
+$g_layout['header'] =  $g_layout['header'] ."	 			
+	 	function chkMemberCount()
+	 	{
+	 		return true;
+	 	}";
+}
+$g_layout['header'] =  $g_layout['header'] ."        		
+        function initializeMemberCount(action)
+        {
+        	member_count = 0;
+        	all_inputs = document.getElementsByTagName('input');
+        	for(var i=0;i < all_inputs.length; ++i)
+        	{
+        		if(all_inputs[i].name.search(/member.+/)!=-1 && all_inputs[i].checked==true)
+        		{
+        			member_count++;			
+        		}	
+        	}
+        	if(action == -1)
+        	{
+        		member_count--;
+        	}
+        	else
+        	{
+        		member_count++;
+        	}	
         }
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
@@ -335,7 +408,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
     echo "</ul>";
 }
 
-echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?role_id=".$role_id. "\" method=\"post\">";
+echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?role_id=".$role_id. "\" method=\"post\" onsubmit=\"return chkMemberCount()\">";
 
     //Buchstaben Navigation bei mehr als 50 personen
     if($g_db->num_rows($result_user)>=50)
