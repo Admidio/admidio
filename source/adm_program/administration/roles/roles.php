@@ -151,6 +151,11 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
                     alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
                 }
+   			    if($row->rol_mail_to_all == 1)
+                {
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
+                    alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
+                }
                 if($row->rol_profile == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
@@ -202,22 +207,27 @@ echo "
                 if($row->rol_this_list_view == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list_role.png\"
-                    alt=\"Nur Mitglieder dieser Rolle können die Mitgliederliste\" title=\"Nur Mitglieder dieser Rolle können die Mitgliederliste\" />";
+                    alt=\"Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.\" title=\"Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.\" />";
                 }
                 if($row->rol_this_list_view == 2)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list_key.png\"
-                    alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" title=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" />";
+                    alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" title=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.\" />";
                 }
-                if($row->rol_mail_logout == 1 && $g_preferences['enable_mail_module'] > 0)
+                if($row->rol_mail_this_role == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
-                    alt=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Besucher (ausgeloggt) k&ouml;nnen E-Mails an diese Rolle schreiben\" />";
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email_role.png\"
+                    alt=\"Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.\" title=\"Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.\" />";
                 }
-                if($row->rol_mail_login == 1 && $g_preferences['enable_mail_module'] > 0)
+                if($row->rol_mail_this_role == 2 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email_key.png\"
-                    alt=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben\" />";
+                    alt=\"Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben.\" />";
+                }
+    			if($row->rol_mail_this_role == 3 && $g_preferences['enable_mail_module'] > 0)
+                {
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
+                    alt=\"Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.\" title=\"Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben\" />";
                 }
             echo "</td>
             <td style=\"text-align: center;\">

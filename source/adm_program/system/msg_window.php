@@ -251,6 +251,12 @@ echo "
                       dort neue Benutzer anlegen oder alte Benutzer löschen.";
                 break;
 
+            case "role_mail_this_role":
+                echo "Diese Einstellung steuert, wer das Recht hat über das Mailmodul Mails an diese Rolle zu schicken.
+					  Das Rollenrecht <strong>Emails an alle Rollen schreiben</strong> steht allerdings noch
+                      über dieser Einstellung.";
+                break;
+                
             case "role_show_list":
                 echo "Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und
                       die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht

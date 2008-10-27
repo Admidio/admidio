@@ -172,6 +172,7 @@ elseif($_GET["mode"] == 2)
                        ,'rol_mail_login'
                        ,'rol_weblinks'
                        ,'rol_all_lists_view'
+					   ,'rol_mail_to_all'
                        ,'rol_profile');
     
     foreach($checkboxes as $key => $value)

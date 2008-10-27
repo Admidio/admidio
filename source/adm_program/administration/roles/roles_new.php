@@ -279,40 +279,41 @@ echo "
                     {
                         echo "
                         <li>
-                            <div>
-                                <input type=\"checkbox\" id=\"rol_mail_logout\" name=\"rol_mail_logout\" ";
-                                    if($role->getValue("rol_mail_logout") == 1)
-                                    {
-                                        echo " checked=\"checked\" ";
-                                    }
-                                    if($role->getValue("rol_name") == "Webmaster")
-                                    {
-                                        echo " disabled=\"disabled\" ";
-                                    }                                
-                                    echo " onchange=\"markRoleRight('rol_mail_logout', 'rol_mail_login', true)\" value=\"1\" />
-                                <label for=\"rol_mail_logout\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Besucher (ausgeloggt) können E-Mails an diese Rolle schreiben\" /></label>&nbsp;
-                                <label for=\"rol_mail_logout\">Besucher (ausgeloggt) können E-Mails an diese Rolle schreiben</label>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_logout&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  
-                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_logout',this);\" onmouseout=\"ajax_hideTooltip()\" />
-                            </div>
-                        </li>
-                        <li>
-                            <div>
-                                <input type=\"checkbox\" id=\"rol_mail_login\" name=\"rol_mail_login\" ";
-                                    if($role->getValue("rol_mail_login") == 1)
-                                    {
-                                        echo " checked=\"checked\" ";
-                                    }
-                                    if($role->getValue("rol_name") == "Webmaster")
-                                    {
-                                        echo " disabled=\"disabled\" ";
-                                    }                                
-                                    echo " value=\"1\" />
-                                <label for=\"rol_mail_login\"><img src=\"". THEME_PATH. "/icons/email_key.png\" alt=\"Eingeloggte Benutzer können E-Mails an diese Rolle schreiben\" /></label>&nbsp;
-                                <label for=\"rol_mail_login\">Eingeloggte Benutzer können E-Mails an diese Rolle schreiben</label>
-                            </div>
-                        </li>";
+	                        <dl>
+	                            <dt><label for=\"rol_mail_this_role\">Mails zusenden:</label></dt>
+	                            <dd>
+	                                <select size=\"1\" id=\"rol_mail_this_role\" name=\"rol_mail_this_role\">
+	                                    <option value=\"0\" "; 
+	                                        if($role->getValue("rol_mail_this_role") == 0) 
+	                                        {
+	                                            echo " selected=\"selected\"";
+	                                        }
+	                                        echo ">niemand</option>
+	                                    <option value=\"1\" "; 
+	                                        if($role->getValue("rol_mail_this_role") == 1) 
+	                                        {
+	                                            echo " selected=\"selected\"";
+	                                        }
+	                                        echo ">nur Rollenmitglieder</option>
+	                                    <option value=\"2\" "; 
+	                                        if($role->getValue("rol_mail_this_role") == 2) 
+	                                        {
+	                                            echo " selected=\"selected\"";
+	                                        }
+	                                        echo ">alle angemeldeten Benutzer</option>
+										<option value=\"3\" "; 
+	                                        if($role->getValue("rol_mail_this_role") == 3) 
+	                                        {
+	                                            echo " selected=\"selected\"";
+	                                        }
+	                                        echo ">alle Besucher der Seite</option>
+	                                </select>
+	                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
+	                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_this_role&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
+	                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_this_role',this);\" onmouseout=\"ajax_hideTooltip()\" />
+	                            </dd>
+		                    </dl>
+	                    </li>";
                     }
                     echo "
                     <li>
@@ -325,19 +326,19 @@ echo "
                                         {
                                             echo " selected=\"selected\"";
                                         }
-                                        echo ">Keiner</option>
+                                        echo ">niemand</option>
                                     <option value=\"1\" "; 
                                         if($role->getValue("rol_this_list_view") == 1) 
                                         {
                                             echo " selected=\"selected\"";
                                         }
-                                        echo ">Nur Rollenmitglieder</option>
+                                        echo ">nur Rollenmitglieder</option>
                                     <option value=\"2\" "; 
                                         if($role->getValue("rol_this_list_view") == 2) 
                                         {
                                             echo " selected=\"selected\"";
                                         }
-                                        echo ">Alle angemeldeten Benutzer</option>
+                                        echo ">alle angemeldeten Benutzer</option>
                                 </select>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
@@ -439,8 +440,23 @@ echo "
                                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
                                 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
-                    </li>
-                    <li>
+                    </li>";
+					if($g_preferences['enable_mail_module'] > 0)
+                    {
+                        echo "
+                        <li>
+                            <div>
+                                <input type=\"checkbox\" id=\"rol_mail_to_all\" name=\"rol_mail_to_all\" ";
+                                if($role->getValue("rol_mail_to_all") == 1)
+                                    echo " checked=\"checked\" ";
+                                echo " value=\"1\" />
+                                <label for=\"rol_mail_to_all\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Emails an alle Rollen schreiben\" /></label>&nbsp;
+                                <label for=\"rol_mail_to_all\">Emails an alle Rollen schreiben&nbsp;</label>
+                            </div>
+                        </li>";
+                    }        
+                    echo"
+					<li>
                         <div>
                             <input type=\"checkbox\" id=\"rol_profile\" name=\"rol_profile\" ";
                             if($role->getValue("rol_profile") == 1)
