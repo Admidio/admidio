@@ -195,6 +195,10 @@ a:hover, a:active {
     padding-top:        10px;
 }
 
+.formSubmit button {
+    margin-right:       30px;
+}
+
 
 /* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
    wird haeufig innerhalb von Formularen genutzt (z.B.: Profil, Rollenpflege) */

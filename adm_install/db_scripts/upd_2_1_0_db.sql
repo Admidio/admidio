@@ -94,12 +94,14 @@ alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_ORG foreign key (lst
 /*==============================================================*/
 create table %PRAEFIX%_list_columns
 (
+   lsc_id                         int(11) unsigned               not null AUTO_INCREMENT,
    lsc_lst_id                     int(11) unsigned               not null,
    lsc_number                     smallint                       not null,
    lsc_usf_id                     int(11) unsigned,
    lsc_special_field              varchar(255),
-   lsc_sort                       varchar(5)                     default '0',
-   lsc_filter                     varchar(255)
+   lsc_sort                       varchar(5),
+   lsc_filter                     varchar(255),
+   primary key (lsc_id)
 )
 type = InnoDB
 auto_increment = 1;

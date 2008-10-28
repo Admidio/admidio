@@ -50,11 +50,12 @@ $admidio_path = substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1);
 require_once($admidio_path. "/adm_program/system/constants.php");
 require_once(SERVER_PATH. "/adm_program/system/string.php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/member_list.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_role.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_text.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
@@ -596,7 +597,54 @@ elseif($req_mode == 7)
     $member = new TableMembers($db);
     $member->startMembership($role_webmaster->getValue("rol_id"), $g_current_user->getValue("usr_id"));
     $member->startMembership($role_member->getValue("rol_id"), $g_current_user->getValue("usr_id"));
+    
+    // Default-Listen-Konfigurationen anlegen
+    $address_list = new MemberList($db);
+    $address_list->setValue("lst_name", "Adressliste");
+    $address_list->setValue("lst_global", 1);
+    $address_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
+    $address_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
+    $address_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
+    $address_list->addColumn(4, $g_current_user->getProperty("Adresse", "usf_id"));
+    $address_list->addColumn(5, $g_current_user->getProperty("PLZ", "usf_id"));
+    $address_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
+    $address_list->save();
 
+    $phone_list = new MemberList($db);
+    $phone_list->setValue("lst_name", "Telefonliste");
+    $phone_list->setValue("lst_global", 1);
+    $phone_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
+    $phone_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
+    $phone_list->addColumn(3, $g_current_user->getProperty("Telefon", "usf_id"));
+    $phone_list->addColumn(4, $g_current_user->getProperty("Handy", "usf_id"));
+    $phone_list->addColumn(5, $g_current_user->getProperty("E-Mail", "usf_id"));
+    $phone_list->addColumn(6, $g_current_user->getProperty("Fax", "usf_id"));
+    $phone_list->save();
+    
+    $contact_list = new MemberList($db);
+    $contact_list->setValue("lst_name", "Kontaktdaten");
+    $contact_list->setValue("lst_global", 1);
+    $contact_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
+    $contact_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
+    $contact_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
+    $contact_list->addColumn(4, $g_current_user->getProperty("Adresse", "usf_id"));
+    $contact_list->addColumn(5, $g_current_user->getProperty("PLZ", "usf_id"));
+    $contact_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
+    $contact_list->addColumn(7, $g_current_user->getProperty("Telefon", "usf_id"));
+    $contact_list->addColumn(8, $g_current_user->getProperty("Handy", "usf_id"));
+    $contact_list->addColumn(9, $g_current_user->getProperty("E-Mail", "usf_id"));
+    $contact_list->save();
+    
+    $former_list = new MemberList($db);
+    $former_list->setValue("lst_name", "Ehemaligenliste");
+    $former_list->setValue("lst_global", 1);
+    $former_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"));
+    $former_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"));
+    $former_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
+    $former_list->addColumn(4, "mem_begin");
+    $former_list->addColumn(5, "mem_end", "DESC");
+    $former_list->save();
+    
     // Daten der Session loeschen
     unset($_SESSION['g_current_organisation']);
     unset($_SESSION['g_preferences']);
