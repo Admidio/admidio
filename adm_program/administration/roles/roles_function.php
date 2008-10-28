@@ -152,8 +152,7 @@ elseif($_GET["mode"] == 2)
     {
         $_POST['rol_assign_roles']   = 1;
         $_POST['rol_all_lists_view'] = 1;
-        $_POST['rol_mail_logout']    = 1;
-        $_POST['rol_mail_login']     = 1;
+        $_POST['rol_mail_to_all']    = 1;
     }
 
     // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
@@ -168,8 +167,6 @@ elseif($_GET["mode"] == 2)
                        ,'rol_guestbook'
                        ,'rol_guestbook_comments'
                        ,'rol_edit_user'
-                       ,'rol_mail_logout'
-                       ,'rol_mail_login'
                        ,'rol_weblinks'
                        ,'rol_all_lists_view'
 					   ,'rol_mail_to_all'

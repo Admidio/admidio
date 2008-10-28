@@ -560,8 +560,8 @@ elseif($req_mode == 7)
     $role_webmaster->setValue("rol_photo", 1);
     $role_webmaster->setValue("rol_weblinks", 1);
     $role_webmaster->setValue("rol_edit_user", 1);
-    $role_webmaster->setValue("rol_mail_logout", 1);
-    $role_webmaster->setValue("rol_mail_login", 1);
+    $role_webmaster->setValue("rol_mail_to_all", 1);
+    $role_webmaster->setValue("rol_mail_this_role", 3);
     $role_webmaster->setValue("rol_profile", 1);
     $role_webmaster->setValue("rol_this_list_view", 1);
     $role_webmaster->setValue("rol_all_lists_view", 1);
@@ -586,8 +586,8 @@ elseif($req_mode == 7)
     $role_management->setValue("rol_dates", 1);
     $role_management->setValue("rol_weblinks", 1);
     $role_management->setValue("rol_edit_user", 1);
-    $role_management->setValue("rol_mail_logout", 1);
-    $role_management->setValue("rol_mail_login", 1);
+    $role_management->setValue("rol_mail_to_all", 1);
+    $role_management->setValue("rol_mail_this_role", 2);
     $role_management->setValue("rol_profile", 1);
     $role_management->setValue("rol_this_list_view", 1);
     $role_management->setValue("rol_all_lists_view", 1);

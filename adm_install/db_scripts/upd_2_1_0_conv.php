@@ -160,4 +160,42 @@ $g_db->query($sql);
 $sql = "ALTER TABLE ". TBL_DATES. " DROP COLUMN dat_org_shortname ";
 $g_db->query($sql);
 
+//Neu Mailrechte installieren
+//1. neue Spalten anlegen
+$sql = "ALTER TABLE ". TBL_ROLES. " ADD COLUMN rol_mail_to_all int(11) unsigned AFTER rol_guestbook_comments
+									ADD COLUMN rol_mail_this_role int(11) unsigned AFTER rol_mail_to_all";
+$g_db->query($sql);
+//2. alte Einstellungen in neues System übertragen
+$sql = "SELECT * FROM ". TBL_ROLES;
+$result_roles = $g_db->query($sql);
+while($row_roles = $g_db->fetch_array($result_roles))
+{
+	$mail_this_role = 0;
+	if($row_roles['rol_mail_login']==1)
+	{
+		$mail_this_role = 2;
+	}
+	if($row_roles['rol_mail_logout']==1)
+	{
+		$mail_this_role = 3;
+	}
+	$sql = "UPDATE ". TBL_ROLES. " SET rol_mail_this_role = ".$mail_this_role. "
+            WHERE rol_id_create".$row_roles['rol_id']."";
+    $g_db->query($sql);
+	
+    //Webmaster mit globalem Mailsenderecht ausstatten
+    if($row_roles['rol_name']=="Webmaster")
+    {
+		$sql = "UPDATE ". TBL_ROLES. " SET rol_mail_to_all = 1
+        WHERE rol_name".$row_roles['rol_id']."";
+    }
+	$g_db->query($sql);
+
+}
+
+//3. Überflüssige Spalten löschen
+$sql = "ALTER TABLE ". TBL_ROLES. " DROP COLUMN rol_mail_login
+									DROP COLUMN rol_mail_logout";
+$g_db->query($sql);
+
 ?>
