@@ -154,8 +154,8 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
-        if(isset($this->db_fields[$field_name]))
-        {            
+        if(array_key_exists($field_name, $this->db_fields))
+        {
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
             if(strlen($field_value) > 0)
             {
@@ -184,7 +184,7 @@ class TableAccess
                 }
             }
     
-            if(isset($this->db_fields[$field_name])
+            if(array_key_exists($field_name, $this->db_fields)
             && $field_value != $this->db_fields[$field_name])
             {
                 $this->db_fields[$field_name] = $field_value;
