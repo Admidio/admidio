@@ -37,6 +37,7 @@ class User extends TableAccess
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     var $list_view_rights = array();  // Array ueber Listenrechte einzelner Rollen
+    var $role_mail_rights = array();  // Array ueber Mailrechte einzelner Rollen
     
     // Konstruktor
     function User(&$db, $user_id = 0)
@@ -480,7 +481,7 @@ class User extends TableAccess
                                             "rol_announcements" => "0", "rol_dates" => "0", 
                                             "rol_download" => "0", "rol_edit_user" => "0", 
                                             "rol_guestbook" => "0", "rol_guestbook_comments" => "0", 
-                                            "rol_mail_logout" => "0", "rol_mail_login" => "0", 
+                                            "rol_mail_to_all" => "0", 
                                             "rol_photo" => "0", "rol_profile" => "0", 
                                             "rol_weblinks" => "0", "rol_all_lists_view" => "0");
 
@@ -519,7 +520,6 @@ class User extends TableAccess
                     }
                     
                     // Listenansichtseinstellung merken
-                    
                     // Leiter duerfen die Rolle sehen
                     if($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $row['mem_leader'] == 1))
                     {
@@ -535,6 +535,23 @@ class User extends TableAccess
                     {
                         $this->list_view_rights[$row['rol_id']] = 0;
                     }
+                                    
+                    // Mailrechte setzen
+                    // Leiter duerfen der Rolle Mails schreiben
+                    if($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $row['mem_leader'] == 1))
+                    {
+                        // Mitgliedschaft bei der Rolle und diese nicht gesperrt, dann anschauen
+                        $this->role_mail_rights[$row['rol_id']] = 1;
+                    }
+                    elseif($row['rol_mail_this_role'] >= 2)
+                    {
+                        // andere Rollen anschauen, wenn jeder sie sehen darf
+                        $this->role_mail_rights[$row['rol_id']] = 1;
+                    }
+                    else
+                    {
+                        $this->role_mail_rights[$row['rol_id']] = 0;
+                    }
                 }
                 $this->roles_rights = $tmp_roles_rights;
                 
@@ -546,6 +563,16 @@ class User extends TableAccess
                         $this->list_view_rights[$key] = 1;
                     }
                 }
+                
+                // ist das Recht "allen Rollen EMails schreiben" gesetzt, dann dies auch im Array bei allen Rollen setzen
+                if($this->roles_rights['rol_mail_to_all'])
+                {
+                    foreach($this->role_mail_rights as $key => $value)
+                    {
+                        $this->role_mail_rights[$key] = 1;
+                    }
+                }
+                
             }
 
             if(strlen($right) == 0 || $this->roles_rights[$right] == 1)
@@ -578,6 +605,12 @@ class User extends TableAccess
     function viewAllLists()
     {
         return $this->checkRolesRight('rol_all_lists_view'); 
+    }
+    
+    //Ueberprueft ob der User das Recht besitzt, allen Rollenmails zu zusenden 
+    function mailAllRoles()
+    {
+        return $this->checkRolesRight('rol_mail_to_all'); 
     }
     
     // Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
@@ -722,7 +755,27 @@ class User extends TableAccess
         }
         return $view_role;
     }
-
+	
+	// Methode prueft, ob der angemeldete User einer bestimmten oder allen Rolle E-Mails zusenden darf    
+    function mailRole($rol_id)
+    {
+        $mail_role = false;
+        // Abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
+        if($this->mailAllRoles())
+        {
+            $mail_role = true;
+        }
+        else
+        {
+            // Falls er das Recht nicht hat Kontrolle ob fuer eine bestimmte Rolle
+            if(isset($this->role_mail_rights[$rol_id]) && $this->role_mail_rights[$rol_id] > 0)
+            {
+                $mail_role = true;
+            }
+        }
+        return $mail_role;
+    }
+    
     // Methode liefert true zurueck, wenn der User Mitglied der Rolle "Webmaster" ist
     function isWebmaster()
     {
