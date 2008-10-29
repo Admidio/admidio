@@ -64,10 +64,9 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_CAT foreign key (dat
       references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
 
 -- Neu Mailrechteverwaltung
-ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_to_all int(11) unsigned AFTER rol_guestbook_comments DFAULT 0;
-ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_this_role int(11) unsigned AFTER rol_mail_to_all DFAULT 0;
-ALTER TABLE %PRAEFIX%_roles DROP COLUMN rol_mail_logout;
-ALTER TABLE %PRAEFIX%_roles DROP COLUMN rol_mail_login;
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_this_role tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_to_all tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
+
 
 /*==============================================================*/
 /* Table: adm_lists                                             */
