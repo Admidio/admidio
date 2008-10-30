@@ -424,12 +424,12 @@ if($req_mode != "csv")
         </div>
         
         <ul class=\"iconTextLinkList\">";
-            if($role->getValue("rol_mail_login") == 1 && $g_preferences['enable_mail_module'] == 1)
+            if($g_current_user->mailRole($role->getValue("rol_id")) && $g_preferences['enable_mail_module'] == 1)
             {
                 echo "<li>
                     <span class=\"iconTextLink\">
                         <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-                        src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mail an Mitglieder\" /></a>
+                        src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mail an Mitglieder\"  title=\"E-Mail an Mitglieder\" /></a>
                         <a href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\">E-Mail an Mitglieder</a>
                     </span>
                 </li>";
