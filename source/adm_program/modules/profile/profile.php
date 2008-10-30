@@ -622,6 +622,12 @@ echo '
                                                 echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
                                                 alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
                                             }
+                                            
+                                            if($row['rol_mail_to_all'] == 1)
+                                            {
+                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
+                                                alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
+                                            }
                                             if($row['rol_profile'] == 1)
                                             {
                                                 echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
