@@ -84,14 +84,14 @@ elseif (isset($_GET["rol_id"]))
 {
     // Falls eine rol_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf
-    if (is_numeric($_GET["rol_id"]) == false)
+    if (is_numeric($_GET["rol_id"]) == false || ($g_valid_login && !$g_current_user->mailRole($_GET["rol_id"])))
     {
         $g_message->show("invalid");
     }
-
+	    
     if ($g_valid_login)
     {
-        $sql    = "SELECT rol_mail_login, rol_name 
+        $sql    = "SELECT rol_mail_this_role, rol_name, rol_id 
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_id = ". $_GET['rol_id']. "
                       AND rol_cat_id = cat_id
@@ -99,16 +99,16 @@ elseif (isset($_GET["rol_id"]))
     }
     else
     {
-        $sql    = "SELECT rol_mail_logout, rol_name 
+        $sql    = "SELECT rol_mail_this_role, rol_name, rol_id
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_id = ". $_GET['rol_id']. "
-                      AND rol_cat_id = cat_id
+					  AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id");
     }
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
 
-    if ($row[0] != 1)
+    if ((!$g_valid_login && $row[0] != 3))
     {
         $g_message->show("invalid");
     }
@@ -125,26 +125,27 @@ elseif (isset($_GET["rolle"]) && isset($_GET["cat"]))
 
     if ($g_valid_login)
     {
-        $sql    = "SELECT rol_mail_login, rol_id
+        $sql    = "SELECT rol_mail_this_role, rol_id
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE UPPER(rol_name) = UPPER('". $_GET['rolle']. "')
-                   AND rol_cat_id        = cat_id
+				   AND rol_cat_id        = cat_id
                    AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                    AND UPPER(cat_name)   = UPPER('". $_GET['cat']. "')";
     }
     else
     {
-        $sql    = "SELECT rol_mail_logout, rol_id
+        $sql    = "SELECT rol_mail_this_role, rol_id
                     FROM ". TBL_ROLES. " ,". TBL_CATEGORIES. "
                    WHERE UPPER(rol_name) = UPPER('". $_GET['rolle']. "')
-                   AND rol_cat_id        = cat_id
+                   AND rol_mail_this_role = 3
+				   AND rol_cat_id        = cat_id
                    AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                    AND UPPER(cat_name)   = UPPER('". $_GET['cat']. "')";
     }
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
 
-    if ($row[0] != 1)
+    if (($row[0] != 1 && !$g_valid_login )|| ($g_valid_login && !$g_current_user->mailRole($row['rol_id'])))
     {
         $g_message->show("invalid");
     }
@@ -265,8 +266,7 @@ echo "
                                     // an die im eingeloggten Zustand Mails versendet werden duerfen
                                     $sql    = "SELECT rol_name, rol_id, cat_name 
                                                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                               WHERE rol_mail_login = 1
-                                               AND rol_valid        = 1
+                                               WHERE rol_valid        = 1
                                                AND rol_cat_id       = cat_id
                                                AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
                                                ORDER BY cat_sequence, rol_name ";
@@ -277,7 +277,7 @@ echo "
                                     // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
                                     $sql    = "SELECT rol_name, rol_id, cat_name 
                                                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                               WHERE rol_mail_logout = 1
+                                               WHERE rol_mail_this_role = 3
                                                AND rol_valid         = 1
                                                AND rol_cat_id        = cat_id
                                                AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
@@ -288,21 +288,24 @@ echo "
 
                                 while ($row = $g_db->fetch_object($result))
                                 {
-                                    if($act_category != $row->cat_name)
+                                  	if(!$g_valid_login || ($g_valid_login && $g_current_user->mailRole($row->rol_id)))
                                     {
-                                        if(strlen($act_category) > 0)
-                                        {
-                                            echo "</optgroup>";
-                                        }
-                                        echo "<optgroup label=\"$row->cat_name\">";
-                                        $act_category = $row->cat_name;
+										if($act_category != $row->cat_name)
+	                                    {
+	                                        if(strlen($act_category) > 0)
+	                                        {
+	                                            echo "</optgroup>";
+	                                        }
+	                                        echo "<optgroup label=\"$row->cat_name\">";
+	                                        $act_category = $row->cat_name;
+	                                    }
+	                                    echo "<option value=\"$row->rol_id\" ";
+	                                    if ($row->rol_id == $form_values['rol_id'])
+	                                    {
+	                                        echo "selected=\"selected\"";
+	                                    }
+	                                    echo ">$row->rol_name</option>";
                                     }
-                                    echo "<option value=\"$row->rol_id\" ";
-                                    if ($row->rol_id == $form_values['rol_id'])
-                                    {
-                                        echo "selected=\"selected\"";
-                                    }
-                                    echo ">$row->rol_name</option>";
                                 }
 
                                 echo "</optgroup>
