@@ -371,7 +371,15 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                         echo "<strong>". $row_lst['rol_name']. "</strong>";
                     }
     
-                    if($g_current_user->assignRoles() 
+		        	//Mail an Rolle schicken
+                    if($g_current_user->mailRole($row_lst['rol_id']) && $g_preferences['enable_mail_module'] == 1)
+		            {
+		                echo "
+						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
+		                	src=\"". THEME_PATH. "/icons/email.png\"  alt=\"E-Mail an Mitglieder\" title=\"E-Mail an Mitglieder\" /></a>";
+		            }
+                    
+		            if($g_current_user->assignRoles() 
                     || isGroupLeader($g_current_user->getValue("usr_id"), $row_lst['rol_id']) 
                     || $g_current_user->editUsers())
                     {
