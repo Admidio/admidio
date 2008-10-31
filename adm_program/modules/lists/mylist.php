@@ -20,7 +20,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/member_list.php");
+require("../../system/classes/list_configuration.php");
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
 $req_lst_id = 0;
@@ -89,7 +89,7 @@ $b_history = false;     // History-Funktion bereits aktiviert ja/nein
 $default_column_rows = 6;    // Anzahl der Spalten, die beim Aufruf angezeigt werden
 
 // Listenobjekt anlegen
-$list = new MemberList($g_db, $req_lst_id);
+$list = new ListConfiguration($g_db, $req_lst_id);
 
 if(isset($_SESSION['mylist_request']))
 {
@@ -414,7 +414,7 @@ echo '
                     if($counter_unsaved_lists > 5 && strlen($row['lst_name']) == 0)
                     {
                         // alle weiteren Konfigurationen ohne Namen loeschen
-                        $del_list = new MemberList($g_db, $row['lst_id']);
+                        $del_list = new ListConfiguration($g_db, $row['lst_id']);
                         $del_list->delete();
                     }
                     else

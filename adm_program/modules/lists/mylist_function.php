@@ -19,7 +19,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/member_list.php");
+require("../../system/classes/list_configuration.php");
 
 
 // Uebergabevariablen pruefen
@@ -67,7 +67,7 @@ else
 }
 
 // Listenobjekt anlegen
-$list = new MemberList($g_db, $_GET["lst_id"]);
+$list = new ListConfiguration($g_db, $_GET["lst_id"]);
 
 // Liste speichern
 if ($_GET["mode"] == 1 || $_GET["mode"] == 2)
@@ -93,14 +93,12 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 2)
         exit();
     }
     
-    // anzuzeigende Rollen in Array schreiben
+    // anzuzeigende Rollen in Array schreiben und in Session merken
     $role_ids[] = $_POST["rol_id"];
-
-    // SQL-Statement in Session-Variable schreiben
-    $_SESSION['mylist_sql'] = $list->getSQL($role_ids, $member_status);
+    $_SESSION['role_ids'] = $role_ids;
 
     // weiterleiten zur allgemeinen Listeseite
-    $location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?type=mylist&mode=html&rol_id=".$_POST["rol_id"];
+    $location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?lst_id=".$list->getValue("lst_id")."&mode=html";
     header($location);
     exit();
 }

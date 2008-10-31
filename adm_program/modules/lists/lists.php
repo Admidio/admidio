@@ -147,7 +147,7 @@ else
 {
     $g_layout['title']  = "Übersicht der inaktive Rollen";
 }
-$g_layout['header'] = "
+$g_layout['header'] = $g_js_vars. "
     <script type=\"text/javascript\"><!--
         function showCategory()
         {
@@ -157,32 +157,20 @@ $g_layout['header'] = "
 
         function showList(element, rol_id)
         {
-            var sel_list = element.value;
+            var lst_id = element.value;
 
-            if(sel_list == 'address')
+            if(lst_id == 'mylist')
             {
-                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=' + rol_id;
+                self.location.href = gRootPath + '/adm_program/modules/lists/mylist.php?rol_id=' + rol_id";
+                if($active_role)
+                    $g_layout['header'] = $g_layout['header']. ";";
+                else
+                    $g_layout['header'] = $g_layout['header']. " + '&active_role=0&active_member=0';";
+                $g_layout['header'] = $g_layout['header']. "
             }
-            else if(sel_list == 'telefon')
-            {
-                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=telephone&mode=html&rol_id=' + rol_id;
-            }
-            else if(sel_list == 'teilnehmer')
-            {
-                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=teilnehmer&mode=html&rol_id=' + rol_id;
-            }
-            else if(sel_list == 'mylist')
-            {
-                self.location.href = '$g_root_path/adm_program/modules/lists/mylist.php?rol_id=' + rol_id";
-            if($active_role)
-                $g_layout['header'] = $g_layout['header']. ";";
             else
-                $g_layout['header'] = $g_layout['header']. " + '&active_role=0&active_member=0';";
-            $g_layout['header'] = $g_layout['header']. "
-            }
-            else if(sel_list == 'former')
             {
-                self.location.href = '$g_root_path/adm_program/modules/lists/lists_show.php?type=former&mode=html&rol_id=' + rol_id;
+                self.location.href = gRootPath + '/adm_program/modules/lists/lists_show.php?mode=html&lst_id=' + lst_id + '&rol_id=' + rol_id;
             }
         }
     //--></script>
@@ -194,17 +182,17 @@ $g_layout['header'] = "
             {
                 document.getElementById(role_details_ID).style.visibility = 'visible';
                 document.getElementById(role_details_ID).style.display    = 'block';
-				document.getElementById(triangle_ID).src = '". THEME_PATH. "/icons/triangle_open.gif';
+				document.getElementById(triangle_ID).src   = gThemePath + '/icons/triangle_open.gif';
 				document.getElementById(triangle_ID).title = 'Details ausblenden';
-				document.getElementById(triangle_ID).alt = 'Details ausblenden';
+				document.getElementById(triangle_ID).alt   = 'Details ausblenden';
             }
             else
             {
                 document.getElementById(role_details_ID).style.visibility = 'hidden';
                 document.getElementById(role_details_ID).style.display    = 'none';
-				document.getElementById(triangle_ID).src = '". THEME_PATH. "/icons/triangle_close.gif';	
+				document.getElementById(triangle_ID).src   = gThemePath + '/icons/triangle_close.gif';	
 				document.getElementById(triangle_ID).title = 'Details einblenden';
-				document.getElementById(triangle_ID).alt = 'Details einblenden';
+				document.getElementById(triangle_ID).alt   = 'Details einblenden';
             }
         }
     </script>
@@ -408,18 +396,26 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                     // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat
                     if($num_member > 0 || $num_leader > 0)
                     {
-                        echo "
-                        <select size=\"1\" name=\"list$i\" onchange=\"showList(this, ". $row_lst['rol_id']. ")\">
-                            <option value=\"\" selected=\"selected\">Liste anzeigen ...</option>
-                            <option value=\"address\">Adressliste</option>
-                            <option value=\"telefon\">Telefonliste</option>
-                            <option value=\"teilnehmer\">Teilnehmerliste</option>";
-                            if($active_role && $num_former > 0)
+                        $sql = "SELECT lst_id, lst_name FROM ". TBL_LISTS. "
+                                 WHERE lst_org_id = ". $g_current_organization->getValue("org_id"). "
+                                   AND lst_global = 1 
+                                 ORDER BY lst_name ASC";
+                        $lst_result = $g_db->query($sql);
+                        
+                        echo '
+                        <select size="1" name="list'.$i.'" onchange="showList(this, '. $row_lst['rol_id']. ')">
+                            <option value="" selected="selected">Liste anzeigen ...</option>';
+                            
+                            // alle globalen Listenkonfigurationen auflisten
+                            while($row = $g_db->fetch_array($lst_result))
                             {
-                                echo "<option value=\"former\">Ehemaligenliste</option>";
+                                echo '<option value="'.$row['lst_id'].'">'.$row['lst_name'].'</option>';
                             }
-                            echo "<option value=\"mylist\">Eigene Liste ...</option>
-                        </select>";
+                            
+                            // Link zu den eigenen Listen setzen
+                            echo '<option value="">-------------------------</option>
+                            <option value="mylist">Eigene Liste ...</option>
+                        </select>';
                     }
                     else
                     {
