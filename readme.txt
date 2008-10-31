@@ -116,6 +116,10 @@ Mark James
 	http://www.famfamfam.com
 	Icon Bibliothek famfamfam
 	Silk Icons
+
+Tango Desktop Project
+	http://tango.freedesktop.org
+	Icon Bibliothek Tango
 	
 Thomas Fuchs
 	http://script.aculo.us
@@ -124,6 +128,10 @@ Thomas Fuchs
 Lokesh Dhakar
 	http://www.huddletogether.com/projects/lightbox2
 	Lightbox 2
+
+Mirko Schaal
+    http://www.splinelab.de/flexupload
+    Flexupload
 	
 Alf Magne Kalleland
 	http://www.dhtmlgoodies.com
@@ -144,10 +152,6 @@ Roönaän Webdevelopment
 phpBB bulletin board
 	http://www.phpbb.com
 	Diverse Funktionen
-
-Tango Desktop Project
-	http://tango.freedesktop.org
-	Icon Bibliothek Tango
 
 -------------------------------------------------------------------------
        	        Copyright (c) 2004 - 2008 The Admidio Team
