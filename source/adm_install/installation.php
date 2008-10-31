@@ -50,7 +50,7 @@ $admidio_path = substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1);
 require_once($admidio_path. "/adm_program/system/constants.php");
 require_once(SERVER_PATH. "/adm_program/system/string.php");
 require_once(SERVER_PATH. "/adm_program/system/function.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/member_list.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/list_configuration.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_role.php");
@@ -599,7 +599,7 @@ elseif($req_mode == 7)
     $member->startMembership($role_member->getValue("rol_id"), $g_current_user->getValue("usr_id"));
     
     // Default-Listen-Konfigurationen anlegen
-    $address_list = new MemberList($db);
+    $address_list = new ListConfiguration($db);
     $address_list->setValue("lst_name", "Adressliste");
     $address_list->setValue("lst_global", 1);
     $address_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
@@ -610,7 +610,7 @@ elseif($req_mode == 7)
     $address_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
     $address_list->save();
 
-    $phone_list = new MemberList($db);
+    $phone_list = new ListConfiguration($db);
     $phone_list->setValue("lst_name", "Telefonliste");
     $phone_list->setValue("lst_global", 1);
     $phone_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
@@ -621,7 +621,7 @@ elseif($req_mode == 7)
     $phone_list->addColumn(6, $g_current_user->getProperty("Fax", "usf_id"));
     $phone_list->save();
     
-    $contact_list = new MemberList($db);
+    $contact_list = new ListConfiguration($db);
     $contact_list->setValue("lst_name", "Kontaktdaten");
     $contact_list->setValue("lst_global", 1);
     $contact_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
@@ -635,7 +635,7 @@ elseif($req_mode == 7)
     $contact_list->addColumn(9, $g_current_user->getProperty("E-Mail", "usf_id"));
     $contact_list->save();
     
-    $former_list = new MemberList($db);
+    $former_list = new ListConfiguration($db);
     $former_list->setValue("lst_name", "Ehemaligenliste");
     $former_list->setValue("lst_global", 1);
     $former_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"));

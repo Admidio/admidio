@@ -10,7 +10,7 @@
  *****************************************************************************/
 
 require_once("systemmails_texts.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/member_list.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/list_configuration.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
  
 // Texte fuer Systemmails pflegen
@@ -84,7 +84,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $g_current_organization->readData($row_orga['org_id']);
     
     // Default-Listen-Konfigurationen anlegen
-    $address_list = new MemberList($g_db);
+    $address_list = new ListConfiguration($g_db);
     $address_list->setValue("lst_name", "Adressliste");
     $address_list->setValue("lst_global", 1);
     $address_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
@@ -95,7 +95,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $address_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
     $address_list->save();
 
-    $phone_list = new MemberList($g_db);
+    $phone_list = new ListConfiguration($g_db);
     $phone_list->setValue("lst_name", "Telefonliste");
     $phone_list->setValue("lst_global", 1);
     $phone_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
@@ -106,7 +106,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $phone_list->addColumn(6, $g_current_user->getProperty("Fax", "usf_id"));
     $phone_list->save();
     
-    $contact_list = new MemberList($g_db);
+    $contact_list = new ListConfiguration($g_db);
     $contact_list->setValue("lst_name", "Kontaktdaten");
     $contact_list->setValue("lst_global", 1);
     $contact_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
@@ -120,7 +120,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $contact_list->addColumn(9, $g_current_user->getProperty("E-Mail", "usf_id"));
     $contact_list->save();
     
-    $former_list = new MemberList($g_db);
+    $former_list = new ListConfiguration($g_db);
     $former_list->setValue("lst_name", "Ehemaligenliste");
     $former_list->setValue("lst_global", 1);
     $former_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"));

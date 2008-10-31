@@ -1,14 +1,14 @@
 <?php
 /******************************************************************************
- * Klasse zum Verwalten von Listen
+ * Klasse zum Verwalten von Listenkonfigurationen
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu ein Listenobjekt zu erstellen. 
- * Eine Liste kann ueber diese Klasse in der Datenbank verwaltet werden
+ * Diese Klasse dient dazu ein Listenkonfigurationsobjekt zu erstellen. 
+ * Eine Konfiguration kann ueber diese Klasse in der Datenbank verwaltet werden
  *
  * Neben den Methoden der Elternklasse TableLists, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
@@ -28,12 +28,12 @@ require_once(SERVER_PATH. "/adm_program/system/classes/condition_parser.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_lists.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_list_columns.php");
 
-class MemberList extends TableLists
+class ListConfiguration extends TableLists
 {
     var $columns = array();     // Array ueber alle Listenspaltenobjekte
 
     // Konstruktor
-    function MemberList(&$db, $lst_id = 0)
+    function ListConfiguration(&$db, $lst_id = 0)
     {
         $this->TableLists($db, $lst_id);
         if($lst_id > 0)

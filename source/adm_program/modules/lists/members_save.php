@@ -9,9 +9,7 @@
  *
  * Uebergaben:
  *
- * user_id: Benutzer deren Zuordnung geaendert werden soll
- * url:     URL auf die danach weitergeleitet wird
- * role_id: Rolle zu denen die Zuordnug geaendert werden soll
+ * rol_id : Rolle zu denen die Zuordnug geaendert werden soll
  *
  *****************************************************************************/
 
@@ -23,28 +21,19 @@ require_once("../../system/classes/table_role.php");
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET['rol_id']) == false || is_numeric($_GET['rol_id']) == false)
 {
     $g_message->show("invalid");
-}
-
-if(isset($_GET["role_id"]) && is_numeric($_GET["role_id"]) == false)
-{
-    $g_message->show("invalid");
-}
-else
-{
-    $role_id = $_GET["role_id"];
 }
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new TableRole($g_db, $role_id);
+$role = new TableRole($g_db, $_GET['rol_id']);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
-   && !isGroupLeader($g_current_user->getValue("usr_id"), $role_id) 
+   && !isGroupLeader($g_current_user->getValue("usr_id"), $role->getValue("rol_id")) 
    && !$g_current_user->editUsers()) 
 || (  !$g_current_user->isWebmaster()
    && $role->getValue("rol_name") == "Webmaster") 
@@ -57,7 +46,7 @@ if(  (!$g_current_user->assignRoles()
 // Ermittlung aller bisherigen aktiven Mitgliedschaften
 $sql = " SELECT *
            FROM ". TBL_MEMBERS. "
-          WHERE mem_rol_id = $role_id
+          WHERE mem_rol_id = ". $role->getValue("rol_id"). "
             AND mem_valid  = 1";
 $result_mem_role = $g_db->query($sql);
 
@@ -116,22 +105,22 @@ while($user= $g_db->fetch_array($result_user))
             // Leiterstatus noch entsprechend weitergeben
             if(isset($_POST["leader_".$user["usr_id"]]) == true)
             {
-                $member->startMembership($role_id, $user["usr_id"], 1);
+                $member->startMembership($role->getValue("rol_id"), $user["usr_id"], 1);
             }
             else
             {
-                $member->startMembership($role_id, $user["usr_id"], 0);
+                $member->startMembership($role->getValue("rol_id"), $user["usr_id"], 0);
             }
         }
         else
         {
-            $member->stopMembership($role_id, $user["usr_id"]);
+            $member->stopMembership($role->getValue("rol_id"), $user["usr_id"]);
         }
         
         if(isset($_POST["member_".$user["usr_id"]]) == true  && array_key_exists($user["usr_id"], $mitglieder_array) == false)
         {
             // abhaengige Rollen finden
-            $tmpRoles = RoleDependency::getParentRoles($g_db,$role_id);
+            $tmpRoles = RoleDependency::getParentRoles($g_db,$role->getValue("rol_id"));
             foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))

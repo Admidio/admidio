@@ -9,12 +9,10 @@
  *
  * Uebergaben:
  *
- * rol_id     - Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
- * restrict:    Begrenzte Userzahl:
- *              m - (Default) nur Mitglieder
- *              u - alle in der Datenbank gespeicherten user
- * popup   :    0 - (Default) Fenster wird normal mit Homepagerahmen angezeigt
- *              1 - Fenster wurde im Popupmodus aufgerufen
+ * rol_id   : Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
+ * restrict : Begrenzte Userzahl:
+ *            m - (Default) nur Mitglieder
+ *            u - alle in der Datenbank gespeicherten user
  *
  *****************************************************************************/
 
@@ -377,9 +375,9 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
         {
             echo "<li>
                 <span class=\"iconTextLink\">
-                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\"><img
+                    <a href=\"members.php?rol_id=$role_id&amp;restrict=u\"><img
                     src=\"". THEME_PATH. "/icons/group.png\" alt=\"Alle Benutzer anzeigen\" /></a>
-                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=u\">Alle Benutzer anzeigen</a>
+                    <a href=\"members.php?rol_id=$role_id&amp;restrict=u\">Alle Benutzer anzeigen</a>
                 </span>
             </li>";
         }
@@ -388,9 +386,9 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
             //Nur Mitglieder anzeigen
             echo "<li>
                 <span class=\"iconTextLink\">
-                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\"><img
+                    <a href=\"members.php?rol_id=$role_id&amp;restrict=m\"><img
                     src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Nur Mitglieder anzeigen\" /></a>
-                    <a href=\"members.php?rol_id=$role_id&amp;popup=1&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+                    <a href=\"members.php?rol_id=$role_id&amp;restrict=m\">Nur Mitglieder anzeigen</a>
                 </span>
             </li>";
 
@@ -408,7 +406,7 @@ if(($count_valid_users != $user_anzahl || $restrict == "u")
     echo "</ul>";
 }
 
-echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?role_id=".$role_id. "\" method=\"post\" onsubmit=\"return chkMemberCount()\">";
+echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol_id=".$role_id. "\" method=\"post\" onsubmit=\"return chkMemberCount()\">";
 
     //Buchstaben Navigation bei mehr als 50 personen
     if($g_db->num_rows($result_user)>=50)
