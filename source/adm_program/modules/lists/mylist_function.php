@@ -11,9 +11,10 @@
  *
  * lst_id : ID der Liste, die aktuell bearbeitet werden soll
  * name   : (optional) die Liste wird unter diesem Namen gespeichert
- * mode   : 1 - Liste speichern
- *          2 - Liste speichern und anzeigen
- *          3 - liste loeschen
+ * mode   : 1 - Listenkonfiguration speichern
+ *          2 - Listenkonfiguration speichern und anzeigen
+ *          3 - Listenkonfiguration loeschen
+ *          4 - Listenkonfiguration zur Systemkonfiguration machen
  *
  *****************************************************************************/
 
@@ -69,13 +70,36 @@ else
 // Listenobjekt anlegen
 $list = new ListConfiguration($g_db, $_GET["lst_id"]);
 
+// pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
+if($_GET["mode"] != 2)
+{
+    // globale Listen duerfen nur von Webmastern editiert werden
+    if($list->getValue("lst_global") == 1 && $g_current_user->isWebmaster() == false)
+    {
+        $g_message->show("norights");
+    }
+    elseif($list->getValue("lst_usr_id") != $g_current_user->getValue("usr_id")
+    && $list->getValue("lst_global") == 0
+    && $list->getValue("lst_id") > 0)
+    {
+        $g_message->show("norights");
+    }
+}
+
 // Liste speichern
-if ($_GET["mode"] == 1 || $_GET["mode"] == 2)
+if ($_GET["mode"] == 1 || $_GET["mode"] == 2 || $_GET["mode"] == 4)
 {
     // alle vorhandenen Spalten durchgehen
     for($number = 1; isset($_POST["column". $number]); $number++)
     {
-        $list->addColumn($number, $_POST["column". $number], $_POST["sort". $number], $_POST["condition". $number]);
+        if(strlen($_POST["column". $number]) > 0)
+        {
+            $list->addColumn($number, $_POST["column". $number], $_POST["sort". $number], $_POST["condition". $number]);
+        }
+        else
+        {
+            $list->deleteColumn($number, true);
+        }
     }
     
     if(isset($_GET['name']) && strlen($_GET['name']) > 0)
@@ -83,13 +107,21 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 2)
         $list->setValue("lst_name", $_GET['name']);
     }
     
+    if($_GET["mode"] == 4 && $g_current_user->isWebmaster())
+    {
+        $list->setValue("lst_global", 1);
+    }
+    else
+    {
+        $list->setValue("lst_global", 0);
+    }
+    
     $list->save();
     
-    if($_GET["mode"] == 1)
+    if($_GET["mode"] == 1 || $_GET["mode"] == 4)
     {
         // wieder zur eigenen Liste zurueck
-        $location = "Location: $g_root_path/adm_program/modules/lists/mylist.php?lst_id=". $list->getValue("lst_id");
-        header($location);
+        header("Location: ".$g_root_path."/adm_program/modules/lists/mylist.php?lst_id=". $list->getValue("lst_id"));
         exit();
     }
     
@@ -98,8 +130,16 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 2)
     $_SESSION['role_ids'] = $role_ids;
 
     // weiterleiten zur allgemeinen Listeseite
-    $location = "Location: $g_root_path/adm_program/modules/lists/lists_show.php?lst_id=".$list->getValue("lst_id")."&mode=html";
-    header($location);
+    header("Location: ".$g_root_path."/adm_program/modules/lists/lists_show.php?lst_id=".$list->getValue("lst_id")."&mode=html");
+    exit();
+}
+elseif ($_GET["mode"] == 3)
+{
+    // Listenkonfiguration loeschen
+    $list->delete();
+
+    // weiterleiten zur Listenkonfiguration
+    header("Location: ".$g_root_path."/adm_program/modules/lists/mylist.php");
     exit();
 }
 

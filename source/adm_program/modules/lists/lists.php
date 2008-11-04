@@ -253,6 +253,15 @@ if(!$g_db->data_seek($result_lst, $_GET["start"]))
     $g_message->show("invalid");
 }
 
+// SQL-Statement fuer alle Listenkonfigurationen vorbereiten, die angezeigt werdne sollen
+$sql = "SELECT lst_id, lst_name, lst_global FROM ". TBL_LISTS. "
+     WHERE lst_org_id = ". $g_current_organization->getValue("org_id"). "
+       AND (  lst_usr_id = ". $g_current_user->getValue("usr_id"). "
+           OR lst_global = 1)
+       AND lst_name IS NOT NULL
+     ORDER BY lst_global ASC, lst_name ASC";
+$result_config = $g_db->query($sql);
+
 // Anzahl Rollen pro Seite
 if($g_preferences['lists_roles_per_page'] > 0)
 {
@@ -362,9 +371,9 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
 		        	//Mail an Rolle schicken
                     if($g_current_user->mailRole($row_lst['rol_id']) && $g_preferences['enable_mail_module'] == 1)
 		            {
-		                echo "
-						<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/mail/mail.php?rol_id=$req_rol_id\"><img
-		                	src=\"". THEME_PATH. "/icons/email.png\"  alt=\"E-Mail an Mitglieder\" title=\"E-Mail an Mitglieder\" /></a>";
+		                echo '
+						<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$row_lst['rol_id'].'"><img
+		                	src="'. THEME_PATH. '/icons/email.png"  alt="E-Mail an Mitglieder" title="E-Mail an Mitglieder" /></a>';
 		            }
                     
 		            if($g_current_user->assignRoles() 
@@ -396,25 +405,40 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                     // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat
                     if($num_member > 0 || $num_leader > 0)
                     {
-                        $sql = "SELECT lst_id, lst_name FROM ". TBL_LISTS. "
-                                 WHERE lst_org_id = ". $g_current_organization->getValue("org_id"). "
-                                   AND lst_global = 1 
-                                 ORDER BY lst_name ASC";
-                        $lst_result = $g_db->query($sql);
-                        
                         echo '
                         <select size="1" name="list'.$i.'" onchange="showList(this, '. $row_lst['rol_id']. ')">
                             <option value="" selected="selected">Liste anzeigen ...</option>';
                             
                             // alle globalen Listenkonfigurationen auflisten
-                            while($row = $g_db->fetch_array($lst_result))
+                            $g_db->data_seek($result_config, 0);
+                            $list_global_flag = "";
+                            
+                            while($row = $g_db->fetch_array($result_config))
                             {
+                                if($list_global_flag != $row['lst_global'])
+                                {
+                                    if($row['lst_global'] == 0)
+                                    {
+                                        echo '<optgroup label="Gespeicherte Listen">';
+                                    }
+                                    else
+                                    {
+                                        if($list_global_flag == 0)
+                                        {
+                                            echo '</optgroup>';
+                                        }
+                                        echo '<optgroup label="Allgemeine Listen">';
+                                    }
+                                    $list_global_flag = $row['lst_global'];
+                                }
                                 echo '<option value="'.$row['lst_id'].'">'.$row['lst_name'].'</option>';
                             }
                             
                             // Link zu den eigenen Listen setzen
-                            echo '<option value="">-------------------------</option>
-                            <option value="mylist">Eigene Liste ...</option>
+                            echo '</optgroup>
+                            <optgroup label="Konfiguration">
+                                <option value="mylist">Eigene Liste ...</option>
+                            </optgroup>
                         </select>';
                     }
                     else

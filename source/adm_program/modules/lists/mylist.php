@@ -349,20 +349,40 @@ $g_layout['header'] = $g_js_vars. '
                 }
             }
 
-            if(mode == "show")
+            switch (mode)
             {
-                document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
-                document.getElementById("form_mylist").submit();
-            }
-            else if(mode == "save")
-            {
-                var listName = "";
-                listName = prompt("Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden ?");
-                if(listName != null)
-                {
-                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=1&name=" + listName;
+                case "show":
+                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=2";
                     document.getElementById("form_mylist").submit();
-                }
+                    break;
+
+                case "save":
+                    var listName = "";
+                    listName = prompt("Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden ?");
+                    if(listName != null)
+                    {
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=1&name=" + listName;
+                        document.getElementById("form_mylist").submit();
+                    }
+                    break;
+
+                case "delete":
+                    var msg_result = confirm("Willst du die aktuelle Listenkonfiguration wirklich löschen ?");
+                    if(msg_result)
+                    {
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=3";
+                        document.getElementById("form_mylist").submit();
+                    }
+                    break;
+
+                case "system":
+                    var msg_result = confirm("Willst du die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen ?");
+                    if(msg_result)
+                    {
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=4";
+                        document.getElementById("form_mylist").submit();
+                    }
+                    break;
             }
         }
     </script>';
@@ -429,7 +449,7 @@ echo '
                             }
                             if($row['lst_global'] == 0 && strlen($row['lst_name']) == 0)
                             {
-                                echo '<optgroup label="Meine letzten Konfigurationen">';
+                                echo '<optgroup label="Deine letzten Konfigurationen">';
                             }
                             elseif($row['lst_global'] == 0 && strlen($row['lst_name']) > 0)
                             {
@@ -468,7 +488,34 @@ echo '
                 }
                 echo '</optgroup>';
             }           
-        echo '</select></p>
+        echo '</select>';
+        
+        // Listen speichern darf man speichern, wenn es Eigene sind, Neue oder als Webmaster auch Systemlisten
+        if($g_current_user->isWebmaster()
+        || $req_lst_id == 0
+        || $g_current_user->getValue("usr_id") == $list->getValue("lst_usr_id"))
+        {
+            echo '
+            <a class="iconLink" href="javascript:send(\'save\');"><img
+                src="'. THEME_PATH. '/icons/disk.png" alt="Konfiguration speichern" title="Konfiguration speichern" /></a>';
+        }
+
+        if($g_current_user->isWebmaster() && $list->getValue("lst_global") == 1
+        || ($g_current_user->getValue("usr_id") == $list->getValue("lst_usr_id") && strlen($list->getValue("lst_name")) > 0))
+        {
+            echo '
+            <a class="iconLink" href="javascript:send(\'delete\');"><img
+                src="'. THEME_PATH. '/icons/delete.png" alt="Konfiguration löschen" title="Konfiguration löschen" /></a>';
+        }
+
+        // eine gespeicherte Konfiguration kann vom Webmaster zur Systemkonfiguration gemacht werden
+        if($g_current_user->isWebmaster() && $list->getValue("lst_global") == 0 && strlen($list->getValue("lst_name")) > 0)
+        {
+            echo '
+            <a class="iconLink" href="javascript:send(\'system\');"><img
+                src="'. THEME_PATH. '/icons/list_global.png" alt="Konfiguration allen Benutzern zur Verfügung stellen" title="Konfiguration allen Benutzern zur Verfügung stellen" /></a>';
+        }
+        echo '</p>
         
         <p><b>2.</b> Bestimme die Spalten, die in der Liste angezeigt werden sollen:</p>
 
@@ -526,9 +573,6 @@ echo '
         <div class="formSubmit">
             <button name="btn_show" type="button" onclick="javascript:send(\'show\');" value="anzeigen"><img 
                 src="'. THEME_PATH. '/icons/list.png" alt="Liste anzeigen" />&nbsp;Liste anzeigen</button>
-
-            <button name="btn_save" type="button" onclick="javascript:send(\'save\');" value="anzeigen"><img 
-                src="'. THEME_PATH. '/icons/disk.png" alt="Konfiguration speichern" />&nbsp;Konfiguration speichern</button>            
         </div>
     </div>
 </div>
