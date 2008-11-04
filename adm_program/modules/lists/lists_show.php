@@ -63,6 +63,16 @@ if(isset($_GET['start']))
     $req_start = $_GET['start'];
 }
 
+if($req_rol_id > 0)
+{
+    $role_ids[] = $req_rol_id;
+}
+else
+{
+    $role_ids = $_SESSION['role_ids'];
+    $req_rol_id = $role_ids[0];
+}
+
 //Testen ob Recht zur Listeneinsicht besteht
 if(!$g_current_user->viewRole($req_rol_id))
 {
@@ -126,14 +136,6 @@ $role = new TableRole($g_db, $req_rol_id);
 
 // Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
 $list = new ListConfiguration($g_db, $req_lst_id);
-if($req_rol_id > 0)
-{
-    $role_ids[] = $req_rol_id;
-}
-else
-{
-    $role_ids[] = $_SESSION['role_ids'];
-}
 $main_sql = $list->getSQL($role_ids);
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
@@ -344,7 +346,7 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
     else
     {
         $usf_id = 0;
-        $col_name = $column->getValue("lsc_special_field");
+        $col_name = $arr_col_name[$column->getValue("lsc_special_field")];
     }
 
     // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden

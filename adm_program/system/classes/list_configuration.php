@@ -13,14 +13,16 @@
  * Neben den Methoden der Elternklasse TableLists, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * readColumns()       - Daten der zugehoerigen Spalten einlesen und in Objekten speichern
+ * readColumns()         - Daten der zugehoerigen Spalten einlesen und in Objekten speichern
  * addColumn($number, $field, $sort = "", $condition = "")
- *                     - fuegt eine neue Spalte dem Spaltenarray hinzu
- * countColumns()      - Anzahl der Spalten der Liste zurueckgeben
+ *                       - fuegt eine neue Spalte dem Spaltenarray hinzu
+ * deleteColumn($number, $all = false)
+ *                       - entfernt die entsprechende Spalte aus der Konfiguration
+ * countColumns()        - Anzahl der Spalten der Liste zurueckgeben
  * getColumnObject($number)
- *                     - liefert das entsprechende TableListColumns-Objekt zurueck
+ *                       - liefert das entsprechende TableListColumns-Objekt zurueck
  * getSQL($role_ids, $member_status = 0)
- *                     - gibt das passende SQL-Statement zu der Liste zurueck
+ *                       - gibt das passende SQL-Statement zu der Liste zurueck
  *
  *****************************************************************************/
 
@@ -83,6 +85,38 @@ class ListConfiguration extends TableLists
             }
             $this->columns[$number]->setValue("lsc_sort", $sort);
             $this->columns[$number]->setValue("lsc_filter", $filter);
+        }
+    }
+    
+    // entfernt die entsprechende Spalte aus der Konfiguration
+    // all : gibt an, ob alle folgenden Spalten auch geloescht werden sollen
+    function deleteColumn($number, $all = false)
+    {
+        if($number <= $this->countColumns())
+        {
+            if($all)
+            {
+                // alle Spalten ab der Nummer werden entfernt
+                for($new_number = $this->countColumns(); $new_number >= $number; $new_number--)
+                {
+                    $this->columns[$new_number]->delete();
+                    array_pop($this->columns);
+                }
+            }
+            else
+            {
+                // es wird nur die einzelne Spalte entfernt und alle folgenden Spalten ruecken eins nach vorne
+                for($new_number = $number; $new_number < $this->countColumns(); $new_number++)
+                {
+                    $this->columns[$new_number]->setValue("lsc_usf_id", $this->columns[$new_number+1]->getValue("lsc_usf_id"));
+                    $this->columns[$new_number]->setValue("lsc_special_field", $this->columns[$new_number+1]->getValue("lsc_special_field"));
+                    $this->columns[$new_number]->setValue("lsc_sort",   $this->columns[$new_number+1]->getValue("lsc_sort"));
+                    $this->columns[$new_number]->setValue("lsc_filter", $this->columns[$new_number+1]->getValue("lsc_filter"));
+                    $this->columns[$new_number]->save();
+                }
+                $this->columns[$new_number]->delete();
+                array_pop($this->columns);
+            }
         }
     }
     
