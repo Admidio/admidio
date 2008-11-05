@@ -13,6 +13,9 @@
  * lst_id : ID der Listenkonfiguration, die angezeigt werden soll
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
  * start  : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen 
+ * show_members : 0 - (Default) aktive Mitglieder der Rolle anzeigen
+ *                1 - Ehemalige Mitglieder der Rolle anzeigen
+ *                2 - Aktive und ehemalige Mitglieder der Rolle anzeigen
  *
  *****************************************************************************/
 
@@ -26,6 +29,7 @@ $arr_mode   = array("csv-ms", "csv-ms-2k", "csv-oo", "html", "print");
 $req_rol_id = 0;
 $req_lst_id = 0;
 $req_start  = 0;
+$show_members = 0;
 
 // Uebergabevariablen pruefen
 
@@ -61,6 +65,11 @@ if(isset($_GET['start']))
         $g_message->show("invalid");
     }
     $req_start = $_GET['start'];
+}
+
+if(isset($_GET['show_members']) && is_numeric($_GET['show_members']))
+{
+    $show_members = $_GET['show_members'];
 }
 
 if($req_rol_id > 0)
@@ -133,10 +142,15 @@ $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Rollenobjekt erzeugen
 $role = new TableRole($g_db, $req_rol_id);
+// falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
+if($role->getValue("rol_valid") == 0)
+{
+    $show_members = 1;
+}
 
 // Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
 $list = new ListConfiguration($g_db, $req_lst_id);
-$main_sql = $list->getSQL($role_ids);
+$main_sql = $list->getSQL($role_ids, $show_members);
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
 $result_list = $g_db->query($main_sql);
