@@ -130,7 +130,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 2 || $_GET["mode"] == 4)
     $_SESSION['role_ids'] = $role_ids;
 
     // weiterleiten zur allgemeinen Listeseite
-    header("Location: ".$g_root_path."/adm_program/modules/lists/lists_show.php?lst_id=".$list->getValue("lst_id")."&mode=html");
+    header("Location: ".$g_root_path."/adm_program/modules/lists/lists_show.php?lst_id=".$list->getValue("lst_id")."&mode=html&show_members=". $_POST['show_members']);
     exit();
 }
 elseif ($_GET["mode"] == 3)

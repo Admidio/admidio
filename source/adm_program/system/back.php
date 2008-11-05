@@ -18,10 +18,12 @@ $_SESSION['navigation']->deleteLastUrl();
 
 // Jetzt die "neue" letzte Url aufrufen
 $next_url = $_SESSION['navigation']->getUrl();
+
+// wurde keine Seite gefunden, dann immer die Startseite anzeigen
 if(strlen($next_url) == 0)
 {
     $next_url = $g_homepage;
 }
-header("Location: $next_url");
+header("Location: ".$next_url);
  
 ?>

@@ -11,10 +11,11 @@
  *
  * lst_id : Liste deren Konfiguration direkt angezeigt werden soll
  * rol_id : das Feld Rolle kann mit der entsprechenden Rolle vorbelegt werden
- * active_role   : 1 - (Default) aktive Rollen auflisten
- *                 0 - Ehemalige Rollen auflisten
- * active_member : 1 - (Default) aktive Mitglieder der Rolle anzeigen
- *                 0 - Ehemalige Mitglieder der Rolle anzeigen
+ * active_role  : 1 - (Default) aktive Rollen auflisten
+ *                0 - Ehemalige Rollen auflisten
+ * show_members : 0 - (Default) aktive Mitglieder der Rolle anzeigen
+ *                1 - Ehemalige Mitglieder der Rolle anzeigen
+ *                2 - Aktive und ehemalige Mitglieder der Rolle anzeigen
  *
  *****************************************************************************/
 
@@ -25,6 +26,8 @@ require("../../system/classes/list_configuration.php");
 // Uebergabevariablen pruefen und ggf. vorbelegen
 $req_lst_id = 0;
 $req_rol_id = 0;
+$active_role  = 1;
+$show_members = 0;
 
 if(isset($_GET['lst_id']))
 {
@@ -44,38 +47,14 @@ if(isset($_GET['rol_id']))
     $req_rol_id = $_GET["rol_id"];
 }  
 
-if(!isset($_GET['active_role']))
+if(isset($_GET['active_role']) && is_numeric($_GET['show_members']))
 {
-    $active_role = 1;
-}
-else
-{
-    if($_GET['active_role'] != 0
-    && $_GET['active_role'] != 1)
-    {
-        $active_role = 1;
-    }
-    else
-    {
-        $active_role = $_GET['active_role'];
-    }
+    $active_role = $_GET['active_role'];
 }   
 
-if(!isset($_GET['active_member']))
+if(isset($_GET['show_members']) && is_numeric($_GET['show_members']))
 {
-    $active_member = 1;
-}
-else
-{
-    if($_GET['active_member'] != 0
-    && $_GET['active_member'] != 1)
-    {
-        $active_member = 1;
-    }
-    else
-    {
-        $active_member = $_GET['active_member'];
-    }
+    $show_members = $_GET['show_members'];
 }  
 
 if($req_rol_id == 0)
@@ -96,10 +75,6 @@ if(isset($_SESSION['mylist_request']))
     $form_values = strStripSlashesDeep($_SESSION['mylist_request']);
     unset($_SESSION['mylist_request']);
     $req_rol_id = $form_values['rol_id'];
-    if(isset($form_values['former']) && $form_values['former'] == 1)
-    {
-        $active_member = 0;
-    }
     
     // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, 
     // muessen diese nun direkt angelegt werden
@@ -559,14 +534,18 @@ echo '
         // Combobox mit allen Rollen ausgeben
         echo generateRoleSelectBox($req_rol_id);
 
-        echo "&nbsp;&nbsp;&nbsp;
-        <input type=\"checkbox\" id=\"former\" name=\"former\" value=\"1\" ";
-            if(!$active_member) 
-            {
-                echo " checked=\"checked\" ";
-            }
-            echo ' />
-        <label for="former">nur Ehemalige</label></p>
+        // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
+        $selected[0] = "";
+        $selected[1] = "";
+        $selected[2] = "";
+        $selected[$show_members] = ' selected="selected" ';
+        
+        echo '&nbsp;&nbsp;&nbsp;
+        <select size="1" id="show_members" name="show_members">
+            <option '.$selected[0].' value="0">Aktive Mitglieder</option>
+            <option '.$selected[1].' value="1">Ehemalige Mitglieder</option>
+            <option '.$selected[2].' value="2">Aktive und Ehemalige</option>
+        </select>
         
         <hr />
 

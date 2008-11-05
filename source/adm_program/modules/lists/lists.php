@@ -165,7 +165,7 @@ $g_layout['header'] = $g_js_vars. "
                 if($active_role)
                     $g_layout['header'] = $g_layout['header']. ";";
                 else
-                    $g_layout['header'] = $g_layout['header']. " + '&active_role=0&active_member=0';";
+                    $g_layout['header'] = $g_layout['header']. " + '&active_role=0&show_members=1';";
                 $g_layout['header'] = $g_layout['header']. "
             }
             else
