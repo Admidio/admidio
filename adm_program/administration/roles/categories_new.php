@@ -15,7 +15,7 @@
  *         LNK = Linkkategorien
  *
  ****************************************************************************/
- 
+
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/classes/table_category.php");
@@ -24,11 +24,15 @@ require("../../system/classes/table_category.php");
 $req_cat_id = 0;
 
 // Uebergabevariablen pruefen
+$title = "Kategorie";
+if (isset($_GET['title'])) {
+   $title = $_GET['title'];
+}
 
 // Modus und Rechte pruefen
 if(isset($_GET['type']))
 {
-    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK" && $_GET['type'] != "USF")
+    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK" && $_GET['type'] != "USF" && $_GET['type'] != "DAT")
     {
         $g_message->show("invalid");
     }
@@ -41,6 +45,10 @@ if(isset($_GET['type']))
         $g_message->show("norights");
     }
     if($_GET['type'] == "USF" && $g_current_user->editUsers() == false)
+    {
+        $g_message->show("norights");
+    }
+    if($_GET['type'] == "DAT" && $g_current_user->editUsers() == false)
     {
         $g_message->show("norights");
     }
@@ -67,7 +75,7 @@ $category = new TableCategory($g_db);
 if($req_cat_id > 0)
 {
     $category->readData($req_cat_id);
-    
+
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue("cat_org_id") >  0
     && $category->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
@@ -85,7 +93,7 @@ if(isset($_SESSION['categories_request']))
         if(strpos($key, "cat_") == 0)
         {
             $category->setValue($key, stripslashes($value));
-        }        
+        }
     }
     unset($_SESSION['categories_request']);
 }
@@ -93,11 +101,11 @@ if(isset($_SESSION['categories_request']))
 // Html-Kopf ausgeben
 if($req_cat_id > 0)
 {
-    $g_layout['title']  = "Kategorie ändern";
+    $g_layout['title']  = "$title ändern";
 }
 else
 {
-    $g_layout['title']  = "Kategorie anlegen";
+    $g_layout['title']  = "$title anlegen";
 }
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -117,7 +125,7 @@ echo "
                     </dd>
                 </dl>
             </li>";
-            
+
             if($_GET['type'] == "USF" && $category->getValue("cat_system") == 0)
             {
                 // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
@@ -135,9 +143,9 @@ echo "
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                                <label for=\"cat_org_id\">Kategorie für mehrere Organisationen sichtbar</label>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"\" 
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=category_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\" 
+                                <label for=\"cat_org_id\">$title für mehrere Organisationen sichtbar</label>
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"\"
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=category_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\"
                                     onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=category_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
                             </dd>
                         </dl>
@@ -150,7 +158,7 @@ echo "
                 <li>
                     <dl>
                         <dt>
-                            <label for=\"cat_hidden\"><img src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar\" /></label>
+                            <label for=\"cat_hidden\"><img src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"$title nur f&uuml;r eingeloggte Benutzer sichtbar\" /></label>
                         </dt>
                         <dd>
                             <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
@@ -159,7 +167,7 @@ echo "
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                            <label for=\"cat_hidden\">Kategorie nur f&uuml;r eingeloggte Benutzer sichtbar</label>
+                            <label for=\"cat_hidden\">$title nur f&uuml;r eingeloggte Benutzer sichtbar</label>
                         </dd>
                     </dl>
                 </li>";
@@ -178,7 +186,7 @@ echo "
 <ul class=\"iconTextLinkList\">
     <li>
         <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+            <a href=\"$g_root_path/adm_program/system/back.php\"><img
             src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>

@@ -14,6 +14,7 @@
  * start        - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
  * headline     - Ueberschrift, die ueber den Terminen steht
  *                (Default) Termine
+ * category     - Angabe der Kategorie damit auch nur eine angezeigt werden kann.
  * id           - Nur einen einzigen Termin anzeigen lassen.
  * date         - Alle Termine zu einem Datum werden aufgelistet
  *                Uebergabeformat: YYYYMMDD
@@ -44,6 +45,12 @@ $req_id       = 0;
 $sql_datum    = "";
 
 // Uebergabevariablen pruefen
+
+//Kontrolle ob nur Kategorien angezeigt werden
+if(isset($_GET['category']) == false)
+{
+    $_GET['category'] = Null;
+}
 
 if(isset($_GET['mode']))
 {
@@ -132,6 +139,8 @@ echo "</h1>";
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = "";
+$hidden = "";
+$conditions = "";
 $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $key => $value)
@@ -140,35 +149,50 @@ foreach($arr_ref_orgas as $key => $value)
 }
 $organizations = $organizations. $g_current_organization->getValue("org_id");
 
-// falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
+if ($g_valid_login == false)
+{
+	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+	$hidden = " AND cat_hidden = 0 ";
+}
+
+// falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
 if($req_id > 0)
 {
-    $conditions = " AND dat_id = $req_id ";
+    $conditions = " AND dat_id = $req_id ".$hidden;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
+   if (strlen($_GET['category']) != NULL)
+   {
+	  // alle Termine zu einer Kategorie anzeigen
+	  $conditions = " AND cat_name   = '". $_GET['category']. "' ";
+   }
     // Termine an einem Tag suchen
     if(strlen($sql_datum) > 0)
     {
-        $conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d')       <= '$sql_datum'
-                          AND DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$sql_datum 00:00:00' 
-                        ORDER BY dat_begin ASC ";       
+        $conditions = $conditions."   AND DATE_FORMAT(dat_begin, '%Y-%m-%d')       <= '$sql_datum'
+                          AND DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$sql_datum 00:00:00'
+                          $hidden
+                        ORDER BY dat_begin ASC ";
     }
     //fuer alte Termine...
     elseif($req_mode == "old")
     {
-        $conditions = "   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') < '$act_date'
-                          AND DATE_FORMAT(dat_end, '%Y-%m-%d')   < '$act_date' 
+        $conditions = $conditions."   AND DATE_FORMAT(dat_begin, '%Y-%m-%d') < '$act_date'
+                          AND DATE_FORMAT(dat_end, '%Y-%m-%d')   < '$act_date'
+                          $hidden
                         ORDER BY dat_begin DESC ";
     }
     //... ansonsten fuer kommende Termine
     else
     {
-        $conditions = "   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '$act_date'
-                              OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$act_date 00:00:00' ) 
+        $conditions = $conditions."   AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '$act_date'
+                              OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$act_date 00:00:00' )
+                           $hidden
                         ORDER BY dat_begin ASC ";
     }
+
 }
 
 $sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
@@ -176,7 +200,7 @@ $sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
            AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                OR (   dat_global   = 1
                   AND cat_org_id IN ($organizations) ))
-               $conditions 
+               $conditions
          LIMIT $req_start, 10";
 $dates_result = $g_db->query($sql);
 
@@ -211,7 +235,14 @@ if($g_current_user->editDates())
                 <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
             </span>
         </li>
-    </ul>";    
+        <li>
+            <span class=\"iconTextLink\">
+               <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\"><img
+                  src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kalender pflegen\" /></a>
+               <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\">Kalender pflegen</a>
+            </span>
+        </li>
+    </ul>";
 }
 
 if($num_dates > 10)
@@ -255,16 +286,16 @@ else
                     echo ' ' . $date->getValue("dat_headline"). "
                 </div>
                 <div class=\"boxHeadRight\">
-                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $date->getValue("dat_id"). "&amp;mode=4\"><img 
+                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=". $date->getValue("dat_id"). "&amp;mode=4\"><img
                         src=\"". THEME_PATH. "/icons/database_out.png\" alt=\"Exportieren (iCal)\" title=\"Exportieren (iCal)\" /></a>";
-                    
+
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editDates())
                     {
                         if($date->editRight() == true)
                         {
                             echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=". $date->getValue("dat_id"). "&amp;headline=$req_headline\"><img 
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/dates/dates_new.php?dat_id=". $date->getValue("dat_id"). "&amp;headline=$req_headline\"><img
                                 src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
                         }
 
@@ -272,7 +303,7 @@ else
                         if($date->getValue("cat_org_id") == $g_current_organization->getValue("org_id"))
                         {
                             echo '
-                            <a class="iconLink" href="javascript:deleteObject(\'dat\', \'dat_'.$date->getValue("dat_id").'\','.$date->getValue("dat_id").',\''.$date->getValue("dat_headline").'\')"><img 
+                            <a class="iconLink" href="javascript:deleteObject(\'dat\', \'dat_'.$date->getValue("dat_id").'\','.$date->getValue("dat_id").',\''.$date->getValue("dat_headline").'\')"><img
                                 src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         }
                     }
@@ -282,7 +313,7 @@ else
             <div class=\"boxBody\">";
                 // Uhrzeit und Ort anzeigen, falls vorhanden
                 if ($date->getValue("dat_all_day") == 0 || strlen($date->getValue("dat_location")) > 0)
-                { 
+                {
                     echo '<div class="date_info_block">';
                         $margin_left_location = "0";
                         if ($date->getValue("dat_all_day") == 0)
@@ -294,12 +325,12 @@ else
                             </div>';
                             $margin_left_location = "40";
                         }
-    
+
                         if ($date->getValue("dat_location") != "")
                         {
-                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;</div>
-                            <div style="float: left;"><strong>'. $date->getValue("dat_location"). '</strong><br />';
-                                // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind, 
+                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;<br />Kalender:</div>
+                            <div style="float: left;"><strong>'. $date->getValue("dat_location"). '&nbsp;</strong>';
+                                // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
                                 // die jeweils laenger als 3 Zeichen sind
                                 $map_info_count = 0;
                                 foreach(split("[,; ]", $date->getValue("dat_location")) as $key => $value)
@@ -309,7 +340,7 @@ else
                                         $map_info_count++;
                                     }
                                 }
-                                
+
                                 if($g_preferences['dates_show_map_link']
                                 && $map_info_count > 1)
                                 {
@@ -318,7 +349,7 @@ else
                                         src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
                                         <a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank">Karte</a>
                                     </span>';
-                                    
+
                                     // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
                                     if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
                                     && (  strlen($g_current_user->getValue("PLZ"))  > 0 || strlen($g_current_user->getValue("Ort"))  > 0 ))
@@ -336,14 +367,26 @@ else
                                         {
                                             $route_url .= ",%20". urlencode($g_current_user->getValue("Land"));
                                         }
-        
+
                                         $route_url .= '&amp;daddr='. urlencode($date->getValue("dat_location"));
                                         echo ' - <a href="'. $route_url. '" target="_blank">Route anzeigen</a>';
                                     }
                                 }
-                            echo '</div>';
+                            echo '<br /><strong>'. $date->getValue("cat_name"). '</strong></div>';
+                           //echo '<div style="float: left;"><strong>'. $date->getValue("cat_name"). '&nbsp;</strong></div>';
+                        } else {
+                           echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:</div>
+                            <div style="float: left;"><strong>'. $date->getValue("cat_name"). '&nbsp;</strong></div>';
                         }
                     echo '</div>';
+                } else {
+                  echo '<div class="date_info_block">';
+                  $margin_left_location = "0";
+                  echo '<div style="float: left;">Kalender:</div>
+                        <div style="float: left;">
+                           <strong>'.$date->getValue("cat_name"). '</strong>
+                        </div>';
+                  echo '</div>';
                 }
                 echo '<div class="date_description" style="clear: left;">';
                     // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
@@ -380,7 +423,7 @@ if($num_dates > 10)
     $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
     echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
 }
-        
+
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
