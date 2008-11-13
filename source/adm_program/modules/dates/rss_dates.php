@@ -50,11 +50,21 @@ foreach($arr_orgas as $key => $value)
 }
 $organizations = $organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
 
+$hidden = "";
+if ($g_valid_login == false)
+{
+	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+	$hidden = " AND cat_hidden = 0 ";
+}
+
 // aktuelle Termine aus DB holen die zur Orga passen
-$sql = "SELECT * FROM ". TBL_DATES. "
-        WHERE ( dat_org_shortname = '".$g_current_organization->getValue("org_shortname")."'
-        OR ( dat_global = 1 AND dat_org_shortname IN ($organizations) ))
+$sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
+        WHERE dat_cat_id = cat_id
+        AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
+            OR (   dat_global   = 1
+            AND cat_org_id IN ($organizations) ))
         AND ( dat_begin >= '".date("Y-m-d h:i:s", time())."' OR dat_end >= '".date("Y-m-d h:i:s", time())."' )
+        ".$hidden."
         ORDER BY dat_begin ASC
         LIMIT 10 ";
 $result = $g_db->query($sql);
@@ -115,10 +125,10 @@ while ($row = $g_db->fetch_object($result))
     }
 
     $description = $description. '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue("org_homepage"). '</a>';
-    
+
     //i-cal downloadlink
-    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue("dat_id").'&mode=4">Termin in meinen Kalender übernehmen</a>';
-    
+    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue("dat_id").'&mode=4">Termin in meinen Kalender Ã¼bernehmen</a>';
+
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
     $user = new User($g_db, $date->getValue("dat_usr_id_create"));
     $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
@@ -130,7 +140,7 @@ while ($row = $g_db->fetch_object($result))
         $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_change")). "</i>";
     }
-    
+
     $pubDate = date('r',strtotime($date->getValue("dat_timestamp_create")));
 
 

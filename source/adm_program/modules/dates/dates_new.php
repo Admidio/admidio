@@ -301,6 +301,36 @@ echo "
                         }
                     echo "</dd>
                 </dl>
+                <dl>
+                    <dt><label for=\"dat_cat_id\">Kategorie:</label></dt>
+                    <dd>
+                        <select id=\"dat_cat_id\" name=\"dat_cat_id\" size=\"1\" tabindex=\"3\">
+                            <option value=\" \"";
+                           if($date->getValue("dat_cat_id") == 0)
+                           {
+                              echo " selected=\"selected\"";
+                           }
+                              echo ">- Bitte wählen -</option>";
+
+                            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
+                                     WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                                       AND cat_type   = 'DAT'
+                                     ORDER BY cat_sequence ASC ";
+                            $result = $g_db->query($sql);
+
+                            while($row = $g_db->fetch_object($result))
+                            {
+                                echo "<option value=\"$row->cat_id\"";
+                                    if($date->getValue("dat_cat_id") == $row->cat_id)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                echo ">$row->cat_name</option>";
+                            }
+                        echo "</select>
+                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
             </li>
             ";
          if ($g_preferences['enable_bbcode'] == 1)
@@ -335,8 +365,8 @@ echo "
                                 <a class=\"iconLink\" href=\"javascript:bbcodeclose();\"><img id=\"all-closed\"
                                     src=\"". THEME_PATH. "/icons/delete.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
                                 <img class=\"iconLink\" src=\"". THEME_PATH. "/icons/help.png\"
-                                    onclick=\"javascript:window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes');\" 
-                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=bbcode',this);\" 
+                                    onclick=\"javascript:window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes');\"
+                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=bbcode',this);\"
                                     onmouseout=\"ajax_hideTooltip()\" alt=\"Hilfe\" title=\"\" />
                             </div>
                         </div>
