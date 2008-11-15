@@ -126,7 +126,7 @@ if($req_members)
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       $search_condition
-                ORDER BY last_name.usd_value ";
+                ORDER BY last_name.usd_value, first_name.usd_value ";
 }
 else
 {
@@ -159,7 +159,7 @@ else
                 WHERE usr_valid = 1
                       $search_condition
                 GROUP BY usr_id
-                ORDER BY last_name.usd_value ";
+                ORDER BY last_name.usd_value, first_name.usd_value ";
 }
 $result_mgl  = $g_db->query($sql);
 $num_members = $g_db->num_rows($result_mgl);
