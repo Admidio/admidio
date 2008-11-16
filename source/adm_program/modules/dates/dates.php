@@ -106,13 +106,10 @@ if(array_key_exists("date", $_GET))
 // Prüfen ob Box angezeigt werden soll und setzten des Flags
 if ($g_preferences['show_dat_sel'] == 1) {
    $show_dat_sel = 1;
+} else {
+   $show_dat_sel = 0;
 }
-
-if(isset($_GET['category-selection']) == false)
-{
-    $show_dat_sel = 1;
-}
-else
+if(isset($_GET['category-selection']) != false)
 {
     if($_GET['category-selection'] == 1)
     {
@@ -289,7 +286,6 @@ if($num_dates > 10)
     echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
 }
 
-//$show_dat_sel = 1;
 //Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
 if(($show_dat_sel == 1) && ($req_id == 0))
    {

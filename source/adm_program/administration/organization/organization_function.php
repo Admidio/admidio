@@ -16,7 +16,7 @@ require("../../system/classes/table_text.php");
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show("norights"); 
+    $g_message->show("norights");
 }
 
 $_SESSION['organization_request'] = $_REQUEST;
@@ -52,7 +52,7 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
     $g_message->show("feld", "Automatischer Logout");
 }
 
-// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
+// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
 // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
 $checkboxes = array('dates_show_map_link'
@@ -79,7 +79,8 @@ $checkboxes = array('dates_show_map_link'
                    ,'profile_show_roles'
                    ,'profile_show_former_roles'
                    ,'profile_show_extern_roles'
-				   ,'hide_list_overview_details');
+				       ,'hide_list_overview_details'
+                   ,'show_dat_sel');
 
 foreach($checkboxes as $key => $value)
 {
@@ -103,9 +104,9 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
         {
             $_POST['forum_pw'] = $g_preferences['forum_pw'];
         }
-        
+
         $forum_test = Forum::createForumObject($_POST['forum_version']);
-        
+
         if($_POST['forum_sqldata_from_admidio'] == 0)
         {
             $connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
@@ -150,7 +151,7 @@ foreach($_POST as $key => $value)
             // 0000 bedeutet, dass das PW sich nicht veraendert hat
             if($key == "forum_pw" && $value == "0000")
             {
-                $g_preferences[$key] = $g_preferences[$key]; 
+                $g_preferences[$key] = $g_preferences[$key];
             }
             else
             {
