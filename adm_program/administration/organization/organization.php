@@ -46,7 +46,7 @@ else
     {
         $form_values[$key] = $value;
     }
-    
+
     // Forumpassword immer auf 0000 setzen, damit es nicht ausgelesen werden kann
     $form_values['forum_pw'] = "0000";
 }
@@ -65,7 +65,7 @@ $g_layout['header'] =  "
     <script type=\"text/javascript\"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 'forum',
-                        'guestbook-module', 'list-module', 'mail-module', 'system-mail', 'ecard-module', 'profile-module', 
+                        'guestbook-module', 'list-module', 'mail-module', 'system-mail', 'ecard-module', 'profile-module',
                         'dates-module', 'links-module');
 
 
@@ -99,7 +99,7 @@ $g_layout['header'] =  "
                 }
             }
             else if(document.getElementById(LayerSetting))
-            {            
+            {
                     document.getElementById(LayerSetting).innerHTML = \"\";
             }
         }
@@ -118,7 +118,7 @@ $g_layout['header'] =  "
                 document.getElementById('forum_db').value = '';
             }
             else if (document.getElementById(LayerSwith).checked == false && layerSetting)
-            {             
+            {
                 var ElementsArray = Array('forum_srv','forum_usr','forum_pw','forum_db');
                 var ValuesArray = Array();
                 ValuesArray[0] = Array(\"Server:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_srv']. "\");
@@ -126,7 +126,7 @@ $g_layout['header'] =  "
                 ValuesArray[2] = Array(\"Passwort:\",\"PASSWORD\",\"200px\",\"50\",\"". $form_values['forum_pw']. "\");
                 ValuesArray[3] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
                 appendElements(ElementsArray,ValuesArray,layerSetting);
-                
+
                 document.getElementById('forum_access_data').style.visibility = 'visible';
                 document.getElementById('forum_access_data').style.display    = '';
                 document.getElementById('forum_access_data_text').style.visibility = 'visible';
@@ -329,7 +329,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
                         aus dem Ordner adm_themes angezeigt.
-                    </li>                    
+                    </li>
                     <li>
                         <dl>
                             <dt><label for=\"homepage_logout\">Startseite (Besucher):</label></dt>
@@ -482,7 +482,7 @@ echo "
                         Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung
                         wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat.
                     </li>
-                    
+
                      <li>
                         <dl>
                             <dt><label for=\"enable_password_recovery\">Passwort zusenden:</label>
@@ -498,8 +498,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch 
-                        zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den 
+                        Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch
+                        zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den
                         Administrator stellen.
                     </li>
                 </ul>
@@ -582,7 +582,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Mitglieder aller Rollen mit der Berechtigung <strong>Registrierungen verwalten und zuordnen</strong> erhalten eine E-Mail, 
+                        Mitglieder aller Rollen mit der Berechtigung <strong>Registrierungen verwalten und zuordnen</strong> erhalten eine E-Mail,
                         sobald sich ein neuer User im System registriert hat.
                     </li>
                 </ul>
@@ -726,7 +726,7 @@ echo "
                         für beide Gruppen dann nicht mehr aufrufbar.<br /><br />
                         <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
                         Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur f&uuml;r registrierte Benutzer&rdquo;, wird nur der Zugriff &uuml;ber
-                        die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt.        
+                        die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt.
                     </li>
                     <li>
                         <dl>
@@ -756,8 +756,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, wie die Bilder im Fotomodul präsentiert werden sollen. 
-                        dies kann über ein Popup-Fenster, über eine Javascript-Animation (Lightbox) oder auf 
+                        Hier kann eingestellt werden, wie die Bilder im Fotomodul präsentiert werden sollen.
+                        dies kann über ein Popup-Fenster, über eine Javascript-Animation (Lightbox) oder auf
                         dergleichen Seite in normalem HTML erfolgen.
                     </li>
                     <li>
@@ -904,7 +904,7 @@ echo "
                 </ul>
             </div>
         </div>";
-        
+
         /**************************************************************************************/
         //Einstellungen Forum
         /**************************************************************************************/
@@ -915,7 +915,7 @@ echo "
                 Einstellungen Forum</div>
             <div class=\"groupBoxBody\">
                 <ul class=\"formFieldList\">
-                    <li> 
+                    <li>
                         <dl>
                             <dt><label for=\"enable_forum_interface\">Forum aktivieren:</label></dt>
                             <dd>
@@ -925,7 +925,7 @@ echo "
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                            </dd>                            
+                            </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -951,7 +951,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Welches Forum soll genutzt werden?<br/>
                         <table summary=\"Forum_Auflistung\" border=\"0\">
-                            <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>                    
+                            <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
                         </table>
                     </li>
                     <li>
@@ -964,7 +964,7 @@ echo "
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                            </dd>                            
+                            </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -980,7 +980,7 @@ echo "
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                            </dd>                            
+                            </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -1027,7 +1027,7 @@ echo "
                     </li>
                     <li id=\"forum_access_data_text\" class=\"smallFontSize\">
                         Hier müssen die Zugangsdaten des Forums eingegeben werden, falls ein solches ausgewählt und aktiviert wurde.
-                    </li>                
+                    </li>
                 </ul>
             </div>
         </div>";
@@ -1297,9 +1297,9 @@ echo "
                         werden als Systemmail verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden.
                         Es sei denn der Server unterstützt keinen Mailversand.
                         Das E-Mailmodul ist durch die Deaktivierung nicht betroffen.<br /><br />
-                        
-                        Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und 
-                        werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann 
+
+                        Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und
+                        werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann
                         der jeweilige Inhalt für diesen Bereich.<br /><br />
                         In jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden:<br />
                         <strong>%user_first_name%</strong> - Vorname des Benutzers aus dem jeweiligen Mailkontext<br />
@@ -1321,7 +1321,7 @@ echo "
                     echo '<li>
                         <br />Benachrichtung des Webmasters nach einer Registrierung:<br />
                         <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
-                    </li>';                  
+                    </li>';
                     $text->readData("SYSMAIL_NEW_PASSWORD");
                     echo '<li>
                         <br />Neues Passwort zuschicken:<br />
@@ -1349,7 +1349,7 @@ echo "
             </div>
         </div>';
 
-        
+
         /**************************************************************************************/
         //Einstellungen Grußkartenmodul
         /**************************************************************************************/
@@ -1389,7 +1389,7 @@ echo "
                                         <td>&nbsp;</td>
                                     </tr>
                                     <tr>
-                                       
+
                                         <td><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" /></td>
                                         <td>Pixel</td>
                                         <td style=\"padding-left:20px;\"><input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /></td>
@@ -1414,7 +1414,7 @@ echo "
                                         <td style=\"padding-left:20px;\">Höhe: </td>
                                         <td>&nbsp;</td>
                                     </tr>
-                                    <tr>                             
+                                    <tr>
                                         <td>
                                             <input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
                                         </td>
@@ -1602,7 +1602,7 @@ echo "
                     $name = $data_array[$i];
                 }
                 if($name != "")
-                {   
+                {
                     if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
                     {
                         $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
@@ -1632,7 +1632,7 @@ echo "
             $temp_data .='</select>';
             return $temp_data;
         }
-        
+
         /**************************************************************************************/
         //Einstellungen Profilmodul
         /**************************************************************************************/
@@ -1815,6 +1815,23 @@ echo "
                     <li class=\"smallFontSize\">
                         Wird ein Treffpunkt angegeben, so wird versucht ein Link zu Google-Maps zu erstellen,
                         welcher den Treffpunkt anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"dates_show_sel\">Auswahlbox anzeigen:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"show_dat_sel\" name=\"show_dat_sel\" ";
+                                if(isset($form_values['show_dat_sel']) && $form_values['show_dat_sel'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine
+                        schnelle Suche nach einem Termin zu ermöglichen.
                     </li>
                 </ul>
             </div>

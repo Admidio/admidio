@@ -64,7 +64,7 @@ $date = new TableDate($g_db);
 if($req_dat_id > 0)
 {
     $date->readData($req_dat_id);
-    
+
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false )
     {
@@ -75,7 +75,7 @@ if($req_dat_id > 0)
 if($_GET["mode"] == 1)
 {
     $_SESSION['dates_request'] = $_REQUEST;
-    
+
     if(strlen($_POST['dat_headline']) == 0)
     {
         $g_message->show("feld", "Überschrift");
@@ -100,16 +100,20 @@ if($_GET["mode"] == 1)
     {
         $g_message->show("feld", "Uhrzeit Ende");
     }
-    
+    if(strlen($_POST['dat_cat_id']) == 0)
+    {
+        $g_message->show("feld", "Kalender");
+    }
+
     if(isset($_POST['dat_all_day']))
     {
         $_POST['time_from'] = "00:00";
         $_POST['time_to'] = "00:00";
         $date->setValue("dat_all_day", 1);
     }
-    
+
     // Datum und Uhrzeit auf Gueltigkeit pruefen
-    
+
     if(dtCheckDate($_POST['date_from']))
     {
         if(strlen($_POST['time_from']) > 0 && dtCheckTime($_POST['time_from']))
@@ -143,7 +147,7 @@ if($_GET["mode"] == 1)
     }
 
     if(dtCheckDate($_POST['date_to']))
-    {   
+    {
         if(strlen($_POST['time_to']) > 0 && dtCheckTime($_POST['time_to']))
         {
             // Datum & Uhrzeit formatiert zurueckschreiben
@@ -178,7 +182,7 @@ if($_GET["mode"] == 1)
     {
         $_POST['dat_all_day'] = 0;
     }
-    
+
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)
     {
@@ -187,7 +191,7 @@ if($_GET["mode"] == 1)
             $date->setValue($key, $value);
         }
     }
-    
+
     // Daten in Datenbank schreiben
     $return_code = $date->save();
 
