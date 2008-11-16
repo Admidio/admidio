@@ -268,14 +268,14 @@ if($g_current_user->editDates())
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
-                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Termin anlegen\" /></a>
+                src=\"". THEME_PATH. "/icons/add.png\" alt=\"Termin anlegen\" title=\"Termin anlegen\"/></a>
                 <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
             </span>
         </li>
         <li>
             <span class=\"iconTextLink\">
                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\"><img
-                  src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kalender pflegen\" /></a>
+                  src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kalender pflegen\" title=\"Kalender pflegen\"/></a>
                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\">Kalender pflegen</a>
             </span>
         </li>
@@ -420,7 +420,7 @@ else
                                 if($g_preferences['dates_show_map_link']
                                 && $map_info_count > 1)
                                 {
-                                    echo '<a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank"><strong>'.$date->getValue("dat_location").'</strong></a>';
+                                    echo '<a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank" title="Auf Karte zeigen"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
                                     // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
                                     if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
@@ -442,7 +442,7 @@ else
 
                                         $route_url .= '&amp;daddr='. urlencode($date->getValue("dat_location"));
                                         echo '<spam class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
-                                        src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" /></a></spam>';
+                                        src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" title="Route anzeigen"/></a></spam>';
                                     }
                                 } else {
                                     echo '<strong>'. $date->getValue("dat_location"). '</strong>';
