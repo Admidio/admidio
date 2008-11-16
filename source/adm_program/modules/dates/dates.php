@@ -9,15 +9,20 @@
  *
  * Uebergaben:
  *
- * mode: actual - (Default) Alle aktuellen und zukuenftige Termine anzeigen
- *       old    - Alle bereits erledigten
- * start        - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
- * headline     - Ueberschrift, die ueber den Terminen steht
- *                (Default) Termine
- * category     - Angabe der Kategorie damit auch nur eine angezeigt werden kann.
- * id           - Nur einen einzigen Termin anzeigen lassen.
- * date         - Alle Termine zu einem Datum werden aufgelistet
- *                Uebergabeformat: YYYYMMDD
+ * mode: actual         - (Default) Alle aktuellen und zukuenftige Termine
+ *                         anzeigen
+ *       old            - Alle bereits erledigten
+ * start                - Angabe, ab welchem Datensatz Termine angezeigt werden
+ *                        sollen
+ * headline             - Ueberschrift, die ueber den Terminen steht
+ *                      (Default) Termine
+ * category             - Angabe der Kategorie damit auch nur eine angezeigt
+ *                        werden kann.
+ * id                   - Nur einen einzigen Termin anzeigen lassen.
+ * date                 - Alle Termine zu einem Datum werden aufgelistet
+ *                        Uebergabeformat: YYYYMMDD
+ * category-selection   - 1: Es wird die Box angezeigt
+ *                        0: Es wird keine Box angezeigt
  *
  *****************************************************************************/
 
@@ -46,11 +51,13 @@ $sql_datum    = "";
 
 // Uebergabevariablen pruefen
 
-//Kontrolle ob nur Kategorien angezeigt werden
+//Kontrolle ob nur ein Kalender angezeigt werden soll
 if(isset($_GET['category']) == false)
 {
     $_GET['category'] = Null;
 }
+$category = $_GET['category'];
+
 
 if(isset($_GET['mode']))
 {
@@ -96,6 +103,27 @@ if(array_key_exists("date", $_GET))
     }
 }
 
+// Prüfen ob Box angezeigt werden soll und setzten des Flags
+if ($g_preferences['show_dat_sel'] == 1) {
+   $show_dat_sel = 1;
+}
+
+if(isset($_GET['category-selection']) == false)
+{
+    $show_dat_sel = 1;
+}
+else
+{
+    if($_GET['category-selection'] == 1)
+    {
+        $show_dat_sel = 1;
+    }
+    else if ($_GET['category-selection'] == 0)
+    {
+        $show_dat_sel = 0;
+    }
+}
+
 if($g_preferences['enable_bbcode'] == 1)
 {
     // Klasse fuer BBCode
@@ -125,6 +153,15 @@ if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] ==
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
+echo" <script type=\"text/javascript\"><!--
+        function showCategory()
+        {
+          if (document.getElementById('category').selectedIndex != 0) {
+            var category = document.getElementById('category').value;
+            self.location.href = 'dates.php?category='+category;
+          } else { self.location.href = 'dates.php';}
+        }
+    //--></script>";
 echo "
 <h1 class=\"moduleHeadline\">";
     if($req_mode == "old")
@@ -252,6 +289,46 @@ if($num_dates > 10)
     echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
 }
 
+//$show_dat_sel = 1;
+//Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
+if(($show_dat_sel == 1) && ($req_id == 0))
+   {
+   // Combobox mit allen Kategorien anzeigen
+   $sql = "SELECT DISTINCT cat_name
+            FROM ". TBL_CATEGORIES. "
+            WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
+            AND cat_type   = 'DAT'";
+   if($g_valid_login == false)
+   {
+     $sql .= " AND cat_hidden = 0 ";
+   }
+   $sql .= " ORDER BY cat_sequence ASC ";
+   $result = $g_db->query($sql);
+
+   if($g_db->num_rows($result) > 0)
+   {
+       echo '<p>Kalender wählen:&nbsp;&nbsp;
+      <select size="1" id="category" onchange="showCategory()">
+         <option value="Alle" ';
+         if(strlen($_GET['category']) == 0)
+         {
+             echo ' selected="selected" ';
+         }
+         echo '>Alle</option>';
+
+         while($row = $g_db->fetch_object($result))
+         {
+             echo '<option value="'. urlencode($row->cat_name). '"';
+             if($_GET['category'] == $row->cat_name)
+             {
+                 echo ' selected="selected" ';
+             }
+             echo '>'.$row->cat_name.'</option>';
+         }
+     echo '</select></p>';
+      }
+}
+
 if($g_db->num_rows($dates_result) == 0)
 {
     // Keine Termine gefunden
@@ -267,7 +344,6 @@ if($g_db->num_rows($dates_result) == 0)
 else
 {
     $date = new TableDate($g_db);
-
     // Termine auflisten
     while($row = $g_db->fetch_array($dates_result))
     {
@@ -328,8 +404,8 @@ else
 
                         if ($date->getValue("dat_location") != "")
                         {
-                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Treffpunkt:&nbsp;<br />Kalender:</div>
-                            <div style="float: left;"><strong>'. $date->getValue("dat_location"). '&nbsp;</strong>';
+                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:&nbsp;<br />Treffpunkt:</div>
+                            <strong>'. $date->getValue("cat_name"). '</strong><br/><div>';
                                 // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
                                 // die jeweils laenger als 3 Zeichen sind
                                 $map_info_count = 0;
@@ -344,11 +420,7 @@ else
                                 if($g_preferences['dates_show_map_link']
                                 && $map_info_count > 1)
                                 {
-                                    echo '<span class="iconTextLink">
-                                        <a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank"><img
-                                        src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
-                                        <a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank">Karte</a>
-                                    </span>';
+                                    echo '<a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank"><strong>'.$date->getValue("dat_location").'</strong></a>';
 
                                     // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
                                     if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
@@ -369,10 +441,13 @@ else
                                         }
 
                                         $route_url .= '&amp;daddr='. urlencode($date->getValue("dat_location"));
-                                        echo ' - <a href="'. $route_url. '" target="_blank">Route anzeigen</a>';
+                                        echo '<spam class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
+                                        src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" /></a></spam>';
                                     }
+                                } else {
+                                    echo '<strong>'. $date->getValue("dat_location"). '</strong>';
                                 }
-                            echo '<br /><strong>'. $date->getValue("cat_name"). '</strong></div>';
+                            echo '</div>';
                            //echo '<div style="float: left;"><strong>'. $date->getValue("cat_name"). '&nbsp;</strong></div>';
                         } else {
                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:</div>

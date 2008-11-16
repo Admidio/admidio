@@ -62,7 +62,7 @@ $orga_preferences = array(
     'forum_usr'             => '',
     'forum_pw'              => '',
     'forum_set_admin'       => '1',
-    
+
     // Gaestebuch
     'enable_guestbook_module'           => '1',
     'enable_guestbook_captcha'          => '1',
@@ -79,7 +79,7 @@ $orga_preferences = array(
     'enable_mail_module'        => '1',
     'max_email_attachment_size' => '1024',
     'enable_mail_captcha'       => '1',
-    
+
     // Systemmail
     'enable_system_mails'       => '1',
 
@@ -108,6 +108,7 @@ $orga_preferences = array(
     // Termine
     'enable_dates_module'       => '1',
     'dates_show_map_link'       => '1',
+    'show_dat_sel'              => '1',
 
     // Weblinks
     'enable_weblinks_module' => '1'
