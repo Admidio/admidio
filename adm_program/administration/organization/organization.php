@@ -1821,11 +1821,11 @@ echo "
                             <dt><label for=\"dates_show_sel\">Auswahlbox anzeigen:</label></dt>
                             <dd>
                                 <input type=\"checkbox\" id=\"show_dat_sel\" name=\"show_dat_sel\" ";
-                                if(isset($form_values['show_dat_sel']) && $form_values['show_dat_sel'] == 1)
+                                if($g_preferences['show_dat_sel'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo " value=\"1\"/>
                             </dd>
                         </dl>
                     </li>
