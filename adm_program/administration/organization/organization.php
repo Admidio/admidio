@@ -1185,10 +1185,10 @@ echo "
                     </li>
 					<li>
                         <dl>
-                            <dt><label for=\"hide_list_overview_details\">Details in Übersicht einklappen:</label></dt>
+                            <dt><label for=\"lists_hide_overview_details\">Details in Übersicht einklappen:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"hide_list_overview_details\" name=\"hide_list_overview_details\" ";
-                                if(isset($form_values['hide_list_overview_details']) && $form_values['hide_list_overview_details'] == 1)
+                                <input type=\"checkbox\" id=\"lists_hide_overview_details\" name=\"lists_hide_overview_details\" ";
+                                if(isset($form_values['lists_hide_overview_details']) && $form_values['lists_hide_overview_details'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
@@ -1820,8 +1820,8 @@ echo "
                         <dl>
                             <dt><label for=\"dates_show_sel\">Auswahlbox anzeigen:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"show_dat_sel\" name=\"show_dat_sel\" ";
-                                if($g_preferences['show_dat_sel'] == 1)
+                                <input type=\"checkbox\" id=\"dates_show_calendar_select\" name=\"dates_show_calendar_select\" ";
+                                if($g_preferences['dates_show_calendar_select'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }

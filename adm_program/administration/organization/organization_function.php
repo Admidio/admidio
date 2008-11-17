@@ -79,8 +79,8 @@ $checkboxes = array('dates_show_map_link'
                    ,'profile_show_roles'
                    ,'profile_show_former_roles'
                    ,'profile_show_extern_roles'
-				       ,'hide_list_overview_details'
-                   ,'show_dat_sel');
+				   ,'lists_hide_overview_details'
+                   ,'dates_show_calendar_select');
 
 foreach($checkboxes as $key => $value)
 {

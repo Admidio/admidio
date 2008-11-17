@@ -338,7 +338,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
             <div>
                 <div style=\"float: left;\">";
                     //Dreieck zum ein und ausblenden der Details
-			        if($g_preferences['hide_list_overview_details']==1)
+			        if($g_preferences['lists_hide_overview_details']==1)
 	                {
 	                    echo "<a class=\"iconLink\" href=\"javascript:toggleDetails('role_details_".$row_lst['rol_id']."', 'triangle_".$row_lst['rol_id']."')\">
 							<img id=\"triangle_".$row_lst['rol_id']."\"  src=\"". THEME_PATH. "/icons/triangle_close.gif\" alt=\"Details einblende\" title=\"Details einblende\" /></a>"; 
@@ -449,7 +449,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
             </div>
             
             <ul id=\"role_details_".$row_lst['rol_id']."\" ";
-                if($g_preferences['hide_list_overview_details']==1)
+                if($g_preferences['lists_hide_overview_details']==1)
                 {
                     echo"style=\"visibility: hidden; display: none;\""; 
                 }
