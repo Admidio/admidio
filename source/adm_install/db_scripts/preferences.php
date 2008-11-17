@@ -21,8 +21,8 @@ $orga_preferences = array(
     'enable_auto_login'             => '1',
     'logout_minutes'                => '20',
     'email_administrator'           => 'webmaster@'. $_SERVER['HTTP_HOST'],
-    'homepage_logout'               => 'index.html',
-    'homepage_login'                => 'index.html',
+    'homepage_logout'               => 'adm_program/index.php',
+    'homepage_login'                => 'adm_program/index.php',
     'theme'                         => 'modern',
     'enable_password_recovery'      => '1',
 
@@ -73,7 +73,7 @@ $orga_preferences = array(
     // Listen
     'lists_roles_per_page'   => '10',
     'lists_members_per_page' => '20',
-    'hide_list_overview_details' => '0',
+    'lists_hide_overview_details' => '0',
 
     // Mailmodul
     'enable_mail_module'        => '1',
@@ -106,9 +106,9 @@ $orga_preferences = array(
     'profile_show_extern_roles' => '1',
 
     // Termine
-    'enable_dates_module'       => '1',
-    'dates_show_map_link'       => '1',
-    'show_dat_sel'              => '1',
+    'enable_dates_module'        => '1',
+    'dates_show_map_link'        => '1',
+    'dates_show_calendar_select' => '1',
 
     // Weblinks
     'enable_weblinks_module' => '1'

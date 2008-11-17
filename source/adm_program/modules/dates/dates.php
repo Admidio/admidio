@@ -104,20 +104,20 @@ if(array_key_exists("date", $_GET))
 }
 
 // Prüfen ob Box angezeigt werden soll und setzten des Flags
-if ($g_preferences['show_dat_sel'] == 1) {
-   $show_dat_sel = 1;
+if ($g_preferences['dates_show_calendar_select'] == 1) {
+   $dates_show_calendar_select = 1;
 } else {
-   $show_dat_sel = 0;
+   $dates_show_calendar_select = 0;
 }
 if(isset($_GET['category-selection']) != false)
 {
     if($_GET['category-selection'] == 1)
     {
-        $show_dat_sel = 1;
+        $dates_show_calendar_select = 1;
     }
     else if ($_GET['category-selection'] == 0)
     {
-        $show_dat_sel = 0;
+        $dates_show_calendar_select = 0;
     }
 }
 
@@ -287,7 +287,7 @@ if($num_dates > 10)
 }
 
 //Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
-if(($show_dat_sel == 1) && ($req_id == 0))
+if(($dates_show_calendar_select == 1) && ($req_id == 0))
    {
    // Combobox mit allen Kategorien anzeigen
    $sql = "SELECT DISTINCT cat_name
