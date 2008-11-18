@@ -31,6 +31,7 @@ $restrict = "";
 $listname = "";
 $i = 0;
 $members_per_page = 20; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
+$today = date('Y-m-d');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_members   = 1;
@@ -48,7 +49,7 @@ if (isset($_GET['members']) && is_numeric($_GET['members']))
 
 if (isset($_GET['letter']))
 {
-    
+
     if(strlen($_GET['letter']) > 1)
     {
         $g_message->show("invalid");
@@ -91,7 +92,7 @@ if ($req_queryForm)
     // Bedingung fuer die Suchanfrage
     $search_string = str_replace(',', '', $req_queryForm). '%';
     $search_condition = " AND (  CONCAT_WS(' ', last_name.usd_value, first_name.usd_value) LIKE '$search_string'
-                              OR CONCAT_WS(' ', last_name.usd_value, first_name.usd_value) LIKE '$search_string' ) ";    
+                              OR CONCAT_WS(' ', last_name.usd_value, first_name.usd_value) LIKE '$search_string' ) ";
 }
 else
 {
@@ -102,7 +103,7 @@ else
 // unbestaetigte User werden dabei nicht angezeigt
 if($req_members)
 {
-    $sql    = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
+    $sql    = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
                       email.usd_value as email, homepage.usd_value as homepage,
                       usr_login_name, usr_timestamp_change, 1 member
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
@@ -121,7 +122,8 @@ if($req_members)
                 WHERE usr_valid = 1
                   AND mem_usr_id = usr_id
                   AND mem_rol_id = rol_id
-                  AND mem_valid  = 1
+                  AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                  AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -131,7 +133,7 @@ if($req_members)
 else
 {
     // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
-    $sql    = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, 
+    $sql    = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
                       email.usd_value as email, homepage.usd_value as homepage,
                       usr_login_name, usr_timestamp_change, count(cat_id) member
                  FROM ". TBL_USERS. "
@@ -140,7 +142,8 @@ else
                   AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
                  LEFT JOIN ". TBL_MEMBERS. "
                    ON mem_usr_id = usr_id
-                  AND mem_valid  = 1
+                  AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                  AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
                  LEFT JOIN ". TBL_ROLES. "
                    ON mem_rol_id = rol_id
                   AND rol_valid  = 1
@@ -183,7 +186,7 @@ $g_layout['header'] = '
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>';
-    
+
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -265,7 +268,7 @@ echo "
 <form id=\"autosuggest\" action=\"$g_root_path/adm_program/administration/members/members.php?members=$req_members\" method=\"post\">
     <div id=\"search_members\">
         <input type=\"text\" value=\"$req_queryForm\" name=\"queryForm\" id=\"queryForm\" style=\"width: 200px;\"  />
-        <input type=\"submit\" value=\"Suchen\" />    
+        <input type=\"submit\" value=\"Suchen\" />
     </div>
 </form>
 
@@ -297,15 +300,16 @@ echo "<div class=\"pageNavigation\">";
     if($req_members == 1)
     {
         $sql    = "SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count
-                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", 
+                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ",
                           ". TBL_USERS. ", ". TBL_USER_FIELDS. ", ". TBL_USER_DATA. "
                     WHERE rol_valid  = 1
                       AND rol_cat_id = cat_id
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND mem_rol_id = rol_id
                       AND mem_usr_id = usr_id
-                      AND mem_valid  = 1
-                      AND usr_valid  = 1 
+                      AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                      AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                      AND usr_valid  = 1
                       AND usf_name   = 'Nachname'
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
@@ -314,9 +318,9 @@ echo "<div class=\"pageNavigation\">";
     }
     else
     {
-        $sql    = "SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count 
+        $sql    = "SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count
                      FROM ". TBL_USERS. ", ". TBL_USER_FIELDS. ", ". TBL_USER_DATA. "
-                    WHERE usr_valid  = 1 
+                    WHERE usr_valid  = 1
                       AND usf_name   = 'Nachname'
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
@@ -327,7 +331,7 @@ echo "<div class=\"pageNavigation\">";
     $letter_row  = $g_db->fetch_array($result);
     $letter_menu = "A";
 
-    // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht 
+    // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht
     // (diese werden nicht im Buchstabenmenue angezeigt)
     while(ord($letter_row['letter']) < ord("A"))
     {
@@ -379,13 +383,13 @@ if($num_members > 0)
     echo "<table class=\"tableList\" cellspacing=\"0\">
         <tr>
             <th>Nr.</th>
-            <th><img class=\"iconInformation\" 
-                src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" 
+            <th><img class=\"iconInformation\"
+                src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\"
                 title=\"Mitglied bei ". $g_current_organization->getValue("org_longname"). "\" /></th>
             <th>Name</th>
-            <th><img class=\"iconInformation\" 
+            <th><img class=\"iconInformation\"
                 src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mail\" title=\"E-Mail\" /></th>
-            <th><img class=\"iconInformation\" 
+            <th><img class=\"iconInformation\"
                 src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Homepage\" title=\"Homepage\" /></th>
             <th>Benutzer</th>
             <th>Aktualisiert am</th>
@@ -454,7 +458,8 @@ if($num_members > 0)
                                       AND rol_cat_id  = cat_id
                                       AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                                       AND mem_rol_id  = rol_id
-                                      AND mem_valid   = 1
+                                      AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                                      AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
                                       AND mem_usr_id  = ". $row['usr_id'];
                         $result = $g_db->query($sql);
                         $b_other_orga = false;
@@ -463,7 +468,7 @@ if($num_members > 0)
                         {
                             $b_other_orga = true;
                         }
-                        
+
                         // Link um E-Mail mit neuem Passwort zu zuschicken
                         // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
                         if($row['member'] > 0
@@ -533,7 +538,7 @@ else
 {
     echo "<p>Es wurde keine Daten gefunden !</p><br />";
 }
-        
+
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
