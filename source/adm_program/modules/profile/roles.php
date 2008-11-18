@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen zuordnen 
+ * Funktionen zuordnen
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -27,6 +27,7 @@ if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_usr_id   = 0;
 $req_new_user = 0;
+$today = date('Y-m-d');
 
 // Uebergabevariablen pruefen
 
@@ -104,9 +105,9 @@ echo "
                 <th>&nbsp;</th>
                 <th>Rolle</th>
                 <th>Beschreibung</th>
-                <th style=\"text-align: center; width: 80px;\">Leiter<img 
-                    class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" 
-                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" 
+                <th style=\"text-align: center; width: 80px;\">Leiter<img
+                    class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\"
                     onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/>
                 </th>
             </tr>
@@ -116,19 +117,20 @@ echo "
         {
             // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
             // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
-            // aber auch keine Rollen mit Rollenvergaberechten 
+            // aber auch keine Rollen mit Rollenvergaberechten
             $sql_roles_condition = "";
             if($g_current_user->editUsers() && !$g_current_user->viewAllLists())
             {
                 $sql_roles_condition = " AND rol_this_list_view > 0 ";
             }
-            
+
             $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, mem_usr_id, mem_leader
-                         FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
+                         FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                          LEFT JOIN ". TBL_MEMBERS. "
                            ON rol_id     = mem_rol_id
                           AND mem_usr_id = $req_usr_id
-                          AND mem_valid  = 1
+                          AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                          AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
                         WHERE rol_valid  = 1
                               $sql_roles_condition
                           AND rol_cat_id = cat_id
@@ -138,15 +140,17 @@ echo "
         else
         {
             // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, 
+            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id,
                               mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
                          FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                          LEFT JOIN ". TBL_MEMBERS. " mgl
                            ON rol_id         = mgl.mem_rol_id
                           AND mgl.mem_usr_id = $req_usr_id
-                          AND mgl.mem_valid  = 1
+                          AND (DATE_FORMAT(mgl.mem_begin, '%Y-%m-%d') <= '$today')
+                          AND (mem_end IS NULL OR DATE_FORMAT(mgl.mem_end, '%Y-%m-%d') > '$today')
                         WHERE bm.mem_usr_id  = ". $g_current_user->getValue("usr_id"). "
-                          AND bm.mem_valid   = 1
+                          AND (DATE_FORMAT(bm.mem_begin, '%Y-%m-%d') <= '$today')
+                          AND (mem_end IS NULL OR DATE_FORMAT(bm.mem_end, '%Y-%m-%d') > '$today')
                           AND bm.mem_leader  = 1
                           AND rol_id         = bm.mem_rol_id
                           AND rol_valid      = 1
@@ -234,7 +238,7 @@ echo "
     <ul class=\"iconTextLinkList\">
         <li>
             <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img
                 src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>

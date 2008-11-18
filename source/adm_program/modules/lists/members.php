@@ -40,6 +40,9 @@ else
     $restrict = "m";
 }
 
+//Variablen setzten
+$today = date('Y-m-d');
+
 //URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
 if(!isset($_GET["restrict"]))
 {
@@ -53,10 +56,10 @@ $role = new TableRole($g_db, $role_id);
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
-   && !isGroupLeader($g_current_user->getValue("usr_id"), $role_id) 
-   && !$g_current_user->editUsers()) 
-|| (  !$g_current_user->isWebmaster() 
-   && $role->getValue("rol_name") == "Webmaster") 
+   && !isGroupLeader($g_current_user->getValue("usr_id"), $role_id)
+   && !$g_current_user->editUsers())
+|| (  !$g_current_user->isWebmaster()
+   && $role->getValue("rol_name") == "Webmaster")
 || $role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
 {
     $g_message->show("norights");
@@ -65,7 +68,7 @@ if(  (!$g_current_user->assignRoles()
 if($restrict=="m")
 {
     //Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
-    $sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday, 
+    $sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
                    city.usd_value as city, phone.usd_value as phone, address.usd_value as address, zip_code.usd_value as zip_code
             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
             LEFT JOIN ". TBL_USER_DATA. " as last_name
@@ -91,7 +94,8 @@ if($restrict=="m")
              AND zip_code.usd_usf_id = ". $g_current_user->getProperty("PLZ", "usf_id"). "
             WHERE usr_id   = mem_usr_id
             AND mem_rol_id = rol_id
-            AND mem_valid  = 1
+            AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+            AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
             AND rol_valid  = 1
             AND usr_valid  = 1
             AND rol_cat_id = cat_id
@@ -101,7 +105,7 @@ if($restrict=="m")
 elseif($restrict=="u")
 {
     //Falls gefordert, aufrufen alle Leute aus der Datenbank
-    $sql = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday, 
+    $sql = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
                    city.usd_value as city, phone.usd_value as phone, address.usd_value as address, zip_code.usd_value as zip_code
             FROM ". TBL_USERS. "
             LEFT JOIN ". TBL_USER_DATA. " as last_name
@@ -139,13 +143,13 @@ for($x=0; $user = $g_db->fetch_array($result_user); $x++)
 {
     //Anfangsbuchstabe erfassen
     $this_letter = ord($user['last_name']);
-    
+
     //falls Kleinbuchstaben
     if($this_letter>=97 && $this_letter<=122)
     {
         $this_letter = $this_letter-32;
     }
-    
+
     //falls zahlen
     if($this_letter>=48 && $this_letter<=57)
     {
@@ -157,19 +161,19 @@ for($x=0; $user = $g_db->fetch_array($result_user); $x++)
     {
         $this_letter = 65;
     }
-    
+
     //Umlaute zu O
     if($this_letter>=210 && $this_letter<=214)
     {
         $this_letter = 79;
     }
-    
+
     //Umlaute zu U
     if($this_letter>=217 && $this_letter<=220)
     {
         $this_letter = 85;
     }
-    
+
     $first_letter_array[$x]= $this_letter;
 }
 
@@ -178,7 +182,7 @@ $g_db->data_seek ($result_user, 0);
 
 
 //Erfassen wer die Rolle bereits hat oder schon mal hatte
-$sql="  SELECT mem_usr_id, mem_rol_id, mem_valid, mem_leader
+$sql="  SELECT mem_usr_id, mem_rol_id, mem_begin, mem_leader, mem_end
         FROM ". TBL_MEMBERS. "
         WHERE mem_rol_id = $role_id ";
 $result_role_member = $g_db->query($sql);
@@ -189,7 +193,8 @@ $role_member   = array();
 $group_leaders = array();
 for($y=0; $member = $g_db->fetch_array($result_role_member); $y++)
 {
-    if($member['mem_valid']==1)
+    if(($member['mem_begin']<=$today)
+      AND (($member['mem_end'] > $today) or ($member['mem_end'] == NULL)))
     {
         $role_member[$y]= $member['mem_usr_id'];
     }
@@ -212,7 +217,7 @@ $count_valid_users = $row[0];
 $g_layout['title']  = "Mitgliederzuordnung für \"". $role->getValue("rol_name"). "\"";
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
-        var member_count = -1;   
+        var member_count = -1;
         function markMember(element)
         {
             if(element.checked == true)
@@ -226,7 +231,7 @@ $g_layout['header'] = "
             }
             else
             {
-            	decreaseMemberCount();	
+            	decreaseMemberCount();
             }
         }
 
@@ -247,27 +252,27 @@ $g_layout['header'] = "
             	increaseMemberCount();
             }
         }
-    
-	 	function decreaseMemberCount()	
+
+	 	function decreaseMemberCount()
 	 	{
 	 		if(member_count==-1)
 	 		{
 	 			initializeMemberCount(+1);
 	 		}
-	 		member_count--;	 		
+	 		member_count--;
 	 	}
-	 	
+
 	 	function increaseMemberCount()
 	 	{
 	 		if(member_count==-1)
 	 		{
 	 			initializeMemberCount(-1);
 	 		}
-	 		member_count++;	 		
+	 		member_count++;
 	 	}";
 if($role->getValue("rol_name") == "Webmaster")
 {
-$g_layout['header'] =  $g_layout['header'] ."	 			
+$g_layout['header'] =  $g_layout['header'] ."
 	 	function chkMemberCount()
 	 	{
 	 		if(member_count == 0)
@@ -276,18 +281,18 @@ $g_layout['header'] =  $g_layout['header'] ."
 	 			return false;
 	 		}
 	 		else
-	 			return true;	
+	 			return true;
 	 	}";
 }
 else
 {
-$g_layout['header'] =  $g_layout['header'] ."	 			
+$g_layout['header'] =  $g_layout['header'] ."
 	 	function chkMemberCount()
 	 	{
 	 		return true;
 	 	}";
 }
-$g_layout['header'] =  $g_layout['header'] ."        		
+$g_layout['header'] =  $g_layout['header'] ."
         function initializeMemberCount(action)
         {
         	member_count = 0;
@@ -296,8 +301,8 @@ $g_layout['header'] =  $g_layout['header'] ."
         	{
         		if(all_inputs[i].name.search(/member.+/)!=-1 && all_inputs[i].checked==true)
         		{
-        			member_count++;			
-        		}	
+        			member_count++;
+        		}
         	}
         	if(action == -1)
         	{
@@ -306,7 +311,7 @@ $g_layout['header'] =  $g_layout['header'] ."
         	else
         	{
         		member_count++;
-        	}	
+        	}
         }
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
@@ -345,12 +350,12 @@ $g_layout['header'] =  $g_layout['header'] ."
     {
         //Alle divs auf unsichtbar setzen
         var i, id_head, id_body;
-        
+
         for (i=0;i<ids.length;i++)
         {
             id_head = 'head_letter_' + ids[i];
             id_body = 'letter_' + ids[i];
-            
+
             if(document.getElementById(id_head))
             {
                 document.getElementById(id_head).style.visibility = 'visible';
@@ -358,7 +363,7 @@ $g_layout['header'] =  $g_layout['header'] ."
                 document.getElementById(id_body).style.visibility = 'visible';
                 document.getElementById(id_body).style.display    = '';
             }
-        }     
+        }
     }
     --></script>";
 
@@ -435,7 +440,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 {
                     echo"<a href=\"#\" onclick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
                 }
-                else 
+                else
                 {
                     echo"&#35;&nbsp;";
                 }
@@ -492,7 +497,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     <th>Name</th>
                     <th>Vorname</th>
                     <th>Geburtsdatum</th>
-                    <th style=\"text-align: center;\">Leiter<img 
+                    <th style=\"text-align: center;\">Leiter<img
                         class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/></th>
                 </tr>
             </thead>";
@@ -505,10 +510,10 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             {
                 $letter_merker=64;
             }
-            
+
             //Nach erstem benoetigtem Container suchen, solange leere ausgeben
-            while($this_letter != $letter_merker 
-            && !in_array($letter_merker+1, $first_letter_array) 
+            while($this_letter != $letter_merker
+            && !in_array($letter_merker+1, $first_letter_array)
             && $letter_merker < 91)
             {
                 //Falls Zahl
@@ -576,11 +581,11 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             {
                 $user_text = $user_text. " - ". $user['phone'];
             }
-            
+
             echo"
             <tr class=\"tableMouseOver\">
                 <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
-                
+
                 <td style=\"text-align: center;\">";
                     //Haekchen setzen ob jemand Mitglied ist oder nicht
                     if(in_array($user['usr_id'], $role_member))
@@ -592,7 +597,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                         echo"<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\" />";
                     }
                 echo"</td>
-                
+
                 <td>". $user['last_name']."</td>
                 <td>". $user['first_name']."</td>
 
@@ -677,9 +682,9 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                     <th>Name</th>
                     <th>Vorname</th>
                     <th>Geburtsdatum</th>
-                    <th style=\"text-align: center;\">Leiter<img 
-                    	class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" 
-                    	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\" 
+                    <th style=\"text-align: center;\">Leiter<img
+                    	class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+                    	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\"
                     	onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/>
                     </th>
                 </tr>
@@ -737,7 +742,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             echo "</tbody>
         </table>";
     }
-    
+
     //Buttons schliessen oder Speichern
     echo"<div class=\"formSubmit\">
         <button name=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
@@ -750,7 +755,7 @@ if($_SESSION['navigation']->count > 1)
     <ul class=\"iconTextLinkList\">
         <li>
             <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img
                 src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
@@ -765,7 +770,7 @@ if($g_db->num_rows($result_user)>=50)
         Das Zwischenspeichern vor dem Buchstabenwechsel ist nicht notwendig&#33;&#33;&#33;
     </div>";
 }
-   
+
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>
