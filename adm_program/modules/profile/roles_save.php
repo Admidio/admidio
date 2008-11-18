@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen des Benutzers speichern 
+ * Funktionen des Benutzers speichern
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -30,6 +30,7 @@ if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_usr_id   = 0;
 $req_new_user = 0;
+$today = date('Y-m-d');
 
 // Uebergabevariablen pruefen
 
@@ -55,15 +56,15 @@ if($g_current_user->assignRoles() || $g_current_user->editUsers())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
-    // aber auch keine Rollen mit Rollenvergaberechten 
+    // aber auch keine Rollen mit Rollenvergaberechten
     $sql_roles_condition = "";
     if($g_current_user->editUsers() && !$g_current_user->viewAllLists())
     {
         $sql_roles_condition .= " AND rol_this_list_view > 0 ";
     }
-    
+
     $sql    = "SELECT rol_id, rol_name, rol_max_members, mem_usr_id, mem_leader, mem_valid
-                 FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. " 
+                 FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                  LEFT JOIN ". TBL_MEMBERS. "
                    ON rol_id     = mem_rol_id
                   AND mem_usr_id = $req_usr_id
@@ -81,9 +82,11 @@ else
                  LEFT JOIN ". TBL_MEMBERS. " mgl
                    ON rol_id         = mgl.mem_rol_id
                   AND mgl.mem_usr_id = $req_usr_id
-                  AND mgl.mem_valid  = 1
+                  AND (DATE_FORMAT(mgl.mem_begin, '%Y-%m-%d') <= '$today')
+                  AND (mem_end IS NULL OR DATE_FORMAT(mgl.mem_end, '%Y-%m-%d') > '$today')
                 WHERE bm.mem_usr_id  = ". $g_current_user->getValue("usr_id"). "
-                  AND bm.mem_valid   = 1
+                  AND (DATE_FORMAT(bm.mem_begin, '%Y-%m-%d') <= '$today')
+                  AND (bm.mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
                   AND bm.mem_leader  = 1
                   AND rol_id         = bm.mem_rol_id
                   AND rol_valid      = 1
@@ -107,7 +110,8 @@ while($row = $g_db->fetch_object($result_rolle))
                       WHERE mem_rol_id = $row->rol_id
                         AND mem_usr_id = $req_usr_id
                         AND mem_leader = 0
-                        AND mem_valid  = 1";
+                        AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                        AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')";
         $g_db->query($sql);
 
         $row_usr = $g_db->fetch_array();
@@ -119,7 +123,8 @@ while($row = $g_db->fetch_object($result_rolle))
                            FROM ". TBL_MEMBERS. "
                           WHERE mem_rol_id = $row->rol_id
                             AND mem_leader = 0
-                            AND mem_valid  = 1";
+                            AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                            AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')";
             $g_db->query($sql);
 
             $row_members = $g_db->fetch_array();
@@ -162,7 +167,7 @@ while($row = $g_db->fetch_object($result_rolle))
             {
                 $role_leader = 1;
             }
-            
+
             // Rollenmitgliedschaften aktualisieren
             if($role_assign == 1)
             {
@@ -190,7 +195,7 @@ while($row = $g_db->fetch_object($result_rolle))
 
 $_SESSION['navigation']->deleteLastUrl();
 
-// falls Rollen dem eingeloggten User neu zugewiesen wurden, 
+// falls Rollen dem eingeloggten User neu zugewiesen wurden,
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
 $g_current_session->renewUserObject();
 
@@ -206,7 +211,7 @@ if(count($parentRoles) > 0 )
 
     // Das letzte Komma wieder wegschneiden
     $sql = substr($sql,0,-1);
-    
+
     $g_db->query($sql);
 }
 

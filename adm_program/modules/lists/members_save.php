@@ -19,6 +19,8 @@ require_once("../../system/classes/role_dependency.php");
 require_once("../../system/classes/table_members.php");
 require_once("../../system/classes/table_role.php");
 
+$today = date('Y-m-d');
+
 // Uebergabevariablen pruefen
 
 if(isset($_GET['rol_id']) == false || is_numeric($_GET['rol_id']) == false)
@@ -33,10 +35,10 @@ $role = new TableRole($g_db, $_GET['rol_id']);
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
-   && !isGroupLeader($g_current_user->getValue("usr_id"), $role->getValue("rol_id")) 
-   && !$g_current_user->editUsers()) 
+   && !isGroupLeader($g_current_user->getValue("usr_id"), $role->getValue("rol_id"))
+   && !$g_current_user->editUsers())
 || (  !$g_current_user->isWebmaster()
-   && $role->getValue("rol_name") == "Webmaster") 
+   && $role->getValue("rol_name") == "Webmaster")
 || $role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
 {
    $g_message->show("norights");
@@ -47,7 +49,8 @@ if(  (!$g_current_user->assignRoles()
 $sql = " SELECT *
            FROM ". TBL_MEMBERS. "
           WHERE mem_rol_id = ". $role->getValue("rol_id"). "
-            AND mem_valid  = 1";
+            AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+            AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')";
 $result_mem_role = $g_db->query($sql);
 
 //Schreiben der Datensaetze in Array sortiert nach zugewiesenen Benutzern (id)
@@ -116,7 +119,7 @@ while($user= $g_db->fetch_array($result_user))
         {
             $member->stopMembership($role->getValue("rol_id"), $user["usr_id"]);
         }
-        
+
         if(isset($_POST["member_".$user["usr_id"]]) == true  && array_key_exists($user["usr_id"], $mitglieder_array) == false)
         {
             // abhaengige Rollen finden
@@ -128,7 +131,7 @@ while($user= $g_db->fetch_array($result_user))
             }
         }
     }
-    
+
     if(count($parentRoles) > 0 )
     {
         $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
@@ -141,10 +144,10 @@ while($user= $g_db->fetch_array($result_user))
 
         //Das letzte Komma wieder wegschneiden
         $sql = substr($sql,0,-1);
-        
+
         $result = $g_db->query($sql);
     }
-    
+
 }
 
 //Zurueck zur Herkunftsseite

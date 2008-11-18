@@ -643,7 +643,7 @@ echo '
                       FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                      WHERE mem_rol_id = rol_id
                        AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                       AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') >= '$today')
+                       AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
                        AND mem_usr_id = $a_user_id
                        AND rol_valid  = 1
                        AND rol_cat_id = cat_id
@@ -736,7 +736,7 @@ echo '
             $sql    = "SELECT *
                          FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                         WHERE mem_rol_id = rol_id
-                          AND DATE_FORMAT(mem_end, '%Y-%m-%d') < '$today'
+                          AND DATE_FORMAT(mem_end, '%Y-%m-%d') <= '$today'
                           AND mem_usr_id = $a_user_id
                           AND rol_valid  = 1
                           AND rol_cat_id = cat_id
