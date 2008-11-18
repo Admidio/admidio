@@ -330,7 +330,7 @@ if($g_db->num_rows($dates_result) == 0)
     // Keine Termine gefunden
     if($req_id > 0)
     {
-        echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+        echo "<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>";
     }
     else
     {

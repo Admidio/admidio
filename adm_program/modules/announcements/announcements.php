@@ -184,11 +184,11 @@ if ($g_db->num_rows($announcements_result) == 0)
     // Keine Ankuendigungen gefunden
     if($req_id > 0)
     {
-        echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+        echo "<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>";
     }
     else
     {
-        echo "<p>Es sind keine Eintr&auml;ge vorhanden.</p>";
+        echo "<p>Es sind keine Einträge vorhanden.</p>";
     }
 }
 else

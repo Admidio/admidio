@@ -87,9 +87,9 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
 	if (move_uploaded_file($_FILES['Filedata']['tmp_name'], $image_file)) 
 	{ 
 
-		//Bildobjekt erzeugen
+		//Bildobjekt erzeugen und scaliert speichern
 	    $image = new Image($image_file);
-	    //Bild skalliert speichern
+        $image->setImageType("jpeg");
         $image->scale($g_preferences['photo_save_scale']);
         $image->copyToFile(null, $ordner."/".$bildnr.".jpg");
         $image->delete();
