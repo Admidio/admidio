@@ -1821,7 +1821,7 @@ echo "
                             <dt><label for=\"dates_show_sel\">Auswahlbox anzeigen:</label></dt>
                             <dd>
                                 <input type=\"checkbox\" id=\"dates_show_calendar_select\" name=\"dates_show_calendar_select\" ";
-                                if($g_preferences['dates_show_calendar_select'] == 1)
+                                if($form_values['dates_show_calendar_select'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }

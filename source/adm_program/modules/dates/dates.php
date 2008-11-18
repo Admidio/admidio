@@ -21,7 +21,7 @@
  * id                   - Nur einen einzigen Termin anzeigen lassen.
  * date                 - Alle Termine zu einem Datum werden aufgelistet
  *                        Uebergabeformat: YYYYMMDD
- * category-selection   - 1: Es wird die Box angezeigt
+ * calendar-selection   - 1: Es wird die Box angezeigt
  *                        0: Es wird keine Box angezeigt
  *
  *****************************************************************************/
@@ -109,13 +109,13 @@ if ($g_preferences['dates_show_calendar_select'] == 1) {
 } else {
    $dates_show_calendar_select = 0;
 }
-if(isset($_GET['category-selection']) != false)
+if(isset($_GET['calendar-selection']) != false)
 {
     if($_GET['category-selection'] == 1)
     {
         $dates_show_calendar_select = 1;
     }
-    else if ($_GET['category-selection'] == 0)
+    else if ($_GET['calendar-selection'] == 0)
     {
         $dates_show_calendar_select = 0;
     }
