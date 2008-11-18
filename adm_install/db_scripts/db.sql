@@ -521,10 +521,10 @@ alter table %PRAEFIX%_list_columns add index LSC_USF_FK (lsc_usf_id);
 
 -- Constraints
 alter table %PRAEFIX%_list_columns add constraint FK_LSC_LST foreign key (lsc_lst_id)
-      references adm_lists (lst_id) on delete restrict on update restrict;
+      references %PRAEFIX%_lists (lst_id) on delete restrict on update restrict;
 
 alter table %PRAEFIX%_list_columns add constraint FK_LSC_USF foreign key (lsc_usf_id)
-      references adm_user_fields (usf_id) on delete restrict on update restrict;
+      references %PRAEFIX%_user_fields (usf_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_folders                                           */
