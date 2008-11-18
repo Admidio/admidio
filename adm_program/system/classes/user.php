@@ -13,7 +13,7 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getProperty($field_name, $property) 
+ * getProperty($field_name, $property)
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
@@ -21,7 +21,7 @@
  *                        Users einsehen darf
  * viewRole             - Ueberprueft ob der User eine uebergebene Rolle(Liste)
  *                        einsehen darf
- * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der 
+ * isWebmaster()        - gibt true/false zurueck, falls der User Mitglied der
  *                        Rolle "Webmaster" ist
  *
  *****************************************************************************/
@@ -33,19 +33,19 @@ class User extends TableAccess
     var $webmaster;
     var $b_set_last_change;         // Kennzeichen, ob User und Zeitstempel der aktuellen Aenderung gespeichert werden sollen
     var $real_password;             // Unverschluesseltes Passwort. Ist nur gefuellt, wenn gerade das Passwort gesetzt wurde
-    
+
     var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
     var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     var $list_view_rights = array();  // Array ueber Listenrechte einzelner Rollen
     var $role_mail_rights = array();  // Array ueber Mailrechte einzelner Rollen
-    
+
     // Konstruktor
     function User(&$db, $user_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_USERS;
         $this->column_praefix = "usr";
-        
+
         if(strlen($user_id) > 0)
         {
             $this->readData($user_id);
@@ -60,20 +60,20 @@ class User extends TableAccess
     function readData($user_id)
     {
         parent::readData($user_id);
-                    
+
         // user_data-Array aufbauen
         $this->fillUserFieldArray($user_id);
     }
-    
+
     function fillUserFieldArray($user_id = 0)
     {
         global $g_current_organization;
-        
+
         // erst mal alles bisherige entfernen
         $this->db_user_fields = array();
-        
+
         if(is_numeric($user_id) && $user_id > 0)
-        {        
+        {
             $field_usd_value = "usd_value";
             $join_user_data  = "LEFT JOIN ". TBL_USER_DATA. "
                                   ON usd_usf_id = usf_id
@@ -84,13 +84,13 @@ class User extends TableAccess
             $field_usd_value = "NULL as usd_value";
             $join_user_data  = "";
         }
-        
+
         // Daten aus adm_user_data auslesen
-        $sql = "SELECT usf_id, cat_id, cat_name, usf_name, usf_type, usf_description, 
+        $sql = "SELECT usf_id, cat_id, cat_name, usf_name, usf_type, usf_description,
                        usf_disabled, usf_hidden, usf_mandatory, usf_system, $field_usd_value
                   FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
                        $join_user_data
-                 WHERE usf_cat_id = cat_id 
+                 WHERE usf_cat_id = cat_id
                    AND (  cat_org_id IS NULL
                        OR cat_org_id  = ". $g_current_organization->getValue("org_id"). " )
                  ORDER BY cat_sequence, usf_sequence";
@@ -98,7 +98,7 @@ class User extends TableAccess
 
         while($row_usf = $this->db->fetch_array($result_usf))
         {
-            // ein mehrdimensionales Array aufbauen, welche fuer jedes usf-Feld alle 
+            // ein mehrdimensionales Array aufbauen, welche fuer jedes usf-Feld alle
             // Daten des Sql-Statements beinhaltet
             for($i = 0; $i < $this->db->num_fields($result_usf); $i++)
             {
@@ -126,14 +126,14 @@ class User extends TableAccess
 
         $this->webmaster = 0;
         $this->b_set_last_change = true;
-        
+
         // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
         $this->setValue("usr_valid", 1);
-        
+
         // user_data-Array komplett neu aufbauen
         // vorher wurde nur alles geleert, dadurch aber keine geloeschten Felder entfernt
         $this->fillUserFieldArray();
-        
+
         // Arrays initialisieren
         $this->roles_rights = array();
         $this->list_view_rights = array();
@@ -143,7 +143,7 @@ class User extends TableAccess
     // und ungueltige Werte auf leer setzt
     // die Methode wird innerhalb von setValue() aufgerufen
     function setValue($field_name, $field_value)
-    {        
+    {
         if(strpos($field_name, "usr_") !== 0)
         {
             // Daten fuer User-Fields-Tabelle
@@ -157,7 +157,7 @@ class User extends TableAccess
                 {
                     $this->db_user_fields[$field_name]['new'] = false;
                 }
-                
+
                 // Homepage noch mit http vorbelegen
                 if($this->getProperty($field_name, "usf_type") == "URL")
                 {
@@ -179,7 +179,7 @@ class User extends TableAccess
         }
         parent::setValue($field_name, $field_value);
     }
-    
+
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
     // angefordert wurde und gibt diesen zurueck
     // die Funktion wird innerhalb von getValue() aufgerufen
@@ -188,7 +188,7 @@ class User extends TableAccess
         if(strpos($field_name, "usr_") === 0)
         {
             $field_value = parent::getValue($field_name);
-            
+
             // ist die Create-Id leer, so wurde der Datensatz durch Registierung angelegt und gehoert dem User selber
             if($field_name == "usr_usr_id_create" && strlen($field_value) == 0)
             {
@@ -200,7 +200,7 @@ class User extends TableAccess
         {
             return htmlspecialchars($this->getProperty($field_name, "usd_value"), ENT_QUOTES);
         }
-    }    
+    }
 
     // Methode gibt den Wert eines Profilfeldes zurueck
     // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
@@ -208,8 +208,8 @@ class User extends TableAccess
     function getProperty($field_name, $property)
     {
         return $this->db_user_fields[$field_name][$property];
-    }    
-    
+    }
+
     // aehnlich getProperty, allerdings suche ueber usf_id
     function getPropertyById($field_id, $property)
     {
@@ -221,15 +221,15 @@ class User extends TableAccess
             }
         }
         return false;
-    } 
-        
+    }
+
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
         global $g_current_session, $g_current_user;
         $fields_changed = $this->db_fields_changed;
-        
+
         if($this->b_set_last_change)
         {
             if($this->new_record)
@@ -251,18 +251,18 @@ class User extends TableAccess
 
         $this->b_set_last_change = true;
         parent::save();
-        
+
         // nun noch Updates fuer alle geaenderten User-Fields machen
         foreach($this->db_user_fields as $key => $value)
         {
             if($value['changed'] == true)
             {
                 $item_connection = "";
-                $sql_field_list  = "";                
+                $sql_field_list  = "";
 
                 if(strlen($value['usd_value']) == 0)
                 {
-                    $sql = "DELETE FROM ". TBL_USER_DATA. " 
+                    $sql = "DELETE FROM ". TBL_USER_DATA. "
                              WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
                                AND usd_usf_id = ". $value['usf_id'];
                 }
@@ -270,7 +270,7 @@ class User extends TableAccess
                 {
                     if($value['new'] == true)
                     {
-                        $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value) 
+                        $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
                                 VALUES (". $this->db_fields['usr_id']. ", ". $value['usf_id']. ", '". $value['usd_value']. "') ";
                         $this->db_user_fields[$key]['new'] = false;
                     }
@@ -285,13 +285,13 @@ class User extends TableAccess
                 $this->db_user_fields[$key]['changed'] = false;
             }
         }
-        
+
         if($fields_changed && is_object($g_current_session))
         {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
             $g_current_session->renewUserObject();
-        }           
+        }
     }
 
     // Referenzen zum aktuellen Benutzer loeschen
@@ -374,13 +374,13 @@ class User extends TableAccess
 
         $sql    = "DELETE FROM ". TBL_AUTO_LOGIN. " WHERE atl_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
-        
+
         $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
 
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->db_fields['usr_id'];
         $this->db->query($sql);
-        
+
         return parent::delete();
     }
 
@@ -391,7 +391,7 @@ class User extends TableAccess
         global $g_current_user;
 
         $editAllUsers = $g_current_user->editProfile($this->db_fields['usr_id']);
-        
+
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
         if($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Vorname']['usf_hidden'] == 0))
@@ -406,17 +406,17 @@ class User extends TableAccess
         {
             $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
         }
-        if (strlen($this->getValue("Telefon")) > 0 
+        if (strlen($this->getValue("Telefon")) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Telefon']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue("Telefon"). "\r\n";
         }
-        if (strlen($this->getValue("Handy")) > 0 
+        if (strlen($this->getValue("Handy")) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Handy']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue("Handy"). "\r\n";
         }
-        if (strlen($this->getValue("Fax")) > 0 
+        if (strlen($this->getValue("Fax")) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Fax']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue("Fax"). "\r\n";
@@ -426,17 +426,17 @@ class User extends TableAccess
         {
             $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue("Adresse")). ";" . utf8_decode($this->getValue("Ort")). ";;" . utf8_decode($this->getValue("PLZ")). ";" . utf8_decode($this->getValue("Land")). "\r\n";
         }
-        if (strlen($this->getValue("Homepage")) > 0 
+        if (strlen($this->getValue("Homepage")) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Homepage']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "URL;HOME:" . $this->getValue("Homepage"). "\r\n";
         }
-        if (strlen($this->getValue("Geburtstag")) > 0 
+        if (strlen($this->getValue("Geburtstag")) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Geburtstag']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "BDAY:" . mysqldatetime("ymd", $this->getValue("Geburtstag")) . "\r\n";
         }
-        if (strlen($this->getValue("E-Mail")) > 0 
+        if (strlen($this->getValue("E-Mail")) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['E-Mail']['usf_hidden'] == 0)))
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
@@ -446,7 +446,7 @@ class User extends TableAccess
             $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->getValue("Geschlecht") > 0 
+        if ($this->getValue("Geschlecht") > 0
         && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Geschlecht']['usf_hidden'] == 0)))
         {
             if($this->getValue("Geschlecht") == 1)
@@ -467,8 +467,8 @@ class User extends TableAccess
         $vcard .= (string) "END:VCARD\r\n";
         return $vcard;
     }
-    
-    // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags, 
+
+    // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags,
     // welche Rollen der User einsehen darf
     function checkRolesRight($right = "")
     {
@@ -477,32 +477,34 @@ class User extends TableAccess
             if(count($this->roles_rights) == 0)
             {
                 global $g_current_organization;
-                $tmp_roles_rights  = array("rol_assign_roles" => "0", "rol_approve_users" => "0", 
-                                            "rol_announcements" => "0", "rol_dates" => "0", 
-                                            "rol_download" => "0", "rol_edit_user" => "0", 
-                                            "rol_guestbook" => "0", "rol_guestbook_comments" => "0", 
-                                            "rol_mail_to_all" => "0", 
-                                            "rol_photo" => "0", "rol_profile" => "0", 
+                $tmp_roles_rights  = array("rol_assign_roles" => "0", "rol_approve_users" => "0",
+                                            "rol_announcements" => "0", "rol_dates" => "0",
+                                            "rol_download" => "0", "rol_edit_user" => "0",
+                                            "rol_guestbook" => "0", "rol_guestbook_comments" => "0",
+                                            "rol_mail_to_all" => "0",
+                                            "rol_photo" => "0", "rol_profile" => "0",
                                             "rol_weblinks" => "0", "rol_all_lists_view" => "0");
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
+                $today = date('Y-m-d');
                 $sql    = "SELECT *
                              FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                              LEFT JOIN ". TBL_MEMBERS. "
                                ON mem_usr_id = ". $this->db_fields['usr_id']. "
                               AND mem_rol_id = rol_id
-                              AND mem_valid  = 1
-                            WHERE rol_valid  = 1 
+                              AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                              AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') >= '$today')
+                            WHERE rol_valid  = 1
                               AND rol_cat_id = cat_id
                               AND cat_org_id = ". $g_current_organization->getValue("org_id");
                 $this->db->query($sql);
-                
+
                 while($row = $this->db->fetch_array())
                 {
                     // Rechte nur beruecksichtigen, wenn auch Rollenmitglied
                     if($row['mem_usr_id'] > 0)
                     {
-                        // Rechte der Rollen in das Array uebertragen, 
+                        // Rechte der Rollen in das Array uebertragen,
                         // falls diese noch nicht durch andere Rollen gesetzt wurden
                         foreach($tmp_roles_rights as $key => $value)
                         {
@@ -512,13 +514,13 @@ class User extends TableAccess
                             }
                         }
                     }
-                    
+
                     // Webmasterflag setzen
                     if($row['mem_usr_id'] > 0 && $row['rol_name'] == "Webmaster")
                     {
                         $this->webmaster = 1;
                     }
-                    
+
                     // Listenansichtseinstellung merken
                     // Leiter duerfen die Rolle sehen
                     if($row['mem_usr_id'] > 0 && ($row['rol_this_list_view'] > 0 || $row['mem_leader'] == 1))
@@ -535,7 +537,7 @@ class User extends TableAccess
                     {
                         $this->list_view_rights[$row['rol_id']] = 0;
                     }
-                                    
+
                     // Mailrechte setzen
                     // Leiter duerfen der Rolle Mails schreiben
                     if($row['mem_usr_id'] > 0 && ($row['rol_mail_this_role'] > 0 || $row['mem_leader'] == 1))
@@ -554,7 +556,7 @@ class User extends TableAccess
                     }
                 }
                 $this->roles_rights = $tmp_roles_rights;
-                
+
                 // ist das Recht "alle Listen einsehen" gesetzt, dann dies auch im Array bei allen Rollen setzen
                 if($this->roles_rights['rol_all_lists_view'])
                 {
@@ -563,7 +565,7 @@ class User extends TableAccess
                         $this->list_view_rights[$key] = 1;
                     }
                 }
-                
+
                 // ist das Recht "allen Rollen EMails schreiben" gesetzt, dann dies auch im Array bei allen Rollen setzen
                 if($this->roles_rights['rol_mail_to_all'])
                 {
@@ -572,7 +574,7 @@ class User extends TableAccess
                         $this->role_mail_rights[$key] = 1;
                     }
                 }
-                
+
             }
 
             if(strlen($right) == 0 || $this->roles_rights[$right] == 1)
@@ -601,30 +603,30 @@ class User extends TableAccess
         return $this->checkRolesRight('rol_assign_roles');
     }
 
-    //Ueberprueft ob der User das Recht besitzt, alle Rollenlisten einsehen zu duerfen 
+    //Ueberprueft ob der User das Recht besitzt, alle Rollenlisten einsehen zu duerfen
     function viewAllLists()
     {
-        return $this->checkRolesRight('rol_all_lists_view'); 
+        return $this->checkRolesRight('rol_all_lists_view');
     }
-    
-    //Ueberprueft ob der User das Recht besitzt, allen Rollenmails zu zusenden 
+
+    //Ueberprueft ob der User das Recht besitzt, allen Rollenmails zu zusenden
     function mailAllRoles()
     {
-        return $this->checkRolesRight('rol_mail_to_all'); 
+        return $this->checkRolesRight('rol_mail_to_all');
     }
-    
+
     // Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
     function editDates()
     {
         return $this->checkRolesRight('rol_dates');
     }
-    
+
     // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
     function editDownloadRight()
     {
         return $this->checkRolesRight('rol_download');
     }
-    
+
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
     function editProfile($profileID = NULL)
     {
@@ -665,14 +667,14 @@ class User extends TableAccess
     {
         return $this->checkRolesRight('rol_guestbook');
     }
-    
+
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
     function commentGuestbookRight()
     {
         return $this->checkRolesRight('rol_guestbook_comments');
     }
-    
-    // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf    
+
+    // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
     function editPhotoRight()
     {
         return $this->checkRolesRight('rol_photo');
@@ -683,13 +685,13 @@ class User extends TableAccess
     {
         return $this->checkRolesRight('rol_weblinks');
     }
-    
-    // Funktion prueft, ob der User ein Profil einsehen darf    
+
+    // Funktion prueft, ob der User ein Profil einsehen darf
     function viewProfile($usr_id)
     {
         global $g_current_organization;
         $view_profile = false;
-        
+
         //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
         if($this->editProfile($usr_id))
         {
@@ -704,18 +706,20 @@ class User extends TableAccess
             }
             else
             {
+                $today = date('Y-m-d');
                 $sql    = "SELECT rol_id, rol_this_list_view
                              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                             WHERE mem_usr_id = ".$usr_id. "
-                              AND mem_valid  = 1
+                              AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                              AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') >= '$today')
                               AND mem_rol_id = rol_id
-                              AND rol_valid  = 1 
+                              AND rol_valid  = 1
                               AND rol_cat_id = cat_id
                               AND cat_org_id = ". $g_current_organization->getValue("org_id");
                 $this->db->query($sql);
-                
+
                 if($this->db->num_rows() > 0)
-                {             
+                {
                     while($row = $this->db->fetch_array())
                     {
                         if($row['rol_this_list_view'] == 2)
@@ -735,8 +739,8 @@ class User extends TableAccess
         }
         return $view_profile;
     }
-    
-    // Methode prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf    
+
+    // Methode prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf
     function viewRole($rol_id)
     {
         $view_role = false;
@@ -755,8 +759,8 @@ class User extends TableAccess
         }
         return $view_role;
     }
-	
-	// Methode prueft, ob der angemeldete User einer bestimmten oder allen Rolle E-Mails zusenden darf    
+
+	// Methode prueft, ob der angemeldete User einer bestimmten oder allen Rolle E-Mails zusenden darf
     function mailRole($rol_id)
     {
         $mail_role = false;
@@ -775,7 +779,7 @@ class User extends TableAccess
         }
         return $mail_role;
     }
-    
+
     // Methode liefert true zurueck, wenn der User Mitglied der Rolle "Webmaster" ist
     function isWebmaster()
     {
