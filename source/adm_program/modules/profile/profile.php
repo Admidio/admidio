@@ -17,7 +17,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-// Uebergabevariablen pruefen 
+// Uebergabevariablen pruefen
 
 if(isset($_GET['user_id']))
 {
@@ -49,12 +49,12 @@ function getFieldCode($field, $user_id)
     $value     = "";
     $msg_image = "";
     $messenger = false;
-    
+
     if($g_current_user->editProfile($user_id) == false && $field['usf_hidden'] == 1)
     {
         return "";
     }
-    
+
     switch($field['usf_type'])
     {
         case "CHECKBOX":
@@ -67,7 +67,7 @@ function getFieldCode($field, $user_id)
                 $value = "<img src=\"". THEME_PATH. "/icons/checkbox.gif\" alt=\"off\" />";
             }
             break;
-            
+
         case "DATE":
             if(strlen($field['usd_value']) > 0)
             {
@@ -79,7 +79,7 @@ function getFieldCode($field, $user_id)
                 }
             }
             break;
-            
+
         case "EMAIL":
             // E-Mail als Link darstellen
             if(strlen($field['usd_value']) > 0)
@@ -94,12 +94,12 @@ function getFieldCode($field, $user_id)
                 }
                 if(strlen($field['usd_value']) > 25)
                 {
-                    $value = '<a href="'. $mail_link. '" title="'. $field['usd_value'].'">'. substr($field['usd_value'], 0, 25). '...</a>';   
+                    $value = '<a href="'. $mail_link. '" title="'. $field['usd_value'].'">'. substr($field['usd_value'], 0, 25). '...</a>';
                 }
                 else
                 {
-                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$field['usd_value'].'">'. $field['usd_value']. '</a>';;                    
-                }               
+                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$field['usd_value'].'">'. $field['usd_value']. '</a>';;
+                }
             }
             break;
 
@@ -109,24 +109,24 @@ function getFieldCode($field, $user_id)
             {
                 if(strlen($field['usd_value']) > 25)
                 {
-                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2, 25). '...</a>';   
+                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2, 25). '...</a>';
                 }
                 else
                 {
-                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2). '</a>';                    
+                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2). '</a>';
                 }
             }
             break;
-                                
+
         case "TEXT_BIG":
             $value = nl2br($field['usd_value']);
             break;
-            
+
         default:
             $value = $field['usd_value'];
             break;
     }
-        
+
     if($field['cat_name'] != "Stammdaten")
     {
         // Icons der Messenger anzeigen
@@ -139,9 +139,9 @@ function getFieldCode($field, $user_id)
                 $icq_number = implode("", reset($matches));
 
                 // ICQ Onlinestatus anzeigen
-                $value = "<a class=\"iconLink\" href=\"http://www.icq.com/people/cmd.php?uin=$icq_number&amp;action=add\"><img 
-                            src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\" 
-                            alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
+                $value = "<a class=\"iconLink\" href=\"http://www.icq.com/people/cmd.php?uin=$icq_number&amp;action=add\"><img
+                            src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\"
+                            alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\"
                             title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
                           $value";
             }
@@ -153,9 +153,9 @@ function getFieldCode($field, $user_id)
             {
                 // Skype Onlinestatus anzeigen
                 $value = "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
-                <a class=\"iconLink\" href=\"skype:". $field['usd_value']. "?add\"><img 
+                <a class=\"iconLink\" href=\"skype:". $field['usd_value']. "?add\"><img
                     src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
-                    title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" 
+                    title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\"
                     alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
                 $value";
             }
@@ -179,12 +179,12 @@ function getFieldCode($field, $user_id)
         }
         if(strlen($msg_image) > 0)
         {
-            $value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;" 
+            $value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;"
                 alt="'. $field['usf_name']. '" title="'. $field['usf_name']. '" />&nbsp;&nbsp;'. $value;
             $messenger = true;
         }
     }
-    
+
     // Feld anzeigen, außer bei Messenger, wenn dieser keine Daten enthält
     if($messenger == false
     || ($messenger == true && strlen($field['usd_value']) > 0))
@@ -196,7 +196,7 @@ function getFieldCode($field, $user_id)
                     </dl>
                 </li>';
     }
-             
+
     return $html;
 }
 
@@ -226,6 +226,13 @@ $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>';
 
+echo "
+   <script type=\"text/javascript\">
+      function color(name){
+         document.getElementById('anzeige').text = 'Gesetzt durch:'+ name;
+      }
+   </script>
+";
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo '
@@ -242,7 +249,7 @@ echo '
                 <div class="groupBox">
                     <div class="groupBoxHeadline">
                         <div style="float: left;">'. $user->getValue("Vorname"). ' '. $user->getValue("Nachname");
-                        
+
                             // Icon des Geschlechts anzeigen
                             if($user->getValue("Geschlecht") > 0)
                             {
@@ -258,15 +265,15 @@ echo '
                         echo '</div>
                         <div style="text-align: right;">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue("usr_id"). '"><img
-                                src="'. THEME_PATH. '/icons/vcard.png" 
-                                alt="vCard von '. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). ' exportieren" 
+                                src="'. THEME_PATH. '/icons/vcard.png"
+                                alt="vCard von '. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). ' exportieren"
                                 title="vCard von '. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). ' exportieren" /></a>';
-                            
+
                             // Nur berechtigte User duerfen das Passwort editieren
                             if($a_user_id == $g_current_user->getValue("usr_id") || $g_current_user->isWebmaster())
                             {
                                 echo'
-                                <a class="iconLink" style="cursor:pointer;" onclick="window.open(\'password.php?usr_id='. $a_user_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')"><img 
+                                <a class="iconLink" style="cursor:pointer;" onclick="window.open(\'password.php?usr_id='. $a_user_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')"><img
                                     src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>';
                             }
                             // Nur berechtigte User duerfen ein Profil editieren
@@ -283,12 +290,12 @@ echo '
                             <li>
                                 <dl>
                                     <dt>Benutzername:</dt>
-                                    <dd><i>'; 
-                                    if(strlen($user->getValue("usr_login_name")) > 0) 
+                                    <dd><i>';
+                                    if(strlen($user->getValue("usr_login_name")) > 0)
                                     {
                                         echo $user->getValue("usr_login_name");
                                     }
-                                    else 
+                                    else
                                     {
                                         echo "nicht registriert";
                                     }
@@ -462,13 +469,13 @@ echo '
                                 echo "
                                 <tr>
                                     <td align=\"center\">
-                                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img 
+                                        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
                                             src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>";
                                     //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                                     if(strlen($user->getValue("usr_photo")) > 0)
                                     {
                                         echo"
-                                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img 
+                                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img
                                                 src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Foto löschen\" title=\"Foto löschen\" /></a>
                                         </td>";
                                     }
@@ -477,7 +484,7 @@ echo '
                                         echo"</td>";
                                     }
                                 echo "</tr>";
-                            }   
+                            }
                         echo"</table>
                     </div>
                 </div>
@@ -501,8 +508,8 @@ echo '
             {
                 // Kategorienwechsel den Kategorienheader anzeigen
                 // Kategorie "Messenger" nur anzeigen, wenn auch Daten zugeordnet sind
-                if($category != $value['cat_name'] 
-                && (  $value['cat_name'] != "Messenger" 
+                if($category != $value['cat_name']
+                && (  $value['cat_name'] != "Messenger"
                    || ($value['cat_name'] == "Messenger" && strlen($value['usd_value']) > 0 )))
                 {
                     if(strlen($category) > 0)
@@ -531,7 +538,7 @@ echo '
 
                 // Html des Feldes ausgeben
                 // bei Kategorie "Messenger" nur anzeigen, wenn auch Daten zugeordnet sind
-                if($value['cat_name'] != "Messenger" 
+                if($value['cat_name'] != "Messenger"
                 || ($value['cat_name'] == "Messenger" && strlen($value['usd_value']) > 0 ))
                 {
                     echo getFieldCode($value, $a_user_id);
@@ -548,16 +555,95 @@ echo '
         if($g_preferences['profile_show_roles'] == 1)
         {
             // *******************************************************************************
+            // Berechtigungen-Block
+            // *******************************************************************************
+            echo "<div class=\"groupBox\" id=\"profile_roles_box\">
+                     <div class=\"groupBoxHeadline\">
+                        <div style=\"float: left;\">Berechtigungen&nbsp;</div>
+                     </div>
+                     <div class=\"groupBoxBody\">";
+            //checkRolesRight($right)
+               if($user->checkRolesRight('rol_assign_roles') == 1)
+              {
+                  echo "<img onmouseover=\"color('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
+                  alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
+              }
+              if($user->checkRolesRight('rol_approve_users') == 1)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
+                  alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
+              }
+              if($user->checkRolesRight('rol_edit_user') == 1)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
+                  alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
+              }
+
+              if($user->checkRolesRight('rol_mail_to_all') == 1)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
+                  alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
+              }
+              if($user->checkRolesRight('rol_profile') == 1)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
+                  alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
+              }
+              if($user->checkRolesRight('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
+                  alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
+              }
+              if($user->checkRolesRight('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
+                  alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
+              }
+              if($user->checkRolesRight('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
+                  alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
+              }
+              if($user->checkRolesRight('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
+                  alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
+              }
+              if($user->checkRolesRight('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
+                  alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
+              }
+              if($user->checkRolesRight('rol_guestbook_comments') == 1 && $g_preferences['enable_guestbook_module'] > 0)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
+                  alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
+              }
+              if($user->checkRolesRight('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
+                  alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
+              }
+              if($user->checkRolesRight('rol_all_lists_view') == 1)
+              {
+                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
+                  alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
+              }
+              echo "</div><div id=\"anzeige\"><p id=\"anzeige\">Gesetzt durch:</p></div>
+              </div>";
+
+            // *******************************************************************************
             // Rollen-Block
             // *******************************************************************************
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
-            
+            $today = date('Y-m-d');
             $count_show_roles = 0;
             $sql = "SELECT *
                       FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                      WHERE mem_rol_id = rol_id
-                       AND mem_valid  = 1
+                       AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
+                       AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') >= '$today')
                        AND mem_usr_id = $a_user_id
                        AND rol_valid  = 1
                        AND rol_cat_id = cat_id
@@ -567,9 +653,10 @@ echo '
             $result_role = $g_db->query($sql);
             $count_role  = $g_db->num_rows($result_role);
 
+            //Ausgabe
             echo "<div class=\"groupBox\" id=\"profile_roles_box\">
                 <div class=\"groupBoxHeadline\">
-                    <div style=\"float: left;\">Rollenmitgliedschaften und Berechtigungen&nbsp;</div>";
+                    <div style=\"float: left;\">Rollenmitgliedschaften&nbsp;</div>";
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
                         if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue("usr_id")) || $g_current_user->editUsers())
                         && $user->getValue("usr_reg_org_shortname") != $g_current_organization->getValue("org_shortname"))
@@ -594,85 +681,19 @@ echo '
                                             '. $row['cat_name']. ' - ';
                                                 if($g_current_user->viewRole($row['mem_rol_id']))
                                                 {
-                                                    echo'<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                                    echo'<a id="'.$row['rol_name'].'" href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id=1&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
                                                 }
                                                 else
                                                 {
-                                                    echo $row['rol_name'];  
+                                                    echo $row['rol_name'];
                                                 }
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo ' - Leiter';
                                                 }
                                             echo '&nbsp;';
-                                            
-                                            // nun fuer alle Rollenrechte die Icons anzeigen
-                                            if($row['rol_assign_roles'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
-                                                alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
-                                            }
-                                            if($row['rol_approve_users'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
-                                                alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
-                                            }                                                    
-                                            if($row['rol_edit_user'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
-                                                alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
-                                            }
-                                            
-                                            if($row['rol_mail_to_all'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
-                                                alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
-                                            }
-                                            if($row['rol_profile'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
-                                                alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
-                                            }
-                                            if($row['rol_announcements'] == 1 && $g_preferences['enable_announcements_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
-                                                alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_dates'] == 1 && $g_preferences['enable_dates_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
-                                                alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_photo'] == 1 && $g_preferences['enable_photo_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
-                                                alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_download'] == 1 && $g_preferences['enable_download_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
-                                                alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_guestbook'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
-                                                alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
-                                            }
-                                            if($row['rol_guestbook_comments'] == 1 && $g_preferences['enable_guestbook_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
-                                                alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
-                                            }
-                                            if($row['rol_weblinks'] == 1 && $g_preferences['enable_weblinks_module'] > 0)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
-                                                alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
-                                            }
-                                            if($row['rol_all_lists_view'] == 1)
-                                            {
-                                                echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
-                                                alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
-                                            }
+
+
                                                                     echo "</dt>
                                         <dd>
                                             seit ". mysqldate('d.m.y', $row['mem_begin']);
@@ -680,22 +701,24 @@ echo '
 
                                             {
                                                 echo "
-                                                <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '". 
-                                                	$row['cat_name']. "', '". mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ")\"><img 
-                                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                                                <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '".
+                                                	$row['cat_name']. "', '". mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ")\"><img
+                                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
+                                                    <a class=\"iconLink\" style=\"cursor:pointer;\" onclick=\"window.open('roles_date.php?usr_id=". $user->getValue("usr_id"). "&rol_id=".$row['rol_id']."','Titel','width=350,height=300,left=310,top=200')\"><img
+                                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Datum ändern\" title=\"Datum ändern\" /></a>";
                                             }
                                         echo "</dd>
                                     </dl>
                                 </li>";
-                                $count_show_roles++;  
-                            }       
+                                $count_show_roles++;
+                            }
                         }
-                        
+
                         if($count_show_roles == 0)
                         {
-                            echo 'Diese Person ist kein Mitglied der Organisation '. 
+                            echo 'Diese Person ist kein Mitglied der Organisation '.
                             $g_current_organization->getValue("org_longname"). ' bzw. es sind keine Rollen sichtbar.';
-                        }                       
+                        }
                     echo '</ul>
                 </div>
             </div>';
@@ -708,12 +731,12 @@ echo '
             // *******************************************************************************
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
-            
+
             $count_show_roles = 0;
             $sql    = "SELECT *
                          FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                         WHERE mem_rol_id = rol_id
-                          AND mem_valid  = 0
+                          AND DATE_FORMAT(mem_end, '%Y-%m-%d') < '$today'
                           AND mem_usr_id = $a_user_id
                           AND rol_valid  = 1
                           AND rol_cat_id = cat_id
@@ -723,7 +746,7 @@ echo '
             $result_role = $g_db->query($sql);
             $count_role  = $g_db->num_rows($result_role);
             $visible     = "";
-            
+
             if($count_role == 0)
             {
                 $visible = ' style="display: none;" ';
@@ -749,7 +772,7 @@ echo '
                                             }
                                             else
                                             {
-                                                echo" - ".$row['rol_name']; 
+                                                echo" - ".$row['rol_name'];
                                             }
                                             if($row['mem_leader'] == 1)
                                             {
@@ -762,8 +785,10 @@ echo '
                                             if($g_current_user->isWebmaster())
                                             {
                                                 echo "
-                                                <a class=\"iconLink\" href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ")\"><img 
-                                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                                                <a class=\"iconLink\" href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ")\"><img
+                                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
+                                                    <a class=\"iconLink\" style=\"cursor:pointer;\" onclick=\"window.open('roles_date.php?usr_id=". $user->getValue("usr_id"). "&rol_id=".$row['rol_id']."','Titel','width=350,height=300,left=310,top=200')\"><img
+                                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Datum ändern\" title=\"Datum ändern\" /></a>";
                                             }
                                         echo "</dd>
                                     </dl>
@@ -774,14 +799,14 @@ echo '
                         if($count_show_roles == 0 && $count_role > 0)
                         {
                             echo 'Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.';
-                        }                           
+                        }
                     echo "</ul>
                 </div>
             </div>";
         }
 
         if($g_preferences['profile_show_extern_roles'] == 1
-        && (  $g_current_organization->getValue("org_org_id_parent") > 0 
+        && (  $g_current_organization->getValue("org_org_id_parent") > 0
            || $g_current_organization->hasChildOrganizations() ))
         {
             // *******************************************************************************
@@ -841,7 +866,7 @@ if(isset($_GET['user_id']) == true)
     <ul class=\"iconTextLinkList\">
         <li>
             <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img 
+                <a href=\"$g_root_path/adm_program/system/back.php\"><img
                 src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
                 <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
             </span>
