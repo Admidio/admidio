@@ -209,18 +209,18 @@ $g_layout['header'] = $g_js_vars. '
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
-                    user_fields['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
-                    user_fields['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
-                    user_fields['. $i. '][\'usf_id\'] = \'usr_login_name\';
-                    user_fields['. $i. '][\'usf_name\'] = \'Benutzername\';';
+                    user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
+                    user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
+                    user_fields['. $i. ']["usf_id"]   = "usr_login_name";
+                    user_fields['. $i. ']["usf_name"] = "Benutzername";';
                     $i++;
                     
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
-                    user_fields['. $i. '][\'cat_id\'] = '. $old_cat_id. ';
-                    user_fields['. $i. '][\'cat_name\'] = \''. $old_cat_name. '\';
-                    user_fields['. $i. '][\'usf_id\'] = \'usr_photo\';
-                    user_fields['. $i. '][\'usf_name\'] = \'Foto\';';
+                    user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
+                    user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
+                    user_fields['. $i. ']["usf_id"]   = "usr_photo";
+                    user_fields['. $i. ']["usf_name"] = "Foto";';
                     $i++;
                 }
                 
@@ -228,10 +228,10 @@ $g_layout['header'] = $g_js_vars. '
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
-                    user_fields['. $i. '][\'cat_id\'] = '. $value['cat_id']. ';
-                    user_fields['. $i. '][\'cat_name\'] = \''. $value['cat_name']. '\';
-                    user_fields['. $i. '][\'usf_id\'] = '. $value['usf_id']. ';
-                    user_fields['. $i. '][\'usf_name\'] = \''. $value['usf_name']. '\';';
+                    user_fields['. $i. ']["cat_id"]   = '. $value['cat_id']. ';
+                    user_fields['. $i. ']["cat_name"] = "'. $value['cat_name']. '";
+                    user_fields['. $i. ']["usf_id"]   = '. $value['usf_id']. ';
+                    user_fields['. $i. ']["usf_name"] = "'. addslashes($value['usf_name']). '";';
                 
                     $old_cat_id   = $value['cat_id'];
                     $old_cat_name = $value['cat_name'];
@@ -242,18 +242,18 @@ $g_layout['header'] = $g_js_vars. '
             // Anfangs- und Enddatum der Rollenmitgliedschaft als Inhalte noch anhaengen
             $g_layout['header'] .= '
             user_fields['. $i. '] = new Object();
-            user_fields['. $i. '][\'cat_id\'] = -1;
-            user_fields['. $i. '][\'cat_name\'] = \'Rollendaten\';
-            user_fields['. $i. '][\'usf_id\'] = \'mem_begin\';
-            user_fields['. $i. '][\'usf_name\'] = \'Mitgliedsbeginn\';';
+            user_fields['. $i. ']["cat_id"]   = -1;
+            user_fields['. $i. ']["cat_name"] = "Rollendaten";
+            user_fields['. $i. ']["usf_id"]   = "mem_begin";
+            user_fields['. $i. ']["usf_name"] = "Mitgliedsbeginn";';
             
             $i++;
             $g_layout['header'] .= '
             user_fields['. $i. '] = new Object();
-            user_fields['. $i. '][\'cat_id\'] = -1;
-            user_fields['. $i. '][\'cat_name\'] = \'Rollendaten\';
-            user_fields['. $i. '][\'usf_id\'] = \'mem_end\';
-            user_fields['. $i. '][\'usf_name\'] = \'Mitgliedsende\';
+            user_fields['. $i. ']["cat_id"]   = -1;
+            user_fields['. $i. ']["cat_name"] = "Rollendaten";
+            user_fields['. $i. ']["usf_id"]   = "mem_end";
+            user_fields['. $i. ']["usf_name"] = "Mitgliedsende";
             
             return user_fields;
         }
