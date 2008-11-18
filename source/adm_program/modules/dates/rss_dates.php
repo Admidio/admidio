@@ -44,11 +44,11 @@ if ($g_preferences['enable_bbcode'] == 1)
 $organizations = "";
 $arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-foreach($arr_orgas as $key => $value)
+foreach($arr_orgas as $org_id => $value)
 {
-	$organizations = $organizations. "'$value', ";
+	$organizations = $organizations. "$org_id, ";
 }
-$organizations = $organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
+$organizations = $organizations. $g_current_organization->getValue("org_id");
 
 $hidden = "";
 if ($g_valid_login == false)

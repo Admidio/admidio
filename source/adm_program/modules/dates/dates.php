@@ -177,9 +177,9 @@ $hidden = "";
 $conditions = "";
 $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-foreach($arr_ref_orgas as $key => $value)
+foreach($arr_ref_orgas as $org_id => $value)
 {
-	$organizations = $organizations. $key. ", ";
+	$organizations = $organizations. $org_id. ", ";
 }
 $organizations = $organizations. $g_current_organization->getValue("org_id");
 
