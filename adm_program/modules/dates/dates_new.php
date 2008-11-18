@@ -302,7 +302,7 @@ echo "
                     echo "</dd>
                 </dl>
                 <dl>
-                    <dt><label for=\"dat_cat_id\">Kategorie:</label></dt>
+                    <dt><label for=\"dat_cat_id\">Kalender:</label></dt>
                     <dd>
                         <select id=\"dat_cat_id\" name=\"dat_cat_id\" size=\"1\" tabindex=\"3\">
                             <option value=\" \"";
