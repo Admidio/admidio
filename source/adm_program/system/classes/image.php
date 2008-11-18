@@ -166,7 +166,22 @@ class Image
     {
         return image_type_to_mime_type($this->imageType);
     }
-    
+
+    // setzt den Image-Type des Bildes neu
+    function setImageType($imageType)
+    {
+        switch ($imageType)
+        {
+            case "jpeg":
+                $this->imageType = IMAGETYPE_JPEG;
+                break;
+
+            case "png":
+                $this->imageType = IMAGETYPE_PNG;
+                break;
+        }
+    }
+
     // Methode dreht das Bild um 90° in eine Richtung
     // direction : "right" o. "left" Richtung, in die gedreht wird
     function rotate($direction = "right")

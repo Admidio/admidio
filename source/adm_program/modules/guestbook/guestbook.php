@@ -218,7 +218,7 @@ if ($g_db->num_rows($guestbook_result) == 0)
     // Keine Gaestebucheintraege gefunden
     if ($_GET['id'] > 0)
     {
-        echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+        echo "<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>";
     }
     else
     {

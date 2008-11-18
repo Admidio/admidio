@@ -141,6 +141,7 @@ if($_POST["upload"])
 
                     //Bild skalliert speichern
                     $image = new Image($temp_bild);
+                    $image->setImageType("jpeg");
                     $image->scale($g_preferences['photo_save_scale']);
                     $image->copyToFile(null, $ordner."/".$bildnr.".jpg");
                     $image->delete();
