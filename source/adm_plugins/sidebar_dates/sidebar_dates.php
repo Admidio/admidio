@@ -73,11 +73,11 @@ $g_db->setCurrentDB();
 $plg_organizations = "";
 $plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-foreach($plg_arr_orgas as $key => $value)
+foreach($plg_arr_orgas as $key)
 {
-	$plg_organizations = $plg_organizations. "'$value', ";
+	$plg_organizations = $plg_organizations. $key. ", ";
 }
-$plg_organizations = $plg_organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
+$plg_organizations = $plg_organizations. $g_current_organization->getValue("org_id");
 
 // Wenn User nicht eingeloggt ist, Kalender, die hidden sind, aussortieren
 $hidden = "";
@@ -90,8 +90,8 @@ if ($g_valid_login == false)
 $sql    = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
             WHERE dat_cat_id = cat_id
             AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            OR (   dat_global   = 1
-            AND cat_org_id IN ($organizations) ))
+                OR (   dat_global   = 1
+                   AND cat_org_id IN ($organizations) ))
 			  AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '$plg_act_date'
                   OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$plg_act_date 00:00:00' )
             ".$hidden."
