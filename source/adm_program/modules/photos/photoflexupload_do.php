@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 $_COOKIE["admidio_session_id"] = $_GET["admidio_session_id"];
+$_COOKIE["admidio_php_session_id"] = $_GET["admidio_php_session_id"];
 $_COOKIE["admidio_data"] = $_GET["admidio_data"];
 
 require_once("../../system/classes/table_photos.php");

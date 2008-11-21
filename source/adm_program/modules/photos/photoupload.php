@@ -139,7 +139,7 @@ elseif($_GET["mode"] == 2 && $g_preferences['photo_upload_mode'] <> 2)
             (Beginn: '. mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ')
 	    </p>';
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
-	$fup = new FlexUpload($g_root_path."/adm_program/modules/photos/photoflexupload_do.php?pho_id=".$_GET['pho_id']."&admidio_php_session_id=".$_COOKIE["admidio_session_id"]."&admidio_data=".$_COOKIE["admidio_data"]);
+	$fup = new FlexUpload($g_root_path."/adm_program/modules/photos/photoflexupload_do.php?pho_id=".$_GET['pho_id']."&admidio_php_session_id=".$_COOKIE["admidio_php_session_id"]."&admidio_session_id=".$_COOKIE["admidio_session_id"]."&admidio_data=".$_COOKIE["admidio_data"]);
 	//Pfad zum swf-File
 	$fup->setPathToSWF($g_root_path."/adm_program/libs/flexupload/");
 	//Pfad der Sprachdatei
