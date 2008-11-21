@@ -317,7 +317,6 @@ class FlexUpload {
 					menu="false"
 					scale="noscale"
 					salign="lt"
-					type="application/x-shockwave-flash"
 					pluginspage="http://www.adobe.com/go/getflashplayer">
 				</embed>
 			</object>';
