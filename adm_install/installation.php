@@ -602,6 +602,7 @@ elseif($req_mode == 7)
     $address_list = new ListConfiguration($db);
     $address_list->setValue("lst_name", "Adressliste");
     $address_list->setValue("lst_global", 1);
+    $address_list->setValue("lst_default", 1);
     $address_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
     $address_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
     $address_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));

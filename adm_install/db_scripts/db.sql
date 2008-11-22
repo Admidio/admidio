@@ -483,6 +483,7 @@ create table %PRAEFIX%_lists
    lst_name                       varchar(255),
    lst_timestamp                  datetime                       not null,
    lst_global                     tinyint(1) unsigned            not null default 0,
+   lst_default                    tinyint(1) unsigned            not null default 0,
    primary key (lst_id)
 )
 type = InnoDB

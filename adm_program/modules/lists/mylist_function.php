@@ -15,6 +15,7 @@
  *          2 - Listenkonfiguration speichern und anzeigen
  *          3 - Listenkonfiguration loeschen
  *          4 - Listenkonfiguration zur Systemkonfiguration machen
+ *          5 - Listenkonfiguration zur Standardkonfiguratoin machen
  *
  *****************************************************************************/
 
@@ -140,6 +141,15 @@ elseif ($_GET["mode"] == 3)
 
     // weiterleiten zur Listenkonfiguration
     header("Location: ".$g_root_path."/adm_program/modules/lists/mylist.php");
+    exit();
+}
+elseif ($_GET["mode"] == 5)
+{
+    // Listenkonfiguration zur Standardkonfiguration machen
+    $list->setDefault();
+
+    // wieder zur eigenen Liste zurueck
+    header("Location: ".$g_root_path."/adm_program/modules/lists/mylist.php?lst_id=". $list->getValue("lst_id"));
     exit();
 }
 

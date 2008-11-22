@@ -96,6 +96,14 @@ if($active_role)
     }
 }
 
+// Default-Konfiguration ermitteln
+$sql = "SELECT lst_id FROM ". TBL_LISTS. "
+         WHERE lst_org_id  = ". $g_current_organization->getValue("org_id"). "
+           AND lst_default = 1 ";
+$g_db->query($sql);
+$row = $g_db->fetch_array();
+$default_list_id = $row[0];
+
 // SQL-Statement zusammensetzen
 $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
          WHERE rol_valid  = $active_role
@@ -352,20 +360,11 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                     // Link nur anzeigen, wenn Rolle auch Mitglieder hat
                     if($num_member > 0 || $num_leader > 0)
                     {
-                        echo "<a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=";
-                        if($active_role)
-                        {
-                            echo "address";
-                        }
-                        else
-                        {
-                            echo "former";
-                        }
-                        echo "&amp;mode=html&amp;rol_id=". $row_lst['rol_id']. "\">". $row_lst['rol_name']. "</a>";
+                        echo '<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='. $default_list_id. '&amp;mode=html&amp;rol_id='. $row_lst['rol_id']. '">'. $row_lst['rol_name']. '</a>';
                     }
                     else
                     {
-                        echo "<strong>". $row_lst['rol_name']. "</strong>";
+                        echo '<strong>'. $row_lst['rol_name']. '</strong>';
                     }
     
 		        	//Mail an Rolle schicken
