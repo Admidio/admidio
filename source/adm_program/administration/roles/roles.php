@@ -39,14 +39,6 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 unset($_SESSION['roles_request']);
 
-// Default-Konfiguration ermitteln
-$sql = "SELECT lst_id FROM ". TBL_LISTS. "
-         WHERE lst_org_id  = ". $g_current_organization->getValue("org_id"). "
-           AND lst_default = 1 ";
-$g_db->query($sql);
-$row = $g_db->fetch_array();
-$default_list_id = $row[0];
-
 // Html-Kopf ausgeben
 $g_layout['title']  = "Rollenverwaltung";
 
@@ -239,7 +231,7 @@ echo "
                 }
             echo '</td>
             <td style="text-align: center;">
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$default_list_id.'&amp;mode=html&amp;rol_id='.$row->rol_id.'"><img
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$row->rol_id.'"><img
                 src="'. THEME_PATH. '/icons/list.png" alt="Mitglieder anzeigen" title="Mitglieder anzeigen" /></a>';
 
                 if($req_valid == true)

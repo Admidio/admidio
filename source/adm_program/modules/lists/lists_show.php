@@ -11,6 +11,7 @@
  *
  * mode   : Ausgabeart   (html, print, csv-ms, csv-ms-2k, csv-oo)
  * lst_id : ID der Listenkonfiguration, die angezeigt werden soll
+ *          Wird keine ID uebergeben, wird die Default-Konfiguration angezeigt
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
  * start  : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen 
  * show_members : 0 - (Default) aktive Mitglieder der Rolle anzeigen
@@ -46,7 +47,13 @@ if(isset($_GET['lst_id']) && is_numeric($_GET['lst_id']))
 }
 else
 {
-    $g_message->show("invalid");
+	// Default-Konfiguration laden
+	$sql = "SELECT lst_id FROM ". TBL_LISTS. "
+	         WHERE lst_org_id  = ". $g_current_organization->getValue("org_id"). "
+	           AND lst_default = 1 ";
+	$g_db->query($sql);
+	$row = $g_db->fetch_array();
+	$req_lst_id = $row[0];
 }
 
 if(isset($_GET["rol_id"]))
@@ -228,8 +235,22 @@ if($req_mode != "csv")
             //--></script>';
         require(THEME_SERVER_PATH. "/overall_header.php");
     }
-    
-    echo "<h1 class=\"moduleHeadline\">". $role->getValue("rol_name"). "&nbsp;&#40;".$role->getValue("cat_name")."&#41;</h1>";
+
+    if($show_members == 0)
+    {
+    	$member_status = 'Aktive Mitglieder';
+    }
+    elseif($show_members == 1)
+    {
+    	$member_status = 'Ehemalige Mitglieder';
+    }
+    elseif($show_members == 2)
+    {
+    	$member_status = 'Aktive und ehemalige Mitglieder';
+    }
+
+    echo '<h1 class="moduleHeadline">'. $role->getValue("rol_name"). '</h1>
+    <h3>&#40;'.$role->getValue("cat_name").' - '. $member_status .'&#41;</h3>';
 
     //Beschreibung der Rolle einblenden
     if(strlen($role->getValue("rol_description")) > 0)
