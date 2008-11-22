@@ -637,7 +637,7 @@ elseif($req_mode == 7)
     $contact_list->save();
     
     $former_list = new ListConfiguration($db);
-    $former_list->setValue("lst_name", "Ehemaligenliste");
+    $former_list->setValue("lst_name", "Mitgliedschaft");
     $former_list->setValue("lst_global", 1);
     $former_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"));
     $former_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"));

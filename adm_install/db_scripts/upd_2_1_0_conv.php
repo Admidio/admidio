@@ -122,7 +122,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $contact_list->save();
     
     $former_list = new ListConfiguration($g_db);
-    $former_list->setValue("lst_name", "Ehemaligenliste");
+    $former_list->setValue("lst_name", "Mitgliedschaft");
     $former_list->setValue("lst_global", 1);
     $former_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"));
     $former_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"));
