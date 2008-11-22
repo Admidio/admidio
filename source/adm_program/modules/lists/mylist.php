@@ -358,6 +358,15 @@ $g_layout['header'] = $g_js_vars. '
                         document.getElementById("form_mylist").submit();
                     }
                     break;
+
+                case "default":
+                    var msg_result = confirm("Willst du die aktuelle Listenkonfiguration zur neuen Standardkonfiguration dieser Organisation machen ?");
+                    if(msg_result)
+                    {
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=5";
+                        document.getElementById("form_mylist").submit();
+                    }
+                    break;
             }
         }
     </script>';
@@ -475,6 +484,7 @@ echo '
                 src="'. THEME_PATH. '/icons/disk.png" alt="Konfiguration speichern" title="Konfiguration speichern" /></a>';
         }
 
+        // eigene Liste duerfen geloescht werden, Webmaster koennen aus Systemkonfigurationen loeschen
         if($g_current_user->isWebmaster() && $list->getValue("lst_global") == 1
         || ($g_current_user->getValue("usr_id") == $list->getValue("lst_usr_id") && strlen($list->getValue("lst_name")) > 0))
         {
@@ -490,6 +500,14 @@ echo '
             <a class="iconLink" href="javascript:send(\'system\');"><img
                 src="'. THEME_PATH. '/icons/list_global.png" alt="Konfiguration allen Benutzern zur Verfügung stellen" title="Konfiguration allen Benutzern zur Verfügung stellen" /></a>';
         }
+        
+        // eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
+        if($g_current_user->isWebmaster() && $list->getValue("lst_global") == 1)
+        {
+            echo '
+            <a class="iconLink" href="javascript:send(\'default\');"><img
+                src="'. THEME_PATH. '/icons/star.png" alt="Konfiguration wird zur neuen Standardkonfiguration" title="Konfiguration wird zur neuen Standardkonfiguration" /></a>';
+        }        
         echo '</p>
         
         <p><b>2.</b> Bestimme die Spalten, die in der Liste angezeigt werden sollen:</p>
