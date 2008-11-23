@@ -61,8 +61,8 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
 //bei Bedarf Uploadodner erzeugen
 if(!file_exists(SERVER_PATH. "/adm_my_files/photos/upload"))
 {
-    mkdir(SERVER_PATH. "/adm_my_files/photos/upload", 0777);
-    chmod(SERVER_PATH. "/adm_my_files/photos/upload", 0777);
+    mkdir(SERVER_PATH. "/adm_my_files/photos/upload", 0774);
+    chmod(SERVER_PATH. "/adm_my_files/photos/upload", 0774);
 }
 
 //Ordnerpfad
@@ -101,8 +101,8 @@ if (is_uploaded_file($_FILES['Filedata']['tmp_name'])) {
         //Nachsehen ob Thumnailordner existiert
         if(!file_exists($ordner."/thumbnails"))
         {
-            mkdir($ordner."/thumbnails", 0777);
-            chmod($ordner."/thumbnails", 0777);
+            mkdir($ordner."/thumbnails", 0774);
+            chmod($ordner."/thumbnails", 0774);
         }
 
         //Thumbnail speichern
