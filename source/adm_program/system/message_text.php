@@ -176,7 +176,7 @@ $message_text = array(
     "write_access" =>
         "Der Ordner %VAR1% konnte nicht angelegt werden. Du musst dich an den
         <a href=\"mailto:%VAR2%\">Webmaster</a> wenden, damit dieser die entsprechenden
-        <acronym title=\"über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.\">Schreibrechte</acronym>
+        <acronym title=\"über FTP die Dateiattribute auf 0774 bzw. drwxrwxrwx setzen.\">Schreibrechte</acronym>
         setzen kann.",
 
     // Meldungen Listen
