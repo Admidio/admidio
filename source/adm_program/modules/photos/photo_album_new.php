@@ -224,7 +224,7 @@ echo "
                 <dl>
                     <dt><label for="pho_end">Ende:</label></dt>
                     <dd>
-                        <input type="text" id="pho_end" name="pho_end" size="10" maxlength="10" value="'. $photo_album->getValue("pho_end").'">
+                        <input type="text" id="pho_end" name="pho_end" size="10" tabindex="4" maxlength="10" value="'. $photo_album->getValue("pho_end").'">
                         <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:calPopUp.select(document.forms[0].pho_end,\'ico_cal_pho_end\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\');" 
                             id="ico_cal_pho_end" style="vertical-align:middle; cursor:pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
                     </dd>
@@ -263,7 +263,7 @@ echo "
         //Submitbutton
         echo"<hr />
         <div class=\"formSubmit\">
-            <button name=\"submit\" type=\"submit\" tabindex=\"8\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
+            <button name=\"submit\" type=\"submit\" tabindex=\"7\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
         </div>
 
     </div>
@@ -274,13 +274,13 @@ echo "
     <li>
         <span class=\"iconTextLink\">
             <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
+            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" tabindex=\"8\" /></a>
             <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
         </span>
     </li>
     <li>
         <span class=\"iconTextLink\">
-            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
+            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" tabindex=\"9\"
                 onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
             <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=310,top=200,scrollbars=yes')\">Hilfe</a>
         </span>
