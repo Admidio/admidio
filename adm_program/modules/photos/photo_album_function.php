@@ -182,16 +182,16 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         //wenn Rechte OK, Ordner erstellen
         else
         {
-            mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu",0777);
-            chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu", 0777);
-            mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails",0777);
-            chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails", 0777);
+            mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu",0774);
+            chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu", 0774);
+            mkdir(SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails",0774);
+            chmod(SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails", 0774);
         }
 
         //Fotos verschieben
         for($x=1; $x<=$photo_album->getValue("pho_quantity"); $x++)
         {
-            chmod("$ordner/$x.jpg", 0777);
+            chmod("$ordner/$x.jpg", 0774);
             copy("$ordner/$x.jpg", SERVER_PATH. "/adm_my_files/photos/$ordnerneu/$x.jpg");
             unlink("$ordner/$x.jpg");
         }
@@ -199,15 +199,15 @@ if(isset($_POST["submit"]) && $_POST["submit"])
         //Thumbnails verschieben
         for($x=1; $x<=$photo_album->getValue("pho_quantity"); $x++)
         {
-            chmod("$ordner/thumbnails/$x.jpg", 0777);
+            chmod("$ordner/thumbnails/$x.jpg", 0774);
             copy("$ordner/thumbnails/$x.jpg", SERVER_PATH. "/adm_my_files/photos/$ordnerneu/thumbnails/$x.jpg");
             unlink("$ordner/thumbnails/$x.jpg");
         }
 
         //alten ordner loeschen
-        chmod("$ordner/thumbnails", 0777);
+        chmod("$ordner/thumbnails", 0774);
         rmdir("$ordner/thumbnails");
-        chmod("$ordner", 0777);
+        chmod("$ordner", 0774);
         rmdir("$ordner");
         
         // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen

@@ -45,10 +45,10 @@ if (is_writeable(SERVER_PATH. "/adm_my_files"))
     if (file_exists(SERVER_PATH. "/adm_my_files/download") == false)
     {
         // Ordner fuer die Downloads existiert noch nicht -> erst anlegen
-        $b_return = @mkdir(SERVER_PATH. "/adm_my_files/download", 0777);
+        $b_return = @mkdir(SERVER_PATH. "/adm_my_files/download", 0774);
         if ($b_return)
         {
-            $b_return = @chmod(SERVER_PATH. "/adm_my_files/download", 0777);
+            $b_return = @chmod(SERVER_PATH. "/adm_my_files/download", 0774);
         }
         if ($b_return == false)
         {
@@ -292,10 +292,10 @@ elseif ($req_mode == 3)
     else
     {
         // Ordner erstellen
-        $b_return = @mkdir($targetFolder->getCompletePathOfFolder(). "/$newFolderName", 0777);
+        $b_return = @mkdir($targetFolder->getCompletePathOfFolder(). "/$newFolderName", 0774);
         if($b_return)
         {
-            $b_return = @chmod($targetFolder->getCompletePathOfFolder(). "/$newFolderName", 0777);
+            $b_return = @chmod($targetFolder->getCompletePathOfFolder(). "/$newFolderName", 0774);
 
             //Jetzt noch den Ordner der DB hinzufuegen...
             $newFolder = new TableFolder($g_db);
