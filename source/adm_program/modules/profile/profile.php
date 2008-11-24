@@ -224,15 +224,14 @@ $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>';
-
-echo "
-   <script type=\"text/javascript\">
-      function color(name){
-         document.getElementById('anzeige').text = 'Gesetzt durch:'+ name;
-      }
-   </script>
-";
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
+    
+    <script type="text/javascript">
+        function color(name)
+        {
+            document.getElementById("anzeige").text = "Gesetzt durch:"+ name;
+        }
+    </script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo '
