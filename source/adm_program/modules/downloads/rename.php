@@ -91,7 +91,7 @@ else {
     $class->getFolderForDownload($folder_id);
 }
 
-if (is_a($class,'File')) {
+if (is_a($class,'TableFile')) {
     if ($class->getValue('fil_id')) {
         $originalName = $class->getValue('fil_name');
     }
@@ -101,12 +101,12 @@ if (is_a($class,'File')) {
 
 }
 else {
-if ($class->getValue('fol_id')) {
-        $originalName = $class->getValue('fol_name');
-    }
-    else {
-        $g_message->show("invalid");
-    }
+	if ($class->getValue('fol_id')) {
+	        $originalName = $class->getValue('fol_name');
+	    }
+	    else {
+	        $g_message->show("invalid");
+	    }
 
 }
 
