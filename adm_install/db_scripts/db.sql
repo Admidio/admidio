@@ -220,10 +220,12 @@ alter table %PRAEFIX%_user_fields add constraint %PRAEFIX%_FK_USF_CAT foreign ke
 /*==============================================================*/
 create table %PRAEFIX%_user_data
 (
+   usd_id                         int(11) unsigned               not null AUTO_INCREMENT,
    usd_usr_id                     int(11) unsigned               not null,
    usd_usf_id                     int(11) unsigned               not null,
    usd_value                      varchar(255),
-   primary key (usd_usr_id, usd_usf_id)
+   primary key (usd_id),
+   unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
 )
 engine = InnoDB
 auto_increment = 1;

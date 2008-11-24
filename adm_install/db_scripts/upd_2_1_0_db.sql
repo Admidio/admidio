@@ -67,6 +67,39 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_CAT foreign key (dat
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_this_role tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_to_all tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
 
+-- Autoincrement-Spalte für adm_user_data anlegen
+ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USF;
+ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USR ;
+
+RENAME TABLE %PRAEFIX%_user_data TO %PRAEFIX%_user_data_old;
+
+create table %PRAEFIX%_user_data
+(
+   usd_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   usd_usr_id                     int(11) unsigned               not null,
+   usd_usf_id                     int(11) unsigned               not null,
+   usd_value                      varchar(255),
+   primary key (usd_id),
+   unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
+)
+engine = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_user_data add index USD_USF_FK (usd_usf_id);
+alter table %PRAEFIX%_user_data add index USD_USR_FK (usd_usr_id);
+
+-- Constraints
+alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USF foreign key (usd_usf_id)
+      references %PRAEFIX%_user_fields (usf_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USR foreign key (usd_usr_id)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+
+INSERT INTO %PRAEFIX%_user_data (usd_usr_id, usd_usf_id, usd_value)
+SELECT usd_usr_id, usd_usf_id, usd_value
+  FROM %PRAEFIX%_user_data_old;
+  
+DROP TABLE %PRAEFIX%_user_data_old;
 
 /*==============================================================*/
 /* Table: adm_lists                                             */
