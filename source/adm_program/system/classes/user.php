@@ -13,9 +13,13 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
+ * readUserData()       - baut ein Array mit allen Profilfeldern und 
+ *                        den entsprechenden Werten des Users auf
  * getProperty($field_name, $property)
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
+ * getPropertyById($field_id, $property)
+ *                      - aehnlich getProperty, allerdings suche ueber usf_id
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
  * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
  *                        Users einsehen darf
@@ -26,96 +30,64 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_users.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_user_data.php");
 
-class User extends TableAccess
+class User extends TableUsers
 {
     var $webmaster;
-    var $b_set_last_change;         // Kennzeichen, ob User und Zeitstempel der aktuellen Aenderung gespeichert werden sollen
-    var $real_password;             // Unverschluesseltes Passwort. Ist nur gefuellt, wenn gerade das Passwort gesetzt wurde
-
-    var $db_user_fields = array();  // Array ueber alle Felder der User-Fields-Tabelle des entsprechenden Users
-    var $roles_rights   = array();  // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-    var $list_view_rights = array();  // Array ueber Listenrechte einzelner Rollen
-    var $role_mail_rights = array();  // Array ueber Mailrechte einzelner Rollen
+    
+    var $userFieldData    = array();    // Array ueber alle Userdatenobjekte mit den entsprechenden Feldeigenschaften
+    var $roles_rights     = array();    // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
+    var $list_view_rights = array();    // Array ueber Listenrechte einzelner Rollen
+    var $role_mail_rights = array();    // Array ueber Mailrechte einzelner Rollen
 
     // Konstruktor
-    function User(&$db, $user_id = 0)
+    function User(&$db, $usr_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_USERS;
-        $this->column_praefix = "usr";
+        $this->TableUsers($db, $usr_id);
+    }
+    
+    function readData($usr_id)
+    {
+        parent::readData($usr_id);
 
-        if(strlen($user_id) > 0)
+        if($usr_id > 0)
         {
-            $this->readData($user_id);
-        }
-        else
-        {
-            $this->clear();
+            $this->readUserData();
         }
     }
-
-    // User mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($user_id)
+    
+    // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
+    function readUserData()
     {
-        parent::readData($user_id);
+        $userFieldData = array();
 
-        // user_data-Array aufbauen
-        $this->fillUserFieldArray($user_id);
-    }
-
-    function fillUserFieldArray($user_id = 0)
-    {
-        global $g_current_organization;
-
-        // erst mal alles bisherige entfernen
-        $this->db_user_fields = array();
-
-        if(is_numeric($user_id) && $user_id > 0)
+        if($this->getValue("usr_id") > 0)
         {
-            $field_usd_value = "usd_value";
             $join_user_data  = "LEFT JOIN ". TBL_USER_DATA. "
                                   ON usd_usf_id = usf_id
-                                 AND usd_usr_id = $user_id";
+                                 AND usd_usr_id = ". $this->getValue("usr_id");
         }
         else
         {
-            $field_usd_value = "NULL as usd_value";
             $join_user_data  = "";
         }
 
-        // Daten aus adm_user_data auslesen
-        $sql = "SELECT usf_id, cat_id, cat_name, usf_name, usf_type, usf_description,
-                       usf_disabled, usf_hidden, usf_mandatory, usf_system, $field_usd_value
-                  FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
+        $sql = "SELECT * FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
                        $join_user_data
                  WHERE usf_cat_id = cat_id
-                   AND (  cat_org_id IS NULL
-                       OR cat_org_id  = ". $g_current_organization->getValue("org_id"). " )
-                 ORDER BY cat_sequence, usf_sequence";
-        $result_usf = $this->db->query($sql);
-
-        while($row_usf = $this->db->fetch_array($result_usf))
+                 ORDER BY cat_sequence ASC, usf_sequence ASC ";
+        $usf_result   = $this->db->query($sql);
+        
+        while($usf_row = $this->db->fetch_array($usf_result))
         {
-            // ein mehrdimensionales Array aufbauen, welche fuer jedes usf-Feld alle
-            // Daten des Sql-Statements beinhaltet
-            for($i = 0; $i < $this->db->num_fields($result_usf); $i++)
+            if(isset($this->userFieldData[$usf_row['usf_name']]) == false)
             {
-                $this->db_user_fields[$row_usf['usf_name']][$this->db->field_name($result_usf, $i)] = $row_usf[$i];
+                $this->userFieldData[$usf_row['usf_name']] = new TableUserData($this->db);
             }
-            // Flag, ob der Inhalt geaendert wurde, um das Update effektiver zu gestalten
-            $this->db_user_fields[$row_usf['usf_name']]['changed'] = false;
-            // Flag, welches angibt, ob der Wert neu hinzugefuegt wurde
-            if(is_null($row_usf['usd_value']))
-            {
-                $this->db_user_fields[$row_usf['usf_name']]['new'] = true;
-            }
-            else
-            {
-                $this->db_user_fields[$row_usf['usf_name']]['new'] = false;
-            }
-        }
+            $this->userFieldData[$usf_row['usf_name']]->setArray($usf_row);
+        }    
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
@@ -123,16 +95,15 @@ class User extends TableAccess
     function clear()
     {
         parent::clear();
+        
+        // die Profilfeldinfos werden neu geladen, allerdings ohne Werte
+        $this->readUserData();
 
         $this->webmaster = 0;
         $this->b_set_last_change = true;
 
         // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
         $this->setValue("usr_valid", 1);
-
-        // user_data-Array komplett neu aufbauen
-        // vorher wurde nur alles geleert, dadurch aber keine geloeschten Felder entfernt
-        $this->fillUserFieldArray();
 
         // Arrays initialisieren
         $this->roles_rights = array();
@@ -141,23 +112,13 @@ class User extends TableAccess
 
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
-    // die Methode wird innerhalb von setValue() aufgerufen
     function setValue($field_name, $field_value)
     {
         if(strpos($field_name, "usr_") !== 0)
         {
             // Daten fuer User-Fields-Tabelle
-            if($field_value != $this->db_user_fields[$field_name]['usd_value'])
+            if($field_value != $this->userFieldData[$field_name]->getValue("usd_value"))
             {
-                if(strlen($this->db_user_fields[$field_name]['usd_value']) == 0)
-                {
-                    $this->db_user_fields[$field_name]['new'] = true;
-                }
-                else
-                {
-                    $this->db_user_fields[$field_name]['new'] = false;
-                }
-
                 // Homepage noch mit http vorbelegen
                 if($this->getProperty($field_name, "usf_type") == "URL")
                 {
@@ -167,34 +128,23 @@ class User extends TableAccess
                         $field_value = "http://". $field_value;
                     }
                 }
-                $this->db_user_fields[$field_name]['usd_value'] = $field_value;
-                $this->db_user_fields[$field_name]['changed']   = true;
+                $this->userFieldData[$field_name]->setValue("usd_value", $field_value);
             }
         }
-        elseif($field_name == "usr_password")
+        else
         {
-            // Passwort verschluesselt und unverschluesselt speichern
-            $this->real_password = $field_value;
-            $field_value = md5($field_value);
+            parent::setValue($field_name, $field_value);
         }
-        parent::setValue($field_name, $field_value);
     }
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
     // angefordert wurde und gibt diesen zurueck
     // die Funktion wird innerhalb von getValue() aufgerufen
-    function getValue($field_name)
+    function getValue($field_name, $field_value = "")
     {
         if(strpos($field_name, "usr_") === 0)
         {
-            $field_value = parent::getValue($field_name);
-
-            // ist die Create-Id leer, so wurde der Datensatz durch Registierung angelegt und gehoert dem User selber
-            if($field_name == "usr_usr_id_create" && strlen($field_value) == 0)
-            {
-                $field_value = parent::getValue("usr_id");
-            }
-            return $field_value;
+            return parent::getValue($field_name, $field_value);
         }
         else
         {
@@ -207,82 +157,54 @@ class User extends TableAccess
     // hier koennen auch noch bestimmte Formatierungen angewandt werden
     function getProperty($field_name, $property)
     {
-        return $this->db_user_fields[$field_name][$property];
+        return $this->userFieldData[$field_name]->getValue($property);
     }
 
     // aehnlich getProperty, allerdings suche ueber usf_id
     function getPropertyById($field_id, $property)
     {
-        foreach($this->db_user_fields as $key => $value)
+        foreach($this->userFieldData as $field)
         {
-            if($value['usf_id'] == $field_id)
+            if($field->getValue('usf_id') == $field_id)
             {
-                return $value[$property];
+                return $field->getValue($property);
             }
         }
         return false;
     }
 
-    // die Funktion speichert die Userdaten in der Datenbank,
-    // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
-        global $g_current_session, $g_current_user;
-        $fields_changed = $this->db_fields_changed;
+        global $g_current_session;
+        $fields_changed = $this->columnsValueChanged;
 
-        if($this->b_set_last_change)
-        {
-            if($this->new_record)
-            {
-                $this->setValue("usr_timestamp_create", date("Y-m-d H:i:s", time()));
-                $this->setValue("usr_usr_id_create", $g_current_user->getValue("usr_id"));
-            }
-            else
-            {
-                // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-                if(time() > (strtotime($this->getValue("usr_timestamp_create")) + 900)
-                || $g_current_user->getValue("usr_id") != $this->getValue("usr_usr_id_create") )
-                {
-                    $this->setValue("usr_timestamp_change", date("Y-m-d H:i:s", time()));
-                    $this->setValue("usr_usr_id_change", $g_current_user->getValue("usr_id"));
-                }
-            }
-        }
-
-        $this->b_set_last_change = true;
         parent::save();
-
-        // nun noch Updates fuer alle geaenderten User-Fields machen
-        foreach($this->db_user_fields as $key => $value)
+        
+        // jetzt noch die einzelnen Spalten sichern
+        foreach($this->userFieldData as $field)
         {
-            if($value['changed'] == true)
+            // update nur machen, wenn auch noetig
+            if($field->getValue("usd_id") > 0 || $field->getValue("usd_value") > 0)
             {
-                $item_connection = "";
-                $sql_field_list  = "";
-
-                if(strlen($value['usd_value']) == 0)
+                // wird das Feld neu gefuellt, dann auch User-ID setzen
+                if($field->getValue("usd_usr_id") == 0
+                && strlen($field->getValue("usd_value")) > 0)
                 {
-                    $sql = "DELETE FROM ". TBL_USER_DATA. "
-                             WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
-                               AND usd_usf_id = ". $value['usf_id'];
+                    $field->setValue("usd_usr_id", $this->getValue("usr_id"));
+                    $field->setValue("usd_usf_id", $field->getValue("usf_id"));
+                    $field->new_record = true;
+                }
+
+                // existiert schon ein Wert und dieser wird entfernt, dann auch DS loeschen
+                if($field->getValue("usd_id") > 0
+                && strlen($field->getValue("usd_value")) == 0)
+                {
+                    $field->delete();
                 }
                 else
                 {
-                    if($value['new'] == true)
-                    {
-                        $sql = "INSERT INTO ". TBL_USER_DATA. " (usd_usr_id, usd_usf_id, usd_value)
-                                VALUES (". $this->db_fields['usr_id']. ", ". $value['usf_id']. ", '". $value['usd_value']. "') ";
-                        $this->db_user_fields[$key]['new'] = false;
-                    }
-                    else
-                    {
-                        $sql = "UPDATE ". TBL_USER_DATA. " SET usd_value = '". $value['usd_value']. "'
-                                 WHERE usd_usr_id = ". $this->db_fields['usr_id']. "
-                                   AND usd_usf_id = ". $value['usf_id'];
-                    }
+                    $field->save();
                 }
-                $result = $this->db->query($sql);
-                $this->db_user_fields[$key]['changed'] = false;
             }
         }
 
@@ -290,98 +212,8 @@ class User extends TableAccess
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
-            $g_current_session->renewUserObject();
+            $g_current_session->renewUserObject($this->getValue("usr_id"));
         }
-    }
-
-    // Referenzen zum aktuellen Benutzer loeschen
-    // die Methode wird innerhalb von delete() aufgerufen
-    function delete()
-    {
-        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_create = NULL
-                    WHERE ann_usr_id_create = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_change = NULL
-                    WHERE ann_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_create = NULL
-                    WHERE dat_usr_id_create = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_change = NULL
-                    WHERE dat_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_FOLDERS. " SET fol_usr_id = NULL
-                    WHERE fol_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_FILES. " SET fil_usr_id = NULL
-                    WHERE fil_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id = NULL
-                    WHERE gbo_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id_change = NULL
-                    WHERE gbo_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id_create = NULL
-                    WHERE lnk_usr_id_create = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id_change = NULL
-                    WHERE lnk_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_create = NULL
-                    WHERE pho_usr_id_create = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_change = NULL
-                    WHERE pho_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_create = NULL
-                    WHERE rol_usr_id_create = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
-                    WHERE rol_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
-                    WHERE rld_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_create = NULL
-                    WHERE usr_usr_id_create = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
-                    WHERE usr_usr_id_change = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "DELETE FROM ". TBL_AUTO_LOGIN. " WHERE atl_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->db_fields['usr_id'];
-        $this->db->query($sql);
-
-        return parent::delete();
     }
 
     // gibt die Userdaten als VCard zurueck
@@ -390,15 +222,15 @@ class User extends TableAccess
     {
         global $g_current_user;
 
-        $editAllUsers = $g_current_user->editProfile($this->db_fields['usr_id']);
+        $editAllUsers = $g_current_user->editProfile($this->getValue("usr_id"));
 
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
-        if($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Vorname']['usf_hidden'] == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Vorname']->getValue("usf_hidden") == 0))
         {
             $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("Nachname")). ";". utf8_decode($this->getValue("Vorname")) . ";;;\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Nachname']['usf_hidden'] == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Nachname']->getValue("usf_hidden") == 0))
         {
             $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue("Vorname")) . " ". utf8_decode($this->getValue("Nachname")) . "\r\n";
         }
@@ -407,37 +239,37 @@ class User extends TableAccess
             $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
         }
         if (strlen($this->getValue("Telefon")) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Telefon']['usf_hidden'] == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Telefon']->getValue("usf_hidden") == 0)))
         {
             $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue("Telefon"). "\r\n";
         }
         if (strlen($this->getValue("Handy")) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Handy']['usf_hidden'] == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Handy']->getValue("usf_hidden") == 0)))
         {
             $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue("Handy"). "\r\n";
         }
         if (strlen($this->getValue("Fax")) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Fax']['usf_hidden'] == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Fax']->getValue("usf_hidden") == 0)))
         {
             $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue("Fax"). "\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Adresse']['usf_hidden'] == 0 && $this->db_user_fields['Ort']['usf_hidden'] == 0
-        && $this->db_user_fields['PLZ']['usf_hidden'] == 0  && $this->db_user_fields['Land']['usf_hidden'] == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Adresse']->getValue("usf_hidden") == 0 && $this->userFieldData['Ort']->getValue("usf_hidden") == 0
+        && $this->userFieldData['PLZ']->getValue("usf_hidden") == 0  && $this->userFieldData['Land']->getValue("usf_hidden") == 0))
         {
             $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue("Adresse")). ";" . utf8_decode($this->getValue("Ort")). ";;" . utf8_decode($this->getValue("PLZ")). ";" . utf8_decode($this->getValue("Land")). "\r\n";
         }
         if (strlen($this->getValue("Homepage")) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Homepage']['usf_hidden'] == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Homepage']->getValue("usf_hidden") == 0)))
         {
             $vcard .= (string) "URL;HOME:" . $this->getValue("Homepage"). "\r\n";
         }
         if (strlen($this->getValue("Geburtstag")) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Geburtstag']['usf_hidden'] == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geburtstag']->getValue("usf_hidden") == 0)))
         {
             $vcard .= (string) "BDAY:" . mysqldatetime("ymd", $this->getValue("Geburtstag")) . "\r\n";
         }
         if (strlen($this->getValue("E-Mail")) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['E-Mail']['usf_hidden'] == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['E-Mail']->getValue("usf_hidden") == 0)))
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
         }
@@ -447,7 +279,7 @@ class User extends TableAccess
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
         if ($this->getValue("Geschlecht") > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->db_user_fields['Geschlecht']['usf_hidden'] == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geschlecht']->getValue("usf_hidden") == 0)))
         {
             if($this->getValue("Geschlecht") == 1)
             {
@@ -472,7 +304,7 @@ class User extends TableAccess
     // welche Rollen der User einsehen darf
     function checkRolesRight($right = "")
     {
-        if($this->db_fields['usr_id'] > 0)
+        if($this->getValue("usr_id") > 0)
         {
             if(count($this->roles_rights) == 0)
             {
@@ -490,7 +322,7 @@ class User extends TableAccess
                 $sql    = "SELECT *
                              FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                              LEFT JOIN ". TBL_MEMBERS. "
-                               ON mem_usr_id = ". $this->db_fields['usr_id']. "
+                               ON mem_usr_id = ". $this->getValue("usr_id"). "
                               AND mem_rol_id = rol_id
                               AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
                               AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') >= '$today')
@@ -632,11 +464,11 @@ class User extends TableAccess
     {
         if($profileID == NULL)
         {
-            $profileID = $this->db_fields['usr_id'];
+            $profileID = $this->getValue("usr_id");
         }
 
         //soll das eigene Profil bearbeitet werden?
-        if($profileID == $this->db_fields['usr_id'] && $this->db_fields['usr_id'] > 0)
+        if($profileID == $this->getValue("usr_id") && $this->getValue("usr_id") > 0)
         {
             $edit_profile = $this->checkRolesRight('rol_profile');
 

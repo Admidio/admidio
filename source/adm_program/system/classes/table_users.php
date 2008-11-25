@@ -1,0 +1,211 @@
+<?php
+/******************************************************************************
+ * Klasse fuer Datenbanktabelle adm_users
+ *
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Diese Klasse dient dazu ein Userobjekt zu erstellen.
+ * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
+ *
+ *****************************************************************************/
+
+require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+
+class TableUsers extends TableAccess
+{
+    var $real_password;     // Unverschluesseltes Passwort. Ist nur gefuellt, wenn gerade das Passwort gesetzt wurde
+    var $b_set_last_change; // Kennzeichen, ob User und Zeitstempel der aktuellen Aenderung gespeichert werden sollen
+
+    // Konstruktor
+    function TableUsers(&$db, $usr_id = 0)
+    {
+        $this->db            =& $db;
+        $this->table_name     = TBL_USERS;
+        $this->column_praefix = "usr";
+
+        if(strlen($usr_id) > 0)
+        {
+            $this->readData($usr_id);
+        }
+        else
+        {
+            $this->clear();
+        }
+    }
+
+    // alle Klassenvariablen wieder zuruecksetzen
+    function clear()
+    {
+        parent::clear();
+        
+        $this->b_set_last_change = true;
+
+        // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
+        $this->setValue("usr_valid", 1);
+    }
+
+    // interne Methode, die bei setValue den uebergebenen Wert prueft
+    // und ungueltige Werte auf leer setzt
+    function setValue($field_name, $field_value)
+    {
+        if($field_name == "usr_password")
+        {
+            // Passwort verschluesselt und unverschluesselt speichern
+            $this->real_password = $field_value;
+            $field_value = md5($field_value);
+        }
+        parent::setValue($field_name, $field_value);
+    }
+
+    // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
+    // angefordert wurde und gibt diesen zurueck
+    function getValue($field_name, $field_value = "")
+    {
+        // ist die Create-Id leer, so wurde der Datensatz durch Registierung angelegt und gehoert dem User selber
+        if($field_name == "usr_usr_id_create" && strlen($field_value) == 0)
+        {
+            $field_value = parent::getValue("usr_id");
+        }
+        else
+        {
+            $field_value = parent::getValue($field_name);
+        }
+        return $field_value;
+    }
+
+    // die Funktion speichert die Userdaten in der Datenbank,
+    // je nach Bedarf wird ein Insert oder Update gemacht
+    function save()
+    {
+        global $g_current_user;
+        $fields_changed = $this->columnsValueChanged;
+
+        if($this->b_set_last_change)
+        {
+            if($this->new_record)
+            {
+                $this->setValue("usr_timestamp_create", date("Y-m-d H:i:s", time()));
+                $this->setValue("usr_usr_id_create", $g_current_user->getValue("usr_id"));
+            }
+            else
+            {
+                // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+                if(time() > (strtotime($this->getValue("usr_timestamp_create")) + 900)
+                || $g_current_user->getValue("usr_id") != $this->getValue("usr_usr_id_create") )
+                {
+                    $this->setValue("usr_timestamp_change", date("Y-m-d H:i:s", time()));
+                    $this->setValue("usr_usr_id_change", $g_current_user->getValue("usr_id"));
+                }
+            }
+        }
+
+        $this->b_set_last_change = true;
+        parent::save();
+    }
+
+    // Referenzen zum aktuellen Benutzer loeschen
+    // die Methode wird innerhalb von delete() aufgerufen
+    function delete()
+    {
+        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_create = NULL
+                    WHERE ann_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_change = NULL
+                    WHERE ann_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_create = NULL
+                    WHERE dat_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_DATES. " SET dat_usr_id_change = NULL
+                    WHERE dat_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_FOLDERS. " SET fol_usr_id = NULL
+                    WHERE fol_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_FILES. " SET fil_usr_id = NULL
+                    WHERE fil_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id = NULL
+                    WHERE gbo_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_GUESTBOOK. " SET gbo_usr_id_change = NULL
+                    WHERE gbo_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id_create = NULL
+                    WHERE lnk_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id_change = NULL
+                    WHERE lnk_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_LISTS. " SET lst_usr_id = NULL
+                    WHERE lst_global = 1
+                      AND lst_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_create = NULL
+                    WHERE pho_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_change = NULL
+                    WHERE pho_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_create = NULL
+                    WHERE rol_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_change = NULL
+                    WHERE rol_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_usr_id = NULL
+                    WHERE rld_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_create = NULL
+                    WHERE usr_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
+                    WHERE usr_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+        
+        $sql    = "DELETE FROM ". TBL_LIST_COLUMNS. " 
+                    WHERE lsc_lst_id IN (SELECT lst_id FROM adm_lists WHERE lst_usr_id = ".$this->getValue("usr_id")." AND lst_global = 0)";
+        $this->db->query($sql);
+
+        $sql    = "DELETE FROM ". TBL_LISTS. " WHERE lst_global = 0 AND lst_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "DELETE FROM ". TBL_MEMBERS. " WHERE mem_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "DELETE FROM ". TBL_AUTO_LOGIN. " WHERE atl_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "DELETE FROM ". TBL_SESSIONS. " WHERE ses_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        return parent::delete();
+    }
+}
+?>

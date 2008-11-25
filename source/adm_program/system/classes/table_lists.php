@@ -85,7 +85,7 @@ class TableLists extends TableAccess
     function delete()
     {
         // alle Spalten der Liste loeschen
-        $sql = "DELETE FROM ". TBL_LIST_COLUMNS. " WHERE lsc_lst_id = ". $this->db_fields['lst_id'];
+        $sql = "DELETE FROM ". TBL_LIST_COLUMNS. " WHERE lsc_lst_id = ". $this->getValue("lst_id");
         $result = $this->db->query($sql);
         
         return parent::delete();

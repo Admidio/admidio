@@ -54,7 +54,7 @@ class TableMembers extends TableAccess
     function setValue($field_name, $field_value)
     {
         if($field_name == "mem_valid"
-        && $this->db_fields[$field_name] != $field_value)
+        && $this->getValue($field_name) != $field_value)
         {
             if($field_value == 1)
             {
@@ -72,7 +72,7 @@ class TableMembers extends TableAccess
     function save()
     {
         global $g_current_session;
-        $fields_changed = $this->db_fields_changed;
+        $fields_changed = $this->columnsValueChanged;
         
         parent::save();
         
@@ -80,21 +80,21 @@ class TableMembers extends TableAccess
         {
             // einlesen des entsprechenden Userobjekts, da Aenderungen 
             // bei den Rollen vorgenommen wurden 
-            $g_current_session->renewUserObject($this->db_fields['mem_usr_id']);
+            $g_current_session->renewUserObject($this->getValue("mem_usr_id"));
         }
     } 
     
     // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beginnen bzw. zu aktualisieren
     function startMembership($rol_id, $usr_id, $leader = "")
     {
-        if($this->db_fields['mem_rol_id'] != $rol_id
-        || $this->db_fields['mem_usr_id'] != $usr_id)
+        if($this->getValue("mem_rol_id") != $rol_id
+        || $this->getValue("mem_usr_id") != $usr_id)
         {
             $this->readData($rol_id, $usr_id);
         }
 
         // Beginn nicht ueberschreiben, wenn schon existiert
-        if(strlen($this->db_fields['mem_begin']) == 0)
+        if(strlen($this->getValue("mem_begin")) == 0)
         {
             $this->setValue("mem_begin", date("Y-m-d", time()));
         }
@@ -118,8 +118,8 @@ class TableMembers extends TableAccess
     // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beginnen
     function stopMembership($rol_id, $usr_id)
     {
-        if($this->db_fields['mem_rol_id'] != $rol_id
-        || $this->db_fields['mem_usr_id'] != $usr_id)
+        if($this->getValue("mem_rol_id") != $rol_id
+        || $this->getValue("mem_usr_id") != $usr_id)
         {
             $this->readData($rol_id, $usr_id);
         }

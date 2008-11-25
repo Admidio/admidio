@@ -38,9 +38,9 @@ class TableAccess
     var $db;
     
     var $new_record;                // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    var $db_fields_changed;         // Merker ob an den db_fields Daten was geaendert wurde
-    var $db_fields = array();       // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
-    var $db_fields_infos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+    var $columnsValueChanged;         // Merker ob an den dbColumns Daten was geaendert wurde
+    var $dbColumns = array();       // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+    var $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
 
     // liest den Datensatz von $id ein
     // id : Schluesselwert von dem der Datensatz gelesen werden soll
@@ -79,11 +79,11 @@ class TableAccess
                 {
                     if(is_null($value))
                     {
-                        $this->db_fields[$key] = "";
+                        $this->dbColumns[$key] = "";
                     }
                     else
                     {
-                        $this->db_fields[$key] = $value;
+                        $this->dbColumns[$key] = $value;
                     }
                 }
             }
@@ -93,33 +93,33 @@ class TableAccess
     // alle Klassenvariablen wieder zuruecksetzen
    function clear()
    {
-        $this->db_fields_changed = false;
+        $this->columnsValueChanged = false;
         $this->new_record        = true;
         $this->record_count      = -1;
-                        
-        if(count($this->db_fields) > 0
-        && count($this->db_fields_infos) > 0)
+
+        if(count($this->columnsInfos) > 0)
         {
-            foreach($this->db_fields as $key => $value)
+            // die Spalteninfos wurden bereits eingelesen
+            // und werden nun nur noch neu initialisiert
+            foreach($this->dbColumns as $field_name)
             {
-                $this->db_fields[$key] = "";
-                $this->db_fields_infos[$key]['changed'] = false;
+                $this->dbColumns[$field_name] = "";
+                $this->columnsInfos[$field_name]['changed'] = false;
             }
         }
         else
         {
-            // alle Spalten der Tabelle ins Array einlesen 
-            // und auf leer setzen
+            // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
             $sql = "SHOW COLUMNS FROM $this->table_name ";
             $this->db->query($sql);
 
             while ($row = $this->db->fetch_array())
             {
-                $this->db_fields[$row['Field']] = "";
-                $this->db_fields_infos[$row['Field']]['changed'] = false;
-                $this->db_fields_infos[$row['Field']]['type']    = $row['Type'];
-                $this->db_fields_infos[$row['Field']]['key']     = $row['Key'];
-                $this->db_fields_infos[$row['Field']]['extra']   = $row['Extra'];
+                $this->dbColumns[$row['Field']] = "";
+                $this->columnsInfos[$row['Field']]['changed'] = false;
+                $this->columnsInfos[$row['Field']]['type']    = $row['Type'];
+                $this->columnsInfos[$row['Field']]['key']     = $row['Key'];
+                $this->columnsInfos[$row['Field']]['extra']   = $row['Extra'];
                 
                 if($row['Key'] == "PRI")
                 {
@@ -145,7 +145,8 @@ class TableAccess
     {
         foreach($field_array as $field => $value)
         {
-            $this->db_fields[$field] = $value;
+            $this->dbColumns[$field] = $value;
+            $this->columnsInfos[$field]['changed'] = false;
         }
         $this->new_record = false;
     }
@@ -154,13 +155,13 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
-        if(array_key_exists($field_name, $this->db_fields))
+        if(array_key_exists($field_name, $this->dbColumns))
         {
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
             if(strlen($field_value) > 0)
             {
                 // Numerische Felder
-                if(strpos($this->db_fields_infos[$field_name]['type'], "int") !== false)
+                if(strpos($this->columnsInfos[$field_name]['type'], "int") !== false)
                 {
                     if(is_numeric($field_value) == false)
                     {
@@ -168,8 +169,8 @@ class TableAccess
                     }
                     
                     // Schluesselfelder
-                    if((  $this->db_fields_infos[$field_name]['key'] == "PRI"
-                       || $this->db_fields_infos[$field_name]['key'] == "MUL")
+                    if((  $this->columnsInfos[$field_name]['key'] == "PRI"
+                       || $this->columnsInfos[$field_name]['key'] == "MUL")
                     && $field_value == 0)
                     {
                         $field_value = "";    
@@ -177,19 +178,19 @@ class TableAccess
                 }
                 
                 // Strings
-                elseif(strpos($this->db_fields_infos[$field_name]['type'], "char") !== false
-                ||     strpos($this->db_fields_infos[$field_name]['type'], "text") !== false)
+                elseif(strpos($this->columnsInfos[$field_name]['type'], "char") !== false
+                ||     strpos($this->columnsInfos[$field_name]['type'], "text") !== false)
                 {
                     $field_value = strStripTags($field_value);
                 }
             }
     
-            if(array_key_exists($field_name, $this->db_fields)
-            && $field_value != $this->db_fields[$field_name])
+            if(array_key_exists($field_name, $this->dbColumns)
+            && $field_value != $this->dbColumns[$field_name])
             {
-                $this->db_fields[$field_name] = $field_value;
-                $this->db_fields_changed      = true;
-                $this->db_fields_infos[$field_name]['changed'] = true;
+                $this->dbColumns[$field_name] = $field_value;
+                $this->columnsValueChanged      = true;
+                $this->columnsInfos[$field_name]['changed'] = true;
             }
         }
     }    
@@ -200,9 +201,9 @@ class TableAccess
     {
         if(strlen($field_value) == 0)
         {
-            $field_value = $this->db_fields[$field_name];
+            $field_value = $this->dbColumns[$field_name];
         }
-        
+
         // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
         if(is_numeric($field_value))
         {
@@ -218,7 +219,7 @@ class TableAccess
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()
     {
-        if($this->db_fields_changed || strlen($this->db_fields[$this->key_name]) == 0)
+        if($this->columnsValueChanged || strlen($this->dbColumns[$this->key_name]) == 0)
         {
             // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
             $item_connection = "";                
@@ -226,14 +227,14 @@ class TableAccess
             $sql_value_list  = "";
 
             // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
-            foreach($this->db_fields as $key => $value)
+            foreach($this->dbColumns as $key => $value)
             {
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
                 if(strpos($key, $this->column_praefix. "_") === 0
-                && $this->db_fields_infos[$key]['extra'] != "auto_increment") 
+                && $this->columnsInfos[$key]['extra'] != "auto_increment") 
                 {
-                    if($this->db_fields_infos[$key]['changed'] == true)
+                    if($this->columnsInfos[$key]['changed'] == true)
                     {
                         if($this->new_record)
                         {
@@ -279,7 +280,7 @@ class TableAccess
                         {
                             $item_connection = ",";
                         }
-                        $this->db_fields_infos[$key]['changed'] = false;
+                        $this->columnsInfos[$key]['changed'] = false;
                     }
                 }
             }
@@ -288,18 +289,18 @@ class TableAccess
             {
                 $sql = "INSERT INTO $this->table_name ($sql_field_list) VALUES ($sql_value_list) ";
                 $this->db->query($sql);
-                $this->db_fields[$this->key_name] = $this->db->insert_id();
+                $this->dbColumns[$this->key_name] = $this->db->insert_id();
                 $this->new_record = false;
             }
             else
             {
                 $sql = "UPDATE $this->table_name SET $sql_field_list 
-                         WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
+                         WHERE $this->key_name = '". $this->dbColumns[$this->key_name]. "'";
                 $this->db->query($sql);
             }
         }
 
-        $this->db_fields_changed = false;
+        $this->columnsValueChanged = false;
         return 0;
     }
     
@@ -307,7 +308,7 @@ class TableAccess
     function delete()
     {
         $sql    = "DELETE FROM $this->table_name 
-                    WHERE $this->key_name = '". $this->db_fields[$this->key_name]. "'";
+                    WHERE $this->key_name = '". $this->dbColumns[$this->key_name]. "'";
         $this->db->query($sql);
 
         $this->clear();

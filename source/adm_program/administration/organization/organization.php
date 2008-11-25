@@ -36,7 +36,7 @@ if(isset($_SESSION['organization_request']))
 }
 else
 {
-    foreach($g_current_organization->db_fields as $key => $value)
+    foreach($g_current_organization->dbColumns as $key => $value)
     {
         $form_values[$key] = $value;
     }

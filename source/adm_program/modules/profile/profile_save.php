@@ -146,9 +146,9 @@ if($new_user == 2)
 }
 
 // nun alle Profilfelder pruefen
-foreach($user->db_user_fields as $key => $value)
+foreach($user->userFieldData as $field)
 {
-    $post_id = "usf-". $value['usf_id'];    
+    $post_id = "usf-". $field->getValue("usf_id");    
     
     if(isset($_POST[$post_id])) 
     {
@@ -156,14 +156,14 @@ foreach($user->db_user_fields as $key => $value)
         
         // gesperrte Felder duerfen nur von berechtigten Benutzern geaendert werden 
         // Ausnahme bei der Registrierung
-        if($value['usf_disabled'] == 1 && $g_current_user->editUsers() == false && $new_user != 2)
+        if($field->getValue("usf_disabled") == 1 && $g_current_user->editUsers() == false && $new_user != 2)
         {
             $update_field = false;
         }
 
         // versteckte Felder duerfen nur im eigenen Profil, oder mit dem Recht alle User
         // zu bearbeiten, geaendert werden
-        if($value['usf_hidden'] == 1 && $g_current_user->editUsers() == false 
+        if($field->getValue("usf_hidden") == 1 && $g_current_user->editUsers() == false 
         && $usr_id != $g_current_user->getValue("usr_id"))
         {
             $update_field = false;
@@ -173,16 +173,16 @@ foreach($user->db_user_fields as $key => $value)
         {    
             // Pflichtfelder muessen gefuellt sein
             // E-Mail bei Restrierung immer !!!
-            if(($value['usf_mandatory'] == 1 && strlen($_POST[$post_id]) == 0)
-            || ($new_user == 2 && $value['usf_name'] == "E-Mail" && strlen($_POST[$post_id]) == 0))
+            if(($field->getValue("usf_mandatory") == 1 && strlen($_POST[$post_id]) == 0)
+            || ($new_user == 2 && $field->getValue("usf_name") == "E-Mail" && strlen($_POST[$post_id]) == 0))
             {
-                $g_message->show("feld", $value['usf_name']);
+                $g_message->show("feld", $field->getValue("usf_name"));
             }
             
             if(strlen($_POST[$post_id]) > 0)
             {
                 // Pruefungen fuer die entsprechenden Datentypen
-                if($value['usf_type'] == "CHECKBOX")
+                if($field->getValue("usf_type") == "CHECKBOX")
                 {
                     // Checkbox darf nur 1 oder 0 haben
                     if($_POST[$post_id] != 0 && $_POST[$post_id] != 1)
@@ -190,16 +190,16 @@ foreach($user->db_user_fields as $key => $value)
                         $g_message->show("invalid");
                     }
                 }
-                elseif($value['usf_type'] == "DATE")
+                elseif($field->getValue("usf_type") == "DATE")
                 {
                     // Datum muss gueltig sein und formatiert werden
                     if(dtCheckDate($_POST[$post_id]) == false)
                     {
-                        $g_message->show("date_invalid", $value['usf_name']);
+                        $g_message->show("date_invalid", $field->getValue("usf_name"));
                     }
                     $_POST[$post_id] = dtFormatDate($_POST[$post_id], "Y-m-d");
                 }
-                elseif($value['usf_type'] == "EMAIL")
+                elseif($field->getValue("usf_type") == "EMAIL")
                 {
                     // Pruefung auf gueltige E-Mail-Adresse
                     if(!isValidEmailAddress($_POST[$post_id]))
@@ -207,25 +207,25 @@ foreach($user->db_user_fields as $key => $value)
                         $g_message->show("email_invalid");
                     }        
                 }
-                elseif($value['usf_type'] == "NUMERIC")
+                elseif($field->getValue("usf_type") == "NUMERIC")
                 {
                     // Zahl muss numerisch sein
                     if(is_numeric(strtr($_POST[$post_id], ",.", "00")) == false)
                     {
-                        $g_message->show("field_numeric", $value['usf_name']);
+                        $g_message->show("field_numeric", $field->getValue("usf_name"));
                     }
                 }
             }
     
-            $user->setValue($value['usf_name'], $_POST[$post_id]);
+            $user->setValue($field->getValue("usf_name"), $_POST[$post_id]);
         }
     }
     else
     {
         // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
-        if($value['usf_type'] == "CHECKBOX")
+        if($field->getValue("usf_type") == "CHECKBOX")
         {
-            $user->setValue($value['usf_name'], "0");
+            $user->setValue($field->getValue("usf_name"), "0");
         }
     }
 }

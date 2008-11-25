@@ -69,7 +69,7 @@ class TableRole extends TableAccess
     function save()
     {
         global $g_current_user, $g_current_session;
-        $fields_changed = $this->db_fields_changed;
+        $fields_changed = $this->columnsValueChanged;
         
         
         if($this->new_record)
@@ -110,15 +110,15 @@ class TableRole extends TableAccess
         $g_current_session->renewUserObject();
             
         // die Rolle "Webmaster" darf nicht geloescht werden
-        if($this->db_fields['rol_name'] != "Webmaster")
+        if($this->getValue("rol_name") != "Webmaster")
         {
             $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES. " 
-                        WHERE rld_rol_id_parent = ". $this->db_fields['rol_id']. "
-                           OR rld_rol_id_child  = ". $this->db_fields['rol_id'];
+                        WHERE rld_rol_id_parent = ". $this->getValue("rol_id"). "
+                           OR rld_rol_id_child  = ". $this->getValue("rol_id");
             $this->db->query($sql);
 
             $sql    = "DELETE FROM ". TBL_MEMBERS. " 
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id'];
+                        WHERE mem_rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
             
             return parent::delete();
@@ -135,16 +135,16 @@ class TableRole extends TableAccess
         global $g_current_session;
         
         // die Rolle "Webmaster" darf nicht auf inaktiv gesetzt werden
-        if($this->db_fields['rol_name'] != "Webmaster")
+        if($this->getValue("rol_name") != "Webmaster")
         {
             $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
                                                   , mem_end   = '".date("Y-m-d", time())."'
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id']. "
+                        WHERE mem_rol_id = ". $this->getValue("rol_id"). "
                           AND mem_valid  = 1 ";
             $this->db->query($sql);
 
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
-                        WHERE rol_id = ". $this->db_fields['rol_id'];
+                        WHERE rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
             
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
@@ -162,15 +162,15 @@ class TableRole extends TableAccess
         global $g_current_session;
         
         // die Rolle "Webmaster" ist immer aktiv
-        if($this->db_fields['rol_name'] != "Webmaster")
+        if($this->getValue("rol_name") != "Webmaster")
         {
             $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 1
                                                   , mem_end   = NULL
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id'];
+                        WHERE mem_rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
 
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
-                        WHERE rol_id = ". $this->db_fields['rol_id'];
+                        WHERE rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
             
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
@@ -186,10 +186,10 @@ class TableRole extends TableAccess
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
     function countVacancies($count_leaders = false)
     {
-        if($this->db_fields['rol_max_members'] > 0)
+        if($this->getValue("rol_max_members") > 0)
         {
             $sql    = "SELECT mem_usr_id FROM ". TBL_MEMBERS. "
-                        WHERE mem_rol_id = ". $this->db_fields['rol_id']. "
+                        WHERE mem_rol_id = ". $this->getValue("rol_id"). "
                           AND mem_valid  = 1";
             if($count_leaders == false)
             {
@@ -198,7 +198,7 @@ class TableRole extends TableAccess
             $this->db->query($sql);
             
             $num_members = $this->db->num_rows();            
-            return $this->db_fields['rol_max_members'] - $num_members;
+            return $this->getValue("rol_max_members") - $num_members;
         }
         return 999;
     }

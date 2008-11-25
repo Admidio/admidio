@@ -54,7 +54,7 @@ class TableUserField extends TableAccess
     function setValue($field_name, $field_value)
     {
         if($field_name == "usf_cat_id"
-        && $this->db_fields[$field_name] != $field_value)
+        && $this->getValue($field_name) != $field_value)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = "SELECT COUNT(*) as count FROM ". TBL_USER_FIELDS. "
@@ -72,7 +72,7 @@ class TableUserField extends TableAccess
     function save()
     {
         global $g_current_session;
-        $fields_changed = $this->db_fields_changed;
+        $fields_changed = $this->columnsValueChanged;
         
         parent::save();
         
@@ -98,7 +98,7 @@ class TableUserField extends TableAccess
 
         // Abhaenigigkeiten loeschen
         $sql    = "DELETE FROM ". TBL_USER_DATA. "
-                    WHERE usd_usf_id = ". $this->db_fields['usf_id'];
+                    WHERE usd_usf_id = ". $this->getValue("usf_id");
         $this->db->query($sql);
 
         // einlesen aller Userobjekte der angemeldeten User anstossen, 

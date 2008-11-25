@@ -201,11 +201,11 @@ $g_layout['header'] = $g_js_vars. '
             $old_cat_name = "";
             $old_cat_id   = 0;
 
-            foreach($g_current_user->db_user_fields as $key => $value)
+            foreach($g_current_user->userFieldData as $field)
             {    
                 // bei den Stammdaten noch Foto und Loginname anhaengen
                 if($old_cat_name == "Stammdaten"
-                && $value['cat_name'] != "Stammdaten")
+                && $field->getValue("cat_name") != "Stammdaten")
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
@@ -224,17 +224,17 @@ $g_layout['header'] = $g_js_vars. '
                     $i++;
                 }
                 
-                if($value['usf_hidden'] == 0 || $g_current_user->editUsers())
+                if($field->getValue("usf_hidden") == 0 || $g_current_user->editUsers())
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
-                    user_fields['. $i. ']["cat_id"]   = '. $value['cat_id']. ';
-                    user_fields['. $i. ']["cat_name"] = "'. $value['cat_name']. '";
-                    user_fields['. $i. ']["usf_id"]   = '. $value['usf_id']. ';
-                    user_fields['. $i. ']["usf_name"] = "'. addslashes($value['usf_name']). '";';
+                    user_fields['. $i. ']["cat_id"]   = '. $field->getValue("cat_id"). ';
+                    user_fields['. $i. ']["cat_name"] = "'. $field->getValue("cat_name"). '";
+                    user_fields['. $i. ']["usf_id"]   = '. $field->getValue("usf_id"). ';
+                    user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue("usf_name")). '";';
                 
-                    $old_cat_id   = $value['cat_id'];
-                    $old_cat_name = $value['cat_name'];
+                    $old_cat_id   = $field->getValue("cat_id");
+                    $old_cat_name = $field->getValue("cat_name");
                     $i++;
                 }
             }       

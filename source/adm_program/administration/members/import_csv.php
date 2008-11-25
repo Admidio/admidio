@@ -25,12 +25,12 @@ if(!$g_current_user->editUsers())
 
 // Pflichtfelder prüfen
 
-foreach($g_current_user->db_user_fields as $key => $value)
+foreach($g_current_user->userFieldData as $field)
 {
-    if($value['usf_mandatory'] == 1
-    && strlen($_POST['usf-'. $value['usf_id']]) == 0)
+    if($field->getValue("usf_mandatory") == 1
+    && strlen($_POST['usf-'. $field->getValue("usf_id")]) == 0)
     {
-        $g_message->show("feld", $value['usf_name']);
+        $g_message->show("feld", $field->getValue("usf_name"));
     }
 }
 
@@ -71,32 +71,32 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
         // dieser dann den Wert zuordnen
-        foreach($user->db_user_fields as $key => $value)
+        foreach($user->userFieldData as $field)
         {
-            if(strlen($_POST['usf-'. $value['usf_id']]) > 0 && $col_key == $_POST['usf-'. $value['usf_id']])
+            if(strlen($_POST['usf-'. $field->getValue("usf_id")]) > 0 && $col_key == $_POST['usf-'. $field->getValue("usf_id")])
             {
                 // importiertes Feld merken
-                if(!isset($imported_fields[$value['usf_id']]))
+                if(!isset($imported_fields[$field->getValue("usf_id")]))
                 {
-                    $imported_fields[$value['usf_id']] = $value['usf_name'];
+                    $imported_fields[$field->getValue("usf_id")] = $field->getValue("usf_name");
                 }
                 
-                if($value['usf_name'] == "Geschlecht")
+                if($field->getValue("usf_name") == "Geschlecht")
                 {
                     if(strtolower($col_value) == "m"
                     || strtolower($col_value) == "männlich"
                     || $col_value             == "1")
                     {
-                        $user->setValue($value['usf_name'], "1");
+                        $user->setValue($field->getValue("usf_name"), "1");
                     }
                     if(strtolower($col_value) == "w"
                     || strtolower($col_value) == "weiblich"
                     || $col_value             == "2")
                     {
-                        $user->setValue($value['usf_name'], "2");
+                        $user->setValue($field->getValue("usf_name"), "2");
                     }
                 }
-                elseif($value['usf_type'] == "CHECKBOX")
+                elseif($field->getValue("usf_type") == "CHECKBOX")
                 {
                     if(strtolower($col_value) == "j"
                     || strtolower($col_value) == "ja"
@@ -104,7 +104,7 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
                     || strtolower($col_value) == "yes"
                     || $col_value             == "1")
                     {
-                        $user->setValue($value['usf_name'], "1");
+                        $user->setValue($field->getValue("usf_name"), "1");
                     }
                     if(strtolower($col_value) == "n"
                     || strtolower($col_value) == "nein"
@@ -112,40 +112,40 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
                     || $col_value             == "0"
                     || strlen($col_value)     == 0)
                     {
-                        $user->setValue($value['usf_name'], "0");
+                        $user->setValue($field->getValue("usf_name"), "0");
                     }
                 }
-                elseif($value['usf_type'] == "DATE")
+                elseif($field->getValue("usf_type") == "DATE")
                 {
                     if(strlen($col_value) > 0
                     && dtCheckDate($col_value))
                     {
-                        $user->setValue($value['usf_name'], dtFormatDate($col_value, "Y-m-d"));
+                        $user->setValue($field->getValue("usf_name"), dtFormatDate($col_value, "Y-m-d"));
                     }
                 }
-                elseif($value['usf_type'] == "EMAIL")
+                elseif($field->getValue("usf_type") == "EMAIL")
                 {
                     if(isValidEmailAddress($col_value))
                     {
-                        $user->setValue($value['usf_name'], substr($col_value, 0, 50));
+                        $user->setValue($field->getValue("usf_name"), substr($col_value, 0, 50));
                     }
                 }
-                elseif($value['usf_type'] == "INTEGER")
+                elseif($field->getValue("usf_type") == "INTEGER")
                 {
                     // Zahl darf Punkt und Komma enthalten
                     if(is_numeric(strtr($col_value, ",.", "00")) == true)
                     {
-                        $user->setValue($value['usf_name'], $col_value);
+                        $user->setValue($field->getValue("usf_name"), $col_value);
                     }
                 }
-                elseif($value['usf_type'] == "TEXT_BIG")
+                elseif($field->getValue("usf_type") == "TEXT_BIG")
                 {
-                    $user->setValue($value['usf_name'], substr($col_value, 0, 255));
+                    $user->setValue($field->getValue("usf_name"), substr($col_value, 0, 255));
                 }
                 else
                 {
                     
-                    $user->setValue($value['usf_name'], substr($col_value, 0, 50));
+                    $user->setValue($field->getValue("usf_name"), substr($col_value, 0, 50));
                 }
             }
         }

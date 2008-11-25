@@ -53,7 +53,7 @@ class TableDate extends TableAccess
     
     function setValue($field_name, $field_value)
     {
-        if($field_name == "dat_end" && $this->db_fields['dat_all_day'] == 1)
+        if($field_name == "dat_end" && $this->getValue("dat_all_day") == 1)
         {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
@@ -65,11 +65,11 @@ class TableDate extends TableAccess
     
     function getValue($field_name)
     {
-        $value = $this->db_fields[$field_name];
+        $value = $this->getValue($field_name);
         
-        if($field_name == "dat_end" && $this->db_fields['dat_all_day'] == 1)
+        if($field_name == "dat_end" && $this->getValue("dat_all_day") == 1)
         {
-            list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $this->db_fields['dat_end']);
+            list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $this->getValue("dat_end"));
             $value = date("Y-m-d H:i:s", mktime($hour, $minute, $second, $month, $day, $year) - 86400);
         }
         return parent::getValue($field_name, $value);
@@ -103,7 +103,7 @@ class TableDate extends TableAccess
     function getIcal($domain)
     {
         $prodid = "-//www.admidio.org//Admidio" . ADMIDIO_VERSION . "//DE";
-        $uid = mysqldatetime("ymdThis", $this->db_fields['dat_timestamp_create']) . "+" . $this->db_fields['dat_usr_id'] . "@" . $domain;
+        $uid = mysqldatetime("ymdThis", $this->getValue("dat_timestamp_create")) . "+" . $this->getValue("dat_usr_id") . "@" . $domain;
         
         $ical = "BEGIN:VCALENDAR\n".
                 "METHOD:PUBLISH\n".
@@ -111,19 +111,19 @@ class TableDate extends TableAccess
                 "VERSION:2.0\n".
                 "BEGIN:VEVENT\n".
                 "UID:". $uid. "\n".
-                "SUMMARY:". $this->db_fields['dat_headline']. "\n".
-                "DESCRIPTION:". $this->db_fields['dat_description']. "\n".
-                "DTSTAMP:". mysqldatetime("ymdThisZ", $this->db_fields['dat_timestamp_create']). "\n".
-                "LOCATION:". $this->db_fields['dat_location']. "\n";
-        if($this->db_fields['dat_all_day'] == 1)
+                "SUMMARY:". $this->getValue("dat_headline"). "\n".
+                "DESCRIPTION:". $this->getValue("dat_description"). "\n".
+                "DTSTAMP:". mysqldatetime("ymdThisZ", $this->getValue("dat_timestamp_create")). "\n".
+                "LOCATION:". $this->getValue("dat_location"). "\n";
+        if($this->getValue("dat_all_day") == 1)
         {
-            $ical .= "DTSTART;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_begin']). "\n".
-                     "DTEND;VALUE=DATE:". mysqldate("ymd", $this->db_fields['dat_end']). "\n";
+            $ical .= "DTSTART;VALUE=DATE:". mysqldate("ymd", $this->getValue("dat_begin")). "\n".
+                     "DTEND;VALUE=DATE:". mysqldate("ymd", $this->getValue("dat_end")). "\n";
         }
         else
         {
-            $ical .= "DTSTART:". mysqldatetime("ymdThis", $this->db_fields['dat_begin']). "\n".
-                     "DTEND:". mysqldatetime("ymdThis", $this->db_fields['dat_end']). "\n";
+            $ical .= "DTSTART:". mysqldatetime("ymdThis", $this->getValue("dat_begin")). "\n".
+                     "DTEND:". mysqldatetime("ymdThis", $this->getValue("dat_end")). "\n";
         }
         $ical .= "END:VEVENT\n".
                  "END:VCALENDAR";
@@ -137,13 +137,13 @@ class TableDate extends TableAccess
         global $g_current_organization;
         
         // Termine der eigenen Orga darf bearbeitet werden
-        if($this->db_fields['cat_org_id'] == $g_current_organization->getValue("org_id"))
+        if($this->getValue("cat_org_id") == $g_current_organization->getValue("org_id"))
         {
             return true;
         }
         // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        elseif($this->db_fields['dat_global'] == true
-        && $g_current_organization->isChildOrganization($this->db_fields['cat_org_id']))
+        elseif($this->getValue("dat_global") == true
+        && $g_current_organization->isChildOrganization($this->getValue("cat_org_id")))
         {
             return true;
         }
