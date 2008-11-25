@@ -149,8 +149,8 @@ if($_POST["upload"])
                     //Nachsehen ob Thumnailordner existiert
                     if(!file_exists($ordner."/thumbnails"))
                     {
-                        mkdir($ordner."/thumbnails", 0774);
-                        chmod($ordner."/thumbnails", 0774);
+                        mkdir($ordner."/thumbnails", 0777);
+                        chmod($ordner."/thumbnails", 0777);
                     }
                     
                     //Thumbnail speichern

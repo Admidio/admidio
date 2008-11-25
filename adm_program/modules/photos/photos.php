@@ -252,8 +252,8 @@ echo "<div class=\"photoModuleContainer\">";
         //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
         if(!file_exists($ordner."/thumbnails"))
         {
-            mkdir($ordner."/thumbnails", 0774);
-            chmod($ordner."/thumbnails", 0774);
+            mkdir($ordner."/thumbnails", 0777);
+            chmod($ordner."/thumbnails", 0777);
         }
         //Thumbnails pro Seite
         $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];

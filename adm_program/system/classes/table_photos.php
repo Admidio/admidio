@@ -111,7 +111,7 @@ class TablePhotos extends TableAccess
                 $return_code = $this->deleteInFilesystem($folder);
     
                 // nun noch den uebergebenen Ordner loeschen
-                @chmod($folder, 0774);
+                @chmod($folder, 0777);
                 if(@rmdir($folder) == false)
                 {
                     return false;
@@ -147,7 +147,7 @@ class TablePhotos extends TableAccess
                     {
                         // nun den entsprechenden Ordner loeschen
                         $this->deleteInFilesystem($act_folder_entry);
-                        @chmod($act_folder_entry, 0774);
+                        @chmod($act_folder_entry, 0777);
                         if(@rmdir($act_folder_entry) == false)
                         {
                             return false;
@@ -158,7 +158,7 @@ class TablePhotos extends TableAccess
                         // die Datei loeschen
                         if(file_exists($act_folder_entry))
                         {
-                            @chmod($act_folder_entry, 0774);
+                            @chmod($act_folder_entry, 0777);
                             if(@unlink($act_folder_entry) == false)
                             {
                                 return false;
@@ -183,10 +183,10 @@ class TablePhotos extends TableAccess
             if(file_exists(SERVER_PATH. "/adm_my_files/photos") == false)
             {
                 // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
-                $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos", 0774);
+                $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos", 0777);
                 if($b_return)
                 {
-                    $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos", 0774);
+                    $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos", 0777);
                 }
                 if($b_return == false)
                 {
@@ -198,10 +198,10 @@ class TablePhotos extends TableAccess
             // nun den Ordner fuer die Veranstaltung anlegen
             $folder_name = $this->db_fields['pho_begin']. "_". $this->db_fields['pho_id'];
             
-            $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0774);
+            $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
             if($b_return)
             {
-                $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0774);
+                $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
             }
             if($b_return == false)
             {
