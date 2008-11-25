@@ -89,31 +89,31 @@ echo '
 
             // jedes Benutzerfeld aus der Datenbank auflisten
             
-            foreach($g_current_user->db_user_fields as $key => $value)
+            foreach($g_current_user->userFieldData as $field)
             {
-                if($category != $value['cat_id'])
+                if($category != $field->getValue("cat_id"))
                 {
                     if(strlen($category) > 0)
                     {
                         echo "</tbody>";
                     }
-                    $block_id = "cat_". $value['cat_id'];
+                    $block_id = "cat_". $field->getValue("cat_id");
                     echo '<tbody>
                         <tr>
                             <td class="tableSubHeader" colspan="4">
                                 <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''. THEME_PATH. '\')"><img 
-                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'. $value['cat_name']. '
+                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'. $field->getValue("cat_name"). '
                             </td>
                         </tr>
                     </tbody>
                     <tbody id="$block_id">';
 
-                    $category = $value['cat_id'];
+                    $category = $field->getValue("cat_id");
                 }             
                 echo "<tr>
-                    <td><label for=\"usf-". $value['usf_id']. "\">". $value['usf_name']. ":</label></td>
+                    <td><label for=\"usf-". $field->getValue("usf_id"). "\">". $field->getValue("usf_name"). ":</label></td>
                     <td>
-                        <select size=\"1\" id=\"usf-". $value['usf_id']. "\" name=\"usf-". $value['usf_id']. "\" style=\"width: 95%;\">
+                        <select size=\"1\" id=\"usf-". $field->getValue("usf_id"). "\" name=\"usf-". $field->getValue("usf_id"). "\" style=\"width: 95%;\">
                             <option value=\"\" selected=\"selected\"></option>";
 
                             // Alle Spalten aus der Datei in Combobox auflisten
@@ -124,7 +124,7 @@ echo '
                             }
                         echo "</select>";
                         // Nachname und Vorname als Pflichtfelder kennzeichnen
-                        if($value['usf_mandatory'] == 1)
+                        if($field->getValue("usf_mandatory") == 1)
                         {
                             echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
                         }

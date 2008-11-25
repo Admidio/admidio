@@ -50,15 +50,15 @@ function getFieldCode($field, $user_id)
     $msg_image = "";
     $messenger = false;
 
-    if($g_current_user->editProfile($user_id) == false && $field['usf_hidden'] == 1)
+    if($g_current_user->editProfile($user_id) == false && $field->getValue("usf_hidden") == 1)
     {
         return "";
     }
 
-    switch($field['usf_type'])
+    switch($field->getValue("usf_type"))
     {
         case "CHECKBOX":
-            if($field['usd_value'] == 1)
+            if($field->getValue("usd_value") == 1)
             {
                 $value = "<img src=\"". THEME_PATH. "/icons/checkbox_checked.gif\" alt=\"on\" />";
             }
@@ -69,129 +69,129 @@ function getFieldCode($field, $user_id)
             break;
 
         case "DATE":
-            if(strlen($field['usd_value']) > 0)
+            if(strlen($field->getValue("usd_value")) > 0)
             {
-                $value = mysqldate('d.m.y', $field['usd_value']);
-                if($field['usf_name'] == "Geburtstag")
+                $value = mysqldate('d.m.y', $field->getValue("usd_value"));
+                if($field->getValue("usf_name") == "Geburtstag")
                 {
                     // Alter mit ausgeben
-                    $value = $value. '&nbsp;&nbsp;&nbsp;('. dtGetAge($field['usd_value']). ' Jahre)';
+                    $value = $value. '&nbsp;&nbsp;&nbsp;('. dtGetAge($field->getValue("usd_value")). ' Jahre)';
                 }
             }
             break;
 
         case "EMAIL":
             // E-Mail als Link darstellen
-            if(strlen($field['usd_value']) > 0)
+            if(strlen($field->getValue("usd_value")) > 0)
             {
                 if($g_preferences['enable_mail_module'] != 1)
                 {
-                    $mail_link = "mailto:". $field['usd_value'];
+                    $mail_link = "mailto:". $field->getValue("usd_value");
                 }
                 else
                 {
                     $mail_link = $g_root_path. "/adm_program/modules/mail/mail.php?usr_id=". $user_id;
                 }
-                if(strlen($field['usd_value']) > 25)
+                if(strlen($field->getValue("usd_value")) > 25)
                 {
-                    $value = '<a href="'. $mail_link. '" title="'. $field['usd_value'].'">'. substr($field['usd_value'], 0, 25). '...</a>';
+                    $value = '<a href="'. $mail_link. '" title="'. $field->getValue("usd_value").'">'. substr($field->getValue("usd_value"), 0, 25). '...</a>';
                 }
                 else
                 {
-                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$field['usd_value'].'">'. $field['usd_value']. '</a>';;
+                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$field->getValue("usd_value").'">'. $field->getValue("usd_value"). '</a>';;
                 }
             }
             break;
 
         case "URL":
             // Homepage als Link darstellen
-            if(strlen($field['usd_value']) > 0)
+            if(strlen($field->getValue("usd_value")) > 0)
             {
-                if(strlen($field['usd_value']) > 25)
+                if(strlen($field->getValue("usd_value")) > 25)
                 {
-                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2, 25). '...</a>';
+                    $value = '<a href="'. $field->getValue("usd_value").'" target="_blank" title="'. $field->getValue("usd_value").'">'. substr($field->getValue("usd_value"), strpos($field->getValue("usd_value"), "//") + 2, 25). '...</a>';
                 }
                 else
                 {
-                    $value = '<a href="'. $field['usd_value'].'" target="_blank" title="'. $field['usd_value'].'">'. substr($field['usd_value'], strpos($field['usd_value'], "//") + 2). '</a>';
+                    $value = '<a href="'. $field->getValue("usd_value").'" target="_blank" title="'. $field->getValue("usd_value").'">'. substr($field->getValue("usd_value"), strpos($field->getValue("usd_value"), "//") + 2). '</a>';
                 }
             }
             break;
 
         case "TEXT_BIG":
-            $value = nl2br($field['usd_value']);
+            $value = nl2br($field->getValue("usd_value"));
             break;
 
         default:
-            $value = $field['usd_value'];
+            $value = $field->getValue("usd_value");
             break;
     }
 
-    if($field['cat_name'] != "Stammdaten")
+    if($field->getValue("cat_name") != "Stammdaten")
     {
         // Icons der Messenger anzeigen
-        if($field['usf_name'] == 'ICQ')
+        if($field->getValue("usf_name") == 'ICQ')
         {
-            if(strlen($field['usd_value']) > 0)
+            if(strlen($field->getValue("usd_value")) > 0)
             {
                 // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-                preg_match_all("/\d+/", $field['usd_value'], $matches);
+                preg_match_all("/\d+/", $field->getValue("usd_value"), $matches);
                 $icq_number = implode("", reset($matches));
 
                 // ICQ Onlinestatus anzeigen
                 $value = "<a class=\"iconLink\" href=\"http://www.icq.com/people/cmd.php?uin=$icq_number&amp;action=add\"><img
                             src=\"http://status.icq.com/online.gif?icq=$icq_number&amp;img=5\"
-                            alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\"
-                            title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
+                            alt=\"". $field->getValue("usd_value"). " zu ". $field->getValue("usf_name"). " hinzufügen\"
+                            title=\"". $field->getValue("usd_value"). " zu ". $field->getValue("usf_name"). " hinzufügen\" /></a>
                           $value";
             }
             $messenger = true;
         }
-        elseif($field['usf_name'] == 'Skype')
+        elseif($field->getValue("usf_name") == 'Skype')
         {
-            if(strlen($field['usd_value']) > 0)
+            if(strlen($field->getValue("usd_value")) > 0)
             {
                 // Skype Onlinestatus anzeigen
                 $value = "<script type=\"text/javascript\" src=\"http://download.skype.com/share/skypebuttons/js/skypeCheck.js\"></script>
-                <a class=\"iconLink\" href=\"skype:". $field['usd_value']. "?add\"><img
-                    src=\"http://mystatus.skype.com/smallicon/". $field['usd_value']. "\"
-                    title=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\"
-                    alt=\"". $field['usd_value']. " zu ". $field['usf_name']. " hinzufügen\" /></a>
+                <a class=\"iconLink\" href=\"skype:". $field->getValue("usd_value"). "?add\"><img
+                    src=\"http://mystatus.skype.com/smallicon/". $field->getValue("usd_value"). "\"
+                    title=\"". $field->getValue("usd_value"). " zu ". $field->getValue("usf_name"). " hinzufügen\"
+                    alt=\"". $field->getValue("usd_value"). " zu ". $field->getValue("usf_name"). " hinzufügen\" /></a>
                 $value";
             }
             $messenger = true;
         }
-        elseif($field['usf_name'] == 'AIM')
+        elseif($field->getValue("usf_name") == 'AIM')
         {
             $msg_image = "aim.png";
         }
-        elseif($field['usf_name'] == 'Google Talk')
+        elseif($field->getValue("usf_name") == 'Google Talk')
         {
             $msg_image = "google.gif";
         }
-        elseif($field['usf_name'] == 'MSN')
+        elseif($field->getValue("usf_name") == 'MSN')
         {
             $msg_image = "msn.png";
         }
-        elseif($field['usf_name'] == 'Yahoo')
+        elseif($field->getValue("usf_name") == 'Yahoo')
         {
             $msg_image = "yahoo.png";
         }
         if(strlen($msg_image) > 0)
         {
             $value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;"
-                alt="'. $field['usf_name']. '" title="'. $field['usf_name']. '" />&nbsp;&nbsp;'. $value;
+                alt="'. $field->getValue("usf_name"). '" title="'. $field->getValue("usf_name"). '" />&nbsp;&nbsp;'. $value;
             $messenger = true;
         }
     }
 
     // Feld anzeigen, außer bei Messenger, wenn dieser keine Daten enthält
     if($messenger == false
-    || ($messenger == true && strlen($field['usd_value']) > 0))
+    || ($messenger == true && strlen($field->getValue("usd_value")) > 0))
     {
         $html = '<li>
                     <dl>
-                        <dt>'. $field['usf_name']. ':</dt>
+                        <dt>'. $field->getValue("usf_name"). ':</dt>
                         <dd>'. $value. '&nbsp;</dd>
                     </dl>
                 </li>';
@@ -303,16 +303,15 @@ echo '
                             </li>';
 
                             // Schleife ueber alle Felder der Stammdaten
-                            //print_r($user->db_user_fields); exit();
 
-                            foreach($user->db_user_fields as $key => $value)
+                            foreach($user->userFieldData as $field)
                             {
                                 // nur Felder der Stammdaten anzeigen
-                                if($value['cat_name'] == "Stammdaten"
+                                if($field->getValue("cat_name") == "Stammdaten"
                                 && (  $g_current_user->editProfile($a_user_id) == true
-                                    || ($g_current_user->editProfile($a_user_id) == false && $value['usf_hidden'] == 0 )))
+                                    || ($g_current_user->editProfile($a_user_id) == false && $field->getValue("usf_hidden") == 0 )))
                                 {
-                                    switch($value['usf_name'])
+                                    switch($field->getValue("usf_name"))
                                     {
                                         case "Nachname":
                                         case "Vorname":
@@ -324,7 +323,7 @@ echo '
                                             break;
 
                                         case "Adresse":
-                                            if($value['usf_name'] == "Adresse")   // nur 1x bei Adresse schreiben
+                                            if($field->getValue("usf_name") == "Adresse")   // nur 1x bei Adresse schreiben
                                             {
                                                 echo '<li>
                                                     <dl>
@@ -430,7 +429,7 @@ echo '
                                             break;
 
                                         default:
-                                            echo getFieldCode($value, $a_user_id);
+                                            echo getFieldCode($field, $a_user_id);
                                             break;
                                     }
                                 }
@@ -497,37 +496,37 @@ echo '
         // *******************************************************************************
 
         $category = "";
-        foreach($user->db_user_fields as $key => $value)
+        foreach($user->userFieldData as $field)
         {
             // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
             // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
-            if($value['cat_name'] != "Stammdaten"
+            if($field->getValue("cat_name") != "Stammdaten"
             && (  $g_current_user->editProfile($a_user_id) == true
-               || ($g_current_user->editProfile($a_user_id) == false && $value['usf_hidden'] == 0 )))
+               || ($g_current_user->editProfile($a_user_id) == false && $field->getValue("usf_hidden") == 0 )))
             {
                 // Kategorienwechsel den Kategorienheader anzeigen
                 // Kategorie "Messenger" nur anzeigen, wenn auch Daten zugeordnet sind
-                if($category != $value['cat_name']
-                && (  $value['cat_name'] != "Messenger"
-                   || ($value['cat_name'] == "Messenger" && strlen($value['usd_value']) > 0 )))
+                if($category != $field->getValue("cat_name")
+                && (  $field->getValue("cat_name") != "Messenger"
+                   || ($field->getValue("cat_name") == "Messenger" && strlen($field->getValue("usd_value")) > 0 )))
                 {
                     if(strlen($category) > 0)
                     {
                         // div-Container groupBoxBody und groupBox schliessen
                         echo "</ul></div></div>";
                     }
-                    $category = $value['cat_name'];
+                    $category = $field->getValue("cat_name");
 
                     echo "<div class=\"groupBox\">
                         <div class=\"groupBoxHeadline\">
-                            <div style=\"float: left;\">". $value['cat_name']. "</div>";
+                            <div style=\"float: left;\">". $field->getValue("cat_name"). "</div>";
                             // Nur berechtigte User duerfen ein Profil editieren
                             if($g_current_user->editProfile($a_user_id) == true)
                             {
                                 echo "
                                 <div style=\"text-align: right;\">
-                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $value['cat_id']. "\"><img
-                                        src=\"". THEME_PATH. "/icons/edit.png\" alt=\"". $value['cat_name']. " bearbeiten\" title=\"". $value['cat_name']. " bearbeiten\" /></a>
+                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$a_user_id#cat-". $field->getValue("cat_id"). "\"><img
+                                        src=\"". THEME_PATH. "/icons/edit.png\" alt=\"". $field->getValue("cat_name"). " bearbeiten\" title=\"". $field->getValue("cat_name"). " bearbeiten\" /></a>
                                 </div>";
                             }
                         echo "</div>
@@ -537,10 +536,10 @@ echo '
 
                 // Html des Feldes ausgeben
                 // bei Kategorie "Messenger" nur anzeigen, wenn auch Daten zugeordnet sind
-                if($value['cat_name'] != "Messenger"
-                || ($value['cat_name'] == "Messenger" && strlen($value['usd_value']) > 0 ))
+                if($field->getValue("cat_name") != "Messenger"
+                || ($field->getValue("cat_name") == "Messenger" && strlen($field->getValue("usd_value")) > 0 ))
                 {
-                    echo getFieldCode($value, $a_user_id);
+                    echo getFieldCode($field, $a_user_id);
                 }
             }
         }

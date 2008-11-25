@@ -42,13 +42,13 @@ class TableCategory extends TableAccess
     function save()
     {
         global $g_current_organization, $g_current_session;
-        $fields_changed = $this->db_fields_changed;
+        $fields_changed = $this->columnsValueChanged;
         
         $this->calc_sequence = false;
             
         if($this->new_record)
         {
-            if($this->db_fields['cat_org_id'] > 0)
+            if($this->getValue("cat_org_id") > 0)
             {
                 $org_condition = " AND (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
                                        OR cat_org_id IS NULL ) ";
@@ -59,7 +59,7 @@ class TableCategory extends TableAccess
             }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = "SELECT COUNT(*) as count FROM ". TBL_CATEGORIES. "
-                     WHERE cat_type = '". $this->db_fields['cat_type']. "'
+                     WHERE cat_type = '". $this->getValue("cat_type"). "'
                            $org_condition ";
             $this->db->query($sql);
 
@@ -67,11 +67,11 @@ class TableCategory extends TableAccess
 
             $this->setValue("cat_sequence", $row['count'] + 1);
             
-            if($this->db_fields['cat_org_id'] == 0)
+            if($this->getValue("cat_org_id") == 0)
             {
                 // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
                 $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence + 1
-                         WHERE cat_type = '". $this->db_fields['cat_type']. "'
+                         WHERE cat_type = '". $this->getValue("cat_type"). "'
                            AND cat_org_id IS NOT NULL ";
                 $this->db->query($sql);                 
             }
@@ -80,7 +80,7 @@ class TableCategory extends TableAccess
         parent::save();
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && $this->db_fields['cat_type'] == 'USF' && is_object($g_current_session))
+        if($fields_changed && $this->getValue("cat_type") == 'USF' && is_object($g_current_session))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, 
             // da Aenderungen in den Profilfeldern vorgenommen wurden 
@@ -103,28 +103,28 @@ class TableCategory extends TableAccess
         $this->db->query($sql);
 
         // Abhaenigigkeiten loeschen
-        if($this->db_fields['cat_type'] == 'DAT')
+        if($this->getValue("cat_type") == 'DAT')
         {
             $sql    = "DELETE FROM ". TBL_DATES. "
-                        WHERE dat_cat_id = ". $this->db_fields['cat_id'];
+                        WHERE dat_cat_id = ". $this->getValue("cat_id");
             $this->db->query($sql);
         }
-        elseif($this->db_fields['cat_type'] == 'LNK')
+        elseif($this->getValue("cat_type") == 'LNK')
         {
             $sql    = "DELETE FROM ". TBL_LINKS. "
-                        WHERE lnk_cat_id = ". $this->db_fields['cat_id'];
+                        WHERE lnk_cat_id = ". $this->getValue("cat_id");
             $this->db->query($sql);
         }
-        elseif($this->db_fields['cat_type'] == 'ROL')
+        elseif($this->getValue("cat_type") == 'ROL')
         {
             $sql    = "DELETE FROM ". TBL_ROLES. "
-                        WHERE rol_cat_id = ". $this->db_fields['cat_id'];
+                        WHERE rol_cat_id = ". $this->getValue("cat_id");
             $this->db->query($sql);
         }
-        elseif($this->db_fields['cat_type'] == 'USF')
+        elseif($this->getValue("cat_type") == 'USF')
         {
             $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
-                        WHERE usf_cat_id = ". $this->db_fields['cat_id'];
+                        WHERE usf_cat_id = ". $this->getValue("cat_id");
             $this->db->query($sql);
             
             // einlesen aller Userobjekte der angemeldeten User anstossen, 

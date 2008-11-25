@@ -72,7 +72,7 @@ class TablePhotos extends TableAccess
     // die Funktion wird innerhalb von delete() aufgerufen
     function delete()
     {
-        if($this->deleteInDatabase($this->db_fields['pho_id']))
+        if($this->deleteInDatabase($this->getValue("pho_id")))
         {
             return parent::delete();
         }
@@ -102,7 +102,7 @@ class TablePhotos extends TableAccess
         if($return_code)
         {
             //Ordnerpfad zusammensetzen
-            $folder = SERVER_PATH. "/adm_my_files/photos/".$this->db_fields['pho_begin']."_$photo_id";
+            $folder = SERVER_PATH. "/adm_my_files/photos/".$this->getValue("pho_begin")."_$photo_id";
             
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
             if(file_exists($folder))
@@ -196,7 +196,7 @@ class TablePhotos extends TableAccess
             }
             
             // nun den Ordner fuer die Veranstaltung anlegen
-            $folder_name = $this->db_fields['pho_begin']. "_". $this->db_fields['pho_id'];
+            $folder_name = $this->getValue("pho_begin"). "_". $this->getValue("pho_id");
             
             $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
             if($b_return)

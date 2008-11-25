@@ -122,17 +122,17 @@ if(isset($_SESSION['profile_request']))
 {
     $form_values = strStripSlashesDeep($_SESSION['profile_request']);
     
-    foreach($user->db_user_fields as $key => $value)
+    foreach($user->userFieldData as $field)
     {
-        $field_name = "usf-". $value['usf_id'];
+        $field_name = "usf-". $field->getValue("usf_id");
         if(isset($form_values[$field_name]))
         {
             // Datum rest einmal wieder in MySQL-Format bringen
-            if($value['usf_type'] == "DATE" && strlen($form_values[$field_name]) > 0)
+            if($field->getValue("usf_type") == "DATE" && strlen($form_values[$field_name]) > 0)
             {
                 $form_values[$field_name] = dtFormatDate($form_values[$field_name], "Y-m-d");
             }
-            $user->setValue($value['usf_name'], $form_values[$field_name]);
+            $user->setValue($field->getValue("usf_name"), $form_values[$field_name]);
         }
     }
     
@@ -154,9 +154,9 @@ function getFieldCode($field, $user, $new_user)
     
     // Felder sperren, falls dies so eingestellt wurde
     $readonly = "";
-    if($field['usf_disabled'] == 1 && $g_current_user->editUsers() == false && $new_user == 0)
+    if($field->getValue("usf_disabled") == 1 && $g_current_user->editUsers() == false && $new_user == 0)
     {
-        if($field['usf_type'] == "CHECKBOX" || $field['usf_name'] == "Geschlecht")
+        if($field->getValue("usf_type") == "CHECKBOX" || $field->getValue("usf_name") == "Geschlecht")
         {
             $readonly = ' disabled="disabled" ';
         }
@@ -167,33 +167,33 @@ function getFieldCode($field, $user, $new_user)
     }
 
     // Code fuer die einzelnen Felder zusammensetzen    
-    if($field['usf_name'] == "Geschlecht")
+    if($field->getValue("usf_name") == "Geschlecht")
     {
         $checked_female = "";
         $checked_male   = "";
-        if($field['usd_value'] == 2)
+        if($field->getValue("usd_value") == 2)
         {
             $checked_female = ' checked="checked" ';
         }
-        elseif($field['usd_value'] == 1)
+        elseif($field->getValue("usd_value") == 1)
         {
             $checked_male = ' checked="checked" ';
         }
-        $value = '<input type="radio" id="female" name="usf-'. $field['usf_id']. '" value="2" '.$checked_female.' '.$readonly.' />
+        $value = '<input type="radio" id="female" name="usf-'. $field->getValue("usf_id"). '" value="2" '.$checked_female.' '.$readonly.' />
             <label for="female"><img src="'. THEME_PATH. '/icons/female.png" title="weiblich" alt="weiblich" /></label>
             &nbsp;
-            <input type="radio" id="male" name="usf-'. $field['usf_id']. '" value="1" '.$checked_male.' '.$readonly.' />
+            <input type="radio" id="male" name="usf-'. $field->getValue("usf_id"). '" value="1" '.$checked_male.' '.$readonly.' />
             <label for="male"><img src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" /></label>';
     }
-    elseif($field['usf_name'] == "Land")
+    elseif($field->getValue("usf_name") == "Land")
     {
         //Laenderliste oeffnen
         $landlist = fopen(SERVER_PATH. "/adm_program/system/staaten.txt", "r");
         $value = '
-        <select size="1" id="usf-'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '">
+        <select size="1" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '">
             <option value="" ';
                 if(strlen($g_preferences['default_country']) == 0
-                && strlen($field['usd_value']) == 0)
+                && strlen($field->getValue("usd_value")) == 0)
                 {
                     $value = $value. ' selected="selected" ';
                 }
@@ -212,7 +212,7 @@ function getFieldCode($field, $user, $new_user)
                      {
                         $value = $value. ' selected="selected" ';
                      }
-                     if(!$new_user > 0 && $land == $field['usd_value'])
+                     if(!$new_user > 0 && $land == $field->getValue("usd_value"))
                      {
                         $value = $value. ' selected="selected" ';
                      }
@@ -221,31 +221,31 @@ function getFieldCode($field, $user, $new_user)
             }
         $value = $value. '</select>';
     }
-    elseif($field['usf_type'] == "CHECKBOX")
+    elseif($field->getValue("usf_type") == "CHECKBOX")
     {
         $mode = "";
-        if($field['usd_value'] == 1)
+        if($field->getValue("usd_value") == 1)
         {
             $mode = "checked";
         }
-        $value = '<input type="checkbox" id="usf-'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '" '.$mode.' '.$readonly.' value="1" />';
+        $value = '<input type="checkbox" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" '.$mode.' '.$readonly.' value="1" />';
     }
-    elseif($field['usf_type'] == "TEXT_BIG")
+    elseif($field->getValue("usf_type") == "TEXT_BIG")
     {
-        $value = '<textarea name="usf-'. $field['usf_id']. '" id="usf-'. $field['usf_id']. '" style="width: 300px;" rows="2" cols="40">'. $field['usd_value']. '</textarea>';
+        $value = '<textarea name="usf-'. $field->getValue("usf_id"). '" id="usf-'. $field->getValue("usf_id"). '" style="width: 300px;" rows="2" cols="40">'. $field->getValue("usd_value"). '</textarea>';
     }
     else
     {
-        if($field['usf_type'] == "DATE")
+        if($field->getValue("usf_type") == "DATE")
         {
             $width = "80px";
             $maxlength = "10";
-            if(strlen($field['usd_value']) > 0)
+            if(strlen($field->getValue("usd_value")) > 0)
             {
-                $field['usd_value'] = mysqldate('d.m.y', $field['usd_value']);
+                $field->setValue("usd_value", mysqldate('d.m.y', $field->getValue("usd_value")));
             }
         }
-        elseif($field['usf_type'] == "EMAIL" || $field['usf_type'] == "URL")
+        elseif($field->getValue("usf_type") == "EMAIL" || $field->getValue("usf_type") == "URL")
         {
             $width     = "300px";
             $maxlength = "50";
@@ -255,9 +255,9 @@ function getFieldCode($field, $user, $new_user)
             $width = "200px";
             $maxlength = "50";
         }
-        if($field['usf_type'] == "DATE")
+        if($field->getValue("usf_type") == "DATE")
         {
-            if($field['usf_name'] == 'Geburtstag')
+            if($field->getValue("usf_name") == 'Geburtstag')
             {
                 $value = '<script type="text/javascript">
                             var calBirthday = new CalendarPopup("calendardiv");
@@ -280,69 +280,69 @@ function getFieldCode($field, $user, $new_user)
                 $calObject = "calDate";
             }
             $value .= '
-                    <input type="text" id="usf'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '" style="width: '.$width.';" 
-                        maxlength="'.$maxlength.'" '.$readonly.' value="'. $field['usd_value']. '" '.$readonly.' />
-                    <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:'.$calObject.'.select(document.forms[0].usf'. $field['usf_id']. ',\'anchor'. $field['usf_id']. '\',\'dd.MM.yyyy\');" 
-                        id="anchor'. $field['usf_id']. '" style="vertical-align: middle; cursor: pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
+                    <input type="text" id="usf'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" 
+                        maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />
+                    <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:'.$calObject.'.select(document.forms[0].usf'. $field->getValue("usf_id"). ',\'anchor'. $field->getValue("usf_id"). '\',\'dd.MM.yyyy\');" 
+                        id="anchor'. $field->getValue("usf_id"). '" style="vertical-align: middle; cursor: pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
         else
         {
-            $value = '<input type="text" id="usf-'. $field['usf_id']. '" name="usf-'. $field['usf_id']. '" style="width: '.$width.';" maxlength="$maxlength" '.$readonly.' value="'. $field['usd_value']. '" '.$readonly.' />';
+            $value = '<input type="text" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" maxlength="$maxlength" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />';
         }
     }
     
     // Icons der Messenger anzeigen
     $icon = "";
-    if($field['usf_name'] == 'AIM')
+    if($field->getValue("usf_name") == 'AIM')
     {
         $icon = "aim.png";
     }
-    elseif($field['usf_name'] == 'Google Talk')
+    elseif($field->getValue("usf_name") == 'Google Talk')
     {
         $icon = "google.gif";
     }
-    elseif($field['usf_name'] == 'ICQ')
+    elseif($field->getValue("usf_name") == 'ICQ')
     {
         $icon = "icq.png";
     }
-    elseif($field['usf_name'] == 'MSN')
+    elseif($field->getValue("usf_name") == 'MSN')
     {
         $icon = "msn.png";
     }
-    elseif($field['usf_name'] == 'Skype')
+    elseif($field->getValue("usf_name") == 'Skype')
     {
         $icon = "skype.png";
     }
-    elseif($field['usf_name'] == 'Yahoo')
+    elseif($field->getValue("usf_name") == 'Yahoo')
     {
         $icon = "yahoo.png";
     }
     if(strlen($icon) > 0)
     {
-        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $field['usf_name']. '" />&nbsp;';
+        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $field->getValue("usf_name"). '" />&nbsp;';
     }
         
     // Kennzeichen fuer Pflichtfeld setzen
     $mandatory = "";
-    if($field['usf_mandatory'] == 1)
+    if($field->getValue("usf_mandatory") == 1)
     {
         $mandatory = '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
     $description = "";
-    if(strlen($field['usf_description']) > 0 && $field['cat_name'] != "Messenger")
+    if(strlen($field->getValue("usf_description")) > 0 && $field->getValue("cat_name") != "Messenger")
     {
         $description = '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field['usf_name']. '&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
-            onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field['usf_name']. '\',this);" onmouseout="ajax_hideTooltip()" />';
+            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue("usf_name"). '&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+            onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue("usf_name"). '\',this);" onmouseout="ajax_hideTooltip()" />';
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
     $html = '<li>
                 <dl>
-                    <dt><label for="usf-'. $field['usf_id']. '">'. $icon. $field['usf_name']. ':</label></dt>
+                    <dt><label for="usf-'. $field->getValue("usf_id"). '">'. $icon. $field->getValue("usf_name"). ':</label></dt>
                     <dd>'. $value. $mandatory. $description. '</dd>
                 </dl>
             </li>';
@@ -384,7 +384,7 @@ echo "
 
         $category = "";
         
-        foreach($user->db_user_fields as $key => $value)
+        foreach($user->userFieldData as $field)
         {
             $show_field = false;
             
@@ -392,7 +392,7 @@ echo "
             // E-Mail ist Ausnahme und muss immer angezeigt werden
             if($new_user == 2 
             && $g_preferences['registration_mode'] == 1 
-            && ($value['usf_mandatory'] == 1 || $value['usf_name'] == "E-Mail"))
+            && ($field->getValue("usf_mandatory") == 1 || $field->getValue("usf_name") == "E-Mail"))
             {
                 $show_field = true;
             }
@@ -412,7 +412,7 @@ echo "
         
             // Kategorienwechsel den Kategorienheader anzeigen
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-            if($category != $value['cat_name']
+            if($category != $field->getValue("cat_name")
             && $show_field == true)
             {
                 if(strlen($category) > 0)
@@ -420,15 +420,15 @@ echo "
                     // div-Container groupBoxBody und groupBox schliessen
                     echo "</ul></div></div>";
                 }
-                $category = $value['cat_name'];
+                $category = $field->getValue("cat_name");
 
-                echo "<a name=\"cat-". $value['cat_id']. "\"></a>
+                echo "<a name=\"cat-". $field->getValue("cat_id"). "\"></a>
                 <div class=\"groupBox\">
-                    <div class=\"groupBoxHeadline\">". $value['cat_name']. "</div>
+                    <div class=\"groupBoxHeadline\">". $field->getValue("cat_name"). "</div>
                     <div class=\"groupBoxBody\">
                         <ul class=\"formFieldList\">";
                         
-                if($value['cat_name'] == "Stammdaten")
+                if($field->getValue("cat_name") == "Stammdaten")
                 {
                     // bei den Stammdaten erst einmal Benutzername und Passwort anzeigen
                     if($usr_id > 0 || $new_user == 2)
@@ -447,8 +447,8 @@ echo "
                                     {
                                         echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                                         <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=nickname&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=nickname',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
+                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profile_login_name&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=profile_login_name',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
                                     }
                                 echo "</dd>
                             </dl>
@@ -463,8 +463,8 @@ echo "
                                         <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
                                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                                         <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=password',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profile_password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=profile_password',this);\" onmouseout=\"ajax_hideTooltip()\" />
                                     </dd>
                                 </dl>
                             </li>
@@ -506,7 +506,7 @@ echo "
             if($show_field == true)
             {
                 // Html des Feldes ausgeben
-                echo getFieldCode($value, $user, $new_user);
+                echo getFieldCode($field, $user, $new_user);
             }
         }
         

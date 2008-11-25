@@ -69,13 +69,13 @@ class TableAnnouncement extends TableAccess
         global $g_current_organization;
         
         // Ankuendigung der eigenen Orga darf bearbeitet werden
-        if($this->db_fields['ann_org_shortname'] == $g_current_organization->getValue("org_shortname"))
+        if($this->getValue("ann_org_shortname") == $g_current_organization->getValue("org_shortname"))
         {
             return true;
         }
         // Ankuendigung von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        elseif($this->db_fields['ann_global'] == true
-        && $g_current_organization->isChildOrganization($this->db_fields['ann_org_shortname']))
+        elseif($this->getValue("ann_global") == true
+        && $g_current_organization->isChildOrganization($this->getValue("ann_org_shortname")))
         {
             return true;
         }
