@@ -84,7 +84,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
         //Thumbnail loeschen
         if(file_exists($photo_path))
         {
-            chmod($photo_path, 0774);
+            chmod($photo_path, 0777);
             unlink($photo_path);
         }
     }
@@ -107,7 +107,7 @@ function deletePhoto($pho_id, $pic_nr)
         //Bilder loeschen
         if(file_exists("$album_path/$pic_nr.jpg"))
         {
-            chmod("$album_path/$pic_nr.jpg", 0774);
+            chmod("$album_path/$pic_nr.jpg", 0777);
             unlink("$album_path/$pic_nr.jpg");
         }
 
@@ -121,7 +121,7 @@ function deletePhoto($pho_id, $pic_nr)
             {
                 if($act_pic_nr > $new_pic_nr)
                 {
-                    chmod("$album_path/$act_pic_nr.jpg", 0774);
+                    chmod("$album_path/$act_pic_nr.jpg", 0777);
                     rename("$album_path/$act_pic_nr.jpg", "$album_path/$new_pic_nr.jpg");
                     $new_pic_nr++;
                 }                

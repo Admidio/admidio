@@ -71,7 +71,7 @@ else
 //ordner fuer Flexupload anlegen, falls dieser nicht existiert
 if(!file_exists(SERVER_PATH. "/adm_my_files/photos/upload"))
 {
-    mkdir(SERVER_PATH. "/adm_my_files/photos/upload",0774);
+    mkdir(SERVER_PATH. "/adm_my_files/photos/upload",0777);
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert

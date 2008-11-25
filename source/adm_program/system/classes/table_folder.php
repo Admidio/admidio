@@ -680,7 +680,7 @@ class TableFolder extends TableAccess
                     {
                         // nun den entsprechenden Ordner loeschen
                         $this->_deleteInFilesystem($act_folder_entry);
-                        @chmod($act_folder_entry, 0774);
+                        @chmod($act_folder_entry, 0777);
                         @rmdir($act_folder_entry);
 
                     }
@@ -689,7 +689,7 @@ class TableFolder extends TableAccess
                         // die Datei loeschen
                         if(file_exists($act_folder_entry))
                         {
-                            @chmod($act_folder_entry, 0774);
+                            @chmod($act_folder_entry, 0777);
                             @unlink($act_folder_entry);
 
                         }
@@ -702,7 +702,7 @@ class TableFolder extends TableAccess
         if ($initialCall)
         {
             //Den Ursprungsordner natuerlich auch noch loeschen
-            @chmod($folder, 0774);
+            @chmod($folder, 0777);
             @rmdir($folder);
         }
 

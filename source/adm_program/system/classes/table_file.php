@@ -126,7 +126,7 @@ class TableFile extends TableAccess
     //und loescht das File physikalisch von der Platte bevor es aus der DB geloescht wird
     function delete()
     {
-        @chmod($this->getCompletePathOfFile(), 0774);
+        @chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
 
         //Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
