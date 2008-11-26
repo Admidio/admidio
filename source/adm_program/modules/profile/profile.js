@@ -46,7 +46,7 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
             webmaster = ' <a class=\"iconLink\" href=\"javascript:deleteFormerRole(' + rol_id + ', \'' + rol_name + '\', \'' + usr_id + '\')\"><img ' +
             'src=\"' + gThemePath + '/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\"></a>';
         }
-        var html = '<dl><dt>' + cat_name + ' - ' + '<a href=\"' + gRootPath + '/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=' + rol_id + '\">' + rol_name + '</a>' + 
+        var html = '<dl><dt>' + cat_name + ' - ' + '<a href=\"' + gRootPath + '/adm_program/modules/lists/lists_show.php?mode=html&rol_id=' + rol_id + '\">' + rol_name + '</a>' + 
                     leader + '</dt><dd>vom ' + mem_begin + ' bis ' + 
                     end_date + webmaster + '</dd></dl>';
         
