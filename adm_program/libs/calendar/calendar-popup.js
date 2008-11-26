@@ -558,7 +558,7 @@ function PopupWindow_isClicked(e) {
 			}
 		else if (this.use_gebi && e) {
 				var t = e.originalTarget;
-				if(t == "[object HTMLImageElement]" || t != "[object HTMLDivElement]")
+				if(t == "[object HTMLImageElement]" || ( t != "[object HTMLDivElement]" && t != "[object HTMLOptionElement]" && t != "[object HTMLSelectElement]") )
 				{
 					while (t.parentNode != null) 
 					{
@@ -569,6 +569,10 @@ function PopupWindow_isClicked(e) {
 						t = t.parentNode;
 					}
 					return false;
+				}
+				else
+				{
+					return true;
 				}
 			}
 		return false;
