@@ -679,7 +679,7 @@ echo '
                                             '. $row['cat_name']. ' - ';
                                                 if($g_current_user->viewRole($row['mem_rol_id']))
                                                 {
-                                                    echo'<a id="'.$row['rol_name'].'" href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id=1&mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                                    echo '<a id="'.$row['rol_name'].'" href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
                                                 }
                                                 else
                                                 {
@@ -759,38 +759,38 @@ echo '
                             if($g_current_user->viewRole($row['mem_rol_id']))
                             {
                                 // jede einzelne Rolle anzeigen
-                                echo "
-                                <li id=\"former_role_". $row['mem_rol_id']. "\">
+                                echo '
+                                <li id="former_role_'. $row['mem_rol_id']. '">
                                     <dl>
-                                        <dt>".
+                                        <dt>'.
                                             $row['cat_name'];
                                             if($g_current_user->viewRole($row['mem_rol_id']))
                                             {
-                                                echo" - <a href=\"$g_root_path/adm_program/modules/lists/lists_show.php?type=address&mode=html&rol_id=". $row['mem_rol_id']. "\">". $row['rol_name']. "</a>";
+                                                echo ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&rol_id='. $row['mem_rol_id']. '">'. $row['rol_name']. '</a>';
                                             }
                                             else
                                             {
-                                                echo" - ".$row['rol_name'];
+                                                echo ' - '. $row['rol_name'];
                                             }
                                             if($row['mem_leader'] == 1)
                                             {
-                                                echo " - Leiter";
+                                                echo ' - Leiter';
                                             }
-                                        echo "</dt>
+                                        echo '</dt>
                                         <dd>
-                                            vom ". mysqldate('d.m.y', $row['mem_begin']). "
-                                            bis ". mysqldate('d.m.y', $row['mem_end']);
+                                            vom '. mysqldate('d.m.y', $row['mem_begin']). '
+                                            bis '. mysqldate('d.m.y', $row['mem_end']);
                                             if($g_current_user->isWebmaster())
                                             {
-                                                echo "
-                                                <a class=\"iconLink\" href=\"javascript:deleteFormerRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $user->getValue("usr_id"). ")\"><img
-                                                    src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
-                                                    <a class=\"iconLink\" style=\"cursor:pointer;\" onclick=\"window.open('roles_date.php?usr_id=". $user->getValue("usr_id"). "&rol_id=".$row['rol_id']."','Titel','width=350,height=300,left=310,top=200')\"><img
-                                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Datum ändern\" title=\"Datum ändern\" /></a>";
+                                                echo '
+                                                <a class="iconLink" href="javascript:deleteFormerRole('. $row['rol_id']. ', \''. $row['rol_name']. '\', '. $user->getValue("usr_id"). ')"><img
+                                                    src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>
+                                                    <a class="iconLink" style="cursor:pointer;" onclick="window.open(\'roles_date.php?usr_id='. $user->getValue("usr_id"). '&rol_id='.$row['rol_id'].'\',\'Titel\',\'width=350,height=300,left=310,top=200\')"><img
+                                                    src="'. THEME_PATH. '/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
                                             }
-                                        echo "</dd>
+                                        echo '</dd>
                                     </dl>
-                                </li>";
+                                </li>';
                                 $count_show_roles++;
                             }
                         }
