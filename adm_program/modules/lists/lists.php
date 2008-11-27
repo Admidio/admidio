@@ -512,12 +512,13 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
                                 // Anzahl Ehemaliger anzeigen
                                 if($num_former == 1)
                                 {
-                                    echo "&nbsp;&nbsp;($num_former Ehemaliger) ";
+                                    $text_former = "Ehemaliger";
                                 }
                                 else
                                 {
-                                    echo "&nbsp;&nbsp;($num_former Ehemalige) ";
+                                    $text_former = "Ehemalige";
                                 }
+                                echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $row_lst['rol_id']. '&amp;show_members=1">'.$num_former.' '.$text_former.'</a>) ';
                             }
                         echo "</dd>
                     </dl>
