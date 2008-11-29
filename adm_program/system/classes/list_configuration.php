@@ -68,7 +68,7 @@ class ListConfiguration extends TableLists
             if(isset($this->columns[$number]) == false)
             {
                 $this->columns[$number] = new TableListColumns($this->db);
-                $this->columns[$number]->setValue("lsc_lsf_id", $this->columns['lst_id']);
+                $this->columns[$number]->setValue("lsc_lsf_id", $this->getValue("lst_id"));
             }
 
             // Spalteninhalte belegen
@@ -327,7 +327,7 @@ class ListConfiguration extends TableLists
         {
             if($list_column->getValue("lsc_lst_id") == 0)
             {
-                $list_column->setValue("lsc_lst_id", $this->columns['lst_id']);
+                $list_column->setValue("lsc_lst_id", $this->getValue("lst_id"));
             }
             $list_column->save();
         }

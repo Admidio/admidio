@@ -101,7 +101,7 @@ class TableAccess
         {
             // die Spalteninfos wurden bereits eingelesen
             // und werden nun nur noch neu initialisiert
-            foreach($this->dbColumns as $field_name)
+            foreach($this->dbColumns as $field_name => $field_value)
             {
                 $this->dbColumns[$field_name] = "";
                 $this->columnsInfos[$field_name]['changed'] = false;
