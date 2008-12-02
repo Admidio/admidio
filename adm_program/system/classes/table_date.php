@@ -50,7 +50,7 @@ class TableDate extends TableAccess
             parent::readData($dat_id, $condition, $tables);
         }
     }
-    
+
     function setValue($field_name, $field_value)
     {
         if($field_name == "dat_end" && $this->getValue("dat_all_day") == 1)
@@ -62,14 +62,15 @@ class TableDate extends TableAccess
         }
         parent::setValue($field_name, $field_value);
     }
-    
+
     function getValue($field_name)
     {
-        $value = $this->getValue($field_name);
-        
-        if($field_name == "dat_end" && $this->getValue("dat_all_day") == 1)
+        // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
+        $value = $this->dbColumns[$field_name];
+
+        if($field_name == "dat_end" && $this->dbColumns["dat_all_day"] == 1)
         {
-            list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $this->getValue("dat_end"));
+            list($year, $month, $day, $hour, $minute, $second) = split("[- :]", $this->dbColumns["dat_end"]);
             $value = date("Y-m-d H:i:s", mktime($hour, $minute, $second, $month, $day, $year) - 86400);
         }
         return parent::getValue($field_name, $value);
@@ -80,7 +81,7 @@ class TableDate extends TableAccess
     function save()
     {
         global $g_current_organization, $g_current_user;
-        
+
         if($this->new_record)
         {
             $this->setValue("dat_timestamp_create", date("Y-m-d H:i:s", time()));
