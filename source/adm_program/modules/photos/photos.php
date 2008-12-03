@@ -146,13 +146,12 @@ if($g_preferences['enable_rss'] == 1)
             href=\"$g_root_path/adm_program/modules/photos/rss_photos.php\" />";
 };
 
-//Lightbox-Mode
+//Thickbox-Mode
 if($g_preferences['photo_show_mode']==1)
 {
     $g_layout['header'] = $g_layout['header']."
-        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/prototype.js\"></script>
-        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects,builder\"></script>
-        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/lightbox/lightbox.js\"></script>";
+        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/thickbox/jquery-latest.pack.js\"></script>
+		<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/thickbox/thickbox.js\"></script>";
 }
 
 //Photomodulspezifische CSS laden
@@ -261,9 +260,13 @@ echo "<div class=\"photoModuleContainer\">";
         //Differenz
         $difference = $g_preferences['photo_thumbs_row']-$g_preferences['photo_thumbs_column'];
 
-        //Popupfenstergr???üe
+        //Popupfenstergröße
         $popup_height = $g_preferences['photo_show_height']+210;
         $popup_width  = $g_preferences['photo_show_width']+70;
+        
+        //Thickboxgröße
+        $thickbox_height = $g_preferences['photo_show_height']+90;
+        $thickbox_width  = $g_preferences['photo_show_width'];
 
         //Ausrechnen der Seitenzahl
         if (settype($bilder, "int") || settype($thumb_seiten, "int"))
@@ -372,10 +375,13 @@ echo "<div class=\"photoModuleContainer\">";
                         //Lightbox-Mode
                         elseif($g_preferences['photo_show_mode']==1)
                         {
-                            echo '<div>
-                                <a href="'.$ordner_url.'/'.$bild.'.jpg" rel="lightbox[roadtrip]" title="'.$photo_album->getValue("pho_name").'"><img 
-                                    src="'.$ordner_url.'/thumbnails/'.$bild.'.jpg" class="photoThumbnail" alt="'.$bild.'" /></a>
-                            </div>';
+                            echo 
+                            "<div>
+                                <a class=\"thickbox\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$bild."&pho_id=".$pho_id."
+                                	&KeepThis=true&TB_iframe=true&height=$thickbox_height&width=$thickbox_width\">
+                                	<img src=\"$ordner_url/thumbnails/$bild.jpg\" class=\"photoThumbnail\" alt=\"$bild\" />
+                                </a>
+                            </div>";
                         }
 
                         //Gleichesfenster-Mode
