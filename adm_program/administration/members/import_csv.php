@@ -50,6 +50,10 @@ $member = new TableMembers($g_db);
 $start_row    = 0;
 $count_import = 0;
 $imported_fields = array();
+$depRoles = array();
+
+// Abhängige Rollen ermitteln
+$depRoles = RoleDependency::getParentRoles($g_db,$_SESSION['rol_id']);
 
 if($first_row_title == true)
 {
@@ -57,6 +61,7 @@ if($first_row_title == true)
     $line = next($_SESSION["file_lines"]);
     $start_row = 1;
 }
+
 
 for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
 {
@@ -205,6 +210,14 @@ for($i = $start_row; $i < count($_SESSION["file_lines"]); $i++)
         $count_import++;
         // Rollenmitgliedschaft zuordnen
         $member->startMembership($_SESSION['rol_id'], $user->getValue("usr_id"));
+        
+        //abhängige Rollen zuordnen
+        foreach($depRoles as $depRole)
+        {
+            $member->startMembership($depRole, $user->getValue("usr_id"));
+        }
+        
+        
     }
 
     $line = next($_SESSION["file_lines"]);
