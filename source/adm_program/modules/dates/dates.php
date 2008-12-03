@@ -16,7 +16,7 @@
  *                        sollen
  * headline             - Ueberschrift, die ueber den Terminen steht
  *                      (Default) Termine
- * category             - Angabe der Kategorie damit auch nur eine angezeigt
+ * calendar             - Angabe der Kategorie damit auch nur eine angezeigt
  *                        werden kann.
  * id                   - Nur einen einzigen Termin anzeigen lassen.
  * date                 - Alle Termine zu einem Datum werden aufgelistet
@@ -48,16 +48,15 @@ $req_start    = 0;
 $req_headline = "Termine";
 $req_id       = 0;
 $sql_datum    = "";
+$req_calendar = "";
 
 // Uebergabevariablen pruefen
 
 //Kontrolle ob nur ein Kalender angezeigt werden soll
-if(isset($_GET['category']) == false)
+if(isset($_GET['calendar']))
 {
-    $_GET['category'] = Null;
+    $req_calendar = $_GET['calendar'];
 }
-$category = $_GET['category'];
-
 
 if(isset($_GET['mode']))
 {
@@ -111,7 +110,7 @@ if ($g_preferences['dates_show_calendar_select'] == 1) {
 }
 if(isset($_GET['calendar-selection']) != false)
 {
-    if($_GET['category-selection'] == 1)
+    if($_GET['calendar-selection'] == 1)
     {
         $dates_show_calendar_select = 1;
     }
@@ -134,7 +133,18 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $req_headline;
+if(strlen($req_calendar) > 0)
+{
+    $g_layout['title'] = $req_headline. " - ". $req_calendar;
+}
+else
+{
+    $g_layout['title'] = $req_headline;
+}
+if($req_mode == "old")
+{
+    $g_layout['title'] = "Vergangene ". $g_layout['title'];
+}
 $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
@@ -150,26 +160,22 @@ if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] ==
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo" <script type=\"text/javascript\"><!--
-        function showCategory()
+echo ' 
+<script type="text/javascript"><!--
+    function showCalendar()
+    {
+        if (document.getElementById("calendar").selectedIndex != 0)
         {
-          if (document.getElementById('category').selectedIndex != 0) {
-            var category = document.getElementById('category').value;
-            self.location.href = 'dates.php?category='+category;
-          } else { self.location.href = 'dates.php';}
+            var calendar = document.getElementById("calendar").value;
+            self.location.href = "dates.php?calendar=" + calendar;
+        } 
+        else 
+        { 
+            self.location.href = "dates.php";
         }
-    //--></script>";
-echo "
-<h1 class=\"moduleHeadline\">";
-    if($req_mode == "old")
-    {
-        echo "Vergangene ". $req_headline;
     }
-    else
-    {
-        echo $req_headline;
-    }
-echo "</h1>";
+//--></script>
+<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>';
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = "";
@@ -197,10 +203,10 @@ if($req_id > 0)
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-   if (strlen($_GET['category']) != NULL)
+   if (strlen($req_calendar) > 0)
    {
 	  // alle Termine zu einer Kategorie anzeigen
-	  $conditions = " AND cat_name   = '". $_GET['category']. "' ";
+	  $conditions = " AND cat_name   = '". $req_calendar. "' ";
    }
     // Termine an einem Tag suchen
     if(strlen($sql_datum) > 0)
@@ -229,15 +235,6 @@ else
 
 }
 
-$sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
-         WHERE dat_cat_id = cat_id
-           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
-               OR (   dat_global   = 1
-                  AND cat_org_id IN ($organizations) ))
-               $conditions
-         LIMIT $req_start, 10";
-$dates_result = $g_db->query($sql);
-
 if($req_id == 0)
 {
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
@@ -256,6 +253,26 @@ else
 {
     $num_dates = 1;
 }
+
+// Anzahl Ankuendigungen pro Seite
+if($g_preferences['dates_per_page'] > 0)
+{
+    $dates_per_page = $g_preferences['dates_per_page'];
+}
+else
+{
+    $dates_per_page = $num_dates;
+}
+
+// nun die Ankuendigungen auslesen, die angezeigt werden sollen
+$sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
+         WHERE dat_cat_id = cat_id
+           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
+               OR (   dat_global   = 1
+                  AND cat_org_id IN ($organizations) ))
+               $conditions
+         LIMIT $req_start, $dates_per_page";
+$dates_result = $g_db->query($sql);
 
 // Neue Termine anlegen
 if($g_current_user->editDates())
@@ -279,21 +296,15 @@ if($g_current_user->editDates())
     </ul>";
 }
 
-if($num_dates > 10)
-{
-    // Navigation mit Vor- und Zurueck-Buttons
-    $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
-    echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
-}
-
 //Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
 if(($dates_show_calendar_select == 1) && ($req_id == 0))
    {
-   // Combobox mit allen Kategorien anzeigen
+   // Combobox mit allen Kalendern anzeigen, denen auch Termine zugeordnet sind
    $sql = "SELECT DISTINCT cat_name
-            FROM ". TBL_CATEGORIES. "
+             FROM ". TBL_CATEGORIES. ", ". TBL_DATES. "
             WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            AND cat_type   = 'DAT'";
+              AND cat_type   = 'DAT'
+              AND dat_cat_id = cat_id ";
    if($g_valid_login == false)
    {
      $sql .= " AND cat_hidden = 0 ";
@@ -301,12 +312,12 @@ if(($dates_show_calendar_select == 1) && ($req_id == 0))
    $sql .= " ORDER BY cat_sequence ASC ";
    $result = $g_db->query($sql);
 
-   if($g_db->num_rows($result) > 0)
+   if($g_db->num_rows($result) > 1)
    {
        echo '<p>Kalender wählen:&nbsp;&nbsp;
-      <select size="1" id="category" onchange="showCategory()">
+      <select size="1" id="calendar" onchange="showCalendar()">
          <option value="Alle" ';
-         if(strlen($_GET['category']) == 0)
+         if(strlen($req_calendar) == 0)
          {
              echo ' selected="selected" ';
          }
@@ -315,7 +326,7 @@ if(($dates_show_calendar_select == 1) && ($req_id == 0))
          while($row = $g_db->fetch_object($result))
          {
              echo '<option value="'. urlencode($row->cat_name). '"';
-             if($_GET['category'] == $row->cat_name)
+             if($req_calendar == $row->cat_name)
              {
                  echo ' selected="selected" ';
              }
@@ -324,6 +335,10 @@ if(($dates_show_calendar_select == 1) && ($req_id == 0))
      echo '</select></p>';
       }
 }
+
+// Navigation mit Vor- und Zurueck-Buttons
+$base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
+echo generatePagination($base_url, $num_dates, $dates_per_page, $req_start, TRUE);
 
 if($g_db->num_rows($dates_result) == 0)
 {
@@ -400,7 +415,7 @@ else
 
                         if ($date->getValue("dat_location") != "")
                         {
-                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:&nbsp;<br />Treffpunkt:</div>
+                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:&nbsp;<br />Ort:</div>
                             <strong>'. $date->getValue("cat_name"). '</strong><br/><div>';
                                 // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
                                 // die jeweils laenger als 3 Zeichen sind
@@ -487,13 +502,10 @@ else
     }  // Ende While-Schleife
 }
 
-if($num_dates > 10)
-{
-    // Navigation mit Vor- und Zurueck-Buttons
-    // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-    $base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
-    echo generatePagination($base_url, $num_dates, 10, $req_start, TRUE);
-}
+// Navigation mit Vor- und Zurueck-Buttons
+// erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+$base_url = "$g_root_path/adm_program/modules/dates/dates.php?mode=$req_mode&headline=$req_headline";
+echo generatePagination($base_url, $num_dates, $dates_per_page, $req_start, TRUE);
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

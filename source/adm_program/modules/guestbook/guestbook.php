@@ -154,6 +154,24 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <h1 class=\"moduleHeadline\">". $_GET["headline"]. "</h1>";
 
+// Gucken wieviele Gaestebucheintraege insgesamt vorliegen...
+// Das ist wichtig für die Seitengenerierung...
+$sql    = "SELECT COUNT(*) FROM ". TBL_GUESTBOOK. "
+           WHERE gbo_org_id = ". $g_current_organization->getValue("org_id");
+$result = $g_db->query($sql);
+$row = $g_db->fetch_array($result);
+$num_guestbook = $row[0];
+
+// Anzahl Gaestebucheintraege pro Seite
+if($g_preferences['guestbook_entries_per_page'] > 0)
+{
+    $guestbook_entries_per_page = $g_preferences['guestbook_entries_per_page'];
+}
+else
+{
+    $guestbook_entries_per_page = $num_guestbook;
+}
+
 // falls eine id fuer einen bestimmten Gaestebucheintrag uebergeben worden ist...
 if ($_GET['id'] > 0)
 {
@@ -166,18 +184,10 @@ else
     $sql    = "SELECT * FROM ". TBL_GUESTBOOK. "
                WHERE gbo_org_id = ". $g_current_organization->getValue("org_id"). "
                ORDER BY gbo_timestamp DESC
-               LIMIT ". $_GET['start']. ", 10 ";
+               LIMIT ". $_GET['start']. ", ". $guestbook_entries_per_page;
 }
 
 $guestbook_result = $g_db->query($sql);
-
-// Gucken wieviele Gaestebucheintraege insgesamt vorliegen...
-// Das ist wichtig für die Seitengenerierung...
-$sql    = "SELECT COUNT(*) FROM ". TBL_GUESTBOOK. "
-           WHERE gbo_org_id = ". $g_current_organization->getValue("org_id");
-$result = $g_db->query($sql);
-$row = $g_db->fetch_array($result);
-$num_guestbook = $row[0];
 
 // Icon-Links und Navigation anzeigen
 
@@ -197,7 +207,7 @@ if ($_GET['id'] == 0)
 
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
-    echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
+    echo generatePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $_GET["start"], TRUE);
 }
 else
 {
@@ -380,13 +390,9 @@ else
 }
 
 
-if ($g_db->num_rows($guestbook_result) > 2)
-{
-    // Navigation mit Vor- und Zurueck-Buttons
-    // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-    $base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
-    echo generatePagination($base_url, $num_guestbook, 10, $_GET["start"], TRUE);
-}
+// Navigation mit Vor- und Zurueck-Buttons
+$base_url = "$g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET["headline"];
+echo generatePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $_GET["start"], TRUE);
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

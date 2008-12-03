@@ -378,7 +378,7 @@ echo '
 <div class="formLayout" id="mylist_form">
     <div class="formHead">Eigene Liste</div>
     <div class="formBody">
-        <p><b>1.</b> Möchtest du eine gespeicherte Konfiguration laden und verändern oder lieber eine neue Listenkonfiguration erstellen ?</p>
+        <p><b>1.</b> Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen ?</p>
         <p><b>Listenkonfiguration :</b>&nbsp;&nbsp;
         <select size="1" id="lists_config" name="lists_config" onchange="loadList()">
             <option ';

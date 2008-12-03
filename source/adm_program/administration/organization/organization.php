@@ -402,8 +402,8 @@ echo "
                                 </dl>
                             </li>
                             <li class=\"smallFontSize\">
-                                Hier kannst du die &uuml;bergeordnete Organisation festlegen.
-                                Diese haben dann die Berechtigung Termine f&uuml;r die untergeordneten Organisationen anzulegen.
+                                Hier kannst du die übergeordnete Organisation festlegen.
+                                Diese haben dann die Berechtigung Termine für die untergeordneten Organisationen anzulegen.
                             </li>";
                         }
                     }
@@ -447,9 +447,9 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Admidio kann RSS-Feeds f&uuml;r verschiedene Module (Ank&uuml;ndigungen,
-                        Termine, G&auml;stebuch, Fotogalerien und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
-                        bereitstellen, die dann &uuml;ber den Browser einem Feedreader zugeordnet
+                        Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen,
+                        Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
+                        bereitstellen, die dann über den Browser einem Feedreader zugeordnet
                         werden k&ouml;nnen.
                     </li>
                     <li>
@@ -548,7 +548,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
                         Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten
-                        Registrierung stehen ihm alle Felder des Profils zur Verf&uuml;gung.
+                        Registrierung stehen ihm alle Felder des Profils zur Verfügung.
                     </li>
                     <li>
                         <dl>
@@ -564,7 +564,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Bei der Registrierung wird f&uuml;r alle Benutzer bei aktiviertem Captcha ein alphanumerischer
+                        Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
                         dass das Formular nicht von Spammern missbraucht werden kann.
                     </li>
@@ -628,10 +628,24 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Ankündigungsmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
+                        Das Ankündigungsmodul kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"announcements_per_page\">Anzahl Einträge pro Seite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"announcements_per_page\" name=\"announcements_per_page\" 
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['announcements_per_page']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Ankündigungen die auf einer Seite dargestellt werden. Gibt es mehr Ankündigungen
+                        so kann man zwischen den Ankündigungen blättern. Bei dem Wert 0 werden alle Ankündigungen 
+                        aufgelistet und die Blättern-Funktion deaktiviert.
                     </li>
                 </ul>
             </div>
@@ -662,14 +676,15 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Downloadmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt.
+                        Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"max_file_upload_size\">Maximale Dateigr&ouml;&szlig;e:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\" maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\" /> KB
+                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\" 
+                                    maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\" /> KB
                             </dd>
                         </dl>
                     </li>
@@ -720,13 +735,13 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Fotomodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
+                        Das Fotomodul kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.<br /><br />
                         <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
-                        Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur f&uuml;r registrierte Benutzer&rdquo;, wird nur der Zugriff &uuml;ber
-                        die Webseite verhindert. Die Bilddatein werden nicht gesch&uuml;tzt.
+                        Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur für registrierte Benutzer&rdquo;, wird nur der Zugriff über
+                        die Webseite verhindert. Die Bilddateien werden nicht geschützt.
                     </li>
                     <li>
                         <dl>
@@ -758,7 +773,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier kann eingestellt werden, wie die Bilder im Fotomodul präsentiert werden sollen.
                         dies kann über ein Popup-Fenster, über eine Javascript-Animation (Lightbox) oder auf
-                        dergleichen Seite in normalem HTML erfolgen.
+                        dergleichen Seite in HTML erfolgen.
                     </li>
                     <li>
                         <dl>
@@ -793,7 +808,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann festgelegt werden auf welchen Wert die l&auml;ngere Bildseite in der Thumbnailanzeige
+                        Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
                         Ggf. weniger Thumbnailspalten einstellen. (Standardwert: 100)
                     </li>
@@ -841,7 +856,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Beim Upload werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
                         ist der Parameter für die längere Seite des Bildes, egal ob das Bild im Hoch-
-                        oder Querformat &uuml;bergeben wurde. Die andere Seite wird im Verhältnis berechnet.(Standardwert: 640)
+                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet.(Standardwert: 640)
                     </li>
                     <li>
                         <dl>
@@ -865,7 +880,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Die hier angegeben Werte bestimmen die maximale Breite die ein Bild im Anzeigefenster
                         haben darf, au&szlig;er Lightboxmodus. Das Fenster im Popupmodus wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
-                        ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
+                        ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
                         sein muss. (Standardwert: 500)
                     </li>
                     <li>
@@ -879,7 +894,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
                         haben darf, au&szlig;er Lightboxmodus. Das Fenster  im Popupmodus wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
-                        ist Vorsicht angebracht, da &uuml;ber und unter dem Bild noch genug Platz f&uuml;r Layout und Browser
+                        ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
                         sein muss. (Standardwert: 380)
                     </li>
                     <li>
@@ -897,8 +912,8 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
-                        eingeblendet. Der Schriftzug wird nicht beim hochladen mit abgespeichert. Die Einblendung
-                        erfolgt nur bei Bildern mit einer Skalierung &uuml;ber 200 Pixel der l&auml;ngeren Seite, also in der Regl nicht bei Thumbnails.
+                        eingeblendet. Der Schriftzug wird beim Hochladen des Bildes nicht gespeichert. Die Einblendung
+                        erfolgt nur bei Bildern mit einer Skalierung über 200 Pixel der längeren Seite, also in der Regel nicht bei Thumbnails.
                         Diese Funktion steht im Lightboxmodus nicht zur Verfügung.
                     </li>
                 </ul>
@@ -1044,7 +1059,7 @@ echo "
                 <ul class=\"formFieldList\">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_guestbook_module\">G&auml;stebuch aktivieren:</label></dt>
+                            <dt><label for=\"enable_guestbook_module\">Gästebuch aktivieren:</label></dt>
                             <dd>
                                 <select size=\"1\" id=\"enable_guestbook_module\" name=\"enable_guestbook_module\">
                                     <option value=\"0\" ";
@@ -1070,11 +1085,25 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Gästebuch kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
+                        Das Gästebuch kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.
                     </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"guestbook_entries_per_page\">Anzahl Einträge pro Seite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"guestbook_entries_per_page\" name=\"guestbook_entries_per_page\" 
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['guestbook_entries_per_page']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Gästebucheinträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge
+                        so kann man zwischen den Einträgen blättern. Bei dem Wert 0 werden alle Gästebucheinträge 
+                        aufgelistet und die Blättern-Funktion deaktiviert.
+                    </li>                    
                     <li>
                         <dl>
                             <dt><label for=\"enable_guestbook_captcha\">Captcha aktivieren:</label></dt>
@@ -1089,7 +1118,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        F&uuml;r nicht eingeloggte Benutzer wird im G&auml;stebuchformular bei aktiviertem Captcha ein alphanumerischer
+                        Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
                         Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
                     </li>
@@ -1107,8 +1136,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Eintr&auml;ge im G&auml;stebuch kommentieren. Die Rechtevergabe
-                        f&uuml;r dieses Feature &uuml;ber die Rollenverwaltung wird dann ignoriert.
+                        Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Einträge im Gästebuch kommentieren. Die Rechtevergabe
+                        für dieses Feature über die Rollenverwaltung wird dann ignoriert.
                     </li>
                     <li>
                         <dl>
@@ -1124,7 +1153,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Wenn diese Option aktiviert ist, werden beim Aufruf der G&auml;stebuchseite die Kommentare direkt geladen und nicht ausgeblendet.
+                        Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und nicht ausgeblendet.
                     </li>
                     <li>
                         <dl>
@@ -1135,11 +1164,11 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        F&uuml;r nicht eingeloggte Benutzer wird bei Eintr&auml;gen im G&auml;stebuch &uuml;berpr&uuml;ft,
-                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag get&auml;tigt haben.
-                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabst&auml;nden hintereinander
-                        ungew&uuml;nschte Eintr&auml;ge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berpr&uuml;fung
-                        nicht durchgef&uuml;hrt.
+                        Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft,
+                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben.
+                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander
+                        ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berprüfung
+                        nicht durchgeführt.
                     </li>
                 </ul>
             </div>
@@ -1160,28 +1189,30 @@ echo "
                         <dl>
                             <dt><label for=\"lists_roles_per_page\">Anzahl Rollen pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\" />
+                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\" 
+                                    maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Anzahl der Rollen die auf einer Seite in der Listen&uuml;bersicht aufgelistet werden. Gibt es mehr Rollen
-                        so kann man in der Liste bl&auml;ttern. Bei dem Wert 0 werden alle Rollen aufgelistet und die
-                        Bl&auml;ttern-Funktion deaktiviert.
+                        Anzahl der Rollen die auf einer Seite in der Listenübersicht aufgelistet werden. Gibt es mehr Rollen
+                        so kann man in der Liste blättern. Bei dem Wert 0 werden alle Rollen aufgelistet und die
+                        Blättern-Funktion deaktiviert.
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"lists_members_per_page\">Anzahl Teilnehmer pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\" maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\" />
+                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\" 
+                                    maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden.
-                        Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste bl&auml;ttern.
+                        Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste blättern.
                         Die Druckvorschau und der Export sind von diesem Wert nicht betroffen.
-                        Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Bl&auml;ttern-Funktion deaktiviert.
+                        Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert.
                     </li>
 					<li>
                         <dl>
@@ -1197,7 +1228,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Bei Aaktivierung dieser Option werden die Details in der Listeübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen.
+                        Bei Aaktivierung dieser Option werden die Details in der Listeübersicht standardmäßig eingeklappt. Auf Wunsch 
+                        lassen sich die Details weiterhin anzeigen.
                     </li>
                 </ul>
             </div>
@@ -1228,9 +1260,9 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Mailmodul kann &uuml;ber diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modul&uuml;bersichtsseite nicht mehr angezeigt. Falls der Server keinen
-                        Mailversand unterst&uuml;tzt, sollte das Modul deaktiviert werden.
+                        Das Mailmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen
+                        Mailversand unterstützt, sollte das Modul deaktiviert werden.
                     </li>
                     <li>
                         <dl>
@@ -1246,7 +1278,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        F&uuml;r nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
+                        Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
                         dass das Formular nicht von Spammern missbraucht werden kann.
                     </li>
@@ -1461,7 +1493,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empf&auml;ngern festgelegt werden. (Standardwert: 10)
+                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standardwert: 10)
                     </li>
                     <li>
                         <dl>
@@ -1794,10 +1826,24 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Das Terminmodul kann &uuml;ber diese Einstellung komplett deaktiviert oder nur für
+                        Das Terminmodul kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
                         für beide Gruppen dann nicht mehr aufrufbar.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"dates_per_page\">Anzahl Einträge pro Seite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"dates_per_page\" name=\"dates_per_page\" 
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['dates_per_page']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Termine die auf einer Seite dargestellt werden. Gibt es mehr Termine
+                        so kann man zwischen den Terminen blättern. Bei dem Wert 0 werden alle Termine
+                        aufgelistet und die Blättern-Funktion deaktiviert.
                     </li>
                     <li>
                         <dl>
@@ -1879,6 +1925,20 @@ echo "
                         Das Weblinksmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
                     </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"weblinks_per_page\">Anzahl Links pro Seite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"weblinks_per_page\" name=\"weblinks_per_page\" 
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_per_page']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Links die auf einer Seite dargestellt werden. Gibt es mehr Links
+                        so kann man zwischen den Links blättern. Bei dem Wert 0 werden alle Links 
+                        aufgelistet und die Blättern-Funktion deaktiviert.
+                    </li>                     
                 </ul>
             </div>
         </div>
