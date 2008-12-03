@@ -137,25 +137,43 @@ else
     }
 }
 
+if($req_id == 0)
+{
+    // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
+    $sql = "SELECT COUNT(1) as count 
+              FROM ". TBL_ANNOUNCEMENTS. "
+             WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+                   OR (   ann_global   = 1
+                      AND ann_org_shortname IN ($organizations) ))
+                   $conditions ";
+    $result = $g_db->query($sql);
+    $row    = $g_db->fetch_array($result);
+    $num_announcements = $row['count'];
+}
+else
+{
+    $num_announcements = 1;
+}
+
+// Anzahl Ankuendigungen pro Seite
+if($g_preferences['announcements_per_page'] > 0)
+{
+    $announcements_per_page = $g_preferences['announcements_per_page'];
+}
+else
+{
+    $announcements_per_page = $num_announcements;
+}
+
+// nun die Ankuendigungen auslesen, die angezeigt werden sollen
 $sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
          WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
                OR (   ann_global   = 1
                   AND ann_org_shortname IN ($organizations) ))
                $conditions 
          ORDER BY ann_timestamp_create DESC
-         LIMIT $req_start, 10";
+         LIMIT $req_start, $announcements_per_page";
 $announcements_result = $g_db->query($sql);
-
-// Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-$sql = "SELECT COUNT(1) as count 
-          FROM ". TBL_ANNOUNCEMENTS. "
-         WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-               OR (   ann_global   = 1
-                  AND ann_org_shortname IN ($organizations) ))
-               $conditions ";
-$result = $g_db->query($sql);
-$row    = $g_db->fetch_array($result);
-$num_announcements = $row['count'];
 
 // Neue Ankuendigung anlegen
 if($g_current_user->editAnnouncements())
@@ -172,12 +190,9 @@ if($g_current_user->editAnnouncements())
     </ul>';        
 }
 
-if($num_announcements > 10)
-{
-    // Navigation mit Vor- und Zurueck-Buttons
-    $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=$req_headline";
-    echo generatePagination($base_url, $num_announcements, 10, $req_start, TRUE);
-}
+// Navigation mit Vor- und Zurueck-Buttons
+$base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=$req_headline";
+echo generatePagination($base_url, $num_announcements, $announcements_per_page, $req_start, TRUE);
 
 if ($g_db->num_rows($announcements_result) == 0)
 {
@@ -260,13 +275,10 @@ else
     }  // Ende While-Schleife
 }
 
-if($num_announcements > 10)
-{
-    // Navigation mit Vor- und Zurueck-Buttons
-    // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-    $base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=$req_headline";
-    echo generatePagination($base_url, $num_announcements, 10, $req_start, TRUE);
-}
+// Navigation mit Vor- und Zurueck-Buttons
+// erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+$base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=$req_headline";
+echo generatePagination($base_url, $num_announcements, $announcements_per_page, $req_start, TRUE);
         
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

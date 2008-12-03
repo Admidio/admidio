@@ -201,12 +201,12 @@ $g_layout['header'] = $g_js_vars. "
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
-<div id="lists_overview">';
+echo '<div id="lists_overview">
+<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>';
 
 if($show_ctg_sel == 1)
 {
-    // Combobox mit allen Kategorien anzeigen
+    // Combobox mit allen Kategorien anzeigen, denen auch Rollen zugeordnet sind
     $sql = "SELECT DISTINCT cat_name 
               FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
              WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -220,7 +220,7 @@ if($show_ctg_sel == 1)
     $sql .= " ORDER BY cat_sequence ASC ";
     $result = $g_db->query($sql);
 
-    if($g_db->num_rows($result) > 0)
+    if($g_db->num_rows($result) > 1)
     {
         echo '<p>Kategorie wählen:&nbsp;&nbsp;
         <select size="1" id="category" onchange="showCategory()">
@@ -271,6 +271,10 @@ else
 {
     $roles_per_page = $num_roles;
 }
+
+// Navigation mit Vor- und Zurueck-Buttons
+$base_url = "$g_root_path/adm_program/modules/lists/lists.php?category=". $_GET['category']. "&category-selection=". $_GET['category-selection']. "&active_role=$active_role";
+echo generatePagination($base_url, $num_roles, $roles_per_page, $_GET["start"], TRUE);
 
 for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
 {
@@ -561,11 +565,13 @@ if($count_cat_entries == 0)
 {
     echo "Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.";
 }
-echo "</div></div></div>";
+echo "</div></div>";
 
 // Navigation mit Vor- und Zurueck-Buttons
 $base_url = "$g_root_path/adm_program/modules/lists/lists.php?category=". $_GET['category']. "&category-selection=". $_GET['category-selection']. "&active_role=$active_role";
 echo generatePagination($base_url, $num_roles, $roles_per_page, $_GET["start"], TRUE);
+
+echo "</div>";
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

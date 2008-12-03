@@ -82,9 +82,6 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 unset($_SESSION['links_request']);
 
-// Hier eingerichtet, damit es spaeter noch in den Orga-Einstellungen verwendet werden kann
-$linksPerPage = 10;
-
 // Html-Kopf ausgeben
 $g_layout['title'] = $_GET["headline"];
 $g_layout['header'] = $g_js_vars. "
@@ -127,17 +124,6 @@ if ($g_valid_login == false)
 	$hidden = " AND cat_hidden = 0 ";
 }
 
-// Links entsprechend der Einschraenkung suchen
-$sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-  		  WHERE lnk_cat_id = cat_id
-		    AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-		    AND cat_type = 'LNK'
-		        $condition
-  		        $hidden
-		  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
-		  LIMIT ". $_GET['start']. ", ". $linksPerPage;
-$links_result = $g_db->query($sql1);
-
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
 // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
 // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
@@ -151,6 +137,27 @@ $sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
 $result = $g_db->query($sql);
 $row = $g_db->fetch_array($result);
 $numLinks = $row[0];
+
+// Anzahl Ankuendigungen pro Seite
+if($g_preferences['weblinks_per_page'] > 0)
+{
+    $weblinks_per_page = $g_preferences['weblinks_per_page'];
+}
+else
+{
+    $weblinks_per_page = $numLinks;
+}
+
+// Links entsprechend der Einschraenkung suchen
+$sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+  		  WHERE lnk_cat_id = cat_id
+		    AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+		    AND cat_type = 'LNK'
+		        $condition
+  		        $hidden
+		  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
+		  LIMIT ". $_GET['start']. ", ". $weblinks_per_page;
+$links_result = $g_db->query($sql1);
 
 // Icon-Links und Navigation anzeigen
 
@@ -180,7 +187,7 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
 
     // Navigation mit Vor- und Zurueck-Buttons
     $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-    echo generatePagination($baseUrl, $numLinks, $linksPerPage, $_GET["start"], TRUE);
+    echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET["start"], TRUE);
 }
 
 if ($g_db->num_rows($links_result) == 0)
@@ -209,7 +216,7 @@ else
 
     // Solange die vorherige Kategorie-ID sich nicht veraendert...
     // Sonst in die neue Kategorie springen
-    while (($row = $g_db->fetch_object($links_result)) && ($j<$linksPerPage))
+    while ($row = $g_db->fetch_object($links_result))
     {
 
         if ($row->lnk_cat_id != $previous_cat_id)
@@ -295,13 +302,9 @@ else
 
 echo '</div>';
 
-if ($g_db->num_rows($links_result) > 2)
-{
-    // Navigation mit Vor- und Zurueck-Buttons
-    // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-    $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-    echo generatePagination($baseUrl, $numLinks, $linksPerPage, $_GET["start"], TRUE);
-}
+// Navigation mit Vor- und Zurueck-Buttons
+$baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
+echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET["start"], TRUE);
 
 require(THEME_SERVER_PATH. "/overall_footer.php");
 

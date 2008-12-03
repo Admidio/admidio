@@ -28,7 +28,9 @@ while($row_orga = $g_db->fetch_array($result_orga))
 
     // Default-Kategorie fuer Datum eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                           VALUES (". $row_orga['org_id']. ", 'DAT', 'Allgemein', 0, 1)";
+                                      VALUES (". $row_orga['org_id']. ", 'DAT', 'Allgemein', 0, 1)
+                                           , (". $row_orga['org_id']. ", 'DAT', 'Kurse', 0, 1)
+                                           , (". $row_orga['org_id']. ", 'DAT', 'Training', 0, 1)";
     $g_db->query($sql);
     $category_common = $g_db->insert_id();
 

@@ -112,6 +112,7 @@ else
 {
     $g_layout['title'] = $_GET['headline']. " anlegen";
 }
+
 $g_layout['header'] = "
 <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
 <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />
@@ -292,7 +293,7 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"dat_location\">Treffpunkt:</label></dt>
+                    <dt><label for=\"dat_location\">Ort:</label></dt>
                     <dd>
                         <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 345px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />";
                         if($g_preferences['dates_show_map_link'])

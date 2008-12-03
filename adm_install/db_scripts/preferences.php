@@ -33,6 +33,7 @@ $orga_preferences = array(
 
     // Ankuendigungen
     'enable_announcements_module' => '1',
+    'announcements_per_page'      => '10',
 
     // Downloads
     'enable_download_module' => '1',
@@ -65,6 +66,7 @@ $orga_preferences = array(
 
     // Gaestebuch
     'enable_guestbook_module'           => '1',
+    'guestbook_entries_per_page'        => '10',
     'enable_guestbook_captcha'          => '1',
     'flooding_protection_time'          => '60',
     'enable_gbook_comments4all'         => '0',
@@ -107,10 +109,12 @@ $orga_preferences = array(
 
     // Termine
     'enable_dates_module'        => '1',
+    'dates_per_page'             => '10',
     'dates_show_map_link'        => '1',
     'dates_show_calendar_select' => '1',
 
     // Weblinks
-    'enable_weblinks_module' => '1'
+    'enable_weblinks_module'    => '1',
+    'weblinks_per_page' => '0'
  );
 ?>

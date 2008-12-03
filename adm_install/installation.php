@@ -522,6 +522,8 @@ elseif($req_mode == 7)
                                            , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
                                            , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Intern', 1, 1)
                                            , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Allgemein', 0, 1)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Kurse', 0, 1)
+                                           , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Training', 0, 1)
                                            , (NULL, 'USF', 'Zusätzliche Daten', 0, 3) ";
     $db->query($sql);
 
