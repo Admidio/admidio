@@ -92,7 +92,21 @@ if(file_exists($picpath) == false)
 
 // Bild einlesen und scalieren
 $image = new Image($picpath);
-$image->resize($scal*($image->imageWidth/$image->imageHeight), $scal);
+
+//Neue Größe berechnen
+if($side=="x")
+{
+	$x_side = $scal;
+	$y_side = $scal*($image->imageWidth/$image->imageHeight);
+}
+elseif($side=="y")
+{
+	$y_side = $scal;
+	$x_side = $scal*($image->imageWidth/$image->imageHeight);
+}
+
+
+$image->resize($x_side, $y_side);
 
 // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
 if ($scal>200 && $g_preferences['photo_image_text'] == 1)

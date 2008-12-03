@@ -86,7 +86,7 @@ $g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/phot
 $g_layout['title']    = "Fotogalerien";
 
 //wenn Popupmode normalen kopf unterdruecken
-if($g_preferences['photo_show_mode']==0)
+if($g_preferences['photo_show_mode']==0 || $g_preferences['photo_show_mode']==1)
 {                      
     $g_layout['includes'] = false;
 }
@@ -95,43 +95,13 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 //Ausgabe der Eine Tabelle Kopfzelle mit &Uuml;berschrift, Photographen und Datum
 //untere Zelle mit Buttons Bild und Fenster Schließen Button
+if($g_preferences['photo_show_mode']==0 || $g_preferences['photo_show_mode']==2)
+{ 
 echo "
 <div class=\"formLayout\" id=\"photo_presenter\" style=\"width: ".$body_with."px;\">
     <div class=\"formHead\">".$photo_album->getValue("pho_name")."</div>
-    <div class=\"formBody\">
-        <p>
-            Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
-            if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
-            && strlen($photo_album->getValue("pho_end")) > 0)
-            {
-                echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
-            }
-            echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."
-        </p>
-    
-        <ul class=\"iconTextLinkList\">";
-            //Vor und zurueck buttons
-            if($prev_image > 0)
-            {
-                echo"<li>
-                    <span class=\"iconTextLink\">
-                        <a href=\"$url_prev_image\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
-                        <a href=\"$url_prev_image\">Vorheriges Bild</a>
-                    </span>
-                </li>";
-            }
-            if($next_image <= $photo_album->getValue("pho_quantity"))
-            {
-                echo"<li>
-                    <span class=\"iconTextLink\">
-                        <a href=\"$url_next_image\">Nächstes Bild</a>
-                        <a href=\"$url_next_image\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
-                    </span>
-                </li>";
-            }
-            echo"
-        </ul>";
-    
+    <div class=\"formBody\">";
+}   
         //Ermittlung der Original Bildgroesse
         $bildgroesse = getimagesize("$ordner/$bild.jpg");
         //Entscheidung ueber scallierung
@@ -192,6 +162,46 @@ echo "
                 </li>
             </ul>";
         }
+        
+    	//Vor und zurück Buttons
+    	echo"
+        <ul class=\"iconTextLinkList\">";
+            //Vor und zurueck buttons
+            if($prev_image > 0)
+            {
+                echo"<li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$url_prev_image\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
+                        <a href=\"$url_prev_image\">Vorheriges Bild</a>
+                    </span>
+                </li>";
+            }
+            if($next_image <= $photo_album->getValue("pho_quantity"))
+            {
+                echo"<li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$url_next_image\">Nächstes Bild</a>
+                        <a href=\"$url_next_image\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
+                    </span>
+                </li>";
+            }
+            echo"
+        </ul>";
+        
+        //Zusatzinformationen zum Album nur wenn im gleichen Fenster
+        if($g_preferences['photo_show_mode']==2)
+        {	
+        	echo"
+	        <p>
+	            Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
+	            if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin")
+	            && strlen($photo_album->getValue("pho_end")) > 0)
+	            {
+	                echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
+	            }
+	            echo "<br />Fotos von: ".$photo_album->getValue("pho_photographers")."
+	        </p>";
+		}    
     echo"</div>
 </div>";
         
