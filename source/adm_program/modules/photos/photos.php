@@ -377,8 +377,7 @@ echo "<div class=\"photoModuleContainer\">";
                         {
                             echo 
                             "<div>
-                                <a class=\"thickbox\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$bild."&pho_id=".$pho_id."
-                                	&KeepThis=true&TB_iframe=true&height=$thickbox_height&width=$thickbox_width\">
+                                <a class=\"thickbox\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$bild."&pho_id=".$pho_id."&KeepThis=true&TB_iframe=true&height=$thickbox_height&width=$thickbox_width\">
                                 	<img src=\"$ordner_url/thumbnails/$bild.jpg\" class=\"photoThumbnail\" alt=\"$bild\" />
                                 </a>
                             </div>";
