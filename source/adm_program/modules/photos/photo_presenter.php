@@ -82,6 +82,13 @@ $body_with   = $g_preferences['photo_show_width']  + 20;
 //Photomodulspezifische CSS laden
 $g_layout['header'] = "<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />";
 
+//Photomodulspezifische CSS laden
+if($g_preferences['photo_show_mode']==1)
+{
+	$g_layout['header'] = "<style rel=\"stylesheet\" type=\"text/css\" media=\"screen\">body{ padding: 0px;}</style>";
+}
+
+
 // Html-Kopf ausgeben
 $g_layout['title']    = "Fotogalerien";
 
@@ -137,7 +144,32 @@ echo "
             <img class=\"photoOutput\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$scal."&amp;side=".$side."\" alt=\"$ordner_url $bild\">
             </a>
         </div>";
-    
+    	
+    	//Vor und zurück Buttons
+    	echo"
+        <ul class=\"iconTextLinkList\">";
+            //Vor und zurueck buttons
+            if($prev_image > 0)
+            {
+                echo"<li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$url_prev_image\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
+                        <a href=\"$url_prev_image\">Vorheriges Bild</a>
+                    </span>
+                </li>";
+            }
+            if($next_image <= $photo_album->getValue("pho_quantity"))
+            {
+                echo"<li>
+                    <span class=\"iconTextLink\">
+                        <a href=\"$url_next_image\">Nächstes Bild</a>
+                        <a href=\"$url_next_image\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
+                    </span>
+                </li>";
+            }
+            echo"
+        </ul>";    
+
         if($g_preferences['photo_show_mode']==0)
         {   
             // im Popupmodus Fenster schliessen Button
@@ -163,30 +195,6 @@ echo "
             </ul>";
         }
         
-    	//Vor und zurück Buttons
-    	echo"
-        <ul class=\"iconTextLinkList\">";
-            //Vor und zurueck buttons
-            if($prev_image > 0)
-            {
-                echo"<li>
-                    <span class=\"iconTextLink\">
-                        <a href=\"$url_prev_image\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorheriges Bild\" /></a>
-                        <a href=\"$url_prev_image\">Vorheriges Bild</a>
-                    </span>
-                </li>";
-            }
-            if($next_image <= $photo_album->getValue("pho_quantity"))
-            {
-                echo"<li>
-                    <span class=\"iconTextLink\">
-                        <a href=\"$url_next_image\">Nächstes Bild</a>
-                        <a href=\"$url_next_image\"><img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Nächstes Bild\" /></a>
-                    </span>
-                </li>";
-            }
-            echo"
-        </ul>";
         
         //Zusatzinformationen zum Album nur wenn im gleichen Fenster
         if($g_preferences['photo_show_mode']==2)
