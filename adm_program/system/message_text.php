@@ -278,7 +278,7 @@ $message_text = array(
         "Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!",
 
     "lost_password_send_error" =>
-        "Es ist ein ERROR beim Senden an die Email Addresse %VAR1% aufgetreten!<br /> Bitte versuch es später wieder!",
+        "Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!<br /> Bitte versuch es später wieder!",
 
     "lost_password_email_error" =>
         "Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!",

@@ -11,10 +11,10 @@
  * und anschliessend verschickt werden.
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
- * function Email()
+ * Email()
  *
  * Nun wird der Absender gesetzt:
- * function setSender($address, $name='')
+ * setSender($address, $name='')
  * Uebergaben: $address - Die Emailadresse
  *             $name    - Der Name des Absenders (optional)
  *
@@ -23,14 +23,14 @@
  * (optional und mehrfach aufrufbar, es muss jedoch mindestens
  * ein Empfaenger mittels einer der drei Funktionen gesetzt werden)
  *
- * function addRecipient($address, $name='')
- * function addCopy($address, $name='')
- * function addBlindCopy($address, $name='')
+ * addRecipient($address, $name='')
+ * addCopy($address, $name='')
+ * addBlindCopy($address, $name='')
  * Uebergaben: $address - Die Emailadresse
  *             $name    - Der Name des Absenders (optional)
  *
  * Nun noch ein Subject setzen (optional):
- * function setSubject($subject)
+ * setSubject($subject)
  * Uebergaben: $subject - Der Text des Betreffs
  *
  * Der Email einen Text geben:
@@ -47,11 +47,15 @@
  *               $file_id                - Damit kann mann die id jeden Attachments festlegen
  *
  * Bei Bedarf kann man sich eine Kopie der Mail zuschicken lassen (optional):
- * function setCopyToSenderFlag()
+ * setCopyToSenderFlag()
  *
  * Sollen in der Kopie zusaetzlich noch alle Empfaenger aufgelistet werden,
  * muss folgende Funktion auch noch aufgerufen werden (optional):
  * function setListRecipientsFlag()
+ *
+ * Methode gibt die maximale Groesse der Anhaenge zurueck
+ * size_unit : "b" = byte; "kb" = kilobyte; "mb" = megabyte
+ * getMaxAttachementSize($size_unit = "kb") 
  *
  * Soll die Nachricht als HTML Code interpretiert und versendet werden,
  * muss folgende Funktion auch noch aufgerufen werden (optional):
@@ -226,6 +230,32 @@ function prepareHeader()
     }
     //Den letzten Zeilenumbruch im Header entsorgen.
     $this->mail_properties = substr($this->mail_properties,0,strlen($this->mail_properties)-1);
+}
+
+// Methode gibt die maximale Groesse der Anhaenge zurueck
+// size_unit : "b" = byte; "kb" = kilobyte; "mb" = megabyte
+function getMaxAttachementSize($size_unit = "kb")
+{
+    global $g_preferences;
+    
+    if(round(maxUploadSize()/pow(1024, 1), 1) < $g_preferences['max_email_attachment_size'])
+    {
+        $attachment_size = round(maxUploadSize()/pow(1024, 1), 2);
+    }
+    else
+    {
+        $attachment_size = $g_preferences['max_email_attachment_size'];
+    }
+    
+    if($size_unit == "mb")
+    {
+        $attachment_size = $attachment_size / 1024;
+    }
+    elseif($size_unit == "b")
+    {
+        $attachment_size = $attachment_size * 1024;
+    }
+    return round($attachment_size, 2);
 }
 
 // Funktion um den Body zusammenzusetzen

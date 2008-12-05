@@ -185,6 +185,7 @@ if (strpos($_SESSION['navigation']->getUrl(),'mail_send.php') > 0 && isset($_SES
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
     $form_values = strStripSlashesDeep($_SESSION['mail_request']);
     unset($_SESSION['mail_request']);
+    //print_r($form_values); exit();
 
     $_SESSION['navigation']->deleteLastUrl();
 }
@@ -215,12 +216,25 @@ else
 {
     $g_layout['title'] = "E-Mail verschicken";
 }
-if($g_preferences['enable_rss'] == 1)
-{
-    $g_layout['header'] =  "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Ankuendigungen\"
-    href=\"$g_root_path/adm_program/modules/announcements/rss_announcements.php\" />
-    ";
-};
+
+$g_layout['header'] =  '
+<script type="text/javascript">
+
+    // neue Zeile mit Button zum Hinzufuegen von Dateipfaden einblenden
+    function addAttachment()
+    {
+        lnk_attachment = document.getElementById("add_attachment");            
+        new_br = document.createElement("br");
+        new_attachment = document.createElement("input");
+        new_attachment.type = "file";
+        new_attachment.name = "userfile[]";
+        new_attachment.size = "35";
+        new_attachment.style.width = "350px";
+        document.getElementById("attachments").insertBefore(new_attachment, lnk_attachment);
+        document.getElementById("attachments").insertBefore(new_br, lnk_attachment);
+    }
+</script>';
+
 require(THEME_SERVER_PATH. "/overall_header.php");
 echo "
 <form action=\"$g_root_path/adm_program/modules/mail/mail_send.php?";
@@ -300,7 +314,8 @@ echo "
 	                                        $act_category = $row->cat_name;
 	                                    }
 	                                    echo "<option value=\"$row->rol_id\" ";
-	                                    if ($row->rol_id == $form_values['rol_id'])
+	                                    if (isset($form_values['rol_id']) 
+                                        && $row->rol_id == $form_values['rol_id'])
 	                                    {
 	                                        echo "selected=\"selected\"";
 	                                    }
@@ -308,9 +323,11 @@ echo "
                                     }
                                 }
 
-                                echo "</optgroup>
+                                echo '</optgroup>
                                 </select>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"  onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_mail',this)\" onmouseout=\"ajax_hideTooltip()\"/>";
+                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
+                                    onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_mail&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_mail\',this)" onmouseout="ajax_hideTooltip()"/>';
                             }
                             echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         </dd>
@@ -390,32 +407,39 @@ echo "
                 if (($g_valid_login) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
                 {
                     // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(
-                    echo "
+                    echo '
                     <li>
                         <dl>
-                            <dt><label for=\"userfile\">Anhang:</label></dt>
-                            <dd>
-                                <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_email_attachment_size'] * 1024) . "\" />
-                                <input id=\"userfile\" name=\"userfile\" size=\"35\" style=\"width: 350px;\" type=\"file\" />
+                            <dt><label for="userfile">Anhang:</label></dt>
+                            <dd id="attachments">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="' . ($g_preferences['max_email_attachment_size'] * 1024) . '" />
+                                <span id="add_attachment" class="iconTextLink">
+                                    <a href="javascript:addAttachment()"><img
+                                    src="'. THEME_PATH. '/icons/add.png" alt="Anhang hinzufügen" /></a>
+                                    <a href="javascript:addAttachment()">Anhang hinzufügen</a>
+                                    <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
+                                        onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mail_max_attachment_size&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mail_max_attachment_size\',this)" onmouseout="ajax_hideTooltip()"/>
+                                </span>
                             </dd>
                         </dl>
-                    </li>";
+                    </li>';
                 }
 
-                echo "
+                echo '
                 <li>
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <input type=\"checkbox\" id=\"kopie\" name=\"kopie\" value=\"1\" ";
+                            <input type="checkbox" id="kopie" name="kopie" value="1" ';
                             if ($_GET['kopie'] == 1)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
-                            echo " /> <label for=\"kopie\">Kopie der E-Mail an mich senden</label>
+                            echo ' /> <label for="kopie">Kopie der E-Mail an mich senden</label>
                         </dd>
                     </dl>
-                </li>";
+                </li>';
 
                 // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
                 // falls es in den Orgaeinstellungen aktiviert wurde...
@@ -432,11 +456,13 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"captcha\">Best&auml;tigungscode:</label></dt>
+                            <dt><label for=\"captcha\">Bestätigungscode:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
                                 <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help',this)\" onmouseout=\"ajax_hideTooltip()\" />
+                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                       
+                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" 
+                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help',this)\" onmouseout=\"ajax_hideTooltip()\" />
                             </dd>
                         </dl>
                     </li>";
