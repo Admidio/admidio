@@ -24,6 +24,8 @@ if ($g_preferences['enable_mail_module'] != 1)
     $g_message->show("module_disabled");
 } 
 
+// Der Inhalt des Formulars wird nun in der Session gespeichert...
+$_SESSION['mail_request'] = $_REQUEST;
 
 // Uebergabevariablen pruefen
 
@@ -49,9 +51,6 @@ if (array_key_exists("usr_id", $_GET) && !$g_valid_login)
 // aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
 // Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
 $_SESSION['navigation']->addUrl(CURRENT_URL);
-
-// Der Inhalt des Formulars wird nun in der Session gespeichert...
-$_SESSION['mail_request'] = $_REQUEST;
 
 // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
 // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
@@ -82,79 +81,80 @@ if (empty($_POST))
     $g_message->show("invalid");
 }
 
-$err_code = "";
 $err_text = "";
-
-
-$_POST['mailfrom'] = trim($_POST['mailfrom']);
-$_POST['name']     = trim($_POST['name']);
-$_POST['subject']  = trim($_POST['subject']);
 
 //Erst mal ein neues Emailobjekt erstellen...
 $email = new Email();
 
-
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
-if (strlen($_POST['name']) > 0)
+if(strlen($_POST['name']) == 0)
 {
-    //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
-    if ( $g_valid_login 
-    && (  $_POST['mailfrom'] != $g_current_user->getValue("E-Mail") 
-       || $_POST['name'] != $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname")) )
-    {
-        $g_message->show("invalid");
-    }
+    $g_message->show("feld", "Name");
+}
 
+//Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
+if ( $g_valid_login 
+&& (  $_POST['mailfrom'] != $g_current_user->getValue("E-Mail") 
+   || $_POST['name'] != $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname")) )
+{
+    $g_message->show("invalid");
+}
 
-    //Absenderangaben setzen
-    if ($email->setSender($_POST['mailfrom'],$_POST['name']))
-    {
-      //Betreff setzen
-      if ($email->setSubject($_POST['subject']))
-      {
-            //Pruefen ob moeglicher Weise ein Attachment vorliegt
-            if (isset($_FILES['userfile']))
+//Absenderangaben setzen
+if ($email->setSender($_POST['mailfrom'],$_POST['name']))
+{
+  //Betreff setzen
+  if ($email->setSubject($_POST['subject']))
+  {
+        //Pruefen ob moeglicher Weise ein Attachment vorliegt
+        if (isset($_FILES['userfile']))
+        {
+            //noch mal schnell pruefen ob der User wirklich eingelogt ist...
+            if (!$g_valid_login)
             {
-                //noch mal schnell pruefen ob der User wirklich eingelogt ist...
-                if (!$g_valid_login)
-                {
-                    $g_message->show("invalid");
-                }
-
+                $g_message->show("invalid");
+            }
+            $attachment_size = 0;
+            // Nun jedes Attachment
+            for($act_attachment_nr = 0; isset($_FILES['userfile']['name'][$act_attachment_nr]) == true; $act_attachment_nr++)
+            {
                 //Pruefen ob ein Fehler beim Upload vorliegt
-                if (($_FILES['userfile']['error'] != 0) &&  ($_FILES['userfile']['error'] != 4))
+                if (($_FILES['userfile']['error'][$act_attachment_nr] != 0) &&  ($_FILES['userfile']['error'][$act_attachment_nr] != 4))
                 {
                     $g_message->show("attachment");
                 }
                 //Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
-                if ($_FILES['userfile']['error'] == 0)
+                if ($_FILES['userfile']['error'][$act_attachment_nr] == 0)
                 {
-                    if (strlen($_FILES['userfile']['type']) > 0)
+                    // pruefen, ob die Anhanggroesse groesser als die zulaessige Groesse ist
+                    $attachment_size = $attachment_size + $_FILES['userfile']['size'][$act_attachment_nr];
+                    if($attachment_size > $email->getMaxAttachementSize("b"))
                     {
-                        $email->addAttachment($_FILES['userfile']['tmp_name'], $_FILES['userfile']['name'], $_FILES['userfile']['type']);
+                        $g_message->show("attachment");
+                    }
+                    
+                    if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) > 0)
+                    {
+                        $email->addAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr], $_FILES['userfile']['type'][$act_attachment_nr]);
                     }
                     // Falls kein ContentType vom Browser uebertragen wird,
                     // setzt die MailKlasse automatisch "application/octet-stream" als FileTyp
                     else
                     {
-                        $email->addAttachment($_FILES['userfile']['tmp_name'], $_FILES['userfile']['name']);
+                        $email->addAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr]);
                     }
                 }
             }
         }
-        else
-        {
-            $g_message->show("feld", "Betreff");
-        }
     }
     else
     {
-        $g_message->show("email_invalid");
+        $g_message->show("feld", "Betreff");
     }
 }
 else
 {
-    $g_message->show("feld", "Name");
+    $g_message->show("email_invalid");
 }
 
 if (array_key_exists("rol_id", $_POST))
@@ -287,7 +287,6 @@ if ($email->sendEmail())
     {
         $err_text = $_POST['mailto'];
     }
-    $err_code="mail_send"; 
 
     // Der CaptchaCode wird bei erfolgreichem Mailversand aus der Session geloescht
     if (isset($_SESSION['captchacode']))
@@ -312,7 +311,7 @@ if ($email->sendEmail())
     {
         $g_message->setForwardUrl($g_homepage);
     }
-    $g_message->show($err_code, $err_text, "Hinweis");
+    $g_message->show("mail_send", $err_text, "Hinweis");
 }
 else
 {
@@ -324,9 +323,8 @@ else
     {
         $err_text = $_POST['mailto'];
     }
-    $err_code="mail_not_send";
 
-    $g_message->show($err_code, $err_text);
+    $g_message->show("mail_not_send", $err_text);
 }
 
 

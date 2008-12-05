@@ -13,7 +13,7 @@
  *
  *****************************************************************************/
 
-require("common.php");
+require_once("common.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_err_code = null;
@@ -180,8 +180,8 @@ echo "
                 break;
 
             case "date_location_link":
-                echo "Werden genügend Informationen zum Treffpunkt eingegeben, so kann ein Link bzw. eine Route zu
-                diesem Treffpunkt über Google-Maps erstellt werden.";
+                echo "Werden genügend Informationen (Straße, Ort, Lokalität) zum Treffpunkt eingegeben, 
+                so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.";
                 break;
 
             case "enable_rss":
@@ -217,13 +217,6 @@ echo "
                       Profildatenbearbeitung.";
                 break;
 
-            case "file_size":
-                echo "Hier kannst Du die maximal zulässige Größe einer Datei für das
-                      jeweilige Modul in Kilobyte definieren.<br /><br />
-                      Wenn du 0 als Dateigröße einträgst, deaktivierst du die entsprechende
-                      Funktion für alle Benutzer.";
-                break;
-
             case "leader":
                 echo "Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen
                       haben Leiter mehr Rechte als ein normales Rollenmitglied.<br /><br />
@@ -231,16 +224,24 @@ echo "
                       immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.";
                 break;
 
-            case "nickname":
+            case "mail_max_attachment_size":
+                require_once("classes/email.php");
+                echo "Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller 
+                      Anhänge zusammen nicht größer als ". Email::getMaxAttachementSize("mb"). 
+                      " MB sein.";
+                break;
+
+            case "profile_login_name":
                 echo "Mit diesem Namen kannst du dich später auf der Homepage anmelden.<br /><br />
                       Damit du ihn dir leicht merken kannst, solltest du deinen Spitznamen oder Vornamen nehmen.
                       Auch Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>, sind möglich.";
                 break;
 
-            case "password":
-                echo "Das Passwort wird verschlüsselt gespeichert.
-                      Es ist später nicht mehr möglich dieses nachzuschauen.
-                      Aus diesem Grund solltest du es dir gut merken.";
+            case "profile_password":
+                echo "Das Passwort muss mindestens aus 6 Zeichen bestehen. Es sollte sowohl Zahlen,  
+                      Buchstaben als auch Sonderzeichen beinhalten.<br /><br />
+                      Aus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert.
+                      Es ist später nicht mehr möglich dieses einzusehen.";
                 break;
 
             case "rolle_benutzer":
@@ -356,34 +357,33 @@ echo "
             case "veranst_help":
                 echo "<h3>Was ist zu tun?</h3>
                     Alle offenen Felder ausfüllen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. auswählen
-                    welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
-                    Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind für Homepagebesucher sichtbar. Möchte man z.B. erst alle Bilder hochladen
+                    welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in 
+                    &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
+                    Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind für 
+                    Homepagebesucher sichtbar. Möchte man z.B. erst alle Bilder hochladen
                     oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.
                     Danach auf Speichern klicken.
                     ";
                 break;
 
             case "folder_not_found":
-                echo " <h3>Warnung!!!</h3>
-                    Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein
+                echo "Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein
                     oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
-                    den Datensatz mit klick auf das (<img src=\"". THEME_PATH. "/icons/delete.png\" style=\"vertical-align: top;\" />)Icon löschen.
+                    den Datensatz mit klick auf das Icon <img src=\"". THEME_PATH. "/icons/delete.png\" style=\"vertical-align: top;\" /> löschen.<br />
                     Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.";
                 break;
 
             case "not_approved":
-                echo " <h3>Warnung!!!</h3>
-                    Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
-                    den entsprechende Icon (<img src=\"". THEME_PATH. "/icons/key.png\" />)
-                    in der Bearbeitungszeile nutzen.";
+                echo "Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
+                    den entsprechende Icon <img src=\"". THEME_PATH. "/icons/key.png\" /> in der Bearbeitungszeile nutzen.";
                 break;
 
             //Captcha-Hilfen
             case "captcha_help":
                 echo " <h3>Was ist das für ein Bestätigungscode?</h3>
-                    Hierbei handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das
-                    Formular von einem User oder einem Script/Spambot ausgefüllt wurde. <br /> Bitte trage den im Bild angezeigten
-                    4- bis 6-stelligen Code in das Formularfeld ein.";
+                    Hierbei handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes 
+                    wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde. <br /> 
+                    Bitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.";
                 break;
 
             default:
