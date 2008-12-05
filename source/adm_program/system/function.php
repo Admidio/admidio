@@ -128,6 +128,12 @@ function isGroupLeader($user_id, $role_id = 0)
 function generatePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true)
 {
     global $g_root_path;
+
+    if ( $num_items == 0)
+    {
+    	return '';
+    }
+    
     $total_pages = ceil($num_items/$per_page);
 
     if ( $total_pages <= 1 )
