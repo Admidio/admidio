@@ -71,10 +71,7 @@ else
     $date->setValue("dat_begin", date("Y-m-d H:00:00", time()));
     $date->setValue("dat_end", date("Y-m-d H:00:00", time()+3600));
 }
-$date_from  = "";
-$time_from  = "";
-$date_to    = "";
-$time_to    = "";
+
 if(isset($_SESSION['dates_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
@@ -293,16 +290,6 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"dat_location\">Ort:</label></dt>
-                    <dd>
-                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 345px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />";
-                        if($g_preferences['dates_show_map_link'])
-                        {
-                            echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true','Message','width=300,height=180,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link',this);\" onmouseout=\"ajax_hideTooltip()\" />";
-                        }
-                    echo "</dd>
-                </dl>
-                <dl>
                     <dt><label for=\"dat_cat_id\">Kalender:</label></dt>
                     <dd>
                         <select id=\"dat_cat_id\" name=\"dat_cat_id\" size=\"1\" tabindex=\"3\">
@@ -333,49 +320,91 @@ echo "
                     </dd>
                 </dl>
             </li>
-            ";
-         if ($g_preferences['enable_bbcode'] == 1)
-         {
-            echo "
             <li>
                 <dl>
-                    <dt>&nbsp;</dt>
+                    <dt><label for=\"dat_location\">Ort:</label></dt>
                     <dd>
-                        <div style=\"width: 350px;\">
-                            <div style=\"float: left;\">
-                                <a class=\"iconLink\" href=\"javascript:bbcode(0);\"><img id=\"b\"
-                                    src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:bbcode(1);\"><img id=\"u\"
-                                    src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:bbcode(2);\"><img id=\"i\"
-                                    src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:bbcode(3);\"><img id=\"big\"
-                                    src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:bbcode(4);\"><img id=\"small\"
-                                    src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:bbcode(5);\"><img id=\"center\"
-                                    src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:emoticon('[url=http://www.admidio.org]Linktext[/url]')\"><img id=\"url\"
-                                    src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:emoticon('[email=name@admidio.org]Linktext[/email]')\"><img id=\"email\"
-                                    src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\" /></a>
-                                <a class=\"iconLink\" href=\"javascript:emoticon('[img]http://www.admidio.org/images/admidio_small.png[/img]');\"><img id=\"img\"
-                                    src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
-                            </div>
-                            <div style=\"float: right;\">
-                                <a class=\"iconLink\" href=\"javascript:bbcodeclose();\"><img id=\"all-closed\"
-                                    src=\"". THEME_PATH. "/icons/delete.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
-                                <img class=\"iconLink\" src=\"". THEME_PATH. "/icons/help.png\"
-                                    onclick=\"javascript:window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes');\"
-                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=bbcode',this);\"
-                                    onmouseout=\"ajax_hideTooltip()\" alt=\"Hilfe\" title=\"\" />
-                            </div>
-                        </div>
-                    </dd>
+                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 345px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />";
+                        if($g_preferences['dates_show_map_link'])
+                        {
+                            echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true','Message','width=300,height=180,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link',this);\" onmouseout=\"ajax_hideTooltip()\" />";
+                        }
+                    echo "</dd>
                 </dl>
             </li>";
-         }
-         echo "
+            if($g_preferences['dates_show_map_link'])
+            {
+                if(strlen($date->getValue("dat_country")) == 0)
+                {
+                    $date->setValue("dat_country", $g_preferences['default_country']);
+                }
+                echo '<li>
+                    <dl>
+                        <dt>&nbsp;</dt>
+                        <dd>
+                            <select size="1" id="dat_country" name="dat_country">';
+                                // Datei mit Laenderliste oeffnen und alle Laender einlesen
+                                $country_list = fopen("../../system/staaten.txt", "r");
+                                $country = trim(fgets($country_list));
+                                while (!feof($country_list))
+                                {
+                                    echo '<option value="'.$country.'"';
+                                    if($country == $date->getValue("dat_country"))
+                                    {
+                                        echo ' selected="selected" ';
+                                    }
+                                    echo '>'.$country.'</option>';
+                                    $country = trim(fgets($country_list));
+                                }
+                                fclose($country_list);
+                            echo '</select>
+                        </dd>
+                    </dl>
+                </li>';
+            }
+
+            if ($g_preferences['enable_bbcode'] == 1)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>&nbsp;</dt>
+                        <dd>
+                            <div style=\"width: 350px;\">
+                                <div style=\"float: left;\">
+                                    <a class=\"iconLink\" href=\"javascript:bbcode(0);\"><img id=\"b\"
+                                        src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:bbcode(1);\"><img id=\"u\"
+                                        src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:bbcode(2);\"><img id=\"i\"
+                                        src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:bbcode(3);\"><img id=\"big\"
+                                        src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:bbcode(4);\"><img id=\"small\"
+                                        src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:bbcode(5);\"><img id=\"center\"
+                                        src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:emoticon('[url=http://www.admidio.org]Linktext[/url]')\"><img id=\"url\"
+                                        src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:emoticon('[email=name@admidio.org]Linktext[/email]')\"><img id=\"email\"
+                                        src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\" /></a>
+                                    <a class=\"iconLink\" href=\"javascript:emoticon('[img]http://www.admidio.org/images/admidio_small.png[/img]');\"><img id=\"img\"
+                                        src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
+                                </div>
+                                <div style=\"float: right;\">
+                                    <a class=\"iconLink\" href=\"javascript:bbcodeclose();\"><img id=\"all-closed\"
+                                        src=\"". THEME_PATH. "/icons/delete.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
+                                    <img class=\"iconLink\" src=\"". THEME_PATH. "/icons/help.png\"
+                                        onclick=\"javascript:window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes');\"
+                                        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=bbcode',this);\"
+                                        onmouseout=\"ajax_hideTooltip()\" alt=\"Hilfe\" title=\"\" />
+                                </div>
+                            </div>
+                        </dd>
+                    </dl>
+                </li>";
+            }
+            echo "
             <li>
                 <dl>
                     <dt><label for=\"dat_description\">Text:</label>";

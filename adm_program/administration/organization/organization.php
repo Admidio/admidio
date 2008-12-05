@@ -1669,39 +1669,39 @@ echo "
         //Einstellungen Profilmodul
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"profile-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" />
+        echo '
+        <div class="groupBox" id="profile-module">
+            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/profile.png" alt="Profil" />
                 Einstellungen Profilmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"default_country\">Standard-Land:</label></dt>
-                            <dd>";
-                                // Laenderliste oeffnen
-                                $country_list = fopen("../../system/staaten.txt", "r");
-                                echo "
-                                <select size=\"1\" id=\"default_country\" name=\"default_country\">
-                                    <option value=\"\"";
+                            <dt><label for="default_country">Standard-Land:</label></dt>
+                            <dd>
+                                <select size="1" id="default_country" name="default_country">
+                                    <option value=""';
                                     if(strlen($form_values['default_country']) == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">- Bitte wählen -</option>";
-                                    $land = trim(fgets($country_list));
+                                    echo '>- Bitte wählen -</option>';
+
+                                    // Datei mit Laenderliste oeffnen und alle Laender einlesen
+                                    $country_list = fopen("../../system/staaten.txt", "r");
+                                    $country = trim(fgets($country_list));
                                     while (!feof($country_list))
                                     {
-                                        echo"<option value=\"$land\"";
-                                        if($land == $form_values['default_country'])
+                                        echo '<option value="'.$country.'"';
+                                        if($country == $form_values['default_country'])
                                         {
-                                            echo " selected=\"selected\" ";
+                                            echo ' selected="selected" ';
                                         }
-                                        echo">$land</option>";
-                                        $land = trim(fgets($country_list));
+                                        echo '>'.$country.'</option>';
+                                        $country = trim(fgets($country_list));
                                     }
                                     fclose($country_list);
-                                echo"</select>
+                                echo "</select>
                             </dd>
                         </dl>
                     </li>
