@@ -451,6 +451,7 @@ create table %PRAEFIX%_dates
    dat_all_day                    tinyint(1) unsigned            not null default 0,
    dat_description                text,
    dat_location                   varchar(100),
+   dat_country                    varchar(100),
    dat_headline                   varchar(100)                   not null,
    dat_usr_id_create              int(11) unsigned,
    dat_timestamp_create           datetime                       not null,

@@ -123,7 +123,6 @@ if($_GET["mode"] == 1)
             $time_arr = explode(":", $_POST['time_from']);
             $date_from_timestamp = mktime($time_arr[0],$time_arr[1],0,$date_arr[1],$date_arr[0],$date_arr[2]);
             $date_begin = date("Y-m-d H:i:s", $date_from_timestamp);
-            //$date_begin = dtFormatDate($_POST['date_from'], "Y-m-d"). " ". dtFormatTime($_POST['time_from']);
             $date->setValue("dat_begin", $date_begin);
         }
         else
@@ -155,7 +154,6 @@ if($_GET["mode"] == 1)
             $time_arr = explode(":", $_POST['time_to']);
             $date_to_timestamp = mktime($time_arr[0],$time_arr[1],0,$date_arr[1],$date_arr[0],$date_arr[2]);
             $date_end = date("Y-m-d H:i:s", $date_to_timestamp);
-            //$date_end = dtFormatDate($_POST['date_to'], "Y-m-d"). " ". dtFormatTime($_POST['time_to']);
             $date->setValue("dat_end", $date_end);
         }
         else
@@ -181,6 +179,12 @@ if($_GET["mode"] == 1)
     if(isset($_POST['dat_all_day']) == false)
     {
         $_POST['dat_all_day'] = 0;
+    }
+    
+    // das Land nur zusammen mit dem Ort abspeichern
+    if(strlen($_POST['dat_location']) == 0)
+    {
+        $_POST['dat_country'] = "";
     }
 
     // POST Variablen in das Termin-Objekt schreiben

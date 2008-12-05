@@ -413,7 +413,7 @@ else
                             $margin_left_location = "40";
                         }
 
-                        if ($date->getValue("dat_location") != "")
+                        if (strlen($date->getValue("dat_location")) > 0)
                         {
                             echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:&nbsp;<br />Ort:</div>
                             <strong>'. $date->getValue("cat_name"). '</strong><br/><div>';
@@ -428,10 +428,17 @@ else
                                     }
                                 }
 
-                                if($g_preferences['dates_show_map_link']
+                                if($g_preferences['dates_show_map_link'] == true
                                 && $map_info_count > 1)
                                 {
-                                    echo '<a href="http://maps.google.com/?q='. urlencode($date->getValue("dat_location")). '" target="_blank" title="Auf Karte zeigen"/><strong>'.$date->getValue("dat_location").'</strong></a>';
+                                    // Google-Maps-Link fuer den Ort zusammenbauen
+                                    $location_url = 'http://maps.google.com/?q='. $date->getValue("dat_location");
+                                    if(strlen($date->getValue("dat_country")) > 0)
+                                    {
+                                        // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
+                                        $location_url .= ',%20'. $date->getValue("dat_country");
+                                    }
+                                    echo '<a href="'. $location_url. '" target="_blank" title="Auf Karte zeigen"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
                                     // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
                                     if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
@@ -452,20 +459,30 @@ else
                                         }
 
                                         $route_url .= '&amp;daddr='. urlencode($date->getValue("dat_location"));
+                                        if(strlen($date->getValue("dat_country")) > 0)
+                                        {
+                                            // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
+                                            $route_url .= ',%20'. $date->getValue("dat_country");
+                                        }
                                         echo '<spam class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
                                         src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" title="Route anzeigen"/></a></spam>';
                                     }
-                                } else {
+                                } 
+                                else
+                                {
                                     echo '<strong>'. $date->getValue("dat_location"). '</strong>';
                                 }
                             echo '</div>';
-                           //echo '<div style="float: left;"><strong>'. $date->getValue("cat_name"). '&nbsp;</strong></div>';
-                        } else {
+                        }
+                        else 
+                        {
                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:</div>
                             <div style="float: left;"><strong>'. $date->getValue("cat_name"). '&nbsp;</strong></div>';
                         }
                     echo '</div>';
-                } else {
+                } 
+                else 
+                {
                   echo '<div class="date_info_block">';
                   $margin_left_location = "0";
                   echo '<div style="float: left;">Kalender:</div>
