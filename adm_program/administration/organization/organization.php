@@ -1228,7 +1228,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Bei Aaktivierung dieser Option werden die Details in der Listeübersicht standardmäßig eingeklappt. Auf Wunsch 
+                        Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch 
                         lassen sich die Details weiterhin anzeigen.
                     </li>
                 </ul>
