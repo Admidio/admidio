@@ -59,6 +59,14 @@ if($g_current_user->editProfile($req_usr_id) == false)
     $g_message->show("norights");
 }
 
+//ggf. Ordner für Userfotos anlegen
+if(!file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos"))
+{
+    mkdir(SERVER_PATH. "/adm_my_files/user_profile_photos", 0777);
+    chmod(SERVER_PATH. "/adm_my_files/user_profile_photos", 0777);
+}
+                     
+
 // User auslesen
 $user = new User($g_db, $req_usr_id);
 
@@ -67,19 +75,14 @@ if($job=="save")
     /*****************************Bild speichern*************************************/
     
     //Nachsehen ob fuer den User ein Photo gespeichert war
-    if(strlen($g_current_session->getValue("ses_blob")) > 0)
+    if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg"))
     {
-        //Bilddaten in User-Tabelle schreiben
-        $sql = "UPDATE ". TBL_USERS. "
-                   SET usr_photo = '". addslashes($g_current_session->getValue("ses_blob")). "'
-                 WHERE usr_id    = $req_usr_id ";
-        $g_db->query($sql, false);
-
-        $g_current_session->setValue("ses_blob", "");
-        $g_current_session->setValue("ses_renew", 1);
-        $g_current_session->save();
-        
-        $_SESSION['navigation']->deleteLastUrl();
+		if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg"))
+		{
+			unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
+		}
+		rename(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg", SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
+		$_SESSION['navigation']->deleteLastUrl();
     }
     
     // zur Ausgangsseite zurueck
@@ -89,6 +92,7 @@ if($job=="save")
 elseif($job=="dont_save")
 {
     /*****************************Bild nicht speichern*************************************/
+    unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg");
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
     $g_message->show("profile_photo_update_cancel");
@@ -102,8 +106,7 @@ elseif($job=="msg_delete")
 elseif($job=="delete")
 {
     /***************************** Bild loeschen *************************************/
-    $user->setValue("usr_photo", "");
-    $user->save();
+	unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
     
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
@@ -158,10 +161,16 @@ if($job==NULL)
     <div class="formLayout" id="profile_photo_upload_form">
         <div class="formHead">'.$headline.'</div>
         <div class="formBody">
-            <p>Aktuelles Bild:</p>
-
-            <img src="profile_photo_show.php?usr_id='.$req_usr_id.'&amp;id='. time(). '" alt="Aktuelles Bild" />
-
+            <p>Aktuelles Bild:</p>';
+			if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg"))
+			{
+            	echo '<img src="'.$g_root_path.'/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg" alt="Aktuelles Bild" />';
+            }
+            else
+            {
+            	echo '<img src="'.THEME_PATH.'/images/no_profile_pic.png" alt="Kein Profilbild" />';
+            }
+			echo'
             <p>Bitte hier ein neues Bild auswählen:</p>
             <p><input type="file" id="bilddatei" name="bilddatei" size="40" value="durchsuchen" /></p>
 
@@ -196,17 +205,8 @@ elseif($job=="upload")
     $user_image = new Image($_FILES["bilddatei"]["tmp_name"]);
     $user_image->setImageType("jpeg");
     $user_image->resize(130, 170);
-    $user_image->copyToFile();
+    $user_image->copyToFile(null, SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg");
     $user_image->delete();
-
-    // Foto aus PHP-Temp-Ordner einlesen
-    $user_photo = addslashes(fread(fopen($_FILES["bilddatei"]["tmp_name"], "r"), $_FILES["bilddatei"]["size"]));
-
-    // Zwischenspeichern des neuen Bildes in der Session
-    $sql = "UPDATE ". TBL_SESSIONS. "
-               SET ses_blob   = '$user_photo'
-             WHERE ses_usr_id = ". $g_current_user->getValue("usr_id");
-    $result = $g_db->query($sql, false);
 
     if($req_usr_id == $g_current_user->getValue("usr_id"))
     {
@@ -229,9 +229,17 @@ elseif($job=="upload")
                     <td>Aktuelles Bild:</td>
                     <td>Neues Bild:</td>
                 </tr>
-                <tr style="text-align: center;">
-                    <td><img src="profile_photo_show.php?usr_id='. $req_usr_id. '&amp;id='. time(). '" alt="Aktuelles Bild" /></td>
-                    <td><img src="profile_photo_show.php?usr_id='. $req_usr_id. '&amp;tmp_photo=1&amp;id='. time(). '" alt="Neues Bild" /></td>
+                <tr style="text-align: center;">';
+                    if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg"))
+					{
+            			echo '<td><img src="'.$g_root_path.'/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg" alt="Aktuelles Bild" /></td>';
+            		}
+            		else
+            		{
+            			echo '<td><img src="'.THEME_PATH.'/images/no_profile_pic.png" alt="Kein Profilbild" /></td>';
+            		}
+                    echo'
+                    <td><img src="'.$g_root_path.'/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg" alt="Neues Bild" /></td>
                 </tr>
             </table>
 

@@ -445,21 +445,22 @@ echo '
                 // Bild-Block
                 // *******************************************************************************
 
-                //Nachsehen ob fuer den User ein Photo gespeichert wurde
-                $sql =" SELECT usr_id
-                          FROM ".TBL_USERS."
-                         WHERE usr_id = $a_user_id
-                           AND usr_photo IS NOT NULL ";
-                $result_photo = $g_db->query($sql);
-
                 echo"
                 <div class=\"groupBox\">
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
                         <table width=\"100%\" summary=\"Profilfoto\" border=\"0\" style=\"border:0px;\" cellpadding=\"0\" cellspacing=\"0\" rules=\"none\">
                             <tr>
-                                <td>
-                                <img src=\"$g_root_path/adm_program/modules/profile/profile_photo_show.php?usr_id=$a_user_id&amp;id=". time(). "\" alt=\"Profilfoto\" />
-                                </td>
+                                <td>";
+                                if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$a_user_id.".jpg"))
+								{
+            						echo '<img src="'.$g_root_path.'/adm_my_files/user_profile_photos/'.$a_user_id.'.jpg" alt="Aktuelles Bild" />';
+            					}
+            					else
+            					{
+            						echo '<img src="'.THEME_PATH.'/images/no_profile_pic.png" alt="Kein Profilbild" />';
+            					}
+                                echo
+                                "</td>
                             </tr>";
                              // Nur berechtigte User duerfen das Profilfoto editieren
                             if($g_current_user->editProfile($a_user_id) == true)
