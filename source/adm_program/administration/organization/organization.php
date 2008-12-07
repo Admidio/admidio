@@ -759,7 +759,7 @@ echo "
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">Lightbox</option>
+                                    echo ">Thickbox</option>
                                     <option value=\"2\" ";
                                     if($form_values['photo_show_mode'] == 2)
                                     {
@@ -772,7 +772,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Hier kann eingestellt werden, wie die Bilder im Fotomodul präsentiert werden sollen.
-                        dies kann über ein Popup-Fenster, über eine Javascript-Animation (Lightbox) oder auf
+                        dies kann über ein Popup-Fenster, über eine Javascript-Animation (Thickbox) oder auf
                         dergleichen Seite in HTML erfolgen.
                     </li>
                     <li>
@@ -914,7 +914,6 @@ echo "
                         Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
                         eingeblendet. Der Schriftzug wird beim Hochladen des Bildes nicht gespeichert. Die Einblendung
                         erfolgt nur bei Bildern mit einer Skalierung über 200 Pixel der längeren Seite, also in der Regel nicht bei Thumbnails.
-                        Diese Funktion steht im Lightboxmodus nicht zur Verfügung.
                     </li>
                 </ul>
             </div>
