@@ -155,7 +155,9 @@ if($g_preferences['photo_show_mode']==1)
 }
 
 //Photomodulspezifische CSS laden
-$g_layout['header'] = $g_layout['header']."<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />";
+$g_layout['header'] = $g_layout['header']."
+		<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/photos.css\" type=\"text/css\" media=\"screen\" />
+		<link rel=\"stylesheet\" href=\"". THEME_PATH. "/css/thickbox.css\" type=\"text/css\" media=\"screen\" />";
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
