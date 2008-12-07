@@ -409,11 +409,11 @@ class PhpBB2
 
     // Funktion speichert die Daten eines Users
     // existiert der User noch nicht, wird er angelegt, ansonsten aktualisiert
-    function userSave($username, $password, $email, $old_username = "", $set_admin = 0)
+    function userSave($username, $password, $email, $old_username = "", $usercode = 0, $set_admin = 0)
     {
         // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
         // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
-        if(strlen($username) > 0 and strlen($password) > 0 and strlen($email) > 0)
+        if(strlen($username) > 0 AND strlen($password) > 0 AND strlen($email) > 0 AND ($usercode == 3 OR strlen($old_username) > 0))
         {
             $user_aktiv = 1;
         }
@@ -441,7 +441,7 @@ class PhpBB2
         else
         {
             // User anlegen
-            $this->userInsert($username, $password, $email);
+            $this->userInsert($username, $user_aktiv, $password, $email);
         }
         
         // Falls ein Admidio-Webmaster angemeldet wird, so sollte dieser automatisch im Forum 
@@ -453,11 +453,11 @@ class PhpBB2
     }
 
     // Funktion legt einen neuen Benutzer im Forum an
-    function userInsert($forum_username, $forum_password, $forum_email)
+    function userInsert($forum_username, $forum_useraktiv, $forum_password, $forum_email)
     {
         // Erst mal schauen ob der User alle Kriterien erfuellt um im Forum aktiv zu sein
         // Voraussetzung ist ein gueltiger Benutzername, eine Email und ein Password
-        if(strlen($forum_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0)
+        if(strlen($forum_username) > 0 AND strlen($forum_password) > 0 AND strlen($forum_email) > 0 AND $forum_useraktiv == 1)
         {
             $forum_useraktiv = 1;
         }

@@ -58,7 +58,7 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
                     // Paralell im Forum aendern, wenn Forum aktiviert ist
                     if($g_preferences['enable_forum_interface'])
                     {
-                        $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"));
+                        $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"), "", 3);
                     }
 
                     // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren

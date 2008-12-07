@@ -318,7 +318,7 @@ if($g_preferences['enable_forum_interface'] && ($login_name_changed || $new_user
     {
         $set_admin = true;
     }
-    $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"), $forum_old_username, $set_admin);
+    $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"), $forum_old_username, $new_user, $set_admin);
 }
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
