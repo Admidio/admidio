@@ -92,6 +92,16 @@
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/weblinks.png" alt="Weblinks" title="Weblinks" /></a>
                     <a href="'. $g_root_path. '/adm_program/modules/links/links.php">Weblinks</a></span>';
             }
+            
+            if( $g_preferences['enable_pm_module'] == 1
+            || ($g_preferences['enable_pm_module'] == 2 && $g_valid_login) || 1 == 1)            
+            {
+                echo '
+                <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/pm/pm.php"><img
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/list_small.png" alt="Nachrichten" title="Nachrichten" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/pm/pm.php">Nachrichten</a></span>';
+            }
+
             if($g_preferences['enable_forum_interface'])
             {
                 echo '<span class="menu"><a href="'. $g_forum->url. '"><img

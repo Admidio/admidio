@@ -239,6 +239,45 @@ echo "</ul>
                     </dl>
                 </li>";
             }
+            
+            if( $g_preferences['enable_pm_module'] == 1
+            || ($g_preferences['enable_pm_module'] == 2 && $g_valid_login) || 1 == 1)
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>
+                            <a href=\"$g_root_path/adm_program/modules/pm/pm.php\"><img
+                            src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Nachrichten\" title=\"Nachrichten\" /></a>
+                        </dt>
+                        <dd>
+                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/pm/pm.php\">Nachrichten</a></span>";
+                        	if($g_valid_login)
+                        	{
+                            	echo "
+                            	&nbsp;&nbsp;
+                                &#91; 
+                                <a href=\"$g_root_path/adm_program/modules/pm/pm.php?mode=new\"><img src=\"". THEME_PATH. "/icons/".$g_pm->pm_icon."\" alt=\"Neue Nachrichten\" title=\"Neue Nachrichten\"></a>
+                                <a href=\"$g_root_path/adm_program/modules/pm/pm.php?mode=new\">".$g_pm->pm_text."</a> |
+                                <a href=\"$g_root_path/adm_program/modules/pm/pm.php?mode=archiv\"><img src=\"". THEME_PATH. "/icons/pm_read.gif\" alt=\"Archiv\" title=\"Archiv\"></a>
+                                <a href=\"$g_root_path/adm_program/modules/pm/pm.php?mode=archiv\">Archiv</a>
+                                &#93;
+                                <br /> 
+                            	<span class=\"smallFontSize\">Private Nachrichten mit anderen Mitgliedern austauschen und verwalten.</span>
+   								";
+                        	}
+                        	else
+                        	{
+                            	echo "
+								<br />
+                            	<span class=\"smallFontSize\">Private Nachrichten mit anderen Mitgliedern austauschen und verwalten.</span>
+								";
+                        	}
+                        echo "
+                        </dd>
+                    </dl>
+                </li>";
+            }
 
             // Wenn das Forum aktiv ist, dieses auch in der Uebersicht anzeigen.
             if($g_preferences['enable_forum_interface'])

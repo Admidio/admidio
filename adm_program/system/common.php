@@ -56,6 +56,7 @@ require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_session.php");
 require_once(SERVER_PATH. "/adm_program/system/forum/forum.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/pm.php");
 
 // Variablen von HMTL & PHP-Code befreien
 $_REQUEST = array_map("strStripTags", $_REQUEST);
@@ -169,6 +170,18 @@ else
 if(isset($_SESSION['navigation']) == false)
 {
     $_SESSION['navigation'] = new Navigation();
+}
+
+// Objekt fuer die Nachrichten erstellen
+if(isset($_SESSION['pm']))
+{
+	$g_pm =& $_SESSION['pm'];
+	$g_pm->db =& $g_db;
+}
+else
+{
+    $g_pm = new Pm($g_db);
+    $_SESSION['pm'] =& $g_pm;
 }
 
 /*********************************************************************************
@@ -297,6 +310,13 @@ else
 {
     $g_homepage = $g_root_path. "/". $g_preferences['homepage_logout'];
 }
+
+// Auf neue Nachrichten prüfen
+if($g_valid_login)
+{
+    $g_pm->GetPm($g_current_user->getValue('usr_id'));
+}
+
 
 /*********************************************************************************
 Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
