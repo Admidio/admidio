@@ -309,14 +309,14 @@ else
 {
     $g_layout['title'] = "Grußkarte bearbeiten";
 }
-//Lightbox-Mode
+//Thickbox-Mode
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
 {
     $g_layout['header'] = $g_layout['header']."
         <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/thickbox/jquery-latest.pack.js\"></script>
 		<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/thickbox/thickbox.js\"></script>
-        <link rel=\"stylesheet\" href=\"".THEME_PATH."/css/photos.css\" type=\"text/css\" media=\"screen\" />";
+        <link rel=\"stylesheet\" href=\"".THEME_PATH."/css/thickbox.css\" type=\"text/css\" media=\"screen\" />";
 }
 $javascript = '
     <script type="text/javascript"><!--
