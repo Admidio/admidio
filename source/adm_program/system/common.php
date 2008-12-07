@@ -56,7 +56,7 @@ require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_session.php");
 require_once(SERVER_PATH. "/adm_program/system/forum/forum.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/pm.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/messages.php");
 
 // Variablen von HMTL & PHP-Code befreien
 $_REQUEST = array_map("strStripTags", $_REQUEST);
@@ -173,15 +173,15 @@ if(isset($_SESSION['navigation']) == false)
 }
 
 // Objekt fuer die Nachrichten erstellen
-if(isset($_SESSION['pm']))
+if(isset($_SESSION['messages']))
 {
-	$g_pm =& $_SESSION['pm'];
-	$g_pm->db =& $g_db;
+	$g_messages =& $_SESSION['messages'];
+	$g_messages->db =& $g_db;
 }
 else
 {
-    $g_pm = new Pm($g_db);
-    $_SESSION['pm'] =& $g_pm;
+    $g_messages = new Messages($g_db);
+    $_SESSION['messages'] =& $g_messages;
 }
 
 /*********************************************************************************
@@ -314,9 +314,8 @@ else
 // Auf neue Nachrichten prüfen
 if($g_valid_login)
 {
-    $g_pm->GetPm($g_current_user->getValue('usr_id'));
+    $g_messages->GetMessages($g_current_user->getValue('usr_id'));
 }
-
 
 /*********************************************************************************
 Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
