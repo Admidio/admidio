@@ -450,17 +450,9 @@ echo '
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
                         <table width=\"100%\" summary=\"Profilfoto\" border=\"0\" style=\"border:0px;\" cellpadding=\"0\" cellspacing=\"0\" rules=\"none\">
                             <tr>
-                                <td>";
-                                if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$a_user_id.".jpg"))
-								{
-            						echo '<img src="'.$g_root_path.'/adm_my_files/user_profile_photos/'.$a_user_id.'.jpg" alt="Aktuelles Bild" />';
-            					}
-            					else
-            					{
-            						echo '<img src="'.THEME_PATH.'/images/no_profile_pic.png" alt="Kein Profilbild" />';
-            					}
-                                echo
-                                "</td>
+                                <td>
+                                	<img src=\"profile_photo_show.php?usr_id=".$a_user_id."\" alt=\"Aktuelles Bild\" />
+                                </td>
                             </tr>";
                              // Nur berechtigte User duerfen das Profilfoto editieren
                             if($g_current_user->editProfile($a_user_id) == true)
