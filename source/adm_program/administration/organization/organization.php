@@ -777,28 +777,17 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_thumbs_row\">Thumbnailzeilen:</label></dt>
+                            <dt><label for=\"photo_thumbs_row\">Thumbnails pro Seite (Spalten x Zeilen):</label></dt>
                             <dd>
+                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" /> x 
                                 <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\" />
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standardwert: 5)
+                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standardwert: 4 x 5)
                     </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"photo_thumbs_column\">Thumbnailspalten:</label></dt>
-                            <dd>
-                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" />
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Der hier angegebene Wert bestimmt wieviele Zeilen an Thumbnails auf einer Seite angezeigt werden.
-                        Vorsicht: zuviele Thumbnails nebeneinander passen nicht ins Layout. Ggf. die Thumbnailskalierung
-                        herunter setzen. (Standardwert: 5)
-                    </li>
+
                     <li>
                         <dl>
                             <dt><label for=\"photo_thumbs_scale\">Skalierung Thumbnails:</label></dt>
@@ -847,7 +836,7 @@ echo "
                     </li>
 					<li>
                         <dl>
-                            <dt><label for=\"photo_save_scale\">Skalierung beim Upload und im LBmodus:</label></dt>
+                            <dt><label for=\"photo_save_scale\">Skalierung beim Upload:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
                              </dd>
@@ -856,7 +845,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Beim Upload werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
                         ist der Parameter für die längere Seite des Bildes, egal ob das Bild im Hoch-
-                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet.(Standardwert: 640)
+                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standardwert: 640)
                     </li>
                     <li>
                         <dl>
@@ -871,49 +860,30 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_show_width\">Max. Bildanzeigebreite:</label></dt>
+                            <dt><label for=\"photo_show_width\">Max. Bildanzeigegröße (Briete x Höhe):</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> Pixel
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Die hier angegeben Werte bestimmen die maximale Breite die ein Bild im Anzeigefenster
-                        haben darf, au&szlig;er Lightboxmodus. Das Fenster im Popupmodus wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
-                        ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
-                        sein muss. (Standardwert: 500)
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"photo_show_height\">Max. Bildanzeigeh&ouml;he:</label></dt>
-                            <dd>
+                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x 
                                 <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Die hier angegeben Werte bestimmen die maximale Breite und H&ouml;he die ein Bild im Anzeigefenster
-                        haben darf, au&szlig;er Lightboxmodus. Das Fenster  im Popupmodus wird automatisch entsprechend gr&ouml;&szlig;er. Besonders bei der H&ouml;he
+                        Die hier angegeben Werte bestimmen die maximale Größe die ein Bild im Anzeigefenster
+                        haben darf. Das Fenster im Popup- bzw. Thickboxmodus werden automatisch in der Größe angepasst. Besonders bei der H&ouml;he
                         ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
-                        sein muss. (Standardwert: 380)
+                        sein muss. (Standardwert: 500 x 380)
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"photo_image_text\">Bildtext einblenden:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"photo_image_text\" name=\"photo_image_text\" ";
-                                if(isset($form_values['photo_image_text']) && $form_values['photo_image_text'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
+                                <input type=\"text\" id=\"photo_image_text\" name=\"photo_image_text\" size=\"20\" maxlength=\"60\" value=\"".$form_values['photo_image_text']. "\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Ist diese Funktion aktiviert, wird in jedes angezeigte Bild das &#169;-Symbol und die Homepage
-                        eingeblendet. Der Schriftzug wird beim Hochladen des Bildes nicht gespeichert. Die Einblendung
-                        erfolgt nur bei Bildern mit einer Skalierung über 200 Pixel der längeren Seite, also in der Regel nicht bei Thumbnails.
+                        Der hier eingegebene Text wird in alle angezeigten Bilder, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet.
+                        (Standardwert: &#169; ".$g_current_organization->getValue("org_homepage").")
                     </li>
                 </ul>
             </div>
@@ -922,8 +892,8 @@ echo "
         /**************************************************************************************/
         //Einstellungen Forum
         /**************************************************************************************/
-
-         echo"
+ 
+        echo "
         <div class=\"groupBox\" id=\"forum\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" />
                 Einstellungen Forum</div>
