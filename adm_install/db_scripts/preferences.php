@@ -50,7 +50,8 @@ $orga_preferences = array(
     'photo_image_text'    => '1',
     'photo_preview_scale' => '100',
     'photo_show_mode'     => '1',
-    'photo_upload_mode'     => '0',
+    'photo_upload_mode'   => '0',
+    'photo_image_text'    => '© '.$_SERVER['HTTP_HOST'],
 
     // Forum
     'enable_forum_interface'=> '0',

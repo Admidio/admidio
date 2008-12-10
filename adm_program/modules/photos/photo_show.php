@@ -109,14 +109,14 @@ elseif($side=="y")
 $image->resize($x_side, $y_side);
 
 // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-if ($scal>200 && $g_preferences['photo_image_text'] == 1)
+if ($scal>200 && $g_preferences['photo_image_text'] != "")
 {
     $font_c = imagecolorallocate($image->imageResource,255,255,255);
     $font_ttf = THEME_SERVER_PATH."/font.ttf";
     $font_s = $scal/40;
     $font_x = $font_s;
     $font_y = $image->imageHeight-$font_s;
-    $text = "&#169;&#32;".$g_current_organization->getValue("org_homepage");
+    $text = $g_preferences['photo_image_text'];
     imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
 }
 

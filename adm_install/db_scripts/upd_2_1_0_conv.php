@@ -188,4 +188,38 @@ $sql = "ALTER TABLE ". TBL_ROLES. "
 		DROP rol_mail_login,
 		DROP rol_mail_logout";
 $g_db->query($sql);
+
+//Fototext updaten
+// Texte fuer Systemmails pflegen
+$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
+$result_orga = $g_db->query($sql);
+while($row_orga = $g_db->fetch_array($result_orga))
+{
+	//erstmal gucken ob die Funktion bisher aktiviert war
+	$sql = "SELECT prf_value
+              FROM ". TBL_PREFERENCES. "
+             WHERE prf_org_id = ". $row_orga['org_id']. "
+               AND prf_name   = 'photo_image_text' ";
+    $result = $g_db->query($sql);
+    $row_photo_image_text = $g_db->fetch_array($result);
+	
+	//wenn ja
+	if($row_photo_image_text['prf_value'] == 1)
+	{
+		$sql = "UPDATE ". TBL_PREFERENCES. " 
+				SET prf_value = '© ".$row_orga['org_homepage']."'
+       			WHERE prf_org_id = ". $row_orga['org_id']. "
+               	AND prf_name   = 'photo_image_text' ";
+		$g_db->query($sql);
+	}
+	//wenn nicht
+	else
+	{
+		$sql = "UPDATE ". TBL_PREFERENCES. " 
+				SET prf_value = ''
+         		WHERE prf_org_id = ". $row_orga['org_id']. "
+               	AND prf_name   = 'photo_image_text' ";
+	}
+	$g_db->query($sql);
+}
 ?>
