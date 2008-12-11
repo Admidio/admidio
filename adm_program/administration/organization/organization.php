@@ -174,31 +174,31 @@ echo "
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a></span>
         </span>
         </td>
         </tr>
@@ -206,31 +206,31 @@ echo "
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" title=\"Forum\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" title=\"Listen\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a></span>
         </span>
         </td>
         </tr>
@@ -238,25 +238,25 @@ echo "
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('system-mail');\"><img src=\"". THEME_PATH. "/icons/system_mail.png\" alt=\"Systemmails\" title=\"Systemmails\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('system-mail');\">Systemmails</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('system-mail');\">Systemmails</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" title=\"Profil\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" title=\"Termine\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a></span>
         </span>
         </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
-            <a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a></span>
         </span>
         </td>
         </tr>
@@ -937,6 +937,35 @@ echo "
                         <table summary=\"Forum_Auflistung\" border=\"0\">
                             <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
                         </table>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_link_intern\">Forum Link Intern aktivieren:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"forum_link_intern\" name=\"forum_link_intern\" ";
+                                if(isset($form_values['forum_link_intern']) && $form_values['forum_link_intern'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                    	Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt.<br /> 
+                    	Deaktiviert: Forum wird in einem neuen Browserfenster angezeigt. 
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"forum_width\">Forum Breite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"forum_width\" name=\"forum_width\" size=\"4\" maxlength=\"4\" style=\"width: 50px;\" value=\"". $form_values['forum_width']. "\" /> Pixel
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+						<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
+                    	Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Default Wert 550)
                     </li>
                     <li>
                         <dl>

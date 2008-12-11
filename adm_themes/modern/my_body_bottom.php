@@ -104,9 +104,27 @@
 
             if($g_preferences['enable_forum_interface'])
             {
-                echo '<span class="menu"><a href="'. $g_forum->url. '"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/forum.png" alt="Forum" title="Forum" /></a>
-                    <a href="'. $g_forum->url. '">Forum</a></span>';
+                echo '<span class="menu">';
+                if($g_preferences['forum_link_intern'])
+                {
+                   	echo "<a href=\"$g_root_path/adm_program/index_forum.php\">";
+                }
+                else
+                {
+                   	echo "<a href=\"". $g_forum->url. "\" target=\"_new\">";
+                }                
+                echo '
+                <img
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/forum.png" alt="Forum" title="Forum" /></a>';
+                if($g_preferences['forum_link_intern'])
+                {
+                   	echo " <a href=\"$g_root_path/adm_program/index_forum.php\">";
+                }
+                else
+                {
+                   	echo " <a href=\"". $g_forum->url. "\" target=\"_new\">";
+                } 
+                echo 'Forum</a></span>';
             }
 
             if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUsers())
