@@ -294,12 +294,30 @@ echo "</ul>
                 echo "
                 <li>
                     <dl>
-                        <dt>
-                            <a href=\"". $g_forum->url. "\"><img
-                            src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" title=\"Forum\" /></a>
+                        <dt>";
+                            if($g_preferences['forum_link_intern'])
+                            {
+                            	echo "<a href=\"$g_root_path/adm_program/index_forum.php\">";
+                            }
+                            else
+                            {
+                            	echo "<a href=\"". $g_forum->url. "\" target=\"_new\">";
+                            }
+                            echo "
+                            <img src=\"". THEME_PATH. "/icons/forum_big.png\" alt=\"Forum\" title=\"Forum\" /></a>
                         </dt>
                         <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"". $g_forum->url. "\">Forum</a></span><br />
+                            <span class=\"veryBigFontSize\">";
+                            if($g_preferences['forum_link_intern'])
+                            {
+                            	echo "<a href=\"$g_root_path/adm_program/index_forum.php\">";
+                            }
+                            else
+                            {
+                            	echo "<a href=\"". $g_forum->url. "\" target=\"_new\">";
+                            }
+                            echo "
+                            Forum</a></span><br />
                             <span class=\"smallFontSize\">$forumstext</span>
                         </dd>
                     </dl>
