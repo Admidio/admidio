@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-var objectId;
+var objectDeleted;
 
 function deleteObject(type, elementId, databaseId, description)
 {
@@ -16,7 +16,7 @@ function deleteObject(type, elementId, databaseId, description)
     if(msg_result)
     {
         var url  = "";
-        objectId = elementId;
+        objectDeleted = document.getElementById(elementId);
         
         switch (type)
         {
@@ -44,6 +44,9 @@ function deleteObject(type, elementId, databaseId, description)
             case "new_user":
                 url = gRootPath + "/adm_program/administration/new_user/new_user_function.php?mode=4&new_user_id=" + databaseId;
                 break;
+            case "pho":
+                url = gRootPath + "/adm_program/modules/photos/photo_album_function.php?job=delete&pho_id=" + databaseId;
+                break;
         }
         if(url.length > 0)
         {
@@ -62,7 +65,7 @@ function afterDeleteObject()
     {
         if(resObject.responseText == "done")
         {
-            Effect.DropOut(objectId);
+            $(objectDeleted).fadeOut("slow");
         }
         else
         {

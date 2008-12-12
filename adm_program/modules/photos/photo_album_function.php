@@ -12,7 +12,6 @@
  * job:    - new    (neue eingaben speichern)
  *         - change (Aenderungen ausfuehren)
  *         - delete (Loeschen eines Albums)
- *         - delete_request
  *
  *****************************************************************************/
 
@@ -40,8 +39,7 @@ if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_
     $g_message->show("invalid");
 }
 
-if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "do_delete"
-    && $_GET["job"] != "change" && $_GET["job"] != "delete_request")
+if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "delete" && $_GET["job"] != "change")
 {
     $g_message->show("invalid");
 }
@@ -313,27 +311,13 @@ if(isset($_POST["submit"]) && $_POST["submit"])
 
 /***********************Album Loeschen*******************************************/
 
-//Nachfrage ob geloescht werden soll
-if(isset($_GET["job"]) && $_GET["job"]=="delete_request")
+if(isset($_GET["job"]) && $_GET["job"]=="delete")
 {
-    $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_album_function.php?job=do_delete&pho_id=$pho_id");
-    $g_message->show("delete_veranst", $photo_album->getValue("pho_name"));
-}
-
-// Nun Album loeschen
-if(isset($_GET["job"]) && $_GET["job"]=="do_delete")
-{
-    $return_code = $photo_album->delete();
-    
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $photo_album->getValue("pho_pho_id_parent"));
-    if($return_code)
+    if($photo_album->delete())
     {
-        $g_message->show("album_deleted");
+        echo "done"; 
     }
-    else
-    {
-        $g_message->show("album_deleted_error");
-    }
+    exit();
 }
 
 require(THEME_SERVER_PATH. "/overall_footer.php");

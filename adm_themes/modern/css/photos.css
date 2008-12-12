@@ -34,12 +34,13 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 
 
 /*Die Fotoalben werden in einer Definitionsliste angezeigt*/
-.photoAlbumTable dl{
+.photoAlbumTable {
 	width: 550px;
+    list-style-type: none;
 }
 
 /*dabei bildet ein Vorschaubild den Term*/
-.photoAlbumTable dt{
+.photoAlbumTable dt {
 	margin-bottom: 5px;
 	float: left;
 	display: block;
