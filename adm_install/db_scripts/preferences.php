@@ -115,6 +115,7 @@ $orga_preferences = array(
     'dates_per_page'             => '10',
     'dates_show_map_link'        => '1',
     'dates_show_calendar_select' => '1',
+    'profile_photo_storage'		 => '0',
 
     // Weblinks
     'enable_weblinks_module'    => '1',

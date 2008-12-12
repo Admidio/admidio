@@ -1781,7 +1781,36 @@ echo "
                             mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt.
                         </li>";
                     }
-                echo "</ul>
+                echo "
+                 <li>
+                        <dl>
+                            <dt><label for=\"profile_photo_storage\">Speicherort der Profilbild:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"profile_photo_storage\" name=\"profile_photo_storage\">
+                                    <option value=\"\">- Bitte wählen -</option>
+                                    <option value=\"0\" ";
+                                            if($form_values['profile_photo_storage'] == 0)
+                                            {
+                                                echo " selected=\"selected\" ";
+                                            }
+                                            echo ">Datenbank
+                                    </option>
+                                    <option value=\"1\" ";
+                                            if($form_values['profile_photo_storage'] == 1)
+                                            {
+                                                echo " selected=\"selected\" ";
+                                            }
+                                            echo ">Ordner
+                                    </option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden.
+                        Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen.
+                    </li>
+                </ul>
             </div>
         </div>";
 
