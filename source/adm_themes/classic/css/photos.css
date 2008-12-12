@@ -72,7 +72,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
     text-align: center;
 }
 
-/*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/
+/*Einstellungen fuer die ausgabe der grossen Photos (ohne ThickBox) */
 .photoOutput{
     text-align: center;
     border: none;

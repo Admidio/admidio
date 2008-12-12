@@ -92,9 +92,9 @@ http://www.gnu.org/licenses/gpl-2.0.html
 
 Teile von Admidio stehen unter der Creative Commons Lizenz. Dies sind die 
 Icons der Tango-Bibliothek (Creative Commons Attribution Share-Alike license),
-die Icons der Silk-Bibliothek und Lightbox2 (Creative Commons Attribution 2.5 
-License).
+die Icons der Silk-Bibliothek (Creative Commons Attribution 2.5 License).
 
+Das JavaScript Thickbox steht unter der MIT-Lizenz.
 
  6. Copyright
 -------------------------------------------------------------------------
@@ -120,14 +120,14 @@ Mark James
 Tango Desktop Project
 	http://tango.freedesktop.org
 	Icon Bibliothek Tango
-	
-Thomas Fuchs
-	http://script.aculo.us
-	script.acolu.us JavaScript libraries
-	
-Lokesh Dhakar
-	http://www.huddletogether.com/projects/lightbox2
-	Lightbox 2
+
+jQuery
+    http://www.jquery.com
+	JavaScript-Library
+
+Cody Lindley
+    http://jquery.com/demo/thickbox
+    Thickbox
 
 Mirko Schaal
     http://www.splinelab.de/flexupload
