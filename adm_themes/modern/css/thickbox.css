@@ -6,7 +6,6 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese CSS-Datei dient dazu spezifische Anpassungen am Fotomodul zu machen.
- * Hier sind auch die CSS-Eigenschaften fuer Lightbox zu finden.
  *
  *****************************************************************************/
  
@@ -73,7 +72,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
     margin-bottom:      10px; 
 }
 
-/*Einstellungen fuer die ausgabe der grossen Photos (ohne LightBox)*/
+/*Einstellungen fuer die ausgabe der grossen Photos */
 .photoOutput{
     text-align: center;
     border: none;

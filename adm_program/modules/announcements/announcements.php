@@ -91,10 +91,9 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Html-Kopf ausgeben
 $g_layout['title'] = $req_headline;
 $g_layout['header'] = $g_js_vars. '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/prototype.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/script.aculo.us/scriptaculous.js?load=effects"></script>';
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
 
 if($g_preferences['enable_rss'] == 1)
 {

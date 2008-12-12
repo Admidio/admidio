@@ -8,14 +8,14 @@
  *
  *****************************************************************************/
  
-var objectRemoveId;
+var objectDeleted;
 
 function deleteFormerRole(rol_id, rol_name, usr_id) 
 {
     var msg_result = confirm('Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle ' + rol_name + ' wirklich entfernen ?');
     if(msg_result)
     {
-        objectRemoveId = 'former_role_' + rol_id;
+        objectDeleted = document.getElementById('former_role_' + rol_id);
 
         resObject.open('POST', gRootPath + '/adm_program/modules/profile/profile_function.php', true);
         resObject.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -35,7 +35,7 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
         var leader    = '';
         var webmaster = '';
         
-        objectRemoveId = 'role_' + rol_id;
+        objectDeleted = document.getElementById('role_' + rol_id);
 
         if(mem_leader == 1)
         {
@@ -69,7 +69,7 @@ function afterRemoveRole()
     {
         if(resObject.responseText == "done")
         {
-            Effect.DropOut(objectRemoveId);
+            $(objectDeleted).fadeOut("slow");
         }
         else
         {
