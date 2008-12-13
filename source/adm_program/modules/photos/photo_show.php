@@ -14,6 +14,8 @@
  * pic_nr    : Nummer des Bildes, das angezeigt werden soll
  * scal      : Pixelanzahl auf die die Bildseite scaliert werden soll
  * side      : Seite des Bildes die skaliert werden soll (x oder y)
+ * thumb	 : ist thumb == true wird ein Thumnail in der Größe der
+ *				Voreinstellung zurückgegeben 
  *
  *****************************************************************************/
 require_once("../../system/classes/table_photos.php");
@@ -38,6 +40,7 @@ $pho_begin = 0;
 $pic_nr    = NULL;
 $scal      = NULL;
 $side      = "";
+$thumb 	   = false;
 
 // Album-ID
 if(isset($_GET['pho_id']))
@@ -76,8 +79,15 @@ if(isset($_GET['side']))
     }
 }
 
+//Thumbnail
+if(isset($_GET['thumb']))
+{
+	$thumb = $_GET['thumb'];
+}
+
 // Bildpfad zusammensetzten
-$picpath = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id."/".$pic_nr.".jpg";
+$ordner = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id;
+$picpath = $ordner."/".$pic_nr.".jpg";
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
 if($g_debug == 1)
@@ -85,31 +95,61 @@ if($g_debug == 1)
     error_log($picpath);
 }
 
-if(file_exists($picpath) == false)
+//Wenn Thumbnail existiert laengere Seite ermitteln
+if($thumb)
 {
-    $picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
+	$thumb_length=1;
+	if(file_exists($ordner."/thumbnails/".$pic_nr.".jpg"))
+	{
+	    //Ermittlung der Original Bildgroesse
+	    $bildgroesse = getimagesize($ordner."/thumbnails/".$pic_nr.".jpg");
+	    
+	    $thumb_length = $bildgroesse[1];
+	    if($bildgroesse[0]>$bildgroesse[1])
+	    {
+	        $thumb_length = $bildgroesse[0];
+	    }
+	}
+	
+	//Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
+	//Wenn nicht anlegen
+	if(!file_exists($ordner."/thumbnails/".$pic_nr.".jpg") || $thumb_length !=$g_preferences['photo_thumbs_scale'])
+	{
+	    $image = new Image($picpath);
+	    $image->scale($g_preferences['photo_thumbs_scale']);
+	    $image->copyToFile(null, $ordner."/thumbnails/".$pic_nr.".jpg");
+	}
+	else
+	{
+		$image = new Image($ordner."/thumbnails/".$pic_nr.".jpg");
+	}
+
 }
-
-// Bild einlesen und scalieren
-$image = new Image($picpath);
-
-//Neue Größe berechnen
-if($side=="x")
+else
 {
-	$x_side = $scal;
-	$y_side = $scal*($image->imageWidth/$image->imageHeight);
+	if(file_exists($picpath) == false)
+	{
+    	$picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
+	}
+	// Bild einlesen und scalieren
+	$image = new Image($picpath);
+	//Neue Größe berechnen
+	if($side=="x")
+	{
+		$x_side = $scal;
+		$y_side = $scal*($image->imageWidth/$image->imageHeight);
+	}
+	elseif($side=="y")
+	{
+		$y_side = $scal;
+		$x_side = $scal*($image->imageWidth/$image->imageHeight);
+	}
+	
+	$image->resize($x_side, $y_side);
 }
-elseif($side=="y")
-{
-	$y_side = $scal;
-	$x_side = $scal*($image->imageWidth/$image->imageHeight);
-}
-
-
-$image->resize($x_side, $y_side);
 
 // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-if ($scal>200 && $g_preferences['photo_image_text'] != "")
+if (($scal>200) && $g_preferences['photo_image_text'] != "")
 {
     $font_c = imagecolorallocate($image->imageResource,255,255,255);
     $font_ttf = THEME_SERVER_PATH."/font.ttf";

@@ -19,6 +19,7 @@
 require_once("../../system/classes/table_photos.php");
 require_once("../../system/common.php");
 require_once("../../system/classes/image.php");
+require("../../system/classes/htaccess.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -93,6 +94,15 @@ if(!is_numeric($locked) && $locked!=NULL)
 {
     $g_message->show("invalid");
 }
+
+//ggf. Ordner für Fotos anlegen
+if(!file_exists(SERVER_PATH. "/adm_my_files/photos"))
+{
+    mkdir(SERVER_PATH. "/adm_my_files/photos", 0777);
+    chmod(SERVER_PATH. "/adm_my_files/photos", 0777);
+}
+$protection = new Htaccess(SERVER_PATH. "/adm_my_files");
+$protection->protectFolder();
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $pho_id)
@@ -290,16 +300,16 @@ echo "<div class=\"photoModuleContainer\">";
         }
 
         //Datum des Albums
-        echo"<div id=\"photoAlbumInformation\">
+        echo "<div id=\"photoAlbumInformation\">
             Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
             if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin"))
             {
                 echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
             }
-        echo"</div>";
+        echo "</div>";
 
         //Container mit Navigation
-        echo" <div class=\"pageNavigation\">";
+        echo " <div class=\"pageNavigation\">";
             //Seitennavigation
             echo"Seite:&nbsp;";
     
@@ -307,7 +317,7 @@ echo "<div class=\"photoModuleContainer\">";
             $vorseite=$thumb_seite-1;
             if($vorseite>=1)
             {
-                echo"
+                echo "
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
                     <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorherige\" />
                 </a>
@@ -329,7 +339,7 @@ echo "<div class=\"photoModuleContainer\">";
             //naechste thumb_seite
             $nachseite=$thumb_seite+1;
             if($nachseite<=$thumb_seiten){
-                echo"
+                echo "
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
                 <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
                     <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&auml;chste\" />
@@ -349,30 +359,6 @@ echo "<div class=\"photoModuleContainer\">";
                     $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
                     {
-                        //Wenn Thumbnail existiert laengere Seite ermitteln
-                        $thumb_length=1;
-                        if(file_exists($ordner."/thumbnails/".$bild.".jpg"))
-                        {
-                            //Ermittlung der Original Bildgroesse
-                            $bildgroesse = getimagesize($ordner."/thumbnails/".$bild.".jpg");
-                            
-                            $thumb_length = $bildgroesse[1];
-                            if($bildgroesse[0]>$bildgroesse[1])
-                            {
-                                $thumb_length = $bildgroesse[0];
-                            }
-                        }
-                        
-                        //Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
-                        //Wenn nicht und nicht SafeMode anlegen
-                        if(!file_exists($ordner."/thumbnails/".$bild.".jpg") || $thumb_length !=$g_preferences['photo_thumbs_scale'])
-                        {
-                            $image = new Image($ordner."/".$bild.".jpg");
-                            $image->scale($g_preferences['photo_thumbs_scale']);
-                            $image->copyToFile(null, $ordner."/thumbnails/".$bild.".jpg");
-                            $image->delete();
-                        }
-
                         //Popup-Mode
                         if($g_preferences['photo_show_mode']==0)
                         {
@@ -382,13 +368,13 @@ echo "<div class=\"photoModuleContainer\">";
                             </div>';
                         }
 
-                        //Lightbox-Mode
+                        //Thickbox-Mode
                         elseif($g_preferences['photo_show_mode']==1)
                         {
                             echo 
                             "<div>
                                 <a class=\"thickbox\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$bild."&pho_id=".$pho_id."&KeepThis=true&TB_iframe=true&height=$thickbox_height&width=$thickbox_width\">
-                                	<img src=\"$ordner_url/thumbnails/$bild.jpg\" class=\"photoThumbnail\" alt=\"$bild\" />
+                                	<img src=\"photo_show.php?pho_id=".$pho_id."&pic_nr=".$bild."&pho_begin=".$photo_album->getValue("pho_begin")."&thumb=true\" class=\"photoThumbnail\" alt=\"$bild\" />
                                 </a>
                             </div>";
                         }

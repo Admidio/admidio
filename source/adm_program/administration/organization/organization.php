@@ -738,10 +738,7 @@ echo "
                         Das Fotomodul kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar.<br /><br />
-                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
-                        Achtung&#33;&#33;&#33; bei der Einstellung &bdquo;Nur für registrierte Benutzer&rdquo;, wird nur der Zugriff über
-                        die Webseite verhindert. Die Bilddateien werden nicht geschützt.
+                        für beide Gruppen dann nicht mehr aufrufbar.
                     </li>
                     <li>
                         <dl>

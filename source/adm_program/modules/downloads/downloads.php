@@ -26,8 +26,8 @@ if ($g_preferences['enable_download_module'] != 1)
     $g_message->show("module_disabled");
 }
 
-//htaccessFile erzeugen fuer den Downloadbereich
-$htaccess = new Htaccess(SERVER_PATH. "/adm_my_files/download");
+//htaccessFile erzeugen fuer adm_my_files
+$htaccess = new Htaccess(SERVER_PATH. "/adm_my_files");
 $htaccess->protectFolder();
 
 
