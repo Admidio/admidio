@@ -364,7 +364,7 @@ echo "<div class=\"photoModuleContainer\">";
                         {
                             echo '<div>
                                 <img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
-                                    src="'.$ordner_url.'/thumbnails/'.$bild.'.jpg" class="photoThumbnail" alt="$bild" />
+                                    src=\"photo_show.php?pho_id=".$pho_id."&pic_nr=".$bild."&pho_begin=".$photo_album->getValue("pho_begin")."&thumb=true\" alt="$bild" />
                             </div>';
                         }
 
@@ -384,7 +384,7 @@ echo "<div class=\"photoModuleContainer\">";
                         {
                             echo '<div>
                                 <img onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&pho_id='.$pho_id.'\'" 
-                                    src="'.$ordner_url.'/thumbnails/'.$bild.'.jpg" class="photoThumbnail" alt="'.$bild.'" />
+                                    src=\"photo_show.php?pho_id=".$pho_id."&pic_nr=".$bild."&pho_begin=".$photo_album->getValue("pho_begin")."&thumb=true\" />
                             </div>';
                         }   
                         
