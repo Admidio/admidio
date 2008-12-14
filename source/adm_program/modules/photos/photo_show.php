@@ -121,7 +121,7 @@ if($thumb)
 	}
 	else
 	{
-		$image = new Image($ordner."/thumbnails/".$pic_nr.".jpg");
+		readfile($ordner."/thumbnails/".$pic_nr.".jpg");
 	}
 
 }
@@ -144,24 +144,26 @@ else
 		$y_side = $scal;
 		$x_side = $scal*($image->imageWidth/$image->imageHeight);
 	}
-	
 	$image->resize($x_side, $y_side);
 }
 
-// Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-if (($scal>200) && $g_preferences['photo_image_text'] != "")
+if($image !=0)
 {
-    $font_c = imagecolorallocate($image->imageResource,255,255,255);
-    $font_ttf = THEME_SERVER_PATH."/font.ttf";
-    $font_s = $scal/40;
-    $font_x = $font_s;
-    $font_y = $image->imageHeight-$font_s;
-    $text = $g_preferences['photo_image_text'];
-    imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
+	// Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
+	if (($scal>200) && $g_preferences['photo_image_text'] != "")
+	{
+	    $font_c = imagecolorallocate($image->imageResource,255,255,255);
+	    $font_ttf = THEME_SERVER_PATH."/font.ttf";
+	    $font_s = $scal/40;
+	    $font_x = $font_s;
+	    $font_y = $image->imageHeight-$font_s;
+	    $text = $g_preferences['photo_image_text'];
+	    imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
+	}
+	
+	// Rueckgabe des neuen Bildes
+	header("Content-Type: ". $image->getMimeType());
+	$image->copyToBrowser();
+	$image->delete();
 }
-
-// Rueckgabe des neuen Bildes
-header("Content-Type: ". $image->getMimeType());
-$image->copyToBrowser();
-$image->delete();
 ?>
