@@ -99,7 +99,15 @@
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/messages/messages.php"><img
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/list_small.png" alt="Nachrichten" title="Nachrichten" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/messages/messages.php">Nachrichten</a></span>';
+                    <a href="'. $g_root_path. '/adm_program/modules/messages/messages.php">Nachrichten</a>';
+                if ($g_messages->msg > 0 AND $g_valid_login)
+                {
+                	echo "&nbsp;<a href=\"$g_root_path/adm_program/modules/messages/messages.php?mode=new\"><img src=\"". THEME_PATH. "/icons/".$g_messages->msg_icon."\" alt=\"Neue Nachrichten\" title=\"Neue Nachrichten\"></a></span>";
+                }
+                else
+                {
+                	echo "</span>";
+                }
             }
 
             if($g_preferences['enable_forum_interface'])

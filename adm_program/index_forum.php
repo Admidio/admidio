@@ -132,15 +132,16 @@ echo "</head>
 <!--
 notIE=document.getElementById&&!document.all
 heightOffset=20
-function resizeIframe(obj){
-this.obj=obj
-this.obj.style.height="" // for Firefox and Opera
-setTimeout("this.obj.style.height=this.obj.contentWindow.document.body.scrollHeight+(notIE?heightOffset:0)",10) // setTimeout required for Opera
+function resizeIframe(obj)
+{
+	this.obj=obj
+	this.obj.style.height=""
+	setTimeout("this.obj.style.height=this.obj.contentWindow.document.body.scrollHeight+(notIE?heightOffset:0)",10)
 }
 // -->
 </script>
 
-<iframe id="sizeframe" name="sizeframe" width="<?php echo $g_preferences['forum_width']; ?>px" height="100px" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" src="<?php echo $g_forum->url; ?>" onload="resizeIframe(this)"></iframe>
+<iframe id="sizeframe" name="sizeframe" width="<?php if ($g_preferences['forum_width']){echo $g_preferences['forum_width'];}else{echo "550";}?>px" height="100px" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" src="<?php echo $g_forum->url; ?>" onload="resizeIframe(this)"></iframe>
 
 <?
 require(THEME_SERVER_PATH. "/overall_footer.php");
