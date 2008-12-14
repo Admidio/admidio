@@ -41,6 +41,7 @@ $pic_nr    = NULL;
 $scal      = NULL;
 $side      = "";
 $thumb 	   = false;
+$image     = NULL;
 
 // Album-ID
 if(isset($_GET['pho_id']))
@@ -147,7 +148,7 @@ else
 	$image->resize($x_side, $y_side);
 }
 
-if($image !=0)
+if($image != NULL)
 {
 	// Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
 	if (($scal>200) && $g_preferences['photo_image_text'] != "")
