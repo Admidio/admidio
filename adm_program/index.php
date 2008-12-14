@@ -241,7 +241,7 @@ echo "</ul>
             }
             
             if( $g_preferences['enable_messages_module'] == 1
-            || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login) || 1 == 1)
+            || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login))
             {
                 echo "
                 <li>

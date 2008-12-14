@@ -119,6 +119,9 @@ $orga_preferences = array(
 
     // Weblinks
     'enable_weblinks_module'    => '1',
-    'weblinks_per_page' => '0'
+    'weblinks_per_page' 		=> '0',
+
+    // Nachrichten
+    'enable_messages_module'    => '1'
  );
 ?>

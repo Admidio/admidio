@@ -66,7 +66,7 @@ $g_layout['header'] =  "
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 'forum',
                         'guestbook-module', 'list-module', 'mail-module', 'system-mail', 'ecard-module', 'profile-module',
-                        'dates-module', 'links-module');
+                        'dates-module', 'links-module', 'messages-module');
 
 
         // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -257,6 +257,12 @@ echo "
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a></span>
+        </span>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('messages-module');\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Nachrichten\" title=\"Nachrichten\" /></a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('messages-module');\">Nachrichten</a></span>
         </span>
         </td>
         </tr>
@@ -1965,7 +1971,55 @@ echo "
                     </li>                     
                 </ul>
             </div>
-        </div>
+        </div>";
+
+
+        /**************************************************************************************/
+        //Einstellungen Nachrichtenmodul
+        /**************************************************************************************/
+
+        echo "
+        <div class=\"groupBox\" id=\"messages-module\">
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Nachrichten\" />
+                Einstellungen Nachrichtenmodul</div>
+            <div class=\"groupBoxBody\">
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_messages_module\">Nachrichtenmodul aktivieren:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"enable_messages_module\" name=\"enable_messages_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_messages_module'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_messages_module'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['enable_messages_module'] == 2)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Nur für registrierte Benutzer</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Das Nachrichtenmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
+                    </li>
+        	</div>
+        </div>";
+
+
+    echo "    
     </div>
 </div>
 
