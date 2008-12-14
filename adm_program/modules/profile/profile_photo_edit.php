@@ -65,10 +65,9 @@ if(!file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos"))
 {
     mkdir(SERVER_PATH. "/adm_my_files/user_profile_photos", 0777);
     chmod(SERVER_PATH. "/adm_my_files/user_profile_photos", 0777);
-    $protection = new Htaccess(SERVER_PATH. "/adm_my_files/user_profile_photos");
-    $protection->protectFolder();
 }
-                     
+$protection = new Htaccess(SERVER_PATH. "/adm_my_files");
+$protection->protectFolder();                     
 
 // User auslesen
 $user = new User($g_db, $req_usr_id);
@@ -84,7 +83,20 @@ if($job=="save")
 		{
 			unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
 		}
-		rename(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg", SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
+		//wenn Ordnerspeicherung Datei umbennen
+		if($g_preferences['profile_photo_storage'] == 1)
+		{
+			rename(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg", SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
+		}
+		//Sonst Bild in Datenbank speichern
+		else
+		{
+			$new_profile_photo = fopen(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg", "rb");
+			$user->setValue("usr_photo", fread($new_profile_photo, filesize(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg")));
+			$user->save();
+			fclose($ne_profile_photo);
+			unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg");
+		}
 		$_SESSION['navigation']->deleteLastUrl();
     }
     
@@ -109,8 +121,17 @@ elseif($job=="msg_delete")
 elseif($job=="delete")
 {
     /***************************** Bild loeschen *************************************/
-	unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
-    
+	//wenn Ordnerspeicherung Datei umbennen
+		if($g_preferences['profile_photo_storage'] == 1)
+		{
+			unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
+		}
+		else
+		{
+			$user->setValue("usr_photo", "");
+			$user->save();
+		}
+	    
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
     $g_message->show("profile_photo_deleted");

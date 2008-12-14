@@ -444,7 +444,7 @@ echo '
                 // Bild-Block
                 // *******************************************************************************
 
-                echo"
+                echo "
                 <div class=\"groupBox\">
                     <div class=\"groupBoxBody\" style=\"text-align: center;\">
                         <table width=\"100%\" summary=\"Profilfoto\" border=\"0\" style=\"border:0px;\" cellpadding=\"0\" cellspacing=\"0\" rules=\"none\">
