@@ -72,15 +72,18 @@ $checkboxes = array('dates_show_map_link'
                    ,'enable_forum_interface'
                    ,'enable_gbook_comments4all'
                    ,'enable_ecard_module'
+                   ,'enable_messages_module'
                    ,'forum_export_user'
                    ,'forum_sqldata_from_admidio'
+                   ,'forum_link_intern'
+                   ,'photo_image_text'
                    ,'profile_show_map_link'
                    ,'profile_show_roles'
                    ,'profile_show_former_roles'
                    ,'profile_show_extern_roles'
 				   ,'lists_hide_overview_details'
                    ,'dates_show_calendar_select'
-                   ,'forum_link_intern');
+                   );
 
 foreach($checkboxes as $key => $value)
 {

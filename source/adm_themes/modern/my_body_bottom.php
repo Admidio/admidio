@@ -94,7 +94,7 @@
             }
             
             if( $g_preferences['enable_messages_module'] == 1
-            || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login) || 1 == 1)            
+            || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login))            
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/messages/messages.php"><img
