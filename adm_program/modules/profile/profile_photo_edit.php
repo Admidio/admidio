@@ -94,7 +94,7 @@ if($job=="save")
 			$new_profile_photo = fopen(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg", "rb");
 			$user->setValue("usr_photo", fread($new_profile_photo, filesize(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg")));
 			$user->save();
-			fclose($ne_profile_photo);
+			fclose($new_profile_photo);
 			unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg");
 		}
 		$_SESSION['navigation']->deleteLastUrl();
