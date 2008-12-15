@@ -57,6 +57,11 @@ class TableUsers extends TableAccess
             $this->real_password = $field_value;
             $field_value = md5($field_value);
         }
+        elseif($field_name == "usr_photo")
+        {
+            $field_value = addslashes($field_value);
+        }
+
         parent::setValue($field_name, $field_value);
     }
 
@@ -68,6 +73,11 @@ class TableUsers extends TableAccess
         if($field_name == "usr_usr_id_create" && strlen($field_value) == 0)
         {
             $field_value = parent::getValue("usr_id");
+        }
+        elseif($field_name == "usr_photo")
+        {
+            // beim Profilbild darf spaeter htmlspecialchars nicht aufgerufen werden
+            $field_value = $this->dbColumns[$field_name];
         }
         else
         {
