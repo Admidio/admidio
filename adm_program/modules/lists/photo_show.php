@@ -1,5 +1,5 @@
 <?php
-   /******************************************************************************
+ /******************************************************************************
  * Photoresizer
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
@@ -15,9 +15,12 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 
-header("Content-Type: image/jpeg");
-$id = $_GET['usr_id'];
-echo $_SESSION['profilphoto'][$id];
-unset($_SESSION['profilphoto'][$id]);
+if(is_numeric($_GET['usr_id']))
+{
+    // Ausgabe des Bildes aus dem Sessionarray
+    header("Content-Type: image/jpeg");
+    echo $_SESSION['profilphoto'][$_GET['usr_id']];
 
+    unset($_SESSION['profilphoto'][$_GET['usr_id']]);
+}
 ?>
