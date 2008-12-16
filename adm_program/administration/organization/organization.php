@@ -2015,6 +2015,66 @@ echo "
                         Das Nachrichtenmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
                     </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"messages_reminder\">Email Benachrichtigung:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"messages_reminder\" name=\"messages_reminder\" ";
+                                if(isset($form_values['forum_link_intern']) && $form_values['messages_reminder'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                    	Aktiviert: Das Mitglied erh&auml;lt eine Benachrichtigung per Email, wenn neue Nachrichten eintreffen.<br /> 
+                    	Deaktiviert: Keine Email Benachrichtigung. 
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"messages_in_box\">Anzahl der Nachrichten im Posteingang:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"messages_in_box\" name=\"messages_in_box\" 
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['messages_in_box']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Nachrichten die sich im Posteingang befinden d&uuml;rfen. Wird die Anzahl
+                        &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
+                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Default = 0)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"messages_out_box\">Anzahl der Nachrichten im Postausgang:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"messages_out_box\" name=\"messages_out_box\" 
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['messages_out_box']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Nachrichten die sich im Postausgang befinden d&uuml;rfen. Wird die Anzahl
+                        &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
+                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Default = 0)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"messages_archive\">Anzahl der Nachrichten im Achriv:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"messages_archive\" name=\"messages_archive\" 
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['messages_archive']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Nachrichten die sich im Nachrichtenarchiv befinden d&uuml;rfen. Wird die Anzahl
+                        &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
+                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Default = 0)
+                    </li>
+                </ul>
         	</div>
         </div>";
 
