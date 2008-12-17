@@ -10,50 +10,29 @@
 
 -- Hier ist die Reihenfolge wegen den Constraints wichtig !!!
 
+drop table if exists %PRAEFIX%_messages;
 drop table if exists %PRAEFIX%_photos;
-
 drop table if exists %PRAEFIX%_links;
-
 drop table if exists %PRAEFIX%_guestbook_comments;
-
 drop table if exists %PRAEFIX%_guestbook;
-
 drop table if exists %PRAEFIX%_folder_roles;
-
 drop table if exists %PRAEFIX%_files;
-
 drop table if exists %PRAEFIX%_folders;
-
 drop table if exists %PRAEFIX%_list_columns;
-
 drop table if exists %PRAEFIX%_lists;
-
 drop table if exists %PRAEFIX%_dates;
-
 drop table if exists %PRAEFIX%_announcements;
-
 drop table if exists %PRAEFIX%_members;
-
 drop table if exists %PRAEFIX%_role_dependencies;
-
 drop table if exists %PRAEFIX%_roles;
-
 drop table if exists %PRAEFIX%_auto_login;
-
 drop table if exists %PRAEFIX%_sessions;
-
 drop table if exists %PRAEFIX%_user_data;
-
 drop table if exists %PRAEFIX%_user_fields;
-
 drop table if exists %PRAEFIX%_users;
-
 drop table if exists %PRAEFIX%_categories;
-
 drop table if exists %PRAEFIX%_preferences;
-
 drop table if exists %PRAEFIX%_texts;
-
 drop table if exists %PRAEFIX%_organizations;
 
 /*==============================================================*/
@@ -717,7 +696,7 @@ alter table %PRAEFIX%_links add constraint %PRAEFIX%_FK_LNK_USR_CHANGE foreign k
 /*==============================================================*/
 create table %PRAEFIX%_photos
 (
-   pho_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   pho_id                         int(11) unsigned               not null auto_increment,
    pho_org_shortname              varchar(10)                    not null,
    pho_quantity                   int(11) unsigned               not null default 0,
    pho_name                       varchar(50)                    not null,
@@ -750,3 +729,35 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CREATE foreign 
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+
+/*==============================================================*/
+/* Table: adm_messages                                          */
+/*==============================================================*/
+create table %PRAEFIX%_messages
+(
+ msg_id                         int(11) unsigned NOT NULL auto_increment,
+ msg_usr_id_from                int(11) unsigned NOT NULL,
+ msg_usr_id_to                  int(11) unsigned NOT NULL,
+ msg_msg_id_previous            int(11) unsigned,
+ msg_send_date                  datetime NOT NULL,
+ msg_read_date                  datetime,
+ msg_title                      varchar(250),
+ msg_text                       text NOT NULL,
+ msg_archive_flag               tinyint(1) unsigned NOT NULL default '0',
+ primary key (msg_id)
+)
+engine = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_messages add index MSG_USR_FROM_FK (msg_usr_id_from);
+alter table %PRAEFIX%_messages add index MSG_USR_TO_FK (msg_usr_id_to);
+alter table %PRAEFIX%_messages add index MSG_MSG_ID_PREVIOUS_FK (msg_msg_id_previous);
+
+-- Constraints
+alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_USR_ID_FROM foreign key (msg_usr_id_from)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_USR_ID_TO foreign key (msg_usr_id_to)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_MSG_ID_PREVIOUS foreign key (msg_msg_id_previous)
+      references %PRAEFIX%_messages (msg_id) on delete set null on update restrict;
