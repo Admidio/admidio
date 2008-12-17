@@ -156,3 +156,35 @@ alter table %PRAEFIX%_list_columns add constraint %PRAEFIX%_FK_LSC_LST foreign k
 
 alter table %PRAEFIX%_list_columns add constraint %PRAEFIX%_FK_LSC_USF foreign key (lsc_usf_id)
       references %PRAEFIX%_user_fields (usf_id) on delete restrict on update restrict;
+
+/*==============================================================*/
+/* Table: adm_messages                                          */
+/*==============================================================*/
+create table %PRAEFIX%_messages
+(
+ msg_id                         int(11) unsigned NOT NULL auto_increment,
+ msg_usr_id_from                int(11) unsigned NOT NULL,
+ msg_usr_id_to                  int(11) unsigned NOT NULL,
+ msg_msg_id_previous            int(11) unsigned,
+ msg_send_date                  datetime NOT NULL,
+ msg_read_date                  datetime,
+ msg_title                      varchar(250),
+ msg_text                       text NOT NULL,
+ msg_archive_flag               tinyint(1) unsigned NOT NULL default '0',
+ primary key (msg_id)
+)
+engine = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_messages add index MSG_USR_FROM_FK (msg_usr_id_from);
+alter table %PRAEFIX%_messages add index MSG_USR_TO_FK (msg_usr_id_to);
+alter table %PRAEFIX%_messages add index MSG_MSG_ID_PREVIOUS_FK (msg_msg_id_previous);
+
+-- Constraints
+alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_USR_ID_FROM foreign key (msg_usr_id_from)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_USR_ID_TO foreign key (msg_usr_id_to)
+      references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_MSG_ID_PREVIOUS foreign key (msg_msg_id_previous)
+      references %PRAEFIX%_messages (msg_id) on delete set null on update restrict;

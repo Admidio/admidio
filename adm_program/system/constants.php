@@ -45,6 +45,7 @@ define("TBL_LINKS",             $g_tbl_praefix. "_links");
 define("TBL_LIST_COLUMNS",      $g_tbl_praefix. "_list_columns");
 define("TBL_LISTS",             $g_tbl_praefix. "_lists");
 define("TBL_MEMBERS",           $g_tbl_praefix. "_members");
+define("TBL_MESSAGES",          $g_tbl_praefix. "_messages");
 define("TBL_ORGANIZATIONS",     $g_tbl_praefix. "_organizations");
 define("TBL_PHOTOS",            $g_tbl_praefix. "_photos");
 define("TBL_PREFERENCES",       $g_tbl_praefix. "_preferences");
