@@ -74,7 +74,7 @@ class TableRole extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("rol_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("rol_timestamp_create", DATETIME_NOW);
             $this->setValue("rol_usr_id_create", $g_current_user->getValue("usr_id"));
         }
         else
@@ -83,7 +83,7 @@ class TableRole extends TableAccess
             if(time() > (strtotime($this->getValue("rol_timestamp_create")) + 900)
             || $g_current_user->getValue("usr_id") != $this->getValue("rol_usr_id_create") )
             {
-                $this->setValue("rol_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("rol_timestamp_change", DATETIME_NOW);
                 $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
             }
         }        
@@ -137,10 +137,10 @@ class TableRole extends TableAccess
         // die Rolle "Webmaster" darf nicht auf inaktiv gesetzt werden
         if($this->getValue("rol_name") != "Webmaster")
         {
-            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 0
-                                                  , mem_end   = '".date("Y-m-d", time())."'
+            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_end   = '".DATE_NOW."'
                         WHERE mem_rol_id = ". $this->getValue("rol_id"). "
-                          AND mem_valid  = 1 ";
+                          AND mem_begin <= '".DATE_NOW."'
+                          AND mem_end    > '".DATE_NOW."' ";
             $this->db->query($sql);
 
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
@@ -164,8 +164,7 @@ class TableRole extends TableAccess
         // die Rolle "Webmaster" ist immer aktiv
         if($this->getValue("rol_name") != "Webmaster")
         {
-            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_valid = 1
-                                                  , mem_end   = NULL
+            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_end   = '9999-12-31'
                         WHERE mem_rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
 
@@ -190,7 +189,8 @@ class TableRole extends TableAccess
         {
             $sql    = "SELECT mem_usr_id FROM ". TBL_MEMBERS. "
                         WHERE mem_rol_id = ". $this->getValue("rol_id"). "
-                          AND mem_valid  = 1";
+                          AND mem_begin <= '".DATE_NOW."'
+                          AND mem_end    > '".DATE_NOW."'";
             if($count_leaders == false)
             {
                 $sql = $sql. " AND mem_leader = 0 ";

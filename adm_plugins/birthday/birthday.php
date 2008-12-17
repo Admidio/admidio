@@ -142,7 +142,8 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
               AND gender.usd_usf_id = ". $g_current_user->getProperty("Geschlecht", "usf_id"). "
              LEFT JOIN ". TBL_MEMBERS. "
                ON mem_usr_id = usr_id
-              AND mem_valid  = 1
+              AND mem_begin <= '".DATE_NOW."'
+              AND mem_end    > '".DATE_NOW."'
             RIGHT JOIN ". TBL_ROLES. "
                ON mem_rol_id = rol_id
               AND rol_valid  = 1

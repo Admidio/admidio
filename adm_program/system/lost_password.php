@@ -48,7 +48,8 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
              WHERE rol_cat_id = cat_id
                AND cat_org_id = ".$g_current_organization->getValue("org_id")."
                AND rol_id     = mem_rol_id
-               AND mem_valid  = 1
+               AND mem_begin <= '".DATE_NOW."'
+               AND mem_end    > '".DATE_NOW."'
                AND mem_usr_id = usr_id
                AND usr_valid  = 1
                AND email.usd_value = '".$empfaenger_email."'";   

@@ -68,7 +68,7 @@ class TableGuestbook extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("gbo_timestamp", date("Y-m-d H:i:s", time()));
+            $this->setValue("gbo_timestamp", DATETIME_NOW);
             $this->setValue("gbo_usr_id", $g_current_user->getValue("usr_id"));
             $this->setValue("gbo_org_id", $g_current_organization->getValue("org_id"));
             $this->setValue("gbo_ip_address", $_SERVER['REMOTE_ADDR']);
@@ -79,7 +79,7 @@ class TableGuestbook extends TableAccess
             if(time() > (strtotime($this->getValue("gbo_timestamp")) + 900)
             || $g_current_user->getValue("usr_id") != $this->getValue("gbo_usr_id") )
             {
-                $this->setValue("gbo_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("gbo_timestamp_change", DATETIME_NOW);
                 $this->setValue("gbo_usr_id_change", $g_current_user->getValue("usr_id"));
             }
         }

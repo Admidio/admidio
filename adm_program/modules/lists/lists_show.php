@@ -482,7 +482,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
         {
             $column = $list->getColumnObject($column_number);
 
-            // da im SQL noch mem_valid und usr_id vor die eigentlichen Spalten kommen,
+            // da im SQL noch mem_leader und usr_id vor die eigentlichen Spalten kommen,
             // muss der Index auf row direkt mit 2 anfangen
             $sql_column_number = $column_number + 1;
 

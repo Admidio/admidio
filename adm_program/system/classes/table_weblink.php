@@ -72,7 +72,7 @@ class TableWeblink extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("lnk_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("lnk_timestamp_create", DATETIME_NOW);
             $this->setValue("lnk_usr_id_create", $g_current_user->getValue("usr_id"));
         }
         else
@@ -81,7 +81,7 @@ class TableWeblink extends TableAccess
             if(time() > (strtotime($this->getValue("lnk_timestamp_create")) + 900)
             || $g_current_user->getValue("usr_id") != $this->getValue("lnk_usr_id_create") )
             {
-                $this->setValue("lnk_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("lnk_timestamp_change", DATETIME_NOW);
                 $this->setValue("lnk_usr_id_change", $g_current_user->getValue("usr_id"));
             }
         }

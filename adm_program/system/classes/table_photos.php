@@ -51,7 +51,7 @@ class TablePhotos extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("pho_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("pho_timestamp_create", DATETIME_NOW);
             $this->setValue("pho_usr_id_create", $g_current_user->getValue("usr_id"));
             $this->setValue("pho_org_shortname", $g_current_organization->getValue("org_shortname"));
         }
@@ -61,7 +61,7 @@ class TablePhotos extends TableAccess
             if(time() > (strtotime($this->getValue("pho_timestamp_create")) + 900)
             || $g_current_user->getValue("usr_id") != $this->getValue("pho_usr_id_create") )
             {
-                $this->setValue("pho_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("pho_timestamp_change", DATETIME_NOW);
                 $this->setValue("pho_usr_id_change", $g_current_user->getValue("usr_id"));
             }
         }

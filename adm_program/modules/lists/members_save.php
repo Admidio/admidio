@@ -19,8 +19,6 @@ require_once("../../system/classes/role_dependency.php");
 require_once("../../system/classes/table_members.php");
 require_once("../../system/classes/table_role.php");
 
-$today = date('Y-m-d');
-
 // Uebergabevariablen pruefen
 
 if(isset($_GET['rol_id']) == false || is_numeric($_GET['rol_id']) == false)
@@ -49,8 +47,8 @@ if(  (!$g_current_user->assignRoles()
 $sql = " SELECT *
            FROM ". TBL_MEMBERS. "
           WHERE mem_rol_id = ". $role->getValue("rol_id"). "
-            AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-            AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')";
+            AND mem_begin <= '".DATE_NOW."'
+            AND mem_end    > '".DATE_NOW."'";
 $result_mem_role = $g_db->query($sql);
 
 //Schreiben der Datensaetze in Array sortiert nach zugewiesenen Benutzern (id)
@@ -134,12 +132,12 @@ while($user= $g_db->fetch_array($result_user))
 
     if(count($parentRoles) > 0 )
     {
-        $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
+        $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ";
 
         // alle einzufuegenden Rollen anhaengen
         foreach($parentRoles as $actRole)
         {
-            $sql .= " ($actRole, ". $user['usr_id']. ", '".date("Y-m-d", time())."', NULL, 1, 0),";
+            $sql .= " ($actRole, ". $user['usr_id']. ", '".DATE_NOW."', '9999-12-31', 0),";
         }
 
         //Das letzte Komma wieder wegschneiden

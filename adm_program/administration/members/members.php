@@ -31,7 +31,6 @@ $restrict = "";
 $listname = "";
 $i = 0;
 $members_per_page = 20; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
-$today = date('Y-m-d');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_members   = 1;
@@ -122,8 +121,8 @@ if($req_members)
                 WHERE usr_valid = 1
                   AND mem_usr_id = usr_id
                   AND mem_rol_id = rol_id
-                  AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                  AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                  AND mem_begin <= '".DATE_NOW."'
+                  AND mem_end    > '".DATE_NOW."'
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -142,8 +141,8 @@ else
                   AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
                  LEFT JOIN ". TBL_MEMBERS. "
                    ON mem_usr_id = usr_id
-                  AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                  AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                  AND mem_begin <= '".DATE_NOW."'
+                  AND mem_end    > '".DATE_NOW."'
                  LEFT JOIN ". TBL_ROLES. "
                    ON mem_rol_id = rol_id
                   AND rol_valid  = 1
@@ -307,8 +306,8 @@ echo "<div class=\"pageNavigation\">";
                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                       AND mem_rol_id = rol_id
                       AND mem_usr_id = usr_id
-                      AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                      AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                      AND mem_begin <= '".DATE_NOW."'
+                      AND mem_end    > '".DATE_NOW."'
                       AND usr_valid  = 1
                       AND usf_name   = 'Nachname'
                       AND usd_usf_id = usf_id
@@ -458,8 +457,8 @@ if($num_members > 0)
                                       AND rol_cat_id  = cat_id
                                       AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                                       AND mem_rol_id  = rol_id
-                                      AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                                      AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                                      AND mem_begin  <= '".DATE_NOW."'
+                                      AND mem_end     > '".DATE_NOW."'
                                       AND mem_usr_id  = ". $row['usr_id'];
                         $result = $g_db->query($sql);
                         $b_other_orga = false;

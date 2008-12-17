@@ -30,6 +30,8 @@ else
     define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
 }
 
+define("DATE_NOW", date("Y-m-d", time()));
+define("DATETIME_NOW", date("Y-m-d H:i:s", time()));
 
 // Defines fuer alle Datenbanktabellen
 define("TBL_ANNOUNCEMENTS",     $g_tbl_praefix. "_announcements");

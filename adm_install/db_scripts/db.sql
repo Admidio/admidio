@@ -366,8 +366,7 @@ create table %PRAEFIX%_members
    mem_rol_id                     int(11) unsigned               not null,
    mem_usr_id                     int(11) unsigned               not null,
    mem_begin                      date                           not null,
-   mem_end                        date,
-   mem_valid                      tinyint(1) unsigned            not null default 1,
+   mem_end                        date                           not null default '9999-12-31',
    mem_leader                     tinyint(1) unsigned            not null default 0,
    primary key (mem_id),
    unique ak_rol_usr_id (mem_rol_id, mem_usr_id)
@@ -735,15 +734,15 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CHANGE foreign 
 /*==============================================================*/
 create table %PRAEFIX%_messages
 (
- msg_id                         int(11) unsigned NOT NULL auto_increment,
- msg_usr_id_from                int(11) unsigned NOT NULL,
- msg_usr_id_to                  int(11) unsigned NOT NULL,
+ msg_id                         int(11) unsigned                NOT NULL auto_increment,
+ msg_usr_id_from                int(11) unsigned                NOT NULL,
+ msg_usr_id_to                  int(11) unsigned                NOT NULL,
  msg_msg_id_previous            int(11) unsigned,
- msg_send_date                  datetime NOT NULL,
+ msg_send_date                  datetime                        NOT NULL,
  msg_read_date                  datetime,
  msg_title                      varchar(250),
- msg_text                       text NOT NULL,
- msg_archive_flag               tinyint(1) unsigned NOT NULL default '0',
+ msg_text                       text                            NOT NULL,
+ msg_archive_flag               tinyint(1) unsigned             NOT NULL default '0',
  primary key (msg_id)
 )
 engine = InnoDB

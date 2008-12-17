@@ -66,7 +66,8 @@ $sql    = "SELECT usr_id
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
-              AND mem_valid      = 1
+              AND mem_begin     <= '".DATE_NOW."'
+              AND mem_end        > '".DATE_NOW."'
               AND rol_valid      = 1 
               AND rol_cat_id     = cat_id
               AND cat_org_id     = ". $g_current_organization->getValue("org_id");
@@ -77,8 +78,6 @@ $user_row   = $g_db->fetch_array($result);
 
 if ($user_found >= 1)
 {
-    $act_date = date("Y-m-d H:i:s", time());
-    
     // Userobjekt anlegen
     $g_current_user = new User($g_db, $user_row['usr_id']);
     
@@ -126,7 +125,7 @@ if ($user_found >= 1)
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
         $g_current_user->setValue("usr_last_login",   $g_current_user->getValue("usr_actual_login"));
         $g_current_user->setValue("usr_number_login", $g_current_user->getValue("usr_number_login") + 1);
-        $g_current_user->setValue("usr_actual_login", $act_date);
+        $g_current_user->setValue("usr_actual_login", DATETIME_NOW);
         $g_current_user->setValue("usr_date_invalid", NULL);
         $g_current_user->setValue("usr_number_invalid", 0);
         $g_current_user->b_set_last_change = false;
@@ -174,7 +173,7 @@ if ($user_found >= 1)
         {
             $g_current_user->setValue("usr_number_invalid", $g_current_user->getValue("usr_number_invalid") + 1);
         }
-        $g_current_user->setValue("usr_date_invalid", $act_date);
+        $g_current_user->setValue("usr_date_invalid", DATETIME_NOW);
         $g_current_user->b_set_last_change = false;
         $g_current_user->save();
 

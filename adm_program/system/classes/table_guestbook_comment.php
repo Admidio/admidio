@@ -69,7 +69,7 @@ class TableGuestbookComment extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("gbc_timestamp", date("Y-m-d H:i:s", time()));
+            $this->setValue("gbc_timestamp", DATETIME_NOW);
             $this->setValue("gbc_usr_id", $g_current_user->getValue("usr_id"));
             $this->setValue("gbc_org_id", $g_current_organization->getValue("org_id"));
             $this->setValue("gbc_ip_address", $_SERVER['REMOTE_ADDR']);
@@ -80,7 +80,7 @@ class TableGuestbookComment extends TableAccess
             if(time() > (strtotime($this->getValue("gbc_timestamp")) + 900)
             || $g_current_user->getValue("usr_id") != $this->getValue("gbc_usr_id") )
             {
-                $this->setValue("gbc_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("gbc_timestamp_change", DATETIME_NOW);
                 $this->setValue("gbc_usr_id_change", $g_current_user->getValue("usr_id"));
             }
         }

@@ -107,10 +107,11 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
                 LEFT JOIN ". TBL_USER_DATA. " as email
                     ON email.usd_usr_id = usr_id
                     AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id")."
-                WHERE usr_id = mem_usr_id
+                WHERE usr_id   = mem_usr_id
                 AND mem_rol_id = ".$_GET['rol_id']."
-                AND mem_valid = 1
-                AND usr_valid = 1
+                AND mem_begin <= '".DATE_NOW."'
+                AND mem_end    > '".DATE_NOW."'
+                AND usr_valid  = 1
                 AND email.usd_usr_id = email.usd_usr_id
                 ORDER BY last_name,first_name ASC";
         
@@ -157,9 +158,10 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
                     LEFT JOIN ". TBL_USER_DATA. " as email
                         ON email.usd_usr_id = usr_id
                         AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id")."
-                    WHERE usr_id = ".$_GET['usrid']."
-                    AND mem_valid = 1
-                    AND usr_valid = 1
+                    WHERE usr_id   = ".$_GET['usrid']."
+                    AND mem_begin <= '".DATE_NOW."'
+                    AND mem_end    > '".DATE_NOW."'
+                    AND usr_valid  = 1
                     ORDER BY last_name, first_name";
         
         $result = $g_db->query($sql);

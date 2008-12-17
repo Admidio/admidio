@@ -628,13 +628,12 @@ echo '
             // *******************************************************************************
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
-            $today = date('Y-m-d');
             $count_show_roles = 0;
             $sql = "SELECT *
                       FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                      WHERE mem_rol_id = rol_id
-                       AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                       AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                       AND mem_begin <= '".DATE_NOW."'
+                       AND mem_end    > '".DATE_NOW."'
                        AND mem_usr_id = $a_user_id
                        AND rol_valid  = 1
                        AND rol_cat_id = cat_id
@@ -727,7 +726,7 @@ echo '
             $sql    = "SELECT *
                          FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                         WHERE mem_rol_id = rol_id
-                          AND DATE_FORMAT(mem_end, '%Y-%m-%d') <= '$today'
+                          AND mem_end   <= '".DATE_NOW."'
                           AND mem_usr_id = $a_user_id
                           AND rol_valid  = 1
                           AND rol_cat_id = cat_id
@@ -743,10 +742,10 @@ echo '
                 $visible = ' style="display: none;" ';
             }
 
-            echo "<div class=\"groupBox\" id=\"profile_former_roles_box\" $visible>
-                <div class=\"groupBoxHeadline\">Ehemalige Rollenmitgliedschaften&nbsp;</div>
-                <div class=\"groupBoxBody\">
-                    <ul class=\"formFieldList\" id=\"former_role_list\">";
+            echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
+                <div class="groupBoxHeadline">Ehemalige Rollenmitgliedschaften&nbsp;</div>
+                <div class="groupBoxBody">
+                    <ul class="formFieldList" id="former_role_list">';
                         while($row = $g_db->fetch_array($result_role))
                         {
                             if($g_current_user->viewRole($row['mem_rol_id']))
@@ -808,7 +807,8 @@ echo '
             $sql = "SELECT *
                       FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
                      WHERE mem_rol_id = rol_id
-                       AND mem_valid  = 1
+                       AND mem_begin <= '".DATE_NOW."'
+                       AND mem_end    > '".DATE_NOW."'
                        AND mem_usr_id = $a_user_id
                        AND rol_valid  = 1
                        AND rol_this_list_view = 2

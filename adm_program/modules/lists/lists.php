@@ -280,11 +280,20 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
 {
     if($row_lst = $g_db->fetch_array($result_lst))
     {
+        if($active_role == 1)
+        {
+            $sql_member_status = " AND mem_begin <= '".DATE_NOW."'
+                                   AND mem_end    > '".DATE_NOW."' ";
+        }
+        else
+        {
+            $sql_member_status = " AND mem_end < '".DATE_NOW."' ";
+        }
         // Anzahl Mitglieder ermitteln die keine Leiter sind
         $sql = "SELECT COUNT(*) as count
                   FROM ". TBL_MEMBERS. "
                  WHERE mem_rol_id = ". $row_lst['rol_id']. "
-                   AND mem_valid  = $active_role
+                       $sql_member_status
                    AND mem_leader = 0";
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);
@@ -294,7 +303,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
         $sql = "SELECT COUNT(*) as count
                   FROM ". TBL_MEMBERS. "
                  WHERE mem_rol_id = ". $row_lst['rol_id']. "
-                   AND mem_valid  = $active_role
+                       $sql_member_status
                    AND mem_leader = 1";
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);
@@ -306,7 +315,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET["start"] < $num_roles; $i++)
             $sql = "SELECT COUNT(*) as count
                       FROM ". TBL_MEMBERS. "
                      WHERE mem_rol_id = ". $row_lst['rol_id']. "
-                       AND mem_valid  = 0 ";
+                       AND mem_end   <= '". DATE_NOW."'";
             $result = $g_db->query($sql);
             $row    = $g_db->fetch_array($result);
             $num_former = $row['count'];
