@@ -166,12 +166,12 @@ if (array_key_exists("rol_id", $_POST))
     
     $role = new TableRole($g_db, $_POST['rol_id']);
 
-    if ($g_valid_login && $role->getValue("rol_mail_login") == false)
+    if ($g_valid_login == true && $role->getValue("rol_mail_this_role") == 2)
     {
         $g_message->show("invalid");
     }
     
-    if (!$g_valid_login && $role->getValue("rol_mail_logout") == false)
+    if ($g_valid_login == false && $role->getValue("rol_mail_this_role") == 3)
     {
         $g_message->show("invalid");
     }

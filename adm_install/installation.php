@@ -574,7 +574,7 @@ elseif($req_mode == 7)
     $role_member->setValue("rol_cat_id", $category_common);
     $role_member->setValue("rol_name", "Mitglied");
     $role_member->setValue("rol_description", "Alle Mitglieder der Organisation");
-    $role_member->setValue("rol_mail_login", 1);
+    $role_member->setValue("rol_mail_this_role", 2);
     $role_member->setValue("rol_profile", 1);
     $role_member->setValue("rol_this_list_view", 1);
     $role_member->save(0);

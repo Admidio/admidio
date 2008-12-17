@@ -35,7 +35,7 @@ if ($g_valid_login && isset($_GET['base']) =="1")
         // im eingeloggten Zustand nur an Rollen schreiben, die die Einstellung besitzen
        $sql    = "SELECT rol_name, rol_id, cat_name 
                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-               WHERE rol_mail_login = 1
+               WHERE rol_mail_this_role = 2
                AND rol_valid        = 1
                AND rol_cat_id       = cat_id
                AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
@@ -47,10 +47,10 @@ if ($g_valid_login && isset($_GET['base']) =="1")
         // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
         $sql    = "SELECT rol_name, rol_id, cat_name 
                    FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                   WHERE rol_mail_logout = 1
-                   AND rol_valid         = 1
-                   AND rol_cat_id        = cat_id
-                   AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
+                   WHERE rol_mail_this_role = 3
+                   AND rol_valid  = 1
+                   AND rol_cat_id = cat_id
+                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                    ORDER BY cat_sequence, rol_name ";
     }
     $result = $g_db->query($sql);
