@@ -46,11 +46,13 @@ if(!$g_current_user->viewProfile($req_usr_id))
     $g_message->show("norights");
 }
 
-
 //Bild aus adm_my_files
 if($g_preferences['profile_photo_storage'] == 1 && $req_new_photo == 0)
 {
-	$picpath = SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg";
+	if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg"))
+	{
+		$picpath = SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg";
+	}
 	$image = new Image($picpath);
 }
 //Bild der Datenbank

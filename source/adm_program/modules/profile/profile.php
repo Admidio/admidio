@@ -462,7 +462,8 @@ echo '
                                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
                                             src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>";
                                     //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
-                                    if(strlen($user->getValue("usr_photo")) > 0)
+                                    if((strlen($user->getValue("usr_photo")) > 0 && $g_preferences['profile_photo_storage'] == 0) 
+                                    	|| file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$a_user_id.".jpg") && $g_preferences['profile_photo_storage'] == 1 )
                                     {
                                         echo"
                                             <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id=$a_user_id\"><img

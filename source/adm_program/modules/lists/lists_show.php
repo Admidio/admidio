@@ -95,8 +95,11 @@ if(!$g_current_user->viewRole($req_rol_id))
     $g_message->show("norights");
 }
 
-//SESSION array für bilder initialisieren
-$_SESSION['profilphoto'] = array();
+//SESSION array f�r bilder initialisieren
+if($g_preferences['profile_photo_storage'] == 0)
+{
+	$_SESSION['profilphoto'] = array();
+}
 
 if($req_mode == "csv-ms")
 {
@@ -589,9 +592,13 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 elseif($column->getValue("lsc_special_field") == "usr_photo")
                 {
                     // Benutzerfoto anzeigen
-                    if(($req_mode == "html" || $req_mode == "print") && $row[$sql_column_number] != NULL)
+                    if($req_mode == "html" || $req_mode == "print")
                     {
-                        $_SESSION['profilphoto'][$row['usr_id']]=$row[$sql_column_number];
+	                    $_SESSION['profilphoto'][$row['usr_id']] = 0;
+                    	if($g_preferences['profile_photo_storage'] == 0  && $row[$sql_column_number] != "")
+						{
+							$_SESSION['profilphoto'][$row['usr_id']]=$row[$sql_column_number];
+						}
                         $content = '<img src="photo_show.php?usr_id='.$row['usr_id'].'" style="vertical-align: middle;" alt="Benutzerfoto" />';
                     }
                     if ($req_mode == "csv" && $row[$sql_column_number] != NULL)
