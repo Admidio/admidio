@@ -89,7 +89,7 @@ else
 {
     $g_layout['title'] = "Rolle anlegen";
     $role->setValue("rol_this_list_view", "1");
-    $role->setValue("rol_mail_login", "1");
+    $role->setValue("rol_mail_this_role", "2");
 }
 $g_layout['header'] = "
     <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>

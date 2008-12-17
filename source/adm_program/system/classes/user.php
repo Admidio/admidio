@@ -184,10 +184,10 @@ class User extends TableUsers
         foreach($this->userFieldData as $field)
         {
             // update nur machen, wenn auch noetig
-            if($field->getValue("usd_id") > 0 || $field->getValue("usd_value") > 0)
+            if($field->getValue("usd_id") > 0 || strlen($field->getValue("usd_value")) > 0)
             {
                 // wird das Feld neu gefuellt, dann auch User-ID setzen
-                if($field->getValue("usd_usr_id") == 0
+                if(strlen($field->getValue("usd_usr_id")) == 0
                 && strlen($field->getValue("usd_value")) > 0)
                 {
                     $field->setValue("usd_usr_id", $this->getValue("usr_id"));

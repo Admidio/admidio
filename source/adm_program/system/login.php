@@ -74,7 +74,7 @@ echo "
             $mail_link = "$g_root_path/adm_program/system/lost_password.php";
         }
         elseif($g_preferences['enable_mail_module'] == 1 
-        && $role_webmaster->getValue("rol_mail_logout") == 1)
+        && $role_webmaster->getValue("rol_mail_this_role") == 3)
         {
             // Mailmodul aufrufen mit Webmaster als Ansprechpartner
             $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
