@@ -76,7 +76,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
            AND rol_cat_id IN (".$all_cat_str.")";
     $g_db->query($sql);
 
-    $sql = "UPDATE ". TBL_ROLES. " SET rol_timestamp_create = '".date("Y-m-d H:i:s", time())."'
+    $sql = "UPDATE ". TBL_ROLES. " SET rol_timestamp_create = '".DATETIME_NOW."'
                                      , rol_usr_id_create    = ". $row_webmaster['webmaster_id']. "
          WHERE rol_timestamp_create IS NULL 
            AND rol_cat_id IN (".$all_cat_str.")";
@@ -134,7 +134,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $former_list->save();  
 }
 
-$sql = "UPDATE ". TBL_PHOTOS. " SET pho_timestamp_create = '".date("Y-m-d H:i:s", time())."'
+$sql = "UPDATE ". TBL_PHOTOS. " SET pho_timestamp_create = '".DATETIME_NOW."'
          WHERE pho_timestamp_create IS NULL ";
 $g_db->query($sql);
 
@@ -143,7 +143,7 @@ $sql = "UPDATE ". TBL_USERS. " SET usr_timestamp_create = usr_timestamp_change
          WHERE usr_timestamp_change IS NOT NULL ";
 $g_db->query($sql);
 
-$sql = "UPDATE ". TBL_USERS. " SET usr_timestamp_create = '".date("Y-m-d H:i:s", time())."'
+$sql = "UPDATE ". TBL_USERS. " SET usr_timestamp_create = '".DATETIME_NOW."'
          WHERE usr_timestamp_create IS NULL ";
 $g_db->query($sql);
 

@@ -62,13 +62,13 @@ class TableLists extends TableAccess
         // Standardfelder fuellen
         if($this->new_record)
         {
-            $this->setValue("lst_timestamp", date("Y-m-d H:i:s", time()));
+            $this->setValue("lst_timestamp", DATETIME_NOW);
             $this->setValue("lst_usr_id", $g_current_user->getValue("usr_id"));
             $this->setValue("lst_org_id", $g_current_organization->getValue("org_id"));
         }
         else
         {
-            $this->setValue("lst_timestamp", date("Y-m-d H:i:s", time()));
+            $this->setValue("lst_timestamp", DATETIME_NOW);
             $this->setValue("lst_usr_id", $g_current_user->getValue("usr_id"));
         }
         

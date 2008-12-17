@@ -61,8 +61,6 @@ require_once(SERVER_PATH. "/adm_program/system/classes/table_text.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 
 $message  = "";
-$act_date     = date("Y-m-d", time());
-$act_datetime = date("Y-m-d H:i:s", time());
 
 if($req_mode == 1)
 {
@@ -194,7 +192,8 @@ elseif($req_mode == 4)
                       AND usr_valid      = 1
                       AND mem_usr_id     = usr_id
                       AND mem_rol_id     = rol_id
-                      AND mem_valid      = 1
+                      AND mem_begin     <= '".DATE_NOW."'
+                      AND mem_end        > '".DATE_NOW."'
                       AND rol_valid      = 1
                       AND rol_name       = 'Webmaster' ";
         $result = $db->query($sql);
@@ -338,7 +337,7 @@ elseif($req_mode == 6)
     $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
                                            fol_locked, fol_public, fol_timestamp)
                                     VALUES (". $g_current_organization->getValue("org_id"). ", 'DOWNLOAD', 'download', '/adm_my_files',
-                                            0,1, '". $act_datetime. "')";
+                                            0,1, '". DATETIME_NOW. "')";
     $db->query($sql);
 
     // nun die Default-Rollen anlegen

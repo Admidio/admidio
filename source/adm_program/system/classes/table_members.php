@@ -47,26 +47,7 @@ class TableMembers extends TableAccess
             $this->setValue("mem_rol_id", $rol_id);
             $this->setValue("mem_usr_id", $usr_id);
         }
-    }    
-    
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    function setValue($field_name, $field_value)
-    {
-        if($field_name == "mem_valid"
-        && $this->getValue($field_name) != $field_value)
-        {
-            if($field_value == 1)
-            {
-                $this->setValue("mem_end", NULL);
-            }
-            elseif($field_value == 0)
-            {
-                $this->setValue("mem_end", date("Y-m-d", time()));
-            }
-        }     
-        parent::setValue($field_name, $field_value);
-    }    
+    }       
 
     // Speichert die Mitgliedschaft und aktualisiert das
     function save()
@@ -96,7 +77,7 @@ class TableMembers extends TableAccess
         // Beginn nicht ueberschreiben, wenn schon existiert
         if(strlen($this->getValue("mem_begin")) == 0)
         {
-            $this->setValue("mem_begin", date("Y-m-d", time()));
+            $this->setValue("mem_begin", DATE_NOW);
         }
         // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
         if(strlen($leader) == 0)
@@ -110,8 +91,7 @@ class TableMembers extends TableAccess
         {
             $this->setValue("mem_leader", $leader);
         }
-        $this->setValue("mem_end", NULL);
-        $this->setValue("mem_valid", 1);
+        $this->setValue("mem_end", "9999-12-31");
         $this->save();
     }
 
@@ -126,8 +106,7 @@ class TableMembers extends TableAccess
 
         if($this->new_record == false)
         {
-            $this->setValue("mem_end", date("Y-m-d", time()));
-            $this->setValue("mem_valid", 0);
+            $this->setValue("mem_end", DATE_NOW);
             $this->save();
         }
     }

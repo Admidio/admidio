@@ -90,8 +90,6 @@ if ($_GET["mode"] == 1 || ($_GET["mode"] == 3 && $_GET["lnk_id"] > 0) )
     {
         $g_message->show("feld", "Beschreibung");
     }
-    
-    $act_date = date("Y.m.d G:i:s", time());
    
     // POST Variablen in das Ankuendigungs-Objekt schreiben
     foreach($_POST as $key => $value)

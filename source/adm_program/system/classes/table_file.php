@@ -89,10 +89,11 @@ class TableFile extends TableAccess
                 //Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
                 $sql_rights = "SELECT count(*)
                          FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
-                        WHERE flr_fol_id        = ". $this->getValue("fol_id"). "
-                          AND flr_rol_id         = mem_rol_id
-                          AND mem_usr_id         = ". $g_current_user->getValue("usr_id"). "
-                          AND mem_valid         = 1";
+                        WHERE flr_fol_id = ". $this->getValue("fol_id"). "
+                          AND flr_rol_id = mem_rol_id
+                          AND mem_usr_id = ". $g_current_user->getValue("usr_id"). "
+                          AND mem_begin <= '".DATE_NOW."'
+                          AND mem_end    > '".DATE_NOW."'";
                 $result_rights = $this->db->query($sql_rights);
                 $row_rights = $this->db->fetch_array($result_rights);
                 $row_count  = $row_rights[0];
@@ -143,7 +144,7 @@ class TableFile extends TableAccess
 
         if($this->new_record)
         {
-            $this->setValue("fil_timestamp", date("Y-m-d H:i:s", time()));
+            $this->setValue("fil_timestamp", DATETIME_NOW);
             $this->setValue("fil_usr_id", $g_current_user->getValue("usr_id"));
         }
         parent::save();

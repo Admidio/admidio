@@ -265,12 +265,12 @@ if($g_current_session->getValue("ses_id") > 0)
                 // bei Autologin ggf. den Beginn aktualisieren, wenn die Luecke zu gross geworden ist
                 if($time_gap > $g_preferences['logout_minutes'] * 60 && $b_auto_login == true)
                 {
-                    $g_current_session->setValue("ses_begin", date("Y-m-d H:i:s", time()));
+                    $g_current_session->setValue("ses_begin", DATETIME_NOW);
                 }
 
                 // User-Login ist gueltig
                 $g_valid_login = true;
-                $g_current_session->setValue("ses_timestamp", date("Y-m-d H:i:s", time()));
+                $g_current_session->setValue("ses_timestamp", DATETIME_NOW);
             }
             else
             {

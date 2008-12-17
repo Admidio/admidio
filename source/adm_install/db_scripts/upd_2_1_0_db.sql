@@ -56,6 +56,12 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CREATE foreign 
 ALTER TABLE %PRAEFIX%_guestbook CHANGE COLUMN `gbo_last_change` `gbo_timestamp_change` datetime;
 ALTER TABLE %PRAEFIX%_guestbook_comments CHANGE COLUMN `gbc_last_change` `gbc_timestamp_change` datetime;
 
+-- Mitgliederzuordnung anpassen
+update %PRAEFIX%_members set mem_end = '9999-12-31' where mem_end is null;
+ALTER TABLE %PRAEFIX%_members MODIFY COLUMN `mem_begin` DATE NOT NULL;
+ALTER TABLE %PRAEFIX%_members MODIFY COLUMN `mem_end` DATE NOT NULL DEFAULT '9999-12-31';
+ALTER TABLE %PRAEFIX%_members DROP COLUMN `mem_valid`;
+
 -- Organisation aus Dates entfernen und Kategorie hinzufuegen
 ALTER TABLE %PRAEFIX%_dates DROP FOREIGN KEY %PRAEFIX%_FK_DAT_ORG;
 ALTER TABLE %PRAEFIX%_dates DROP INDEX DAT_ORG_FK;

@@ -30,7 +30,6 @@ if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_usr_id   = 0;
 $req_new_user = 0;
-$today = date('Y-m-d');
 
 // Uebergabevariablen pruefen
 
@@ -63,7 +62,7 @@ if($g_current_user->assignRoles() || $g_current_user->editUsers())
         $sql_roles_condition .= " AND rol_this_list_view > 0 ";
     }
 
-    $sql    = "SELECT rol_id, rol_name, rol_max_members, mem_usr_id, mem_leader, mem_valid
+    $sql    = "SELECT rol_id, rol_name, rol_max_members
                  FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                  LEFT JOIN ". TBL_MEMBERS. "
                    ON rol_id     = mem_rol_id
@@ -77,16 +76,16 @@ if($g_current_user->assignRoles() || $g_current_user->editUsers())
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql    = "SELECT rol_id, rol_name, rol_max_members, mgl.mem_usr_id, mgl.mem_leader, mgl.mem_valid
+    $sql    = "SELECT rol_id, rol_name, rol_max_members
                  FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                  LEFT JOIN ". TBL_MEMBERS. " mgl
                    ON rol_id         = mgl.mem_rol_id
                   AND mgl.mem_usr_id = $req_usr_id
-                  AND (DATE_FORMAT(mgl.mem_begin, '%Y-%m-%d') <= '$today')
-                  AND (mem_end IS NULL OR DATE_FORMAT(mgl.mem_end, '%Y-%m-%d') > '$today')
+                  AND mgl.mem_begin <= '".DATE_NOW."'
+                  AND mgl.mem_end    > '".DATE_NOW."'
                 WHERE bm.mem_usr_id  = ". $g_current_user->getValue("usr_id"). "
-                  AND (DATE_FORMAT(bm.mem_begin, '%Y-%m-%d') <= '$today')
-                  AND (bm.mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                  AND bm.mem_begin  <= '".DATE_NOW."'
+                  AND bm.mem_end     > '".DATE_NOW."'
                   AND bm.mem_leader  = 1
                   AND rol_id         = bm.mem_rol_id
                   AND rol_valid      = 1
@@ -94,24 +93,24 @@ else
                   AND cat_org_id     = ". $g_current_organization->getValue("org_id"). "
                 ORDER BY cat_sequence, rol_name";
 }
-$result_rolle = $g_db->query($sql);
+$result_rol = $g_db->query($sql);
 
 $count_assigned = 0;
 $parentRoles = array();
 
 // Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
-while($row = $g_db->fetch_object($result_rolle))
+while($row = $g_db->fetch_array($result_rol))
 {
-    if($row->rol_max_members > 0)
+    if($row['rol_max_members'] > 0)
     {
         // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
         $sql    =   "SELECT COUNT(*)
                        FROM ". TBL_MEMBERS. "
-                      WHERE mem_rol_id = $row->rol_id
+                      WHERE mem_rol_id = ".$row['rol_id']."
                         AND mem_usr_id = $req_usr_id
                         AND mem_leader = 0
-                        AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                        AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')";
+                        AND mem_begin <= '".DATE_NOW."'
+                        AND mem_end    > '".DATE_NOW."'";
         $g_db->query($sql);
 
         $row_usr = $g_db->fetch_array();
@@ -121,49 +120,49 @@ while($row = $g_db->fetch_object($result_rolle))
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
             $sql    =   "SELECT COUNT(*)
                            FROM ". TBL_MEMBERS. "
-                          WHERE mem_rol_id = $row->rol_id
+                          WHERE mem_rol_id = ".$row['rol_id']."
                             AND mem_leader = 0
-                            AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                            AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')";
+                            AND mem_begin <= '".DATE_NOW."'
+                            AND mem_end    > '".DATE_NOW."'";
             $g_db->query($sql);
 
             $row_members = $g_db->fetch_array();
 
             //Bedingungen fuer Abbruch und Abbruch
-            if($row_members[0] >= $row->rol_max_members
-            && isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == false
-            && isset($_POST["role-$row->rol_id"])   && $_POST["role-$row->rol_id"]   == true)
+            if($row_members[0] >= $row['rol_max_members']
+            && isset($_POST["leader-".$row['rol_id']]) && $_POST["leader-".$row['rol_id']] == false
+            && isset($_POST["role-".$row['rol_id']])   && $_POST["role-".$row['rol_id']]   == true)
             {
-                $g_message->show("max_members_profile", $row->rol_name);
+                $g_message->show("max_members_profile", $row['rol_name']);
             }
         }
     }
 }
 
 //Dateizeiger auf erstes Element zurueck setzen
-if($g_db->num_rows($result_rolle)>0)
+if($g_db->num_rows($result_rol)>0)
 {
-    $g_db->data_seek($result_rolle, 0);
+    $g_db->data_seek($result_rol, 0);
 }
 
 $member = new TableMembers($g_db);
 
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
-while($row = $g_db->fetch_object($result_rolle))
+while($row = $g_db->fetch_array($result_rol))
 {
-    if($g_current_user->assignRoles() || $g_current_user->viewRole($row->rol_id))
+    if($g_current_user->assignRoles() || $g_current_user->viewRole($row['rol_id']))
     {
         // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
-        if($row->rol_name != 'Webmaster' || $g_current_user->isWebmaster())
+        if($row['rol_name'] != 'Webmaster' || $g_current_user->isWebmaster())
         {
             $role_assign = 0;
-            if(isset($_POST["role-$row->rol_id"]) && $_POST["role-$row->rol_id"] == 1)
+            if(isset($_POST["role-".$row['rol_id']]) && $_POST["role-".$row['rol_id']] == 1)
             {
                 $role_assign = 1;
             }
 
             $role_leader = 0;
-            if(isset($_POST["leader-$row->rol_id"]) && $_POST["leader-$row->rol_id"] == 1)
+            if(isset($_POST["leader-".$row['rol_id']]) && $_POST["leader-".$row['rol_id']] == 1)
             {
                 $role_leader = 1;
             }
@@ -171,18 +170,18 @@ while($row = $g_db->fetch_object($result_rolle))
             // Rollenmitgliedschaften aktualisieren
             if($role_assign == 1)
             {
-                $member->startMembership($row->rol_id, $req_usr_id, $role_leader);
+                $member->startMembership($row['rol_id'], $req_usr_id, $role_leader);
                 $count_assigned++;
             }
             else
             {
-                $member->stopMembership($row->rol_id, $req_usr_id);
+                $member->stopMembership($row['rol_id'], $req_usr_id);
             }
 
             // find the parent roles
             if($role_assign == 1)
             {
-                $tmpRoles = RoleDependency::getParentRoles($g_db,$row->rol_id);
+                $tmpRoles = RoleDependency::getParentRoles($g_db, $row['rol_id']);
                 foreach($tmpRoles as $tmpRole)
                 {
                     if(!in_array($tmpRole,$parentRoles))
@@ -201,12 +200,12 @@ $g_current_session->renewUserObject();
 
 if(count($parentRoles) > 0 )
 {
-    $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin,mem_end, mem_valid, mem_leader) VALUES ";
+    $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ";
 
     // alle einzufuegenden Rollen anhaengen
     foreach($parentRoles as $actRole)
     {
-        $sql .= " ($actRole, $req_usr_id, '".date("Y-m-d", time())."', NULL, 1, 0),";
+        $sql .= " ($actRole, $req_usr_id, '".DATE_NOW."', '9999-12-31', 0),";
     }
 
     // Das letzte Komma wieder wegschneiden

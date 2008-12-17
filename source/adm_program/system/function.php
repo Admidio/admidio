@@ -30,7 +30,8 @@ function hasRole($role_name, $user_id = 0)
     $sql    = "SELECT *
                  FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                 WHERE mem_usr_id = $user_id
-                  AND mem_valid  = 1
+                  AND mem_begin <= '".DATE_NOW."'
+                  AND mem_end    > '".DATE_NOW."'
                   AND mem_rol_id = rol_id
                   AND rol_name   = '$role_name'
                   AND rol_valid  = 1 
@@ -61,7 +62,8 @@ function isMember($user_id)
         $sql    = "SELECT COUNT(*)
                      FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE mem_usr_id = $user_id
-                      AND mem_valid  = 1
+                      AND mem_begin <= '".DATE_NOW."'
+                      AND mem_end    > '".DATE_NOW."'
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
@@ -92,7 +94,8 @@ function isGroupLeader($user_id, $role_id = 0)
         $sql    = "SELECT *
                      FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE mem_usr_id = $user_id
-                      AND mem_valid  = 1
+                      AND mem_begin <= '".DATE_NOW."'
+                      AND mem_end    > '".DATE_NOW."'
                       AND mem_leader = 1
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 

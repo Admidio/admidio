@@ -27,7 +27,6 @@ if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_usr_id   = 0;
 $req_new_user = 0;
-$today = date('Y-m-d');
 
 // Uebergabevariablen pruefen
 
@@ -129,8 +128,8 @@ echo "
                          LEFT JOIN ". TBL_MEMBERS. "
                            ON rol_id     = mem_rol_id
                           AND mem_usr_id = $req_usr_id
-                          AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                          AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+                          AND mem_begin <= '".DATE_NOW."'
+                          AND mem_end    > '".DATE_NOW."'
                         WHERE rol_valid  = 1
                               $sql_roles_condition
                           AND rol_cat_id = cat_id
@@ -146,11 +145,11 @@ echo "
                          LEFT JOIN ". TBL_MEMBERS. " mgl
                            ON rol_id         = mgl.mem_rol_id
                           AND mgl.mem_usr_id = $req_usr_id
-                          AND (DATE_FORMAT(mgl.mem_begin, '%Y-%m-%d') <= '$today')
-                          AND (mem_end IS NULL OR DATE_FORMAT(mgl.mem_end, '%Y-%m-%d') > '$today')
+                          AND mgl.mem_begin <= '".DATE_NOW."'
+                          AND mgl.mem_end    > '".DATE_NOW."'
                         WHERE bm.mem_usr_id  = ". $g_current_user->getValue("usr_id"). "
-                          AND (DATE_FORMAT(bm.mem_begin, '%Y-%m-%d') <= '$today')
-                          AND (mem_end IS NULL OR DATE_FORMAT(bm.mem_end, '%Y-%m-%d') > '$today')
+                          AND bm.mem_begin  <= '".DATE_NOW."'
+                          AND bm.mem_end     > '".DATE_NOW."'
                           AND bm.mem_leader  = 1
                           AND rol_id         = bm.mem_rol_id
                           AND rol_valid      = 1

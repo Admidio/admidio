@@ -101,7 +101,8 @@ if($usr_id > 0)
                           AND rol_cat_id  = cat_id
                           AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                           AND mem_rol_id  = rol_id
-                          AND mem_valid   = 1
+                          AND mem_begin  <= '".DATE_NOW."'
+                          AND mem_end     > '".DATE_NOW."'
                           AND mem_usr_id  = $usr_id ";
             $g_db->query($sql);
             $b_other_orga = false;
@@ -384,7 +385,8 @@ elseif($new_user == 2)
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
                    AND mem_rol_id        = rol_id
-                   AND mem_valid         = 1
+                   AND mem_begin        <= '".DATE_NOW."'
+                   AND mem_end           > '".DATE_NOW."'
                    AND mem_usr_id        = usr_id
                    AND usr_valid         = 1 ";
         $result = $g_db->query($sql);

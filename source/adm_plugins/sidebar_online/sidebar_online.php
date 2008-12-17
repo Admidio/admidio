@@ -70,8 +70,6 @@ else
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
-// Aktuelle Zeit setzten
-$act_date = date("Y.m.d H:i:s", time());
 // Referenzzeit setzen
 $ref_date = date("Y.m.d H:i:s", time() - 60 * $plg_time_online);
 
@@ -80,7 +78,7 @@ $sql = "SELECT ses_usr_id, usr_login_name
           FROM ". TBL_SESSIONS. " 
           LEFT JOIN ". TBL_USERS. "
             ON ses_usr_id = usr_id
-         WHERE ses_timestamp BETWEEN '".$ref_date."' AND '".$act_date."' ";
+         WHERE ses_timestamp BETWEEN '".$ref_date."' AND '".DATETIME_NOW."' ";
 if($plg_show_visitors == 0)
 {
     $sql = $sql. " AND ses_usr_id IS NOT NULL ";

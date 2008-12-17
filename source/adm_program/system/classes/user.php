@@ -320,14 +320,13 @@ class User extends TableUsers
                                             "rol_weblinks" => "0", "rol_all_lists_view" => "0");
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
-                $today = date('Y-m-d');
                 $sql    = "SELECT *
                              FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                              LEFT JOIN ". TBL_MEMBERS. "
                                ON mem_usr_id = ". $this->getValue("usr_id"). "
                               AND mem_rol_id = rol_id
-                              AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                              AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') >= '$today')
+                              AND mem_begin <= '".DATE_NOW."'
+                              AND mem_end    > '".DATE_NOW."'
                             WHERE rol_valid  = 1
                               AND rol_cat_id = cat_id
                               AND cat_org_id = ". $g_current_organization->getValue("org_id");
@@ -540,12 +539,11 @@ class User extends TableUsers
             }
             else
             {
-                $today = date('Y-m-d');
                 $sql    = "SELECT rol_id, rol_this_list_view
                              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                             WHERE mem_usr_id = ".$usr_id. "
-                              AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-                              AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') >= '$today')
+                              AND mem_begin <= '".DATE_NOW."'
+                              AND mem_end    > '".DATE_NOW."'
                               AND mem_rol_id = rol_id
                               AND rol_valid  = 1
                               AND rol_cat_id = cat_id

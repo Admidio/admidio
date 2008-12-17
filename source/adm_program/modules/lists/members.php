@@ -40,9 +40,6 @@ else
     $restrict = "m";
 }
 
-//Variablen setzten
-$today = date('Y-m-d');
-
 //URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
 if(!isset($_GET["restrict"]))
 {
@@ -94,8 +91,8 @@ if($restrict=="m")
              AND zip_code.usd_usf_id = ". $g_current_user->getProperty("PLZ", "usf_id"). "
             WHERE usr_id   = mem_usr_id
             AND mem_rol_id = rol_id
-            AND (DATE_FORMAT(mem_begin, '%Y-%m-%d') <= '$today')
-            AND (mem_end IS NULL OR DATE_FORMAT(mem_end, '%Y-%m-%d') > '$today')
+            AND mem_begin <= '".DATE_NOW."'
+            AND mem_end    > '".DATE_NOW."'
             AND rol_valid  = 1
             AND usr_valid  = 1
             AND rol_cat_id = cat_id
@@ -193,8 +190,8 @@ $role_member   = array();
 $group_leaders = array();
 for($y=0; $member = $g_db->fetch_array($result_role_member); $y++)
 {
-    if(($member['mem_begin']<=$today)
-      AND (($member['mem_end'] > $today) or ($member['mem_end'] == NULL)))
+    if($member['mem_begin'] <= DATE_NOW
+    && $member['mem_end']    > DATE_NOW)
     {
         $role_member[$y]= $member['mem_usr_id'];
     }
@@ -214,7 +211,7 @@ $row = $g_db->fetch_array($result);
 $count_valid_users = $row[0];
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Mitgliederzuordnung für \"". $role->getValue("rol_name"). "\"";
+$g_layout['title']  = 'Mitgliederzuordnung für "'. $role->getValue("rol_name"). '"';
 $g_layout['header'] = "
     <script type=\"text/javascript\"><!--
         var member_count = -1;

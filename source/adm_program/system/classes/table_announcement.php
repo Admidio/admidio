@@ -46,7 +46,7 @@ class TableAnnouncement extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("ann_timestamp_create", date("Y-m-d H:i:s", time()));
+            $this->setValue("ann_timestamp_create", DATETIME_NOW);
             $this->setValue("ann_usr_id_create", $g_current_user->getValue("usr_id"));
             $this->setValue("ann_org_shortname", $g_current_organization->getValue("org_shortname"));
         }
@@ -56,7 +56,7 @@ class TableAnnouncement extends TableAccess
             if(time() > (strtotime($this->getValue("ann_timestamp_create")) + 900)
             || $g_current_user->getValue("usr_id") != $this->getValue("ann_usr_id_create") )
             {
-                $this->setValue("ann_timestamp_change", date("Y-m-d H:i:s", time()));
+                $this->setValue("ann_timestamp_change", DATETIME_NOW);
                 $this->setValue("ann_usr_id_change", $g_current_user->getValue("usr_id"));
             }
         }

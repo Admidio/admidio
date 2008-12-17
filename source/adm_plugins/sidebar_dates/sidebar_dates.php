@@ -64,8 +64,6 @@ else
     $plg_link_target = "_self";
 }
 
-$plg_act_date = date("Y-m-d", time());
-
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
@@ -92,8 +90,8 @@ $sql    = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
             AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                 OR (   dat_global   = 1
                    AND cat_org_id IN ($organizations) ))
-			  AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '$plg_act_date'
-                  OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '$plg_act_date 00:00:00' )
+			  AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '".DATE_NOW."'
+                  OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '".DATE_NOW." 00:00:00' )
             ".$hidden."
 			ORDER BY dat_begin ASC
 			LIMIT $plg_dates_count";

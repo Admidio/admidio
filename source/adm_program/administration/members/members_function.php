@@ -65,7 +65,8 @@ if($_GET["mode"] != 1)
                   AND rol_cat_id  = cat_id
                   AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
                   AND mem_rol_id  = rol_id
-                  AND mem_valid   = 1
+                  AND mem_begin  <= '".DATE_NOW."'
+                  AND mem_end     > '".DATE_NOW."'
                   AND mem_usr_id  = ". $_GET['user_id'];
     $result = $g_db->query($sql);
     $other_orga = $g_db->num_rows($result);
@@ -134,7 +135,8 @@ elseif($_GET["mode"] == 2)
                AND rol_cat_id = cat_id
                AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                AND mem_rol_id = rol_id
-               AND mem_valid  = 1
+               AND mem_begin <= '".DATE_NOW."'
+               AND mem_end    > '".DATE_NOW."'
                AND mem_usr_id = ". $_GET['user_id'];
     $result_mgl = $g_db->query($sql);
 

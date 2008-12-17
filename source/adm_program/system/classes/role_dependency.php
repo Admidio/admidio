@@ -89,12 +89,10 @@ class RoleDependency
     {
         if(!isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
-            $act_date = date("Y-m-d H:i:s", time());
-
             $sql = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_rol_id_parent = '$this->role_id_parent'
                                                          , rld_rol_id_child  = '$this->role_id_child'
                                                          , rld_comment        = '$this->comment'
-                                                         , rld_timestamp      = '$act_date'
+                                                         , rld_timestamp      = '".DATETIME_NOW."'
                                                          , rld_usr_id         = $login_user_id " .
                     "WHERE rld_rol_id_parent = '$this->role_id_parent_orig'" .
                       "AND rld_rol_id_child  = '$this->role_id_child_orig'";
@@ -109,15 +107,9 @@ class RoleDependency
     {
         if(!$this->isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
-            $act_date = date("Y-m-d H:i:s", time());
-
-            $sql = "INSERT INTO ". TBL_ROLE_DEPENDENCIES. " (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                                                            VALUES
-                                                            ($this->role_id_parent
-                                                         , $this->role_id_child
-                                                         , '$this->comment'
-                                                         , $login_user_id
-                                                         , '$act_date') ";
+            $sql = "INSERT INTO ". TBL_ROLE_DEPENDENCIES. " 
+                                (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
+                         VALUES ($this->role_id_parent, $this->role_id_child, '$this->comment', $login_user_id, '".DATETIME_NOW."') ";
             $this->db->query($sql);
             $persisted = true;
             return 0;
@@ -138,8 +130,8 @@ class RoleDependency
     function delete()
     {
         $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES.
-                   " WHERE rld_rol_id_child = $this->role_id_child_orig " .
-                     "AND rld_rol_id_parent = $this->role_id_parent_orig";
+                  " WHERE rld_rol_id_child  = $this->role_id_child_orig " .
+                    " AND rld_rol_id_parent = $this->role_id_parent_orig";
         $this->db->query($sql);
 
         $this->clear();
@@ -226,11 +218,11 @@ class RoleDependency
             $num_rows = $this->db->num_rows($result);
             if ($num_rows)
             {
-                $sql="  INSERT IGNORE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_valid, mem_leader) VALUES ";
+                $sql="  INSERT IGNORE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ";
 
                 while ($row = $this->db->fetch_object($result))
                 {
-                    $sql .= "($this->role_id_parent, $row->mem_usr_id, '".date("Y-m-d", time())."', 1, 0),";
+                    $sql .= "($this->role_id_parent, $row->mem_usr_id, '".DATE_NOW."', '9999-12-31', 0),";
                 }
                 //Das letzte Komma wieder wegschneiden
                 $sql = substr($sql,0,-1);
