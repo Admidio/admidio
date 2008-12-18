@@ -74,7 +74,7 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_CAT foreign key (dat
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_this_role tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_to_all tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
 
--- Autoincrement-Spalte für adm_user_data anlegen
+-- Autoincrement-Spalte fuer adm_user_data anlegen
 ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USF;
 ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USR ;
 
@@ -105,8 +105,14 @@ alter table %PRAEFIX%_user_data add constraint %PRAEFIX%_FK_USD_USR foreign key 
 INSERT INTO %PRAEFIX%_user_data (usd_usr_id, usd_usf_id, usd_value)
 SELECT usd_usr_id, usd_usf_id, usd_value
   FROM %PRAEFIX%_user_data_old;
-  
+
 DROP TABLE %PRAEFIX%_user_data_old;
+
+
+--neue Spalten in den Tabellen des Downloadmoduls anlegen
+ALTER TABLE %PRAEFIX%_folders ADD COLUMN fol_description text AFTER fol_name;
+ALTER TABLE %PRAEFIX%_files   ADD COLUMN fil_description text AFTER fil_name;
+
 
 /*==============================================================*/
 /* Table: adm_lists                                             */
@@ -134,7 +140,7 @@ alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_USR foreign key (lst
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_ORG foreign key (lst_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_list_columns                                       */
 /*==============================================================*/

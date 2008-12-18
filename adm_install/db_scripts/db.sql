@@ -112,7 +112,7 @@ create table %PRAEFIX%_categories
    cat_name                       varchar(30)                    not null,
    cat_hidden                     tinyint(1) unsigned            not null default 0,
    cat_system                     tinyint(1) unsigned            not null default 0,
-   cat_sequence						        smallint                       not null,
+   cat_sequence                                smallint                       not null,
    primary key (cat_id)
 )
 engine = InnoDB
@@ -133,10 +133,10 @@ create table %PRAEFIX%_users
    usr_id                         int(11) unsigned               not null AUTO_INCREMENT,
    usr_login_name                 varchar(35),
    usr_password                   varchar(35),
-   usr_new_password 			  varchar(35),
+   usr_new_password               varchar(35),
    usr_photo                      blob,
    usr_text                       text,
-   usr_activation_code			  varchar(10),
+   usr_activation_code              varchar(10),
    usr_last_login                 datetime,
    usr_actual_login               datetime,
    usr_number_login               smallint(5) unsigned           not null default 0,
@@ -181,7 +181,7 @@ create table %PRAEFIX%_user_fields
    usf_disabled                   tinyint(1) unsigned            not null default 0,
    usf_hidden                     tinyint(1) unsigned            not null default 0,
    usf_mandatory                  tinyint(1) unsigned            not null default 0,
-   usf_sequence						 smallint                       not null,
+   usf_sequence                         smallint                       not null,
    primary key (usf_id)
 )
 engine = InnoDB
@@ -452,7 +452,7 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR_CREATE foreign k
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_lists                                             */
 /*==============================================================*/
@@ -479,7 +479,7 @@ alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_USR foreign key (lst
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_lists add constraint %PRAEFIX%_FK_LST_ORG foreign key (lst_org_id)
       references %PRAEFIX%_organizations (org_id) on delete restrict on update restrict;
-      
+
 /*==============================================================*/
 /* Table: adm_list_columns                                       */
 /*==============================================================*/
@@ -518,6 +518,7 @@ create table %PRAEFIX%_folders
    fol_fol_id_parent              int(11) unsigned,
    fol_type                       varchar(10)                    not null,
    fol_name                       varchar(255)                   not null,
+   fol_description                text,
    fol_path                       varchar(255)                   not null,
    fol_locked                     tinyint (1) unsigned           not null default 0,
    fol_public                     tinyint (1) unsigned           not null default 0,
@@ -549,6 +550,7 @@ create table %PRAEFIX%_files
    fil_id                         int(11) unsigned               not null AUTO_INCREMENT,
    fil_fol_id                     int(11) unsigned               not null,
    fil_name                       varchar(255)                   not null,
+   fil_description                text,
    fil_locked                     tinyint(1) unsigned            not null default 0,
    fil_counter                    int,
    fil_usr_id                     int(11) unsigned,
