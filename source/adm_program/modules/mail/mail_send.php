@@ -10,7 +10,6 @@
  * Uebergaben:
  *
  * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
- * rol_id  - E-Mail an alle Mitglieder der Rolle schreiben
  *
  *****************************************************************************/
 
@@ -34,7 +33,7 @@ if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
     $g_message->show("invalid");
 }
 
-if (isset($_GET["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
+if (isset($_POST["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
 {
     $g_message->show("invalid");
 }
@@ -81,10 +80,11 @@ if (empty($_POST))
     $g_message->show("invalid");
 }
 
-$err_text = "";
-
 //Erst mal ein neues Emailobjekt erstellen...
 $email = new Email();
+
+// und ein Dummy Rollenobjekt dazu
+$role = new TableRole($g_db);
 
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if(strlen($_POST['name']) == 0)
@@ -164,7 +164,7 @@ if (array_key_exists("rol_id", $_POST))
         $g_message->show("mail_rolle");
     }
     
-    $role = new TableRole($g_db, $_POST['rol_id']);
+    $role->readData($_POST['rol_id']);
 
     if ($g_valid_login == true && $role->getValue("rol_mail_this_role") == 2)
     {
@@ -187,8 +187,6 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
     }
 }
 
-$rolle = null;
-
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
 if (array_key_exists("usr_id", $_GET))
 {
@@ -197,11 +195,11 @@ if (array_key_exists("usr_id", $_GET))
 }
 else
 {
-    //Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen
+    // Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen (ausser dem Sender selber)
     $sql   = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
                      email.usd_value as email, rol_name
                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               RIGHT JOIN ". TBL_USER_DATA. " as email
+                JOIN ". TBL_USER_DATA. " as email
                   ON email.usd_usr_id = usr_id
                  AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
                  AND LENGTH(email.usd_value) > 0
@@ -211,32 +209,29 @@ else
                 LEFT JOIN ". TBL_USER_DATA. " as first_name
                   ON first_name.usd_usr_id = usr_id
                  AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-               WHERE rol_id            = ". $_POST['rol_id']. "
-                 AND rol_cat_id        = cat_id
-                 AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
-                 AND mem_rol_id        = rol_id
-                 AND mem_begin        <= '".DATE_NOW."'
-                 AND mem_end           > '".DATE_NOW."'
-                 AND mem_usr_id        = usr_id
-                 AND usr_valid         = 1 ";
+               WHERE rol_id      = ". $_POST['rol_id']. "
+                 AND rol_cat_id  = cat_id
+                 AND cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+                 AND mem_rol_id  = rol_id
+                 AND mem_begin  <= '".DATE_NOW."'
+                 AND mem_end     > '".DATE_NOW."'
+                 AND mem_usr_id  = usr_id
+                 AND usr_valid   = 1 
+                 AND usr_id     <> ". $g_current_user->getValue("usr_id");
     $result = $g_db->query($sql);
 
-    while ($row = $g_db->fetch_object($result))
+    if($g_db->num_rows($result) > 0)
     {
-        // Wenn im Empfänger-Pool die E-Mail-Adresse des Users vorhanden ist und dieser zu gleich eine Kopie
-        // der nachricht angefordert hat, so wird er bei den Empfängern ausgelassen und bekommt nur die Kopie,
-        // damit er nicht zwei mal die gleiche E-Mail bekommt.
-        if  (!(($row->email == $g_current_user->getValue("E-Mail")) && (isset($_POST['kopie']) && $_POST['kopie'] == true)))
+        // alle Mitglieder als BCC an die Mail haengen
+        while ($row = $g_db->fetch_object($result))
         {
-            $email->addBlindCopy($row->email, "$row->first_name $row->last_name");
-            $rolle = $row->rol_name;                
+            $email->addBlindCopy($row->email, "$row->first_name $row->last_name");              
         }
     }
-
-    // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
-    // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
-    if (is_null($rolle))
+    else
     {
+        // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
+        // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
         $g_message->show("role_empty");
     }
 
@@ -256,13 +251,13 @@ if (isset($_POST['kopie']) && $_POST['kopie'] == true)
 
 //Den Text fuer die Mail aufbereiten
 $mail_body = $_POST['name']. " hat ";
-if (strlen($rolle) > 0)
+if ($role->getValue("rol_id") > 0)
 {
-    $mail_body = $mail_body. "an die Rolle \"$rolle\"";
+    $mail_body = $mail_body. 'an die Rolle "'.$role->getValue("rol_name").'"';
 }
 else
 {
-    $mail_body = $mail_body. "Dir";
+    $mail_body = $mail_body. 'Dir';
 }
 $mail_body = $mail_body. " von ". $g_current_organization->getValue("org_homepage"). " folgende E-Mail geschickt:\n";
 $mail_body = $mail_body. "Eine Antwort kannst Du an ". $_POST['mailfrom']. " schicken.";
@@ -280,15 +275,6 @@ $email->setText($mail_body);
 //Nun kann die Mail endgueltig versendet werden...
 if ($email->sendEmail())
 {
-    if (strlen($rolle) > 0)
-    {
-        $err_text = "die Rolle $rolle";
-    }
-    else
-    {
-        $err_text = $_POST['mailto'];
-    }
-
     // Der CaptchaCode wird bei erfolgreichem Mailversand aus der Session geloescht
     if (isset($_SESSION['captchacode']))
     {
@@ -312,20 +298,26 @@ if ($email->sendEmail())
     {
         $g_message->setForwardUrl($g_homepage);
     }
-    $g_message->show("mail_send", $err_text, "Hinweis");
-}
-else
-{
-    if (strlen($_POST['rol_id']) > 0)
+    
+    if ($role->getValue("rol_id") > 0)
     {
-        $err_text = "die Rolle $rolle";
+        $g_message->show("mail_send", "die Rolle ". $role->getValue("rol_name"), "Hinweis");
     }
     else
     {
-        $err_text = $_POST['mailto'];
+        $g_message->show("mail_send", $_POST['mailto'], "Hinweis");
     }
-
-    $g_message->show("mail_not_send", $err_text);
+}
+else
+{
+    if ($role->getValue("rol_id") > 0)
+    {
+        $g_message->show("mail_not_send", "die Rolle ". $role->getValue("rol_name"));
+    }
+    else
+    {
+        $g_message->show("mail_not_send", $_POST['mailto']);
+    }
 }
 
 
