@@ -84,8 +84,9 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
    $mem->setValue('mem_begin',$date_begin);
    $mem->setValue('mem_end',$date_end);
    $mem->save();
-   $g_message->setCloseButton();
-   $g_message->show("save", "", "Hinweis", false);
+   $adress=$g_root_path."/adm_program/modules/profile/profile.php?user_id=".$_GET['usr_id'];
+   $g_message->setForwardUrl($adress, 2000);
+   $g_message->show("save");
 
 }
 else
