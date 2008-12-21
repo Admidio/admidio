@@ -99,10 +99,9 @@ if($job=="save")
 		if(strlen($g_current_session->getValue("ses_blob")) > 0)
 		{
 		    //Bilddaten in User-Tabelle schreiben
-		    $sql = "UPDATE ". TBL_USERS. "
-		               SET usr_photo = '". addslashes($g_current_session->getValue("ses_blob")). "'
-		             WHERE usr_id    = $req_usr_id ";
-		    $g_db->query($sql, false);
+		    $user = new TableUsers($g_db, $req_usr_id);
+		    $user->setValue("usr_photo", $g_current_session->getValue("ses_blob"));
+		    $user->save();
 		
 		    $g_current_session->setValue("ses_blob", "");
 		    $g_current_session->setValue("ses_renew", 1);
@@ -259,13 +258,11 @@ elseif($job=="upload")
 		//Bild in PHP-Temp-Ordner übertragen
 		$user_image->copyToFile(null, ($_FILES["bilddatei"]["tmp_name"]));
 		// Foto aus PHP-Temp-Ordner einlesen
-        $user_image_data = addslashes(fread(fopen($_FILES["bilddatei"]["tmp_name"], "r"), $_FILES["bilddatei"]["size"]));
+        $user_image_data = fread(fopen($_FILES["bilddatei"]["tmp_name"], "r"), $_FILES["bilddatei"]["size"]);
         
 		// Zwischenspeichern des neuen Bildes in der Session
-        $sql = "UPDATE ". TBL_SESSIONS. "
-                   SET ses_blob   = '".$user_image_data."'
-                 WHERE ses_usr_id = ". $g_current_user->getValue("usr_id");
-        $result = $g_db->query($sql, false);
+        $g_current_session->setValue("ses_blob", $user_image_data);
+		$g_current_session->save();
 	}
     
     //Image-Objekt löschen	
