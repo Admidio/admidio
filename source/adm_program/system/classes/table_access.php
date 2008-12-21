@@ -183,6 +183,13 @@ class TableAccess
                 {
                     $field_value = strStripTags($field_value);
                 }
+
+                // Daten
+                elseif(strpos($this->columnsInfos[$field_name]['type'], "blob") !== false)
+                {
+                    $field_value = addslashes($field_value);
+                    error_log("blob");
+                }
             }
     
             if(array_key_exists($field_name, $this->dbColumns)
