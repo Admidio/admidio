@@ -78,7 +78,7 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
        }
     }
     else {
-      $date_end = NULL;
+      $date_end = "9999-12-31";
     }
 
    $mem->setValue('mem_begin',$date_begin);

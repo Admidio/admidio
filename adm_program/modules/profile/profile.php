@@ -224,12 +224,27 @@ $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
-    
+
     <script type="text/javascript">
-        function color(name)
+        function infoanzeigen(name)
         {
-            document.getElementById("anzeige").text = "Gesetzt durch:"+ name;
+            document.getElementById("anzeige").firstChild.nodeValue = \'Gesetzt durch: \' + name;
         }
+        function infoanzeigenloeschen()
+        {
+            document.getElementById("anzeige").firstChild.nodeValue = \'\';
+        }
+        function toggleDetailson(role_details_ID)
+        {
+                document.getElementById(role_details_ID).style.visibility = \'visible\';
+                document.getElementById(role_details_ID).style.display    = \'block\';
+        }
+        function toggleDetailsoff(role_details_ID)
+        {
+                document.getElementById(role_details_ID).style.visibility = \'hidden\';
+                document.getElementById(role_details_ID).style.display    = \'none\';
+		  }
+
     </script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -462,7 +477,7 @@ echo '
                                         <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/profile/profile_photo_edit.php?usr_id=$a_user_id\"><img
                                             src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Foto ändern\" title=\"Foto ändern\" /></a>";
                                     //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
-                                    if((strlen($user->getValue("usr_photo")) > 0 && $g_preferences['profile_photo_storage'] == 0) 
+                                    if((strlen($user->getValue("usr_photo")) > 0 && $g_preferences['profile_photo_storage'] == 0)
                                     	|| file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$a_user_id.".jpg") && $g_preferences['profile_photo_storage'] == 1 )
                                     {
                                         echo"
@@ -548,79 +563,79 @@ echo '
             // *******************************************************************************
             // Berechtigungen-Block
             // *******************************************************************************
-            echo "<div class=\"groupBox\" id=\"profile_roles_box\">
+            echo "<div class=\"groupBox\" id=\"profile_roles_box\" >
                      <div class=\"groupBoxHeadline\">
                         <div style=\"float: left;\">Berechtigungen&nbsp;</div>
                      </div>
-                     <div class=\"groupBoxBody\">";
+                     <div class=\"groupBoxBody\" onmouseout=\"infoanzeigenloeschen()\">";
             //checkRolesRight($right)
                if($user->checkRolesRight('rol_assign_roles') == 1)
               {
-                  echo "<img onmouseover=\"color('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
                   alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
               }
               if($user->checkRolesRight('rol_approve_users') == 1)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
                   alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
               }
               if($user->checkRolesRight('rol_edit_user') == 1)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
                   alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
               }
 
               if($user->checkRolesRight('rol_mail_to_all') == 1)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
                   alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
               }
               if($user->checkRolesRight('rol_profile') == 1)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
                   alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
                   alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
                   alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
                   alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
                   alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
                   alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
               }
               if($user->checkRolesRight('rol_guestbook_comments') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
                   alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
               }
               if($user->checkRolesRight('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                   alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_all_lists_view') == 1)
               {
-                  echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
+                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
                   alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
               }
-              echo "</div><div id=\"anzeige\"><p id=\"anzeige\">Gesetzt durch:</p></div>
+              echo "</div><div><p id=\"anzeige\">Gesetzt durch:</p></div>
               </div>";
 
             // *******************************************************************************
@@ -687,15 +702,28 @@ echo '
                                                                     echo "</dt>
                                         <dd>
                                             seit ". mysqldate('d.m.y', $row['mem_begin']);
-                                            if($g_current_user->assignRoles() || $g_current_user->editUsers())
-
+                                            if(($g_current_user->assignRoles() || $g_current_user->editUsers()) && $row['rol_name'] != "Webmaster")
                                             {
+                                                $rol_from = mysqldatetime("d.m.y", $row['mem_begin']);
+                                                $rol_to = NULL;
+                                                if ($row['mem_end'] != "9999-12-31") {
+                                                   $rol_to = mysqldatetime("d.m.y", $row['mem_end']);
+                                                }
                                                 echo "
-                                                <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '".
+                                                   <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '".
                                                 	$row['cat_name']. "', '". mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ")\"><img
                                                     src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>
-                                                    <a class=\"iconLink\" style=\"cursor:pointer;\" onclick=\"window.open('roles_date.php?usr_id=". $user->getValue("usr_id"). "&rol_id=".$row['rol_id']."','Titel','width=350,height=300,left=310,top=200')\"><img
-                                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Datum ändern\" title=\"Datum ändern\" /></a>";
+                                                    <a class=\"iconLink\" style=\"cursor:pointer;\" onclick=\"toggleDetailson(".$row['rol_id'].")\"><img
+                                                    src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Datum ändern\" title=\"Datum ändern\" /></a>
+                                                    </dd></dl></li>
+                                                    <div align= \"right\" id=\"".$row['rol_id']."\" style=\"visibility: hidden; display: none\">
+                                                    <form  action=\"". $g_root_path. "/adm_program/modules/profile/roles_date.php?usr_id=". $user->getValue("usr_id"). "&mode=1&rol_id=".$row['rol_id']."\" method=\"post\">
+                                                                   <label for=\"rol_begin\">Beginn:</label><input type=\"edit\" id=\"rol_begin\" name=\"rol_begin\" size=\"10\" maxlength=\"20\" value=\"".$rol_from."\"/>&nbsp;
+                                                                   <label for=\"rol_end\">Ende:</label><input type=\"edit\" id=\"rol_end\" name=\"rol_end\" size=\"10\" maxlength=\"20\" value=\"".$rol_to."\"/>
+                                                                   <button name=\"save\" type=\"submit\" value=\"Speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" /></button>
+                                                                   <a onclick=\"toggleDetailsoff(".$row['rol_id'].")\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" /></a>
+                                                    </form></div>
+                                                ";
                                             }
                                         echo "</dd>
                                     </dl>
