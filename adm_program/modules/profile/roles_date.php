@@ -49,10 +49,10 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
     /* Formular verarbeiten */
     /***********************************************************************/
    //Check das Beginn Datum
-   if(dtCheckDate($_POST['rol_begin']))
+   if(dtCheckDate($_GET['rol_begin']))
    {
       // Datum formatiert zurueckschreiben
-      $date_arr = explode(".", $_POST['rol_begin']);
+      $date_arr = explode(".", $_GET['rol_begin']);
       $date_from_timestamp = mktime(0,0,0,$date_arr[1],$date_arr[0],$date_arr[2]);
       $date_begin = date("Y-m-d H:i:s", $date_from_timestamp);
     }
@@ -61,11 +61,11 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
         $g_message->show("date_invalid", "Beginn", "Hinweis", false);
     }
     //Falls gesetzt wird das Enddatum gecheckt
-    if($_POST['rol_end'] != '') {
-       if(dtCheckDate($_POST['rol_end']))
+    if($_GET['rol_end'] != '') {
+       if(dtCheckDate($_GET['rol_end']))
       {
          // Datum formatiert zurueckschreiben
-         $date_arr = explode(".", $_POST['rol_end']);
+         $date_arr = explode(".", $_GET['rol_end']);
          $date_from_timestamp = mktime(0,0,0,$date_arr[1],$date_arr[0],$date_arr[2]);
          $date_end = date("Y-m-d H:i:s", $date_from_timestamp);
        }
