@@ -190,7 +190,6 @@ $sql = "ALTER TABLE ". TBL_ROLES. "
 $g_db->query($sql);
 
 //Fototext updaten
-// Texte fuer Systemmails pflegen
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
 $result_orga = $g_db->query($sql);
 while($row_orga = $g_db->fetch_array($result_orga))
