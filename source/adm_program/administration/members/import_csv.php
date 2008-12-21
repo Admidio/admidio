@@ -12,6 +12,7 @@
 require_once("../../system/common.php");
 require_once("../../system/login_valid.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/role_dependency.php");
 
 // setzt die Ausfuehrungszeit des Scripts auf 8 Min., falls viele Daten importiert werden
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
