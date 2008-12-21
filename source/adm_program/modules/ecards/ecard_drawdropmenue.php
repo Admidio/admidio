@@ -35,7 +35,7 @@ if ($g_valid_login && isset($_GET['base']) =="1")
         // im eingeloggten Zustand nur an Rollen schreiben, die die Einstellung besitzen
        $sql    = "SELECT rol_name, rol_id, cat_name 
                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-               WHERE rol_mail_this_role = 2
+               WHERE rol_mail_this_role > 0
                AND rol_valid        = 1
                AND rol_cat_id       = cat_id
                AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
@@ -67,7 +67,7 @@ if ($g_valid_login && isset($_GET['base']) =="1")
             echo '<optgroup label="'.$row->cat_name.'">';
             $act_category = $row->cat_name;
         }
-        if($g_current_user->viewRole($row->rol_id))
+        if($g_current_user->mailRole($row->rol_id))
         {
             echo '<option value='.$row->rol_id.' ';
             if ($row->rol_id == isset($form_values['rol_id']))
