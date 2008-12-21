@@ -232,7 +232,7 @@ $g_layout['header'] = $g_js_vars. '
         }
         function infoanzeigenloeschen()
         {
-            document.getElementById("anzeige").firstChild.nodeValue = \'\';
+            document.getElementById("anzeige").firstChild.nodeValue = \'Gesetzt durch: \';
         }
         function toggleDetailson(role_details_ID)
         {
@@ -563,6 +563,34 @@ echo '
             // *******************************************************************************
             // Berechtigungen-Block
             // *******************************************************************************
+
+            //Array mit allen Berechtigungen
+            $berechtigungen = Array('rol_assign_roles','rol_approve_users','rol_edit_user',
+                                       'rol_mail_to_all','rol_profile','rol_announcements',
+                                       'rol_dates','rol_photo','rol_download','rol_guestbook',
+                                       'rol_guestbook_comments','rol_weblinks','rol_all_lists_view');
+            //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
+            for ($i=0; $i<=12; $i++) {
+               $sql = "SELECT *
+                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_ORGANIZATIONS. "
+                        WHERE mem_rol_id = rol_id
+                          AND mem_begin <= '".DATE_NOW."'
+                          AND mem_end    > '".DATE_NOW."'
+                          AND mem_usr_id = $a_user_id
+                          AND rol_valid  = 1
+                          AND rol_cat_id = cat_id
+                          AND cat_org_id = org_id
+                          AND org_id     = ". $g_current_organization->getValue("org_id"). "
+                          AND ".$berechtigungen[$i]." = 1
+                        ORDER BY org_shortname, cat_sequence, rol_name";
+               $result_role = $g_db->query($sql);
+               $berechtigungs_Herkunft[$berechtigungen[$i]] = NULL;
+
+               while($row = $g_db->fetch_array($result_role))
+               {
+                  $berechtigungs_Herkunft[$berechtigungen[$i]] = $berechtigungs_Herkunft[$berechtigungen[$i]].", ".$row['rol_name'];
+               }
+            }
             echo "<div class=\"groupBox\" id=\"profile_roles_box\" >
                      <div class=\"groupBoxHeadline\">
                         <div style=\"float: left;\">Berechtigungen&nbsp;</div>
@@ -571,68 +599,68 @@ echo '
             //checkRolesRight($right)
                if($user->checkRolesRight('rol_assign_roles') == 1)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_assign_roles'],2)."')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
                   alt=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" title=\"Rollen anlegen, bearbeiten, löschen und zuordnen\" />";
               }
               if($user->checkRolesRight('rol_approve_users') == 1)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_approve_users'],2)."')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
                   alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
               }
               if($user->checkRolesRight('rol_edit_user') == 1)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_edit_user'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
                   alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
               }
 
               if($user->checkRolesRight('rol_mail_to_all') == 1)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_mail_to_all'],2)."')\" class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
                   alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
               }
               if($user->checkRolesRight('rol_profile') == 1)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_profile'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
                   alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_announcements'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
                   alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_dates'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
                   alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_photo'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
                   alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_download'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
                   alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_guestbook'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
                   alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
               }
               if($user->checkRolesRight('rol_guestbook_comments') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_guestbook_comments'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
                   alt=\"Kommentare zu Gästebucheinträgen anlegen\" title=\"Kommentare zu Gästebucheinträgen anlegen\" />";
               }
               if($user->checkRolesRight('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_weblinks'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                   alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
               }
               if($user->checkRolesRight('rol_all_lists_view') == 1)
               {
-                  echo "<img onmouseover=\"infoanzeigen('Webmaster')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
+                  echo "<img onmouseover=\"infoanzeigen('".substr($berechtigungs_Herkunft['rol_all_lists_view'],2)."')\"  class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
                   alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
               }
               echo "</div><div><p id=\"anzeige\">Gesetzt durch:</p></div>
