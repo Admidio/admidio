@@ -78,6 +78,7 @@ if(isset($_SESSION['download_request']))
 else
 {
    $form_values['new_name'] = null;
+   $form_values['new_description'] = null;
 }
 
 //Informationen zur Datei/Ordner aus der DB holen,
@@ -92,6 +93,7 @@ else {
 }
 
 if (is_a($class,'TableFile')) {
+
     if ($class->getValue('fil_id')) {
         $originalName = $class->getValue('fil_name');
     }
@@ -99,14 +101,31 @@ if (is_a($class,'TableFile')) {
         $g_message->show("invalid");
     }
 
+    if ($form_values['new_name'] == null) {
+        $form_values['new_name'] = $originalName;
+    }
+
+    if ($form_values['new_description'] == null) {
+        $form_values['new_description'] = $class->getValue('fil_description');
+    }
+
 }
 else {
-	if ($class->getValue('fol_id')) {
-	        $originalName = $class->getValue('fol_name');
-	    }
-	    else {
-	        $g_message->show("invalid");
-	    }
+
+    if ($class->getValue('fol_id')) {
+        $originalName = $class->getValue('fol_name');
+    }
+    else {
+        $g_message->show("invalid");
+    }
+
+    if ($form_values['new_name'] == null) {
+        $form_values['new_name'] = $originalName;
+    }
+
+    if ($form_values['new_description'] == null) {
+        $form_values['new_description'] = $class->getValue('fol_description');
+    }
 
 }
 
@@ -133,9 +152,17 @@ echo "
                 <dl>
                     <dt><label for=\"new_name\">Neuer Name:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" size=\"25\" tabindex=\"1\" />
+                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" style=\"width: 200px;\" maxlength=\"255\" tabindex=\"1\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
                         <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=dateiname',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"new_description\">Beschreibung:</label></dt>
+                    <dd>
+                        <textarea id=\"new_description\" name=\"new_description\" style=\"width: 200px;\" rows=\"5\" cols=\"40\" tabindex=\"2\" >". $form_values['new_description']. "</textarea>
                     </dd>
                 </dl>
             </li>

@@ -57,6 +57,7 @@ if(isset($_SESSION['download_request']))
 else
 {
    $form_values['new_folder'] = null;
+   $form_values['new_description'] = null;
 }
 
 //Folderobject erstellen
@@ -96,8 +97,16 @@ echo "
                 <dl>
                     <dt><label for=\"new_folder\">Name:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"new_folder\" name=\"new_folder\" value=\"". $form_values['new_folder']. "\" style=\"width: 200px;\" maxlength=\"255\" />
+                        <input type=\"text\" id=\"new_folder\" name=\"new_folder\" value=\"". $form_values['new_folder']. "\" style=\"width: 200px;\" maxlength=\"255\" tabindex=\"1\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
+                    <dt><label for=\"new_description\">Beschreibung:</label></dt>
+                    <dd>
+                        <textarea id=\"new_description\" name=\"new_description\" style=\"width: 200px;\" rows=\"5\" cols=\"40\" tabindex=\"2\" >". $form_values['new_description']. "</textarea>
                     </dd>
                 </dl>
             </li>
