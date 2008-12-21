@@ -76,39 +76,42 @@ if($job=="save")
 {
     /*****************************Bild speichern*************************************/
     
-    //Nachsehen ob fuer den User ein Photo gespeichert war
-    if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg"))
+    if($g_preferences['profile_photo_storage'] == 1)
     {
-		if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg"))
-		{
-			unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
-		}
-		//wenn Ordnerspeicherung Datei umbennen
-		if($g_preferences['profile_photo_storage'] == 1)
-		{
-			rename(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg", SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
-		}
-		//Sonst Bild in Datenbank speichern
-		else
-		{
-			//Nachsehen ob fuer den User ein Photo gespeichert war
-    		if(strlen($g_current_session->getValue("ses_blob")) > 0)
-    		{
-    		    //Bilddaten in User-Tabelle schreiben
-    		    $sql = "UPDATE ". TBL_USERS. "
-    		               SET usr_photo = '". addslashes($g_current_session->getValue("ses_blob")). "'
-    		             WHERE usr_id    = $req_usr_id ";
-    		    $g_db->query($sql, false);
+    	// Bild im Dateisystem speichern
+    
+	    //Nachsehen ob fuer den User ein Photo gespeichert war
+	    if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg"))
+	    {
+			if(file_exists(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg"))
+			{
+				unlink(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
+			}
 			
-    		    $g_current_session->setValue("ses_blob", "");
-    		    $g_current_session->setValue("ses_renew", 1);
-    		    $g_current_session->save();
-       		}
-		}
-		$_SESSION['navigation']->deleteLastUrl();
-    }
+			rename(SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg", SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id.".jpg");
+	    }
+	}
+	else
+	{
+		// Bild in der Datenbank speichern
+
+		//Nachsehen ob fuer den User ein Photo gespeichert war
+		if(strlen($g_current_session->getValue("ses_blob")) > 0)
+		{
+		    //Bilddaten in User-Tabelle schreiben
+		    $sql = "UPDATE ". TBL_USERS. "
+		               SET usr_photo = '". addslashes($g_current_session->getValue("ses_blob")). "'
+		             WHERE usr_id    = $req_usr_id ";
+		    $g_db->query($sql, false);
+		
+		    $g_current_session->setValue("ses_blob", "");
+		    $g_current_session->setValue("ses_renew", 1);
+		    $g_current_session->save();
+   		}
+	}
     
     // zur Ausgangsseite zurueck
+    $_SESSION['navigation']->deleteLastUrl();
     $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
     $g_message->show("profile_photo_update");
 }    
@@ -257,9 +260,10 @@ elseif($job=="upload")
 		$user_image->copyToFile(null, ($_FILES["bilddatei"]["tmp_name"]));
 		// Foto aus PHP-Temp-Ordner einlesen
         $user_image_data = addslashes(fread(fopen($_FILES["bilddatei"]["tmp_name"], "r"), $_FILES["bilddatei"]["size"]));
+        
 		// Zwischenspeichern des neuen Bildes in der Session
         $sql = "UPDATE ". TBL_SESSIONS. "
-                   SET ses_blob   = '$user_image_data'
+                   SET ses_blob   = '".$user_image_data."'
                  WHERE ses_usr_id = ". $g_current_user->getValue("usr_id");
         $result = $g_db->query($sql, false);
 	}
