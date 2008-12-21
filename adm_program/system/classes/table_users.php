@@ -65,15 +65,14 @@ class TableUsers extends TableAccess
     // angefordert wurde und gibt diesen zurueck
     function getValue($field_name, $field_value = "")
     {
+        $field_value = parent::getValue($field_name);
+
         // ist die Create-Id leer, so wurde der Datensatz durch Registierung angelegt und gehoert dem User selber
         if($field_name == "usr_usr_id_create" && strlen($field_value) == 0)
         {
             $field_value = parent::getValue("usr_id");
         }
-        else
-        {
-            $field_value = parent::getValue($field_name);
-        }
+
         return $field_value;
     }
 
