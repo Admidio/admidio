@@ -95,7 +95,7 @@ class TableMembers extends TableAccess
         $this->save();
     }
 
-    // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beginnen
+    // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beenden
     function stopMembership($rol_id, $usr_id)
     {
         if($this->getValue("mem_rol_id") != $rol_id
