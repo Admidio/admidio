@@ -212,9 +212,9 @@ class TableAccess
         }
 
         // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
-        if( isset($this->columnsInfos[$field_name]['type']
-        || strpos($this->columnsInfos[$field_name]['type'], "char") !== false
-        || strpos($this->columnsInfos[$field_name]['type'], "text") !== false)
+        if(isset($this->columnsInfos[$field_name]['type'])
+        && (  strpos($this->columnsInfos[$field_name]['type'], "char") !== false
+           || strpos($this->columnsInfos[$field_name]['type'], "text") !== false))
         {
             return htmlspecialchars($field_value, ENT_QUOTES);
         }
