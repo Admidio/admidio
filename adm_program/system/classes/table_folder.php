@@ -14,10 +14,10 @@
  * folgende Methoden zur Verfuegung:
  *
  * getFolderForDownload($folder_id)
- *                         - Folder mit der uebergebenen ID aus der Datenbank 
+ *                         - Folder mit der uebergebenen ID aus der Datenbank
  *                           fuer das Downloadmodul auslesen
  * getFolderContentsForDownload()
- *                         - Inhalt des aktuellen Ordners, abhaengig von den 
+ *                         - Inhalt des aktuellen Ordners, abhaengig von den
  *                           Benutzerrechten, als Array zurueckliefern
  * ...
  *
@@ -203,13 +203,14 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $completeFolder["folders"][] = array(
-                                'fol_id'        => $row_folders->fol_id,
-                                'fol_name'      => $row_folders->fol_name,
-                                'fol_path'      => $row_folders->fol_path,
-                                'fol_timestamp' => $row_folders->fol_timestamp,
-                                'fol_public'    => $row_folders->fol_public,
-                                'fol_exists'    => $folderExists,
-                                'fol_locked'    => $row_folders->fol_locked
+                                'fol_id'          => $row_folders->fol_id,
+                                'fol_name'        => $row_folders->fol_name,
+                                'fol_description' => $row_folders->fol_description,
+                                'fol_path'        => $row_folders->fol_path,
+                                'fol_timestamp'   => $row_folders->fol_timestamp,
+                                'fol_public'      => $row_folders->fol_public,
+                                'fol_exists'      => $folderExists,
+                                'fol_locked'      => $row_folders->fol_locked
                 );
             }
         }
@@ -254,13 +255,14 @@ class TableFolder extends TableAccess
             if ($addToArray)
             {
                 $completeFolder["files"][] = array(
-                                'fil_id'        => $row_files->fil_id,
-                                'fil_name'      => $row_files->fil_name,
-                                'fil_timestamp' => $row_files->fil_timestamp,
-                                'fil_locked'    => $row_files->fil_locked,
-                                'fil_exists'    => $fileExists,
-                                'fil_size'      => $fileSize,
-                                'fil_counter'   => $row_files->fil_counter
+                                'fil_id'          => $row_files->fil_id,
+                                'fil_name'        => $row_files->fil_name,
+                                'fil_description' => $row_files->fil_description,
+                                'fil_timestamp'   => $row_files->fil_timestamp,
+                                'fil_locked'      => $row_files->fil_locked,
+                                'fil_exists'      => $fileExists,
+                                'fil_size'        => $fileSize,
+                                'fil_counter'     => $row_files->fil_counter
                 );
             }
         }
