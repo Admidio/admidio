@@ -55,7 +55,7 @@ if($g_preferences['profile_photo_storage'] == 1 && $req_new_photo == 0)
 	}
 	$image = new Image($picpath);
 }
-//Bild der Datenbank
+//Bild aus der Datenbank
 elseif($g_preferences['profile_photo_storage'] == 0 && $req_new_photo == 0)
 {
 	$user = new User($g_db, $req_usr_id);
@@ -69,11 +69,17 @@ elseif($g_preferences['profile_photo_storage'] == 0 && $req_new_photo == 0)
     	$image = new Image($picpath);
     }
 }
-//neues Bild
-else
+//neues Bild, Ordnerspeicherung
+elseif($g_preferences['profile_photo_storage'] == 1 && $req_new_photo == 1)
 {
 	$picpath = SERVER_PATH. "/adm_my_files/user_profile_photos/".$req_usr_id."_new.jpg";
 	$image = new Image($picpath);
+}
+//neues Bild, Datenbankspeicherung
+elseif($g_preferences['profile_photo_storage'] == 0 && $req_new_photo == 1)
+{
+   	$image = new Image();
+    $image->setImageFromData(addslashes($g_current_session->getValue("ses_blob")));   
 }
 
 header("Content-Type: ". $image->getMimeType());
