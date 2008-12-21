@@ -189,6 +189,8 @@ if ($req_mode == 1)
         $g_message->show("file_exists","$file_name");
     }
 
+    $file_description = $_POST['new_description'];
+
     // Datei hochladen
     if(move_uploaded_file($_FILES['userfile']['tmp_name'], $targetFolder->getCompletePathOfFolder(). "/$file_name"))
     {
@@ -196,6 +198,7 @@ if ($req_mode == 1)
         $newFile = new TableFile($g_db);
         $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
         $newFile->setValue('fil_name',$file_name);
+        $newFile->setValue('fil_description',$file_description);
         $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
         $newFile->setValue('fil_counter','0');
         $newFile->save();
@@ -213,9 +216,9 @@ if ($req_mode == 1)
 //Datei loeschen
 elseif ($req_mode == 2)
 {
-    if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
+    if (!$file_id)
     {
-        //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
+        //Es muss eine FileID uebergeben werden
         //beides ist auch nicht erlaubt
         $g_message->show("invalid");
     }
@@ -226,7 +229,7 @@ elseif ($req_mode == 2)
         $file->getFileForDownload($file_id);
 
         //Pruefen ob Datensatz gefunden
-        if ($file->getValue('fil_id')) 
+        if ($file->getValue('fil_id'))
         {
             if ($file->delete())
             {
@@ -235,6 +238,8 @@ elseif ($req_mode == 2)
             }
         }
     }
+
+    unset($_SESSION['download_request']);
 }
 
 
@@ -285,6 +290,9 @@ elseif ($req_mode == 3)
         $g_message->show("feld", "Name");
     }
 
+    $newFolderDescription = $_POST['new_description'];
+
+
     //Test ob der Ordner schon existiert im Filesystem
     if (file_exists($targetFolder->getCompletePathOfFolder(). "/$newFolderName")) {
         $g_message->show("folder_exists", $newFolderName);
@@ -303,6 +311,7 @@ elseif ($req_mode == 3)
             $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
             $newFolder->setValue('fol_type', 'DOWNLOAD');
             $newFolder->setValue('fol_name', $newFolderName);
+            $newFolder->setValue('fol_description', $newFolderDescription);
             $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). "/".$targetFolder->getValue('fol_name'));
             $newFolder->setValue('fol_locked', $targetFolder->getValue('fol_locked'));
             $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
@@ -380,8 +389,12 @@ elseif ($req_mode == 4)
             $g_message->show("feld", "Neuer Name");
         }
 
+        $newDescription = $_POST['new_description'];
+
         //Test ob die Datei schon existiert im Filesystem
-        if (file_exists(SERVER_PATH. $file->getValue('fol_path'). "/". $file->getValue('fol_name'). "/$newFile")) {
+        if ($newFile != $file->getValue('fil_name')
+         && file_exists(SERVER_PATH. $file->getValue('fol_path'). "/". $file->getValue('fol_name'). "/$newFile"))
+        {
             $g_message->show("file_exists", $newFile);
         }
         else
@@ -392,6 +405,7 @@ elseif ($req_mode == 4)
             if (rename($oldFile,SERVER_PATH. $file->getValue('fol_path'). "/". $file->getValue('fol_name'). "/$newFile"))
             {
                 $file->setValue('fil_name', $newFile);
+                $file->setValue('fil_description', $newDescription);
                 $file->save();
 
                 $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
@@ -444,8 +458,12 @@ elseif ($req_mode == 4)
             $g_message->show("feld", "Neuer Name");
         }
 
+        $newDescription = $_POST['new_description'];
+
         //Test ob der Ordner schon existiert im Filesystem
-        if (file_exists(SERVER_PATH. $folder->getValue('fol_path'). "/$newFolder")) {
+        if ($newFolder != $folder->getValue('fol_name')
+         && file_exists(SERVER_PATH. $folder->getValue('fol_path'). "/$newFolder"))
+        {
             $g_message->show("folder_exists", $newFolder);
         }
         else
@@ -455,6 +473,7 @@ elseif ($req_mode == 4)
             // Ordner umbenennen im Filesystem und in der Datenbank
             if (rename($oldFolder,SERVER_PATH. $folder->getValue('fol_path'). "/$newFolder"))
             {
+                $folder->setValue('fol_description', $newDescription);
                 $folder->rename($newFolder, $folder->getValue('fol_path'));
 
                 $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
@@ -473,10 +492,9 @@ elseif ($req_mode == 4)
 //Folder loeschen
 elseif ($req_mode == 5)
 {
-    if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
+    if (!$folder_id)
     {
-        //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
-        //beides ist auch nicht erlaubt
+        //Es muss eine FolderId uebergeben werden
         $g_message->show("invalid");
     }
     else if ($folder_id > 0)
@@ -485,7 +503,7 @@ elseif ($req_mode == 5)
         $folder->getFolderForDownload($folder_id);
 
         //Pruefen ob Datensatz gefunden
-        if ($folder->getValue('fol_id')) 
+        if ($folder->getValue('fol_id'))
         {
             if ($folder->delete())
             {
@@ -494,6 +512,8 @@ elseif ($req_mode == 5)
             }
         }
     }
+
+    unset($_SESSION['download_request']);
 }
 
 
