@@ -109,7 +109,7 @@ SELECT usd_usr_id, usd_usf_id, usd_value
 DROP TABLE %PRAEFIX%_user_data_old;
 
 
---neue Spalten in den Tabellen des Downloadmoduls anlegen
+-- neue Spalten in den Tabellen des Downloadmoduls anlegen
 ALTER TABLE %PRAEFIX%_folders ADD COLUMN fol_description text AFTER fol_name;
 ALTER TABLE %PRAEFIX%_files   ADD COLUMN fil_description text AFTER fil_name;
 
