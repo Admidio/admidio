@@ -74,11 +74,6 @@ class TableUsers extends TableAccess
         {
             $field_value = parent::getValue("usr_id");
         }
-        elseif($field_name == "usr_photo")
-        {
-            // beim Profilbild darf spaeter htmlspecialchars nicht aufgerufen werden
-            $field_value = $this->dbColumns[$field_name];
-        }
         else
         {
             $field_value = parent::getValue($field_name);

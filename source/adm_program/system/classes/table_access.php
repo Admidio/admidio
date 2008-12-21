@@ -205,13 +205,14 @@ class TableAccess
         }
 
         // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
-        if(is_numeric($field_value))
+        if(strpos($this->columnsInfos[$field_name]['type'], "char") !== false
+        || strpos($this->columnsInfos[$field_name]['type'], "text") !== false)
         {
-            return $field_value;
+            return htmlspecialchars($field_value, ENT_QUOTES);
         }
         else
         {
-            return htmlspecialchars($field_value, ENT_QUOTES);
+            return $field_value;
         }
     }    
     
