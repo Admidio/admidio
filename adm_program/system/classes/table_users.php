@@ -110,6 +110,8 @@ class TableUsers extends TableAccess
     // die Methode wird innerhalb von delete() aufgerufen
     function delete()
     {
+        $this->db->startTransaction();
+
         $sql    = "UPDATE ". TBL_ANNOUNCEMENTS. " SET ann_usr_id_create = NULL
                     WHERE ann_usr_id_create = ". $this->getValue("usr_id");
         $this->db->query($sql);
@@ -205,7 +207,10 @@ class TableUsers extends TableAccess
         $sql    = "DELETE FROM ". TBL_USER_DATA. " WHERE usd_usr_id = ". $this->getValue("usr_id");
         $this->db->query($sql);
 
-        return parent::delete();
+        $return = parent::delete();
+
+        $this->db->endTransaction();
+        return $return;
     }
 }
 ?>

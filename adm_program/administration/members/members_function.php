@@ -15,7 +15,7 @@
  *       4 - User E-Mail mit neuen Zugangsdaten schicken
  *       5 - Frage, ob Zugangsdaten geschickt werden soll
  *       6 - Frage, ob Mitglied geloescht werden soll
- * user_id - Id des Benutzers, der bearbeitet werden soll
+ * usr_id :  Id des Benutzers, der bearbeitet werden soll
  *
  *****************************************************************************/
 
@@ -41,13 +41,13 @@ if(is_numeric($_GET["mode"]) == false
     $g_message->show("invalid");
 }
 
-if(isset($_GET["user_id"]) && is_numeric($_GET["user_id"]) == false)
+if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
     $g_message->show("invalid");
 }
 
 // nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
-if(isMember($_GET["user_id"]) == true)
+if(isMember($_GET["usr_id"]) == true)
 {
     $this_orga = true;
 }
@@ -67,12 +67,12 @@ if($_GET["mode"] != 1)
                   AND mem_rol_id  = rol_id
                   AND mem_begin  <= '".DATE_NOW."'
                   AND mem_end     > '".DATE_NOW."'
-                  AND mem_usr_id  = ". $_GET['user_id'];
+                  AND mem_usr_id  = ". $_GET['usr_id'];
     $result = $g_db->query($sql);
     $other_orga = $g_db->num_rows($result);
 
     // User-Objekt anlegen
-    $user = new User($g_db, $_GET['user_id']);
+    $user = new User($g_db, $_GET['usr_id']);
 }
 
 if($_GET["mode"] == 1)
@@ -99,9 +99,9 @@ if($_GET["mode"] == 1)
             </p>
             <button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"delete\" type=\"button\" value=\"delete\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Benutzer löschen\" />&nbsp;Löschen</button>
+            <button name=\"delete\" type=\"button\" value=\"delete\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET['usr_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Benutzer löschen\" />&nbsp;Löschen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"former\" type=\"button\" value=\"former\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET['user_id']. "&mode=2'\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Ehemaliger\" />&nbsp;Ehemaliger</button>
+            <button name=\"former\" type=\"button\" value=\"former\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET['usr_id']. "&mode=2'\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Ehemaliger\" />&nbsp;Ehemaliger</button>
         </div>
     </div>";
 
@@ -122,7 +122,7 @@ elseif($_GET["mode"] == 2)
     // User muss zur aktuellen Orga dazugehoeren
     // kein Suizid ermoeglichen
     if($this_orga == false
-    || $g_current_user->getValue("usr_id") == $_GET['user_id'])
+    || $g_current_user->getValue("usr_id") == $_GET['usr_id'])
     {
         $g_message->show("norights");
     }
@@ -137,7 +137,7 @@ elseif($_GET["mode"] == 2)
                AND mem_rol_id = rol_id
                AND mem_begin <= '".DATE_NOW."'
                AND mem_end    > '".DATE_NOW."'
-               AND mem_usr_id = ". $_GET['user_id'];
+               AND mem_usr_id = ". $_GET['usr_id'];
     $result_mgl = $g_db->query($sql);
 
     while($row = $g_db->fetch_array($result_mgl))
@@ -163,7 +163,7 @@ elseif($_GET["mode"] == 3)
     // User darf in keiner anderen Orga aktiv sein
     // kein Suizid ermoeglichen
     if($other_orga > 0
-    || $g_current_user->getValue("usr_id") == $_GET['user_id'])
+    || $g_current_user->getValue("usr_id") == $_GET['usr_id'])
     {
         $g_message->show("norights");
     }
@@ -221,7 +221,7 @@ elseif($_GET["mode"] == 4)
 elseif($_GET["mode"] == 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=4");
+    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=4");
     $g_message->show("send_new_login", $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
 }
 elseif($_GET["mode"] == 6)
@@ -230,14 +230,14 @@ elseif($_GET["mode"] == 6)
     {
         // nur Webmaster duerfen dies
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
-        header("Location: $g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=1");
+        header("Location: $g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=1");
         exit();
     }
     elseif($this_orga == false && $other_orga == 0 && $g_current_user->isWebmaster())
     {
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
-        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=3");
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=3");
         $g_message->addVariableContent($user->getValue("Vorname"). " ". $user->getValue("Nachname"));
         $g_message->addVariableContent($g_current_organization->getValue("org_longname"));
         $g_message->show("delete_user", "", "Löschen");
@@ -245,7 +245,7 @@ elseif($_GET["mode"] == 6)
     else
     {
         // User kann nur aus dieser Orga entfernt werden
-        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?user_id=". $_GET["user_id"]. "&mode=2");
+        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=2");
         $g_message->addVariableContent($user->getValue("Vorname"). " ". $user->getValue("Nachname"));
         $g_message->addVariableContent($g_current_organization->getValue("org_longname"));
         $g_message->show("remove_member", "", "Entfernen");

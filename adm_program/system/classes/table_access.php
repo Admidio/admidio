@@ -188,7 +188,6 @@ class TableAccess
                 elseif(strpos($this->columnsInfos[$field_name]['type'], "blob") !== false)
                 {
                     $field_value = addslashes($field_value);
-                    error_log("blob");
                 }
             }
     
