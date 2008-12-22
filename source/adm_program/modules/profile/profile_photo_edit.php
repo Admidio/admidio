@@ -99,19 +99,19 @@ if($job=="save")
 		if(strlen($g_current_session->getValue("ses_blob")) > 0)
 		{
 		    //Bilddaten in User-Tabelle schreiben
-		    $user = new TableUsers($g_db, $req_usr_id);
 		    $user->setValue("usr_photo", $g_current_session->getValue("ses_blob"));
 		    $user->save();
-		
+
+            // Bild aus Session entfernen und neues Einlesen des Users veranlassen
 		    $g_current_session->setValue("ses_blob", "");
-		    $g_current_session->setValue("ses_renew", 1);
 		    $g_current_session->save();
+            $g_current_session->renewUserObject($req_usr_id);
    		}
 	}
     
     // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
+    $g_message->setForwardUrl($g_root_path."/adm_program/modules/profile/profile.php?user_id=".$req_usr_id, 2000);
     $g_message->show("profile_photo_update");
 }    
 elseif($job=="dont_save")
@@ -129,7 +129,6 @@ elseif($job=="dont_save")
     else
     {
 		$g_current_session->setValue("ses_blob", "");
-    	$g_current_session->setValue("ses_renew", 1);
     	$g_current_session->save();
     }
     // zur Ausgangsseite zurueck
@@ -155,10 +154,11 @@ elseif($job=="delete")
 	{
 	    $user->setValue("usr_photo", "");
 	    $user->save();
+        $g_current_session->renewUserObject($req_usr_id);
 	}
 	    
     // zur Ausgangsseite zurueck
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/profile/profile.php?user_id=$req_usr_id", 2000);
+    $g_message->setForwardUrl($g_root_path."/adm_program/modules/profile/profile.php?user_id=".$req_usr_id, 2000);
     $g_message->show("profile_photo_deleted");
 }
 elseif( isset($_POST["upload"]))
@@ -205,38 +205,38 @@ if($job==NULL)
     $g_layout['title'] = $headline;
     require(THEME_SERVER_PATH. "/overall_header.php");
     
-    echo "
-    <form method=\"post\" action=\"".$g_root_path."/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id=".$req_usr_id."\" enctype=\"multipart/form-data\">
-    <div class=\"formLayout\" id=\"profile_photo_upload_form\">
-        <div class=\"formHead\">".$headline."</div>
-        <div class=\"formBody\">
+    echo '
+    <form method="post" action="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id='.$req_usr_id.'" enctype="multipart/form-data">
+    <div class="formLayout" id="profile_photo_upload_form">
+        <div class="formHead">'.$headline.'</div>
+        <div class="formBody">
             <p>Aktuelles Bild:</p>
-            <img src=\"profile_photo_show.php?usr_id=".$req_usr_id."\" alt=\"Aktuelles Bild\" />
+            <img src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="Aktuelles Bild" />
 			<p>Bitte hier ein neues Bild auswählen:</p>
-            <p><input type=\"file\" id=\"bilddatei\" name=\"bilddatei\" size=\"40\" value=\"durchsuchen\" /></p>
+            <p><input type="file" id="bilddatei" name="bilddatei" size="40" value="durchsuchen" /></p>
 
             <hr />
 
-            <div class=\"formSubmit\">
-                <button name=\"upload\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Speichern\" />&nbsp;Bild Hochladen</button>
+            <div class="formSubmit">
+                <button name="upload" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Speichern" />&nbsp;Bild Hochladen</button>
             </div>
         </div>
     </div>
     </form>
     
-    <ul class=\"iconTextLinkList\">
+    <ul class="iconTextLinkList">
         <li>
-            <span class=\"iconTextLink\">
-                <a href=\"".$g_root_path."/adm_program/system/back.php\"><img 
-                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-                <a href=\"".$g_root_path."/adm_program/system/back.php\">Zurück</a>
+            <span class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
+                src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
             </span>
         </li>
     </ul>
     
-    <script type=\"text/javascript\"><!--
-        document.getElementById(\"bilddatei\").focus();
-    --></script>";    
+    <script type="text/javascript"><!--
+        document.getElementById("bilddatei").focus();
+    --></script>';    
 }
 elseif($job=="upload")
 {
@@ -280,35 +280,35 @@ elseif($job=="upload")
     $g_layout['title'] = $headline;
     require(THEME_SERVER_PATH. "/overall_header.php");    
     
-    echo "
-    <div class=\"formLayout\" id=\"profile_photo_after_upload_form\">
-        <div class=\"formHead\">". $headline. "</div>
-        <div class=\"formBody\">
-            <table style=\"border: none; width: 100%; padding: 5px;\">
-                <tr style=\"text-align: center;\">
+    echo '
+    <div class="formLayout" id="profile_photo_after_upload_form">
+        <div class="formHead">'.$headline.'</div>
+        <div class="formBody">
+            <table style="border: none; width: 100%; padding: 5px;">
+                <tr style="text-align: center;">
                     <td>Aktuelles Bild:</td>
                     <td>Neues Bild:</td>
                 </tr>
-                <tr style=\"text-align: center;\">
-                	<td><img src=\"profile_photo_show.php?usr_id=".$req_usr_id."\" alt=\"Aktuelles Profilbild\" /></td>
-					<td><img src=\"profile_photo_show.php?usr_id=".$req_usr_id."&new_photo=1\" alt=\"Neues Profilbild\" /></td>
+                <tr style="text-align: center;">
+                	<td><img src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="Aktuelles Profilbild" /></td>
+					<td><img src="profile_photo_show.php?usr_id='.$req_usr_id.'&new_photo=1" alt="Neues Profilbild" /></td>
                 </tr>
             </table>
 
             <hr />
             
-            <div class=\"formSubmit\">
-                <button name=\"cancel\" type=\"button\" value=\"abbrechen\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id=".$req_usr_id."'\">
-                    <img src=\"". THEME_PATH. "/icons/error.png\" alt=\"Abbrechen\" />
+            <div class="formSubmit">
+                <button name="cancel" type="button" value="abbrechen" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$req_usr_id.'\'">
+                    <img src="'.THEME_PATH.'/icons/error.png" alt="Abbrechen" />
                     &nbsp;Abbrechen
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button name=\"update\" type=\"button\" value=\"update\" onclick=\"self.location.href='$g_root_path/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id=".$req_usr_id."'\">
-                    <img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Update\" />
-                    &nbsp;Neues Bild &uuml;bernehmen
+                <button name="update" type="button" value="update" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$req_usr_id.'\'">
+                    <img src="'.THEME_PATH.'/icons/database_in.png" alt="Update" />
+                    &nbsp;Neues Bild übernehmen
                 </button>
             </div>
         </div>
-    </div>";
+    </div>';
 }
 
 require(THEME_SERVER_PATH. "/overall_footer.php");

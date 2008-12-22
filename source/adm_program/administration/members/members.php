@@ -478,7 +478,7 @@ if($num_members > 0)
                         && $row['usr_id'] != $g_current_user->getValue("usr_id"))
                         {
                             echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=5\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $row['usr_id']. "&amp;mode=5\"><img
                                 src=\"". THEME_PATH. "/icons/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\"
                                 title=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>";
                         }
@@ -512,7 +512,7 @@ if($num_members > 0)
                         && $row['usr_id'] != $g_current_user->getValue("usr_id"))       // das eigene Profil darf keiner entfernen
                         {
                             echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?user_id=". $row['usr_id']. "&amp;mode=6\"><img
+                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $row['usr_id']. "&amp;mode=6\"><img
                                 src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Benutzer entfernen\" title=\"Benutzer entfernen\" /></a>";
                         }
                         else
