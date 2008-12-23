@@ -123,13 +123,7 @@ if ($user_found >= 1)
         setcookie("admidio_data", $b_auto_login. ";". $g_current_user->getValue("usr_id") , $timestamp_expired, "/", $domain, 0);
 
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
-        $g_current_user->setValue("usr_last_login",   $g_current_user->getValue("usr_actual_login"));
-        $g_current_user->setValue("usr_number_login", $g_current_user->getValue("usr_number_login") + 1);
-        $g_current_user->setValue("usr_actual_login", DATETIME_NOW);
-        $g_current_user->setValue("usr_date_invalid", NULL);
-        $g_current_user->setValue("usr_number_invalid", 0);
-        $g_current_user->b_set_last_change = false;
-        $g_current_user->save();
+        $g_current_user->updateLoginData();
 
         // Parallel im Forum einloggen
         if($g_preferences['enable_forum_interface'])

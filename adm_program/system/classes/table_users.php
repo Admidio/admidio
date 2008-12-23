@@ -10,6 +10,12 @@
  * Diese Klasse dient dazu ein Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
  *
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
+ *
+ * updateLoginData()    - Anzahl Logins hochsetzen, Datum aktualisieren und 
+ *                        ungueltige Logins zuruecksetzen
+ * 
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
@@ -34,6 +40,18 @@ class TableUsers extends TableAccess
         {
             $this->clear();
         }
+    }
+
+    // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
+    function updateLoginData()
+    {
+        $this->setValue("usr_last_login",   $this->getValue("usr_actual_login"));
+        $this->setValue("usr_number_login", $this->getValue("usr_number_login") + 1);
+        $this->setValue("usr_actual_login", DATETIME_NOW);
+        $this->setValue("usr_date_invalid", NULL);
+        $this->setValue("usr_number_invalid", 0);
+        $this->b_set_last_change = false;
+        $this->save();
     }
 
     // alle Klassenvariablen wieder zuruecksetzen

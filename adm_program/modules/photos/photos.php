@@ -87,7 +87,7 @@ if(isset($_GET["locked"]))
 }
 else
 {
-    $locked=NULL;
+    $locked = NULL;
 }
 
 if(!is_numeric($locked) && $locked!=NULL)
@@ -255,7 +255,7 @@ if($g_current_user->editPhotoRight())
     echo "</ul>";
 }
 
-//Anlegender Tabelle
+//Anlegen der Tabelle
 echo "<div class=\"photoModuleContainer\">";
     /*************************THUMBNAILS**********************************/
     //Nur wenn uebergebenes Album Bilder enthaelt
@@ -456,7 +456,7 @@ echo "<div class=\"photoModuleContainer\">";
     // dann einen Trennstrich zeichnen
     if($photo_album->getValue("pho_quantity") > 0 && $albums > 0)
     {
-        echo"<hr />";
+        echo "<hr />";
     }
 
     $ignored=0; //Summe aller zu ignorierender Elemente
@@ -470,7 +470,7 @@ echo "<div class=\"photoModuleContainer\">";
         if((!file_exists($ordner) || $adm_photo_list["pho_locked"]==1) && (!$g_current_user->editPhotoRight()))
         {
             $ignored++;
-            if($x>=$album_element+$ignored-$ignore)
+            if($x >= $album_element+$ignored-$ignore)
                 $ignore++;
         }
     }
@@ -481,54 +481,55 @@ echo "<div class=\"photoModuleContainer\">";
         $g_db->data_seek($result_list, $album_element+$ignored-$ignore);
     }
 
-    //Funktion mit Selbstaufruf zum Erfassen der Bilder in Unteralben
-    function bildersumme($pho_id_parent)
+    // Rekursive Funktion zum Erfassen der Bilder in Unteralben
+    function countImages($adm_photo_album)
     {
         global $g_db;
-        global $bildersumme;
+        $total_images = $adm_photo_album["pho_quantity"];
         
-        $sql = "    SELECT *
-                    FROM ". TBL_PHOTOS. "
-                    WHERE pho_pho_id_parent = $pho_id_parent
-                    AND pho_locked = 0";
+        $sql = "SELECT *
+                  FROM ". TBL_PHOTOS. "
+                 WHERE pho_pho_id_parent = ".$adm_photo_album["pho_id"]."
+                   AND pho_locked = 0";
         $result_child = $g_db->query($sql);
         
         while($adm_photo_child = $g_db->fetch_array($result_child))
         {
-            $bildersumme=$bildersumme+$adm_photo_child["pho_quantity"];
-            bildersumme($adm_photo_child["pho_id"]);
-        };
-    }//function
+            $total_images = $total_images + countImages($adm_photo_child);
+        }
+        return $total_images;
+    }
 
-    //Funktion mit selbstaufruf zum auswaehlen eines Beispielbildes aus einem moeglichst hohen Ordner
-    function beispielbild($pho_id_parent)
+    // Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album
+    function shuffleImage($adm_photo_album)
     {
         global $g_db;
-        global $bsp_pho_id;
-        global $bsp_pic_nr;
-        global $bsp_pic_begin;
-        
-        $sql = "    SELECT *
-                    FROM ". TBL_PHOTOS. "
-                    WHERE pho_pho_id_parent = $pho_id_parent
-                    AND pho_locked   = 0";
-        $result_child = $g_db->query($sql);
-        
-        while($adm_photo_child = $g_db->fetch_array($result_child))
-        {
-            if($adm_photo_child["pho_quantity"]!=0)
-            {
-                $bsp_pic_nr = mt_rand(1, $adm_photo_child["pho_quantity"]);
-                $bsp_pho_id = $adm_photo_child["pho_id"];
-                $bsp_pic_begin = $adm_photo_child["pho_begin"];
-            }
-            else 
-            {
-                beispielbild($adm_photo_child["pho_id"]);
-            }
-        };
-    }//function
+        $shuffle_image = array("shuffle_pho_id" => 0, "shuffle_img_nr" => 0, "shuffle_img_begin" => "");
 
+        if($adm_photo_album["pho_quantity"] > 0)
+        {
+            $shuffle_image["shuffle_img_nr"] = mt_rand(1, $adm_photo_album["pho_quantity"]);
+            $shuffle_image["shuffle_pho_id"] = $adm_photo_album["pho_id"];
+            $shuffle_image["shuffle_img_begin"] = $adm_photo_album["pho_begin"];
+        }
+        else
+        {   
+            // kein Bild vorhanden, dann in einem Unteralbum suchen
+            $sql = "SELECT *
+                      FROM ". TBL_PHOTOS. "
+                     WHERE pho_pho_id_parent = ".$adm_photo_album["pho_id"]."
+                       AND pho_locked = 0
+                     ORDER BY pho_quantity DESC";
+            $result_child = $g_db->query($sql);
+            
+            while($adm_photo_child = $g_db->fetch_array($result_child))
+            {
+                $shuffle_image = shuffleImage($adm_photo_child);
+            }
+        }
+        return $shuffle_image;
+    }
+    
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
     echo "<div class=\"pageNavigation\">".generatePagination($base_url, $albums-$ignored, 10, $album_element, TRUE)."</div>";
@@ -549,35 +550,20 @@ echo "<div class=\"photoModuleContainer\">";
                 echo '<ul class="photoAlbumTable">';
             }
 
-            //Summe der Bilder erfassen und zufaelliges Beispeilbild auswaehlen
-            $bildersumme=$adm_photo_list["pho_quantity"];
-            //Funktion zum Bildersummieren aufrufen
-            bildersumme($adm_photo_list["pho_id"]);
+            // Summe der Bilder ermitteln
+            $bildersumme = countImages($adm_photo_list);
+            
+            // Zufallsbild fuer die Vorschau ermitteln
+            $shuffle_image = shuffleImage($adm_photo_list);
 
-            //Bild aus Album als Vorschau auswaehlen
-            $bsp_pho_id=0;
-            $bsp_pic_nr=0;
-            $bsp_pic_begin=0;
-
-            //sehen ob das Hauptalbum Bilder enthaelt, nur wenn nicht in unterveranst suchen
-            if($adm_photo_list["pho_quantity"]>0)
+            if($shuffle_image["shuffle_pho_id"] > 0)
             {
-                $bsp_pic_nr=mt_rand(1, $adm_photo_list["pho_quantity"]);
-                $bsp_pho_id=$adm_photo_list["pho_id"];
-                $bsp_pic_begin=$adm_photo_list["pho_begin"];
+                //Pfad des Beispielbildes
+                $bsp_pic_path = SERVER_PATH. "/adm_my_files/photos/".$shuffle_image["shuffle_img_begin"]."_".$shuffle_image["shuffle_pho_id"]."/".$shuffle_image["shuffle_img_nr"].".jpg";
             }
-            //Sonst Funktionsaufruf zur Bildauswahl
-            else 
+            else
             {
-                beispielbild($adm_photo_list["pho_id"]);
-            }
-
-            //Pfad des Beispielbildes
-            $bsp_pic_path = SERVER_PATH. "/adm_my_files/photos/".$bsp_pic_begin."_".$bsp_pho_id."/".$bsp_pic_nr.".jpg";
-
-            //Wenn kein Bild gefunden wurde
-            if($bsp_pho_id==0)
-            {
+                //Wenn kein Bild gefunden wurde
                 $bsp_pic_path = THEME_PATH. "/images/nopix.jpg";
             }
 
@@ -586,13 +572,13 @@ echo "<div class=\"photoModuleContainer\">";
             <li id="pho_'.$adm_photo_list["pho_id"].'">
             <dl>
                 <dt>';
-                        if(file_exists($ordner))
-                        {
-    	                    echo '
-    	                    <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$adm_photo_list["pho_id"].'">
-                                <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$bsp_pho_id.'&amp;pic_nr='.$bsp_pic_nr.'&amp;pho_begin='.$bsp_pic_begin.'&amp;scal='.$g_preferences['photo_preview_scale'].'&amp;side=y"
-                                alt="Zufallsbild" /></a>';
-                        }
+                    if(file_exists($ordner))
+                    {
+                        echo '
+                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$adm_photo_list["pho_id"].'">
+                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image["shuffle_pho_id"].'&amp;pic_nr='.$shuffle_image["shuffle_img_nr"].'&amp;pho_begin='.$shuffle_image["shuffle_img_begin"].'&amp;scal='.$g_preferences['photo_preview_scale'].'&amp;side=y"
+                            alt="Zufallsbild" /></a>';
+                    }
                 echo '</dt>
                 <dd>
     				<ul>
@@ -626,7 +612,7 @@ echo "<div class=\"photoModuleContainer\">";
                             echo $adm_photo_list["pho_name"];
                         }
 
-                        echo"</li>
+                        echo "</li>
                             <li>Bilder: ".$bildersumme." </li>
                             <li>Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
                             if($adm_photo_list["pho_end"] != $adm_photo_list["pho_begin"])
@@ -710,7 +696,6 @@ echo "<div class=\"photoModuleContainer\">";
 echo "</div>";
 
 /************************Buttons********************************/
-//Uebersicht
 if($photo_album->getValue("pho_id") > 0)
 {
     echo "

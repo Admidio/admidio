@@ -211,6 +211,8 @@ if($g_preferences['enable_auto_login'] == 1 && isset($_COOKIE['admidio_data']))
             if($auto_login->getValue("atl_usr_id") == $admidio_data[1])
             {
                 $g_current_user->readData($auto_login->getValue("atl_usr_id"));
+                // Logins zaehlen und aktuelles Login-Datum aktualisieren
+                $g_current_user->updateLoginData();                
                 $b_auto_login = true;
             }
             else
