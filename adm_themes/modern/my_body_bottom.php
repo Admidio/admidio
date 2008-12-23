@@ -98,7 +98,7 @@
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/messages/messages.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/list_small.png" alt="Nachrichten" title="Nachrichten" /></a>
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/lists.png" alt="Nachrichten" title="Nachrichten" /></a>
                     <a href="'. $g_root_path. '/adm_program/modules/messages/messages.php">Nachrichten</a>';
                 if ($g_messages->msg > 0 AND $g_valid_login)
                 {
