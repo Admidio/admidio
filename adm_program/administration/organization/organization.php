@@ -863,7 +863,7 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_show_width\">Max. Bildanzeigegröße (Briete x Höhe):</label></dt>
+                            <dt><label for=\"photo_show_width\">Max. Bildanzeigegröße (Breite x Höhe):</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x 
                                 <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\" /> Pixel
@@ -1412,58 +1412,31 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_view_width\">Skalierung Vorschaubild:</label></dt>
-                            <dd>
-                                <table summary=\"Skalierung Vorschaubild\" border=\"0\" cellspacing=\"2\">
-                                    <tr>
-                                        <td>Breite: </td>
-                                        <td>&nbsp;</td>
-                                        <td style=\"padding-left:20px;\">Höhe: </td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-
-                                        <td><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" /></td>
-                                        <td>Pixel</td>
-                                        <td style=\"padding-left:20px;\"><input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" /></td>
-                                        <td>Pixel</td>
-                                    </tr>
-                                </table>
-                             </dd>
+                            <dt><label for=\"ecard_view_width\">Skalierung Vorschaubild (Breite x Höhe):</label></dt>
+                            <dd><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" />
+                                x
+                                <input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" />
+                                Pixel
+                            </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Vorschau-Bildes skaliert werden soll.
-                        (Standardwert: Breite 250 | H&ouml;he 250)
+                        (Standardwert: Breite 250 | Höhe 250)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_card_picture_width\">Skalierung Grußkartenbild:</label></dt>
-                            <dd>
-                                <table summary=\"Skalierung Grußkartenbild\" border=\"0\" cellspacing=\"2\">
-                                    <tr>
-                                        <td>Breite: </td>
-                                        <td>&nbsp;</td>
-                                        <td style=\"padding-left:20px;\">Höhe: </td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
-                                        </td>
-                                        <td>Pixel</td>
-                                        <td style=\"padding-left:20px;\">
-                                          <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" />
-                                        </td>
-                                        <td>Pixel</td>
-                                    </tr>
-                                </table>
+                            <dt><label for=\"ecard_card_picture_width\">Skalierung Grußkartenbild (Breite x Höhe):</label></dt>
+                            <dd><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
+                                x
+                                <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" />
+                                Pixel
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                        Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll.
-                       (Standardwert: Breite 400 | H&ouml;he 250)
+                       (Standardwert: Breite 400 | Höhe 250)
                     </li>
                     <li>
                         <dl>

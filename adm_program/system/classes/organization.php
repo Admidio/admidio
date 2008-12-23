@@ -10,13 +10,6 @@
  * Diese Klasse dient dazu einen Objekt einer Organisation zu erstellen. 
  * Eine Organisation kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Das Objekt wird erzeugt durch Aufruf des Konstruktors und der Uebergabe der
- * aktuellen Datenbankverbindung:
- * $orga = new TblOrganization($g_db);
- *
- * Mit der Funktion readData($shortname) kann die gewuenschte Organisation
- * ausgelesen werden.
- *
  * Folgende Methoden stehen neben den Standardmethoden aus der table_access_class zur Verfuegung:
  *
  * getPreferences()       - gibt ein Array mit allen organisationsspezifischen Einstellungen
@@ -33,9 +26,9 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_organizations.php");
 
-class Organization extends TableAccess
+class Organization extends TableOrganizations
 {
     var $b_check_childs;        // Flag, ob schon nach Kinderorganisationen gesucht wurde
     var $child_orgas = array(); // Array mit allen Kinderorganisationen
@@ -43,37 +36,10 @@ class Organization extends TableAccess
     // Konstruktor
     function Organization(&$db, $organization = "")
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_ORGANIZATIONS;
-        $this->column_praefix = "org";
-        
-        if(strlen($organization) > 0)
-        {
-            $this->readData($organization);
-        }
-        else
-        {
-            $this->clear();
-        }
-    }
-
-    // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
-    function readData($organization)
-    {
-        $condition = "";
-        
-        // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
-        if(is_numeric($organization) == false)
-        {
-            $organization = addslashes($organization);
-            $condition = " org_shortname LIKE '$organization' ";
-        }
-        
-        parent::readData($organization, $condition);
+        $this->TableOrganizations($db, $organization);
     }
     
     // interne Funktion, die spezielle Daten des Organizationobjekts loescht
-    // die Funktion wird innerhalb von clear() aufgerufen
     function clear()
     {
         parent::clear();
