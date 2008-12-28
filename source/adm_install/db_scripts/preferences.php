@@ -120,6 +120,8 @@ $orga_preferences = array(
     // Weblinks
     'enable_weblinks_module'    => '1',
     'weblinks_per_page' 		=> '0',
+	'enable_weblinks_redirect'	=> '0',
+	'weblinks_redirect_seconds'	=> '10',
 
     // Nachrichten
     'enable_messages_module'    => '1',
