@@ -236,12 +236,25 @@ else
     		{
     			echo "<hr />";
     		}
-    		echo "
-    		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
-    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-    		<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+			
+			if($g_preferences['enable_weblinks_redirect'] == 1)
+			{
+				echo "
+	    		<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
+	    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
+	    		<a href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"_blank\">$row->lnk_name</a>
 
-    		<div style=\"margin-top: 10px;\">";
+	    		<div style=\"margin-top: 10px;\">";
+			}
+			else
+			{			
+	    		echo "
+	    		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
+	    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
+	    		<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+
+	    		<div style=\"margin-top: 10px;\">";
+			}
 
     			// wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
     			if ($g_preferences['enable_bbcode'] == 1)

@@ -1941,7 +1941,31 @@ echo "
                         Anzahl der Links die auf einer Seite dargestellt werden. Gibt es mehr Links
                         so kann man zwischen den Links blättern. Bei dem Wert 0 werden alle Links 
                         aufgelistet und die Blättern-Funktion deaktiviert.
-                    </li>                     
+                    </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"enable_weblinks_redirect\">Automatische Weiterleitung (Redirect):</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"enable_weblinks_redirect\" name=\"enable_weblinks_redirect\" ";
+                                if(isset($form_values['enable_weblinks_redirect']) && $form_values['enable_weblinks_redirect'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann die Automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem
+						Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener
+						Zeit wird dann der eigentliche Link aufgerufen.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect für:</label></dt>
+                            <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
+                        </dl>
+                    </li>					
                 </ul>
             </div>
         </div>";
