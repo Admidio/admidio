@@ -38,30 +38,46 @@ elseif($g_preferences['enable_photo_module'] == 2)
 }
 
 // die neuesten 10 Fotoalben aus der DB fischen...
-$sql = "SELECT * FROM ". TBL_PHOTOS. "
-        WHERE ( pho_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-        AND pho_locked = 0)
-        ORDER BY pho_timestamp_create DESC
-        LIMIT 10";
+$sql = "SELECT pho.*,
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+          FROM ". TBL_PHOTOS. " pho
+          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+            ON cre_surname.usd_usr_id = pho_usr_id_create
+           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+            ON cre_firstname.usd_usr_id = pho_usr_id_create
+           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+            ON cha_surname.usd_usr_id = pho_usr_id_change
+           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+            ON cha_firstname.usd_usr_id = pho_usr_id_change
+           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+         WHERE (   pho_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+               AND pho_locked = 0)
+         ORDER BY pho_timestamp_create DESC
+         LIMIT 10";
 $result = $g_db->query($sql);
 
-//Funktion mit selbstaufruf zum erfassen der Bilder in Unteralben
-function bildersumme($pho_id_parent)
+// Rekursive Funktion zum Erfassen der Bilder in Unteralben
+function countImages($adm_photo_album)
 {
     global $g_db;
-    global $bildersumme;
-    $sql = "    SELECT *
-                FROM ". TBL_PHOTOS. "
-                WHERE pho_pho_id_parent = $pho_id_parent
-                AND pho_locked = 0";
+    $total_images = $adm_photo_album["pho_quantity"];
+    
+    $sql = "SELECT *
+              FROM ". TBL_PHOTOS. "
+             WHERE pho_pho_id_parent = ".$adm_photo_album["pho_id"]."
+               AND pho_locked = 0";
     $result_child = $g_db->query($sql);
     
     while($adm_photo_child = $g_db->fetch_array($result_child))
     {
-        $bildersumme=$bildersumme+$adm_photo_child["pho_quantity"];
-        bildersumme($adm_photo_child["pho_id"]);
-    };
-}//function
+        $total_images = $total_images + countImages($adm_photo_child);
+    }
+    return $total_images;
+}
 
 // ab hier wird der RSS-Feed zusammengestellt
 
@@ -69,13 +85,13 @@ function bildersumme($pho_id_parent)
 $rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Fotos", "Die 10 neuesten Fotoalben");
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $g_db->fetch_object($result))
+while ($row = $g_db->fetch_array($result))
 {
     // Die Attribute fuer das Item zusammenstellen
 
     //Titel
     $parents = "";
-    $pho_parent_id = $row->pho_pho_id_parent;
+    $pho_parent_id = $row['pho_pho_id_parent'];
     //Titel muss mit Ordnerstruktur zusammengesetzt werden
     while ($pho_parent_id != NULL)
     {
@@ -92,38 +108,37 @@ while ($row = $g_db->fetch_object($result))
         //Elternveranst
         $pho_parent_id=$adm_photo_parent["pho_pho_id_parent"];
     }
-    $title = "Fotogalerien".$parents."&nbsp;&gt;&nbsp;".$row->pho_name;
+    $title = "Fotogalerien".$parents."&nbsp;&gt;&nbsp;".$row['pho_name'];
 
     //Link
-    $link  = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $row->pho_id;
+    $link  = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=". $row['pho_id'];
 
     //Bildersumme
-    $bildersumme=$row->pho_quantity;
-    bildersumme($row->pho_id);
+    $bildersumme = countImages($row);
 
     //Inhalt zusammensetzen
-    $description = "Fotogalerien".$parents." > ". $row->pho_name;
+    $description = "Fotogalerien".$parents." > ". $row['pho_name'];
     $description = $description. "<br /><br /> Bilder: ".$bildersumme;
-    $description = $description. "<br /> Datum: ".mysqldate("d.m.y", $row->pho_begin);
+    $description = $description. "<br /> Datum: ".mysqldate("d.m.y", $row['pho_begin']);
     //Enddatum nur wenn anders als startdatum
-    if($row->pho_end != $row->pho_begin)
+    if($row['pho_end'] != $row['pho_begin'])
     {
-        $description = $description. " bis ".mysqldate("d.m.y", $row->pho_end);
+        $description = $description. " bis ".mysqldate("d.m.y", $row['pho_end']);
     }
-    $description = $description. "<br />Fotos von: ".$row->pho_photographers;
+    $description = $description. "<br />Fotos von: ".$row['pho_photographers'];
 
     //die letzten fuenf Bilder sollen als Beispiel genutzt werden
-    if($row->pho_quantity >0)
+    if($row['pho_quantity'] >0)
     {
         $description = $description. "<br /><br />Beispielbilder:<br />";
-        for($bild=$row->pho_quantity; $bild>=$row->pho_quantity-4 && $bild>0; $bild--)
+        for($bild=$row['pho_quantity']; $bild>=$row['pho_quantity']-4 && $bild>0; $bild--)
         {
-            $bildpfad = SERVER_PATH. "/adm_my_files/photos/".$row->pho_begin."_".$row->pho_id."/".$bild.".jpg";
+            $bildpfad = SERVER_PATH. "/adm_my_files/photos/".$row['pho_begin']."_".$row['pho_id']."/".$bild.".jpg";
             //Zu Sicherheit noch überwachen ob das Bild existiert, wenn ja raus damit
             if (file_exists($bildpfad))
             {
                 $description = $description. "
-                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$row->pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$row->pho_begin."&amp;scal=100\" border=\"0\" />&nbsp;";
+                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$row['pho_id']."&amp;pic_nr=".$bild."&amp;pho_begin=".$row['pho_begin']."&amp;scal=100\" border=\"0\" />&nbsp;";
             }
         }
     }
@@ -132,18 +147,16 @@ while ($row = $g_db->fetch_object($result))
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
-    $create_user = new User($g_db, $row->pho_usr_id_create);
-    $description = $description. "<br /><br /><i>Angelegt von ". $create_user->getValue("Vorname"). " ". $create_user->getValue("Nachname");
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp_create). "</i>";
+    $description = $description. "<br /><br /><i>Angelegt von ". $row['create_firstname']. ' '. $row['create_surname'].
+								 " am ". mysqldatetime("d.m.y h:i", $row['pho_timestamp_create']). "</i>";
 
-    if($row->pho_usr_id_change > 0)
+    if($row['pho_usr_id_change'] > 0)
     {
-        $user_change = new User($g_db, $row->pho_usr_id_change);
-        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->pho_timestamp_change). "</i>";
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $row['change_firstname']. ' '. $row['change_surname'].
+									 " am ". mysqldatetime("d.m.y h:i", $row['pho_timestamp_change']). "</i>";
     }
 
-    $pubDate = date('r',strtotime($row->pho_timestamp_create));
+    $pubDate = date('r',strtotime($row['pho_timestamp_create']));
 
     // Item hinzufuegen
     $rss->addItem($title, $description, $pubDate, $link);
