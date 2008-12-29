@@ -75,24 +75,7 @@
             <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/profile/profile.php"><img
                 style="vertical-align: middle;" src="'. THEME_PATH. '/icons/profile.png" alt="Mein Profil" title="Mein Profil" /></a>
                 <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php">Mein Profil</a></span>';
-                
-            if( $g_preferences['enable_dates_module'] == 1
-            || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))                    
-            {
-                echo '
-                <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/dates/dates.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/dates.png" alt="Termine" title="Termine" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/dates/dates.php">Termine</a></span>';
-            }
-            if( $g_preferences['enable_weblinks_module'] == 1
-            || ($g_preferences['enable_weblinks_module'] == 2 && $g_valid_login))            
-            {
-                echo '
-                <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/links/links.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/weblinks.png" alt="Weblinks" title="Weblinks" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/links/links.php">Weblinks</a></span>';
-            }
-            
+
             if( $g_preferences['enable_messages_module'] == 1
             || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login))            
             {
@@ -110,6 +93,23 @@
                 }
             }
 
+            if( $g_preferences['enable_dates_module'] == 1
+            || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))                    
+            {
+                echo '
+                <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/dates/dates.php"><img
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/dates.png" alt="Termine" title="Termine" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/dates/dates.php">Termine</a></span>';
+            }
+            if( $g_preferences['enable_weblinks_module'] == 1
+            || ($g_preferences['enable_weblinks_module'] == 2 && $g_valid_login))            
+            {
+                echo '
+                <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/links/links.php"><img
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/weblinks.png" alt="Weblinks" title="Weblinks" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/links/links.php">Weblinks</a></span>';
+            }
+            
             if($g_preferences['enable_forum_interface'])
             {
                 echo '<span class="menu">';

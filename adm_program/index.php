@@ -203,43 +203,8 @@ echo "</ul>
                 </dl>
             </li>";
 
-            if( $g_preferences['enable_dates_module'] == 1
-            || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))
-            {
-                echo "
-                <li>
-                    <dl>
-                        <dt>
-                            <a href=\"$g_root_path/adm_program/modules/dates/dates.php\"><img
-                            src=\"". THEME_PATH. "/icons/dates_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
-                        </dt>
-                        <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
-                            &#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;<br />
-                            <span class=\"smallFontSize\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
-                        </dd>
-                    </dl>
-                </li>";
-            }
 
-            if( $g_preferences['enable_weblinks_module'] == 1
-            || ($g_preferences['enable_weblinks_module'] == 2 && $g_valid_login))
-            {
-                echo "
-                <li>
-                    <dl>
-                        <dt>
-                            <a href=\"$g_root_path/adm_program/modules/links/links.php\"><img
-                            src=\"". THEME_PATH. "/icons/weblinks_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
-                        </dt>
-                        <dd>
-                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
-                            <span class=\"smallFontSize\">Hier können Links zu interessanten Webseiten abgelegt werden.</span>
-                        </dd>
-                    </dl>
-                </li>";
-            }
-            
+
             if( $g_preferences['enable_messages_module'] == 1
             || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login))
             {
@@ -248,7 +213,7 @@ echo "</ul>
                     <dl>
                         <dt>
                             <a href=\"$g_root_path/adm_program/modules/messages/messages.php\"><img
-                            src=\"". THEME_PATH. "/icons/list_big.png\" alt=\"Nachrichten\" title=\"Nachrichten\" /></a>
+                            src=\"". THEME_PATH. "/icons/lists_big.png\" alt=\"Nachrichten\" title=\"Nachrichten\" /></a>
                         </dt>
                         <dd>
                             <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/messages/messages.php\">Nachrichten</a></span>";
@@ -278,6 +243,46 @@ echo "</ul>
                     </dl>
                 </li>";
             }
+
+
+            if( $g_preferences['enable_dates_module'] == 1
+            || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>
+                            <a href=\"$g_root_path/adm_program/modules/dates/dates.php\"><img
+                            src=\"". THEME_PATH. "/icons/dates_big.png\" alt=\"Termine\" title=\"Termine\" /></a>
+                        </dt>
+                        <dd>
+                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/dates/dates.php\">Termine</a></span>&nbsp;&nbsp;
+                            &#91; <a href=\"$g_root_path/adm_program/modules/dates/dates.php?mode=old\">Vergangene Termine</a> &#93;<br />
+                            <span class=\"smallFontSize\">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
+                        </dd>
+                    </dl>
+                </li>";
+            }
+
+
+            if( $g_preferences['enable_weblinks_module'] == 1
+            || ($g_preferences['enable_weblinks_module'] == 2 && $g_valid_login))
+            {
+                echo "
+                <li>
+                    <dl>
+                        <dt>
+                            <a href=\"$g_root_path/adm_program/modules/links/links.php\"><img
+                            src=\"". THEME_PATH. "/icons/weblinks_big.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
+                        </dt>
+                        <dd>
+                            <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/modules/links/links.php\">Weblinks</a></span><br />
+                            <span class=\"smallFontSize\">Hier können Links zu interessanten Webseiten abgelegt werden.</span>
+                        </dd>
+                    </dl>
+                </li>";
+            }
+            
 
             // Wenn das Forum aktiv ist, dieses auch in der Uebersicht anzeigen.
             if($g_preferences['enable_forum_interface'])

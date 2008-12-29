@@ -197,22 +197,16 @@ echo "
         </td>
         <td>
         <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a></span>
+            <a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" title=\"Forum\" /></a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a></span>
         </span>
         </td>
         </tr>
         <tr>
         <td>
         <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" title=\"Forum\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a></span>
-        </span>
-        </td>
-        <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a></span>
+            <a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a></span>
         </span>
         </td>
         <td>
@@ -223,8 +217,8 @@ echo "
         </td>
         <td>
         <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" title=\"Listen\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a></span>
+            <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a></span>
         </span>
         </td>
         <td>
@@ -233,18 +227,30 @@ echo "
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a></span>
         </span>
         </td>
-        </tr>
-        <tr>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('system-mail');\"><img src=\"". THEME_PATH. "/icons/system_mail.png\" alt=\"Systemmails\" title=\"Systemmails\" /></a>
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('system-mail');\">Systemmails</a></span>
         </span>
         </td>
+        </tr>
+        <tr>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" title=\"Listen\" /></a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a></span>
+        </span>
+        </td>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" title=\"Profil\" /></a>
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a></span>
+        </span>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('messages-module');\"><img src=\"". THEME_PATH. "/icons/lists.png\" alt=\"Nachrichten\" title=\"Nachrichten\" /></a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('messages-module');\">Nachrichten</a></span>
         </span>
         </td>
         <td>
@@ -257,12 +263,6 @@ echo "
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a></span>
-        </span>
-        </td>
-        <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('messages-module');\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Nachrichten\" title=\"Nachrichten\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('messages-module');\">Nachrichten</a></span>
         </span>
         </td>
         </tr>
