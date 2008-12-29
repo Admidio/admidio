@@ -148,15 +148,30 @@ else
 }
 
 // Links entsprechend der Einschraenkung suchen
-$sql1 = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
-  		  WHERE lnk_cat_id = cat_id
-		    AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-		    AND cat_type = 'LNK'
-		        $condition
-  		        $hidden
-		  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
-		  LIMIT ". $_GET['start']. ", ". $weblinks_per_page;
-$links_result = $g_db->query($sql1);
+$sql = "SELECT cat.*, lnk.*,
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+          FROM ". TBL_CATEGORIES ." cat, ". TBL_LINKS. " lnk
+          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+            ON cre_surname.usd_usr_id = lnk_usr_id_create
+           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+            ON cre_firstname.usd_usr_id = lnk_usr_id_create
+           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+            ON cha_surname.usd_usr_id = lnk_usr_id_change
+           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+            ON cha_firstname.usd_usr_id = lnk_usr_id_change
+           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+  	     WHERE lnk_cat_id = cat_id
+	       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+		   AND cat_type = 'LNK'
+		       $condition
+  		       $hidden
+		 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
+		 LIMIT ". $_GET['start']. ", ". $weblinks_per_page;
+$links_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen
 
@@ -280,19 +295,17 @@ else
     					<a class=\"iconLink\" href=\"javascript:deleteObject('lnk', 'lnk_".$row->lnk_id."',".$row->lnk_id.",'".$row->lnk_name."')\"><img
     						src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
     				}
-    				$user_create = new User($g_db, $row->lnk_usr_id_create);
-    				echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-    				" am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create);
+    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.
+    				' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create);
 
     				if($row->lnk_usr_id_change > 0)
     				{
-    					$user_change = new User($g_db, $row->lnk_usr_id_change);
-    					echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-    					" am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change);
+    					echo '<br />Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname.
+    					' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change);
     				}
-    			echo "</div>";
+    			echo '</div>';
     		}
-        echo "</div>";
+        echo '</div>';
 
 		$j++;
         $i++;

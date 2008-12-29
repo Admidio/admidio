@@ -64,11 +64,26 @@ if (strlen($organizations) == 0)
 
 
 // die neuesten 10 Annkuedigungen aus der DB fischen...
-$sql = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-        WHERE ( ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-        OR ( ann_global = 1 AND ann_org_shortname IN ($organizations) ))
-        ORDER BY ann_timestamp_create DESC
-        LIMIT 10 ";
+$sql = "SELECT ann.*, 
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+          FROM ". TBL_ANNOUNCEMENTS. " ann
+          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+            ON cre_surname.usd_usr_id = ann_usr_id_create
+           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+            ON cre_firstname.usd_usr_id = ann_usr_id_create
+           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+            ON cha_surname.usd_usr_id = ann_usr_id_change
+           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+            ON cha_firstname.usd_usr_id = ann_usr_id_change
+           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+         WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+               OR ( ann_global = 1 AND ann_org_shortname IN ($organizations) ))
+         ORDER BY ann_timestamp_create DESC
+         LIMIT 10 ";
 $result = $g_db->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
@@ -98,14 +113,12 @@ while ($row = $g_db->fetch_object($result))
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $user = new User($g_db, $row->ann_usr_id_create);
-    $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
+    $description = $description. "<br /><br /><i>Angelegt von ". $row->create_firstname. ' '. $row->create_surname;
     $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp_create). "</i>";
 
     if($row->ann_usr_id_change > 0)
     {
-        $user_change = new User($g_db, $row->ann_usr_id_change);
-        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $row->change_firstname. ' '. $row->change_surname;
         $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->ann_timestamp_change). "</i>";
     }
                 

@@ -41,7 +41,22 @@ if ($g_preferences['enable_bbcode'] == 1)
 }
 
 // alle Links aus der DB fischen...
-$sql = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+$sql = "SELECT cat.*, lnk.*, 
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname 
+          FROM ". TBL_CATEGORIES ." cat, ". TBL_LINKS. " lnk
+          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+            ON cre_surname.usd_usr_id = lnk_usr_id_create
+           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+            ON cre_firstname.usd_usr_id = lnk_usr_id_create
+           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+            ON cha_surname.usd_usr_id = lnk_usr_id_change
+           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+            ON cha_firstname.usd_usr_id = lnk_usr_id_change
+           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
            AND cat_type = 'LNK'
@@ -77,15 +92,13 @@ while ($row = $g_db->fetch_object($result))
     $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
 
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
-    $user = new User($g_db, $row->lnk_usr_id);
-    $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create). "</i>";
+    $description = $description. "<br /><br /><i>Angelegt von ". $row->create_firstname. ' '. $row->create_surname.
+                                 " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create). "</i>";
 
     if($row->lnk_usr_id_change > 0)
     {
-        $user_change = new User($g_db, $row->lnk_usr_id_change);
-        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change). "</i>";
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $row->change_firstname. ' '. $row->change_surname.
+									 " am ". mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change). "</i>";
     }
     
     $pubDate = date('r', strtotime($row->lnk_timestamp_create));

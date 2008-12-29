@@ -37,9 +37,9 @@ class TableAccess
     var $key_name;
     var $db;
     
-    var $new_record;                // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    var $columnsValueChanged;         // Merker ob an den dbColumns Daten was geaendert wurde
-    var $dbColumns = array();       // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+    var $new_record;             // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
+    var $columnsValueChanged;    // Merker ob an den dbColumns Daten was geaendert wurde
+    var $dbColumns = array();    // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
     var $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
 
     // liest den Datensatz von $id ein
@@ -94,8 +94,8 @@ class TableAccess
    function clear()
    {
         $this->columnsValueChanged = false;
-        $this->new_record        = true;
-        $this->record_count      = -1;
+        $this->new_record   = true;
+        $this->record_count = -1;
 
         if(count($this->columnsInfos) > 0)
         {

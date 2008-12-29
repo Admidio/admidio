@@ -264,7 +264,22 @@ else
 }
 
 // nun die Ankuendigungen auslesen, die angezeigt werden sollen
-$sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
+$sql = "SELECT cat.*, dat.*, 
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+          FROM ". TBL_CATEGORIES. " cat, ". TBL_DATES. " dat
+          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+            ON cre_surname.usd_usr_id = dat_usr_id_create
+           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+            ON cre_firstname.usd_usr_id = dat_usr_id_create
+           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+            ON cha_surname.usd_usr_id = dat_usr_id_change
+           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+            ON cha_firstname.usd_usr_id = dat_usr_id_change
+           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
                OR (   dat_global   = 1
@@ -500,21 +515,19 @@ else
                     {
                         echo nl2br($date->getValue("dat_description"));
                     }
-                echo "</div>
-                <div class=\"editInformation\">";
-                    $user_create = new User($g_db, $date->getValue("dat_usr_id_create"));
-                    echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname").
-                    " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_create"));
+                echo '</div>
+                <div class="editInformation">
+                    Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
+                    ' am '. mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_create"));
 
                     if($date->getValue("dat_usr_id_change") > 0)
                     {
-                        $user_change = new User($g_db, $date->getValue("dat_usr_id_change"));
-                        echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname").
-                        " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_change"));
+                        echo '<br />Zuletzt bearbeitet von '. $row['change_firstname']. ' '. $row['change_surname'].
+                        ' am '. mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_change"));
                     }
-                echo "</div>
+                echo '</div>
             </div>
-        </div>";
+        </div>';
     }  // Ende While-Schleife
 }
 

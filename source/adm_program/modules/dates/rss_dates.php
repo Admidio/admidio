@@ -58,15 +58,31 @@ if ($g_valid_login == false)
 }
 
 // aktuelle Termine aus DB holen die zur Orga passen
-$sql = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
-        WHERE dat_cat_id = cat_id
-        AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            OR (   dat_global   = 1
-            AND cat_org_id IN ($organizations) ))
-        AND ( dat_begin >= '".date("Y-m-d h:i:s", time())."' OR dat_end >= '".date("Y-m-d h:i:s", time())."' )
-        ".$hidden."
-        ORDER BY dat_begin ASC
-        LIMIT 10 ";
+$sql = "SELECT cat.*, dat.*, 
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname 
+          FROM ". TBL_CATEGORIES. " cat, ". TBL_DATES. " dat
+          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+            ON cre_surname.usd_usr_id = dat_usr_id_create
+           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+            ON cre_firstname.usd_usr_id = dat_usr_id_create
+           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+            ON cha_surname.usd_usr_id = dat_usr_id_change
+           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
+          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+            ON cha_firstname.usd_usr_id = dat_usr_id_change
+           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+         WHERE dat_cat_id = cat_id
+           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
+               OR (   dat_global  = 1
+                  AND cat_org_id IN ($organizations) ))
+           AND (  dat_begin >= '".date("Y-m-d h:i:s", time())."' 
+               OR dat_end   >= '".date("Y-m-d h:i:s", time())."' )
+               ".$hidden."
+         ORDER BY dat_begin ASC
+         LIMIT 10 ";
 $result = $g_db->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
@@ -76,7 +92,7 @@ $rss  = new RSSfeed("http://". $g_current_organization->getValue("org_homepage")
 $date = new TableDate($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $g_db->fetch_object($result))
+while ($row = $g_db->fetch_array($result))
 {
     // ausgelesene Termindaten in Date-Objekt schieben
     $date->clear();
@@ -130,15 +146,13 @@ while ($row = $g_db->fetch_object($result))
     $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue("dat_id").'&mode=4">Termin in meinen Kalender übernehmen</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $user = new User($g_db, $date->getValue("dat_usr_id_create"));
-    $description = $description. "<br /><br /><i>Angelegt von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
-    $description = $description. " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_create")). "</i>";
+    $description = $description. "<br /><br /><i>Angelegt von ". $row['create_firstname']. ' '. $row['create_surname'].
+     							 " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_create")). "</i>";
 
     if($date->getValue("dat_usr_id_change") > 0)
     {
-        $user_change = new User($g_db, $date->getValue("dat_usr_id_change"));
-        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname");
-        $description = $description. " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_change")). "</i>";
+        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $row['change_firstname']. ' '. $row['change_surname'].
+                                     " am ". mysqldatetime("d.m.y h:i", $date->getValue("dat_timestamp_change")). "</i>";
     }
 
     $pubDate = date('r',strtotime($date->getValue("dat_timestamp_create")));
