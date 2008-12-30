@@ -96,7 +96,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 
                            birthday.bday as birthday,
 			   birthday.bdate,
-			   DATEDIFF(birthday.bdate, NOW()) AS days_to_bdate,
+			   DATEDIFF(birthday.bdate, '".DATETIME_NOW."') AS days_to_bdate,
 			   YEAR(bdate) - YEAR(bday) AS age,
 			   email.usd_value as email,
                            gender.usd_value as gender
@@ -106,25 +106,25 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
 			(SELECT 
 				usd_usr_id,
 				usd_value AS bday,
-				CONCAT(year(NOW()), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)) AS bdate
+				CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)) AS bdate
 				FROM ". TBL_USER_DATA. " bd1
-				WHERE DATEDIFF(CONCAT(year(NOW()), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)), NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future
+				WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
               			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
 		UNION
 			(SELECT 
 				usd_usr_id,
 				usd_value AS bday,
-				CONCAT(year(NOW())-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)) AS bdate
+				CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)) AS bdate
 				FROM ". TBL_USER_DATA. " bd2
-				WHERE DATEDIFF(CONCAT(year(NOW())-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)), NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future
+				WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
               			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
 		UNION
 			(SELECT 
 				usd_usr_id,
 				usd_value AS bday,
-				CONCAT(year(NOW())+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)) AS bdate
+				CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)) AS bdate
 				FROM ". TBL_USER_DATA. " bd3
-				WHERE DATEDIFF(CONCAT(year(NOW())+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)), NOW()) BETWEEN -$plg_show_zeitraum AND $plg_show_future
+				WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
               			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
 		 ) AS birthday
                ON birthday.usd_usr_id = usr_id
