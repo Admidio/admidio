@@ -12,11 +12,7 @@
 /*Die Thumbnails werden in einer Tabelle aufbebaut
 hier koenne Einstellungen fuer diese vorgenommen werden*/
 #photoThumbnailTable {
-    width: 570px;   
-}
-
-/*Einstellung fuer die Thumbnailtabellenzeile, z.B. die Hoehe*/
-.photoThumbnailTableRow{
+    width: 100%;   
 }
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
@@ -34,7 +30,6 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 
 /*Die Fotoalben werden in einer Definitionsliste angezeigt*/
 .photoAlbumTable {
-	width: 550px;
     list-style-type: none;
 }
 
@@ -62,7 +57,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 /*Umramender Container um Thumbnail- und Fotoalbentabelle, sowie Uploadbericht*/
 .photoModuleContainer{
     border: 0px solid #6CA7A8;
-    width: 570px;
+    width: 100%;
     text-align: left;
 }
 
@@ -81,9 +76,5 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 
 /*Informationen ueber den Thumbnails, derzeit nur Datum*/
 #photoAlbumInformation{
-    margin: 5px
-}
-
-.photoModuleContainer .editInformation {
-    text-align: center;
+    margin: 5px 0px 5px 0px;
 }

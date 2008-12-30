@@ -380,8 +380,7 @@ ul.autosuggest li.highlight a:visited  {
 .editInformation{
     font-size:          8pt;
     margin-top:         8px;
-    text-align:         left;
-    color:              #555555;
+    clear:				both;
 }
 
 /*Pflichtfeldmarkierung*/
@@ -393,7 +392,7 @@ ul.autosuggest li.highlight a:visited  {
 
 /*Einstellungen fuer eine Pfadnavigation, z.B. durch die Versanstaltungsherarchie im Fotomodul*/
 .navigationPath{
-    margin:             5px;
+    margin:         	5px 0px 5px 0px;
 }
 
 .navigationPath img{

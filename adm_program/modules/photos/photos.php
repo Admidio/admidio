@@ -363,8 +363,8 @@ echo "<div class=\"photoModuleContainer\">";
                         if($g_preferences['photo_show_mode']==0)
                         {
                             echo '<div>
-                                <img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
-                                    src=\"photo_show.php?pho_id=".$pho_id."&pic_nr=".$bild."&pho_begin=".$photo_album->getValue("pho_begin")."&thumb=true\" alt="$bild" />
+                                <img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
+                                    src="photo_show.php?pho_id='.$pho_id.'&pic_nr='.$bild.'&pho_begin='.$photo_album->getValue("pho_begin").'&thumb=true" alt="'.$bild.'" />
                             </div>';
                         }
 
@@ -372,19 +372,19 @@ echo "<div class=\"photoModuleContainer\">";
                         elseif($g_preferences['photo_show_mode']==1)
                         {
                             echo 
-                            "<div>
-                                <a class=\"thickbox\" href=\"$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$bild."&pho_id=".$pho_id."&KeepThis=true&TB_iframe=true&height=$thickbox_height&width=$thickbox_width\">
-                                	<img src=\"photo_show.php?pho_id=".$pho_id."&pic_nr=".$bild."&pho_begin=".$photo_album->getValue("pho_begin")."&thumb=true\" class=\"photoThumbnail\" alt=\"$bild\" />
+                            '<div>
+                                <a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.$thickbox_height.'&amp;width='.$thickbox_width.'">
+                                	<img class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;thumb=true" alt="'.$bild.'" />
                                 </a>
-                            </div>";
+                            </div>';
                         }
 
                         //Gleichesfenster-Mode
                         elseif($g_preferences['photo_show_mode']==2)
                         {
                             echo '<div>
-                                <img onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&pho_id='.$pho_id.'\'" 
-                                    src=\"photo_show.php?pho_id=".$pho_id."&pic_nr=".$bild."&pho_begin=".$photo_album->getValue("pho_begin")."&thumb=true\" />
+                                <img onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\'" 
+                                    src=\"photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;thumb=true\" />
                             </div>';
                         }   
                         
@@ -413,19 +413,19 @@ echo "<div class=\"photoModuleContainer\">";
         echo '</table>';
 
         // Anleger und Veraendererinfos
-        echo "
-        <div class=\"editInformation\">";
+        echo '
+        <div class="editInformation">';
             $user_create = new User($g_db, $photo_album->getValue("pho_usr_id_create"));
-            echo"Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname")
+            echo "Angelegt von ". $user_create->getValue("Vorname"). " ". $user_create->getValue("Nachname")
             ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp_create"));
             
             if($photo_album->getValue("pho_usr_id_change") > 0)
             {
                 $user_change = new User($g_db, $photo_album->getValue("pho_usr_id_change"));
-                echo"<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname")
+                echo "<br />Zuletzt bearbeitet von ". $user_change->getValue("Vorname"). " ". $user_change->getValue("Nachname")
                 ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp_change"));
             }
-        echo "</div>";
+        echo '</div>';
     }
     /************************Albumliste*************************************/
 

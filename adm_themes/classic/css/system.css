@@ -395,6 +395,7 @@ ul.autosuggest li.highlight a:visited  {
 .editInformation{
     font-size:          8pt;
     margin-top:         8px;
+    clear:				both;
 }
 
 /*Pflichtfeldmarkierung*/
