@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_role.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_roles.php");
 
 class TableFolder extends TableAccess
 {

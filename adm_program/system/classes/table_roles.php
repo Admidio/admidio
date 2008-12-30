@@ -24,10 +24,10 @@
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 
-class TableRole extends TableAccess
+class TableRoles extends TableAccess
 {
     // Konstruktor
-    function TableRole(&$db, $role = "")
+    function TableRoles(&$db, $role = "")
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ROLES;

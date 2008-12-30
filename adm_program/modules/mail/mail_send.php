@@ -15,7 +15,7 @@
 
 require("../../system/common.php");
 require("../../system/classes/email.php");
-require("../../system/classes/table_role.php");
+require("../../system/classes/table_roles.php");
 
 if ($g_preferences['enable_mail_module'] != 1)
 {
@@ -84,7 +84,7 @@ if (empty($_POST))
 $email = new Email();
 
 // und ein Dummy Rollenobjekt dazu
-$role = new TableRole($g_db);
+$role = new TableRoles($g_db);
 
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if(strlen($_POST['name']) == 0)

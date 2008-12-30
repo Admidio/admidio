@@ -18,7 +18,7 @@
 
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require("../../system/classes/table_role.php");
+require("../../system/classes/table_roles.php");
 
 // Uebergabevariablen pruefen
 
@@ -47,7 +47,7 @@ if(!isset($_GET["restrict"]))
 }
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new TableRole($g_db, $role_id);
+$role = new TableRoles($g_db, $role_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen

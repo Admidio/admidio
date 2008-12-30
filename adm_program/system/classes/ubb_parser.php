@@ -274,11 +274,13 @@ class ubbParser
     if(isset($params['align']))
     {
       $s = strtolower($params['align']);
-      if($s == 'left' || $s == 'links') $align = ' align="left"';
-      if($s == 'right' || $s == 'rechts') $align = ' align="right"';
+      /*if($s == 'left' || $s == 'links') $align = ' align="left"';
+      if($s == 'right' || $s == 'rechts') $align = ' align="right"';*/
+      if($s == 'left' || $s == 'links') $align = ' style="float: left;"';
+      if($s == 'right' || $s == 'rechts') $align = ' style="float: right;"';
     }
     $text = $this->valid_url($text) ? $text : '';
-    return '<img'.$height.$width.$align.' src="'.htmlspecialchars($text).'" />';
+    return '<img'.$height.$width.$align.' src="'.htmlspecialchars($text).'" alt="Bild" />';
   }
   function valid_url($href)
   {

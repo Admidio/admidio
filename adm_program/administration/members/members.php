@@ -273,7 +273,7 @@ echo "
 
 <script type=\"text/javascript\">
     var options = {
-                script:\"$g_root_path/adm_program/administration/members/query_suggestions.php?members=$req_members&\",
+                script:\"$g_root_path/adm_program/administration/members/query_suggestions.php?members=$req_members&amp;\",
                 varname:\"query\",
                 minchars:1,
                 timeout:5000
@@ -529,7 +529,7 @@ if($num_members > 0)
     echo "</table>";
 
     // Navigation mit Vor- und Zurueck-Buttons
-    $base_url = "$g_root_path/adm_program/administration/members/members.php?letter=$req_letter&members=$req_members&queryForm=$req_queryForm";
+    $base_url = "$g_root_path/adm_program/administration/members/members.php?letter=$req_letter&amp;members=$req_members&amp;queryForm=$req_queryForm";
     echo generatePagination($base_url, $num_members, $members_per_page, $req_start, TRUE);
 
 }

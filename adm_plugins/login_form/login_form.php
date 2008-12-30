@@ -28,7 +28,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_role.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_roles.php");
 require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -227,7 +227,7 @@ else
                         if($plg_show_email_link)
                         {
                             // Rollenobjekt fuer 'Webmaster' anlegen
-                            $role_webmaster = new TableRole($g_db, 'Webmaster');
+                            $role_webmaster = new TableRoles($g_db, 'Webmaster');
 
                             // Link bei Loginproblemen
                             if($g_preferences['enable_password_recovery'] == 1

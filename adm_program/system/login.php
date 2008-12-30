@@ -10,13 +10,13 @@
  *****************************************************************************/
 
 require("common.php");
-require("classes/table_role.php");
+require("classes/table_roles.php");
 
 // Url merken (wird in cookie_check wieder entfernt)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Rollenobjekt fuer 'Webmaster' anlegen
-$role_webmaster = new TableRole($g_db, 'Webmaster');
+$role_webmaster = new TableRoles($g_db, 'Webmaster');
 
 // Html-Kopf ausgeben
 $g_layout['title']  = "Login";

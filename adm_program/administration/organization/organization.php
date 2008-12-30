@@ -808,7 +808,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_upload_mode\">Uploadmethode:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"photo_show_mode\" name=\"photo_upload_mode\">
+                                <select size=\"1\" id=\"photo_upload_mode\" name=\"photo_upload_mode\">
                                     <option value=\"0\" ";
                                     if($form_values['photo_upload_mode'] == 0)
                                     {
@@ -1867,7 +1867,7 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"dates_show_sel\">Auswahlbox anzeigen:</label></dt>
+                            <dt><label for=\"dates_show_calendar_select\">Auswahlbox anzeigen:</label></dt>
                             <dd>
                                 <input type=\"checkbox\" id=\"dates_show_calendar_select\" name=\"dates_show_calendar_select\" ";
                                 if($form_values['dates_show_calendar_select'] == 1)
