@@ -110,57 +110,58 @@ else
     $g_layout['title'] = $_GET['headline']. " anlegen";
 }
 
-$g_layout['header'] = "
-<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
-<link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />
-<script type=\"text/javascript\">
+$g_layout['header'] = '
+<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+<link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
+<script type="text/javascript"><!--
      //Kontrolliert ob das Anfangsdatum wirklich vor dem Enddatum liegt
 
 
     // Funktion blendet Zeitfelder ein/aus
     function setAllDay()
     {
-        if(document.getElementById('dat_all_day').checked == true)
+        if(document.getElementById("dat_all_day").checked == true)
         {
-            document.getElementById('time_from').style.visibility = 'hidden';
-            document.getElementById('time_from').style.display    = 'none';
-            document.getElementById('time_to').style.visibility = 'hidden';
-            document.getElementById('time_to').style.display    = 'none';
+            document.getElementById("time_from").style.visibility = "hidden";
+            document.getElementById("time_from").style.display    = "none";
+            document.getElementById("time_to").style.visibility = "hidden";
+            document.getElementById("time_to").style.display    = "none";
         }
         else
         {
-            document.getElementById('time_from').style.visibility = 'visible';
-            document.getElementById('time_from').style.display    = '';
-            document.getElementById('time_to').style.visibility = 'visible';
-            document.getElementById('time_to').style.display    = '';
+            document.getElementById("time_from").style.visibility = "visible";
+            document.getElementById("time_from").style.display    = "";
+            document.getElementById("time_to").style.visibility = "visible";
+            document.getElementById("time_to").style.display    = "";
         }
     }
 
     // Funktion belegt das Datum-bis entsprechend dem Datum-Von
     function setDateTo()
     {
-        if(document.getElementById('date_from').value > document.getElementById('date_to').value)
+        if(document.getElementById("date_from").value > document.getElementById("date_to").value)
         {
-            document.getElementById('date_to').value = document.getElementById('date_from').value;
+            document.getElementById("date_to").value = document.getElementById("date_from").value;
         }
     }
 
     var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
-    var bbids = Array(\"b\",\"u\",\"i\",\"big\",\"small\",\"center\",\"url\",\"email\",\"img\");
-    var bbcodes = Array(\"[b]\",\"[/b]\",\"[u]\",\"[/u]\",\"[i]\",\"[/i]\",\"[big]\",\"[/big]\",\"[small]\",\"[/small]\",\"[center]\",\"[/center]\",\"[url=".$g_root_path."]\",\"[/url]\",\"[email=adresse@demo.de]\",\"[/email]\",\"[img]\",\"[/img]\");
-    var bbcodestext = Array(\"text_bold_point.png\",\"text_bold.png\",
-                            \"text_underline_point.png\",\"text_underline.png\",
-                            \"text_italic_point.png\",\"text_italic.png\",
-                            \"text_bigger_point.png\",\"text_bigger.png\",
-                            \"text_smaller_point.png\",\"text_smaller.png\",
-                            \"text_align_center_point.png\",\"text_align_center.png\",
-                            \"link_point.png\",\"link.png\",
-                            \"email_point.png\",\"email.png\",
-                            \"image_point.png\",\"image.png\");
+    var bbids = Array("b","u","i","big","small","center","url","email","img");
+    var bbcodes = Array("[b]","[/b]","[u]","[/u]","[i]","[/i]","[big]","[/big]","[small]","[/small]","[center]","[/center]",
+                        "[url='.$g_root_path.']","[/url]","[email=adresse@demo.de]","[/email]","[img]","[/img]");
+    var bbcodestext = Array("text_bold_point.png","text_bold.png",
+                            "text_underline_point.png","text_underline.png",
+                            "text_italic_point.png","text_italic.png",
+                            "text_bigger_point.png","text_bigger.png",
+                            "text_smaller_point.png","text_smaller.png",
+                            "text_align_center_point.png","text_align_center.png",
+                            "link_point.png","link.png",
+                            "email_point.png","email.png",
+                            "image_point.png","image.png");
 
     function emoticon(text)
     {
-        var txtarea = document.getElementById('dat_description');
+        var txtarea = document.getElementById("dat_description");
 
         if (txtarea.createTextRange && txtarea.caretPos)
         {
@@ -185,14 +186,14 @@ $g_layout['header'] = "
          arrayid = nummer*2;
       }
       emoticon(bbcodes[arrayid]);
-      document.getElementById(bbids[nummer]).src = '". THEME_PATH. "/icons/'+bbcodestext[arrayid];
+      document.getElementById(bbids[nummer]).src = "'.THEME_PATH.'/icons/"+bbcodestext[arrayid];
       vorbelegt[nummer] = !vorbelegt[nummer];
     }
 
     //Funktion schließt alle offnen Tags
     function bbcodeclose()
     {
-       for (var i=0;i<9;i++)
+       for (var i = 0; i < 9; i++)
        {
           if (vorbelegt[i])
           {
@@ -200,9 +201,9 @@ $g_layout['header'] = "
           }
        }
     }
-    var calPopUp = new CalendarPopup(\"calendardiv\");
-    calPopUp.setCssPrefix(\"calendar\");
-</script>";
+    var calPopUp = new CalendarPopup("calendardiv");
+    calPopUp.setCssPrefix("calendar");
+--></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben

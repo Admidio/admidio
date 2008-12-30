@@ -202,7 +202,7 @@ function getFieldCode($field, $user, $new_user)
             if(strlen($g_preferences['default_country']) > 0)
             {
                 $value = $value. '<option value="'. $g_preferences['default_country']. '">'. $g_preferences['default_country']. '</option>
-                <option value="">--------------------------------</option>\n';
+                <option value="">--------------------------------</option>';
             }
 
             $land = trim(fgets($landlist));
@@ -217,7 +217,7 @@ function getFieldCode($field, $user, $new_user)
                      {
                         $value = $value. ' selected="selected" ';
                      }
-                $value = $value. '>'.$land.'</option>\n';
+                $value = $value. '>'.$land.'</option>';
                 $land = trim(fgets($landlist));
             }
         $value = $value. '</select>';
@@ -227,7 +227,7 @@ function getFieldCode($field, $user, $new_user)
         $mode = "";
         if($field->getValue("usd_value") == 1)
         {
-            $mode = "checked";
+            $mode = ' checked="checked" ';
         }
         $value = '<input type="checkbox" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" '.$mode.' '.$readonly.' value="1" />';
     }
@@ -281,7 +281,7 @@ function getFieldCode($field, $user, $new_user)
                 $calObject = "calDate";
             }
             $value .= '
-                    <input type="text" id="usf'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" 
+                    <input type="text" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" 
                         maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />
                     <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:'.$calObject.'.select(document.forms[0].usf'. $field->getValue("usf_id"). ',\'anchor'. $field->getValue("usf_id"). '\',\'dd.MM.yyyy\');" 
                         id="anchor'. $field->getValue("usf_id"). '" style="vertical-align: middle; cursor: pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
@@ -486,7 +486,7 @@ echo "
                             {
                                 echo '<li>
                                     <dl>
-                                        <dt><label for="password">Passwort:</label></dt>
+                                        <dt><label>Passwort:</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
                                                 <a style="cursor:pointer;" href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">

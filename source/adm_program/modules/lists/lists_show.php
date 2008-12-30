@@ -23,7 +23,7 @@
 require("../../system/common.php");
 require("../../system/login_valid.php");
 require("../../system/classes/list_configuration.php");
-require("../../system/classes/table_role.php");
+require("../../system/classes/table_roles.php");
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $arr_mode   = array("csv-ms", "csv-ms-2k", "csv-oo", "html", "print");
@@ -151,7 +151,7 @@ $str_csv   = "";   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Rollenobjekt erzeugen
-$role = new TableRole($g_db, $req_rol_id);
+$role = new TableRoles($g_db, $req_rol_id);
 // falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
 if($role->getValue("rol_valid") == 0)
 {

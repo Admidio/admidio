@@ -56,7 +56,7 @@ require_once(SERVER_PATH. "/adm_program/system/function.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/list_configuration.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_role.php");
+require_once(SERVER_PATH. "/adm_program/system/classes/table_roles.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/table_text.php");
 require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
 
@@ -343,7 +343,7 @@ elseif($req_mode == 6)
     // nun die Default-Rollen anlegen
 
     // Webmaster
-    $role_webmaster = new TableRole($db);
+    $role_webmaster = new TableRoles($db);
     $role_webmaster->setValue("rol_cat_id", $category_common);
     $role_webmaster->setValue("rol_name", "Webmaster");
     $role_webmaster->setValue("rol_description", "Gruppe der Administratoren des Systems");
@@ -365,7 +365,7 @@ elseif($req_mode == 6)
     $role_webmaster->save(0);
 
     // Mitglied
-    $role_member = new TableRole($db);
+    $role_member = new TableRoles($db);
     $role_member->setValue("rol_cat_id", $category_common);
     $role_member->setValue("rol_name", "Mitglied");
     $role_member->setValue("rol_description", "Alle Mitglieder der Organisation");
@@ -375,7 +375,7 @@ elseif($req_mode == 6)
     $role_member->save(0);
 
     // Vorstand
-    $role_management = new TableRole($db);
+    $role_management = new TableRoles($db);
     $role_management->setValue("rol_cat_id", $category_common);
     $role_management->setValue("rol_name", "Vorstand");
     $role_management->setValue("rol_description", "Vorstand des Vereins");
