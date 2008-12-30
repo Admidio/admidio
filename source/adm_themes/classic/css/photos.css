@@ -16,10 +16,6 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
     width: 550px;   
 }
 
-/*Einstellung fuer die Thumbnailtabellenzeile, z.B. die Hoehe*/
-.photoThumbnailTableRow{
-}
-
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
 .photoThumbnailTableColumn{
     text-align: center;
@@ -81,8 +77,4 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 /*Informationen ueber den Thumbnails, derzeit nur Datum*/
 #photoAlbumInformation{
     margin: 5px
-}
-
-.photoModuleContainer .editInformation {
-    text-align: center;
 }
