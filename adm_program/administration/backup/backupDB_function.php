@@ -15,7 +15,7 @@
  *****************************************************************************/
 require("../../system/common.php");
 require("../../system/login_valid.php");
-require_once("backupDB.functions.php");
+require_once("./backupDB.functions.php");
 
 // Some Defines
 
@@ -30,25 +30,12 @@ define('MYSQL_RECONNECT_INTERVAL', 100000);  // disconnect and reconnect to MySQ
 //Some Config
 $fullbackupfilename = 'db_backup.'.date('Y-m-d.Gis').'.sql.gz';
 $backupabsolutepath = SERVER_PATH. "/adm_my_files/backup/"; // make sure to include trailing slash
-$old_backup_file ='';
 
 
 // nur Webmaster duerfen ein Backup starten
 if($g_current_user->isWebmaster() == false)
 {
     $g_message->show("norights");
-}
-
-// das alte Backup finden
-if ($handle = opendir($backupabsolutepath)) {
-
-   while (false !== ($file = readdir($handle))) {
-        if ($file != "." && $file != "..") {
-            $old_backup_file = $backupabsolutepath.$file;
-        }
-    }
-    closedir($handle);
-
 }
 
 $g_layout['title'] = "Datenbank Backup";
@@ -371,7 +358,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 else 
 {
 
-	echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$tempbackupfilename.' for writing!<br><br>';
+	echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$fullbackupfilename.' for writing!<br><br>';
 	if (is_dir($backupabsolutepath)) 
 	{
 		echo '<i>CHMOD 777</i> on the directory ('.htmlentities($backupabsolutepath).') should fix that.';
@@ -384,7 +371,20 @@ else
 }
 
 //Alte Backupdatei löschen
-unlink($old_backup_file);
+if(array_key_exists("oldBackupFile", $_POST))
+{
+    $first_row_title = true;
+	if (is_string($_POST["oldBackupFile"]) == false)
+    {
+        $g_message->show("invalid");
+    }
+	else
+	{
+		$oldBackupFileCP = $backupabsolutepath.basename($_POST["oldBackupFile"]);
+		unlink($oldBackupFileCP);
+	}
+}
+
 
 
 echo '<br>Backup fertiggestellt in '.FormattedTimeRemaining(getmicrotime() - $starttime, 2).'.<br>';
