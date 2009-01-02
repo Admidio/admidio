@@ -408,6 +408,24 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         </dl>
                     </li>";
                 }
+				
+				if($g_current_user->isWebmaster())
+                {
+                    echo "
+                    <li>
+                        <dl>
+                            <dt>
+                                <a href=\"$g_root_path/adm_program/administration/backup/backupDB.php\"><img
+                                src=\"". THEME_PATH. "/icons/options_big.png\" alt=\"Datenbank Backup\" title=\"Datenbank Backup\" /></a>
+                            </dt>
+                            <dd>
+                                <span class=\"veryBigFontSize\"><a href=\"$g_root_path/adm_program/administration/backup/backupDB.php\">Datenbank Backup</a></span><br />
+                                <span class=\"smallFontSize\">Ein Backup der Admidio Tabellen in der Datenbank kann hier erstellt werden.</span>
+                            </dd>
+                        </dl>
+                    </li>";
+                }
+
             echo "
             </ul>
         </div>
