@@ -14,6 +14,7 @@
  *****************************************************************************/
 
 require("../../system/common.php");
+require("../../system/login_valid.php");
 
 // nur Webmaster duerfen ein Backup runterladen
 if($g_current_user->isWebmaster() == false)
@@ -40,7 +41,7 @@ else
 $backupabsolutepath = SERVER_PATH. "/adm_my_files/backup/"; // make sure to include trailing slash
 
 //kompletten Pfad der Datei holen
-$completePath = $backupabsolutepath.$filename;
+$completePath = $backupabsolutepath.$_GET["filename"];
 
 
 //pruefen ob File ueberhaupt physikalisch existiert
@@ -55,7 +56,7 @@ $fileSize   = filesize($completePath);
 // Passenden Datentyp erzeugen.
 header("Content-Type: application/octet-stream");
 header("Content-Length: $fileSize");
-header("Content-Disposition: attachment; filename=\"". $filename. "\"");
+header("Content-Disposition: attachment; filename=\"". $_GET["filename"]. "\"");
 // noetig fuer IE6, da sonst pdf und doc nicht direkt geoeffnet werden kann
 header('Cache-Control: private');
 header('Pragma: public');

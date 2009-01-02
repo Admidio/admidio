@@ -15,6 +15,7 @@
  *****************************************************************************/
 require("../../system/common.php");
 require("../../system/login_valid.php");
+require("../../system/classes/htaccess.php");
 require_once('backupDB.functions.php');
 
 
@@ -33,7 +34,12 @@ if(!file_exists($backupabsolutepath))
     chmod($backupabsolutepath, 0777);
 }
 
+$protection = new Htaccess(SERVER_PATH. "/adm_my_files");
+$protection->protectFolder();
+
 $last_backup_file = '';
+$last_backup_file_cp = '';
+
 
 //Zeitpunkt des letzten Backups bestimmen
 if ($handle = opendir($backupabsolutepath)) 
@@ -42,7 +48,8 @@ if ($handle = opendir($backupabsolutepath))
 	{
         if ($file != "." && $file != "..") 
 		{
-            $last_backup_file = $backupabsolutepath.$file;
+            $last_backup_file = $file;
+			$last_backup_file_cp = $backupabsolutepath.$file;
         }
     }
     closedir($handle);	
@@ -54,14 +61,25 @@ echo "
 <h1 class=\"moduleHeadline\">Datenbank Backup</h1>";
 
 flush();
-
-echo "Das letzte Backup ist vom ". date ("d.m.Y G:i:s", filemtime($last_backup_file))."<br/>";
+if(strlen($last_backup_file) > 0 )
+{
+	echo "Das letzte Backup ist vom ". date ("d.m.Y G:i:s", filemtime($last_backup_file_cp)).":<br/>";
+	echo "<a href=\"$g_root_path/adm_program/administration/backup/get_backup_file.php?filename=$last_backup_file\"><b>$last_backup_file</b></a><br/><br/>";
+}
+else
+{
+	echo "Es wurde kein altes Backup gefunden!<br/>";
+}
 echo "Neues Backup starten!";
 
 
 echo "<form action=\"$g_root_path/adm_program/administration/backup/backupDB_function.php\" method=\"post\">";
-echo '<input type="submit" value="Go">';
-echo '</form>';
+if(strlen($last_backup_file) > 0)
+{
+	echo "<input type=\"hidden\" name=\"oldBackupFile\" value=\"$last_backup_file\">";
+}
+echo "<input type=\"submit\" value=\"Go\">";
+echo "</form>";
 
 
 

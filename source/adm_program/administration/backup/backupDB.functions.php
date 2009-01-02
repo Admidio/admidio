@@ -14,6 +14,13 @@
  *
  *****************************************************************************/
 
+if (!function_exists('getmicrotime')) {
+	function getmicrotime() {
+		list($usec, $sec) = explode(' ', microtime());
+		return ((float) $usec + (float) $sec);
+	}
+}
+
 function FormattedTimeRemaining($seconds, $precision=1) {
 	if ($seconds > 86400) {
 		return number_format($seconds / 86400, $precision).' days';
