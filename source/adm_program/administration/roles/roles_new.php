@@ -91,15 +91,15 @@ else
     $role->setValue("rol_this_list_view", "1");
     $role->setValue("rol_mail_this_role", "2");
 }
-$g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
-    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />
-    <script type=\"text/javascript\"><!--
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+    <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />
+    <script type="text/javascript"><!--
         // Rollenabhaengigkeiten markieren
         function hinzufuegen()
         {
-            var child_roles = document.getElementById('ChildRoles');
-            var all_roles   = document.getElementById('AllRoles');
+            var child_roles = document.getElementById("ChildRoles");
+            var all_roles   = document.getElementById("AllRoles");
             
             if(all_roles.selectedIndex >= 0)
             {
@@ -111,8 +111,8 @@ $g_layout['header'] = "
 
         function entfernen()
         {
-            var child_roles = document.getElementById('ChildRoles');
-            var all_roles   = document.getElementById('AllRoles');
+            var child_roles = document.getElementById("ChildRoles");
+            var all_roles   = document.getElementById("AllRoles");
             
             if(child_roles.selectedIndex >= 0)
             {
@@ -124,7 +124,7 @@ $g_layout['header'] = "
 
         function absenden()
         {
-            var child_roles = document.getElementById('ChildRoles');
+            var child_roles = document.getElementById("ChildRoles");
             
             for (var i = 0; i < child_roles.options.length; i++)
             {
@@ -139,14 +139,14 @@ $g_layout['header'] = "
         {
         
             // Alle abhängigen Rollen werden für die Darstellung gesichert
-            var child_roles = document.getElementById('ChildRoles');
+            var child_roles = document.getElementById("ChildRoles");
         
             //Wenn eine Maximale Mitgliederzahl angeben wurde, düren keine Rollenabhängigkeiten bestehem         
             if(inputValue > 0)
             {
                 // Die Box zum konfigurieren der Rollenabhängig wird ausgeblendet
-                document.getElementById('dependancies_box').style.visibility = 'hidden';
-                document.getElementById('dependancies_box').style.display    = 'none';
+                document.getElementById("dependancies_box").style.visibility = "hidden";
+                document.getElementById("dependancies_box").style.display    = "none";
 
                 // Alle Abhängigen Rollen werden markiert und auf unabhängig gesetzt
                 for (var i = 0; i < child_roles.options.length; i++)
@@ -155,7 +155,7 @@ $g_layout['header'] = "
                 }
                 entfernen();
                 
-                alert('Achtung! Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.');
+                alert("Achtung! Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.");
                 
             }
             else
@@ -169,8 +169,8 @@ $g_layout['header'] = "
                 hinzufuegen();
             
                 // Die Box zum konfigurieren der Rollenabhängigkeit wird wieder eingeblendet
-                document.getElementById('dependancies_box').style.visibility = 'visible';
-                document.getElementById('dependancies_box').style.display    = '';
+                document.getElementById("dependancies_box").style.visibility = "visible";
+                document.getElementById("dependancies_box").style.display    = "";
                 
                 
             }
@@ -197,9 +197,9 @@ $g_layout['header'] = "
         }
                 
         // Calendarobjekt fuer das Popup anlegen
-        var cal18 = new CalendarPopup(\"calendardiv\");
-        cal18.setCssPrefix(\"calendar\");
-    --></script>";
+        var calPopup = new CalendarPopup("calendardiv");
+        calPopup.setCssPrefix("calendar");
+    --></script>';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -566,47 +566,49 @@ echo "
                             </div>
                         </li>";
                     }
-                echo "</ul>
+                echo '</ul>
             </div>
         </div>
 
-        <div class=\"groupBox\" id=\"dates_box\" style=\"width: 90%;\">
-            <div class=\"groupBoxHeadline\" id=\"dates_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dates_body','". THEME_PATH. "')\"><img 
-                id=\"img_dates_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
+        <div class="groupBox" id="dates_box" style="width: 90%;">
+            <div class="groupBoxHeadline" id="dates_head">
+                <a class="iconShowHide" href="javascript:showHideBlock(\'dates_body\',\''.THEME_PATH.'\')"><img 
+                	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="ausblenden" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
-            <div class=\"groupBoxBody\" id=\"dates_body\">        
-                <ul class=\"formFieldList\">
+            <div class="groupBoxBody" id="dates_body">        
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"rol_start_date\">Gültig von:</label></dt>
+                            <dt><label for="rol_start_date">Gültig von:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"rol_start_date\" name=\"rol_start_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_start_date"). "\" />
-                                <img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_start_date,'ico_cal_date_from','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-                                <label for=\"rol_end_date\">bis</label>
-                                <input type=\"text\" id=\"rol_end_date\" name=\"rol_end_date\" size=\"10\" maxlength=\"10\" value=\"". $role->getValue("rol_end_date"). "\" />
-                                <img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:cal18.select(document.forms[0].rol_end_date,'ico_cal_date_to','dd.MM.yyyy','rol_start_date','rol_end_date');\"  style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />&nbsp;(Datum)
-                                <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
+                                <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue("rol_start_date").'" />
+                                <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img 
+                                	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                                <label for="rol_end_date">bis</label>
+                                <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue("rol_end_date").'" />
+                                <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img 
+                                	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>&nbsp;(Datum)
+                                <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"rol_start_time\">Uhrzeit:</label></dt>
+                            <dt><label for="rol_start_time">Uhrzeit:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"rol_start_time\" name=\"rol_start_time\" size=\"5\" maxlength=\"5\" value=\"". $role->getValue("rol_start_time"). "\" />
-                                <label for=\"rol_end_time\">bis</label>
-                                <input type=\"text\" id=\"rol_end_time\" name=\"rol_end_time\" size=\"5\" maxlength=\"5\" value=\"". $role->getValue("rol_end_time"). "\" />
+                                <input type="text" id="rol_start_time" name="rol_start_time" size="5" maxlength="5" value="'.$role->getValue("rol_start_time").'" />
+                                <label for="rol_end_time">bis</label>
+                                <input type="text" id="rol_end_time" name="rol_end_time" size="5" maxlength="5" value="'.$role->getValue("rol_end_time").'" />
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"rol_weekday\">Wochentag:</label></dt>
+                            <dt><label for="rol_weekday">Wochentag:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"rol_weekday\" name=\"rol_weekday\">
-                                <option value=\"0\"";
+                                <select size="1" id="rol_weekday" name="rol_weekday">
+                                <option value="0"';
                                 if($role->getValue("rol_weekday") == 0)
                                 {
                                     echo " selected=\"selected\"";

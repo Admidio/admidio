@@ -149,8 +149,8 @@ $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
     <script type="text/javascript">
-        var calPopUp = new CalendarPopup("calendardiv");
-        calPopUp.setCssPrefix("calendar");
+        var calPopup = new CalendarPopup("calendardiv");
+        calPopup.setCssPrefix("calendar");
     </script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -213,8 +213,8 @@ echo "
                     <dt><label for="pho_begin">Beginn:</label></dt>
                     <dd>
                         <input type="text" id="pho_begin" name="pho_begin" size="10" tabindex="3" maxlength="10" value="'. $photo_album->getValue("pho_begin").'" />
-                        <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:calPopUp.select(document.forms[0].pho_begin,\'ico_cal_pho_begin\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\'); " 
-                            id="ico_cal_pho_begin" style="vertical-align:middle; cursor:pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
+                        <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\');"><img 
+                        	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                         <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
@@ -225,8 +225,8 @@ echo "
                     <dt><label for="pho_end">Ende:</label></dt>
                     <dd>
                         <input type="text" id="pho_end" name="pho_end" size="10" tabindex="4" maxlength="10" value="'. $photo_album->getValue("pho_end").'">
-                        <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:calPopUp.select(document.forms[0].pho_end,\'ico_cal_pho_end\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\');" 
-                            id="ico_cal_pho_end" style="vertical-align:middle; cursor:pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
+                        <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\');"><img 
+                        	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                     </dd>
                 </dl>
             </li>';
