@@ -135,12 +135,12 @@ else
                 <button name="save" type="submit" value="Speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
             </div>
         </div>
-    </form>';
-/*
+    </form>
+
     <script type="text/javascript"><!--
         document.getElementById(\'old_password\').focus();
     --></script>';
-  */      
+      
     require(THEME_SERVER_PATH. "/overall_footer.php");
 }
 
