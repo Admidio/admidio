@@ -492,9 +492,9 @@ echo "
                                         <dt><label>Passwort:</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
-                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&KeepThis=true&TB_iframe=true&height=300&width=350"><img 
+                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350"><img 
                                                 	src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
-                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&KeepThis=true&TB_iframe=true&height=300&width=350">Passwort ändern</a>
+                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350">Passwort ändern</a>
                                             </span>
                                         </dd>
                                     </dl>

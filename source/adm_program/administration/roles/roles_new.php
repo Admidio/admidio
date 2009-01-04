@@ -710,7 +710,7 @@ echo "
                         <div>
                             <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/ok.png\" alt=\"abh&auml;ngig\" title=\"abh&auml;ngig\" />abh&auml;ngig</div>
                             <div>
-                                <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple style=\"width: 200px;\">";
+                                <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple=\"multiple\" style=\"width: 200px;\">";
                                     foreach ($childRoleObjects as $childRoleObject)
                                     {
                                         echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
