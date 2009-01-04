@@ -88,8 +88,8 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 if($_GET["mode"] == 1 && $g_preferences['photo_upload_mode'] <> 1)
 {
 	echo '
-	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '" enctype="multipart/form-data">
 	<div class="formLayout" id="photo_upload_form">
+	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '" enctype="multipart/form-data">
 	    <div class="formHead">Bilder hochladen</div>
 	    <div class="formBody">
 	        <p>
