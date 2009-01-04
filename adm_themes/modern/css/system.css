@@ -322,6 +322,14 @@ ul.autosuggest li.highlight a:visited  {
     vertical-align:     top;
 }
 
+/*Iconlinkliste die neben einer Überschrift steht*/
+.iconLinkListInline {
+	list-style-position: inside;
+	list-style-type:    none;
+	float: 				right;
+	padding-top:        7px;
+}
+
 /* Iconlinks um Funktionen aufzurufen (ohne Text) in vertikaler Anordnung*/
 .verticalIconList ul{
     padding-left:       0px;

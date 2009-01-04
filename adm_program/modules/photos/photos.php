@@ -54,6 +54,13 @@ if ($pho_id == NULL)
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
+//Modulüberschrift
+$req_headline = "Fotogalerien";
+if(isset($_GET['headline']))
+{
+    $req_headline = strStripTags($_GET["headline"]);
+}
+
 //aktuelle album_element
 if(array_key_exists("start", $_GET))
 {
@@ -148,15 +155,8 @@ if($locked=="1" || $locked=="0")
 
 /*********************HTML_TEIL*******************************/
 
-// Header-Variablen befuellen
-if($pho_id > 0)
-{
-    $g_layout['title'] = $photo_album->getValue("pho_name");
-}
-else
-{
-    $g_layout['title'] = "Fotogalerien";
-}
+$g_layout['title'] = $req_headline;
+
 $g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>';
 
 if($g_preferences['enable_rss'] == 1)
@@ -188,6 +188,35 @@ $g_layout['header'] = $g_layout['header']. '
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. "/overall_header.php");
 
+
+//bei Seitenaufruf mit Moderationsrechten
+if($g_current_user->editPhotoRight())
+{
+    echo "<span class=\"iconLinkListInline\">
+    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id=$pho_id\">
+    	<img src=\"". THEME_PATH. "/icons/add.png\" alt=\"Album anlegen\" title=\"Album anlegen\" />
+    </a>";
+        
+    if($pho_id > 0)
+    {
+        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
+        {
+	        echo "
+	        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&amp;mode=1\">
+	        	<img src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Einzelbilder hochladen\" title=\"Einzelbilder hochladen\"/>
+	        </a>";
+        }
+        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
+        {
+	        echo "
+	        <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&amp;mode=2\">
+	        	<img src=\"". THEME_PATH. "/icons/photo_upload_multi.png\" alt=\"Komfortupload\" title=\"Komfortupload\"/>
+	        </a>";
+        }
+    }
+    echo "</span>";
+}
+
 //Ueberschift
 echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
@@ -215,44 +244,8 @@ if($pho_id > 0)
     echo "<div class=\"navigationPath\">
             <a href=\"$g_root_path/adm_program/modules/photos/photos.php\"><img src=\"". THEME_PATH. "/icons/application_view_tile.png\" alt=\"Fotogalerien\" /></a>
             <a href=\"$g_root_path/adm_program/modules/photos/photos.php\">Fotogalerien</a>$navilink
+            &nbsp;&gt;&nbsp;".$photo_album->getValue("pho_name")."         
         </div>";
-}
-
-//bei Seitenaufruf mit Moderationsrechten
-if($g_current_user->editPhotoRight())
-{
-    echo"<ul class=\"iconTextLinkList\">
-            <li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id=$pho_id\"><img
-                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Album anlegen\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id=$pho_id\">Album anlegen</a>
-                </span>
-            </li>";
-        if($pho_id > 0)
-        {
-            if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
-            {
-	            echo "<li>
-	                <span class=\"iconTextLink\">
-	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&amp;mode=1\"><img
-	                         src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Einzelbilder hochladen\" /></a>
-	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&amp;mode=1\">Einzelbilder hochladen</a>
-	                </span>
-	            </li>";
-            }
-            if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
-            {
-	            echo "<li>
-	                <span class=\"iconTextLink\">
-	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&amp;mode=2\"><img
-	                         src=\"". THEME_PATH. "/icons/photo_upload_multi.png\" alt=\"Komfortupload\" /></a>
-	                    <a href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=$pho_id&amp;mode=2\">Komfortupload</a>
-	                </span>
-	            </li>";
-            }
-        }
-    echo "</ul>";
 }
 
 //Anlegen der Tabelle
@@ -350,15 +343,6 @@ echo "<div class=\"photoModuleContainer\">";
         	}
 		}
         
-        //Datum des Albums
-        echo "<div id=\"photoAlbumInformation\">
-            Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
-            if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin"))
-            {
-                echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
-            }
-        echo "</div>";
-
 		//Seitennavigation
         photoAlbumPageNavigation($photo_album);
             
@@ -427,6 +411,20 @@ echo "<div class=\"photoModuleContainer\">";
             }//for
         echo '</table>';
 
+		//Seitennavigation
+        photoAlbumPageNavigation($photo_album);
+
+        //Datum des Albums
+        echo "<div class=\"editInformation\" id=\"photoAlbumInformation\">
+            Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
+            if($photo_album->getValue("pho_end") != $photo_album->getValue("pho_begin"))
+            {
+                echo " bis ".mysqldate("d.m.y", $photo_album->getValue("pho_end"));
+            }
+        echo "
+        	<br />Fotos von: ".$photo_album->getValue("pho_photographers")."
+        </div>";
+
         // Anleger und Veraendererinfos
         echo '
         <div class="editInformation">';
@@ -441,9 +439,6 @@ echo "<div class=\"photoModuleContainer\">";
                 ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp_change"));
             }
         echo '</div>';
-        
-        //Seitennavigation
-        photoAlbumPageNavigation($photo_album);
     }
     /************************Albumliste*************************************/
 
@@ -643,37 +638,37 @@ echo "<div class=\"photoModuleContainer\">";
                             //bei Moderationrecheten
                             if ($g_current_user->editPhotoRight())
                             {
-                                echo"<li>";
+                                echo "<li>";
 
                                 if(file_exists($ordner))
                                 {
                                     if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
                                     {
-    	                                echo"
+    	                                echo "
     	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."&amp;mode=1\"><img 
     	                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Einzelbilder hochladen\" title=\"Einzelbilder hochladen\" /></a>";
                                     }
                                     
                                     if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 1)
                                     {
-    	                                echo"
+    	                                echo "
     	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."&amp;mode=2\"><img 
     	                                    src=\"". THEME_PATH. "/icons/photo_upload_multi.png\" alt=\"Komfortupload\" title=\"Komfortupload\" /></a>";
                                     }
                                     
-                                    echo"
+                                    echo "
     								<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?pho_id=".$adm_photo_list["pho_id"]."&amp;job=change\"><img 
                                         src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
     	                            
                                     if($adm_photo_list["pho_locked"]==1)
     	                            {
-    	                                echo"
+    	                                echo "
     	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&amp;locked=0\"><img 
     	                                    src=\"". THEME_PATH. "/icons/key.png\"  alt=\"Freigeben\" title=\"Freigeben\" /></a>";
     	                            }
     	                            elseif($adm_photo_list["pho_locked"]==0)
     	                            {
-    	                                echo"
+    	                                echo "
     	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&amp;locked=1\"><img 
     	                                    src=\"". THEME_PATH. "/icons/key.png\" alt=\"Sperren\" title=\"Sperren\" /></a>";
     	                            }
