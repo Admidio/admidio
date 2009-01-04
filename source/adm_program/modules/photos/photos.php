@@ -263,6 +263,7 @@ echo "<div class=\"photoModuleContainer\">";
     {        
         //Aanzahl der Bilder
         $bilder = $photo_album->getValue("pho_quantity");
+        
         //Ordnerpfad
         $ordner_foto = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
         $ordner      = SERVER_PATH. $ordner_foto;
@@ -274,12 +275,13 @@ echo "<div class=\"photoModuleContainer\">";
             mkdir($ordner."/thumbnails", 0777);
             chmod($ordner."/thumbnails", 0777);
         }
-        //Thumbnails pro Seite
-        $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
-
+        
         //Differenz
         $difference = $g_preferences['photo_thumbs_row']-$g_preferences['photo_thumbs_column'];
 
+		//Thumbnails pro Seite
+        $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
+        	
         //Popupfenstergröße
         $popup_height = $g_preferences['photo_show_height']+210;
         $popup_width  = $g_preferences['photo_show_width']+70;
@@ -288,17 +290,63 @@ echo "<div class=\"photoModuleContainer\">";
         $thickbox_height = $g_preferences['photo_show_height']+90;
         $thickbox_width  = $g_preferences['photo_show_width'];
 
-        //Ausrechnen der Seitenzahl
-        if (settype($bilder, "int") || settype($thumb_seiten, "int"))
-        {
-            $thumb_seiten = round($bilder / $thumbs_per_side);
-        }
-
-        if ($thumb_seiten * $thumbs_per_side < $bilder)
-        {
-            $thumb_seiten++;
-        }
-
+        //Album Seitennavigation
+		function photoAlbumPageNavigation()
+		{
+			global $thumb_seiten;
+			global $thumb_seite;
+			global $photo_album;
+			global $thumbs_per_side;
+			global $g_root_path;
+			       	
+			//Ausrechnen der Seitenzahl
+        	if (settype($photo_album->getValue("pho_quantity"), "int") || settype($thumb_seiten, "int"))
+        	{
+        	    $thumb_seiten = round($photo_album->getValue("pho_quantity") / $thumbs_per_side);
+        	}
+			
+        	if ($thumb_seiten * $thumbs_per_side < $photo_album->getValue("pho_quantity"))
+        	{
+        	    $thumb_seiten++;
+        	}
+			//Container mit Navigation
+        	echo " <div class=\"pageNavigation\">";
+        	    //Seitennavigation
+        	    echo "Seite:&nbsp;";
+    		
+        	    //Vorherige thumb_seite
+        	    $vorseite=$thumb_seite-1;
+        	    if($vorseite>=1)
+        	    {
+        	        echo "
+        	        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=".$photo_album->getValue("pho_id")."\">
+        	            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorherige\" />
+        	        </a>";
+        	    }
+    		
+        	    //Seitenzahlen
+        	    for($s=1; $s<=$thumb_seiten; $s++)
+        	    {
+        	        if($s==$thumb_seite)
+        	        {
+        	            echo $thumb_seite."&nbsp;";
+        	        }
+        	        if($s!=$thumb_seite){
+        	            echo"<a href='$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$s&pho_id=".$photo_album->getValue("pho_id")."'>$s</a>&nbsp;";
+        	        }
+        	    }
+    		
+        	    //naechste thumb_seite
+        	    $nachseite=$thumb_seite+1;
+        	    if($nachseite<=$thumb_seiten){
+        	        echo "
+        	        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=".$photo_album->getValue("pho_id")."\">
+        	            <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&auml;chste\" />
+        	        </a>";
+        	    }
+        	echo '</div>';
+		}
+        
         //Datum des Albums
         echo "<div id=\"photoAlbumInformation\">
             Datum: ".mysqldate("d.m.y", $photo_album->getValue("pho_begin"));
@@ -308,44 +356,8 @@ echo "<div class=\"photoModuleContainer\">";
             }
         echo "</div>";
 
-        //Container mit Navigation
-        echo " <div class=\"pageNavigation\">";
-            //Seitennavigation
-            echo"Seite:&nbsp;";
-    
-            //Vorherige thumb_seite
-            $vorseite=$thumb_seite-1;
-            if($vorseite>=1)
-            {
-                echo "
-                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">
-                    <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorherige\" />
-                </a>
-                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=$pho_id\">Vorherige</a>&nbsp;&nbsp;";
-            }
-    
-            //Seitenzahlen
-            for($s=1; $s<=$thumb_seiten; $s++)
-            {
-                if($s==$thumb_seite)
-                {
-                    echo $thumb_seite."&nbsp;";
-                }
-                if($s!=$thumb_seite){
-                    echo"<a href='$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$s&pho_id=$pho_id'>$s</a>&nbsp;";
-                }
-            }
-    
-            //naechste thumb_seite
-            $nachseite=$thumb_seite+1;
-            if($nachseite<=$thumb_seiten){
-                echo "
-                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">N&auml;chste</a>
-                <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=$pho_id\">
-                    <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&auml;chste\" />
-                </a>";
-            }
-        echo '</div>';
+		//Seitennavigation
+        photoAlbumPageNavigation($photo_album);
             
         //Thumbnailtabelle
         echo '<table id="photoThumbnailTable">';
@@ -426,6 +438,9 @@ echo "<div class=\"photoModuleContainer\">";
                 ." am ". mysqldatetime("d.m.y h:i", $photo_album->getValue("pho_timestamp_change"));
             }
         echo '</div>';
+        
+        //Seitennavigation
+        photoAlbumPageNavigation($photo_album);
     }
     /************************Albumliste*************************************/
 
