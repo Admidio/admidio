@@ -309,42 +309,45 @@ echo "<div class=\"photoModuleContainer\">";
         	{
         	    $thumb_seiten++;
         	}
-			//Container mit Navigation
-        	echo " <div class=\"pageNavigation\">";
-        	    //Seitennavigation
-        	    echo "Seite:&nbsp;";
-    		
-        	    //Vorherige thumb_seite
-        	    $vorseite=$thumb_seite-1;
-        	    if($vorseite>=1)
-        	    {
-        	        echo "
-        	        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=".$photo_album->getValue("pho_id")."\">
-        	            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorherige\" />
-        	        </a>";
-        	    }
-    		
-        	    //Seitenzahlen
-        	    for($s=1; $s<=$thumb_seiten; $s++)
-        	    {
-        	        if($s==$thumb_seite)
-        	        {
-        	            echo $thumb_seite."&nbsp;";
-        	        }
-        	        if($s!=$thumb_seite){
-        	            echo"<a href='$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$s&pho_id=".$photo_album->getValue("pho_id")."'>$s</a>&nbsp;";
-        	        }
-        	    }
-    		
-        	    //naechste thumb_seite
-        	    $nachseite=$thumb_seite+1;
-        	    if($nachseite<=$thumb_seiten){
-        	        echo "
-        	        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=".$photo_album->getValue("pho_id")."\">
-        	            <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&auml;chste\" />
-        	        </a>";
-        	    }
-        	echo '</div>';
+			if($thumb_seiten > 1)
+			{
+				//Container mit Navigation
+        		echo " <div class=\"pageNavigation\">";
+        		    //Seitennavigation
+        		    echo "Seite:&nbsp;";
+    			
+        		    //Vorherige thumb_seite
+        		    $vorseite=$thumb_seite-1;
+        		    if($vorseite>=1)
+        		    {
+        		        echo "
+        		        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$vorseite&amp;pho_id=".$photo_album->getValue("pho_id")."\">
+        		            <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Vorherige\" />
+        		        </a>";
+        		    }
+    			
+        		    //Seitenzahlen
+        		    for($s=1; $s<=$thumb_seiten; $s++)
+        		    {
+        		        if($s==$thumb_seite)
+        		        {
+        		            echo $thumb_seite."&nbsp;";
+        		        }
+        		        if($s!=$thumb_seite){
+        		            echo"<a href='$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$s&pho_id=".$photo_album->getValue("pho_id")."'>$s</a>&nbsp;";
+        		        }
+        		    }
+    			
+        		    //naechste thumb_seite
+        		    $nachseite=$thumb_seite+1;
+        		    if($nachseite<=$thumb_seiten){
+        		        echo "
+        		        <a href=\"$g_root_path/adm_program/modules/photos/photos.php?thumb_seite=$nachseite&amp;pho_id=".$photo_album->getValue("pho_id")."\">
+        		            <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"N&auml;chste\" />
+        		        </a>";
+        		    }
+        		echo '</div>';
+        	}
 		}
         
         //Datum des Albums
