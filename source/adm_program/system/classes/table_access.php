@@ -155,6 +155,8 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
+    	$return_code = false;
+
         if(array_key_exists($field_name, $this->dbColumns))
         {
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
@@ -197,8 +199,10 @@ class TableAccess
                 $this->dbColumns[$field_name] = $field_value;
                 $this->columnsValueChanged      = true;
                 $this->columnsInfos[$field_name]['changed'] = true;
+                $return_code = true;
             }
         }
+        return $return_code;
     }    
     
     // Methode gibt den Wert eines Feldes ($field_name) zurueck

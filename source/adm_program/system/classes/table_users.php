@@ -76,7 +76,7 @@ class TableUsers extends TableAccess
             $field_value = md5($field_value);
         }
 
-        parent::setValue($field_name, $field_value);
+        return parent::setValue($field_name, $field_value);
     }
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle

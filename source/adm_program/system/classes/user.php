@@ -114,10 +114,37 @@ class User extends TableUsers
     // und ungueltige Werte auf leer setzt
     function setValue($field_name, $field_value)
     {
+    	global $g_current_user;
+    	$return_code  = false;
+    	$update_field = false;
+
         if(strpos($field_name, "usr_") !== 0)
         {
-            // Daten fuer User-Fields-Tabelle
-            if($field_value != $this->userFieldData[$field_name]->getValue("usd_value"))
+        	// Daten fuer User-Fields-Tabelle
+        	
+        	// gesperrte Felder duerfen nur von Usern mit dem Rollenrecht "alle Benutzerdaten bearbeiten" geaendert werden
+        	// bei Registrierung muss die Eingabe auch erlaubt sein
+        	if((  $this->getProperty($field_name, "usf_disabled") == 1
+        	   && $g_current_user->editUsers() == true)
+        	|| $this->getProperty($field_name, "usf_disabled") == 0
+        	|| ($g_current_user->getValue("usr_id") == 0 && $this->getValue("usr_id") == 0))
+        	{
+        		$update_field = true;
+        	}
+        	
+        	// versteckte Felder duerfen nur von Usern mit dem Rollenrecht "alle Benutzerdaten bearbeiten" geaendert werden
+        	// oder im eigenen Profil
+        	if((  $this->getProperty($field_name, "usf_hidden") == 1
+        	   && $g_current_user->editUsers() == true)
+        	|| $this->getProperty($field_name, "usf_hidden") == 0
+        	|| $g_current_user->getValue("usr_id") == $this->getValue("usr_id"))
+        	{
+        		$update_field = true;
+        	}
+        	
+        	// nur Updaten, wenn sich auch der Wert geaendert hat
+            if($update_field == true
+            && $field_value  != $this->userFieldData[$field_name]->getValue("usd_value"))
             {
                 // Homepage noch mit http vorbelegen
                 if($this->getProperty($field_name, "usf_type") == "URL")
@@ -128,13 +155,14 @@ class User extends TableUsers
                         $field_value = "http://". $field_value;
                     }
                 }
-                $this->userFieldData[$field_name]->setValue("usd_value", $field_value);
+                $return_code = $this->userFieldData[$field_name]->setValue("usd_value", $field_value);
             }
         }
         else
         {
-            parent::setValue($field_name, $field_value);
+            $return_code = parent::setValue($field_name, $field_value);
         }
+        return $return_code;
     }
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle

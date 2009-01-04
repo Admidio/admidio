@@ -233,7 +233,7 @@ function getFieldCode($field, $user, $new_user)
     }
     elseif($field->getValue("usf_type") == "TEXT_BIG")
     {
-        $value = '<textarea name="usf-'. $field->getValue("usf_id"). '" id="usf-'. $field->getValue("usf_id"). '" style="width: 300px;" rows="2" cols="40">'. $field->getValue("usd_value"). '</textarea>';
+        $value = '<textarea name="usf-'. $field->getValue("usf_id"). '" id="usf-'. $field->getValue("usf_id"). '" '.$readonly.' style="width: 300px;" rows="2" cols="40">'. $field->getValue("usd_value"). '</textarea>';
     }
     else
     {
@@ -289,7 +289,7 @@ function getFieldCode($field, $user, $new_user)
         }
         else
         {
-            $value = '<input type="text" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" maxlength="$maxlength" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />';
+            $value = '<input type="text" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />';
         }
     }
     
