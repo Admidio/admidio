@@ -222,6 +222,7 @@ else
 }
 $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js">
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
 
@@ -247,7 +248,10 @@ $g_layout['header'] = $g_js_vars. '
         function linkaendern(rolle,id) {
             document.getElementById(\'enter\'+rolle).href = \'' . $g_root_path . '/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue("usr_id").'&mode=1&rol_id=\'+id+\'&rol_begin=\'+document.getElementById(\'begin\'+rolle).value+\'&rol_end=\'+document.getElementById(\'end\'+rolle).value ;
         }
-    </script>';
+    </script>
+    
+    <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />';
+
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 echo '
@@ -288,7 +292,7 @@ echo '
                             if($a_user_id == $g_current_user->getValue("usr_id") || $g_current_user->isWebmaster())
                             {
                                 echo'
-                                <a class="iconLink" style="cursor:pointer;" onclick="window.open(\'password.php?usr_id='. $a_user_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')"><img
+                                <a class="thickbox" style="cursor:pointer;" href="password.php?usr_id='. $a_user_id. '&KeepThis=true&TB_iframe=true&height=300&width=350"><img
                                     src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>';
                             }
                             // Nur berechtigte User duerfen ein Profil editieren

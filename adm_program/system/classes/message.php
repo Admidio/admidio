@@ -18,13 +18,16 @@ class Message
     var $inline;            // wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
     var $forward_url;       // Url auf die durch den Weiter-Button verwiesen wird
     var $timer;             // Anzahl ms bis automatisch zu forward_url weitergeleitet wird
+    
+    var $show_buttons;      // Buttons werden angezeigt
     var $yes_no_buttons;    // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
-    var $close_button;      // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
+    var $close_button;      // Anstelle von Weiter wird ein Schliessen-Buttons angezeigt
     
     function Message()
     {
         $this->includes = true;
         $this->inline   = false;
+        $this->show_buttons   = true;
         $this->yes_no_buttons = false;
         $this->close_button   = false;
     }
@@ -83,6 +86,11 @@ class Message
     function setCloseButton()
     {
         $this->close_button = true;
+    }
+
+    function hideButtons()
+    {
+        $this->show_buttons = false;
     }
     
     // die Meldung wird ausgegeben
@@ -172,38 +180,57 @@ class Message
         <div class="formLayout" id="message_form" style="width: 350px; margin-top: 60px;">
             <div class="formHead">'. $this->headline. '</div>
             <div class="formBody">
-                <p>'. $this->content. '</p>
-                <div class="formSubmit">';
-                    if(strlen($this->forward_url) > 0)
-                    {
-                        if($this->yes_no_buttons == true)
-                        {
-                            echo '
-                            <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="Ja" />&nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;</button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="nein" type="button" value="nein" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" alt="Nein" />&nbsp;Nein</button>';
-                        }
-                        else
-                        {
-                            // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-                            echo '<button id="weiter" type="button" value="weiter" onclick="window.location.href=\''. $this->forward_url. '\'"><img src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" />&nbsp;Weiter</button>';
-                        }
-                    }
-                    else
-                    {
-                        // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen 
-                        // bzw. ggf. einen Fenster-Schließen-Button                       
-                        if($this->close_button == true)
-                        {
-                            echo '<button name="close" type="button" value="schließen" onclick="window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Schließen" />&nbsp;Schließen</button>';
-                        }
-                        else
-                        {
-                            echo '<button id="zurueck" type="button" value="zurueck" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurueck" />&nbsp;Zurück</button>';
-                        }
-                    }
-                echo '</div>
-            </div>
+                <p>'. $this->content. '</p>';
+                
+                if($this->show_buttons == true)
+                {
+	                echo '<div class="formSubmit">';
+	                    if(strlen($this->forward_url) > 0)
+	                    {
+	                        if($this->yes_no_buttons == true)
+	                        {
+	                            echo '
+	                            <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forward_url. '\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="Ja" />&nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;</button>
+	                            &nbsp;&nbsp;&nbsp;&nbsp;
+	                            <button id="nein" type="button" value="nein" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" alt="Nein" />&nbsp;Nein</button>';
+	                        }
+	                        else
+	                        {
+	                            // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
+	                            echo '
+	                            <span class="iconTextLink">
+                                    <a href="'. $this->forward_url. '"><img 
+                                    	src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" title="Weiter" /></a>
+                                    <a href="'. $this->forward_url. '">Weiter</a>
+                                </span>';
+	                        }
+	                    }
+	                    else
+	                    {
+	                        // Wenn nicht weitergeleitet wird, dann immer einen Zurueck-Button anzeigen 
+	                        // bzw. ggf. einen Fenster-Schließen-Button                       
+	                        if($this->close_button == true)
+	                        {
+	                            echo '
+	                            <span class="iconTextLink">
+                                    <a href="javascript:window.close()"><img 
+                                    	src="'. THEME_PATH. '/icons/door_in.png" alt="Schließen" title="Schließen" /></a>
+                                    <a href="javascript:window.close()">Schließen</a>
+                                </span>';
+	                        }
+	                        else
+	                        {
+	                            echo '
+	                            <span class="iconTextLink">
+                                    <a href="javascript:history.back()"><img 
+                                    	src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zurück" /></a>
+                                    <a href="javascript:history.back()">Zurück</a>
+                                </span>';
+	                        }
+	                    }
+	                echo '</div>';
+	            }
+            echo '</div>
         </div>';
         
         if($this->inline == false)

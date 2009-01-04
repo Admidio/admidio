@@ -67,7 +67,7 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
                         $g_current_user->setValue("usr_password", $user->getValue("usr_password"));
                     }
 
-                    $g_message->setCloseButton();
+                    $g_message->setForwardUrl("javascript:self.parent.tb_remove()");
                     $g_message->show("password_changed", "", "Hinweis", false);
                 }
                 else
@@ -132,17 +132,15 @@ else
             <hr />
 
             <div class="formSubmit">
-                <button name="close" type="button" value="Schließen" onclick="window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Schließen" />&nbsp;Schließen</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button name="save" type="submit" value="Speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
             </div>
         </div>
-    </form>
-
+    </form>';
+/*
     <script type="text/javascript"><!--
         document.getElementById(\'old_password\').focus();
     --></script>';
-        
+  */      
     require(THEME_SERVER_PATH. "/overall_footer.php");
 }
 
