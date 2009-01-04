@@ -201,8 +201,8 @@ $g_layout['header'] = '
           }
        }
     }
-    var calPopUp = new CalendarPopup("calendardiv");
-    calPopUp.setCssPrefix("calendar");
+    var calPopup = new CalendarPopup("calendardiv");
+    calPopup.setCssPrefix("calendar");
 --></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -247,59 +247,61 @@ echo "
                 </li>";
             }
 
-            echo "<li><hr /></li>
+            echo '<li><hr /></li>
 
             <li>
                 <dl>
-                    <dt><label for=\"date_from\">Beginn:</label></dt>
+                    <dt><label for="date_from">Beginn:</label></dt>
                     <dd>
                         <span>
-                            <input type=\"text\" id=\"date_from\" name=\"date_from\" onchange=\"javascript:setDateTo();\" size=\"10\" maxlength=\"10\" value=\"$date_from\" />
-                            <img id=\"ico_cal_date_from\" src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:calPopUp.select(document.forms[0].date_from,'ico_cal_date_from','dd.MM.yyyy','date_from','date_to','time_from','time_to');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
-                            <span id=\"calendardiv\" style=\"position: absolute; visibility: hidden; \"></span>
+                            <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$date_from.'" />
+                            <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
+                            	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                            <span id="calendardiv" style="position: absolute; visibility: hidden; "></span>
                         </span>
-                        <span style=\"margin-left: 10px;\">
-                            <input type=\"text\" id=\"time_from\" name=\"time_from\" size=\"5\" maxlength=\"5\" value=\"$time_from\" />
-                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <span style="margin-left: 10px;">
+                            <input type="text" id="time_from" name="time_from" size="5" maxlength="5" value="'.$time_from.'" />
+                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                         </span>
-                        <span style=\"margin-left: 15px;\">
-                            <input type=\"checkbox\" id=\"dat_all_day\" name=\"dat_all_day\" ";
+                        <span style="margin-left: 15px;">
+                            <input type="checkbox" id="dat_all_day" name="dat_all_day" ';
                             if($date->getValue("dat_all_day") == 1)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
-                            echo " onclick=\"setAllDay()\" value=\"1\" />
-                            <label for=\"dat_all_day\">Ganztägig</label>
+                            echo ' onclick="setAllDay()" value="1" />
+                            <label for="dat_all_day">Ganztägig</label>
                         </span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"date_to\">Ende:</label></dt>
+                    <dt><label for="date_to">Ende:</label></dt>
                     <dd>
                         <span>
-                            <input type=\"text\" id=\"date_to\" name=\"date_to\" size=\"10\" maxlength=\"10\" value=\"$date_to\" />
-                            <img id=\"ico_cal_date_to\" src=\"". THEME_PATH. "/icons/calendar.png\" onclick=\"javascript:calPopUp.select(document.forms[0].date_to,'ico_cal_date_to','dd.MM.yyyy','date_from','date_to','time_from','time_to');\" style=\"vertical-align:middle; cursor:pointer;\" alt=\"Kalender anzeigen\" title=\"Kalender anzeigen\" />
+                            <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$date_to.'" />
+                            <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
+                            	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                         </span>
-                        <span style=\"margin-left: 10px;\">
-                            <input type=\"text\" id=\"time_to\" name=\"time_to\" size=\"5\" maxlength=\"5\" value=\"$time_to\" />
-                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <span style="margin-left: 10px;">
+                            <input type="text" id="time_to" name="time_to" size="5" maxlength="5" value="'.$time_to.'" />
+                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                         </span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"dat_cat_id\">Kalender:</label></dt>
+                    <dt><label for="dat_cat_id">Kalender:</label></dt>
                     <dd>
-                        <select id=\"dat_cat_id\" name=\"dat_cat_id\" size=\"1\" tabindex=\"3\">
-                            <option value=\" \"";
-                           if($date->getValue("dat_cat_id") == 0)
-                           {
-                              echo " selected=\"selected\"";
-                           }
-                              echo ">- Bitte wählen -</option>";
+                        <select id="dat_cat_id" name="dat_cat_id" size="1" tabindex="3">
+                            <option value=" "';
+                           	if($date->getValue("dat_cat_id") == 0)
+                           	{
+                              	echo ' selected="selected" ';
+                           	}
+                          	echo '>- Bitte wählen -</option>';
 
                             $sql = "SELECT * FROM ". TBL_CATEGORIES. "
                                      WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
@@ -309,12 +311,12 @@ echo "
 
                             while($row = $g_db->fetch_object($result))
                             {
-                                echo "<option value=\"$row->cat_id\"";
+                                echo '<option value="'.$row->cat_id.'"';
                                     if($date->getValue("dat_cat_id") == $row->cat_id)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                echo ">$row->cat_name</option>";
+                                echo '>'.$row->cat_name.'</option>';
                             }
                         echo "</select>
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>

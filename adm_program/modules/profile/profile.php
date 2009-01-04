@@ -222,7 +222,7 @@ else
 }
 $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js">
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
 
@@ -292,7 +292,7 @@ echo '
                             if($a_user_id == $g_current_user->getValue("usr_id") || $g_current_user->isWebmaster())
                             {
                                 echo'
-                                <a class="thickbox" style="cursor:pointer;" href="password.php?usr_id='. $a_user_id. '&KeepThis=true&TB_iframe=true&height=300&width=350"><img
+                                <a class="thickbox" href="password.php?usr_id='. $a_user_id. '&KeepThis=true&TB_iframe=true&height=300&width=350"><img
                                     src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>';
                             }
                             // Nur berechtigte User duerfen ein Profil editieren

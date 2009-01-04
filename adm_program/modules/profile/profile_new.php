@@ -283,8 +283,8 @@ function getFieldCode($field, $user, $new_user)
             $value .= '
                     <input type="text" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" 
                         maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />
-                    <img src="'. THEME_PATH. '/icons/calendar.png" onclick="javascript:'.$calObject.'.select(document.forms[0].usf'. $field->getValue("usf_id"). ',\'anchor'. $field->getValue("usf_id"). '\',\'dd.MM.yyyy\');" 
-                        id="anchor'. $field->getValue("usf_id"). '" style="vertical-align: middle; cursor: pointer;" alt="Kalender anzeigen" title="Kalender anzeigen" />
+                    <a class="iconLink" id="anchor_'. $field->getValue("usf_id"). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue("usf_id"). '\'),\'anchor_'. $field->getValue("usf_id"). '\',\'dd.MM.yyyy\');"><img 
+                    	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
         else
@@ -371,7 +371,7 @@ else
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
 
