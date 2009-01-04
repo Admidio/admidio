@@ -368,9 +368,12 @@ else
 {
     $g_layout['title'] = "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
 }
-$g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/calendar/calendar-popup.js\"></script>
-    <link rel=\"stylesheet\" href=\"".THEME_PATH. "/css/calendar.css\" type=\"text/css\" />";
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js">
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+    <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -489,9 +492,9 @@ echo "
                                         <dt><label>Passwort:</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
-                                                <a style="cursor:pointer;" href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">
-                                                    <img src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
-                                                <a href="#" onclick="window.open(\'password.php?usr_id='. $usr_id. '\',\'Titel\',\'width=350,height=300,left=310,top=200\')">Passwort ändern</a>
+                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&KeepThis=true&TB_iframe=true&height=300&width=350"><img 
+                                                	src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
+                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&KeepThis=true&TB_iframe=true&height=300&width=350">Passwort ändern</a>
                                             </span>
                                         </dd>
                                     </dl>
