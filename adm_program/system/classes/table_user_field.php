@@ -65,7 +65,7 @@ class TableUserField extends TableAccess
 
             $this->setValue("usf_sequence", $row['count'] + 1);
         }     
-        parent::setValue($field_name, $field_value);
+        return parent::setValue($field_name, $field_value);
     }
 
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
