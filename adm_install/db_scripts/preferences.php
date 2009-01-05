@@ -109,13 +109,13 @@ $orga_preferences = array(
     'profile_show_roles'        => '1',
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',
+    'profile_photo_storage'		=> '0',
 
     // Termine
     'enable_dates_module'        => '1',
     'dates_per_page'             => '10',
     'dates_show_map_link'        => '1',
     'dates_show_calendar_select' => '1',
-    'profile_photo_storage'		 => '0',
 
     // Weblinks
     'enable_weblinks_module'    => '1',

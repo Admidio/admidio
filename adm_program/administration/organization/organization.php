@@ -334,7 +334,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
-                        aus dem Ordner adm_themes angezeigt.
+                        aus dem Ordner adm_themes angezeigt. (Standard: modern)
                     </li>
                     <li>
                         <dl>
@@ -345,7 +345,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden.
                         Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
-                        Beispiel: adm_program/index.php
+                        (Beispiel: adm_program/index.php)
                     </li>
                     <li>
                         <dl>
@@ -356,7 +356,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat.
                         Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
-                        Beispiel: adm_program/index.php
+                        (Beispiel: adm_program/index.php)
                     </li>
                     <li>
                         <dl>
@@ -366,7 +366,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
-                        für Systemnachrichten benutzt. (z.B. bei der Registierungsbestätigung)
+                        für Systemnachrichten benutzt, z.B. bei der Registierungsbestätigung. (Standard: webmaster@". $_SERVER['HTTP_HOST'].")
                     </li>";
 
                     //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
@@ -415,13 +415,6 @@ echo "
                     }
 
                     echo "
-                    <li class=\"smallFontSize\">
-                        Hier können die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen,
-                        wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen
-                        werden als Systemmail verschickt. Dieses Feature sollte also am besten nicht deaktiviert werden.
-                        Es sei denn der Server unterstützt gar keinen Mailversand.
-                        Das Mailmodul ist durch die Deaktivierung nicht betroffen.
-                    </li>
                     <li>
                         <dl>
                             <dt><label for=\"enable_bbcode\">BBCode zulassen:</label></dt>
@@ -437,7 +430,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) BB-Code nutzen um den
-                        Text besser zu formatieren.
+                        Text besser zu formatieren. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -456,7 +449,7 @@ echo "
                         Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen,
                         Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
                         bereitstellen, die dann über den Browser einem Feedreader zugeordnet
-                        werden k&ouml;nnen.
+                        werden k&ouml;nnen. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -475,7 +468,7 @@ echo "
                         Benutzer können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll.
                         Bei einem weiteren Besuch der Homepage sind diese Benutzer dann automatisch angemeldet. Dies kann
                         allerdings auch dazu führen, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde
-                        Personen Zugriff auf die Daten bekommen.
+                        Personen Zugriff auf die Daten bekommen. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -486,7 +479,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
                         Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung
-                        wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat.
+                        wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat. (Standrad: 20Minuten)
                     </li>
 
                      <li>
@@ -506,7 +499,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch
                         zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den
-                        Administrator stellen.
+                        Administrator stellen. (Standard: ja)
                     </li>
                 </ul>
             </div>
@@ -554,7 +547,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
                         Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten
-                        Registrierung stehen ihm alle Felder des Profils zur Verfügung.
+                        Registrierung stehen ihm alle Felder des Profils zur Verfügung.  (Standard: Schnelle Registrierung)
                     </li>
                     <li>
                         <dl>
@@ -572,7 +565,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
-                        dass das Formular nicht von Spammern missbraucht werden kann.
+                        dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -589,7 +582,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Mitglieder aller Rollen mit der Berechtigung <strong>Registrierungen verwalten und zuordnen</strong> erhalten eine E-Mail,
-                        sobald sich ein neuer User im System registriert hat.
+                        sobald sich ein neuer User im System registriert hat. (Standard: ja)
                     </li>
                 </ul>
             </div>
@@ -637,7 +630,7 @@ echo "
                         Das Ankündigungsmodul kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar.
+                        für beide Gruppen dann nicht mehr aufrufbar. (Standard: Aktiviert)
                     </li>
                     <li>
                         <dl>
@@ -651,7 +644,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Anzahl der Ankündigungen die auf einer Seite dargestellt werden. Gibt es mehr Ankündigungen
                         so kann man zwischen den Ankündigungen blättern. Bei dem Wert 0 werden alle Ankündigungen 
-                        aufgelistet und die Blättern-Funktion deaktiviert.
+                        aufgelistet und die Blättern-Funktion deaktiviert. (Standrad: 10)
                     </li>
                 </ul>
             </div>
@@ -683,7 +676,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -696,7 +689,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert.
+                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standrad: 4000KB)
                     </li>
                 </ul>
             </div>
@@ -744,7 +737,7 @@ echo "
                         Das Fotomodul kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar.
+                        für beide Gruppen dann nicht mehr aufrufbar.  (Standard: Aktiviert)
                     </li>
                     <li>
                         <dl>
@@ -776,7 +769,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier kann eingestellt werden, wie die Bilder im Fotomodul präsentiert werden sollen.
                         dies kann über ein Popup-Fenster, über eine Javascript-Animation (Thickbox) oder auf
-                        dergleichen Seite in HTML erfolgen.
+                        dergleichen Seite in HTML erfolgen. (Standard: Thickbox)
                     </li>
                     <li>
                         <dl>
@@ -788,7 +781,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standardwert: 4 x 5)
+                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 5 x 5)
                     </li>
 
                     <li>
@@ -802,7 +795,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
-                        Ggf. weniger Thumbnailspalten einstellen. (Standardwert: 100)
+                        Ggf. weniger Thumbnailspalten einstellen. (Standard: 100Pixel)
                     </li>
                      <li>
                         <dl>
@@ -836,6 +829,7 @@ echo "
 						<i>Benutzerauswahl</i> - Der Benutzer kann selbst eine Methode wählen.<br />
 						<i>Multiupload</i> - Über ein Flashplugin können mehrere Dateien gleichzeitig ausgewählt werden. Während dem Upload wird der Benutzer laufend über den Status und die Verarbeitung informiert.<br />
 						<i>Einzeldateiauswahl</i> - Der Benutzer kann bis zu fünf Dateien pro Uploadvorgang auswählen. Es ist kein Plugin notwendig.<br />
+						(Standard: Benutzerauswahl)
                     </li>
 					<li>
                         <dl>
@@ -848,7 +842,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Beim Upload werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
                         ist der Parameter für die längere Seite des Bildes, egal ob das Bild im Hoch-
-                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standardwert: 640)
+                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standard: 640Pixel)
                     </li>
                     <li>
                         <dl>
@@ -859,7 +853,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird die Höhe des jeweiligen Vorschaubildes in der Albenübersicht festgelegt. (Standardwert: 100)
+                        Hier wird die Höhe des jeweiligen Vorschaubildes in der Albenübersicht festgelegt. (Standard: 100Pixel)
                     </li>
                     <li>
                         <dl>
@@ -874,7 +868,7 @@ echo "
                         Die hier angegeben Werte bestimmen die maximale Größe die ein Bild im Anzeigefenster
                         haben darf. Das Fenster im Popup- bzw. Thickboxmodus werden automatisch in der Größe angepasst. Besonders bei der H&ouml;he
                         ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
-                        sein muss. (Standardwert: 500 x 380)
+                        sein muss. (Standard: 500 x 380 Pixel²)
                     </li>
                     <li>
                         <dl>
@@ -886,7 +880,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Der hier eingegebene Text wird in alle angezeigten Bilder, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet.
-                        (Standardwert: &#169; ".$g_current_organization->getValue("org_homepage").")
+                        (Standard: &#169; ".$g_current_organization->getValue("org_homepage").")
                     </li>
                 </ul>
             </div>
@@ -918,7 +912,7 @@ echo "
                     <li class=\"smallFontSize\">
                     	<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
                     	Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0)
-                    	eingebunden werden.
+                    	eingebunden werden. (Standard: nein)
                     </li>
                     <li>
                         <dl>
@@ -939,7 +933,7 @@ echo "
                         Welches Forum soll genutzt werden?<br/>
                         <table summary=\"Forum_Auflistung\" border=\"0\">
                             <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
-                        </table>
+                        </table> 
                     </li>
                     <li>
                         <dl>
@@ -955,7 +949,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                    	Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt.<br /> 
+                    	Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)<br /> 
                     	Deaktiviert: Forum wird in einem neuen Browserfenster angezeigt. 
                     </li>
                     <li>
@@ -968,7 +962,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
 						<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
-                    	Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Default Wert 550)
+                    	Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 550Pixel)
                     </li>
                     <li>
                         <dl>
@@ -984,7 +978,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standardwert: ja)
+                        Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1000,7 +994,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators.
+                        Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1011,7 +1005,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird der prefix der Tabellen des phpBB-Forums angegeben. (Bsp.: phpbb)
+                        Hier wird der prefix der Tabellen des phpBB-Forums angegeben. (Beispiel: phpbb)
                     </li>
                     <li>
                         <dl>
@@ -1034,7 +1028,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und
-                        die Zugangsdaten müssen nicht mehr eingegeben werden.
+                        die Zugangsdaten müssen nicht mehr eingegeben werden. (Standard: nein)
                     </li>
                     <li id=\"forum_access_data\">
                         <script type=\"text/javascript\"><!--
@@ -1089,7 +1083,7 @@ echo "
                         Das Gästebuch kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar.
+                        für beide Gruppen dann nicht mehr aufrufbar. (Standard: Aktiviert)
                     </li>
                     <li>
                         <dl>
@@ -1103,7 +1097,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Anzahl der Gästebucheinträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge
                         so kann man zwischen den Einträgen blättern. Bei dem Wert 0 werden alle Gästebucheinträge 
-                        aufgelistet und die Blättern-Funktion deaktiviert.
+                        aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)
                     </li>                    
                     <li>
                         <dl>
@@ -1121,7 +1115,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
-                        Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann.
+                        Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1138,7 +1132,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Einträge im Gästebuch kommentieren. Die Rechtevergabe
-                        für dieses Feature über die Rollenverwaltung wird dann ignoriert.
+                        für dieses Feature über die Rollenverwaltung wird dann ignoriert. (Standard: nein)
                     </li>
                     <li>
                         <dl>
@@ -1154,7 +1148,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und nicht ausgeblendet.
+                        Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und nicht ausgeblendet. (Standard: nein)
                     </li>
                     <li>
                         <dl>
@@ -1169,7 +1163,7 @@ echo "
                         ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben.
                         Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander
                         ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berprüfung
-                        nicht durchgeführt.
+                        nicht durchgeführt. (Standard: 60Sekunden)
                     </li>
                 </ul>
             </div>
@@ -1198,7 +1192,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Anzahl der Rollen die auf einer Seite in der Listenübersicht aufgelistet werden. Gibt es mehr Rollen
                         so kann man in der Liste blättern. Bei dem Wert 0 werden alle Rollen aufgelistet und die
-                        Blättern-Funktion deaktiviert.
+                        Blättern-Funktion deaktiviert. (Standard: 10)
                     </li>
                     <li>
                         <dl>
@@ -1213,7 +1207,7 @@ echo "
                         Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden.
                         Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste blättern.
                         Die Druckvorschau und der Export sind von diesem Wert nicht betroffen.
-                        Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert.
+                        Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 20)
                     </li>
 					<li>
                         <dl>
@@ -1230,7 +1224,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch 
-                        lassen sich die Details weiterhin anzeigen.
+                        lassen sich die Details weiterhin anzeigen. (Standard: nein)
                     </li>
                 </ul>
             </div>
@@ -1263,7 +1257,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Das Mailmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen
-                        Mailversand unterstützt, sollte das Modul deaktiviert werden.
+                        Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)
                     </li>
                     <li>
                         <dl>
@@ -1281,7 +1275,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
                         Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
-                        dass das Formular nicht von Spammern missbraucht werden kann.
+                        dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1293,7 +1287,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich.
+                        angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)
                     </li>
                 </ul>
             </div>
@@ -1329,7 +1323,7 @@ echo "
                         wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen
                         werden als Systemmail verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden.
                         Es sei denn der Server unterstützt keinen Mailversand.
-                        Das E-Mailmodul ist durch die Deaktivierung nicht betroffen.<br /><br />
+                        Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)<br /><br />
 
                         Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und
                         werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann
@@ -1408,7 +1402,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.
                         Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.
-                        Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung.
+                        Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1422,7 +1416,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Vorschau-Bildes skaliert werden soll.
-                        (Standardwert: Breite 250 | Höhe 250)
+                        (Standard: 250 x 250 Pixel²)
                     </li>
                     <li>
                         <dl>
@@ -1436,7 +1430,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                        Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll.
-                       (Standardwert: Breite 400 | Höhe 250)
+                       (Standard: 400 x 250 Pixel²)
                     </li>
                     <li>
                         <dl>
@@ -1467,7 +1461,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standardwert: 10)
+                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)
                     </li>
                     <li>
                         <dl>
@@ -1497,7 +1491,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standardwert: 500)
+                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)
                     </li>
                     <li>
                         <dl>
@@ -1508,7 +1502,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird das Standard Template festgelegt.
+                        Hier wird das Standard Template festgelegt. (Standard: Brief standard)
                     </li>
                     <li>
                         <dl>
@@ -1519,7 +1513,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird die Standard Schriftart festgelegt.
+                        Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)
                     </li>
                     <li>
                         <dl>
@@ -1530,7 +1524,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                       Hier wird die Standard Schriftgr&ouml;&szlig;e festgelegt.
+                       Hier wird die Standard Schriftgr&ouml;&szlig;e festgelegt. (Standard: 20)
                     </li>
                     <li>
                         <dl>
@@ -1541,7 +1535,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird die Standard Schriftfarbe festgelegt.
+                        Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)
                     </li>
 
                 </ul>
@@ -1681,7 +1675,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Das ausgewählte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und
-                        erleichtert die Eingabe.
+                        erleichtert die Eingabe. (Standard: Deutschland)
                     </li>
                     <li>
                         <dl>
@@ -1698,7 +1692,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Sobald genügend Adressinformationen vorhanden sind, wird ein Link zu Google-Maps erstellt,
-                        welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort.
+                        welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1715,7 +1709,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>ist</b>.
-                        Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet.
+                        Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1732,7 +1726,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>war</b>.
-                        Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt.
+                        Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)
                     </li>";
 
                     if($g_current_organization->getValue("org_org_id_parent") > 0
@@ -1754,7 +1748,7 @@ echo "
                         </li>
                         <li class=\"smallFontSize\">
                             Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten
-                            mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt.
+                            mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)
                         </li>";
                     }
                 echo "
@@ -1784,7 +1778,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden.
-                        Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen.
+                        Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)
                     </li>
                 </ul>
             </div>
@@ -1832,7 +1826,7 @@ echo "
                         Das Terminmodul kann über diese Einstellung komplett deaktiviert oder nur für
                         registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
                         wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar.
+                        für beide Gruppen dann nicht mehr aufrufbar. (Standard: Aktiviert)
                     </li>
                     <li>
                         <dl>
@@ -1846,7 +1840,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Anzahl der Termine die auf einer Seite dargestellt werden. Gibt es mehr Termine
                         so kann man zwischen den Terminen blättern. Bei dem Wert 0 werden alle Termine
-                        aufgelistet und die Blättern-Funktion deaktiviert.
+                        aufgelistet und die Blättern-Funktion deaktiviert. (Stdandrad: 10)
                     </li>
                     <li>
                         <dl>
@@ -1863,7 +1857,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Wird ein Treffpunkt angegeben, so wird versucht ein Link zu Google-Maps zu erstellen,
-                        welcher den Treffpunkt anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort.
+                        welcher den Treffpunkt anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)
                     </li>
                     <li>
                         <dl>
@@ -1880,7 +1874,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine
-                        schnelle Suche nach einem Termin zu ermöglichen.
+                        schnelle Suche nach einem Termin zu ermöglichen. (Standard: ja)
                     </li>
                 </ul>
             </div>
@@ -1958,13 +1952,16 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier kann die Automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem
 						Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener
-						Zeit wird dann der eigentliche Link aufgerufen.
+						Zeit wird dann der eigentliche Link aufgerufen. (Standard: 0)
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect für:</label></dt>
                             <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
                         </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Zeit nach der automatisch weitergeleitet wird. (Standard: 5Sekunden)
                     </li>					
                 </ul>
             </div>
@@ -2041,7 +2038,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Anzahl der Nachrichten die sich im Posteingang befinden d&uuml;rfen. Wird die Anzahl
                         &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
-                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Default = 0)
+                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Standard: 0)
                     </li>
                     <li>
                         <dl>
@@ -2055,7 +2052,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Anzahl der Nachrichten die sich im Postausgang befinden d&uuml;rfen. Wird die Anzahl
                         &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
-                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Default = 0)
+                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Standard: 0)
                     </li>
                     <li>
                         <dl>
@@ -2069,7 +2066,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Anzahl der Nachrichten die sich im Nachrichtenarchiv befinden d&uuml;rfen. Wird die Anzahl
                         &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
-                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Default = 0)
+                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Standard: 0)
                     </li>
                 </ul>
         	</div>
