@@ -208,6 +208,10 @@ foreach($user->userFieldData as $field)
         {
             $user->setValue($field->getValue("usf_name"), "0");
         }
+        elseif($field->getValue("usf_mandatory") == 1)
+        {
+    		$g_message->show("feld", $field->getValue("usf_name"));
+        }
     }
 }
 
