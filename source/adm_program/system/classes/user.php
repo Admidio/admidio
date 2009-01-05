@@ -62,7 +62,7 @@ class User extends TableUsers
     function readUserData()
     {
     	global $g_current_organization;
-        $userFieldData = array();
+        $this->userFieldData = array();
 
         if($this->getValue("usr_id") > 0)
         {
