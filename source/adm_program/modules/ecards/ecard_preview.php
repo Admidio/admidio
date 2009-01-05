@@ -17,13 +17,13 @@ require_once("ecard_function.php");
 $propotional_width  = "";
 $propotional_height = "";
 $bbcode_enable = false;
-if(isset($_GET['width']))
+if(isset($_GET['pwidth']))
 {
-    $propotional_width  = $_GET['width'];
+    $propotional_width  = $_GET['pwidth'];
 }
-if(isset($_GET['height']))
+if(isset($_GET['pheight']))
 {
-    $propotional_height = $_GET['height'];
+    $propotional_height = $_GET['pheight'];
 }
 if($g_preferences['enable_bbcode'])
 {

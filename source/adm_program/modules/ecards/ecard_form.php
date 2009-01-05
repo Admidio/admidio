@@ -138,6 +138,11 @@ if (isset($_GET["usr_id"]))
 
 $popup_height = $g_preferences['photo_show_height']+210;
 $popup_width  = $g_preferences['photo_show_width']+70;
+
+//Thickboxgröße
+$thickbox_height = $g_preferences['photo_show_height']+17;
+$thickbox_width  = $g_preferences['photo_show_width'];
+	
 $bild         = $_REQUEST['photo'];
 
 // Wenn der übergebene Bildernamen und die daszugehörige Photogallerie Id
@@ -146,7 +151,7 @@ if(is_numeric($bild) && isset($_GET['pho_id']))
 {
     $ordner_foto      = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id")."/".$_REQUEST['photo'].".jpg";
     $bild_server_path = SERVER_PATH. $ordner_foto;
-    $bild_link        = $g_root_path. $ordner_foto;
+    $bild_link        = $g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.$thickbox_height.'&amp;width='.$thickbox_width;
 }
 // Wenn nur der Bildernamen übergeben wird ist die Übergabe ungültig
 if(is_numeric($bild) && !isset($_GET['pho_id']))
@@ -314,10 +319,10 @@ else
 $g_layout['header'] = "";
 if($g_preferences['photo_show_mode']==1)
 {
-    $g_layout['header'] = $g_layout['header']."
-        <script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/jquery/jquery.js\"></script>
-		<script type=\"text/javascript\" src=\"".$g_root_path."/adm_program/libs/thickbox/thickbox.js\"></script>
-        <link rel=\"stylesheet\" href=\"".THEME_PATH."/css/thickbox.css\" type=\"text/css\" media=\"screen\" />";
+    $g_layout['header'] = $g_layout['header'].'
+        <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+		<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
+        <link rel="stylesheet" href="'.THEME_PATH.'/css/thickbox.css" type="text/css" media="screen" />';
 }
 $javascript = '
     <script type="text/javascript"><!--
@@ -355,6 +360,7 @@ $javascript = '
         {
             if (check())
             {
+				document.getElementById(ecardformid).onsubmit = "";
                 document.getElementById(ecardformid).action                 = "'.CURRENT_URL.'";
                 document.getElementById(ecardformid).target                 = "_self";
                 document.getElementById(ecardformid)["submit_action"].value = "send";
@@ -362,6 +368,7 @@ $javascript = '
             }
             else
             {
+				document.getElementById(ecardformid).onsubmit = "";
                 document.getElementById(ecardformid)["submit_action"].value = "";
             }
         }
@@ -497,6 +504,48 @@ $javascript = '
             document.getElementById(ecardformid).target = "ecard_preview";
             document.getElementById(ecardformid).submit();
         }
+		function tb_sendform(f,c)
+		{
+ 			f.action.match(/(\bkeepThis=(true|false)&TB_iframe=true.+$)/);
+  			tb_show(c, \'about:blank?\'+RegExp.$1);
+ 			f.target=$(\'#TB_iframeContent\').attr(\'name\')
+  			return true;
+		}
+		function calculateWidthHeightForThickBox()
+		{
+			var viewportwidth		= 0;
+			var viewportheight		= 0;
+			var tb_widthheight = new Array(0,0);
+
+			if( typeof( window.innerWidth ) == "number" ) 
+			{
+				//Non-IE
+				viewportwidth = window.innerWidth;
+				viewportheight = window.innerHeight;
+			} 
+			else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) 
+			{
+				//IE 6+ in "standards compliant mode"
+				viewportwidth = document.documentElement.clientWidth;
+				viewportheight = document.documentElement.clientHeight;
+			} 
+			else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) 
+			{
+				//IE 4 compatible
+				viewportwidth = document.body.clientWidth;
+				viewportheight = document.body.clientHeight;
+			}
+			
+			tb_widthheight[0] 	= viewportheight * 0.8;
+			tb_widthheight[1] 	= viewportwidth * 0.8;
+			
+			return tb_widthheight;
+		}
+		function makeThickBoxPreview()
+		{
+			tb_widthheight = calculateWidthHeightForThickBox();
+			document.getElementById("ecard_form").action = "ecard_preview.php?keepThis=true&TB_iframe=true&width="+tb_widthheight[1].toFixed(0)+"&heigth="+tb_widthheight[0].toFixed(0)+"&pwidth='.$propotional_size_card['width'].'&pheight='.$propotional_size_card['height'].'";
+		}
         function blendout(id)
         {
             if(document.getElementById(id).value == "< Empfänger Name >" || document.getElementById(id).value == "< Empfänger E-Mail >")
@@ -939,7 +988,9 @@ if (empty($submit_action))
     //Thickbox-Mode
     if($g_preferences['photo_show_mode']==1)
     {
-        echo "<a href=\"".$bild_link."\" class=\"thickbox\" title=\"".$photo_album->getValue("pho_name")."\"><img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" /></a>";
+        echo '<a class="thickbox" href="'.$bild_link.'">
+					<img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" alt="'.$g_organization.' - Grußkarte\" />
+			  </a>';
     }
 
     //Gleichesfenster-Mode
@@ -952,7 +1003,13 @@ if (empty($submit_action))
         $g_message->show($error_msg);
     }
 
-        echo' <form id="ecard_form" action="#" method="post">
+        echo' <form id="ecard_form" action="" ';
+			//Thickbox
+			if($g_preferences['ecard_preview_mode'] == 1)
+			{
+				echo 'onsubmit="return tb_sendform(this,\'Vorschau der Grußkarte:\')" ';
+			}
+			echo 'method="post">
               <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
               <input type="hidden" name="submit_action" value="" />
               <ul class="formFieldList">
@@ -1192,8 +1249,18 @@ if (empty($submit_action))
             </ul>
             <hr />
             <div class="formSubmit">
-                <button onclick="javascript:makePreview();" type="button" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+			';
+			//Popupfenster
+			if($g_preferences['ecard_preview_mode'] == 0)
+			{
+                echo '<button onclick="javascript:makePreview();" type="button" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>';
+			}
+			//Thickbox
+			elseif($g_preferences['ecard_preview_mode'] == 1)
+			{
+				echo '<button onclick="javascript:makeThickBoxPreview();" type="submit" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>';
+			}
+			echo '&nbsp;&nbsp;&nbsp;&nbsp;
                 <button onclick="javascript:sendEcard();" type="button" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
             </div>
             </form>';
