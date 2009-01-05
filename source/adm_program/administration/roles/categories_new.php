@@ -126,11 +126,11 @@ echo "
                 </dl>
             </li>";
 
-            if($_GET['type'] == "USF" && $category->getValue("cat_system") == 0)
+            if($_GET['type'] == "USF")
             {
                 // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
-                if($g_current_organization->getValue("org_org_id_parent") > 0
-                || $g_current_organization->hasChildOrganizations())
+                if($category->getValue("cat_system") == 0
+                && $g_current_organization->countAllRecords() > 1)
                 {
                     echo "
                     <li>
@@ -143,7 +143,7 @@ echo "
                                     echo " checked=\"checked\" ";
                                 }
                                 echo " value=\"1\" />
-                                <label for=\"cat_org_id\">$title für mehrere Organisationen sichtbar</label>
+                                <label for=\"cat_org_id\">$title für alle Organisationen sichtbar</label>
                                 <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"\"
                                     onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=category_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\"
                                     onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=category_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
