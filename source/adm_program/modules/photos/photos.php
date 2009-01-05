@@ -58,7 +58,12 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 $req_headline = "Fotogalerien";
 if(isset($_GET['headline']))
 {
-    $req_headline = strStripTags($_GET["headline"]);
+    $_SESSION['photomodul_headline'] = strStripTags($_GET["headline"]);
+    $req_headline = $_SESSION['photomodul_headline'];
+}
+else if(isset($_SESSION['photomodul_headline']))
+{
+	$req_headline = $_SESSION['photomodul_headline'];
 }
 
 //aktuelle album_element
@@ -189,6 +194,9 @@ $g_layout['header'] = $g_layout['header']. '
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 
+//Ueberschift
+echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
+
 //bei Seitenaufruf mit Moderationsrechten
 if($g_current_user->editPhotoRight())
 {
@@ -216,9 +224,6 @@ if($g_current_user->editPhotoRight())
     }
     echo "</span>";
 }
-
-//Ueberschift
-echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
 //solange nach Unteralben suchen bis es keine mehr gibt
 $navilink = "";
