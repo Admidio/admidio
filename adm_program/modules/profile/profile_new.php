@@ -577,7 +577,9 @@ echo "
 
         echo '
         <div class="formSubmit">
-            <button name="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/'. $btn_image. '" alt="'. $btn_text. '" />&nbsp;'. $btn_text. '</button>
+            <button name="speichern" type="submit" value="speichern">
+            	<img src="'. THEME_PATH. '/icons/'. $btn_image. '" alt="'. $btn_text. '" />
+            	&nbsp;'. $btn_text. '</button>
         </div>
     </div>
 </div>

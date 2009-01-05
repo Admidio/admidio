@@ -61,6 +61,7 @@ class User extends TableUsers
     // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
     function readUserData()
     {
+    	global $g_current_organization;
         $userFieldData = array();
 
         if($this->getValue("usr_id") > 0)
@@ -77,6 +78,8 @@ class User extends TableUsers
         $sql = "SELECT * FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
                        $join_user_data
                  WHERE usf_cat_id = cat_id
+                   AND (  cat_org_id IS NULL
+                       OR cat_org_id  = ". $g_current_organization->getValue("org_id"). " )
                  ORDER BY cat_sequence ASC, usf_sequence ASC ";
         $usf_result   = $this->db->query($sql);
         
