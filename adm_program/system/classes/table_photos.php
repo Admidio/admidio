@@ -13,11 +13,15 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
+ * countImages($pho_id = 0)    - Rekursive Funktion gibt die Anzahl aller Bilder 
+ *                               inkl. der Unteralben zurueck
+ * shuffleImage($pho_id = 0)   - Rekursive Funktion zum Auswaehlen eines 
+ *                               Beispielbildes aus einem moeglichst hohen Album
+ * createFolder()      - erzeugt den entsprechenden Ordner unter adm_my_files/photos
  * deleteInDatabase($photo_id) - Rekursive Funktion die die uebergebene Veranstaltung
  *                               und alle Unterveranstaltungen loescht
  * deleteInFilesystem($folder) - Rekursive Funktion die alles innerhalb des uebergebenen
  *                               Ordners mit Unterordnern und allen Dateien loescht
- * createFolder()      - erzeugt den entsprechenden Ordner unter adm_my_files/photos
  *
  *****************************************************************************/
 
@@ -68,6 +72,126 @@ class TablePhotos extends TableAccess
         parent::save();
     }
     
+    // Rekursive Funktion gibt die Anzahl aller Bilder inkl. der Unteralben zurueck
+    // pho_id noetig fuer rekursiven Aufruf
+    function countImages($pho_id = 0)
+    {
+        $total_images = 0;
+
+        // wurde keine ID uebergeben, dann Anzahl Bilder des aktuellen Albums ermitteln
+        if($pho_id == 0)
+        {
+            $pho_id = $this->getValue("pho_id");
+            $total_images = $this->getValue("pho_quantity");
+        }
+
+        // alle Unteralben ermitteln
+        $sql = "SELECT pho_id, pho_quantity
+                  FROM ". TBL_PHOTOS. "
+                 WHERE pho_pho_id_parent = ".$pho_id."
+                   AND pho_locked = 0";
+        $pho_result = $this->db->query($sql);
+
+        while($pho_row = $this->db->fetch_array($pho_result))
+        {
+            $total_images = $total_images + $pho_row["pho_quantity"] + $this->countImages($pho_row["pho_id"]);
+        }
+
+        return $total_images;
+    }
+
+    // Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album
+    // Rueckgabe eines Arrays mit allen noetigen Infos um den Link zu erstellen
+    function shuffleImage($pho_id = 0)
+    {
+        $shuffle_image = array("shuffle_pho_id" => 0, "shuffle_img_nr" => 0, "shuffle_img_begin" => "");
+
+        // wurde keine ID uebergeben, dann versuchen das Zufallsbild aus dem aktuellen Album zu nehmen
+        if($pho_id == 0)
+        {
+            $pho_id = $this->getValue("pho_id");
+            if($this->getValue("pho_quantity") > 0)
+            {
+                $shuffle_image["shuffle_img_nr"] = mt_rand(1, $this->getValue("pho_quantity"));
+                $shuffle_image["shuffle_pho_id"] = $this->getValue("pho_id");
+                $shuffle_image["shuffle_img_begin"] = $this->getValue("pho_begin");
+            }
+        }
+        
+        if($shuffle_image["shuffle_pho_id"] == 0)
+        {   
+            // kein Bild vorhanden, dann in einem Unteralbum suchen
+            $sql = "SELECT *
+                      FROM ". TBL_PHOTOS. "
+                     WHERE pho_pho_id_parent = ".$pho_id."
+                       AND pho_locked = 0
+                     ORDER BY pho_quantity DESC";
+            $result_child = $this->db->query($sql);
+            
+            while($pho_row = $this->db->fetch_array($result_child))
+            {
+                if($shuffle_image["shuffle_pho_id"] == 0)
+                {
+                    if($pho_row["pho_quantity"] > 0)
+                    {
+                        $shuffle_image["shuffle_img_nr"] = mt_rand(1, $pho_row["pho_quantity"]);
+                        $shuffle_image["shuffle_pho_id"] = $pho_row["pho_id"];
+                        $shuffle_image["shuffle_img_begin"] = $pho_row["pho_begin"];
+                    }
+                    else
+                    {
+                        $shuffle_image = shuffleImage($pho_row["pho_id"]);
+                    }
+                }
+            }
+        }
+        return $shuffle_image;
+    }
+
+    // Legt den Ordner fuer die Veranstaltung im Dateisystem an
+    function createFolder()
+    {
+        $error = array("code" => "0", "text" => "");
+    
+        if(is_writeable(SERVER_PATH. "/adm_my_files"))
+        {
+            if(file_exists(SERVER_PATH. "/adm_my_files/photos") == false)
+            {
+                // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
+                $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos", 0777);
+                if($b_return)
+                {
+                    $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos", 0777);
+                }
+                if($b_return == false)
+                {
+                    $error['code'] = "-2";
+                    $error['text'] = "adm_my_files/photos";
+                }
+            }
+            
+            // nun den Ordner fuer die Veranstaltung anlegen
+            $folder_name = $this->getValue("pho_begin"). "_". $this->getValue("pho_id");
+            
+            $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
+            if($b_return)
+            {
+                $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
+            }
+            if($b_return == false)
+            {
+                $error['code'] = "-3";
+                $error['text'] = "adm_my_files/photos/$folder_name";
+            }
+        }
+        else
+        {
+            $error['code'] = "-1";
+            $error['text'] = "adm_my_files";
+        }
+        return $error;
+    }
+
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
     // die Funktion wird innerhalb von delete() aufgerufen
     function delete()
@@ -172,49 +296,6 @@ class TablePhotos extends TableAccess
                     
         return true;
     }
-    
-    // Legt den Ordner fuer die Veranstaltung im Dateisystem an
-    function createFolder()
-    {
-        $error = array("code" => "0", "text" => "");
-    
-        if(is_writeable(SERVER_PATH. "/adm_my_files"))
-        {
-            if(file_exists(SERVER_PATH. "/adm_my_files/photos") == false)
-            {
-                // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
-                $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos", 0777);
-                if($b_return)
-                {
-                    $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos", 0777);
-                }
-                if($b_return == false)
-                {
-                    $error['code'] = "-2";
-                    $error['text'] = "adm_my_files/photos";
-                }
-            }
-            
-            // nun den Ordner fuer die Veranstaltung anlegen
-            $folder_name = $this->getValue("pho_begin"). "_". $this->getValue("pho_id");
-            
-            $b_return = @mkdir(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
-            if($b_return)
-            {
-                $b_return = @chmod(SERVER_PATH. "/adm_my_files/photos/$folder_name", 0777);
-            }
-            if($b_return == false)
-            {
-                $error['code'] = "-3";
-                $error['text'] = "adm_my_files/photos/$folder_name";
-            }
-        }
-        else
-        {
-            $error['code'] = "-1";
-            $error['text'] = "adm_my_files";
-        }
-        return $error;
-    }
+
 }
 ?>

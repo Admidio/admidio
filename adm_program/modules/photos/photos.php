@@ -19,7 +19,7 @@
 require_once("../../system/classes/table_photos.php");
 require_once("../../system/common.php");
 require_once("../../system/classes/image.php");
-require("../../system/classes/htaccess.php");
+require_once("../../system/classes/htaccess.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -30,7 +30,7 @@ if ($g_preferences['enable_photo_module'] == 0)
 elseif($g_preferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
+    require_once("../../system/login_valid.php");
 }
 
 //ID Pruefen
@@ -493,81 +493,34 @@ echo "<div class=\"photoModuleContainer\">";
     {
         $g_db->data_seek($result_list, $album_element+$ignored-$ignore);
     }
-
-    // Rekursive Funktion zum Erfassen der Bilder in Unteralben
-    function countImages($adm_photo_album)
-    {
-        global $g_db;
-        $total_images = $adm_photo_album["pho_quantity"];
-        
-        $sql = "SELECT *
-                  FROM ". TBL_PHOTOS. "
-                 WHERE pho_pho_id_parent = ".$adm_photo_album["pho_id"]."
-                   AND pho_locked = 0";
-        $result_child = $g_db->query($sql);
-        
-        while($adm_photo_child = $g_db->fetch_array($result_child))
-        {
-            $total_images = $total_images + countImages($adm_photo_child);
-        }
-        return $total_images;
-    }
-
-    // Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album
-    function shuffleImage($adm_photo_album)
-    {
-        global $g_db;
-        $shuffle_image = array("shuffle_pho_id" => 0, "shuffle_img_nr" => 0, "shuffle_img_begin" => "");
-
-        if($adm_photo_album["pho_quantity"] > 0)
-        {
-            $shuffle_image["shuffle_img_nr"] = mt_rand(1, $adm_photo_album["pho_quantity"]);
-            $shuffle_image["shuffle_pho_id"] = $adm_photo_album["pho_id"];
-            $shuffle_image["shuffle_img_begin"] = $adm_photo_album["pho_begin"];
-        }
-        else
-        {   
-            // kein Bild vorhanden, dann in einem Unteralbum suchen
-            $sql = "SELECT *
-                      FROM ". TBL_PHOTOS. "
-                     WHERE pho_pho_id_parent = ".$adm_photo_album["pho_id"]."
-                       AND pho_locked = 0
-                     ORDER BY pho_quantity DESC";
-            $result_child = $g_db->query($sql);
-            
-            while($adm_photo_child = $g_db->fetch_array($result_child))
-            {
-                $shuffle_image = shuffleImage($adm_photo_child);
-            }
-        }
-        return $shuffle_image;
-    }
     
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = "$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$pho_id;
     echo "<div class=\"pageNavigation\">".generatePagination($base_url, $albums-$ignored, 10, $album_element, TRUE)."</div>";
     
     $counter = 0;
+    $sub_photo_album = new TablePhotos($g_db);
 
     for($x=$album_element+$ignored-$ignore; $x<=$album_element+$ignored+9 && $x<$albums; $x++)
     {
         $adm_photo_list = $g_db->fetch_array($result_list);
+        // Daten in ein Photo-Objekt uebertragen
+        $sub_photo_album->clear();
+        $sub_photo_album->setArray($adm_photo_list);
+
         //Hauptordner
-        $ordner = SERVER_PATH. "/adm_my_files/photos/".$adm_photo_list["pho_begin"]."_".$adm_photo_list["pho_id"];
+        $ordner = SERVER_PATH. "/adm_my_files/photos/".$sub_photo_album->getValue("pho_begin")."_".$sub_photo_album->getValue("pho_id");
 
         //wenn ja Zeile ausgeben
-        if(file_exists($ordner) && ($adm_photo_list["pho_locked"]==0) || $g_current_user->editPhotoRight())
+        if(file_exists($ordner) && ($sub_photo_album->getValue("pho_locked")==0) || $g_current_user->editPhotoRight())
         {
             if($counter == 0)
             {
                 echo '<ul class="photoAlbumTable">';
             }
 
-            // Summe der Bilder ermitteln
-            $bildersumme = countImages($adm_photo_list);
-            
             // Zufallsbild fuer die Vorschau ermitteln
-            $shuffle_image = shuffleImage($adm_photo_list);
+            $shuffle_image = $sub_photo_album->shuffleImage();
 
             if($shuffle_image["shuffle_pho_id"] > 0)
             {
@@ -582,13 +535,13 @@ echo "<div class=\"photoModuleContainer\">";
 
             //Ausgabe
             echo '
-            <li id="pho_'.$adm_photo_list["pho_id"].'">
+            <li id="pho_'.$sub_photo_album->getValue("pho_id").'">
             <dl>
                 <dt>';
                     if(file_exists($ordner))
                     {
                         echo '
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$adm_photo_list["pho_id"].'">
+                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue("pho_id").'">
                             <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image["shuffle_pho_id"].'&amp;pic_nr='.$shuffle_image["shuffle_img_nr"].'&amp;pho_begin='.$shuffle_image["shuffle_img_begin"].'&amp;scal='.$g_preferences['photo_preview_scale'].'&amp;side=y"
                             alt="Zufallsbild" /></a>';
                     }
@@ -596,7 +549,7 @@ echo "<div class=\"photoModuleContainer\">";
                 <dd>
     				<ul>
                         <li>';
-                        if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($adm_photo_list["pho_locked"]==1 && file_exists($ordner)))
+                        if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($sub_photo_album->getValue("pho_locked")==1 && file_exists($ordner)))
                         {                   
                             //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                             if(!file_exists($ordner) && $g_current_user->editPhotoRight())
@@ -607,7 +560,7 @@ echo "<div class=\"photoModuleContainer\">";
                             }
 
                             //Hinweis fur Leute mit Photorechten: Album ist gesperrt
-                            if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
+                            if($sub_photo_album->getValue("pho_locked")==1 && file_exists($ordner))
                             {
                                 echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="Album ist gesperrt" title=""
                                 onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=not_approved\',this);" onmouseout="ajax_hideTooltip()"
@@ -618,22 +571,22 @@ echo "<div class=\"photoModuleContainer\">";
                         //Album angaben
                         if(file_exists($ordner))
                         {
-                            echo"<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."\">".$adm_photo_list["pho_name"]."</a><br />";
+                            echo"<a href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$sub_photo_album->getValue("pho_id")."\">".$sub_photo_album->getValue("pho_name")."</a><br />";
                         }
                         else
                         {
-                            echo $adm_photo_list["pho_name"];
+                            echo $sub_photo_album->getValue("pho_name");
                         }
 
                         echo "</li>
-                            <li>Bilder: ".$bildersumme." </li>
-                            <li>Datum: ".mysqldate("d.m.y", $adm_photo_list["pho_begin"]);
-                            if($adm_photo_list["pho_end"] != $adm_photo_list["pho_begin"])
+                            <li>Bilder: ".$sub_photo_album->countImages()." </li>
+                            <li>Datum: ".mysqldate("d.m.y", $sub_photo_album->getValue("pho_begin"));
+                            if($sub_photo_album->getValue("pho_end") != $sub_photo_album->getValue("pho_begin"))
                             {
-                                echo " bis ".mysqldate("d.m.y", $adm_photo_list["pho_end"]);
+                                echo " bis ".mysqldate("d.m.y", $sub_photo_album->getValue("pho_end"));
                             }
                             echo "</li> 
-    						<li>Fotos von: ".$adm_photo_list["pho_photographers"]."</li>";
+    						<li>Fotos von: ".$sub_photo_album->getValue("pho_photographers")."</li>";
 
                             //bei Moderationrecheten
                             if ($g_current_user->editPhotoRight())
@@ -645,37 +598,37 @@ echo "<div class=\"photoModuleContainer\">";
                                     if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
                                     {
     	                                echo "
-    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."&amp;mode=1\"><img 
+    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$sub_photo_album->getValue("pho_id")."&amp;mode=1\"><img 
     	                                    src=\"". THEME_PATH. "/icons/photo_upload.png\" alt=\"Einzelbilder hochladen\" title=\"Einzelbilder hochladen\" /></a>";
                                     }
                                     
                                     if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 1)
                                     {
     	                                echo "
-    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$adm_photo_list["pho_id"]."&amp;mode=2\"><img 
+    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photoupload.php?pho_id=".$sub_photo_album->getValue("pho_id")."&amp;mode=2\"><img 
     	                                    src=\"". THEME_PATH. "/icons/photo_upload_multi.png\" alt=\"Komfortupload\" title=\"Komfortupload\" /></a>";
                                     }
                                     
                                     echo "
-    								<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?pho_id=".$adm_photo_list["pho_id"]."&amp;job=change\"><img 
+    								<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photo_album_new.php?pho_id=".$sub_photo_album->getValue("pho_id")."&amp;job=change\"><img 
                                         src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
     	                            
-                                    if($adm_photo_list["pho_locked"]==1)
+                                    if($sub_photo_album->getValue("pho_locked")==1)
     	                            {
     	                                echo "
-    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&amp;locked=0\"><img 
+    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$sub_photo_album->getValue("pho_id")."&amp;locked=0\"><img 
     	                                    src=\"". THEME_PATH. "/icons/key.png\"  alt=\"Freigeben\" title=\"Freigeben\" /></a>";
     	                            }
-    	                            elseif($adm_photo_list["pho_locked"]==0)
+    	                            elseif($sub_photo_album->getValue("pho_locked")==0)
     	                            {
     	                                echo "
-    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$adm_photo_list["pho_id"]."&amp;locked=1\"><img 
+    	                                <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/photos/photos.php?pho_id=".$sub_photo_album->getValue("pho_id")."&amp;locked=1\"><img 
     	                                    src=\"". THEME_PATH. "/icons/key.png\" alt=\"Sperren\" title=\"Sperren\" /></a>";
     	                            }
                                 }
 
                                 echo '
-                                <a class="iconLink" href="javascript:deleteObject(\'pho\', \'pho_'.$adm_photo_list["pho_id"].'\','.$adm_photo_list["pho_id"].',\''.$adm_photo_list["pho_name"].'\')"><img 
+                                <a class="iconLink" href="javascript:deleteObject(\'pho\', \'pho_'.$sub_photo_album->getValue("pho_id").'\','.$sub_photo_album->getValue("pho_id").',\''.$sub_photo_album->getValue("pho_name").'\')"><img 
                                     src="'. THEME_PATH. '/icons/delete.png" alt="Album löschen" title="Album löschen" /></a>
     							</li>';
                             }
