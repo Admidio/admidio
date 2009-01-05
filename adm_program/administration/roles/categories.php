@@ -139,29 +139,35 @@ $g_layout['header'] = $g_js_vars. "
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
-// Html des Modules ausgeben
-echo "
-<h1 class=\"moduleHeadline\">$title-Verwaltung</h1>
+$icon_login_user = "";
+if($_GET['type'] != "USF")
+{
+	$icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$title.' nur für eingeloggte Benutzer sichtbar" title="'.$title.' nur für eingeloggte Benutzer sichtbar" />';
+}
 
-<ul class=\"iconTextLinkList\">
+// Html des Modules ausgeben
+echo '
+<h1 class="moduleHeadline">'.$title.'-Verwaltung</h1>
+
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type&amp;title=$title\"><img
-            src=\"". THEME_PATH. "/icons/add.png\" alt=\"$title anlegen\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/roles/categories_new.php?type=$req_type&amp;title=$title\">$title anlegen</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?type='.$req_type.'&amp;title='.$title.'"><img
+            src="'.THEME_PATH.'/icons/add.png" alt="'.$title.' anlegen" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$title.' anlegen</a>
         </span>
     </li>
 </ul>
 
-<table class=\"tableList\" id=\"tableCategories\" style=\"width: 300px;\" cellspacing=\"0\">
+<table class="tableList" id="tableCategories" style="width: 300px;" cellspacing="0">
     <thead>
         <tr>
             <th>Bezeichnung</th>
             <th>&nbsp;</th>
-            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"$title nur f&uuml;r eingeloggte Benutzer sichtbar\" title=\"$title nur f&uuml;r eingeloggte Benutzer sichtbar\" /></th>
+            <th>'.$icon_login_user.'</th>
             <th>&nbsp;</th>
         </tr>
-    </thead>";
+    </thead>';
 
     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
              WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
