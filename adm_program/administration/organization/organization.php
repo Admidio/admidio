@@ -1259,6 +1259,18 @@ echo "
                         aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen
                         Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)
                     </li>
+					<li>
+                        <dl>
+                            <dt><label for=\"mail_bcc_count\">Anzahl der BCC Empfänger:</label>
+                            </dt>
+                            <dd>
+								<input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" size=\"4\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. "\" />
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)
+                    </li>
                     <li>
                         <dl>
                             <dt><label for=\"enable_mail_captcha\">Captcha aktivieren:</label></dt>

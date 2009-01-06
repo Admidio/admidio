@@ -398,8 +398,8 @@ function sendEmail()
 
             $bccCounter++;
 
-            //immer wenn die Anzahl der BCCs 50 erreicht hat oder aber das letzte Element des Arrays erreicht ist, wird die Mail versand.
-            if ($bccCounter == 50 || count($this->bccArray) == $key+1)
+            //immer wenn die Anzahl der BCCs $g_preferences['mail_bcc_count'] (Standard: 50) erreicht hat oder aber das letzte Element des Arrays erreicht ist, wird die Mail versand.
+            if ($bccCounter == $g_preferences['mail_bcc_count'] || count($this->bccArray) == $key+1)
             {
                 // Hier wird der Header fuer die Mail aufbereitet...
                 $this->prepareHeader();

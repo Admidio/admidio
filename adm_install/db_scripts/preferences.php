@@ -83,6 +83,7 @@ $orga_preferences = array(
     // Mailmodul
     'enable_mail_module'        => '1',
     'max_email_attachment_size' => '1024',
+	'mail_bcc_count'			=> '50',
     'enable_mail_captcha'       => '1',
 
     // Systemmail
