@@ -20,5 +20,5 @@ if(strpos($_SERVER['REQUEST_URI'], "index.php") === false)
         src="<?php echo $g_root_path ?>/adm_program/system/logo/admidio_logo_20.png" style="vertical-align: middle; border-width: 0px;" 
         alt="Die Online-Mitgliederverwaltung für Vereine, Gruppen und Organisationen"
         title="Die Online-Mitgliederverwaltung für Vereine, Gruppen und Organisationen" /></a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2008&nbsp;&nbsp;Admidio Team</span>
+    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2009&nbsp;&nbsp;Admidio Team</span>
 </div>

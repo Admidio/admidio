@@ -184,5 +184,5 @@
     src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
      alt="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen"
      title="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen" /></a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2008&nbsp;&nbsp;Admidio Team</span>
+    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2009&nbsp;&nbsp;Admidio Team</span>
 </p>
