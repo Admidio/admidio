@@ -12,6 +12,7 @@
  * job:    - new    (neue eingaben speichern)
  *         - change (Aenderungen ausfuehren)
  *         - delete (Loeschen eines Albums)
+ *		   - set_rights
  *
  *****************************************************************************/
 
