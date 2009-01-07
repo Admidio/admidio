@@ -252,7 +252,7 @@ else
     			echo "<hr />";
     		}
 			
-			if($g_preferences['enable_weblinks_redirect'] == 1)
+			if($g_preferences['weblinks_redirect_seconds'] > 0)
 			{
 				echo "
 	    		<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
