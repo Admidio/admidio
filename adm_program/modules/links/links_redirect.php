@@ -2,7 +2,7 @@
 /******************************************************************************
  * Redirect für Links
  *
- * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Matthias Roberg
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@
 require("../../system/common.php");
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_weblinks_module'] == 0)
+if ($g_preferences['weblinks_redirect_seconds'] == 0)
 {
     // das Modul ist deaktiviert
     $g_message->show("module_disabled");

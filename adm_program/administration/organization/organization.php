@@ -1163,7 +1163,7 @@ echo "
                         ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben.
                         Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander
                         ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berprüfung
-                        nicht durchgeführt. (Standard: 60Sekunden)
+                        nicht durchgeführt. (Standard: 60 Sekunden)
                     </li>
                 </ul>
             </div>
@@ -1974,32 +1974,17 @@ echo "
                         so kann man zwischen den Links blättern. Bei dem Wert 0 werden alle Links 
                         aufgelistet und die Blättern-Funktion deaktiviert.
                     </li>
-					<li>
-                        <dl>
-                            <dt><label for=\"enable_weblinks_redirect\">Automatische Weiterleitung (Redirect):</label></dt>
-                            <dd>
-                                <input type=\"checkbox\" id=\"enable_weblinks_redirect\" name=\"enable_weblinks_redirect\" ";
-                                if(isset($form_values['enable_weblinks_redirect']) && $form_values['enable_weblinks_redirect'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann die Automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem
-						Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener
-						Zeit wird dann der eigentliche Link aufgerufen. (Standard: 0)
-                    </li>
                     <li>
                         <dl>
-                            <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect für:</label></dt>
+                            <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect:</label></dt>
                             <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Zeit nach der automatisch weitergeleitet wird. (Standard: 5Sekunden)
+						Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem
+						Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener
+						Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne
+						Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)
                     </li>					
                 </ul>
             </div>

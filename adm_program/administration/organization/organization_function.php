@@ -52,7 +52,7 @@ if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 
     $g_message->show("feld", "Automatischer Logout");
 }
 
-if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] <= 0)
+if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
 {
     $g_message->show("feld", "Anzeige Redirect");
 }
@@ -89,7 +89,6 @@ $checkboxes = array('dates_show_map_link'
 				   ,'lists_hide_overview_details'
                    ,'dates_show_calendar_select'
                    ,'messages_reminder'
-				   ,'enable_weblinks_redirect'
                    );
 
 foreach($checkboxes as $key => $value)
