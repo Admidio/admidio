@@ -1976,6 +1976,30 @@ echo "
                     </li>
                     <li>
                         <dl>
+                            <dt><label for=\"weblinks_target\">Link-Target:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"weblinks_target\" name=\"weblinks_target\">
+									<option value=\"_self\"";
+									if($form_values['weblinks_target'] == "_self")
+									{
+										echo " selected=\"selected\" ";
+									}
+									echo ">Gleiches Fenster</option>									
+									<option value=\"_blank\"";
+									if($form_values['weblinks_target'] == "_blank")
+									{
+										echo " selected=\"selected\" ";
+									}									
+									echo ">Neues Fenster</option>";
+                                echo "</select>
+                            </dd>
+                        </dl>
+                    </li>					
+                    <li class=\"smallFontSize\">
+						Gibt an, ob die Links im gleichen oder in einem neuen Fenster geöffnet werden.
+                    </li>
+                    <li>
+                        <dl>
                             <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect:</label></dt>
                             <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
                         </dl>

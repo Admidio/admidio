@@ -255,18 +255,18 @@ else
 			if($g_preferences['weblinks_redirect_seconds'] > 0)
 			{
 				echo "
-	    		<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
+	    		<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"". $g_preferences['weblinks_target']. "\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
 	    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-	    		<a href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"_blank\">$row->lnk_name</a>
+	    		<a href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"". $g_preferences['weblinks_target']. "\">$row->lnk_name</a>
 
 	    		<div style=\"margin-top: 10px;\">";
 			}
 			else
 			{			
 	    		echo "
-	    		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"_blank\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
+	    		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"". $g_preferences['weblinks_target']. "\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
 	    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-	    		<a href=\"$row->lnk_url\" target=\"_blank\">$row->lnk_name</a>
+	    		<a href=\"$row->lnk_url\" target=\"". $g_preferences['weblinks_target']. "\">$row->lnk_name</a>
 
 	    		<div style=\"margin-top: 10px;\">";
 			}
