@@ -962,7 +962,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
 						<img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
-                    	Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 550Pixel)
+                    	Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)
                     </li>
                     <li>
                         <dl>
