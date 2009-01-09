@@ -372,7 +372,7 @@ function maxUploadSize()
 	    case 'k':
 	        $upload_max_filesize *= 1024;
     }
-    if($upload_max_filesize > $post_max_size)
+    if($upload_max_filesize < $post_max_size)
     {
         return $upload_max_filesize;    
     }
