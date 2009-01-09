@@ -326,13 +326,12 @@ $message_text = array(
         "Das Foto wurde erfolgreich gelöscht.",
 
     "photo_2big" =>
-        "Mindestens eins der hochgeladenen Fotos übersteigt die vom Server zugelassene
-        Dateigröße von %VAR1% B.",
+        "Eine der Dateien oder alle gemeinsam übersteigen die vom Server zugelassenen Uplodgröße von %VAR1% MB.",
 
     "empty_photo_post" =>
         "Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.<br />
         Vermutlich wurde die vom Server vorgegebene, maximale Uploadgröße
-        von %VAR1% B. übersteigen!",
+        von %VAR1%B. übersteigen!",
     //Ende Fehlermeldungen Fotomodul
 
     //Fehlermeldungen Forum

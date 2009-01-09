@@ -66,7 +66,7 @@ else if(isset($_SESSION['photomodul_headline']))
 	$req_headline = $_SESSION['photomodul_headline'];
 }
 
-//aktuelle album_element
+//aktuelles Bild
 if(array_key_exists("start", $_GET))
 {
     if(is_numeric($_GET["start"]) == false)
@@ -80,6 +80,7 @@ else
     $album_element = 0;
 }
 
+//aktuelle Albumseite
 if(array_key_exists("thumb_seite", $_GET))
 {
     if(is_numeric($_GET["thumb_seite"]) == false)
@@ -91,20 +92,6 @@ if(array_key_exists("thumb_seite", $_GET))
 else
 {
     $thumb_seite = 1;
-}
-
-if(isset($_GET["locked"]))
-{
-    $locked = $_GET["locked"];
-}
-else
-{
-    $locked = NULL;
-}
-
-if(!is_numeric($locked) && $locked!=NULL)
-{
-    $g_message->show("invalid");
 }
 
 //ggf. Ordner für Fotos anlegen
@@ -141,6 +128,20 @@ if($pho_id > 0 && $photo_album->getValue("pho_org_shortname") != $g_organization
 }   
 
 /*********************LOCKED************************************/
+if(isset($_GET["locked"]))
+{
+    $locked = $_GET["locked"];
+}
+else
+{
+    $locked = NULL;
+}
+
+if(!is_numeric($locked) && $locked!=NULL)
+{
+    $g_message->show("invalid");
+}
+
 //Falls gefordert und Foto-edit-rechte, aendern der Freigabe
 if($locked=="1" || $locked=="0")
 {

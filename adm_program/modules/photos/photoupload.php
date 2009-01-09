@@ -89,7 +89,7 @@ if($_GET["mode"] == 1 && $g_preferences['photo_upload_mode'] <> 1)
 {
 	echo '
 	<div class="formLayout" id="photo_upload_form">
-	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '" enctype="multipart/form-data">
+	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '&uploadmethod=1" enctype="multipart/form-data">
 	    <div class="formHead">Bilder hochladen</div>
 	    <div class="formBody">
 	        <p>
@@ -100,23 +100,23 @@ if($_GET["mode"] == 1 && $g_preferences['photo_upload_mode'] <> 1)
 	        <ul class="formFieldList">
 	            <li><dl>
 	                <dt><label for="bilddatei1">Bild 1:</label></dt>
-	                <dd><input type="file" id="bilddatei1" name="bilddatei[]" value="durchsuchen" /></dd>
+	                <dd><input type="file" id="bilddatei1" name="Filedata[]" value="durchsuchen" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="bilddatei1">Bild 2:</label></dt>
-	                <dd><input type="file" id="bilddatei2" name="bilddatei[]" value="durchsuchen" /></dd>
+	                <dd><input type="file" id="bilddatei2" name="Filedata[]" value="durchsuchen" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="bilddatei1">Bild 3:</label></dt>
-	                <dd><input type="file" id="bilddatei3" name="bilddatei[]" value="durchsuchen" /></dd>
+	                <dd><input type="file" id="bilddatei3" name="Filedata[]" value="durchsuchen" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="bilddatei1">Bild 4:</label></dt>
-	                <dd><input type="file" id="bilddatei4" name="bilddatei[]" value="durchsuchen" /></dd>
+	                <dd><input type="file" id="bilddatei4" name="Filedata[]" value="durchsuchen" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="bilddatei1">Bild 5:</label></dt>
-	                <dd><input type="file" id="bilddatei5" name="bilddatei[]" value="durchsuchen" /></dd>
+	                <dd><input type="file" id="bilddatei5" name="Filedata[]" value="durchsuchen" /></dd>
 	            </dl></li>
 	        </ul>
 	        <hr />
@@ -139,7 +139,7 @@ elseif($_GET["mode"] == 2 && $g_preferences['photo_upload_mode'] <> 2)
             (Beginn: '. mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ')
 	    </p>';
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
-	$fup = new FlexUpload($g_root_path."/adm_program/modules/photos/photoflexupload_do.php?pho_id=".$_GET['pho_id']."&admidio_php_session_id=".$_COOKIE["admidio_php_session_id"]."&admidio_session_id=".$_COOKIE["admidio_session_id"]."&admidio_data=".$_COOKIE["admidio_data"]);
+	$fup = new FlexUpload($g_root_path."/adm_program/modules/photos/photoupload_do.php?pho_id=".$_GET['pho_id']."&admidio_php_session_id=".$_COOKIE["admidio_php_session_id"]."&admidio_session_id=".$_COOKIE["admidio_session_id"]."&admidio_data=".$_COOKIE["admidio_data"]."&uploadmethod=2");
 	//Pfad zum swf-File
 	$fup->setPathToSWF($g_root_path."/adm_program/libs/flexupload/");
 	//Pfad der Sprachdatei
