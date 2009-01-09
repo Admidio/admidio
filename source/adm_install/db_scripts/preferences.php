@@ -65,7 +65,7 @@ $orga_preferences = array(
     'forum_pw'              => '',
     'forum_set_admin'       => '1',
     'forum_link_intern'     => '1',
-    'forum_width'           => '550',
+    'forum_width'           => '570',
 
     // Gaestebuch
     'enable_guestbook_module'           => '1',

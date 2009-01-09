@@ -8,6 +8,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
+
 include("system/common.php");
 
 // Url-Stack loeschen
@@ -17,7 +18,13 @@ $_SESSION['navigation']->clear();
 $g_layout['title']  = "Admidio Forum";
 $g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
 
-//require(THEME_SERVER_PATH. "/overall_header.php");
+
+if( eregi("(msie) ([0-9]{1,2}.[0-9]{1,3})",$_SERVER['HTTP_USER_AGENT'] ,$regs) )
+{
+   require(THEME_SERVER_PATH. "/overall_header.php");
+}
+else
+{
 // Header hier Ausgeben (Kopie von overall_header.php mit anderem Doctype wegen Script kompabilität)
 /******************************************************************************
  * Anfang Html-Kopf der in allen Admidio-Dateien integriert wird
@@ -64,12 +71,8 @@ if(isset($g_current_organization))
 }
 
 header('Content-type: text/html; charset=utf-8'); 
-if( eregi("(msie) ([0-9]{1,2}.[0-9]{1,3})",$_SERVER['HTTP_USER_AGENT'] ,$regs) )
-{
-   echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-}
-
 echo '
+
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
 <head>
     <!-- (c) 2004 - 2008 The Admidio Team - http://www.admidio.org -->
@@ -123,7 +126,7 @@ echo "</head>
  *
  *****************************************************************************/
 // Header Ende
-
+}
 
 // Html des Modules ausgeben
 ?>
@@ -140,10 +143,9 @@ function resizeIframe(obj)
 }
 // -->
 </script>
-
-<iframe id="sizeframe" name="sizeframe" width="<?php if ($g_preferences['forum_width']){echo $g_preferences['forum_width'];}else{echo "550";}?>px" height="100px" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" src="<?php echo $g_forum->url; ?>" onload="resizeIframe(this)"></iframe>
-
+<br />
+<iframe id="sizeframe" name="sizeframe" marginheight="0px" marginwidth="0px" width="<?php if ($g_preferences['forum_width']){echo $g_preferences['forum_width'];}else{echo "570";}?>px" height="100px" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" src="<?php echo $g_forum->url; ?>" onload="resizeIframe(this)"></iframe>
+<br />
 <?
 require(THEME_SERVER_PATH. "/overall_footer.php");
-
 ?>
