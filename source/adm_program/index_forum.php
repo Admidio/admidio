@@ -133,7 +133,6 @@ echo "</head>
 	
 	function resizeIframe(id)
 	{
-	alert("lol");
 		var notIE = document.getElementById&&!document.all
 		var heightOffset = 20;
 		var IFrameObj = document.getElementById(id);
