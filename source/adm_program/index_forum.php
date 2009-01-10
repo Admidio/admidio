@@ -134,7 +134,7 @@ echo "</head>
 	function resizeIframe(id)
 	{
 		var notIE = document.getElementById&&!document.all
-		var heightOffset = 20;
+		var heightOffset = 0;
 		var IFrameObj = document.getElementById(id);
 		IFrameObj.style.height="";
 		var IFrameDoc;
@@ -145,7 +145,7 @@ echo "</head>
 			// For IE5.5 and IE6
 			IFrameDoc = IFrameObj.document;
 		}
-		IFrameObj.style.height=IFrameDoc.body.scrollHeight+(notIE?heightOffset:0)+"px";
+		IFrameObj.style.height=IFrameDoc.body.scrollHeight+(notIE?0:heightOffset)+"px";
 	}
 // -->
 </script>
