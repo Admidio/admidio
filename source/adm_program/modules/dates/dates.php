@@ -288,66 +288,78 @@ $sql = "SELECT cat.*, dat.*,
          LIMIT $req_start, $dates_per_page";
 $dates_result = $g_db->query($sql);
 
-// Neue Termine anlegen
-if($g_current_user->editDates())
+
+//Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
+if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->editDates())
 {
-    echo "
-    <ul class=\"iconTextLinkList\">
+    echo "<ul class=\"iconTextLinkList\">";
+    //Neue Termine anlegen
+    if($g_current_user->editDates())
+    {
+        echo "
         <li>
             <span class=\"iconTextLink\">
                 <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline$req_headline\"><img
                 src=\"". THEME_PATH. "/icons/add.png\" alt=\"Termin anlegen\" title=\"Termin anlegen\"/></a>
-                <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Anlegen</a>
+                <a href=\"$g_root_path/adm_program/modules/dates/dates_new.php?headline=$req_headline\">Termin Anlegen</a>
             </span>
-        </li>
-        <li>
-            <span class=\"iconTextLink\">
-               <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\"><img
-                  src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kalender pflegen\" title=\"Kalender pflegen\"/></a>
-               <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\">Kalender pflegen</a>
-            </span>
-        </li>
-    </ul>";
-}
-
-//Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
-if(($dates_show_calendar_select == 1) && ($req_id == 0))
-   {
-   // Combobox mit allen Kalendern anzeigen, denen auch Termine zugeordnet sind
-   $sql = "SELECT DISTINCT cat_name
-             FROM ". TBL_CATEGORIES. ", ". TBL_DATES. "
-            WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
-              AND cat_type   = 'DAT'
-              AND dat_cat_id = cat_id ";
-   if($g_valid_login == false)
-   {
-     $sql .= " AND cat_hidden = 0 ";
-   }
-   $sql .= " ORDER BY cat_sequence ASC ";
-   $result = $g_db->query($sql);
-
-   if($g_db->num_rows($result) > 1)
-   {
-       echo '<p>Kalender wählen:&nbsp;&nbsp;
-      <select size="1" id="calendar" onchange="showCalendar()">
-         <option value="Alle" ';
-         if(strlen($req_calendar) == 0)
-         {
-             echo ' selected="selected" ';
-         }
-         echo '>Alle</option>';
-
-         while($row = $g_db->fetch_object($result))
-         {
-             echo '<option value="'. urlencode($row->cat_name). '"';
-             if($req_calendar == $row->cat_name)
-             {
-                 echo ' selected="selected" ';
-             }
-             echo '>'.$row->cat_name.'</option>';
-         }
-     echo '</select></p>';
-      }
+        </li>";
+    }
+    if(($dates_show_calendar_select == 1) && ($req_id == 0))   
+    {
+        // Combobox mit allen Kalendern anzeigen, denen auch Termine zugeordnet sind
+        $sql = "SELECT DISTINCT cat_name
+                  FROM ". TBL_CATEGORIES. ", ". TBL_DATES. "
+                 WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                   AND cat_type   = 'DAT'
+                   AND dat_cat_id = cat_id ";
+        if($g_valid_login == false)
+        {
+          $sql .= " AND cat_hidden = 0 ";
+        }
+        $sql .= " ORDER BY cat_sequence ASC ";
+        $result = $g_db->query($sql);
+        
+        if($g_db->num_rows($result) > 1)
+        {
+            echo "<li>Kalender:&nbsp;&nbsp;
+           <select size=\"1\" id=\"calendar\" onchange=\"showCalendar()\">
+              <option value=\"Alle\" ";
+              if(strlen($req_calendar) == 0)
+              {
+                  echo " selected=\"selected\" ";
+              }
+              echo ">Alle</option>";
+        
+              while($row = $g_db->fetch_object($result))
+              {
+                  echo "<option value=\"". urlencode($row->cat_name). "\"";
+                  if($req_calendar == $row->cat_name)
+                  {
+                      echo " selected=\"selected\" ";
+                  }
+                  echo ">".$row->cat_name."</option>";
+              }
+            echo "</select>";
+            if($g_current_user->editDates())
+            {
+                echo "<a  class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\">
+                    <img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Kalender pflegen\" title=\"Kalender pflegen\"/>
+                </a>";
+            }
+            echo "</li>";
+        }
+        elseif($g_current_user->editDates())
+        {
+           echo "
+           <li><span class=\"iconTextLink\">
+                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\"><img
+                          src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Kalender pflegen\" title=\"Kalender pflegen\"/></a>
+                <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender\">Kalender pflegen</a>
+           </li></span>";
+        }
+    } 
+    echo "</ul>";
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
