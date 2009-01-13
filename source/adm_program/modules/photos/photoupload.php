@@ -15,77 +15,77 @@
  * 
  *****************************************************************************/
 
-require_once("../../system/classes/table_photos.php");
-require_once("../../system/common.php");
-require_once("../../system/login_valid.php");
-require_once("../../libs/flexupload/class.flexupload.inc.php");
+require_once('../../system/classes/table_photos.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../libs/flexupload/class.flexupload.inc.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show("photoverwaltunsrecht");
+    $g_message->show('photoverwaltunsrecht');
 }
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false)
+if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false)
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 // im Zweifel den klassischen Upload nehmen
-if(!isset($_GET["mode"]) || $_GET["mode"] < 1 || $_GET["mode"] > 2)
+if(!isset($_GET['mode']) || $_GET['mode'] < 1 || $_GET['mode'] > 2)
 {
-    $_GET["mode"] = 1;
+    $_GET['mode'] = 1;
 }
 
 //Kontrolle ob Server Dateiuploads zulaesst
 $ini = ini_get('file_uploads');
 if($ini!=1)
 {
-    $g_message->show("no_file_upload_server");
+    $g_message->show('no_file_upload_server');
 }
 
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $_GET["pho_id"])
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $_GET['pho_id'])
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_album = new TablePhotos($g_db, $_GET["pho_id"]);
+    $photo_album = new TablePhotos($g_db, $_GET['pho_id']);
     $_SESSION['photo_album'] =& $photo_album;
 }
 
 //ordner fuer Flexupload anlegen, falls dieser nicht existiert
-if(!file_exists(SERVER_PATH. "/adm_my_files/photos/upload"))
+if(!file_exists(SERVER_PATH. '/adm_my_files/photos/upload'))
 {
-    mkdir(SERVER_PATH. "/adm_my_files/photos/upload",0777);
+    mkdir(SERVER_PATH. '/adm_my_files/photos/upload',0777);
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($photo_album->getValue("pho_org_shortname") != $g_organization)
+if($photo_album->getValue('pho_org_shortname') != $g_organization)
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Fotos hochladen";
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['title'] = 'Fotos hochladen';
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 /**************************Klassisches Formular********************************************************/
-if($_GET["mode"] == 1 && $g_preferences['photo_upload_mode'] <> 1)
+if($_GET['mode'] == 1 && $g_preferences['photo_upload_mode'] <> 1)
 {
 	echo '
 	<div class="formLayout" id="photo_upload_form">
@@ -127,23 +127,23 @@ if($_GET["mode"] == 1 && $g_preferences['photo_upload_mode'] <> 1)
 	</form>
 
     <script type="text/javascript"><!--
-        document.getElementById(\'bilddatei1\').focus();
+        document.getElementById("bilddatei1").focus();
     --></script>';
 }
 /**************************Flexuploader********************************************************/
-elseif($_GET["mode"] == 2 && $g_preferences['photo_upload_mode'] <> 2)
+elseif($_GET['mode'] == 2 && $g_preferences['photo_upload_mode'] <> 2)
 {
 	echo '<h2>Bilder hochladen</h2>
 		<p>
-	        Die Bilder werden zu dem Album <strong>'.$photo_album->getValue("pho_name").'</strong> hinzugefügt.<br />
-            (Beginn: '. mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ')
+	        Die Bilder werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
+            (Beginn: '. mysqldate('d.m.y', $photo_album->getValue('pho_begin')). ')
 	    </p>';
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
-	$fup = new FlexUpload($g_root_path."/adm_program/modules/photos/photoupload_do.php?pho_id=".$_GET['pho_id']."&admidio_php_session_id=".$_COOKIE["admidio_php_session_id"]."&admidio_session_id=".$_COOKIE["admidio_session_id"]."&admidio_data=".$_COOKIE["admidio_data"]."&uploadmethod=2");
+	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$_GET['pho_id'].'&admidio_php_session_id='.$_COOKIE['admidio_php_session_id'].'&admidio_session_id='.$_COOKIE['admidio_session_id'].'&admidio_data='.$_COOKIE['admidio_data'].'&uploadmethod=2');
 	//Pfad zum swf-File
-	$fup->setPathToSWF($g_root_path."/adm_program/libs/flexupload/");
+	$fup->setPathToSWF($g_root_path.'/adm_program/libs/flexupload/');
 	//Pfad der Sprachdatei
-	$fup->setLocale($g_root_path."/adm_program/libs/flexupload/de.xml");
+	$fup->setLocale($g_root_path.'/adm_program/libs/flexupload/de.xml');
 	//maximale Dateigröße
 	$fup->setMaxFileSize(maxUploadSize());
 	//maximale Dateianzahl
@@ -153,13 +153,13 @@ elseif($_GET["mode"] == 2 && $g_preferences['photo_upload_mode'] <> 2)
 	//breite des Uploaders
 	$fup->setHeight(400);
 	//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
-	$fup->setFileExtensions("*.jpg;*.jpeg;*.png");
+	$fup->setFileExtensions('*.jpg;*.jpeg;*.png');
 	//Ausgabe des Uploaders
 	$fup->printHTML(true, 'flexupload');
 }
 else
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 echo '
@@ -175,13 +175,13 @@ echo '
     <li>
         <span class="iconTextLink">
             <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true\',\'Message\',\'width=600,height=600,left=310,top=200,scrollbars=yes\')"  
-                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=photo_up_help\',this);" onmouseout="ajax_hideTooltip()" />   
-            <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true\',\'Message\',\'width=600,height=600,left=310,top=200,scrollbars=yes\')">Hilfe</a>
+                onclick="window.open("'.$g_root_path.'/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true","Message","width=600,height=600,left=310,top=200,scrollbars=yes")"  
+                onmouseover="ajax_showTooltip(event,"'.$g_root_path.'/adm_program/system/msg_window.php?err_code=photo_up_help",this);" onmouseout="ajax_hideTooltip()" />   
+            <a href="#" onclick="window.open("'.$g_root_path.'/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true","Message","width=600,height=600,left=310,top=200,scrollbars=yes")">Hilfe</a>
         </span>
     </li>
 </ul>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

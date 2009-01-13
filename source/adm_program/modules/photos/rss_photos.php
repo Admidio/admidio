@@ -14,50 +14,50 @@
  *
  *****************************************************************************/
 
-require_once("../../system/common.php");
-require_once("../../system/classes/rss.php");
-require_once("../../system/classes/table_photos.php");
+require_once('../../system/common.php');
+require_once('../../system/classes/rss.php');
+require_once('../../system/classes/table_photos.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($g_preferences['enable_rss'] != 1)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show("rss_disabled");
+    $g_message->show('rss_disabled');
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 elseif($g_preferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require_once("../../system/login_valid.php");
+    require_once('../../system/login_valid.php');
 }
 
 // die neuesten 10 Fotoalben aus der DB fischen...
-$sql = "SELECT pho.*,
+$sql = 'SELECT pho.*,
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-          FROM ". TBL_PHOTOS. " pho
-          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+          FROM '. TBL_PHOTOS. ' pho
+          LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = pho_usr_id_create
-           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = pho_usr_id_create
-           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = pho_usr_id_change
-           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = pho_usr_id_change
-           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
-         WHERE (   pho_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+         WHERE (   pho_org_shortname = ''. $g_current_organization->getValue('org_shortname'). ''
                AND pho_locked = 0)
          ORDER BY pho_timestamp_create DESC
-         LIMIT 10";
+         LIMIT 10';
 $result = $g_db->query($sql);
 
 $photo_album = new TablePhotos($g_db);
@@ -65,7 +65,7 @@ $photo_album = new TablePhotos($g_db);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed("http://". $g_current_organization->getValue("org_homepage"), $g_current_organization->getValue("org_longname"). " - Fotos", "Die 10 neuesten Fotoalben");
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Fotos', 'Die 10 neuesten Fotoalben');
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_array($result))
@@ -77,67 +77,67 @@ while ($row = $g_db->fetch_array($result))
     // Die Attribute fuer das Item zusammenstellen
 
     //Titel
-    $parents = "";
+    $parents = '';
     $pho_parent_id = $photo_album->getValue('pho_pho_id_parent');
     //Titel muss mit Ordnerstruktur zusammengesetzt werden
     while ($pho_parent_id != NULL)
     {
         //Erfassen des Eltern Albums
-        $sql=" SELECT *
-                 FROM ". TBL_PHOTOS. "
-                WHERE pho_id = $pho_parent_id ";
+        $sql=' SELECT *
+                 FROM '. TBL_PHOTOS. '
+                WHERE pho_id = $pho_parent_id ';
         $result_parents = $g_db->query($sql);
         $adm_photo_parent = $g_db->fetch_array($result_parents);
 
         //Link zusammensetzen
-        $parents = " > ".$adm_photo_parent["pho_name"].$parents;
+        $parents = ' > '.$adm_photo_parent['pho_name'].$parents;
 
         //Elternveranst
-        $pho_parent_id=$adm_photo_parent["pho_pho_id_parent"];
+        $pho_parent_id=$adm_photo_parent['pho_pho_id_parent'];
     }
-    $title = "Fotogalerien".$parents."&nbsp;&gt;&nbsp;".$photo_album->getValue('pho_name');
+    $title = 'Fotogalerien'.$parents.'&nbsp;&gt;&nbsp;'.$photo_album->getValue('pho_name');
 
     //Link
-    $link  = $g_root_path."/adm_program/modules/photos/photos.php?pho_id=". $photo_album->getValue('pho_id');
+    $link  = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
 
     //Inhalt zusammensetzen
-    $description = "Fotogalerien".$parents." > ". $photo_album->getValue('pho_name');
-    $description = $description. "<br /><br /> Bilder: ".$photo_album->countImages();
-    $description = $description. "<br /> Datum: ".mysqldate("d.m.y", $photo_album->getValue('pho_begin'));
+    $description = 'Fotogalerien'.$parents.' > '. $photo_album->getValue('pho_name');
+    $description = $description. '<br /><br /> Bilder: '.$photo_album->countImages();
+    $description = $description. '<br /> Datum: '.mysqldate('d.m.y', $photo_album->getValue('pho_begin'));
     //Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
     {
-        $description = $description. " bis ".mysqldate("d.m.y", $photo_album->getValue('pho_end'));
+        $description = $description. ' bis '.mysqldate('d.m.y', $photo_album->getValue('pho_end'));
     }
-    $description = $description. "<br />Fotos von: ".$photo_album->getValue('pho_photographers');
+    $description = $description. '<br />Fotos von: '.$photo_album->getValue('pho_photographers');
 
     //die letzten fuenf Bilder sollen als Beispiel genutzt werden
     if($photo_album->getValue('pho_quantity') >0)
     {
-        $description = $description. "<br /><br />Beispielbilder:<br />";
+        $description = $description. '<br /><br />Beispielbilder:<br />';
         for($bild=$photo_album->getValue('pho_quantity'); $bild>=$photo_album->getValue('pho_quantity')-4 && $bild>0; $bild--)
         {
-            $bildpfad = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue('pho_begin')."_".$photo_album->getValue('pho_id')."/".$bild.".jpg";
+            $bildpfad = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$bild.'.jpg';
             //Zu Sicherheit noch überwachen ob das Bild existiert, wenn ja raus damit
             if (file_exists($bildpfad))
             {
-                $description = $description. "
-                 <img src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$photo_album->getValue('pho_id')."&amp;pic_nr=".$bild."&amp;pho_begin=".$photo_album->getValue('pho_begin')."&amp;scal=100\" border=\"0\" />&nbsp;";
+                $description = $description. '
+                 <img src="$g_root_path/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal=100" border="0" />&nbsp;';
             }
         }
     }
 
     //Link zur Momepage
-    $description = $description. "<br /><br /><a href=\"$link\">Link auf ". $g_current_organization->getValue("org_homepage"). "</a>";
+    $description = $description. '<br /><br /><a href="$link">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
     // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
-    $description = $description. "<br /><br /><i>Angelegt von ". $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname').
-								 " am ". mysqldatetime("d.m.y h:i", $photo_album->getValue('pho_timestamp_create')). "</i>";
+    $description = $description. '<br /><br /><i>Angelegt von '. $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname').
+								 ' am '. mysqldatetime('d.m.y h:i', $photo_album->getValue('pho_timestamp_create')). '</i>';
 
     if($photo_album->getValue('pho_usr_id_change') > 0)
     {
-        $description = $description. "<br /><i>Zuletzt bearbeitet von ". $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname').
-									 " am ". mysqldatetime("d.m.y h:i", $photo_album->getValue('pho_timestamp_change')). "</i>";
+        $description = $description. '<br /><i>Zuletzt bearbeitet von '. $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname').
+									 ' am '. mysqldatetime('d.m.y h:i', $photo_album->getValue('pho_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));

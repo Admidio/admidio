@@ -14,52 +14,52 @@
  *
  *****************************************************************************/
 
-require_once("../../system/common.php");
-require_once("../../system/login_valid.php");
-require_once("../../system/classes/table_photos.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_photos.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show("photoverwaltunsrecht");
+    $g_message->show('photoverwaltunsrecht');
 }
 
 // Uebergabevariablen pruefen
 //Albumsuebergabe Numerisch und != Null?
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]) == false && $_GET["pho_id"]!=NULL)
+if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false && $_GET['pho_id']!=NULL)
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 // Aufgabe gesetzt, welche Aufgabe
-if(isset($_GET["job"]) && $_GET["job"] != "new" && $_GET["job"] != "change")
+if(isset($_GET['job']) && $_GET['job'] != 'new' && $_GET['job'] != 'change')
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 //Variablen initialisieren
-$pho_id = $_GET["pho_id"];
+$pho_id = $_GET['pho_id'];
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($g_db);
 
 // nur Daten holen, wenn Album editiert werden soll
-if ($_GET["job"] == "change")
+if ($_GET['job'] == 'change')
 {
     $photo_album->readData($pho_id);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
-    if($photo_album->getValue("pho_org_shortname") != $g_organization)
+    if($photo_album->getValue('pho_org_shortname') != $g_organization)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
 }
 
@@ -69,7 +69,7 @@ if(isset($_SESSION['photo_album_request']))
     // nun die vorher eingegebenen Inhalte auslesen
     foreach($_SESSION['photo_album_request'] as $key => $value)
     {
-        if(strpos($key, "pho_") == 0)
+        if(strpos($key, 'pho_') == 0)
         {
             $photo_album->setValue($key, stripslashes($value));
         }
@@ -79,23 +79,23 @@ if(isset($_SESSION['photo_album_request']))
 else
 {
     // Datum formatieren
-    $photo_album->setValue("pho_begin", mysqldate('d.m.y', $photo_album->getValue("pho_begin")));
-    $photo_album->setValue("pho_end", mysqldate('d.m.y', $photo_album->getValue("pho_end")));
+    $photo_album->setValue('pho_begin', mysqldate('d.m.y', $photo_album->getValue('pho_begin')));
+    $photo_album->setValue('pho_end', mysqldate('d.m.y', $photo_album->getValue('pho_end')));
 }
 
 // einlesen der Albumliste
-$pho_id_condition = "";
-if($photo_album->getValue("pho_id") > 0)
+$pho_id_condition = '';
+if($photo_album->getValue('pho_id') > 0)
 {
-    $pho_id_condition = " AND pho_id <> ". $photo_album->getValue("pho_id");
+    $pho_id_condition = ' AND pho_id <> '. $photo_album->getValue('pho_id');
 }
 
-$sql="  SELECT *
-        FROM ". TBL_PHOTOS. "
-        WHERE pho_org_shortname ='$g_organization'
+$sql='  SELECT *
+        FROM '. TBL_PHOTOS. '
+        WHERE pho_org_shortname ="'.$g_organization.'"
         AND   pho_pho_id_parent IS NULL
-        $pho_id_condition
-        ORDER BY pho_begin DESC ";
+        '.$pho_id_condition.'
+        ORDER BY pho_begin DESC ';
 $result_list = $g_db->query($sql);
 
 //Parent
@@ -103,47 +103,47 @@ $result_list = $g_db->query($sql);
 function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 {
     global $g_db;
-    $vorschub = $vorschub."&nbsp;&nbsp;&nbsp;&nbsp;";
+    $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;&nbsp;';
 
     //Erfassen des auszugebenden Albums
-    $pho_id_condition = "";
-    if($photo_album->getValue("pho_id") > 0)
+    $pho_id_condition = '';
+    if($photo_album->getValue('pho_id') > 0)
     {
-        $pho_id_condition = " AND pho_id <> ". $photo_album->getValue("pho_id");
+        $pho_id_condition = ' AND pho_id <> '. $photo_album->getValue('pho_id');
     }
 
-    $sql = "SELECT *
-            FROM ". TBL_PHOTOS. "
-            WHERE pho_pho_id_parent = $parent_id
-            $pho_id_condition ";
+    $sql = 'SELECT *
+            FROM '. TBL_PHOTOS. '
+            WHERE pho_pho_id_parent = "'.$parent_id.'"
+            '.$pho_id_condition.' ';
     $result_child = $g_db->query($sql);
 
     while($adm_photo_child = $g_db->fetch_array($result_child))
     {
         //Wenn die Elternveranstaltung von pho_id dann selected
-        $selected = 0;
-        if(($adm_photo_child["pho_id"] == $photo_album->getValue("pho_pho_id_parent"))
-        ||  $adm_photo_child["pho_id"] == $pho_id)
+        $selected = '';
+        if(($adm_photo_child['pho_id'] == $photo_album->getValue('pho_pho_id_parent'))
+        ||  $adm_photo_child['pho_id'] == $pho_id)
         {
-            $selected = " selected=\"selected\" ";
+            $selected = 'selected="selected"';
         }
 
-        echo"<option value=\"".$adm_photo_child["pho_id"]."\" $selected>".$vorschub."&#151;".$adm_photo_child["pho_name"]
-        ."&nbsp(".mysqldate("y", $adm_photo_child["pho_begin"]).")</option>";
+        echo'<option value="'.$adm_photo_child['pho_id'].'" '.$selected.'>'.$vorschub.'&#151;'.$adm_photo_child['pho_name']
+        .'&nbsp('.mysqldate('y', $adm_photo_child['pho_begin']).')</option>';
 
-        subfolder($adm_photo_child["pho_id"], $vorschub, $photo_album, $pho_id);
+        subfolder($adm_photo_child['pho_id'], $vorschub, $photo_album, $pho_id);
     }//while
 }//function
 
 /******************************HTML-Kopf******************************************/
 
-if($_GET["job"]=="new")
+if($_GET['job']=='new')
 {
-    $g_layout['title'] = "Neues Album anlegen";
+    $g_layout['title'] = 'Neues Album anlegen';
 }
-elseif($_GET["job"]=="change")
+elseif($_GET['job']=='change')
 {
-    $g_layout['title'] = "Album bearbeiten";
+    $g_layout['title'] = 'Album bearbeiten';
 }
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
@@ -157,54 +157,54 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 /****************************Formular***********************************************/
 
-echo "
-<form method=\"post\" action=\"$g_root_path/adm_program/modules/photos/photo_album_function.php?pho_id=". $_GET["pho_id"]. "&amp;job=". $_GET["job"]. "\">
-<div class=\"formLayout\" id=\"photo_album_new_form\">
-    <div class=\"formHead\">". $g_layout['title']. "</div>
-    <div class=\"formBody\">";
+echo '
+<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='. $_GET['pho_id']. '&amp;job='. $_GET['job']. '">
+<div class="formLayout" id="photo_album_new_form">
+    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formBody">';
         //Album
-        echo"
-        <ul class=\"formFieldList\">
+        echo'
+        <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for=\"pho_name\">Album:</label></dt>
+                    <dt><label for="pho_name">Album:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_name\" name=\"pho_name\" style=\"width: 300px;\" maxlength=\"50\" tabindex=\"1\" value=\"".$photo_album->getValue("pho_name")."\" />
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <input type="text" id="pho_name" name="pho_name" style="width: 300px;" maxlength="50" tabindex="1" value="'.$photo_album->getValue('pho_name').'" />
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
-            </li>";
+            </li>';
 
             //Unterordnung
-            echo"
+            echo'
             <li>
                 <dl>
-                    <dt><label for=\"pho_pho_id_parent\">im Album:</label></dt>
+                    <dt><label for="pho_pho_id_parent">im Album:</label></dt>
                     <dd>
-                        <select size=\"1\" id=\"pho_pho_id_parent\" name=\"pho_pho_id_parent\" style=\"max-width: 95%;\" tabindex=\"2\">
-                            <option value=\"0\">Fotogalerien(Hauptordner)</option>";
+                        <select size="1" id="pho_pho_id_parent" name="pho_pho_id_parent" style="max-width: 95%;" tabindex="2">
+                            <option value="0">Fotogalerien(Hauptordner)</option>';
 
                            while($adm_photo_list = $g_db->fetch_array($result_list))
                             {
                                 //Wenn das Elternalbum von pho_id dann selected
                                 $selected = 0;
-                                if(($adm_photo_list["pho_id"] == $photo_album->getValue("pho_pho_id_parent"))
-                                ||  $adm_photo_list["pho_id"] == $pho_id)
+                                if(($adm_photo_list['pho_id'] == $photo_album->getValue('pho_pho_id_parent'))
+                                ||  $adm_photo_list['pho_id'] == $pho_id)
                                 {
-                                    $selected = " selected=\"selected\" ";
+                                    $selected = ' selected="selected" ';
                                 }
 
-                                echo"<option value=\"".$adm_photo_list["pho_id"]."\" $selected style=\"maxlength: 40px;\">".$adm_photo_list["pho_name"]
-                                ."&nbsp;(".mysqldate("y", $adm_photo_list["pho_begin"]).")</option>";
+                                echo'<option value="'.$adm_photo_list['pho_id'].'" '.$selected.' style="maxlength: 40px;">'.$adm_photo_list['pho_name']
+                                .'&nbsp;('.mysqldate('y', $adm_photo_list['pho_begin']).')</option>';
 
                                 //Auftruf der Funktion
-                                subfolder($adm_photo_list["pho_id"], "", $photo_album, $pho_id);
+                                subfolder($adm_photo_list['pho_id'], '', $photo_album, $pho_id);
                             }//while
-                            echo"
+                            echo'
                         </select>
                     </dd>
                 </dl>
-            </li>";
+            </li>';
 
             // Beginn / Ende
             echo '
@@ -232,69 +232,69 @@ echo "
             </li>';
 
             //Photographen
-            echo"
+            echo'
             <li>
                 <dl>
-                    <dt><label for=\"pho_photographers\">Fotografen:</label></dt>
+                    <dt><label for="pho_photographers">Fotografen:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"pho_photographers\" name=\"pho_photographers\" style=\"width: 300px;\" tabindex=\"5\" maxlength=\"100\" value=\"".$photo_album->getValue("pho_photographers")."\" />
+                        <input type="text" id="pho_photographers" name="pho_photographers" style="width: 300px;" tabindex="5" maxlength="100" value="'.$photo_album->getValue('pho_photographers').'" />
                     </dd>
                 </dl>
-            </li>";
+            </li>';
 
             //Freigabe
-            echo"
+            echo'
             <li>
                 <dl>
-                    <dt><label for=\"pho_locked\">Sperren:</label></dt>
-                    <dd>";
-                        echo "<input type=\"checkbox\" id=\"pho_locked\" name=\"pho_locked\" tabindex=\"6\" value=\"1\"";
+                    <dt><label for="pho_locked">Sperren:</label></dt>
+                    <dd>';
+                        echo '<input type="checkbox" id="pho_locked" name="pho_locked" tabindex="6" value="1"';
 
-                        if($photo_album->getValue("pho_locked") == 1)
+                        if($photo_album->getValue('pho_locked') == 1)
                         {
-                            echo "checked = \"checked\" ";
+                            echo 'checked = "checked" ';
                         }
 
-                     echo" /></dd>
+                     echo' /></dd>
                 </dl>
             </li>
-        </ul>";
+        </ul>';
 
         //Submitbutton
-        echo"<hr />
-        <div class=\"formSubmit\">
-            <button name=\"submit\" type=\"submit\" tabindex=\"7\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
+        echo'<hr />
+        <div class="formSubmit">
+            <button name="submit" type="submit" tabindex="7" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
 
     </div>
 </div>
 </form>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" tabindex=\"8\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" tabindex="8" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
     <li>
-        <span class=\"iconTextLink\">
-            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" tabindex=\"9\"
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=300,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
-            <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true','Message','width=500,height=300,left=310,top=200,scrollbars=yes')\">Hilfe</a>
+        <span class="iconTextLink">
+            <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" tabindex="9"
+                onclick="window.open(\''.$g_root_path.\'/adm_program/system/msg_window.php?err_code=veranst_help&window=true\,\'Message\',\'width=500,height=300,left=300,top=200,scrollbars=yes\')" onmouseover="ajax_showTooltip(event,\''.$g_root_path.\'/adm_program/system/msg_window.php?err_code=veranst_help\',this);" onmouseout="ajax_hideTooltip()" />
+            <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true\',\'Message\',\'width=500,height=300,left=310,top=200,scrollbars=yes\')">Hilfe</a>
         </span>
     </li>
 </ul>
 
 
-<script type=\"text/javascript\">
+<script type="text/javascript">
     <!--
-        document.getElementById('pho_name').focus();
+        document.getElementById("pho_name").focus();
     -->
-</script>";
+</script>';
 
 /***********************************Ende********************************************/
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
