@@ -18,20 +18,20 @@
  *				Voreinstellung zurückgegeben 
  *
  *****************************************************************************/
-require_once("../../system/classes/table_photos.php");
-require_once("../../system/common.php");
-require_once("../../system/classes/image.php");
+require_once('../../system/classes/table_photos.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/image.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 elseif($g_preferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
+    require('../../system/login_valid.php');
 }
 
 //Uebergaben pruefen
@@ -39,7 +39,7 @@ $pho_id    = NULL;
 $pho_begin = 0;
 $pic_nr    = NULL;
 $scal      = NULL;
-$side      = "";
+$side      = '';
 $thumb 	   = false;
 $image     = NULL;
 
@@ -52,7 +52,7 @@ if(isset($_GET['pho_id']))
 //pho_begin
 if(isset($_GET['pho_begin']) && strlen($_GET['pho_begin']) == 10)
 {
-    if(dtCheckDate(mysqldate("d.m.y", $_GET['pho_begin'])))
+    if(dtCheckDate(mysqldate('d.m.y', $_GET['pho_begin'])))
     {
         $pho_begin = $_GET['pho_begin'];
     }
@@ -74,7 +74,7 @@ if(isset($_GET['scal']))
 if(isset($_GET['side']))
 {
     $_GET['side'] = strtolower($_GET['side']);
-    if($_GET['side'] ==  "x" || $_GET['side'] == "y")
+    if($_GET['side'] ==  'x' || $_GET['side'] == 'y')
     {
         $side = $_GET['side'];
     }
@@ -87,8 +87,8 @@ if(isset($_GET['thumb']))
 }
 
 // Bildpfad zusammensetzten
-$ordner = SERVER_PATH. "/adm_my_files/photos/".$pho_begin."_".$pho_id;
-$picpath = $ordner."/".$pic_nr.".jpg";
+$ordner = SERVER_PATH. '/adm_my_files/photos/'.$pho_begin.'_'.$pho_id;
+$picpath = $ordner.'/'.$pic_nr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
 if($g_debug == 1)
@@ -100,10 +100,10 @@ if($g_debug == 1)
 if($thumb)
 {
 	$thumb_length=1;
-	if(file_exists($ordner."/thumbnails/".$pic_nr.".jpg"))
+	if(file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg'))
 	{
 	    //Ermittlung der Original Bildgroesse
-	    $bildgroesse = getimagesize($ordner."/thumbnails/".$pic_nr.".jpg");
+	    $bildgroesse = getimagesize($ordner.'/thumbnails/'.$pic_nr.'.jpg');
 	    
 	    $thumb_length = $bildgroesse[1];
 	    if($bildgroesse[0]>$bildgroesse[1])
@@ -114,15 +114,15 @@ if($thumb)
 	
 	//Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
 	//Wenn nicht anlegen
-	if(!file_exists($ordner."/thumbnails/".$pic_nr.".jpg") || $thumb_length !=$g_preferences['photo_thumbs_scale'])
+	if(!file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
 	{
 	    $image = new Image($picpath);
 	    $image->scale($g_preferences['photo_thumbs_scale']);
-	    $image->copyToFile(null, $ordner."/thumbnails/".$pic_nr.".jpg");
+	    $image->copyToFile(null, $ordner.'/thumbnails/'.$pic_nr.'.jpg');
 	}
 	else
 	{
-		readfile($ordner."/thumbnails/".$pic_nr.".jpg");
+		readfile($ordner.'/thumbnails/'.$pic_nr.'.jpg');
 	}
 
 }
@@ -130,17 +130,17 @@ else
 {
 	if(file_exists($picpath) == false)
 	{
-    	$picpath = THEME_SERVER_PATH. "/images/nopix.jpg";
+    	$picpath = THEME_SERVER_PATH. '/images/nopix.jpg';
 	}
 	// Bild einlesen und scalieren
 	$image = new Image($picpath);
 	//Neue Größe berechnen
-	if($side=="x")
+	if($side=='x')
 	{
 		$x_side = $scal;
 		$y_side = $scal*($image->imageWidth/$image->imageHeight);
 	}
-	elseif($side=="y")
+	elseif($side=='y')
 	{
 		$y_side = $scal;
 		$x_side = $scal*($image->imageWidth/$image->imageHeight);
@@ -151,10 +151,10 @@ else
 if($image != NULL)
 {
 	// Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-	if (($scal>200) && $g_preferences['photo_image_text'] != "")
+	if (($scal>200) && $g_preferences['photo_image_text'] != '')
 	{
 	    $font_c = imagecolorallocate($image->imageResource,255,255,255);
-	    $font_ttf = THEME_SERVER_PATH."/font.ttf";
+	    $font_ttf = THEME_SERVER_PATH.'/font.ttf';
 	    $font_s = $scal/40;
 	    $font_x = $font_s;
 	    $font_y = $image->imageHeight-$font_s;
@@ -163,7 +163,7 @@ if($image != NULL)
 	}
 	
 	// Rueckgabe des neuen Bildes
-	header("Content-Type: ". $image->getMimeType());
+	header('Content-Type: '. $image->getMimeType());
 	$image->copyToBrowser();
 	$image->delete();
 }

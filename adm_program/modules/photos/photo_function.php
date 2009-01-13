@@ -18,24 +18,24 @@
  *
  *****************************************************************************/
 
-require_once("../../system/common.php");
-require_once("../../system/login_valid.php");
-require_once("../../system/classes/table_photos.php");
-require_once("../../system/classes/image.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_photos.php');
+require_once('../../system/classes/image.php');
 
 // die Funktionen sollten auch ausgeloggt irgendwo benutzt werden koennen
-if(isset($_GET["job"]))
+if(isset($_GET['job']))
 {
     if ($g_preferences['enable_photo_module'] == 0)
     {
         // das Modul ist deaktiviert
-        $g_message->show("module_disabled");
+        $g_message->show('module_disabled');
     }
 
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$g_current_user->editPhotoRight())
     {
-        $g_message->show("photoverwaltunsrecht");
+        $g_message->show('photoverwaltunsrecht');
     }
 
     //URL auf Navigationstack ablegen
@@ -45,29 +45,29 @@ if(isset($_GET["job"]))
 // Uebergabevariablen pruefen
 
 //ID Pruefen
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]))
+if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']))
 {
-    $pho_id = $_GET["pho_id"];
+    $pho_id = $_GET['pho_id'];
 }
 else 
 {
     $pho_id = NULL;
 }
 
-if(isset($_GET["job"]) == false 
-|| ($_GET["job"] != "rotate" && $_GET["job"] != "delete_request" && $_GET["job"] != "do_delete"))
+if(isset($_GET['job']) == false 
+|| ($_GET['job'] != 'rotate' && $_GET['job'] != 'delete_request' && $_GET['job'] != 'do_delete'))
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
-if(isset($_GET["direction"]) && $_GET["direction"] != "left" && $_GET["direction"] != "right")
+if(isset($_GET['direction']) && $_GET['direction'] != 'left' && $_GET['direction'] != 'right')
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
-if(isset($_GET["job"]) && (isset($_GET["bild"]) == false || is_numeric($_GET["bild"]) == false) )
+if(isset($_GET['job']) && (isset($_GET['bild']) == false || is_numeric($_GET['bild']) == false) )
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 
@@ -79,7 +79,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
     if(is_numeric($pic_nr))
     {
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id")."/thumbnails/".$pic_nr.".jpg";
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/thumbnails/'.$pic_nr.'.jpg';
         
         //Thumbnail loeschen
         if(file_exists($photo_path))
@@ -102,27 +102,27 @@ function deletePhoto($pho_id, $pic_nr)
         $photo_album = new TablePhotos($g_db, $pho_id);
         
         //Speicherort
-        $album_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id");
+        $album_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id');
         
         //Bilder loeschen
-        if(file_exists("$album_path/$pic_nr.jpg"))
+        if(file_exists($album_path.'/'.$pic_nr.'.jpg'))
         {
-            chmod("$album_path/$pic_nr.jpg", 0777);
-            unlink("$album_path/$pic_nr.jpg");
+            chmod($album_path.'/'.$pic_nr.'.jpg', 0777);
+            unlink($album_path.'/'.$pic_nr.'.jpg');
         }
 
         // Umbenennen der Restbilder und Thumbnails loeschen
         $new_pic_nr = $pic_nr;
         $thumbnail_delete = false;
 
-        for($act_pic_nr = 1; $act_pic_nr <= $photo_album->getValue("pho_quantity"); $act_pic_nr++)
+        for($act_pic_nr = 1; $act_pic_nr <= $photo_album->getValue('pho_quantity'); $act_pic_nr++)
         {
-            if(file_exists("$album_path/$act_pic_nr.jpg"))
+            if(file_exists($album_path.'/'.$act_pic_nr.'.jpg'))
             {
                 if($act_pic_nr > $new_pic_nr)
                 {
-                    chmod("$album_path/$act_pic_nr.jpg", 0777);
-                    rename("$album_path/$act_pic_nr.jpg", "$album_path/$new_pic_nr.jpg");
+                    chmod($album_path.'/'.$act_pic_nr.'.jpg', 0777);
+                    rename($album_path.'/'.$act_pic_nr.'.jpg', $album_path.'/'.$new_pic_nr.'.jpg');
                     $new_pic_nr++;
                 }                
             }
@@ -139,48 +139,48 @@ function deletePhoto($pho_id, $pic_nr)
         }//for
 
         // Aendern der Datenbankeintaege
-        $photo_album->setValue("pho_quantity", $photo_album->getValue("pho_quantity")-1);
+        $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')-1);
         $photo_album->save();
     }
 };
 
 
 // Foto um 90° drehen
-if($_GET["job"] == "rotate")
+if($_GET['job'] == 'rotate')
 {
     // nur bei gueltigen Uebergaben weiterarbeiten
-    if(is_numeric($pho_id) && is_numeric($_GET["bild"]) && ($_GET["direction"] == "left" || $_GET["direction"] == "right"))
+    if(is_numeric($pho_id) && is_numeric($_GET['bild']) && ($_GET['direction'] == 'left' || $_GET['direction'] == 'right'))
     {
         //Aufruf des ggf. uebergebenen Albums
         $photo_album = new TablePhotos($g_db, $pho_id);
 
         //Thumbnail loeschen
-        deleteThumbnail($photo_album, $_GET["bild"]);
+        deleteThumbnail($photo_album, $_GET['bild']);
         
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id"). "/". $_GET["bild"]. ".jpg";
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id'). '/'. $_GET['bild']. '.jpg';
         
         // Bild drehen
         $image = new Image($photo_path);
-        $image->rotate($_GET["direction"]);
+        $image->rotate($_GET['direction']);
         $image->delete();
     }    
     
     // zur Ausgangsseite zurueck
-    $location = "Location: $g_root_path/adm_program/system/back.php";
+    $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
     header($location);
     exit();
 }
-elseif($_GET["job"] == "delete_request")
+elseif($_GET['job'] == 'delete_request')
 {
     // Nachfrage ob geloescht werden soll
-   $g_message->setForwardYesNo("$g_root_path/adm_program/modules/photos/photo_function.php?pho_id=$pho_id&bild=". $_GET["bild"]."&job=do_delete");
-   $g_message->show("delete_photo");
+   $g_message->setForwardYesNo($g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&bild='. $_GET['bild'].'&job=do_delete');
+   $g_message->show('delete_photo');
 }
-elseif($_GET["job"] == "do_delete")
+elseif($_GET['job'] == 'do_delete')
 {
     // das entsprechende Bild wird physikalisch und in der DB geloescht
-    deletePhoto($pho_id, $_GET["bild"]);
+    deletePhoto($pho_id, $_GET['bild']);
     
     //Neu laden der Albumdaten
     $photo_album = new TablePhotos($g_db);
@@ -192,7 +192,7 @@ elseif($_GET["job"] == "do_delete")
     $_SESSION['photo_album'] =& $photo_album;
     
     $_SESSION['navigation']->deleteLastUrl();
-    $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php", 2000);
-    $g_message->show("photo_deleted");
+    $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php', 2000);
+    $g_message->show('photo_deleted');
 }
 ?>
