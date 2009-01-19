@@ -28,8 +28,6 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_photos.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
-//require_once(PLUGIN_PATH. '/../adm_program/system/classes/image.php');
-//require_once(PLUGIN_PATH. '/../adm_program/system/classes/htaccess.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
