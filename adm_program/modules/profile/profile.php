@@ -226,29 +226,31 @@ $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
 
-    <script type="text/javascript">
+    <script type="text/javascript"><!--
         function infoanzeigen(name)
         {
-            document.getElementById("anzeige").firstChild.nodeValue = \'Gesetzt durch: \' + name;
+            document.getElementById("anzeige").firstChild.nodeValue = "Gesetzt durch: " + name;
         }
         function infoanzeigenloeschen()
         {
-            document.getElementById("anzeige").firstChild.nodeValue = \'Gesetzt durch: \';
+            document.getElementById("anzeige").firstChild.nodeValue = "Gesetzt durch: ";
         }
         function toggleDetailson(role_details_ID)
         {
-                document.getElementById(role_details_ID).style.visibility = \'visible\';
-                document.getElementById(role_details_ID).style.display    = \'block\';
+            document.getElementById("mem_rol_"+role_details_ID).style.visibility = "visible";
+            document.getElementById("mem_rol_"+role_details_ID).style.display    = "block";
         }
         function toggleDetailsoff(role_details_ID)
         {
-                document.getElementById(role_details_ID).style.visibility = \'hidden\';
-                document.getElementById(role_details_ID).style.display    = \'none\';
-		  }
-        function linkaendern(rolle,id) {
-            document.getElementById(\'enter\'+rolle).href = \'' . $g_root_path . '/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue("usr_id").'&mode=1&rol_id=\'+id+\'&rol_begin=\'+document.getElementById(\'begin\'+rolle).value+\'&rol_end=\'+document.getElementById(\'end\'+rolle).value ;
+            document.getElementById("mem_rol_"+role_details_ID).style.visibility = "hidden";
+            document.getElementById("mem_rol_"+role_details_ID).style.display    = "none";
+		}
+        
+        function linkaendern(rolle,id) 
+        {
+            document.getElementById("enter"+rolle).href = "' . $g_root_path . '/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue("usr_id").'&mode=1&rol_id="+id+"&rol_begin="+document.getElementById("begin"+rolle).value+"&rol_end="+document.getElementById("end"+rolle).value ;
         }
-    </script>
+    --></script>
     
     <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />';
 
@@ -597,11 +599,11 @@ echo '
                   $berechtigungs_Herkunft[$berechtigungen[$i]] = $berechtigungs_Herkunft[$berechtigungen[$i]].", ".$row['rol_name'];
                }
             }
-            echo "<div class=\"groupBox\" id=\"profile_roles_box\" >
-                     <div class=\"groupBoxHeadline\">
-                        <div style=\"float: left;\">Berechtigungen&nbsp;</div>
+            echo '<div class="groupBox" id="profile_authorizations_box">
+                     <div class="groupBoxHeadline">
+                        <div style="float: left;">Berechtigungen&nbsp;</div>
                      </div>
-                     <div class=\"groupBoxBody\" onmouseout=\"infoanzeigenloeschen()\">";
+                     <div class="groupBoxBody" onmouseout="infoanzeigenloeschen()">';
             //checkRolesRight($right)
                if($user->checkRolesRight('rol_assign_roles') == 1)
               {
@@ -720,7 +722,7 @@ echo '
                                             '. $row['cat_name']. ' - ';
                                                 if($g_current_user->viewRole($row['mem_rol_id']))
                                                 {
-                                                    echo '<a id="'.$row['rol_name'].'" href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                                    echo '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
                                                 }
                                                 else
                                                 {
@@ -730,47 +732,49 @@ echo '
                                                 {
                                                     echo ' - Leiter';
                                                 }
-                                            echo '&nbsp;';
-
-
-                                                                    echo "</dt>
+                                            echo '&nbsp;
+                                        </dt>
                                         <dd>
-                                            seit ". mysqldate('d.m.y', $row['mem_begin']);
+                                            seit '. mysqldate('d.m.y', $row['mem_begin']);
                                             if($g_current_user->assignRoles() || $g_current_user->editUsers())
                                             {
                                                 // Datum für die Bearbeitung der Mitgliedschaft wird vorbereitet
                                                 $rol_from = mysqldatetime("d.m.y", $row['mem_begin']);
                                                 $rol_to = NULL;
-                                                if ($row['mem_end'] != "9999-12-31") {
+                                                if ($row['mem_end'] != "9999-12-31") 
+                                                {
                                                    $rol_to = mysqldatetime("d.m.y", $row['mem_end']);
                                                 }
                                                 // Löschen wird nur bei anderen Webmastern ermöglicht
-                                                if (($row['rol_name'] == "Webmaster" && $g_current_user->getValue("usr_id") != $a_user_id) || ($row['rol_name'] != "Webmaster")) {
+                                                if (($row['rol_name'] == "Webmaster" && $g_current_user->getValue("usr_id") != $a_user_id) || ($row['rol_name'] != "Webmaster")) 
+                                                {
                                                    echo "
                                                       <a class=\"iconLink\" href=\"javascript:deleteRole(". $row['rol_id']. ", '". $row['rol_name']. "', ". $row['rol_valid']. ", ". $user->getValue("usr_id"). ", '".
                                                    	$row['cat_name']. "', '". mysqldate('d.m.y', $row['mem_begin']). "', ". $row['mem_leader']. ", ". $g_current_user->isWebmaster(). ")\"><img
                                                        src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                                                 }
                                                 // Bearbeiten des Datums nicht bei Webmastern möglich
-                                                if ($row['rol_name'] != "Webmaster") {
-                                                       echo "<a class=\"iconLink\" style=\"cursor:pointer;\" onclick=\"toggleDetailson(".$row['rol_id'].")\"><img
-                                                       src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Datum ändern\" title=\"Datum ändern\" /></a>
-                                                       </dd></dl></li>
-                                                       <div align= \"right\" id=\"".$row['rol_id']."\" style=\"visibility: hidden; display: none\">
-                                                       <form  action=\"". $g_root_path. "/adm_program/modules/profile/roles_date.php?usr_id=". $user->getValue("usr_id"). "&mode=1&rol_id=".$row['rol_id']."\" method=\"post\">
-                                                                      <label for=\"rol_begin\">Beginn:</label><input type=\"edit\" id=\"begin".$row['rol_name']."\" name=\"rol_begin\" size=\"10\" maxlength=\"20\" value=\"".$rol_from."\"/>&nbsp;
-                                                                      <label for=\"rol_end\">Ende:</label><input type=\"edit\" id=\"end".$row['rol_name']."\" name=\"rol_end\" size=\"10\" maxlength=\"20\" value=\"".$rol_to."\"/>
-                                                                      <a href=\"\" id=\"enter".$row['rol_name']."\"><img onclick=\"linkaendern('".$row['rol_name']."','".$row['rol_id']."')\" src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" title=\"Speichern\"/></a>
-                                                                      <a onclick=\"toggleDetailsoff(".$row['rol_id'].")\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Abbrechen\" title=\"Abbrechen\"/></a>
-                                                       </form></div>";
-                                                    } else {
-                                                      echo "</dd></dl></li>";
-                                                    }
-
+                                                if ($row['rol_name'] != "Webmaster") 
+                                                {
+                                                    echo '<a class="iconLink" style="cursor:pointer;" onclick="toggleDetailson('.$row['rol_id'].')"><img
+                                                        src="'.THEME_PATH.'/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
+                                                } 
                                             }
-                                        echo "</dd>
+                                        echo '</dd>
                                     </dl>
-                                </li>";
+                                </li>
+                                <li id="mem_rol_'.$row['rol_id'].'" style="text-align: right; visibility: hidden; display: none;">
+                                    <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue("usr_id").'&amp;mode=1&amp;rol_id='.$row['rol_id'].'" method="post">
+                                        <div>
+                                            <label for="begin'.$row['rol_name'].'">Beginn:</label>
+                                            <input type="text" id="begin'.$row['rol_name'].'" name="rol_begin" size="10" maxlength="20" value="'.$rol_from.'"/>&nbsp;
+                                            <label for="end'.$row['rol_name'].'">Ende:</label>
+                                            <input type="text" id="end'.$row['rol_name'].'" name="rol_end" size="10" maxlength="20" value="'.$rol_to.'"/>
+                                            <a class="iconLink" href="javascript:linkaendern(\''.$row['rol_name'].'\',\''.$row['rol_id'].'\')" id="enter'.$row['rol_name'].'"><img src="'.THEME_PATH.'/icons/disk.png" alt="Speichern" title="Speichern"/></a>
+                                            <a class="iconLink" href="javascript:toggleDetailsoff('.$row['rol_id'].')"><img src="'.THEME_PATH.'/icons/delete.png" alt="Abbrechen" title="Abbrechen"/></a>
+                                        </div>
+                                    </form>
+                                </li>';
                                 $count_show_roles++;
                             }
                         }
@@ -829,7 +833,7 @@ echo '
                                             $row['cat_name'];
                                             if($g_current_user->viewRole($row['mem_rol_id']))
                                             {
-                                                echo ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&rol_id='. $row['mem_rol_id']. '">'. $row['rol_name']. '</a>';
+                                                echo ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $row['mem_rol_id']. '">'. $row['rol_name']. '</a>';
                                             }
                                             else
                                             {
@@ -848,7 +852,7 @@ echo '
                                                 echo '
                                                 <a class="iconLink" href="javascript:deleteFormerRole('. $row['rol_id']. ', \''. $row['rol_name']. '\', '. $user->getValue("usr_id"). ')"><img
                                                     src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>
-                                                    <a class="iconLink" style="cursor:pointer;" onclick="window.open(\'roles_date.php?usr_id='. $user->getValue("usr_id"). '&rol_id='.$row['rol_id'].'\',\'Titel\',\'width=350,height=300,left=310,top=200\')"><img
+                                                    <a class="iconLink" style="cursor:pointer;" onclick="window.open(\'roles_date.php?usr_id='. $user->getValue("usr_id"). '&amp;rol_id='.$row['rol_id'].'\',\'Titel\',\'width=350,height=300,left=310,top=200\')"><img
                                                     src="'. THEME_PATH. '/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
                                             }
                                         echo '</dd>
