@@ -167,7 +167,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
 
     /********************Aenderung des Ordners***********************************/
     //Bearbeiten Anfangsdatum und Ordner ge&auml;ndert
-    elseif ($_GET['job']=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.'$pho_id')
+    elseif ($_GET['job']=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$pho_id)
     {
         $ordnerneu = $_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
         //testen ob Schreibrechte fuer adm_my_files bestehen
