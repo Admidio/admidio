@@ -140,7 +140,7 @@ echo '
     
         //Ausgabe Bild
         echo '
-        <div><a href="$url_next_image">
+        <div><a href="'.$url_next_image.'">
             <img class="photoOutput" src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$scal.'&amp;side='.$side.'" alt="'.$ordner_url.$bild.'">
             </a>
         </div>';

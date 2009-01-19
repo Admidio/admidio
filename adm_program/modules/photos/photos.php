@@ -311,7 +311,7 @@ echo '<div class="photoModuleContainer">';
 			if($thumb_seiten > 1)
 			{
 				//Container mit Navigation
-        		echo ' <div class="pageNavigation">';
+        		echo ' <div class="pageNavigation" id="photoPageNavigation">';
         		    //Seitennavigation
         		    echo 'Seite:&nbsp;';
     			
@@ -348,18 +348,16 @@ echo '<div class="photoModuleContainer">';
         		echo '</div>';
         	}
 		}
-        
-		//Seitennavigation
-        photoAlbumPageNavigation($photo_album);
-            
+                  
         //Thumbnailtabelle
-        echo '<table id="photoThumbnailTable">';
+        echo '<ul id="photoThumbnailTable">';
             for($zeile=1;$zeile<=$g_preferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
             {
-                echo '<tr class="photoThumbnailTableRow">';
+                echo '<li class="photoThumbnailRow"><ul>';
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
-                    echo '<td class="photoThumbnailTableColumn">';
+                     echo '<li class="photoThumbnailColumn">';
+                     echo '<ul class="photoThumbnailElement">';
                     //Errechnug welches Bild ausgegeben wird
                     $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
@@ -377,11 +375,11 @@ echo '<div class="photoModuleContainer">';
                         elseif($g_preferences['photo_show_mode']==1)
                         {
                             echo 
-                            '<div>
+                            '<li>
                                 <a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.$thickbox_height.'&amp;width='.$thickbox_width.'">
                                 	<img class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;thumb=true" alt="'.$bild.'" />
                                 </a>
-                            </div>';
+                            </li>';
                         }
 
                         //Gleichesfenster-Mode
@@ -411,11 +409,11 @@ echo '<div class="photoModuleContainer">';
                                 src="'. THEME_PATH. '/icons/ecard.png" alt="Foto als Grußkarte versenden" title="Foto als Grußkarte versenden" /></a>';
                         }
                     }//if
-                    echo '</td>';
+                    echo '</ul></li>';
                 }//for
-                echo '</tr>'; //Zeilenende
+                echo '</ul></li>'; //Zeilenende
             }//for
-        echo '</table>';
+        echo '</ul>';
 
 		//Seitennavigation
         photoAlbumPageNavigation($photo_album);
