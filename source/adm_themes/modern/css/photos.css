@@ -9,15 +9,38 @@
  *
  *****************************************************************************/
  
-/*Die Thumbnails werden in einer Tabelle aufbebaut
+/*Die Thumbnails werden in einer art Tabelle aufbebaut
 hier koenne Einstellungen fuer diese vorgenommen werden*/
-#photoThumbnailTable {
-    width: 100%;   
+#photoPageNavigation{
+    clear: both;
+}
+#photoThumbnailTable{
+    width: 550px;
+}
+#photoThumbnailTable li{
+    list-style-type: none;
+}
+
+
+/*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
+.photoThumbnailColumn{
+    float: left;
+}
+
+/*Abständer der Thumbnails mit ihren Icons zu den anderen Elementen*/
+.photoThumbnailElement{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 0px;
+    margin-left: 0px;
+    width: 110px;
 }
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photoThumbnailTableColumn{
+.photoThumbnailRow{
     text-align: center;
+    list-style-type: none;
+    clear: left;
 }
 
 /*Einstellung fuer das Thumbnail selbst, z.B. laesst sich ein Rand um jedes Bild legen*/
@@ -26,7 +49,6 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
     cursor: pointer;
     border: none;
 }
-
 
 /*Die Fotoalben werden in einer Definitionsliste angezeigt*/
 .photoAlbumTable {
@@ -57,7 +79,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 /*Umramender Container um Thumbnail- und Fotoalbentabelle, sowie Uploadbericht*/
 .photoModuleContainer{
     border: 0px solid #6CA7A8;
-    width: 100%;
+    width: 550px;
     text-align: left;
 }
 
@@ -74,7 +96,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
     border: none;
 }
 
-/*Informationen ueber den Thumbnails, derzeit nur Datum*/
+/*Informationen unter den Thumbnails*/
 #photoAlbumInformation{
     margin: 5px 0px 5px 0px;
 }
