@@ -325,7 +325,6 @@ echo "
 
 
             //Fotomodulhifen
-
            case "photo_up_help":
                 echo " <h3>Was ist zu tun?</h3>
                     <ul>
@@ -385,6 +384,24 @@ echo "
                     wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde. <br /> 
                     Bitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.";
                 break;
+           
+            //Profilfoto
+           case "profile_photo_up_help":
+                echo " <h3>Was ist zu tun?</h3>
+                    <ul>
+						<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Bilddatei von der Festplatte auswählen.</li>
+						<li>Dann auf &bdquo;Bilde hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+					</ul>  
+                    <h3>Einschränkungen:</h3>
+                    <ul>
+						<li>Du solltest selbst auf dem Bild zu sehen sein.</li>
+						<li>Das Bild muss im Format JPG oder PNG gespeichert sein.</li>
+						<li>Der Server kann Bilder mit einer maximalen Auflösung von ".round(processableImageSize()/1000000, 2)." MegaPixeln verarbeiten.</li>
+						<li>Die hochgeladene Datei darf nicht größer als ".round(maxUploadSize()/pow(1024, 2), 2)."MB sein.</li>
+					</ul>
+                    ";
+                break;     
+            
 
             default:
                 echo "Es ist ein Fehler aufgetreten.";

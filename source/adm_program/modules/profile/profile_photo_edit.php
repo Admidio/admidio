@@ -161,14 +161,14 @@ elseif($job=="delete")
     $g_message->setForwardUrl($g_root_path."/adm_program/modules/profile/profile.php?user_id=".$req_usr_id, 2000);
     $g_message->show("profile_photo_deleted");
 }
+
+/*********************** Kontrollmechanismen *********************************/
 elseif( isset($_POST["upload"]))
 {
-    /*********************** Kontrollmechanismen *********************************/
-    
     //Dateigroesse
     if ($_FILES["bilddatei"]["error"]==1)
     {
-        $g_message->show("profile_photo_2big", ini_get("upload_max_filesize"));
+        $g_message->show("profile_photo_2big", round(maxUploadSize()/pow(1024, 2)));
     }
 
     //Kontrolle ob Bilder ausgewaehlt wurden
@@ -178,19 +178,24 @@ elseif( isset($_POST["upload"]))
     }
 
     //Dateiendung
-    $bildinfo = getimagesize($_FILES["bilddatei"]["tmp_name"]);
-    if ($bildinfo['mime'] != "image/jpeg" && $bildinfo['mime'] != "image/png")
+    $image_properties = getimagesize($_FILES["bilddatei"]["tmp_name"]);
+    if ($image_properties['mime'] != "image/jpeg" && $image_properties['mime'] != "image/png")
     {
         $g_message->show("dateiendungphotoup");
     }
 
+    //Auflösungskontrolle
+    $image_dimensions = $image_properties[0]*$image_properties[1];
+    if($image_dimensions > processableImageSize())
+    {
+    	$g_message->show("profile_photo_resolution_2large", round(processableImageSize()/1000000, 2));
+    }
 }//Kontrollmechanismen
 
-    
+
+/*****************************Bild hochladen*************************************/    
 if($job==NULL)
 {
-    /*****************************Bild hochladen*************************************/
-    
     $_SESSION['navigation']->addUrl(CURRENT_URL);
 
     if($req_usr_id == $g_current_user->getValue("usr_id"))
@@ -230,6 +235,16 @@ if($job==NULL)
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
                 src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
                 <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            </span>
+        </li>
+        <li>
+            <span class="iconTextLink">
+                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
+                    onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;&amp;window=true\',\'Message\',
+                        \'width=500,height=300,left=310,top=200,scrollbars=yes\')"
+                    onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help\',this);" onmouseout="ajax_hideTooltip()" />
+                <a href="#" onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;&amp;window=true\',\'Message\',
+                        \'width=500,height=300,left=310,top=200,scrollbars=yes\')">Hilfe</a>
             </span>
         </li>
     </ul>
