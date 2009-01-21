@@ -238,7 +238,7 @@ $message_text = array(
          liegt weniger als %VAR1% Sekunden zurück.",
     //Ende Fehlermeldungen Gästebuchmodul
 
-        //Fehlermeldungen Profilfoto
+    //Fehlermeldungen Profilfoto
     "profile_photo_update" =>
         "Das neue Profilfoto wurde erfolgreich gespeichert.",
 
@@ -254,6 +254,9 @@ $message_text = array(
     "profile_photo_2big" =>
         "Das hochgeladene Foto übersteigt die vom Server zugelassene
         Dateigröße von %VAR1% B.",
+        
+    "profile_photo_resolution_2large" =>
+        "Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von %VAR1% Megapixeln.",
      //Ende Fehlermeldungen Profilfoto
 
     // Passwort
