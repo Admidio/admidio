@@ -1,7 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>Gru&szlig;karte</title>
 <style type="text/css">
 *{
@@ -24,7 +23,7 @@ font-size:<%ecard_font_size%>px;
         <table align="center" border="0" cellpadding="0" width="100%" cellspacing="0" summary="Grukarte Bild">
           <tbody>
             <tr>
-              <td id="card_form_image" colspan="2" style="border: 1px solid rgb(0, 0, 0); background:url('<%ecard_hintergrund_name%>'); padding: 10px; vertical-align:middle;" align="center">
+              <td id="card_form_image" colspan="2" style="border: 1px solid rgb(0, 0, 0); padding: 10px; vertical-align:middle;" align="center">
                 <table border="0" cellpadding="0" cellspacing="0" summary="Bild">
                   <tbody>
                     <tr>
@@ -32,7 +31,7 @@ font-size:<%ecard_font_size%>px;
                         <table  border="0" cellpadding="0" cellspacing="2" summary="Bild">
                           <tbody>
                             <tr>
-                              <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Grußkarte" /></td>
+                              <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Grußkarte"></td>
                             </tr>
                           </tbody>
                         </table>
@@ -74,9 +73,9 @@ font-size:<%ecard_font_size%>px;
 	   	  </tbody></table>
        </td>
 	  <td style="width: 8px; vertical-align:bottom; min-height:300px;">
-	       <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;" /></a>
+	       <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;"></a>
 	  </td>	  
-	  <td style="background: rgb(0, 0, 0); width:1px;"><br/></td>
+	  <td style="background: rgb(0, 0, 0); width:1px;"><br></td>
 	  <td style="width: 8px;">&nbsp;</td>
 	  <td style="vertical-align: top;height:100%;" >
 	   <table  border="0" cellpadding="0" cellspacing="2" style="height:100%" summary="Sender Data">
@@ -84,7 +83,7 @@ font-size:<%ecard_font_size%>px;
                <tr style="vertical-align:top; margin:5px 5px 5px 5px;">
                 <td>
                       <div align="right">
-                        <img src="<%theme_root_path%>/images/stamp.png" alt="Briefmarke"  style="border:0px;" height="129" width="150" />
+                        <img src="<%theme_root_path%>/images/stamp.png" alt="Briefmarke"  style="border:0px;" height="129" width="150">
                       </div>
                 </td>
                </tr>
@@ -99,16 +98,16 @@ font-size:<%ecard_font_size%>px;
                              <td style="padding-left:5px;"><%ecard_reciepient_name%></td>
                          </tr>
                          <tr style="height:1px;">
-                         	<td><hr color="black" size="1px" /></td>
-                         	<td><hr color="black" size="1px" /></td>
+                         	<td><hr color="black" size="1px"></td>
+                         	<td><hr color="black" size="1px"></td>
                          </tr>
                          <tr>
                              <td><b>E-Mail:</b></td>
                              <td  style="padding-left:5px;"><%ecard_reciepient_email%></td>
                          </tr>
                          <tr style="height:1px;">
-                         	<td><hr color="black" size="1px" /></td>
-                         	<td><hr color="black" size="1px" /></td>
+                         	<td><hr color="black" size="1px"></td>
+                         	<td><hr color="black" size="1px"></td>
                          </tr>
                      </table>
                    </td>
