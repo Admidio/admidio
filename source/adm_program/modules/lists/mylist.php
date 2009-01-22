@@ -19,9 +19,9 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/list_configuration.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/list_configuration.php');
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
 $req_lst_id = 0;
@@ -33,18 +33,18 @@ if(isset($_GET['lst_id']))
 {
     if(is_numeric($_GET['lst_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }   
-    $req_lst_id = $_GET["lst_id"];
+    $req_lst_id = $_GET['lst_id'];
 } 
 
 if(isset($_GET['rol_id']))
 {
     if(is_numeric($_GET['rol_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }   
-    $req_rol_id = $_GET["rol_id"];
+    $req_rol_id = $_GET['rol_id'];
 }  
 
 if(isset($_GET['active_role']) && is_numeric($_GET['show_members']))
@@ -80,7 +80,7 @@ if(isset($_SESSION['mylist_request']))
     // muessen diese nun direkt angelegt werden
     for($i = $default_column_rows+1; $i > 0; $i++)
     {
-        if(isset($form_values["column$i"]))
+        if(isset($form_values['column'.$i]))
         {
             $default_column_rows++;          
         }   
@@ -98,7 +98,7 @@ elseif($req_lst_id > 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Eigene Liste - Einstellungen";
+$g_layout['title']  = 'Eigene Liste - Einstellungen';
 $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript">
         var fieldNumberIntern      = 0;
@@ -108,6 +108,13 @@ $g_layout['header'] = $g_js_vars. '
         // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
         function addColumn() 
         {
+        	// MySQL erlaubt nur 61 gejointe Tabellen
+        	if(fieldNumberIntern >= 57)
+        	{
+        		alert("Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.");
+        		return;
+        	}
+        	
             var category = "";
             var fieldNumberShow  = fieldNumberIntern + 1;
             var table = document.getElementById("mylist_fields_tbody");
@@ -198,14 +205,14 @@ $g_layout['header'] = $g_js_vars. '
         
             // Mehrdimensionales Array fuer alle anzuzeigenden Spalten mit den noetigen Daten erstellen
             $i = 1;
-            $old_cat_name = "";
+            $old_cat_name = '';
             $old_cat_id   = 0;
 
             foreach($g_current_user->userFieldData as $field)
             {    
                 // bei den Stammdaten noch Foto und Loginname anhaengen
-                if($old_cat_name == "Stammdaten"
-                && $field->getValue("cat_name") != "Stammdaten")
+                if($old_cat_name == 'Stammdaten'
+                && $field->getValue('cat_name') != 'Stammdaten')
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
@@ -228,13 +235,13 @@ $g_layout['header'] = $g_js_vars. '
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
-                    user_fields['. $i. ']["cat_id"]   = '. $field->getValue("cat_id"). ';
-                    user_fields['. $i. ']["cat_name"] = "'. $field->getValue("cat_name"). '";
-                    user_fields['. $i. ']["usf_id"]   = '. $field->getValue("usf_id"). ';
-                    user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue("usf_name")). '";';
+                    user_fields['. $i. ']["cat_id"]   = '. $field->getValue('cat_id'). ';
+                    user_fields['. $i. ']["cat_name"] = "'. $field->getValue('cat_name'). '";
+                    user_fields['. $i. ']["usf_id"]   = '. $field->getValue('usf_id'). ';
+                    user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";';
                 
-                    $old_cat_id   = $field->getValue("cat_id");
-                    $old_cat_name = $field->getValue("cat_name");
+                    $old_cat_id   = $field->getValue('cat_id');
+                    $old_cat_name = $field->getValue('cat_name');
                     $i++;
                 }
             }       
@@ -286,19 +293,19 @@ $g_layout['header'] = $g_js_vars. '
                 for($number = 0; $number < $list->countColumns(); $number++)
                 {
                     $column = $list->getColumnObject($number + 1);
-                    if($column->getValue("lsc_usf_id") > 0)
+                    if($column->getValue('lsc_usf_id') > 0)
                     {
-                        $column_content = $column->getValue("lsc_usf_id");
+                        $column_content = $column->getValue('lsc_usf_id');
                     }
                     else
                     {
-                        $column_content = $column->getValue("lsc_special_field");
+                        $column_content = $column->getValue('lsc_special_field');
                     }
                     $g_layout['header'] .= '
                     default_fields['. $number. '] = new Object();
                     default_fields['. $number. '][\'usf_id\']    = \''. $column_content. '\';
-                    default_fields['. $number. '][\'sort\']      = \''. $column->getValue("lsc_sort"). '\';
-                    default_fields['. $number. '][\'condition\'] = \''. $column->getValue("lsc_filter"). '\';';
+                    default_fields['. $number. '][\'sort\']      = \''. $column->getValue('lsc_sort'). '\';
+                    default_fields['. $number. '][\'condition\'] = \''. $column->getValue('lsc_filter'). '\';';
                 }
             }
 
@@ -332,11 +339,16 @@ $g_layout['header'] = $g_js_vars. '
                     break;
 
                 case "save":
+                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=1";
+                    document.getElementById("form_mylist").submit();
+                    break;
+
+                case "save_as":
                     var listName = "";
                     listName = prompt("Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden ?");
                     if(listName != null)
                     {
-                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=1&name=" + listName;
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
                         document.getElementById("form_mylist").submit();
                     }
                     break;
@@ -371,7 +383,7 @@ $g_layout['header'] = $g_js_vars. '
         }
     </script>';
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
 <form id="form_mylist" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
@@ -393,17 +405,17 @@ echo '
             echo $selected.' value="0">Neue Konfiguration erstellen</option>';
 
             // alle relevanten Konfigurationen fuer den User suchen
-            $sql = "SELECT * FROM ". TBL_LISTS. "
-                     WHERE lst_org_id = ". $g_current_organization->getValue("org_id") ."
-                       AND (  lst_usr_id = ". $g_current_user->getValue("usr_id"). "
+            $sql = 'SELECT * FROM '. TBL_LISTS. '
+                     WHERE lst_org_id = '. $g_current_organization->getValue('org_id') .'
+                       AND (  lst_usr_id = '. $g_current_user->getValue('usr_id'). '
                            OR lst_global = 1)
-                     ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ";
+                     ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
             $lst_result = $g_db->query($sql);
             
             if($g_db->num_rows() > 0)
             {
-                $list_global_flag = "";
-                $list_name_flag   = "";
+                $list_global_flag = '';
+                $list_name_flag   = '';
                 $optgroup_flag    = 0;
                 $counter_unsaved_lists = 0;
                 
@@ -460,7 +472,7 @@ echo '
                         // Zeitstempel der Konfigurationen ohne Namen oder Namen anzeigen
                         if(strlen($row['lst_name']) == 0)
                         {
-                            $description = mysqldatetime("d.m.y h:i", $row['lst_timestamp']);
+                            $description = mysqldatetime('d.m.y h:i', $row['lst_timestamp']);
                         }
                         else
                         {
@@ -475,18 +487,36 @@ echo '
         echo '</select>';
         
         // Listen speichern darf man speichern, wenn es Eigene sind, Neue oder als Webmaster auch Systemlisten
-        if($g_current_user->isWebmaster()
-        || $req_lst_id == 0
-        || $g_current_user->getValue("usr_id") == $list->getValue("lst_usr_id"))
+        if(($g_current_user->isWebmaster() && $list->getValue('lst_global') == 1)
+        || ($g_current_user->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
         {
             echo '
             <a class="iconLink" href="javascript:send(\'save\');"><img
                 src="'. THEME_PATH. '/icons/disk.png" alt="Konfiguration speichern" title="Konfiguration speichern" /></a>';
         }
 
-        // eigene Liste duerfen geloescht werden, Webmaster koennen aus Systemkonfigurationen loeschen
-        if($g_current_user->isWebmaster() && $list->getValue("lst_global") == 1
-        || ($g_current_user->getValue("usr_id") == $list->getValue("lst_usr_id") && strlen($list->getValue("lst_name")) > 0))
+        if($g_current_user->isWebmaster()
+        || $req_lst_id == 0
+        || $g_current_user->getValue('usr_id') == $list->getValue('lst_usr_id'))
+        {
+        	if(strlen($list->getValue('lst_name')) > 0)
+        	{
+        		$icon = 'disk_copy.png';
+        		$icon_text = 'Konfiguration unter anderem Namen speichern';
+        	}
+        	else
+        	{
+        		$icon = 'disk.png';
+        		$icon_text = 'Konfiguration speichern';
+        	}
+            echo '
+            <a class="iconLink" href="javascript:send(\'save_as\');"><img
+                src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$icon_text.'" title="'.$icon_text.'" /></a>';
+        }
+
+        // eigene Liste duerfen geloescht werden, Webmaster koennen auch Systemkonfigurationen loeschen
+        if(($g_current_user->isWebmaster() && $list->getValue('lst_global') == 1)
+        || ($g_current_user->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
         {
             echo '
             <a class="iconLink" href="javascript:send(\'delete\');"><img
@@ -494,7 +524,7 @@ echo '
         }
 
         // eine gespeicherte Konfiguration kann vom Webmaster zur Systemkonfiguration gemacht werden
-        if($g_current_user->isWebmaster() && $list->getValue("lst_global") == 0 && strlen($list->getValue("lst_name")) > 0)
+        if($g_current_user->isWebmaster() && $list->getValue('lst_global') == 0 && strlen($list->getValue('lst_name')) > 0)
         {
             echo '
             <a class="iconLink" href="javascript:send(\'system\');"><img
@@ -502,12 +532,21 @@ echo '
         }
         
         // eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
-        if($g_current_user->isWebmaster() && $list->getValue("lst_global") == 1)
+        if($g_current_user->isWebmaster() && $list->getValue('lst_global') == 1)
         {
             echo '
             <a class="iconLink" href="javascript:send(\'default\');"><img
                 src="'. THEME_PATH. '/icons/star.png" alt="Konfiguration wird zur neuen Standardkonfiguration" title="Konfiguration wird zur neuen Standardkonfiguration" /></a>';
-        }        
+        }
+        
+        // Hinweistext fuer Webmaster
+        if($g_current_user->isWebmaster())
+        {
+            echo '
+        	<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
+                onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_config_webmaster&amp;window=true\',\'Message\',\'width=650,height=400,left=310,top=200,scrollbars=no\')" 
+                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_config_webmaster\',this);" onmouseout="ajax_hideTooltip()" />';
+        }
         echo '</p>
         
         <p><b>2.</b> Bestimme die Spalten, die in der Liste angezeigt werden sollen:</p>
@@ -520,8 +559,8 @@ echo '
                     <th style="width: 18%;">Sortierung</th>
                     <th style="width: 27%;">Bedingung
                         <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                            onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=condition&amp;window=true\',\'Message\',\'width=650,height=400,left=310,top=200,scrollbars=no\')" 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=condition\',this);" onmouseout="ajax_hideTooltip()" />
+                            onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_condition&amp;window=true\',\'Message\',\'width=650,height=400,left=310,top=200,scrollbars=no\')" 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_condition\',this);" onmouseout="ajax_hideTooltip()" />
                     </th>
                 </tr>
             </thead>
@@ -553,9 +592,9 @@ echo '
         echo generateRoleSelectBox($req_rol_id);
 
         // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
-        $selected[0] = "";
-        $selected[1] = "";
-        $selected[2] = "";
+        $selected[0] = '';
+        $selected[1] = '';
+        $selected[2] = '';
         $selected[$show_members] = ' selected="selected" ';
         
         echo '&nbsp;&nbsp;&nbsp;
@@ -590,6 +629,6 @@ if($_SESSION['navigation']->count > 1)
     </ul>';
 }
     
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
