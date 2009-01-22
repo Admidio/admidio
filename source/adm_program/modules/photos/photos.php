@@ -198,35 +198,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 //Ueberschift
 echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
-//bei Seitenaufruf mit Moderationsrechten
-if($g_current_user->editPhotoRight())
-{
-    echo '<span class="iconLinkListInline">
-    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">
-    	<img src="'. THEME_PATH. '/icons/add.png" alt="Album anlegen" title="Album anlegen" />
-    </a>';
-        
-    if($pho_id > 0)
-    {
-        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
-        {
-	        echo '
-	        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=1">
-	        	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Einzelbilder hochladen" title="Einzelbilder hochladen"/>
-	        </a>';
-        }
-        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
-        {
-	        echo '
-	        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=2">
-	        	<img src="'. THEME_PATH. '/icons/photo_upload_multi.png" alt="Komfortupload" title="Komfortupload"/>
-	        </a>';
-        }
-    }
-    echo '</span>';
-}
-
-//solange nach Unteralben suchen bis es keine mehr gibt
+//Breadcrump bauen
 $navilink = '';
 $pho_parent_id = $photo_album->getValue('pho_pho_id_parent');
 $photo_album_parent = new TablePhotos($g_db);
@@ -253,6 +225,48 @@ if($pho_id > 0)
             &nbsp;&gt;&nbsp;'.$photo_album->getValue('pho_name').'         
         </div>';
 }
+
+//bei Seitenaufruf mit Moderationsrechten
+if($g_current_user->editPhotoRight())
+{
+    //Album anlegen
+    echo '
+    <ul class="iconTextLinkList">
+        <li>
+            <span class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">
+    	           <img src="'. THEME_PATH. '/icons/add.png" alt="Album anlegen" title="Album anlegen" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">Album anlegen</a>
+            <span>
+    </li>';        
+    if($pho_id > 0)
+    {
+        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
+        {
+	        echo '
+            <li>
+                <span class="iconTextLink">
+	                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=1">
+	                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Einzelbilder hochladen" title="Einzelbilder hochladen"/></a>
+	                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=1">Upload</a>
+	            </span>
+	        </li>';
+        }
+        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
+        {
+            echo '
+            <li>
+                <span class="iconTextLink">
+	               <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=2">
+	                <img src="'. THEME_PATH. '/icons/photo_upload_multi.png" alt="Komfortupload" title="Komfortupload"/></a>
+	                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=2">Komfortupload</a>
+	           </span>
+	        <li>';
+        }
+    }
+    echo '</ul>';
+}
+
 
 //Anlegen der Tabelle
 echo '<div class="photoModuleContainer">';
@@ -322,7 +336,8 @@ echo '<div class="photoModuleContainer">';
         		        echo '
         		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$vorseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
         		            <img src="'. THEME_PATH. '/icons/back.png" alt="Vorherige" />
-        		        </a>';
+        		        </a>
+        		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$vorseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">Vorherige</a>&nbsp;';
         		    }
     			
         		    //Seitenzahlen
@@ -341,6 +356,7 @@ echo '<div class="photoModuleContainer">';
         		    $nachseite=$thumb_seite+1;
         		    if($nachseite<=$thumb_seiten){
         		        echo '
+        		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">Nächste</a>
         		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
         		            <img src="'. THEME_PATH. '/icons/forward.png" alt="N&auml;chste" />
         		        </a>';
@@ -409,6 +425,12 @@ echo '<div class="photoModuleContainer">';
                                 src="'. THEME_PATH. '/icons/ecard.png" alt="Foto als Grußkarte versenden" title="Foto als Grußkarte versenden" /></a>';
                         }
                     }//if
+                    //schleifen abbrechen
+                    if ($bild == $bilder)
+                    {
+                        $zeile=$g_preferences['photo_thumbs_row'];
+                        $spalte=$g_preferences['photo_thumbs_column'];
+                    }
                     echo '</ul></li>';
                 }//for
                 echo '</ul></li>'; //Zeilenende
@@ -497,11 +519,7 @@ echo '<div class="photoModuleContainer">';
     {
         $g_db->data_seek($result_list, $album_element+$ignored-$ignore);
     }
-    
-    // Navigation mit Vor- und Zurueck-Buttons
-    $base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id;
-    echo '<div class="pageNavigation">'.generatePagination($base_url, $albums-$ignored, 10, $album_element, TRUE).'</div>';
-    
+       
     $counter = 0;
     $sub_photo_album = new TablePhotos($g_db);
 

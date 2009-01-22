@@ -13,6 +13,7 @@
 hier koenne Einstellungen fuer diese vorgenommen werden*/
 #photoPageNavigation{
     clear: both;
+    padding-top: 10px;
 }
 #photoThumbnailTable{
     width: 550px;
