@@ -18,27 +18,27 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/classes/ubb_parser.php");
-require("../../system/classes/table_announcement.php");
+require('../../system/common.php');
+require('../../system/classes/ubb_parser.php');
+require('../../system/classes/table_announcement.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 elseif($g_preferences['enable_announcements_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
+    require('../../system/login_valid.php');
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_start    = 0;
-$req_headline = "Ankündigungen";
+$req_headline = 'Ankündigungen';
 $req_id       = 0;
-$sql_datum    = "";
+$sql_datum    = '';
 
 // Uebergabevariablen pruefen
 
@@ -46,34 +46,34 @@ if(isset($_GET['start']))
 {
     if(is_numeric($_GET['start']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     $req_start = $_GET['start'];
 }
 
 if(isset($_GET['headline']))
 {
-    $req_headline = strStripTags($_GET["headline"]);
+    $req_headline = strStripTags($_GET['headline']);
 }
 
 if(isset($_GET['id']))
 {
     if(is_numeric($_GET['id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     $req_id = $_GET['id'];
 }
 
-if(array_key_exists("date", $_GET))
+if(array_key_exists('date', $_GET))
 {
-    if(is_numeric($_GET["date"]) == false)
+    if(is_numeric($_GET['date']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     else
     {
-        $sql_datum = substr($_GET["date"],0,4). "-". substr($_GET["date"],4,2). "-". substr($_GET["date"],6,2);
+        $sql_datum = substr($_GET['date'],0,4). '-'. substr($_GET['date'],4,2). '-'. substr($_GET['date'],6,2);
     }
 }
 
@@ -101,10 +101,10 @@ if($g_preferences['enable_rss'] == 1)
         href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php" />';
 };
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "<h1 class=\"moduleHeadline\">$req_headline</h1>";
+echo '<h1 class="moduleHeadline">'.$req_headline.'</h1>';
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = "";
@@ -112,14 +112,14 @@ $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $key => $value)
 {
-	$organizations = $organizations. "'$value', ";
+	$organizations = $organizations. '"'.$value.'",';
 }
-$organizations = $organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
+$organizations = $organizations. '"'. $g_current_organization->getValue("org_shortname"). '"';
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
 {
-    $conditions = " AND ann_id = $req_id ";
+    $conditions = 'AND ann_id ='. $req_id;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
@@ -127,24 +127,24 @@ else
     // Ankuendigungen an einem Tag suchen
     if(strlen($sql_datum) > 0)
     {
-        $conditions = " AND DATE_FORMAT(ann_timestamp_create, '%Y-%m-%d') = '$sql_datum' ";        
+        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, "%Y-%m-%d") = "'.$sql_datum.'"';        
     }
     //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
     else
     {
-        $conditions = "";
+        $conditions = '';
     }
 }
 
 if($req_id == 0)
 {
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-    $sql = "SELECT COUNT(1) as count 
-              FROM ". TBL_ANNOUNCEMENTS. "
-             WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-                   OR (   ann_global   = 1
-                      AND ann_org_shortname IN ($organizations) ))
-                   $conditions ";
+    $sql = 'SELECT COUNT(1) as count 
+              FROM '. TBL_ANNOUNCEMENTS. '
+             WHERE (  ann_org_shortname = "'. $g_current_organization->getValue('org_shortname'). '"
+                OR (   ann_global   = 1
+               AND ann_org_shortname IN ('.$organizations.') ))
+                   '.$conditions.'';
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
     $num_announcements = $row['count'];
@@ -165,28 +165,28 @@ else
 }
 
 // nun die Ankuendigungen auslesen, die angezeigt werden sollen
-$sql = "SELECT ann.*, 
+$sql = 'SELECT ann.*, 
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-          FROM ". TBL_ANNOUNCEMENTS. " ann
-          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+          FROM '. TBL_ANNOUNCEMENTS. ' ann
+          LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = ann_usr_id_create
-           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = ann_usr_id_create
-           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = ann_usr_id_change
-           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = ann_usr_id_change
-           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
-         WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-               OR (   ann_global   = 1
-                  AND ann_org_shortname IN ($organizations) ))
-               $conditions 
+           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+         WHERE (  ann_org_shortname = "'. $g_current_organization->getValue('org_shortname'). '"
+            OR (   ann_global   = 1
+           AND ann_org_shortname IN ('.$organizations.') ))
+               '.$conditions.' 
          ORDER BY ann_timestamp_create DESC
-         LIMIT $req_start, $announcements_per_page";
+         LIMIT '.$req_start.', '.$announcements_per_page.'';
 $announcements_result = $g_db->query($sql);
 
 // Neue Ankuendigung anlegen
@@ -204,20 +204,16 @@ if($g_current_user->editAnnouncements())
     </ul>';        
 }
 
-// Navigation mit Vor- und Zurueck-Buttons
-$base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=$req_headline";
-echo generatePagination($base_url, $num_announcements, $announcements_per_page, $req_start, TRUE);
-
 if ($g_db->num_rows($announcements_result) == 0)
 {
     // Keine Ankuendigungen gefunden
     if($req_id > 0)
     {
-        echo "<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>";
+        echo '<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>';
     }
     else
     {
-        echo "<p>Es sind keine Einträge vorhanden.</p>";
+        echo '<p>Es sind keine Einträge vorhanden.</p>';
     }
 }
 else
@@ -244,9 +240,9 @@ else
                     {
                         if($announcement->editRight() == true)
                         {
-                            echo "
-                            <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id=". $announcement->getValue("ann_id"). "&amp;headline=$req_headline\"><img 
-                                src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>";
+                            echo '
+                            <a class="iconLink" href="$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline=$req_headline"><img 
+                                src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
@@ -289,9 +285,9 @@ else
 
 // Navigation mit Vor- und Zurueck-Buttons
 // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-$base_url = "$g_root_path/adm_program/modules/announcements/announcements.php?headline=$req_headline";
+$base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$req_headline;
 echo generatePagination($base_url, $num_announcements, $announcements_per_page, $req_start, TRUE);
         
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
