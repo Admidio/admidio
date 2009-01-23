@@ -9,20 +9,17 @@
  *
  * Uebergaben:
  *
- * mode: actual         - (Default) Alle aktuellen und zukuenftige Termine
- *                         anzeigen
- *       old            - Alle bereits erledigten
- * start                - Angabe, ab welchem Datensatz Termine angezeigt werden
- *                        sollen
- * headline             - Ueberschrift, die ueber den Terminen steht
+ * mode: actual       - (Default) Alle aktuellen und zukuenftige Termine anzeigen
+ *       old          - Alle bereits erledigten
+ * start              - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
+ * headline           - Ueberschrift, die ueber den Terminen steht
  *                      (Default) Termine
- * calendar             - Angabe der Kategorie damit auch nur eine angezeigt
- *                        werden kann.
- * id                   - Nur einen einzigen Termin anzeigen lassen.
- * date                 - Alle Termine zu einem Datum werden aufgelistet
- *                        Uebergabeformat: YYYYMMDD
- * calendar-selection   - 1: Es wird die Box angezeigt
- *                        0: Es wird keine Box angezeigt
+ * calendar           - Angabe der Kategorie damit auch nur eine angezeigt werden kann.
+ * id                 - Nur einen einzigen Termin anzeigen lassen.
+ * date               - Alle Termine zu einem Datum werden aufgelistet
+ *                      Uebergabeformat: YYYYMMDD
+ * calendar-selection - 1: Es wird die Box angezeigt
+ *                      0: Es wird keine Box angezeigt
  *
  *****************************************************************************/
 
@@ -163,15 +160,12 @@ echo '
 <script type="text/javascript"><!--
     function showCalendar()
     {
+        var calendar = "";
         if (document.getElementById("calendar").selectedIndex != 0)
         {
             var calendar = document.getElementById("calendar").value;
-            self.location.href = "dates.php?calendar=" + calendar;
         } 
-        else 
-        { 
-            self.location.href = "dates.php";
-        }
+        self.location.href = "dates.php?mode='.$req_mode.'&headline='.$req_headline.'&calendar=" + calendar;
     }
 //--></script>
 <h1 class="moduleHeadline">'. $g_layout['title']. '</h1>';
@@ -180,6 +174,8 @@ echo '
 $organizations = '';
 $hidden = '';
 $conditions = '';
+$condition_calendar = '';
+$order_by = '';
 $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $org_id => $value)
@@ -197,39 +193,40 @@ if ($g_valid_login == false)
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
 if($req_id > 0)
 {
-    $conditions = ' AND dat_id = $req_id '.$hidden;
+    $conditions .= ' AND dat_id = $req_id '.$hidden;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-   if (strlen($req_calendar) > 0)
-   {
-	  // alle Termine zu einer Kategorie anzeigen
-	  $conditions = ' AND cat_name   = "'. $req_calendar. '" ';
-   }
+    if (strlen($req_calendar) > 0)
+    {
+        // alle Termine zu einer Kategorie anzeigen
+        $condition_calendar .= ' AND cat_name   = "'. $req_calendar. '" ';
+    }
+
     // Termine an einem Tag suchen
     if(strlen($sql_datum) > 0)
     {
-        $conditions = $conditions.'   AND DATE_FORMAT(dat_begin, "%Y-%m-%d")       <= "'.$sql_datum.'"
-                          AND DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$sql_datum.' 00:00:00"
-                          '.$hidden.'
-                        ORDER BY dat_begin ASC ';
+        $conditions .= ' AND DATE_FORMAT(dat_begin, "%Y-%m-%d")       <= "'.$sql_datum.'"
+                         AND DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$sql_datum.' 00:00:00"
+                       '.$hidden;
+        $order_by .= ' ORDER BY dat_begin ASC ';
     }
     //fuer alte Termine...
     elseif($req_mode == 'old')
     {
-        $conditions = $conditions.'   AND DATE_FORMAT(dat_begin, "%Y-%m-%d") < "'.$act_date.'"
-                          AND DATE_FORMAT(dat_end, "%Y-%m-%d")   < "'.$act_date.'"
-                          '.$hidden.'
-                        ORDER BY dat_begin DESC ';
+        $conditions .= ' AND DATE_FORMAT(dat_begin, "%Y-%m-%d") < "'.$act_date.'"
+                         AND DATE_FORMAT(dat_end, "%Y-%m-%d")   < "'.$act_date.'"
+                       '.$hidden;
+        $order_by .= ' ORDER BY dat_begin DESC ';
     }
     //... ansonsten fuer kommende Termine
     else
     {
-        $conditions = $conditions.'   AND (  DATE_FORMAT(dat_begin, "%Y-%m-%d")       >= "'.$act_date.'"
-                              OR DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$act_date.' 00:00:00" )
-                           '.$hidden.'
-                        ORDER BY dat_begin ASC ';
+        $conditions .= ' AND (  DATE_FORMAT(dat_begin, "%Y-%m-%d")       >= "'.$act_date.'"
+                             OR DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$act_date.' 00:00:00" )
+                       '.$hidden;
+        $order_by .= ' ORDER BY dat_begin ASC ';
     }
 
 }
@@ -241,9 +238,9 @@ if($req_id == 0)
               FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
              WHERE dat_cat_id = cat_id
                AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                OR (   dat_global   = 1
-               AND cat_org_id IN ("'.$organizations.'") ))
-                 '.$conditions;
+                   OR (   dat_global   = 1
+                      AND cat_org_id IN ("'.$organizations.'") ))
+                 '.$conditions. $condition_calendar;
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
     $num_dates = $row['count'];
@@ -282,9 +279,9 @@ $sql = 'SELECT cat.*, dat.*,
            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-            OR (   dat_global   = 1
-           AND cat_org_id IN ('.$organizations.') ))
-               '.$conditions.'
+               OR (   dat_global   = 1
+                  AND cat_org_id IN ('.$organizations.') ))
+               '.$conditions. $condition_calendar. $order_by. '
          LIMIT '.$req_start.', '.$dates_per_page;
 $dates_result = $g_db->query($sql);
 
@@ -310,9 +307,12 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         // Combobox mit allen Kalendern anzeigen, denen auch Termine zugeordnet sind
         $sql = 'SELECT DISTINCT cat_name
                   FROM '. TBL_CATEGORIES. ', '. TBL_DATES. '
-                 WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                   AND cat_type   = "DAT"
-                   AND dat_cat_id = cat_id ';
+                 WHERE cat_type   = "DAT"
+                   AND dat_cat_id = cat_id 
+                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                       OR (   dat_global   = 1
+                          AND cat_org_id IN ('.$organizations.') ))
+                       '.$conditions;
         if($g_valid_login == false)
         {
           $sql .= ' AND cat_hidden = 0 ';
@@ -323,23 +323,23 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         if($g_db->num_rows($result) > 1)
         {
             echo '<li>Kalender:&nbsp;&nbsp;
-           <select size="1" id="calendar" onchange="showCalendar()">
-              <option value="Alle" ';
-              if(strlen($req_calendar) == 0)
-              {
-                  echo ' selected="selected" ';
-              }
-              echo '>Alle</option>';
+            <select size="1" id="calendar" onchange="showCalendar()">
+                <option value="Alle" ';
+                if(strlen($req_calendar) == 0)
+                {
+                    echo ' selected="selected" ';
+                }
+                echo '>Alle</option>';
         
-              while($row = $g_db->fetch_object($result))
-              {
-                  echo '<option value="'. urlencode($row->cat_name). '"';
-                  if($req_calendar == $row->cat_name)
-                  {
-                      echo ' selected="selected" ';
-                  }
-                  echo '>'.$row->cat_name.'</option>';
-              }
+                while($row = $g_db->fetch_object($result))
+                {
+                    echo '<option value="'. urlencode($row->cat_name). '"';
+                    if($req_calendar == $row->cat_name)
+                    {
+                        echo ' selected="selected" ';
+                    }
+                    echo '>'.$row->cat_name.'</option>';
+                }
             echo '</select>';
             if($g_current_user->editDates())
             {
@@ -351,12 +351,12 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         }
         elseif($g_current_user->editDates())
         {
-           echo '
-           <li><span class="iconTextLink">
+            echo '
+            <li><span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender"><img
-                          src="'. THEME_PATH. '/icons/options.png" alt="Kalender pflegen" title="Kalender pflegen"/></a>
+                    src="'. THEME_PATH. '/icons/application_double.png" alt="Kalender pflegen" title="Kalender pflegen"/></a>
                 <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender">Kalender pflegen</a>
-           </li></span>';
+            </span></li>';
         }
     } 
     echo '</ul>';
