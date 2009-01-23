@@ -12,58 +12,58 @@
   *
  *****************************************************************************/
 
-require("../../system/common.php");
+require('../../system/common.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['weblinks_redirect_seconds'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 elseif($g_preferences['enable_weblinks_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
+    require('../../system/login_valid.php');
 }
 
 // Uebergabevariablen pruefen
-if (array_key_exists("lnk_id", $_GET))
+if (array_key_exists('lnk_id', $_GET))
 {
-    if (is_numeric($_GET["lnk_id"]) == false)
+    if (is_numeric($_GET['lnk_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 }
 else
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
-if (array_key_exists("headline", $_GET))
+if (array_key_exists('headline', $_GET))
 {
-    $_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET['headline'] = strStripTags($_GET['headline']);
 }
 else
 {
-    $_GET["headline"] = "Weblinks";
+    $_GET['headline'] = 'Weblinks';
 }
 
 // SQL-Statement zusammenbasteln
-$hidden    = "";
+$hidden    = '';
 
 if ($g_valid_login == false)
 {
 	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-	$hidden = " AND cat_hidden = 0 ";
+	$hidden = ' AND cat_hidden = 0 ';
 }
 
 // Link aus Datenbank auslesen
-$sql = "SELECT * FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+$sql = 'SELECT * FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
   		  WHERE lnk_cat_id = cat_id
-		    AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-		    AND cat_type = 'LNK'
-			AND lnk_id = ". $_GET['lnk_id']. "
-  		        $hidden
-		  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC";
+		    AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+		    AND cat_type = "LNK"
+			AND lnk_id = '. $_GET["lnk_id"]. '
+  		        '.$hidden.'
+		  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
 
 $result = $g_db->query($sql);
 
@@ -73,9 +73,9 @@ while($row = $g_db->fetch_array($result))
 	$url_name = $row['lnk_name'];
 }
 // Wenn kein Link gefunden wurde Fehler ausgeben
-if ($url == "")
+if ($url == '')
 {
-	$g_message->show("invalid");
+	$g_message->show('invalid');
 }
 
 
@@ -85,24 +85,36 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 unset($_SESSION['links_request']);
 
-$g_layout['header'] = "<meta http-equiv=\"refresh\" content=\"". $g_preferences['weblinks_redirect_seconds']. "; url=$url\">";
+$g_layout['header'] = '<meta http-equiv="refresh" content="'. $g_preferences["weblinks_redirect_seconds"].'; url='.$url.'">';
+
+//Counter zählt die sekunden bis zur Weiterleitung runter
+$g_layout['header'] =$g_layout['header'].'<script type="text/javascript">
+    function countDown(init)
+    {
+        if (init || --document.getElementById( "counter" ).firstChild.nodeValue > 0 )
+        {
+        	window.setTimeout( "countDown()" , 1000 );
+        }
+    };
+    countDown(true);
+</script>'; 
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $_GET["headline"];
+$g_layout['title'] = $_GET['headline'];
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "<h1 class=\"moduleHeadline\">". $_GET["headline"]. "</h1>
-<div id=\"links_overview\">
-	<div class=\"formLayout\">
-			<div class=\"formHead\">Redirect</div>
-			<div class=\"formBody\" style=\"overflow: hidden;\">Du verlässt jetzt das Angebot von <i>". $g_current_organization->getValue("org_longname"). "</i> und		
-			 wirst in wenigen Sekunden automatisch zu <b>$url_name</b> ($url) weitergeleitet.<br><br>
-			 Sollte die automatische Weiterleitung nicht funktionieren, klicke bitte <a href=\"$url\" target=\"_self\">hier</a>!</div>
+echo '<h1 class="moduleHeadline">'. $_GET['headline']. '</h1>
+<div id="links_overview">
+	<div class="formLayout">
+			<div class="formHead">Redirect</div>
+			<div class="formBody" style="overflow: hidden;">Du verlässt jetzt das Angebot von <i>'. $g_current_organization->getValue('org_longname'). '</i> und		
+			 wirst in <span id="counter">'.$g_preferences["weblinks_redirect_seconds"].'</span> Sekunden automatisch zu <b>'.$url_name.'</b> ('.$url.') weitergeleitet.<br><br>
+			 Sollte die automatische Weiterleitung nicht funktionieren, klicke bitte <a href="'.$url.'" target="_self">hier</a>!</div>
 	</div>
-</div>";
+</div>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

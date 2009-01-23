@@ -15,59 +15,59 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/classes/ubb_parser.php");
+require('../../system/common.php');
+require('../../system/classes/ubb_parser.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 elseif($g_preferences['enable_weblinks_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
+    require('../../system/login_valid.php');
 }
 //Kontrolle ob nur Kategorien angezeigt werden
 if(isset($_GET['category']) == false)
 {
-    $_GET['category'] = "";
+    $_GET['category'] = '';
 }
 
 // Uebergabevariablen pruefen
 
-if (array_key_exists("start", $_GET))
+if (array_key_exists('start', $_GET))
 {
-    if (is_numeric($_GET["start"]) == false)
+    if (is_numeric($_GET['start']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 }
 else
 {
-    $_GET["start"] = 0;
+    $_GET['start'] = 0;
 }
 
-if (array_key_exists("id", $_GET))
+if (array_key_exists('id', $_GET))
 {
-    if (is_numeric($_GET["id"]) == false)
+    if (is_numeric($_GET['id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 }
 else
 {
-    $_GET["id"] = 0;
+    $_GET['id'] = 0;
 }
 
-if (array_key_exists("headline", $_GET))
+if (array_key_exists('headline', $_GET))
 {
-    $_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET['headline'] = strStripTags($_GET['headline']);
 }
 else
 {
-    $_GET["headline"] = "Weblinks";
+    $_GET['headline'] = 'Weblinks';
 }
 
 if ($g_preferences['enable_bbcode'] == 1)
@@ -83,7 +83,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['links_request']);
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $_GET["headline"];
+$g_layout['title'] = $_GET['headline'];
 $g_layout['header'] = $g_js_vars. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
@@ -91,8 +91,8 @@ $g_layout['header'] = $g_js_vars. '
 
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] = $g_layout['header']. "<link type=\"application/rss+xml\" rel=\"alternate\" title=\"". $g_current_organization->getValue("org_longname"). " - Links\"
-        href=\"$g_root_path/adm_program/modules/links/rss_links.php\" />";
+    $g_layout['header'] = $g_layout['header']. '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Links"
+        href="$g_root_path/adm_program/modules/links/rss_links.php" />';
 };
 
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -103,38 +103,38 @@ echo '<h1 class="moduleHeadline">'. $_GET["headline"]. '</h1>
 
 // SQL-Statement zusammenbasteln
 
-$condition = "";
-$hidden    = "";
+$condition = '';
+$hidden    = '';
 
 if ($_GET['id'] > 0)
 {
 	// falls eine id fuer einen bestimmten Link uebergeben worden ist...
-	$condition = " AND lnk_id = ". $_GET['id'];
+	$condition = ' AND lnk_id = '. $_GET['id'];
 }
 else if (strlen($_GET['category']) > 0) 
 {
 	// alle Links zu einer Kategorie anzeigen
-	$condition = " AND cat_name   = '". $_GET['category']. "' ";
+	$condition = ' AND cat_name   = "'. $_GET['category']. '"';
 } 
 
 if ($g_valid_login == false)
 {
 	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-	$hidden = " AND cat_hidden = 0 ";
+	$hidden = ' AND cat_hidden = 0 ';
 }
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
 // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
 // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-$sql = "SELECT COUNT(*) FROM ". TBL_LINKS. ", ". TBL_CATEGORIES ."
+$sql = 'SELECT COUNT(*) FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
 		WHERE lnk_cat_id = cat_id
-		AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-		AND cat_type = 'LNK'
-			$condition
-		    $hidden
-		ORDER BY cat_sequence, lnk_name DESC";
-$result = $g_db->query($sql);
-$row = $g_db->fetch_array($result);
+		AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+		AND cat_type = "LNK"
+        '.$condition.'
+		'.$hidden.'
+		ORDER BY cat_sequence, lnk_name DESC';
+$cat_result = $g_db->query($sql);
+$row = $g_db->fetch_array($cat_result);
 $numLinks = $row[0];
 
 // Anzahl Ankuendigungen pro Seite
@@ -148,60 +148,62 @@ else
 }
 
 // Links entsprechend der Einschraenkung suchen
-$sql = "SELECT cat.*, lnk.*,
+$sql = 'SELECT cat.*, lnk.*,
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-          FROM ". TBL_CATEGORIES ." cat, ". TBL_LINKS. " lnk
-          LEFT JOIN ". TBL_USER_DATA ." cre_surname
+          FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
+          LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = lnk_usr_id_create
-           AND cre_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cre_firstname
+           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = lnk_usr_id_create
-           AND cre_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cha_surname
+           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = lnk_usr_id_change
-           AND cha_surname.usd_usf_id = ".$g_current_user->getProperty("Nachname", "usf_id")."
-          LEFT JOIN ". TBL_USER_DATA ." cha_firstname
+           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = lnk_usr_id_change
-           AND cha_firstname.usd_usf_id = ".$g_current_user->getProperty("Vorname", "usf_id")."
+           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
   	     WHERE lnk_cat_id = cat_id
-	       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-		   AND cat_type = 'LNK'
-		       $condition
-  		       $hidden
+	       AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+		   AND cat_type = "LNK"
+		   '.$condition.'
+  		   '.$hidden.'
 		 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
-		 LIMIT ". $_GET['start']. ", ". $weblinks_per_page;
+		 LIMIT '. $_GET["start"]. ', '. $weblinks_per_page;
 $links_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen
 
 if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences['enable_rss'] == true))
 {
-    // Neuen Link anlegen
     if ($g_current_user->editWeblinksRight())
     {
-        echo "
-        <ul class=\"iconTextLinkList\">
+        // Neuen Link anlegen
+        echo '
+        <ul class="iconTextLinkList">
             <li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\"><img
-                    src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neu anlegen\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/links/links_new.php?headline=". $_GET["headline"]. "\">Neu anlegen</a>
+                <span class="iconTextLink">
+                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $_GET['headline']. '">
+                        <img src="'. THEME_PATH. '/icons/add.png" alt="Neu anlegen" /></a>
+                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $_GET['headline']. '">Link anlegen</a>
+                </span>
+            </li>';
+       //Kategorie pflegen
+        echo'
+            <li>
+                <span class="iconTextLink">
+                    <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=LNK">
+                        <img src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" /></a>
+                    <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=LNK">Kategorien pflegen</a>
                 </span>
             </li>
-            <li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\"><img
-                    src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kategorien pflegen\" /></a>
-                    <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=LNK\">Kategorien pflegen</a>
-                </span>
-            </li>
-        </ul>";
+        </ul>';
     }
 
     // Navigation mit Vor- und Zurueck-Buttons
-    $baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-    echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET["start"], TRUE);
+    $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $_GET['headline'];
+    echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET['start'], TRUE);
 }
 
 if ($g_db->num_rows($links_result) == 0)
@@ -209,11 +211,11 @@ if ($g_db->num_rows($links_result) == 0)
     // Keine Links gefunden
     if ($_GET['id'] > 0)
     {
-        echo "<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>";
+        echo '<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>';
     }
     else
     {
-        echo "<p>Es sind keine Einträge vorhanden.</p>";
+        echo '<p>Es sind keine Einträge vorhanden.</p>';
     }
 }
 else
@@ -239,68 +241,72 @@ else
 			$new_category = true;
 			if ($j>0)
 			{
-				echo "</div></div><br />";
+				echo '</div></div><br />';
 			}
-			echo "<div class=\"formLayout\">
-				<div class=\"formHead\">".$row->cat_name."</div>
-				<div class=\"formBody\" style=\"overflow: hidden;\">";
+			echo '<div class="formLayout">
+				<div class="formHead">'.$row->cat_name.'</div>
+				<div class="formBody" style="overflow: hidden;">';
         }
         
-        echo "<div id=\"lnk_".$row->lnk_id."\">";
+        echo '<div id="lnk_'.$row->lnk_id.'">';
     		if($i > 0)
     		{
-    			echo "<hr />";
+    			echo '<hr />';
     		}
 			
 			if($g_preferences['weblinks_redirect_seconds'] > 0)
 			{
-				echo "
-	    		<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"". $g_preferences['weblinks_target']. "\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
-	    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-	    		<a href=\"$g_root_path/adm_program/modules/links/links_redirect.php?lnk_id=$row->lnk_id\" target=\"". $g_preferences['weblinks_target']. "\">$row->lnk_name</a>
-
-	    		<div style=\"margin-top: 10px;\">";
+				echo '
+	    		<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$row->lnk_id.'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+	    			alt="Gehe zu '.$row->lnk_name.'" title="Gehe zu '.$row->lnk_name.'" /></a>
+	    		<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$row->lnk_id.'" target="'. $g_preferences['weblinks_target']. '">'.$row->lnk_name.'</a>';
 			}
 			else
 			{			
-	    		echo "
-	    		<a class=\"iconLink\" href=\"$row->lnk_url\" target=\"". $g_preferences['weblinks_target']. "\"><img src=\"". THEME_PATH. "/icons/weblinks.png\"
-	    			alt=\"Gehe zu $row->lnk_name\" title=\"Gehe zu $row->lnk_name\" /></a>
-	    		<a href=\"$row->lnk_url\" target=\"". $g_preferences['weblinks_target']. "\">$row->lnk_name</a>
+	    		echo '
+	    		<a class="iconLink" href="'.$row->lnk_url.'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+	    			alt="Gehe zu '.$row->lnk_name.'" title="Gehe zu '.$row->lnk_name.'" /></a>
+	    		<a href="'.$row->lnk_url.'" target="'. $g_preferences['weblinks_target']. '">'.$row->lnk_name.'</a>';
 
-	    		<div style=\"margin-top: 10px;\">";
 			}
-
-    			// wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-    			if ($g_preferences['enable_bbcode'] == 1)
-    			{
-    				echo $bbcode->parse($row->lnk_description);
-    			}
-    			else
-    			{
-    				echo nl2br($row->lnk_description);
-    			}
-    		echo "</div>";
-
+            // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+            if ($g_current_user->editWeblinksRight())
+            {
+                echo '
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$row->lnk_id.'&amp;headline='. $_GET['headline']. '"><img
+                	src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
+                <a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$row->lnk_id.'\', \''.$row->lnk_id.'\',\''.$row->lnk_name.'\')">
+                   <img	src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
+            }
+            
+            
+    		//Beschreibung ausgeben falls forhanden
+    		if(strlen($row->lnk_description)>0)
+    		{
+        		echo'<div style="margin-top: 10px;">';
+                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+                if ($g_preferences['enable_bbcode'] == 1)
+                {
+                    echo $bbcode->parse($row->lnk_description);
+                }
+                else
+                {
+                    echo nl2br($row->lnk_description);
+                }
+        		echo '</div>';
+    		}
+            
+            //Editimformationen für Leute mit Bearbeitungsrecht
     		if($g_current_user->editWeblinksRight())
     		{
-    			echo "
-    			<div class=\"editInformation\">";
-    				// aendern & loeschen duerfen nur User mit den gesetzten Rechten
-    				if ($g_current_user->editWeblinksRight())
-    				{
-    					echo "
-    					<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/links/links_new.php?lnk_id=$row->lnk_id&amp;headline=". $_GET['headline']. "\"><img
-    						src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-    					<a class=\"iconLink\" href=\"javascript:deleteObject('lnk', 'lnk_".$row->lnk_id."',".$row->lnk_id.",'".$row->lnk_name."')\"><img
-    						src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Löschen\" title=\"Löschen\" /></a>";
-    				}
-    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.
-    				' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create);
+    			echo '
+    			<div class="editInformation">';
+    				
+    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create);
 
     				if($row->lnk_usr_id_change > 0)
     				{
-    					echo '<br />Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname.
+    					echo ' | Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname.
     					' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change);
     				}
     			echo '</div>';
@@ -319,18 +325,18 @@ else
     // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
     if ($numLinks == 0)
     {
-        echo "<p>Es sind keine Einträge vorhanden.</p>";
+        echo '<p>Es sind keine Einträge vorhanden.</p>';
     }
 
-    echo "</div></div>";
+    echo '</div></div>';
 } // Ende Wenn mehr als 0 Datensaetze
 
 echo '</div>';
 
 // Navigation mit Vor- und Zurueck-Buttons
-$baseUrl = "$g_root_path/adm_program/modules/links/links.php?headline=". $_GET["headline"];
-echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET["start"], TRUE);
+$baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $_GET['headline'];
+echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET['start'], TRUE);
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
