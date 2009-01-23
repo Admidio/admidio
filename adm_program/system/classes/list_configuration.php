@@ -26,9 +26,9 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/condition_parser.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_lists.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_list_columns.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/condition_parser.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_lists.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_list_columns.php');
 
 class ListConfiguration extends TableLists
 {
@@ -47,9 +47,9 @@ class ListConfiguration extends TableLists
     // Daten der zugehoerigen Spalten einlesen und in Objekten speichern
     function readColumns()
     {
-        $sql = "SELECT * FROM ". TBL_LIST_COLUMNS. "
-                 WHERE lsc_lst_id = ". $this->getValue("lst_id"). "
-                 ORDER BY lsc_number ASC ";
+        $sql = 'SELECT * FROM '. TBL_LIST_COLUMNS. '
+                 WHERE lsc_lst_id = '. $this->getValue('lst_id'). '
+                 ORDER BY lsc_number ASC ';
         $lsc_result   = $this->db->query($sql);
         
         while($lsc_row = $this->db->fetch_array($lsc_result))
@@ -60,32 +60,36 @@ class ListConfiguration extends TableLists
     }
     
     // fuegt eine neue Spalte dem Spaltenarray hinzu
-    function addColumn($number, $field, $sort = "", $filter = "")
+    function addColumn($number, $field, $sort = '', $filter = '')
     {
-        if($number > 0 && strlen($field) > 0)
+        // MySQL kann nicht mehr als 61 Tabellen joinen
+        // Uebergaben muessen sinnvoll gefuellt sein
+        if(count($this->columns) < 57 && $number > 0 && strlen($field) > 0)
         {
             // falls Spalte noch nicht existiert, dann Objekt anlegen
             if(isset($this->columns[$number]) == false)
             {
                 $this->columns[$number] = new TableListColumns($this->db);
-                $this->columns[$number]->setValue("lsc_lsf_id", $this->getValue("lst_id"));
+                $this->columns[$number]->setValue('lsc_lsf_id', $this->getValue('lst_id'));
             }
 
             // Spalteninhalte belegen
-            $this->columns[$number]->setValue("lsc_number", $number);
+            $this->columns[$number]->setValue('lsc_number', $number);
             if(is_numeric($field))
             {
-                $this->columns[$number]->setValue("lsc_usf_id", $field);
-                $this->columns[$number]->setValue("lsc_special_field", "");
+                $this->columns[$number]->setValue('lsc_usf_id', $field);
+                $this->columns[$number]->setValue('lsc_special_field', '');
             }
             else
             {
-                $this->columns[$number]->setValue("lsc_usf_id", "");
-                $this->columns[$number]->setValue("lsc_special_field", $field);
+                $this->columns[$number]->setValue('lsc_usf_id', '');
+                $this->columns[$number]->setValue('lsc_special_field', $field);
             }
-            $this->columns[$number]->setValue("lsc_sort", $sort);
-            $this->columns[$number]->setValue("lsc_filter", $filter);
+            $this->columns[$number]->setValue('lsc_sort', $sort);
+            $this->columns[$number]->setValue('lsc_filter', $filter);
+            return true;
         }
+        return false;
     }
     
     // entfernt die entsprechende Spalte aus der Konfiguration
@@ -108,10 +112,10 @@ class ListConfiguration extends TableLists
                 // es wird nur die einzelne Spalte entfernt und alle folgenden Spalten ruecken eins nach vorne
                 for($new_number = $number; $new_number < $this->countColumns(); $new_number++)
                 {
-                    $this->columns[$new_number]->setValue("lsc_usf_id", $this->columns[$new_number+1]->getValue("lsc_usf_id"));
-                    $this->columns[$new_number]->setValue("lsc_special_field", $this->columns[$new_number+1]->getValue("lsc_special_field"));
-                    $this->columns[$new_number]->setValue("lsc_sort",   $this->columns[$new_number+1]->getValue("lsc_sort"));
-                    $this->columns[$new_number]->setValue("lsc_filter", $this->columns[$new_number+1]->getValue("lsc_filter"));
+                    $this->columns[$new_number]->setValue('lsc_usf_id', $this->columns[$new_number+1]->getValue('lsc_usf_id'));
+                    $this->columns[$new_number]->setValue('lsc_special_field', $this->columns[$new_number+1]->getValue('lsc_special_field'));
+                    $this->columns[$new_number]->setValue('lsc_sort',   $this->columns[$new_number+1]->getValue('lsc_sort'));
+                    $this->columns[$new_number]->setValue('lsc_filter', $this->columns[$new_number+1]->getValue('lsc_filter'));
                     $this->columns[$new_number]->save();
                 }
                 $this->columns[$new_number]->delete();
@@ -140,121 +144,121 @@ class ListConfiguration extends TableLists
     function getSQL($role_ids, $member_status = 0)
     {
         global $g_current_user, $g_current_organization;
-        $sql = "";
-        $sql_select   = "";
-        $sql_join     = "";
-        $sql_where    = "";
-        $sql_orderby  = "";
-        $sql_role_ids = "";
-        $sql_member_status = "";
+        $sql = '';
+        $sql_select   = '';
+        $sql_join     = '';
+        $sql_where    = '';
+        $sql_orderby  = '';
+        $sql_role_ids = '';
+        $sql_member_status = '';
     
         foreach($this->columns as $number => $list_column)
         {
             // Spalte anhaengen
             if(strlen($sql_select) > 0) 
             {
-                $sql_select = $sql_select. ", ";
+                $sql_select = $sql_select. ', ';
             }
             
-            if($list_column->getValue("lsc_usf_id") > 0)
+            if($list_column->getValue('lsc_usf_id') > 0)
             {
                 // dynamisches Profilfeld
-                $table_alias = "row". $list_column->getValue("lsc_number"). "id". $list_column->getValue("lsc_usf_id");
+                $table_alias = 'row'. $list_column->getValue('lsc_number'). 'id'. $list_column->getValue('lsc_usf_id');
                 
                 // JOIN - Syntax erstellen
-                $sql_join = $sql_join. " LEFT JOIN ". TBL_USER_DATA ." $table_alias
-                                           ON $table_alias.usd_usr_id = usr_id
-                                          AND $table_alias.usd_usf_id = ".$list_column->getValue("lsc_usf_id");
+                $sql_join = $sql_join. ' LEFT JOIN '. TBL_USER_DATA .' '.$table_alias.'
+                                           ON '.$table_alias.'.usd_usr_id = usr_id
+                                          AND '.$table_alias.'.usd_usf_id = '.$list_column->getValue('lsc_usf_id');
                 
                 // hierbei wird die usf_id als Tabellen-Alias benutzt und vorangestellt
-                $act_field = "$table_alias.usd_value";
+                $act_field = $table_alias.'.usd_value';
             }
             else
             {
                 // Spezialfelder z.B. usr_photo, mem_begin ...
-                $act_field = $list_column->getValue("lsc_special_field");
+                $act_field = $list_column->getValue('lsc_special_field');
             }
 
             $sql_select = $sql_select. $act_field;
 
 
             // Sortierung einbauen
-            if(strlen($list_column->getValue("lsc_sort")) > 0)
+            if(strlen($list_column->getValue('lsc_sort')) > 0)
             {
                 if(strlen($sql_orderby) > 0) 
                 {  
-                    $sql_orderby = $sql_orderby. ", ";
+                    $sql_orderby = $sql_orderby. ', ';
                 }
-                $sql_orderby = $sql_orderby. $act_field. " ". $list_column->getValue("lsc_sort");
+                $sql_orderby = $sql_orderby. $act_field. ' '. $list_column->getValue('lsc_sort');
             }
 
 
             // Bedingungen fuer die Spalte verarbeiten
-            if(strlen($list_column->getValue("lsc_filter")) > 0)
+            if(strlen($list_column->getValue('lsc_filter')) > 0)
             {
-                $value = $list_column->getValue("lsc_filter");
+                $value = $list_column->getValue('lsc_filter');
 
-                if($list_column->getValue("lsc_usf_id") > 0)
+                if($list_column->getValue('lsc_usf_id') > 0)
                 {
                     // ein benutzerdefiniertes Feld
                     
-                    if($g_current_user->getPropertyById($list_column->getValue("lsc_usf_id"), "usf_type") == "CHECKBOX")
+                    if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
                     {
-                        $type = "checkbox";
+                        $type = 'checkbox';
                         $value = strtoupper($value);
                         
                         // Ja bzw. Nein werden durch 1 bzw. 0 ersetzt, damit Vergleich in DB gemacht werden kann
-                        if($value == "JA" || $value == "1" || $value == "TRUE")
+                        if($value == 'JA' || $value == '1' || $value == 'TRUE')
                         {
-                            $value = "1";
+                            $value = '1';
                         }
-                        elseif($value == "NEIN" || $value == "0" || $value == "FALSE")
+                        elseif($value == 'NEIN' || $value == '0' || $value == 'FALSE')
                         {
-                            $value = "0";
+                            $value = '0';
                         }
                     }
-                    elseif($g_current_user->getPropertyById($list_column->getValue("lsc_usf_id"), "usf_type") == "NUMERIC")
+                    elseif($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
                     {
-                        $type = "int";
-                        if($g_current_user->getPropertyById($list_column->getValue("lsc_usf_id"), "usf_name") == "Geschlecht")
+                        $type = 'int';
+                        if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name') == 'Geschlecht')
                         {
                             // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
                             $value = strtoupper($value);
-                            if($value == "U" )
+                            if($value == 'U' )
                             {
-                                $value = "0";
+                                $value = '0';
                             }
-                            elseif($value == "M" )
+                            elseif($value == 'M' )
                             {
-                                $value = "1";
+                                $value = '1';
                             }
-                            elseif($value == "W" )
+                            elseif($value == 'W' )
                             {
-                                $value = "2";
+                                $value = '2';
                             }
                         }
                     }
-                    elseif($g_current_user->getPropertyById($list_column->getValue("lsc_usf_id"), "usf_type") == "DATE")
+                    elseif($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
                     {
-                        $type = "date";
+                        $type = 'date';
                     }
                     else
                     {
-                        $type = "string";
+                        $type = 'string';
                     }
                 }
-                elseif($list_column->getValue("lsc_special_field") == "mem_begin" 
-                || $list_column->getValue("lsc_special_field") == "mem_begin")
+                elseif($list_column->getValue('lsc_special_field') == 'mem_begin' 
+                || $list_column->getValue('lsc_special_field') == 'mem_begin')
                 {
-                    $type = "date";
+                    $type = 'date';
                 }
-                elseif($list_column->getValue("lsc_special_field") == "usr_login_name")
+                elseif($list_column->getValue('lsc_special_field') == 'usr_login_name')
                 {
-                    $type = "string";
+                    $type = 'string';
                 }
-                elseif($list_column->getValue("lsc_special_field") == "usr_photo")
+                elseif($list_column->getValue('lsc_special_field') == 'usr_photo')
                 {
-                    $type = "";
+                    $type = '';
                 }
                 
                 // Bedingungen aus dem Bedingungsfeld als SQL darstellen
@@ -274,39 +278,39 @@ class ListConfiguration extends TableLists
             {
                 if(strlen($sql_role_ids) > 0) 
                 {  
-                    $sql_role_ids = $sql_role_ids. ", ";
+                    $sql_role_ids = $sql_role_ids. ', ';
                 }
-                $sql_role_ids = $sql_role_ids. "'".$value."'";
+                $sql_role_ids = $sql_role_ids. '"'.$value.'"';
             }
         }
 
         // Status der Mitgliedschaft setzen
         if($member_status == 0)
         {
-            $sql_member_status = " AND mem_begin <= '".DATE_NOW."'
-                                   AND mem_end    > '".DATE_NOW."' ";
+            $sql_member_status = ' AND mem_begin <= "'.DATE_NOW.'"
+                                   AND mem_end    > "'.DATE_NOW.'" ';
         }
         elseif($member_status == 1)
         {
-            $sql_member_status = " AND mem_end < '".DATE_NOW."' ";
+            $sql_member_status = ' AND mem_end < "'.DATE_NOW.'" ';
         }
 
         // SQL-Statement zusammenbasteln
-        $sql = "SELECT mem_leader, usr_id, $sql_select
-                  FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                       $sql_join
-                 WHERE rol_id    IN ($sql_role_ids)
+        $sql = 'SELECT mem_leader, usr_id, '.$sql_select.'
+                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+                       '.$sql_join.'
+                 WHERE rol_id    IN ('.$sql_role_ids.')
                    AND rol_cat_id = cat_id
-                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
                    AND mem_rol_id = rol_id
-                       $sql_member_status
+                       '.$sql_member_status.'
                    AND mem_usr_id = usr_id
                    AND usr_valid  = 1
-                       $sql_where 
-                 ORDER BY mem_leader DESC ";
+                       '.$sql_where.' 
+                 ORDER BY mem_leader DESC ';
         if(strlen($sql_orderby) > 0)
         {
-            $sql = $sql. ", ". $sql_orderby;
+            $sql = $sql. ', '. $sql_orderby;
         }
         
         return $sql;
@@ -326,9 +330,9 @@ class ListConfiguration extends TableLists
         // jetzt noch die einzelnen Spalten sichern
         foreach($this->columns as $number => $list_column)
         {
-            if($list_column->getValue("lsc_lst_id") == 0)
+            if($list_column->getValue('lsc_lst_id') == 0)
             {
-                $list_column->setValue("lsc_lst_id", $this->getValue("lst_id"));
+                $list_column->setValue('lsc_lst_id', $this->getValue('lst_id'));
             }
             $list_column->save();
         }
