@@ -39,12 +39,14 @@
  *
  * Nun kann man ein Attachment hinzufuegen:
  * (optional und mehrfach aufrufbar)
- * function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream',  $file_disposition = 'attachment',$file_id = '')
- * Uebergaben: $tmp_filename        - Der Pfad und Name der Datei auf dem Server
- *             $orig_filename        - Der Name der datei auf dem Rechner des Users
- *             $file_type            - Den Contenttype der Datei. (optional)
- *               $file_disposition    - Damit kann mann festlegen ob mann das Attachment als Anhang (=> 'attachment') oder in der Mail verwendent (=> 'inline')
- *               $file_id                - Damit kann mann die id jeden Attachments festlegen
+ * function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream',  
+                          $file_disposition = 'attachment',$file_id = '')
+ * Uebergaben: $tmp_filename     - Der Pfad und Name der Datei auf dem Server
+ *             $orig_filename    - Der Name der datei auf dem Rechner des Users
+ *             $file_type        - Den Contenttype der Datei. (optional)
+ *             $file_disposition - Damit kann mann festlegen ob mann das Attachment als Anhang (=> 'attachment') 
+ *                                 oder in der Mail verwendent (=> 'inline')
+ *             $file_id          - Damit kann mann die id jeden Attachments festlegen
  *
  * Bei Bedarf kann man sich eine Kopie der Mail zuschicken lassen (optional):
  * setCopyToSenderFlag()
@@ -79,18 +81,17 @@ function Email()
     $this->headerOptions['MIME-Version'] = '1.0';
 
     //Jetzt wird noch der ContentType der Mail gesetzt.
-    //Dieser wird im Falle eines Attachments spaeter ersetzt.
-    $this->headerOptions['Content-Type'] = "text/plain; charset=iso-8859-1";
-    $this->headerOptions['Content-Transfer-Encoding'] = "quoted-printable";
-    $this->contentType = "text/plain; charset=iso-8859-1";
+    //Dieser wird im Falle eines Attachments oder HTML spaeter ersetzt.
+    $this->headerOptions['Content-Type'] = 'text/plain; charset=iso-8859-1';
 
     $this->headerOptions['Return-Path'] = $g_preferences['email_administrator'];
     $this->headerOptions['Sender']      = $g_preferences['email_administrator'];
 
-    $this->mailBoundary        = "--NextPart_AdmidioMailSystem_". md5(uniqid(rand()));
+    $this->mailBoundary        = '--NextPart_AdmidioMailSystem_'. md5(uniqid(rand()));
+    $this->mailBoundaryRelated = $this->mailBoundary;
     $this->copyToSender        = false;
-    $this->listRecipients    = false;
-    $this->sendasHTML        = false;
+    $this->listRecipients      = false;
+    $this->sendAsHTML          = false;
 
     //Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
     //fuer den Fall das eine Kopie der Mail angefordert wird...
@@ -106,7 +107,7 @@ function setSender($address, $name='')
 
         if (strlen($name) > 0) {
             //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
-            $this->headerOptions['From'] = "\"". $name. "\" <". $address. ">";
+            $this->headerOptions['From'] = '"'. $name. '" <'. $address. '>';
         }
         else {
             //Kein Name gesetzt...
@@ -184,22 +185,27 @@ function setText($text)
 {
     //Erst mal die Zeilenumbrueche innerhalb des Mailtextes umwandeln in einfache Umbrueche
     // statt \r und \r\n nur noch \n
-    $text = str_replace("\r\n", "\n", $text);
-    $text = str_replace("\r", "\n", $text);
+    $text = str_replace('\r\n', '\n', $text);
+    $text = str_replace('\r', '\n', $text);
 
     $this->text = $text;
 }
 
 // Funktion um ein Attachment an die Mail zu uebergeben...
-function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream' , $file_disposition = 'attachment',$file_id = '')
+function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream' ,
+					   $file_disposition = 'attachment',$file_id = '')
 {
     $this->attachments[] = array(
             'orig_filename' => $orig_filename,
             'tmp_filename'  => $tmp_filename,
-            'file_type' => $file_type,
+            'file_type'     => $file_type,
             'file_disposition' => $file_disposition,
-            'file_id' => $file_id);
-    $this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"". $this->mailBoundary. "\"";
+            'file_id'       => $file_id);
+    if($this->sendAsHTML == false)
+    {
+	    // HTML-Mails mit Anhang behalten ihren Type, Textmails bekommen einen Speziellen
+		$this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"". $this->mailBoundary. '"';
+	}
 }
 
 // Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
@@ -217,7 +223,8 @@ function setListRecipientsFlag()
 // Funktion um die zu sendenden Daten als HTML Code zu inerpretieren zu lassen.
 function setDataAsHtml()
 {
-    $this->sendasHTML = true;
+    $this->sendAsHTML = true;
+	$this->headerOptions['Content-Type'] = "multipart/alternative;\n\tboundary=\"". $this->mailBoundary. '"';
 }
 
 // Funktion um den Header aufzubereiten
@@ -233,8 +240,8 @@ function prepareHeader()
 }
 
 // Methode gibt die maximale Groesse der Anhaenge zurueck
-// size_unit : "b" = byte; "kb" = kilobyte; "mb" = megabyte
-function getMaxAttachementSize($size_unit = "kb")
+// size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
+function getMaxAttachementSize($size_unit = 'kb')
 {
     global $g_preferences;
     
@@ -247,11 +254,11 @@ function getMaxAttachementSize($size_unit = "kb")
         $attachment_size = $g_preferences['max_email_attachment_size'];
     }
     
-    if($size_unit == "mb")
+    if($size_unit == 'mb')
     {
         $attachment_size = $attachment_size / 1024;
     }
-    elseif($size_unit == "b")
+    elseif($size_unit == 'b')
     {
         $attachment_size = $attachment_size * 1024;
     }
@@ -263,21 +270,30 @@ function prepareBody()
 {
     $this->mail_body = '';
 
-    // Fuer die Attachments alles vorbereiten...
-    if (isset($this->attachments))
+    // bei multipart-Mails muss auch der Content-Type fuer Text explizit gesetzt werden
+    if($this->sendAsHTML || isset($this->attachments))
     {
-        $this->mail_body    = $this->mail_body. "This message is in MIME format.\n";
-        $this->mail_body    = $this->mail_body. "Since your mail reader does not understand this format,\n";
-        $this->mail_body    = $this->mail_body. "some or all of this message may not be legible.\n\n";
-        if($this->sendasHTML)
-        {
-             $this->mail_body    = $this->mail_body.strip_tags($this->text)."\n\n";
-        }
-        $this->mail_body    = $this->mail_body. "--". $this->mailBoundary. "\nContent-Type: ". $this->contentType. "\n\n";
+	  	$this->mail_body = $this->mail_body. "--". $this->mailBoundary.
+	    				   "\nContent-Type: text/plain; charset=iso-8859-1\nContent-Transfer-Encoding: 7bit\n\n";
     }
 
-    // Eigentlichen Mail-Text hinzufuegen...
-    $this->mail_body = $this->mail_body. $this->text. "\n\n";
+    // nun den Mailtext als Text-Format hinzufuegen
+    $this->mail_body = $this->mail_body. strip_tags($this->text). "\n\n";
+
+	// wenn gewuenscht, nun den Inhalt als HTML einsetzen
+    if($this->sendAsHTML)
+    {
+    	// Html mit eingebetteten Bildern bekommt eine eigene Boundary
+    	if(isset($this->attachments))
+    	{
+    		$this->mailBoundaryRelated = '--NextPart_AdmidioMailSystem_'. md5(uniqid(rand()));
+			$this->mail_body = $this->mail_body. "--". $this->mailBoundary. 
+						   	   "\nContent-Type: multipart/related;\n\tboundary=\"". $this->mailBoundaryRelated. "\"\n\n";
+		}
+		$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. 
+					   	   "\nContent-Type: text/html; charset=iso-8859-1\nContent-Transfer-Encoding: 7bit\n\n";
+        $this->mail_body = $this->mail_body. $this->text."\n\n";
+    }
 
     // Jetzt die Attachments hinzufuegen...
     if (isset ($this->attachments))
@@ -287,7 +303,7 @@ function prepareBody()
             $thefile = '';
             $fileContent = '';
 
-            $this->mail_body = $this->mail_body. "--". $this->mailBoundary. "\n";
+            $this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. "\n";
             $this->mail_body = $this->mail_body. "Content-Type: ". $this->attachments[$i]['file_type']. ";\n";
             $this->mail_body = $this->mail_body. "\tname=\"". $this->attachments[$i]['orig_filename']. "\"\n";
             $this->mail_body = $this->mail_body. "Content-Transfer-Encoding: base64\n";
@@ -302,10 +318,10 @@ function prepareBody()
             $this->mail_body = $this->mail_body. "\tfilename=\"". $this->attachments[$i]['orig_filename']. "\"\n";
             if (!empty($this->attachments[$i]['file_id']))
             {
-                $this->mail_body = $this->mail_body. "Content-Id: <".$this->attachments[$i]['file_id'].">\n\n";
+                $this->mail_body = $this->mail_body. "Content-ID: <".$this->attachments[$i]['file_id'].">\n\n";
             }
 
-            // File �ffnen und base64 konvertieren
+            // File oeffnen und base64 konvertieren
             $return = "";
             $data    = "";
             $thePart = "";
@@ -320,7 +336,7 @@ function prepareBody()
 
             }
 
-            if (function_exists("chunk_split"))
+            if (function_exists('chunk_split'))
             {
                $thePart    .= chunk_split($data,76,"\n");
             }
@@ -337,6 +353,10 @@ function prepareBody()
             $this->mail_body = $this->mail_body. "\n". $thePart. "\n\n";
         }
         // Das Ende der Mail mit der Boundary kennzeichnen...
+        if($this->mailBoundary != $this->mailBoundaryRelated)
+        {
+        	$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. "--\n\n";
+        }
         $this->mail_body = $this->mail_body. "--". $this->mailBoundary. "--";
     }
 
@@ -345,12 +365,6 @@ function prepareBody()
 // Funktion um die Email endgueltig zu versenden...
 function sendEmail()
 {
-    // Wenn true wird der Content Type umgeaendert damit die E-mail als HMTL Email verstanden wird.
-    if($this->sendasHTML)
-    {
-        $this->contentType = "text/html; charset=iso-8859-1";
-    }
-
     // Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelaende...
     if (!isset($this->headerOptions['From']))
     {
@@ -398,7 +412,8 @@ function sendEmail()
 
             $bccCounter++;
 
-            //immer wenn die Anzahl der BCCs $g_preferences['mail_bcc_count'] (Standard: 50) erreicht hat oder aber das letzte Element des Arrays erreicht ist, wird die Mail versand.
+            //immer wenn die Anzahl der BCCs $g_preferences['mail_bcc_count'] (Standard: 50) erreicht hat 
+            // oder aber das letzte Element des Arrays erreicht ist, wird die Mail versand.
             if ($bccCounter == $g_preferences['mail_bcc_count'] || count($this->bccArray) == $key+1)
             {
                 // Hier wird der Header fuer die Mail aufbereitet...
