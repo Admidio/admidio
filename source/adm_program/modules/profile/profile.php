@@ -703,7 +703,7 @@ echo '
                             echo '
                             <div style="text-align: right;">
                                 <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$a_user_id.'"><img
-                                    src="'.THEME_PATH.'/icons/edit.png" title="Rollen ändern" alt="Rollen ändern" /></a>
+                                    src="'.THEME_PATH.'/icons/edit.png" title="Rollenmitgliedschaften ändern" alt="Rollenmitgliedschaften ändern" /></a>
                             </div>';
                         }
                 echo '</div>
