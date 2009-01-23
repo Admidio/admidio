@@ -13,48 +13,48 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_folder.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/table_folder.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 
 //maximaler Fileupload fuer das Downloadmodul muss groesser 0 sein
 if ($g_preferences['max_file_upload_size'] == 0) {
 
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show("no_file_upload_server");
+    $g_message->show('no_file_upload_server');
 }
 
 // Uebergabevariablen pruefen
-if (array_key_exists("folder_id", $_GET))
+if (array_key_exists('folder_id', $_GET))
 {
-    if (is_numeric($_GET["folder_id"]) == false)
+    if (is_numeric($_GET['folder_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    $folder_id = $_GET["folder_id"];
+    $folder_id = $_GET['folder_id'];
 }
 else
 {
     // ohne FolderId gehts auch nicht weiter
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -78,56 +78,56 @@ $folder->getFolderForDownload($folder_id);
 if (!$folder->getValue('fol_id'))
 {
     //Datensatz konnte nicht in DB gefunden werden...
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 $parentFolderName = $folder->getValue('fol_name');
 
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Dateiupload";
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['title'] = 'Dateiupload';
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<form action=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id=$folder_id\" method=\"post\" enctype=\"multipart/form-data\">
-<div class=\"formLayout\" id=\"upload_download_form\">
-    <div class=\"formHead\">Datei hochladen</div>
-    <div class=\"formBody\">
-        <ul class=\"formFieldList\">
+echo '
+<form action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$folder_id.'" method="post" enctype="multipart/form-data">
+<div class="formLayout" id="upload_download_form">
+    <div class="formHead">Datei hochladen</div>
+    <div class="formBody">
+        <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt>Datei in den Ordner <b>$parentFolderName</b> hochladen</dt>
+                    <dt>Datei in den Ordner <b>'.$parentFolderName.'</b> hochladen</dt>
                     <dd>&nbsp;</dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"userfile\">Datei ausw&auml;hlen:</label></dt>
+                    <dt><label for="userfile">Datei ausw&auml;hlen:</label></dt>
                     <dd>
-                        <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"" . ($g_preferences['max_file_upload_size'] * 1024) . "\" />
-                        <input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\" />
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <input type="hidden" name="MAX_FILE_SIZE" value="'.($g_preferences['max_file_upload_size'] * 1024).'" />
+                        <input type="file" id="userfile" name="userfile" tabindex="1" size="30" style="width: 350px;" />
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"new_name\">Neuer Dateiname:</label></dt>
+                    <dt><label for="new_name">Neuer Dateiname:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" size=\"25\" tabindex=\"1\" value=\"". $form_values['new_name']. "\" style=\"width: 200px;\" />
+                        <input type="text" id="new_name" name="new_name" tabindex="2" value="'.$form_values['new_name'].'" style="width: 250px;" maxlength="255" />
                         &nbsp;(optional)
-                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" titel=\"\"
-                        onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\"
-                        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=dateiname',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/help.png" alt="Hilfe" title=""
+                        onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true\',\'Message\',\'width=400,height=350,left=310,top=200,scrollbars=yes\')"
+                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=dateiname\',this);" onmouseout="ajax_hideTooltip()" />
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"new_description\">Beschreibung:</label></dt>
+                    <dt><label for="new_description">Beschreibung:</label></dt>
                     <dd>
-                        <textarea id=\"new_description\" name=\"new_description\" style=\"width: 200px;\" rows=\"5\" cols=\"40\" tabindex=\"2\" >". $form_values['new_description']. "</textarea>
+                        <textarea id="new_description" name="new_description" style="width: 350px;" rows="4" cols="40" tabindex="3" >'.$form_values['new_description'].'</textarea>
                     </dd>
                 </dl>
             </li>
@@ -135,28 +135,28 @@ echo "
 
         <hr />
 
-        <div class=\"formSubmit\">
-            <button name=\"hochladen\" type=\"submit\" value=\"hochladen\" tabindex=\"2\">
-            <img src=\"". THEME_PATH. "/icons/page_white_upload.png\" alt=\"Hochladen\" />
+        <div class="formSubmit">
+            <button name="hochladen" type="submit" value="hochladen" tabindex="2">
+            <img src="'.THEME_PATH.'/icons/page_white_upload.png" alt="Hochladen" />
             &nbsp;Hochladen</button>
         </div>
     </div>
 </div>
 </form>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+            src="'.THEME_PATH.'/icons/back.png" alt="Zurück" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
 </ul>
-<script type=\"text/javascript\"><!--
-    document.getElementById('userfile').focus();
---></script>";
+<script type="text/javascript"><!--
+    document.getElementById("userfile").focus();
+//--></script>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
