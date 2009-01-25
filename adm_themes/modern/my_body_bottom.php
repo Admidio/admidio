@@ -165,7 +165,7 @@
 				if($g_current_user->isWebmaster())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/backup/backupDB.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/options.png" alt="Datenbank Backup" title="Datenbank Backup" /></a>
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/database_save.png" alt="Datenbank Backup" title="Datenbank Backup" /></a>
                     <a href="'. $g_root_path. '/adm_program/administration/backup/backupDB.php">Datenbank Backup</a></span>';
                 }
 
