@@ -15,20 +15,20 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_date.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/table_date.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 
 if(!$g_current_user->editDates())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -40,14 +40,14 @@ if(isset($_GET['dat_id']))
 {
     if(is_numeric($_GET['dat_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     $req_dat_id = $_GET['dat_id'];
 }
 
 if(!isset($_GET['headline']))
 {
-    $_GET["headline"] = "Termine";
+    $_GET['headline'] = 'Termine';
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -62,14 +62,14 @@ if($req_dat_id > 0)
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
 }
 else
 {
     // bei neuem Termin Datum mit aktuellen Daten vorbelegen
-    $date->setValue("dat_begin", date("Y-m-d H:00:00", time()));
-    $date->setValue("dat_end", date("Y-m-d H:00:00", time()+3600));
+    $date->setValue('dat_begin', date('Y-m-d H:00:00', time()));
+    $date->setValue('dat_end', date('Y-m-d H:00:00', time()+3600));
 }
 
 if(isset($_SESSION['dates_request']))
@@ -78,7 +78,7 @@ if(isset($_SESSION['dates_request']))
     // nun die vorher eingegebenen Inhalte auslesen
     foreach($_SESSION['dates_request'] as $key => $value)
     {
-        if(strpos($key, "dat_") == 0)
+        if(strpos($key, 'dat_') == 0)
         {
             $date->setValue($key, stripslashes($value));
         }
@@ -92,22 +92,22 @@ if(isset($_SESSION['dates_request']))
 else
 {
     // Zeitangaben von/bis aus Datetime-Feld aufsplitten
-    $date_from = mysqldatetime("d.m.y", $date->getValue("dat_begin"));
-    $time_from = mysqldatetime("h:i",   $date->getValue("dat_begin"));
+    $date_from = mysqldatetime('d.m.y', $date->getValue('dat_begin'));
+    $time_from = mysqldatetime('h:i',   $date->getValue('dat_begin'));
 
     // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-    $date_to = mysqldatetime("d.m.y", $date->getValue("dat_end"));
-    $time_to = mysqldatetime("h:i",   $date->getValue("dat_end"));
+    $date_to = mysqldatetime('d.m.y', $date->getValue('dat_end'));
+    $time_to = mysqldatetime('h:i',   $date->getValue('dat_end'));
 }
 
 // Html-Kopf ausgeben
 if($req_dat_id > 0)
 {
-    $g_layout['title'] = $_GET['headline']. " ändern";
+    $g_layout['title'] = $_GET['headline']. ' ändern';
 }
 else
 {
-    $g_layout['title'] = $_GET['headline']. " anlegen";
+    $g_layout['title'] = $_GET['headline']. ' anlegen';
 }
 
 $g_layout['header'] = '
@@ -204,50 +204,50 @@ $g_layout['header'] = '
     var calPopup = new CalendarPopup("calendardiv");
     calPopup.setCssPrefix("calendar");
 --></script>';
-require(THEME_SERVER_PATH. "/overall_header.php");
-
+require(THEME_SERVER_PATH. '/overall_header.php');
+ 
 // Html des Modules ausgeben
-echo "
-<form method=\"post\" action=\"$g_root_path/adm_program/modules/dates/dates_function.php?dat_id=$req_dat_id&amp;mode=1\">
-<div class=\"formLayout\" id=\"edit_dates_form\">
-    <div class=\"formHead\">". $g_layout['title']. "</div>
-    <div class=\"formBody\">
-        <ul class=\"formFieldList\">
+echo '
+<form method="post" action="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$req_dat_id.'&amp;mode=1">
+<div class="formLayout" id="edit_dates_form">
+    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formBody">
+        <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for=\"dat_headline\">Überschrift:</label></dt>
+                    <dt><label for="dat_headline">Überschrift:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"dat_headline\" name=\"dat_headline\" style=\"width: 345px;\" maxlength=\"100\" value=\"". $date->getValue("dat_headline"). "\" />
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <input type="text" id="dat_headline" name="dat_headline" style="width: 345px;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
-            </li>";
+            </li>';
 
             // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
-            if($g_current_organization->getValue("org_org_id_parent") > 0
+            if($g_current_organization->getValue('org_org_id_parent') > 0
             || $g_current_organization->hasChildOrganizations())
             {
-                echo "
+                echo '
                 <li>
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <input type=\"checkbox\" id=\"dat_global\" name=\"dat_global\" ";
-                            if($date->getValue("dat_global") == 1)
+                            <input type="checkbox" id="dat_global" name="dat_global" ';
+                            if($date->getValue('dat_global') == 1)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
-                            echo " value=\"1\" />
-                            <label for=\"dat_global\">". $_GET['headline']. " für mehrere Organisationen sichtbar</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\"
-                                onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=date_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            echo ' value="1" />
+                            <label for="dat_global">'. $_GET['headline']. ' für mehrere Organisationen sichtbar</label>
+                            <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe"  title=""
+                                onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_global&amp;window=true\',\'Message\',\'width=300,height=300,left=310,top=200,scrollbars=yes\')"
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_global\',this);" onmouseout="ajax_hideTooltip()" />
                         </dd>
                     </dl>
-                </li>";
+                </li>';
             }
 
-            echo '<li><hr /></li>
+          echo '<li><hr /></li>
 
             <li>
                 <dl>
@@ -303,10 +303,10 @@ echo "
                            	}
                           	echo '>- Bitte wählen -</option>';
 
-                            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                                     WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                                       AND cat_type   = 'DAT'
-                                     ORDER BY cat_sequence ASC ";
+                            $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
+                                     WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                       AND cat_type   = "DAT"
+                                     ORDER BY cat_sequence ASC ';
                             $result = $g_db->query($sql);
 
                             while($row = $g_db->fetch_object($result))
@@ -318,23 +318,23 @@ echo "
                                     }
                                 echo '>'.$row->cat_name.'</option>';
                             }
-                        echo "</select>
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        echo '</select>
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"dat_location\">Ort:</label></dt>
+                    <dt><label for="dat_location">Ort:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"dat_location\" name=\"dat_location\" style=\"width: 345px;\" maxlength=\"50\" value=\"". $date->getValue("dat_location"). "\" />";
+                        <input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
                         if($g_preferences['dates_show_map_link'])
                         {
-                            echo "<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true','Message','width=300,height=180,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=date_location_link',this);\" onmouseout=\"ajax_hideTooltip()\" />";
+                            echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true\',\'Message\',\'width=300,height=180,left=310,top=200,scrollbars=yes\')" onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_location_link\',this);" onmouseout="ajax_hideTooltip()" />';
                         }
-                    echo "</dd>
+                    echo '</dd>
                 </dl>
-            </li>";
+            </li>';
             if($g_preferences['dates_show_map_link'])
             {
                 if(strlen($date->getValue("dat_country")) == 0)
@@ -368,74 +368,75 @@ echo "
 
             if ($g_preferences['enable_bbcode'] == 1)
             {
-                echo "
+                echo '
                 <li>
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <div style=\"width: 350px;\">
-                                <div style=\"float: left;\">
-                                    <a class=\"iconLink\" href=\"javascript:bbcode(0);\"><img id=\"b\"
-                                        src=\"". THEME_PATH. "/icons/text_bold.png\" title=\"Fett schreiben\" alt=\"Fett schreiben\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:bbcode(1);\"><img id=\"u\"
-                                        src=\"". THEME_PATH. "/icons/text_underline.png\" title=\"Text unterstreichen\" alt=\"Text unterstreichen\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:bbcode(2);\"><img id=\"i\"
-                                        src=\"". THEME_PATH. "/icons/text_italic.png\" title=\"Kursiv schreiben\" alt=\"Kursiv schreiben\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:bbcode(3);\"><img id=\"big\"
-                                        src=\"". THEME_PATH. "/icons/text_bigger.png\" title=\"Größer schreiben\" alt=\"Größer schreiben\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:bbcode(4);\"><img id=\"small\"
-                                        src=\"". THEME_PATH. "/icons/text_smaller.png\" title=\"Kleiner schreiben\" alt=\"Kleiner schreiben\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:bbcode(5);\"><img id=\"center\"
-                                        src=\"". THEME_PATH. "/icons/text_align_center.png\" title=\"Text zentrieren\" alt=\"Text zentrieren\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon('[url=http://www.admidio.org]Linktext[/url]')\"><img id=\"url\"
-                                        src=\"". THEME_PATH. "/icons/link.png\" title=\"Link einfügen\" alt=\"Link einfügen\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon('[email=name@admidio.org]Linktext[/email]')\"><img id=\"email\"
-                                        src=\"". THEME_PATH. "/icons/email.png\" title=\"E-Mail-Adresse einfügen\" alt=\"E-Mail-Adresse einfügen\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon('[img]http://www.admidio.org/images/admidio_small.png[/img]');\"><img id=\"img\"
-                                        src=\"". THEME_PATH. "/icons/image.png\" title=\"Bild einfügen\" alt=\"Bild einfügen\" /></a>
-                                </div>
-                                <div style=\"float: right;\">
-                                    <a class=\"iconLink\" href=\"javascript:bbcodeclose();\"><img id=\"all-closed\"
-                                        src=\"". THEME_PATH. "/icons/delete.png\" title=\"Alle Tags schließen\" alt=\"Alle Tags schließen\" /></a>
-                                    <img class=\"iconLink\" src=\"". THEME_PATH. "/icons/help.png\"
-                                        onclick=\"javascript:window.open('$g_root_path/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes');\"
-                                        onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=bbcode',this);\"
-                                        onmouseout=\"ajax_hideTooltip()\" alt=\"Hilfe\" title=\"\" />
+                            <div style="width: 350px;">
+                                <div style="float: left;">
+                                    <a class="iconLink" href="javascript:bbcode(0)"><img id="b"
+                                        src="'. THEME_PATH. '/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
+                                    <a class="iconLink" href="javascript:bbcode(1)"><img id="u"
+                                        src="'. THEME_PATH. '/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" /></a>
+                                    <a class="iconLink" href="javascript:bbcode(2)"><img id="i"
+                                        src="'. THEME_PATH. '/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" /></a>
+                                    <a class="iconLink" href="javascript:bbcode(3)"><img id="big"
+                                        src="'. THEME_PATH. '/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" /></a>
+                                    <a class="iconLink" href="javascript:bbcode(4)"><img id="small"
+                                        src="'. THEME_PATH. '/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
+                                    <a class="iconLink" href="javascript:bbcode(5)"><img id="center"
+                                        src="'. THEME_PATH. '/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
+                                    <a class="iconLink" href="javascript:emoticon(\'[url=http://www.admidio.org]Linktext[/url]\')"><img id="url"
+                                        src="'. THEME_PATH. '/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
+                                    <a class="iconLink" href="javascript:emoticon(\'[email=name@admidio.org]Linktext[/email]\')"><img id="email"
+                                        src="'. THEME_PATH. '/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
+                                    <a class="iconLink" href="javascript:emoticon(\'[img]http://www.admidio.org/images/admidio_small.png[/img]\')"><img id="img"
+                                        src="'. THEME_PATH. '/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
+                            </div>
+
+                                <div style="float: right;">
+                                    <a class="iconLink" href="javascript:bbcodeclose();"><img id="all-closed"
+                                        src="'. THEME_PATH. '/icons/delete.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
+                                    <img class="iconLink" src="'. THEME_PATH.'/icons/help.png"
+                                        onclick="javascript:window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\', \'Message\', \'width=600, height=500,left=310,top=200, scrollbars=yes\');\"
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);"
+                                        onmouseout="ajax_hideTooltip()" alt="Hilfe" title="" />
                                 </div>
                             </div>
                         </dd>
                     </dl>
-                </li>";
+                </li>';
             }
-            echo "
+           echo '
             <li>
                 <dl>
-                    <dt><label for=\"dat_description\">Text:</label>";
+                    <dt><label for="dat_description">Text:</label>';
                         if($g_preferences['enable_bbcode'] == 1)
                         {
-                             echo "<br /><br />&nbsp;&nbsp;
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(':)');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_smile.png\" alt=\"Smile\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(';)');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_wink.png\" alt=\"Wink\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(':D');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_grin.png\" alt=\"Grin\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(':lol:');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_happy.png\" alt=\"Happy\" /></a>
-                                    <br />&nbsp;&nbsp;
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(':(');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_unhappy.png\" alt=\"Unhappy\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(':p');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_tongue.png\" alt=\"Tongue\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(':o');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_surprised.png\" alt=\"Surprised\" /></a>
-                                    <a class=\"iconLink\" href=\"javascript:emoticon(':twisted:');\"><img
-                                        src=\"". THEME_PATH. "/icons/smilies/emoticon_evilgrin.png\" alt=\"Evilgrin\" /></a>";
+                            echo '<br /><br />&nbsp;&nbsp;
+                            <a class="iconLink" href="javascript:emoticon(\':)\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_smile.png" alt="Smile" /></a>
+                            <a class="iconLink" href="javascript:emoticon(\';)\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_wink.png" alt="Wink" /></a>
+                            <a class="iconLink" href="javascript:emoticon(\':D\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_grin.png" alt="Grin" /></a>
+                            <a class="iconLink" href="javascript:emoticon(\':lol:\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_happy.png" alt="Happy" /></a>
+                            <br />&nbsp;&nbsp;
+                            <a class="iconLink" href="javascript:emoticon(\':(\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_unhappy.png" alt="Unhappy" /></a>
+                            <a class="iconLink" href="javascript:emoticon(\':p\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_tongue.png" alt="Tongue" /></a>
+                            <a class="iconLink" href="javascript:emoticon(\':o\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_surprised.png" alt="Surprised" /></a>
+                            <a class="iconLink" href="javascript:emoticon(\':twisted:\')"><img
+                                src="'. THEME_PATH. '/icons/smilies/emoticon_evilgrin.png" alt="Evilgrin" /></a>';
                         }
-                    echo "</dt>
+                    echo '</dt>
                     <dd>
-                        <textarea id=\"dat_description\" name=\"dat_description\" style=\"width: 345px;\" rows=\"10\" cols=\"40\">". $date->getValue("dat_description"). "</textarea>
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <textarea id="dat_description" name="dat_description" style="width: 345px;" rows="10" cols="40">'. $date->getValue('dat_description'). '</textarea>
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
             </li>
@@ -443,28 +444,26 @@ echo "
 
         <hr />
 
-        <div class=\"formSubmit\">
-            <button name=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
+        <div class="formSubmit">
+            <button name="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
     </div>
 </div>
 </form>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" title=\"Zurück\"/></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zurück"/></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
 </ul>
-
-<script type=\"text/javascript\">
-    document.getElementById('dat_headline').focus();
+<script type="text/javascript">
+    document.getElementById(\'dat_headline\').focus();
     setAllDay();
-</script>";
+</script>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
-
+require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>

@@ -57,9 +57,9 @@ if(isset($_GET['calendar']))
 
 if(isset($_GET['mode']))
 {
-    if($_GET['mode'] != "actual" && $_GET['mode'] != "old")
+    if($_GET['mode'] != 'actual' && $_GET['mode'] != 'old')
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     $req_mode = $_GET['mode'];
 }
@@ -68,21 +68,21 @@ if(isset($_GET['start']))
 {
     if(is_numeric($_GET['start']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     $req_start = $_GET['start'];
 }
 
 if(isset($_GET['headline']))
 {
-    $req_headline = strStripTags($_GET["headline"]);
+    $req_headline = strStripTags($_GET['headline']);
 }
 
 if(isset($_GET['id']))
 {
     if(is_numeric($_GET['id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     $req_id = $_GET['id'];
 }
@@ -150,7 +150,7 @@ $g_layout['header'] = $g_js_vars. '
 if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] == 1)
 {
     $g_layout['header'] .=  '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Termine"
-        href="$g_root_path/adm_program/modules/dates/rss_dates.php" />';
+        href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php" />';
 };
 
 require(THEME_SERVER_PATH. '/overall_header.php');
