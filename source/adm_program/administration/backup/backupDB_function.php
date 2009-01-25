@@ -110,7 +110,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 	OutputInformation('', '<br><b><span id="topprogress">Overall Progress:</span></b><br>');
 	$overallrows = 0;
-	echo '<table border="1"><tr><td colspan="'.ceil(count($SelectedTables) / TABLES_PER_COL).'"><b>'.$g_adm_db.'</b></td></tr><tr><td nowrap valign="top">';
+	echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables) / TABLES_PER_COL).'"><b>'.$g_adm_db.'</b></th></tr><tr><td nowrap valign="top">';
 	$tablecounter = 0;
 	for ($t = 0; $t < count($SelectedTables); $t++) {
 		if ($tablecounter++ >= TABLES_PER_COL) {
@@ -369,22 +369,6 @@ else
 	}
 
 }
-
-//Alte Backupdatei löschen
-if(array_key_exists("oldBackupFile", $_POST))
-{
-    $first_row_title = true;
-	if (is_string($_POST["oldBackupFile"]) == false)
-    {
-        $g_message->show("invalid");
-    }
-	else
-	{
-		$oldBackupFileCP = $backupabsolutepath.basename($_POST["oldBackupFile"]);
-		unlink($oldBackupFileCP);
-	}
-}
-
 
 
 echo '<br>Backup fertiggestellt in '.FormattedTimeRemaining(getmicrotime() - $starttime, 2).'.<br>';

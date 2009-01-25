@@ -47,6 +47,10 @@ function deleteObject(type, elementId, databaseId, description)
             case "pho":
                 url = gRootPath + "/adm_program/modules/photos/photo_album_function.php?job=delete&pho_id=" + databaseId;
                 break;
+            case "bck":
+                url = gRootPath + "/adm_program/administration/backup/backup_file_function.php?job=delete&file_id=" + description;
+                break;
+
         }
         if(url.length > 0)
         {
