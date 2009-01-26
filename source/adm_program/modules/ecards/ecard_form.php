@@ -902,7 +902,7 @@ $javascript = '
 
 if ($g_preferences['enable_bbcode'] == 1)
 {
-    $javascript .= getBBcodeJS('ann_description');
+    $javascript .= getBBcodeJS('Nachricht');
 }
 
 if (empty($submit_action))
