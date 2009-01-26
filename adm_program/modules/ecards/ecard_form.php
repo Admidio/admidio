@@ -15,37 +15,41 @@
  *
  *****************************************************************************/
 
-require_once("../../system/classes/table_photos.php");
-require_once("../../system/common.php");
-require_once("ecard_function.php");
+require_once('../../system/classes/table_photos.php');
+require_once('../../system/common.php');
+require_once('ecard_function.php');
+if ($g_preferences['enable_bbcode'] == 1)
+{
+    require('../../system/bbcode.php');
+}
 
 
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
-$error_msg                  = "";
-$font_sizes                 = array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30");
+$error_msg                  = '';
+$font_sizes                 = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
 $font_colors                = getElementsFromFile('../../system/schriftfarben.txt');
 $fonts                      = getElementsFromFile('../../system/schriftarten.txt');
-$templates                  = getfilenames(THEME_SERVER_PATH. "/ecard_templates/");
-$template                   = THEME_SERVER_PATH. "/ecard_templates/";
-$msg_error_1                = "ecard_send_error";
-$msg_error_2                = "ecard_feld_error";
+$templates                  = getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
+$template                   = THEME_SERVER_PATH. '/ecard_templates/';
+$msg_error_1                = 'ecard_send_error';
+$msg_error_2                = 'ecard_feld_error';
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 // pruefen ob User eingeloggt ist
 if(!$g_valid_login)
 {
- $g_message->show("invalid");
+ $g_message->show('invalid');
 }
 //ID Pruefen
-if(isset($_GET["pho_id"]) && is_numeric($_GET["pho_id"]))
+if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']))
 {
-    $pho_id = $_GET["pho_id"];
+    $pho_id = $_GET['pho_id'];
 }
 else
 {
@@ -82,37 +86,37 @@ else
 }
 
 // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
-if($pho_id > 0 && $photo_album->getValue("pho_org_shortname") != $g_organization)
+if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 
-if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue("E-Mail")))
+if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $g_message->addVariableContent("$g_root_path/adm_program/modules/profile/profile.php", 1, false);
-    $g_message->show("profile_mail");
+    $g_message->addVariableContent($g_root_path.'/adm_program/modules/profile/profile.php', 1, false);
+    $g_message->show('profile_mail');
 }
-if(!isset($_GET["photo"]))
+if(!isset($_GET['photo']))
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
-if (isset($_GET["usr_id"]))
+if (isset($_GET['usr_id']))
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
     if (!$g_valid_login)
     {
         //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
-    if (is_numeric($_GET["usr_id"]) == false)
+    if (is_numeric($_GET['usr_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
@@ -120,20 +124,20 @@ if (isset($_GET["usr_id"]))
 
     // darf auf die User-Id zugegriffen werden
     if((  $g_current_user->editUsers() == false
-       && isMember($user->getValue("usr_id")) == false)
-    || strlen($user->getValue("usr_id")) == 0 )
+       && isMember($user->getValue('usr_id')) == false)
+    || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show("usrid_not_found");
+        $g_message->show('usrid_not_found');
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!isValidEmailAddress($user->getValue("E-Mail")))
+    if (!isValidEmailAddress($user->getValue('E-Mail')))
     {
-        $g_message->show("usrmail_not_found");
+        $g_message->show('usrmail_not_found');
     }
 
-    $user_email = $user->getValue("E-Mail");
-    $user_name  = $user->getValue("Vorname")." ".$user->getValue("Nachname");
+    $user_email = $user->getValue('E-Mail');
+    $user_name  = $user->getValue('Vorname').' '.$user->getValue('Nachname');
 }
 
 $popup_height = $g_preferences['photo_show_height']+210;
@@ -149,19 +153,19 @@ $bild         = $_REQUEST['photo'];
 // gültig ist dann wird der komplete Pfad für das Bild generiert
 if(is_numeric($bild) && isset($_GET['pho_id']))
 {
-    $ordner_foto      = "/adm_my_files/photos/".$photo_album->getValue("pho_begin")."_".$photo_album->getValue("pho_id")."/".$_REQUEST['photo'].".jpg";
+    $ordner_foto      = '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$_REQUEST['photo'].'.jpg';
     $bild_server_path = SERVER_PATH. $ordner_foto;
     $bild_link        = $g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.$thickbox_height.'&amp;width='.$thickbox_width;
 }
 // Wenn nur der Bildernamen übergeben wird ist die Übergabe ungültig
 if(is_numeric($bild) && !isset($_GET['pho_id']))
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 // Wenn weder die Übergabe des Bildes noch die Photogallery id nummerisch sind -> ungültiger Aufruf
 if(!is_numeric($bild) || !is_numeric($_GET['pho_id']))
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 // Wenn ein Bilderpfad generiert worden ist dann können die Proportionalen Größen berechnet werden
 if(isset($bild_server_path))
@@ -180,16 +184,16 @@ $ecard_send = false;
 if (! empty($submit_action))
 {
     // Wenn die Felder Name E-mail von dem Empaenger und Sender nicht leer sind
-    if ( checkEmail($ecard["email_recipient"]) && checkEmail($ecard["email_sender"])
-    && ($ecard["email_recipient"] != "") && ($ecard["name_sender"] != "") )
+    if ( checkEmail($ecard['email_recipient']) && checkEmail($ecard['email_sender'])
+    && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') )
     {
         // Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
-        if (strlen($ecard["message"]) > $g_preferences['ecard_text_length'])
+        if (strlen($ecard['message']) > $g_preferences['ecard_text_length'])
         {
-            $ecard["message"] = substr($ecard["message"],0,$g_preferences['ecard_text_length']-1);
+            $ecard['message'] = substr($ecard['message'],0,$g_preferences['ecard_text_length']-1);
         }
         // Template wird geholt
-        list($error,$ecard_data_to_parse) = getEcardTemplate($ecard["template_name"],$template);
+        list($error,$ecard_data_to_parse) = getEcardTemplate($ecard['template_name'],$template);
         // Wenn es einen Error gibt ihn ausgeben
         if ($error)
         {
@@ -199,14 +203,14 @@ if (! empty($submit_action))
         else
         {
             // Es wird geprüft ob der Benutzer der ganzen Rolle eine Grußkarte schicken will
-            $rolle = str_replace(array("Rolle_","@rolle.com"),"",$ecard["email_recipient"]);
+            $rolle = str_replace(array('Rolle_','@rolle.com'),'',$ecard['email_recipient']);
             // Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzufügen
             if(!is_numeric($rolle))
             {
-                array_push($email_versand_liste,array($ecard["name_recipient"],$ecard["email_recipient"]));
+                array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
                 $email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$ecard["name_recipient"],$ecard["email_recipient"],$g_preferences['enable_bbcode']);
-                $result = sendEcard($ecard,$ecard_html_data,$ecard["name_recipient"],$ecard["email_recipient"],$email_versand_liste_cc, $bild_server_path);
+                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue('usr_id'),$propotional_size_card['width'],$propotional_size_card['height'],$ecard['name_recipient'],$ecard['email_recipient'],$g_preferences['enable_bbcode']);
+                $result = sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $bild_server_path);
                 // Wenn die Grußkarte erfolgreich gesendet wurde
                 if ($result)
                 {
@@ -221,45 +225,45 @@ if (! empty($submit_action))
             // Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
             else
             {
-                $sql = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
-                     email.usd_value as email, rol_name
-                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-               RIGHT JOIN ". TBL_USER_DATA. " as email
-                  ON email.usd_usr_id = usr_id
-                 AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
-                 AND LENGTH(email.usd_value) > 0
-                LEFT JOIN ". TBL_USER_DATA. " as last_name
-                  ON last_name.usd_usr_id = usr_id
-                 AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                LEFT JOIN ". TBL_USER_DATA. " as first_name
-                  ON first_name.usd_usr_id = usr_id
-                 AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-               WHERE rol_id            = ". $rolle. "
-                 AND rol_cat_id        = cat_id
-                 AND cat_org_id        = ". $g_current_organization->getValue("org_id"). "
-                 AND mem_rol_id        = rol_id
-                 AND mem_begin        <= '".DATE_NOW."'
-                 AND mem_end           > '".DATE_NOW."'
-                 AND mem_usr_id        = usr_id
-                 AND usr_valid         = 1
-                AND email.usd_usr_id = email.usd_usr_id
-                ORDER BY last_name, first_name";
+                $sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
+                               email.usd_value as email, rol_name
+                          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+                         RIGHT JOIN '. TBL_USER_DATA. ' as email
+                            ON email.usd_usr_id = usr_id
+                           AND email.usd_usf_id = '. $g_current_user->getProperty('E-Mail', 'usf_id'). '
+                           AND LENGTH(email.usd_value) > 0
+                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                            ON last_name.usd_usr_id = usr_id
+                           AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                          LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                            ON first_name.usd_usr_id = usr_id
+                           AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+                         WHERE rol_id           = '. $rolle. '
+                           AND rol_cat_id       = cat_id
+                           AND cat_org_id       = '. $g_current_organization->getValue('org_id'). '
+                           AND mem_rol_id       = rol_id
+                           AND mem_begin       <= "'.DATE_NOW.'"
+                           AND mem_end          > "'.DATE_NOW.'"
+                           AND mem_usr_id       = usr_id
+                           AND usr_valid        = 1
+                           AND email.usd_usr_id = email.usd_usr_id
+                         ORDER BY last_name, first_name';
 
                 $result             = $g_db->query($sql);
-                $firstvalue_name    = "";
-                $firstvalue_email   = "";
+                $firstvalue_name    = '';
+                $firstvalue_email   = '';
                 $i  = 0 ;
                 while ($row = $g_db->fetch_object($result))
                 {
                     if($i<1)
                     {
-                        $firstvalue_name  = "Rolle: ".$row->rol_name;
-                        $firstvalue_email = "-";
+                        $firstvalue_name  = 'Rolle: '.$row->rol_name;
+                        $firstvalue_email = '-';
 
                     }
-                    if($row->first_name != "" && $row->last_name != "" && $row->email !="")
+                    if($row->first_name != '' && $row->last_name != '' && $row->email !='')
                     {
-                        array_push($email_versand_liste,array("".$row->first_name." ".$row->last_name."",$row->email));
+                        array_push($email_versand_liste,array(''.$row->first_name.' '.$row->last_name.'',$row->email));
                     }
                     $i++;
                 }
@@ -301,7 +305,7 @@ if (! empty($submit_action))
 // Wenn noch keine Anfrage zum versenden der Grußkarte vorhanden ist das Grußkarten Bild setzten
 else
 {
-    $ecard["image_name"] = "$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_card['height']."&amp;side=y";
+    $ecard['image_name'] = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$propotional_size_card['height'].'&amp;side=y';
 }
 
 /*********************HTML_TEIL*******************************/
@@ -309,14 +313,14 @@ else
 // Html-Kopf ausgeben
 if(! empty($submit_action))
 {
-    $g_layout['title'] = "Grußkarte wegschicken";
+    $g_layout['title'] = 'Grußkarte wegschicken';
 }
 else
 {
-    $g_layout['title'] = "Grußkarte bearbeiten";
+    $g_layout['title'] = 'Grußkarte bearbeiten';
 }
 //Thickbox-Mode
-$g_layout['header'] = "";
+$g_layout['header'] = '';
 if($g_preferences['photo_show_mode']==1)
 {
     $g_layout['header'] = $g_layout['header'].'
@@ -326,29 +330,15 @@ if($g_preferences['photo_show_mode']==1)
 }
 $javascript = '
     <script type="text/javascript"><!--
-        var basedropdiv = \'basedropdownmenu\';
-        var dropdiv = \'dropdownmenu\';
-        var externdiv = \'extern\';
-        var switchdiv = \'externSwitch\';
-        var textinputid = \'Nachricht\';
-        var counterdiv  = \'counter\'
+        var basedropdiv = "basedropdownmenu";
+        var dropdiv = "dropdownmenu";
+        var externdiv = "extern";
+        var switchdiv = "externSwitch";
+        var textinputid = "Nachricht";
+        var counterdiv  = "counter"
         var max_recipients = '.$g_preferences['ecard_cc_recipients'].';
         var now_recipients = 0;
-        var ecardformid = \'ecard_form\';
-
-        var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
-        var bbcodes = Array(\'[b]\',\'[\/b]\',\'[u]\',\'[\/u]\',\'[i]\',\'[\/i]\',\'[big]\',\'[\/big]\',\'[small]\',\'[\/small]\',\'[center]\',\'[\/center]\',\'[url='.$g_root_path.']\',\'[\/url]\',\'[email=adresse@demo.de]\',\'[\/email]\',\'[img]\',\'[\/img]\');
-        var bbids = Array(\'b\',\'u\',\'i\',\'big\',\'small\',\'center\',\'url\',\'email\',\'img\');
-        var bbcodestext = Array(\'text_bold_point.png\',\'text_bold.png\',
-                        \'text_underline_point.png\',\'text_underline.png\',
-                        \'text_italic_point.png\',\'text_italic.png\',
-                        \'text_bigger_point.png\',\'text_bigger.png\',
-                        \'text_smaller_point.png\',\'text_smaller.png\',
-                        \'text_align_center_point.png\',\'text_align_center.png\',
-                        \'link_point.png\',\'link.png\',
-                        \'email_point.png\',\'email.png\',
-                        \'image_point.png\',\'image.png\');
-
+        var ecardformid = "ecard_form";
 
 		document.onload = getMenu();
         function popup_win(theURL,winName,winOptions)
@@ -878,6 +868,7 @@ $javascript = '
                 document.getElementById(counterdiv).innerHTML = \'<b>\' + zwprodukt + \'<\/b>\';
             }
         } // Ende function countMax()
+
         function getTextStyle(textdiv)
         {
             var schrift_size = document.getElementById(ecardformid)["ecard[schrift_size]"].value;
@@ -907,48 +898,13 @@ $javascript = '
             document.getElementById(textdiv).style.font = schrift_bold + \' \'+ schrift_italic + \' \'+ schrift_size + \'px \'+schrift;
             document.getElementById(textdiv).style.color = schrift_farbe;
         }
-            function emoticon(text)
-            {
-                var txtarea = document.getElementById(textinputid);
+    //--></script>';
 
-                if (txtarea.createTextRange && txtarea.caretPos)
-                {
-                    txtarea.caretPos.text = text;
-                }
-                else
-                {
-                    txtarea.value  += text + " ";
-                }
-                txtarea.focus();
-            }
-            function bbcode(nummer)
-            {
-               var arrayid;
-               if (vorbelegt[nummer])
-               {
-                  arrayid = nummer*2+1;
-               }
-               else
-               {
-                  arrayid = nummer*2;
-               }
-               emoticon(bbcodes[arrayid]);
-               document.getElementById(bbids[nummer]).src = \''.THEME_PATH.'/icons/\'+bbcodestext[arrayid];
-               vorbelegt[nummer] = !vorbelegt[nummer];
-            }
+if ($g_preferences['enable_bbcode'] == 1)
+{
+    $javascript .= getBBcodeJS('ann_description');
+}
 
-            //Funktion schließt alle offnen Tags
-            function bbcodeclose()
-            {
-               for (var i=0;i<9;i++)
-               {
-                  if (vorbelegt[i])
-                  {
-                     bbcode(i);
-                  }
-               }
-            }
-    --></script>';
 if (empty($submit_action))
 {
 	$g_layout['header'] .= $javascript;
@@ -1010,26 +966,26 @@ if (empty($submit_action))
 				echo 'onsubmit="return tb_sendform(this,\'Vorschau der Grußkarte:\')" ';
 			}
 			echo 'method="post">
-              <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
-              <input type="hidden" name="submit_action" value="" />
-              <ul class="formFieldList">
-               <li>
+                <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
+                <input type="hidden" name="submit_action" value="" />
+                <ul class="formFieldList">
+                <li>
                     <hr />
                 </li>
-               <li>
-                 <dl>
-                   <dt>
-                    <label>An:</label>
-                    ';
-                    if($g_preferences['enable_ecard_cc_recipients'])
-                    {
-                        echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
-                        <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
-                        </div>';
-                    }
-                   echo'
-                   </dt>
-                   <dd id="Menue" style="height:49px; width:370px;">';
+                <li>
+                    <dl>
+                        <dt>
+                            <label>An:</label>
+                            ';
+                            if($g_preferences['enable_ecard_cc_recipients'])
+                            {
+                                echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
+                                <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
+                                </div>';
+                            }
+                           echo'
+                        </dt>
+                        <dd id="Menue" style="height:49px; width:370px;">';
                             if (array_key_exists("usr_id", $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
@@ -1121,44 +1077,8 @@ if (empty($submit_action))
                 </li>'; 
                 if ($g_preferences['enable_bbcode'] == 1)
                 {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>&nbsp;</dt>
-                            <dd>
-                                <div style="width: 350px;">
-                                    <div style="float:left;" >
-                                        <a class="iconLink" href="javascript:bbcode(0)"><img id="b"
-                                            src="'. THEME_PATH.'/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
-                                        <a class="iconLink" href="javascript:bbcode(1)"><img id="u"
-                                            src="'. THEME_PATH.'/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" /></a>
-                                        <a class="iconLink" href="javascript:bbcode(2)"><img id="i"
-                                            src="'. THEME_PATH.'/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" /></a>
-                                        <a class="iconLink" href="javascript:bbcode(3)"><img id="big"
-                                            src="'. THEME_PATH.'/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" /></a>
-                                        <a class="iconLink" href="javascript:bbcode(4)"><img id="small"
-                                            src="'. THEME_PATH.'/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
-                                        <a class="iconLink" href="javascript:bbcode(5)"><img id="center"
-                                            src="'. THEME_PATH.'/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
-                                        <a class="iconLink" href="javascript:emoticon(\'[url=http://www.admidio.org]Linktext[/url]\')"><img id="url"
-                                            src="'. THEME_PATH.'/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
-                                        <a class="iconLink" href="javascript:emoticon(\'[email=name@admidio.org]Linktext[/email]\')"><img id="email"
-                                            src="'. THEME_PATH.'/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
-                                        <a class="iconLink" href="javascript:emoticon(\'[img]http://www.admidio.org/images/admidio_small.png[/img]\')"><img id="img"
-                                            src="'. THEME_PATH.'/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
-                                    </div>
-                                    <div style="float: right;">
-                                        <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
-                                            src="'. THEME_PATH. '/icons/delete.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
-                                        <a class="iconLink" href="javascript:popup_win(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\');" 
-                                            onmouseover="javascript:ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" 
-                                            onmouseout="javascript:ajax_hideTooltip();"><img src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
-                                    </div>
-                                </div>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
+                    printBBcodeIcons();
+                }                
                 echo '
                 <li>
                     <dl>
@@ -1287,7 +1207,7 @@ else
         <td align="left" colspan="2"><b>Absender:</b></td>
     </tr>
     <tr>
-        <td align="left" style="padding-right:5px;">'; echo $ecard["name_sender"].',</td><td align="left">'.$ecard["email_sender"]; echo'</td>
+        <td align="left" style="padding-right:5px;">'; echo $ecard['name_sender'].',</td><td align="left">'.$ecard['email_sender']; echo'</td>
     </tr>
     <tr>
         <td align="left">&nbsp;</td>
@@ -1336,23 +1256,23 @@ else
     }
     echo '</tr></table><br /><br/></div>';
 }
-echo "</div></div></div>";
+echo '</div></div></div>';
 /************************Buttons********************************/
 //Uebersicht
-if($photo_album->getValue("pho_id") > 0)
+if($photo_album->getValue('pho_id') > 0)
 {
-    echo "
-    <ul class=\"iconTextLinkList\">
+    echo '
+    <ul class="iconTextLinkList">
         <li>
-            <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img
-                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+            <span class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+                src="'.THEME_PATH.'/icons/back.png" alt="Zurück" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
             </span>
         </li>
-    </ul>";
+    </ul>';
 }
 
 /***************************Seitenende***************************/
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>
