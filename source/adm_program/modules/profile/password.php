@@ -15,79 +15,83 @@
  *
  *****************************************************************************/
  
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
  
 // nur Webmaster duerfen fremde Passwoerter aendern
-if(!$g_current_user->isWebmaster() && $g_current_user->getValue("usr_id") != $_GET['usr_id'])
+if(!$g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'])
 {
-    $g_message->show("norights", "", "", false);
+    $g_message->show('norights', '', '', false);
 }
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
 {
-    $g_message->show("invalid", "", "", false);
+    $g_message->show('invalid', '', '', false);
 }
 
-if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
+if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
 {
     /***********************************************************************/
     /* Formular verarbeiten */
     /***********************************************************************/
-    
-    if( (strlen($_POST["old_password"]) > 0 || $g_current_user->isWebmaster() )
-    && strlen($_POST["new_password"]) > 0
-    && strlen($_POST["new_password2"]) > 0)
+    if($g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'] )
     {
-        if(strlen($_POST["new_password"]) > 5)
+    	$_POST['old_password']='';
+    }
+    
+	if( (strlen($_POST['old_password']) > 0 || $g_current_user->isWebmaster() )
+    && strlen($_POST['new_password']) > 0
+    && strlen($_POST['new_password2']) > 0)
+    {
+        if(strlen($_POST['new_password']) > 5)
         {
-            if ($_POST["new_password"] == $_POST["new_password2"])
+            if ($_POST['new_password'] == $_POST['new_password2'])
             {
                 // pruefen, ob altes Passwort korrekt eingegeben wurde              
-                $user = new User($g_db, $_GET["usr_id"]);
-                $old_password_crypt = md5($_POST["old_password"]);
+                $user = new User($g_db, $_GET['usr_id']);
+                $old_password_crypt = md5($_POST['old_password']);
 
-                // Webmaster duerfen Passwort so aendern
-                if($user->getValue("usr_password") == $old_password_crypt || $g_current_user->isWebmaster())
+                // Webmaster duerfen fremde Passwörter so aendern
+                if($user->getValue('usr_password') == $old_password_crypt || $g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'] )
                 {
-                    $user->setValue("usr_password", $_POST["new_password"]);
+                    $user->setValue('usr_password', $_POST['new_password']);
                     $user->save();
 
                     // Paralell im Forum aendern, wenn Forum aktiviert ist
                     if($g_preferences['enable_forum_interface'])
                     {
-                        $g_forum->userSave($user->getValue("usr_login_name"), $user->getValue("usr_password"), $user->getValue("E-Mail"), "", 3);
+                        $g_forum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('E-Mail'), '', 3);
                     }
 
                     // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
-                    if($user->getValue("usr_id") == $g_current_user->getValue("usr_id"))
+                    if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
                     {
-                        $g_current_user->setValue("usr_password", $user->getValue("usr_password"));
+                        $g_current_user->setValue('usr_password', $user->getValue('usr_password'));
                     }
 
-                    $g_message->setForwardUrl("javascript:self.parent.tb_remove()");
-                    $g_message->show("password_changed", "", "Hinweis", false);
+                    $g_message->setForwardUrl('javascript:self.parent.tb_remove()');
+                    $g_message->show('password_changed', '', 'Hinweis', false);
                 }
                 else
                 {
-                    $g_message->show("password_old_wrong", "", "", false);
+                    $g_message->show('password_old_wrong', '', '', false);
                 }
             }
             else
             {
-                $g_message->show("passwords_not_equal", "", "", false);
+                $g_message->show('passwords_not_equal', '', '', false);
             }
         }
         else
         {
-            $g_message->show("password_length", "", "", false);
+            $g_message->show('password_length', '', '', false);
         }
     }
     else
     {
-        $g_message->show("felder", "", "", false);
+        $g_message->show('felder', '', '', false);
     }
 }
 else
@@ -97,9 +101,9 @@ else
     /***********************************************************************/
 
     // Html-Kopf ausgeben
-    $g_layout['title']    = "Passwort ändern";
+    $g_layout['title']    = 'Passwort ändern';
     $g_layout['includes'] = false;
-    require(THEME_SERVER_PATH. "/overall_header.php");
+    require(THEME_SERVER_PATH. '/overall_header.php');
 
     // Html des Modules ausgeben
     echo '
@@ -108,7 +112,7 @@ else
         <div class="formHead">'. $g_layout['title']. '</div>
         <div class="formBody">
             <ul class="formFieldList">';
-                if(!$g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $_GET['usr_id'] )
+                if(!$g_current_user->isWebmaster() || $g_current_user->getValue('usr_id') == $_GET['usr_id'] )
     			{
     			echo'
         			<li>
@@ -146,7 +150,7 @@ else
         document.getElementById(\'old_password\').focus();
     --></script>';
       
-    require(THEME_SERVER_PATH. "/overall_footer.php");
+    require(THEME_SERVER_PATH. '/overall_footer.php');
 }
 
 ?>
