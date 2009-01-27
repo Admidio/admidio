@@ -16,12 +16,12 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
     
     if($mode == 1)
     {
-        $headline = "Installation der Version ". ADMIDIO_VERSION;
+        $headline = "Installation der Version ". ADMIDIO_VERSION. BETA_VERSION_TEXT;
         $title    = "Installation";
     }
     elseif($mode == 2)
     {
-        $headline = "Update auf Version ". ADMIDIO_VERSION;
+        $headline = "Update auf Version ". ADMIDIO_VERSION. BETA_VERSION_TEXT;
         $title    = "Update";
     }
     elseif($mode == 3)

@@ -60,7 +60,7 @@ $starttime = getmicrotime();
 if ($zp = @gzopen($newfullfilename, 'wb6')) 
 {
 
-	$fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION.' (http://www.admidio.org)'.LINE_TERMINATOR;
+	$fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION. BETA_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
 	$fileheaderline .= '-- Backup vom '.date('d.m.Y').' um '.date('G:i:s').LINE_TERMINATOR.LINE_TERMINATOR;
 	$fileheaderline .= '-- Database: '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
 	$fileheaderline .= '-- User: '.$g_current_user->getValue("Vorname"). ' '. $g_current_user->getValue("Nachname").LINE_TERMINATOR.LINE_TERMINATOR;
