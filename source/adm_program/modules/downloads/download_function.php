@@ -21,77 +21,77 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_folder.php");
-require("../../system/classes/table_file.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/table_folder.php');
+require('../../system/classes/table_file.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 //testen ob Schreibrechte fuer adm_my_files bestehen
-if (is_writeable(SERVER_PATH. "/adm_my_files"))
+if (is_writeable(SERVER_PATH. '/adm_my_files'))
 {
-    if (file_exists(SERVER_PATH. "/adm_my_files/download") == false)
+    if (file_exists(SERVER_PATH. '/adm_my_files/download') == false)
     {
         // Ordner fuer die Downloads existiert noch nicht -> erst anlegen
-        $b_return = @mkdir(SERVER_PATH. "/adm_my_files/download", 0777);
+        $b_return = @mkdir(SERVER_PATH. '/adm_my_files/download', 0777);
         if ($b_return)
         {
-            $b_return = @chmod(SERVER_PATH. "/adm_my_files/download", 0777);
+            $b_return = @chmod(SERVER_PATH. '/adm_my_files/download', 0777);
         }
         if ($b_return == false)
         {
             // der entsprechende Ordner konnte nicht angelegt werden
-            $g_message->addVariableContent("adm_my_files/download", 1);
+            $g_message->addVariableContent('adm_my_files/download', 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-            $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/downloads.php");
-            $g_message->show("write_access");
+            $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
+            $g_message->show('write_access');
         }
     }
 }
 else
 {
     // der entsprechende Ordner konnte nicht angelegt werden
-    $g_message->addVariableContent("adm_my_files", 1);
+    $g_message->addVariableContent('adm_my_files', 1);
     $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-    $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/downloads.php");
-    $g_message->show("write_access");
+    $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
+    $g_message->show('write_access');
 }
 
 
 // Uebergabevariablen pruefen
-if (isset($_GET["mode"]))
+if (isset($_GET['mode']))
 {
-    if (is_numeric($_GET["mode"]) == false)
+    if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
-    $req_mode = $_GET["mode"];
+    $req_mode = $_GET['mode'];
 
 }
 else
 {
     //ohne mode geht es nicht weiter
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 if (isset($_GET['folder_id']))
 {
-    if (is_numeric($_GET["mode"]) == false)
+    if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     $folder_id = $_GET['folder_id'];
@@ -103,9 +103,9 @@ else
 
 if (isset($_GET['file_id']))
 {
-    if (is_numeric($_GET["mode"]) == false)
+    if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     $file_id = $_GET['file_id'];
@@ -123,7 +123,7 @@ if ($req_mode == 1)
 {
     if ($folder_id == 0) {
         //FolderId ist zum hochladen erforderlich
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -134,12 +134,12 @@ if ($req_mode == 1)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     if (empty($_POST))
     {
-        $g_message->show("empty_upload_post",ini_get('upload_max_filesize'));
+        $g_message->show('empty_upload_post',ini_get('upload_max_filesize'));
     }
 
     $local_file = $_FILES['userfile']['name'];
@@ -147,13 +147,13 @@ if ($req_mode == 1)
     //Dateigroesse ueberpruefen Servereinstellungen
     if ($_FILES['userfile']['error']==1)
     {
-        $g_message->show("file_2big_server",ini_get('upload_max_filesize'));
+        $g_message->show('file_2big_server',ini_get('upload_max_filesize'));
     }
 
     //Dateigroesse ueberpruefen Administratoreinstellungen
     if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1024)
     {
-        $g_message->show("file_2big", $g_preferences['max_file_upload_size']);
+        $g_message->show('file_2big', $g_preferences['max_file_upload_size']);
     }
 
     // Dateinamen ermitteln
@@ -172,27 +172,27 @@ if ($req_mode == 1)
     {
         if($ret_code == -1)
         {
-            $g_message->show("feld", "Datei auswählen");
+            $g_message->show('feld', 'Datei auswählen');
         }
         elseif($ret_code == -2)
         {
-            $g_message->show("invalid_file_name");
+            $g_message->show('invalid_file_name');
         }
         elseif($ret_code == -3)
         {
-            $g_message->show("invalid_file_extension");
+            $g_message->show('invalid_file_extension');
         }
     }
 
-    if (file_exists($targetFolder->getCompletePathOfFolder(). "/$file_name"))
+    if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$file_name))
     {
-        $g_message->show("file_exists","$file_name");
+        $g_message->show('file_exists', $file_name);
     }
 
     $file_description = $_POST['new_description'];
 
     // Datei hochladen
-    if(move_uploaded_file($_FILES['userfile']['tmp_name'], $targetFolder->getCompletePathOfFolder(). "/$file_name"))
+    if(move_uploaded_file($_FILES['userfile']['tmp_name'], $targetFolder->getCompletePathOfFolder(). '/'.$file_name))
     {
         //Neue Datei noch in der DB eintragen
         $newFile = new TableFile($g_db);
@@ -203,12 +203,12 @@ if ($req_mode == 1)
         $newFile->setValue('fil_counter','0');
         $newFile->save();
 
-        $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-        $g_message->show("upload_file",$file_name);
+        $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+        $g_message->show('upload_file',$file_name);
     }
     else
     {
-        $g_message->show("file_upload_error",$file_name);
+        $g_message->show('file_upload_error',$file_name);
     }
 }
 
@@ -220,7 +220,7 @@ elseif ($req_mode == 2)
     {
         //Es muss eine FileID uebergeben werden
         //beides ist auch nicht erlaubt
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     if($file_id > 0)
@@ -234,7 +234,7 @@ elseif ($req_mode == 2)
             if ($file->delete())
             {
                 // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-                echo "done";
+                echo 'done';
             }
         }
     }
@@ -249,7 +249,7 @@ elseif ($req_mode == 3)
 
     if ($folder_id == 0) {
         //FolderId ist zum Anlegen eines Unterordners erforderlich
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -260,7 +260,7 @@ elseif ($req_mode == 3)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     $newFolderName = null;
@@ -277,33 +277,33 @@ elseif ($req_mode == 3)
         {
             if ($ret_code == -1)
             {
-                $g_message->show("feld", "Name");
+                $g_message->show('feld', 'Name');
             }
             elseif ($ret_code == -2)
             {
-                $g_message->show("invalid_folder_name");
+                $g_message->show('invalid_folder_name');
             }
         }
     }
     else
     {
-        $g_message->show("feld", "Name");
+        $g_message->show('feld', 'Name');
     }
 
     $newFolderDescription = $_POST['new_description'];
 
 
     //Test ob der Ordner schon existiert im Filesystem
-    if (file_exists($targetFolder->getCompletePathOfFolder(). "/$newFolderName")) {
-        $g_message->show("folder_exists", $newFolderName);
+    if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName)) {
+        $g_message->show('folder_exists', $newFolderName);
     }
     else
     {
         // Ordner erstellen
-        $b_return = @mkdir($targetFolder->getCompletePathOfFolder(). "/$newFolderName", 0777);
+        $b_return = @mkdir($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName, 0777);
         if($b_return)
         {
-            $b_return = @chmod($targetFolder->getCompletePathOfFolder(). "/$newFolderName", 0777);
+            $b_return = @chmod($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName, 0777);
 
             //Jetzt noch den Ordner der DB hinzufuegen...
             $newFolder = new TableFolder($g_db);
@@ -312,7 +312,7 @@ elseif ($req_mode == 3)
             $newFolder->setValue('fol_type', 'DOWNLOAD');
             $newFolder->setValue('fol_name', $newFolderName);
             $newFolder->setValue('fol_description', $newFolderDescription);
-            $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). "/".$targetFolder->getValue('fol_name'));
+            $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). '/'.$targetFolder->getValue('fol_name'));
             $newFolder->setValue('fol_locked', $targetFolder->getValue('fol_locked'));
             $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
             $newFolder->save();
@@ -324,14 +324,14 @@ elseif ($req_mode == 3)
         if($b_return == false)
         {
             // der entsprechende Ordner konnte nicht angelegt werden
-            $g_message->addVariableContent($targetFolder->getValue('fol_path'). "/". $targetFolder->getValue('fol_name'). "/$newFolderName", 1);
+            $g_message->addVariableContent($targetFolder->getValue('fol_path'). '/'. $targetFolder->getValue('fol_name'). '/'.$newFolderName, 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-            $g_message->setForwardUrl("$g_root_path/adm_program/modules/downloads/downloads.php");
-            $g_message->show("write_access");
+            $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
+            $g_message->show('write_access');
         }
 
-        $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-        $g_message->show("create_folder", $newFolderName);
+        $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+        $g_message->show('create_folder', $newFolderName);
     }
 }
 
@@ -343,7 +343,7 @@ elseif ($req_mode == 4)
     {
         //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
         //beides ist auch nicht erlaubt
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     if($file_id > 0)
@@ -356,7 +356,7 @@ elseif ($req_mode == 4)
             $oldFile = $file->getCompletePathOfFile();
         }
         else {
-            $g_message->show("invalid");
+            $g_message->show('invalid');
         }
 
         $newFile = null;
@@ -369,15 +369,15 @@ elseif ($req_mode == 4)
             {
                 if($ret_code == -1)
                 {
-                    $g_message->show("feld", "Neuer Name");
+                    $g_message->show('feld', 'Neuer Name');
                 }
                 elseif($ret_code == -2)
                 {
-                    $g_message->show("invalid_file_name");
+                    $g_message->show('invalid_file_name');
                 }
                 elseif($ret_code == -3)
                 {
-                    $g_message->show("invalid_file_extension");
+                    $g_message->show('invalid_file_extension');
                 }
             }
             else {
@@ -386,34 +386,34 @@ elseif ($req_mode == 4)
         }
         else
         {
-            $g_message->show("feld", "Neuer Name");
+            $g_message->show('feld', 'Neuer Name');
         }
 
         $newDescription = $_POST['new_description'];
 
         //Test ob die Datei schon existiert im Filesystem
         if ($newFile != $file->getValue('fil_name')
-         && file_exists(SERVER_PATH. $file->getValue('fol_path'). "/". $file->getValue('fol_name'). "/$newFile"))
+         && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
         {
-            $g_message->show("file_exists", $newFile);
+            $g_message->show('file_exists', $newFile);
         }
         else
         {
             $oldName = $file->getValue('fil_name');
 
             // Datei umbenennen im Filesystem und in der Datenbank
-            if (rename($oldFile,SERVER_PATH. $file->getValue('fol_path'). "/". $file->getValue('fol_name'). "/$newFile"))
+            if (rename($oldFile,SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
             {
                 $file->setValue('fil_name', $newFile);
                 $file->setValue('fil_description', $newDescription);
                 $file->save();
 
-                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                $g_message->show("rename_file",$oldName);
+                $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                $g_message->show('rename_file',$oldName);
             }
             else {
-                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                $g_message->show("rename_file_error",$oldName);
+                $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                $g_message->show('rename_file_error',$oldName);
             }
         }
 
@@ -428,7 +428,7 @@ elseif ($req_mode == 4)
             $oldFolder = $folder->getCompletePathOfFolder();
         }
         else {
-            $g_message->show("invalid");
+            $g_message->show('invalid');
         }
 
         $newFolder = null;
@@ -445,43 +445,43 @@ elseif ($req_mode == 4)
             {
                 if ($ret_code == -1)
                 {
-                    $g_message->show("feld", "Neuer Name");
+                    $g_message->show('feld', 'Neuer Name');
                 }
                 elseif ($ret_code == -2)
                 {
-                    $g_message->show("invalid_folder_name");
+                    $g_message->show('invalid_folder_name');
                 }
             }
         }
         else
         {
-            $g_message->show("feld", "Neuer Name");
+            $g_message->show('feld', 'Neuer Name');
         }
 
         $newDescription = $_POST['new_description'];
 
         //Test ob der Ordner schon existiert im Filesystem
         if ($newFolder != $folder->getValue('fol_name')
-         && file_exists(SERVER_PATH. $folder->getValue('fol_path'). "/$newFolder"))
+         && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
         {
-            $g_message->show("folder_exists", $newFolder);
+            $g_message->show('folder_exists', $newFolder);
         }
         else
         {
             $oldName = $folder->getValue('fol_name');
 
             // Ordner umbenennen im Filesystem und in der Datenbank
-            if (rename($oldFolder,SERVER_PATH. $folder->getValue('fol_path'). "/$newFolder"))
+            if (rename($oldFolder,SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
             {
                 $folder->setValue('fol_description', $newDescription);
                 $folder->rename($newFolder, $folder->getValue('fol_path'));
 
-                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                $g_message->show("rename_folder",$oldName);
+                $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                $g_message->show('rename_folder',$oldName);
             }
             else {
-                $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-                $g_message->show("rename_folder_error",$oldName);
+                $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+                $g_message->show('rename_folder_error',$oldName);
             }
         }
 
@@ -495,7 +495,7 @@ elseif ($req_mode == 5)
     if (!$folder_id)
     {
         //Es muss eine FolderId uebergeben werden
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     else if ($folder_id > 0)
     {
@@ -508,7 +508,7 @@ elseif ($req_mode == 5)
             if ($folder->delete())
             {
                 // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-                echo "done";
+                echo 'done';
             }
         }
     }
@@ -522,7 +522,7 @@ elseif ($req_mode == 6)
 {
     if ($folder_id == 0) {
         //FolderId ist zum hinzufuegen erforderlich
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     if (isset($_GET['name']))
@@ -536,18 +536,18 @@ elseif ($req_mode == 6)
         {
             if($ret_code == -2)
             {
-                $g_message->show("invalid_file_name");
+                $g_message->show('invalid_file_name');
             }
             elseif($ret_code == -3)
             {
-                $g_message->show("invalid_file_extension");
+                $g_message->show('invalid_file_extension');
             }
         }
     }
     else
     {
         //name ist zum hinzufuegen erforderlich
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -558,11 +558,11 @@ elseif ($req_mode == 6)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     //Pruefen ob das neue Element eine Datei order ein Ordner ist.
-    if (is_file($targetFolder->getCompletePathOfFolder(). "/". $name)) {
+    if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $name)) {
         //Datei hinzufuegen
         $newFile = new TableFile($g_db);
         $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
@@ -573,18 +573,18 @@ elseif ($req_mode == 6)
 
         //Zurueck zur letzten Seite
         $_SESSION['navigation']->addUrl(CURRENT_URL);
-        $location = "Location: $g_root_path/adm_program/system/back.php";
+        $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
         exit();
     }
-    else if (is_dir($targetFolder->getCompletePathOfFolder(). "/". $name)) {
+    else if (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $name)) {
 
         //Ordner der DB hinzufuegen
         $newFolder = new TableFolder($g_db);
         $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
         $newFolder->setValue('fol_type', 'DOWNLOAD');
         $newFolder->setValue('fol_name', $name);
-        $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). "/".$targetFolder->getValue('fol_name'));
+        $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). '/'.$targetFolder->getValue('fol_name'));
         $newFolder->setValue('fol_locked', $targetFolder->getValue('fol_locked'));
         $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
         $newFolder->save();
@@ -594,7 +594,7 @@ elseif ($req_mode == 6)
 
         //Zurueck zur letzten Seite
         $_SESSION['navigation']->addUrl(CURRENT_URL);
-        $location = "Location: $g_root_path/adm_program/system/back.php";
+        $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
         exit();
    }
@@ -606,7 +606,7 @@ elseif ($req_mode == 7)
 {
     if ($folder_id == 0) {
         //FolderId ist zum hinzufuegen erforderlich
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -617,7 +617,7 @@ elseif ($req_mode == 7)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     //Formularinhalt aufbereiten
@@ -640,7 +640,7 @@ elseif ($req_mode == 7)
     if ($publicFlag == 0) {
 
         //Rollenberechtigungen aufbereiten
-        if(array_key_exists("AllowedRoles", $_POST))
+        if(array_key_exists('AllowedRoles', $_POST))
         {
             $sentAllowedRoles = $_POST['AllowedRoles'];
 
@@ -649,7 +649,7 @@ elseif ($req_mode == 7)
             {
 
                 $rolesArray[] = array('rol_id'        => $newRole,
-                                      'rol_name'      => "");
+                                      'rol_name'      => '');
 
             }
         }
@@ -661,8 +661,8 @@ elseif ($req_mode == 7)
 
     $targetFolder->save();
 
-    $g_message->setForwardUrl("$g_root_path/adm_program/system/back.php");
-    $g_message->show("save");
+    $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+    $g_message->show('save');
 }
 
 

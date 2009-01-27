@@ -15,45 +15,45 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_file.php");
-require("../../system/classes/table_folder.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/table_file.php');
+require('../../system/classes/table_folder.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 // Uebergabevariablen pruefen
-if (array_key_exists("folder_id", $_GET))
+if (array_key_exists('folder_id', $_GET))
 {
-    if (is_numeric($_GET["folder_id"]) == false)
+    if (is_numeric($_GET['folder_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    $folder_id = $_GET["folder_id"];
+    $folder_id = $_GET['folder_id'];
 }
 else
 {
     $folder_id = 0;
 }
 
-if (array_key_exists("file_id", $_GET))
+if (array_key_exists('file_id', $_GET))
 {
-    if (is_numeric($_GET["file_id"]) == false)
+    if (is_numeric($_GET['file_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    $file_id = $_GET["file_id"];
+    $file_id = $_GET['file_id'];
 }
 else
 {
@@ -64,7 +64,7 @@ if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
 {
     //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
     //beides ist auch nicht erlaubt
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 
@@ -98,7 +98,7 @@ if (is_a($class,'TableFile')) {
         $originalName = $class->getValue('fil_name');
     }
     else {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     if ($form_values['new_name'] == null) {
@@ -116,7 +116,7 @@ else {
         $originalName = $class->getValue('fol_name');
     }
     else {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 
     if ($form_values['new_name'] == null) {
@@ -132,37 +132,38 @@ else {
 
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Umbenennen";
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['title'] = 'Umbenennen';
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<form method=\"post\" action=\"$g_root_path/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id=$folder_id&amp;file_id=$file_id\">
-<div class=\"formLayout\" id=\"edit_download_form\">
-    <div class=\"formHead\">Datei/Ordner umbenennen</div>
-    <div class=\"formBody\">
-        <ul class=\"formFieldList\">
+echo '
+<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$folder_id.'&amp;file_id='.$file_id.'">
+<div class="formLayout" id="edit_download_form">
+    <div class="formHead">Datei/Ordner umbenennen</div>
+    <div class="formBody">
+        <ul class="formFieldList">
             <li>
                 <dl>
                     <dt>Bisheriger Name:</dt>
-                    <dd>$originalName&nbsp;</dd>
+                    <dd>'.$originalName.'&nbsp;</dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"new_name\">Neuer Name:</label></dt>
+                    <dt><label for="new_name">Neuer Name:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"new_name\" name=\"new_name\" value=\"". $form_values['new_name']. "\" style=\"width: 200px;\" maxlength=\"255\" tabindex=\"1\" />
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"                       onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true','Message','width=400,height=350,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=dateiname',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 200px;" maxlength="255" tabindex="1" />
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" 
+                            onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true\', \'Message\',\'width=400,height=350,left=310,top=200,scrollbars=yes\')" onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=dateiname\', this);" onmouseout="ajax_hideTooltip()" />
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"new_description\">Beschreibung:</label></dt>
+                    <dt><label for="new_description">Beschreibung:</label></dt>
                     <dd>
-                        <textarea id=\"new_description\" name=\"new_description\" style=\"width: 200px;\" rows=\"5\" cols=\"40\" tabindex=\"2\" >". $form_values['new_description']. "</textarea>
+                        <textarea id="new_description" name="new_description" style="width: 200px;" rows="5" cols="40" tabindex="2" >'. $form_values['new_description']. '</textarea>
                     </dd>
                 </dl>
             </li>
@@ -170,29 +171,29 @@ echo "
 
         <hr />
 
-        <div class=\"formSubmit\">
-            <button name=\"rename\" type=\"submit\" value=\"umbenennen\" tabindex=\"2\">
-            <img src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Umbenennen\" />
+        <div class="formSubmit">
+            <button name="rename" type="submit" value="umbenennen" tabindex="2">
+            <img src="'. THEME_PATH. '/icons/edit.png" alt="Umbenennen" />
             &nbsp;Umbenennen</button>
         </div>
     </div>
 </div>
 </form>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
 </ul>
 
-<script type=\"text/javascript\"><!--
-    document.getElementById('new_name').focus();
---></script>";
+<script type="text/javascript"><!--
+    document.getElementById(\'new_name\').focus();
+--></script>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
