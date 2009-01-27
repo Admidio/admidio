@@ -221,4 +221,9 @@ while($row_orga = $g_db->fetch_array($result_orga))
 	}
 	$g_db->query($sql);
 }
+// Beta-Flag für Datenbank-Versionsnummer schreiben
+$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+								   VALUES ($row_orga->org_id, 'db_version_beta', '1') ";
+$g_db->query($sql);
+
 ?>

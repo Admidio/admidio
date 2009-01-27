@@ -161,6 +161,12 @@ $g_layout['header'] =  "
         }
     --></script>";
 
+// Thickboxintegration
+$g_layout['header'] = $g_layout['header']. '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
+	<link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />';
+	
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. "/overall_header.php");
 
@@ -283,8 +289,8 @@ echo "
                         <dl>
                             <dt><label for=\"version\">Admidio-Version:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"version\" name=\"version\" class=\"readonly\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. "\" />&nbsp;
-                                <a href=\"http://www.admidio.org/index.php?page=download\">Update suchen</a>
+                                <input type=\"text\" id=\"version\" name=\"version\" class=\"readonly\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. BETA_VERSION_TEXT. "\" />&nbsp;
+								<a class=\"thickbox\" href=\"$g_root_path/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350\">Auf Update prüfen</a>
                             </dd>
                         </dl>
                     </li>

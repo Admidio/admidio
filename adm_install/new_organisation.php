@@ -318,6 +318,11 @@ elseif($req_mode == 6)
                                        VALUES (". $g_current_organization->getValue("org_id"). ", 'db_version', '". ADMIDIO_VERSION. "') ";
     $db->query($sql);
 
+	// Beta-Flag für Datenbank-Versionsnummer schreiben
+	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
+									   VALUES ($row_orga->org_id, 'db_version_beta', '". BETA_VERSION. "') ";
+	$g_db->query($sql);
+	
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                            VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";

@@ -94,6 +94,12 @@ if($req_mode == 1)
                       <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />';
         showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
     }
+	elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0 && $g_preferences['db_version_beta'] < BETA_VERSION)
+    {
+        $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
+                      <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />';
+        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
+    }
     elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0)
     {
         $message   = '<img style="vertical-align: top;" src="layout/ok.png" /> 
