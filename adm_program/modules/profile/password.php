@@ -107,14 +107,19 @@ else
     <div class="formLayout" id="password_form" style="width: 300px">
         <div class="formHead">'. $g_layout['title']. '</div>
         <div class="formBody">
-            <ul class="formFieldList">
-                <li>
-                    <dl>
-                        <dt><label for="old_password">Altes Passwort:</label></dt>
-                        <dd><input type="password" id="old_password" name="old_password" size="10" maxlength="20" /></dd>
-                    </dl>
-                </li>
-                <li><hr /></li>
+            <ul class="formFieldList">';
+                if(!$g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $_GET['usr_id'] )
+    			{
+    			echo'
+        			<li>
+                        <dl>
+                            <dt><label for="old_password">Altes Passwort:</label></dt>
+                            <dd><input type="password" id="old_password" name="old_password" size="10" maxlength="20" /></dd>
+                        </dl>
+                    </li>
+                    <li><hr /></li>';
+				}    
+                echo'
                 <li>
                     <dl>
                         <dt><label for="new_password">Neues Passwort:</label></dt>
