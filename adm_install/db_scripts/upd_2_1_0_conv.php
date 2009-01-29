@@ -131,7 +131,12 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $former_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
     $former_list->addColumn(4, "mem_begin");
     $former_list->addColumn(5, "mem_end", "DESC");
-    $former_list->save();  
+    $former_list->save();
+    
+    // Beta-Flag für Datenbank-Versionsnummer schreiben
+    $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
+            VALUES ("'.$row_orga['org_id'].'", "db_version_beta", "1") ';
+    $g_db->query($sql);
 }
 
 $sql = "UPDATE ". TBL_PHOTOS. " SET pho_timestamp_create = '".DATETIME_NOW."'
@@ -221,9 +226,4 @@ while($row_orga = $g_db->fetch_array($result_orga))
 	}
 	$g_db->query($sql);
 }
-// Beta-Flag für Datenbank-Versionsnummer schreiben
-$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-								   VALUES ($row_orga->org_id, 'db_version_beta', '1') ";
-$g_db->query($sql);
-
 ?>
