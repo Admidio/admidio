@@ -22,54 +22,54 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/classes/table_guestbook.php");
-require("../../system/classes/table_guestbook_comment.php");
+require('../../system/common.php');
+require('../../system/classes/table_guestbook.php');
+require('../../system/classes/table_guestbook_comment.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require("../../system/login_valid.php");
+    require('../../system/login_valid.php');
 }
 
 
 // Uebergabevariablen pruefen
 
-if (array_key_exists("id", $_GET))
+if (array_key_exists('id', $_GET))
 {
-    if (is_numeric($_GET["id"]) == false)
+    if (is_numeric($_GET['id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 }
 else
 {
-    $_GET["id"] = 0;
+    $_GET['id'] = 0;
 }
 
 
-if (array_key_exists("mode", $_GET))
+if (array_key_exists('mode', $_GET))
 {
-    if (is_numeric($_GET["mode"]) == false)
+    if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
 }
 
 
-if (array_key_exists("headline", $_GET))
+if (array_key_exists('headline', $_GET))
 {
-    $_GET["headline"] = strStripTags($_GET["headline"]);
+    $_GET['headline'] = strStripTags($_GET['headline']);
 }
 else
 {
-    $_GET["headline"] = "Gästebuch";
+    $_GET['headline'] = 'Gästebuch';
 }
 
 
@@ -82,12 +82,12 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
         if ($g_preferences['enable_gbook_comments4all'] == 0)
         {
-            require("../../system/login_valid.php");
+            require('../../system/login_valid.php');
 
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
             if (!$g_current_user->commentGuestbookRight())
             {
-                $g_message->show("norights");
+                $g_message->show('norights');
             }
         }
 
@@ -95,7 +95,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     else
     {
         // Der User muss fuer die anderen Modes auf jeden Fall eingeloggt sein
-        require("../../system/login_valid.php");
+        require('../../system/login_valid.php');
     }
 
 
@@ -105,7 +105,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
         if(!$g_current_user->editGuestbookRight())
         {
-            $g_message->show("norights");
+            $g_message->show('norights');
         }
     }
 }
@@ -120,9 +120,9 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mod
         $guestbook->readData($_GET['id']);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+        if($guestbook->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
         {
-            $g_message->show("norights");
+            $g_message->show('norights');
         }
     }
 }
@@ -136,15 +136,15 @@ else
         $guestbook_comment->readData($_GET['id']);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook_comment->getValue("gbo_org_id") != $g_current_organization->getValue("org_id"))
+        if($guestbook_comment->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
         {
-            $g_message->show("norights");
+            $g_message->show('norights');
         }
     }
 }
 
 
-if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
+if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
 {
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_entry_request'] = $_REQUEST;
@@ -152,11 +152,11 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET["mode"] == 1 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($_GET['mode'] == 1 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
         {
-            $g_message->show("captcha_code");
+            $g_message->show('captcha_code');
         }
     }
 
@@ -164,22 +164,22 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
     // POST Variablen in das Gaestebuchobjekt schreiben
     foreach($_POST as $key => $value)
     {
-        if(strpos($key, "gbo_") === 0)
+        if(strpos($key, 'gbo_') === 0)
         {
             $guestbook->setValue($key, $value);
         }
     }
 
-    if (strlen($guestbook->getValue("gbo_name")) > 0 && strlen($guestbook->getValue("gbo_text"))  > 0)
+    if (strlen($guestbook->getValue('gbo_name')) > 0 && strlen($guestbook->getValue('gbo_text'))  > 0)
     {
         // Gaestebucheintrag speichern
         
         if($g_valid_login)
         {
-            if(strlen($guestbook->getValue("gbo_name")) == 0)
+            if(strlen($guestbook->getValue('gbo_name')) == 0)
             { 
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $guestbook->setValue("gbo_name", $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"));
+                $guestbook->setValue('gbo_name', $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'));
             }
         }
         else
@@ -189,16 +189,16 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag erzeugt hat...
-                $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK. "
-                        where unix_timestamp(gbo_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-                          and gbo_org_id = ". $g_current_organization->getValue("org_id"). "
-                          and gbo_ip_address = '". $guestbook->getValue("gbo_ip_adress"). "'";
+                $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
+                        where unix_timestamp(gbo_timestamp) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
+                          and gbo_org_id = '. $g_current_organization->getValue('org_id'). '
+                          and gbo_ip_address = "'. $guestbook->getValue('gbo_ip_adress'). '"';
                 $result = $g_db->query($sql);
                 $row    = $g_db->fetch_array($result);
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
+                    $g_message->show('flooding_protection', $g_preferences['flooding_protection_time']);
                 }
             }
         }
@@ -208,7 +208,7 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
     
         if($return_code < 0)
         {
-            $g_message->show("norights");
+            $g_message->show('norights');
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -222,32 +222,32 @@ if ($_GET["mode"] == 1 || $_GET["mode"] == 3)
         }
 
 
-        header("Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?headline=". $_GET['headline']);
+        header('Location: '.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline']);
         exit();
     }
     else
     {
-        if(strlen($guestbook->getValue("gbo_name")) > 0)
+        if(strlen($guestbook->getValue('gbo_name')) > 0)
         {
-            $g_message->show("feld", "Text");
+            $g_message->show('feld', 'Text');
         }
         else
         {
-            $g_message->show("feld", "Name");
+            $g_message->show('feld', 'Name');
         }
     }
 }
 
-elseif($_GET["mode"] == 2)
+elseif($_GET['mode'] == 2)
 {
     // den Gaestebucheintrag loeschen...
     $guestbook->delete();
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-    echo "done";
+    echo 'done';
 }
 
-elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
+elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
 {
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_comment_request'] = $_REQUEST;
@@ -255,18 +255,18 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET["mode"] == 4 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($_GET['mode'] == 4 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
         {
-            $g_message->show("captcha_code");
+            $g_message->show('captcha_code');
         }
     }
 
     // POST Variablen in das Gaestebuchkommentarobjekt schreiben
     foreach($_POST as $key => $value)
     {
-        if(strpos($key, "gbc_") === 0)
+        if(strpos($key, 'gbc_') === 0)
         {
             $guestbook_comment->setValue($key, $value);
         }
@@ -274,19 +274,19 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
     
     if($_GET['mode'] == 4)
     {
-        $guestbook_comment->setValue("gbc_gbo_id", $_GET['id']);
+        $guestbook_comment->setValue('gbc_gbo_id', $_GET['id']);
     }
 
-    if (strlen($guestbook_comment->getValue("gbc_name")) > 0 && strlen($guestbook_comment->getValue("gbc_text"))  > 0)
+    if (strlen($guestbook_comment->getValue('gbc_name')) > 0 && strlen($guestbook_comment->getValue('gbc_text'))  > 0)
     {
         // Gaestebuchkommentar speichern
         
         if($g_valid_login)
         {
-            if(strlen($guestbook_comment->getValue("gbc_name")) == 0)
+            if(strlen($guestbook_comment->getValue('gbc_name')) == 0)
             {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $guestbook_comment->setValue("gbc_name", $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname"));
+                $guestbook_comment->setValue('gbc_name', $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'));
             }
         }
         else
@@ -296,15 +296,15 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag/Kommentar erzeugt hat...
-                $sql = "SELECT count(*) FROM ". TBL_GUESTBOOK_COMMENTS. "
-                         WHERE unix_timestamp(gbc_timestamp) > unix_timestamp()-". $g_preferences['flooding_protection_time']. "
-                           AND gbc_ip_address = '". $guestbook_comment->getValue("gbc_ip_adress"). "'";
+                $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
+                         WHERE unix_timestamp(gbc_timestamp) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
+                           AND gbc_ip_address = "'. $guestbook_comment->getValue('gbc_ip_adress'). '"';
                 $result = $g_db->query($sql);
                 $row = $g_db->fetch_array($result);
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show("flooding_protection", $g_preferences['flooding_protection_time']);
+                    $g_message->show('flooding_protection', $g_preferences['flooding_protection_time']);
                 }
             }
         }
@@ -314,7 +314,7 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
     
         if($return_code < 0)
         {
-            $g_message->show("norights");
+            $g_message->show('norights');
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -327,34 +327,34 @@ elseif($_GET["mode"] == 4 || $_GET["mode"] == 8)
             unset($_SESSION['captchacode']);
         }
 
-        header("Location: $g_root_path/adm_program/modules/guestbook/guestbook.php?id=". $guestbook_comment->getValue("gbc_gbo_id"). "&headline=". $_GET['headline']);
+        header('Location: '.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $_GET['headline']);
         exit();
     }
     else
     {
-        if(strlen($guestbook_comment->getValue("gbc_name")) > 0)
+        if(strlen($guestbook_comment->getValue('gbc_name')) > 0)
         {
-            $g_message->show("feld", "Text");
+            $g_message->show('feld', 'Text');
         }
         else
         {
-            $g_message->show("feld", "Name");
+            $g_message->show('feld', 'Name');
         }
     }
 }
 
-elseif ($_GET["mode"] == 5)
+elseif ($_GET['mode'] == 5)
 {
     //Gaestebuchkommentar loeschen...
     $guestbook_comment->delete();
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-    echo "done";
+    echo 'done';
 }
 
 else
 {
     // Falls der Mode unbekannt ist, ist natürlich auch Ende...
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 ?>
