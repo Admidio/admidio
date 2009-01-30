@@ -23,13 +23,13 @@ if (!function_exists('getmicrotime')) {
 
 function FormattedTimeRemaining($seconds, $precision=1) {
 	if ($seconds > 86400) {
-		return number_format($seconds / 86400, $precision).' days';
+		return number_format($seconds / 86400, $precision).' Tagen';
 	} elseif ($seconds > 3600) {
-		return number_format($seconds / 3600, $precision).' hours';
+		return number_format($seconds / 3600, $precision).' Stunden';
 	} elseif ($seconds > 60) {
-		return number_format($seconds / 60, $precision).' minutes';
+		return number_format($seconds / 60, $precision).' Minuten';
 	}
-	return number_format($seconds, $precision).' seconds';
+	return number_format($seconds, $precision).' Sekunden';
 }
 
 function FileSizeNiceDisplay($filesize, $precision=2) {

@@ -16,8 +16,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/ubb_parser.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -28,7 +28,7 @@ if ($g_preferences['enable_guestbook_module'] == 0)
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 }
 
 // Uebergabevariablen pruefen
@@ -102,7 +102,7 @@ $g_layout['header'] = $g_layout['header']. $g_js_vars. '
         function getComments(commentId)
         {
             gbookId = commentId;
-            resObject.open(\'get\', \''.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=\' + gbookId, true);
+            resObject.open("get", "'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + gbookId, true);
             resObject.onreadystatechange = handleResponse;
             resObject.send(null);
         }
@@ -111,7 +111,7 @@ $g_layout['header'] = $g_layout['header']. $g_js_vars. '
         {
             if (resObject.readyState == 4)
             {
-                var objectId = \'commentSection_\' + gbookId;
+                var objectId = "commentSection_" + gbookId;
                 document.getElementById(objectId).innerHTML = resObject.responseText;
                 toggleComments(gbookId);
             }
@@ -119,29 +119,29 @@ $g_layout['header'] = $g_layout['header']. $g_js_vars. '
 
         function toggleComments(commentId)
         {
-            if (document.getElementById(\'commentSection_\' + commentId).innerHTML.length == 0)
+            if (document.getElementById("commentSection_" + commentId).innerHTML.length == 0)
             {
                 getComments(commentId);
             }
             else
             {
-                toggleDiv(\'commentsInvisible_\' + commentId);
-                toggleDiv(\'commentsVisible_\' + commentId);
-                toggleDiv(\'commentSection_\' + commentId);
+                toggleDiv("commentsInvisible_" + commentId);
+                toggleDiv("commentsVisible_" + commentId);
+                toggleDiv("commentSection_" + commentId);
             }
         }
 
         function toggleDiv(objectId)
         {
-            if (document.getElementById(objectId).style.visibility == \'hidden\')
+            if (document.getElementById(objectId).style.visibility == "hidden")
             {
-                document.getElementById(objectId).style.visibility = \'visible\';
-                document.getElementById(objectId).style.display    = \'block\';
+                document.getElementById(objectId).style.visibility = "visible";
+                document.getElementById(objectId).style.display    = "block";
             }
             else
             {
-                document.getElementById(objectId).style.visibility = \'hidden\';
-                document.getElementById(objectId).style.display    = \'none\';
+                document.getElementById(objectId).style.visibility = "hidden";
+                document.getElementById(objectId).style.display    = "none";
             }
         }
 
@@ -203,10 +203,6 @@ if ($_GET['id'] == 0)
             </span>
         </li>
     </ul>';
-
-    // Navigation mit Vor- und Zurueck-Buttons
-    $base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline'];
-    echo generatePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $_GET['start'], TRUE);
 }
 else
 {
