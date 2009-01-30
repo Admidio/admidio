@@ -10,7 +10,8 @@
  * Uebergaben:
  *
  * pho_id : id des Albums zu dem die Bilder hinzugefuegt werden sollen
- * mode   : 1 - Klassisches Formular zur Bilderauswahl (Default)
+ * mode   : Das entsprechende Formular wird erzwungen !!!
+ *          1 - Klassisches Formular zur Bilderauswahl
  * 		    2 - Flexuploder 
  * 
  *****************************************************************************/
@@ -43,7 +44,7 @@ if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false)
 // im Zweifel den klassischen Upload nehmen
 if(!isset($_GET['mode']) || $_GET['mode'] < 1 || $_GET['mode'] > 2)
 {
-    $_GET['mode'] = 1;
+    $_GET['mode'] = 0;
 }
 
 //Kontrolle ob Server Dateiuploads zulaesst
@@ -80,16 +81,69 @@ if($photo_album->getValue('pho_org_shortname') != $g_organization)
     $g_message->show('invalid');
 }
 
+// Uploadtechnik auswaehlen
+if(($g_preferences['photo_upload_mode'] == 1 || $_GET['mode'] == 2)
+&&  $_GET['mode'] != 1)
+{
+	$flash = 'flashInstalled()';
+}
+else
+{
+	$flash = 'false';
+}
+
 // Html-Kopf ausgeben
 $g_layout['title'] = 'Fotos hochladen';
+$g_layout['header'] = $g_js_vars. '
+<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+<script type="text/javascript"><!--
+	flash_installed = '.$flash.';
+
+	function flashInstalled()
+	{
+		if(navigator.mimeTypes.length) 
+		{
+			if(navigator.mimeTypes["application/x-shockwave-flash"]
+			&& navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin != null)
+			{
+				return true;
+			}
+		}
+		else if(window.ActiveXObject) 
+		{
+		    try 
+		    {
+				flash_test = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
+				if( flash_test ) 
+				{
+					return true;
+				}
+		    }
+		    catch(e){}
+		}
+		return false;
+	}
+	
+	$(document).ready(function() 
+	{
+		if(flash_installed == true)
+		{
+			$("#photo_upload_flash").show();
+			$("#photo_upload_form").hide();
+		}
+		else
+		{
+			$("#photo_upload_flash").hide();
+			$("#photo_upload_form").show();
+			$("#bilddatei1").focus();
+		}
+ 	});
+--></script>';
 require(THEME_SERVER_PATH. '/overall_header.php');
 
-/**************************Klassisches Formular********************************************************/
-if($_GET['mode'] == 1 && $g_preferences['photo_upload_mode'] <> 1)
-{
-	echo '
-	<div class="formLayout" id="photo_upload_form">
-	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '&uploadmethod=1" enctype="multipart/form-data">
+echo '
+<div class="formLayout" id="photo_upload_form">
+	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '&amp;uploadmethod=1" enctype="multipart/form-data">
 	    <div class="formHead">Bilder hochladen</div>
 	    <div class="formBody">
 	        <p>
@@ -125,51 +179,33 @@ if($_GET['mode'] == 1 && $g_preferences['photo_upload_mode'] <> 1)
 	        </div>
 	   </div>
 	</form>
+</div>
 
-    <script type="text/javascript"><!--
-        document.getElementById("bilddatei1").focus();
-    --></script>';
-}
-/**************************Flexuploader********************************************************/
-elseif($_GET['mode'] == 2 && $g_preferences['photo_upload_mode'] <> 2)
-{
-	echo '<h2>Bilder hochladen</h2>
-		<p>
-	        Die Bilder werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
-            (Beginn: '. mysqldate('d.m.y', $photo_album->getValue('pho_begin')). ')
-	    </p>';
+<div id="photo_upload_flash">
+	<h2>Bilder hochladen</h2>
+	<p>
+        Die Bilder werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
+        (Beginn: '. mysqldate('d.m.y', $photo_album->getValue('pho_begin')). ')
+    </p>';
+
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
 	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$_GET['pho_id'].'&admidio_php_session_id='.$_COOKIE['admidio_php_session_id'].'&admidio_session_id='.$_COOKIE['admidio_session_id'].'&admidio_data='.$_COOKIE['admidio_data'].'&uploadmethod=2');
-	//Pfad zum swf-File
-	$fup->setPathToSWF($g_root_path.'/adm_program/libs/flexupload/');
-	//Pfad der Sprachdatei
-	$fup->setLocale($g_root_path.'/adm_program/libs/flexupload/de.xml');
-	//maximale Dateigröße
-	$fup->setMaxFileSize(maxUploadSize());
-	//maximale Dateianzahl
-	$fup->setMaxFiles(999);
-	//breite des Uploaders
-	$fup->setWidth(560);
-	//breite des Uploaders
-	$fup->setHeight(400);
-	//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
-	$fup->setFileExtensions('*.jpg;*.jpeg;*.png');
-	//Ausgabe des Uploaders
-	$fup->printHTML(true, 'flexupload');
-}
-else
-{
-    $g_message->show('invalid');
-}
+	$fup->setPathToSWF($g_root_path.'/adm_program/libs/flexupload/');		//Pfad zum swf-File
+	$fup->setLocale($g_root_path.'/adm_program/libs/flexupload/de.xml');	//Pfad der Sprachdatei
+	$fup->setMaxFileSize(maxUploadSize());	//maximale Dateigröße
+	$fup->setMaxFiles(999);	//maximale Dateianzahl
+	$fup->setWidth(560);	// Breite des Uploaders
+	$fup->setHeight(400);	// Hoehe des Uploaders
+	$fup->setFileExtensions('*.jpg;*.jpeg;*.png');	//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
+	$fup->printHTML(true, 'flexupload');	//Ausgabe des Uploaders
+echo '</div>
 
-echo '
-</div>
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'"><img 
+            src="'. THEME_PATH. '/icons/application_view_tile.png" alt="Zum Album" /></a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'">Zum Album</a>
         </span>
     </li>    
     <li>

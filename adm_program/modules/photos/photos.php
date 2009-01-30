@@ -241,28 +241,14 @@ if($g_current_user->editPhotoRight())
     </li>';        
     if($pho_id > 0)
     {
-        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
-        {
-	        echo '
-            <li>
-                <span class="iconTextLink">
-	                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=1">
-	                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Einzelbilder hochladen" title="Einzelbilder hochladen"/></a>
-	                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=1">Upload</a>
-	            </span>
-	        </li>';
-        }
-        if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
-        {
-            echo '
-            <li>
-                <span class="iconTextLink">
-	               <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=2">
-	                <img src="'. THEME_PATH. '/icons/photo_upload_multi.png" alt="Komfortupload" title="Komfortupload"/></a>
-	                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'&amp;mode=2">Komfortupload</a>
-	           </span>
-	        <li>';
-        }
+        echo '
+        <li>
+            <span class="iconTextLink">
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">
+                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Bilder hochladen" title="Bilder hochladen"/></a>
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">Bilder hochladen</a>
+            </span>
+        </li>';
     }
     echo '</ul>';
 }
@@ -617,21 +603,10 @@ echo '<div class="photoModuleContainer">';
 
                                 if(file_exists($ordner))
                                 {
-                                    if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 2)
-                                    {
-    	                                echo '
-    	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;mode=1"><img 
-    	                                    src="'. THEME_PATH. '/icons/photo_upload.png" alt="Einzelbilder hochladen" title="Einzelbilder hochladen" /></a>';
-                                    }
-                                    
-                                    if($g_preferences['photo_upload_mode'] == 0 || $g_preferences['photo_upload_mode'] == 1)
-                                    {
-    	                                echo '
-    	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;mode=2"><img 
-    	                                    src="'. THEME_PATH. '/icons/photo_upload_multi.png" alt="Komfortupload" title="Komfortupload" /></a>';
-                                    }
-                                    
-                                    echo '
+	                                echo '
+	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
+	                                    src="'. THEME_PATH. '/icons/photo_upload.png" alt="Bilder hochladen" title="Bilder hochladen" /></a>
+
     								<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
                                         src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
     	                            
