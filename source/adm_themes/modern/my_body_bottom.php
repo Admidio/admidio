@@ -156,17 +156,17 @@
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/roles.png" alt="Rollenverwaltung" title="Rollenverwaltung" /></a>
                     <a href="'. $g_root_path. '/adm_program/administration/roles/roles.php">Rollenverwaltung</a></span>';
                 }
+				if($g_current_user->isWebmaster())
+                {
+                    echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/backup/backup.php"><img
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/backup.png" alt="Datenbank Backup" title="Datenbank Backup" /></a>
+                    <a href="'. $g_root_path. '/adm_program/administration/backup/backup.php">Datenbank Backup</a></span>';
+                }
                 if($g_current_user->isWebmaster())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/organization/organization.php"><img
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/options.png" alt="Organisationseinstellungen" title="Organisationseinstellungen" /></a>
                     <a href="'. $g_root_path. '/adm_program/administration/organization/organization.php">Organisationseinstellungen</a></span>';
-                }
-				if($g_current_user->isWebmaster())
-                {
-                    echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/backup/backupDB.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/database_save.png" alt="Datenbank Backup" title="Datenbank Backup" /></a>
-                    <a href="'. $g_root_path. '/adm_program/administration/backup/backupDB.php">Datenbank Backup</a></span>';
                 }
 
             }

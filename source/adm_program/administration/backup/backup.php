@@ -13,10 +13,10 @@
  * available at http://www.silisoftware.com
  *
  *****************************************************************************/
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/htaccess.php");
-require_once('backupDB.functions.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/htaccess.php');
+require_once('backup.functions.php');
 
 
 // nur Webmaster duerfen ein Backup starten
