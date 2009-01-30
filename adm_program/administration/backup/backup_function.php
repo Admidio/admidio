@@ -29,26 +29,37 @@ define('MYSQL_RECONNECT_INTERVAL', 100000);  // disconnect and reconnect to MySQ
 
 //Some Config
 $fullbackupfilename = 'db_backup.'.date('Y-m-d.Gis').'.sql.gz';
-$backupabsolutepath = SERVER_PATH. "/adm_my_files/backup/"; // make sure to include trailing slash
+$backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
 
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // nur Webmaster duerfen ein Backup starten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
-$g_layout['title'] = "Datenbank Backup";
-require(THEME_SERVER_PATH. "/overall_header.php");
-echo "
-<h1 class=\"moduleHeadline\">Datenbank Backup</h1>";
+$g_layout['title'] = 'Datenbank Backup';
+
+require(THEME_SERVER_PATH. '/overall_header.php');
+
+echo '<h1 class="moduleHeadline">Datenbank Backup</h1>';
 
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 
-OutputInformation('', "<span id=\"cancellink\"><a href=\"$g_root_path/adm_program/administration/backup/backupDB.php\">Cancel</a><br><br></span>", "<a href=\"$g_root_path/adm_program/administration/backup/backupDB.php\">Cancel</a><br><br>");
+OutputInformation('', '
+<ul class="iconTextLinkList" id="cancel_link">
+    <li>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php"><img
+            src="'. THEME_PATH. '/icons/error.png" alt="Abbrechen" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">Abbrechen</a>
+        </span>
+    </li>
+</ul>');
 flush();
 
 $newfullfilename = $backupabsolutepath.$fullbackupfilename;
@@ -108,7 +119,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 	OutputInformation('statusinfo', '');
 
-	OutputInformation('', '<br><b><span id="topprogress">Overall Progress:</span></b><br>');
+	OutputInformation('', '<p><b><span id="topprogress">Gesamtfortschritt:</span></b></p>');
 	$overallrows = 0;
 	echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables) / TABLES_PER_COL).'"><b>'.$g_adm_db.'</b></th></tr><tr><td nowrap valign="top">';
 	$tablecounter = 0;
@@ -326,17 +337,17 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 				OutputInformation('rows_'.$SelectedTables[$t], '<b>'.$SelectedTables[$t].' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</b>');
 				$elapsedtime = getmicrotime() - $datastarttime;
 				$percentprocessed = ($processedrows + $currentrow) / $overallrows;
-				$overallprogress = 'Overall Progress: '.number_format($processedrows + $currentrow).' / '.number_format($overallrows).' ('.number_format($percentprocessed * 100, 1).'% done) ['.FormattedTimeRemaining($elapsedtime).' elapsed';
+				$overallprogress = '<p>Gesamtfortschritt:</p><p>'.number_format($processedrows + $currentrow).' / '.number_format($overallrows).' ('.number_format($percentprocessed * 100, 1).'% fertig) ['.FormattedTimeRemaining($elapsedtime).' verstrichen';
 				if (($percentprocessed > 0) && ($percentprocessed < 1)) 
 				{
-					$overallprogress .= ', '.FormattedTimeRemaining(abs($elapsedtime - ($elapsedtime / $percentprocessed))).' remaining';
+					$overallprogress .= ', '.FormattedTimeRemaining(abs($elapsedtime - ($elapsedtime / $percentprocessed))).' übrig';
 				}
-				$overallprogress .= ']';
+				$overallprogress .= ']</p>';
 				OutputInformation('topprogress', $overallprogress);
 			}
 
 		}
-		OutputInformation('rows_'.$SelectedTables[$t], $SelectedTables[$t].' ('.number_format($rows[$t]).' records, [100%])');
+		OutputInformation('rows_'.$SelectedTables[$t], $SelectedTables[$t].' ('.number_format($rows[$t]).' Datensätze, [100%])');
 		$processedrows += $rows[$t];
 		if($currentrow > 0)
 		{
@@ -371,12 +382,23 @@ else
 }
 
 
-echo '<br>Backup fertiggestellt in '.FormattedTimeRemaining(getmicrotime() - $starttime, 2).'.<br>';
-echo "<a href=\"$g_root_path/adm_program/administration/backup/get_backup_file.php?filename=".basename($newfullfilename)."\"><b>".basename($newfullfilename)."</b> (".FileSizeNiceDisplay(filesize($newfullfilename), 2);
-echo ")</a><br><br><a href=\"$g_root_path/adm_program/administration/backup/backupDB.php\">Zurück zur Backupseite</a><br>";
+echo '<p>Backup fertiggestellt in '.FormattedTimeRemaining(getmicrotime() - $starttime, 2).'.</p>
 
-OutputInformation('cancellink', '');
+<p>Backupdatei: <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</p>
+
+<ul class="iconTextLinkList">
+    <li>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zurück zur Backupseite"/></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück zur Backupseite</a>
+        </span>
+    </li>
+</ul>';
+
+OutputInformation('cancel_link', '');
 
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>
