@@ -777,6 +777,25 @@ echo "
                         Dies kann über ein Popup-Fenster, über eine Javascript-Animation (Thickbox) oder auf
                         dergleichen Seite in HTML erfolgen. (Standard: Thickbox)
                     </li>
+                     <li>
+                        <dl>
+                            <dt><label for=\"photo_upload_mode\">Multiupload:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"photo_upload_mode\" name=\"photo_upload_mode\" ";
+                                if(isset($form_values['photo_upload_mode']) && $form_values['photo_upload_mode'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo " value=\"1\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                    	Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Bilder gleichzeitig auszuwählen und hochzuladen.
+                    	Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash installiert oder diese Option nicht
+                    	aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt.
+                    	(Standard: ja)
+                    </li>
                     <li>
                         <dl>
                             <dt><label for=\"photo_thumbs_row\">Thumbnails pro Seite (Spalten x Zeilen):</label></dt>
@@ -802,40 +821,6 @@ echo "
                         Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
                         Ggf. weniger Thumbnailspalten einstellen. (Standard: 100Pixel)
-                    </li>
-                     <li>
-                        <dl>
-                            <dt><label for=\"photo_upload_mode\">Uploadmethode:</label></dt>
-                            <dd>
-                                <select size=\"1\" id=\"photo_upload_mode\" name=\"photo_upload_mode\">
-                                    <option value=\"0\" ";
-                                    if($form_values['photo_upload_mode'] == 0)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Benutzerauswahl</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['photo_upload_mode'] == 1)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Multiupload</option>
-                                    <option value=\"2\" ";
-                                    if($form_values['photo_upload_mode'] == 2)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Einzeldateiauswahl</option>
-                                </select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, welche Möglichkeiten zum Bilderupload berechtigten Benutzern zur Verfügung gestellt werden.<br />
-						<i>Benutzerauswahl</i> - Der Benutzer kann selbst eine Methode wählen.<br />
-						<i>Multiupload</i> - Über ein Flashplugin können mehrere Dateien gleichzeitig ausgewählt werden. Während dem Upload wird der Benutzer laufend über den Status und die Verarbeitung informiert.<br />
-						<i>Einzeldateiauswahl</i> - Der Benutzer kann bis zu fünf Dateien pro Uploadvorgang auswählen. Es ist kein Plugin notwendig.<br />
-						(Standard: Benutzerauswahl)
                     </li>
 					<li>
                         <dl>

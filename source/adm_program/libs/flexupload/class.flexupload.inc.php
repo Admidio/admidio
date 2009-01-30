@@ -301,6 +301,7 @@ class FlexUpload {
 			$content .= 'obj_'.$divId.'.write("'.$divId.'");'."\n";
 			$content .= '// ]]>'."\n";
 			$content .= '</script>'."\n";
+			$content .= '</div>'."\n";
 		} else {
 			$content = '
 			<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="flexupload" width="'.$this->_width.'" height="'.$this->_height.'" codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
