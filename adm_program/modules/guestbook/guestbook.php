@@ -91,8 +91,7 @@ if($g_preferences['enable_rss'] == 1)
         href=\"$g_root_path/adm_program/modules/guestbook/rss_guestbook.php\" />";
 };
 
-$g_layout['header'] = $g_layout['header']. $g_js_vars. '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+$g_layout['header'] = $g_layout['header']. '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
 

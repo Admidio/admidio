@@ -75,17 +75,14 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 
 
 // Html-Kopf ausgeben
-$g_layout['title'] = 'Downloadbereich';
-$g_layout['header'] = $g_js_vars. '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+$g_layout['title']  = 'Downloadbereich';
+$g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo '
-<h1 class="moduleHeadline">Downloadbereich</h1>';
-
+echo '<h1 class="moduleHeadline">Downloadbereich</h1>';
 
 echo $navigationBar;
 

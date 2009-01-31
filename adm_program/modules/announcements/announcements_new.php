@@ -15,12 +15,12 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_announcement.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_announcement.php');
 if ($g_preferences['enable_bbcode'] == 1)
 {
-    require('../../system/bbcode.php');
+    require_once('../../system/bbcode.php');
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -101,9 +101,15 @@ if ($g_preferences['enable_bbcode'] == 1)
     $javascript = getBBcodeJS('ann_description');
 }
 
-$g_layout['header'] = '';
-$g_layout['header'] .= $javascript;
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['header'] = $javascript. '
+	<script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            $("#ann_headline").focus();
+	 	}); 
+	//--></script>';
+
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
@@ -184,11 +190,7 @@ echo '
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>
-
-<script type="text/javascript"><!--
-    document.getElementById(\'ann_headline\').focus();
---></script>';
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 

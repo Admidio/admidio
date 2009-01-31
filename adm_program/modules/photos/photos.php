@@ -163,8 +163,6 @@ if($locked=='1' || $locked=='0')
 
 $g_layout['title'] = $req_headline;
 
-$g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>';
-
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  $g_layout['header']. '
@@ -181,7 +179,7 @@ if($g_preferences['photo_show_mode']==1)
 
 if($g_current_user->editPhotoRight())
 {
-    $g_layout['header'] = $g_layout['header']. $g_js_vars. '
+    $g_layout['header'] = $g_layout['header']. '
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
 }

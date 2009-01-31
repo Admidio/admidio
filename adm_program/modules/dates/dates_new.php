@@ -15,12 +15,12 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_date.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_date.php');
 if ($g_preferences['enable_bbcode'] == 1)
 {
-    require('../../system/bbcode.php');
+    require_once('../../system/bbcode.php');
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -114,14 +114,10 @@ else
     $g_layout['title'] = $_GET['headline']. ' anlegen';
 }
 
-$g_layout['header'] = '';
 $g_layout['header'] = '
 <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
 <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
 <script type="text/javascript"><!--
-     //Kontrolliert ob das Anfangsdatum wirklich vor dem Enddatum liegt
-
-
     // Funktion blendet Zeitfelder ein/aus
     function setAllDay()
     {
@@ -149,9 +145,17 @@ $g_layout['header'] = '
             document.getElementById("date_to").value = document.getElementById("date_from").value;
         }
     }
+
     var calPopup = new CalendarPopup("calendardiv");
     calPopup.setCssPrefix("calendar");
---></script>';
+
+    $(document).ready(function() 
+	{
+		setAllDay();
+        $("#dat_headline").focus();
+ 	}); 
+//--></script>';
+
 //Script für BBCode laden
 $javascript = "";
 if ($g_preferences['enable_bbcode'] == 1)
@@ -359,11 +363,7 @@ echo '
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>
-<script type="text/javascript">
-    document.getElementById(\'dat_headline\').focus();
-    setAllDay();
-</script>';
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>

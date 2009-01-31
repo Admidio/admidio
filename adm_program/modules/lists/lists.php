@@ -148,7 +148,7 @@ else
 {
     $g_layout['title']  = 'Übersicht der inaktiven Rollen';
 }
-$g_layout['header'] = $g_js_vars. '
+$g_layout['header'] = '
     <script type="text/javascript"><!--
         function showCategory()
         {

@@ -138,12 +138,6 @@ if(isset($g_preferences['theme']) == false)
 define('THEME_SERVER_PATH', SERVER_PATH. "/adm_themes/". $g_preferences['theme']);
 define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
 
-// globale Javascript-Variablen die in den Scripten genutzt werden koennen
-$g_js_vars = '<script type="text/javascript"><!-- 
-var gRootPath  = "'. $g_root_path. '"; 
-var gThemePath = "'. THEME_PATH. '"; 
---></script>'; 
-
 // pruefen, ob Datenbank-Version zu den Scripten passt
 if(isset($g_preferences['db_version']) == false
 || version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)

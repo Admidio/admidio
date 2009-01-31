@@ -17,22 +17,22 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
+require_once('../../system/common.php');
 // Registrierung muss ausgeloggt moeglich sein
 if(isset($_GET['new_user']) && $_GET['new_user'] != 2)
 {
-    require("../../system/login_valid.php");
+    require_once('../../system/login_valid.php');
 }
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]))
+if(isset($_GET['user_id']))
 {
-    if(is_numeric($_GET["user_id"]) == false)
+    if(is_numeric($_GET['user_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    $usr_id = $_GET["user_id"];
+    $usr_id = $_GET['user_id'];
 }
 else
 {
@@ -67,7 +67,7 @@ if($new_user == 2)
     // Registrierung deaktiviert, also auch diesen Modus sperren
     if($g_preferences['registration_mode'] == 0)
     {
-        $g_message->show("module_disabled");
+        $g_message->show('module_disabled');
     }
 }
 else
@@ -75,7 +75,7 @@ else
     // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
     if($g_current_user->editProfile($usr_id) == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
 
 
@@ -90,15 +90,15 @@ if($new_user == 0)
     if(isMember($usr_id) == false)
     {
         // pruefen, ob der User noch in anderen Organisationen aktiv ist
-        $sql    = "SELECT *
-                     FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
+        $sql    = 'SELECT *
+                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
                     WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id
-                      AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
+                      AND cat_org_id <> '. $g_current_organization->getValue('org_id'). '
                       AND mem_rol_id  = rol_id
-                      AND mem_begin  <= '".DATE_NOW."'
-                      AND mem_end     > '".DATE_NOW."'
-                      AND mem_usr_id  = $usr_id ";
+                      AND mem_begin  <= "'.DATE_NOW.'"
+                      AND mem_end     > "'.DATE_NOW.'"
+                      AND mem_usr_id  = '.$usr_id;
         $g_db->query($sql);
         $b_other_orga = false;
 
@@ -106,10 +106,10 @@ if($new_user == 0)
         {
             // User, der woanders noch aktiv ist, darf in dieser Orga nicht bearbeitet werden
             // falls doch eine Registrierung vorliegt, dann darf Profil angezeigt werden
-            if($user->getValue("usr_valid") != 0 
-            || $user->getValue("usr_reg_org_shortname") != $g_current_organization->getValue("org_shortname"))
+            if($user->getValue('usr_valid') != 0 
+            || $user->getValue('usr_reg_org_shortname') != $g_current_organization->getValue('org_shortname'))
             {
-                $g_message->show("norights");
+                $g_message->show('norights');
             }
         }
 
@@ -125,21 +125,21 @@ if(isset($_SESSION['profile_request']))
     
     foreach($user->userFieldData as $field)
     {
-        $field_name = "usf-". $field->getValue("usf_id");
+        $field_name = 'usf-'. $field->getValue('usf_id');
         if(isset($form_values[$field_name]))
         {
             // Datum rest einmal wieder in MySQL-Format bringen
-            if($field->getValue("usf_type") == "DATE" && strlen($form_values[$field_name]) > 0)
+            if($field->getValue('usf_type') == 'DATE' && strlen($form_values[$field_name]) > 0)
             {
-                $form_values[$field_name] = dtFormatDate($form_values[$field_name], "Y-m-d");
+                $form_values[$field_name] = dtFormatDate($form_values[$field_name], 'Y-m-d');
             }
-            $user->setValue($field->getValue("usf_name"), $form_values[$field_name]);
+            $user->setValue($field->getValue('usf_name'), $form_values[$field_name]);
         }
     }
     
-    if(isset($form_values["usr_login_name"]))
+    if(isset($form_values['usr_login_name']))
     {
-        $user->setValue("usr_login_name", $form_values["usr_login_name"]);
+        $user->setValue('usr_login_name', $form_values['usr_login_name']);
     }
     
     unset($_SESSION['profile_request']);
@@ -151,13 +151,13 @@ if(isset($_SESSION['profile_request']))
 function getFieldCode($field, $user, $new_user)
 {
     global $g_preferences, $g_root_path, $g_current_user;
-    $value    = "";
+    $value    = '';
     
     // Felder sperren, falls dies so eingestellt wurde
-    $readonly = "";
-    if($field->getValue("usf_disabled") == 1 && $g_current_user->editUsers() == false && $new_user == 0)
+    $readonly = '';
+    if($field->getValue('usf_disabled') == 1 && $g_current_user->editUsers() == false && $new_user == 0)
     {
-        if($field->getValue("usf_type") == "CHECKBOX" || $field->getValue("usf_name") == "Geschlecht")
+        if($field->getValue('usf_type') == 'CHECKBOX' || $field->getValue('usf_name') == 'Geschlecht')
         {
             $readonly = ' disabled="disabled" ';
         }
@@ -168,33 +168,33 @@ function getFieldCode($field, $user, $new_user)
     }
 
     // Code fuer die einzelnen Felder zusammensetzen    
-    if($field->getValue("usf_name") == "Geschlecht")
+    if($field->getValue('usf_name') == 'Geschlecht')
     {
-        $checked_female = "";
-        $checked_male   = "";
-        if($field->getValue("usd_value") == 2)
+        $checked_female = '';
+        $checked_male   = '';
+        if($field->getValue('usd_value') == 2)
         {
             $checked_female = ' checked="checked" ';
         }
-        elseif($field->getValue("usd_value") == 1)
+        elseif($field->getValue('usd_value') == 1)
         {
             $checked_male = ' checked="checked" ';
         }
-        $value = '<input type="radio" id="female" name="usf-'. $field->getValue("usf_id"). '" value="2" '.$checked_female.' '.$readonly.' />
+        $value = '<input type="radio" id="female" name="usf-'. $field->getValue('usf_id'). '" value="2" '.$checked_female.' '.$readonly.' />
             <label for="female"><img src="'. THEME_PATH. '/icons/female.png" title="weiblich" alt="weiblich" /></label>
             &nbsp;
-            <input type="radio" id="male" name="usf-'. $field->getValue("usf_id"). '" value="1" '.$checked_male.' '.$readonly.' />
+            <input type="radio" id="male" name="usf-'. $field->getValue('usf_id'). '" value="1" '.$checked_male.' '.$readonly.' />
             <label for="male"><img src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" /></label>';
     }
-    elseif($field->getValue("usf_name") == "Land")
+    elseif($field->getValue('usf_name') == 'Land')
     {
         //Laenderliste oeffnen
-        $landlist = fopen(SERVER_PATH. "/adm_program/system/staaten.txt", "r");
+        $landlist = fopen(SERVER_PATH. '/adm_program/system/staaten.txt', 'r');
         $value = '
-        <select size="1" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '">
+        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '">
             <option value="" ';
                 if(strlen($g_preferences['default_country']) == 0
-                && strlen($field->getValue("usd_value")) == 0)
+                && strlen($field->getValue('usd_value')) == 0)
                 {
                     $value = $value. ' selected="selected" ';
                 }
@@ -213,7 +213,7 @@ function getFieldCode($field, $user, $new_user)
                      {
                         $value = $value. ' selected="selected" ';
                      }
-                     if(!$new_user > 0 && $land == $field->getValue("usd_value"))
+                     if(!$new_user > 0 && $land == $field->getValue('usd_value'))
                      {
                         $value = $value. ' selected="selected" ';
                      }
@@ -222,43 +222,43 @@ function getFieldCode($field, $user, $new_user)
             }
         $value = $value. '</select>';
     }
-    elseif($field->getValue("usf_type") == "CHECKBOX")
+    elseif($field->getValue('usf_type') == 'CHECKBOX')
     {
-        $mode = "";
-        if($field->getValue("usd_value") == 1)
+        $mode = '';
+        if($field->getValue('usd_value') == 1)
         {
             $mode = ' checked="checked" ';
         }
-        $value = '<input type="checkbox" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" '.$mode.' '.$readonly.' value="1" />';
+        $value = '<input type="checkbox" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" '.$mode.' '.$readonly.' value="1" />';
     }
-    elseif($field->getValue("usf_type") == "TEXT_BIG")
+    elseif($field->getValue('usf_type') == 'TEXT_BIG')
     {
-        $value = '<textarea name="usf-'. $field->getValue("usf_id"). '" id="usf-'. $field->getValue("usf_id"). '" '.$readonly.' style="width: 300px;" rows="2" cols="40">'. $field->getValue("usd_value"). '</textarea>';
+        $value = '<textarea name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '" '.$readonly.' style="width: 300px;" rows="2" cols="40">'. $field->getValue('usd_value'). '</textarea>';
     }
     else
     {
-        if($field->getValue("usf_type") == "DATE")
+        if($field->getValue('usf_type') == 'DATE')
         {
-            $width = "80px";
-            $maxlength = "10";
-            if(strlen($field->getValue("usd_value")) > 0)
+            $width = '80px';
+            $maxlength = '10';
+            if(strlen($field->getValue('usd_value')) > 0)
             {
-                $field->setValue("usd_value", mysqldate('d.m.y', $field->getValue("usd_value")));
+                $field->setValue('usd_value', mysqldate('d.m.y', $field->getValue('usd_value')));
             }
         }
-        elseif($field->getValue("usf_type") == "EMAIL" || $field->getValue("usf_type") == "URL")
+        elseif($field->getValue('usf_type') == 'EMAIL' || $field->getValue('usf_type') == 'URL')
         {
-            $width     = "300px";
-            $maxlength = "50";
+            $width     = '300px';
+            $maxlength = '50';
         }
         else
         {
-            $width = "200px";
-            $maxlength = "50";
+            $width = '200px';
+            $maxlength = '50';
         }
-        if($field->getValue("usf_type") == "DATE")
+        if($field->getValue('usf_type') == 'DATE')
         {
-            if($field->getValue("usf_name") == 'Geburtstag')
+            if($field->getValue('usf_name') == 'Geburtstag')
             {
                 $value = '<script type="text/javascript">
                             var calBirthday = new CalendarPopup("calendardiv");
@@ -267,7 +267,7 @@ function getFieldCode($field, $user, $new_user)
                             calBirthday.setYearSelectStartOffset(90);
                             calBirthday.setYearSelectEndOffset(0);
                         </script>';
-                $calObject = "calBirthday";
+                $calObject = 'calBirthday';
             }
             else
             {
@@ -278,66 +278,66 @@ function getFieldCode($field, $user, $new_user)
                             calDate.setYearSelectStartOffset(50);
                             calDate.setYearSelectEndOffset(10);
                         </script>';
-                $calObject = "calDate";
+                $calObject = 'calDate';
             }
             $value .= '
-                    <input type="text" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" 
-                        maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />
-                    <a class="iconLink" id="anchor_'. $field->getValue("usf_id"). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue("usf_id"). '\'),\'anchor_'. $field->getValue("usf_id"). '\',\'dd.MM.yyyy\');"><img 
+                    <input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" 
+                        maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue('usd_value'). '" '.$readonly.' />
+                    <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\'dd.MM.yyyy\');"><img 
                     	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
         else
         {
-            $value = '<input type="text" id="usf-'. $field->getValue("usf_id"). '" name="usf-'. $field->getValue("usf_id"). '" style="width: '.$width.';" maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue("usd_value"). '" '.$readonly.' />';
+            $value = '<input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue('usd_value'). '" '.$readonly.' />';
         }
     }
     
     // Icons der Messenger anzeigen
-    $icon = "";
-    if($field->getValue("usf_name") == 'AIM')
+    $icon = '';
+    if($field->getValue('usf_name') == 'AIM')
     {
-        $icon = "aim.png";
+        $icon = 'aim.png';
     }
-    elseif($field->getValue("usf_name") == 'Google Talk')
+    elseif($field->getValue('usf_name') == 'Google Talk')
     {
-        $icon = "google.gif";
+        $icon = 'google.gif';
     }
-    elseif($field->getValue("usf_name") == 'ICQ')
+    elseif($field->getValue('usf_name') == 'ICQ')
     {
-        $icon = "icq.png";
+        $icon = 'icq.png';
     }
-    elseif($field->getValue("usf_name") == 'MSN')
+    elseif($field->getValue('usf_name') == 'MSN')
     {
-        $icon = "msn.png";
+        $icon = 'msn.png';
     }
-    elseif($field->getValue("usf_name") == 'Skype')
+    elseif($field->getValue('usf_name') == 'Skype')
     {
-        $icon = "skype.png";
+        $icon = 'skype.png';
     }
-    elseif($field->getValue("usf_name") == 'Yahoo')
+    elseif($field->getValue('usf_name') == 'Yahoo')
     {
-        $icon = "yahoo.png";
+        $icon = 'yahoo.png';
     }
     if(strlen($icon) > 0)
     {
-        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $field->getValue("usf_name"). '" />&nbsp;';
+        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $field->getValue('usf_name'). '" />&nbsp;';
     }
         
     // Kennzeichen fuer Pflichtfeld setzen
-    $mandatory = "";
-    if($field->getValue("usf_mandatory") == 1)
+    $mandatory = '';
+    if($field->getValue('usf_mandatory') == 1)
     {
         $mandatory = '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
-    $description = "";
-    if(strlen($field->getValue("usf_description")) > 0 && $field->getValue("cat_name") != "Messenger")
+    $description = '';
+    if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name') != 'Messenger')
     {
         $description = '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue("usf_name"). '&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
-            onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue("usf_name"). '\',this);" onmouseout="ajax_hideTooltip()" />';
+            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+            onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '\',this);" onmouseout="ajax_hideTooltip()" />';
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
@@ -354,39 +354,53 @@ function getFieldCode($field, $user, $new_user)
 // Html-Kopf ausgeben
 if($new_user == 1)
 {
-    $g_layout['title'] = "Neuer Benutzer";
+    $g_layout['title'] = 'Neuer Benutzer';
 }
 elseif($new_user == 2)
 {
-    $g_layout['title'] = "Registrieren";
+    $g_layout['title'] = 'Registrieren';
 }
-elseif($usr_id == $g_current_user->getValue("usr_id"))
+elseif($usr_id == $g_current_user->getValue('usr_id'))
 {
-    $g_layout['title'] = "Mein Profil";
+    $g_layout['title'] = 'Mein Profil';
 }
 else
 {
-    $g_layout['title'] = "Profil von ". $user->getValue("Vorname"). " ". $user->getValue("Nachname");
+    $g_layout['title'] = 'Profil von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname');
+}
+if($g_current_user->editUsers() || $new_user > 0)
+{
+    $focusField = 'usf-'. $g_current_user->getProperty('Nachname', 'usf_id');
+}
+else
+{
+    $focusField = 'usf-'. $g_current_user->getProperty('Adresse', 'usf_id');
 }
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
+    <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+    <script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            $("#'.$focusField.'").focus();
+	 	}); 
+	//--></script>';
 
-echo "
-<form action=\"$g_root_path/adm_program/modules/profile/profile_save.php?user_id=$usr_id&amp;new_user=$new_user\" method=\"post\">
-<div class=\"formLayout\" id=\"edit_profile_form\">
-    <div class=\"formHead\">". $g_layout['title']. "</div>
-    <div class=\"formBody\">"; 
+require(THEME_SERVER_PATH. '/overall_header.php');
+
+echo '
+<form action="'.$g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$usr_id.'&amp;new_user='.$new_user.'" method="post">
+<div class="formLayout" id="edit_profile_form">
+    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formBody">'; 
         // *******************************************************************************
         // Schleife ueber alle Kategorien und Felder ausser den Stammdaten
         // *******************************************************************************
 
-        $category = "";
+        $category = '';
         
         foreach($user->userFieldData as $field)
         {
@@ -396,7 +410,7 @@ echo "
             // E-Mail ist Ausnahme und muss immer angezeigt werden
             if($new_user == 2 
             && $g_preferences['registration_mode'] == 1 
-            && ($field->getValue("usf_mandatory") == 1 || $field->getValue("usf_name") == "E-Mail"))
+            && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name') == 'E-Mail'))
             {
                 $show_field = true;
             }
@@ -407,7 +421,7 @@ echo "
                 $show_field = true;
             }
             elseif($new_user != 2 
-            && ($usr_id == $g_current_user->getValue("usr_id") || $g_current_user->editUsers()))
+            && ($usr_id == $g_current_user->getValue('usr_id') || $g_current_user->editUsers()))
             {
                 // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
                 // Leiter duerfen dies nicht !!!
@@ -416,23 +430,23 @@ echo "
         
             // Kategorienwechsel den Kategorienheader anzeigen
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-            if($category != $field->getValue("cat_name")
+            if($category != $field->getValue('cat_name')
             && $show_field == true)
             {
                 if(strlen($category) > 0)
                 {
                     // div-Container groupBoxBody und groupBox schliessen
-                    echo "</ul></div></div>";
+                    echo '</ul></div></div>';
                 }
-                $category = $field->getValue("cat_name");
+                $category = $field->getValue('cat_name');
 
-                echo "<a name=\"cat-". $field->getValue("cat_id"). "\"></a>
-                <div class=\"groupBox\">
-                    <div class=\"groupBoxHeadline\">". $field->getValue("cat_name"). "</div>
-                    <div class=\"groupBoxBody\">
-                        <ul class=\"formFieldList\">";
+                echo '<a name="cat-'. $field->getValue('cat_id'). '"></a>
+                <div class="groupBox">
+                    <div class="groupBoxHeadline">'. $field->getValue('cat_name'). '</div>
+                    <div class="groupBoxBody">
+                        <ul class="formFieldList">';
                         
-                if($field->getValue("cat_name") == "Stammdaten")
+                if($field->getValue('cat_name') == 'Stammdaten')
                 {
                     // bei den Stammdaten erst einmal Benutzername und Passwort anzeigen
                     if($usr_id > 0 || $new_user == 2)
@@ -515,62 +529,62 @@ echo "
         }
         
         // div-Container groupBoxBody und groupBox schliessen
-        echo "</ul></div></div>";
+        echo '</ul></div></div>';
 
         // User, die sich registrieren wollen, bekommen jetzt noch das Captcha praesentiert,
         // falls es in den Orgaeinstellungen aktiviert wurde...
         if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
         {
-            echo "
-            <ul class=\"formFieldList\">
+            echo '
+            <ul class="formFieldList">
                 <li>
                     <dl>
                         <dt>&nbsp;</dt>
-                        <dd><img src=\"$g_root_path/adm_program/system/classes/captcha.php?id=". time(). "\" alt=\"Captcha\" /></dd>
+                        <dd><img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '" alt="Captcha" /></dd>
                     </dl>
                 </li>
                 <li>
                     <dl>
                         <dt>Bestätigungscode:</dt>
                         <dd>
-                            <input type=\"text\" id=\"captcha\" name=\"captcha\" style=\"width: 200px;\" maxlength=\"8\" value=\"\" />
-                            <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" 
-                                onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=captcha_help',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
+                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                            <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
+                                onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true\',\'Message\',\'width=400,height=300,left=310,top=200,scrollbars=yes\')" 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this);" onmouseout="ajax_hideTooltip()" />
                         </dd>
                     </dl>
                 </li>
             </ul>
-            <hr />";
+            <hr />';
         }
 
         // Bild und Text fuer den Speichern-Button
         if($new_user == 2)
         {
             // Registrierung
-            $btn_image = "email.png";
-            $btn_text  = "Abschicken";
+            $btn_image = 'email.png';
+            $btn_text  = 'Abschicken';
         }
         else
         {
-            $btn_image = "disk.png";
-            $btn_text  = "Speichern";
+            $btn_image = 'disk.png';
+            $btn_text  = 'Speichern';
         }
 
         if($new_user == 0)
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($g_db, $user->getValue("usr_usr_id_create"));
-                echo 'Angelegt von '. $user_create->getValue("Vorname"). ' '. $user_create->getValue("Nachname").
-                ' am '. mysqldatetime("d.m.y h:i", $user->getValue("usr_timestamp_create"));
+                $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
+                echo 'Angelegt von '. $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname').
+                ' am '. mysqldatetime('d.m.y h:i', $user->getValue('usr_timestamp_create'));
 
-                if($user->getValue("usr_usr_id_change") > 0)
+                if($user->getValue('usr_usr_id_change') > 0)
                 {
-                    $user_change = new User($g_db, $user->getValue("usr_usr_id_change"));
-                    echo '<br />Zuletzt bearbeitet von '. $user_change->getValue("Vorname"). ' '. $user_change->getValue("Nachname").
-                    ' am '. mysqldatetime("d.m.y h:i", $user->getValue("usr_timestamp_change"));
+                    $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
+                    echo '<br />Zuletzt bearbeitet von '. $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
+                    ' am '. mysqldatetime('d.m.y h:i', $user->getValue('usr_timestamp_change'));
                 }
             echo '</div>';
         }
@@ -593,19 +607,8 @@ echo "
             <a href="'. $g_root_path. '/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>
+</ul>';
 
-<script type="text/javascript"><!--\n';
-    if($g_current_user->editUsers() || $new_user > 0)
-    {
-        echo 'document.getElementById(\'usf-'. $g_current_user->getProperty("Nachname", "usf_id"). '\').focus();';
-    }
-    else
-    {
-        echo 'document.getElementById(\'usf-'. $g_current_user->getProperty("Adresse", "usf_id"). '\').focus();';
-    }
-echo '\n--></script>';
-
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

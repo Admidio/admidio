@@ -15,11 +15,11 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/table_guestbook.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_guestbook.php');
 if ($g_preferences['enable_bbcode'] == 1)
 {
-    require('../../system/bbcode.php');
+    require_once('../../system/bbcode.php');
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -31,7 +31,7 @@ if ($g_preferences['enable_guestbook_module'] == 0)
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 }
 
 
@@ -146,8 +146,23 @@ if ($g_preferences['enable_bbcode'] == 1)
     $javascript = getBBcodeJS('gbo_text');
 }
 
-$g_layout['header'] = '';
-$g_layout['header'] .= $javascript;
+if ($g_current_user->getValue('usr_id') == 0)
+{
+    $focusField = 'gbo_name';
+}
+else
+{
+    $focusField = 'gbo_text';
+}
+
+$g_layout['header'] = $javascript. '
+	<script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            $("#'.$focusField.'").focus();
+	 	}); 
+	//--></script>';
+
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
@@ -264,20 +279,6 @@ echo '
         </span>
     </li>
 </ul>';
-
-if ($g_current_user->getValue('usr_id') == 0)
-{
-    $focusField = 'gbo_name';
-}
-else
-{
-    $focusField = 'gbo_text';
-}
-
-echo'
-<script type="text/javascript"><!--
-    document.getElementById(\''.$focusField.'\').focus();
---></script>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 
