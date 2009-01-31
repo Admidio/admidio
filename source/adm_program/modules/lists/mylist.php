@@ -99,7 +99,7 @@ elseif($req_lst_id > 0)
 
 // Html-Kopf ausgeben
 $g_layout['title']  = 'Eigene Liste - Einstellungen';
-$g_layout['header'] = $g_js_vars. '
+$g_layout['header'] = '
     <script type="text/javascript">
         var fieldNumberIntern      = 0;
         var arr_user_fields    = createUserFieldsArray();

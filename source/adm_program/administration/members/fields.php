@@ -9,27 +9,27 @@
  *
  ****************************************************************************/
  
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['fields_request']);
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
-$g_layout['title']  = "Profilfelder";
-$g_layout['header'] = $g_js_vars. "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/js/ajax.js\"></script>
+$g_layout['title']  = 'Profilfelder';
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     
-    <script type=\"text/javascript\"><!--
+    <script type="text/javascript"><!--
         function moveCategory(direction, usfID)
         {
-            var actRow = document.getElementById('row_' + usfID);
+            var actRow = document.getElementById("row_" + usfID);
             var childs = actRow.parentNode.childNodes;
             var prevNode    = null;
             var nextNode    = null;
@@ -42,7 +42,7 @@ $g_layout['header'] = $g_js_vars. "
             // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
             for(i=0;i < childs.length; i++)
             {
-                if(childs[i].tagName == 'TR')
+                if(childs[i].tagName == "TR")
                 {
                     actRowCount++;
                     if(actSequence > 0 && nextNode == null)
@@ -50,7 +50,7 @@ $g_layout['header'] = $g_js_vars. "
                         nextNode = childs[i];
                     }
                     
-                    if(childs[i].id == 'row_' + usfID)
+                    if(childs[i].id == "row_" + usfID)
                     {
                         actSequence = actRowCount;
                     }
@@ -63,12 +63,12 @@ $g_layout['header'] = $g_js_vars. "
             }
             
             // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-            if(direction == 'up')
+            if(direction == "up")
             {
                 if(prevNode != null)
                 {
                     actRow.parentNode.insertBefore(actRow, prevNode);
-                    secondUsfId = prevNode.getAttribute('id').substr(4);
+                    secondUsfId = prevNode.getAttribute("id").substr(4);
                     secondSequence = actSequence - 1;
                 }
             }
@@ -77,7 +77,7 @@ $g_layout['header'] = $g_js_vars. "
                 if(nextNode != null)
                 {
                     actRow.parentNode.insertBefore(nextNode, actRow);
-                    secondUsfId = nextNode.getAttribute('id').substr(4);
+                    secondUsfId = nextNode.getAttribute("id").substr(4);
                     secondSequence = actSequence + 1;
                 }
             }
@@ -85,18 +85,18 @@ $g_layout['header'] = $g_js_vars. "
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-                resObject.open('GET', gRootPath + '/adm_program/administration/members/fields_function.php?usf_id=' + usfID + '&mode=4&sequence=' + secondSequence, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/members/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + secondSequence, true);
                 resObject.send(null);
                 
                 // jetzt die neue Position von jeweils verschobenen Feld aktualisieren
-                resObject.open('GET', gRootPath + '/adm_program/administration/members/fields_function.php?usf_id=' + secondUsfId + '&mode=4&sequence=' + actSequence, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/members/fields_function.php?usf_id=" + secondUsfId + "&mode=4&sequence=" + actSequence, true);
                 resObject.send(null);
             }
         }
-    --></script>";
+    --></script>';
     
 // Html-Kopf ausgeben
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo "
 <h1 class=\"moduleHeadline\">Profilfelder</h1>
@@ -118,15 +118,15 @@ echo "
     </li>
 </ul>";
 
-$sql = "SELECT * FROM ". TBL_CATEGORIES. ", ". TBL_USER_FIELDS. "
-         WHERE cat_type   = 'USF'
+$sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
+         WHERE cat_type   = "USF"
            AND usf_cat_id = cat_id
-           AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
+           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                OR cat_org_id IS NULL )
-         ORDER BY cat_sequence ASC, usf_sequence ASC ";
+         ORDER BY cat_sequence ASC, usf_sequence ASC ';
 $result = $g_db->query($sql);
 
-$js_drag_drop = "";
+$js_drag_drop = '';
 
 echo "
 <table class=\"tableList\" cellspacing=\"0\">
@@ -155,9 +155,9 @@ echo "
             {
                 if($cat_id > 0)
                 {
-                    echo "</tbody>";
+                    echo '</tbody>';
                 }
-                $block_id = "cat_".$row['cat_id'];
+                $block_id = 'cat_'.$row['cat_id'];
                 echo "<tbody>
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"8\">
@@ -280,6 +280,6 @@ echo "</table>
     </li>
 </ul>";
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

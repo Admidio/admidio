@@ -173,8 +173,23 @@ if ($g_preferences['enable_bbcode'] == 1)
     $javascript = getBBcodeJS('gbc_text');
 }
 
-$g_layout['header'] = '';
-$g_layout['header'] .= $javascript;
+if ($g_current_user->getValue('usr_id') == 0)
+{
+    $focusField = 'gbc_name';
+}
+else
+{
+    $focusField = 'gbc_text';
+}
+
+$g_layout['header'] = $javascript. '
+	<script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            $("#'.$focusField.'").focus();
+	 	}); 
+	//--></script>';
+
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
@@ -273,20 +288,6 @@ echo '
         </span>
     </li>
 </ul>';
-
-if ($g_current_user->getValue('usr_id') == 0)
-{
-    $focusField = 'gbc_name';
-}
-else
-{
-    $focusField = 'gbc_text';
-}
-
-echo'
-<script type="text/javascript"><!--
-    document.getElementById(\''.$focusField.'\').focus();
---></script>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 

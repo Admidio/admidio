@@ -9,20 +9,20 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_text.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_text.php');
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
-if($g_debug == 0 && file_exists("../../../adm_install"))
+if($g_debug == 0 && file_exists('../../../adm_install'))
 {
-    $g_message->show("installFolderExists");
+    $g_message->show('installFolderExists');
 }
 
 // Navigation faengt hier im Modul an
@@ -48,13 +48,13 @@ else
     }
 
     // Forumpassword immer auf 0000 setzen, damit es nicht ausgelesen werden kann
-    $form_values['forum_pw'] = "0000";
+    $form_values['forum_pw'] = '0000';
 }
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
-$g_layout['title']  = "Organisationseinstellungen";
-$g_layout['header'] =  "
-    <style type=\"text/css\">
+$g_layout['title']  = 'Organisationseinstellungen';
+$g_layout['header'] =  '
+    <style type="text/css">
         .groupBox {
             visibility: hidden;
             display:    none;
@@ -62,11 +62,11 @@ $g_layout['header'] =  "
         }
     </style>
 
-    <script type=\"text/javascript\"><!--
+    <script type="text/javascript"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
-        ids = new Array('general', 'register', 'announcement-module', 'download-module', 'photo-module', 'forum',
-                        'guestbook-module', 'list-module', 'mail-module', 'system-mail', 'ecard-module', 'profile-module',
-                        'dates-module', 'links-module', 'messages-module');
+        ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
+                        "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
+                        "dates-module", "links-module", "messages-module");
 
 
         // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -76,31 +76,31 @@ $g_layout['header'] =  "
             for (i=0;i<ids.length;i++)
             {
                 // Erstmal alle DIVs aus unsichtbar setzen
-                document.getElementById(ids[i]).style.visibility = 'hidden';
-                document.getElementById(ids[i]).style.display    = 'none';
+                document.getElementById(ids[i]).style.visibility = "hidden";
+                document.getElementById(ids[i]).style.display    = "none";
             }
             // Angeforderten Bereich anzeigen
-            document.getElementById(element_id).style.visibility = 'visible';
-            document.getElementById(element_id).style.display    = 'block';
+            document.getElementById(element_id).style.visibility = "visible";
+            document.getElementById(element_id).style.display    = "block";
             // window.blur();
         }
         // Versteckt oder zeigt weitere Einstellungsmöglichkeiten
         function showHideMoreSettings(LayerSetting,LayerSwith,LayerSettingName,Setting)
         {
-            if(document.getElementById(LayerSwith).value == \"1\" && document.getElementById(LayerSetting))
+            if(document.getElementById(LayerSwith).value == "1" && document.getElementById(LayerSetting))
             {
                 if(Setting == 0)
                 {
-                    document.getElementById(LayerSetting).innerHTML = \"<input type='text' id='LayerSettingName' name='LayerSettingName' size='4' maxlength='4' value='". $form_values['ecard_cc_recipients']. "' />\";
+                    document.getElementById(LayerSetting).innerHTML = \'<input type="text" id="LayerSettingName" name="LayerSettingName" size="4" maxlength="4" value="'. $form_values["ecard_cc_recipients"]. '" />\';
                 }
                 else if(Setting == 1)
                 {
-                    document.getElementById(LayerSetting).innerHTML = \"<input type='text' id='LayerSettingName' name='LayerSettingName' size='4' maxlength='4' value='". $form_values['ecard_text_length']. "' />\";
+                    document.getElementById(LayerSetting).innerHTML = \'<input type="text" id="LayerSettingName" name="LayerSettingName" size="4" maxlength="4" value="'. $form_values["ecard_text_length"]. '" />\';
                 }
             }
             else if(document.getElementById(LayerSetting))
             {
-                    document.getElementById(LayerSetting).innerHTML = \"\";
+                    document.getElementById(LayerSetting).innerHTML = "";
             }
         }
         function drawForumAccessDataTable(LayerSetting,LayerSwith)
@@ -108,42 +108,42 @@ $g_layout['header'] =  "
             var layerSetting = document.getElementById(LayerSetting);
             if(document.getElementById(LayerSwith).checked == true && layerSetting)
             {
-                document.getElementById('forum_access_data').style.visibility = 'hidden';
-                document.getElementById('forum_access_data').style.display    = 'none';
-                document.getElementById('forum_access_data_text').style.visibility = 'hidden';
-                document.getElementById('forum_access_data_text').style.display    = 'none';
-                document.getElementById('forum_srv').value = '';
-                document.getElementById('forum_usr').value = '';
-                document.getElementById('forum_pw').value = '';
-                document.getElementById('forum_db').value = '';
+                document.getElementById("forum_access_data").style.visibility = "hidden";
+                document.getElementById("forum_access_data").style.display    = "none";
+                document.getElementById("forum_access_data_text").style.visibility = "hidden";
+                document.getElementById("forum_access_data_text").style.display    = "none";
+                document.getElementById("forum_srv").value = "";
+                document.getElementById("forum_usr").value = "";
+                document.getElementById("forum_pw").value = "";
+                document.getElementById("forum_db").value = "";
             }
             else if (document.getElementById(LayerSwith).checked == false && layerSetting)
             {
-                var ElementsArray = Array('forum_srv','forum_usr','forum_pw','forum_db');
+                var ElementsArray = Array("forum_srv","forum_usr","forum_pw","forum_db");
                 var ValuesArray = Array();
-                ValuesArray[0] = Array(\"Server:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_srv']. "\");
-                ValuesArray[1] = Array(\"User:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_usr']. "\");
-                ValuesArray[2] = Array(\"Passwort:\",\"PASSWORD\",\"200px\",\"50\",\"". $form_values['forum_pw']. "\");
-                ValuesArray[3] = Array(\"Datenbank:\",\"TEXT\",\"200px\",\"50\",\"". $form_values['forum_db']. "\");
+                ValuesArray[0] = Array("Server:","TEXT","200px","50","'. $form_values['forum_srv']. '");
+                ValuesArray[1] = Array("User:","TEXT","200px","50","'. $form_values['forum_usr']. '");
+                ValuesArray[2] = Array("Passwort:","PASSWORD","200px","50","'. $form_values['forum_pw']. '");
+                ValuesArray[3] = Array("Datenbank:","TEXT","200px","50","'. $form_values['forum_db']. '");
                 appendElements(ElementsArray,ValuesArray,layerSetting);
 
-                document.getElementById('forum_access_data').style.visibility = 'visible';
-                document.getElementById('forum_access_data').style.display    = '';
-                document.getElementById('forum_access_data_text').style.visibility = 'visible';
-                document.getElementById('forum_access_data_text').style.display    = '';
+                document.getElementById("forum_access_data").style.visibility = "visible";
+                document.getElementById("forum_access_data").style.display    = "";
+                document.getElementById("forum_access_data_text").style.visibility = "visible";
+                document.getElementById("forum_access_data_text").style.display    = "";
             }
         }
         function appendElements(array,valuesArray,layer)
         {
-            layer.innerHTML='';
+            layer.innerHTML="";
             for(var i = 0; i < array.length;i++)
             {
-                    var li = document.createElement(\"LI\");
-                    var dl = document.createElement(\"DL\");
-                    var dt = document.createElement(\"DT\");
-                    var dd = document.createElement(\"DD\");
-                    var label = document.createElement(\"label\");
-                    var input = document.createElement(\"input\");
+                    var li = document.createElement("LI");
+                    var dl = document.createElement("DL");
+                    var dt = document.createElement("DT");
+                    var dd = document.createElement("DD");
+                    var label = document.createElement("label");
+                    var input = document.createElement("input");
                     label.appendChild(document.createTextNode(valuesArray[i][0]));
                     input.type=valuesArray[i][1];
                     input.id = array[i];
@@ -159,16 +159,21 @@ $g_layout['header'] =  "
                     layer.appendChild(li);
             }
         }
-    --></script>";
+        
+		$(document).ready(function() 
+		{
+			toggleDiv("general");
+            $("#org_longname").focus();
+	 	});        
+    --></script>';
 
 // Thickboxintegration
 $g_layout['header'] = $g_layout['header']. '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
 	<link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />';
 	
 // Html-Kopf ausgeben
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo "
 <h1 class=\"moduleHeadline\">Organisationseinstellungen</h1>
@@ -2010,122 +2015,114 @@ echo "
         //Einstellungen Nachrichtenmodul
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"messages-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list_small.png\" alt=\"Nachrichten\" />
+        echo '
+        <div class="groupBox" id="messages-module">
+            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/list_small.png" alt="Nachrichten" />
                 Einstellungen Nachrichtenmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_messages_module\">Nachrichtenmodul aktivieren:</label></dt>
+                            <dt><label for="enable_messages_module">Nachrichtenmodul aktivieren:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"enable_messages_module\" name=\"enable_messages_module\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="enable_messages_module" name="enable_messages_module">
+                                    <option value="0" ';
                                     if($form_values['enable_messages_module'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
+                                    echo '>Deaktiviert</option>
+                                    <option value="1" ';
                                     if($form_values['enable_messages_module'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
-                                    <option value=\"2\" ";
+                                    echo '>Aktiviert</option>
+                                    <option value="2" ';
                                     if($form_values['enable_messages_module'] == 2)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Nur für registrierte Benutzer</option>
+                                    echo '>Nur für registrierte Benutzer</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Das Nachrichtenmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
                         aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"messages_reminder\">Email Benachrichtigung:</label></dt>
+                            <dt><label for="messages_reminder">Email Benachrichtigung:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"messages_reminder\" name=\"messages_reminder\" ";
+                                <input type="checkbox" id="messages_reminder" name="messages_reminder" ';
                                 if(isset($form_values['forum_link_intern']) && $form_values['messages_reminder'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                     	Aktiviert: Das Mitglied erh&auml;lt eine Benachrichtigung per Email, wenn neue Nachrichten eintreffen.<br /> 
                     	Deaktiviert: Keine Email Benachrichtigung. 
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"messages_in_box\">Anzahl der Nachrichten im Posteingang:</label></dt>
+                            <dt><label for="messages_in_box">Anzahl der Nachrichten im Posteingang:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"messages_in_box\" name=\"messages_in_box\" 
-                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['messages_in_box']. "\" />
+                                <input type="text" id="messages_in_box" name="messages_in_box" 
+                                    size="4" maxlength="4" value="'. $form_values['messages_in_box']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Anzahl der Nachrichten die sich im Posteingang befinden d&uuml;rfen. Wird die Anzahl
                         &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
                         <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Standard: 0)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"messages_out_box\">Anzahl der Nachrichten im Postausgang:</label></dt>
+                            <dt><label for="messages_out_box">Anzahl der Nachrichten im Postausgang:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"messages_out_box\" name=\"messages_out_box\" 
-                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['messages_out_box']. "\" />
+                                <input type="text" id="messages_out_box" name="messages_out_box" 
+                                    size="4" maxlength="4" value="'. $form_values['messages_out_box']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Anzahl der Nachrichten die sich im Postausgang befinden d&uuml;rfen. Wird die Anzahl
                         &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
                         <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Standard: 0)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"messages_archive\">Anzahl der Nachrichten im Achriv:</label></dt>
+                            <dt><label for="messages_archive">Anzahl der Nachrichten im Achriv:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"messages_archive\" name=\"messages_archive\" 
-                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['messages_archive']. "\" />
+                                <input type="text" id="messages_archive" name="messages_archive" 
+                                    size="4" maxlength="4" value="'. $form_values['messages_archive']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Anzahl der Nachrichten die sich im Nachrichtenarchiv befinden d&uuml;rfen. Wird die Anzahl
-                        &uuml;berschritten, werden immer die &auml;ltesten Nachrichten gel&ouml;scht.
-                        <br />Bei dem Wert 0 werden keine Nachrichten gel&ouml;scht. (Standard: 0)
+                    <li class="smallFontSize">
+                        Anzahl der Nachrichten die sich im Nachrichtenarchiv befinden dürfen. Wird die Anzahl
+                        überschritten, werden immer die ältesten Nachrichten gelöscht.
+                        <br />Bei dem Wert 0 werden keine Nachrichten gelöscht. (Standard: 0)
                     </li>
                 </ul>
         	</div>
-        </div>";
-
-
-    echo "    
+        </div>  
     </div>
 </div>
 
-<div class=\"formLayout\" id=\"organization_save_button\">
-    <div class=\"formBody\">
-        <button name=\"save\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
+<div class="formLayout" id="organization_save_button">
+    <div class="formBody">
+        <button name="save" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
     </div>
 </div>
-</form>
+</form>';
 
-<script type=\"text/javascript\"><!--
-    toggleDiv('general');
-            document.getElementById('org_longname').focus();
---></script>";
-
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>

@@ -148,10 +148,15 @@ elseif($_GET['job']=='change')
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
-    <script type="text/javascript">
+    <script type="text/javascript"><!--
         var calPopup = new CalendarPopup("calendardiv");
         calPopup.setCssPrefix("calendar");
-    </script>';
+        
+        $(document).ready(function() 
+		{
+            $("#pho_name").focus();
+	 	}); 
+    //--></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 
@@ -285,14 +290,7 @@ echo '
             <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=veranst_help&amp;window=true\',\'Message\',\'width=500,height=300,left=310,top=200,scrollbars=yes\')">Hilfe</a>
         </span>
     </li>
-</ul>
-
-
-<script type="text/javascript">
-    <!--
-        document.getElementById("pho_name").focus();
-    -->
-</script>';
+</ul>';
 
 /***********************************Ende********************************************/
 require(THEME_SERVER_PATH. '/overall_footer.php');

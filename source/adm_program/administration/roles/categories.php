@@ -19,60 +19,61 @@
  *
  ****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_type = "";
+$req_type = '';
 
 // Uebergabevariablen pruefen
-$title = "Kategorie";
-if (isset($_GET['title'])) {
+$title = 'Kategorie';
+if (isset($_GET['title'])) 
+{
    $title = $_GET['title'];
 }
 
 // Modus und Rechte pruefen
 if(isset($_GET['type']))
 {
-    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK" && $_GET['type'] != "USF" && $_GET['type'] != "DAT")
+    if($_GET['type'] != 'ROL' && $_GET['type'] != 'LNK' && $_GET['type'] != 'USF' && $_GET['type'] != 'DAT')
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    if($_GET['type'] == "ROL" && $g_current_user->assignRoles() == false)
+    if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
-    if($_GET['type'] == "LNK" && $g_current_user->editWeblinksRight() == false)
+    if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
-    if($_GET['type'] == "USF" && $g_current_user->editUsers() == false)
+    if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
-    if($_GET['type'] == "DAT" && $g_current_user->editdates() == false)
+    if($_GET['type'] == 'DAT' && $g_current_user->editdates() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
     $req_type = $_GET['type'];
 }
 else
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['categories_request']);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "$title-Verwaltung";
-$g_layout['header'] = $g_js_vars. "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/js/ajax.js\"></script>
+$g_layout['title']  = $title.'-Verwaltung';
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
 
-    <script type=\"text/javascript\"><!--
+    <script type="text/javascript"><!--
         function moveCategory(direction, catID)
         {
-            var actRow = document.getElementById('row_' + catID);
+            var actRow = document.getElementById("row_" + catID);
             var childs = actRow.parentNode.childNodes;
             var prevNode    = null;
             var nextNode    = null;
@@ -84,7 +85,7 @@ $g_layout['header'] = $g_js_vars. "
             // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
             for(i=0;i < childs.length; i++)
             {
-                if(childs[i].tagName == 'TR')
+                if(childs[i].tagName == "TR")
                 {
                     actRowCount++;
                     if(actSequence > 0 && nextNode == null)
@@ -92,7 +93,7 @@ $g_layout['header'] = $g_js_vars. "
                         nextNode = childs[i];
                     }
 
-                    if(childs[i].id == 'row_' + catID)
+                    if(childs[i].id == "row_" + catID)
                     {
                         actSequence = actRowCount;
                     }
@@ -105,12 +106,12 @@ $g_layout['header'] = $g_js_vars. "
             }
 
             // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-            if(direction == 'up')
+            if(direction == "up")
             {
                 if(prevNode != null)
                 {
                     actRow.parentNode.insertBefore(actRow, prevNode);
-                    secondCatId = prevNode.getAttribute('id').substr(4);
+                    secondCatId = prevNode.getAttribute("id").substr(4);
                     secondSequence = actSequence - 1;
                 }
             }
@@ -119,7 +120,7 @@ $g_layout['header'] = $g_js_vars. "
                 if(nextNode != null)
                 {
                     actRow.parentNode.insertBefore(nextNode, actRow);
-                    secondCatId = nextNode.getAttribute('id').substr(4);
+                    secondCatId = nextNode.getAttribute("id").substr(4);
                     secondSequence = actSequence + 1;
                 }
             }
@@ -127,20 +128,20 @@ $g_layout['header'] = $g_js_vars. "
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-                resObject.open('GET', gRootPath + '/adm_program/administration/roles/categories_function.php?cat_id=' + catID + '&type=". $_GET['type']. "&mode=4&sequence=' + secondSequence, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/roles/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + secondSequence, true);
                 resObject.send(null);
 
                 // jetzt die neue Position von jeweils verschobenen Kategorie aktualisieren
-                resObject.open('GET', gRootPath + '/adm_program/administration/roles/categories_function.php?cat_id=' + secondCatId + '&type=". $_GET['type']. "&mode=4&sequence=' + actSequence, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/roles/categories_function.php?cat_id=" + secondCatId + "&type='. $_GET["type"]. '&mode=4&sequence=" + actSequence, true);
                 resObject.send(null);
             }
         }
-    --></script>";
+    --></script>';
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
-$icon_login_user = "";
-if($_GET['type'] != "USF")
+$icon_login_user = '';
+if($_GET['type'] != 'USF')
 {
 	$icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$title.' nur für eingeloggte Benutzer sichtbar" title="'.$title.' nur für eingeloggte Benutzer sichtbar" />';
 }
@@ -259,6 +260,6 @@ echo '
     </li>
 </ul>";
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

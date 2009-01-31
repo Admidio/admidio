@@ -93,9 +93,8 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = 'Fotos hochladen';
-$g_layout['header'] = $g_js_vars. '
-<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+$g_layout['title']  = 'Fotos hochladen';
+$g_layout['header'] = '
 <script type="text/javascript"><!--
 	flash_installed = '.$flash.';
 
