@@ -147,7 +147,7 @@ if (count($folderContent) == 0)
     }
 
     echo'<tr>
-       <td colspan="$colspan">Dieser Ordner ist leer</td>
+       <td colspan="'.$colspan.'">Dieser Ordner ist leer</td>
     </tr>';
 }
 else
@@ -176,7 +176,7 @@ else
                     <td style="text-align: center;">
                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
                         <img src="'. THEME_PATH. '/icons/edit.png" alt="Umbenennen" title="Umbenennen" /></a>
-                        <a class="iconLink" href="javascript:deleteObject("fol", "row_folder_'.$nextFolder['fol_id'].'",'.$nextFolder['fol_id'].',"'.$nextFolder['fol_name'].'")">
+                        <a class="iconLink" href="javascript:deleteObject(\'fol\', \'row_folder_'.$nextFolder['fol_id'].'\','.$nextFolder['fol_id'].',\''.$nextFolder['fol_name'].'\')">
                         <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         if (!$nextFolder['fol_exists'])
                         {
@@ -212,7 +212,7 @@ else
             <tr class="tableMouseOver" id="row_file_'.$nextFile['fil_id'].'">
                 <td>
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
-                    <img src="'. THEME_PATH. '/icons/$iconFile" alt="Datei" title="Datei" /></a>
+                    <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="Datei" title="Datei" /></a>
                 </td>
                 <td><a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a></td>
                 <td>'. mysqldatetime('d.m.y h:i', $nextFile['fil_timestamp']). '</td>
