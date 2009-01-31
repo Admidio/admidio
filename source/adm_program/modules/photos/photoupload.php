@@ -213,7 +213,7 @@ echo '</div>
         <span class="iconTextLink">
             <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
-            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700">Hilfe</a>
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700">Hilfe Thickbox</a>
         </span>
     </li>
     <li>
@@ -223,7 +223,7 @@ echo '</div>
                     \'width=500,height=300,left=310,top=200,scrollbars=yes\')"
                 onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help\',this);" onmouseout="ajax_hideTooltip()" />
             <a href="#" onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true\',\'Message\',
-                    \'width=500,height=300,left=310,top=200,scrollbars=yes\')">Hilfe</a>
+                    \'width=500,height=300,left=310,top=200,scrollbars=yes\')">Hilfe bisher</a>
         </span>
     </li>
 </ul>';
