@@ -662,7 +662,10 @@ class TableFolder extends TableAccess
         }
 
         //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
-        return parent::delete();
+
+        if ($folder_id == $this->getValue("fol_id")) {
+            return parent::delete();
+        }
 
     }
 
