@@ -95,6 +95,8 @@ else
 // Html-Kopf ausgeben
 $g_layout['title']  = 'Fotos hochladen';
 $g_layout['header'] = '
+<link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
 <script type="text/javascript"><!--
 	flash_installed = '.$flash.';
 
@@ -122,7 +124,7 @@ $g_layout['header'] = '
 		}
 		return false;
 	}
-	
+
 	$(document).ready(function() 
 	{
 		if(flash_installed == true)
@@ -141,7 +143,7 @@ $g_layout['header'] = '
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
-<div class="formLayout" id="photo_upload_form">
+<div class="formLayout" id="photo_upload_form" style="visibility: hide; display: none;">
 	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '&amp;uploadmethod=1" enctype="multipart/form-data">
 	    <div class="formHead">Bilder hochladen</div>
 	    <div class="formBody">
@@ -180,7 +182,7 @@ echo '
 	</form>
 </div>
 
-<div id="photo_upload_flash">
+<div id="photo_upload_flash" style="visibility: hide; display: none;">
 	<h2>Bilder hochladen</h2>
 	<p>
         Die Bilder werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
@@ -209,11 +211,18 @@ echo '</div>
     </li>    
     <li>
         <span class="iconTextLink">
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700"><img 
+            	src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700">Hilfe</a>
+        </span>
+    </li>
+    <li>
+        <span class="iconTextLink">
             <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
                 onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;&amp;window=true\',\'Message\',
                     \'width=500,height=300,left=310,top=200,scrollbars=yes\')"
                 onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help\',this);" onmouseout="ajax_hideTooltip()" />
-            <a href="#" onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;&amp;window=true\',\'Message\',
+            <a href="#" onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true\',\'Message\',
                     \'width=500,height=300,left=310,top=200,scrollbars=yes\')">Hilfe</a>
         </span>
     </li>
