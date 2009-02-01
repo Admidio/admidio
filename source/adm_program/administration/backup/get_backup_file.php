@@ -43,14 +43,11 @@ else
     $g_message->show('invalid');
 }
 
-// Gefährliche Zeichen aus dem Dateinamen entfernen,
-// damit man nur auf den localen Backup Folder zurgeifen kann
-$filename = str_replace  ( "../"  , ""  , $filename );
-$filename = str_replace  ( "./"  , ""  , $filename );
-$filename = str_replace  ( "/"  , ""  , $filename );
-$filename = str_replace  ( "http"  , ""  , $filename );
-$filename = str_replace  ( ":"  , ""  , $filename );
-$filename = str_replace  ( "//"  , ""  , $filename );
+//Pruefung, ob nur gute Dateinamen uebergeben werden
+if( -2 == isValidFileName($filename) )
+{
+	$g_message->show('invalid');
+}
 
 //kompletten Pfad der Datei holen
 $completePath = $backupabsolutepath.$filename;

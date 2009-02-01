@@ -36,6 +36,18 @@ if(!isset($_GET['file_id']))
 
 if(isset($_GET['job']) && $_GET['job']=='delete')
 {
+//Pruefungen damit nur Backupfiles geloescht werden koennen
+
+$filename= $_GET['file_id'];
+
+//Pruefung, ob nur gute Dateinamen uebergeben werden
+if( -2 == isValidFileName($filename) )
+{
+	exit();
+}
+
+
+//jetzt darf geloescht werden!
     if(unlink($backupabsolutepath.$_GET['file_id']))
     {
         echo 'done'; 
