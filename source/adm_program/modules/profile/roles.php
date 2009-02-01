@@ -205,7 +205,7 @@ echo "
 							($g_current_user->isWebmaster() && $req_usr_id == $g_current_user->getValue("usr_id")))
 						   )
                          {
-                            echo " disabled=\"disabled\" ";
+                           echo " readonly=\"readonly\" ";
                          }
 
                          echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
