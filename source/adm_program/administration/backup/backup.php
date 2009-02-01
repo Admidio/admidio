@@ -45,7 +45,7 @@ $old_backup_files_cp = array();
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-//Zeitpunkt des letzten Backups bestimmen
+//Liste der alten Backup Dateien bestimmen
 if ($handle = opendir($backupabsolutepath)) 
 {
     while (false !== ($file = readdir($handle))) 
@@ -53,11 +53,13 @@ if ($handle = opendir($backupabsolutepath))
         if ($file != '.' && $file != '..' && $file !='.htaccess') 
 		{
             $old_backup_files[] = $file;
-			$old_backup_files_cp[] = $backupabsolutepath.$file;
         }
     }
     closedir($handle);	
 }
+
+// Sortiert die Backupfiles nach Dateiname / Datum
+sort($old_backup_files);
 
 $g_layout['title']  = 'Datenbank Backup';
 $g_layout['header'] = '
@@ -88,7 +90,12 @@ echo '
 	</tr>';
 
     flush();
-
+	
+	if(count($old_backup_file) == 0)
+	{
+		echo'<tr><td colspan="4">Keine Backupdatei vorhanden!</td></tr>';
+	}
+	
     foreach($old_backup_files as $key => $old_backup_file)
     {
         echo '
@@ -97,8 +104,8 @@ echo '
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='. $old_backup_file. '">
                 <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="Datei" title="Datei" /></a>
                 <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='. $old_backup_file. '">'. $old_backup_file. '</a></td>
-            <td>'. date ("d.m.Y H:i:s", filemtime($old_backup_files_cp[$key])). '</td>
-            <td>'. round(filesize($old_backup_files_cp[$key])/1024). ' KB&nbsp;</td>
+            <td>'. date ("d.m.Y H:i:s", filemtime($backupabsolutepath.$old_backup_file)). '</td>
+            <td>'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' KB&nbsp;</td>
             <td style="text-align: center;">
                 <a class="iconLink" href="javascript:deleteObject(\'bck\', \'row_file_'.$key.'\',0,\''.$old_backup_file.'\')">
                 <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>
