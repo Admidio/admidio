@@ -91,6 +91,10 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 		$SelectedTables[] = $value;	
 	}
 	
+	// MYSQL Version ermitteln um spaeter den Storage Engine Type richtig abzufragen
+	$mysql_server_info = mysql_get_server_info();
+    // Ab Version 
+	$TypeEngineKey = (version_compare($mysql_server_info, '4.1.2', '>=') ? 'Engine' : 'Type'); 
 
 	OutputInformation('', null, 'Checking tables...<br><br>');
 	$TableErrors = array();
@@ -212,7 +216,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 		$tablestructure  = 'CREATE TABLE IF NOT EXISTS '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR.' ('.LINE_TERMINATOR;
 		$tablestructure .= '  '.implode(','.LINE_TERMINATOR.'  ', $structurelines).LINE_TERMINATOR;
-		$tablestructure .= ') TYPE='.$TableStatusRow['Engine'];
+		$tablestructure .= ') TYPE='.$TableStatusRow[$TypeEngineKey];
 		if ($TableStatusRow['Auto_increment'] !== null) {
 			$tablestructure .= ' AUTO_INCREMENT='.$TableStatusRow['Auto_increment'];
 		}
