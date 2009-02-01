@@ -750,12 +750,22 @@ echo '
                                                    	$row['cat_name']. '\', \''.mysqldate('d.m.y', $row['mem_begin']).'\', '.$row['mem_leader'].', '.$g_current_user->isWebmaster().')"><img
                                                         src="'.THEME_PATH.'/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
                                                 }
+												else
+												{
+													echo '
+                                                    <a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
+												}
                                                 // Bearbeiten des Datums nicht bei Webmastern möglich
                                                 if ($row['rol_name'] != 'Webmaster') 
                                                 {
                                                     echo '<a class="iconLink" style="cursor:pointer;" onclick="toggleDetailson('.$row['rol_id'].')"><img
                                                         src="'.THEME_PATH.'/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
-                                                } 
+                                                }
+												else
+												{
+													echo '<a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
+												}
+                                                 
                                             }
                                         echo '</dd>
                                     </dl>
