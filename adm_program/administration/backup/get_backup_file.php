@@ -22,14 +22,20 @@ if($g_current_user->isWebmaster() == false)
     $g_message->show('norights');
 }
 
-//pruefen ob eine existierende Datei übergeben wurde
+$backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
+$filename = '';
+
+//pruefen ob eine Dateiname übergeben wurde
 if (array_key_exists('filename', $_GET))
 {
     if (is_string($_GET['filename']) == false)
     {
-        //FileId ist nicht numerisch
+        //FileId ist nicht string
         $g_message->show('invalid');
     }
+	
+	$filename = $_GET['filename'];	
+
 }
 else
 {
@@ -37,11 +43,17 @@ else
     $g_message->show('invalid');
 }
 
-
-$backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
+// Gefährliche Zeichen aus dem Dateinamen entfernen,
+// damit man nur auf den localen Backup Folder zurgeifen kann
+$filename = str_replace  ( "../"  , ""  , $filename );
+$filename = str_replace  ( "./"  , ""  , $filename );
+$filename = str_replace  ( "/"  , ""  , $filename );
+$filename = str_replace  ( "http"  , ""  , $filename );
+$filename = str_replace  ( ":"  , ""  , $filename );
+$filename = str_replace  ( "//"  , ""  , $filename );
 
 //kompletten Pfad der Datei holen
-$completePath = $backupabsolutepath.$_GET['filename'];
+$completePath = $backupabsolutepath.$filename;
 
 
 //pruefen ob File ueberhaupt physikalisch existiert
