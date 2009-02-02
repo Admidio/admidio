@@ -123,7 +123,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 	OutputInformation('statusinfo', '');
 
-	OutputInformation('', '<p><b><span id="topprogress">Gesamtfortschritt:</span></b></p>');
+	OutputInformation('', '<span id="topprogress"><p><b>Gesamtfortschritt:</b></p></span>');
 	$overallrows = 0;
 	echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables) / TABLES_PER_COL).'"><b>'.$g_adm_db.'</b></th></tr><tr><td nowrap valign="top">';
 	$tablecounter = 0;
@@ -402,6 +402,7 @@ echo '<p>Backup fertiggestellt in '.FormattedTimeRemaining(getmicrotime() - $sta
 </ul>';
 
 OutputInformation('cancel_link', '');
+OutputInformation('topprogress', '');
 
 
 require(THEME_SERVER_PATH. '/overall_footer.php');

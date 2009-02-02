@@ -138,15 +138,6 @@ if(isset($g_preferences['theme']) == false)
 define('THEME_SERVER_PATH', SERVER_PATH. "/adm_themes/". $g_preferences['theme']);
 define('THEME_PATH', $g_root_path. "/adm_themes/". $g_preferences['theme']);
 
-// pruefen, ob Datenbank-Version zu den Scripten passt
-if(isset($g_preferences['db_version']) == false
-|| version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
-{
-    unset($_SESSION['g_current_organization']);
-    $g_message->addVariableContent($g_preferences['email_administrator'], 1, false);
-    $g_message->show("database_invalid");
-}
-
 // Daten des angemeldeten Users auch in Session speichern
 if(isset($_SESSION['g_current_user']))
 {
@@ -176,6 +167,15 @@ else
 {
     $g_messages = new Messages($g_db);
     $_SESSION['messages'] =& $g_messages;
+}
+
+// pruefen, ob Datenbank-Version zu den Scripten passt
+if(isset($g_preferences['db_version']) == false
+|| version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
+{
+    unset($_SESSION['g_current_organization']);
+    $g_message->addVariableContent($g_preferences['email_administrator'], 1, false);
+    $g_message->show("database_invalid");
 }
 
 /*********************************************************************************
