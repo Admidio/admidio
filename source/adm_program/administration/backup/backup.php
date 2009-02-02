@@ -91,7 +91,7 @@ echo '
 
     flush();
 	
-	if(count($old_backup_file) == 0)
+	if(count($old_backup_files) == 0)
 	{
 		echo'<tr><td colspan="4">Keine Backupdatei vorhanden!</td></tr>';
 	}
