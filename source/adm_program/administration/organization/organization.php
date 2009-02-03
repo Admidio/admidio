@@ -294,7 +294,7 @@ echo "
                         <dl>
                             <dt><label for=\"version\">Admidio-Version:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"version\" name=\"version\" class=\"readonly\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. BETA_VERSION_TEXT. "\" />&nbsp;
+                                <input type=\"text\" id=\"version\" name=\"version\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. BETA_VERSION_TEXT. "\" />&nbsp;
 								<a class=\"thickbox\" href=\"$g_root_path/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350\">Auf Update prüfen</a>
                             </dd>
                         </dl>
@@ -302,7 +302,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"org_shortname\">Name (Abk.):</label></dt>
-                            <dd><input type=\"text\" id=\"org_shortname\" name=\"org_shortname\" class=\"readonly\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"org_shortname\" name=\"org_shortname\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\" /></dd>
                         </dl>
                     </li>
                     <li>

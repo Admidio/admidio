@@ -278,7 +278,7 @@ echo '
                             if (array_key_exists('usr_id', $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                                echo '<input type="text" class="readonly" readonly="readonly" id="mailto" name="mailto" style="width: 350px;" maxlength="50" value="'.$userEmail.'" />';
+                                echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 350px;" maxlength="50" value="'.$userEmail.'" />';
                             }
                             elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
                             {
@@ -362,7 +362,7 @@ echo '
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo '<input type="text" class="readonly" id="name" name="name" readonly="readonly" style="width: 200px;" maxlength="50" value="'. $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'). '" />';
+                               echo '<input type="text" id="name" name="name" readonly="readonly" style="width: 200px;" maxlength="50" value="'. $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'). '" />';
                             }
                             else
                             {
@@ -378,7 +378,7 @@ echo '
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo '<input type="text" class="readonly" id="mailfrom" name="mailfrom" readonly="readonly" style="width: 350px;" maxlength="50" value="'. $g_current_user->getValue('E-Mail'). '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" readonly="readonly" style="width: 350px;" maxlength="50" value="'. $g_current_user->getValue('E-Mail'). '" />';
                             }
                             else
                             {
@@ -397,7 +397,7 @@ echo '
                         <dd>';
                             if (strlen($_GET['subject']) > 0)
                             {
-                               echo '<input type="text" class="readonly" readonly="readonly" id="subject" name="subject" style="width: 350px;" maxlength="50" value="'. $_GET['subject']. '" />';
+                               echo '<input type="text" readonly="readonly" id="subject" name="subject" style="width: 350px;" maxlength="50" value="'. $_GET['subject']. '" />';
                             }
                             else
                             {
