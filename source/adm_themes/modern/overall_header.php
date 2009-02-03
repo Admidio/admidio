@@ -45,11 +45,11 @@ if(isset($g_layout['includes']) == false)
 
 if(strlen($g_layout['title']) > 0)
 {
-    $g_layout['title'] = $g_current_organization->getValue('org_longname'). ' - '. $g_layout['title'];
+    $g_page_title = $g_current_organization->getValue('org_longname'). ' - '. $g_layout['title'];
 }
 else
 {
-	$g_layout['title'] = $g_current_organization->getValue('org_longname');
+	$g_page_title = $g_current_organization->getValue('org_longname');
 }
 
 header('Content-type: text/html; charset=utf-8'); 
@@ -61,7 +61,7 @@ echo '
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     
-    <title>'. $g_layout['title']. '</title>    
+    <title>'. $g_page_title. '</title>    
     
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
 

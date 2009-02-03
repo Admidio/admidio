@@ -55,14 +55,8 @@ img {
     border-width:       0px;
 }
 
-.readonly {
-    color:              #666666;
-}
-
-/* Elemente, die fuer ein Drag&Drop angefasst werden koennen */
-.dragable {
-    cursor:             move;
-    border-width:       0px;
+*[readonly] {
+    background-color:   #e5e5e5;
 }
 
 textarea {
