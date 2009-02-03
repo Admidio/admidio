@@ -733,15 +733,16 @@ echo '
                                         </dt>
                                         <dd>
                                             seit '. mysqldate('d.m.y', $row['mem_begin']);
+                                            // Datum für die Bearbeitung der Mitgliedschaft wird vorbereitet
+                                            $rol_from = mysqldatetime('d.m.y', $row['mem_begin']);
+                                            $rol_to = NULL;
+                                            if ($row['mem_end'] != '9999-12-31') 
+                                            {
+                                               $rol_to = mysqldatetime("d.m.y", $row['mem_end']);
+                                            }
+
                                             if($g_current_user->assignRoles() || $g_current_user->editUsers())
                                             {
-                                                // Datum für die Bearbeitung der Mitgliedschaft wird vorbereitet
-                                                $rol_from = mysqldatetime('d.m.y', $row['mem_begin']);
-                                                $rol_to = NULL;
-                                                if ($row['mem_end'] != '9999-12-31') 
-                                                {
-                                                   $rol_to = mysqldatetime("d.m.y", $row['mem_end']);
-                                                }
                                                 // Löschen wird nur bei anderen Webmastern ermöglicht
                                                 if (($row['rol_name'] == "Webmaster" && $g_current_user->getValue("usr_id") != $a_user_id) || ($row['rol_name'] != "Webmaster")) 
                                                 {

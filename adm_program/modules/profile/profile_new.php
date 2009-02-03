@@ -163,7 +163,7 @@ function getFieldCode($field, $user, $new_user)
         }
         else
         {
-            $readonly = ' class="readonly" readonly="readonly" ';
+            $readonly = ' readonly="readonly" ';
         }
     }
 
@@ -368,7 +368,12 @@ else
 {
     $g_layout['title'] = 'Profil von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname');
 }
+
 if($g_current_user->editUsers() || $new_user > 0)
+{
+    $focusField = 'usr_login_name';
+}
+elseif($g_current_user->getProperty('Nachname','usf_disabled') == 0)
 {
     $focusField = 'usf-'. $g_current_user->getProperty('Nachname', 'usf_id');
 }
@@ -458,7 +463,7 @@ echo '
                                     <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"35\" value=\"". $user->getValue("usr_login_name"). "\" ";
                                     if($g_current_user->isWebmaster() == false && $new_user == 0)
                                     {
-                                        echo " class=\"readonly\" readonly=\"readonly\" ";
+                                        echo " readonly=\"readonly\" ";
                                     }
                                     echo " />";
                                     if($new_user > 0)

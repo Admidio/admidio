@@ -989,8 +989,8 @@ if (empty($submit_action))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                                 echo '<div id="extern">
-                                        <input type="text" class="readonly" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-                                echo '<input type="text" class="readonly" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                        <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                                echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                      </div>';
 
                             }
@@ -1041,7 +1041,7 @@ if (empty($submit_action))
                     <dl>
                         <dt><label>Absender:</label></dt>
                         <dd>
-                          <input type="text" name="ecard[name_sender]" size="25" class="readonly" readonly="readonly" maxlength="50" style="width: 200px;" value="';
+                          <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
                             if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
                             {
                                echo $ecard["name_sender"];
@@ -1058,7 +1058,7 @@ if (empty($submit_action))
                     <dl>
                         <dt><label>E-Mail:</label></dt>
                         <dd>
-                           <input type="text" name="ecard[email_sender]" size="25" class="readonly" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
+                           <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
                             if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
                             {
                               echo $ecard["email_sender"];

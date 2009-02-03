@@ -218,7 +218,7 @@ echo "
                         // bei bestimmte Rollen darf der Name nicht geaendert werden
                         if($role->getValue("rol_name") == "Webmaster")
                         {
-                            echo " class=\"readonly\" readonly=\"readonly\" ";
+                            echo " readonly=\"readonly\" ";
                         }
                         echo " style=\"width: 320px;\" maxlength=\"50\" value=\"". $role->getValue("rol_name"). "\" />
                         <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>

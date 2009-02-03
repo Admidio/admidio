@@ -161,7 +161,8 @@ if($locked=='1' || $locked=='0')
 
 /*********************HTML_TEIL*******************************/
 
-$g_layout['title'] = $req_headline;
+$g_layout['title']  = $req_headline;
+$g_layout['header'] = '';
 
 if($g_preferences['enable_rss'] == 1)
 {
@@ -652,6 +653,7 @@ echo '<div class="photoModuleContainer">';
     {
         // Navigation mit Vor- und Zurueck-Buttons
         // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
+        $base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id;
         echo generatePagination($base_url, $albums-$ignored, 10, $album_element, TRUE);
     }
 echo '</div>';
