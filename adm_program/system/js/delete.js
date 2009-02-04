@@ -23,6 +23,9 @@ function deleteObject(type, elementId, databaseId, description)
             case "ann":
                 url = gRootPath + "/adm_program/modules/announcements/announcements_function.php?mode=2&ann_id=" + databaseId;
                 break;
+            case "bck":
+                url = gRootPath + "/adm_program/administration/backup/backup_file_function.php?job=delete&file_id=" + description;
+                break;
             case "dat":
                 url = gRootPath + "/adm_program/modules/dates/dates_function.php?mode=2&dat_id=" + databaseId;
                 break;
@@ -47,8 +50,8 @@ function deleteObject(type, elementId, databaseId, description)
             case "pho":
                 url = gRootPath + "/adm_program/modules/photos/photo_album_function.php?job=delete&pho_id=" + databaseId;
                 break;
-            case "bck":
-                url = gRootPath + "/adm_program/administration/backup/backup_file_function.php?job=delete&file_id=" + description;
+            case "usf":
+                url = gRootPath + "/adm_program/administration/members/fields_function.php?mode=2&usf_id=" + databaseId;
                 break;
 
         }

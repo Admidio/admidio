@@ -25,11 +25,12 @@ unset($_SESSION['fields_request']);
 $g_layout['title']  = 'Profilfelder';
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
     
     <script type="text/javascript"><!--
         function moveCategory(direction, usfID)
         {
-            var actRow = document.getElementById("row_" + usfID);
+            var actRow = document.getElementById("row_usf_" + usfID);
             var childs = actRow.parentNode.childNodes;
             var prevNode    = null;
             var nextNode    = null;
@@ -50,7 +51,7 @@ $g_layout['header'] = '
                         nextNode = childs[i];
                     }
                     
-                    if(childs[i].id == "row_" + usfID)
+                    if(childs[i].id == "row_usf_" + usfID)
                     {
                         actSequence = actRowCount;
                     }
@@ -98,25 +99,25 @@ $g_layout['header'] = '
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. '/overall_header.php');
 
-echo "
-<h1 class=\"moduleHeadline\">Profilfelder</h1>
+echo '
+<h1 class="moduleHeadline">Profilfelder</h1>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\"><img 
-            src=\"". THEME_PATH. "/icons/add.png\" alt=\"Profilfeld anlegen\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/members/fields_new.php\">Profilfeld anlegen</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/members/fields_new.php"><img 
+            src="'. THEME_PATH. '/icons/add.png" alt="Profilfeld anlegen" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/members/fields_new.php">Profilfeld anlegen</a>
         </span>
     </li>
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\"><img
-            src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kategorien pflegen\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=USF\">Kategorien pflegen</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=USF"><img
+            src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=USF">Kategorien pflegen</a>
         </span>
     </li>
-</ul>";
+</ul>';
 
 $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
          WHERE cat_type   = "USF"
@@ -128,22 +129,22 @@ $result = $g_db->query($sql);
 
 $js_drag_drop = '';
 
-echo "
-<table class=\"tableList\" cellspacing=\"0\">
+echo '
+<table class="tableList" cellspacing="0">
     <thead>
         <tr>
-            <th>Feld<img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" 
-                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=field&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-                onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=field',this);\" onmouseout=\"ajax_hideTooltip()\" /></th>
+            <th>Feld<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" 
+                onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=field&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=field\',this);" onmouseout="ajax_hideTooltip()" /></th>
             <th>&nbsp;</th>
             <th>Beschreibung</th>
-            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" title=\"Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar\" /></th>
-            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" title=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" /></th>
-            <th><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gefüllt werden\" title=\"Pflichtfeld, muss vom Benutzer gefüllt werden\" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar" title="Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" title="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="Pflichtfeld, muss vom Benutzer gefüllt werden" title="Pflichtfeld, muss vom Benutzer gefüllt werden" /></th>
             <th>Datentyp</th>
-            <th style=\"width: 40px;\">&nbsp;</th>
+            <th style="width: 40px;">&nbsp;</th>
         </tr>
-    </thead>";
+    </thead>';
     
     $cat_id = 0;
 
@@ -158,19 +159,19 @@ echo "
                     echo '</tbody>';
                 }
                 $block_id = 'cat_'.$row['cat_id'];
-                echo "<tbody>
+                echo '<tbody>
                     <tr>
-                        <td class=\"tableSubHeader\" colspan=\"8\">
-                            <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id', '". THEME_PATH. "')\"><img 
-                            id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>".$row['cat_name']."
+                        <td class="tableSubHeader" colspan="8">
+                            <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\', \''. THEME_PATH. '\')"><img 
+                            id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'.$row['cat_name'].'
                         </td>
                     </tr>
                 </tbody>
-                <tbody id=\"$block_id\">";
+                <tbody id="'.$block_id.'">';
                 $cat_id = $row['cat_id'];
             }           
             echo '
-            <tr id="row_'.$row['usf_id'].'" class="tableMouseOver">
+            <tr id="row_usf_'.$row['usf_id'].'" class="tableMouseOver">
                 <td><a href="'.$g_root_path.'/adm_program/administration/members/fields_new.php?usf_id='.$row['usf_id'].'">'.$row['usf_name'].'</a></td>
                 <td style="text-align: right; width: 45px;">
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$row['usf_id'].')"><img
@@ -182,61 +183,61 @@ echo "
                 <td>';
                     if($row['usf_hidden'] == 1)
                     {
-                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/eye_gray.png\" alt=\"Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar\" title=\"Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar\" />";
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye_gray.png" alt="Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar" title="Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar" />';
                     }
                     else
                     {
-                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/eye.png\" alt=\"Feld für alle Benutzer sichtbar\" title=\"Feld für alle Benutzer sichtbar\" />";
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="Feld für alle Benutzer sichtbar" title="Feld für alle Benutzer sichtbar" />';
                     }
                 echo '</td>
                 <td>';
                     if($row['usf_disabled'] == 1)
                     {
-                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield_key.png\" alt=\"Feld nur für berechtigte Benutzer editierbar\" title=\"Feld nur für berechtigte Benutzer editierbar\" />";
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur für berechtigte Benutzer editierbar" title="Feld nur für berechtigte Benutzer editierbar" />';
                     }
                     else
                     {
-                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/textfield.png\" alt=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" title=\"Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar\" />";
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield.png" alt="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" title="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" />';
                     }
                 echo '</td>
                 <td>';
                     if($row['usf_mandatory'] == 1)
                     {
-                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/asterisk_yellow.png\" alt=\"Pflichtfeld, muss vom Benutzer gefüllt werden\" title=\"Pflichtfeld, muss vom Benutzer gefüllt werden\" />";
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="Pflichtfeld, muss vom Benutzer gefüllt werden" title="Pflichtfeld, muss vom Benutzer gefüllt werden" />';
                     }
                     else
                     {
-                        echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/asterisk_gray.png\" alt=\"Feld muss nicht zwingend vom Benutzer gefüllt werden\" title=\"Feld muss nicht zwingend vom Benutzer gefüllt werden\" />";
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_gray.png" alt="Feld muss nicht zwingend vom Benutzer gefüllt werden" title="Feld muss nicht zwingend vom Benutzer gefüllt werden" />';
                     }
                 echo '</td>
                 <td>';
-                    if($row['usf_type'] == "DATE")
+                    if($row['usf_type'] == 'DATE')
                     {
-                        echo "Datum";
+                        echo 'Datum';
                     }
-                    elseif($row['usf_type'] == "EMAIL")
+                    elseif($row['usf_type'] == 'EMAIL')
                     {
-                        echo "E-Mail";
+                        echo 'E-Mail';
                     }
-                    elseif($row['usf_type'] == "CHECKBOX")
+                    elseif($row['usf_type'] == 'CHECKBOX')
                     {
-                        echo "Ja / Nein";
+                        echo 'Ja / Nein';
                     }
-                    elseif($row['usf_type'] == "TEXT")
+                    elseif($row['usf_type'] == 'TEXT')
                     {
-                        echo "Text (50)";
+                        echo 'Text (50)';
                     }
-                    elseif($row['usf_type'] == "TEXT_BIG")
+                    elseif($row['usf_type'] == 'TEXT_BIG')
                     {
-                        echo "Text (255)";
+                        echo 'Text (255)';
                     }
-                    elseif($row['usf_type'] == "URL")
+                    elseif($row['usf_type'] == 'URL')
                     {
-                        echo "URL";
+                        echo 'URL';
                     }
-                    elseif($row['usf_type'] == "NUMERIC")
+                    elseif($row['usf_type'] == 'NUMERIC')
                     {
-                        echo "Zahl";
+                        echo 'Zahl';
                     }
                 echo '</td>
                 <td style="text-align: right; width: 45px;">
@@ -252,7 +253,7 @@ echo "
                     else
                     {
                         echo '
-                        <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/fields_function.php?mode=3&amp;usf_id='.$row['usf_id'].'"><img
+                        <a class="iconLink" href="javascript:deleteObject(\'usf\', \'row_usf_'.$row['usf_id'].'\','.$row['usf_id'].',\''.$row['usf_name'].'\')"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                     }
                 echo '</td>
@@ -262,23 +263,23 @@ echo "
     }
     else
     {
-        echo "<tr>
-            <td colspan=\"5\" style=\"text-align: center;\">
+        echo '<tr>
+            <td colspan="5" style="text-align: center;">
                 <p>Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</p>
             </td>
-        </tr>";
+        </tr>';
     }
-echo "</table>
+echo '</table>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>";
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 
