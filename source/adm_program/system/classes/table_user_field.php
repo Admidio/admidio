@@ -15,7 +15,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableUserField extends TableAccess
 {
@@ -24,7 +24,7 @@ class TableUserField extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_USER_FIELDS;
-        $this->column_praefix = "usf";
+        $this->column_praefix = 'usf';
         
         if($usf_id > 0)
         {
@@ -42,8 +42,8 @@ class TableUserField extends TableAccess
         if(is_numeric($usf_id))
         {
             $tables    = TBL_CATEGORIES;
-            $condition = "       usf_cat_id = cat_id
-                             AND usf_id     = $usf_id ";
+            $condition = '       usf_cat_id = cat_id
+                             AND usf_id     = '.$usf_id;
             parent::readData($usf_id, $condition, $tables);
         }
     }
@@ -53,17 +53,17 @@ class TableUserField extends TableAccess
     // die Funktion wird innerhalb von setValue() aufgerufen
     function setValue($field_name, $field_value)
     {
-        if($field_name == "usf_cat_id"
+        if($field_name == 'usf_cat_id'
         && $this->getValue($field_name) != $field_value)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = "SELECT COUNT(*) as count FROM ". TBL_USER_FIELDS. "
-                     WHERE usf_cat_id = $field_value";
+            $sql = 'SELECT COUNT(*) as count FROM '. TBL_USER_FIELDS. '
+                     WHERE usf_cat_id = '.$field_value;
             $this->db->query($sql);
 
             $row = $this->db->fetch_array();
 
-            $this->setValue("usf_sequence", $row['count'] + 1);
+            $this->setValue('usf_sequence', $row['count'] + 1);
         }     
         return parent::setValue($field_name, $field_value);
     }
@@ -91,14 +91,18 @@ class TableUserField extends TableAccess
         global $g_current_session;
         
         // Luecke in der Reihenfolge schliessen
-        $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_sequence = usf_sequence - 1 
-                 WHERE usf_cat_id   = ". $this->getValue("usf_cat_id"). "
-                   AND usf_sequence > ". $this->getValue("usf_sequence");
+        $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = usf_sequence - 1 
+                 WHERE usf_cat_id   = '. $this->getValue('usf_cat_id'). '
+                   AND usf_sequence > '. $this->getValue('usf_sequence');
         $this->db->query($sql);
 
         // Abhaenigigkeiten loeschen
-        $sql    = "DELETE FROM ". TBL_USER_DATA. "
-                    WHERE usd_usf_id = ". $this->getValue("usf_id");
+        $sql    = 'DELETE FROM '. TBL_USER_DATA. '
+                    WHERE usd_usf_id = '. $this->getValue('usf_id');
+        $this->db->query($sql);
+
+        $sql    = 'DELETE FROM '. TBL_LIST_COLUMNS. ' 
+                    WHERE lsc_usf_id = '. $this->getValue('usf_id');
         $this->db->query($sql);
 
         // einlesen aller Userobjekte der angemeldeten User anstossen, 

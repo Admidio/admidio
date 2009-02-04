@@ -12,7 +12,6 @@
  * usf_id: ID des Feldes
  * mode:   1 - Feld anlegen oder updaten
  *         2 - Feld loeschen
- *         3 - Frage, ob Feld geloescht werden soll
  *         4 - Reihenfolge fuer die uebergebene usf_id anpassen
  * sequence: neue Reihenfolge fuer die uebergebene usf_id
  *
@@ -31,7 +30,7 @@ if (!$g_current_user->isWebmaster())
 // Uebergabevariablen pruefen
 
 if(is_numeric($_GET['mode']) == false
-|| $_GET['mode'] < 1 || $_GET['mode'] > 5)
+|| $_GET['mode'] < 1 || $_GET['mode'] > 4)
 {
     $g_message->show('invalid');
 }
@@ -166,27 +165,21 @@ if($_GET['mode'] == 1)
 
     $err_code = 'save';
 }
-elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
+elseif($_GET['mode'] == 2)
 {
     if($user_field->getValue('usf_system') == 1)
     {
         // Systemfelder duerfen nicht geloescht werden
         $g_message->show('invalid');
     }
-    
-    if($_GET['mode'] == 2)
-    {
-        // Feld loeschen
-        $user_field->delete();
-        $err_code = 'delete';
-    }
-    elseif($_GET['mode'] == 3)
-    {
-        // Frage, ob Feld geloescht werden soll
 
-        $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/fields_function.php?usf_id='. $_GET['usf_id']. '&mode=2');
-        $g_message->show('delete_field', $user_field->getValue('usf_name'), 'Löschen');
+    // Feld loeschen
+    if($user_field->delete())
+    {
+        // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+        echo 'done';
     }
+    exit();
 }
 elseif($_GET['mode'] == 4)
 {
