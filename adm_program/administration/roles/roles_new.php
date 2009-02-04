@@ -670,12 +670,7 @@ echo "
                                        AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                                      ORDER BY rol_name ";
                             $allRoles = $g_db->query($sql);
-    
-                            if($childRoles == -1)
-                                $noChildRoles = true;
-                            else
-                                $noChildRoles = false;
-    
+
                             $childRoleObjects = array();
     
                             echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/no.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
@@ -684,11 +679,13 @@ echo "
                                     while($row = $g_db->fetch_object($allRoles))
                                     {
                                         if(in_array($row->rol_id,$childRoles)  )
+                                        {
                                             $childRoleObjects[] = $row;
-                                        elseif ($row->rol_id == $req_rol_id)
-                                            continue;
-                                        else
-                                        echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
+                                        }
+                                        elseif ($row->rol_id != $req_rol_id)
+                                        {
+                                            echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
+                                        }
                                     }
                                 echo "</select>
                             </div>

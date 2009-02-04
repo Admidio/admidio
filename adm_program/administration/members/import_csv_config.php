@@ -9,18 +9,18 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
 
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 if(count($_SESSION['file_lines']) == 0)
 {
-    $g_message->show("file_not_exist");
+    $g_message->show('file_not_exist');
 }
 
 // feststellen, welches Trennzeichen in der Datei verwendet wurde
@@ -28,8 +28,8 @@ $count_comma     = 0;
 $count_semicolon = 0;
 $count_tabulator = 0;
 
-$line = reset($_SESSION["file_lines"]);
-for($i = 0; $i < count($_SESSION["file_lines"]); $i++)
+$line = reset($_SESSION['file_lines']);
+for($i = 0; $i < count($_SESSION['file_lines']); $i++)
 {
     $count = substr_count($line, ",");
     $count_comma += $count;
@@ -38,24 +38,31 @@ for($i = 0; $i < count($_SESSION["file_lines"]); $i++)
     $count = substr_count($line, "\t");
     $count_tabulator += $count;
 
-    $line = next($_SESSION["file_lines"]);
+    $line = next($_SESSION['file_lines']);
 }
 
 if($count_semicolon > $count_comma && $count_semicolon > $count_tabulator)
 {
-    $_SESSION["value_separator"] = ";";
+    $_SESSION['value_separator'] = ";";
 }
 elseif($count_tabulator > $count_semicolon && $count_tabulator > $count_comma)
 {
-    $_SESSION["value_separator"] = "\t";
+    $_SESSION['value_separator'] = "\t";
 }
 else
 {
-    $_SESSION["value_separator"] = ",";
+    $_SESSION['value_separator'] = ",";
 }
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Benutzer importieren";
+$g_layout['title']  = 'Benutzer importieren';
+$g_layout['header'] = '
+	<script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            $("#first_row").focus();
+	 	}); 
+	//--></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -83,70 +90,66 @@ echo '
                 </tr>
             </thead>';
 
-            $line = reset($_SESSION["file_lines"]);
-            $arr_columns = explode($_SESSION["value_separator"], $line);
-            $category = "";
+            $line = reset($_SESSION['file_lines']);
+            $arr_columns = explode($_SESSION['value_separator'], $line);
+            $category = '';
 
             // jedes Benutzerfeld aus der Datenbank auflisten
             
             foreach($g_current_user->userFieldData as $field)
             {
-                if($category != $field->getValue("cat_id"))
+                if($category != $field->getValue('cat_id'))
                 {
                     if(strlen($category) > 0)
                     {
-                        echo "</tbody>";
+                        echo '</tbody>';
                     }
-                    $block_id = "cat_". $field->getValue("cat_id");
+                    $block_id = 'cat_'. $field->getValue('cat_id');
                     echo '<tbody>
                         <tr>
                             <td class="tableSubHeader" colspan="4">
                                 <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''. THEME_PATH. '\')"><img 
-                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'. $field->getValue("cat_name"). '
+                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'. $field->getValue('cat_name'). '
                             </td>
                         </tr>
                     </tbody>
-                    <tbody id="$block_id">';
+                    <tbody id="'.$block_id.'">';
 
-                    $category = $field->getValue("cat_id");
+                    $category = $field->getValue('cat_id');
                 }             
-                echo "<tr>
-                    <td><label for=\"usf-". $field->getValue("usf_id"). "\">". $field->getValue("usf_name"). ":</label></td>
+                echo '<tr>
+                    <td><label for="usf-'. $field->getValue('usf_id'). '">'. $field->getValue('usf_name'). ':</label></td>
                     <td>
-                        <select size=\"1\" id=\"usf-". $field->getValue("usf_id"). "\" name=\"usf-". $field->getValue("usf_id"). "\" style=\"width: 95%;\">
-                            <option value=\"\" selected=\"selected\"></option>";
+                        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 95%;">
+                            <option value="" selected="selected"></option>';
 
                             // Alle Spalten aus der Datei in Combobox auflisten
                             foreach($arr_columns as $col_key => $col_value)
                             {
-                                $col_value = trim(strip_tags(str_replace("\"", "", $col_value)));
-                                echo "<option value=\"$col_key\">$col_value</option>";
+                                $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
+                                echo '<option value="'.$col_key.'">'.$col_value.'</option>';
                             }
-                        echo "</select>";
+                        echo '</select>';
                         // Nachname und Vorname als Pflichtfelder kennzeichnen
-                        if($field->getValue("usf_mandatory") == 1)
+                        if($field->getValue('usf_mandatory') == 1)
                         {
-                            echo "&nbsp;<span title=\"Pflichtfeld\" style=\"color: #990000;\">*</span>";
+                            echo '&nbsp;<span title="Pflichtfeld" style="color: #990000;">*</span>';
                         }
-                    echo "</td>
-                </tr>";
+                    echo '</td>
+                </tr>';
             }
-        echo "</tbody>
+        echo '</tbody>
         </table>
 
-        <div class=\"formSubmit\">
-            <button name=\"back\" type=\"button\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
+        <div class="formSubmit">
+            <button name="back" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurück" />&nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id=\"import\" type=\"submit\"><img src=\"". THEME_PATH. "/icons/database_in.png\" alt=\"Weiter\" />&nbsp;Importieren</button>
+            <button id="import" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="Weiter" />&nbsp;Importieren</button>
         </div>
     </div>
 </div>
-</form>
-
-<script type=\"text/javascript\"><!--
-    document.getElementById('first_row').focus();
---></script>";
+</form>';
     
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

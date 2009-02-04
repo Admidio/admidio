@@ -96,7 +96,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
     // Ab Version 
 	$TypeEngineKey = (version_compare($mysql_server_info, '4.1.2', '>=') ? 'Engine' : 'Type'); 
 
-	OutputInformation('', null, 'Checking tables...<br><br>');
+	OutputInformation('', null, 'Checking tables...<br /><br />');
 	$TableErrors = array();
 	$repairresult = '';
 	$CanContinue = true;
@@ -123,13 +123,13 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 	OutputInformation('statusinfo', '');
 
-	OutputInformation('', '<span id="topprogress"><p><b>Gesamtfortschritt:</b></p></span>');
+	OutputInformation('', '<div id="topprogress"><p>Gesamtfortschritt:</p></div>');
 	$overallrows = 0;
-	echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables) / TABLES_PER_COL).'"><b>'.$g_adm_db.'</b></th></tr><tr><td nowrap valign="top">';
+	echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables) / TABLES_PER_COL).'"><b>'.$g_adm_db.'</b></th></tr><tr><td style="white-space: nowrap; vertical-align: top;">';
 	$tablecounter = 0;
 	for ($t = 0; $t < count($SelectedTables); $t++) {
 		if ($tablecounter++ >= TABLES_PER_COL) {
-			echo '</td><td nowrap valign="top">';
+			echo '</td><td style="white-space: nowrap; vertical-align: top;">';
 			$tablecounter = 1;
 		}
 		$SQLquery = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR.' FROM '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR;
@@ -137,9 +137,9 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 		$row = mysql_fetch_assoc($result);
 		$rows[$t] = $row['num'];
 		$overallrows += $rows[$t];
-		echo '<span id="rows_'.$SelectedTables[$t].'">'.$SelectedTables[$t].' ('.number_format($rows[$t]).' records)</span><br>';
+		echo '<div id="rows_'.$SelectedTables[$t].'">'.$SelectedTables[$t].' ('.number_format($rows[$t]).' records)</div>';
 	}
-	echo '</td></tr></table><br>';
+	echo '</td></tr></table><br />';
 	
 
 	$alltablesstructure = '';
@@ -373,7 +373,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 else 
 {
 
-	echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$fullbackupfilename.' for writing!<br><br>';
+	echo '<b>Warning:</b> failed to open '.$backupabsolutepath.$fullbackupfilename.' for writing!<br /><br />';
 	if (is_dir($backupabsolutepath)) 
 	{
 		echo '<i>CHMOD 777</i> on the directory ('.htmlentities($backupabsolutepath).') should fix that.';

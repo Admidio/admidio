@@ -41,9 +41,9 @@ class RoleDependency
         if($childRoleId > 0 && $parentRoleId > 0
         && is_numeric($childRoleId) && is_numeric($parentRoleId))
         {
-            $sql = "SELECT * FROM ". TBL_ROLE_DEPENDENCIES.
-                   " WHERE rld_rol_id_child = $childRoleId
-                       AND rld_rol_id_parent = $parentRoleId";
+            $sql = 'SELECT * FROM '. TBL_ROLE_DEPENDENCIES.
+                   ' WHERE rld_rol_id_child  = '.$childRoleId.'
+                       AND rld_rol_id_parent = '.$parentRoleId;
             $this->db->query($sql);
 
             if($row = $this->db->fetch_object())
@@ -73,9 +73,9 @@ class RoleDependency
     {
         $this->role_id_parent      = 0;
         $this->role_id_child       = 0;
-        $this->comment             = "";
+        $this->comment             = '';
         $this->usr_id              = 0;
-        $this->timestamp           = "";
+        $this->timestamp           = '';
 
         $this->role_id_parent_orig = 0;
         $this->role_id_child_orig  = 0;
@@ -89,13 +89,13 @@ class RoleDependency
     {
         if(!isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
-            $sql = "UPDATE ". TBL_ROLE_DEPENDENCIES. " SET rld_rol_id_parent = '$this->role_id_parent'
-                                                         , rld_rol_id_child  = '$this->role_id_child'
-                                                         , rld_comment        = '$this->comment'
-                                                         , rld_timestamp      = '".DATETIME_NOW."'
-                                                         , rld_usr_id         = $login_user_id " .
-                    "WHERE rld_rol_id_parent = '$this->role_id_parent_orig'" .
-                      "AND rld_rol_id_child  = '$this->role_id_child_orig'";
+            $sql = 'UPDATE '. TBL_ROLE_DEPENDENCIES. ' SET rld_rol_id_parent = "'.$this->role_id_parent.'"
+                                                         , rld_rol_id_child  = "'.$this->role_id_child.'"
+                                                         , rld_comment       = "'.$this->comment.'"
+                                                         , rld_timestamp     = "'.DATETIME_NOW.'"
+                                                         , rld_usr_id        = '.$login_user_id.'
+                     WHERE rld_rol_id_parent = '.$this->role_id_parent_orig.'
+                       AND rld_rol_id_child  = '.$this->role_id_child_orig;
             $this->db->query($sql);
             $persisted = true;
             return 0;
@@ -107,9 +107,9 @@ class RoleDependency
     {
         if(!$this->isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
-            $sql = "INSERT INTO ". TBL_ROLE_DEPENDENCIES. " 
+            $sql = 'INSERT INTO '. TBL_ROLE_DEPENDENCIES. ' 
                                 (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                         VALUES ($this->role_id_parent, $this->role_id_child, '$this->comment', $login_user_id, '".DATETIME_NOW."') ";
+                         VALUES ('.$this->role_id_parent.', '.$this->role_id_child.', "'.$this->comment.'", '.$login_user_id.', "'.DATETIME_NOW.'") ';
             $this->db->query($sql);
             $persisted = true;
             return 0;
@@ -120,18 +120,21 @@ class RoleDependency
     function isEmpty()
     {
         if ($this->role_id_parent == 0 && $this->role_id_child == 0)
+        {
             return 1;
+        }
         else
+        {
             return 0;
-
+        }
     }
 
     // aktuelle Rollenabhaengigkeit loeschen
     function delete()
     {
-        $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES.
-                  " WHERE rld_rol_id_child  = $this->role_id_child_orig " .
-                    " AND rld_rol_id_parent = $this->role_id_parent_orig";
+        $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES.
+                  ' WHERE rld_rol_id_child  = '.$this->role_id_child_orig.
+                    ' AND rld_rol_id_parent = '.$this->role_id_parent_orig;
         $this->db->query($sql);
 
         $this->clear();
@@ -139,12 +142,12 @@ class RoleDependency
 
     function getParentRoles(&$db, $childId)
     {
+        $allParentIds = array();
+
         if($childId > 0 && is_numeric($childId))
         {
-            $allParentIds = array();
-
-            $sql = "SELECT rld_rol_id_parent FROM ". TBL_ROLE_DEPENDENCIES.
-                   " WHERE rld_rol_id_child = $childId ";
+            $sql = 'SELECT rld_rol_id_parent FROM '. TBL_ROLE_DEPENDENCIES.
+                   ' WHERE rld_rol_id_child = '.$childId;
             $db->query($sql);
 
             $num_rows = $db->num_rows();
@@ -155,20 +158,18 @@ class RoleDependency
                     $allParentIds[] = $row->rld_rol_id_parent;
                 }
             }
-
-            return  $allParentIds;
         }
-        return -1;
+        return $allParentIds;
     }
 
     function getChildRoles(&$db, $parentId)
     {
+        $allChildIds = array();
+
         if($parentId > 0 && is_numeric($parentId))
         {
-            $allChildIds = array();
-
-            $sql = "SELECT rld_rol_id_child FROM ". TBL_ROLE_DEPENDENCIES.
-                   " WHERE rld_rol_id_parent = $parentId ";
+            $sql = 'SELECT rld_rol_id_child FROM '. TBL_ROLE_DEPENDENCIES.
+                   ' WHERE rld_rol_id_parent = '.$parentId;
             $db->query($sql);
 
             $num_rows = $db->num_rows();
@@ -179,10 +180,8 @@ class RoleDependency
                     $allChildIds[] = $row->rld_rol_id_child;
                 }
             }
-
-            return  $allChildIds;
         }
-        return -1;
+        return $allChildIds;
     }
 
     function setParent($parentId)
@@ -211,18 +210,18 @@ class RoleDependency
     {
         if(0 != $this->role_id_parent and 0 != $this->role_id_child )
         {
-            $sql = "SELECT mem_usr_id FROM ". TBL_MEMBERS.
-                       " WHERE mem_rol_id = $this->role_id_child ;";
+            $sql = 'SELECT mem_usr_id FROM '. TBL_MEMBERS.
+                       ' WHERE mem_rol_id = '.$this->role_id_child;
             $result = $this->db->query($sql);
 
             $num_rows = $this->db->num_rows($result);
             if ($num_rows)
             {
-                $sql="  INSERT IGNORE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ";
+                $sql='  INSERT IGNORE INTO '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ';
 
                 while ($row = $this->db->fetch_object($result))
                 {
-                    $sql .= "($this->role_id_parent, $row->mem_usr_id, '".DATE_NOW."', '9999-12-31', 0),";
+                    $sql .= '('.$this->role_id_parent.', '.$row->mem_usr_id.', "'.DATE_NOW.'", "9999-12-31", 0),';
                 }
                 //Das letzte Komma wieder wegschneiden
                 $sql = substr($sql,0,-1);
@@ -240,8 +239,8 @@ class RoleDependency
         {
             $allChildIds = array();
 
-            $sql = "DELETE FROM ". TBL_ROLE_DEPENDENCIES.
-                   " WHERE rld_rol_id_parent = $parentId ";
+            $sql = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES.
+                   ' WHERE rld_rol_id_parent = '.$parentId;
             $db->query($sql);
 
             return  0;
