@@ -53,6 +53,7 @@ img {
 
 *[readonly] {
     background-color:   #e5e5e5;
+    border-width:       thin;
 }
 
 textarea {

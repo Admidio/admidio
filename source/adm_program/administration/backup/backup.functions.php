@@ -54,7 +54,12 @@ function FileSizeNiceDisplay($filesize, $precision=2) {
 function OutputInformation($id, $dhtml, $text='') {
 		if (!is_null($dhtml)) {
 			if ($id) {
-				echo '<script type="text/javascript">if (document.getElementById("'.$id.'")) document.getElementById("'.$id.'").innerHTML="'.$dhtml.'"</script>';
+				echo '<script type="text/javascript"><!--
+                    if (document.getElementById("'.$id.'")) 
+                    {
+                        document.getElementById("'.$id.'").innerHTML="'.$dhtml.'";
+                    }
+                //--></script>';
 			} else {
 				echo $dhtml;
 			}
