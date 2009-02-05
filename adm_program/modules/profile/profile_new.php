@@ -18,107 +18,70 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-// Registrierung muss ausgeloggt moeglich sein
-if(isset($_GET['new_user']) && $_GET['new_user'] != 2)
+
+// im ausgeloggten Zustand koennen nur Registrierungen angelegt werden
+if($g_valid_login == false)
 {
-    require_once('../../system/login_valid.php');
+    $_GET['new_user'] = 2;
 }
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET['user_id']))
+$new_user = 0;
+$usr_id   = 0;
+
+if(array_key_exists('new_user', $_GET) && is_numeric($_GET['new_user']))
+{
+    $new_user = $_GET['new_user'];
+}
+
+// User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
+if(isset($_GET['user_id']) && ($new_user == 0 || $new_user == 3))
 {
     if(is_numeric($_GET['user_id']) == false)
     {
         $g_message->show('invalid');
     }
-    $usr_id = $_GET['user_id'];
-}
-else
-{
-    $usr_id = 0;
-}
-
-// pruefen, ob Modus neues Mitglied oder Registrierung erfassen
-if(isset($_GET['new_user']))
-{
-    if(is_numeric($_GET['new_user']))
-    {
-        $new_user = $_GET['new_user'];
-    }
-    else
-    {
-        $new_user = 0;
-    }
-}
-else
-{
-    $new_user = 0;
-}
-
-if($new_user == 1 || $new_user == 2)
-{
-    $usr_id = 0;
+    $usr_id  = $_GET['user_id'];
 }
 
 // pruefen, ob Modul aufgerufen werden darf
-if($new_user == 2)
+switch($new_user)
 {
-    // Registrierung deaktiviert, also auch diesen Modus sperren
-    if($g_preferences['registration_mode'] == 0)
-    {
-        $g_message->show('module_disabled');
-    }
-}
-else
-{
-    // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-    if($g_current_user->editProfile($usr_id) == false)
-    {
-        $g_message->show('norights');
-    }
+    case 0:
+        // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
+        if($g_current_user->editProfile($usr_id) == false)
+        {
+            $g_message->show('norights');
+        }
+        break;
 
+    case 1:
+        // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
+        if($g_current_user->editUsers() == false)
+        {
+            $g_message->show('norights');
+        }
+        break;
 
+    case 2:
+    case 3:
+        // Registrierung deaktiviert, also auch diesen Modus sperren
+        if($g_preferences['registration_mode'] == 0)
+        {
+            $g_message->show('module_disabled');
+        }
+        break;
 }
 
 // User auslesen
 $user = new User($g_db, $usr_id);
 
-if($new_user == 0)
-{
-    // jetzt noch schauen, ob User ueberhaupt Mitglied in der Gliedgemeinschaft ist
-    if(isMember($usr_id) == false)
-    {
-        // pruefen, ob der User noch in anderen Organisationen aktiv ist
-        $sql    = 'SELECT *
-                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
-                    WHERE rol_valid   = 1
-                      AND rol_cat_id  = cat_id
-                      AND cat_org_id <> '. $g_current_organization->getValue('org_id'). '
-                      AND mem_rol_id  = rol_id
-                      AND mem_begin  <= "'.DATE_NOW.'"
-                      AND mem_end     > "'.DATE_NOW.'"
-                      AND mem_usr_id  = '.$usr_id;
-        $g_db->query($sql);
-        $b_other_orga = false;
-
-        if($g_db->num_rows() > 0)
-        {
-            // User, der woanders noch aktiv ist, darf in dieser Orga nicht bearbeitet werden
-            // falls doch eine Registrierung vorliegt, dann darf Profil angezeigt werden
-            if($user->getValue('usr_valid') != 0 
-            || $user->getValue('usr_reg_org_shortname') != $g_current_organization->getValue('org_shortname'))
-            {
-                $g_message->show('norights');
-            }
-        }
-
-    }
-}
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
+// Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
 if(isset($_SESSION['profile_request']))
 {
     $form_values = strStripSlashesDeep($_SESSION['profile_request']);
