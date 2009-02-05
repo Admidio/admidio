@@ -239,7 +239,7 @@ elseif($req_mode == 2)
     $message   = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Aktualisierung war erfolgreich</strong><br /><br />
                   Die Admidio-Datenbank ist jetzt auf die Version '. ADMIDIO_VERSION. ' aktualisiert worden.<br />
                   Du kannst nun wieder mit Admidio arbeiten.';
-    showPage($message, "$g_root_path/index.html", "application_view_list.png", "Übersichtsseite", 2);
+    showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', 'Übersichtsseite', 2);
 }
 
 ?>

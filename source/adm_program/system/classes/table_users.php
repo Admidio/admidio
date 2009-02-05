@@ -79,21 +79,6 @@ class TableUsers extends TableAccess
         return parent::setValue($field_name, $field_value);
     }
 
-    // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
-    // angefordert wurde und gibt diesen zurueck
-    function getValue($field_name, $field_value = "")
-    {
-        $field_value = parent::getValue($field_name);
-
-        // ist die Create-Id leer, so wurde der Datensatz durch Registierung angelegt und gehoert dem User selber
-        if($field_name == "usr_usr_id_create" && strlen($field_value) == 0)
-        {
-            $field_value = parent::getValue("usr_id");
-        }
-
-        return $field_value;
-    }
-
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
     function save()

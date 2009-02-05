@@ -9,12 +9,18 @@
  *
  *****************************************************************************/
 
-require_once("systemmails_texts.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/list_configuration.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
+require_once('systemmails_texts.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
  
+// User-Create fuer alle Anmeldungen fuellen
+$sql = 'UPDATE '. TBL_USERS. ' SET usr_usr_id_create = usr_id
+         WHERE usr_usr_id_create IS NULL 
+           AND usr_login_name IS NOT NULL';
+$g_db->query($sql);
+
 // Texte fuer Systemmails pflegen
-$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
+$sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
 $result_orga = $g_db->query($sql);
 
 while($row_orga = $g_db->fetch_array($result_orga))
@@ -56,6 +62,10 @@ while($row_orga = $g_db->fetch_array($result_orga))
                AND pho_org_shortname = '". $row_orga['org_shortname']."'";
     $g_db->query($sql);
     
+    $sql = "UPDATE ". TBL_USERS. " SET usr_usr_id_create = ". $row_webmaster['webmaster_id']. "
+             WHERE usr_usr_id_create IS NULL ";
+    $g_db->query($sql);
+    
     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
              WHERE cat_org_id = ".$row_orga['org_id']. "
                AND cat_type   = 'ROL'";
@@ -87,50 +97,50 @@ while($row_orga = $g_db->fetch_array($result_orga))
     
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($g_db);
-    $address_list->setValue("lst_name", "Adressliste");
-    $address_list->setValue("lst_global", 1);
-    $address_list->setValue("lst_default", 1);
-    $address_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
-    $address_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
-    $address_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
-    $address_list->addColumn(4, $g_current_user->getProperty("Adresse", "usf_id"));
-    $address_list->addColumn(5, $g_current_user->getProperty("PLZ", "usf_id"));
-    $address_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
+    $address_list->setValue('lst_name', 'Adressliste');
+    $address_list->setValue('lst_global', 1);
+    $address_list->setValue('lst_default', 1);
+    $address_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
+    $address_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
+    $address_list->addColumn(3, $g_current_user->getProperty('Geburtstag', 'usf_id'));
+    $address_list->addColumn(4, $g_current_user->getProperty('Adresse', 'usf_id'));
+    $address_list->addColumn(5, $g_current_user->getProperty('PLZ', 'usf_id'));
+    $address_list->addColumn(6, $g_current_user->getProperty('Ort', 'usf_id'));
     $address_list->save();
 
     $phone_list = new ListConfiguration($g_db);
-    $phone_list->setValue("lst_name", "Telefonliste");
-    $phone_list->setValue("lst_global", 1);
-    $phone_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
-    $phone_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
-    $phone_list->addColumn(3, $g_current_user->getProperty("Telefon", "usf_id"));
-    $phone_list->addColumn(4, $g_current_user->getProperty("Handy", "usf_id"));
-    $phone_list->addColumn(5, $g_current_user->getProperty("E-Mail", "usf_id"));
-    $phone_list->addColumn(6, $g_current_user->getProperty("Fax", "usf_id"));
+    $phone_list->setValue('lst_name', 'Telefonliste');
+    $phone_list->setValue('lst_global', 1);
+    $phone_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
+    $phone_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
+    $phone_list->addColumn(3, $g_current_user->getProperty('Telefon', 'usf_id'));
+    $phone_list->addColumn(4, $g_current_user->getProperty('Handy', 'usf_id'));
+    $phone_list->addColumn(5, $g_current_user->getProperty('E-Mail', 'usf_id'));
+    $phone_list->addColumn(6, $g_current_user->getProperty('Fax', 'usf_id'));
     $phone_list->save();
     
     $contact_list = new ListConfiguration($g_db);
-    $contact_list->setValue("lst_name", "Kontaktdaten");
-    $contact_list->setValue("lst_global", 1);
-    $contact_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
-    $contact_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
-    $contact_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
-    $contact_list->addColumn(4, $g_current_user->getProperty("Adresse", "usf_id"));
-    $contact_list->addColumn(5, $g_current_user->getProperty("PLZ", "usf_id"));
-    $contact_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
-    $contact_list->addColumn(7, $g_current_user->getProperty("Telefon", "usf_id"));
-    $contact_list->addColumn(8, $g_current_user->getProperty("Handy", "usf_id"));
-    $contact_list->addColumn(9, $g_current_user->getProperty("E-Mail", "usf_id"));
+    $contact_list->setValue('lst_name', 'Kontaktdaten');
+    $contact_list->setValue('lst_global', 1);
+    $contact_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
+    $contact_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
+    $contact_list->addColumn(3, $g_current_user->getProperty('Geburtstag', 'usf_id'));
+    $contact_list->addColumn(4, $g_current_user->getProperty('Adresse', 'usf_id'));
+    $contact_list->addColumn(5, $g_current_user->getProperty('PLZ', 'usf_id'));
+    $contact_list->addColumn(6, $g_current_user->getProperty('Ort', 'usf_id'));
+    $contact_list->addColumn(7, $g_current_user->getProperty('Telefon', 'usf_id'));
+    $contact_list->addColumn(8, $g_current_user->getProperty('Handy', 'usf_id'));
+    $contact_list->addColumn(9, $g_current_user->getProperty('E-Mail', 'usf_id'));
     $contact_list->save();
     
     $former_list = new ListConfiguration($g_db);
-    $former_list->setValue("lst_name", "Mitgliedschaft");
-    $former_list->setValue("lst_global", 1);
-    $former_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"));
-    $former_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"));
-    $former_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
-    $former_list->addColumn(4, "mem_begin");
-    $former_list->addColumn(5, "mem_end", "DESC");
+    $former_list->setValue('lst_name', 'Mitgliedschaft');
+    $former_list->setValue('lst_global', 1);
+    $former_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'));
+    $former_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'));
+    $former_list->addColumn(3, $g_current_user->getProperty('Geburtstag', 'usf_id'));
+    $former_list->addColumn(4, 'mem_begin');
+    $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
     
     // Beta-Flag für Datenbank-Versionsnummer schreiben
@@ -151,6 +161,7 @@ $g_db->query($sql);
 $sql = "UPDATE ". TBL_USERS. " SET usr_timestamp_create = '".DATETIME_NOW."'
          WHERE usr_timestamp_create IS NULL ";
 $g_db->query($sql);
+
 
 // Datenstruktur nach Update anpassen
 $sql = "ALTER TABLE ". TBL_USERS. " MODIFY COLUMN usr_timestamp_create datetime NOT NULL ";
