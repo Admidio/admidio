@@ -306,6 +306,7 @@ create table %PRAEFIX%_roles
    rol_location                   varchar(30),
    rol_max_members                smallint(3) unsigned,
    rol_cost                       float unsigned,
+   rol_cost_period				  smallint(3) unsigned,
    rol_usr_id_create              int(11) unsigned,
    rol_timestamp_create           datetime                       not null,
    rol_usr_id_change              int(11) unsigned,
