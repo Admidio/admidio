@@ -555,7 +555,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 echo "<tbody id=\"head_$block_id\">
                     <tr>
                         <td class=\"tableSubHeader\" colspan=\"6\">
-                            <a href=\"javascript:showHideBlock('$block_id','". THEME_PATH. "')\"><img class=\"iconShowHide\"
+                            <a href=\"javascript:showHideBlock('$block_id')\"><img class=\"iconShowHide\"
                             id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$letter_string
                         </td>
                     </tr>

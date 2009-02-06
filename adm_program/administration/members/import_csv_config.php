@@ -108,7 +108,7 @@ echo '
                     echo '<tbody>
                         <tr>
                             <td class="tableSubHeader" colspan="4">
-                                <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''. THEME_PATH. '\')"><img 
+                                <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\')"><img 
                                 id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'. $field->getValue('cat_name'). '
                             </td>
                         </tr>

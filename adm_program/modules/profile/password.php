@@ -19,7 +19,7 @@ require('../../system/common.php');
 require('../../system/login_valid.php');
  
 // nur Webmaster duerfen fremde Passwoerter aendern
-if(!$g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'])
+if($g_current_user->isWebmaster() == false && $g_current_user->getValue('usr_id') != $_GET['usr_id'])
 {
     $g_message->show('norights', '', '', false);
 }
@@ -99,7 +99,7 @@ else
     /***********************************************************************/
     /* Passwortformular anzeigen */
     /***********************************************************************/
-
+    
     // Html-Kopf ausgeben
     $g_layout['title']    = 'Passwort ändern';
     $g_layout['includes'] = false;
@@ -112,7 +112,7 @@ else
         <div class="formHead">'. $g_layout['title']. '</div>
         <div class="formBody">
             <ul class="formFieldList">';
-                if(!$g_current_user->isWebmaster() || $g_current_user->getValue('usr_id') == $_GET['usr_id'] )
+                if($g_current_user->getValue('usr_id') == $_GET['usr_id'] )
     			{
     			echo'
         			<li>
@@ -144,11 +144,7 @@ else
                 <button name="save" type="submit" value="Speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
             </div>
         </div>
-    </form>
-
-    <script type="text/javascript"><!--
-        document.getElementById(\'old_password\').focus();
-    --></script>';
+    </form>';
       
     require(THEME_SERVER_PATH. '/overall_footer.php');
 }
