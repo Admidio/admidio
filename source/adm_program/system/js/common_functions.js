@@ -60,7 +60,7 @@ function windowresize()
 }
 
 // Anzeigen bzw. verstecken eines Blocks
-function showHideBlock(block_name, theme_path)
+function showHideBlock(block_name)
 {
 	var block_element = block_name;
 	var image_element = 'img_' + block_name;
@@ -69,12 +69,12 @@ function showHideBlock(block_name, theme_path)
 	{
 		 document.getElementById(block_element).style.visibility = 'visible';
 		 document.getElementById(block_element).style.display    = '';
-		 document.getElementById(image_element).src = theme_path + '/icons/triangle_open.gif';
+		 document.getElementById(image_element).src = gThemePath + '/icons/triangle_open.gif';
 	}
 	else
 	{
 		 document.getElementById(block_element).style.visibility = 'hidden';
 		 document.getElementById(block_element).style.display    = 'none';
-		 document.getElementById(image_element).src = theme_path + '/icons/triangle_close.gif';
+		 document.getElementById(image_element).src = gThemePath + '/icons/triangle_close.gif';
 	}
 }

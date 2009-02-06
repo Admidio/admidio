@@ -13,15 +13,15 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_roles.php");
-require("../../system/classes/role_dependency.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/table_roles.php');
+require('../../system/classes/role_dependency.php');
 
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -29,13 +29,13 @@ $req_rol_id = 0;
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["rol_id"]))
+if(isset($_GET['rol_id']))
 {
-    if(is_numeric($_GET["rol_id"]) == false)
+    if(is_numeric($_GET['rol_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    $req_rol_id = $_GET["rol_id"];
+    $req_rol_id = $_GET['rol_id'];
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -48,16 +48,16 @@ if($req_rol_id > 0)
     $role->readData($req_rol_id);
     
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
+    if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
     
     // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
-    if($role->getValue("rol_name")    == "Webmaster" 
+    if($role->getValue('rol_name')    == 'Webmaster' 
     && $g_current_user->isWebmaster() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
 }
 if(isset($_SESSION['roles_request']))
@@ -66,7 +66,7 @@ if(isset($_SESSION['roles_request']))
     // nun die vorher eingegebenen Inhalte auslesen
     foreach($_SESSION['roles_request'] as $key => $value)
     {
-        if(strpos($key, "rol_") == 0)
+        if(strpos($key, 'rol_') == 0)
         {
             $role->setValue($key, stripslashes($value));
         }        
@@ -76,20 +76,20 @@ if(isset($_SESSION['roles_request']))
 else
 {
     // Datum formatieren
-    $role->setValue("rol_start_date", mysqldate('d.m.y', $role->getValue("rol_start_date")));
-    $role->setValue("rol_end_date", mysqldate('d.m.y', $role->getValue("rol_end_date")));
+    $role->setValue('rol_start_date', mysqldate('d.m.y', $role->getValue('rol_start_date')));
+    $role->setValue('rol_end_date', mysqldate('d.m.y', $role->getValue('rol_end_date')));
 }
 
 // Html-Kopf ausgeben
 if($req_rol_id > 0)
 {
-    $g_layout['title'] = "Rolle ändern";
+    $g_layout['title'] = 'Rolle ändern';
 }
 else
 {
-    $g_layout['title'] = "Rolle anlegen";
-    $role->setValue("rol_this_list_view", "1");
-    $role->setValue("rol_mail_this_role", "2");
+    $g_layout['title'] = 'Rolle anlegen';
+    $role->setValue('rol_this_list_view', '1');
+    $role->setValue('rol_mail_this_role', '2');
 }
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
@@ -199,171 +199,171 @@ $g_layout['header'] = '
         // Calendarobjekt fuer das Popup anlegen
         var calPopup = new CalendarPopup("calendardiv");
         calPopup.setCssPrefix("calendar");
-    --></script>';
+    //--></script>';
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<form id=\"formRole\" action=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=2\" method=\"post\">
-<div class=\"formLayout\" id=\"edit_roles_form\">
-    <div class=\"formHead\">". $g_layout['title']. "</div>
-    <div class=\"formBody\">
-        <ul class=\"formFieldList\">
+echo '
+<form id="formRole" action="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$req_rol_id.'&amp;mode=2" method="post">
+<div class="formLayout" id="edit_roles_form">
+    <div class="formHead">'.$g_layout['title'].'</div>
+    <div class="formBody">
+        <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for=\"rol_name\">Name:</label></dt>
+                    <dt><label for="rol_name">Name:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"rol_name\" name=\"rol_name\" ";
+                        <input type="text" id="rol_name" name="rol_name" ';
                         // bei bestimmte Rollen darf der Name nicht geaendert werden
-                        if($role->getValue("rol_name") == "Webmaster")
+                        if($role->getValue('rol_name') == 'Webmaster')
                         {
-                            echo " readonly=\"readonly\" ";
+                            echo ' readonly="readonly" ';
                         }
-                        echo " style=\"width: 320px;\" maxlength=\"50\" value=\"". $role->getValue("rol_name"). "\" />
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        echo ' style="width: 320px;" maxlength="50" value="'. $role->getValue('rol_name'). '" />
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"rol_description\">Beschreibung:</label></dt>
+                    <dt><label for="rol_description">Beschreibung:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"rol_description\" name=\"rol_description\" style=\"width: 320px;\" maxlength=\"255\" value=\"". $role->getValue("rol_description"). "\" />
+                        <input type="text" id="rol_description" name="rol_description" style="width: 320px;" maxlength="255" value="'. $role->getValue('rol_description'). '" />
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"rol_cat_id\">Kategorie:</label></dt>
+                    <dt><label for="rol_cat_id">Kategorie:</label></dt>
                     <dd>
-                        <select size=\"1\" id=\"rol_cat_id\" name=\"rol_cat_id\">
-                            <option value=\" \""; 
-                                if($role->getValue("rol_cat_id") == 0) 
+                        <select size="1" id="rol_cat_id" name="rol_cat_id">
+                            <option value=" "'; 
+                                if($role->getValue('rol_cat_id') == 0) 
                                 {
-                                    echo " selected=\"selected\"";
+                                    echo ' selected="selected" ';
                                 }
-                                echo ">- Bitte wählen -</option>";
+                                echo '>- Bitte wählen -</option>';
 
-                            $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-                                     WHERE cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                                       AND cat_type   = 'ROL'
-                                     ORDER BY cat_sequence ASC ";
+                            $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
+                                     WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                       AND cat_type   = "ROL"
+                                     ORDER BY cat_sequence ASC ';
                             $result = $g_db->query($sql);
 
                             while($row = $g_db->fetch_object($result))
                             {
-                                echo "<option value=\"$row->cat_id\"";
-                                    if($role->getValue("rol_cat_id") == $row->cat_id)
+                                echo '<option value="'.$row->cat_id.'"';
+                                    if($role->getValue('rol_cat_id') == $row->cat_id)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                echo ">$row->cat_name</option>";
+                                echo '>'.$row->cat_name.'</option>';
                             }
-                        echo "</select>
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        echo '</select>
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
             </li>
         </ul>
 
-        <div class=\"groupBox\" id=\"properties_box\" style=\"width: 90%;\">
-            <div class=\"groupBoxHeadline\" id=\"properties_head\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('properties_body','". THEME_PATH. "')\"><img 
-                id=\"img_properties_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Eigenschaften
+        <div class="groupBox" id="properties_box" style="width: 90%;">
+            <div class="groupBoxHeadline" id="properties_head">
+                <a class="iconShowHide" href="javascript:showHideBlock(\'properties_body\')"><img 
+                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>Eigenschaften
             </div>
 
-            <div class=\"groupBoxBody\" id=\"properties_body\">
-                <ul class=\"formFieldList\">";
+            <div class="groupBoxBody" id="properties_body">
+                <ul class="formFieldList">';
                     if($g_preferences['enable_mail_module'])
                     {
-                        echo "
+                        echo '
                         <li>
 	                        <dl>
-	                            <dt><label for=\"rol_mail_this_role\">Mails zusenden:</label></dt>
+	                            <dt><label for="rol_mail_this_role">Mails zusenden:</label></dt>
 	                            <dd>
-	                                <select size=\"1\" id=\"rol_mail_this_role\" name=\"rol_mail_this_role\">
-	                                    <option value=\"0\" "; 
-	                                        if($role->getValue("rol_mail_this_role") == 0) 
+	                                <select size="1" id="rol_mail_this_role" name="rol_mail_this_role">
+	                                    <option value="0" '; 
+	                                        if($role->getValue('rol_mail_this_role') == 0) 
 	                                        {
-	                                            echo " selected=\"selected\"";
+	                                            echo ' selected="selected" ';
 	                                        }
-	                                        echo ">niemand</option>
-	                                    <option value=\"1\" "; 
-	                                        if($role->getValue("rol_mail_this_role") == 1) 
+	                                        echo '>niemand</option>
+	                                    <option value="1" '; 
+	                                        if($role->getValue('rol_mail_this_role') == 1) 
 	                                        {
-	                                            echo " selected=\"selected\"";
+	                                            echo ' selected="selected" ';
 	                                        }
-	                                        echo ">nur Rollenmitglieder</option>
-	                                    <option value=\"2\" "; 
-	                                        if($role->getValue("rol_mail_this_role") == 2) 
+	                                        echo '>nur Rollenmitglieder</option>
+	                                    <option value="2" '; 
+	                                        if($role->getValue('rol_mail_this_role') == 2) 
 	                                        {
-	                                            echo " selected=\"selected\"";
+	                                            echo ' selected="selected" ';
 	                                        }
-	                                        echo ">alle angemeldeten Benutzer</option>
-										<option value=\"3\" "; 
-	                                        if($role->getValue("rol_mail_this_role") == 3) 
+	                                        echo '>alle angemeldeten Benutzer</option>
+										<option value="3" '; 
+	                                        if($role->getValue('rol_mail_this_role') == 3) 
 	                                        {
-	                                            echo " selected=\"selected\"";
+	                                            echo ' selected="selected" ';
 	                                        }
-	                                        echo ">alle Besucher der Seite</option>
+	                                        echo '>alle Besucher der Seite</option>
 	                                </select>
-	                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
-	                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_this_role&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-	                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_mail_this_role',this);\" onmouseout=\"ajax_hideTooltip()\" />
+	                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt=""
+	                                    onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_mail_this_role&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+	                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_mail_this_role\',this);" onmouseout="ajax_hideTooltip()" />
 	                            </dd>
 		                    </dl>
-	                    </li>";
+	                    </li>';
                     }
-                    echo "
+                    echo '
                     <li>
                         <dl>
-                            <dt><label for=\"rol_this_list_view\">Listen ansehen:</label></dt>
+                            <dt><label for="rol_this_list_view">Listen ansehen:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"rol_this_list_view\" name=\"rol_this_list_view\">
-                                    <option value=\"0\" "; 
-                                        if($role->getValue("rol_this_list_view") == 0) 
+                                <select size="1" id="rol_this_list_view" name="rol_this_list_view">
+                                    <option value="0" '; 
+                                        if($role->getValue('rol_this_list_view') == 0) 
                                         {
-                                            echo " selected=\"selected\"";
+                                            echo ' selected="selected" ';
                                         }
-                                        echo ">niemand</option>
-                                    <option value=\"1\" "; 
-                                        if($role->getValue("rol_this_list_view") == 1) 
+                                        echo '>niemand</option>
+                                    <option value="1" '; 
+                                        if($role->getValue('rol_this_list_view') == 1) 
                                         {
-                                            echo " selected=\"selected\"";
+                                            echo ' selected="selected" ';
                                         }
-                                        echo ">nur Rollenmitglieder</option>
-                                    <option value=\"2\" "; 
-                                        if($role->getValue("rol_this_list_view") == 2) 
+                                        echo '>nur Rollenmitglieder</option>
+                                    <option value="2" '; 
+                                        if($role->getValue('rol_this_list_view') == 2) 
                                         {
-                                            echo " selected=\"selected\"";
+                                            echo ' selected="selected" ';
                                         }
-                                        echo ">alle angemeldeten Benutzer</option>
+                                        echo '>alle angemeldeten Benutzer</option>
                                 </select>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_show_list',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt=""
+                                    onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_show_list\',this);" onmouseout="ajax_hideTooltip()" />
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"rol_max_members\">max. Teilnehmer:</label></dt>
+                            <dt><label for="rol_max_members">max. Teilnehmer:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"rol_max_members\" name=\"rol_max_members\" size=\"3\" maxlength=\"3\" onchange=\"checkMaxMemberCount(this.value)\" value=\"";
-                                if($role->getValue("rol_max_members") > 0)
+                                <input type="text" id="rol_max_members" name="rol_max_members" size="3" maxlength="3" onchange="checkMaxMemberCount(this.value)" value="';
+                                if($role->getValue('rol_max_members') > 0)
                                 {
-                                    echo $role->getValue("rol_max_members");
+                                    echo $role->getValue('rol_max_members');
                                 }
-                                echo "\" />&nbsp;(ohne Leiter)
+                                echo '" />&nbsp;(ohne Leiter)
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"rol_cost\">Beitrag:</label></dt>
+                            <dt><label for="rol_cost">Beitrag:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"rol_cost\" name=\"rol_cost\" size=\"6\" maxlength=\"6\" value=\"". $role->getValue("rol_cost"). "\" /> &euro;
+                                <input type="text" id="rol_cost" name="rol_cost" size="6" maxlength="6" value="'. $role->getValue('rol_cost'). '" /> &euro;
                             </dd>
                         </dl>
                     </li>
@@ -371,24 +371,24 @@ echo "
             </div>
         </div>
         
-        <div class=\"groupBox\" id=\"justifications_box\" style=\"width: 90%;\">
-            <div class=\"groupBoxHeadline\">
-                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('justifications_body','". THEME_PATH. "')\"><img 
-                id=\"img_justifications_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Berechtigungen
+        <div class="groupBox" id="justifications_box" style="width: 90%;">
+            <div class="groupBoxHeadline">
+                <a class="iconShowHide" href="javascript:showHideBlock(\'justifications_body\')"><img 
+                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>Berechtigungen
             </div>
 
-            <div class=\"groupBoxBody\" id=\"justifications_body\">
-                <ul class=\"formFieldList\">
+            <div class="groupBoxBody" id="justifications_body">
+                <ul class="formFieldList">
                     <li>
                         <div>
-                            <input type=\"checkbox\" id=\"rol_assign_roles\" name=\"rol_assign_roles\" ";
-                            if($role->getValue("rol_assign_roles") == 1)
+                            <input type="checkbox" id="rol_assign_roles" name="rol_assign_roles" ';
+                            if($role->getValue('rol_assign_roles') == 1)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
-                            if($role->getValue("rol_name") == "Webmaster")
+                            if($role->getValue('rol_name') == 'Webmaster')
                             {
-                                echo " disabled=\"disabled\" ";
+                                echo ' disabled="disabled" ';
                             }
                             echo " onchange=\"markRoleRight('rol_assign_roles', 'rol_all_lists_view', true)\" value=\"1\" />
                             <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/roles.png\" alt=\"Rollen verwalten und zuordnen\" /></label>&nbsp;
@@ -572,7 +572,7 @@ echo "
 
         <div class="groupBox" id="dates_box" style="width: 90%;">
             <div class="groupBoxHeadline" id="dates_head">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'dates_body\',\''.THEME_PATH.'\')"><img 
+                <a class="iconShowHide" href="javascript:showHideBlock(\'dates_body\')"><img 
                 	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="ausblenden" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
@@ -642,7 +642,7 @@ echo "
         {       
             echo "<div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
                 <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
-                    <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body','". THEME_PATH. "')\"><img
+                    <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body')\"><img
                     id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
                 </div>
     
@@ -720,21 +720,24 @@ echo "
             </div>";
         }                   
 
-        // Infos der Benutzer, die diesen DS erstellt und geaendert haben
-        echo '<div class="editInformation">';
-            $user_create = new User($g_db, $role->getValue("rol_usr_id_create"));
-            echo 'Angelegt von '. $user_create->getValue("Vorname"). ' '. $user_create->getValue("Nachname").
-            ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_create"));
+        if($req_rol_id > 0)
+        {
+            // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+            echo '<div class="editInformation">';
+                $user_create = new User($g_db, $role->getValue("rol_usr_id_create"));
+                echo 'Angelegt von '. $user_create->getValue("Vorname"). ' '. $user_create->getValue("Nachname").
+                ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_create"));
 
-            if($role->getValue("rol_usr_id_change") > 0)
-            {
-                $user_change = new User($g_db, $role->getValue("rol_usr_id_change"));
-                echo '<br />Zuletzt bearbeitet von '. $user_change->getValue("Vorname"). ' '. $user_change->getValue("Nachname").
-                ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_change"));
-            }
-        echo '</div>
+                if($role->getValue("rol_usr_id_change") > 0)
+                {
+                    $user_change = new User($g_db, $role->getValue("rol_usr_id_change"));
+                    echo '<br />Zuletzt bearbeitet von '. $user_change->getValue("Vorname"). ' '. $user_change->getValue("Nachname").
+                    ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_change"));
+                }
+            echo '</div>';
+        }
 
-        <div class="formSubmit">
+        echo '<div class="formSubmit">
             <button name="speichern" type="submit" value="speichern" onclick="absenden()">
                 <img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />
                 &nbsp;Speichern</button>
@@ -758,23 +761,23 @@ echo "
     // Bloecke anzeigen/verstecken
     if($req_rol_id > 0)
     {
-        if(strlen($role->getValue("rol_start_date")) == 0 
-        && strlen($role->getValue("rol_end_date")) == 0
-        && strlen($role->getValue("rol_start_time")) == 0
-        && strlen($role->getValue("rol_end_time")) == 0
-        && $role->getValue("rol_weekday") == 0
-        && strlen($role->getValue("rol_location")) == 0)
+        if(strlen($role->getValue('rol_start_date')) == 0 
+        && strlen($role->getValue('rol_end_date')) == 0
+        && strlen($role->getValue('rol_start_time')) == 0
+        && strlen($role->getValue('rol_end_time')) == 0
+        && $role->getValue('rol_weekday') == 0
+        && strlen($role->getValue('rol_location')) == 0)
         {
-            echo "showHideBlock('dates_body','". THEME_PATH. "'); ";
+            echo 'showHideBlock("dates_body"); ';
         }
         if(count($childRoles) == 0)
         {
-            echo "showHideBlock('dependancies_body','". THEME_PATH. "'); ";
+            echo 'showHideBlock("dependancies_body"); ';
         }
     }
 echo '
 --></script>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
