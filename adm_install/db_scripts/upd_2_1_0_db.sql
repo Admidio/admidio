@@ -18,7 +18,8 @@ alter table %PRAEFIX%_users add constraint %PRAEFIX%_FK_USR_USR_create foreign k
 ALTER TABLE %PRAEFIX%_users ADD COLUMN usr_timestamp_create datetime AFTER usr_usr_id_create;
 ALTER TABLE %PRAEFIX%_users CHANGE COLUMN `usr_last_change` `usr_timestamp_change` datetime;
 
-ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_usr_id_create int(11) unsigned AFTER rol_cost;
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_cost_period smallint(3) unsigned AFTER rol_cost;
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_usr_id_create int(11) unsigned AFTER rol_cost_period;
 alter table %PRAEFIX%_roles add index ROL_USR_CREATE_FK (rol_usr_id_create);
 alter table %PRAEFIX%_roles add constraint %PRAEFIX%_FK_ROL_USR_CREATE foreign key (rol_usr_id_create)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
