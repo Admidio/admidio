@@ -57,6 +57,10 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CREATE foreign 
 ALTER TABLE %PRAEFIX%_guestbook CHANGE COLUMN `gbo_last_change` `gbo_timestamp_change` datetime;
 ALTER TABLE %PRAEFIX%_guestbook_comments CHANGE COLUMN `gbc_last_change` `gbc_timestamp_change` datetime;
 
+-- Systemprofilfelder anpassen
+UPDATE %PRAEFIX%_user_fields SET usf_system = 0
+ WHERE usf_name IN ('Telefon','Handy','Fax');
+
 -- Mitgliederzuordnung anpassen
 update %PRAEFIX%_members set mem_end = '9999-12-31' where mem_end is null;
 ALTER TABLE %PRAEFIX%_members MODIFY COLUMN `mem_begin` DATE NOT NULL;

@@ -15,7 +15,7 @@
  *
  *****************************************************************************/
 
-require_once("install_functions.php");
+require_once('install_functions.php');
 
 // Uebergabevariablen pruefen
 
@@ -29,25 +29,25 @@ else
 }
 
 // Konstanten und Konfigurationsdatei einbinden
-require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1). "/config.php");
-require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1). "/adm_program/system/constants.php");
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
 {
-    $g_tbl_praefix = "adm";
+    $g_tbl_praefix = 'adm';
 }
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
 {
-    $g_db_type = "mysql";
+    $g_db_type = 'mysql';
 }
 
-require_once(SERVER_PATH. "/adm_program/system/db/". $g_db_type. ".php");
-require_once(SERVER_PATH. "/adm_program/system/string.php");
-require_once(SERVER_PATH. "/adm_program/system/function.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
+require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
+require_once(SERVER_PATH. '/adm_program/system/string.php');
+require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 
  // Verbindung zu Datenbank herstellen
 $g_db = new MySqlDB();
@@ -56,10 +56,10 @@ $g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 // Daten der aktuellen Organisation einlesen
 $g_current_organization = new Organization($g_db, $g_organization);
 
-if($g_current_organization->getValue("org_id") == 0)
+if($g_current_organization->getValue('org_id') == 0)
 {
     // Organisation wurde nicht gefunden
-    die("<div style=\"color: #CC0000;\">Error: ". $message_text['missing_orga']. "</div>");
+    die('<div style="color: #CC0000;">Error: '. $message_text['missing_orga']. '</div>');
 }
 
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
@@ -86,26 +86,26 @@ if($req_mode == 1)
                           <option value="1.3.9">Version 1.3.*</option>
                           <option value="1.2.9">Version 1.2.*</option>
                       </select>';
-        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
+        showPage($message, 'update.php?mode=2', 'database_in.png', 'Datenbank aktualisieren', 2);
     }
     elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
     {
         $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
                       <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />';
-        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
+        showPage($message, 'update.php?mode=2', 'database_in.png', 'Datenbank aktualisieren', 2);
     }
 	elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0 && $g_preferences['db_version_beta'] < BETA_VERSION)
     {
         $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
                       <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />';
-        showPage($message, "update.php?mode=2", "database_in.png", "Datenbank aktualisieren", 2);
+        showPage($message, 'update.php?mode=2', 'database_in.png', 'Datenbank aktualisieren', 2);
     }
     elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0)
     {
         $message   = '<img style="vertical-align: top;" src="layout/ok.png" /> 
                       <strong>Eine Aktualisierung ist nicht erforderlich</strong><br /><br />
                       Die Admidio-Datenbank ist aktuell.';
-        showPage($message, "$g_root_path/index.html", "application_view_list.png", "Übersichtsseite", 2);
+        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', 'Übersichtsseite', 2);
     }
 }
 elseif($req_mode == 2)
@@ -118,8 +118,8 @@ elseif($req_mode == 2)
         || strlen($_POST['old_version']) > 5
         || $_POST['old_version'] == 0)
         {
-            $message   = "Das Feld <strong>bisherige Admidio-Version</strong> ist nicht gefüllt.";
-            showPage($message, "update.php", "back.png", "Zurück", 2);
+            $message   = 'Das Feld <strong>bisherige Admidio-Version</strong> ist nicht gefüllt.';
+            showPage($message, 'update.php', 'back.png', 'Zurück', 2);
         }
         $old_version = $_POST['old_version'];
     }
@@ -133,20 +133,20 @@ elseif($req_mode == 2)
     @set_time_limit(120);
 
     // vor dem Update die Versionsnummer umsetzen, damit keiner mehr was machen kann
-    $temp_version = substr(ADMIDIO_VERSION, 0, 4). "u";
-	$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". $temp_version. "'
-			 WHERE prf_name    = 'db_version' ";
+    $temp_version = substr(ADMIDIO_VERSION, 0, 4). 'u';
+	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'. $temp_version. '"
+			 WHERE prf_name    = "db_version" ';
 	$g_db->query($sql);                
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
-    include("db_scripts/preferences.php");
+    include('db_scripts/preferences.php');
 
-    $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
+    $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
     $result_orga = $g_db->query($sql);
 
     while($row_orga = $g_db->fetch_array($result_orga))
     {
-        $g_current_organization->setValue("org_id", $row_orga['org_id']);
+        $g_current_organization->setValue('org_id', $row_orga['org_id']);
         $g_current_organization->setPreferences($orga_preferences, false);
     }
 
@@ -166,16 +166,16 @@ elseif($req_mode == 2)
         for($micro_version = $micro_version; $micro_version < 15; $micro_version++)
         {
             // Update-Datei der naechsten hoeheren Version ermitteln
-            $sql_file  = "db_scripts/upd_". $main_version. "_". $sub_version. "_". $micro_version. "_db.sql";
-            $conv_file = "db_scripts/upd_". $main_version. "_". $sub_version. "_". $micro_version. "_conv.php";                
+            $sql_file  = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_db.sql';
+            $conv_file = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_conv.php';                
             
             if(file_exists($sql_file))
             {
                 // SQL-Script abarbeiten
-                $file    = fopen($sql_file, "r")
-                           or showPage("Die Datei <strong>$sql_file</strong> konnte nicht geöffnet werden.", "update.php", "back.png", "Zurück");
+                $file    = fopen($sql_file, 'r')
+                           or showPage('Die Datei <strong>'.$sql_file.'</strong> konnte nicht geöffnet werden.', 'update.php', 'back.png', 'Zurück');
                 $content = fread($file, filesize($sql_file));
-                $sql_arr = explode(";", $content);
+                $sql_arr = explode(';', $content);
                 fclose($file);
     
                 foreach($sql_arr as $sql)
@@ -183,7 +183,7 @@ elseif($req_mode == 2)
                     if(strlen(trim($sql)) > 0)
                     {
                         // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-                        $sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
+                        $sql = str_replace('%PRAEFIX%', $g_tbl_praefix, $sql);
                         $g_db->query($sql);
                     }
                 }
@@ -202,7 +202,7 @@ elseif($req_mode == 2)
         // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
         // solange bis die aktuelle Versionsnummer erreicht wurde
         if($flag_next_version == false
-        && version_compare($main_version. ".". $sub_version. ".". $micro_version , ADMIDIO_VERSION) == -1)
+        && version_compare($main_version. '.'. $sub_version. '.'. $micro_version , ADMIDIO_VERSION) == -1)
         {
             if($sub_version == 9)
             {
@@ -220,12 +220,12 @@ elseif($req_mode == 2)
     }
 
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
-    $sql = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 1 ";
+    $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';
     $g_db->query($sql);
     
     // nach einem erfolgreichen Update noch die neue Versionsnummer in DB schreiben
-	$sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '". ADMIDIO_VERSION. "'
-			 WHERE prf_name    = 'db_version' ";
+	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'. ADMIDIO_VERSION. '"
+			 WHERE prf_name    = "db_version"" ';
 	$g_db->query($sql);                
 
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
