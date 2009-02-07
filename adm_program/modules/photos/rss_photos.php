@@ -54,7 +54,7 @@ $sql = 'SELECT pho.*,
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = pho_usr_id_change
            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
-         WHERE (   pho_org_shortname = ''. $g_current_organization->getValue('org_shortname'). ''
+         WHERE (   pho_org_shortname = "'. $g_current_organization->getValue('org_shortname'). '"
                AND pho_locked = 0)
          ORDER BY pho_timestamp_create DESC
          LIMIT 10';
