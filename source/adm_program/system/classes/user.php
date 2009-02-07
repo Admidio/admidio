@@ -171,15 +171,15 @@ class User extends TableUsers
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
     // angefordert wurde und gibt diesen zurueck
     // die Funktion wird innerhalb von getValue() aufgerufen
-    function getValue($field_name, $field_value = "")
+    function getValue($field_name, $field_value = '')
     {
-        if(strpos($field_name, "usr_") === 0)
+        if(strpos($field_name, 'usr_') === 0)
         {
             return parent::getValue($field_name, $field_value);
         }
         else
         {
-            return htmlspecialchars($this->getProperty($field_name, "usd_value"), ENT_QUOTES);
+            return htmlspecialchars($this->getProperty($field_name, 'usd_value'), ENT_QUOTES);
         }
     }
 
@@ -188,7 +188,11 @@ class User extends TableUsers
     // hier koennen auch noch bestimmte Formatierungen angewandt werden
     function getProperty($field_name, $property)
     {
-        return $this->userFieldData[$field_name]->getValue($property);
+    	if(isset($this->userFieldData[$field_name]))
+    	{
+        	return $this->userFieldData[$field_name]->getValue($property);
+       	}
+       	return '';
     }
 
     // aehnlich getProperty, allerdings suche ueber usf_id
@@ -201,7 +205,7 @@ class User extends TableUsers
                 return $field->getValue($property);
             }
         }
-        return false;
+        return '';
     }
 
     function save()

@@ -163,31 +163,31 @@ class TableAccess
             if(strlen($field_value) > 0)
             {
                 // Numerische Felder
-                if(strpos($this->columnsInfos[$field_name]['type'], "int") !== false)
+                if(strpos($this->columnsInfos[$field_name]['type'], 'int') !== false)
                 {
                     if(is_numeric($field_value) == false)
                     {
-                        $field_value = "";
+                        $field_value = '';
                     }
                     
                     // Schluesselfelder
-                    if((  $this->columnsInfos[$field_name]['key'] == "PRI"
-                       || $this->columnsInfos[$field_name]['key'] == "MUL")
+                    if((  $this->columnsInfos[$field_name]['key'] == 'PRI'
+                       || $this->columnsInfos[$field_name]['key'] == 'MUL')
                     && $field_value == 0)
                     {
-                        $field_value = "";    
+                        $field_value = '';    
                     }
                 }
                 
                 // Strings
-                elseif(strpos($this->columnsInfos[$field_name]['type'], "char") !== false
-                ||     strpos($this->columnsInfos[$field_name]['type'], "text") !== false)
+                elseif(strpos($this->columnsInfos[$field_name]['type'], 'char') !== false
+                ||     strpos($this->columnsInfos[$field_name]['type'], 'text') !== false)
                 {
                     $field_value = strStripTags($field_value);
                 }
 
                 // Daten
-                elseif(strpos($this->columnsInfos[$field_name]['type'], "blob") !== false)
+                elseif(strpos($this->columnsInfos[$field_name]['type'], 'blob') !== false)
                 {
                     $field_value = addslashes($field_value);
                 }
@@ -207,17 +207,18 @@ class TableAccess
     
     // Methode gibt den Wert eines Feldes ($field_name) zurueck
     // $field_value dient als Uebergabe aus ueberschreibenden Methoden heraus
-    function getValue($field_name, $field_value = "")
+    function getValue($field_name, $field_value = '')
     {
-        if(strlen($field_value) == 0)
+        if(strlen($field_value) == 0
+        && isset($this->dbColumns[$field_name]))
         {
             $field_value = $this->dbColumns[$field_name];
         }
 
         // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
         if(isset($this->columnsInfos[$field_name]['type'])
-        && (  strpos($this->columnsInfos[$field_name]['type'], "char") !== false
-           || strpos($this->columnsInfos[$field_name]['type'], "text") !== false))
+        && (  strpos($this->columnsInfos[$field_name]['type'], 'char') !== false
+           || strpos($this->columnsInfos[$field_name]['type'], 'text') !== false))
         {
             return htmlspecialchars($field_value, ENT_QUOTES);
         }
@@ -234,17 +235,17 @@ class TableAccess
         if($this->columnsValueChanged || strlen($this->dbColumns[$this->key_name]) == 0)
         {
             // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
-            $item_connection = "";                
-            $sql_field_list  = "";
-            $sql_value_list  = "";
+            $item_connection = '';                
+            $sql_field_list  = '';
+            $sql_value_list  = '';
 
             // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
             foreach($this->dbColumns as $key => $value)
             {
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
-                if(strpos($key, $this->column_praefix. "_") === 0
-                && $this->columnsInfos[$key]['extra'] != "auto_increment") 
+                if(strpos($key, $this->column_praefix. '_') === 0
+                && $this->columnsInfos[$key]['extra'] != 'auto_increment') 
                 {
                     if($this->columnsInfos[$key]['changed'] == true)
                     {
