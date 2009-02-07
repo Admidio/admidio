@@ -141,6 +141,28 @@ button img {
     text-align:         center;
 }
 
+/* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
+   wird haeufig innerhalb von Formularen genutzt (z.B.: Profil, Rollenpflege) */
+
+.groupBox {
+    color:              #555555;
+    border:             2px solid #bad8e2;
+    padding:            5px 10px 5px 10px;
+    text-align:         left;
+    margin-top:         12px;
+    -moz-border-radius: 10px;
+}
+
+.groupBoxHeadline {
+    color:              #333333;
+    font-weight:        bold;
+}
+
+.groupBoxBody {
+    padding-top:        7px;
+    clear:              both;
+}
+
 /* weitere CSS-Klassen */
 
 .iconTextLink img {

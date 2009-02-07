@@ -66,7 +66,7 @@ if($restrict=="m")
 {
     //Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
     $sql = "SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
-                   city.usd_value as city, phone.usd_value as phone, address.usd_value as address, zip_code.usd_value as zip_code
+                   city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code
             FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
             LEFT JOIN ". TBL_USER_DATA. " as last_name
               ON last_name.usd_usr_id = usr_id
@@ -80,9 +80,6 @@ if($restrict=="m")
             LEFT JOIN ". TBL_USER_DATA. " as city
               ON city.usd_usr_id = usr_id
              AND city.usd_usf_id = ". $g_current_user->getProperty("Ort", "usf_id"). "
-            LEFT JOIN ". TBL_USER_DATA. " as phone
-              ON phone.usd_usr_id = usr_id
-             AND phone.usd_usf_id = ". $g_current_user->getProperty("Telefon", "usf_id"). "
             LEFT JOIN ". TBL_USER_DATA. " as address
               ON address.usd_usr_id = usr_id
              AND address.usd_usf_id = ". $g_current_user->getProperty("Adresse", "usf_id"). "
@@ -103,7 +100,7 @@ elseif($restrict=="u")
 {
     //Falls gefordert, aufrufen alle Leute aus der Datenbank
     $sql = "SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
-                   city.usd_value as city, phone.usd_value as phone, address.usd_value as address, zip_code.usd_value as zip_code
+                   city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code
             FROM ". TBL_USERS. "
             LEFT JOIN ". TBL_USER_DATA. " as last_name
               ON last_name.usd_usr_id = usr_id
@@ -117,9 +114,6 @@ elseif($restrict=="u")
             LEFT JOIN ". TBL_USER_DATA. " as city
               ON city.usd_usr_id = usr_id
              AND city.usd_usf_id = ". $g_current_user->getProperty("Ort", "usf_id"). "
-            LEFT JOIN ". TBL_USER_DATA. " as phone
-              ON phone.usd_usr_id = usr_id
-             AND phone.usd_usf_id = ". $g_current_user->getProperty("Telefon", "usf_id"). "
             LEFT JOIN ". TBL_USER_DATA. " as address
               ON address.usd_usr_id = usr_id
              AND address.usd_usf_id = ". $g_current_user->getProperty("Adresse", "usf_id"). "
@@ -212,17 +206,17 @@ $count_valid_users = $row[0];
 
 // Html-Kopf ausgeben
 $g_layout['title']  = 'Mitgliederzuordnung für "'. $role->getValue("rol_name"). '"';
-$g_layout['header'] = "
-    <script type=\"text/javascript\"><!--
+$g_layout['header'] = '
+    <script type="text/javascript"><!--
         var member_count = -1;
         function markMember(element)
         {
             if(element.checked == true)
             {
                 var name   = element.name;
-                var pos_number = name.search('_') + 1;
+                var pos_number = name.search("_") + 1;
                 var number = name.substr(pos_number, name.length - pos_number);
-                var role_name = 'member_' + number;
+                var role_name = "member_" + number;
                 document.getElementById(role_name).checked = true;
                 increaseMemberCount();
             }
@@ -237,9 +231,9 @@ $g_layout['header'] = "
             if(element.checked == false)
             {
                 var name   = element.name;
-                var pos_number = name.search('_') + 1;
+                var pos_number = name.search("_") + 1;
                 var number = name.substr(pos_number, name.length - pos_number);
-                var role_name = 'leader_' + number;
+                var role_name = "leader_" + number;
                 document.getElementById(role_name).checked = false;
      			//
      			decreaseMemberCount();
@@ -266,34 +260,34 @@ $g_layout['header'] = "
 	 			initializeMemberCount(-1);
 	 		}
 	 		member_count++;
-	 	}";
-if($role->getValue("rol_name") == "Webmaster")
-{
-$g_layout['header'] =  $g_layout['header'] ."
+	 	}';
+	if($role->getValue('rol_name') == 'Webmaster')
+	{
+		$g_layout['header'] =  $g_layout['header'] .'
 	 	function chkMemberCount()
 	 	{
 	 		if(member_count == 0)
 	 		{
-	 			alert('Die Rolle Webmaster muss mindestens ein Mitglied haben!');
+	 			alert("Die Rolle Webmaster muss mindestens ein Mitglied haben!");
 	 			return false;
 	 		}
 	 		else
 	 			return true;
-	 	}";
-}
-else
-{
-$g_layout['header'] =  $g_layout['header'] ."
+	 	}';
+	}
+	else
+	{
+		$g_layout['header'] =  $g_layout['header'] .'
 	 	function chkMemberCount()
 	 	{
 	 		return true;
-	 	}";
-}
-$g_layout['header'] =  $g_layout['header'] ."
+	 	}';
+	}
+		$g_layout['header'] =  $g_layout['header'] .'
         function initializeMemberCount(action)
         {
         	member_count = 0;
-        	all_inputs = document.getElementsByTagName('input');
+        	all_inputs = document.getElementsByTagName("input");
         	for(var i=0;i < all_inputs.length; ++i)
         	{
         		if(all_inputs[i].name.search(/member.+/)!=-1 && all_inputs[i].checked==true)
@@ -312,8 +306,8 @@ $g_layout['header'] =  $g_layout['header'] ."
         }
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
-    ids = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'zahl');
+    ids = new Array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+                    "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "zahl");
 
 
     // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -323,23 +317,23 @@ $g_layout['header'] =  $g_layout['header'] ."
         var i, id_head, id_body;
         for (i=0;i<ids.length;i++)
         {
-            id_head = 'head_letter_' + ids[i];
-            id_body = 'letter_' + ids[i];
+            id_head = "head_letter_" + ids[i];
+            id_body = "letter_" + ids[i];
             if(document.getElementById(id_head))
             {
-                document.getElementById(id_head).style.visibility = 'hidden';
-                document.getElementById(id_head).style.display    = 'none';
-                document.getElementById(id_body).style.visibility = 'hidden';
-                document.getElementById(id_body).style.display    = 'none';
+                document.getElementById(id_head).style.visibility = "hidden";
+                document.getElementById(id_head).style.display    = "none";
+                document.getElementById(id_body).style.visibility = "hidden";
+                document.getElementById(id_body).style.display    = "none";
             }
         }
 
         // Angeforderten Bereich anzeigen
-        id_head = 'head_' + element_id;
-        document.getElementById(id_head).style.visibility = 'visible';
-        document.getElementById(id_head).style.display    = '';
-        document.getElementById(element_id).style.visibility = 'visible';
-        document.getElementById(element_id).style.display    = '';
+        id_head = "head_" + element_id;
+        document.getElementById(id_head).style.visibility = "visible";
+        document.getElementById(id_head).style.display    = "";
+        document.getElementById(element_id).style.visibility = "visible";
+        document.getElementById(element_id).style.display    = "";
     }
 
     // Alle Divs anzeigen
@@ -350,25 +344,25 @@ $g_layout['header'] =  $g_layout['header'] ."
 
         for (i=0;i<ids.length;i++)
         {
-            id_head = 'head_letter_' + ids[i];
-            id_body = 'letter_' + ids[i];
+            id_head = "head_letter_" + ids[i];
+            id_body = "letter_" + ids[i];
 
             if(document.getElementById(id_head))
             {
-                document.getElementById(id_head).style.visibility = 'visible';
-                document.getElementById(id_head).style.display    = '';
-                document.getElementById(id_body).style.visibility = 'visible';
-                document.getElementById(id_body).style.display    = '';
+                document.getElementById(id_head).style.visibility = "visible";
+                document.getElementById(id_head).style.display    = "";
+                document.getElementById(id_body).style.visibility = "visible";
+                document.getElementById(id_body).style.display    = "";
             }
         }
     }
-    --></script>";
+    --></script>';
 
-require(THEME_SERVER_PATH. "/overall_header.php");
-echo "
-<h1>". $g_layout['title']. "</h1>";
+require(THEME_SERVER_PATH. '/overall_header.php');
+echo '
+<h1>'. $g_layout['title']. '</h1>';
 
-if(($count_valid_users != $user_anzahl || $restrict == "u")
+if(($count_valid_users != $user_anzahl || $restrict == 'u')
 && ($g_current_user->assignRoles() || $g_current_user->editUsers()))
 {
     //Button Alle bzw. nur Mitglieder anzeigen
@@ -574,10 +568,6 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             {
                 $user_text = $user_text. " - ". $user['zip_code']. " ". $user['city'];
             }
-            if(strlen($user['phone']) > 0)
-            {
-                $user_text = $user_text. " - ". $user['phone'];
-            }
 
             echo"
             <tr class=\"tableMouseOver\">
@@ -693,8 +683,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                  //Datensatz ausgeben
                 $user_text= $user['first_name']."&nbsp;".$user['last_name']."&nbsp;&nbsp;&nbsp;"
                             .$user['address']."&nbsp;&nbsp;&nbsp;"
-                            .$user['zip_code']."&nbsp;".$user['city']."&nbsp;&nbsp;&nbsp;"
-                            .$user['phone'];
+                            .$user['zip_code']."&nbsp;".$user['city'];
                 echo"
                 <tr class=\"tableMouseOver\">
                     <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
