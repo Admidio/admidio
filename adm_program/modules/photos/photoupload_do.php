@@ -226,18 +226,18 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 	 echo '
                 	  <img class="photoOutput" 
                 	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&pic_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin').'&scal=300&side=x" 
-                	  alt="Bild '.$new_quantity.'" title="Bild '.$new_quantity.'">
+                	  alt="Foto '.$new_quantity.'" title="Foto '.$new_quantity.'">
                 	  <br />';
                 }
                 else
                 {
-                	echo 'Bild erfolgreich gespeichert!';exit();
+                	echo 'Foto erfolgreich gespeichert!';exit();
                 }          
             }
             else
             {
                 $new_quantity --;
-                echo 'Das Bild konnte nicht verarbeitet werden!';
+                echo 'Das Foto konnte nicht verarbeitet werden!';
             }	        
     	}
     	else
