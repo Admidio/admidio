@@ -153,7 +153,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	
     	if($_GET['uploadmethod'] == 1)
     	{
-    		echo '<br /><br />Albumbild '.$new_quantity.':<br />';
+    		echo '<br /><br />Albumfoto '.$new_quantity.':<br />';
     	}
     	
     	// Sonderzeichen aus Dateinamen entfernen

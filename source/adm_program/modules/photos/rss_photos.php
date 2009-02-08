@@ -102,7 +102,7 @@ while ($row = $g_db->fetch_array($result))
 
     //Inhalt zusammensetzen
     $description = 'Fotogalerien'.$parents.' > '. $photo_album->getValue('pho_name');
-    $description = $description. '<br /><br /> Bilder: '.$photo_album->countImages();
+    $description = $description. '<br /><br /> Fotos: '.$photo_album->countImages();
     $description = $description. '<br /> Datum: '.mysqldate('d.m.y', $photo_album->getValue('pho_begin'));
     //Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))

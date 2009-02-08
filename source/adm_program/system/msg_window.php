@@ -344,25 +344,25 @@ switch ($req_err_code)
    case 'photo_up_help':
         echo '<h3>Was ist zu tun?</h3>
             <ul>
-				<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte(n) Bilddatei(en) von der Festplatte auswählen.</li>
+				<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</li>
 				<li>Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</li>
-				<li>Dann auf &bdquo;Bilder hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+				<li>Dann auf &bdquo;Fotos hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
 			</ul>  
             <h3>Einschränkungen:</h3>
             <ul>
-				<li>Die Bilder müssen im Format JPG oder PNG gespeichert sein.</li>
-				<li>Der Server kann Bilder mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
+				<li>Die Fotos müssen im Format JPG oder PNG gespeichert sein.</li>
+				<li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
 				<li>Die hochgeladenen Dateien dürfen nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
                 <li>
-					Die Bilder werden automatisch auf eine Auflösung von '.$g_preferences['photo_save_scale'].' Pixel der
+					Die Fotos werden automatisch auf eine Auflösung von '.$g_preferences['photo_save_scale'].' Pixel der
                 	längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.
 				</li>
 				<li>Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender Nummer benannt werden.</li>
                 <li>
 					Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
-                	Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Bilder in einen
-                	Sammelordner zu kopieren und diese dann mit einer Bildbearbeitungssoftware auf '.$g_preferences['photo_save_scale'].' Pixel
-                	(längere Bildseite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
+                	Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Fotos in einen
+                	Sammelordner zu kopieren und diese dann mit einer Fotobearbeitungssoftware auf '.$g_preferences['photo_save_scale'].' Pixel
+                	(längere Seite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
                 	(also geringe Komprimierung) gestellt werden.
 				</li>
 			</ul>
@@ -373,9 +373,9 @@ switch ($req_err_code)
         echo '<h3>Was ist zu tun?</h3>
             Alle offenen Felder ausfüllen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. auswählen
             welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in 
-            &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Bildern).
+            &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Fotos).
             Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind für 
-            Homepagebesucher sichtbar. Möchte man z.B. erst alle Bilder hochladen
+            Homepagebesucher sichtbar. Möchte man z.B. erst alle Fotos hochladen
             oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.
             Danach auf Speichern klicken.';
         break;
