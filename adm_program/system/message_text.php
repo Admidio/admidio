@@ -310,7 +310,7 @@ $message_text = array(
         "Der Ordner adm_my_files/photos wurde nicht gefunden.",
 
     "photodateiphotoup" =>
-        "Du hast keine Bilddateien ausgewählt, die hinzugefügt
+        "Du hast keine Fotodateien ausgewählt, die hinzugefügt
         werden sollen.<br />",
 
     "photoverwaltunsrecht" =>
