@@ -358,12 +358,59 @@ echo '
                                 echo '" />&nbsp;(ohne Leiter)
                             </dd>
                         </dl>
-                    </li>
+                    </li>';
+					// Beitragsverwaltung
+					echo '
                     <li>
                         <dl>
                             <dt><label for="rol_cost">Beitrag:</label></dt>
                             <dd>
                                 <input type="text" id="rol_cost" name="rol_cost" size="6" maxlength="6" value="'. $role->getValue('rol_cost'). '" /> &euro;
+                            </dd>
+                        </dl>
+                    </li>
+					<li>
+                        <dl>
+                            <dt><label for="rol_cost_period">Beitragszeitraum:</label></dt>
+                            <dd>
+                                <select size="1" id="rol_cost_period" name="rol_cost_period">';
+									// Zunaechst den unkonfigurierten Fall
+									echo '<option value="0" ';
+									if($role->getValue('rol_cost_period') == 0 || $role->getValue('rol_cost_period') == '') 
+                                    {
+                                            echo ' selected="selected"';
+                                    }
+									echo '>--</option>';
+									// Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
+									foreach (TableRoles::$role_cost_periods as $role_cost_period) {
+										echo '<option value="'.$role_cost_period.'" ';
+										if($role->getValue('rol_cost_period') == $role_cost_period)
+										{
+											echo 'selected="selected"';
+										}
+										if($role_cost_period == -1)
+										{
+											echo '>einmalig</option>';
+										}
+										elseif($role_cost_period == 1)	
+										{
+											echo '>jährlich</option>';
+										}
+										elseif($role_cost_period == 2)	
+										{
+											echo '>halbjährlich</option>';
+										}
+										elseif($role_cost_period == 4)	
+										{
+											echo '>vierteljährlich</option>';
+										}
+										elseif($role_cost_period == 12)	
+										{
+											echo '>monatlich</option>';
+										}
+									}
+									echo '
+                                </select>
                             </dd>
                         </dl>
                     </li>
