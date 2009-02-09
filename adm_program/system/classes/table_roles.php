@@ -28,7 +28,7 @@ class TableRoles extends TableAccess
 {
 	// Alle konfigurierbare Werte für die Bezahlzeitraeume
 	// Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
-	public static $role_cost_periods = array(-1,1,2,4,12);
+	var $role_cost_periods = array(-1,1,2,4,12);
 	
     // Konstruktor
     function TableRoles(&$db, $role = "")
