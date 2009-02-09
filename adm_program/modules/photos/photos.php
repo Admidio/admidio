@@ -244,8 +244,8 @@ if($g_current_user->editPhotoRight())
         <li>
             <span class="iconTextLink">
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">
-                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Bilder hochladen" title="Bilder hochladen"/></a>
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">Bilder hochladen</a>
+                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Fotos hochladen" title="Fotos hochladen"/></a>
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">Fotos hochladen</a>
             </span>
         </li>';
     }
