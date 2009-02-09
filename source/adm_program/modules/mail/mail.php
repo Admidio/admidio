@@ -278,12 +278,14 @@ echo '
                             if (array_key_exists('usr_id', $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                                echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 350px;" maxlength="50" value="'.$userEmail.'" />';
+                                echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 350px;" maxlength="50" value="'.$userEmail.'" />
+                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
                             }
                             elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
                             {
                                 // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-                                echo '<select size="1" id="rol_id" name="rol_id"><option value="'.$rollenID.'" selected="selected">'.$rollenName.'</option></select>';
+                                echo '<select size="1" id="rol_id" name="rol_id"><option value="'.$rollenID.'" selected="selected">'.$rollenName.'</option></select>
+                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
                             }
                             else
                             {
@@ -345,11 +347,12 @@ echo '
 
                                 echo '</optgroup>
                                 </select>
+                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                 <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
                                     onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_mail&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
                                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_mail\',this)" onmouseout="ajax_hideTooltip()"/>';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        echo'
                         </dd>
                     </dl>
                 </li>
