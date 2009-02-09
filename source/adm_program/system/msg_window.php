@@ -371,10 +371,10 @@ switch ($req_err_code)
 
     case 'veranst_help':
         echo '<h3>Was ist zu tun?</h3>
-            Alle offenen Felder ausfüllen. Die Felder Veranstaltung und Beginn sind Pflichtfelder. Ggf. auswählen
-            welcher Veranstaltung die Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in 
+            Alle offenen Felder ausfüllen. Die Felder Album und Beginn sind Pflichtfelder. Ggf. auswählen
+            welches Album das Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in 
             &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Fotos).
-            Die Felder Ende und Fotografen sind optional. Nur Freigegebene Veranstaltungen sind für 
+            Die Felder Ende und Fotografen sind optional. Nur freigegebene Alben sind für 
             Homepagebesucher sichtbar. Möchte man z.B. erst alle Fotos hochladen
             oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.
             Danach auf Speichern klicken.';
@@ -383,13 +383,13 @@ switch ($req_err_code)
     case 'folder_not_found':
         echo 'Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein
             oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
-            den Datensatz mit klick auf das Icon <img src="'. THEME_PATH. '/icons/delete.png" style="vertical-align: top;" alt="delete" /> löschen.<br />
-            Besuchern der Website ohne Fotoverwaltungsrecht, wird diese Veranstaltung nicht mehr angezeigt.';
+            den Datensatz mit klick auf das Symbol <img src="'. THEME_PATH. '/icons/delete.png" style="vertical-align: top;" alt="delete" /> löschen.<br />
+            Besuchern der Website ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.';
         break;
 
     case 'not_approved':
-        echo 'Die Veranstaltung ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
-            den entsprechende Icon <img src="'. THEME_PATH. '/icons/key.png" alt="key" /> in der Bearbeitungszeile nutzen.';
+        echo 'Das Album ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
+            das entsprechende Symbol <img src="'. THEME_PATH. '/icons/key.png" alt="key" /> in der Bearbeitungszeile nutzen.';
         break;
 
     //Captcha-Hilfen
