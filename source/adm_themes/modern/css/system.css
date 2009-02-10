@@ -492,3 +492,11 @@ ul.autosuggest li.highlight a:visited  {
     padding-top:        10px;
     padding-bottom:     5px;
 }
+
+/* Definitionsliste der Systeminformationsseite*/
+#systeminfo dt{
+    float: left;
+}
+#systeminfo dd{
+    padding-left: 200px;
+}
