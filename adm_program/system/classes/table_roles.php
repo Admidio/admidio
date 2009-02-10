@@ -29,14 +29,14 @@ class TableRoles extends TableAccess
 	// Alle konfigurierbare Werte für die Bezahlzeitraeume
 	// Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
 	var $role_cost_periods = array(-1,1,2,4,12);
-	
+
     // Konstruktor
     function TableRoles(&$db, $role = "")
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ROLES;
         $this->column_praefix = "rol";
-        
+
         if(strlen($role) > 0)
         {
             $this->readData($role);
@@ -61,21 +61,21 @@ class TableRoles extends TableAccess
             $role = addslashes($role);
             $condition = " rol_name LIKE '$role' ";
         }
-        
+
         $tables    = TBL_CATEGORIES;
         $condition = $condition. " AND rol_cat_id = cat_id
                                    AND cat_org_id = ". $g_current_organization->getValue("org_id");
         parent::readData($role, $condition, $tables);
     }
-    
+
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
     function save()
     {
         global $g_current_user, $g_current_session;
         $fields_changed = $this->columnsValueChanged;
-        
-        
+
+
         if($this->new_record)
         {
             $this->setValue("rol_timestamp_create", DATETIME_NOW);
@@ -90,54 +90,73 @@ class TableRoles extends TableAccess
                 $this->setValue("rol_timestamp_change", DATETIME_NOW);
                 $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
             }
-        }        
+        }
 
         parent::save();
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && is_object($g_current_session))
         {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
             $g_current_session->renewUserObject();
         }
     }
-    
-    // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
-    // die Funktion wird innerhalb von delete() aufgerufen
+
+    // Loescht die Abhaengigkeiten zur Rolle und anschliessend die Rolle selbst...
     function delete()
     {
         global $g_current_session;
-        
-        // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+
+        // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
         // eine Rechteaenderung vorgenommen wurde
         $g_current_session->renewUserObject();
-            
+
         // die Rolle "Webmaster" darf nicht geloescht werden
         if($this->getValue("rol_name") != "Webmaster")
         {
-            $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES. " 
+            $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES. "
                         WHERE rld_rol_id_parent = ". $this->getValue("rol_id"). "
                            OR rld_rol_id_child  = ". $this->getValue("rol_id");
             $this->db->query($sql);
 
-            $sql    = "DELETE FROM ". TBL_MEMBERS. " 
+            $sql    = "DELETE FROM ". TBL_MEMBERS. "
                         WHERE mem_rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
-            
+
+            //Auch die Inventarpositionen zur Rolle muessen geloescht werden
+            //Alle Inventarpositionen auslesen, die von der Rolle angelegt wurden
+        	$sql_inventory = "SELECT *
+                              FROM ". TBL_INVENTORY. "
+							  WHERE inv_rol_id = ". $this->getValue("rol_id");
+        	$result_inventory = $this->db->query($sql_subfolders);
+
+	        while($row_inventory = $this->db->fetch_object($result_inventory))
+	        {
+	            //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
+	            $sql    = "DELETE FROM ". TBL_RENTAL_OVERVIEW. "
+                        	WHERE rnt_inv_id = ". $row_inventory->inv_id;
+            	$this->db->query($sql);
+	        }
+
+			//Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
+        	$sql    = "DELETE FROM ". TBL_INVENTORY. "
+                        WHERE inv_rol_id = ". $this->getValue("rol_id");
+            $this->db->query($sql);
+
             return parent::delete();
         }
         else
         {
             return false;
-        }   
+        }
     }
-    
+
     // aktuelle Rolle wird auf inaktiv gesetzt
     function setInactive()
     {
         global $g_current_session;
-        
+
         // die Rolle "Webmaster" darf nicht auf inaktiv gesetzt werden
         if($this->getValue("rol_name") != "Webmaster")
         {
@@ -150,11 +169,11 @@ class TableRoles extends TableAccess
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
                         WHERE rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
-            
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
             $g_current_session->renewUserObject();
-        
+
             return 0;
         }
         return -1;
@@ -164,7 +183,7 @@ class TableRoles extends TableAccess
     function setActive()
     {
         global $g_current_session;
-        
+
         // die Rolle "Webmaster" ist immer aktiv
         if($this->getValue("rol_name") != "Webmaster")
         {
@@ -175,16 +194,16 @@ class TableRoles extends TableAccess
             $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
                         WHERE rol_id = ". $this->getValue("rol_id");
             $this->db->query($sql);
-            
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl. 
+
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
             $g_current_session->renewUserObject();
-            
+
             return 0;
         }
         return -1;
     }
-    
+
     // die Funktion gibt die Anzahl freier Plaetze zurueck
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
     function countVacancies($count_leaders = false)
@@ -200,8 +219,8 @@ class TableRoles extends TableAccess
                 $sql = $sql. " AND mem_leader = 0 ";
             }
             $this->db->query($sql);
-            
-            $num_members = $this->db->num_rows();            
+
+            $num_members = $this->db->num_rows();
             return $this->getValue("rol_max_members") - $num_members;
         }
         return 999;
