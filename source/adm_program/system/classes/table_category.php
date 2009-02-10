@@ -26,7 +26,7 @@ class TableCategory extends TableAccess
         $this->db            =& $db;
         $this->table_name     = TBL_CATEGORIES;
         $this->column_praefix = "cat";
-        
+
         if($cat_id > 0)
         {
             $this->readData($cat_id);
@@ -36,16 +36,16 @@ class TableCategory extends TableAccess
             $this->clear();
         }
     }
-    
+
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
     function save()
     {
         global $g_current_organization, $g_current_session;
         $fields_changed = $this->columnsValueChanged;
-        
+
         $this->calc_sequence = false;
-            
+
         if($this->new_record)
         {
             if($this->getValue("cat_org_id") > 0)
@@ -66,36 +66,36 @@ class TableCategory extends TableAccess
             $row = $this->db->fetch_array();
 
             $this->setValue("cat_sequence", $row['count'] + 1);
-            
+
             if($this->getValue("cat_org_id") == 0)
             {
                 // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
                 $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence + 1
                          WHERE cat_type = '". $this->getValue("cat_type"). "'
                            AND cat_org_id IS NOT NULL ";
-                $this->db->query($sql);                 
+                $this->db->query($sql);
             }
         }
-        
+
         parent::save();
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && $this->getValue("cat_type") == 'USF' && is_object($g_current_session))
         {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, 
-            // da Aenderungen in den Profilfeldern vorgenommen wurden 
+            // einlesen aller Userobjekte der angemeldeten User anstossen,
+            // da Aenderungen in den Profilfeldern vorgenommen wurden
             $g_current_session->renewUserObject();
-        }        
+        }
     }
-    
+
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
     // die Funktion wird innerhalb von delete() aufgerufen
     function delete()
     {
         global $g_current_session;
-        
+
         // Luecke in der Reihenfolge schliessen
-        $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence - 1 
+        $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = cat_sequence - 1
                  WHERE (  cat_org_id = ". $g_current_session->getValue("ses_org_id"). "
                        OR cat_org_id IS NULL )
                    AND cat_sequence > ". $this->getValue("cat_sequence"). "
@@ -109,7 +109,28 @@ class TableCategory extends TableAccess
                         WHERE dat_cat_id = ". $this->getValue("cat_id");
             $this->db->query($sql);
         }
-        elseif($this->getValue("cat_type") == 'LNK')
+        elseif($this->getValue("cat_type") == 'INV')
+        {
+            //Alle Inventarpositionen auslesen, die in der Kategorie enthalten sind
+        	$sql_inventory = "SELECT *
+                              FROM ". TBL_INVENTORY. "
+							  WHERE inv_cat_id = ". $this->getValue("cat_id");
+        	$result_inventory = $this->db->query($sql_subfolders);
+
+	        while($row_inventory = $this->db->fetch_object($result_inventory))
+	        {
+	            //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
+	            $sql    = "DELETE FROM ". TBL_RENTAL_OVERVIEW. "
+                        	WHERE rnt_inv_id = ". $row_inventory->inv_id;
+            	$this->db->query($sql);
+	        }
+
+			//Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
+        	$sql    = "DELETE FROM ". TBL_INVENTORY. "
+                        WHERE inv_cat_id = ". $this->getValue("cat_id");
+            $this->db->query($sql);
+        }
+    	elseif($this->getValue("cat_type") == 'LNK')
         {
             $sql    = "DELETE FROM ". TBL_LINKS. "
                         WHERE lnk_cat_id = ". $this->getValue("cat_id");
@@ -126,12 +147,12 @@ class TableCategory extends TableAccess
             $sql    = "DELETE FROM ". TBL_USER_FIELDS. "
                         WHERE usf_cat_id = ". $this->getValue("cat_id");
             $this->db->query($sql);
-            
-            // einlesen aller Userobjekte der angemeldeten User anstossen, 
-            // da Aenderungen in den Profilfeldern vorgenommen wurden 
+
+            // einlesen aller Userobjekte der angemeldeten User anstossen,
+            // da Aenderungen in den Profilfeldern vorgenommen wurden
             $g_current_session->renewUserObject();
         }
-        return parent::delete();    
+        return parent::delete();
     }
 }
 ?>

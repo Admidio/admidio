@@ -13,9 +13,9 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * updateLoginData()    - Anzahl Logins hochsetzen, Datum aktualisieren und 
+ * updateLoginData()    - Anzahl Logins hochsetzen, Datum aktualisieren und
  *                        ungueltige Logins zuruecksetzen
- * 
+ *
  *****************************************************************************/
 
 require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
@@ -58,7 +58,7 @@ class TableUsers extends TableAccess
     function clear()
     {
         parent::clear();
-        
+
         $this->b_set_last_change = true;
 
         // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
@@ -147,6 +147,14 @@ class TableUsers extends TableAccess
                     WHERE gbo_usr_id_change = ". $this->getValue("usr_id");
         $this->db->query($sql);
 
+        $sql    = "UPDATE ". TBL_INVENTORY. " SET inv_usr_id_create = NULL
+                    WHERE inv_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_INVENTORY. " SET inv_usr_id_change = NULL
+                    WHERE inv_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
         $sql    = "UPDATE ". TBL_LINKS. " SET lnk_usr_id_create = NULL
                     WHERE lnk_usr_id_create = ". $this->getValue("usr_id");
         $this->db->query($sql);
@@ -168,6 +176,14 @@ class TableUsers extends TableAccess
                     WHERE pho_usr_id_change = ". $this->getValue("usr_id");
         $this->db->query($sql);
 
+        $sql    = "UPDATE ". TBL_RENTAL_OVERVIEW. " SET rnt_usr_id_create = NULL
+                    WHERE rnt_usr_id_create = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
+        $sql    = "UPDATE ". TBL_RENTAL_OVERVIEW. " SET rnt_usr_id_change = NULL
+                    WHERE rnt_usr_id_change = ". $this->getValue("usr_id");
+        $this->db->query($sql);
+
         $sql    = "UPDATE ". TBL_ROLES. " SET rol_usr_id_create = NULL
                     WHERE rol_usr_id_create = ". $this->getValue("usr_id");
         $this->db->query($sql);
@@ -187,8 +203,8 @@ class TableUsers extends TableAccess
         $sql    = "UPDATE ". TBL_USERS. " SET usr_usr_id_change = NULL
                     WHERE usr_usr_id_change = ". $this->getValue("usr_id");
         $this->db->query($sql);
-        
-        $sql    = "DELETE FROM ". TBL_LIST_COLUMNS. " 
+
+        $sql    = "DELETE FROM ". TBL_LIST_COLUMNS. "
                     WHERE lsc_lst_id IN (SELECT lst_id FROM adm_lists WHERE lst_usr_id = ".$this->getValue("usr_id")." AND lst_global = 0)";
         $this->db->query($sql);
 
