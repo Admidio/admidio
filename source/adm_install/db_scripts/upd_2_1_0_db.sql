@@ -205,3 +205,75 @@ alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_USR_ID_TO foreign
       references %PRAEFIX%_users (usr_id) on delete restrict on update restrict;
 alter table %PRAEFIX%_messages add constraint %PRAEFIX%_FK_MSG_MSG_ID_PREVIOUS foreign key (msg_msg_id_previous)
       references %PRAEFIX%_messages (msg_id) on delete set null on update restrict;
+
+/*==============================================================*/
+/* Table: adm_inventory                                         */
+/*==============================================================*/
+create table %PRAEFIX%_inventory
+(
+   inv_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   inv_name                       varchar(100)                   not null,
+   inv_description_1              text,
+   inv_description_2              text,
+   inv_description_3              text,
+   inv_amount                     int(11) unsigned,
+   inv_rentable                   tinyint(1) unsigned            not null,
+   inv_usr_id_create              int(11) unsigned,
+   inv_timestamp_create           datetime                       not null,
+   inv_usr_id_change              int(11) unsigned,
+   inv_timestamp_change           datetime,
+   inv_rol_id                     int(11) unsigned               not null,
+   inv_cat_id                     int(11) unsigned               not null,
+   primary key (inv_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_inventory add index INV_USR_FK (inv_usr_id_create);
+alter table %PRAEFIX%_inventory add index INV_USR_CHANGE_FK (inv_usr_id_change);
+alter table %PRAEFIX%_inventory add index INV_ROL_FK (inv_rol_id);
+alter table %PRAEFIX%_inventory add index INV_CAT_FK (inv_cat_id);
+
+-- Constraints
+alter table %PRAEFIX%_inventory add constraint %PRAEFIX%_FK_INV_USR foreign key (inv_usr_id_create)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PRAEFIX%_inventory add constraint %PRAEFIX%_FK_INV_USR_CHANGE foreign key (inv_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PRAEFIX%_inventory add constraint %PRAEFIX%_FK_INV_ROL foreign key (inv_rol_id)
+      references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_inventory add constraint %PRAEFIX%_FK_INV_CAT foreign key (inv_cat_id)
+      references %PRAEFIX%_categories (cat_id) on delete restrict on update restrict;
+
+/*==============================================================*/
+/* Table: adm_rental_overview                                   */
+/*==============================================================*/
+create table %PRAEFIX%_rental_overview
+(
+   rnt_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   rnt_inv_id                     int(11) unsigned               not null,
+   rnt_description                text,
+   rnt_amount                     int(11) unsigned,
+   rnt_begin                      datetime                       not null,
+   rnt_end                        datetime                       not null,
+   rnt_usr_id_create              int(11) unsigned,
+   rnt_timestamp_create           datetime                       not null,
+   rnt_usr_id_change              int(11) unsigned,
+   rnt_timestamp_change           datetime,
+   primary key (rnt_id)
+)
+type = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_inventory add index RNT_INV_FK (rnt_inv_id);
+alter table %PRAEFIX%_inventory add index RNT_USR_FK (rnt_usr_id_create);
+alter table %PRAEFIX%_inventory add index RNT_USR_CHANGE_FK (rnt_usr_id_change);
+
+-- Constraints
+alter table %PRAEFIX%_rental_overview add constraint %PRAEFIX%_FK_RNT_INV foreign key (rnt_inv_id)
+      references %PRAEFIX%_inventory (inv_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_rental_overview add constraint %PRAEFIX%_FK_RNT_USR foreign key (rnt_usr_id_create)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PRAEFIX%_rental_overview add constraint %PRAEFIX%_RNT_USR_CHANGE foreign key (rnt_usr_id_change)
+      references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
