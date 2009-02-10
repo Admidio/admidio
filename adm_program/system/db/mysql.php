@@ -175,6 +175,12 @@ class MySqlDB extends DB
         return mysql_data_seek($result, $row_number);
     }   
     
+    // Gibt die MYSQL Version der Datenbank zurück
+    function server_info()
+    {
+        return mysql_get_server_info();
+    } 
+    
     // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
     function db_error()
     {
