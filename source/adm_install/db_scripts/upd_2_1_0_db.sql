@@ -266,9 +266,9 @@ type = InnoDB
 auto_increment = 1;
 
 -- Index
-alter table %PRAEFIX%_inventory add index RNT_INV_FK (rnt_inv_id);
-alter table %PRAEFIX%_inventory add index RNT_USR_FK (rnt_usr_id_create);
-alter table %PRAEFIX%_inventory add index RNT_USR_CHANGE_FK (rnt_usr_id_change);
+alter table %PRAEFIX%_rental_overview add index RNT_INV_FK (rnt_inv_id);
+alter table %PRAEFIX%_rental_overview add index RNT_USR_FK (rnt_usr_id_create);
+alter table %PRAEFIX%_rental_overview add index RNT_USR_CHANGE_FK (rnt_usr_id_change);
 
 -- Constraints
 alter table %PRAEFIX%_rental_overview add constraint %PRAEFIX%_FK_RNT_INV foreign key (rnt_inv_id)

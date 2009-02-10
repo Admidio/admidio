@@ -181,6 +181,13 @@ if(domainAvailable($g_root_path. '/update.txt'))
 	$beta_version = GetUpdateVersion($update_info, "Beta-Version=");
 	$beta_release = GetUpdateVersion($update_info, "Beta-Release=");
 	
+	// Keine Beatversion verfügbar
+	if($beta_version == "")
+	{
+		$beta_version = 'n/a';
+		$beta_release = '';
+	}
+	
 	// Auf Update prüfen
 	$version_update = CheckVersion($current_version, $stable_version, $beta_version, $beta_release, $beta_flag);
 }
@@ -259,7 +266,7 @@ if($show == 2)
 					<dl>
 						<dt><label for="beta_admidio">Letzte Beta Version:</label></dt>
 						<dd style="margin-left: 51%;"><b>'. $beta_version;
-					if($verbindung != 99)
+					if($verbindung != 99 && $beta_version != 'n/a')
 					{echo '&nbsp;Beta&nbsp;';}
 					echo $beta_release. '</b></dd>
 					</dl>
