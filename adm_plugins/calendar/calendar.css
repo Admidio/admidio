@@ -1,0 +1,38 @@
+/******************************************************************************
+ * Cascading-Style-Sheets-Datei um das Aussehen des Calendar Plugins anzupassen
+ *
+  * Version 1.4
+ *
+ * Copyright    : (c) 2007-2009 Matthias Roberg
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+
+#plgCalendarTable {
+	font-family:	Arial;
+	font-size:		8pt;
+	color:			#000000;
+}
+
+#plgCalendarHeader {
+	color:			#449BA6;
+	font-size:		12pt;
+}
+
+#plgCalendarSaturday {
+	color:			#0000CC;
+}
+
+#plgCalendarSunday {
+	color:			#C90000;
+}
+
+#plgCalendarToday {
+	background:		#449BA6;
+}
+
+#plgCalendarMSG{
+	font-family:	Arial;
+	font-size:		10pt;
+	color:			#000000;
+}
