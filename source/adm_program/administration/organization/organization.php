@@ -307,7 +307,7 @@ echo "
                             <dt><label for=\"version\">Admidio-Version:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"version\" name=\"version\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. BETA_VERSION_TEXT. "\" />&nbsp;
-								<a class=\"thickbox\" href=\"$g_root_path/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350\">Auf Update prüfen</a>
+								<a class=\"thickbox\" href=\"$g_root_path/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350\">auf Update prüfen</a>
                             </dd>
                         </dl>
                     </li>
@@ -2135,41 +2135,9 @@ echo "
             <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/info.png" alt="Systeminformationen" />
                 Systeminformationen
             </div>
-            <div class="groupBoxBody">
-                <dl>
-                    <dt>Admidio-Version:</dt>
-                    <dd>'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'&nbsp;
-                        <a class="thickbox" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350">Auf Update prüfen</a>
-                    </dd>
-                    <dt>PHP Version:</dt><dd>'.phpversion().'</dd>
-                    <dt>MySQL Server Version:</dt><dd>'.$g_db->server_info().'</dd>
-                    <dt>Safe Mode:</dt><dd>';
-                    if(ini_get('safe_mode') == 1)
-                    {
-                        echo 'On';
-                    }
-                    else
-                    {
-                        echo 'Off';
-                    }
-                    echo '</dd>
-                    <dt>Max. POST-Größe:</dt><dd>'.ini_get('post_max_size').'</dd>
-                    <dt>Arbeitsspeicher:</dt><dd>'.ini_get('memory_limit').'</dd>
-                    <dt>Dateiuploads:</dt><dd>';
-                    if(ini_get('file_uploads') == 1)
-                    {
-                        echo 'On';
-                    }
-                    else
-                    {
-                        echo 'Off';
-                    }
-                    echo '</dd>
-                    <dt>Max. Upload-Größe:</dt><dd>'.ini_get('upload_max_filesize').'</dd>
-                    <dt>Max. bearbeitbare Bildgröße:</dt><dd>'.round(processableImageSize()/1000000, 2).' MegaPixel</dd>
-                    <dt>alle PHP-Informationen:</dt><dd><a href="phpinfo.php" target="_blank2">phpinfo()</a></dd>
-                </dl>
-            </div>
+            <div class="groupBoxBody">';
+                require_once('systeminfo.php');
+            echo'</div>
         </div>';
      echo'      
     </div>
