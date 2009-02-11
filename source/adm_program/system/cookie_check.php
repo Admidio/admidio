@@ -14,20 +14,20 @@
  *
  *****************************************************************************/
 
-require("common.php");
+require('common.php');
 
-if(isset($_COOKIE['admidio_session_id']) == false)
+if(isset($_COOKIE[$cookie_praefix. '_ID']) == false)
 {
     unset($_SESSION['login_forward_url']);
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show("no_cookie", $g_current_organization->getValue("org_homepage"));
+    $g_message->show('no_cookie', $g_current_organization->getValue('org_homepage'));
 }
 else
 {
     // Uebergabevariable pruefen     
     if(isset($_GET['message_code']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     
     // Loginseite aus Url-Stack entfernen
@@ -39,10 +39,10 @@ else
     if($g_preferences['enable_forum_interface'])
     {
         // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
-        $g_message->addVariableContent($g_current_user->getValue("usr_login_name"));
+        $g_message->addVariableContent($g_current_user->getValue('usr_login_name'));
         $g_message->addVariableContent($g_forum->sitename);
         
-        if($message_code != "login_forum")
+        if($message_code != 'login_forum')
         {
             // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
             $show_time = 0;

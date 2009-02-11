@@ -10,14 +10,14 @@
  *
  *****************************************************************************/
 
-require_once("common.php");
-require_once("classes/table_auto_login.php");
+require_once('common.php');
+require_once('classes/table_auto_login.php');
 
 // Variablen initialisieren
 $user_found   = 0;
 $b_auto_login = false;
-$loginname    = "";
-$password     = "";
+$loginname    = '';
+$password     = '';
 
 // Uebergabevariablen filtern
 // hierbei muss beruecksichtigt werden, dass diese evtl. von dem Loginplugin
@@ -48,29 +48,29 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
 
 if(strlen($loginname) == 0)
 {
-    $g_message->show("feld", "Benutzername");
+    $g_message->show('feld', 'Benutzername');
 }
 
 if(strlen($password) == 0)
 {
-    $g_message->show("feld", "Passwort");
+    $g_message->show('feld', 'Passwort');
 }
 $password = md5($password);
 
 // Name und Passwort pruefen
 // Rolle muss mind. Mitglied sein
 
-$sql    = "SELECT usr_id
-             FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-            WHERE usr_login_name LIKE '". $loginname. "'
+$sql    = 'SELECT usr_id
+             FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+            WHERE usr_login_name LIKE "'. $loginname. '"
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
-              AND mem_begin     <= '".DATE_NOW."'
-              AND mem_end        > '".DATE_NOW."'
+              AND mem_begin     <= "'.DATE_NOW.'"
+              AND mem_end        > "'.DATE_NOW.'"
               AND rol_valid      = 1 
               AND rol_cat_id     = cat_id
-              AND cat_org_id     = ". $g_current_organization->getValue("org_id");
+              AND cat_org_id     = '. $g_current_organization->getValue('org_id');
 $result = $g_db->query($sql);
 
 $user_found = $g_db->num_rows($result);
@@ -81,18 +81,18 @@ if ($user_found >= 1)
     // Userobjekt anlegen
     $g_current_user = new User($g_db, $user_row['usr_id']);
     
-    if($g_current_user->getValue("usr_number_invalid") >= 3)
+    if($g_current_user->getValue('usr_number_invalid') >= 3)
     {
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-        if(time() - mysqlmaketimestamp($g_current_user->getValue("usr_date_invalid")) < 900)
+        if(time() - mysqlmaketimestamp($g_current_user->getValue('usr_date_invalid')) < 900)
         {
-            $g_message->show("login_failed");
+            $g_message->show('login_failed');
         }
     }
 
-    if($g_current_user->getValue("usr_password") == $password)
+    if($g_current_user->getValue('usr_password') == $password)
     {
-        $g_current_session->setValue("ses_usr_id", $g_current_user->getValue("usr_id"));
+        $g_current_session->setValue('ses_usr_id', $g_current_user->getValue('usr_id'));
         $g_current_session->save();
 
         // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
@@ -104,23 +104,23 @@ if ($user_found >= 1)
             $auto_login = new TableAutoLogin($g_db, $g_session_id);
             
             // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser), 
-            // dann kein Neues anlegen, da dies zu "Duplicate Key" fuehrt
-            if(strlen($auto_login->getValue("atl_usr_id")) == 0)
+            // dann kein Neues anlegen, da dies zu 'Duplicate Key' fuehrt
+            if(strlen($auto_login->getValue('atl_usr_id')) == 0)
             {
-                $auto_login->setValue("atl_session_id", $g_session_id);
-                $auto_login->setValue("atl_usr_id", $user_row['usr_id']);            
+                $auto_login->setValue('atl_session_id', $g_session_id);
+                $auto_login->setValue('atl_usr_id', $user_row['usr_id']);            
                 $auto_login->save();
             }
         }
         else
         {
             $timestamp_expired = 0;
-            $g_current_user->setValue("usr_last_session_id", NULL);
+            $g_current_user->setValue('usr_last_session_id', NULL);
         }
-        setcookie("admidio_session_id", $g_session_id , $timestamp_expired, "/", $domain, 0);
+        setcookie($cookie_praefix. '_ID', $g_session_id , $timestamp_expired, '/', $domain, 0);
         // User-Id und Autologin auch noch als Cookie speichern
         // vorher allerdings noch serialisieren, damit der Inhalt nicht so einfach ausgelesen werden kann
-        setcookie("admidio_data", $b_auto_login. ";". $g_current_user->getValue("usr_id") , $timestamp_expired, "/", $domain, 0);
+        setcookie($cookie_praefix. '_DATA', $b_auto_login. ';'. $g_current_user->getValue('usr_id') , $timestamp_expired, '/', $domain, 0);
 
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
         $g_current_user->updateLoginData();
@@ -133,13 +133,13 @@ if ($user_found >= 1)
             {
                 $set_admin = true;
             }
-            $g_forum->userLogin($loginname, $password, $g_current_user->getValue("E-Mail"), $set_admin);
+            $g_forum->userLogin($loginname, $password, $g_current_user->getValue('E-Mail'), $set_admin);
             $login_message = $g_forum->message;
         }
         else
         {
             // User gibt es im Forum nicht, also eine reine Admidio-Anmeldung.
-            $login_message = "login";
+            $login_message = 'login';
         }
 
         // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
@@ -151,7 +151,7 @@ if ($user_found >= 1)
 
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
         // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-        $location = "Location: $g_root_path/adm_program/system/cookie_check.php?message_code=$login_message";
+        $location = 'Location: '.$g_root_path.'/adm_program/system/cookie_check.php?message_code='.$login_message;
         header($location);
         exit();
     }
@@ -159,31 +159,31 @@ if ($user_found >= 1)
     {
         // ungueltige Logins werden mitgeloggt
         
-        if($g_current_user->getValue("usr_number_invalid") >= 3)
+        if($g_current_user->getValue('usr_number_invalid') >= 3)
         {
-            $g_current_user->setValue("usr_number_invalid", 1);
+            $g_current_user->setValue('usr_number_invalid', 1);
         }
         else
         {
-            $g_current_user->setValue("usr_number_invalid", $g_current_user->getValue("usr_number_invalid") + 1);
+            $g_current_user->setValue('usr_number_invalid', $g_current_user->getValue('usr_number_invalid') + 1);
         }
-        $g_current_user->setValue("usr_date_invalid", DATETIME_NOW);
+        $g_current_user->setValue('usr_date_invalid', DATETIME_NOW);
         $g_current_user->b_set_last_change = false;
         $g_current_user->save();
 
-        if($g_current_user->getValue("usr_number_invalid") >= 3)
+        if($g_current_user->getValue('usr_number_invalid') >= 3)
         {
-            $g_message->show("login_failed");
+            $g_message->show('login_failed');
         }
         else
         {
-            $g_message->show("password_unknown");
+            $g_message->show('password_unknown');
         }
     }
 }
 else
 {
-    $g_message->show("login_unknown");
+    $g_message->show('login_unknown');
 }
 
 ?>

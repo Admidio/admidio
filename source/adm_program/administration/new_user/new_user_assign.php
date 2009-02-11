@@ -13,19 +13,19 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
 {
-   $g_message->show("norights");
+   $g_message->show('norights');
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show("module_disabled");
+    $g_message->show('module_disabled');
 }
 
 // Uebergabevariablen pruefen und initialisieren
@@ -37,56 +37,56 @@ if(isset($_GET['new_user_id']) && is_numeric($_GET['new_user_id']))
 }
 else
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 // neuen User erst einmal als Objekt erzeugen
 $new_user = new User($g_db, $req_new_user_id);
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
-$sql = "SELECT usr_id, usr_login_name, last_name.usd_value as last_name, 
+$sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name, 
                first_name.usd_value as first_name, address.usd_value as address,
                zip_code.usd_value as zip_code, city.usd_value as city,
                email.usd_value as email
-          FROM ". TBL_USERS. "
-         RIGHT JOIN ". TBL_USER_DATA. " as last_name
+          FROM '. TBL_USERS. '
+         RIGHT JOIN '. TBL_USER_DATA. ' as last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-         RIGHT JOIN ". TBL_USER_DATA. " as first_name
+           AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+         RIGHT JOIN '. TBL_USER_DATA. ' as first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-          LEFT JOIN ". TBL_USER_DATA. " as address
+           AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+          LEFT JOIN '. TBL_USER_DATA. ' as address
             ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = ". $g_current_user->getProperty("Adresse", "usf_id"). "
-          LEFT JOIN ". TBL_USER_DATA. " as zip_code
+           AND address.usd_usf_id = '. $g_current_user->getProperty('Adresse', 'usf_id'). '
+          LEFT JOIN '. TBL_USER_DATA. ' as zip_code
             ON zip_code.usd_usr_id = usr_id
-           AND zip_code.usd_usf_id = ". $g_current_user->getProperty("PLZ", "usf_id"). "
-          LEFT JOIN ". TBL_USER_DATA. " as city
+           AND zip_code.usd_usf_id = '. $g_current_user->getProperty('PLZ', 'usf_id'). '
+          LEFT JOIN '. TBL_USER_DATA. ' as city
             ON city.usd_usr_id = usr_id
-           AND city.usd_usf_id = ". $g_current_user->getProperty("Ort", "usf_id"). "
-          LEFT JOIN ". TBL_USER_DATA. " as email
+           AND city.usd_usf_id = '. $g_current_user->getProperty('Ort', 'usf_id'). '
+          LEFT JOIN '. TBL_USER_DATA. ' as email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+           AND email.usd_usf_id = '. $g_current_user->getProperty('E-Mail', 'usf_id'). '
          WHERE usr_valid = 1 
-           AND (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4)  LIKE SUBSTRING(SOUNDEX('". $new_user->getValue("Nachname")."'), 1, 4)
-                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)  LIKE SUBSTRING(SOUNDEX('". $new_user->getValue("Vorname"). "'), 1, 4) )
-               OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4)  LIKE SUBSTRING(SOUNDEX('". $new_user->getValue("Vorname"). "'), 1, 4)
-                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)  LIKE SUBSTRING(SOUNDEX('". $new_user->getValue("Nachname")."'), 1, 4) ) )";
+           AND (  (   HEX(SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Nachname').'"), 1, 4))
+                  AND HEX(SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Vorname'). '"), 1, 4)) )
+               OR (   HEX(SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Vorname'). '"), 1, 4))
+                  AND HEX(SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Nachname').'"), 1, 4)) ) )';
 $result_usr   = $g_db->query($sql);
 $member_found = $g_db->num_rows($result_usr);
 
 if($member_found == 0)
 {
     // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-    header("Location: $g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&new_user=3");
+    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&new_user=3');
     exit();
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Neuen Benutzer zuordnen";
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['title'] = 'Neuen Benutzer zuordnen';
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo "
@@ -224,6 +224,6 @@ echo "
     </li>
 </ul>";
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>
