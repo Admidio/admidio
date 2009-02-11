@@ -225,7 +225,7 @@ elseif($req_mode == 2)
     
     // nach einem erfolgreichen Update noch die neue Versionsnummer in DB schreiben
 	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'. ADMIDIO_VERSION. '"
-			 WHERE prf_name    = "db_version"" ';
+			 WHERE prf_name    = "db_version" ';
 	$g_db->query($sql);                
 
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
