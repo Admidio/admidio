@@ -39,7 +39,7 @@ $message_text = array(
     "delete_category" =>
         "<p>Soll die Kategorie %VAR1% wirklich gelöscht werden ?</p>
         <p>Es werden alle Daten, die dieser Kategorie zugeordnet sind
-        (Felder, Rollen, Links), mit gelöscht.</p>",
+        (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</p>",
 
     "delete_role" =>
         "Willst du die Rolle %VAR1% wirklich löschen?<br /><br />
@@ -97,7 +97,7 @@ $message_text = array(
 
     "logout" =>
         "Du wurdest erfolgreich abgemeldet.",
-        
+
     "mylist_condition" =>
         "Bei der Verarbeitung der Bedingungen ist ein Fehler aufgetreten.<br /><br />
         Prüfe bitte, ob die Syntax bei allen Bedingungen korrekt ist.",
@@ -180,15 +180,15 @@ $message_text = array(
         setzen kann.",
 
     // Meldungen Listen
-    
+
     "no_old_roles" =>
         "Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
         Erst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei
         den \"Entfernten Rollen\".",
-    
+
     "no_enabled_lists" =>
         "Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.",
-    
+
     // Ende Meldungen Listen
 
     //Meldungen Anmeldung im Forum
@@ -254,7 +254,7 @@ $message_text = array(
     "profile_photo_2big" =>
         "Das hochgeladene Foto übersteigt die vom Server zugelassene
         Dateigröße von %VAR1% B.",
-        
+
     "profile_photo_resolution_2large" =>
         "Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von %VAR1% Megapixeln.",
      //Ende Fehlermeldungen Profilfoto

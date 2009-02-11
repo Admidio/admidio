@@ -129,6 +129,10 @@ $orga_preferences = array(
     'messages_reminder'			=> '1',
     'messages_in_box'			=> '0',
     'messages_out_box'			=> '0',
-    'messages_archive'			=> '0'
+    'messages_archive'			=> '0',
+
+	// Inventarmodul
+	'enable_inventory_module'	=> '1',
+	'inventory_items_per_page'	=> '0'
  );
 ?>
