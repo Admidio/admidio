@@ -220,7 +220,6 @@ else
     $g_layout['title'] = 'Profil von '.$user->getValue('Vorname').' '.$user->getValue('Nachname');
 }
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
 
@@ -248,9 +247,7 @@ $g_layout['header'] = '
         {
             document.getElementById("enter"+rolle).href = "' . $g_root_path . '/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue('usr_id').'&mode=1&rol_id="+id+"&rol_begin="+document.getElementById("begin"+rolle).value+"&rol_end="+document.getElementById("end"+rolle).value ;
         }
-    --></script>
-    
-    <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />';
+    --></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 

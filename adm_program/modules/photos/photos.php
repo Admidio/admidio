@@ -171,13 +171,6 @@ if($g_preferences['enable_rss'] == 1)
             href="'.$g_root_path.'/adm_program/modules/photos/rss_photos.php" />';
 };
 
-//Thickbox-Mode
-if($g_preferences['photo_show_mode']==1)
-{
-    $g_layout['header'] = $g_layout['header']. '
-        <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>';
-}
-
 if($g_current_user->editPhotoRight())
 {
     $g_layout['header'] = $g_layout['header']. '
@@ -187,8 +180,7 @@ if($g_current_user->editPhotoRight())
 
 //Photomodulspezifische CSS laden
 $g_layout['header'] = $g_layout['header']. '
-		<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="'. THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />';
+		<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
 
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. '/overall_header.php');

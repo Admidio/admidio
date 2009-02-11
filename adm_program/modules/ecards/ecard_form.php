@@ -319,14 +319,7 @@ else
 {
     $g_layout['title'] = 'Grußkarte bearbeiten';
 }
-//Thickbox-Mode
-$g_layout['header'] = '';
-if($g_preferences['photo_show_mode']==1)
-{
-    $g_layout['header'] = $g_layout['header'].'
-		<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
-        <link rel="stylesheet" href="'.THEME_PATH.'/css/thickbox.css" type="text/css" media="screen" />';
-}
+
 $javascript = '
     <script type="text/javascript"><!--
         var basedropdiv = "basedropdownmenu";
@@ -906,7 +899,7 @@ if ($g_preferences['enable_bbcode'] == 1)
 
 if (empty($submit_action))
 {
-	$g_layout['header'] .= $javascript;
+	$g_layout['header'] = $javascript;
 }
 
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -937,257 +930,265 @@ if (empty($submit_action))
      //Popup-Mode
     if($g_preferences['photo_show_mode']==0)
     {
-        echo "<img onclick=\"window.open('$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=".$_REQUEST['pho_id']."','msg','height=".$popup_height.", width=".$popup_width.",left=162,top=5')\"
-             src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
+        echo '<img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$_REQUEST['photo'].'&pho_id='.$_REQUEST['pho_id'].'\',\'msg\',\'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')"
+            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
+            width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Grußkarte"
+            style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />';
     }
     //Thickbox-Mode
     if($g_preferences['photo_show_mode']==1)
     {
-        echo '<a class="thickbox" href="'.$bild_link.'">
-					<img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" alt="'.$g_organization.' - Grußkarte\" />
+        echo '<a class="thickbox" href="'.$bild_link.'"><img 
+                src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
+                width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Grußkarte"
+                style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />
 			  </a>';
     }
 
     //Gleichesfenster-Mode
     if($g_preferences['photo_show_mode']==2)
     {
-        echo "<img onclick=\"self.location.href='$g_root_path/adm_program/modules/photos/photo_presenter.php?bild=".$_REQUEST['photo']."&pho_id=$pho_id'\" src=\"$g_root_path/adm_program/modules/photos/photo_show.php?pho_id=".$pho_id."&amp;pic_nr=".$photo."&amp;pho_begin=".$photo_album->getValue("pho_begin")."&amp;scal=".$propotional_size_view['height']."&amp;side=y\" width=\"".$propotional_size_view['width']."\" height=\"".$propotional_size_view['height']."\" style=\"border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;\" alt=\"".$g_organization." - Grußkarte\" />";
+        echo '<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$_REQUEST['photo'].'&amp;pho_id='.$pho_id.'"><img 
+                src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
+                width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Grußkarte"
+                style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />
+            </a>';
     }
-    if ($error_msg != "")
+    if ($error_msg != '')
     {
         $g_message->show($error_msg);
     }
 
-        echo' <form id="ecard_form" action="" ';
-			//Thickbox
-			if($g_preferences['ecard_preview_mode'] == 1)
-			{
-				echo 'onsubmit="return tb_sendform(this,\'Vorschau der Grußkarte:\')" ';
-			}
-			echo 'method="post">
-                <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
-                <input type="hidden" name="submit_action" value="" />
-                <ul class="formFieldList">
-                <li>
-                    <hr />
-                </li>
-                <li>
-                    <dl>
-                        <dt>
-                            <label>An:</label>
-                            ';
-                            if($g_preferences['enable_ecard_cc_recipients'])
-                            {
-                                echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
-                                <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
-                                </div>';
-                            }
-                           echo'
-                        </dt>
-                        <dd id="Menue" style="height:49px; width:370px;">';
-                            if (array_key_exists("usr_id", $_GET))
-                            {
-                                // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                                echo '<div id="extern">
-                                        <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-                                echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                                     </div>';
+    echo '<form id="ecard_form" action="" ';
+        //Thickbox
+        if($g_preferences['ecard_preview_mode'] == 1)
+        {
+            echo 'onsubmit="return tb_sendform(this,\'Vorschau der Grußkarte:\')" ';
+        }
+        echo 'method="post">
+            <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
+            <input type="hidden" name="submit_action" value="" />
+            <ul class="formFieldList">
+            <li>
+                <hr />
+            </li>
+            <li>
+                <dl>
+                    <dt>
+                        <label>An:</label>
+                        ';
+                        if($g_preferences['enable_ecard_cc_recipients'])
+                        {
+                            echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
+                            <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
+                            </div>';
+                        }
+                       echo'
+                    </dt>
+                    <dd id="Menue" style="height:49px; width:370px;">';
+                        if (array_key_exists("usr_id", $_GET))
+                        {
+                            // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+                            echo '<div id="extern">
+                                    <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                            echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                 </div>';
 
-                            }
-                            else
-                            {
-                               echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
-                                     </div>
-                                     <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
-                                     </div>
-                                     <div id="dropdownmenu" style="display:block;">
-                                     </div>
-                                     <div id="extern">
-                                        <input type="hidden" name="ecard[email_recipient]" value="" />
-                                        <input type="hidden" name="ecard[name_recipient]"  value="" />
-                                     </div>
-                                      <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
-                            }
-                            echo '
-                        </dd>
-                    </dl>
-                </li>
-                <li>
-                    <div id="moreRecipient" style="display:none;">
-                    <hr />
-                        <dl>
-                            <dt>Weitere Empfänger:</dt>
-                            <dd>
-                                <table summary="TableccContainer" border="0" >
+                        }
+                        else
+                        {
+                           echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
+                                 </div>
+                                 <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
+                                 </div>
+                                 <div id="dropdownmenu" style="display:block;">
+                                 </div>
+                                 <div id="extern">
+                                    <input type="hidden" name="ecard[email_recipient]" value="" />
+                                    <input type="hidden" name="ecard[name_recipient]"  value="" />
+                                 </div>
+                                  <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
+                        }
+                        echo '
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <div id="moreRecipient" style="display:none;">
+                <hr />
+                    <dl>
+                        <dt>Weitere Empfänger:</dt>
+                        <dd>
+                            <table summary="TableccContainer" border="0" >
+                                <tr>
+                                    <td style="width:150px; text-align: left;">Name</td>
+                                    <td style="width:200px; padding-left:14px; text-align: left;">Email</td>
+                                </tr>
+                            </table>
+                            <div id="ccrecipientContainer" style="width:490px; border:0px; text-align: left;"></div>
+                            <table summary="TableCCRecipientSettings" border="0">
                                     <tr>
-                                        <td style="width:150px;" align="left">Name</td>
-                                        <td style="width:200px; padding-left:14px;" align="left">Email</td>
+                                        <td style="text-align: left;"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="Empfänger hinzufügen" /></a><a href="javascript:addRecipient()">Empfänger hinzufügen</a></span></td>
                                     </tr>
-                                </table>
-                                <div id="ccrecipientContainer" style="width:490px; border:0px;" align="left"></div>
-                                <table summary="TableCCRecipientSettings" border="0">
-                                        <tr>
-                                            <td align="left"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="Empfänger hinzufügen" /></a><a href="javascript:addRecipient()">Empfänger hinzufügen</a></span></td>
-                                        </tr>
-                                </table>
-                            </dd>
-                        </dl>
-                    </div>
-                </li>
-                <li>
-                    <hr />
-                </li>
-                <li>
-                    <dl>
-                        <dt><label>Absender:</label></dt>
-                        <dd>
-                          <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
-                            if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
-                            {
-                               echo $ecard["name_sender"];
-                            }
-                            else
-                            {
-                               echo $g_current_user->getValue("Vorname")." ".$g_current_user->getValue("Nachname");
-                            }
-                          echo'" />
+                            </table>
                         </dd>
                     </dl>
-                </li>
-                 <li>
-                    <dl>
-                        <dt><label>E-Mail:</label></dt>
-                        <dd>
-                           <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
-                            if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
-                            {
-                              echo $ecard["email_sender"];
-                            }
-                            else
-                            {
-                              echo $g_current_user->getValue("E-Mail");
-                            }
-                            echo'" />
-                        </dd>
-                    </dl>
-                </li>
-                <li>
-                    <hr />
-                </li>'; 
-                if ($g_preferences['enable_bbcode'] == 1)
-                {
-                    printBBcodeIcons();
-                }                
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <label>Nachricht:</label>';
-                            if($g_preferences['enable_ecard_text_length'])
-                            {
-                                echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">
-                                    noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $g_preferences['ecard_text_length'].'</b></div>&nbsp;Zeichen
-                                </div>';
-                            }
-                            echo '<div id="getmoreSettings" style="';
-                            if($g_preferences['enable_ecard_text_length'])
-                            {
-                                echo 'padding-top:28px;';
-                            }
-                            else
-                            {
-                                echo 'padding-top:155px;';
-                            }
-                            echo '  height:1px;">
-                                <a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
-                            </div>
-                        </dt>
-                        <dd>
-                            <textarea id="Nachricht" style="width: 350px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
-                            if($g_preferences['enable_ecard_text_length'])
-                            {
-                            echo' onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();"';
-                            }
-                            echo' >';
-                            if (! empty($ecard["message"]))
-                            {
-                                echo ''.$ecard["message"].'';
-                            }
-                       echo'</textarea>
-                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                       </dd>
-                    </dl>
-                </li>
-                <li>
-                    <div id="moreSettings" style="display:none;">
-                    <hr />
-                    <dl>
-                        <dt>
-                            <label>Einstellungen:</label>
-                        </dt>
-                        <dd>';
-                            $first_value_array = array();
-                            echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:350px;"  border="0px">
-                                <tr>
-                                  <td>Template:</td>
-                                  <td>Schriftart:</td>
-                                  <td>Schriftgröße:</td>
-                                </tr>
-                                <tr>
-                                    <td>';
-                                        array_push($first_value_array,array(getMenueSettings($templates,"ecard[template_name]",$g_preferences['ecard_template'],"120","false"),"ecard[template_name]"));
-                                    echo '</td>
-                                    <td>';
-                                        array_push($first_value_array,array(getMenueSettings($fonts,"ecard[schriftart_name]",$g_preferences['ecard_text_font'],"120","true"),"ecard[schriftart_name]"));
-                                    echo '</td>
-                                    <td>';
-                                        array_push($first_value_array,array(getMenueSettings($font_sizes,"ecard[schrift_size]",$g_preferences['ecard_text_size'],"50","false"),"ecard[schrift_size]"));
-                                    echo  '</td>
-                                </tr>
-                                <tr>
-                                  <td>Schriftfarbe:</td>
-                                  <td style="padding-left:40px;">Style:</td>
-                                  <td></td>
-                                </tr>
-                                <tr>
-                                    <td>';
-                                        array_push($first_value_array,array(getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
-                                    echo '</td>
-                                    <td colspan="2" style="padding-left:40px;">';
-                                        echo '<b>Bold: </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />                                             <i>Italic: </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />';
-                                    echo '</td>
-                                </tr>
-                            </table>';
-                            getFirstSettings($first_value_array);
-                            echo '<input type="hidden" name="ecard[schrift_style_bold]" value="" />';
-                            echo '<input type="hidden" name="ecard[schrift_style_italic]" value="" />';
-                        echo '</dd>
-                    </dl>
-                    </div>
-                </li>
-            </ul>
-            <hr />
-            <div class="formSubmit">
-			';
-			//Popupfenster
-			if($g_preferences['ecard_preview_mode'] == 0)
-			{
+                </div>
+            </li>
+            <li>
+                <hr />
+            </li>
+            <li>
+                <dl>
+                    <dt><label>Absender:</label></dt>
+                    <dd>
+                      <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
+                        if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
+                        {
+                           echo $ecard["name_sender"];
+                        }
+                        else
+                        {
+                           echo $g_current_user->getValue("Vorname")." ".$g_current_user->getValue("Nachname");
+                        }
+                      echo'" />
+                    </dd>
+                </dl>
+            </li>
+             <li>
+                <dl>
+                    <dt><label>E-Mail:</label></dt>
+                    <dd>
+                       <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
+                        if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
+                        {
+                          echo $ecard["email_sender"];
+                        }
+                        else
+                        {
+                          echo $g_current_user->getValue("E-Mail");
+                        }
+                        echo'" />
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <hr />
+            </li>'; 
+            if ($g_preferences['enable_bbcode'] == 1)
+            {
+                printBBcodeIcons();
+            }                
+            echo '
+            <li>
+                <dl>
+                    <dt>
+                        <label>Nachricht:</label>';
+                        if($g_preferences['enable_ecard_text_length'])
+                        {
+                            echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">
+                                noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $g_preferences['ecard_text_length'].'</b></div>&nbsp;Zeichen
+                            </div>';
+                        }
+                        echo '<div id="getmoreSettings" style="';
+                        if($g_preferences['enable_ecard_text_length'])
+                        {
+                            echo 'padding-top:28px;';
+                        }
+                        else
+                        {
+                            echo 'padding-top:155px;';
+                        }
+                        echo '  height:1px;">
+                            <a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
+                        </div>
+                    </dt>
+                    <dd>
+                        <textarea id="Nachricht" style="width: 350px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
+                        if($g_preferences['enable_ecard_text_length'])
+                        {
+                        echo' onfocus="javascript:countMax();" onclick="javascript:countMax();" onchange="javascript:countMax();" onkeydown="javascript:countMax();" onkeyup="javascript:countMax();" onkeypress="javascript:countMax();"';
+                        }
+                        echo' >';
+                        if (! empty($ecard["message"]))
+                        {
+                            echo ''.$ecard["message"].'';
+                        }
+                   echo'</textarea>
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                   </dd>
+                </dl>
+            </li>
+            <li>
+                <div id="moreSettings" style="display:none;">
+                <hr />
+                <dl>
+                    <dt>
+                        <label>Einstellungen:</label>
+                    </dt>
+                    <dd>';
+                        $first_value_array = array();
+                        echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:350px;"  border="0px">
+                            <tr>
+                              <td>Template:</td>
+                              <td>Schriftart:</td>
+                              <td>Schriftgröße:</td>
+                            </tr>
+                            <tr>
+                                <td>';
+                                    array_push($first_value_array,array(getMenueSettings($templates,"ecard[template_name]",$g_preferences['ecard_template'],"120","false"),"ecard[template_name]"));
+                                echo '</td>
+                                <td>';
+                                    array_push($first_value_array,array(getMenueSettings($fonts,"ecard[schriftart_name]",$g_preferences['ecard_text_font'],"120","true"),"ecard[schriftart_name]"));
+                                echo '</td>
+                                <td>';
+                                    array_push($first_value_array,array(getMenueSettings($font_sizes,"ecard[schrift_size]",$g_preferences['ecard_text_size'],"50","false"),"ecard[schrift_size]"));
+                                echo  '</td>
+                            </tr>
+                            <tr>
+                              <td>Schriftfarbe:</td>
+                              <td style="padding-left:40px;">Style:</td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                                <td>';
+                                    array_push($first_value_array,array(getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
+                                echo '</td>
+                                <td colspan="2" style="padding-left:40px;">
+                                    <b>Bold: </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />
+                                    <i>Italic: </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />
+                                </td>
+                            </tr>
+                        </table>';
+                        getFirstSettings($first_value_array);
+                        echo '<input type="hidden" name="ecard[schrift_style_bold]" value="" />
+                        <input type="hidden" name="ecard[schrift_style_italic]" value="" />
+                    </dd>
+                </dl>
+                </div>
+            </li>
+        </ul>
+        <hr />
+        <div class="formSubmit">';
+            //Popupfenster
+            if($g_preferences['ecard_preview_mode'] == 0)
+            {
                 echo '<button onclick="javascript:makePreview();" type="button" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>';
-			}
-			//Thickbox
-			elseif($g_preferences['ecard_preview_mode'] == 1)
-			{
-				echo '<button onclick="javascript:makeThickBoxPreview();" type="submit" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>';
-			}
-			echo '&nbsp;&nbsp;&nbsp;&nbsp;
+            }
+            //Thickbox
+            elseif($g_preferences['ecard_preview_mode'] == 1)
+            {
+                echo '<button onclick="javascript:makeThickBoxPreview();" type="submit" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>';
+            }
+            echo '&nbsp;&nbsp;&nbsp;&nbsp;
                 <button onclick="javascript:sendEcard();" type="button" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
-            </div>
-            </form>';
+        </div>
+    </form>';
 }
 else
 {
     echo'<br />
-    <div align="center">
+    <div style="text-align: center;">
         <div style="text-align:center;
         width:380px;
         height:30px;
@@ -1201,18 +1202,18 @@ else
     </div>
     <br /><br />
 
-    <table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" align="center">
+    <table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" style="text-align: center;">
     <tr>
-        <td align="left" colspan="2"><b>Absender:</b></td>
+        <td style="text-align: left;" colspan="2"><b>Absender:</b></td>
     </tr>
     <tr>
-        <td align="left" style="padding-right:5px;">'; echo $ecard['name_sender'].',</td><td align="left">'.$ecard['email_sender']; echo'</td>
+        <td style="padding-right:5px; text-align: left;">'. $ecard['name_sender'].',</td><td style="text-align: left;">'.$ecard['email_sender'].'</td>
     </tr>
     <tr>
-        <td align="left">&nbsp;</td>
+        <td style="text-align: left;">&nbsp;</td>
     </tr>
     <tr>
-        <td align="left" colspan="2"><b>Empfänger:</b></td>
+        <td style="text-align: left;" colspan="2"><b>Empfänger:</b></td>
     </tr><tr>';
     foreach($email_versand_liste as $item)
     {
@@ -1221,11 +1222,11 @@ else
             {
                     if (!is_integer(($i+1)/2))
                     {
-                        echo '<td align="left"  style="padding-right:5px;">'; echo $item2.',</td></td>';
+                        echo '<td style="padding-right:5px; text-align: left;">'. $item2.',</td></td>';
                     }
                     else
                     {
-                        echo'<td align="left"  style="padding-right:5px;">'; echo $item2.'</td></tr><tr>';
+                        echo'<td style="padding-right:5px; text-align: left;">'. $item2.'</td></tr><tr>';
                     }
                     $i++;
             }
@@ -1243,11 +1244,11 @@ else
             {
                 if (!is_integer(($i+1)/2))
                 {
-                    echo '<td align="left">'.$item2.',</td>';
+                    echo '<td style="text-align: left;">'.$item2.',</td>';
                 }
                 else
                 {
-                    echo'<td align="left">'.$item2.'</td></tr><tr>';
+                    echo'<td style="text-align: left;">'.$item2.'</td></tr><tr>';
                 }
                 $i++;
             }

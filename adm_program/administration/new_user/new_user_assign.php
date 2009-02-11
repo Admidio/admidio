@@ -68,10 +68,10 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $g_current_user->getProperty('E-Mail', 'usf_id'). '
          WHERE usr_valid = 1 
-           AND (  (   HEX(SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Nachname').'"), 1, 4))
-                  AND HEX(SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Vorname'). '"), 1, 4)) )
-               OR (   HEX(SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Vorname'). '"), 1, 4))
-                  AND HEX(SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4)) LIKE HEX(SUBSTRING(SOUNDEX("'. $new_user->getValue('Nachname').'"), 1, 4)) ) )';
+           AND (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('Nachname').'"), 1, 4)
+                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('Vorname'). '"), 1, 4) )
+               OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('Vorname'). '"), 1, 4)
+                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('Nachname').'"), 1, 4) ) )';
 $result_usr   = $g_db->query($sql);
 $member_found = $g_db->num_rows($result_usr);
 
@@ -89,43 +89,43 @@ $g_layout['title'] = 'Neuen Benutzer zuordnen';
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<div class=\"formLayout\" id=\"assign_users_form\" style=\"width: 400px;\">
-    <div class=\"formHead\">Anmeldung zuordnen</div>
-    <div class=\"formBody\">
-        Es wurde bereits ein Benutzer mit &auml;hnlichem Namen wie 
-        <strong>". $new_user->getValue("Vorname"). " ". $new_user->getValue("Nachname"). "</strong> 
+echo '
+<div class="formLayout" id="assign_users_form" style="width: 400px;">
+    <div class="formHead">Anmeldung zuordnen</div>
+    <div class="formBody">
+        Es wurde bereits ein Benutzer mit ähnlichem Namen wie 
+        <strong>'. $new_user->getValue('Vorname'). ' '. $new_user->getValue('Nachname'). '</strong> 
         in der Datenbank gefunden.<br />
-        <div class=\"groupBox\">
-            <div class=\"groupBoxHeadline\">Gefundene Benutzer</div>
-            <div class=\"groupBoxBody\">";
+        <div class="groupBox">
+            <div class="groupBoxHeadline">Gefundene Benutzer</div>
+            <div class="groupBoxBody">';
                 // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
                 $i = 0;
                 while($row = $g_db->fetch_object($result_usr))
                 {
                     if($i > 0)
                     {
-                        echo "<hr />";
+                        echo '<hr />';
                     }
-                    echo "<div style=\"margin-left: 20px;\">
-                        <i>$row->first_name $row->last_name</i><br />";
+                    echo '<div style="margin-left: 20px;">
+                        <i>'.$row->first_name.' '.$row->last_name.'</i><br />';
                         if(strlen($row->address) > 0)
                         {
-                            echo "$row->address<br />";
+                            echo $row->address.'<br />';
                         }
                         if(strlen($row->zip_code) > 0 || strlen($row->city) > 0)
                         {
-                            echo "$row->zip_code $row->city<br />";
+                            echo $row->zip_code.' '.$row->city.'<br />';
                         }
                         if(strlen($row->email) > 0)
                         {
                             if($g_preferences['enable_mail_module'] == 1)
                             {
-                                echo "<a href=\"$g_root_path/adm_program/modules/mail/mail.php?usr_id=$row->usr_id\">$row->email</a><br />";
+                                echo '<a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?usr_id='.$row->usr_id.'">'.$row->email.'</a><br />';
                             }
                             else
                             {
-                                echo "<a href=\"mailto:$row->email\">$row->email</a><br />";
+                                echo '<a href="mailto:'.$row->email.'">'.$row->email.'</a><br />';
                             }
                         }
 
@@ -135,78 +135,78 @@ echo "
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
-                                echo "<br />Dieser Benutzer besitzt schon ein g&uuml;ltiges Login.";
+                                echo '<br />Dieser Benutzer besitzt schon ein gültiges Login.';
                                 if($g_preferences['enable_system_mails'] == 1)
                                 {
-                                    echo "<br />M&ouml;chtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br />
+                                    echo '<br />Möchtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br />
 
-                                    <span class=\"iconTextLink\">
-                                        <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\"><img
-                                        src=\"". THEME_PATH. "/icons/key.png\" alt=\"E-Mail mit Benutzernamen und neuem Passwort zuschicken\" /></a>
-                                        <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=6\">Zugangsdaten zuschicken</a>
-                                    </span>";
+                                    <span class="iconTextLink">
+                                        <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
+                                        src="'. THEME_PATH. '/icons/key.png" alt="E-Mail mit Benutzernamen und neuem Passwort zuschicken" /></a>
+                                        <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=6">Zugangsdaten zuschicken</a>
+                                    </span>';
                                 }
                             }
                             else
                             {
                                 // Logindaten sind NICHT vorhanden -> diese nun zuordnen
-                                echo "<br />Dieser Benutzer besitzt noch kein Login.<br />
-                                    M&ouml;chtest du ihm die Daten dieser Registrierung zuordnen ?<br />
+                                echo '<br />Dieser Benutzer besitzt noch kein Login.<br />
+                                    Möchtest du ihm die Daten dieser Registrierung zuordnen ?<br />
 
-                                <span class=\"iconTextLink\">
-                                    <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\"><img
-                                    src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Zugangsdaten zuordnen\" /></a>
-                                    <a href=\"$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=1\">Zugangsdaten zuordnen</a>
-                                </span>";
+                                <span class="iconTextLink">
+                                    <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
+                                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="Zugangsdaten zuordnen" /></a>
+                                    <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=1">Zugangsdaten zuordnen</a>
+                                </span>';
                             }
                         }
                         else
                         {
                             // gefundene User ist noch KEIN Mitglied dieser Organisation
-                            $link = "$g_root_path/adm_program/administration/new_user/new_user_function.php?new_user_id=$req_new_user_id&amp;user_id=$row->usr_id&amp;mode=2";
+                            $link = $g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
 
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden
-                                echo "<br />Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization, 
+                                echo '<br />Dieser Benutzer ist noch kein Mitglied der Organisation '.$g_organization.', 
                                 besitzt aber bereits Logindaten.<br />
 
-                                <span class=\"iconTextLink\">
-                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" 
-                                        alt=\"Mitgliedschaft zuweisen\" /></a>
-                                    <a href=\"$link\">Mitgliedschaft zuweisen</a>
-                                </span>";
+                                <span class="iconTextLink">
+                                    <a href="'.$link.'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
+                                        alt="Mitgliedschaft zuweisen" /></a>
+                                    <a href="'.$link.'">Mitgliedschaft zuweisen</a>
+                                </span>';
                             }               
                             else
                             {
                                 // KEINE Logindaten vorhanden
-                                echo "<br />Dieser Benutzer ist noch kein Mitglied der Organisation $g_organization und 
+                                echo '<br />Dieser Benutzer ist noch kein Mitglied der Organisation '.$g_organization.' und 
                                 besitzt auch keine Logindaten.<br />
                                 
-                                <span class=\"iconTextLink\">
-                                    <a href=\"$link\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" 
-                                        alt=\"Rollen und Logindaten diesem Benutzer zuordnen\" /></a>
-                                    <a href=\"$link\">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
-                                </span>";
+                                <span class="iconTextLink">
+                                    <a href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
+                                        alt="Rollen und Logindaten diesem Benutzer zuordnen" /></a>
+                                    <a href="'.$link.'">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
+                                </span>';
                             }               
                         }
-                    echo "</div>";
+                    echo '</div>';
                     $i++;
                 }
-            echo "</div>
+            echo '</div>
         </div>
 
-        <div class=\"groupBox\">
-            <div class=\"groupBoxHeadline\">Neuen Benutzer anlegen</div>
-            <div class=\"groupBoxBody\">
-                <div style=\"margin-left: 20px;\">
+        <div class="groupBox">
+            <div class="groupBoxHeadline">Neuen Benutzer anlegen</div>
+            <div class="groupBoxBody">
+                <div style="margin-left: 20px;">
                     Falls der neue Benutzer nicht bei den oben aufgelisteten Benutzern dabei ist, 
                     kannst du auch einen neuen Benutzer anlegen.<br />
                     
-                    <span class=\"iconTextLink\">
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&amp;new_user=3\"><img
-                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Neuen Benutzer anlegen\" /></a>
-                        <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?user_id=$req_new_user_id&amp;new_user=3\">Benutzer anlegen</a>
+                    <span class="iconTextLink">
+                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&amp;new_user=3"><img
+                        src="'. THEME_PATH. '/icons/add.png" alt="Neuen Benutzer anlegen" /></a>
+                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&amp;new_user=3">Benutzer anlegen</a>
                     </span>
                 </div>
             </div>
@@ -214,15 +214,15 @@ echo "
     </div>
 </div>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>";
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 

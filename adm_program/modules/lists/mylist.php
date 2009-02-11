@@ -543,9 +543,9 @@ echo '
         if($g_current_user->isWebmaster())
         {
             echo '
-        	<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_config_webmaster&amp;window=true\',\'Message\',\'width=650,height=400,left=310,top=200,scrollbars=no\')" 
-                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_config_webmaster\',this);" onmouseout="ajax_hideTooltip()" />';
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=mylist_config_webmaster&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580"><img 
+                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_config_webmaster\',this)" onmouseout="ajax_hideTooltip()"
+                src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
         }
         echo '</p>
         
@@ -558,9 +558,8 @@ echo '
                     <th style="width: 37%;">Inhalt</th>
                     <th style="width: 18%;">Sortierung</th>
                     <th style="width: 27%;">Bedingung
-                        <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                            onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_condition&amp;window=true\',\'Message\',\'width=650,height=400,left=310,top=200,scrollbars=no\')" 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_condition\',this);" onmouseout="ajax_hideTooltip()" />
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=mylist_condition&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=470&amp;width=580"><img 
+                            src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
                     </th>
                 </tr>
             </thead>
