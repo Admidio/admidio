@@ -1,26 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>Gru&szlig;karte</title>
 <style type="text/css">
-*{
-font-family:<%ecard_font%>; 
-}
-#Message{  
-color: <%ecard_font_color%>;
-font:<%ecard_font%>;
-font-weight:<%ecard_font_bold%>;
-font-style:<%ecard_font_italic%>;
-font-size:<%ecard_font_size%>px;
-}
+    *{
+        font-family:<%ecard_font%>; 
+    }
+    #Message{  
+        color: <%ecard_font_color%>;
+        font:<%ecard_font%>;
+        font-weight:<%ecard_font_bold%>;
+        font-style:<%ecard_font_italic%>;
+        font-size:<%ecard_font_size%>px;
+    }
 </style>
 </head>
 <body>
-<table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grukarte">
+<table align="center" border="0" cellpadding="0" cellspacing="0" summary="Grusskarte">
   <tbody>
     <tr>
       <td>
-        <table align="center" border="0" cellpadding="0" width="100%" cellspacing="0" summary="Grukarte Bild">
+        <table align="center" border="0" cellpadding="0" width="100%" cellspacing="0" summary="Grusskarte Bild">
           <tbody>
             <tr>
               <td id="card_form_image" colspan="2" style="border: 1px solid rgb(0, 0, 0); padding: 10px; vertical-align:middle;" align="center">
@@ -31,7 +32,7 @@ font-size:<%ecard_font_size%>px;
                         <table  border="0" cellpadding="0" cellspacing="2" summary="Bild">
                           <tbody>
                             <tr>
-                              <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Grußkarte"></td>
+                              <td align="center" width="<%ecard_image_width%>"><img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Gru&szlig;karte"></td>
                             </tr>
                           </tbody>
                         </table>
@@ -73,7 +74,7 @@ font-size:<%ecard_font_size%>px;
 	   	  </tbody></table>
        </td>
 	  <td style="width: 8px; vertical-align:bottom; min-height:300px;">
-	       <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;"></a>
+	       <a href="http://www.admidio.org"><img src="<%theme_root_path%>/images/ownertext.png" width="30px" style="border:0px;" alt="Admidio"></a>
 	  </td>	  
 	  <td style="background: rgb(0, 0, 0); width:1px;"><br></td>
 	  <td style="width: 8px;">&nbsp;</td>
@@ -98,16 +99,16 @@ font-size:<%ecard_font_size%>px;
                              <td style="padding-left:5px;"><%ecard_reciepient_name%></td>
                          </tr>
                          <tr style="height:1px;">
-                         	<td><hr color="black" size="1px"></td>
-                         	<td><hr color="black" size="1px"></td>
+                         	<td><hr style="border: 1px solid black;"></td>
+                         	<td><hr style="border: 1px solid black;"></td>
                          </tr>
                          <tr>
                              <td><b>E-Mail:</b></td>
                              <td  style="padding-left:5px;"><%ecard_reciepient_email%></td>
                          </tr>
                          <tr style="height:1px;">
-                         	<td><hr color="black" size="1px"></td>
-                         	<td><hr color="black" size="1px"></td>
+                         	<td><hr style="border: 1px solid black;"></td>
+                         	<td><hr style="border: 1px solid black;"></td>
                          </tr>
                      </table>
                    </td>
