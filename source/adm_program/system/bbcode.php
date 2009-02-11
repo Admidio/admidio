@@ -108,10 +108,8 @@ function printBBcodeIcons()
                     <div style="float: right;">
                         <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
                             src="'.THEME_PATH.'/icons/delete.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
-                        <img class="iconLink" src="'.THEME_PATH.'/icons/help.png"
-                            onclick="window.open(\''.$g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true\',\'Message\',\'width=600,height=500,left=310,top=200,scrollbars=yes\')" 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=bbcode\',this);" 
-                            onmouseout="ajax_hideTooltip()" alt="Hilfe" title="" />
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=580"><img 
+                            src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
                     </div>
                 </div>
             </dd>

@@ -15,7 +15,7 @@
  *
  *****************************************************************************/
  
-require_once("../../system/common.php");
+require_once('../../system/common.php');
 // Wenn das erste Menue mit den aufgelisteten Rollen gezeichnet werden soll (Uebergabe base == 1)
 // Es werden alle Rollen die in dieser Organisation vorhanden sind aufgelistet und stehen nun bereit 
 // zur Auswahl
@@ -80,13 +80,12 @@ if ($g_valid_login && isset($_GET['base']) =="1")
     
     echo '</optgroup>
     </select>
-    <div style="vertical-align:top; display:inline;">
-    <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard&amp;window=true\',\'Message\',\'width=400,height=250,left=300,top=200,scrollbars=yes\')"
-    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()" style="vertical-align:middle;" />
-    </div>
     <span class="mandatoryFieldMarker" title="Pflichtfeld" >*</span>
-    
-    ';                  
+    <div style="vertical-align:top; display:inline;">
+        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rolle_ecard&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()"
+            src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+    </div>';                  
 }
 // Wenn die Rolle ausgewaehlt worden ist wird dieses Menue gezeichnet
 // Es werden alle Mitglieder in dieser Rolle aufgelistet die eine gueltuige 

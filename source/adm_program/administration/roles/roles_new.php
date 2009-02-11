@@ -382,7 +382,7 @@ echo '
                                     }
 									echo '>--</option>';
 									// Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
-									foreach (TableRoles::$role_cost_periods as $role_cost_period) {
+									foreach ($role->getCostPeriode() as $role_cost_period) {
 										echo '<option value="'.$role_cost_period.'" ';
 										if($role->getValue('rol_cost_period') == $role_cost_period)
 										{

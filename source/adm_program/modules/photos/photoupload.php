@@ -95,8 +95,6 @@ else
 // Html-Kopf ausgeben
 $g_layout['title']  = 'Fotos hochladen';
 $g_layout['header'] = '
-<link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
 <script type="text/javascript"><!--
 	flash_installed = '.$flash.';
 
@@ -211,9 +209,9 @@ echo '</div>
     </li>    
     <li>
         <span class="iconTextLink">
-            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700"><img 
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=580"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
-            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700">Hilfe Thickbox</a>
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=580">Hilfe</a>
         </span>
     </li>
 </ul>';

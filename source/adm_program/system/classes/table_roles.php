@@ -22,7 +22,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableRoles extends TableAccess
 {
@@ -31,11 +31,11 @@ class TableRoles extends TableAccess
 	var $role_cost_periods = array(-1,1,2,4,12);
 
     // Konstruktor
-    function TableRoles(&$db, $role = "")
+    function TableRoles(&$db, $role = '')
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ROLES;
-        $this->column_praefix = "rol";
+        $this->column_praefix = 'rol';
 
         if(strlen($role) > 0)
         {
@@ -54,17 +54,17 @@ class TableRoles extends TableAccess
 
         if(is_numeric($role))
         {
-            $condition = " rol_id = $role ";
+            $condition = ' rol_id = '.$role;
         }
         else
         {
             $role = addslashes($role);
-            $condition = " rol_name LIKE '$role' ";
+            $condition = ' rol_name LIKE "'.$role.'" ';
         }
 
         $tables    = TBL_CATEGORIES;
-        $condition = $condition. " AND rol_cat_id = cat_id
-                                   AND cat_org_id = ". $g_current_organization->getValue("org_id");
+        $condition = $condition. ' AND rol_cat_id = cat_id
+                                   AND cat_org_id = '. $g_current_organization->getValue('org_id');
         parent::readData($role, $condition, $tables);
     }
 
@@ -78,17 +78,17 @@ class TableRoles extends TableAccess
 
         if($this->new_record)
         {
-            $this->setValue("rol_timestamp_create", DATETIME_NOW);
-            $this->setValue("rol_usr_id_create", $g_current_user->getValue("usr_id"));
+            $this->setValue('rol_timestamp_create', DATETIME_NOW);
+            $this->setValue('rol_usr_id_create', $g_current_user->getValue('usr_id'));
         }
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue("rol_timestamp_create")) + 900)
-            || $g_current_user->getValue("usr_id") != $this->getValue("rol_usr_id_create") )
+            if(time() > (strtotime($this->getValue('rol_timestamp_create')) + 900)
+            || $g_current_user->getValue('usr_id') != $this->getValue('rol_usr_id_create') )
             {
-                $this->setValue("rol_timestamp_change", DATETIME_NOW);
-                $this->setValue("rol_usr_id_change", $g_current_user->getValue("usr_id"));
+                $this->setValue('rol_timestamp_change', DATETIME_NOW);
+                $this->setValue('rol_usr_id_change', $g_current_user->getValue('usr_id'));
             }
         }
 
@@ -112,36 +112,36 @@ class TableRoles extends TableAccess
         // eine Rechteaenderung vorgenommen wurde
         $g_current_session->renewUserObject();
 
-        // die Rolle "Webmaster" darf nicht geloescht werden
-        if($this->getValue("rol_name") != "Webmaster")
+        // die Rolle 'Webmaster' darf nicht geloescht werden
+        if($this->getValue('rol_name') != 'Webmaster')
         {
-            $sql    = "DELETE FROM ". TBL_ROLE_DEPENDENCIES. "
-                        WHERE rld_rol_id_parent = ". $this->getValue("rol_id"). "
-                           OR rld_rol_id_child  = ". $this->getValue("rol_id");
+            $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
+                        WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
+                           OR rld_rol_id_child  = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            $sql    = "DELETE FROM ". TBL_MEMBERS. "
-                        WHERE mem_rol_id = ". $this->getValue("rol_id");
+            $sql    = 'DELETE FROM '. TBL_MEMBERS. '
+                        WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
             //Auch die Inventarpositionen zur Rolle muessen geloescht werden
             //Alle Inventarpositionen auslesen, die von der Rolle angelegt wurden
-        	$sql_inventory = "SELECT *
-                              FROM ". TBL_INVENTORY. "
-							  WHERE inv_rol_id = ". $this->getValue("rol_id");
+        	$sql_inventory = 'SELECT *
+                              FROM '. TBL_INVENTORY. '
+							  WHERE inv_rol_id = '. $this->getValue('rol_id');
         	$result_inventory = $this->db->query($sql_subfolders);
 
 	        while($row_inventory = $this->db->fetch_object($result_inventory))
 	        {
 	            //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
-	            $sql    = "DELETE FROM ". TBL_RENTAL_OVERVIEW. "
-                        	WHERE rnt_inv_id = ". $row_inventory->inv_id;
+	            $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
+                        	WHERE rnt_inv_id = '. $row_inventory->inv_id;
             	$this->db->query($sql);
 	        }
 
 			//Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
-        	$sql    = "DELETE FROM ". TBL_INVENTORY. "
-                        WHERE inv_rol_id = ". $this->getValue("rol_id");
+        	$sql    = 'DELETE FROM '. TBL_INVENTORY. '
+                        WHERE inv_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
             return parent::delete();
@@ -151,23 +151,28 @@ class TableRoles extends TableAccess
             return false;
         }
     }
+    
+    function getCostPeriode()
+    {
+        return $this->role_cost_periods;
+    }
 
     // aktuelle Rolle wird auf inaktiv gesetzt
     function setInactive()
     {
         global $g_current_session;
 
-        // die Rolle "Webmaster" darf nicht auf inaktiv gesetzt werden
-        if($this->getValue("rol_name") != "Webmaster")
+        // die Rolle 'Webmaster' darf nicht auf inaktiv gesetzt werden
+        if($this->getValue('rol_name') != 'Webmaster')
         {
-            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_end   = '".DATE_NOW."'
-                        WHERE mem_rol_id = ". $this->getValue("rol_id"). "
-                          AND mem_begin <= '".DATE_NOW."'
-                          AND mem_end    > '".DATE_NOW."' ";
+            $sql    = 'UPDATE '. TBL_MEMBERS. ' SET mem_end   = "'.DATE_NOW.'"
+                        WHERE mem_rol_id = '. $this->getValue('rol_id'). '
+                          AND mem_begin <= "'.DATE_NOW.'"
+                          AND mem_end    > "'.DATE_NOW.'" ';
             $this->db->query($sql);
 
-            $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 0
-                        WHERE rol_id = ". $this->getValue("rol_id");
+            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 0
+                        WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
@@ -184,15 +189,15 @@ class TableRoles extends TableAccess
     {
         global $g_current_session;
 
-        // die Rolle "Webmaster" ist immer aktiv
-        if($this->getValue("rol_name") != "Webmaster")
+        // die Rolle 'Webmaster' ist immer aktiv
+        if($this->getValue('rol_name') != 'Webmaster')
         {
-            $sql    = "UPDATE ". TBL_MEMBERS. " SET mem_end   = '9999-12-31'
-                        WHERE mem_rol_id = ". $this->getValue("rol_id");
+            $sql    = 'UPDATE '. TBL_MEMBERS. ' SET mem_end   = "9999-12-31"
+                        WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            $sql    = "UPDATE ". TBL_ROLES. " SET rol_valid = 1
-                        WHERE rol_id = ". $this->getValue("rol_id");
+            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 1
+                        WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
@@ -208,20 +213,20 @@ class TableRoles extends TableAccess
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
     function countVacancies($count_leaders = false)
     {
-        if($this->getValue("rol_max_members") > 0)
+        if($this->getValue('rol_max_members') > 0)
         {
-            $sql    = "SELECT mem_usr_id FROM ". TBL_MEMBERS. "
-                        WHERE mem_rol_id = ". $this->getValue("rol_id"). "
-                          AND mem_begin <= '".DATE_NOW."'
-                          AND mem_end    > '".DATE_NOW."'";
+            $sql    = 'SELECT mem_usr_id FROM '. TBL_MEMBERS. '
+                        WHERE mem_rol_id = '. $this->getValue('rol_id'). '
+                          AND mem_begin <= "'.DATE_NOW.'"
+                          AND mem_end    > "'.DATE_NOW.'"';
             if($count_leaders == false)
             {
-                $sql = $sql. " AND mem_leader = 0 ";
+                $sql = $sql. ' AND mem_leader = 0 ';
             }
             $this->db->query($sql);
 
             $num_members = $this->db->num_rows();
-            return $this->getValue("rol_max_members") - $num_members;
+            return $this->getValue('rol_max_members') - $num_members;
         }
         return 999;
     }

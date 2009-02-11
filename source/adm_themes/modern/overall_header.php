@@ -64,12 +64,14 @@ echo '
     <title>'. $g_page_title. '</title>    
     
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
+    <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
 
     <script type="text/javascript"><!-- 
 		var gRootPath  = "'. $g_root_path. '"; 
 		var gThemePath = "'. THEME_PATH. '"; 
 	--></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
     

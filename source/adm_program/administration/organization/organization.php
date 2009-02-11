@@ -166,11 +166,6 @@ $g_layout['header'] =  '
             $("#org_longname").focus();
 	 	});        
     --></script>';
-
-// Thickboxintegration
-$g_layout['header'] = $g_layout['header']. '
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
-	<link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />';
 	
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. '/overall_header.php');

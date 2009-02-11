@@ -345,9 +345,7 @@ else
     $focusField = 'usf-'. $g_current_user->getProperty('Adresse', 'usf_id');
 }
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
-    <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />
 
     <script type="text/javascript"><!--

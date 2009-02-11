@@ -50,6 +50,10 @@ h1 {
     color:              #449ba6;
 }
 
+h3 {
+    color:              #333333;
+    padding:            15px 0px 7px 0px;
+}
 
 img {
     border-width:       0px;
@@ -416,7 +420,7 @@ ul.autosuggest li.highlight a:visited  {
 
 #ajax_tooltipObj h3 {
     color:              #333333;
-    padding-top:        0px;
+    padding-top:        10px;
 }
 
 /* spezielle Anpassung fuer die Loginseite */

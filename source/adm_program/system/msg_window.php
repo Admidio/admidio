@@ -39,16 +39,15 @@ if(isset($_GET['err_text']))
 if(isset($_GET['window']))
 {
 	$g_layout['title']    = 'Hinweis';
-	$g_layout['onload']   = 'windowresize();';
 	$g_layout['includes'] = false;
 	require(THEME_SERVER_PATH. '/overall_header.php');
 	
 	
 	// Html des Modules ausgeben
 	echo '
-	<div class="groupBox" id="message_window">
-	    <div class="groupBoxHeadline">Hinweis</div>
-	    <div class="groupBoxBody">';
+    <div class="formLayout" id="message_window">
+            <div class="formHead">Hinweis</div>
+            <div class="formBody">';
 }
 
 switch ($req_err_code)
@@ -126,7 +125,7 @@ switch ($req_err_code)
         break;
 
     case 'date_location_link':
-        echo 'Werden genügend Informationen (Straße, Ort, Lokalität) zum Treffpunkt eingegeben, 
+        echo 'Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, 
         so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.';
         break;
 
@@ -330,7 +329,7 @@ switch ($req_err_code)
 		    Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen.
 		 	Konfiguriere die entsprechende Spalten und Bedingungen und speicher diese unter dem gewünschten Namen. 
 		 	Wähle nun die neu erstellte Liste aus und klick auf dieses Symbol: 
-		 	<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" /><br /><br />
+		 	<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />
 		 	<h3>Standardkonfigurationen</h3>
 		 	Eine vorgegebene Konfiguration kannst du zur Standardkonfiguration machen. Wähle dazu die entsprechende 
 		 	vorgegebene Konfiguration aus und klick auf folgendes Symbol: 
@@ -369,7 +368,7 @@ switch ($req_err_code)
             ';
         break;
 
-    case 'veranst_help':
+    case 'album_help':
         echo '<h3>Was ist zu tun?</h3>
             Alle offenen Felder ausfüllen. Die Felder Album und Beginn sind Pflichtfelder. Ggf. auswählen
             welches Album das Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in 
@@ -432,9 +431,9 @@ if(isset($_GET['window']))
 	<ul class="iconTextLinkList">
 	    <li>
 	        <span class="iconTextLink">
-	            <a href="javascript:window.close();"><img
+	            <a href="javascript:self.parent.tb_remove();"><img
 	            src="'.THEME_PATH.'/icons/door_in.png" alt="Schließen" /></a>
-	            <a href="javascript:window.close();">Schließen</a>
+	            <a href="javascript:self.parent.tb_remove();">Schließen</a>
 	        </span>
 	    </li>
 	</ul>';
