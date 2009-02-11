@@ -9,7 +9,7 @@
  *
  * Uebergaben:
  *
- * pho_id:      id des Albums dessen Bilder angezeigt werden sollen
+ * pho_id:      id des Albums dessen Fotos angezeigt werden sollen
  * thumb_seite: welch Seite der Thumbnails ist die aktuelle
  * start:       mit welchem Element beginnt die Albumliste
  * locked:      das Album soll freigegebn/gesperrt werden
@@ -476,7 +476,7 @@ echo '<div class="photoModuleContainer">';
     //Gesamtzahl der auszugebenden Alben
     $albums = $g_db->num_rows($result_list);
 
-    // falls zum aktuellen Album Bilder und Unteralben existieren,
+    // falls zum aktuellen Album Fotos und Unteralben existieren,
     // dann einen Trennstrich zeichnen
     if($photo_album->getValue('pho_quantity') > 0 && $albums > 0)
     {
@@ -586,7 +586,7 @@ echo '<div class="photoModuleContainer">';
                         }
 
                         echo '</li>
-                            <li>Bilder: '.$sub_photo_album->countImages().' </li>
+                            <li>Fotos: '.$sub_photo_album->countImages().' </li>
                             <li>Datum: '.mysqldate('d.m.y', $sub_photo_album->getValue('pho_begin'));
                             if($sub_photo_album->getValue('pho_end') != $sub_photo_album->getValue('pho_begin'))
                             {
@@ -604,7 +604,7 @@ echo '<div class="photoModuleContainer">';
                                 {
 	                                echo '
 	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
-	                                    src="'. THEME_PATH. '/icons/photo_upload.png" alt="Bilder hochladen" title="Bilder hochladen" /></a>
+	                                    src="'. THEME_PATH. '/icons/photo_upload.png" alt="Fotos hochladen" title="Fotos hochladen" /></a>
 
     								<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
                                         src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
@@ -643,10 +643,10 @@ echo '<div class="photoModuleContainer">';
     }
         
     /****************************Leeres Album****************/
-    //Falls das Album weder Bilder noch Unterordner enthaelt
+    //Falls das Album weder Fotos noch Unterordner enthaelt
     if(($photo_album->getValue('pho_quantity')=='0' || strlen($photo_album->getValue('pho_quantity')) == 0) && $albums<1)  // alle vorhandenen Albumen werden ignoriert
     {
-        echo'Dieses Album enthält leider noch keine Bilder.';
+        echo'Dieses Album enthält leider noch keine Fotos.';
     }
     
     if($g_db->num_rows($result_list) > 2)

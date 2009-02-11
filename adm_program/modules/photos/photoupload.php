@@ -190,7 +190,7 @@ echo '
     </p>';
 
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
-	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$_GET['pho_id'].'&admidio_php_session_id='.$_COOKIE['admidio_php_session_id'].'&admidio_session_id='.$_COOKIE['admidio_session_id'].'&admidio_data='.$_COOKIE['admidio_data'].'&uploadmethod=2');
+	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$_GET['pho_id'].'&'.$cookie_praefix. '_PHP_ID='.$_COOKIE[$cookie_praefix. '_PHP_ID'].'&'.$cookie_praefix. '_ID='.$_COOKIE[$cookie_praefix. '_ID'].'&'.$cookie_praefix.'_DATA='.$_COOKIE[$cookie_praefix. '_DATA'].'&uploadmethod=2');
 	$fup->setPathToSWF($g_root_path.'/adm_program/libs/flexupload/');		//Pfad zum swf-File
 	$fup->setLocale($g_root_path.'/adm_program/libs/flexupload/de.xml');	//Pfad der Sprachdatei
 	$fup->setMaxFileSize(maxUploadSize());	//maximale Dateigröße
@@ -214,16 +214,6 @@ echo '</div>
             <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
             <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=700">Hilfe Thickbox</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;&amp;window=true\',\'Message\',
-                    \'width=500,height=300,left=310,top=200,scrollbars=yes\')"
-                onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help\',this);" onmouseout="ajax_hideTooltip()" />
-            <a href="#" onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=photo_up_help&amp;window=true\',\'Message\',
-                    \'width=500,height=300,left=310,top=200,scrollbars=yes\')">Hilfe bisher</a>
         </span>
     </li>
 </ul>';

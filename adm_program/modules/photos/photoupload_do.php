@@ -9,16 +9,21 @@
  *
  * Uebergaben:
  *
- * pho_id: id des Albums zu dem die Bilder hinzugefuegt werden sollen
+ * pho_id: id des Albums zu dem die Fotos hinzugefuegt werden sollen
  * uploadmethod: 1 - Klassisch
  *				 2 - Flexuploader
  *
  *****************************************************************************/
-if(isset($_GET['uploadmethod']) && is_numeric($_GET['pho_id']) && $_GET['pho_id'] == 1)
+if(isset($_GET['uploadmethod']) && is_numeric($_GET['pho_id']) && $_GET['uploadmethod'] == 2)
 {
-    $_COOKIE['admidio_session_id'] = $_GET['admidio_session_id'];
-    $_COOKIE['admidio_php_session_id'] = $_GET['admidio_php_session_id'];
-    $_COOKIE['admidio_data'] = $_GET['admidio_data'];
+    // Cookies wurden uebergeben, nun wieder in Cookievariable kopieren
+    foreach($_GET as $key => $value)
+    {
+        if(strpos($key, 'ADMIDIO') !== false)
+        {
+            $_COOKIE[$key] = $value;
+        }
+    }
 }
 
 require_once('../../system/classes/table_photos.php');
@@ -95,14 +100,14 @@ if($_GET['uploadmethod'] == 1)
 	echo '
 	<h1 class="moduleHeadline">Fotogalerien - Upload</h1>
     <p> Bitte einen Moment Geduld...<br /><br />
-        Die Bilder wurden dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> erfolgreich hinzugefügt,<br /> wenn sie hier angezeigt werden.
+        Die Fotos wurden dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> erfolgreich hinzugefügt,<br /> wenn sie hier angezeigt werden.
     </p>';
 }
 
 //Bei Klassischem upload erstmal testen ob Alle Dateien angekommen sind bei Flex reichen die Kontrollen in der Verarbeitung
-if($_POST['upload'] && $_GET['uploadmethod'] == 1)
+if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
 {
-    //zaehlen wieviele Bilder hochgeladen werden sollen und ob alle Uploads Fehlerfrei sind
+    //zaehlen wieviele Fotos hochgeladen werden sollen und ob alle Uploads Fehlerfrei sind
     $counter=0;
     for($x=0; $x<=4; $x++)
     {
@@ -119,12 +124,12 @@ if($_POST['upload'] && $_GET['uploadmethod'] == 1)
             }
         }
     }
-    //Kontrolle ob Bilder ausgewaehlt wurden
+    //Kontrolle ob Fotos ausgewaehlt wurden
     if($counter==0)
     {
         $g_message->show('photodateiphotoup');
     }
-    // Bilder wurden erfolgreich hochgeladen -> Upload-Seite aus der Navi-Klasse entfernen
+    // Fotos wurden erfolgreich hochgeladen -> Upload-Seite aus der Navi-Klasse entfernen
     $_SESSION['navigation']->deleteLastUrl();
 }//Kontrollmechanismen
 
@@ -266,9 +271,9 @@ if($_GET['uploadmethod'] == 1)
 		    <li>
 		        <span class="iconTextLink">
 		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1">
-		            	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Weitere Bilder hochladen" />
+		            	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Weitere Fotos hochladen" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1">Weitere Bilder hochladen</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1">Weitere Fotos hochladen</a>
 		        </span>
 		    </li>
 		 </ul>

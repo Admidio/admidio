@@ -790,7 +790,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, wie die Bilder im Fotomodul präsentiert werden sollen.
+                        Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen.
                         Dies kann über ein Popup-Fenster, über eine Javascript-Animation (Thickbox) oder auf
                         dergleichen Seite in HTML erfolgen. (Standard: Thickbox)
                     </li>
@@ -808,7 +808,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                    	Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Bilder gleichzeitig auszuwählen und hochzuladen.
+                    	Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen.
                     	Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash installiert oder diese Option nicht
                     	aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt.
                     	(Standard: ja)
@@ -848,13 +848,13 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Beim Upload werden alle Bilder neu skaliert. Der hier eingegeben Pixelwert
-                        ist der Parameter für die längere Seite des Bildes, egal ob das Bild im Hoch-
+                        Beim Upload werden alle Fotos neu skaliert. Der hier eingegeben Pixelwert
+                        ist der Parameter für die längere Seite des Fotos, egal ob das Foto im Hoch-
                         oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standard: 640Pixel)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_preview_scale\">Höhe der Vorschaubilder:</label></dt>
+                            <dt><label for=\"photo_preview_scale\">Höhe der Vorschaufotos:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_preview_scale\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\" /> Pixel
                              </dd>
@@ -887,7 +887,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Der hier eingegebene Text wird in alle angezeigten Bilder, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet.
+                        Der hier eingegebene Text wird in alle angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet.
                         (Standard: &#169; ".$g_current_organization->getValue("org_homepage").")
                     </li>
                 </ul>

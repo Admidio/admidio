@@ -85,7 +85,7 @@ while ($row = $g_db->fetch_array($result))
         //Erfassen des Eltern Albums
         $sql=' SELECT *
                  FROM '. TBL_PHOTOS. '
-                WHERE pho_id = $pho_parent_id ';
+                WHERE pho_id = '.$pho_parent_id;
         $result_parents = $g_db->query($sql);
         $adm_photo_parent = $g_db->fetch_array($result_parents);
 
@@ -111,14 +111,14 @@ while ($row = $g_db->fetch_array($result))
     }
     $description = $description. '<br />Fotos von: '.$photo_album->getValue('pho_photographers');
 
-    //die letzten fuenf Bilder sollen als Beispiel genutzt werden
+    //die letzten fuenf Fotos sollen als Beispiel genutzt werden
     if($photo_album->getValue('pho_quantity') >0)
     {
-        $description = $description. '<br /><br />Beispielbilder:<br />';
+        $description = $description. '<br /><br />Beispielfotos:<br />';
         for($bild=$photo_album->getValue('pho_quantity'); $bild>=$photo_album->getValue('pho_quantity')-4 && $bild>0; $bild--)
         {
             $bildpfad = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$bild.'.jpg';
-            //Zu Sicherheit noch überwachen ob das Bild existiert, wenn ja raus damit
+            //Zu Sicherheit noch überwachen ob das Foto existiert, wenn ja raus damit
             if (file_exists($bildpfad))
             {
                 $description = $description. '

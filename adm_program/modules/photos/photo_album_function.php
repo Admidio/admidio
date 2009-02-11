@@ -284,7 +284,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
                 </dl></li>
 
                 <li><dl>
-                    <dt>Aktuelle Bilderzahl:</dt>
+                    <dt>Anzahl Fotos:</dt>
                     <dd>';
                         if($photo_album->getValue('pho_quantity')!=NULL)
                         {
