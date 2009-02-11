@@ -13,7 +13,7 @@
  *				  2 - Updateregbnis anzeigen
  *
  *****************************************************************************/
- 
+
 require("common.php");
 require("login_valid.php");
 
@@ -66,52 +66,15 @@ function CheckVersion($current_version, $check_stable_version, $check_beta_versi
 	$update = 0;
 	
 	// Zunächst auf stabile Version prüfen
-	$current_version = explode(".", $current_version);
-	$check_stable_version = explode(".", $check_stable_version);
-	
-	if(strlen($current_version) > strlen($check_stable_version))
-	{
-		for($i==1;$i=(strlen($current_version)-strlen($check_stable_version));$i++)
-		{
-			$check_stable_version = $check_stable_version. "0";
-		}
-	}	
-	else if(strlen($check_stable_version) > strlen($current_version))
-	{
-		for($i==1;$i=(strlen($check_stable_version)-strlen($current_version));$i++)
-		{
-			$current_version = $current_version. "0";
-		}
-	}	
-	
-	if($check_stable_version > $current_version)
+	$status = version_compare($check_stable_version, $current_version);
+	if($status == 1)
 	{
 		$update = 1;
 	}
-	else if($check_stable_version == $current_version && $beta_flag > 0)
-	{
-		$update = 1;
-	}	
 	
 	// Jetzt auf Beta Version prüfen
-	$check_beta_version = explode(".", $check_beta_version);
-	
-	if(strlen($current_version) > strlen($check_beta_version))
-	{
-		for($i==1;$i=(strlen($current_version)-strlen($check_beta_version));$i++)
-		{
-			$check_beta_version = $check_beta_version. "0";
-		}
-	}	
-	else if(strlen($check_beta_version) > strlen($current_version))
-	{
-		for($i==1;$i=(strlen($check_beta_version)-strlen($current_version));$i++)
-		{
-			$current_version = $current_version. "0";
-		}
-	}
-	
-	if($check_beta_version > $current_version)
+	$status = version_compare($check_beta_version, $current_version);
+	if($status == 1 || ($status == 0 && version_compare($beta_release, $beta_flag) == 1))
 	{
 		if($update == 1)
 		{
@@ -120,38 +83,27 @@ function CheckVersion($current_version, $check_stable_version, $check_beta_versi
 		else
 		{
 			$update = 2;
-		}		
-	}
-	else if($check_beta_version == $current_version && $beta_release > $beta_flag)
-	{
-		if($update == 1)
-		{
-			$update = 3;
 		}
-		else
-		{
-			$update = 2;
-		}		
 	}
 	
 	return $update;
 }
 
 // Uebergabevariablen pruefen
-if(isset($_GET["show"]) && is_numeric($_GET["show"]) == false || $_GET["show"] > 2)
+if(isset($_GET['show']))
 {
-    $g_message->show("invalid", "", "", false);
-}
-else
-{
-	if(isset($_GET["show"]))
+	if(is_numeric($_GET["show"]) == false || $_GET["show"] > 2)
 	{
-		$show = $_GET["show"];
+		$g_message->show("invalid", "", "", false);
 	}
 	else
 	{
-		$show = 1;
-	}	
+		$show = $_GET["show"];		
+	}
+}
+else
+{
+	$show = 1;
 }
 
 // Für Entwickler:
@@ -181,6 +133,12 @@ if(domainAvailable($g_root_path. '/update.txt'))
 	$beta_version = GetUpdateVersion($update_info, "Beta-Version=");
 	$beta_release = GetUpdateVersion($update_info, "Beta-Release=");
 	
+	// Keine Stabile Version verfügbar (eigentlich unmöglich)
+	if($stable_version == "")
+	{
+		$stable_version = 'n/a';
+	}
+	
 	// Keine Beatversion verfügbar
 	if($beta_version == "")
 	{
@@ -201,7 +159,7 @@ else
 	$version_update = 99;
 }
 
-// Nur im Anzeigemodus geht es weiter, ansonsten kann der aktuelle Updatestand 
+ // Nur im Anzeigemodus geht es weiter, ansonsten kann der aktuelle Updatestand 
 // in der Variable $version_update abgefragt werden.
 // $version_update (0 = Kein Update, 1 = Neue stabile Version, 2 = Neue Beta-Version, 3 = Neue stabile + Beta Version, 99 = Keine Verbindung)
 
@@ -266,7 +224,7 @@ if($show == 2)
 					<dl>
 						<dt><label for="beta_admidio">Letzte Beta Version:</label></dt>
 						<dd style="margin-left: 51%;"><b>'. $beta_version;
-					if($verbindung != 99 && $beta_version != 'n/a')
+					if($version_update != 99 && $beta_version != 'n/a')
 					{echo '&nbsp;Beta&nbsp;';}
 					echo $beta_release. '</b></dd>
 					</dl>
