@@ -79,6 +79,10 @@ alter table %PRAEFIX%_dates add constraint %PRAEFIX%_FK_DAT_CAT foreign key (dat
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_this_role tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_mail_to_all tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
 
+-- Neues Recht fuer Inventarmodul
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_inventory tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER rol_guestbook_comments;
+
+
 -- Autoincrement-Spalte fuer adm_user_data anlegen
 ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USF;
 ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USR ;

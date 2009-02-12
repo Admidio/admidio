@@ -242,8 +242,8 @@ $g_layout['header'] = '
             document.getElementById("mem_rol_"+role_details_ID).style.visibility = "hidden";
             document.getElementById("mem_rol_"+role_details_ID).style.display    = "none";
 		}
-        
-        function linkaendern(rolle,id) 
+
+        function linkaendern(rolle,id)
         {
             document.getElementById("enter"+rolle).href = "' . $g_root_path . '/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue('usr_id').'&mode=1&rol_id="+id+"&rol_begin="+document.getElementById("begin"+rolle).value+"&rol_end="+document.getElementById("end"+rolle).value ;
         }
@@ -570,7 +570,7 @@ echo '
             $berechtigungen = Array('rol_assign_roles','rol_approve_users','rol_edit_user',
                                        'rol_mail_to_all','rol_profile','rol_announcements',
                                        'rol_dates','rol_photo','rol_download','rol_guestbook',
-                                       'rol_guestbook_comments','rol_weblinks','rol_all_lists_view');
+                                       'rol_guestbook_comments','rol_inventory','rol_weblinks','rol_all_lists_view');
             //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
             for ($i=0; $i<=12; $i++) {
                $sql = 'SELECT *
@@ -660,6 +660,11 @@ echo '
                   echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
                   alt="Weblinks anlegen und bearbeiten" title="Weblinks anlegen und bearbeiten" />';
               }
+        	  if($user->checkRolesRight('rol_inventory') == 1 && $g_preferences['enable_inventory_module'] > 0)
+              {
+                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_inventory'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
+                  alt="Inventar verwalten" title="Inventar verwalten" />';
+              }
               if($user->checkRolesRight('rol_all_lists_view') == 1)
               {
                   echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/lists.png"
@@ -733,7 +738,7 @@ echo '
                                             // Datum für die Bearbeitung der Mitgliedschaft wird vorbereitet
                                             $rol_from = mysqldatetime('d.m.y', $row['mem_begin']);
                                             $rol_to = NULL;
-                                            if ($row['mem_end'] != '9999-12-31') 
+                                            if ($row['mem_end'] != '9999-12-31')
                                             {
                                                $rol_to = mysqldatetime("d.m.y", $row['mem_end']);
                                             }
@@ -741,7 +746,7 @@ echo '
                                             if($g_current_user->assignRoles() || $g_current_user->editUsers())
                                             {
                                                 // Löschen wird nur bei anderen Webmastern ermöglicht
-                                                if (($row['rol_name'] == "Webmaster" && $g_current_user->getValue("usr_id") != $a_user_id) || ($row['rol_name'] != "Webmaster")) 
+                                                if (($row['rol_name'] == "Webmaster" && $g_current_user->getValue("usr_id") != $a_user_id) || ($row['rol_name'] != "Webmaster"))
                                                 {
                                                     echo '
                                                     <a class="iconLink" href="javascript:deleteRole('.$row['rol_id'].', \''.$row['rol_name'].'\', '.$row['rol_valid'].', '.$user->getValue("usr_id").', \''.
@@ -754,7 +759,7 @@ echo '
                                                     <a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
 												}
                                                 // Bearbeiten des Datums nicht bei Webmastern möglich
-                                                if ($row['rol_name'] != 'Webmaster') 
+                                                if ($row['rol_name'] != 'Webmaster')
                                                 {
                                                     echo '<a class="iconLink" style="cursor:pointer;" onclick="toggleDetailson('.$row['rol_id'].')"><img
                                                         src="'.THEME_PATH.'/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
@@ -763,7 +768,7 @@ echo '
 												{
 													echo '<a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
 												}
-                                                 
+
                                             }
                                         echo '</dd>
                                     </dl>

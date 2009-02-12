@@ -132,7 +132,7 @@ $orga_preferences = array(
     'messages_archive'			=> '0',
 
 	// Inventarmodul
-	'enable_inventory_module'	=> '1',
+	'enable_inventory_module'	=> '0',
 	'inventory_items_per_page'	=> '0'
  );
 ?>
