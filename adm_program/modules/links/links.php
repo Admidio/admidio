@@ -91,7 +91,7 @@ $g_layout['header'] = '
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] = $g_layout['header']. '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Links"
-        href="$g_root_path/adm_program/modules/links/rss_links.php" />';
+        href="'. $g_root_path. '/adm_program/modules/links/rss_links.php" />';
 };
 
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -110,11 +110,11 @@ if ($_GET['id'] > 0)
 	// falls eine id fuer einen bestimmten Link uebergeben worden ist...
 	$condition = ' AND lnk_id = '. $_GET['id'];
 }
-else if (strlen($_GET['category']) > 0) 
+else if (strlen($_GET['category']) > 0)
 {
 	// alle Links zu einer Kategorie anzeigen
 	$condition = ' AND cat_name   = "'. $_GET['category']. '"';
-} 
+}
 
 if ($g_valid_login == false)
 {
@@ -246,13 +246,13 @@ else
 				<div class="formHead">'.$row->cat_name.'</div>
 				<div class="formBody" style="overflow: hidden;">';
         }
-        
+
         echo '<div id="lnk_'.$row->lnk_id.'">';
     		if($i > 0)
     		{
     			echo '<hr />';
     		}
-			
+
 			if($g_preferences['weblinks_redirect_seconds'] > 0)
 			{
 				echo '
@@ -261,7 +261,7 @@ else
 	    		<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$row->lnk_id.'" target="'. $g_preferences['weblinks_target']. '">'.$row->lnk_name.'</a>';
 			}
 			else
-			{			
+			{
 	    		echo '
 	    		<a class="iconLink" href="'.$row->lnk_url.'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
 	    			alt="Gehe zu '.$row->lnk_name.'" title="Gehe zu '.$row->lnk_name.'" /></a>
@@ -277,8 +277,8 @@ else
                 <a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$row->lnk_id.'\', \''.$row->lnk_id.'\',\''.$row->lnk_name.'\')">
                    <img	src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
             }
-            
-            
+
+
     		//Beschreibung ausgeben falls forhanden
     		if(strlen($row->lnk_description)>0)
     		{
@@ -294,13 +294,13 @@ else
                 }
         		echo '</div>';
     		}
-            
+
             //Editimformationen für Leute mit Bearbeitungsrecht
     		if($g_current_user->editWeblinksRight())
     		{
     			echo '
     			<div class="editInformation">';
-    				
+
     				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create);
 
     				if($row->lnk_usr_id_change > 0)

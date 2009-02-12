@@ -1,4 +1,4 @@
-<?php 
+<?php
 /******************************************************************************
  * RSS - Feed fuer Links
  *
@@ -41,9 +41,9 @@ if ($g_preferences['enable_bbcode'] == 1)
 }
 
 // alle Links aus der DB fischen...
-$sql = 'SELECT cat.*, lnk.*, 
+$sql = 'SELECT cat.*, lnk.*,
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname 
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
           FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = lnk_usr_id_create
@@ -75,7 +75,7 @@ while ($row = $g_db->fetch_object($result))
 {
     // Die Attribute fuer das Item zusammenstellen
     $title = $row->lnk_name;
-    $link  = $g_root_path'./adm_program/modules/links/links.php?id='. $row->lnk_id;
+    $link  = $g_root_path. '/adm_program/modules/links/links.php?id='. $row->lnk_id;
     $description = '<a href="'.$row->lnk_url.'" target="_blank"><b>'.$row->lnk_name.'</b></a>';
 
 
@@ -100,7 +100,7 @@ while ($row = $g_db->fetch_object($result))
         $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. " ". $row->change_surname.
 									 ' am '. mysqldatetime('d.m.y h:i', $row->lnk_timestamp_change). '</i>';
     }
-    
+
     $pubDate = date("r", strtotime($row->lnk_timestamp_create));
 
 
