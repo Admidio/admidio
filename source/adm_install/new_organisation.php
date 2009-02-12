@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Einrichtung einer weiteren Organisation 
+ * Einrichtung einer weiteren Organisation
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -139,7 +139,7 @@ elseif($req_mode == 3)
     }
     $message = '<strong>Administrator anlegen</strong><br /><br />
                 Gib in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein.
-                Dieser wird der neue Administrator der neuen Organisation mit dem du dich direkt an der Organisation anmelden kannst. 
+                Dieser wird der neue Administrator der neuen Organisation mit dem du dich direkt an der Organisation anmelden kannst.
 
                 <div class="groupBox">
                     <div class="groupBoxHeadline">Zugangsdaten eines Webmasters</div>
@@ -183,8 +183,8 @@ elseif($req_mode == 4)
         // Verbindung zu Datenbank herstellen
         $db = new MySqlDB();
         $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
-        
-        // Logindaten pruefen        
+
+        // Logindaten pruefen
         $sql    = "SELECT DISTINCT usr_id
                      FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
                     WHERE usr_login_name LIKE '". $_SESSION['user_login']. "'
@@ -197,10 +197,10 @@ elseif($req_mode == 4)
                       AND rol_valid      = 1
                       AND rol_name       = 'Webmaster' ";
         $result = $db->query($sql);
-        
+
         $user_found = $db->num_rows($result);
         $user_row   = $db->fetch_array($result);
-        
+
         if($user_found != 1)
         {
             $message = "Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation !";
@@ -214,7 +214,7 @@ elseif($req_mode == 4)
 
     $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
                 Laden Sie die Konfigurationsdatei <strong>config.php</strong> herunter und kopieren Sie
-                diese in das Admidio Hauptverzeichnis der neuen Organisation. Dort liegt auch schon eine 
+                diese in das Admidio Hauptverzeichnis der neuen Organisation. Dort liegt auch schon eine
                 <i>config_default.php</i>.<br /><br />
 
                 <span class="iconTextLink">
@@ -281,7 +281,7 @@ elseif($req_mode == 6)
     $db->startTransaction();
 
     // Default-Daten anlegen
-    
+
     // Organisationsobjekt erstellen
     $g_current_organization = new Organization($db, $_SESSION['orga_name_short']);
 
@@ -295,12 +295,12 @@ elseif($req_mode == 6)
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include("db_scripts/preferences.php");
-    
+
     // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
     $orga_preferences['email_administrator'] = $_SESSION['user_email'];
 
     $g_current_organization->setPreferences($orga_preferences, false);
-    
+
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
     include("db_scripts/systemmails_texts.php");
     $text = new TableText($db);
@@ -311,7 +311,7 @@ elseif($req_mode == 6)
         $text->setValue("txt_name", $key);
         $text->setValue("txt_text", $value);
         $text->save();
-    }    
+    }
 
     // Datenbank-Versionsnummer schreiben
     $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
@@ -322,7 +322,7 @@ elseif($req_mode == 6)
 	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
 									   VALUES ($row_orga->org_id, 'db_version_beta', '". BETA_VERSION. "') ";
 	$g_db->query($sql);
-	
+
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                            VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";
@@ -333,7 +333,7 @@ elseif($req_mode == 6)
                                       VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
                                            , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1) 
+                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
                                            , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Intern', 1, 1)
                                            , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Allgemein', 0, 1)
                                            , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Kurse', 0, 1)
@@ -361,6 +361,7 @@ elseif($req_mode == 6)
     $role_webmaster->setValue("rol_download", 1);
     $role_webmaster->setValue("rol_guestbook", 1);
     $role_webmaster->setValue("rol_guestbook_comments", 1);
+    $role_webmaster->setValue("rol_inventory", 1);
     $role_webmaster->setValue("rol_photo", 1);
     $role_webmaster->setValue("rol_weblinks", 1);
     $role_webmaster->setValue("rol_edit_user", 1);
@@ -400,7 +401,7 @@ elseif($req_mode == 6)
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $member = new TableMembers($db);
     $member->startMembership($role_webmaster->getValue("rol_id"), $g_current_user->getValue("usr_id"));
-    $member->startMembership($role_member->getValue("rol_id"), $g_current_user->getValue("usr_id"));    
+    $member->startMembership($role_member->getValue("rol_id"), $g_current_user->getValue("usr_id"));
 
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($db);
@@ -425,7 +426,7 @@ elseif($req_mode == 6)
     $phone_list->addColumn(5, $g_current_user->getProperty("E-Mail", "usf_id"));
     $phone_list->addColumn(6, $g_current_user->getProperty("Fax", "usf_id"));
     $phone_list->save();
-    
+
     $contact_list = new ListConfiguration($db);
     $contact_list->setValue("lst_name", "Kontaktdaten");
     $contact_list->setValue("lst_global", 1);
@@ -439,7 +440,7 @@ elseif($req_mode == 6)
     $contact_list->addColumn(8, $g_current_user->getProperty("Handy", "usf_id"));
     $contact_list->addColumn(9, $g_current_user->getProperty("E-Mail", "usf_id"));
     $contact_list->save();
-    
+
     $former_list = new ListConfiguration($db);
     $former_list->setValue("lst_name", "Mitgliedschaft");
     $former_list->setValue("lst_global", 1);
@@ -449,7 +450,7 @@ elseif($req_mode == 6)
     $former_list->addColumn(4, "mem_begin");
     $former_list->addColumn(5, "mem_end", "DESC");
     $former_list->save();
-    
+
     $db->endTransaction();
 
     // Daten der Session loeschen

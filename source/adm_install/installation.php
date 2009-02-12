@@ -486,12 +486,12 @@ elseif($req_mode == 7)
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include('db_scripts/preferences.php');
-    
+
     // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
     $orga_preferences['email_administrator'] = $_SESSION['user_email'];
 
     $g_current_organization->setPreferences($orga_preferences, false);
-    
+
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
     include('db_scripts/systemmails_texts.php');
     $text = new TableText($db);
@@ -503,7 +503,7 @@ elseif($req_mode == 7)
         $text->setValue('txt_text', $value);
         $text->save();
     }
-    
+
     // Datenbank-Versionsnummer schreiben
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
                                        VALUES ('. $g_current_organization->getValue('org_id'). ', "db_version", "'. ADMIDIO_VERSION. '") ';
@@ -513,7 +513,7 @@ elseif($req_mode == 7)
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
                                        VALUES ('. $g_current_organization->getValue('org_id'). ', "db_version_beta", "'. BETA_VERSION. '") ';
     $db->query($sql);
-	
+
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
                                            VALUES ('. $g_current_organization->getValue('org_id'). ', "ROL", "Allgemein", 0, 1)';
@@ -564,6 +564,7 @@ elseif($req_mode == 7)
     $role_webmaster->setValue('rol_download', 1);
     $role_webmaster->setValue('rol_guestbook', 1);
     $role_webmaster->setValue('rol_guestbook_comments', 1);
+    $role_webmaster->setValue('rol_inventory', 1);
     $role_webmaster->setValue('rol_photo', 1);
     $role_webmaster->setValue('rol_weblinks', 1);
     $role_webmaster->setValue('rol_edit_user', 1);
@@ -604,7 +605,7 @@ elseif($req_mode == 7)
     $member = new TableMembers($db);
     $member->startMembership($role_webmaster->getValue('rol_id'), $g_current_user->getValue('usr_id'));
     $member->startMembership($role_member->getValue('rol_id'), $g_current_user->getValue('usr_id'));
-    
+
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($db);
     $address_list->setValue('lst_name', 'Adressliste');
@@ -628,7 +629,7 @@ elseif($req_mode == 7)
     $phone_list->addColumn(5, $g_current_user->getProperty('E-Mail', 'usf_id'));
     $phone_list->addColumn(6, $g_current_user->getProperty('Fax', 'usf_id'));
     $phone_list->save();
-    
+
     $contact_list = new ListConfiguration($db);
     $contact_list->setValue('lst_name', 'Kontaktdaten');
     $contact_list->setValue('lst_global', 1);
@@ -642,7 +643,7 @@ elseif($req_mode == 7)
     $contact_list->addColumn(8, $g_current_user->getProperty('Handy', 'usf_id'));
     $contact_list->addColumn(9, $g_current_user->getProperty('E-Mail', 'usf_id'));
     $contact_list->save();
-    
+
     $former_list = new ListConfiguration($db);
     $former_list->setValue('lst_name', 'Mitgliedschaft');
     $former_list->setValue('lst_global', 1);
@@ -652,7 +653,7 @@ elseif($req_mode == 7)
     $former_list->addColumn(4, 'mem_begin');
     $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
-    
+
     // Daten der Session loeschen
     unset($_SESSION['g_current_organisation']);
     unset($_SESSION['g_preferences']);
@@ -664,7 +665,7 @@ elseif($req_mode == 7)
     if(is_writeable("../adm_my_files") == false)
     {
         $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> Der Ordner <strong>adm_my_files</strong>
-                   besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien 
+                   besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien
                    für das Downloadmodul hochgeladen werden können.';
     }
     showPage($message, '../adm_program/index.php', 'application_view_list.png', 'Übersichtsseite');

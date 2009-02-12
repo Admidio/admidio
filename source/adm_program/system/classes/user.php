@@ -13,7 +13,7 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * readUserData()       - baut ein Array mit allen Profilfeldern und 
+ * readUserData()       - baut ein Array mit allen Profilfeldern und
  *                        den entsprechenden Werten des Users auf
  * getProperty($field_name, $property)
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
@@ -36,7 +36,7 @@ require_once(SERVER_PATH. "/adm_program/system/classes/table_user_data.php");
 class User extends TableUsers
 {
     var $webmaster;
-    
+
     var $userFieldData    = array();    // Array ueber alle Userdatenobjekte mit den entsprechenden Feldeigenschaften
     var $roles_rights     = array();    // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     var $list_view_rights = array();    // Array ueber Listenrechte einzelner Rollen
@@ -47,7 +47,7 @@ class User extends TableUsers
     {
         $this->TableUsers($db, $usr_id);
     }
-    
+
     function readData($usr_id)
     {
         parent::readData($usr_id);
@@ -57,7 +57,7 @@ class User extends TableUsers
             $this->readUserData();
         }
     }
-    
+
     // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
     function readUserData()
     {
@@ -82,7 +82,7 @@ class User extends TableUsers
                        OR cat_org_id  = ". $g_current_organization->getValue("org_id"). " )
                  ORDER BY cat_sequence ASC, usf_sequence ASC ";
         $usf_result   = $this->db->query($sql);
-        
+
         while($usf_row = $this->db->fetch_array($usf_result))
         {
             if(isset($this->userFieldData[$usf_row['usf_name']]) == false)
@@ -90,7 +90,7 @@ class User extends TableUsers
                 $this->userFieldData[$usf_row['usf_name']] = new TableUserData($this->db);
             }
             $this->userFieldData[$usf_row['usf_name']]->setArray($usf_row);
-        }    
+        }
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
@@ -98,7 +98,7 @@ class User extends TableUsers
     function clear()
     {
         parent::clear();
-        
+
         // die Profilfeldinfos werden neu geladen, allerdings ohne Werte
         $this->readUserData();
 
@@ -124,7 +124,7 @@ class User extends TableUsers
         if(strpos($field_name, "usr_") !== 0)
         {
         	// Daten fuer User-Fields-Tabelle
-        	
+
         	// gesperrte Felder duerfen nur von Usern mit dem Rollenrecht "alle Benutzerdaten bearbeiten" geaendert werden
         	// bei Registrierung muss die Eingabe auch erlaubt sein
         	if((  $this->getProperty($field_name, "usf_disabled") == 1
@@ -134,7 +134,7 @@ class User extends TableUsers
         	{
         		$update_field = true;
         	}
-        	
+
         	// versteckte Felder duerfen nur von Usern mit dem Rollenrecht "alle Benutzerdaten bearbeiten" geaendert werden
         	// oder im eigenen Profil
         	if((  $this->getProperty($field_name, "usf_hidden") == 1
@@ -144,7 +144,7 @@ class User extends TableUsers
         	{
         		$update_field = true;
         	}
-        	
+
         	// nur Updaten, wenn sich auch der Wert geaendert hat
             if($update_field == true
             && $field_value  != $this->userFieldData[$field_name]->getValue("usd_value"))
@@ -214,7 +214,7 @@ class User extends TableUsers
         $fields_changed = $this->columnsValueChanged;
 
         parent::save();
-        
+
         // jetzt noch die einzelnen Spalten sichern
         foreach($this->userFieldData as $field)
         {
@@ -354,6 +354,7 @@ class User extends TableUsers
                                             "rol_announcements" => "0", "rol_dates" => "0",
                                             "rol_download" => "0", "rol_edit_user" => "0",
                                             "rol_guestbook" => "0", "rol_guestbook_comments" => "0",
+                							"rol_inventory" => "0",
                                             "rol_mail_to_all" => "0",
                                             "rol_photo" => "0", "rol_profile" => "0",
                                             "rol_weblinks" => "0", "rol_all_lists_view" => "0");
@@ -544,6 +545,12 @@ class User extends TableUsers
     function commentGuestbookRight()
     {
         return $this->checkRolesRight('rol_guestbook_comments');
+    }
+
+	// Funktion prueft, ob der angemeldete User Inventargegenstaende verwalten darf
+    function editInventoryRight()
+    {
+        return $this->checkRolesRight('rol_inventory');
     }
 
     // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf

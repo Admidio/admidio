@@ -293,6 +293,7 @@ create table %PRAEFIX%_roles
    rol_edit_user                  tinyint(1) unsigned            not null default 0,
    rol_guestbook                  tinyint(1) unsigned            not null default 0,
    rol_guestbook_comments         tinyint(1) unsigned            not null default 0,
+   rol_inventory				  tinyint(1) unsigned            not null default 0,
    rol_mail_to_all                tinyint(1) unsigned            not null default 0,
    rol_mail_this_role             tinyint(1) unsigned            not null default 0,
    rol_photo                      tinyint(1) unsigned            not null default 0,

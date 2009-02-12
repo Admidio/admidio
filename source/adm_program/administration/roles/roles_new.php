@@ -46,15 +46,15 @@ $role = new TableRoles($g_db);
 if($req_rol_id > 0)
 {
     $role->readData($req_rol_id);
-    
+
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
         $g_message->show('norights');
     }
-    
+
     // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
-    if($role->getValue('rol_name')    == 'Webmaster' 
+    if($role->getValue('rol_name')    == 'Webmaster'
     && $g_current_user->isWebmaster() == false)
     {
         $g_message->show('norights');
@@ -69,7 +69,7 @@ if(isset($_SESSION['roles_request']))
         if(strpos($key, 'rol_') == 0)
         {
             $role->setValue($key, stripslashes($value));
-        }        
+        }
     }
     unset($_SESSION['roles_request']);
 }
@@ -100,7 +100,7 @@ $g_layout['header'] = '
         {
             var child_roles = document.getElementById("ChildRoles");
             var all_roles   = document.getElementById("AllRoles");
-            
+
             if(all_roles.selectedIndex >= 0)
             {
                 NeuerEintrag = new Option(all_roles.options[all_roles.selectedIndex].text, all_roles.options[all_roles.selectedIndex].value, false, true);
@@ -113,7 +113,7 @@ $g_layout['header'] = '
         {
             var child_roles = document.getElementById("ChildRoles");
             var all_roles   = document.getElementById("AllRoles");
-            
+
             if(child_roles.selectedIndex >= 0)
             {
                 NeuerEintrag = new Option(child_roles.options[child_roles.selectedIndex].text, child_roles.options[child_roles.selectedIndex].value, false, true);
@@ -125,7 +125,7 @@ $g_layout['header'] = '
         function absenden()
         {
             var child_roles = document.getElementById("ChildRoles");
-            
+
             for (var i = 0; i < child_roles.options.length; i++)
             {
                 child_roles.options[i].selected = true;
@@ -133,15 +133,15 @@ $g_layout['header'] = '
 
             form.submit();
         }
-        
+
         //Prüfe Mitgliederanzahl
         function checkMaxMemberCount(inputValue)
         {
-        
+
             // Alle abhängigen Rollen werden für die Darstellung gesichert
             var child_roles = document.getElementById("ChildRoles");
-        
-            //Wenn eine Maximale Mitgliederzahl angeben wurde, düren keine Rollenabhängigkeiten bestehem         
+
+            //Wenn eine Maximale Mitgliederzahl angeben wurde, düren keine Rollenabhängigkeiten bestehem
             if(inputValue > 0)
             {
                 // Die Box zum konfigurieren der Rollenabhängig wird ausgeblendet
@@ -154,32 +154,32 @@ $g_layout['header'] = '
                     child_roles.options[i].selected = true;
                 }
                 entfernen();
-                
+
                 alert("Achtung! Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.");
-                
+
             }
             else
             {
-                
+
                 // Alle Abhängigen Rollen werden markiert und auf abhängig gesetzt
                 for (var i = 0; i < child_roles.options.length; i++)
                 {
                     child_roles.options[i].selected = true;
                 }
                 hinzufuegen();
-            
+
                 // Die Box zum konfigurieren der Rollenabhängigkeit wird wieder eingeblendet
                 document.getElementById("dependancies_box").style.visibility = "visible";
                 document.getElementById("dependancies_box").style.display    = "";
-                
-                
+
+
             }
         }
-        
+
         // Rollenrechte markieren
-        // Uebergaben: 
+        // Uebergaben:
         // srcRight  - ID des Rechts, welches das Ereignis ausloest
-        // destRight - ID des Rechts, welches angepasst werden soll 
+        // destRight - ID des Rechts, welches angepasst werden soll
         // checked   - true destRight wird auf checked gesetzt
         //             false destRight wird auf unchecked gesetzt
         function markRoleRight(srcRight, destRight, checked)
@@ -195,7 +195,7 @@ $g_layout['header'] = '
                 document.getElementById(destRight).checked = false;
             }
         }
-                
+
         // Calendarobjekt fuer das Popup anlegen
         var calPopup = new CalendarPopup("calendardiv");
         calPopup.setCssPrefix("calendar");
@@ -238,8 +238,8 @@ echo '
                     <dt><label for="rol_cat_id">Kategorie:</label></dt>
                     <dd>
                         <select size="1" id="rol_cat_id" name="rol_cat_id">
-                            <option value=" "'; 
-                                if($role->getValue('rol_cat_id') == 0) 
+                            <option value=" "';
+                                if($role->getValue('rol_cat_id') == 0)
                                 {
                                     echo ' selected="selected" ';
                                 }
@@ -269,7 +269,7 @@ echo '
 
         <div class="groupBox" id="properties_box" style="width: 90%;">
             <div class="groupBoxHeadline" id="properties_head">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'properties_body\')"><img 
+                <a class="iconShowHide" href="javascript:showHideBlock(\'properties_body\')"><img
                 id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>Eigenschaften
             </div>
 
@@ -283,26 +283,26 @@ echo '
 	                            <dt><label for="rol_mail_this_role">Mails zusenden:</label></dt>
 	                            <dd>
 	                                <select size="1" id="rol_mail_this_role" name="rol_mail_this_role">
-	                                    <option value="0" '; 
-	                                        if($role->getValue('rol_mail_this_role') == 0) 
+	                                    <option value="0" ';
+	                                        if($role->getValue('rol_mail_this_role') == 0)
 	                                        {
 	                                            echo ' selected="selected" ';
 	                                        }
 	                                        echo '>niemand</option>
-	                                    <option value="1" '; 
-	                                        if($role->getValue('rol_mail_this_role') == 1) 
+	                                    <option value="1" ';
+	                                        if($role->getValue('rol_mail_this_role') == 1)
 	                                        {
 	                                            echo ' selected="selected" ';
 	                                        }
 	                                        echo '>nur Rollenmitglieder</option>
-	                                    <option value="2" '; 
-	                                        if($role->getValue('rol_mail_this_role') == 2) 
+	                                    <option value="2" ';
+	                                        if($role->getValue('rol_mail_this_role') == 2)
 	                                        {
 	                                            echo ' selected="selected" ';
 	                                        }
 	                                        echo '>alle angemeldeten Benutzer</option>
-										<option value="3" '; 
-	                                        if($role->getValue('rol_mail_this_role') == 3) 
+										<option value="3" ';
+	                                        if($role->getValue('rol_mail_this_role') == 3)
 	                                        {
 	                                            echo ' selected="selected" ';
 	                                        }
@@ -321,20 +321,20 @@ echo '
                             <dt><label for="rol_this_list_view">Listen ansehen:</label></dt>
                             <dd>
                                 <select size="1" id="rol_this_list_view" name="rol_this_list_view">
-                                    <option value="0" '; 
-                                        if($role->getValue('rol_this_list_view') == 0) 
+                                    <option value="0" ';
+                                        if($role->getValue('rol_this_list_view') == 0)
                                         {
                                             echo ' selected="selected" ';
                                         }
                                         echo '>niemand</option>
-                                    <option value="1" '; 
-                                        if($role->getValue('rol_this_list_view') == 1) 
+                                    <option value="1" ';
+                                        if($role->getValue('rol_this_list_view') == 1)
                                         {
                                             echo ' selected="selected" ';
                                         }
                                         echo '>nur Rollenmitglieder</option>
-                                    <option value="2" '; 
-                                        if($role->getValue('rol_this_list_view') == 2) 
+                                    <option value="2" ';
+                                        if($role->getValue('rol_this_list_view') == 2)
                                         {
                                             echo ' selected="selected" ';
                                         }
@@ -376,7 +376,7 @@ echo '
                                 <select size="1" id="rol_cost_period" name="rol_cost_period">';
 									// Zunaechst den unkonfigurierten Fall
 									echo '<option value="0" ';
-									if($role->getValue('rol_cost_period') == 0 || $role->getValue('rol_cost_period') == '') 
+									if($role->getValue('rol_cost_period') == 0 || $role->getValue('rol_cost_period') == '')
                                     {
                                             echo ' selected="selected"';
                                     }
@@ -392,19 +392,19 @@ echo '
 										{
 											echo '>einmalig</option>';
 										}
-										elseif($role_cost_period == 1)	
+										elseif($role_cost_period == 1)
 										{
 											echo '>jährlich</option>';
 										}
-										elseif($role_cost_period == 2)	
+										elseif($role_cost_period == 2)
 										{
 											echo '>halbjährlich</option>';
 										}
-										elseif($role_cost_period == 4)	
+										elseif($role_cost_period == 4)
 										{
 											echo '>vierteljährlich</option>';
 										}
-										elseif($role_cost_period == 12)	
+										elseif($role_cost_period == 12)
 										{
 											echo '>monatlich</option>';
 										}
@@ -417,10 +417,10 @@ echo '
                 </ul>
             </div>
         </div>
-        
+
         <div class="groupBox" id="justifications_box" style="width: 90%;">
             <div class="groupBoxHeadline">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'justifications_body\')"><img 
+                <a class="iconShowHide" href="javascript:showHideBlock(\'justifications_body\')"><img
                 id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>Berechtigungen
             </div>
 
@@ -441,7 +441,7 @@ echo '
                             <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/roles.png\" alt=\"Rollen verwalten und zuordnen\" /></label>&nbsp;
                             <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
                             <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
+                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
                                 onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen',this);\" onmouseout=\"ajax_hideTooltip()\" />
                         </div>
                     </li>
@@ -455,7 +455,7 @@ echo '
                             if($role->getValue("rol_name") == "Webmaster")
                             {
                                 echo " disabled=\"disabled\" ";
-                            } 
+                            }
                             echo " onchange=\"markRoleRight('rol_all_lists_view', 'rol_assign_roles', false)\" value=\"1\" />
                             <label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/lists.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
                             <label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
@@ -501,7 +501,7 @@ echo '
                                 <label for=\"rol_mail_to_all\">Emails an alle Rollen schreiben&nbsp;</label>
                             </div>
                         </li>";
-                    }        
+                    }
                     echo"
 					<li>
                         <div>
@@ -513,7 +513,7 @@ echo '
                             <label for=\"rol_profile\">Eigenes Profil bearbeiten</label>
                         </div>
                     </li>";
-                    
+
                     if($g_preferences['enable_announcements_module'] > 0)
                     {
                         echo "
@@ -613,28 +613,42 @@ echo '
                             </div>
                         </li>";
                     }
+                    if($g_preferences['enable_inventory_module'] > 0)
+                    {
+                        echo "
+                        <li>
+                            <div>
+                                <input type=\"checkbox\" id=\"rol_inventory\" name=\"rol_inventory\" ";
+                                if($role->getValue("rol_inventory") == 1)
+                                    echo " checked=\"checked\" ";
+                                echo " value=\"1\" />
+                                <label for=\"rol_inventory\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Inventar verwalten\" /></label>&nbsp;
+                                <label for=\"rol_inventory\">Inventar verwalten</label>
+                            </div>
+                        </li>";
+                    }
                 echo '</ul>
             </div>
         </div>
 
         <div class="groupBox" id="dates_box" style="width: 90%;">
             <div class="groupBoxHeadline" id="dates_head">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'dates_body\')"><img 
+                <a class="iconShowHide" href="javascript:showHideBlock(\'dates_body\')"><img
                 	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="ausblenden" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
-            <div class="groupBoxBody" id="dates_body">        
+            <div class="groupBoxBody" id="dates_body">
                 <ul class="formFieldList">
                     <li>
                         <dl>
                             <dt><label for="rol_start_date">Gültig von:</label></dt>
                             <dd>
                                 <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue("rol_start_date").'" />
-                                <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img 
+                                <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                                 <label for="rol_end_date">bis</label>
                                 <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue("rol_end_date").'" />
-                                <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img 
+                                <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>&nbsp;(Datum)
                                 <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
                             </dd>
@@ -686,14 +700,14 @@ echo '
             </div>
         </div>";
         if($role->getValue("rol_max_members") == 0)
-        {       
+        {
             echo "<div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
                 <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
                     <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body')\"><img
                     id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
                 </div>
-    
-                <div class=\"groupBoxBody\" id=\"dependancies_body\">  
+
+                <div class=\"groupBoxBody\" id=\"dependancies_body\">
                     <div style=\"margin-top: 6px;\">";
                         $rolename_var = "neuen Rolle";
                         if($role->getValue("rol_name")!="")
@@ -702,15 +716,15 @@ echo '
                         }
                         echo"
                         <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der ".$rolename_var." sein!</p>
-                        <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen 
-                        Rolle Mitglied der ".$rolename_var.". Beim Entfernen einer Abhängigkeit werden Mitgliedschaften 
+                        <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen
+                        Rolle Mitglied der ".$rolename_var.". Beim Entfernen einer Abhängigkeit werden Mitgliedschaften
                         nicht aufgehoben!</p>
                         <div style=\"text-align: left; float: left;\">";
                             // holt eine Liste der ausgewählten Rolen
                             $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
-    
+
                             // Alle Rollen auflisten, die der Benutzer sehen darf
-                            $sql = "SELECT * 
+                            $sql = "SELECT *
                                       FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                                      WHERE rol_valid  = 1
                                        AND rol_cat_id = cat_id
@@ -719,7 +733,7 @@ echo '
                             $allRoles = $g_db->query($sql);
 
                             $childRoleObjects = array();
-    
+
                             echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/no.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
                             <div>
                                 <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
@@ -765,7 +779,7 @@ echo '
                     </div>
                 </div>
             </div>";
-        }                   
+        }
 
         if($req_rol_id > 0)
         {
@@ -788,7 +802,7 @@ echo '
             <button name="speichern" type="submit" value="speichern" onclick="absenden()">
                 <img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />
                 &nbsp;Speichern</button>
-        </div>    
+        </div>
     </div>
 </div>
 </form>
@@ -796,7 +810,7 @@ echo '
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
             src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
@@ -808,7 +822,7 @@ echo '
     // Bloecke anzeigen/verstecken
     if($req_rol_id > 0)
     {
-        if(strlen($role->getValue('rol_start_date')) == 0 
+        if(strlen($role->getValue('rol_start_date')) == 0
         && strlen($role->getValue('rol_end_date')) == 0
         && strlen($role->getValue('rol_start_time')) == 0
         && strlen($role->getValue('rol_end_time')) == 0

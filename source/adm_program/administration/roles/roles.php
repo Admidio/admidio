@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Rollen mit Berechtigungen auflisten 
+ * Rollen mit Berechtigungen auflisten
  *
  * Copyright    : (c) 2004 - 2008 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -105,7 +105,7 @@ echo "
                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                 ORDER BY cat_sequence ASC, rol_name ASC ";
     $rol_result = $g_db->query($sql);
-    
+
     // Rollenobjekt anlegen
 	$role = new TableRoles($g_db);
 
@@ -124,13 +124,13 @@ echo "
             $block_id     = "cat_".$role->getValue("cat_id");
             if($role->getValue("cat_hidden") == 1)
             {
-                $image_hidden = "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\" 
+                $image_hidden = "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\"
                                  alt=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" title=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" />";
             }
             echo "<tbody>
                 <tr>
                     <td class=\"tableSubHeader\" colspan=\"4\">
-                        <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id')\"><img 
+                        <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id')\"><img
                         id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>".$role->getValue("cat_name")." $image_hidden
                     </td>
                 </tr>
@@ -138,7 +138,7 @@ echo "
             <tbody id=\"$block_id\">";
 
             $cat_id = $role->getValue("cat_id");
-        }            
+        }
         echo "
         <tr class=\"tableMouseOver\">
             <td>&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=".$role->getValue("rol_id")."\" title=\"".$role->getValue("rol_description")."\">".$role->getValue("rol_name")."</a></td>
@@ -204,6 +204,11 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                 }
+    			if($role->getValue("rol_inventory") == 1 && $g_preferences['enable_inventory_module'] > 0)
+                {
+                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
+                    alt=\"Inventar verwalten\" title=\"Inventar verwalten\" />";
+                }
                 if($role->getValue("rol_all_lists_view") == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
@@ -243,7 +248,7 @@ echo "
 
                 if($req_valid == true)
                 {
-                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=".$role->getValue("rol_id")."\"><img 
+                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=".$role->getValue("rol_id")."\"><img
                         src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>";
                 }
                 else
@@ -260,12 +265,12 @@ echo "
                 {
                     if($req_valid == true)
                     {
-                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=".$role->getValue("rol_id")."&amp;mode=1\"><img 
+                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=".$role->getValue("rol_id")."&amp;mode=1\"><img
                             src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                     }
                     else
                     {
-                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=".$role->getValue("rol_id")."&amp;mode=6\"><img 
+                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=".$role->getValue("rol_id")."&amp;mode=6\"><img
                             src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
                     }
                 }
@@ -274,7 +279,7 @@ echo "
     }
 echo "</tbody>
 </table>";
-    
+
 require(THEME_SERVER_PATH. "/overall_footer.php");
 
 ?>

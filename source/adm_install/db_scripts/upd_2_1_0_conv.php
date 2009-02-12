@@ -12,10 +12,10 @@
 require_once('systemmails_texts.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
- 
+
 // User-Create fuer alle Anmeldungen fuellen
 $sql = 'UPDATE '. TBL_USERS. ' SET usr_usr_id_create = usr_id
-         WHERE usr_usr_id_create IS NULL 
+         WHERE usr_usr_id_create IS NULL
            AND usr_login_name IS NOT NULL';
 $g_db->query($sql);
 
@@ -25,12 +25,12 @@ $result_orga = $g_db->query($sql);
 
 while($row_orga = $g_db->fetch_array($result_orga))
 {
-    $sql = "INSERT INTO ". TBL_TEXTS. " (txt_org_id, txt_name, txt_text) 
+    $sql = "INSERT INTO ". TBL_TEXTS. " (txt_org_id, txt_name, txt_text)
                  VALUES (".$row_orga['org_id'].", 'SYSMAIL_REGISTRATION_USER', '".$systemmails_texts['SYSMAIL_REGISTRATION_USER']."')
                       , (".$row_orga['org_id'].", 'SYSMAIL_REGISTRATION_WEBMASTER', '".$systemmails_texts['SYSMAIL_REGISTRATION_WEBMASTER']."')
-                      , (".$row_orga['org_id'].", 'SYSMAIL_NEW_PASSWORD', '".$systemmails_texts['SYSMAIL_NEW_PASSWORD']."') 
+                      , (".$row_orga['org_id'].", 'SYSMAIL_NEW_PASSWORD', '".$systemmails_texts['SYSMAIL_NEW_PASSWORD']."')
                       , (".$row_orga['org_id'].", 'SYSMAIL_ACTIVATION_LINK', '".$systemmails_texts['SYSMAIL_ACTIVATION_LINK']."') ";
-    $g_db->query($sql); 
+    $g_db->query($sql);
 
     // Default-Kategorie fuer Datum eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
@@ -45,8 +45,8 @@ while($row_orga = $g_db->fetch_array($result_orga))
              WHERE dat_cat_id is null
                AND dat_org_shortname LIKE '". $row_orga['org_shortname']. "'";
     $g_db->query($sql);
-    
-    // bei allen Alben ohne Ersteller, die Erstellungs-ID mit Webmaster befuellen, 
+
+    // bei allen Alben ohne Ersteller, die Erstellungs-ID mit Webmaster befuellen,
     // damit das Feld auf NOT NULL gesetzt werden kann
     $sql = "SELECT min(mem_usr_id) as webmaster_id
               FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
@@ -56,16 +56,16 @@ while($row_orga = $g_db->fetch_array($result_orga))
                AND mem_rol_id = rol_id ";
     $result = $g_db->query($sql);
     $row_webmaster = $g_db->fetch_array($result);
-    
+
     $sql = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_create = ". $row_webmaster['webmaster_id']. "
-             WHERE pho_usr_id_create IS NULL 
+             WHERE pho_usr_id_create IS NULL
                AND pho_org_shortname = '". $row_orga['org_shortname']."'";
     $g_db->query($sql);
-    
+
     $sql = "UPDATE ". TBL_USERS. " SET usr_usr_id_create = ". $row_webmaster['webmaster_id']. "
              WHERE usr_usr_id_create IS NULL ";
     $g_db->query($sql);
-    
+
     $sql = "SELECT * FROM ". TBL_CATEGORIES. "
              WHERE cat_org_id = ".$row_orga['org_id']. "
                AND cat_type   = 'ROL'";
@@ -77,24 +77,24 @@ while($row_orga = $g_db->fetch_array($result_orga))
         $all_cat_ids[] = $row_cat['cat_id'];
     }
     $all_cat_str = implode(",", $all_cat_ids);
-    
+
     // neue Rollenfelder fuellen
     $sql = "UPDATE ". TBL_ROLES. " SET rol_timestamp_create = rol_timestamp_change
                                      , rol_usr_id_create    = ". $row_webmaster['webmaster_id']. "
-         WHERE rol_timestamp_change IS NOT NULL 
+         WHERE rol_timestamp_change IS NOT NULL
            AND rol_usr_id_change IS NOT NULL
            AND rol_cat_id IN (".$all_cat_str.")";
     $g_db->query($sql);
 
     $sql = "UPDATE ". TBL_ROLES. " SET rol_timestamp_create = '".DATETIME_NOW."'
                                      , rol_usr_id_create    = ". $row_webmaster['webmaster_id']. "
-         WHERE rol_timestamp_create IS NULL 
+         WHERE rol_timestamp_create IS NULL
            AND rol_cat_id IN (".$all_cat_str.")";
     $g_db->query($sql);
-    
+
     $g_current_user = new User($g_db, $row_webmaster['webmaster_id']);
     $g_current_organization->readData($row_orga['org_id']);
-    
+
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($g_db);
     $address_list->setValue('lst_name', 'Adressliste');
@@ -118,7 +118,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $phone_list->addColumn(5, $g_current_user->getProperty('E-Mail', 'usf_id'));
     $phone_list->addColumn(6, $g_current_user->getProperty('Fax', 'usf_id'));
     $phone_list->save();
-    
+
     $contact_list = new ListConfiguration($g_db);
     $contact_list->setValue('lst_name', 'Kontaktdaten');
     $contact_list->setValue('lst_global', 1);
@@ -132,7 +132,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $contact_list->addColumn(8, $g_current_user->getProperty('Handy', 'usf_id'));
     $contact_list->addColumn(9, $g_current_user->getProperty('E-Mail', 'usf_id'));
     $contact_list->save();
-    
+
     $former_list = new ListConfiguration($g_db);
     $former_list->setValue('lst_name', 'Mitgliedschaft');
     $former_list->setValue('lst_global', 1);
@@ -142,7 +142,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $former_list->addColumn(4, 'mem_begin');
     $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
-    
+
     // Beta-Flag für Datenbank-Versionsnummer schreiben
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
             VALUES ("'.$row_orga['org_id'].'", "db_version_beta", "1") ';
@@ -200,10 +200,22 @@ $sql = "UPDATE ". TBL_ROLES. " SET rol_mail_this_role = '3'
 $g_db->query($sql);
 
 //4. Überflüssige Spalten löschen
-$sql = "ALTER TABLE ". TBL_ROLES. " 
+$sql = "ALTER TABLE ". TBL_ROLES. "
 		DROP rol_mail_login,
 		DROP rol_mail_logout";
 $g_db->query($sql);
+
+
+//Neues Inventarmodulrecht installieren
+//1. neue Spalte anlegen
+	//passiert schon in upd_2_1_0_db.sql
+
+//2.Webmaster mit Inventarverwaltungsrecht ausstatten
+$sql = "UPDATE ". TBL_ROLES. " SET rol_inventory = '1'
+        WHERE rol_name = 'Webmaster'";
+$g_db->query($sql);
+
+
 
 //Fototext updaten
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
@@ -217,11 +229,11 @@ while($row_orga = $g_db->fetch_array($result_orga))
                AND prf_name   = 'photo_image_text' ";
     $result = $g_db->query($sql);
     $row_photo_image_text = $g_db->fetch_array($result);
-	
+
 	//wenn ja
 	if($row_photo_image_text['prf_value'] == 1)
 	{
-		$sql = "UPDATE ". TBL_PREFERENCES. " 
+		$sql = "UPDATE ". TBL_PREFERENCES. "
 				SET prf_value = '© ".$row_orga['org_homepage']."'
        			WHERE prf_org_id = ". $row_orga['org_id']. "
                	AND prf_name   = 'photo_image_text' ";
@@ -230,7 +242,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
 	//wenn nicht
 	else
 	{
-		$sql = "UPDATE ". TBL_PREFERENCES. " 
+		$sql = "UPDATE ". TBL_PREFERENCES. "
 				SET prf_value = ''
          		WHERE prf_org_id = ". $row_orga['org_id']. "
                	AND prf_name   = 'photo_image_text' ";

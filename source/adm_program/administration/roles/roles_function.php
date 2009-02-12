@@ -57,7 +57,7 @@ $role = new TableRoles($g_db);
 if($req_rol_id > 0)
 {
     $role->readData($req_rol_id);
-    
+
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if($role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
@@ -90,18 +90,18 @@ if($_GET["mode"] == 1)
                 Wenn du <b>Löschen</b> auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank
                 entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.
             </p>
-            <button name="delete" type="button" value="delete" 
-                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=4\'"><img 
+            <button name="delete" type="button" value="delete"
+                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=4\'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" />&nbsp;Löschen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name="inactive" type="button" value="inactive" 
-                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=3\'"><img 
+            <button name="inactive" type="button" value="inactive"
+                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=3\'"><img
                 src="'. THEME_PATH. '/icons/roles_gray.png" alt="Inaktive Rolle" />&nbsp;Inaktive Rolle</button>
 
             <ul class="iconTextLinkList">
                 <li>
                     <span class="iconTextLink">
-                        <a href="#" onclick="history.back()"><img 
+                        <a href="#" onclick="history.back()"><img
                         src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
                         <a href="#" onclick="history.back()">Zurück</a>
                     </span>
@@ -127,11 +127,11 @@ elseif($_GET["mode"] == 2)
         // es sind nicht alle Felder gefuellt
         $g_message->show("feld", "Kategorie");
     }
-        
+
     if($role->getValue("rol_name") != $_POST['rol_name'])
     {
         // Schauen, ob die Rolle bereits existiert
-        $sql    = "SELECT COUNT(*) as count 
+        $sql    = "SELECT COUNT(*) as count
                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
                     WHERE rol_name   LIKE '". $_POST['rol_name']. "'
                       AND rol_cat_id = ". $_POST['rol_cat_id']. "
@@ -146,7 +146,7 @@ elseif($_GET["mode"] == 2)
             $g_message->show("role_exist");
         }
     }
-        
+
     // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
     if(strcmp($_POST['rol_name'], "Webmaster") == 0)
     {
@@ -155,7 +155,7 @@ elseif($_GET["mode"] == 2)
         $_POST['rol_mail_to_all']    = 1;
     }
 
-    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde 
+    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
     // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
     $checkboxes = array('rol_assign_roles'
@@ -166,12 +166,13 @@ elseif($_GET["mode"] == 2)
                        ,'rol_download'
                        ,'rol_guestbook'
                        ,'rol_guestbook_comments'
+                       ,'rol_inventory'
                        ,'rol_edit_user'
                        ,'rol_weblinks'
                        ,'rol_all_lists_view'
 					   ,'rol_mail_to_all'
                        ,'rol_profile');
-    
+
     foreach($checkboxes as $key => $value)
     {
         if(isset($_POST[$value]) == false || $_POST[$value] != 1)
@@ -180,7 +181,7 @@ elseif($_GET["mode"] == 2)
         }
     }
 
-    
+
     // Zeitraum von/bis auf Gueltigkeit pruefen
 
     if(strlen($_POST['rol_start_date']) > 0)
@@ -254,7 +255,7 @@ elseif($_GET["mode"] == 2)
             $g_message->show("max_members_roles_change");
         }
     }
-    
+
     // POST Variablen in das Role-Objekt schreiben
     foreach($_POST as $key => $value)
     {
@@ -337,12 +338,12 @@ elseif($_GET["mode"] == 3)
 {
     // Rolle zur inaktiven Rolle machen
     $return_code = $role->setInactive();
-    
+
     if($return_code < 0)
     {
         $g_message->show("norights");
     }
-    
+
     $msg_code = "role_inactive";
     $g_message->addVariableContent($role->getValue("rol_name"));
 }
@@ -350,12 +351,12 @@ elseif($_GET["mode"] == 4)
 {
     // Rolle aus der DB loeschens
     $return_code = $role->delete();
-    
+
     if($return_code == false)
     {
         $g_message->show("norights");
     }
-    
+
     $msg_code = "delete";
 }
 elseif($_GET["mode"] == 5)
@@ -367,7 +368,7 @@ elseif($_GET["mode"] == 5)
     {
         $g_message->show("norights");
     }
-    
+
     $msg_code = "role_active";
     $g_message->addVariableContent($role->getValue("rol_name"));
 }
