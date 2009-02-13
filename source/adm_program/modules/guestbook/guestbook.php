@@ -239,8 +239,7 @@ else
         <div class="boxLayout" id="gbo_'.$row->gbo_id.'">
             <div class="boxHead">
                 <div class="boxHeadLeft">
-                    <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$row->gbo_name.'" />
-                    '.$row->gbo_name;
+                    <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$row->gbo_name.'" />'.$row->gbo_name;
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
                     if (strlen(trim($row->gbo_homepage)) > 0)
