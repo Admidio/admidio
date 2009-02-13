@@ -78,7 +78,8 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 $g_layout['title']  = 'Downloadbereich';
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/text_tooltip.js"></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
@@ -165,7 +166,12 @@ else
                       <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
                     <img src="'. THEME_PATH. '/icons/download.png" alt="Ordner" title="Ordner" /></a>
                 </td>
-                <td><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">'. $nextFolder['fol_name']. '</a></td>
+                <td><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">'. $nextFolder['fol_name']. '</a>';
+                if($nextFolder['fol_description']!="")
+                {
+                    echo '<span class="iconLink" ><a class="textTooltip" title="'.$nextFolder['fol_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="Ordner"/></a></span>';
+                }
+                echo'</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>';
@@ -214,7 +220,12 @@ else
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
                     <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="Datei" title="Datei" /></a>
                 </td>
-                <td><a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a></td>
+                <td><a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>';
+                if($nextFile['fil_description']!="")
+                {
+                    echo '<span class="iconLink" ><a class="textTooltip" title="'.$nextFile['fil_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="Ordner"/></a></span>';
+                }
+                echo'</td>
                 <td>'. mysqldatetime('d.m.y h:i', $nextFile['fil_timestamp']). '</td>
                 <td>'. $nextFile['fil_size']. ' KB&nbsp;</td>
                 <td>'. $nextFile['fil_counter'];
