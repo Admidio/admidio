@@ -200,7 +200,7 @@ echo '
                             <label for="dat_global">'. $_GET['headline']. ' für mehrere Organisationen sichtbar</label>
                             <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_global&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=320&amp;width=580"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_global\',this)" onmouseout="ajax_hideTooltip()"
-                                src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                         </dd>
                     </dl>
                 </li>';
@@ -291,7 +291,7 @@ echo '
                         {
                             echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_location_link\',this)" onmouseout="ajax_hideTooltip()"
-                                src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                         }
                     echo '</dd>
                 </dl>

@@ -109,7 +109,7 @@ function printBBcodeIcons()
                         <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
                             src="'.THEME_PATH.'/icons/delete.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
                         <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=580"><img 
-                            src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
                     </div>
                 </div>
             </dd>

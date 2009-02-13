@@ -126,30 +126,30 @@ echo "
                 </dl>
             </li>";
 
-            if($_GET['type'] == "USF")
+            if($_GET['type'] == 'USF')
             {
                 // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
-                if($category->getValue("cat_system") == 0
+                if($category->getValue('cat_system') == 0
                 && $g_current_organization->countAllRecords() > 1)
                 {
-                    echo "
+                    echo '
                     <li>
                         <dl>
                             <dt>&nbsp;</dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"cat_org_id\" name=\"cat_org_id\" tabindex=\"3\" ";
-                                if($category->getValue("cat_org_id") == 0)
+                                <input type="checkbox" id="cat_org_id" name="cat_org_id" tabindex="3" ';
+                                if($category->getValue('cat_org_id') == 0)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
-                                <label for=\"cat_org_id\">$title für alle Organisationen sichtbar</label>
-                                <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\"  title=\"\"
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=category_global&amp;window=true','Message','width=300,height=300,left=310,top=200,scrollbars=yes')\"
-                                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=category_global',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                echo ' value="1" />
+                                <label for=\"cat_org_id\">'.$title.' für alle Organisationen sichtbar</label>
+                                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=category_global&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=320&amp;width=580"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=category_global\',this)" onmouseout="ajax_hideTooltip()"
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                             </dd>
                         </dl>
-                    </li>";
+                    </li>';
                 }
             }
             else
