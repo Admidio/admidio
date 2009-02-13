@@ -39,7 +39,7 @@ class Message
     {
         if($show_bold)
         {
-            $content = "<strong>$content</strong>";
+            $content = '<strong>'.$content.'</strong>';
         }
         else
         {
@@ -113,7 +113,7 @@ class Message
         
         if(strlen($msg_variable1) > 0)
         {
-            $this->variables[0] = "<strong>$msg_variable1</strong>";
+            $this->variables[0] = '<strong>'.$msg_variable1.'</strong>';
         }
         if(strlen($msg_headline) > 0)
         {
@@ -125,11 +125,11 @@ class Message
             {
                 if(strlen($this->forward_url) > 0)
                 {
-                    $this->headline = "Hinweis";
+                    $this->headline = 'Hinweis';
                 }
                 else
                 {
-                    $this->headline = "Fehlermeldung";
+                    $this->headline = 'Fehlermeldung';
                 }
             }
         }
@@ -143,13 +143,13 @@ class Message
         {
             // Text nicht gefunden -> Standard-Meldung
             $this->variables[0] = $msg_key;
-            $this->content = $GLOBALS['message_text']["default"];
+            $this->content = $GLOBALS['message_text']['default'];
         }
         
         // Variablen des Messagetextes (%VAR1%, %VAR2% ...) fuellen
         for($i = 0; $i < count($this->variables); $i++)
         {
-            $var_name = "%VAR". ($i + 1). "%";
+            $var_name = '%VAR'. ($i + 1). '%';
             $this->content = str_replace($var_name, $this->variables[$i], $this->content);
         }
                     
@@ -164,7 +164,7 @@ class Message
         if($this->inline == false)
         {
             // Html-Kopf ausgeben
-            $g_layout['title']    = "Hinweis";
+            $g_layout['title']    = 'Hinweis';
             $g_layout['includes'] = $msg_includes;
             if ($this->timer > 0)
             {
@@ -173,7 +173,7 @@ class Message
                     //--></script>';
             }
     
-            require(THEME_SERVER_PATH. "/overall_header.php");       
+            require(THEME_SERVER_PATH. '/overall_header.php');       
         }
         
         echo '
@@ -199,9 +199,9 @@ class Message
 	                            // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
 	                            echo '
 	                            <span class="iconTextLink">
+                                    <a href="'. $this->forward_url. '">Weiter</a>
                                     <a href="'. $this->forward_url. '"><img 
                                     	src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" title="Weiter" /></a>
-                                    <a href="'. $this->forward_url. '">Weiter</a>
                                 </span>';
 	                        }
 	                    }
@@ -235,7 +235,7 @@ class Message
         
         if($this->inline == false)
         {
-            require(THEME_SERVER_PATH. "/overall_footer.php");
+            require(THEME_SERVER_PATH. '/overall_footer.php');
             exit();
         }
     }

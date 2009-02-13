@@ -479,19 +479,20 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
         }
 
         //Tabelle anlegen
-        echo"
-        <table class=\"tableList\" cellspacing=\"0\">
+        echo '
+        <table class="tableList" cellspacing="0">
             <thead>
                 <tr>
                     <th>Info</th>
-                    <th style=\"text-align: center;\">Mitglied</th>
+                    <th style="text-align: center;">Mitglied</th>
                     <th>Name</th>
                     <th>Vorname</th>
                     <th>Geburtsdatum</th>
-                    <th style=\"text-align: center;\">Leiter<img
-                        class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\" onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=400,height=300,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/></th>
+                    <th style="text-align: center;">Leiter<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
+					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a></th>
                 </tr>
-            </thead>";
+            </thead>';
 
         //Zeilen ausgeben
         for($x=1; $x<=$g_db->num_rows($result_user); $x++)
@@ -660,23 +661,22 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
     else
     {
         //Tabelle anlegen
-        echo"
-        <table class=\"tableList\" cellspacing=\"0\" >
+        echo '
+        <table class="tableList" cellspacing="0" >
             <thead>
                 <tr>
                     <th>Info</th>
-                    <th style=\"text-align: center;\">Mitglied</th>
+                    <th style="text-align: center;">Mitglied</th>
                     <th>Name</th>
                     <th>Vorname</th>
                     <th>Geburtsdatum</th>
-                    <th style=\"text-align: center;\">Leiter<img
-                    	class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                    	onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\"
-                    	onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/>
+                    <th style="text-align: center;">Leiter<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+		                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
+		                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </th>
                 </tr>
             </thead>
-            <tbody>";
+            <tbody>';
 
             while($user = $g_db->fetch_array($result_user))
             {
