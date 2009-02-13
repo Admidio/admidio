@@ -385,8 +385,8 @@ else
         <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
             <div class="boxHead">
                 <div class="boxHeadLeft">
-                    <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />
-                    '. mysqldatetime('d.m.y', $date->getValue('dat_begin'));
+                    <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />'
+                    . mysqldatetime('d.m.y', $date->getValue('dat_begin'));
                     if(mysqldatetime('d.m.y', $date->getValue('dat_begin')) != mysqldatetime('d.m.y', $date->getValue('dat_end')))
                     {
                         echo ' - '. mysqldatetime('d.m.y', $date->getValue('dat_end'));
