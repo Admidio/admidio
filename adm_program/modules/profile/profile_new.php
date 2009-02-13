@@ -298,9 +298,9 @@ function getFieldCode($field, $user, $new_user)
     $description = '';
     if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name') != 'Messenger')
     {
-        $description = '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-            onclick="window.open(\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
-            onmouseover="ajax_showTooltip(event,\''. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '\',this);" onmouseout="ajax_hideTooltip()" />';
+        $description = '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '\',this)" onmouseout="ajax_hideTooltip()"
+            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
@@ -417,50 +417,50 @@ echo '
                     // bei den Stammdaten erst einmal Benutzername und Passwort anzeigen
                     if($usr_id > 0 || $new_user == 2)
                     {
-                        echo "<li>
+                        echo '<li>
                             <dl>
-                                <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
+                                <dt><label for="usr_login_name">Benutzername:</label></dt>
                                 <dd>
-                                    <input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 200px;\" maxlength=\"35\" value=\"". $user->getValue("usr_login_name"). "\" ";
+                                    <input type="text" id="usr_login_name" name="usr_login_name" style="width: 200px;" maxlength="35" value="'. $user->getValue('usr_login_name'). '" ';
                                     if($g_current_user->isWebmaster() == false && $new_user == 0)
                                     {
-                                        echo " readonly=\"readonly\" ";
+                                        echo ' readonly="readonly" ';
                                     }
-                                    echo " />";
+                                    echo ' />';
                                     if($new_user > 0)
                                     {
-                                        echo "<span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profile_login_name&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=profile_login_name',this);\" onmouseout=\"ajax_hideTooltip()\"/>";
+                                        echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_login_name&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_login_name\',this)" onmouseout="ajax_hideTooltip()"
+								            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                                     }
-                                echo "</dd>
+                                echo '</dd>
                             </dl>
-                        </li>";
+                        </li>';
 
                         if($new_user == 2)
                         {
-                            echo "<li>
+                            echo '<li>
                                 <dl>
-                                    <dt><label for=\"usr_password\">Passwort:</label></dt>
+                                    <dt><label for="usr_password">Passwort:</label></dt>
                                     <dd>
-                                        <input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 130px;\" maxlength=\"20\" />
-                                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
-                                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                            onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=profile_password&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" 
-                                            onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=profile_password',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                                        <input type="password" id="usr_password" name="usr_password" style="width: 130px;" maxlength="20" />
+                                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_password&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
+								            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                                     </dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for=\"password2\">Passwort (Wdh):</label></dt>
+                                    <dt><label for="password2">Passwort (Wdh):</label></dt>
                                     <dd>
-                                        <input type=\"password\" id=\"password2\" name=\"password2\" style=\"width: 130px;\" maxlength=\"20\" />
-                                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                                        <input type="password" id="password2" name="password2" style="width: 130px;" maxlength="20" />
+                                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                     </dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
                         else
                         {
@@ -515,9 +515,9 @@ echo '
                         <dd>
                             <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                             <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                            <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                                onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true\',\'Message\',\'width=400,height=300,left=310,top=200,scrollbars=yes\')" 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this);" onmouseout="ajax_hideTooltip()" />
+                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=270&amp;width=580"><img 
+					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
+					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                         </dd>
                     </dl>
                 </li>

@@ -348,9 +348,9 @@ echo '
                                 echo '</optgroup>
                                 </select>
                                 <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                                    onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_mail&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_mail\',this)" onmouseout="ajax_hideTooltip()"/>';
+	                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rolle_mail&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_mail\',this)" onmouseout="ajax_hideTooltip()"
+						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                             }
                         echo'
                         </dd>
@@ -440,9 +440,9 @@ echo '
                                     <a href="javascript:addAttachment()"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="Anhang hinzufügen" /></a>
                                     <a href="javascript:addAttachment()">Anhang hinzufügen</a>
-                                    <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                                        onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mail_max_attachment_size&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
-                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mail_max_attachment_size\',this)" onmouseout="ajax_hideTooltip()"/>
+		                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=mail_max_attachment_size&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+							            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mail_max_attachment_size\',this)" onmouseout="ajax_hideTooltip()"
+							            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                                 </span>
                             </dd>
                         </dl>
@@ -483,9 +483,9 @@ echo '
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                                 <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title=""
-                                    onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true\',\'Message\',\'width=400,height=300,left=310,top=200,scrollbars=yes\')" 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this)" onmouseout="ajax_hideTooltip()" />
+	                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=270&amp;width=580"><img 
+						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
+						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                             </dd>
                         </dl>
                     </li>';

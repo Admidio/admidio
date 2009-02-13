@@ -186,8 +186,9 @@ else
                         <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         if (!$nextFolder['fol_exists'])
                         {
-                            echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=folderNotExists&amp;window=true\',\'Message\',\'width=400,height=300,left=310,top=200,scrollbars=yes\')" onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=folderNotExists\',this);"
-                          onmouseout="ajax_hideTooltip()" />';
+                            echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=folderNotExists&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=folderNotExists\',this)" onmouseout="ajax_hideTooltip()"
+				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
                         }
 
                      echo '
@@ -239,8 +240,9 @@ else
                         <a class="iconLink" href="javascript:deleteObject(\'fil\', \'row_file_'.$nextFile['fil_id'].'\','.$nextFile['fil_id'].',\''.$nextFile['fil_name'].'\')">
                         <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         if (!$nextFile['fil_exists']) {
-                            echo '<img class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=fileNotExists&amp;window=true\',\'Message\',\'width=400,height=300,left=310,top=200,scrollbars=yes\')" onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=fileNotExists\',this);"
-                          onmouseout="ajax_hideTooltip()" />';
+                            echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=fileNotExists&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=fileNotExists\',this)" onmouseout="ajax_hideTooltip()"
+				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
                         }
 
                      echo '
@@ -266,9 +268,9 @@ if ($g_current_user->editDownloadRight())
         echo '
         <h3>
             Nicht verwaltete Dateien
-            <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" titel=""
-              onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=additionalFiles&amp;window=true\',\'Message\',\'width=400,height=350,left=310,top=200,scrollbars=yes\')";
-              onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=additionalFiles\',this);" onmouseout="ajax_hideTooltip()"
+			<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=additionalFiles&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580"><img 
+                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=additionalFiles\',this)" onmouseout="ajax_hideTooltip()"
+                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>            
             />
         </h3>';
 
