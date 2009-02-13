@@ -194,7 +194,7 @@ $g_layout['header'] = '
                 }
             }            
             var newCellConditions = newTableRow.insertCell(-1);
-            newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" size=\"15\" maxlength=\"30\" value=\"" + condition + "\" />";
+            newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" size=\"25\" maxlength=\"50\" value=\"" + condition + "\" />";
 
             fieldNumberIntern++;
         }
@@ -551,7 +551,7 @@ echo '
         
         <p><b>2.</b> Bestimme die Spalten, die in der Liste angezeigt werden sollen:</p>
 
-        <table class="tableList" id="mylist_fields_table" style="width: 94%;" cellspacing="0">
+        <table class="tableList" id="mylist_fields_table" style="width: 100%;" cellspacing="0">
             <thead>
                 <tr>
                     <th style="width: 18%;">Nr.</th>
@@ -564,12 +564,12 @@ echo '
                 </tr>
             </thead>
             <tbody id="mylist_fields_tbody">
-                <script type="text/javascript">          
+                <script type="text/javascript"><!--          
                     for(var counter = 0; counter < '. $default_column_rows. '; counter++)
                     {
                         addColumn();
                     }
-                </script>
+                //--></script>
                 <tr id="table_row_button">
                     <td colspan="4">
                         <span class="iconTextLink">
