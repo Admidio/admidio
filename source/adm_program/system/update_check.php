@@ -173,19 +173,19 @@ if($show == 2)
 	{
 		$versionstext = '<b>Eine neue Version ist verfügbar!</b>&nbsp;
 						<a href="http://www.admidio.org/index.php?page=download"" target="_blank">
-						<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="Zur Admidio Updateseite" title="Zur Admidio Updateseite" /></a>';
+						<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/update_link.png" alt="Zur Admidio Updateseite" title="Zur Admidio Updateseite" /></a>';
 	}
 	else if($version_update == 2)
 	{
 		$versionstext = '<b>Eine neue Beta Version ist verfügbar!</b>&nbsp;
 						<a href="http://www.admidio.org/index.php?page=download"" target="_blank">
-						<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="Zur Admidio Updateseite" title="Zur Admidio Updateseite" /></a>';
+						<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/update_link.png" alt="Zur Admidio Updateseite" title="Zur Admidio Updateseite" /></a>';
 	}
 	else if($version_update == 3)
 	{
 		$versionstext = '<b>Eine neue Version und eine neue Beta ist verfügbar!</b>&nbsp;
 						<a href="http://www.admidio.org/index.php?page=download"" target="_blank">
-						<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="Zur Admidio Updateseite" title="Zur Admidio Updateseite" /></a>';
+						<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/update_link.png" alt="Zur Admidio Updateseite" title="Zur Admidio Updateseite" /></a>';
 	}	
 	else if($version_update == 99)
 	{
