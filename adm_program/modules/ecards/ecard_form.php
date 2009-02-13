@@ -46,23 +46,26 @@ if(!$g_valid_login)
 {
  $g_message->show('invalid');
 }
-//ID Pruefen
+// Uebergaben pruefen
 if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']))
 {
     $pho_id = $_GET['pho_id'];
 }
 else
 {
-    $pho_id = NULL;
+    $g_message->show('invalid');
+}
+
+if(isset($_GET['photo']) && is_numeric($_GET['photo']))
+{
+    $photo_nr = $_GET['photo'];
+}
+else
+{
+    $g_message->show('invalid');
 }
 
 unset($_SESSION['photo_album_request']);
-
-//Wurde keine Veranstaltung uebergeben kann das Navigationsstack zurückgesetzt werden
-if ($pho_id == NULL)
-{
-    $_SESSION['navigation']->clear();
-}
 
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -98,10 +101,6 @@ if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
     // die als Absender genutzt werden kann...
     $g_message->addVariableContent($g_root_path.'/adm_program/modules/profile/profile.php', 1, false);
     $g_message->show('profile_mail');
-}
-if(!isset($_GET['photo']))
-{
-    $g_message->show('invalid');
 }
 
 if (isset($_GET['usr_id']))
@@ -146,27 +145,11 @@ $popup_width  = $g_preferences['photo_show_width']+70;
 //Thickboxgröße
 $thickbox_height = $g_preferences['photo_show_height']+17;
 $thickbox_width  = $g_preferences['photo_show_width'];
-	
-$bild         = $_REQUEST['photo'];
 
 // Wenn der übergebene Bildernamen und die daszugehörige Photogallerie Id
-// gültig ist dann wird der komplete Pfad für das Bild generiert
-if(is_numeric($bild) && isset($_GET['pho_id']))
-{
-    $ordner_foto      = '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$_REQUEST['photo'].'.jpg';
-    $bild_server_path = SERVER_PATH. $ordner_foto;
-    $bild_link        = $g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.$thickbox_height.'&amp;width='.$thickbox_width;
-}
-// Wenn nur der Bildernamen übergeben wird ist die Übergabe ungültig
-if(is_numeric($bild) && !isset($_GET['pho_id']))
-{
-    $g_message->show('invalid');
-}
-// Wenn weder die Übergabe des Bildes noch die Photogallery id nummerisch sind -> ungültiger Aufruf
-if(!is_numeric($bild) || !is_numeric($_GET['pho_id']))
-{
-    $g_message->show('invalid');
-}
+// den kompletten Pfad für das Bild generiert
+$bild_server_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$photo_nr.'.jpg';
+
 // Wenn ein Bilderpfad generiert worden ist dann können die Proportionalen Größen berechnet werden
 if(isset($bild_server_path))
 {
@@ -776,13 +759,13 @@ $javascript = '
         {
             if(document.getElementById(divLayer).style.display == "none")
             {
-                document.getElementById(divLayer).style.display = "block";
+                $("#" + divLayer).show("slow");
                 document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">Keine weiteren Empf.<\/a>";
                 addRecipient();
             }
             else
             {
-                document.getElementById(divLayer).style.display = "none";
+                $("#" + divLayer).hide("slow");
                 document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">Mehr Empfänger<\/a>";
                 delAllRecipients(\'ja\');
             }
@@ -791,13 +774,12 @@ $javascript = '
         {
             if(document.getElementById(divLayerSetting).style.display == "none")
             {
-                document.getElementById(divLayerSetting).style.display = "block";
+                $("#" + divLayerSetting).show("slow");
                 document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen ausblenden<\/a>";
-                window.scrollBy(0,200);
             }
             else
             {
-                document.getElementById(divLayerSetting).style.display = "none";
+                $("#" + divLayerSetting).hide("slow");
                 document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen einblenden<\/a>";
             }
         }
@@ -927,33 +909,13 @@ echo '
 </noscript>';
 if (empty($submit_action))
 {
-     //Popup-Mode
-    if($g_preferences['photo_show_mode']==0)
-    {
-        echo '<img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$_REQUEST['photo'].'&pho_id='.$_REQUEST['pho_id'].'\',\'msg\',\'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')"
-            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
-            width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Grußkarte"
-            style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />';
-    }
-    //Thickbox-Mode
-    if($g_preferences['photo_show_mode']==1)
-    {
-        echo '<a class="thickbox" href="'.$bild_link.'"><img 
-                src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
-                width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Grußkarte"
-                style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />
-			  </a>';
-    }
+    // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
+    echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$g_preferences['photo_show_width'].'&amp;side=x&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($thickbox_height+10).'&amp;width='.$thickbox_width.'"><img 
+            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
+            width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Bild in voller Größe anzeigen"  title="Bild in voller Größe anzeigen"
+            style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />
+          </a>';
 
-    //Gleichesfenster-Mode
-    if($g_preferences['photo_show_mode']==2)
-    {
-        echo '<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$_REQUEST['photo'].'&amp;pho_id='.$pho_id.'"><img 
-                src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
-                width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Grußkarte"
-                style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />
-            </a>';
-    }
     if ($error_msg != '')
     {
         $g_message->show($error_msg);
