@@ -56,6 +56,10 @@ if(isset($plg_geb_icon) == false)
 {
     $plg_geb_icon = 0;
 }
+if(isset($plg_kal_cat) == false)
+{
+    $plg_kal_cat =  array("all");
+}
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
 if(array_key_exists("date_id", $_GET))
@@ -90,21 +94,27 @@ $g_db->setCurrentDB();
 // Abfrage der Termine
 if($plg_ter_aktiv == 1)
 {
+	// Ermitteln, welche Kalender angezeigt werden sollen
+	if(in_array("all",$plg_kal_cat))
+	{
+		// ALLE EINTRÄGE
+		$sql_syntax = "AND dat_global = 0 ";
+	}
+	else
+	{
+		$sql_syntax = "AND cat_type = 'DAT' AND (";
+		for($i=0;$i<count($plg_kal_cat);$i++)
+		{
+			$sql_syntax = $sql_syntax. "cat_name = '".$plg_kal_cat[$i]."' OR ";
+		}
+		$sql_syntax = substr($sql_syntax,0,-4). ") AND cat_id = dat_cat_id ";
+	}
+	
 	// Dummy-Zähler für Schleifen definieren
 	$ter = 1;
 	$ter_anzahl = 0;
 	$ter_aktuell = 0;
-	
-	// alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-	$plg_organizations = "";
-	$plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
-	
-	foreach($plg_arr_orgas as $key => $value)
-	{
-		$plg_organizations = $plg_organizations. "'$value', ";
-	}
-	$plg_organizations = $plg_organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
-	
+
 	// Datenbankabfrage mit Datum (Monat / Jahr)
 /*	$sql    = "SELECT dat_id, dat_begin, dat_all_day, dat_location, dat_headline FROM ". TBL_DATES. "
 				WHERE DATE_FORMAT(dat_begin, '%Y-%m') = '$sql_dat'
@@ -112,9 +122,9 @@ if($plg_ter_aktiv == 1)
 				      OR (   dat_global   = 1
 					     AND dat_org_shortname IN ($plg_organizations) ))
 				ORDER BY dat_begin ASC";*/
-	$sql    = "SELECT dat_id, dat_begin, dat_all_day, dat_location, dat_headline FROM ". TBL_DATES. "
+	$sql    = "SELECT DISTINCT dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline FROM ". TBL_DATES. ", ".TBL_CATEGORIES." 
 				WHERE DATE_FORMAT(dat_begin, '%Y-%m') = '$sql_dat' 
-				AND dat_global   = 1 
+				".$sql_syntax."
 				ORDER BY dat_begin ASC";				
 						
 	$result = $g_db->query($sql);
@@ -198,7 +208,7 @@ while($i<=$insgesamt)
 	$ter_title = "";
 	$geb_link = "";
 	$geb_title = "";
-	// Terminsanzeige generieren
+	// Terminanzeige generieren
 	if($plg_ter_aktiv == 1)
 	{
 		$ter_valid = 0;
