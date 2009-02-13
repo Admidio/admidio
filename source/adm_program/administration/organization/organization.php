@@ -66,7 +66,7 @@ $g_layout['header'] =  '
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
                         "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
-                        "dates-module", "links-module", "messages-module", "systeminfo");
+                        "dates-module", "links-module", "messages-module", "systeminfo", "inventory-module");
 
 
         // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -159,14 +159,14 @@ $g_layout['header'] =  '
                     layer.appendChild(li);
             }
         }
-        
-		$(document).ready(function() 
+
+		$(document).ready(function()
 		{
 			toggleDiv("general");
             $("#org_longname").focus();
-	 	});        
+	 	});
     --></script>';
-	
+
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -275,11 +275,16 @@ echo "
         <tr>
         <td>
         <span class=\"iconTextLink\">
+            <a href=\"#\" onclick=\"toggleDiv('inventory-module');\"><img src=\"". THEME_PATH. "/icons/info.png\" alt=\"Inventarverwaltung\" title=\"Inventarverwaltung\" /></a>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('inventory-module');\">Inventar</a></span>
+        </span>
+        </td>
+        <td>
+        <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('systeminfo');\"><img src=\"". THEME_PATH. "/icons/info.png\" alt=\"Systeminformationen\" title=\"Systeminformationen\" /></a>
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('systeminfo');\">Syteminfo</a></span>
         </span>
         </td>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -654,14 +659,14 @@ echo "
                         <dl>
                             <dt><label for=\"announcements_per_page\">Anzahl Einträge pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"announcements_per_page\" name=\"announcements_per_page\" 
+                                <input type=\"text\" id=\"announcements_per_page\" name=\"announcements_per_page\"
                                     size=\"4\" maxlength=\"4\" value=\"". $form_values['announcements_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Anzahl der Ankündigungen die auf einer Seite dargestellt werden. Gibt es mehr Ankündigungen
-                        so kann man zwischen den Ankündigungen blättern. Bei dem Wert 0 werden alle Ankündigungen 
+                        so kann man zwischen den Ankündigungen blättern. Bei dem Wert 0 werden alle Ankündigungen
                         aufgelistet und die Blättern-Funktion deaktiviert. (Standrad: 10)
                     </li>
                 </ul>
@@ -700,7 +705,7 @@ echo "
                         <dl>
                             <dt><label for=\"max_file_upload_size\">Maximale Dateigr&ouml;&szlig;e:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\" 
+                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\"
                                     maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\" /> KB
                             </dd>
                         </dl>
@@ -812,7 +817,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_thumbs_row\">Thumbnails pro Seite (Spalten x Zeilen):</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" /> x 
+                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" /> x
                                 <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\" />
                              </dd>
                         </dl>
@@ -862,7 +867,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_show_width\">Max. Bildanzeigegröße (Breite x Höhe):</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x 
+                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x
                                 <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\" /> Pixel
                              </dd>
                         </dl>
@@ -892,7 +897,7 @@ echo "
         /**************************************************************************************/
         //Einstellungen Forum
         /**************************************************************************************/
- 
+
         echo "
         <div class=\"groupBox\" id=\"forum\">
             <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" />
@@ -936,7 +941,7 @@ echo "
                         Welches Forum soll genutzt werden?<br/>
                         <table summary=\"Forum_Auflistung\" border=\"0\">
                             <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
-                        </table> 
+                        </table>
                     </li>
                     <li>
                         <dl>
@@ -952,8 +957,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                    	Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)<br /> 
-                    	Deaktiviert: Forum wird in einem neuen Browserfenster angezeigt. 
+                    	Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)<br />
+                    	Deaktiviert: Forum wird in einem neuen Browserfenster angezeigt.
                     </li>
                     <li>
                         <dl>
@@ -1092,16 +1097,16 @@ echo "
                         <dl>
                             <dt><label for=\"guestbook_entries_per_page\">Anzahl Einträge pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"guestbook_entries_per_page\" name=\"guestbook_entries_per_page\" 
+                                <input type=\"text\" id=\"guestbook_entries_per_page\" name=\"guestbook_entries_per_page\"
                                     size=\"4\" maxlength=\"4\" value=\"". $form_values['guestbook_entries_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Anzahl der Gästebucheinträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge
-                        so kann man zwischen den Einträgen blättern. Bei dem Wert 0 werden alle Gästebucheinträge 
+                        so kann man zwischen den Einträgen blättern. Bei dem Wert 0 werden alle Gästebucheinträge
                         aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)
-                    </li>                    
+                    </li>
                     <li>
                         <dl>
                             <dt><label for=\"enable_guestbook_captcha\">Captcha aktivieren:</label></dt>
@@ -1187,7 +1192,7 @@ echo "
                         <dl>
                             <dt><label for=\"lists_roles_per_page\">Anzahl Rollen pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\" 
+                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\"
                                     maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\" />
                             </dd>
                         </dl>
@@ -1201,7 +1206,7 @@ echo "
                         <dl>
                             <dt><label for=\"lists_members_per_page\">Anzahl Teilnehmer pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\" 
+                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\"
                                     maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\" />
                             </dd>
                         </dl>
@@ -1226,7 +1231,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch 
+                        Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch
                         lassen sich die Details weiterhin anzeigen. (Standard: nein)
                     </li>
                 </ul>
@@ -1442,8 +1447,8 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, wie die Vorschau der Grußkarten präsentiert werden soll. 
-						Dies kann über ein Popup-Fenster oder über eine Javascript-Animation (Thickbox). 
+                        Hier kann eingestellt werden, wie die Vorschau der Grußkarten präsentiert werden soll.
+						Dies kann über ein Popup-Fenster oder über eine Javascript-Animation (Thickbox).
                     </li>
                     <li>
                         <dl>
@@ -1873,7 +1878,7 @@ echo "
                         <dl>
                             <dt><label for=\"dates_per_page\">Anzahl Einträge pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"dates_per_page\" name=\"dates_per_page\" 
+                                <input type=\"text\" id=\"dates_per_page\" name=\"dates_per_page\"
                                     size=\"4\" maxlength=\"4\" value=\"". $form_values['dates_per_page']. "\" />
                             </dd>
                         </dl>
@@ -1967,14 +1972,14 @@ echo "
                         <dl>
                             <dt><label for=\"weblinks_per_page\">Anzahl Links pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"weblinks_per_page\" name=\"weblinks_per_page\" 
+                                <input type=\"text\" id=\"weblinks_per_page\" name=\"weblinks_per_page\"
                                     size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Anzahl der Links die auf einer Seite dargestellt werden. Gibt es mehr Links
-                        so kann man zwischen den Links blättern. Bei dem Wert 0 werden alle Links 
+                        so kann man zwischen den Links blättern. Bei dem Wert 0 werden alle Links
                         aufgelistet und die Blättern-Funktion deaktiviert.
                     </li>
                     <li>
@@ -1987,17 +1992,17 @@ echo "
 									{
 										echo " selected=\"selected\" ";
 									}
-									echo ">Gleiches Fenster</option>									
+									echo ">Gleiches Fenster</option>
 									<option value=\"_blank\"";
 									if($form_values['weblinks_target'] == "_blank")
 									{
 										echo " selected=\"selected\" ";
-									}									
+									}
 									echo ">Neues Fenster</option>";
                                 echo "</select>
                             </dd>
                         </dl>
-                    </li>					
+                    </li>
                     <li class=\"smallFontSize\">
 						Gibt an, ob die Links im gleichen oder in einem neuen Fenster geöffnet werden.
                     </li>
@@ -2012,7 +2017,7 @@ echo "
 						Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener
 						Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne
 						Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)
-                    </li>					
+                    </li>
                 </ul>
             </div>
         </div>";
@@ -2073,14 +2078,14 @@ echo "
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                    	Aktiviert: Das Mitglied erh&auml;lt eine Benachrichtigung per Email, wenn neue Nachrichten eintreffen.<br /> 
-                    	Deaktiviert: Keine Email Benachrichtigung. 
+                    	Aktiviert: Das Mitglied erh&auml;lt eine Benachrichtigung per Email, wenn neue Nachrichten eintreffen.<br />
+                    	Deaktiviert: Keine Email Benachrichtigung.
                     </li>
                     <li>
                         <dl>
                             <dt><label for="messages_in_box">Anzahl der Nachrichten im Posteingang:</label></dt>
                             <dd>
-                                <input type="text" id="messages_in_box" name="messages_in_box" 
+                                <input type="text" id="messages_in_box" name="messages_in_box"
                                     size="4" maxlength="4" value="'. $form_values['messages_in_box']. '" />
                             </dd>
                         </dl>
@@ -2094,7 +2099,7 @@ echo "
                         <dl>
                             <dt><label for="messages_out_box">Anzahl der Nachrichten im Postausgang:</label></dt>
                             <dd>
-                                <input type="text" id="messages_out_box" name="messages_out_box" 
+                                <input type="text" id="messages_out_box" name="messages_out_box"
                                     size="4" maxlength="4" value="'. $form_values['messages_out_box']. '" />
                             </dd>
                         </dl>
@@ -2108,7 +2113,7 @@ echo "
                         <dl>
                             <dt><label for="messages_archive">Anzahl der Nachrichten im Achriv:</label></dt>
                             <dd>
-                                <input type="text" id="messages_archive" name="messages_archive" 
+                                <input type="text" id="messages_archive" name="messages_archive"
                                     size="4" maxlength="4" value="'. $form_values['messages_archive']. '" />
                             </dd>
                         </dl>
@@ -2121,10 +2126,70 @@ echo "
                 </ul>
         	</div>
         </div>';
+
+		/**************************************************************************************/
+        //Einstellungen Inventarmodul
+        /**************************************************************************************/
+
+        echo "
+        <div class=\"groupBox\" id=\"inventory-module\">
+            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Inventarverwaltung\" />
+                Einstellungen Inventarverwaltung</div>
+            <div class=\"groupBoxBody\">
+                <ul class=\"formFieldList\">
+                    <li>
+                        <dl>
+                            <dt><label for=\"enable_inventory_module\">Inventarverwaltung aktivieren:</label></dt>
+                            <dd>
+                                <select size=\"1\" id=\"enable_inventory_module\" name=\"enable_inventory_module\">
+                                    <option value=\"0\" ";
+                                    if($form_values['enable_inventory_module'] == 0)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
+                                    if($form_values['enable_inventory_module'] == 1)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Aktiviert</option>
+                                    <option value=\"2\" ";
+                                    if($form_values['enable_inventory_module'] == 2)
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo ">Nur für registrierte Benutzer</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Die Inventarverwaltung kann über diese Einstellung komplett deaktiviert werden. Sie ist dann nicht mehr
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"weblinks_per_page\">Anzahl Inventargegenstände pro Seite:</label></dt>
+                            <dd>
+                                <input type=\"text\" id=\"inventory_items_per_page\" name=\"inventory_items_per_page\"
+                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['inventory_items_per_page']. "\" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Anzahl der Inventargegenstände, die auf einer Seite dargestellt werden. Gibt es mehr Inventargegenstände,
+                        so kann man zwischen den Seiten blättern. Bei dem Wert 0 werden alle Inventargegenstände
+                        aufgelistet und die Blättern-Funktion deaktiviert.
+                    </li>
+                </ul>
+            </div>
+        </div>";
+
         /**************************************************************************************/
         //Systeminformationen
         /**************************************************************************************/
-        
+
         echo '
         <div class="groupBox" id="systeminfo">
             <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/info.png" alt="Systeminformationen" />
@@ -2134,7 +2199,7 @@ echo "
                 require_once('systeminfo.php');
             echo'</div>
         </div>';
-     echo'      
+     echo'
     </div>
 </div>
 
