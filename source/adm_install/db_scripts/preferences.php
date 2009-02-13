@@ -93,6 +93,7 @@ $orga_preferences = array(
     'enable_ecard_module'           => '1',
     'enable_ecard_text_length'      => '1',
     'enable_ecard_cc_recipients'    => '1',
+    'ecard_preview_mode'            => '1',
     'ecard_view_width'              => '250',
     'ecard_view_height'             => '250',
     'ecard_card_picture_width'      => '400',
