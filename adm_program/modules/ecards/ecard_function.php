@@ -264,11 +264,11 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
     $ecard_data = preg_replace ("/<%ecard_font_italic%>/",      $ecard["schrift_style_italic"], $ecard_data);
     // Hier wird der Sender Name, Email und Id ersetzt
     $ecard_data = preg_replace ("/<%ecard_sender_id%>/",        $usr_id, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_sender_email%>/",     $ecard["email_sender"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_sender_name%>/",      $ecard["name_sender"], $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_sender_email%>/",     utf8_decode($ecard["email_sender"]), $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_sender_name%>/",      utf8_decode($ecard["name_sender"]), $ecard_data);
     // Hier wird der Empfaenger Name und Email ersetzt
-    $ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", $empfaenger_email, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_reciepient_name%>/",  $empfaenger_name, $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", utf8_decode($empfaenger_email), $ecard_data);
+    $ecard_data = preg_replace ("/<%ecard_reciepient_name%>/",  utf8_decode($empfaenger_name), $ecard_data);
     // Hier wird die Bild Breite, Hoehe und Name ersetzt
     $ecard_data = preg_replace ("/<%ecard_image_width%>/",      $propotional_width, $ecard_data);
     $ecard_data = preg_replace ("/<%ecard_image_height%>/",     $propotional_height, $ecard_data);
