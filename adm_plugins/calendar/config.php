@@ -35,4 +35,8 @@ $plg_geb_login = 0;
 // Anzeige der Geburtstage mit Icon (1) oder ohne Icon (0)
 $plg_geb_icon = 0;
 
+// Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)
+// Meherer Einträge: $plg_kal_cat = array("abc","cdf")
+$plg_kal_cat =  array("all");
+
 ?>
