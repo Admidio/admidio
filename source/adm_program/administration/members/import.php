@@ -9,24 +9,24 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
 
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show("no_fileuploads");
+    $g_message->show('no_fileuploads');
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Benutzer importieren";
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['title']  = 'Benutzer importieren';
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo "
@@ -55,38 +55,39 @@ echo "
                         // Combobox mit allen Rollen ausgeben
                         echo generateRoleSelectBox();
 
-                        echo "&nbsp;
-                        <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=role_assign&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\" onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=role_assign',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                        echo '&nbsp;
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=role_assign&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_assign\',this)" onmouseout="ajax_hideTooltip()"
+			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
             </li>
             <li>
-                <label for=\"user_import_mode\">Bereits existierende Benutzer</label>&nbsp;
-                <select size=\"1\" id=\"user_import_mode\" name=\"user_import_mode\">
-                    <option value=\"1\" selected=\"selected\">behalten</option>
-                    <option value=\"2\">duplizieren</option>
-                    <option value=\"3\">ersetzen</option>
-                    <option value=\"4\">erg&auml;nzen</option>
+                <label for="user_import_mode">Bereits existierende Benutzer</label>&nbsp;
+                <select size="1" id="user_import_mode" name="user_import_mode">
+                    <option value="1" selected="selected">behalten</option>
+                    <option value="2">duplizieren</option>
+                    <option value="3">ersetzen</option>
+                    <option value="4">ergänzen</option>
                 </select>
             </li>
         </ul>
 
         <hr />
 
-        <div class=\"formSubmit\">
-            <button name=\"zurueck\" type=\"button\" value=\"zurueck\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
+        <div class="formSubmit">
+            <button name="zurueck" type="button" value="zurueck" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurück" />&nbsp;Zurück</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id=\"weiter\" type=\"submit\" value=\"weiter\" tabindex=\"2\">Weiter&nbsp;<img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Weiter\" /></button>
+            <button id="weiter" type="submit" value="weiter" tabindex="2">Weiter&nbsp;<img src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" /></button>
         </div>
     </div>
 </div>
 </form>
 
-<script type=\"text/javascript\"><!--
-    document.getElementById('userfile').focus();
---></script>";
+<script type="text/javascript"><!--
+    document.getElementById("userfile").focus();
+--></script>';
     
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

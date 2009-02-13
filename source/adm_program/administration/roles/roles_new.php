@@ -308,9 +308,9 @@ echo '
 	                                        }
 	                                        echo '>alle Besucher der Seite</option>
 	                                </select>
-	                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt=""
-	                                    onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_mail_this_role&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
-	                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_mail_this_role\',this);" onmouseout="ajax_hideTooltip()" />
+									<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=role_mail_this_role&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+						                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_mail_this_role\',this)" onmouseout="ajax_hideTooltip()"
+						                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
 	                            </dd>
 		                    </dl>
 	                    </li>';
@@ -340,9 +340,9 @@ echo '
                                         }
                                         echo '>alle angemeldeten Benutzer</option>
                                 </select>
-                                <img class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt=""
-                                    onclick="window.open(\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true\',\'Message\',\'width=400,height=250,left=310,top=200,scrollbars=yes\')"
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_show_list\',this);" onmouseout="ajax_hideTooltip()" />
+								<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=role_show_list&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=role_show_list\',this)" onmouseout="ajax_hideTooltip()"
+					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
                             </dd>
                         </dl>
                     </li>
@@ -437,24 +437,24 @@ echo '
                             {
                                 echo ' disabled="disabled" ';
                             }
-                            echo " onchange=\"markRoleRight('rol_assign_roles', 'rol_all_lists_view', true)\" value=\"1\" />
-                            <label for=\"rol_assign_roles\"><img src=\"". THEME_PATH. "/icons/roles.png\" alt=\"Rollen verwalten und zuordnen\" /></label>&nbsp;
-                            <label for=\"rol_assign_roles\">Rollen verwalten und zuordnen</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-                                onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_zuordnen',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            echo ' onchange="markRoleRight(\'rol_assign_roles\', \'rol_all_lists_view\', true)" value="1" />
+                            <label for="rol_assign_roles"><img src="'. THEME_PATH. '/icons/roles.png" alt="Rollen verwalten und zuordnen" /></label>&nbsp;
+                            <label for="rol_assign_roles">Rollen verwalten und zuordnen</label>
+							<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rolle_zuordnen&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_zuordnen\',this)" onmouseout="ajax_hideTooltip()"
+				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
                         </div>
                     </li>
                     <li>
                         <div>
-                            <input type=\"checkbox\" id=\"rol_all_lists_view\" name=\"rol_all_lists_view\" ";
-                            if($role->getValue("rol_all_lists_view") == 1)
+                            <input type="checkbox" id="rol_all_lists_view" name="rol_all_lists_view" ';
+                            if($role->getValue('rol_all_lists_view') == 1)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
-                            if($role->getValue("rol_name") == "Webmaster")
+                            if($role->getValue('rol_name') == 'Webmaster')
                             {
-                                echo " disabled=\"disabled\" ";
+                                echo ' disabled="disabled" ';
                             }
                             echo " onchange=\"markRoleRight('rol_all_lists_view', 'rol_assign_roles', false)\" value=\"1\" />
                             <label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/lists.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
@@ -480,14 +480,14 @@ echo '
                             {
                                 echo " checked=\"checked\" ";
                             }
-                            echo " value=\"1\" />
-                            <label for=\"rol_edit_user\"><img src=\"". THEME_PATH. "/icons/group.png\" alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" /></label>&nbsp;
-                            <label for=\"rol_edit_user\">Profildaten und Rollenzuordnungen aller Benutzer bearbeiten</label>
-                            <img class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                                onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer&amp;window=true','Message','width=400,height=250,left=310,top=200,scrollbars=yes')\"
-                                onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=rolle_benutzer',this);\" onmouseout=\"ajax_hideTooltip()\" />
+                            echo ' value="1" />
+                            <label for="rol_edit_user"><img src="'. THEME_PATH. '/icons/group.png" alt="Profildaten und Rollenzuordnungen aller Benutzer bearbeiten" /></label>&nbsp;
+                            <label for="rol_edit_user">Profildaten und Rollenzuordnungen aller Benutzer bearbeiten</label>
+							<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rolle_benutzer&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_benutzer\',this)" onmouseout="ajax_hideTooltip()"
+				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
                         </div>
-                    </li>";
+                    </li>';
 					if($g_preferences['enable_mail_module'] > 0)
                     {
                         echo "

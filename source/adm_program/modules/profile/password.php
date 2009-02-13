@@ -127,7 +127,11 @@ else
                 <li>
                     <dl>
                         <dt><label for="new_password">Neues Passwort:</label></dt>
-                        <dd><input type="password" id="new_password" name="new_password" size="10" maxlength="20" /></dd>
+                        <dd><input type="password" id="new_password" name="new_password" size="10" maxlength="20" />
+                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_password&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
+					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                        </dd>
                     </dl>
                 </li>
                 <li>
