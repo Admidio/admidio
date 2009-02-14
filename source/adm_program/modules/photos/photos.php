@@ -542,7 +542,8 @@ echo '<div class="photoModuleContainer">';
                         echo '
                         <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'">
                             <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;pic_nr='.$shuffle_image['shuffle_img_nr'].'&amp;pho_begin='.$shuffle_image['shuffle_img_begin'].'&amp;scal='.$g_preferences['photo_preview_scale'].'&amp;side=y"
-                            alt="Zufallsfoto" /></a>';
+                            	class="imageFrame" alt="Zufallsfoto" />
+                        </a>';
                     }
                 echo '</dt>
                 <dd>

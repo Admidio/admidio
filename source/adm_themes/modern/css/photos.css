@@ -49,12 +49,17 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 .photoThumbnail{
     vertical-align: middle;
     cursor: pointer;
-    border: none;
+    border: 1px solid #dddddd; 
+	padding: 2px;
 }
 
 /*Die Fotoalben werden in einer Definitionsliste angezeigt*/
 .photoAlbumTable {
     list-style-type: none;
+}
+
+.photoAlbumTable dl { 
+	margin-bottom: 10px;
 }
 
 /*dabei bildet ein Vorschaubild den Term*/
