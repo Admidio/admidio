@@ -912,8 +912,8 @@ if (empty($submit_action))
     // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
     echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$g_preferences['photo_show_width'].'&amp;side=x&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($thickbox_height+10).'&amp;width='.$thickbox_width.'"><img 
             src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
-            width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" alt="Bild in voller Größe anzeigen"  title="Bild in voller Größe anzeigen"
-            style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" />
+            width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" 
+            class="imageFrame" alt="Bild in voller Größe anzeigen"  title="Bild in voller Größe anzeigen" />
           </a>';
 
     if ($error_msg != '')

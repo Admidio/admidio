@@ -15,13 +15,13 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")) && !$g_current_user->editUsers())
+if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('usr_id')) && !$g_current_user->editUsers())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -30,22 +30,22 @@ $req_new_user = 0;
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["user_id"]))
+if(isset($_GET['user_id']))
 {
-    if(is_numeric($_GET["user_id"]) == false)
+    if(is_numeric($_GET['user_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    $req_usr_id = $_GET["user_id"];
+    $req_usr_id = $_GET['user_id'];
 }
 
-if(isset($_GET["new_user"]))
+if(isset($_GET['new_user']))
 {
-    if(is_numeric($_GET["new_user"]) == false)
+    if(is_numeric($_GET['new_user']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    $req_new_user = $_GET["new_user"];
+    $req_new_user = $_GET['new_user'];
 }
 
 $user     = new User($g_db, $req_usr_id);
@@ -63,18 +63,18 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Rollenzuordnung für \"". $user->getValue("Vorname"). " ". $user->getValue("Nachname"). "\"";
-$g_layout['header'] = "
-    <script type=\"text/javascript\" src=\"$g_root_path/adm_program/system/show_hide_block.js\"></script>
-    <script type=\"text/javascript\"><!--
+$g_layout['title']  = 'Rollenzuordnung für "'. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). '"';
+$g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/show_hide_block.js"></script>
+    <script type="text/javascript"><!--
         function markMember(element)
         {
             if(element.checked == true)
             {
                 var name   = element.name;
-                var pos_number = name.search('-') + 1;
+                var pos_number = name.search("-") + 1;
                 var number = name.substr(pos_number, name.length - pos_number);
-                var role_name = 'role-' + number;
+                var role_name = "role-" + number;
                 document.getElementById(role_name).checked = true;
             }
         }
@@ -84,33 +84,33 @@ $g_layout['header'] = "
             if(element.checked == false)
             {
                 var name   = element.name;
-                var pos_number = name.search('-') + 1;
+                var pos_number = name.search("-") + 1;
                 var number = name.substr(pos_number, name.length - pos_number);
-                var role_name = 'leader-' + number;
+                var role_name = "leader-" + number;
                 document.getElementById(role_name).checked = false;
             }
         }
-    --></script>";
+    //--></script>';
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
-echo "
-<h1 class=\"moduleHeadline\">". $g_layout['title']. "</h1>
+echo '
+<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 
-<form action=\"$g_root_path/adm_program/modules/profile/roles_save.php?user_id=$req_usr_id&amp;new_user=$req_new_user\" method=\"post\">
-    <table class=\"tableList\" cellspacing=\"0\">
+<form action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$req_usr_id.'&amp;new_user='.$req_new_user.'" method="post">
+    <table class="tableList" cellspacing="0">
         <thead>
             <tr>
                 <th>&nbsp;</th>
                 <th>Rolle</th>
                 <th>Beschreibung</th>
-                <th style=\"text-align: center; width: 80px;\">Leiter<img
-                    class=\"iconHelpLink\" src=\"". THEME_PATH. "/icons/help.png\" alt=\"Hilfe\" title=\"\"
-                    onclick=\"window.open('$g_root_path/adm_program/system/msg_window.php?err_code=leader&amp;window=true','Message','width=600,height=500,left=310,top=200,scrollbars=yes')\"
-                    onmouseover=\"ajax_showTooltip(event,'$g_root_path/adm_program/system/msg_window.php?err_code=leader',this);\" onmouseout=\"ajax_hideTooltip()\"/>
+                <th style="text-align: center; width: 80px;">Leiter<a 
+                	class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
+		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                 </th>
             </tr>
-        </thead>";
+        </thead>';
 
         if($g_current_user->assignRoles() || $g_current_user->editUsers())
         {
@@ -248,6 +248,6 @@ echo "
     </ul>
 </form>";
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

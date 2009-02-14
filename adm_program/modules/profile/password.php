@@ -117,8 +117,8 @@ else
     			echo'
         			<li>
                         <dl>
-                            <dt><label for="old_password">Altes Passwort:</label></dt>
-                            <dd><input type="password" id="old_password" name="old_password" size="10" maxlength="20" /></dd>
+                            <dt><label for="old_password">Aktuelles Passwort:</label></dt>
+                            <dd><input type="password" id="old_password" name="old_password" size="12" maxlength="20" /></dd>
                         </dl>
                     </li>
                     <li><hr /></li>';
@@ -127,17 +127,16 @@ else
                 <li>
                     <dl>
                         <dt><label for="new_password">Neues Passwort:</label></dt>
-                        <dd><input type="password" id="new_password" name="new_password" size="10" maxlength="20" />
-                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_password&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
-					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                        <dd><input type="password" id="new_password" name="new_password" size="12" maxlength="20" />
+                            <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
+					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />
                         </dd>
                     </dl>
                 </li>
                 <li>
                     <dl>
                         <dt><label for="new_password2">Wiederholen:</label></dt>
-                        <dd><input type="password" id="new_password2" name="new_password2" size="10" maxlength="20" /></dd>
+                        <dd><input type="password" id="new_password2" name="new_password2" size="12" maxlength="20" /></dd>
                     </dl>
                 </li>
             </ul>

@@ -136,7 +136,7 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button name="hochladen" type="submit" value="hochladen" tabindex="2">
+            <button name="hochladen" type="submit" value="hochladen" tabindex="4">
             <img src="'.THEME_PATH.'/icons/page_white_upload.png" alt="Hochladen" />
             &nbsp;Hochladen</button>
         </div>

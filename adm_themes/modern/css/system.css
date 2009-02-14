@@ -399,6 +399,12 @@ ul.autosuggest li.highlight a:visited  {
     vertical-align:     middle;
 }
 
+/* */
+.imageFrame {
+	border: 			1px solid #dddddd; 
+	padding: 			3px;
+}
+
 /* Style Eigenschaften fuer das tooltip */
 #ajax_tooltipObj{
     z-index:            1000000;

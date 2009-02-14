@@ -405,14 +405,14 @@ switch ($req_err_code)
     case 'profile_photo_up_help':
 		echo '<h3>Was ist zu tun?</h3>
 			<ul>
-				<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Bilddatei von der Festplatte auswählen.</li>
-				<li>Dann auf &bdquo;Bilde hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+				<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Fotodatei von der Festplatte auswählen.</li>
+				<li>Danach auf &bdquo;Foto hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
 			</ul>
 			<h3>Einschränkungen:</h3>
 			<ul>
-				<li>Du solltest selbst auf dem Bild zu sehen sein.</li>
-				<li>Das Bild muss im Format JPG oder PNG gespeichert sein.</li>
-				<li>Der Server kann Bilder mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
+				<li>Du solltest selbst auf dem Foto zu sehen sein.</li>
+				<li>Das Foto muss im Format JPG oder PNG gespeichert sein.</li>
+				<li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
 				<li>Die hochgeladene Datei darf nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
 			</ul>
 			';
