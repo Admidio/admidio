@@ -20,23 +20,23 @@ function hasRole($role_name, $user_id = 0)
 
     if($user_id == 0)
     {
-        $user_id = $g_current_user->getValue("usr_id");
+        $user_id = $g_current_user->getValue('usr_id');
     }
     elseif(is_numeric($user_id) == false)
     {
         return -1;
     }
 
-    $sql    = "SELECT *
-                 FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE mem_usr_id = $user_id
-                  AND mem_begin <= '".DATE_NOW."'
-                  AND mem_end    > '".DATE_NOW."'
+    $sql    = 'SELECT *
+                 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                WHERE mem_usr_id = '.$user_id.'
+                  AND mem_begin <= "'.DATE_NOW.'"
+                  AND mem_end    > "'.DATE_NOW.'"
                   AND mem_rol_id = rol_id
-                  AND rol_name   = '$role_name'
+                  AND rol_name   = "'.$role_name.'"
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = ". $g_current_organization->getValue("org_id");
+                  AND cat_org_id = '. $g_current_organization->getValue('org_id');
     $result = $g_db->query($sql);
 
     $user_found = $g_db->num_rows($result);
@@ -59,15 +59,15 @@ function isMember($user_id)
     
     if(is_numeric($user_id) && $user_id > 0)
     {
-        $sql    = "SELECT COUNT(*)
-                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                    WHERE mem_usr_id = $user_id
-                      AND mem_begin <= '".DATE_NOW."'
-                      AND mem_end    > '".DATE_NOW."'
+        $sql    = 'SELECT COUNT(*)
+                     FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                    WHERE mem_usr_id = '.$user_id.'
+                      AND mem_begin <= "'.DATE_NOW.'"
+                      AND mem_end    > "'.DATE_NOW.'"
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
+                      AND cat_org_id = '. $g_current_organization->getValue('org_id');
         $result = $g_db->query($sql);
 
         $row = $g_db->fetch_array($result);
@@ -91,19 +91,19 @@ function isGroupLeader($user_id, $role_id = 0)
     if(is_numeric($user_id) && $user_id >  0
     && is_numeric($role_id))
     {
-        $sql    = "SELECT *
-                     FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+        $sql    = 'SELECT *
+                     FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                     WHERE mem_usr_id = $user_id
-                      AND mem_begin <= '".DATE_NOW."'
-                      AND mem_end    > '".DATE_NOW."'
+                      AND mem_begin <= "'.DATE_NOW.'"
+                      AND mem_end    > "'.DATE_NOW.'"
                       AND mem_leader = 1
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
+                      AND cat_org_id = '. $g_current_organization->getValue('org_id');
         if ($role_id > 0)
         {
-            $sql .= "  AND mem_rol_id = $role_id";
+            $sql .= '  AND mem_rol_id = '.$role_id;
         }
         $result = $g_db->query($sql);
 
@@ -236,14 +236,20 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 // Uebergaben:
 // default_role : Id der Rolle die markiert wird
 // field_id     : Id und Name der Select-Box
+// condition    : eine zusaetzliche SQL-Bedingung, welche mit AND beginnen muss
 
-function generateRoleSelectBox($default_role = 0, $field_id = "")
+function generateRoleSelectBox($default_role = 0, $field_id = '', $condition = '')
 {
     global $g_current_user, $g_current_organization, $g_db;
     
     if(strlen($field_id) == 0)
     {
-        $field_id = "rol_id";
+        $field_id = 'rol_id';
+    }
+
+    if(strlen($condition) > 0)
+    {
+        $condition = addslashes($condition);
     }
     
     $box_string = '
@@ -252,13 +258,14 @@ function generateRoleSelectBox($default_role = 0, $field_id = "")
         // Rollen selektieren
 
         // Benutzer mit den Recht alle Listen einzusehen, bekommen auch alle Rollen aufgelistet
-        $sql = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+        $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                  WHERE rol_valid  = 1
                    AND rol_cat_id = cat_id
-                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                 ORDER BY cat_sequence, rol_name";
+                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                       '.$condition.'
+                 ORDER BY cat_sequence, rol_name';
         $result_lst = $g_db->query($sql);
-        $act_category = "";
+        $act_category = '';
 
         while($row = $g_db->fetch_object($result_lst))
         {

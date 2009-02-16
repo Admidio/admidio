@@ -242,7 +242,8 @@ if($g_current_session->getValue('ses_id') > 0)
     // da die Daten evtl. von anderen Usern in der DB geaendert wurden
     if($g_current_session->getValue('ses_renew') == 1 || $g_current_session->getValue('ses_renew') == 3)
     {
-        // Userobjekt neu einlesen
+        // Feldstruktur entfernen und Userobjekt neu einlesen
+        $g_current_user->userFieldData = array();
         $g_current_user->readData($g_current_user->getValue('usr_id'));
         $g_current_session->setValue('ses_renew', 0);
     }

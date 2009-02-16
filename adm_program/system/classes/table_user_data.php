@@ -43,5 +43,20 @@ class TableUserData extends TableAccess
             $this->setValue("usd_usf_id", $usf_id);
         }
     }
+    
+    // es werden nur die Daten der Tabelle adm_user_data entfernt
+    // die Kategorie und adm_user_field bleiben erhalten
+    function clearFieldData()
+    {
+    	foreach($this->dbColumns as $name => $value)
+    	{
+    		if(strpos($name, 'usd') !== false)
+    		{
+    			$this->dbColumns[$name] = '';
+    			$this->columnsInfos[$name]['changed'] = false;
+    			$this->new_record = false;
+    		}
+    	}
+    }
 }
 ?>
