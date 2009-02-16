@@ -5,13 +5,12 @@
 
 
 <div id="page_header">
-	<img src="<?php echo THEME_PATH; ?>/images/title.png" alt="Admidio - Die Online-Mitgliederverwaltung" />
-	<div id ="orga_name"><?php echo $g_current_organization->getValue("org_longname"); ?></div>
+	<h1><?php echo $g_current_organization->getValue("org_longname"); ?></h1>
 </div>
 
 <div style="clear: left;"><br /></div>
 
 <div id="page">
 	<div id="left_block">
-		<div><img class="img_border" src="<?php echo THEME_PATH; ?>/images/border_top_big.png" alt="border" /></div>
+		<div id="top_border_img_big"></div>
 		<div id="content_left" class="content">&nbsp;

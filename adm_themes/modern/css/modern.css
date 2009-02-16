@@ -11,9 +11,21 @@
  *****************************************************************************/
 
 #page_header {
+    background-image: url(../images/title.png);
     text-align: left;
     margin: 0 auto;
-    width: 955px;
+    width: 960px;
+    height: 180px;
+}
+
+#page_header h1 {
+    color: #dbebee;
+    top: 112px;
+    position: absolute;
+    margin-left: 372px;
+    padding: 0px;
+    font-size: 24pt;
+    font-weight: bold;
 }
 
 h2 {
@@ -40,16 +52,6 @@ h4 {
     margin-top: 0px;
     margin-bottom: 0px;
     color: #459ba6;
-}
-
-#orga_name {
-    color: #dbebee;
-    top: 108px;
-    position: absolute;
-    margin-left: 372px;
-    padding: 0px;
-    font-size: 24pt;
-    font-weight: bold;
 }
 
 *:first-child+html #orga_name[id] {
@@ -85,11 +87,35 @@ p {
     margin-left: 625px;
 }
 
+#top_border_img_big{
+    background-image: url(../images/border_top_big.png);
+    height: 26px;
+    width: 601px;
+}
+
+#bottom_border_img_big{
+    background-image: url(../images/border_bottom_big.png);
+    height: 26px;
+    width: 601px;
+}
+
+#top_border_img_small{
+    background-image: url(../images/border_top_small.png);
+    height: 26px;
+    width: 300px;
+}
+
+#bottom_border_img_small{
+    background-image: url(../images/border_bottom_small.png);
+    height: 26px;
+    width: 300px;
+}
+
 /* spezieller Hack, damit der Block im IE6 auch richtig neben den anderem positioniert ist */
-html.* #right_block div { 
-    margin-left: 622px;
+html.* #right_block{ 
     width: 268px;
 }
+
 /* spezieller Hack, damit die Menuelinks im IE6 nicht so weit auseinander springen */
 html.* #right_block span { 
     height: 15px;
@@ -114,6 +140,10 @@ html.* #right_block span {
     background-position: 0 bottom;
     background-repeat: repeat-x;
     background-image: url(../images/background_in_borders.png);
+}
+/*IE6 Hack damit Blöcke die richtige Breite behalten*/
+html.*  #content_left {
+    width: 574px;
 }
 
 #sidebar {

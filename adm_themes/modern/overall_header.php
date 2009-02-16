@@ -65,7 +65,6 @@ echo '
     
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
     <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
-
     <script type="text/javascript"><!-- 
 		var gRootPath  = "'. $g_root_path. '"; 
 		var gThemePath = "'. THEME_PATH. '"; 
@@ -78,9 +77,8 @@ echo '
     '. $g_layout['header']. '
 
     <!--[if lt IE 7]>
-    <script type="text/javascript">
-        window.attachEvent("onload", correctPNG);
-    </script>
+        <script type="text/javascript">if (typeof blankImg == \'undefined\') var blankImg = \''.$g_root_path.'/adm_program/libs/iepngfix/blank.gif\';</script>
+        <style type="text/css">img, div {behavior: url('.$g_root_path.'/adm_program/libs/iepngfix/iepngfix.php)}</style>
     <![endif]-->';
 
     if($g_layout['includes'])
