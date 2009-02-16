@@ -52,7 +52,7 @@ if($_REQUEST['mode'] == 1)
 elseif($_REQUEST['mode'] == 2)
 {
     // Mitgliedschaft bei einer aktuellen Rolle beenden
-    if($g_current_user->assignRoles() || $g_current_user->editUsers())
+    if($g_current_user->assignRoles())
     {
         $member = new TableMembers($g_db);
         $member->stopMembership($_REQUEST['rol_id'], $_REQUEST['user_id']);

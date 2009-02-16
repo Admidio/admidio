@@ -22,7 +22,7 @@ require("../../system/classes/role_dependency.php");
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")) && !$g_current_user->editUsers())
+if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")))
 {
     $g_message->show("norights");
 }
@@ -51,24 +51,15 @@ if(isset($_GET["new_user"]))
     $req_new_user = $_GET["new_user"];
 }
 
-if($g_current_user->assignRoles() || $g_current_user->editUsers())
+if($g_current_user->assignRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    // Benutzer ohne Rollenvergaberechte, duerfen nur Rollen zuordnen, die sie sehen duerfen
-    // aber auch keine Rollen mit Rollenvergaberechten
-    $sql_roles_condition = "";
-    if($g_current_user->editUsers() && !$g_current_user->viewAllLists())
-    {
-        $sql_roles_condition .= " AND rol_this_list_view > 0 ";
-    }
-
     $sql    = "SELECT rol_id, rol_name, rol_max_members
                  FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
                  LEFT JOIN ". TBL_MEMBERS. "
                    ON rol_id     = mem_rol_id
                   AND mem_usr_id = $req_usr_id
                 WHERE rol_valid  = 1
-                      $sql_roles_condition
                   AND rol_cat_id = cat_id
                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                 ORDER BY cat_sequence, rol_name";
@@ -150,43 +141,40 @@ $member = new TableMembers($g_db);
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = $g_db->fetch_array($result_rol))
 {
-    if($g_current_user->assignRoles() || $g_current_user->viewRole($row['rol_id']))
+    // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
+    if($row['rol_name'] != 'Webmaster' || $g_current_user->isWebmaster())
     {
-        // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
-        if($row['rol_name'] != 'Webmaster' || $g_current_user->isWebmaster())
+        $role_assign = 0;
+        if(isset($_POST["role-".$row['rol_id']]) && $_POST["role-".$row['rol_id']] == 1)
         {
-            $role_assign = 0;
-            if(isset($_POST["role-".$row['rol_id']]) && $_POST["role-".$row['rol_id']] == 1)
-            {
-                $role_assign = 1;
-            }
+            $role_assign = 1;
+        }
 
-            $role_leader = 0;
-            if(isset($_POST["leader-".$row['rol_id']]) && $_POST["leader-".$row['rol_id']] == 1)
-            {
-                $role_leader = 1;
-            }
+        $role_leader = 0;
+        if(isset($_POST["leader-".$row['rol_id']]) && $_POST["leader-".$row['rol_id']] == 1)
+        {
+            $role_leader = 1;
+        }
 
-            // Rollenmitgliedschaften aktualisieren
-            if($role_assign == 1)
-            {
-                $member->startMembership($row['rol_id'], $req_usr_id, $role_leader);
-                $count_assigned++;
-            }
-            else
-            {
-                $member->stopMembership($row['rol_id'], $req_usr_id);
-            }
+        // Rollenmitgliedschaften aktualisieren
+        if($role_assign == 1)
+        {
+            $member->startMembership($row['rol_id'], $req_usr_id, $role_leader);
+            $count_assigned++;
+        }
+        else
+        {
+            $member->stopMembership($row['rol_id'], $req_usr_id);
+        }
 
-            // find the parent roles
-            if($role_assign == 1)
+        // find the parent roles
+        if($role_assign == 1)
+        {
+            $tmpRoles = RoleDependency::getParentRoles($g_db, $row['rol_id']);
+            foreach($tmpRoles as $tmpRole)
             {
-                $tmpRoles = RoleDependency::getParentRoles($g_db, $row['rol_id']);
-                foreach($tmpRoles as $tmpRole)
-                {
-                    if(!in_array($tmpRole,$parentRoles))
-                    $parentRoles[] = $tmpRole;
-                }
+                if(!in_array($tmpRole,$parentRoles))
+                $parentRoles[] = $tmpRole;
             }
         }
     }
