@@ -94,7 +94,7 @@ if($req_mode == 1)
         }
         echo '</dd>
         <dt>Max. Upload-Größe:</dt><dd>'.ini_get('upload_max_filesize').'</dd>
-        <dt>Max. bearbeitbare Bildgröße:</dt><dd>'.round(processableImageSize()/1000000, 2).' MegaPixel</dd>
+        <dt>Max. bearbeitbare Bildgröße:</dt><dd>'.round((processableImageSize()/1000000), 2).' MegaPixel</dd>
         <dt>alle PHP-Informationen:</dt><dd><a href="systeminfo.php?mode=2" target="_blank2">phpinfo()</a></dd>
     </dl>';
 
