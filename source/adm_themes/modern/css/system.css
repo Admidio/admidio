@@ -125,11 +125,6 @@ a:hover, a:active {
     float:              left;
 }
 
-/*IE6 Hack*/
-.boxHeadLeft span{
-    margin-right:       5px;     
-}
-
 .boxHeadRight{
     float:              right;
 }

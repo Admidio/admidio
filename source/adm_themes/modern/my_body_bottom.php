@@ -4,10 +4,10 @@
 -->
 
         &nbsp;</div>
-        <div><img class="img_border" src="<?php echo THEME_PATH; ?>/images/border_bottom_big.png" alt="border" /></div>
+        <div id="bottom_border_img_big"></div>
     </div>
     <div id="right_block">
-        <div><img class="img_border" src="<?php echo THEME_PATH; ?>/images/border_top_small.png" alt="border" /></div>
+        <div id="top_border_img_small"></div>
         <div id="sidebar" class="content">
             <?php
             if($g_valid_login)
@@ -173,7 +173,7 @@
             
             ?>
         </div>
-        <div><img class="img_border" src="<?php echo THEME_PATH; ?>/images/border_bottom_small.png" alt="border" /></div>
+        <div id="bottom_border_img_small"></div>
 
         <div style="clear: both;"></div>
     </div>
