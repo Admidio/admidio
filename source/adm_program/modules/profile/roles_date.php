@@ -21,7 +21,7 @@ require("../../system/login_valid.php");
 require("../../system/classes/table_members.php");
 
 // nur Webmaster duerfen fremde Passwoerter aendern
-if(!$g_current_user->assignRoles() || !$g_current_user->editUsers())
+if(!$g_current_user->assignRoles())
 {
     $g_message->show("norights", "", "", false);
 }

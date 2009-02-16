@@ -698,7 +698,7 @@ echo '
                 <div class="groupBoxHeadline">
                     <div style="float: left;">Rollenmitgliedschaften&nbsp;</div>';
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                        if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue('usr_id')) || $g_current_user->editUsers())
+                        if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue('usr_id')))
                         && $user->getValue('usr_reg_org_shortname') != $g_current_organization->getValue('org_shortname'))
                         {
                             echo '
@@ -740,16 +740,16 @@ echo '
                                             $rol_to = NULL;
                                             if ($row['mem_end'] != '9999-12-31')
                                             {
-                                               $rol_to = mysqldatetime("d.m.y", $row['mem_end']);
+                                               $rol_to = mysqldatetime('d.m.y', $row['mem_end']);
                                             }
 
-                                            if($g_current_user->assignRoles() || $g_current_user->editUsers())
+                                            if($g_current_user->assignRoles())
                                             {
                                                 // Löschen wird nur bei anderen Webmastern ermöglicht
-                                                if (($row['rol_name'] == "Webmaster" && $g_current_user->getValue("usr_id") != $a_user_id) || ($row['rol_name'] != "Webmaster"))
+                                                if (($row['rol_name'] == 'Webmaster' && $g_current_user->getValue('usr_id') != $a_user_id) || ($row['rol_name'] != 'Webmaster'))
                                                 {
                                                     echo '
-                                                    <a class="iconLink" href="javascript:deleteRole('.$row['rol_id'].', \''.$row['rol_name'].'\', '.$row['rol_valid'].', '.$user->getValue("usr_id").', \''.
+                                                    <a class="iconLink" href="javascript:deleteRole('.$row['rol_id'].', \''.$row['rol_name'].'\', '.$row['rol_valid'].', '.$user->getValue('usr_id').', \''.
                                                    	$row['cat_name']. '\', \''.mysqldate('d.m.y', $row['mem_begin']).'\', '.$row['mem_leader'].', '.$g_current_user->isWebmaster().')"><img
                                                         src="'.THEME_PATH.'/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
                                                 }

@@ -29,13 +29,12 @@ $g_layout['title']  = 'Benutzer importieren';
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<p>&nbsp;</p>
-<form id=\"form_import\" action=\"$g_root_path/adm_program/administration/members/import_function.php\" method=\"post\" enctype=\"multipart/form-data\">
-<div class=\"formLayout\" id=\"import_form\">
-    <div class=\"formHead\">Benutzer aus Datei importieren</div>
-    <div class=\"formBody\">
-        <ul class=\"formFieldList\">
+echo '
+<form id="form_import" action="'.$g_root_path.'/adm_program/administration/members/import_function.php" method="post" enctype="multipart/form-data">
+<div class="formLayout" id="import_form">
+    <div class="formHead">Benutzer aus Datei importieren</div>
+    <div class="formBody">
+        <ul class="formFieldList">
             <li>
                 <dl>
                     <dt>Format:</dt>
@@ -44,14 +43,14 @@ echo "
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"userfile\">Datei ausw&auml;hlen:</label></dt>
-                    <dd><input id=\"userfile\" name=\"userfile\" size=\"30\" type=\"file\" /></dd>
+                    <dt><label for="userfile">Datei ausw&auml;hlen:</label></dt>
+                    <dd><input id="userfile" name="userfile" size="30" type="file" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"rol_id\">Rolle zuordnen:</label></dt>
-                    <dd>";
+                    <dt><label for="rol_id">Rolle zuordnen:</label></dt>
+                    <dd>';
                         // Combobox mit allen Rollen ausgeben
                         echo generateRoleSelectBox();
 
@@ -65,7 +64,7 @@ echo "
             <li>
                 <label for="user_import_mode">Bereits existierende Benutzer</label>&nbsp;
                 <select size="1" id="user_import_mode" name="user_import_mode">
-                    <option value="1" selected="selected">behalten</option>
+                    <option value="1" selected="selected">nicht bearbeiten</option>
                     <option value="2">duplizieren</option>
                     <option value="3">ersetzen</option>
                     <option value="4">ergänzen</option>
