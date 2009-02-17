@@ -487,7 +487,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
             <ul id="role_details_'.$role->getValue('rol_id').'" ';
                 if($g_preferences['lists_hide_overview_details']==1)
                 {
-                    echo ' style="visibility: hidden; display: none;" '; 
+                    echo ' style="display: none;" '; 
                 }
                 echo ' class="formFieldList">';
                 if(strlen($role->getValue('rol_description')) > 0)
