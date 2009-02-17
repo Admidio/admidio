@@ -177,24 +177,22 @@ $g_layout['header'] = '
 
 	    function toggleDetails(role_details_ID, triangle_ID)
         {
-            if (document.getElementById(role_details_ID).style.visibility == "hidden")
+            if($("#" + role_details_ID).css("display") == "none")
             {
-                document.getElementById(role_details_ID).style.visibility = "visible";
-                document.getElementById(role_details_ID).style.display    = "block";
-				document.getElementById(triangle_ID).src   = gThemePath + "/icons/triangle_open.gif";
-				document.getElementById(triangle_ID).title = "Details ausblenden";
-				document.getElementById(triangle_ID).alt   = "Details ausblenden";
+                $("#" + role_details_ID).show("slow");
+                $("#" + triangle_ID).attr("src",   gThemePath + "/icons/triangle_open.gif");
+                $("#" + triangle_ID).attr("title", "Details ausblenden");
+                $("#" + triangle_ID).attr("alt",   "Details ausblenden");
             }
             else
             {
-                document.getElementById(role_details_ID).style.visibility = "hidden";
-                document.getElementById(role_details_ID).style.display    = "none";
-				document.getElementById(triangle_ID).src   = gThemePath + "/icons/triangle_close.gif";	
-				document.getElementById(triangle_ID).title = "Details einblenden";
-				document.getElementById(triangle_ID).alt   = "Details einblenden";
+                $("#" + role_details_ID).hide("slow");
+                $("#" + triangle_ID).attr("src",   gThemePath + "/icons/triangle_close.gif");
+                $("#" + triangle_ID).attr("title", "Details einblenden");
+                $("#" + triangle_ID).attr("alt",   "Details einblenden");
             }
         }
-    --></script>';
+    //--></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
