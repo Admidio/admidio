@@ -356,7 +356,7 @@ echo '<div class="pageNavigation">';
         }
         elseif($letter_found == true)
         {
-            echo '<a href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'&amp;letter='.$letter_menu.'\" title=\"'. $letter_row['count']. ' Benutzer gefunden">'.$letter_menu.'</a>';
+            echo '<a href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'&amp;letter='.$letter_menu.'" title="'. $letter_row['count']. ' Benutzer gefunden">'.$letter_menu.'</a>';
         }
         else
         {
