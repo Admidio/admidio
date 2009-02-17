@@ -567,39 +567,43 @@ echo '
             // *******************************************************************************
 
             //Array mit allen Berechtigungen
-            $berechtigungen = Array('rol_assign_roles','rol_approve_users','rol_edit_user',
+            $authorizations = Array('rol_assign_roles','rol_approve_users','rol_edit_user',
                                        'rol_mail_to_all','rol_profile','rol_announcements',
                                        'rol_dates','rol_photo','rol_download','rol_guestbook',
-                                       'rol_guestbook_comments','rol_inventory','rol_weblinks','rol_all_lists_view');
-            //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
-            for ($i=0; $i<=12; $i++) {
-               $sql = 'SELECT *
-                         FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-                        WHERE mem_rol_id = rol_id
-                          AND mem_begin <= "'.DATE_NOW.'"
-                          AND mem_end    > "'.DATE_NOW.'"
-                          AND mem_usr_id = '.$a_user_id.'
-                          AND rol_valid  = 1
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = org_id
-                          AND org_id     = '. $g_current_organization->getValue('org_id'). '
-                          AND '.$berechtigungen[$i].' = 1
-                        ORDER BY org_shortname, cat_sequence, rol_name';
-               $result_role = $g_db->query($sql);
-               $berechtigungs_Herkunft[$berechtigungen[$i]] = NULL;
+                                       'rol_guestbook_comments','rol_inventory','rol_weblinks',
+                                       'rol_inventory','rol_all_lists_view');
 
-               while($row = $g_db->fetch_array($result_role))
-               {
-                  $berechtigungs_Herkunft[$berechtigungen[$i]] = $berechtigungs_Herkunft[$berechtigungen[$i]].', '.$row['rol_name'];
-               }
+            //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
+            foreach($authorizations as $authorization_db_name)
+            {
+                $sql = 'SELECT *
+                          FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
+                         WHERE mem_rol_id = rol_id
+                           AND mem_begin <= "'.DATE_NOW.'"
+                           AND mem_end    > "'.DATE_NOW.'"
+                           AND mem_usr_id = '.$a_user_id.'
+                           AND rol_valid  = 1
+                           AND rol_cat_id = cat_id
+                           AND cat_org_id = org_id
+                           AND org_id     = '. $g_current_organization->getValue('org_id'). '
+                           AND '.$authorization_db_name.' = 1
+                         ORDER BY org_shortname, cat_sequence, rol_name';
+                $result_role = $g_db->query($sql);
+                $berechtigungs_Herkunft[$authorization_db_name] = NULL;
+
+                while($row = $g_db->fetch_array($result_role))
+                {
+                    $berechtigungs_Herkunft[$authorization_db_name] = $berechtigungs_Herkunft[$authorization_db_name].', '.$row['rol_name'];
+                }
             }
+
             echo '<div class="groupBox" id="profile_authorizations_box">
                      <div class="groupBoxHeadline">
                         <div style="float: left;">Berechtigungen&nbsp;</div>
                      </div>
                      <div class="groupBoxBody" onmouseout="infoanzeigenloeschen()">';
             //checkRolesRight($right)
-               if($user->checkRolesRight('rol_assign_roles') == 1)
+              if($user->checkRolesRight('rol_assign_roles') == 1)
               {
                   echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
                   alt="Rollen anlegen, bearbeiten, löschen und zuordnen" title="Rollen anlegen, bearbeiten, löschen und zuordnen" />';
