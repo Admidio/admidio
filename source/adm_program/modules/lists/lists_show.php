@@ -818,6 +818,17 @@ else
                                 </dl>
                             </li>";
                         }
+						
+						//Beitragszeitraum
+                        if(strlen($role->getValue("rol_cost_period")) > 0 && $role->getValue('rol_cost_period') != 0)
+                        {
+                            echo"<li>
+                                <dl>
+                                    <dt>Beitragszeitraum:</dt>
+                                    <dd>".TableRoles::getRolCostPeriodDesc($role->getValue("rol_cost_period"))."</dd>
+                                </dl>
+                            </li>";
+                        }
 
                         //maximale Teilnehmerzahl
                         if(strlen($role->getValue("rol_max_members")) > 0)
