@@ -95,7 +95,7 @@ while ($row = $g_db->fetch_array($result))
         //Elternveranst
         $pho_parent_id=$adm_photo_parent['pho_pho_id_parent'];
     }
-    $title = 'Fotogalerien'.$parents.'&nbsp;&gt;&nbsp;'.$photo_album->getValue('pho_name');
+    $title = 'Fotogalerien'.$parents.' > '.$photo_album->getValue('pho_name');
 
     //Link
     $link  = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
