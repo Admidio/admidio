@@ -230,5 +230,34 @@ class TableRoles extends TableAccess
         }
         return 999;
     }
+	
+	// die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
+	static function getRolCostPeriodDesc($my_rol_cost_period)
+	{
+		if($my_rol_cost_period == -1)
+		{
+			return 'einmalig';
+		}
+		elseif($my_rol_cost_period == 1)
+		{
+			return 'jährlich';
+		}
+		elseif($my_rol_cost_period == 2)
+		{
+			return 'halbjährlich';
+		}
+		elseif($my_rol_cost_period == 4)
+		{
+			return 'vierteljährlich';
+		}
+		elseif($my_rol_cost_period == 12)
+		{
+			return 'monatlich';
+		}
+		else
+		{
+			return '--';
+		}
+	}
 }
 ?>

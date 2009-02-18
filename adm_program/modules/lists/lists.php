@@ -592,6 +592,18 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         </dl>
                     </li>';
                 }
+				
+				//Beitragszeitraum
+                if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+                {
+                    echo'<li>
+                        <dl>
+                            <dt>Beitragszeitraum:</dt>
+                            <dd>'.TableRoles::getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
+                        </dl>
+                    </li>';
+                }
+				
             echo '</ul>';
             $count_cat_entries++;
         }

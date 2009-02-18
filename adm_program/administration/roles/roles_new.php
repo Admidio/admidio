@@ -388,26 +388,7 @@ echo '
 										{
 											echo 'selected="selected"';
 										}
-										if($role_cost_period == -1)
-										{
-											echo '>einmalig</option>';
-										}
-										elseif($role_cost_period == 1)
-										{
-											echo '>jährlich</option>';
-										}
-										elseif($role_cost_period == 2)
-										{
-											echo '>halbjährlich</option>';
-										}
-										elseif($role_cost_period == 4)
-										{
-											echo '>vierteljährlich</option>';
-										}
-										elseif($role_cost_period == 12)
-										{
-											echo '>monatlich</option>';
-										}
+										echo '>'.TableRoles::getRolCostPeriodDesc($role_cost_period).'</option>';
 									}
 									echo '
                                 </select>
