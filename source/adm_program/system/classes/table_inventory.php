@@ -33,6 +33,61 @@ class TableInventory extends TableAccess
         }
     }
 
+
+    //Liest den Eintrag zu einer uebergebenen inv_id aus der DB
+	function readData($inv_id)
+    {
+		global $g_current_organization, $g_current_user, $g_valid_login;
+
+        if(is_numeric($inv_id))
+        {
+            $tables    = TBL_CATEGORIES. ", ". TBL_ROLES;
+            $condition = "       inv_cat_id = cat_id
+                             AND inv_id     = $inv_id
+                             AND inv_rol_id = rol_id
+                             AND cat_org_id = ". $g_current_organization->getValue("org_id");
+            parent::readData($inv_id, $condition, $tables);
+        }
+
+        //pruefen ob das Inventarobjekt ueberhaupt ausgelesen werden darf
+        if (!$this->getValue('inv_rentable')) {
+
+			//Da das Inventarobjekt nicht verleihbar ist, muss geprueft werden,
+			// ob der aktuelle Benutzer es sehen darf.
+			if (!$g_valid_login) {
+				//Der Benutzer ist nicht eingeloggt, also bekommt er nichts zu sehen
+				$this->clear();
+			} else {
+				//Rolle ueberpruefen
+				$sql_rights = "SELECT count(*)
+	                         FROM ". TBL_MEMBERS. "
+	                        WHERE mem_rol_id = ". $this->getValue("inv_rol_id"). "
+	                          AND mem_usr_id = ". $g_current_user->getValue("usr_id"). "
+	                          AND mem_begin <= '".DATE_NOW."'
+	                          AND mem_end    > '".DATE_NOW."'";
+                $result_rights = $this->db->query($sql_rights);
+                $row_rights = $this->db->fetch_array($result_rights);
+                $row_count  = $row_rights[0];
+
+                //Falls der User in keiner Rolle Mitglied ist, die Rechte an dem Inventarobjekt besitzt
+                //wird ebenfalls ein leeres Objekt zurueckgegeben
+                if ($row_count == 0)
+                {
+                    $this->clear();
+                }
+			}
+        }
+
+    }
+
+
+    //Gibt alle Inventargegenstaende, die der Benutzer sehen darf zurueck
+    function getAllInventoryItems()
+    {
+
+
+    }
+
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
     function save()
