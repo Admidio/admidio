@@ -75,7 +75,7 @@ if($req_mode == 1)
                 Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung
                 von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der
                 Datenbank, auf der Admidio zukünftig laufen soll.';
-    if(substr(phpversion(), 0, 3)< 4.3 || ini_get('safe_mode') == 1)
+    if((phpversion() !='' && substr(phpversion(), 0, 3)< 4.3 )|| ini_get('safe_mode') == 1)
     {    
         $message = $message.'
         <div class="groupBox">
