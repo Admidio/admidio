@@ -276,7 +276,7 @@ echo "
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('systeminfo');\"><img src=\"". THEME_PATH. "/icons/info.png\" alt=\"Systeminformationen\" title=\"Systeminformationen\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('systeminfo');\">Syteminfo</a></span>
+            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('systeminfo');\">Systeminfo</a></span>
         </span>
         </td>
         <td>

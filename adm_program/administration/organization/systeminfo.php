@@ -39,64 +39,176 @@ else
 /************Systeminformationen********/
 if($req_mode == 1)
 {
-    echo'<dl>
-        <dt>Admidio-Version:</dt>
-        <dd>'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'&nbsp;
-            <a class="thickbox" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350">auf Update prüfen</a>
-        </dd>';
+    echo'
+    <ul class="formFieldList">
+        <li>
+            <dl>
+                <dt>Admidio-Version:</dt>
+                <dd>'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'&nbsp;
+                    <a class="thickbox" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350">auf Update prüfen</a>
+                </dd>
+            </dl>
+        </li>';
+                
         //php Version
-        echo'<dt>PHP Version:</dt><dd><span class="';;
-        if(substr(phpversion(), 0, 3)< 4.3)
-        {
-            echo 'systeminfoBad">'.phpversion().'</span> &rarr; Admidio benötigt 4.3 oder höher';
-        }
-        else
-        {
-            echo 'systeminfoGood">'.phpversion().'</span>';
-        }
         echo'
-        </dd>';
+        <li>
+            <dl>
+                <dt>PHP Version:</dt><dd><span class="';
+                if(substr(phpversion(), 0, 3)< 4.3)
+                {
+                    echo 'systeminfoBad">'.phpversion().'</span> &rarr; Admidio benötigt 4.3 oder höher';
+                }
+                else
+                {
+                    echo 'systeminfoGood">'.phpversion().'</span>';
+                }
+                echo'
+                </dd>
+            </dl>
+        </li>';
+                
         //sql-server Version
-        echo'<dt>MySQL Server Version:</dt><dd><span class="';;
-        if(substr($g_db->server_info(), 0, 3)< 4.1)
-        {
-            echo 'systeminfoBad">'.$g_db->server_info().'</span> &rarr; Admidio benötigt 4.1 oder höher';
-        }
-        else
-        {
-            echo 'systeminfoGood">'.$g_db->server_info().'</span>';
-        }
         echo'
-        </dd>';
+        <li>
+            <dl>
+                <dt>MySQL Server Version:</dt><dd><span class="';
+                if(substr($g_db->server_info(), 0, 3)< 4.1)
+                {
+                    echo 'systeminfoBad">'.$g_db->server_info().'</span> &rarr; Admidio benötigt 4.1 oder höher';
+                }
+                else
+                {
+                    echo 'systeminfoGood">'.$g_db->server_info().'</span>';
+                }
+                echo'
+                </dd>
+            </dl>
+        </li>';
+                
         //SafeMode
         echo'
-        <dt>Safe Mode:</dt><dd>';
-        if(ini_get('safe_mode') == 1)
-        {
-            echo '<span class="systeminfoBad">On</span> &rarr; problematisch bei Dateiuploads';
-        }
-        else
-        {
-            echo '<span class="systeminfoGood">Off</span>';
-        }
-        echo '</dd>';
+        <li>
+            <dl>
+                <dt>Safe Mode:</dt><dd>';
+                if(ini_get('safe_mode') == 1)
+                {
+                    echo '<span class="systeminfoBad">On</span> &rarr; problematisch bei Dateiuploads';
+                }
+                else
+                {
+                    echo '<span class="systeminfoGood">Off</span>';
+                }
+                echo '</dd>
+            </dl>
+        </li>';
+                
         //Maximal Größe eines Posts
-        echo'<dt>Max. POST-Größe:</dt><dd>'.ini_get('post_max_size').'</dd>';
-        echo'<dt>Arbeitsspeicher:</dt><dd>'.ini_get('memory_limit').'</dd>';
-        echo' <dt>Dateiuploads:</dt><dd>';
-        if(ini_get('file_uploads') == 1)
+        echo'
+        <li>
+            <dl>
+                <dt>Max. POST-Größe:</dt><dd>';
+                if(ini_get('post_max_size')!='')
+                {
+                    echo ini_get('post_max_size');
+                }
+                else
+                {
+                    echo 'nicht gesetzt';
+                }
+                echo '</dd>
+            </dl>
+        </li>';
+                
+        //Arbeitsspeicher
+        echo'
+        <li>
+            <dl>
+                <dt>Arbeitsspeicher:</dt><dd>';
+                if(ini_get('memory_limit')!='')
+                {
+                    echo ini_get('memory_limit');
+                }
+                else
+                {
+                    echo 'nicht gesetzt';
+                }
+                echo '</dd>
+            </dl>
+        </li>';
+                
+        //Dateiuploads
+        echo'
+        <li>
+            <dl>
+                <dt>Dateiuploads:</dt><dd>';
+                if(ini_get('file_uploads') == 1)
+                {
+                    echo 'On';
+                }
+                else
+                {
+                    echo 'Off';
+                }
+                echo '</dd>
+            </dl>
+        </li>';
+                
+        //Max. Upload-Größe
+        echo'
+        <li>
+            <dl>
+                <dt>Max. Upload-Größe:</dt><dd>';
+                if(ini_get('upload_max_filesize')!='')
+                {
+                    echo ini_get('upload_max_filesize');
+                }
+                else
+                {
+                    echo 'nicht gesetzt';
+                }
+                echo '</dd>
+            </dl>
+        </li>';     
+                
+        // Maximal bearbeitbare Bildgröße
+        echo'
+        <li>
+            <dl>
+                <dt>Max. bearbeitbare Bildgröße:</dt><dd>'.round((processableImageSize()/1000000), 2).' MegaPixel</dd>
+            </dl>
+        </li>';
+                
+        // Link zu php Info
+        echo'
+        <li>
+            <dl>
+                <dt>alle PHP-Informationen:</dt><dd><a href="systeminfo.php?mode=2" target="_blank2">phpinfo()</a></dd>
+                
+            </dl>
+        </li>';
+        
+        //Debugmodus       
+        if(isset($g_debug))
         {
-            echo 'On';
-        }
-        else
-        {
-            echo 'Off';
-        }
-        echo '</dd>
-        <dt>Max. Upload-Größe:</dt><dd>'.ini_get('upload_max_filesize').'</dd>
-        <dt>Max. bearbeitbare Bildgröße:</dt><dd>'.round((processableImageSize()/1000000), 2).' MegaPixel</dd>
-        <dt>alle PHP-Informationen:</dt><dd><a href="systeminfo.php?mode=2" target="_blank2">phpinfo()</a></dd>
-    </dl>';
+            echo'
+            <li>
+                <dl>';           
+                    echo' <dt>Debugmodus:</dt><dd>';
+                    if($g_debug == 1)
+                    {
+                        echo 'On';
+                    }
+                    else
+                    {
+                        echo 'Off';
+                    }
+                    echo'</dd>
+                
+                </dl>
+            </li>';
+        }  
+    echo'</ul>';
 
 } 
 /************PHP Info*******************/
