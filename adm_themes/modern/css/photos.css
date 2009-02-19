@@ -54,23 +54,23 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 
 /*Die Fotoalben werden in einer Definitionsliste angezeigt*/
-.photoAlbumTable {
+.photoAlbumList {
     list-style-type: none;
 }
 
-.photoAlbumTable dl { 
+.photoAlbumList dl { 
 	margin-bottom: 10px;
 }
 
 /*dabei bildet ein Vorschaubild den Term*/
-.photoAlbumTable dt {
+.photoAlbumList dt {
 	margin-bottom: 5px;
 	float: left;
 	display: block;
 	padding: 0px;
 }
 /*die sonstigen Angaben bilden die Definition*/
-.photoAlbumTable dd{
+.photoAlbumList dd{
 	margin-left: 170px;
 	margin-bottom: 5px;
 	height: 110px;
@@ -78,7 +78,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 
 /*die Definition ist selbst wieder eine List*/
-.photoAlbumTable ul{
+.photoAlbumList ul{
 	padding: 0px;
 	list-style-type: none;
 }

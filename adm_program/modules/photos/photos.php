@@ -515,7 +515,7 @@ echo '<div class="photoModuleContainer">';
         {
             if($counter == 0)
             {
-                echo '<ul class="photoAlbumTable">';
+                echo '<ul class="photoAlbumList">';
             }
 
             // Zufallsbild fuer die Vorschau ermitteln
