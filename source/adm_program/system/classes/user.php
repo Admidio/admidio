@@ -19,6 +19,8 @@
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
  * getPropertyById($field_id, $property)
+ * getListViewRights()  - Liefert ein Array mit allen Rollen und der 
+ *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
  * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
@@ -39,7 +41,7 @@ class User extends TableUsers
 
     var $userFieldData    = array();    // Array ueber alle Userdatenobjekte mit den entsprechenden Feldeigenschaften
     var $roles_rights     = array();    // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-    var $list_view_rights = array();    // Array ueber Listenrechte einzelner Rollen
+    var $list_view_rights = array();    // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     var $role_mail_rights = array();    // Array ueber Mailrechte einzelner Rollen
 
     // Konstruktor
@@ -211,6 +213,13 @@ class User extends TableUsers
             }
         }
         return '';
+    }
+    
+    // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
+    function getListViewRights()
+    {
+        $this->checkRolesRight();
+        return $this->list_view_rights;
     }
 
     function save()
