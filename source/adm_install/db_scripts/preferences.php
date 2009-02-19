@@ -42,9 +42,9 @@ $orga_preferences = array(
     // Fotomodul
     'enable_photo_module' => '1',
     'photo_save_scale'    => '640',
-    'photo_thumbs_column' => '5',
+    'photo_thumbs_column' => '4',
     'photo_thumbs_row'    => '5',
-    'photo_thumbs_scale'  => '100',
+    'photo_thumbs_scale'  => '110',
     'photo_show_width'    => '500',
     'photo_show_height'   => '380',
     'photo_image_text'    => '1',

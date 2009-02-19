@@ -823,7 +823,7 @@ echo "
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 5 x 5)
+                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 4 x 5)
                     </li>
 
                     <li>
@@ -837,7 +837,7 @@ echo "
                     <li class=\"smallFontSize\">
                         Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
-                        Ggf. weniger Thumbnailspalten einstellen. (Standard: 100Pixel)
+                        Ggf. weniger Thumbnailspalten einstellen. (Standard: 110Pixel)
                     </li>
 					<li>
                         <dl>
