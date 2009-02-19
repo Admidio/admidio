@@ -233,7 +233,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_disabled">
-                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur für berechtigte Benutzer editierbar" />
+                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur für berechtigte Benutzer bearbeitbar" />
                         </label>
                     </dt>
                     <dd>
@@ -243,7 +243,7 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_disabled">Feld nur für berechtigte Benutzer editierbar</label>
+                        <label for="usf_disabled">Feld nur für berechtigte Benutzer bearbeitbar</label>
                         <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=field_disabled&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=field_disabled\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
