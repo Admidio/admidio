@@ -224,7 +224,7 @@ a:hover, a:active {
    (z.B.: Listen, Eigene Liste) */
 
 .tableList {
-    width:              568px;         /* Optimale Breite von Listen */
+    width:              570px;         /* Optimale Breite von Listen */
     font-size:          10pt;
     color:              #555555;
     border:             1px solid #7d7d7d;
@@ -499,6 +499,12 @@ ul.autosuggest li.highlight a:visited  {
 
 #infoboxListsBox {
     width:              400px; 
+}
+
+/*spezielle Anpassung Hilfe Thickbox*/
+#message_window{
+    padding-left:       20px;
+    width:              540px;
 }
 
 /* spezielle Anpassung fuer die Terminseite */
