@@ -193,11 +193,11 @@ echo '
                 <td>';
                     if($row['usf_disabled'] == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur für berechtigte Benutzer editierbar" title="Feld nur für berechtigte Benutzer editierbar" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur durch berechtigte Benutzer bearbeitet werden (Recht: Alle Benutzer bearbeiten)." title="Feld nur für berechtigte Benutzer bearbeitenbar (Recht: Alle Benutzer bearbeiten)" />';
                     }
                     else
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield.png" alt="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" title="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield.png" alt="Feld kann durch Benutzer selbst bearbeitet werden." title="Feld kann durch Benutzer selbst bearbeitet werden." />';
                     }
                 echo '</td>
                 <td>';
