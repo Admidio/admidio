@@ -80,7 +80,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 $rol_id_list = '';
 if($active_role)
 {
-    foreach($g_current_user->list_view_rights as $key => $value)
+    foreach($g_current_user->getListViewRights() as $key => $value)
     {
         if($value == 1)
         {
@@ -116,7 +116,7 @@ if(strlen($_GET['category']) > 0 && $_GET['category'] != 'Alle')
 $sql .= ' ORDER BY cat_sequence, rol_name ';
 
 $result_lst = $g_db->query($sql);
-$num_roles  = $g_db->num_rows($result_lst);
+$num_roles  = $g_db->num_rows();
 
 if($num_roles == 0)
 {
