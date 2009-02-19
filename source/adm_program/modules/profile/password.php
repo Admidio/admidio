@@ -38,7 +38,7 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
     /***********************************************************************/
     if($g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'] )
     {
-    	$_POST['old_password']='';
+    	$_POST['old_password'] = '';
     }
     
 	if( (strlen($_POST['old_password']) > 0 || $g_current_user->isWebmaster() )
@@ -118,7 +118,8 @@ else
         			<li>
                         <dl>
                             <dt><label for="old_password">Aktuelles Passwort:</label></dt>
-                            <dd><input type="password" id="old_password" name="old_password" size="12" maxlength="20" /></dd>
+                            <dd><input type="password" id="old_password" name="old_password" size="12" maxlength="20" />
+                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span></dd>
                         </dl>
                     </li>
                     <li><hr /></li>';
@@ -128,6 +129,7 @@ else
                     <dl>
                         <dt><label for="new_password">Neues Passwort:</label></dt>
                         <dd><input type="password" id="new_password" name="new_password" size="12" maxlength="20" />
+                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                             <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
 					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />
                         </dd>
@@ -136,7 +138,8 @@ else
                 <li>
                     <dl>
                         <dt><label for="new_password2">Wiederholen:</label></dt>
-                        <dd><input type="password" id="new_password2" name="new_password2" size="12" maxlength="20" /></dd>
+                        <dd><input type="password" id="new_password2" name="new_password2" size="12" maxlength="20" />
+                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span></dd>
                     </dl>
                 </li>
             </ul>

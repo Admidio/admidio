@@ -865,9 +865,7 @@ echo '
                                             {
                                                 echo '
                                                 <a class="iconLink" href="javascript:deleteFormerRole('. $row['rol_id']. ', \''. $row['rol_name']. '\', '. $user->getValue("usr_id"). ')"><img
-                                                    src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>
-                                                    <a class="iconLink" style="cursor:pointer;" onclick="window.open(\'roles_date.php?usr_id='. $user->getValue("usr_id"). '&amp;rol_id='.$row['rol_id'].'\',\'Titel\',\'width=350,height=300,left=310,top=200\')"><img
-                                                    src="'. THEME_PATH. '/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
+                                                    src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
                                             }
                                         echo '</dd>
                                     </dl>

@@ -51,7 +51,7 @@ function deleteRole(rol_id, rol_name, rol_valid, usr_id, cat_name, mem_begin, me
                     end_date + webmaster + '</dd></dl>';
         
         // Listenelement mit Unterelemten einfuegen
-        document.getElementById('profile_former_roles_box').style.display = 'block';
+        $('#profile_former_roles_box').fadeIn('slow');
         newListElement.setAttribute('id', 'former_role_' + rol_id);
         newListElement.innerHTML = html;
         document.getElementById('former_role_list').appendChild(newListElement);
