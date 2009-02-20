@@ -232,7 +232,7 @@ class TableRoles extends TableAccess
     }
 	
 	// die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
-	static function getRolCostPeriodDesc($my_rol_cost_period)
+	function getRolCostPeriodDesc($my_rol_cost_period)
 	{
 		if($my_rol_cost_period == -1)
 		{
