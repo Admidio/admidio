@@ -170,14 +170,14 @@ elseif($req_mode == 4)
     if(isset($_POST['user_login']))
     {
         // Daten des Administrators in Sessionvariablen gefiltert speichern
-        $_SESSION['user_login']      = strStripTags($_POST['user_login']);
-        $_SESSION['user_password']   = strStripTags($_POST['user_password']);
+        $_SESSION['user_login'] = strStripTags($_POST['user_login']);
+        $md5_password           = md5(strStripTags($_POST['user_password']));
 
-        if(strlen($_SESSION['user_login'])      == 0
-        || strlen($_SESSION['user_password'])   == 0 )
+        if(strlen($_SESSION['user_login']) == 0
+        || strlen($_POST['user_password']) == 0 )
         {
-            $message = "Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !";
-            showPage($message, "new_organisation.php?mode=3", "back.png", "Zurück", 3);
+            $message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
+            showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
         }
 
         // Verbindung zu Datenbank herstellen
@@ -185,17 +185,17 @@ elseif($req_mode == 4)
         $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
         // Logindaten pruefen
-        $sql    = "SELECT DISTINCT usr_id
-                     FROM ". TBL_USERS. ", ". TBL_MEMBERS. ", ". TBL_ROLES. "
-                    WHERE usr_login_name LIKE '". $_SESSION['user_login']. "'
-                      AND usr_password   = '". $_SESSION['user_password']. "'
-                      AND usr_valid      = 1
-                      AND mem_usr_id     = usr_id
-                      AND mem_rol_id     = rol_id
-                      AND mem_begin     <= '".DATE_NOW."'
-                      AND mem_end        > '".DATE_NOW."'
-                      AND rol_valid      = 1
-                      AND rol_name       = 'Webmaster' ";
+        $sql    = 'SELECT DISTINCT usr_id
+                     FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. '
+                    WHERE UPPER(usr_login_name) LIKE UPPER("'. $_SESSION['user_login']. '")
+                      AND usr_password = "'. $md5_password. '"
+                      AND usr_valid    = 1
+                      AND mem_usr_id   = usr_id
+                      AND mem_rol_id   = rol_id
+                      AND mem_begin   <= "'.DATE_NOW.'"
+                      AND mem_end      > "'.DATE_NOW.'"
+                      AND rol_valid    = 1
+                      AND rol_name     = "Webmaster" ';
         $result = $db->query($sql);
 
         $user_found = $db->num_rows($result);
@@ -213,7 +213,7 @@ elseif($req_mode == 4)
     }
 
     $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
-                Laden Sie die Konfigurationsdatei <strong>config.php</strong> herunter und kopieren Sie
+                Lade die Konfigurationsdatei <strong>config.php</strong> herunter und kopiere 
                 diese in das Admidio Hauptverzeichnis der neuen Organisation. Dort liegt auch schon eine
                 <i>config_default.php</i>.<br /><br />
 
@@ -223,46 +223,58 @@ elseif($req_mode == 4)
                     <a href="new_organisation.php?mode=5">config.php herunterladen</a>
                 </span>
                 <br />';
-    showPage($message, "new_organisation.php?mode=6", "database_in.png", "Organisation einrichten", 3);
+    showPage($message, 'new_organisation.php?mode=6', 'database_in.png', 'Organisation einrichten', 3);
 }
 elseif($req_mode == 5)
 {
+	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
+	{
+		$message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
+        showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
+   	}
+
     // MySQL-Zugangsdaten in config.php schreiben
     // Datei auslesen
-    $filename     = "config.php";
-    $config_file  = fopen($filename, "r");
+    $filename     = 'config.php';
+    $config_file  = fopen($filename, 'r');
     $file_content = fread($config_file, filesize($filename));
     fclose($config_file);
 
     // den Root-Pfad ermitteln
     $root_path = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
-    $root_path = substr($root_path, 0, strpos($root_path, "/adm_install"));
-    if(!strpos($root_path, "http://"))
+    $root_path = substr($root_path, 0, strpos($root_path, '/adm_install'));
+    if(!strpos($root_path, 'http://'))
     {
-        $root_path = "http://". $root_path;
+        $root_path = 'http://'. $root_path;
     }
 
-    $file_content = str_replace("%PRAEFIX%",   $g_tbl_praefix, $file_content);
-    $file_content = str_replace("%SERVER%",    $g_adm_srv,     $file_content);
-    $file_content = str_replace("%USER%",      $g_adm_usr,     $file_content);
-    $file_content = str_replace("%PASSWORD%",  $g_adm_pw,      $file_content);
-    $file_content = str_replace("%DATABASE%",  $g_adm_db,      $file_content);
-    $file_content = str_replace("%ROOT_PATH%", $root_path,     $file_content);
-    $file_content = str_replace("%ORGANIZATION%", $_SESSION['orga_name_short'], $file_content);
+    $file_content = str_replace('%PRAEFIX%',   $g_tbl_praefix, $file_content);
+    $file_content = str_replace('%SERVER%',    $g_adm_srv,     $file_content);
+    $file_content = str_replace('%USER%',      $g_adm_usr,     $file_content);
+    $file_content = str_replace('%PASSWORD%',  $g_adm_pw,      $file_content);
+    $file_content = str_replace('%DATABASE%',  $g_adm_db,      $file_content);
+    $file_content = str_replace('%ROOT_PATH%', $root_path,     $file_content);
+    $file_content = str_replace('%ORGANIZATION%', $_SESSION['orga_name_short'], $file_content);
 
     // die erstellte Config-Datei an den User schicken
-    $file_name   = "config.php";
+    $file_name   = 'config.php';
     $file_length = strlen($file_content);
 
-    header("Content-Type: text/plain; charset=utf-8");
-    header("Content-Length: $file_length");
-    header("Content-Disposition: attachment; filename=$file_name");
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Content-Length: '.$file_length);
+    header('Content-Disposition: attachment; filename='.$file_name);
     echo $file_content;
     exit();
 }
 elseif($req_mode == 6)
 {
     // Installation starten
+
+	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
+	{
+		$message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
+        showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
+   	}
 
     if(file_exists("../config.php") == false)
     {
@@ -285,16 +297,16 @@ elseif($req_mode == 6)
     // Organisationsobjekt erstellen
     $g_current_organization = new Organization($db, $_SESSION['orga_name_short']);
 
-    $g_current_organization->setValue("org_shortname", $_SESSION['orga_name_short']);
-    $g_current_organization->setValue("org_longname",  $_SESSION['orga_name_long']);
-    $g_current_organization->setValue("org_homepage",  $_SERVER['HTTP_HOST']);
+    $g_current_organization->setValue('org_shortname', $_SESSION['orga_name_short']);
+    $g_current_organization->setValue('org_longname',  $_SESSION['orga_name_long']);
+    $g_current_organization->setValue('org_homepage',  $_SERVER['HTTP_HOST']);
     $g_current_organization->save();
 
     // Userobjekt anlegen
     $g_current_user = new User($db, $_SESSION['webmaster_id']);
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
-    include("db_scripts/preferences.php");
+    include('db_scripts/preferences.php');
 
     // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
     $orga_preferences['email_administrator'] = $_SESSION['user_email'];
@@ -302,14 +314,14 @@ elseif($req_mode == 6)
     $g_current_organization->setPreferences($orga_preferences, false);
 
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
-    include("db_scripts/systemmails_texts.php");
+    include('db_scripts/systemmails_texts.php');
     $text = new TableText($db);
 
     foreach($systemmails_texts as $key => $value)
     {
         $text->clear();
-        $text->setValue("txt_name", $key);
-        $text->setValue("txt_text", $value);
+        $text->setValue('txt_name', $key);
+        $text->setValue('txt_text', $value);
         $text->save();
     }
 
@@ -320,8 +332,8 @@ elseif($req_mode == 6)
 
 	// Beta-Flag für Datenbank-Versionsnummer schreiben
 	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-									   VALUES ($row_orga->org_id, 'db_version_beta', '". BETA_VERSION. "') ";
-	$g_db->query($sql);
+									   VALUES (". $g_current_organization->getValue("org_id"). ", 'db_version_beta', '". BETA_VERSION. "') ";
+	$db->query($sql);
 
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
@@ -351,104 +363,104 @@ elseif($req_mode == 6)
 
     // Webmaster
     $role_webmaster = new TableRoles($db);
-    $role_webmaster->setValue("rol_cat_id", $category_common);
-    $role_webmaster->setValue("rol_name", "Webmaster");
-    $role_webmaster->setValue("rol_description", "Gruppe der Administratoren des Systems");
-    $role_webmaster->setValue("rol_assign_roles", 1);
-    $role_webmaster->setValue("rol_approve_users", 1);
-    $role_webmaster->setValue("rol_announcements", 1);
-    $role_webmaster->setValue("rol_dates", 1);
-    $role_webmaster->setValue("rol_download", 1);
-    $role_webmaster->setValue("rol_guestbook", 1);
-    $role_webmaster->setValue("rol_guestbook_comments", 1);
-    $role_webmaster->setValue("rol_inventory", 1);
-    $role_webmaster->setValue("rol_photo", 1);
-    $role_webmaster->setValue("rol_weblinks", 1);
-    $role_webmaster->setValue("rol_edit_user", 1);
-    $role_webmaster->setValue("rol_mail_to_all", 1);
-    $role_webmaster->setValue("rol_mail_this_role", 3);
-    $role_webmaster->setValue("rol_profile", 1);
-    $role_webmaster->setValue("rol_this_list_view", 1);
-    $role_webmaster->setValue("rol_all_lists_view", 1);
+    $role_webmaster->setValue('rol_cat_id', $category_common);
+    $role_webmaster->setValue('rol_name', 'Webmaster');
+    $role_webmaster->setValue('rol_description', 'Gruppe der Administratoren des Systems');
+    $role_webmaster->setValue('rol_assign_roles', 1);
+    $role_webmaster->setValue('rol_approve_users', 1);
+    $role_webmaster->setValue('rol_announcements', 1);
+    $role_webmaster->setValue('rol_dates', 1);
+    $role_webmaster->setValue('rol_download', 1);
+    $role_webmaster->setValue('rol_guestbook', 1);
+    $role_webmaster->setValue('rol_guestbook_comments', 1);
+    $role_webmaster->setValue('rol_inventory', 1);
+    $role_webmaster->setValue('rol_photo', 1);
+    $role_webmaster->setValue('rol_weblinks', 1);
+    $role_webmaster->setValue('rol_edit_user', 1);
+    $role_webmaster->setValue('rol_mail_to_all', 1);
+    $role_webmaster->setValue('rol_mail_this_role', 3);
+    $role_webmaster->setValue('rol_profile', 1);
+    $role_webmaster->setValue('rol_this_list_view', 1);
+    $role_webmaster->setValue('rol_all_lists_view', 1);
     $role_webmaster->save(0);
 
     // Mitglied
     $role_member = new TableRoles($db);
-    $role_member->setValue("rol_cat_id", $category_common);
-    $role_member->setValue("rol_name", "Mitglied");
-    $role_member->setValue("rol_description", "Alle Mitglieder der Organisation");
-    $role_member->setValue("rol_mail_this_role", 2);
-    $role_member->setValue("rol_profile", 1);
-    $role_member->setValue("rol_this_list_view", 1);
+    $role_member->setValue('rol_cat_id', $category_common);
+    $role_member->setValue('rol_name', 'Mitglied');
+    $role_member->setValue('rol_description', 'Alle Mitglieder der Organisation');
+    $role_member->setValue('rol_mail_this_role', 2);
+    $role_member->setValue('rol_profile', 1);
+    $role_member->setValue('rol_this_list_view', 1);
     $role_member->save(0);
 
     // Vorstand
     $role_management = new TableRoles($db);
-    $role_management->setValue("rol_cat_id", $category_common);
-    $role_management->setValue("rol_name", "Vorstand");
-    $role_management->setValue("rol_description", "Vorstand des Vereins");
-    $role_management->setValue("rol_announcements", 1);
-    $role_management->setValue("rol_dates", 1);
-    $role_management->setValue("rol_weblinks", 1);
-    $role_management->setValue("rol_edit_user", 1);
-    $role_management->setValue("rol_mail_to_all", 1);
-    $role_management->setValue("rol_mail_this_role", 2);
-    $role_management->setValue("rol_profile", 1);
-    $role_management->setValue("rol_this_list_view", 1);
-    $role_management->setValue("rol_all_lists_view", 1);
+    $role_management->setValue('rol_cat_id', $category_common);
+    $role_management->setValue('rol_name', 'Vorstand');
+    $role_management->setValue('rol_description', 'Vorstand des Vereins');
+    $role_management->setValue('rol_announcements', 1);
+    $role_management->setValue('rol_dates', 1);
+    $role_management->setValue('rol_weblinks', 1);
+    $role_management->setValue('rol_edit_user', 1);
+    $role_management->setValue('rol_mail_to_all', 1);
+    $role_management->setValue('rol_mail_this_role', 2);
+    $role_management->setValue('rol_profile', 1);
+    $role_management->setValue('rol_this_list_view', 1);
+    $role_management->setValue('rol_all_lists_view', 1);
     $role_management->save(0);
 
-    // Mitgliedschaft bei Rolle "Webmaster" anlegen
+    // Mitgliedschaft bei Rolle 'Webmaster' anlegen
     $member = new TableMembers($db);
-    $member->startMembership($role_webmaster->getValue("rol_id"), $g_current_user->getValue("usr_id"));
-    $member->startMembership($role_member->getValue("rol_id"), $g_current_user->getValue("usr_id"));
+    $member->startMembership($role_webmaster->getValue('rol_id'), $g_current_user->getValue('usr_id'));
+    $member->startMembership($role_member->getValue('rol_id'), $g_current_user->getValue('usr_id'));
 
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($db);
-    $address_list->setValue("lst_name", "Adressliste");
-    $address_list->setValue("lst_global", 1);
-    $address_list->setValue("lst_default", 1);
-    $address_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
-    $address_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
-    $address_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
-    $address_list->addColumn(4, $g_current_user->getProperty("Adresse", "usf_id"));
-    $address_list->addColumn(5, $g_current_user->getProperty("PLZ", "usf_id"));
-    $address_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
+    $address_list->setValue('lst_name', 'Adressliste');
+    $address_list->setValue('lst_global', 1);
+    $address_list->setValue('lst_default', 1);
+    $address_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
+    $address_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
+    $address_list->addColumn(3, $g_current_user->getProperty('Geburtstag', 'usf_id'));
+    $address_list->addColumn(4, $g_current_user->getProperty('Adresse', 'usf_id'));
+    $address_list->addColumn(5, $g_current_user->getProperty('PLZ', 'usf_id'));
+    $address_list->addColumn(6, $g_current_user->getProperty('Ort', 'usf_id'));
     $address_list->save();
 
     $phone_list = new ListConfiguration($db);
-    $phone_list->setValue("lst_name", "Telefonliste");
-    $phone_list->setValue("lst_global", 1);
-    $phone_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
-    $phone_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
-    $phone_list->addColumn(3, $g_current_user->getProperty("Telefon", "usf_id"));
-    $phone_list->addColumn(4, $g_current_user->getProperty("Handy", "usf_id"));
-    $phone_list->addColumn(5, $g_current_user->getProperty("E-Mail", "usf_id"));
-    $phone_list->addColumn(6, $g_current_user->getProperty("Fax", "usf_id"));
+    $phone_list->setValue('lst_name', 'Telefonliste');
+    $phone_list->setValue('lst_global', 1);
+    $phone_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
+    $phone_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
+    $phone_list->addColumn(3, $g_current_user->getProperty('Telefon', 'usf_id'));
+    $phone_list->addColumn(4, $g_current_user->getProperty('Handy', 'usf_id'));
+    $phone_list->addColumn(5, $g_current_user->getProperty('E-Mail', 'usf_id'));
+    $phone_list->addColumn(6, $g_current_user->getProperty('Fax', 'usf_id'));
     $phone_list->save();
 
     $contact_list = new ListConfiguration($db);
-    $contact_list->setValue("lst_name", "Kontaktdaten");
-    $contact_list->setValue("lst_global", 1);
-    $contact_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"), "ASC");
-    $contact_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"), "ASC");
-    $contact_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
-    $contact_list->addColumn(4, $g_current_user->getProperty("Adresse", "usf_id"));
-    $contact_list->addColumn(5, $g_current_user->getProperty("PLZ", "usf_id"));
-    $contact_list->addColumn(6, $g_current_user->getProperty("Ort", "usf_id"));
-    $contact_list->addColumn(7, $g_current_user->getProperty("Telefon", "usf_id"));
-    $contact_list->addColumn(8, $g_current_user->getProperty("Handy", "usf_id"));
-    $contact_list->addColumn(9, $g_current_user->getProperty("E-Mail", "usf_id"));
+    $contact_list->setValue('lst_name', 'Kontaktdaten');
+    $contact_list->setValue('lst_global', 1);
+    $contact_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
+    $contact_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
+    $contact_list->addColumn(3, $g_current_user->getProperty('Geburtstag', 'usf_id'));
+    $contact_list->addColumn(4, $g_current_user->getProperty('Adresse', 'usf_id'));
+    $contact_list->addColumn(5, $g_current_user->getProperty('PLZ', 'usf_id'));
+    $contact_list->addColumn(6, $g_current_user->getProperty('Ort', 'usf_id'));
+    $contact_list->addColumn(7, $g_current_user->getProperty('Telefon', 'usf_id'));
+    $contact_list->addColumn(8, $g_current_user->getProperty('Handy', 'usf_id'));
+    $contact_list->addColumn(9, $g_current_user->getProperty('E-Mail', 'usf_id'));
     $contact_list->save();
 
     $former_list = new ListConfiguration($db);
-    $former_list->setValue("lst_name", "Mitgliedschaft");
-    $former_list->setValue("lst_global", 1);
-    $former_list->addColumn(1, $g_current_user->getProperty("Nachname", "usf_id"));
-    $former_list->addColumn(2, $g_current_user->getProperty("Vorname", "usf_id"));
-    $former_list->addColumn(3, $g_current_user->getProperty("Geburtstag", "usf_id"));
-    $former_list->addColumn(4, "mem_begin");
-    $former_list->addColumn(5, "mem_end", "DESC");
+    $former_list->setValue('lst_name', 'Mitgliedschaft');
+    $former_list->setValue('lst_global', 1);
+    $former_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'));
+    $former_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'));
+    $former_list->addColumn(3, $g_current_user->getProperty('Geburtstag', 'usf_id'));
+    $former_list->addColumn(4, 'mem_begin');
+    $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
 
     $db->endTransaction();
@@ -461,12 +473,12 @@ elseif($req_mode == 6)
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Einrichtung war erfolgreich</strong><br /><br />
                 Die neue Organisation '. $_SESSION['orga_name_short']. ' wurde eingerichtet und die Konfigurationsdatei erstellt.
                 Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.';
-    if(is_writeable("../adm_my_files") == false)
+    if(is_writeable('../adm_my_files') == false)
     {
         $message = $message. '<br /><br />Zuvor sollten Sie allerdings dem Ordner <strong>adm_my_files</strong>
                    Schreibrechte geben. Ohne diese können Sie keine Fotos oder Dateien hochladen.';
     }
-    showPage($message, "../adm_program/index.php", "application_view_list.png", "Übersichtsseite");
+    showPage($message, '../adm_program/index.php', 'application_view_list.png', 'Übersichtsseite');
 }
 
 ?>
