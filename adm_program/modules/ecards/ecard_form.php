@@ -921,13 +921,7 @@ if (empty($submit_action))
         $g_message->show($error_msg);
     }
 
-    echo '<form id="ecard_form" action="" ';
-        //Thickbox
-        if($g_preferences['ecard_preview_mode'] == 1)
-        {
-            echo 'onsubmit="return tb_sendform(this,\'Vorschau der Grußkarte:\')" ';
-        }
-        echo 'method="post">
+    echo '<form id="ecard_form" action="" onsubmit="return tb_sendform(this,\'Vorschau der Grußkarte:\')" method="post">
             <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
             <input type="hidden" name="submit_action" value="" />
             <ul class="formFieldList">
@@ -1131,19 +1125,11 @@ if (empty($submit_action))
             </li>
         </ul>
         <hr />
-        <div class="formSubmit">';
-            //Popupfenster
-            if($g_preferences['ecard_preview_mode'] == 0)
-            {
-                echo '<button onclick="javascript:makePreview();" type="button" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>';
-            }
-            //Thickbox
-            elseif($g_preferences['ecard_preview_mode'] == 1)
-            {
-                echo '<button onclick="javascript:makeThickBoxPreview();" type="submit" value="vorschau"><img src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>';
-            }
-            echo '&nbsp;&nbsp;&nbsp;&nbsp;
-                <button onclick="javascript:sendEcard();" type="button" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
+        <div class="formSubmit">
+            <button onclick="javascript:makeThickBoxPreview();" type="submit" value="vorschau"><img 
+            	src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
+            <button onclick="javascript:sendEcard();" type="button" value="abschicken"><img 
+            	src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
         </div>
     </form>';
 }

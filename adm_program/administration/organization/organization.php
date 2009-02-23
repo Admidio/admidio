@@ -1424,32 +1424,6 @@ echo "
                         Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.
                         Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)
                     </li>
-					 <li>
-                        <dl>
-                            <dt><label for=\"ecard_preview_mode\">Vorschaudarstellung:</label>
-                            </dt>
-                            <dd>
-                            	<select size=\"1\" id=\"ecard_preview_mode\" name=\"ecard_preview_mode\" style=\"margin-right:20px;\">
-                                    <option value=\"0\" ";
-                                    if($form_values['ecard_preview_mode'] == 0)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Popupfenster</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['ecard_preview_mode'] == 1)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Thickbox</option>
-                                </select>
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, wie die Vorschau der Grußkarten präsentiert werden soll. 
-						Dies kann über ein Popup-Fenster oder über eine Javascript-Animation (Thickbox). 
-                    </li>
                     <li>
                         <dl>
                             <dt><label for=\"ecard_view_width\">Skalierung Vorschaubild (Breite x Höhe):</label></dt>
