@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer die Nachrichten
  *
- * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Thomas Thoss
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html

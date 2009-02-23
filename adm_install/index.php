@@ -2,7 +2,7 @@
 /******************************************************************************
  * Index-Datei welche auf Installation bzw. Update verweist
  *
- * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,7 @@ header('Content-type: text/html; charset=utf-8');
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
 <head>
-    <!-- (c) 2004 - 2008 The Admidio Team - http://www.admidio.org -->
+    <!-- (c) 2004 - 2009 The Admidio Team - http://www.admidio.org -->
     
     <title>Admidio - Installation/Update</title>
 

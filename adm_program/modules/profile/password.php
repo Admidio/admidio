@@ -2,7 +2,7 @@
 /******************************************************************************
  * Passwort neu vergeben
  *
- * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html

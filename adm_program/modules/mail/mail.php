@@ -2,7 +2,7 @@
 /******************************************************************************
  * E-Mails verschicken
  *
- * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -240,14 +240,14 @@ $g_layout['header'] =  '
     function addAttachment()
     {
         lnk_attachment = document.getElementById("add_attachment");            
-        new_br = document.createElement("br");
         new_attachment = document.createElement("input");
         new_attachment.type = "file";
         new_attachment.name = "userfile[]";
         new_attachment.size = "35";
-        new_attachment.style.width = "350px";
+        $(new_attachment).css("display", "none");
+        $(new_attachment).css("width", "350px");
         document.getElementById("attachments").insertBefore(new_attachment, lnk_attachment);
-        document.getElementById("attachments").insertBefore(new_br, lnk_attachment);
+        $(new_attachment).show("slow");
     }
 
     $(document).ready(function() 

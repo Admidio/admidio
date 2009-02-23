@@ -2,7 +2,7 @@
 /******************************************************************************
  * Eigene Listen erstellen
  *
- * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -119,6 +119,7 @@ $g_layout['header'] = '
             var fieldNumberShow  = fieldNumberIntern + 1;
             var table = document.getElementById("mylist_fields_tbody");
             var newTableRow = table.insertRow(fieldNumberIntern);
+            $(newTableRow).css("display", "none");
             var newCellCount = newTableRow.insertCell(-1);
             newCellCount.innerHTML = (fieldNumberShow) + ". Spalte :";
             
@@ -196,6 +197,7 @@ $g_layout['header'] = '
             var newCellConditions = newTableRow.insertCell(-1);
             newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" size=\"25\" maxlength=\"50\" value=\"" + condition + "\" />";
 
+			$(newTableRow).fadeIn("slow");
             fieldNumberIntern++;
         }
         
