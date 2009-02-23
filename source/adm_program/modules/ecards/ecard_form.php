@@ -2,7 +2,7 @@
 /******************************************************************************
  * Grußkarte Form
  *
- * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -757,7 +757,7 @@ $javascript = '
         }
         function showHideMoreRecipient(divLayer,divMenu)
         {
-            if(document.getElementById(divLayer).style.display == "none")
+            if($("#" + divLayer).css("display") == "none")
             {
                 $("#" + divLayer).show("slow");
                 document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">Keine weiteren Empf.<\/a>";
@@ -772,7 +772,7 @@ $javascript = '
         }
         function showHideMoreSettings(divLayerSetting,divMenuSetting)
         {
-            if(document.getElementById(divLayerSetting).style.display == "none")
+            if($("#" + divLayerSetting).css("display") == "none")
             {
                 $("#" + divLayerSetting).show("slow");
                 document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen ausblenden<\/a>";
@@ -1127,7 +1127,7 @@ if (empty($submit_action))
         <hr />
         <div class="formSubmit">
             <button onclick="javascript:makeThickBoxPreview();" type="submit" value="vorschau"><img 
-            	src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>
+            	src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>&nbsp;&nbsp;&nbsp;&nbsp;
             <button onclick="javascript:sendEcard();" type="button" value="abschicken"><img 
             	src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
         </div>
