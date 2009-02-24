@@ -731,138 +731,136 @@ else
 
     //INFOBOX zur Gruppe
     //nur anzeigen wenn zusatzfelder gefüllt sind
-    if(strlen($role->getValue("rol_start_date")) > 0
-    || $role->getValue("rol_weekday") > 0
-    || strlen($role->getValue("rol_start_time")) > 0
-    || strlen($role->getValue("rol_location")) > 0
-    || strlen($role->getValue("rol_cost")) > 0
-    || strlen($role->getValue("rol_max_members")) > 0)
+    if(strlen($role->getValue('rol_start_date')) > 0
+    || $role->getValue('rol_weekday') > 0
+    || strlen($role->getValue('rol_start_time')) > 0
+    || strlen($role->getValue('rol_location')) > 0
+    || strlen($role->getValue('rol_cost')) > 0
+    || strlen($role->getValue('rol_max_members')) > 0)
     {
-        echo "
-        <br />
-        
-        <div class=\"groupBox\" id=\"infoboxListsBox\">
-            <div class=\"groupBoxHeadline\">Infobox: ". $role->getValue("rol_name"). "</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
-                    <li>";
+        echo '
+        <div class="groupBox" id="infoboxListsBox">
+            <div class="groupBoxHeadline">Infobox: '. $role->getValue('rol_name'). '</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
+                    <li>';
                         //Kategorie
-                        echo"
+                        echo '
                         <dl>
                             <dt>Kategorie:</dt>
-                            <dd>".$role->getValue("cat_name")."</dd>
+                            <dd>'.$role->getValue('cat_name').'</dd>
                         </dl>
-                    </li>";
+                    </li>';
 
                         //Beschreibung
-                        if(strlen($role->getValue("rol_description")) > 0)
+                        if(strlen($role->getValue('rol_description')) > 0)
                         {
-                            echo"<li>
+                            echo'<li>
                                 <dl>
                                     <dt>Beschreibung:</dt>
-                                    <dd>".$role->getValue("rol_description")."</dd>
+                                    <dd>'.$role->getValue('rol_description').'</dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
 
                         //Zeitraum
-                        if(strlen($role->getValue("rol_start_date")) > 0)
+                        if(strlen($role->getValue('rol_start_date')) > 0)
                         {
-                            echo"<li>
+                            echo'<li>
                                 <dl>
                                     <dt>Zeitraum:</dt>
-                                    <dd>". mysqldate("d.m.y", $role->getValue("rol_start_date")). " bis ". mysqldate("d.m.y", $role->getValue("rol_end_date")). "</dd>
+                                    <dd>'. mysqldate('d.m.y', $role->getValue('rol_start_date')). ' bis '. mysqldate('d.m.y', $role->getValue('rol_end_date')). '</dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
 
                         //Termin
-                        if($role->getValue("rol_weekday") > 0 || strlen($role->getValue("rol_start_time")) > 0)
+                        if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                         {
-                            echo"<li>
+                            echo'<li>
                                 <dl>
                                     <dt>Termin: </dt>
-                                    <dd>"; 
-                                        if($role->getValue("rol_weekday") > 0)
+                                    <dd>'; 
+                                        if($role->getValue('rol_weekday') > 0)
                                         {
-                                            echo $arrDay[$role->getValue("rol_weekday")-1];
+                                            echo $arrDay[$role->getValue('rol_weekday')-1];
                                         }
-                                        if(strlen($role->getValue("rol_start_time")) > 0)
+                                        if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
-                                            echo " von ". mysqltime("h:i", $role->getValue("rol_start_time")). " bis ". mysqltime("h:i", $role->getValue("rol_end_time"));
+                                            echo ' von '. mysqltime('h:i', $role->getValue('rol_start_time')). ' bis '. mysqltime('h:i', $role->getValue('rol_end_time'));
                                         }
 
-                                    echo"</dd>
+                                    echo'</dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
 
                         //Treffpunkt
-                        if(strlen($role->getValue("rol_location")) > 0)
+                        if(strlen($role->getValue('rol_location')) > 0)
                         {
-                            echo"<li>
+                            echo'<li>
                                 <dl>
                                     <dt>Treffpunkt:</dt>
-                                    <dd>".$role->getValue("rol_location")."</dd>
+                                    <dd>'.$role->getValue('rol_location').'</dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
 
                         //Beitrag
-                        if(strlen($role->getValue("rol_cost")) > 0)
+                        if(strlen($role->getValue('rol_cost')) > 0)
                         {
-                            echo"<li>
+                            echo'<li>
                                 <dl>
                                     <dt>Beitrag:</dt>
-                                    <dd>". $role->getValue("rol_cost"). " &euro;</dd>
+                                    <dd>'. $role->getValue('rol_cost'). ' &euro;</dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
 						
 						//Beitragszeitraum
-                        if(strlen($role->getValue("rol_cost_period")) > 0 && $role->getValue('rol_cost_period') != 0)
+                        if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                         {
-                            echo"<li>
+                            echo'<li>
                                 <dl>
                                     <dt>Beitragszeitraum:</dt>
-                                    <dd>".TableRoles::getRolCostPeriodDesc($role->getValue("rol_cost_period"))."</dd>
+                                    <dd>'.$role->getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
 
                         //maximale Teilnehmerzahl
-                        if(strlen($role->getValue("rol_max_members")) > 0)
+                        if(strlen($role->getValue('rol_max_members')) > 0)
                         {
-                            echo"<li>
+                            echo'<li>
                                 <dl>
                                     <dt>Max. Teilnehmer:</dt>
-                                    <dd>". $role->getValue("rol_max_members"). "</dd>
+                                    <dd>'. $role->getValue('rol_max_members'). '</dd>
                                 </dl>
-                            </li>";
+                            </li>';
                         }
-                echo"</ul>
+                echo'</ul>
             </div>
-        </div>";
+        </div>';
     } // Ende Infobox
     
-    if($req_mode == "print")
+    if($req_mode == 'print')
     {
-        echo "</body></html>";
+        echo '</body></html>';
     }
     else
     {    
-        echo "
-        <ul class=\"iconTextLinkList\">
+        echo '
+        <ul class="iconTextLinkList">
             <li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/system/back.php\"><img 
-                    src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-                    <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+                <span class="iconTextLink">
+                    <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
+                    src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+                    <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
                 </span>
             </li>
-        </ul>";
+        </ul>';
     
-        require(THEME_SERVER_PATH. "/overall_footer.php");
+        require(THEME_SERVER_PATH. '/overall_footer.php');
     }
 }
 
