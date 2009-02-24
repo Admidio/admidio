@@ -498,7 +498,8 @@ ul.autosuggest li.highlight a:visited  {
 }
 
 #infoboxListsBox {
-    width:              400px; 
+    width:              500px;
+    margin-top:         25px;
 }
 
 /*spezielle Anpassung Hilfe Thickbox*/
