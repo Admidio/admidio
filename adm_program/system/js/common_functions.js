@@ -8,40 +8,47 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-
-// Fenstergroeße an Inhalt anpassen
-function windowresize()
+ 
+// das uebergebene Element wird optisch schick ein- und ausgeblendet
+// diese Funktion kann nicht auf <table>-Elemente angewendet werden
+function toggleElement(elementID, iconID)
 {
-	if(document.all)
-	{
-		breite = self.document.body.scrollWidth;
-		hoehe  = self.document.body.scrollHeight+80;
-	}
-	
-	else
-	{
-		breite = self.document.body.offsetWidth;
-		hoehe  = self.document.body.offsetHeight+80;
-	}
-	window.resizeTo(breite,hoehe);
+    if($("#" + elementID).css("display") == "none")
+    {
+        $("#" + elementID).show("slow");
+        $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_open.gif");
+        $("#" + iconID).attr("title", "Ausblenden");
+        $("#" + iconID).attr("alt",   "Ausblenden");
+    }
+    else
+    {
+        $("#" + elementID).hide("slow");
+        $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_close.gif");
+        $("#" + iconID).attr("title", "Einblenden");
+        $("#" + iconID).attr("alt",   "Einblenden");
+    }
 }
 
-// Anzeigen bzw. verstecken eines Blocks
-function showHideBlock(block_name)
+// Identisch zu toggleElement allerdings nicht so schick, 
+// dafuer aber auch auf <table>-Element anwendbar
+function showHideBlock(elementID)
 {
-	var block_element = block_name;
-	var image_element = 'img_' + block_name;
-
-	if(document.getElementById(block_element).style.visibility == 'hidden')
-	{
-		 document.getElementById(block_element).style.visibility = 'visible';
-		 document.getElementById(block_element).style.display    = '';
-		 document.getElementById(image_element).src = gThemePath + '/icons/triangle_open.gif';
-	}
-	else
-	{
-		 document.getElementById(block_element).style.visibility = 'hidden';
-		 document.getElementById(block_element).style.display    = 'none';
-		 document.getElementById(image_element).src = gThemePath + '/icons/triangle_close.gif';
-	}
+	var imageID = 'img_' + elementID;
+    
+    if($("#" + elementID).css("display") == "none")
+    {
+        $("#" + elementID).css("visibility", "visible")
+        $("#" + elementID).css("display", "")
+        $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_open.gif");
+        $("#" + iconID).attr("title", "Ausblenden");
+        $("#" + iconID).attr("alt",   "Ausblenden");
+    }
+    else
+    {
+        $("#" + elementID).css("visibility", "hidden")
+        $("#" + elementID).css("display", "none")
+        $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_close.gif");
+        $("#" + iconID).attr("title", "Einblenden");
+        $("#" + iconID).attr("alt",   "Einblenden");
+    }
 }
