@@ -13,10 +13,10 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_roles.php');
-require('../../system/classes/role_dependency.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_roles.php');
+require_once('../../system/classes/role_dependency.php');
 
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!$g_current_user->assignRoles())
@@ -80,6 +80,20 @@ else
     $role->setValue('rol_end_date', mysqldate('d.m.y', $role->getValue('rol_end_date')));
 }
 
+// holt eine Liste der ausgewaehlten abhaengigen Rolen
+$childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
+
+// Alle Rollen auflisten, die der Benutzer sehen darf
+$sql = "SELECT *
+          FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+         WHERE rol_valid  = 1
+           AND rol_cat_id = cat_id
+           AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+         ORDER BY rol_name ";
+$allRoles = $g_db->query($sql);
+
+$childRoleObjects = array();
+
 // Html-Kopf ausgeben
 if($req_rol_id > 0)
 {
@@ -95,6 +109,29 @@ $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />
     <script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            document.getElementById("rol_name").focus(); ';
+            // Bloecke anzeigen/verstecken
+            if($req_rol_id > 0)
+            {
+                if(strlen($role->getValue('rol_start_date')) == 0
+                && strlen($role->getValue('rol_end_date')) == 0
+                && strlen($role->getValue('rol_start_time')) == 0
+                && strlen($role->getValue('rol_end_time')) == 0
+                && $role->getValue('rol_weekday') == 0
+                && strlen($role->getValue('rol_location')) == 0)
+                {
+                    $g_layout['header'] .= 'toggleElement("dates_body","img_dates_body"); ';
+                }
+                if(count($childRoles) == 0)
+                {
+                    $g_layout['header'] .= 'toggleElement("dependancies_body","img_dependancies_body"); ';
+                }
+            }
+            $g_layout['header'] .= '
+	 	}); 
+
         // Rollenabhaengigkeiten markieren
         function hinzufuegen()
         {
@@ -269,8 +306,8 @@ echo '
 
         <div class="groupBox" id="properties_box" style="width: 90%;">
             <div class="groupBoxHeadline" id="properties_head">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'properties_body\')"><img
-                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>Eigenschaften
+                <a class="iconShowHide" href="javascript:toggleElement(\'properties_body\', \'img_properties_body\')"><img
+                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Eigenschaften
             </div>
 
             <div class="groupBoxBody" id="properties_body">
@@ -401,8 +438,8 @@ echo '
 
         <div class="groupBox" id="justifications_box" style="width: 90%;">
             <div class="groupBoxHeadline">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'justifications_body\')"><img
-                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>Berechtigungen
+                <a class="iconShowHide" href="javascript:toggleElement(\'justifications_body\',\'img_justifications_body\')"><img
+                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Berechtigungen
             </div>
 
             <div class="groupBoxBody" id="justifications_body">
@@ -614,8 +651,8 @@ echo '
 
         <div class="groupBox" id="dates_box" style="width: 90%;">
             <div class="groupBoxHeadline" id="dates_head">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'dates_body\')"><img
-                	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="ausblenden" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
+                <a class="iconShowHide" href="javascript:toggleElement(\'dates_body\',\'img_dates_body\')"><img
+                	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
             <div class="groupBoxBody" id="dates_body">
@@ -680,44 +717,30 @@ echo '
                 </ul>
             </div>
         </div>";
-        if($role->getValue("rol_max_members") == 0)
+        if($role->getValue('rol_max_members') == 0)
         {
-            echo "<div class=\"groupBox\" id=\"dependancies_box\" style=\"width: 90%;\">
-                <div class=\"groupBoxHeadline\" id=\"dependancies_head\">
-                    <a class=\"iconShowHide\" href=\"javascript:showHideBlock('dependancies_body')\"><img
-                    id=\"img_dependancies_body\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>Abh&auml;ngigkeiten&nbsp;&nbsp;(optional)
+            echo '<div class="groupBox" id="dependancies_box" style="width: 90%;">
+                <div class="groupBoxHeadline" id="dependancies_head">
+                    <a class="iconShowHide" href="javascript:toggleElement(\'dependancies_body\',\'img_dependancies_body\')"><img
+                    id="img_dependancies_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Abhängigkeiten&nbsp;&nbsp;(optional)
                 </div>
 
-                <div class=\"groupBoxBody\" id=\"dependancies_body\">
-                    <div style=\"margin-top: 6px;\">";
-                        $rolename_var = "neuen Rolle";
-                        if($role->getValue("rol_name")!="")
+                <div class="groupBoxBody" id="dependancies_body">
+                    <div style="margin-top: 6px;">';
+                        $rolename_var = 'neuen Rolle';
+                        if($role->getValue('rol_name')!='')
                         {
-                            $rolename_var = "Rolle <b>".$role->getValue("rol_name")."</b>";
+                            $rolename_var = 'Rolle <b>'.$role->getValue('rol_name').'</b>';
                         }
-                        echo"
-                        <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der ".$rolename_var." sein!</p>
+                        echo '
+                        <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der '.$rolename_var.' sein!</p>
                         <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen
-                        Rolle Mitglied der ".$rolename_var.". Beim Entfernen einer Abhängigkeit werden Mitgliedschaften
+                        Rolle Mitglied der '.$rolename_var.'. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften
                         nicht aufgehoben!</p>
-                        <div style=\"text-align: left; float: left;\">";
-                            // holt eine Liste der ausgewählten Rolen
-                            $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
-
-                            // Alle Rollen auflisten, die der Benutzer sehen darf
-                            $sql = "SELECT *
-                                      FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                                     WHERE rol_valid  = 1
-                                       AND rol_cat_id = cat_id
-                                       AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                                     ORDER BY rol_name ";
-                            $allRoles = $g_db->query($sql);
-
-                            $childRoleObjects = array();
-
-                            echo "<div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/no.png\" alt=\"unabh&auml;ngig\" title=\"unabh&auml;ngig\" />unabh&auml;ngig</div>
+                        <div style="text-align: left; float: left;">
+                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="unabhängig" title="unabhängig" />unabhängig</div>
                             <div>
-                                <select id=\"AllRoles\" size=\"8\" style=\"width: 200px;\">";
+                                <select id="AllRoles" size="8" style="width: 200px;">';
                                     while($row = $g_db->fetch_object($allRoles))
                                     {
                                         if(in_array($row->rol_id,$childRoles)  )
@@ -726,40 +749,40 @@ echo '
                                         }
                                         elseif ($row->rol_id != $req_rol_id)
                                         {
-                                            echo "<option value=\"$row->rol_id\">$row->rol_name</option>";
+                                            echo '<option value="'.$row->rol_id.'">'.$row->rol_name.'</option>';
                                         }
                                     }
-                                echo "</select>
+                                echo '</select>
                             </div>
                         </div>
-                        <div style=\"float: left;\" class=\"verticalIconList\">
+                        <div style="float: left;" class="verticalIconList">
                             <ul>
                                 <li>
-                                    <a class=\"iconLink\" href=\"javascript:hinzufuegen()\">
-                                        <img src=\"". THEME_PATH. "/icons/forward.png\" alt=\"Rolle hinzuf&uuml;gen\" title=\"Rolle hinzuf&uuml;gen\" />
+                                    <a class="iconLink" href="javascript:hinzufuegen()">
+                                        <img src="'. THEME_PATH. '/icons/forward.png" alt="Rolle hinzufügen" title="Rolle hinzufügen" />
                                     </a>
                                 </li>
                                 <li>
-                                    <a class=\"iconLink\" href=\"javascript:entfernen()\">
-                                        <img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Rolle entfernen\" title=\"Rolle entfernen\" />
+                                    <a class="iconLink" href="javascript:entfernen()">
+                                        <img src="'. THEME_PATH. '/icons/back.png" alt="Rolle entfernen" title="Rolle entfernen" />
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <div>
-                            <div><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/ok.png\" alt=\"abh&auml;ngig\" title=\"abh&auml;ngig\" />abh&auml;ngig</div>
+                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="abh&auml;ngig" title="abhängig" />abhängig</div>
                             <div>
-                                <select id=\"ChildRoles\" name=\"ChildRoles[]\" size=\"8\" multiple=\"multiple\" style=\"width: 200px;\">";
+                                <select id="ChildRoles" name="ChildRoles[]" size="8" multiple="multiple" style="width: 200px;">';
                                     foreach ($childRoleObjects as $childRoleObject)
                                     {
-                                        echo "<option value=\"$childRoleObject->rol_id\">$childRoleObject->rol_name</option>";
+                                        echo '<option value="'.$childRoleObject->rol_id.'">'.$childRoleObject->rol_name.'</option>';
                                     }
-                                echo "</select>
+                                echo '</select>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>";
+            </div>';
         }
 
         if($req_rol_id > 0)
@@ -796,29 +819,7 @@ echo '
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>
-
-<script type="text/javascript"><!--
-    document.getElementById("rol_name").focus(); ';
-    // Bloecke anzeigen/verstecken
-    if($req_rol_id > 0)
-    {
-        if(strlen($role->getValue('rol_start_date')) == 0
-        && strlen($role->getValue('rol_end_date')) == 0
-        && strlen($role->getValue('rol_start_time')) == 0
-        && strlen($role->getValue('rol_end_time')) == 0
-        && $role->getValue('rol_weekday') == 0
-        && strlen($role->getValue('rol_location')) == 0)
-        {
-            echo 'showHideBlock("dates_body"); ';
-        }
-        if(count($childRoles) == 0)
-        {
-            echo 'showHideBlock("dependancies_body"); ';
-        }
-    }
-echo '
---></script>';
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 

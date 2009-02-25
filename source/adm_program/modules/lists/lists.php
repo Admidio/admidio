@@ -135,7 +135,7 @@ if($num_roles == 0)
     else
     {
         // wenn User ausgeloggt, dann Login-Bildschirm anzeigen
-        require('../../system/login_valid.php');
+        require_once('../../system/login_valid.php');
     }
 }
 
@@ -172,24 +172,6 @@ $g_layout['header'] = '
             else
             {
                 self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + lst_id + "&rol_id=" + rol_id;
-            }
-        }
-
-	    function toggleDetails(role_details_ID, triangle_ID)
-        {
-            if($("#" + role_details_ID).css("display") == "none")
-            {
-                $("#" + role_details_ID).show("slow");
-                $("#" + triangle_ID).attr("src",   gThemePath + "/icons/triangle_open.gif");
-                $("#" + triangle_ID).attr("title", "Details ausblenden");
-                $("#" + triangle_ID).attr("alt",   "Details ausblenden");
-            }
-            else
-            {
-                $("#" + role_details_ID).hide("slow");
-                $("#" + triangle_ID).attr("src",   gThemePath + "/icons/triangle_close.gif");
-                $("#" + triangle_ID).attr("title", "Details einblenden");
-                $("#" + triangle_ID).attr("alt",   "Details einblenden");
             }
         }
     //--></script>';
@@ -385,13 +367,13 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                     //Dreieck zum ein und ausblenden der Details
 			        if($g_preferences['lists_hide_overview_details']==1)
 	                {
-	                    echo '<a class="iconLink" href="javascript:toggleDetails(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
-							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="Details einblende" title="Details einblende" /></a>'; 
+	                    echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
+							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="Einblenden" title="Einblenden" /></a>'; 
 	                }
                     else
                     {
-                        echo '<a class="iconLink" href="javascript:toggleDetails(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
-							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Details ausblenden" title="Details ausblenden" /></a>';
+                        echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
+							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>';
                     }
 
                     // Link nur anzeigen, wenn Rolle auch Mitglieder hat
