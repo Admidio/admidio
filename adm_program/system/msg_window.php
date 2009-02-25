@@ -234,7 +234,9 @@ switch ($req_err_code)
         break;
 
     case 'role_assign':
-        echo 'Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.';
+        echo 'Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.<br /><br />
+        Dir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen,
+        falls du diese selber nicht besitzt.';
         break;
 
     case 'user_field_description':

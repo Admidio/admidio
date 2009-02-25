@@ -162,8 +162,8 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
         }
     }
 
-    // schauen, ob schon User mit dem Namen existieren
-    $sql = 'SELECT usr_id 
+    // schauen, ob schon User mit dem Namen existieren und Daten einlesen
+    $sql = 'SELECT MAX(usr_id) AS usr_id
               FROM '. TBL_USERS. '
               JOIN '. TBL_USER_DATA. ' last_name
                 ON last_name.usd_usr_id = usr_id
@@ -175,31 +175,27 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                AND first_name.usd_value  = "'. $user->getValue('Vorname'). '"
              WHERE usr_valid = 1 ';
     $result = $g_db->query($sql);
-    $dup_users = $g_db->num_rows($result);
-
-    if($dup_users > 0)
+    $row_duplicate_user = $g_db->fetch_array($result);
+    if($row_duplicate_user['usr_id'] > 0)
     {
-        $duplicate_user = new User($g_db);
-        
+        $duplicate_user = new User($g_db, $row_duplicate_user['usr_id']);
+    }
+
+    if($row_duplicate_user['usr_id'] > 0)
+    {
         if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
         {
-            // alle vorhandene User mit dem Namen loeschen            
-            while($row = $g_db->fetch_array($result))
-            {
-                $duplicate_user->readData($row['usr_id']);
-                $duplicate_user->delete();
-            }
+            // alle vorhandene Profilfelddaten des Users loeschen
+            $duplicate_user->clearUserFieldArray(true);
         }
-        elseif($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE && $dup_users == 1)
+
+        if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE
+        || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
         {
             // Daten des Nutzers werden angepasst
-            $row = $g_db->fetch_array($result);
-            $duplicate_user->readData($row['usr_id']);
-            
             foreach($imported_fields as $key => $field_name)
             {
-                if($field_name != 'Nachname' && $field_name != 'Vorname'
-                && $duplicate_user->getValue($field_name) != $user->getValue($field_name))
+                if($duplicate_user->getValue($field_name) != $user->getValue($field_name))
                 {
                     $duplicate_user->setValue($field_name, $user->getValue($field_name));
                 }
@@ -208,8 +204,8 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
         }
     }
 
-    if( $dup_users == 0
-    || ($dup_users  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
+    if( $row_duplicate_user['usr_id'] == 0
+    || ($row_duplicate_user['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
     {
         // Usersatz anlegen
         $user->save();

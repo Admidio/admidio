@@ -9,8 +9,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
@@ -22,12 +22,6 @@ if(!$g_current_user->editUsers())
 if (ini_get('file_uploads') != '1')
 {
     $g_message->show('no_fileuploads');
-}
-
-$role_condition = '';
-if($g_current_user->isWebmaster() == false)
-{
-	$role_condition = ' AND rol_assign_roles = 0 ';
 }
 
 // Html-Kopf ausgeben
@@ -57,8 +51,9 @@ echo '
                 <dl>
                     <dt><label for="rol_id">Rolle zuordnen:</label></dt>
                     <dd>';
-                        // Combobox mit allen Rollen ausgeben
-                        echo generateRoleSelectBox(0,'',$role_condition);
+                        // Combobox mit allen Rollen ausgeben, die der Benutzer sehen darf
+                        // Rollen mit der Rollenzuordnungsberechtigung werden nur angezeigt, wenn der User die Rechte schon hat
+                        echo generateRoleSelectBox(0,'',1);
 
                         echo '&nbsp;
                         <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=role_assign&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 

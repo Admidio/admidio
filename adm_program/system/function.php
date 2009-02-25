@@ -236,9 +236,12 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 // Uebergaben:
 // default_role : Id der Rolle die markiert wird
 // field_id     : Id und Name der Select-Box
-// condition    : eine zusaetzliche SQL-Bedingung, welche mit AND beginnen muss
+// show_mode    : Modus der bestimmt, welche Rollen angezeigt werden
+//          = 0 : Alle Rollen, die der Benutzer sehen darf
+//          = 1 : Alle sicheren Rollen, so dass der Benutzer sich kein "Rollenzuordnungsrecht" 
+//                dazuholen kann, wenn er es nicht schon besitzt
 
-function generateRoleSelectBox($default_role = 0, $field_id = '', $condition = '')
+function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0)
 {
     global $g_current_user, $g_current_organization, $g_db;
     
@@ -247,24 +250,31 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $condition = '
         $field_id = 'rol_id';
     }
 
-    if(strlen($condition) > 0)
+    // SQL-Statement entsprechend dem Modus zusammensetzen
+    $condition = '';
+    if($show_mode == 1 && $g_current_user->assignRoles() == false)
     {
-        $condition = addslashes($condition);
+        // keine Rollen mit Rollenzuordnungsrecht anzeigen
+        $condition .= ' AND rol_assign_roles = 0 ';
+    }
+    elseif($show_mode == 1 && $g_current_user->isWebmaster() == false)
+    {
+        // Webmasterrolle nicht anzeigen
+        $condition .= ' AND rol_name <> "Webmaster" ';
     }
     
+    $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE rol_valid  = 1
+               AND rol_cat_id = cat_id
+               AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                   '.$condition.'
+             ORDER BY cat_sequence, rol_name';
+    $result_lst = $g_db->query($sql);
+
+    // Selectbox mit allen selektierten Rollen zusammensetzen
     $box_string = '
     <select size="1" id="'.$field_id.'" name="'.$field_id.'">
         <option value="0" selected="selected">- Bitte wählen -</option>';
-        // Rollen selektieren
-
-        // Benutzer mit den Recht alle Listen einzusehen, bekommen auch alle Rollen aufgelistet
-        $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                 WHERE rol_valid  = 1
-                   AND rol_cat_id = cat_id
-                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                       '.$condition.'
-                 ORDER BY cat_sequence, rol_name';
-        $result_lst = $g_db->query($sql);
         $act_category = '';
 
         while($row = $g_db->fetch_object($result_lst))
