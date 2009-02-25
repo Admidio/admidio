@@ -150,7 +150,11 @@ $message_text = array(
         "Die Rolle %VAR1% wurde auf <b>inaktiv</b> gesetzt.",
 
     "role_exist" =>
-        " Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.",
+        "Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.",
+
+    "role_select_right" =>
+        "Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.<br />
+        Bitte wähle eine andere Rolle aus.",
 
     "save" =>
         "Deine Daten wurden erfolgreich gespeichert.",

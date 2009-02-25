@@ -8,13 +8,19 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu einen Userdatenobjekt zu erstellen.
- * Eine Userdaten koennen ueber diese Klasse in der Datenbank verwaltet werden.
+ * Userdaten koennen ueber diese Klasse in der Datenbank verwaltet werden.
  * Dazu werden die Userdaten sowie der zugehoerige Feldkonfigurationen
  * ausgelesen. Geschrieben werden aber nur die Userdaten
  *
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
+ *
+ * clearFieldData() - es werden nur die Daten der Tabelle adm_user_data entfernt
+ *                    die Kategorie und adm_user_field bleiben erhalten
+ *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableUserData extends TableAccess
 {
@@ -23,7 +29,7 @@ class TableUserData extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_USER_DATA;
-        $this->column_praefix = "usd";
+        $this->column_praefix = 'usd';
         
         $this->clear();
     }
@@ -34,13 +40,13 @@ class TableUserData extends TableAccess
         if(is_numeric($usr_id) && is_numeric($usf_id))
         {
             $tables    = TBL_USER_FIELDS;
-            $condition = $condition. " AND usd_usr_id = ". $usr_id. "
-                                       AND usd_usf_id = ". $usf_id. "
-                                       AND usd_usf_id = usf_id ";
+            $condition = $condition. ' AND usd_usr_id = '. $usr_id. '
+                                       AND usd_usf_id = '. $usf_id. '
+                                       AND usd_usf_id = usf_id ';
             parent::readData(0, $condition, $tables);
             
-            $this->setValue("usd_usr_id", $usr_id);
-            $this->setValue("usd_usf_id", $usf_id);
+            $this->setValue('usd_usr_id', $usr_id);
+            $this->setValue('usd_usf_id', $usf_id);
         }
     }
     

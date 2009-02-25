@@ -15,6 +15,9 @@
  *
  * readUserData()       - baut ein Array mit allen Profilfeldern und
  *                        den entsprechenden Werten des Users auf
+ * clearUserFieldArray($delete_db_data = false)
+ *                      - der Inhalt der Profilfelder wird geloescht, 
+ *                        die Objekte mit DB-Struktur aber nicht !
  * getProperty($field_name, $property)
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
@@ -91,14 +94,21 @@ class User extends TableUsers
         }
     }
     
-    // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur aber nicht !
-    function clearUserFieldArray()
+    // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
+    function clearUserFieldArray($delete_db_data = false)
     {
     	// Jedes Feld durchgehen und alle Inhalte der Tabelle adm_user_data entfernen
     	foreach($this->userFieldData as $field_name => $object)
     	{
     		$this->userFieldData[$field_name]->clearFieldData();
     	}
+        
+        // Daten in der DB auch loeschen
+        if($delete_db_data)
+        {
+            $sql    = 'DELETE FROM '. TBL_USER_DATA. ' WHERE usd_usr_id = '. $this->getValue('usr_id');
+            $this->db->query($sql);
+        }
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
