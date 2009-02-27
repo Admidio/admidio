@@ -13,13 +13,13 @@
  *
  *****************************************************************************/
 
-require_once("../../system/common.php");
-require_once("../../system/login_valid.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur berechtigte User duerfen Querysuggestions empfangen
 if (!$g_current_user->editUsers())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 if (isset($_GET['members']) && is_numeric($_GET['members']))
@@ -63,36 +63,36 @@ else
         // erst mal die Benutzerliste aus der DB holen und in der Session speichern
         if($members == true)
         {
-            $sql    = "SELECT DISTINCT last_name.usd_value as last_name, first_name.usd_value as first_name
-                         FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_USERS. "
-                         LEFT JOIN ". TBL_USER_DATA. " as last_name
+            $sql    = 'SELECT DISTINCT last_name.usd_value as last_name, first_name.usd_value as first_name
+                         FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
+                         LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
-                          AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                         LEFT JOIN ". TBL_USER_DATA. " as first_name
+                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                         LEFT JOIN '. TBL_USER_DATA. ' as first_name
                            ON first_name.usd_usr_id = usr_id
-                          AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
                         WHERE usr_valid = 1
                           AND mem_usr_id = usr_id
                           AND mem_rol_id = rol_id
-                          AND mem_begin <= '".DATE_NOW."'
-                          AND mem_end    > '".DATE_NOW."'
+                          AND mem_begin <= "'.DATE_NOW.'"
+                          AND mem_end    > "'.DATE_NOW.'"
                           AND rol_valid  = 1
                           AND rol_cat_id = cat_id
-                          AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                        ORDER BY last_name, first_name ";
+                          AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                        ORDER BY last_name, first_name ';
         }
         else
         {
-            $sql    = "SELECT last_name.usd_value as last_name, first_name.usd_value as first_name
-                         FROM ". TBL_USERS. "
-                         LEFT JOIN ". TBL_USER_DATA. " as last_name
+            $sql    = 'SELECT last_name.usd_value as last_name, first_name.usd_value as first_name
+                         FROM '. TBL_USERS. '
+                         LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
-                          AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                         LEFT JOIN ". TBL_USER_DATA. " as first_name
+                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                         LEFT JOIN '. TBL_USER_DATA. ' as first_name
                            ON first_name.usd_usr_id = usr_id
-                          AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
                         WHERE usr_valid = 1
-                        ORDER BY last_name, first_name ";
+                        ORDER BY last_name, first_name ';
         }
         $result_mgl = $g_db->query($sql);
 
@@ -118,13 +118,12 @@ else
             or  strpos(strtolower($suggest['firstName']). " ". strtolower($suggest['lastName']),str_replace(',', '', $q))===0
             or  strpos(strtolower($suggest['lastName']). " ". strtolower($suggest['firstName']),str_replace(',', '', $q))===0)
         {
-            $match[]="<rs>". $suggest['lastName']. ", ". $suggest['firstName']. "</rs>";
+            $match[]='<rs>'. $suggest['lastName']. ', '. $suggest['firstName']. '</rs>';
         }
     }
     //sort($match);
-    $xml .= "<results>\n".implode("\n",$match)."</results>";
+    $xml .= '<results>\n'.implode('\n',$match).'</results>';
 }
-
 header('Content-Type: text/xml');
 echo $xml;
 

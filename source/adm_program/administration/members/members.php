@@ -232,16 +232,16 @@ echo '
             </span>
         </form>
     </li>
-<script type="text/javascript"><!--
-    var options = {
-                script:"'.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$req_members.'&amp;",
-                varname:"query",
-                minchars:1,
-                timeout:5000
-    };
-    var as = new AutoSuggest("queryForm", options);
-//--></script>';
-
+    <script type=\'text/javascript\'>
+        var options = {
+                    script:\''.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$req_members.'&\',
+                    varname:\'query\',
+                    minchars:1,
+                    timeout:5000
+        };
+        var as = new AutoSuggest("queryForm", options);
+    </script>
+';
 if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
 {
     // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
