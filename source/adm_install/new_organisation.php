@@ -18,7 +18,7 @@
  *
  *****************************************************************************/
 
-require_once("install_functions.php");
+require_once('install_functions.php');
 
 // Uebergabevariablen pruefen
 
@@ -35,32 +35,32 @@ session_name('admidio_php_session_id');
 session_start();
 
 // Konstanten und Konfigurationsdatei einbinden
-require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1). "/config.php");
-require_once(substr(__FILE__, 0, strpos(__FILE__, "adm_install")-1). "/adm_program/system/constants.php");
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
  // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
 if(strlen($g_tbl_praefix) == 0)
 {
-    $g_tbl_praefix = "adm";
+    $g_tbl_praefix = 'adm';
 }
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
 {
-    $g_db_type = "mysql";
+    $g_db_type = 'mysql';
 }
 
-require_once(SERVER_PATH. "/adm_program/system/db/". $g_db_type. ".php");
-require_once(SERVER_PATH. "/adm_program/system/string.php");
-require_once(SERVER_PATH. "/adm_program/system/function.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/list_configuration.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/organization.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_members.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_roles.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_text.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/user.php");
+require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
+require_once(SERVER_PATH. '/adm_program/system/string.php');
+require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 
-$message  = "";
+$message  = '';
 
 if($req_mode == 1)
 {
@@ -68,7 +68,7 @@ if($req_mode == 1)
     session_destroy();
     $message = '<strong>Willkommen zur Einrichtung einer weiteren Organisation</strong><br /><br />
                 Auf den nächsten Seiten musst du einige notwendige Informationen der neuen Organisation eingeben.';
-    showPage($message, "new_organisation.php?mode=2", "forward.png", "Organisation festlegen", 3);
+    showPage($message, 'new_organisation.php?mode=2', 'forward.png', 'Organisation festlegen', 3);
 }
 elseif($req_mode == 2)
 {
@@ -80,8 +80,8 @@ elseif($req_mode == 2)
     }
     else
     {
-        $orga_name_short = "";
-        $orga_name_long  = "";
+        $orga_name_short = '';
+        $orga_name_long  = '';
     }
 
     $message = '<strong>Organisation festlegen</strong><br /><br />
@@ -108,7 +108,7 @@ elseif($req_mode == 2)
                     </div>
                 </div>
                 <br />';
-    showPage($message, "new_organisation.php?mode=3", "forward.png", "Administrator festlegen", 3);
+    showPage($message, 'new_organisation.php?mode=3', 'forward.png', 'Administrator festlegen', 3);
 }
 elseif($req_mode == 3)
 {
@@ -123,8 +123,8 @@ elseif($req_mode == 3)
         if(strlen($_SESSION['orga_name_short']) == 0
         || strlen($_SESSION['orga_name_long']) == 0 )
         {
-            $message = "Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !";
-            showPage($message, "new_organisation.php?mode=2", "back.png", "Zurück");
+            $message = 'Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !';
+            showPage($message, 'new_organisation.php?mode=2', 'back.png', 'Zurück');
         }
     }
 
@@ -135,7 +135,7 @@ elseif($req_mode == 3)
     }
     else
     {
-        $user_login = "";
+        $user_login = '';
     }
     $message = '<strong>Administrator anlegen</strong><br /><br />
                 Gib in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein.
@@ -161,7 +161,7 @@ elseif($req_mode == 3)
                     </div>
                 </div>
                 <br />';
-    showPage($message, "new_organisation.php?mode=4", "forward.png", "Konfigurationsdatei erzeugen", 3);
+    showPage($message, 'new_organisation.php?mode=4', 'forward.png', 'Konfigurationsdatei erzeugen', 3);
 }
 elseif($req_mode == 4)
 {
@@ -203,8 +203,8 @@ elseif($req_mode == 4)
 
         if($user_found != 1)
         {
-            $message = "Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation !";
-            showPage($message, "new_organisation.php?mode=3", "back.png", "Zurück", 3);
+            $message = 'Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation !';
+            showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
         }
         else
         {
@@ -276,11 +276,11 @@ elseif($req_mode == 6)
         showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
    	}
 
-    if(file_exists("../config.php") == false)
+    if(file_exists('../config.php') == false)
     {
-        $message = "Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
-                    Laden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.";
-        showPage($message, "new_organisation.php?mode=4", "back.png", "Zurück", 3);
+        $message = 'Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
+                    Laden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.';
+        showPage($message, 'new_organisation.php?mode=4', 'back.png', 'Zurück', 3);
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
