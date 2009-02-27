@@ -16,18 +16,18 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
     
     if($mode == 1)
     {
-        $headline = "Installation der Version ". ADMIDIO_VERSION. BETA_VERSION_TEXT;
-        $title    = "Installation";
+        $headline = 'Installation der Version '. ADMIDIO_VERSION. BETA_VERSION_TEXT;
+        $title    = 'Installation';
     }
     elseif($mode == 2)
     {
-        $headline = "Update auf Version ". ADMIDIO_VERSION. BETA_VERSION_TEXT;
-        $title    = "Update";
+        $headline = 'Update auf Version '. ADMIDIO_VERSION. BETA_VERSION_TEXT;
+        $title    = 'Update';
     }
     elseif($mode == 3)
     {
-        $headline = "Weitere Organisation hinzufügen";
-        $title    = "Organisation hinzufügen";
+        $headline = 'Weitere Organisation hinzufügen';
+        $title    = 'Organisation hinzufügen';
     }
     
     header('Content-type: text/html; charset=utf-8'); 
@@ -58,24 +58,24 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
 
             function startUpdate()
             {
-                submit_button = document.getElementById(\'next_page\');
-                if(submit_button.value == \'Datenbank aktualisieren\'
-                || submit_button.value == \'Admidio installieren\')
+                submit_button = document.getElementById("next_page");
+                if(submit_button.value == "Datenbank aktualisieren"
+                || submit_button.value == "Admidio installieren")
                 {
                     submit_button.disabled  = true;
-                    document.getElementById(\'btn_icon\').src = imgLoader.src;
-                    if(submit_button.value == \'Datenbank aktualisieren\')
+                    document.getElementById("btn_icon").src = imgLoader.src;
+                    if(submit_button.value == "Datenbank aktualisieren")
                     {
-                        document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird aktualisiert\';
+                        document.getElementById("btn_text").innerHTML = "Datenbank wird aktualisiert";
                     }
                     else
                     {
-                        document.getElementById(\'btn_text\').innerHTML = \'Datenbank wird eingerichtet\';
+                        document.getElementById("btn_text").innerHTML = "Datenbank wird eingerichtet";
                     }
                 }
-                document.getElementById(\'adm_install\').submit();
+                document.getElementById("adm_install").submit();
             }
-        --></script>
+        //--></script>
     </head>
     <body>
         <form id="adm_install" action="'. $next_url. '" method="post">
@@ -101,8 +101,8 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
         </form>
 
         <script type="text/javascript"><!--
-            document.getElementById(\'next_page\').focus();
-        --></script>
+            document.getElementById("next_page").focus();
+        //--></script>
     </body>
     </html>';
     exit();

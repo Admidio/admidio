@@ -9,24 +9,24 @@
  *****************************************************************************/
 
 // Tabellenpraefix fuer die Admidio-Tabellen in der Datenbank angeben
-// Beispiel: "adm"
-$g_tbl_praefix = "%PRAEFIX%";
+// Beispiel: 'adm'
+$g_tbl_praefix = '%PRAEFIX%';
 
 // Daten für die MySQL-Datenbank-Verbindung
-$g_adm_srv = "%SERVER%";      // Server
-$g_adm_usr = "%USER%";        // Benutzer
-$g_adm_pw  = "%PASSWORD%";    // Passwort
-$g_adm_db  = "%DATABASE%";    // Datenbank
+$g_adm_srv = '%SERVER%';      // Server
+$g_adm_usr = '%USER%';        // Benutzer
+$g_adm_pw  = '%PASSWORD%';    // Passwort
+$g_adm_db  = '%DATABASE%';    // Datenbank
 
 // Root-Pfad für das System auf dem es installiert ist
 // Der Pfad muss bis zu dem Verzeichnis, in dem die admidio.html-Datei liegt, angegeben werden !!!
-// Beispiel: "http://www.admidio.org/beispiel"
-$g_root_path = "%ROOT_PATH%";
+// Beispiel: 'http://www.admidio.org/beispiel'
+$g_root_path = '%ROOT_PATH%';
 
 // Kurzbezeichnung der Gruppierung, des Vereins oder der Organisation auf der Admidio läuft
 // Diese muss der Eingabe auf der Installationsseite entsprechen !!!
-// Beispiel: "ADMIDIO"
+// Beispiel: 'ADMIDIO'
 // Maximal 10 Zeichen !!!
-$g_organization = "%ORGANIZATION%"; 
+$g_organization = '%ORGANIZATION%'; 
 
 ?>
