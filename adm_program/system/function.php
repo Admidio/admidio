@@ -93,7 +93,7 @@ function isGroupLeader($user_id, $role_id = 0)
     {
         $sql    = 'SELECT *
                      FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                    WHERE mem_usr_id = $user_id
+                    WHERE mem_usr_id = '.$user_id.'
                       AND mem_begin <= "'.DATE_NOW.'"
                       AND mem_end    > "'.DATE_NOW.'"
                       AND mem_leader = 1
