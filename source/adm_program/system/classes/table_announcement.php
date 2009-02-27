@@ -17,7 +17,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableAnnouncement extends TableAccess
 {
@@ -26,7 +26,7 @@ class TableAnnouncement extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ANNOUNCEMENTS;
-        $this->column_praefix = "ann";
+        $this->column_praefix = 'ann';
         
         if($ann_id > 0)
         {
@@ -46,18 +46,18 @@ class TableAnnouncement extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("ann_timestamp_create", DATETIME_NOW);
-            $this->setValue("ann_usr_id_create", $g_current_user->getValue("usr_id"));
-            $this->setValue("ann_org_shortname", $g_current_organization->getValue("org_shortname"));
+            $this->setValue('ann_timestamp_create', DATETIME_NOW);
+            $this->setValue('ann_usr_id_create', $g_current_user->getValue('usr_id'));
+            $this->setValue('ann_org_shortname', $g_current_organization->getValue('org_shortname'));
         }
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue("ann_timestamp_create")) + 900)
-            || $g_current_user->getValue("usr_id") != $this->getValue("ann_usr_id_create") )
+            if(time() > (strtotime($this->getValue('ann_timestamp_create')) + 900)
+            || $g_current_user->getValue('usr_id') != $this->getValue('ann_usr_id_create') )
             {
-                $this->setValue("ann_timestamp_change", DATETIME_NOW);
-                $this->setValue("ann_usr_id_change", $g_current_user->getValue("usr_id"));
+                $this->setValue('ann_timestamp_change', DATETIME_NOW);
+                $this->setValue('ann_usr_id_change', $g_current_user->getValue('usr_id'));
             }
         }
         parent::save();
@@ -69,13 +69,13 @@ class TableAnnouncement extends TableAccess
         global $g_current_organization;
         
         // Ankuendigung der eigenen Orga darf bearbeitet werden
-        if($this->getValue("ann_org_shortname") == $g_current_organization->getValue("org_shortname"))
+        if($this->getValue('ann_org_shortname') == $g_current_organization->getValue('org_shortname'))
         {
             return true;
         }
         // Ankuendigung von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        elseif($this->getValue("ann_global") == true
-        && $g_current_organization->isChildOrganization($this->getValue("ann_org_shortname")))
+        elseif($this->getValue('ann_global') == true
+        && $g_current_organization->isChildOrganization($this->getValue('ann_org_shortname')))
         {
             return true;
         }

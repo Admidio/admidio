@@ -42,7 +42,7 @@ function RSSfeed($homepage, $title, $description)
     $this->channel['link']=$homepage;
     $this->channel['description']=$description;
     $this->items=array();
-    $this->feed="http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
+    $this->feed='http://'. $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
 function addItem($title, $description, $date, $link)
@@ -63,7 +63,7 @@ function buildFeed()
 
 function rssHeader()
 {
-    header("Content-type: application/xml");
+    header('Content-type: application/xml');
     echo '<?xml version="1.0" encoding="utf-8"?>'. chr(10). '<rss version="2.0">'. chr(10);
 }
 

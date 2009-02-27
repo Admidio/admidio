@@ -12,7 +12,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableGuestbook extends TableAccess
 {
@@ -21,7 +21,7 @@ class TableGuestbook extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_GUESTBOOK;
-        $this->column_praefix = "gbo";
+        $this->column_praefix = 'gbo';
         
         if($gbo_id > 0)
         {
@@ -40,20 +40,20 @@ class TableGuestbook extends TableAccess
     {
         if(strlen($field_value) > 0)
         {
-            if($field_name == "gbo_homepage")
+            if($field_name == 'gbo_homepage')
             {
                 // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
                 if (substr($field_value, 0, 7) != 'http://' && substr($field_value, 0, 8) != 'https://' )
                 {
-                    $field_value = "http://". $field_value;
+                    $field_value = 'http://'. $field_value;
                 }
             }
-            elseif($field_name == "gbo_email")
+            elseif($field_name == 'gbo_email')
             {
                 if (!isValidEmailAddress($field_value))
                 {
                     // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
-                    $field_value = "";
+                    $field_value = '';
                 }
             }
         }
@@ -68,19 +68,19 @@ class TableGuestbook extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("gbo_timestamp", DATETIME_NOW);
-            $this->setValue("gbo_usr_id", $g_current_user->getValue("usr_id"));
-            $this->setValue("gbo_org_id", $g_current_organization->getValue("org_id"));
-            $this->setValue("gbo_ip_address", $_SERVER['REMOTE_ADDR']);
+            $this->setValue('gbo_timestamp', DATETIME_NOW);
+            $this->setValue('gbo_usr_id', $g_current_user->getValue('usr_id'));
+            $this->setValue('gbo_org_id', $g_current_organization->getValue('org_id'));
+            $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
         }
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue("gbo_timestamp")) + 900)
-            || $g_current_user->getValue("usr_id") != $this->getValue("gbo_usr_id") )
+            if(time() > (strtotime($this->getValue('gbo_timestamp')) + 900)
+            || $g_current_user->getValue('usr_id') != $this->getValue('gbo_usr_id') )
             {
-                $this->setValue("gbo_timestamp_change", DATETIME_NOW);
-                $this->setValue("gbo_usr_id_change", $g_current_user->getValue("usr_id"));
+                $this->setValue('gbo_timestamp_change', DATETIME_NOW);
+                $this->setValue('gbo_usr_id_change', $g_current_user->getValue('usr_id'));
             }
         }
         parent::save();
@@ -90,7 +90,7 @@ class TableGuestbook extends TableAccess
     function delete()
     {
         //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
-        $sql = "DELETE FROM ". TBL_GUESTBOOK_COMMENTS. " WHERE gbc_gbo_id = ". $this->getValue("gbo_id");
+        $sql = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
         $result = $this->db->query($sql);
         
         return parent::delete();

@@ -48,26 +48,26 @@ class TableAccess
     // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
     //                          eingelesen werden soll, dabei muessen die Verknuepfungen
     //                          in sql_where_condition stehen
-    function readData($id, $sql_where_condition = "", $sql_additional_tables = "")
+    function readData($id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
         $this->clear();
 
         // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen, 
         // falls diese sinnvoll gefuellt ist
-        if(strlen($sql_where_condition) == 0 && strlen($id) > 0 && $id != "0")
+        if(strlen($sql_where_condition) == 0 && strlen($id) > 0 && $id != '0')
         {
-            $sql_where_condition = " $this->key_name = '$id' ";
+            $sql_where_condition = ' '.$this->key_name.' = "'.$id.'" ';
         }
         if(strlen($sql_additional_tables) > 0)
         {
-            $sql_additional_tables = ", ". $sql_additional_tables;
+            $sql_additional_tables = ', '. $sql_additional_tables;
         }
         
         if(strlen($sql_where_condition) > 0)
         {
-            $sql = "SELECT * FROM $this->table_name $sql_additional_tables
-                     WHERE $sql_where_condition ";
+            $sql = 'SELECT * FROM '.$this->table_name.' '.$sql_additional_tables.'
+                     WHERE '.$sql_where_condition.' ';
             $result = $this->db->query($sql);
     
             if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
@@ -79,7 +79,7 @@ class TableAccess
                 {
                     if(is_null($value))
                     {
-                        $this->dbColumns[$key] = "";
+                        $this->dbColumns[$key] = '';
                     }
                     else
                     {
@@ -103,25 +103,25 @@ class TableAccess
             // und werden nun nur noch neu initialisiert
             foreach($this->dbColumns as $field_name => $field_value)
             {
-                $this->dbColumns[$field_name] = "";
+                $this->dbColumns[$field_name] = '';
                 $this->columnsInfos[$field_name]['changed'] = false;
             }
         }
         else
         {
             // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
-            $sql = "SHOW COLUMNS FROM $this->table_name ";
+            $sql = 'SHOW COLUMNS FROM '.$this->table_name;
             $this->db->query($sql);
 
             while ($row = $this->db->fetch_array())
             {
-                $this->dbColumns[$row['Field']] = "";
+                $this->dbColumns[$row['Field']] = '';
                 $this->columnsInfos[$row['Field']]['changed'] = false;
                 $this->columnsInfos[$row['Field']]['type']    = $row['Type'];
                 $this->columnsInfos[$row['Field']]['key']     = $row['Key'];
                 $this->columnsInfos[$row['Field']]['extra']   = $row['Extra'];
                 
-                if($row['Key'] == "PRI")
+                if($row['Key'] == 'PRI')
                 {
                     $this->key_name = $row['Field'];
                 }
@@ -132,7 +132,7 @@ class TableAccess
     // Methode gibt die Anzahl aller Datensaetze dieser Tabelle zurueck
     function countAllRecords()
     {
-        $sql = "SELECT COUNT(1) as count FROM $this->table_name ";
+        $sql = 'SELECT COUNT(1) as count FROM '.$this->table_name;
         $this->db->query($sql);
         $row = $this->db->fetch_array();
         return $row['count'];
@@ -254,10 +254,10 @@ class TableAccess
                             if(strlen($value) > 0)
                             {
                                 // Daten fuer ein Insert aufbereiten
-                                $sql_field_list = $sql_field_list. " $item_connection $key ";
+                                $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' ';
                                 if(is_numeric($value))
                                 {
-                                    $sql_value_list = $sql_value_list. " $item_connection $value ";
+                                    $sql_value_list = $sql_value_list. ' '.$item_connection.' '.$value.' ';
                                 }
                                 else
                                 {
@@ -265,7 +265,7 @@ class TableAccess
                                     // damit sie auf jeden Fall da sind
                                     $value = stripslashes($value);
                                     $value = addslashes($value);
-                                    $sql_value_list = $sql_value_list. " $item_connection '$value' ";
+                                    $sql_value_list = $sql_value_list. ' '.$item_connection.' "'.$value.'" ';
                                 }
                             }
                         }
@@ -274,11 +274,11 @@ class TableAccess
                             // Daten fuer ein Update aufbereiten
                             if(strlen($value) == 0 || is_null($value))
                             {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = NULL ";
+                                $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = NULL ';
                             }
                             elseif(is_numeric($value))
                             {
-                                $sql_field_list = $sql_field_list. " $item_connection $key = $value ";
+                                $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = '.$value.' ';
                             }
                             else
                             {
@@ -286,12 +286,12 @@ class TableAccess
                                 // damit sie auf jeden Fall da sind
                                 $value = stripslashes($value);
                                 $value = addslashes($value);
-                                $sql_field_list = $sql_field_list. " $item_connection $key = '$value' ";
+                                $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = "'.$value.'" ';
                             }
                         }
                         if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
                         {
-                            $item_connection = ",";
+                            $item_connection = ',';
                         }
                         $this->columnsInfos[$key]['changed'] = false;
                     }
@@ -300,15 +300,15 @@ class TableAccess
 
             if($this->new_record)
             {
-                $sql = "INSERT INTO $this->table_name ($sql_field_list) VALUES ($sql_value_list) ";
+                $sql = 'INSERT INTO '.$this->table_name.' ('.$sql_field_list.') VALUES ('.$sql_value_list.') ';
                 $this->db->query($sql);
                 $this->dbColumns[$this->key_name] = $this->db->insert_id();
                 $this->new_record = false;
             }
             else
             {
-                $sql = "UPDATE $this->table_name SET $sql_field_list 
-                         WHERE $this->key_name = '". $this->dbColumns[$this->key_name]. "'";
+                $sql = 'UPDATE '.$this->table_name.' SET '.$sql_field_list.' 
+                         WHERE '.$this->key_name.' = "'. $this->dbColumns[$this->key_name]. '"';
                 $this->db->query($sql);
             }
         }
@@ -320,8 +320,8 @@ class TableAccess
     // aktuelle Datensatz loeschen und ggf. noch die Referenzen
     function delete()
     {
-        $sql    = "DELETE FROM $this->table_name 
-                    WHERE $this->key_name = '". $this->dbColumns[$this->key_name]. "'";
+        $sql    = 'DELETE FROM '.$this->table_name.' 
+                    WHERE '.$this->key_name.' = "'. $this->dbColumns[$this->key_name]. '"';
         $this->db->query($sql);
 
         $this->clear();

@@ -21,7 +21,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableFile extends TableAccess
 {
@@ -30,7 +30,7 @@ class TableFile extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_FILES;
-        $this->column_praefix = "fil";
+        $this->column_praefix = 'fil';
 
         if($file_id > 0)
         {
@@ -49,9 +49,9 @@ class TableFile extends TableAccess
         global $g_current_organization;
 
         $tables    = TBL_FOLDERS;
-        $condition = "     fil_id     = $file_id
+        $condition = '     fil_id     = '.$file_id.'
                        AND fil_fol_id = fol_id
-                       AND fol_org_id = ". $g_current_organization->getValue("org_id");
+                       AND fol_org_id = '. $g_current_organization->getValue('org_id');
         parent::readData($file_id, $condition, $tables);
     }
 
@@ -63,10 +63,10 @@ class TableFile extends TableAccess
         global $g_current_organization, $g_current_user, $g_valid_login;
 
         $tables    = TBL_FOLDERS;
-        $condition = "     fil_id     = $file_id
+        $condition = '     fil_id     = '.$file_id.'
                        AND fil_fol_id = fol_id
-                       AND fol_type   = 'DOWNLOAD'
-                       AND fol_org_id = ". $g_current_organization->getValue("org_id");
+                       AND fol_type   = "DOWNLOAD"
+                       AND fol_org_id = '. $g_current_organization->getValue('org_id');
         $this->readData($file_id, $condition, $tables);
 
         //Pruefen ob der aktuelle Benutzer Rechte an der Datei hat
@@ -75,25 +75,25 @@ class TableFile extends TableAccess
         {
 
             //Falls die Datei gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
-            if (!$g_current_user->editDownloadRight() && $this->getValue("fil_locked"))
+            if (!$g_current_user->editDownloadRight() && $this->getValue('fil_locked'))
             {
                 $this->clear();
             }
-            else if (!$g_valid_login && !$this->getValue("fol_public"))
+            else if (!$g_valid_login && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
             }
-            else if (!$g_current_user->editDownloadRight() && !$this->getValue("fol_public"))
+            else if (!$g_current_user->editDownloadRight() && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
-                $sql_rights = "SELECT count(*)
-                         FROM ". TBL_FOLDER_ROLES. ", ". TBL_MEMBERS. "
-                        WHERE flr_fol_id = ". $this->getValue("fol_id"). "
+                $sql_rights = 'SELECT count(*)
+                         FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
+                        WHERE flr_fol_id = '. $this->getValue('fol_id'). '
                           AND flr_rol_id = mem_rol_id
-                          AND mem_usr_id = ". $g_current_user->getValue("usr_id"). "
-                          AND mem_begin <= '".DATE_NOW."'
-                          AND mem_end    > '".DATE_NOW."'";
+                          AND mem_usr_id = '. $g_current_user->getValue('usr_id'). '
+                          AND mem_begin <= "'.DATE_NOW.'"
+                          AND mem_end    > "'.DATE_NOW.'"';
                 $result_rights = $this->db->query($sql_rights);
                 $row_rights = $this->db->fetch_array($result_rights);
                 $row_count  = $row_rights[0];
@@ -114,10 +114,10 @@ class TableFile extends TableAccess
     function getCompletePathOfFile()
     {
         //Dateinamen und Pfad zusammen setzen
-        $fileName     = $this->getValue("fil_name");
-        $folderPath   = $this->getValue("fol_path");
-        $folderName   = $this->getValue("fol_name");
-        $completePath = SERVER_PATH. $folderPath. "/". $folderName. "/". $fileName;
+        $fileName     = $this->getValue('fil_name');
+        $folderPath   = $this->getValue('fol_path');
+        $folderName   = $this->getValue('fol_name');
+        $completePath = SERVER_PATH. $folderPath. '/'. $folderName. '/'. $fileName;
 
         return $completePath;
     }
@@ -144,8 +144,8 @@ class TableFile extends TableAccess
 
         if($this->new_record)
         {
-            $this->setValue("fil_timestamp", DATETIME_NOW);
-            $this->setValue("fil_usr_id", $g_current_user->getValue("usr_id"));
+            $this->setValue('fil_timestamp', DATETIME_NOW);
+            $this->setValue('fil_usr_id', $g_current_user->getValue('usr_id'));
         }
         parent::save();
     }

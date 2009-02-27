@@ -38,7 +38,7 @@ class Htaccess {
         if (file_exists($this->folderPath)) {
             $this->folderExists = true;
 
-            if (file_exists($folderPathParam. "/.htaccess")) {
+            if (file_exists($folderPathParam. '/.htaccess')) {
                 $this->htaccessFileExistsAlready = true;
             }
         }
@@ -48,7 +48,7 @@ class Htaccess {
     function protectFolder()
     {
         if ($this->folderExists && !$this->htaccessFileExistsAlready) {
-            $file=fopen($this->folderPath. "/.htaccess","w+");
+            $file=fopen($this->folderPath. '/.htaccess','w+');
             fputs($file,"Order deny,allow\n");
             fputs($file,"Deny from all\n");
             fclose($file);
@@ -59,7 +59,7 @@ class Htaccess {
     function unprotectFolder()
     {
         if ($this->folderExists && $this->htaccessFileExistsAlready) {
-            @unlink($this->folderPath. "/.htaccess","w+");
+            @unlink($this->folderPath. '/.htaccess','w+');
         }
     }
 

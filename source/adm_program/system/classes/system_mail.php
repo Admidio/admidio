@@ -23,8 +23,8 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/email.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_text.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 
 class SystemMail extends Email
 {
@@ -48,42 +48,42 @@ class SystemMail extends Email
     {
         global $g_current_organization, $g_preferences;
     
-        if($this->textObject->getValue("txt_name") != $sysmail_id)
+        if($this->textObject->getValue('txt_name') != $sysmail_id)
         {
             $this->textObject->readData($sysmail_id);
         }
         
-        $mailSrcText = $this->textObject->getValue("txt_text");
+        $mailSrcText = $this->textObject->getValue('txt_text');
         
         // jetzt alle Variablen ersetzen
-        $mailSrcText = preg_replace ("/%user_first_name%/", $user->getValue("Vorname"),  $mailSrcText);
-        $mailSrcText = preg_replace ("/%user_last_name%/",  $user->getValue("Nachname"), $mailSrcText);
-        $mailSrcText = preg_replace ("/%user_login_name%/", $user->getValue("usr_login_name"), $mailSrcText);
-        $mailSrcText = preg_replace ("/%user_email%/", $user->getValue("E-Mail"),   $mailSrcText);
-        $mailSrcText = preg_replace ("/%webmaster_email%/", $g_preferences['email_administrator'],  $mailSrcText);
-        $mailSrcText = preg_replace ("/%organization_short_name%/", $g_current_organization->getValue("org_shortname"), $mailSrcText);
-        $mailSrcText = preg_replace ("/%organization_long_name%/",  $g_current_organization->getValue("org_longname"), $mailSrcText);
-        $mailSrcText = preg_replace ("/%organization_homepage%/",   $g_current_organization->getValue("org_homepage"), $mailSrcText);
+        $mailSrcText = preg_replace ('/%user_first_name%/', $user->getValue('Vorname'),  $mailSrcText);
+        $mailSrcText = preg_replace ('/%user_last_name%/',  $user->getValue('Nachname'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%user_login_name%/', $user->getValue('usr_login_name'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%user_email%/', $user->getValue('E-Mail'),   $mailSrcText);
+        $mailSrcText = preg_replace ('/%webmaster_email%/', $g_preferences['email_administrator'],  $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_short_name%/', $g_current_organization->getValue('org_shortname'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_long_name%/',  $g_current_organization->getValue('org_longname'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_homepage%/',   $g_current_organization->getValue('org_homepage'), $mailSrcText);
         
         // zusaetzliche Variablen ersetzen
         for($i = 1; $i <= count($this->variables); $i++)
         {
-            $mailSrcText = preg_replace ("/%variable".$i."%/", $this->variables[$i],  $mailSrcText);
+            $mailSrcText = preg_replace ('/%variable'.$i.'%/', $this->variables[$i],  $mailSrcText);
         }
         
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
-        if(strpos($mailSrcText, "#Betreff#") !== false)
+        if(strpos($mailSrcText, '#Betreff#') !== false)
         {
-            $this->mailHeader = trim(substr($mailSrcText, strpos($mailSrcText, "#Betreff#") + 9, strpos($mailSrcText, "#Inhalt#") - 9));
+            $this->mailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#Betreff#') + 9, strpos($mailSrcText, '#Inhalt#') - 9));
         }
         else
         {
-            $this->mailHeader = "Systemmail von ". $g_current_organization->getValue("org_homepage");
+            $this->mailHeader = 'Systemmail von '. $g_current_organization->getValue('org_homepage');
         }
         
-        if(strpos($mailSrcText, "#Inhalt#") !== false)
+        if(strpos($mailSrcText, '#Inhalt#') !== false)
         {
-            $this->mailText   = trim(substr($mailSrcText, strpos($mailSrcText, "#Inhalt#") + 8));
+            $this->mailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#Inhalt#') + 8));
         }
         else
         {

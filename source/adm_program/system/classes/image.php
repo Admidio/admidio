@@ -38,7 +38,7 @@ class Image
     var $imageHeight   = 0;
     var $imageType     = null;
     
-    function Image($pathAndFilename = "")
+    function Image($pathAndFilename = '')
     {
         if(strlen($pathAndFilename) > 0)
         {
@@ -112,7 +112,7 @@ class Image
     //           - ein andere Datei kann zur Ausgabe angegeben werden
     //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
     // Rueckgabe: true, falls erfolgreich
-    function copyToFile($imageResource = null, $pathAndFilename = "", $quality = 95)
+    function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
     {
         $returnValue = false;
         
@@ -172,22 +172,22 @@ class Image
     {
         switch ($imageType)
         {
-            case "jpeg":
+            case 'jpeg':
                 $this->imageType = IMAGETYPE_JPEG;
                 break;
 
-            case "png":
+            case 'png':
                 $this->imageType = IMAGETYPE_PNG;
                 break;
         }
     }
 
     // Methode dreht das Bild um 90° in eine Richtung
-    // direction : "right" o. "left" Richtung, in die gedreht wird
-    function rotate($direction = "right")
+    // direction : 'right' o. 'left' Richtung, in die gedreht wird
+    function rotate($direction = 'right')
     {
         // nur bei gueltigen Uebergaben weiterarbeiten
-        if(($direction == "left" || $direction == "right"))
+        if(($direction == 'left' || $direction == 'right'))
         {
             // Erzeugung neues Bild
             $photo_rotate = imagecreatetruecolor($this->imageHeight, $this->imageWidth);
@@ -197,11 +197,11 @@ class Image
             {
                 for($x = 0; $x < $this->imageWidth; $x++)
                 {
-                    if($direction == "right")
+                    if($direction == 'right')
                     {
                         imagecopy($photo_rotate, $this->imageResource, $this->imageHeight - $y - 1, $x, $x, $y, 1,1 );
                     }
-                    elseif($direction == "left")
+                    elseif($direction == 'left')
                     {
                         imagecopy($photo_rotate, $this->imageResource, $y, $this->imageWidth - $x - 1, $x, $y, 1,1 );
                     }
@@ -298,7 +298,7 @@ class Image
     {
     	imagedestroy($this->imageResource);
     	$this->imageResource = null;
-    	$this->imagePath = "";
+    	$this->imagePath = '';
     }
 }
 ?>

@@ -75,7 +75,14 @@ $parentFolderName = $folder->getValue('fol_name');
 
 
 // Html-Kopf ausgeben
-$g_layout['title'] = 'Ordner erstellen';
+$g_layout['title']  = 'Ordner erstellen';
+$g_layout['header'] = '
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("#new_folder").focus();
+        }); 
+    //--></script>';
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
@@ -131,11 +138,7 @@ echo '
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>
-
-<script type="text/javascript"><!--
-    document.getElementById("new_folder").focus();
-//--></script>';
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 

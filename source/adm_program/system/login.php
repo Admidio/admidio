@@ -9,8 +9,8 @@
  *
  *****************************************************************************/
 
-require("common.php");
-require("classes/table_roles.php");
+require('common.php');
+require('classes/table_roles.php');
 
 // Url merken (wird in cookie_check wieder entfernt)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -19,51 +19,57 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 $role_webmaster = new TableRoles($g_db, 'Webmaster');
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Login";
-
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['title']  = 'Login';
+$g_layout['header'] = '
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("#usr_login_name").focus();
+        }); 
+    //--></script>';
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<form action=\"$g_root_path/adm_program/system/login_check.php\" method=\"post\">
-<div class=\"formLayout\" id=\"login_form\" style=\"width: 300px; margin-top: 60px;\">
-    <div class=\"formHead\">Login</div>
-    <div class=\"formBody\">
-        <ul class=\"formFieldList\">
+echo '
+<form action="'.$g_root_path.'/adm_program/system/login_check.php" method="post">
+<div class="formLayout" id="login_form" style="width: 300px; margin-top: 60px;">
+    <div class="formHead">Login</div>
+    <div class="formBody">
+        <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for=\"usr_login_name\">Benutzername:</label></dt>
-                    <dd><input type=\"text\" id=\"usr_login_name\" name=\"usr_login_name\" style=\"width: 120px;\" maxlength=\"35\" tabindex=\"1\" /></dd>
+                    <dt><label for="usr_login_name">Benutzername:</label></dt>
+                    <dd><input type="text" id="usr_login_name" name="usr_login_name" style="width: 120px;" maxlength="35" tabindex="1" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for=\"usr_password\">Passwort:</label></dt>
-                    <dd><input type=\"password\" id=\"usr_password\" name=\"usr_password\" style=\"width: 120px;\" maxlength=\"20\" tabindex=\"2\" /></dd>
+                    <dt><label for="usr_password">Passwort:</label></dt>
+                    <dd><input type="password" id="usr_password" name="usr_password" style="width: 120px;" maxlength="20" tabindex="2" /></dd>
                 </dl>
-            </li>";
+            </li>';
             
             if($g_preferences['enable_auto_login'] == 1)
             {
-                echo "
+                echo '
                 <li>
                     <dl>
-                        <dt><label for=\"auto_login\">Angemeldet bleiben:</label></dt>
-                        <dd><input type=\"checkbox\" id=\"auto_login\" name=\"auto_login\" value=\"1\" tabindex=\"3\" /></dd>
+                        <dt><label for="auto_login">Angemeldet bleiben:</label></dt>
+                        <dd><input type="checkbox" id="auto_login" name="auto_login" value="1" tabindex="3" /></dd>
                     </dl>
-                </li>";
+                </li>';
             }
-        echo "</ul>
+        echo '</ul>
         
-        <div class=\"formSubmit\">
-            <button name=\"login\" type=\"submit\" value=\"login\" tabindex=\"4\"><img src=\"". THEME_PATH. "/icons/key.png\" alt=\"Login\" />&nbsp;Login</button>
-        </div>";
+        <div class="formSubmit">
+            <button name="login" type="submit" value="login" tabindex="4"><img src="'. THEME_PATH. '/icons/key.png" alt="Login" />&nbsp;Login</button>
+        </div>';
         
         if($g_preferences['registration_mode'] > 0)
         {
-            echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
-                <a href=\"$g_root_path/adm_program/system/registration.php\">Ich m&ouml;chte mich registrieren!</a>
-            </div>";
+            echo '<div class="smallFontSize" style="margin-top: 5px;">
+                <a href="'.$g_root_path.'/adm_program/system/registration.php">Ich möchte mich registrieren!</a>
+            </div>';
         }
 
         // Link bei Loginproblemen
@@ -71,34 +77,30 @@ echo "
         && $g_preferences['enable_system_mails'] == 1)
         {
             // neues Passwort zusenden
-            $mail_link = "$g_root_path/adm_program/system/lost_password.php";
+            $mail_link = $g_root_path.'/adm_program/system/lost_password.php';
         }
         elseif($g_preferences['enable_mail_module'] == 1 
-        && $role_webmaster->getValue("rol_mail_this_role") == 3)
+        && $role_webmaster->getValue('rol_mail_this_role') == 3)
         {
             // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-            $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
+            $mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?rol_id='. $role_webmaster->getValue('rol_id'). '&amp;subject=Loginprobleme';
         }
         else
         {
             // direkte Mail an den Webmaster ueber einen externen Mailclient
-            $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
+            $mail_link = 'mailto:'. $g_preferences['email_administrator']. '?subject=Loginprobleme';
         }
 
-        echo "<div class=\"smallFontSize\" style=\"margin-top: 5px;\">
-            <a href=\"$mail_link\">Ich habe mein Passwort vergessen!</a>
+        echo '<div class="smallFontSize" style="margin-top: 5px;">
+            <a href="'.$mail_link.'">Ich habe mein Passwort vergessen!</a>
         </div>
-        <div class=\"smallFontSize\" style=\"margin-top: 20px;\">
-            Powered by <a href=\"http://www.admidio.org\">Admidio</a>
+        <div class="smallFontSize" style="margin-top: 20px;">
+            Powered by <a href="http://www.admidio.org">Admidio</a>
         </div>
     </div>
 </div>
-</form>
+</form>';
 
-<script type=\"text/javascript\"><!--
-    document.getElementById('usr_login_name').focus();
---></script>";
-
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

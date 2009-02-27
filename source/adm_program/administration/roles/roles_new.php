@@ -111,7 +111,7 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
     	$(document).ready(function() 
 		{
-            document.getElementById("rol_name").focus(); ';
+            $("#rol_name").focus(); ';
             // Bloecke anzeigen/verstecken
             if($req_rol_id > 0)
             {

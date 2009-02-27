@@ -18,16 +18,16 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableAutoLogin extends TableAccess
 {
     // Konstruktor
-    function TableAutoLogin(&$db, $session = "")
+    function TableAutoLogin(&$db, $session = '')
     {
         $this->db            =& $db;
         $this->table_name     = TBL_AUTO_LOGIN;
-        $this->column_praefix = "atl";
+        $this->column_praefix = 'atl';
         
         if(strlen($session) > 0)
         {
@@ -46,9 +46,9 @@ class TableAutoLogin extends TableAccess
         {
             // Insert
             global $g_current_organization;
-            $this->setValue("atl_org_id", $g_current_organization->getValue("org_id"));
-            $this->setValue("atl_last_login", DATETIME_NOW);
-            $this->setValue("atl_ip_address", $_SERVER['REMOTE_ADDR']);
+            $this->setValue('atl_org_id', $g_current_organization->getValue('org_id'));
+            $this->setValue('atl_last_login', DATETIME_NOW);
+            $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
             
             // Tabelle aufraeumen, wenn ein neuer Datensatz geschrieben wird
             $this->tableCleanup();
@@ -56,8 +56,8 @@ class TableAutoLogin extends TableAccess
         else
         {
             // Update
-            $this->setValue("atl_last_login", DATETIME_NOW);
-            $this->setValue("atl_ip_address", $_SERVER['REMOTE_ADDR']);
+            $this->setValue('atl_last_login', DATETIME_NOW);
+            $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
         }
         parent::save();
     }  
@@ -68,8 +68,8 @@ class TableAutoLogin extends TableAccess
         // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
         $date_session_delete = time() - 60*60*24*365;
             
-        $sql    = "DELETE FROM ". TBL_AUTO_LOGIN. " 
-                    WHERE atl_last_login < '". date("Y.m.d H:i:s", $date_session_delete). "'";
+        $sql    = 'DELETE FROM '. TBL_AUTO_LOGIN. ' 
+                    WHERE atl_last_login < "'. date('Y.m.d H:i:s', $date_session_delete). '"';
         $this->db->query($sql);
     }    
 }

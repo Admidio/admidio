@@ -12,16 +12,16 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableOrganizations extends TableAccess
 {
     // Konstruktor
-    function TableOrganizations(&$db, $organization = "")
+    function TableOrganizations(&$db, $organization = '')
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ORGANIZATIONS;
-        $this->column_praefix = "org";
+        $this->column_praefix = 'org';
         
         if(strlen($organization) > 0)
         {
@@ -36,13 +36,13 @@ class TableOrganizations extends TableAccess
     // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
     function readData($organization)
     {
-        $condition = "";
+        $condition = '';
         
         // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($organization) == false)
         {
             $organization = addslashes($organization);
-            $condition = " org_shortname LIKE '$organization' ";
+            $condition = ' org_shortname LIKE "'.$organization.'" ';
         }
         
         parent::readData($organization, $condition);

@@ -14,7 +14,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableListColumns extends TableAccess
 {
@@ -23,7 +23,7 @@ class TableListColumns extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_LIST_COLUMNS;
-        $this->column_praefix = "lsc";
+        $this->column_praefix = 'lsc';
         
         if($lsc_id > 0)
         {

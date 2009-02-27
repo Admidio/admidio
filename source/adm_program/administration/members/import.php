@@ -26,6 +26,13 @@ if (ini_get('file_uploads') != '1')
 
 // Html-Kopf ausgeben
 $g_layout['title']  = 'Benutzer importieren';
+$g_layout['header'] = '
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("#userfile").focus();
+        }); 
+    //--></script>';
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
@@ -82,11 +89,7 @@ echo '
         </div>
     </div>
 </div>
-</form>
-
-<script type="text/javascript"><!--
-    document.getElementById("userfile").focus();
---></script>';
+</form>';
     
 require(THEME_SERVER_PATH. '/overall_footer.php');
 
