@@ -43,7 +43,7 @@
  *
  *****************************************************************************/
 
-require("../common.php");
+require_once('../common.php');
 
 class Captcha
 {
@@ -51,7 +51,7 @@ class Captcha
     function Captcha()
     {
         // Hier wird jetzt die Schriftart festgelegt...
-        $this->font = THEME_SERVER_PATH. "/font.ttf";
+        $this->font = THEME_SERVER_PATH. '/font.ttf';
 
 
         // Nun die Bildgroesse des Captchas festlegen
@@ -67,12 +67,12 @@ class Captcha
         $this->codeSize = 15;
 
         // Hier wird der Untertitel festgelegt.
-        $this->backgroundWriting = "POWERED  BY   A D M I D I O . O R G";
+        $this->backgroundWriting = 'POWERED  BY   A D M I D I O . O R G';
         $this->backgroundWritingSize = 9;
 
         // Diese Zeichen sind erlaubt innerhalb des Captcha-Codes.
         // Schlecht lesbare Zeichen habe ich raus geworfen...
-        $this->allowedChars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+        $this->allowedChars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
     }
 

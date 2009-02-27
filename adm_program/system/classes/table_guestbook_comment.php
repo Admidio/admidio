@@ -12,7 +12,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableGuestbookComment extends TableAccess
 {
@@ -21,7 +21,7 @@ class TableGuestbookComment extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_GUESTBOOK_COMMENTS;
-        $this->column_praefix = "gbc";
+        $this->column_praefix = 'gbc';
         
         if($gbc_id > 0)
         {
@@ -37,8 +37,8 @@ class TableGuestbookComment extends TableAccess
     function readData($gbc_id)
     {
         $tables    = TBL_GUESTBOOK;
-        $condition = "       gbc_gbo_id = gbo_id 
-                         AND gbc_id     = $gbc_id ";
+        $condition = '       gbc_gbo_id = gbo_id 
+                         AND gbc_id     = '.$gbc_id;
         parent::readData($gbc_id, $condition, $tables);
     }
     
@@ -49,12 +49,12 @@ class TableGuestbookComment extends TableAccess
     {
         if(strlen($field_value) > 0)
         {
-            if($field_name == "gbc_email")
+            if($field_name == 'gbc_email')
             {
                 if (!isValidEmailAddress($field_value))
                 {
                     // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
-                    $field_value = "";
+                    $field_value = '';
                 }
             }
         }
@@ -69,19 +69,19 @@ class TableGuestbookComment extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("gbc_timestamp", DATETIME_NOW);
-            $this->setValue("gbc_usr_id", $g_current_user->getValue("usr_id"));
-            $this->setValue("gbc_org_id", $g_current_organization->getValue("org_id"));
-            $this->setValue("gbc_ip_address", $_SERVER['REMOTE_ADDR']);
+            $this->setValue('gbc_timestamp', DATETIME_NOW);
+            $this->setValue('gbc_usr_id', $g_current_user->getValue('usr_id'));
+            $this->setValue('gbc_org_id', $g_current_organization->getValue('org_id'));
+            $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
         }
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue("gbc_timestamp")) + 900)
-            || $g_current_user->getValue("usr_id") != $this->getValue("gbc_usr_id") )
+            if(time() > (strtotime($this->getValue('gbc_timestamp')) + 900)
+            || $g_current_user->getValue('usr_id') != $this->getValue('gbc_usr_id') )
             {
-                $this->setValue("gbc_timestamp_change", DATETIME_NOW);
-                $this->setValue("gbc_usr_id_change", $g_current_user->getValue("usr_id"));
+                $this->setValue('gbc_timestamp_change', DATETIME_NOW);
+                $this->setValue('gbc_usr_id_change', $g_current_user->getValue('usr_id'));
             }
         }
         parent::save();

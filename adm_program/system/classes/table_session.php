@@ -23,7 +23,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableSession extends TableAccess
 {
@@ -32,7 +32,7 @@ class TableSession extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_SESSIONS;
-        $this->column_praefix = "ses";
+        $this->column_praefix = 'ses';
         
         if(strlen($session) > 0)
         {
@@ -50,7 +50,7 @@ class TableSession extends TableAccess
         // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
         {
-            $condition = " ses_session_id = '$session' ";
+            $condition = ' ses_session_id = "'.$session.'" ';
         }       
         
         parent::readData($session, $condition);
@@ -63,15 +63,15 @@ class TableSession extends TableAccess
         {
             // Insert
             global $g_current_organization;
-            $this->setValue("ses_org_id", $g_current_organization->getValue("org_id"));
-            $this->setValue("ses_begin", DATETIME_NOW);
-            $this->setValue("ses_timestamp", DATETIME_NOW);
-            $this->setValue("ses_ip_address", $_SERVER['REMOTE_ADDR']);
+            $this->setValue('ses_org_id', $g_current_organization->getValue('org_id'));
+            $this->setValue('ses_begin', DATETIME_NOW);
+            $this->setValue('ses_timestamp', DATETIME_NOW);
+            $this->setValue('ses_ip_address', $_SERVER['REMOTE_ADDR']);
         }
         else
         {
             // Update
-            $this->setValue("ses_timestamp", DATETIME_NOW);
+            $this->setValue('ses_timestamp', DATETIME_NOW);
         }
         parent::save();
     }  
@@ -81,12 +81,12 @@ class TableSession extends TableAccess
     // wird usr_id uebergeben, dann nur das Einlesen fuer diese usr_id anstossen
     function renewUserObject($usr_id = 0)
     {
-        $sql_usr_id = "";
+        $sql_usr_id = '';
         if($usr_id > 0)
         {
-            $sql_usr_id = " WHERE ses_usr_id = ". $usr_id;
+            $sql_usr_id = ' WHERE ses_usr_id = '. $usr_id;
         }
-        $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 1 ". $sql_usr_id;
+        $sql    = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 '. $sql_usr_id;
         $this->db->query($sql);
     }
     
@@ -94,7 +94,7 @@ class TableSession extends TableAccess
     // Usern beim naechsten Seitenaufruf an
     function renewOrganizationObject()
     {
-        $sql    = "UPDATE ". TBL_SESSIONS. " SET ses_renew = 2 ";
+        $sql    = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 2 ';
         $this->db->query($sql);
     }
     
@@ -111,8 +111,8 @@ class TableSession extends TableAccess
             $date_session_delete = time() - 60 * 60;
         }
             
-        $sql    = "DELETE FROM ". TBL_SESSIONS. " 
-                    WHERE ses_timestamp < '". date("Y.m.d H:i:s", $date_session_delete). "'";
+        $sql    = 'DELETE FROM '. TBL_SESSIONS. ' 
+                    WHERE ses_timestamp < "'. date('Y.m.d H:i:s', $date_session_delete). '"';
         $this->db->query($sql);
     }
 }

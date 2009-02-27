@@ -12,7 +12,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableWeblink extends TableAccess
 {
@@ -21,7 +21,7 @@ class TableWeblink extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_LINKS;
-        $this->column_praefix = "lnk";
+        $this->column_praefix = 'lnk';
         
         if($lnk_id > 0)
         {
@@ -39,9 +39,9 @@ class TableWeblink extends TableAccess
         global $g_current_organization;
         
         $tables    = TBL_CATEGORIES;
-        $condition = "     lnk_id     = $lnk_id 
+        $condition = '     lnk_id     = '.$lnk_id.' 
                        AND lnk_cat_id = cat_id
-                       AND cat_org_id = ". $g_current_organization->getValue("org_id");
+                       AND cat_org_id = '. $g_current_organization->getValue('org_id');
         parent::readData($lnk_id, $condition, $tables);
     }
     
@@ -52,12 +52,12 @@ class TableWeblink extends TableAccess
     {
         if(strlen($field_value) > 0)
         {
-            if($field_name == "lnk_url")
+            if($field_name == 'lnk_url')
             {
                 // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
                 if (substr($field_value, 0, 7) != 'http://' && substr($field_value, 0, 8) != 'https://' )
                 {
-                    $field_value = "http://". $field_value;
+                    $field_value = 'http://'. $field_value;
                 }
             }
         }
@@ -72,17 +72,17 @@ class TableWeblink extends TableAccess
         
         if($this->new_record)
         {
-            $this->setValue("lnk_timestamp_create", DATETIME_NOW);
-            $this->setValue("lnk_usr_id_create", $g_current_user->getValue("usr_id"));
+            $this->setValue('lnk_timestamp_create', DATETIME_NOW);
+            $this->setValue('lnk_usr_id_create', $g_current_user->getValue('usr_id'));
         }
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue("lnk_timestamp_create")) + 900)
-            || $g_current_user->getValue("usr_id") != $this->getValue("lnk_usr_id_create") )
+            if(time() > (strtotime($this->getValue('lnk_timestamp_create')) + 900)
+            || $g_current_user->getValue('usr_id') != $this->getValue('lnk_usr_id_create') )
             {
-                $this->setValue("lnk_timestamp_change", DATETIME_NOW);
-                $this->setValue("lnk_usr_id_change", $g_current_user->getValue("usr_id"));
+                $this->setValue('lnk_timestamp_change', DATETIME_NOW);
+                $this->setValue('lnk_usr_id_change', $g_current_user->getValue('usr_id'));
             }
         }
         parent::save();

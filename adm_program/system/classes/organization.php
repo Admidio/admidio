@@ -26,7 +26,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_organizations.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_organizations.php');
 
 class Organization extends TableOrganizations
 {
@@ -34,7 +34,7 @@ class Organization extends TableOrganizations
     var $child_orgas = array(); // Array mit allen Kinderorganisationen
     
     // Konstruktor
-    function Organization(&$db, $organization = "")
+    function Organization(&$db, $organization = '')
     {
         $this->TableOrganizations($db, $organization);
     }
@@ -52,8 +52,8 @@ class Organization extends TableOrganizations
     // aus adm_preferences zurueck
     function getPreferences()
     {
-        $sql    = "SELECT * FROM ". TBL_PREFERENCES. "
-                    WHERE prf_org_id = ". $this->getValue("org_id");
+        $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
+                    WHERE prf_org_id = '. $this->getValue('org_id');
         $result = $this->db->query($sql);
 
         $preferences = array();
@@ -81,17 +81,17 @@ class Organization extends TableOrganizations
                 && $value  != $db_preferences[$key])
                 {
                     // Pref existiert in DB, aber Wert hat sich geaendert
-                    $sql = "UPDATE ". TBL_PREFERENCES. " SET prf_value = '$value'
-                             WHERE prf_org_id = ". $this->getValue("org_id"). "
-                               AND prf_name   = '$key' ";
+                    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'.$value.'"
+                             WHERE prf_org_id = '. $this->getValue('org_id'). '
+                               AND prf_name   = "'.$key.'" ';
                     $this->db->query($sql);
                 }
             }
             else
             {
                 // Parameter existiert noch nicht in DB
-                $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                        VALUES   (". $this->getValue("org_id"). ", '$key', '$value') ";
+                $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
+                        VALUES   ('. $this->getValue('org_id'). ', "'.$key.'", "'.$value.'") ';
                 $this->db->query($sql);
             }
         }
@@ -107,20 +107,20 @@ class Organization extends TableOrganizations
     {
         $arr_child_orgas = array();
     
-        $sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-                 WHERE ";
+        $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. '
+                 WHERE ';
         if($child == true)
         {
-            $sql .= " org_org_id_parent = ". $this->getValue("org_id");
+            $sql .= ' org_org_id_parent = '. $this->getValue('org_id');
         }
         if($parent == true
-        && $this->getValue("org_org_id_parent") > 0)
+        && $this->getValue('org_org_id_parent') > 0)
         {
             if($child == true)
             {
-                $sql .= " OR ";
+                $sql .= ' OR ';
             }
-            $sql .= " org_id = ". $this->getValue("org_org_id_parent");
+            $sql .= ' org_id = '. $this->getValue('org_org_id_parent');
         }
         $this->db->query($sql);
         

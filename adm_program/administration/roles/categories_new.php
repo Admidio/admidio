@@ -16,53 +16,54 @@
  *
  ****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_category.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/table_category.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_cat_id = 0;
 
 // Uebergabevariablen pruefen
-$title = "Kategorie";
-if (isset($_GET['title'])) {
+$title = 'Kategorie';
+if (isset($_GET['title'])) 
+{
    $title = $_GET['title'];
 }
 
 // Modus und Rechte pruefen
 if(isset($_GET['type']))
 {
-    if($_GET['type'] != "ROL" && $_GET['type'] != "LNK" && $_GET['type'] != "USF" && $_GET['type'] != "DAT")
+    if($_GET['type'] != 'ROL' && $_GET['type'] != 'LNK' && $_GET['type'] != 'USF' && $_GET['type'] != 'DAT')
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
-    if($_GET['type'] == "ROL" && $g_current_user->assignRoles() == false)
+    if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
-    if($_GET['type'] == "LNK" && $g_current_user->editWeblinksRight() == false)
+    if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
-    if($_GET['type'] == "USF" && $g_current_user->editUsers() == false)
+    if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
-    if($_GET['type'] == "DAT" && $g_current_user->editUsers() == false)
+    if($_GET['type'] == 'DAT' && $g_current_user->editUsers() == false)
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
 }
 else
 {
-    $g_message->show("invalid");
+    $g_message->show('invalid');
 }
 
 if(isset($_GET['cat_id']))
 {
     if(is_numeric($_GET['cat_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     $req_cat_id = $_GET['cat_id'];
 }
@@ -77,10 +78,10 @@ if($req_cat_id > 0)
     $category->readData($req_cat_id);
 
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
-    if($category->getValue("cat_org_id") >  0
-    && $category->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
+    if($category->getValue('cat_org_id') >  0
+    && $category->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show("norights");
+        $g_message->show('norights');
     }
 }
 
@@ -90,7 +91,7 @@ if(isset($_SESSION['categories_request']))
     // nun die vorher eingegebenen Inhalte auslesen
     foreach($_SESSION['categories_request'] as $key => $value)
     {
-        if(strpos($key, "cat_") == 0)
+        if(strpos($key, 'cat_') == 0)
         {
             $category->setValue($key, stripslashes($value));
         }
@@ -101,30 +102,37 @@ if(isset($_SESSION['categories_request']))
 // Html-Kopf ausgeben
 if($req_cat_id > 0)
 {
-    $g_layout['title']  = "$title ändern";
+    $g_layout['title']  = $title.' ändern';
 }
 else
 {
-    $g_layout['title']  = "$title anlegen";
+    $g_layout['title']  = $title.' anlegen';
 }
-require(THEME_SERVER_PATH. "/overall_header.php");
+$g_layout['header'] = '
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("#cat_name").focus();
+        }); 
+    //--></script>';
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<form action=\"$g_root_path/adm_program/administration/roles/categories_function.php?cat_id=$req_cat_id&amp;type=". $_GET["type"]. "&amp;mode=1\" method=\"post\">
-<div class=\"formLayout\" id=\"edit_categories_form\">
-    <div class=\"formHead\">". $g_layout['title']. "</div>
-    <div class=\"formBody\">
-        <ul class=\"formFieldList\">
+echo '
+<form action="'.$g_root_path.'/adm_program/administration/roles/categories_function.php?cat_id='.$req_cat_id.'&amp;type='. $_GET['type']. '&amp;mode=1" method="post">
+<div class="formLayout" id="edit_categories_form">
+    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formBody">
+        <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for=\"cat_name\">Name:</label></dt>
+                    <dt><label for="cat_name">Name:</label></dt>
                     <dd>
-                        <input type=\"text\" id=\"cat_name\" name=\"cat_name\" size=\"30\" maxlength=\"30\" value=\"". $category->getValue("cat_name"). "\" />
-                        <span class=\"mandatoryFieldMarker\" title=\"Pflichtfeld\">*</span>
+                        <input type="text" id="cat_name" name="cat_name" size="30" maxlength="30" value="'. $category->getValue('cat_name'). '" />
+                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
-            </li>";
+            </li>';
 
             if($_GET['type'] == 'USF')
             {
@@ -154,49 +162,45 @@ echo "
             }
             else
             {
-                echo "
+                echo '
                 <li>
                     <dl>
                         <dt>
-                            <label for=\"cat_hidden\"><img src=\"". THEME_PATH. "/icons/user_key.png\" alt=\"$title nur f&uuml;r eingeloggte Benutzer sichtbar\" /></label>
+                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$title.' nur für eingeloggte Benutzer sichtbar" /></label>
                         </dt>
                         <dd>
-                            <input type=\"checkbox\" id=\"cat_hidden\" name=\"cat_hidden\" ";
-                                if($category->getValue("cat_hidden") == 1)
+                            <input type="checkbox" id="cat_hidden" name="cat_hidden" ';
+                                if($category->getValue('cat_hidden') == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
-                            <label for=\"cat_hidden\">$title nur f&uuml;r eingeloggte Benutzer sichtbar</label>
+                                echo ' value="1" />
+                            <label for="cat_hidden">'.$title.' nur für eingeloggte Benutzer sichtbar</label>
                         </dd>
                     </dl>
-                </li>";
+                </li>';
             }
-        echo "</ul>
+        echo '</ul>
 
         <hr />
 
-        <div class=\"formSubmit\">
-            <button id=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
+        <div class="formSubmit">
+            <button id="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
     </div>
 </div>
 </form>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>
+</ul>';
 
-<script type=\"text/javascript\"><!--
-    document.getElementById('cat_name').focus();
---></script>";
-
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

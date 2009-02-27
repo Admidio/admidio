@@ -17,7 +17,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableLists extends TableAccess
 {
@@ -26,7 +26,7 @@ class TableLists extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_LISTS;
-        $this->column_praefix = "lst";
+        $this->column_praefix = 'lst';
         
         if($lst_id > 0)
         {
@@ -44,14 +44,14 @@ class TableLists extends TableAccess
         global $g_current_organization;
         
         // erst die bisherige Default-Liste zuruecksetzen
-        $sql = "UPDATE ". TBL_LISTS. " SET lst_default = 0
-                 WHERE lst_org_id  = ". $g_current_organization->getValue("org_id"). "
-                   AND lst_default = 1 ";
+        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 0
+                 WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
+                   AND lst_default = 1 ';
         $this->db->query($sql);
 
         // jetzt die aktuelle Liste zur Default-Liste machen
-        $sql = "UPDATE ". TBL_LISTS. " SET lst_default = 1
-                 WHERE lst_id = ". $this->getValue("lst_id");
+        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 1
+                 WHERE lst_id = '. $this->getValue('lst_id');
         $this->db->query($sql);
     }
 
@@ -62,20 +62,20 @@ class TableLists extends TableAccess
         // Standardfelder fuellen
         if($this->new_record)
         {
-            $this->setValue("lst_timestamp", DATETIME_NOW);
-            $this->setValue("lst_usr_id", $g_current_user->getValue("usr_id"));
-            $this->setValue("lst_org_id", $g_current_organization->getValue("org_id"));
+            $this->setValue('lst_timestamp', DATETIME_NOW);
+            $this->setValue('lst_usr_id', $g_current_user->getValue('usr_id'));
+            $this->setValue('lst_org_id', $g_current_organization->getValue('org_id'));
         }
         else
         {
-            $this->setValue("lst_timestamp", DATETIME_NOW);
-            $this->setValue("lst_usr_id", $g_current_user->getValue("usr_id"));
+            $this->setValue('lst_timestamp', DATETIME_NOW);
+            $this->setValue('lst_usr_id', $g_current_user->getValue('usr_id'));
         }
         
         // falls nicht explizit auf global = 1 gesetzt wurde, immer auf 0 setzen
-        if($this->getValue("lst_global") <> 1)
+        if($this->getValue('lst_global') <> 1)
         {
-            $this->setValue("lst_global", 0);
+            $this->setValue('lst_global', 0);
         }
         
         parent::save();
@@ -85,7 +85,7 @@ class TableLists extends TableAccess
     function delete()
     {
         // alle Spalten der Liste loeschen
-        $sql = "DELETE FROM ". TBL_LIST_COLUMNS. " WHERE lsc_lst_id = ". $this->getValue("lst_id");
+        $sql = 'DELETE FROM '. TBL_LIST_COLUMNS. ' WHERE lsc_lst_id = '. $this->getValue('lst_id');
         $result = $this->db->query($sql);
         
         return parent::delete();

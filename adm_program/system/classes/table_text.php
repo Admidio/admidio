@@ -14,16 +14,16 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableText extends TableAccess
 {
     // Konstruktor
-    function TableText(&$db, $name = "")
+    function TableText(&$db, $name = '')
     {
         $this->db            =& $db;
         $this->table_name     = TBL_TEXTS;
-        $this->column_praefix = "txt";
+        $this->column_praefix = 'txt';
         
         if(strlen($name) > 0)
         {
@@ -43,8 +43,8 @@ class TableText extends TableAccess
         // wurde txt_name uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($name) == false)
         {
-            $condition = "    txt_name = '$name' 
-                          AND txt_org_id = ". $g_current_organization->getValue("org_id");
+            $condition = '    txt_name   = "'.$name.'" 
+                          AND txt_org_id = '. $g_current_organization->getValue('org_id');
         }
         
         parent::readData($name, $condition);
@@ -58,7 +58,7 @@ class TableText extends TableAccess
         {
             // Insert
             global $g_current_organization;
-            $this->setValue("txt_org_id", $g_current_organization->getValue("org_id"));
+            $this->setValue('txt_org_id', $g_current_organization->getValue('org_id'));
         }
         parent::save();
     }    
