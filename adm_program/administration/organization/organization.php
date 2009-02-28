@@ -66,7 +66,7 @@ $g_layout['header'] =  '
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
                         "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
-                        "dates-module", "links-module", "messages-module", "systeminfo", "inventory-module", "billing-module");
+                        "dates-module", "links-module", "messages-module", "systeminfo", "inventory-module");
 
 
         // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -279,12 +279,7 @@ echo "
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('systeminfo');\">Systeminfo</a></span>
         </span>
         </td>
-        <td>
-       <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('billing-module');\"><img src=\"". THEME_PATH. "/icons/billing.png\" alt=\"Mitgliedsbeiträge\" title=\"Mitgliedsbeiträge\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('billing-module');\">Mitgliedsbeiträge</a></span>
-        </span>
-		</td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -2101,42 +2096,6 @@ echo "
         	</div>
         </div>';
 		
-		/**************************************************************************************/
-        //Einstellungen Billing Modul
-        /**************************************************************************************/
-
-        echo "
-        <div class=\"groupBox\" id=\"billing-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/billing.png\" alt=\"Beitrag\" />
-                Einstellungen Beitragsmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
-                    <li>
-                        <dl>
-                            <dt><label for=\"enable_billing_module\">Beitragsmodul aktivieren:</label></dt>
-                            <dd>
-                                <select size=\"1\" id=\"enable_billing_module\" name=\"enable_billing_module\">
-                                    <option value=\"0\" ";
-                                    if($form_values['enable_billing_module'] == 0)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['enable_billing_module'] == 1)
-                                    {
-                                        echo " selected=\"selected\" ";
-                                    }
-                                    echo ">Aktiviert</option>
-                                </select>
-                            </dd>
-                        </dl>
-                    </li>
-                </ul>
-            </div>
-        </div>";
-
-
 		/**************************************************************************************/
         //Einstellungen Inventarmodul
         /**************************************************************************************/
