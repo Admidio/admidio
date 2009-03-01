@@ -255,12 +255,6 @@ echo "
         </td>
         <td>
         <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('messages-module');\"><img src=\"". THEME_PATH. "/icons/lists.png\" alt=\"Nachrichten\" title=\"Nachrichten\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('messages-module');\">Nachrichten</a></span>
-        </span>
-        </td>
-        <td>
-        <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" title=\"Termine\" /></a>
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a></span>
         </span>
@@ -271,18 +265,12 @@ echo "
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a></span>
         </span>
         </td>
-        </tr>
-        <tr>
         <td>
         <span class=\"iconTextLink\">
             <a href=\"#\" onclick=\"toggleDiv('systeminfo');\"><img src=\"". THEME_PATH. "/icons/info.png\" alt=\"Systeminformationen\" title=\"Systeminformationen\" /></a>
             <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('systeminfo');\">Systeminfo</a></span>
         </span>
         </td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
         </tr>
         </table>
     </div>
