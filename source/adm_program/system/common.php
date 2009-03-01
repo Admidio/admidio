@@ -303,12 +303,6 @@ else
     $g_homepage = $g_root_path. '/'. $g_preferences['homepage_logout'];
 }
 
-// Auf neue Nachrichten prüfen
-if($g_valid_login)
-{
-    $g_messages->GetMessages($g_current_user->getValue('usr_id'));
-}
-
 /*********************************************************************************
 Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
 /********************************************************************************/
