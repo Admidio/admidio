@@ -122,17 +122,6 @@ $orga_preferences = array(
     'enable_weblinks_module'    => '1',
     'weblinks_per_page' 		=> '0',
 	'weblinks_redirect_seconds'	=> '10',
-	'weblinks_target'			=> '_blank',
-
-    // Nachrichten
-    'enable_messages_module'    => '1',
-    'messages_reminder'			=> '1',
-    'messages_in_box'			=> '0',
-    'messages_out_box'			=> '0',
-    'messages_archive'			=> '0',
-
-	// Inventarmodul
-	'enable_inventory_module'	=> '0',
-	'inventory_items_per_page'	=> '0'
+	'weblinks_target'			=> '_blank'
  );
 ?>
