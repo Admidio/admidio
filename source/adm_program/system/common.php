@@ -164,18 +164,6 @@ if(isset($_SESSION['navigation']) == false)
     $_SESSION['navigation'] = new Navigation();
 }
 
-// Objekt fuer die Nachrichten erstellen
-if(isset($_SESSION['messages']))
-{
-	$g_messages =& $_SESSION['messages'];
-	$g_messages->db =& $g_db;
-}
-else
-{
-    $g_messages = new Messages($g_db);
-    $_SESSION['messages'] =& $g_messages;
-}
-
 // pruefen, ob Datenbank-Version zu den Scripten passt
 if(isset($g_preferences['db_version']) == false
 || version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)

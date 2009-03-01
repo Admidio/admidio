@@ -76,23 +76,6 @@
                 style="vertical-align: middle;" src="'. THEME_PATH. '/icons/profile.png" alt="Mein Profil" title="Mein Profil" /></a>
                 <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php">Mein Profil</a></span>';
 
-            if( $g_preferences['enable_messages_module'] == 1
-            || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login))            
-            {
-                echo '
-                <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/messages/messages.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/lists.png" alt="Nachrichten" title="Nachrichten" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/messages/messages.php">Nachrichten</a>';
-                if ($g_messages->msg > 0 AND $g_valid_login)
-                {
-                	echo "&nbsp;<a href=\"$g_root_path/adm_program/modules/messages/messages.php?mode=new\"><img src=\"". THEME_PATH. "/icons/".$g_messages->msg_icon."\" alt=\"Neue Nachrichten\" title=\"Neue Nachrichten\"></a></span>";
-                }
-                else
-                {
-                	echo "</span>";
-                }
-            }
-
             if( $g_preferences['enable_dates_module'] == 1
             || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))                    
             {

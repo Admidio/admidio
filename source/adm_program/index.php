@@ -204,43 +204,6 @@ echo '</ul>
             </li>';
 
 
-
-            if( $g_preferences['enable_messages_module'] == 1
-            || ($g_preferences['enable_messages_module'] == 2 && $g_valid_login))
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/messages/messages.php"><img
-                            src="'.THEME_PATH.'/icons/lists_big.png" alt="Nachrichten" title="Nachrichten" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/messages/messages.php">Nachrichten</a></span>';
-                        	if($g_valid_login)
-                        	{
-                            	echo '
-                            	&nbsp;&nbsp;
-                                &#91; 
-                                <a href="'.$g_root_path.'/adm_program/modules/messages/messages.php?mode=new"><img src="'.THEME_PATH.'/icons/'.$g_messages->msg_icon.'" alt="Neue Nachrichten" title="Neue Nachrichten"></a>
-                                <a href="'.$g_root_path.'/adm_program/modules/messages/messages.php?mode=new">'.$g_messages->msg_text.'</a> |
-                                <a href="'.$g_root_path.'/adm_program/modules/messages/messages.php?mode=archiv"><img src="'.THEME_PATH.'/icons/message_read.gif" alt="Archiv" title="Archiv"></a>
-                                <a href="'.$g_root_path.'/adm_program/modules/messages/messages.php?mode=archiv">Archiv</a>
-                                &#93;
-                                <br /> 
-                            	<span class="smallFontSize">Private Nachrichten mit anderen Mitgliedern austauschen und verwalten.</span>';
-                        	}
-                        	else
-                        	{
-                            	echo '<br />
-                            	<span class="smallFontSize">Private Nachrichten mit anderen Mitgliedern austauschen und verwalten.</span>';
-                        	}
-                        echo '</dd>
-                    </dl>
-                </li>';
-            }
-
-
             if( $g_preferences['enable_dates_module'] == 1
             || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))
             {
