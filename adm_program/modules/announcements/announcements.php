@@ -240,7 +240,7 @@ else
                         if($announcement->editRight() == true)
                         {
                             echo '
-                            <a class="iconLink" href="$g_root_path/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$req_headline.'"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$req_headline.'"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
                         }
 
