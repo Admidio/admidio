@@ -16,16 +16,22 @@ function toggleElement(elementID, iconID)
     if($("#" + elementID).css("display") == "none")
     {
         $("#" + elementID).show("slow");
-        $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_open.gif");
-        $("#" + iconID).attr("title", "Ausblenden");
-        $("#" + iconID).attr("alt",   "Ausblenden");
+        if($("#" + iconID).length > 0)
+        {
+            $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_open.gif");
+            $("#" + iconID).attr("title", "Ausblenden");
+            $("#" + iconID).attr("alt",   "Ausblenden");
+        }
     }
     else
     {
         $("#" + elementID).hide("slow");
-        $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_close.gif");
-        $("#" + iconID).attr("title", "Einblenden");
-        $("#" + iconID).attr("alt",   "Einblenden");
+        if($("#" + iconID).length > 0)
+        {    
+            $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_close.gif");
+            $("#" + iconID).attr("title", "Einblenden");
+            $("#" + iconID).attr("alt",   "Einblenden");
+        }
     }
 }
 

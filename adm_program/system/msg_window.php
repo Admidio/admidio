@@ -56,7 +56,6 @@ switch ($req_err_code)
         echo 'Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks)
               können mit verschiedenen Tags (BBCode) formatiert werden. Dafür müssen die
               hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
-              Beispiele:<br /><br />
               <table class="tableList" style="width: auto;" cellspacing="0">
                  <tr>
                     <th style="width: 155px;">Beispiel</th>
