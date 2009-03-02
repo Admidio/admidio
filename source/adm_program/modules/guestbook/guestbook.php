@@ -126,7 +126,7 @@ $g_layout['header'] = $g_layout['header']. '
             {
                 toggleDiv("commentsInvisible_" + commentId);
                 toggleDiv("commentsVisible_" + commentId);
-                toggleDiv("commentSection_" + commentId);
+                toggleElement("commentSection_" + commentId, "");
             }
         }
 
@@ -347,7 +347,7 @@ else
                     </div>';
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
-                    echo '<div id="commentSection_'. $row->gbo_id. '" class="commentBox" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">';
+                    echo '<div id="commentSection_'. $row->gbo_id. '" class="commentBox" style="display: '. $display_others. ';">';
                         if($g_preferences['enable_intial_comments_loading'] == 1)
                         {
                             include("get_comments.php");
