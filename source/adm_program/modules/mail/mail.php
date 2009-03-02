@@ -475,7 +475,7 @@ echo '
                             <dd>
                                 <img src="$g_root_path/adm_program/system/classes/captcha.php?id='. time(). '" alt="Captcha" />
                             </dd>
-                        </dt>
+                        </dl>
                     </li>
                     <li>
                         <dl>
