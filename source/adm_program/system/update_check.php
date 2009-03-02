@@ -106,27 +106,15 @@ else
 	$show = 1;
 }
 
-// Für Entwickler:
-// Zum Testen wird eine einfache Textdatei 'update.txt' mit folgendem Inhalt benötigt:
-// Version=2.0.9
-// Beta-Version=2.1.0
-// Beta-Release=1
-//
-// Bitte den Zeilenumbruch in der letzten Zeile nicht vergessen! Der Link muss natürlich
-// entsprechend angepasst werden. Hier in der Beta-Veresion liegt die Datei im root-Verzeichnis!
-// Und Achrung: Bei xamp muss die Erweiterung extension=php_curl.dll aktiviert sein!
-// Im Live-System wird es natürlich nur eine zentrale Stelle geben, an der diese
-// Informationen liegen (z.B. http://www.admidio.org/update.txt)
-
 // Admidio Versionen (Installierte und Verfügbare) übergeben
 $current_version = ADMIDIO_VERSION;
 $beta_flag = BETA_VERSION;
 
 // Erreichbarkeit der Updateinformation prüfen und bei Verbindung
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
-if(domainAvailable($g_root_path. '/update.txt'))
+if(domainAvailable('http://www.admidio.org/update.txt'))
 {
-	$update_info = file_get_contents($g_root_path. '/update.txt');
+	$update_info = file_get_contents('http://www.admidio.org/update.txt');
 	
 	// Admidio Versionen vom Server übergeben
 	$stable_version = GetUpdateVersion($update_info, "Version=");
