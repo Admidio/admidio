@@ -14,8 +14,8 @@
  *
  *****************************************************************************/
 
-require("common.php");
-require("login_valid.php");
+require_once('common.php');
+require_once('login_valid.php');
 
 // Funktion zur Erreichbarkeitsprüfung der Updatedatei
 function domainAvailable($strDomain)
@@ -43,8 +43,8 @@ function GetUpdateVersion($update_info, $search)
 {
 	// Variablen festlegen
 	$i = 0;
-	$pointer = "";
-	$update_version = "";
+	$pointer = '';
+	$update_version = '';
 	$current_version_start = strpos($update_info, $search);
 	$adding = strlen($search)-1;
 
@@ -56,7 +56,7 @@ function GetUpdateVersion($update_info, $search)
 		$pointer = substr($update_info, $current_version_start+$adding+$i, 1);
 	}
 	
-	return $update_version;
+	return trim($update_version, "\n\r");
 }
 
 // Funktion zur Überprüfung eines Updates
@@ -92,23 +92,19 @@ function CheckVersion($current_version, $check_stable_version, $check_beta_versi
 // Uebergabevariablen pruefen
 if(isset($_GET['show']))
 {
-	if(is_numeric($_GET["show"]) == false || $_GET["show"] > 2)
+	if(is_numeric($_GET['show']) == false || $_GET['show'] > 2)
 	{
-		$g_message->show("invalid", "", "", false);
+		$g_message->show('invalid', '', '', false);
 	}
 	else
 	{
-		$show = $_GET["show"];		
+		$show = $_GET['show'];		
 	}
 }
 else
 {
 	$show = 1;
 }
-
-// Admidio Versionen (Installierte und Verfügbare) übergeben
-$current_version = ADMIDIO_VERSION;
-$beta_flag = BETA_VERSION;
 
 // Erreichbarkeit der Updateinformation prüfen und bei Verbindung
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
@@ -117,25 +113,25 @@ if(domainAvailable('http://www.admidio.org/update.txt'))
 	$update_info = file_get_contents('http://www.admidio.org/update.txt');
 	
 	// Admidio Versionen vom Server übergeben
-	$stable_version = GetUpdateVersion($update_info, "Version=");
-	$beta_version = GetUpdateVersion($update_info, "Beta-Version=");
-	$beta_release = GetUpdateVersion($update_info, "Beta-Release=");
+	$stable_version = GetUpdateVersion($update_info, 'Version=');
+	$beta_version   = GetUpdateVersion($update_info, 'Beta-Version=');
+	$beta_release   = GetUpdateVersion($update_info, 'Beta-Release=');
 	
 	// Keine Stabile Version verfügbar (eigentlich unmöglich)
-	if($stable_version == "")
+	if($stable_version == '')
 	{
 		$stable_version = 'n/a';
 	}
 	
 	// Keine Beatversion verfügbar
-	if($beta_version == "")
+	if($beta_version == '')
 	{
 		$beta_version = 'n/a';
 		$beta_release = '';
 	}
 	
 	// Auf Update prüfen
-	$version_update = CheckVersion($current_version, $stable_version, $beta_version, $beta_release, $beta_flag);
+	$version_update = CheckVersion(ADMIDIO_VERSION, $stable_version, $beta_version, $beta_release, BETA_VERSION);
 }
 else
 {
@@ -181,13 +177,13 @@ if($show == 2)
 	}	
 	else
 	{
-		$versionstext = 'Kein Update verfügbar!';
+		$versionstext = '<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/ok.png" alt="Ok" /> Du benutzt eine aktuelle Admidio-Version!';
 	}
 
 	// Html-Kopf ausgeben
-	$g_layout['title']    = "Update Prüfung";
+	$g_layout['title']    = 'Update Prüfung';
 	$g_layout['includes'] = false;
-	require(THEME_SERVER_PATH. "/overall_header.php");
+	require(THEME_SERVER_PATH. '/overall_header.php');
 
 	// Html des Modules ausgeben
 	echo '
@@ -197,33 +193,34 @@ if($show == 2)
 			<ul class="formFieldList">
 				<li>
 					<dl>
-						<dt><label for="current_admidio">Aktuelle Version:</label></dt>
-						<dd style="margin-left: 51%;"><b>'. ADMIDIO_VERSION. BETA_VERSION_TEXT. '</b></dd>
+						<dt><label for="stable_admidio">Aktuelle stabile Version:</label></dt>
+						<dd style="margin-left: 55%;"><b>' .$stable_version. '</b></dd>
 					</dl>
 				</li>
+				<li>
+					<dl>
+						<dt><label for="beta_admidio">Aktuelle Beta Version:</label></dt>
+						<dd style="margin-left: 55%;"><b>'. $beta_version;
+                        if($version_update != 99 && $beta_version != 'n/a')
+                        {
+                            echo '&nbsp;Beta&nbsp;';
+                        }
+                        echo $beta_release. '</b></dd>
+					</dl>
+				</li>	
 				<li><hr /></li>
 				<li>
 					<dl>
-						<dt><label for="stable_admidio">Letzte stabile Version:</label></dt>
-						<dd style="margin-left: 51%;"><b>' .$stable_version. '</b></dd>
+						<dt><label for="current_admidio">Installierte Version:</label></dt>
+						<dd style="margin-left: 55%;"><b>'. ADMIDIO_VERSION. BETA_VERSION_TEXT. '</b></dd>
 					</dl>
 				</li>
-				<li>
-					<dl>
-						<dt><label for="beta_admidio">Letzte Beta Version:</label></dt>
-						<dd style="margin-left: 51%;"><b>'. $beta_version;
-					if($version_update != 99 && $beta_version != 'n/a')
-					{echo '&nbsp;Beta&nbsp;';}
-					echo $beta_release. '</b></dd>
-					</dl>
-				</li>	
 			</ul>
 
-			<hr />
-			<div>' .$versionstext. '</div>
+			<div style="margin-top: 20px;">' .$versionstext. '</div>
 		</div>';
 	  
-	require(THEME_SERVER_PATH. "/overall_footer.php");
+	require(THEME_SERVER_PATH. '/overall_footer.php');
 }
 
 
