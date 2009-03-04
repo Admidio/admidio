@@ -11,9 +11,9 @@
 
 $message_text = array(
 'anmeldung' =>
-    '<p>Deine Daten wurden gespeichert.</p>
-    <p>Du kannst dich noch nicht einloggen.<br />
-    Sobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.</p>',
+    'Deine Daten wurden gespeichert.<br /><br />
+    Du kannst dich noch nicht einloggen.<br />
+    Sobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.',
 
 'assign_login' =>
     'Die Logindaten wurden erfolgreich zugeordnet.',
