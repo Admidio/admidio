@@ -166,7 +166,9 @@ if(isset($_SESSION['navigation']) == false)
 
 // pruefen, ob Datenbank-Version zu den Scripten passt
 if(isset($g_preferences['db_version']) == false
-|| version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
+|| isset($g_preferences['db_version_beta']) == false
+|| version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0
+|| version_compare($g_preferences['db_version_beta'], BETA_VERSION) != 0)
 {
     unset($_SESSION['g_current_organization']);
     $g_message->addVariableContent($g_preferences['email_administrator'], 1, false);
@@ -251,7 +253,7 @@ if($g_current_session->getValue('ses_id') > 0)
             // Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
             $time_gap = time() - mysqlmaketimestamp($g_current_session->getValue('ses_timestamp'));
             
-            // wenn lÃ¤nger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
+            // wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
             if($time_gap < $g_preferences['logout_minutes'] * 60 || $b_auto_login == true) 
             {
                 // bei Autologin ggf. den Beginn aktualisieren, wenn die Luecke zu gross geworden ist

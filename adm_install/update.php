@@ -74,39 +74,40 @@ if($req_mode == 1)
     {
         // bei einem Update von Admidio 1.x muss die spezielle Version noch erfragt werden,
         // da in Admidio 1.x die Version noch nicht in der DB gepflegt wurde
-        $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
-                      <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />
-                      Bisher wurde eine Version 1.x von Admidio verwendet. Um die Datenbank
-                      erfolgreich auf Admidio '. ADMIDIO_VERSION. ' zu migrieren, ist es erforderlich,
-                      dass du deine bisherige Version angibst:<br /><br />
-                      Bisherige Admidio-Version:&nbsp;
-                      <select id="old_version" name="old_version" size="1">
-                          <option value="0" selected="selected">- Bitte wählen -</option>
-                          <option value="1.4.9">Version 1.4.*</option>
-                          <option value="1.3.9">Version 1.3.*</option>
-                          <option value="1.2.9">Version 1.2.*</option>
-                      </select>';
-        showPage($message, 'update.php?mode=2', 'database_in.png', 'Datenbank aktualisieren', 2);
+        $message = '<img style="vertical-align: top;" src="layout/warning.png" />
+                    <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />
+                    Bisher wurde eine Version 1.x von Admidio verwendet. Um die Datenbank
+                    erfolgreich auf Admidio '. ADMIDIO_VERSION. ' zu migrieren, ist es erforderlich,
+                    dass du deine bisherige Version angibst:<br /><br />
+                    Bisherige Admidio-Version:&nbsp;
+                    <select id="old_version" name="old_version" size="1">
+                        <option value="0" selected="selected">- Bitte wählen -</option>
+                        <option value="1.4.9">Version 1.4.*</option>
+                        <option value="1.3.9">Version 1.3.*</option>
+                        <option value="1.2.9">Version 1.2.*</option>
+                    </select>';
     }
-    elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0)
+    elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0 || $g_preferences['db_version_beta'] != BETA_VERSION)
     {
-        $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
-                      <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />';
-        showPage($message, 'update.php?mode=2', 'database_in.png', 'Datenbank aktualisieren', 2);
+        $message = '<img style="vertical-align: top;" src="layout/warning.png" />
+                    <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong>';
     }
-	elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0 && $g_preferences['db_version_beta'] < BETA_VERSION)
+    else
     {
-        $message   = '<img style="vertical-align: top;" src="layout/warning.png" />
-                      <strong>Eine Aktualisierung der Datenbank ist erforderlich</strong><br /><br />';
-        showPage($message, 'update.php?mode=2', 'database_in.png', 'Datenbank aktualisieren', 2);
-    }
-    elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) == 0)
-    {
-        $message   = '<img style="vertical-align: top;" src="layout/ok.png" /> 
-                      <strong>Eine Aktualisierung ist nicht erforderlich</strong><br /><br />
-                      Die Admidio-Datenbank ist aktuell.';
+        $message = '<img style="vertical-align: top;" src="layout/ok.png" /> 
+                    <strong>Eine Aktualisierung ist nicht erforderlich</strong><br /><br />
+                    Die Admidio-Datenbank ist aktuell.';
         showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', 'Übersichtsseite', 2);
     }
+
+    // falls dies eine Betaversion ist, dann Hinweis ausgeben
+    if(BETA_VERSION > 0)
+    {
+        $message .= '<br /><br />Dies ist eine Beta-Version von Admidio.<br /><br />
+                    Sie kann zu Stabilitätsproblemen und Datenverlust führen und
+                    sollte deshalb nur in einer Testumgebung genutzt werden !';
+    }
+    showPage($message, 'update.php?mode=2', 'database_in.png', 'Datenbank aktualisieren', 2);
 }
 elseif($req_mode == 2)
 {
@@ -228,6 +229,10 @@ elseif($req_mode == 2)
 			 WHERE prf_name    = "db_version" ';
 	$g_db->query($sql);                
 
+	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'. BETA_VERSION. '"
+			 WHERE prf_name    = "db_version_beta" ';
+	$g_db->query($sql);                
+    
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
     // damit diese neu eingelesen werden muessen
     session_name('admidio_php_session_id');
@@ -237,7 +242,7 @@ elseif($req_mode == 2)
     unset($_SESSION['g_current_user']);
 
     $message   = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Aktualisierung war erfolgreich</strong><br /><br />
-                  Die Admidio-Datenbank ist jetzt auf die Version '. ADMIDIO_VERSION. ' aktualisiert worden.<br />
+                  Die Admidio-Datenbank ist jetzt auf die Version '. ADMIDIO_VERSION. BETA_VERSION_TEXT. ' aktualisiert worden.<br />
                   Du kannst nun wieder mit Admidio arbeiten.';
     showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', 'Übersichtsseite', 2);
 }

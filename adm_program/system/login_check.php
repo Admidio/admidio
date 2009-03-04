@@ -142,6 +142,12 @@ if ($user_found >= 1)
             $login_message = 'login';
         }
 
+        // bei einer Beta-Version noch einen Hinweis ausgeben !
+        if(BETA_VERSION > 0 && $g_debug == false)
+        {
+            $login_message = 'beta_version';
+        }
+
         // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
         // die Startseite verweisen
         if(isset($_SESSION['login_forward_url']) == false)

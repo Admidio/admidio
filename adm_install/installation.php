@@ -75,6 +75,16 @@ if($req_mode == 1)
                 Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung
                 von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der
                 Datenbank, auf der Admidio zukünftig laufen soll.';
+
+    // falls dies eine Betaversion ist, dann Hinweis ausgeben
+    if(BETA_VERSION > 0)
+    {
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" />
+                    Dies ist eine Beta-Version von Admidio.<br /><br />
+                    Sie kann zu Stabilitätsproblemen und Datenverlust führen und
+                    sollte deshalb nur in einer Testumgebung genutzt werden !';
+    }
+
     if((phpversion() !='' && substr(phpversion(), 0, 3)< 4.3 )|| ini_get('safe_mode') == 1)
     {    
         $message = $message.'
@@ -557,14 +567,10 @@ elseif($req_mode == 7)
         $text->save();
     }
 
-    // Datenbank-Versionsnummer schreiben
+    // Admidio-Versionsnummer schreiben
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-                                       VALUES ('. $g_current_organization->getValue('org_id'). ', "db_version", "'. ADMIDIO_VERSION. '") ';
-    $db->query($sql);
-
-	// Beta-Flag für Datenbank-Versionsnummer schreiben
-    $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-                                       VALUES ('. $g_current_organization->getValue('org_id'). ', "db_version_beta", "'. BETA_VERSION. '") ';
+                                       VALUES ('. $g_current_organization->getValue('org_id'). ', "db_version",      "'. ADMIDIO_VERSION. '") 
+                                            , ('. $g_current_organization->getValue('org_id'). ', "db_version_beta", "'. BETA_VERSION. '")';
     $db->query($sql);
 
     // Default-Kategorie fuer Rollen und Links eintragen
