@@ -101,15 +101,20 @@ if ($parentRoleSet == null) {
 $roleSet = $folder->getRoleArrayOfFolder();
 
 // Html-Kopf ausgeben
-$g_layout['title'] = "Ordnerberechtigungen setzen";
+$g_layout['title'] = 'Ordnerberechtigungen setzen';
 
-$g_layout['header'] = "
-    <script type=\"text/javascript\"><!--
+$g_layout['header'] = '
+    <script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            $("#fol_public").focus();
+	 	});
+
         // Scripts fuer Rollenbox
         function hinzufuegen()
         {
-            var allowed_roles = document.getElementById('AllowedRoles');
-            var denied_roles  = document.getElementById('DeniedRoles');
+            var allowed_roles = document.getElementById("AllowedRoles");
+            var denied_roles  = document.getElementById("DeniedRoles");
 
             if (denied_roles.selectedIndex >= 0) {
                 NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
@@ -120,8 +125,8 @@ $g_layout['header'] = "
 
         function entfernen()
         {
-            var allowed_roles = document.getElementById('AllowedRoles');
-            var denied_roles  = document.getElementById('DeniedRoles');
+            var allowed_roles = document.getElementById("AllowedRoles");
+            var denied_roles  = document.getElementById("DeniedRoles");
 
             if (allowed_roles.selectedIndex >= 0)
             {
@@ -133,7 +138,7 @@ $g_layout['header'] = "
 
         function absenden()
         {
-            var allowed_roles = document.getElementById('AllowedRoles');
+            var allowed_roles = document.getElementById("AllowedRoles");
 
             allowed_roles.multiple = true;
 
@@ -144,23 +149,7 @@ $g_layout['header'] = "
 
             form.submit();
         }
-
-        function toggleDiv(objectId)
-        {
-            if (document.getElementById(objectId).style.visibility == 'hidden')
-            {
-                document.getElementById(objectId).style.visibility = 'visible';
-                document.getElementById(objectId).style.display    = 'block';
-            }
-            else
-            {
-                document.getElementById(objectId).style.visibility = 'hidden';
-                document.getElementById(objectId).style.display    = 'none';
-            }
-        }
-
-    --></script>";
-
+    //--></script>';
 
 
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -170,11 +159,8 @@ echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$folder_id.'">
 <div class="formLayout" id="edit_download_folder_form" >
     <div class="formHead">Ordnerberechtigungen setzen</div>
-    <div class="formBody">';
-
-    echo $navigationBar;
-
-        echo '
+    <div class="formBody">'.
+        $navigationBar.'
         <div class="groupBox" style="width: 90%;">
             <div class="groupBoxBody" >
                 <div style="margin-top: 6px;">
@@ -190,7 +176,7 @@ echo '
                                 {
                                     echo ' disabled="disabled" ';
                                 }
-                                echo ' value="0" onclick="toggleDiv(\'rolesBox\');" />
+                                echo ' value="0" onclick="toggleElement(\'rolesBox\');" />
                                 <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="Der Ordner ist &ouml;ffentlich." /></label>&nbsp;
                                 <label for="fol_public">Öffentlicher Zugriff ist nicht erlaubt.</label>
                                 <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
@@ -214,66 +200,61 @@ echo '
         <div class="groupBox" id="rolesBox" style="width: 90%; ';
             if($folder->getValue('fol_public') == 1)
             {
-                echo ' visibility: hidden; display: none;';
+                echo ' display: none;';
             }
             echo ' ">
+            <div class="groupBoxHeadline">Rollenzugriffsberechtigungen</div>
             <div class="groupBoxBody" >
-                <div style="margin-top: 6px;">
-                    <p>Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben d&uuml;rfen.
-                       Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene
-                       Berechtigungen in Unterordnern werden &uuml;berschrieben. Es stehen nur Rollen
-                       zur Verf&uuml;gung die auf den &uuml;bergeordneten Ordner Zugriff haben.</p>
+                <p>Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben d&uuml;rfen.
+                   Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene
+                   Berechtigungen in Unterordnern werden &uuml;berschrieben. Es stehen nur Rollen
+                   zur Verf&uuml;gung die auf den &uuml;bergeordneten Ordner Zugriff haben.</p>
 
-                    <div style="text-align: left; float: left;">';
-                        echo '
-                        <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="Kein Zugriff" title="Kein Zugriff" />Kein Zugriff</div>
-                        <div>
-                            <select id="DeniedRoles" size="8" style="width: 200px;">';
-                            for($i=0; $i<count($parentRoleSet); $i++) {
-
-                                $nextRole = $parentRoleSet[$i];
-
-                                if ($roleSet != null && in_array($nextRole, $roleSet)) {
-                                    continue;
-                                }
-                                else {
-                                    echo '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
-                                }
-
-                            }
-
-                            echo '
-                            </select>
-                        </div>
-                    </div>
-                    <div style="float: left;" class="verticalIconList">
-                        <ul>
-                            <li>
-                                <a class="iconLink" href="javascript:hinzufuegen()">
-                                    <img src="'. THEME_PATH. '/icons/forward.png" alt="Rolle hinzufügen" title="Rolle hinzufügen" />
-                                </a>
-                            </li>
-                            <li>
-                                <a class="iconLink" href="javascript:entfernen()">
-                                    <img src="'. THEME_PATH. '/icons/back.png" alt="Rolle entfernen" title="Rolle entfernen" />
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                <div style="text-align: left; float: left;">
+                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="Kein Zugriff" title="Kein Zugriff" />Kein Zugriff</div>
                     <div>
-                        <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="Zugriff erlaubt" title="Zugriff erlaubt" />Zugriff erlaubt</div>
-                        <div>
-                            <select id="AllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">';
-                            for($i=0; $i<count($roleSet); $i++) {
+                        <select id="DeniedRoles" size="8" style="width: 200px;">';
+                        for($i=0; $i < count($parentRoleSet); $i++) 
+                        {
+                            $nextRole = $parentRoleSet[$i];
 
-                                $nextRole = $roleSet[$i];
+                            if ($roleSet == null || in_array($nextRole, $roleSet) == false) 
+                            {
                                 echo '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
                             }
-                            echo '
-                            </select>
-                        </div>
+                        }
+
+                        echo '
+                        </select>
                     </div>
-                 </div>
+                </div>
+                <div style="float: left;" class="verticalIconList">
+                    <ul>
+                        <li>
+                            <a class="iconLink" href="javascript:hinzufuegen()">
+                                <img src="'. THEME_PATH. '/icons/forward.png" alt="Rolle hinzufügen" title="Rolle hinzufügen" />
+                            </a>
+                        </li>
+                        <li>
+                            <a class="iconLink" href="javascript:entfernen()">
+                                <img src="'. THEME_PATH. '/icons/back.png" alt="Rolle entfernen" title="Rolle entfernen" />
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="Zugriff erlaubt" title="Zugriff erlaubt" />Zugriff erlaubt</div>
+                    <div>
+                        <select id="AllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">';
+                        for($i=0; $i<count($roleSet); $i++) {
+
+                            $nextRole = $roleSet[$i];
+                            echo '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
+                        }
+                        echo '
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
 
