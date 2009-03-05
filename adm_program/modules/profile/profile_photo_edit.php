@@ -208,7 +208,7 @@ if($job==NULL)
     }
 
     $g_layout['title']  = $headline;
-	$g_layout['header'] = $javascript. '
+	$g_layout['header'] = '
 	<script type="text/javascript"><!--
     	$(document).ready(function() 
 		{

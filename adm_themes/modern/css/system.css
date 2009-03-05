@@ -509,9 +509,8 @@ ul.autosuggest li.highlight a:visited  {
 }
 
 /*spezielle Anpassung Hilfe Thickbox*/
-#message_window{
+#message_window .formBody ul {
     padding-left:       20px;
-    width:              540px;
 }
 
 /* spezielle Anpassung fuer die Terminseite */
