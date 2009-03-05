@@ -161,54 +161,52 @@ echo '
     <div class="formHead">Ordnerberechtigungen setzen</div>
     <div class="formBody">'.
         $navigationBar.'
-        <div class="groupBox" style="width: 90%;">
+        <div class="groupBox">
             <div class="groupBoxBody" >
-                <div style="margin-top: 6px;">
-                    <ul class="formFieldList">
-                        <li>
-                            <div>
-                                <input type="checkbox" id="fol_public" name="fol_public" ';
-                                if($folder->getValue('fol_public') == 0)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
-                                {
-                                    echo ' disabled="disabled" ';
-                                }
-                                echo ' value="0" onclick="toggleElement(\'rolesBox\');" />
-                                <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="Der Ordner ist &ouml;ffentlich." /></label>&nbsp;
-                                <label for="fol_public">Öffentlicher Zugriff ist nicht erlaubt.</label>
-                                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=publicDownloadFlag\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+                <ul class="formFieldList">
+                    <li>
+                        <div>
+                            <input type="checkbox" id="fol_public" name="fol_public" ';
+                            if($folder->getValue('fol_public') == 0)
+                            {
+                                echo ' checked="checked" ';
+                            }
+                            if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
+                            {
+                                echo ' disabled="disabled" ';
+                            }
+                            echo ' value="0" onclick="toggleElement(\'rolesBox\');" />
+                            <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="Der Ordner ist &ouml;ffentlich." /></label>&nbsp;
+                            <label for="fol_public">Öffentlicher Zugriff ist nicht erlaubt.</label>
+                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=publicDownloadFlag\',this)" onmouseout="ajax_hideTooltip()"
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
 
-                                //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.
-                                if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
-                                {
-                                    echo '<input type=hidden id="fol_public_hidden" name="fol_public" value='. $parentFolder->getValue('fol_public'). ' />';
-                                }
+                            //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.
+                            if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
+                            {
+                                echo '<input type=hidden id="fol_public_hidden" name="fol_public" value='. $parentFolder->getValue('fol_public'). ' />';
+                            }
 
-                            echo '
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                        echo '
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
 
-        <div class="groupBox" id="rolesBox" style="width: 90%; ';
+        <div class="groupBox" id="rolesBox" ';
             if($folder->getValue('fol_public') == 1)
             {
-                echo ' display: none;';
+                echo ' style="display: none;" ';
             }
-            echo ' ">
+            echo '>
             <div class="groupBoxHeadline">Rollenzugriffsberechtigungen</div>
             <div class="groupBoxBody" >
-                <p>Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben d&uuml;rfen.
+                <p>Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben dürfen.
                    Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene
-                   Berechtigungen in Unterordnern werden &uuml;berschrieben. Es stehen nur Rollen
-                   zur Verf&uuml;gung die auf den &uuml;bergeordneten Ordner Zugriff haben.</p>
+                   Berechtigungen in Unterordnern werden überschrieben. Es stehen nur Rollen
+                   zur Verfügung die auf den übergeordneten Ordner Zugriff haben.</p>
 
                 <div style="text-align: left; float: left;">
                     <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="Kein Zugriff" title="Kein Zugriff" />Kein Zugriff</div>
@@ -261,8 +259,8 @@ echo '
 
         <div class="formSubmit">
             <button name="speichern" type="submit" value="speichern" onclick="absenden()">
-            <img src="'. THEME_PATH. '/icons/disk.png" alt="Berechtigungen speichern" />
-            &nbsp;Berechtigungen speichern</button>
+            <img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />
+            &nbsp;Speichern</button>
         </div>
     </div>
 </div>
