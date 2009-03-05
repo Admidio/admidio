@@ -304,7 +304,7 @@ echo '
             </li>
         </ul>
 
-        <div class="groupBox" id="properties_box" style="width: 90%;">
+        <div class="groupBox" id="properties_box">
             <div class="groupBoxHeadline" id="properties_head">
                 <a class="iconShowHide" href="javascript:toggleElement(\'properties_body\', \'img_properties_body\')"><img
                 id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Eigenschaften
@@ -436,7 +436,7 @@ echo '
             </div>
         </div>
 
-        <div class="groupBox" id="justifications_box" style="width: 90%;">
+        <div class="groupBox" id="justifications_box">
             <div class="groupBoxHeadline">
                 <a class="iconShowHide" href="javascript:toggleElement(\'justifications_body\',\'img_justifications_body\')"><img
                 id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Berechtigungen
@@ -474,29 +474,29 @@ echo '
                             {
                                 echo ' disabled="disabled" ';
                             }
-                            echo " onchange=\"markRoleRight('rol_all_lists_view', 'rol_assign_roles', false)\" value=\"1\" />
-                            <label for=\"rol_all_lists_view\"><img src=\"". THEME_PATH. "/icons/lists.png\" alt=\"Mitgliederlisten aller Rollen einsehen\" /></label>&nbsp;
-                            <label for=\"rol_all_lists_view\">Mitgliederlisten aller Rollen einsehen</label>
+                            echo ' onchange="markRoleRight(\'rol_all_lists_view\', \'rol_assign_roles\', false)" value="1" />
+                            <label for="rol_all_lists_view"><img src="'. THEME_PATH. '/icons/lists.png" alt="Mitgliederlisten aller Rollen einsehen" /></label>&nbsp;
+                            <label for="rol_all_lists_view">Mitgliederlisten aller Rollen einsehen</label>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <input type=\"checkbox\" id=\"rol_approve_users\" name=\"rol_approve_users\" ";
-                            if($role->getValue("rol_approve_users") == 1)
+                            <input type="checkbox" id="rol_approve_users" name="rol_approve_users" ';
+                            if($role->getValue('rol_approve_users') == 1)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
-                            echo " value=\"1\" />
-                            <label for=\"rol_approve_users\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierungen verwalten und zuordnen\" /></label>&nbsp;
-                            <label for=\"rol_approve_users\">Registrierungen verwalten und zuordnen</label>
+                            echo ' value="1" />
+                            <label for="rol_approve_users"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="Registrierungen verwalten und zuordnen" /></label>&nbsp;
+                            <label for="rol_approve_users">Registrierungen verwalten und zuordnen</label>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <input type=\"checkbox\" id=\"rol_edit_user\" name=\"rol_edit_user\" ";
-                            if($role->getValue("rol_edit_user") == 1)
+                            <input type="checkbox" id="rol_edit_user" name="rol_edit_user" ';
+                            if($role->getValue('rol_edit_user') == 1)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
                             echo ' value="1" />
                             <label for="rol_edit_user"><img src="'. THEME_PATH. '/icons/group.png" alt="Profildaten und Rollenzuordnungen aller Benutzer bearbeiten" /></label>&nbsp;
@@ -508,148 +508,169 @@ echo '
                     </li>';
 					if($g_preferences['enable_mail_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_mail_to_all\" name=\"rol_mail_to_all\" ";
-                                if($role->getValue("rol_mail_to_all") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_mail_to_all\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"Emails an alle Rollen schreiben\" /></label>&nbsp;
-                                <label for=\"rol_mail_to_all\">Emails an alle Rollen schreiben&nbsp;</label>
+                                <input type="checkbox" id="rol_mail_to_all" name="rol_mail_to_all" ';
+                                if($role->getValue('rol_mail_to_all') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_mail_to_all"><img src="'. THEME_PATH. '/icons/email.png" alt="Emails an alle Rollen schreiben" /></label>&nbsp;
+                                <label for="rol_mail_to_all">Emails an alle Rollen schreiben&nbsp;</label>
                             </div>
-                        </li>";
+                        </li>';
                     }
-                    echo"
+                    echo '
 					<li>
                         <div>
-                            <input type=\"checkbox\" id=\"rol_profile\" name=\"rol_profile\" ";
-                            if($role->getValue("rol_profile") == 1)
-                                echo " checked=\"checked\" ";
-                            echo " value=\"1\" />
-                            <label for=\"rol_profile\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Eigenes Profil bearbeiten\" /></label>&nbsp;
-                            <label for=\"rol_profile\">Eigenes Profil bearbeiten</label>
+                            <input type="checkbox" id="rol_profile" name="rol_profile" ';
+                            if($role->getValue('rol_profile') == 1)
+                            {
+                                echo ' checked="checked" ';
+                            }
+                            echo ' value="1" />
+                            <label for="rol_profile"><img src="'. THEME_PATH. '/icons/profile.png" alt="Eigenes Profil bearbeiten" /></label>&nbsp;
+                            <label for="rol_profile">Eigenes Profil bearbeiten</label>
                         </div>
-                    </li>";
+                    </li>';
 
                     if($g_preferences['enable_announcements_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_announcements\" name=\"rol_announcements\" ";
-                                if($role->getValue("rol_announcements") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_announcements\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen anlegen und bearbeiten\" /></label>&nbsp;
-                                <label for=\"rol_announcements\">Ankündigungen anlegen und bearbeiten&nbsp;</label>
+                                <input type="checkbox" id="rol_announcements" name="rol_announcements" ';
+                                if($role->getValue('rol_announcements') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_announcements"><img src="'. THEME_PATH. '/icons/announcements.png" alt="Ankündigungen anlegen und bearbeiten" /></label>&nbsp;
+                                <label for="rol_announcements">Ankündigungen anlegen und bearbeiten&nbsp;</label>
                             </div>
-                        </li>";
+                        </li>';
                     }
                     if($g_preferences['enable_dates_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_dates\" name=\"rol_dates\" ";
-                                if($role->getValue("rol_dates") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_dates\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine anlegen und bearbeiten\" /></label>&nbsp;
-                                <label for=\"rol_dates\">Termine anlegen und bearbeiten</label>
+                                <input type="checkbox" id="rol_dates" name="rol_dates" ';
+                                if($role->getValue('rol_dates') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_dates"><img src="'. THEME_PATH. '/icons/dates.png" alt="Termine anlegen und bearbeiten" /></label>&nbsp;
+                                <label for="rol_dates">Termine anlegen und bearbeiten</label>
                             </div>
-                        </li>";
+                        </li>';
                     }
                     if($g_preferences['enable_photo_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_photo\" name=\"rol_photo\" ";
-                                if($role->getValue("rol_photo") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_photo\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos hochladen und bearbeiten\" /></label>&nbsp;
-                                <label for=\"rol_photo\">Fotos hochladen und bearbeiten</label>
+                                <input type="checkbox" id="rol_photo" name="rol_photo" ';
+                                if($role->getValue('rol_photo') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_photo"><img src="'. THEME_PATH. '/icons/photo.png" alt="Fotos hochladen und bearbeiten" /></label>&nbsp;
+                                <label for="rol_photo">Fotos hochladen und bearbeiten</label>
                             </div>
-                        </li>";
+                        </li>';
                     }
                     if($g_preferences['enable_download_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_download\" name=\"rol_download\" ";
-                                if($role->getValue("rol_download") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_download\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads hochladen und bearbeiten\" /></label>&nbsp;
-                                <label for=\"rol_download\">Downloads hochladen und bearbeiten</label>
+                                <input type="checkbox" id="rol_download" name="rol_download" ';
+                                if($role->getValue('rol_download') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_download"><img src="'. THEME_PATH. '/icons/download.png" alt="Downloads hochladen und bearbeiten" /></label>&nbsp;
+                                <label for="rol_download">Downloads hochladen und bearbeiten</label>
                             </div>
-                        </li>";
+                        </li>';
                     }
                     if($g_preferences['enable_guestbook_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_guestbook\" name=\"rol_guestbook\" ";
-                                if($role->getValue("rol_guestbook") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_guestbook\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebucheinträge bearbeiten und löschen\" /></label>&nbsp;
-                                <label for=\"rol_guestbook\">Gästebucheinträge bearbeiten und löschen</label>
+                                <input type="checkbox" id="rol_guestbook" name="rol_guestbook" ';
+                                if($role->getValue('rol_guestbook') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_guestbook"><img src="'. THEME_PATH. '/icons/guestbook.png" alt="Gästebucheinträge bearbeiten und löschen" /></label>&nbsp;
+                                <label for="rol_guestbook">Gästebucheinträge bearbeiten und löschen</label>
                             </div>
-                        </li>";
+                        </li>';
                         // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
                         if($g_preferences['enable_gbook_comments4all'] == false)
                         {
-                            echo "
+                            echo '
                             <li>
                                 <div>
-                                    <input type=\"checkbox\" id=\"rol_guestbook_comments\" name=\"rol_guestbook_comments\" ";
-                                    if($role->getValue("rol_guestbook_comments") == 1)
-                                        echo " checked=\"checked\" ";
-                                    echo " value=\"1\" />
-                                    <label for=\"rol_guestbook_comments\"><img src=\"". THEME_PATH. "/icons/comments.png\" alt=\"Kommentare zu Gästebucheinträgen anlegen\" /></label>&nbsp;
-                                    <label for=\"rol_guestbook_comments\">Kommentare zu Gästebucheinträgen anlegen</label>
+                                    <input type="checkbox" id="rol_guestbook_comments" name="rol_guestbook_comments" ';
+                                    if($role->getValue('rol_guestbook_comments') == 1)
+                                    {
+                                        echo ' checked="checked" ';
+                                    }
+                                    echo ' value="1" />
+                                    <label for="rol_guestbook_comments"><img src="'. THEME_PATH. '/icons/comments.png" alt="Kommentare zu Gästebucheinträgen anlegen" /></label>&nbsp;
+                                    <label for="rol_guestbook_comments">Kommentare zu Gästebucheinträgen anlegen</label>
                                 </div>
-                            </li>";
+                            </li>';
                         }
                     }
                     if($g_preferences['enable_weblinks_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_weblinks\" name=\"rol_weblinks\" ";
-                                if($role->getValue("rol_weblinks") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_weblinks\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks anlegen und bearbeiten\" /></label>&nbsp;
-                                <label for=\"rol_weblinks\">Weblinks anlegen und bearbeiten</label>
+                                <input type="checkbox" id="rol_weblinks" name="rol_weblinks" ';
+                                if($role->getValue('rol_weblinks') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_weblinks"><img src="'. THEME_PATH. '/icons/weblinks.png" alt="Weblinks anlegen und bearbeiten" /></label>&nbsp;
+                                <label for="rol_weblinks">Weblinks anlegen und bearbeiten</label>
                             </div>
-                        </li>";
+                        </li>';
                     }
                     if($g_preferences['enable_inventory_module'] > 0)
                     {
-                        echo "
+                        echo '
                         <li>
                             <div>
-                                <input type=\"checkbox\" id=\"rol_inventory\" name=\"rol_inventory\" ";
-                                if($role->getValue("rol_inventory") == 1)
-                                    echo " checked=\"checked\" ";
-                                echo " value=\"1\" />
-                                <label for=\"rol_inventory\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Inventar verwalten\" /></label>&nbsp;
-                                <label for=\"rol_inventory\">Inventar verwalten</label>
+                                <input type="checkbox" id="rol_inventory" name="rol_inventory" ';
+                                if($role->getValue('rol_inventory') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                                <label for="rol_inventory"><img src="'. THEME_PATH. '/icons/weblinks.png" alt="Inventar verwalten" /></label>&nbsp;
+                                <label for="rol_inventory">Inventar verwalten</label>
                             </div>
-                        </li>";
+                        </li>';
+               
                     }
                 echo '</ul>
             </div>
         </div>
 
-        <div class="groupBox" id="dates_box" style="width: 90%;">
+        <div class="groupBox" id="dates_box">
             <div class="groupBoxHeadline" id="dates_head">
                 <a class="iconShowHide" href="javascript:toggleElement(\'dates_body\',\'img_dates_body\')"><img
                 	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
@@ -719,7 +740,7 @@ echo '
         </div>";
         if($role->getValue('rol_max_members') == 0)
         {
-            echo '<div class="groupBox" id="dependancies_box" style="width: 90%;">
+            echo '<div class="groupBox" id="dependancies_box">
                 <div class="groupBoxHeadline" id="dependancies_head">
                     <a class="iconShowHide" href="javascript:toggleElement(\'dependancies_body\',\'img_dependancies_body\')"><img
                     id="img_dependancies_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Abhängigkeiten&nbsp;&nbsp;(optional)

@@ -50,6 +50,12 @@ h3 {
     margin:             15px 0px 7px 0px;
 }
 
+p {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin: 0px;
+}
+
 img {
     border-width:       0px;
 }
@@ -198,7 +204,7 @@ a:hover, a:active {
     float:              left;
 }
 .formFieldList li dl dd {
-    margin-left:        31%;
+    margin-left:        29%;
     text-align:         left;
 }
 
