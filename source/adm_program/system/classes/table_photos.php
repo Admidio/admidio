@@ -140,7 +140,7 @@ class TablePhotos extends TableAccess
                     }
                     else
                     {
-                        $shuffle_image = shuffleImage($pho_row['pho_id']);
+                        $shuffle_image = $this->shuffleImage($pho_row['pho_id']);
                     }
                 }
             }

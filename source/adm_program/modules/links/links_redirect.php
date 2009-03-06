@@ -78,13 +78,6 @@ if ($url == '')
 	$g_message->show('invalid');
 }
 
-
-// Navigation initialisieren - Modul faengt hier an.
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
-
-unset($_SESSION['links_request']);
-
 $g_layout['header'] = '<meta http-equiv="refresh" content="'. $g_preferences["weblinks_redirect_seconds"].'; url='.$url.'">';
 
 //Counter zählt die sekunden bis zur Weiterleitung runter
