@@ -124,7 +124,7 @@ html.* #right_block span {
     padding-left: 13px;
     padding-right: 12px;
     min-height: 450px;
-    min-width: 574px;
+    width: 574px;
 }
 
 .content {
@@ -134,10 +134,6 @@ html.* #right_block span {
     background-position: 0 bottom;
     background-repeat: repeat-x;
     background-image: url(../images/background_in_borders.png);
-}
-/*IE6 Hack damit Blöcke die richtige Breite behalten*/
-html.*  #content_left {
-    width: 574px;
 }
 
 #sidebar {
