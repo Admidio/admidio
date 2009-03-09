@@ -48,6 +48,33 @@ class TableUserField extends TableAccess
         }
     }
     
+    // das Feld wird um eine Position in der Reihenfolge verschoben
+    function moveSequence($mode)
+    {
+        global $g_current_organization;
+
+        // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
+        if(strtoupper($mode) == 'UP')
+        {
+            $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = '.$this->getValue('usf_sequence').'
+                     WHERE usf_cat_id   = '.$this->getValue('usf_cat_id').'
+                       AND usf_sequence = '.$this->getValue('usf_sequence').' - 1 ';
+            $this->db->query($sql);
+            $this->setValue('usf_sequence', $this->getValue('usf_sequence')-1);
+            $this->save();
+        }
+        // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
+        elseif(strtoupper($mode) == 'DOWN')
+        {
+            $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = '.$this->getValue('usf_sequence').'
+                     WHERE usf_cat_id   = '.$this->getValue('usf_cat_id').'
+                       AND usf_sequence = '.$this->getValue('usf_sequence').' + 1 ';
+            $this->db->query($sql);
+            $this->setValue('usf_sequence', $this->getValue('usf_sequence')+1);
+            $this->save();
+        }
+    }    
+    
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen

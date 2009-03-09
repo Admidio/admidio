@@ -36,9 +36,7 @@ $g_layout['header'] = '
             var nextNode    = null;
             var actRowCount = 0;
             var actSequence = 0;
-            var secondUsfId = 0;
             var secondSequence = 0;
-            var this_orga   = 0;
             
             // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
             for(i=0;i < childs.length; i++)
@@ -69,7 +67,6 @@ $g_layout['header'] = '
                 if(prevNode != null)
                 {
                     actRow.parentNode.insertBefore(actRow, prevNode);
-                    secondUsfId = prevNode.getAttribute("id").substr(4);
                     secondSequence = actSequence - 1;
                 }
             }
@@ -78,7 +75,6 @@ $g_layout['header'] = '
                 if(nextNode != null)
                 {
                     actRow.parentNode.insertBefore(nextNode, actRow);
-                    secondUsfId = nextNode.getAttribute("id").substr(4);
                     secondSequence = actSequence + 1;
                 }
             }
@@ -86,15 +82,11 @@ $g_layout['header'] = '
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/members/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + secondSequence, true);
-                resObject.send(null);
-                
-                // jetzt die neue Position von jeweils verschobenen Feld aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/members/fields_function.php?usf_id=" + secondUsfId + "&mode=4&sequence=" + actSequence, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/members/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction, true);
                 resObject.send(null);
             }
         }
-    --></script>';
+    //--></script>';
     
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. '/overall_header.php');

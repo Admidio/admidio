@@ -79,7 +79,6 @@ $g_layout['header'] = '
             var nextNode    = null;
             var actRowCount = 0;
             var actSequence = 0;
-            var secondCatId = 0;
             var secondSequence = 0;
 
             // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
@@ -111,7 +110,6 @@ $g_layout['header'] = '
                 if(prevNode != null)
                 {
                     actRow.parentNode.insertBefore(actRow, prevNode);
-                    secondCatId = prevNode.getAttribute("id").substr(4);
                     secondSequence = actSequence - 1;
                 }
             }
@@ -120,7 +118,6 @@ $g_layout['header'] = '
                 if(nextNode != null)
                 {
                     actRow.parentNode.insertBefore(nextNode, actRow);
-                    secondCatId = nextNode.getAttribute("id").substr(4);
                     secondSequence = actSequence + 1;
                 }
             }
@@ -128,15 +125,11 @@ $g_layout['header'] = '
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/roles/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + secondSequence, true);
-                resObject.send(null);
-
-                // jetzt die neue Position von jeweils verschobenen Kategorie aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/roles/categories_function.php?cat_id=" + secondCatId + "&type='. $_GET["type"]. '&mode=4&sequence=" + actSequence, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/roles/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + direction, true);
                 resObject.send(null);
             }
         }
-    --></script>';
+    //--></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -170,23 +163,23 @@ echo '
         </tr>
     </thead>';
 
-    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-             WHERE (  cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+    $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
+             WHERE (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-               AND cat_type   = '$req_type'
-             ORDER BY cat_sequence ASC ";
+               AND cat_type   = "'.$req_type.'"
+             ORDER BY cat_sequence ASC ';
     $cat_result = $g_db->query($sql);
     $write_tbody = false;
     $write_all_orgas = false;
 
     while($cat_row = $g_db->fetch_array($cat_result))
     {
-        if($cat_row['cat_name'] == "Stammdaten" && $_GET['type'] == "USF")
+        if($cat_row['cat_name'] == 'Stammdaten' && $_GET['type'] == 'USF')
         {
             // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
             echo '<tbody id="cat_stammdaten">';
         }
-        elseif($cat_row['cat_org_id'] == 0 && $_GET['type'] == "USF")
+        elseif($cat_row['cat_org_id'] == 0 && $_GET['type'] == 'USF')
         {
             // Kategorien über alle Organisationen kommen immer zuerst
             if($write_all_orgas == false)
@@ -201,7 +194,7 @@ echo '
             if($write_tbody == false)
             {
                 $write_tbody = true;
-                if($_GET['type'] == "USF")
+                if($_GET['type'] == 'USF')
                 {
                     echo '</tbody>';
                 }
@@ -247,18 +240,18 @@ echo '
             echo '</td>
         </tr>';
     }
-    echo "</tbody>
+    echo '</tbody>
 </table>
 
-<ul class=\"iconTextLinkList\">
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/system/back.php\"><img
-            src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-            <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+            src="'.THEME_PATH.'/icons/back.png" alt="Zurück" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>";
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 
