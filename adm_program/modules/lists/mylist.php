@@ -47,7 +47,7 @@ if(isset($_GET['rol_id']))
     $req_rol_id = $_GET['rol_id'];
 }  
 
-if(isset($_GET['active_role']) && is_numeric($_GET['show_members']))
+if(isset($_GET['active_role']) && is_numeric($_GET['active_role']))
 {
     $active_role = $_GET['active_role'];
 }   
@@ -55,7 +55,13 @@ if(isset($_GET['active_role']) && is_numeric($_GET['show_members']))
 if(isset($_GET['show_members']) && is_numeric($_GET['show_members']))
 {
     $show_members = $_GET['show_members'];
-}  
+}
+
+// falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
+if($active_role == 0)
+{
+    $show_members = 1;
+}
 
 if($req_rol_id == 0)
 {
@@ -305,9 +311,9 @@ $g_layout['header'] = '
                     }
                     $g_layout['header'] .= '
                     default_fields['. $number. '] = new Object();
-                    default_fields['. $number. '][\'usf_id\']    = \''. $column_content. '\';
-                    default_fields['. $number. '][\'sort\']      = \''. $column->getValue('lsc_sort'). '\';
-                    default_fields['. $number. '][\'condition\'] = \''. $column->getValue('lsc_filter'). '\';';
+                    default_fields['. $number. ']["usf_id"]    = "'. $column_content. '";
+                    default_fields['. $number. ']["sort"]      = "'. $column->getValue('lsc_sort'). '";
+                    default_fields['. $number. ']["condition"] = "'. $column->getValue('lsc_filter'). '";';
                 }
             }
 
@@ -317,8 +323,10 @@ $g_layout['header'] = '
 
         function loadList()
         {
-            var lst_id = document.getElementById("lists_config").value;
-            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + lst_id;
+            var lst_id = $("#lists_config").value;
+            var rol_id = $("#rol_id").value;
+            var show_members = $("#show_members").value;
+            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + lst_id + "&rol_id=" + rol_id + "&active_role='.$active_role.'&show_members=" + show_members;
         }
 
         function send(mode)
@@ -589,23 +597,31 @@ echo '
         <b>3.</b> Wähle eine Rolle aus von der du die Mitgliederliste erstellen willst:
         <p><b>Rolle :</b>&nbsp;&nbsp;';
 
-        // Combobox mit allen Rollen ausgeben
-        echo generateRoleSelectBox($req_rol_id);
+        // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen
+        $role_select_box_mode = 0;
+        if($active_role == 0)
+        {
+            $role_select_box_mode = 2;
+        }
+        echo generateRoleSelectBox($req_rol_id, '', $role_select_box_mode);
 
         // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
-        $selected[0] = '';
-        $selected[1] = '';
-        $selected[2] = '';
-        $selected[$show_members] = ' selected="selected" ';
+        // bei inaktiven Rollen gibt es nur Ehemalige
+        if($active_role == 1)
+        {
+            $selected[0] = '';
+            $selected[1] = '';
+            $selected[2] = '';
+            $selected[$show_members] = ' selected="selected" ';
+            echo '&nbsp;&nbsp;&nbsp;
+            <select size="1" id="show_members" name="show_members">
+                <option '.$selected[0].' value="0">Aktive Mitglieder</option>
+                <option '.$selected[1].' value="1">Ehemalige Mitglieder</option>
+                <option '.$selected[2].' value="2">Aktive und Ehemalige</option>
+            </select>';
+        }
         
-        echo '&nbsp;&nbsp;&nbsp;
-        <select size="1" id="show_members" name="show_members">
-            <option '.$selected[0].' value="0">Aktive Mitglieder</option>
-            <option '.$selected[1].' value="1">Ehemalige Mitglieder</option>
-            <option '.$selected[2].' value="2">Aktive und Ehemalige</option>
-        </select>
-        
-        <hr />
+        echo '<hr />
 
         <div class="formSubmit">
             <button name="btn_show" type="button" onclick="javascript:send(\'show\');" value="anzeigen"><img 

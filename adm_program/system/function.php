@@ -240,6 +240,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 //          = 0 : Alle Rollen, die der Benutzer sehen darf
 //          = 1 : Alle sicheren Rollen, so dass der Benutzer sich kein "Rollenzuordnungsrecht" 
 //                dazuholen kann, wenn er es nicht schon besitzt
+//          = 2 : Alle nicht aktiven Rollen auflisten
 
 function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0)
 {
@@ -252,6 +253,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
 
     // SQL-Statement entsprechend dem Modus zusammensetzen
     $condition = '';
+    $active_roles = 1;
     if($show_mode == 1 && $g_current_user->assignRoles() == false)
     {
         // keine Rollen mit Rollenzuordnungsrecht anzeigen
@@ -262,9 +264,13 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
         // Webmasterrolle nicht anzeigen
         $condition .= ' AND rol_name <> "Webmaster" ';
     }
+    elseif($show_mode == 2)
+    {
+        $active_roles = 0;
+    }
     
     $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-             WHERE rol_valid  = 1
+             WHERE rol_valid  = '.$active_roles.'
                AND rol_cat_id = cat_id
                AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
                    '.$condition.'

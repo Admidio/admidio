@@ -58,6 +58,11 @@ if($_GET['mode'] == 2
     $g_message->show('feld', 'Rolle');
 }
 
+if(isset($_POST['show_members']) == false)
+{
+    $_POST['show_members'] = 0;
+}
+
 // Ehemalige
 if(array_key_exists('former', $_POST))
 {
