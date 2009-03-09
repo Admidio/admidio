@@ -162,12 +162,7 @@ $g_layout['header'] = '
 
             if(lst_id == "mylist")
             {
-                self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + rol_id';
-                if($active_role == false)
-                {
-                    $g_layout['header'] .= ' + "&show_members=1"';
-                }
-                $g_layout['header'] .= ';
+                self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + rol_id + "&active_role='.$active_role.'";
             }
             else
             {
