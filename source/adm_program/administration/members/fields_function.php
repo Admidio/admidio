@@ -43,12 +43,9 @@ if(isset($_GET['usf_id']))
     }
 }
 
-if(isset($_GET['sequence']))
+if(isset($_GET['sequence']) && strtoupper($_GET['sequence']) != 'UP' && strtoupper($_GET['sequence']) != 'DOWN')
 {
-    if(is_numeric($_GET['sequence']) == false)
-    {
-        $g_message->show('invalid');
-    }
+    $g_message->show('invalid');
 }
 
 // UserField-objekt anlegen
@@ -184,13 +181,7 @@ elseif($_GET['mode'] == 2)
 elseif($_GET['mode'] == 4)
 {
     // Feldreihenfolge aktualisieren
-    $sequence_old = $user_field->getValue('usf_sequence');
-    
-    if($sequence_old != $_GET['sequence'])
-    {
-        $user_field->setValue('usf_sequence', $_GET['sequence']);
-        $user_field->save();
-    }
+    $user_field->moveSequence($_GET['sequence']);
     exit();
 }
          

@@ -37,8 +37,53 @@ class TableCategory extends TableAccess
         }
     }
 
+    // die Kategorie wird um eine Position in der Reihenfolge verschoben
+    function moveSequence($mode)
+    {
+        global $g_current_organization;
+
+        // Anzahl orgaunabhaengige ermitteln, da diese nicht mit den abhaengigen vermischt werden duerfen
+        $sql = 'SELECT COUNT(1) as count FROM '. TBL_CATEGORIES. '
+                 WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                   AND cat_org_id IS NULL ';
+        $this->db->query($sql);
+        $row = $this->db->fetch_array();
+
+        // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
+        if(strtoupper($mode) == 'UP')
+        {
+            if($this->getValue('cat_org_id') == 0
+            || $this->getValue('cat_sequence') > $row['count']+1)
+            {
+                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
+                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                          OR cat_org_id IS NULL )
+                           AND cat_sequence = '.$this->getValue('cat_sequence').' - 1 ';
+                $this->db->query($sql);
+                $this->setValue('cat_sequence', $this->getValue('cat_sequence')-1);
+                $this->save();
+            }
+        }
+        // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
+        elseif(strtoupper($mode) == 'DOWN')
+        {
+            if($this->getValue('cat_org_id') > 0
+            || $this->getValue('cat_sequence') < $row['count'])
+            {
+                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
+                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                          OR cat_org_id IS NULL )
+                           AND cat_sequence = '.$this->getValue('cat_sequence').' + 1 ';
+                $this->db->query($sql);
+                $this->setValue('cat_sequence', $this->getValue('cat_sequence')+1);
+                $this->save();
+            }
+        }
+    }
+
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
     function save()
     {
         global $g_current_organization, $g_current_session;
@@ -89,7 +134,6 @@ class TableCategory extends TableAccess
     }
 
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
-    // die Funktion wird innerhalb von delete() aufgerufen
     function delete()
     {
         global $g_current_session;
