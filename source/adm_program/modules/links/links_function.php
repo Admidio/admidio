@@ -74,11 +74,11 @@ $_SESSION['links_request'] = $_REQUEST;
 
 if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
 {
-    if(strlen($_POST['lnk_name']) == 0)
+    if(strlen(strStripTags($_POST['lnk_name'])) == 0)
     {
         $g_message->show('feld', 'Linkname');
     }
-    if(strlen($_POST['lnk_url']) == 0)
+    if(strlen(strStripTags($_POST['lnk_url'])) == 0)
     {
         $g_message->show('feld', 'Linkadresse');
     }
