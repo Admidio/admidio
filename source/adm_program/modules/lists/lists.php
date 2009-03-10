@@ -432,7 +432,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                 {
                                     if($row['lst_global'] == 0)
                                     {
-                                        echo '<optgroup label="Gespeicherte Listen">';
+                                        echo '<optgroup label="Deine Listen">';
                                     }
                                     else
                                     {
