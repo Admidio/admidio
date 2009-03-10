@@ -323,9 +323,9 @@ $g_layout['header'] = '
 
         function loadList()
         {
-            var lst_id = $("#lists_config").value;
-            var rol_id = $("#rol_id").value;
-            var show_members = $("#show_members").value;
+            var lst_id = $("#lists_config").attr("value");
+            var rol_id = $("#rol_id").attr("value");
+            var show_members = $("#show_members").attr("value");
             self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + lst_id + "&rol_id=" + rol_id + "&active_role='.$active_role.'&show_members=" + show_members;
         }
 
@@ -459,7 +459,7 @@ echo '
                             }
                             elseif($row['lst_global'] == 0 && strlen($row['lst_name']) > 0)
                             {
-                                echo '<optgroup label="Gespeicherte Konfigurationen">';
+                                echo '<optgroup label="Deine Konfigurationen">';
                             }
                             else
                             {
@@ -594,7 +594,7 @@ echo '
         
         <br />
         
-        <b>3.</b> Wähle eine Rolle aus von der du die Mitgliederliste erstellen willst:
+        <b>3.</b> Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest:
         <p><b>Rolle :</b>&nbsp;&nbsp;';
 
         // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen

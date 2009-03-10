@@ -4,7 +4,7 @@
  *
  * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Daniel Dieckelmann
+ * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Uebergaben:
@@ -127,7 +127,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 4)
     if($_GET['mode'] == 1 || $_GET['mode'] == 4)
     {
         // wieder zur eigenen Liste zurueck
-        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'));
+        header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
         exit();
     }
     
@@ -145,7 +145,7 @@ elseif ($_GET['mode'] == 3)
     $list->delete();
 
     // weiterleiten zur Listenkonfiguration
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php');
+    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
     exit();
 }
 elseif ($_GET['mode'] == 5)
@@ -154,7 +154,7 @@ elseif ($_GET['mode'] == 5)
     $list->setDefault();
 
     // wieder zur eigenen Liste zurueck
-    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'));
+    header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
     exit();
 }
 
