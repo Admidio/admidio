@@ -792,7 +792,7 @@ echo "
                     </li>
                     <li class=\"smallFontSize\">
                         Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen.
-                        Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash installiert oder diese Option nicht
+                        Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht
                         aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt.
                         (Standard: ja)
                     </li>
@@ -1646,6 +1646,22 @@ echo "
                 Einstellungen Profilmodul</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
+                    <li>
+                        <dl>
+                            <dt><label for="default_country">Profilfelder pflegen:</label></dt>
+                            <dd>
+                                <span class="iconTextLink">
+                                    <a href="'. $g_root_path. '/adm_program/administration/members/fields.php"><img
+                                    src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/administration/members/fields.php">zur Profilfeldpflege wechseln</a>
+                                </span>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Um die Profilbilder zu bearbeiten, kannst Du hier zur Profilfeldpflege wechseln. Achtung, alle nicht gespeicherten 
+                        Organisationseinstellungen gehen dabei verloren.
+                    </li>
                     <li>
                         <dl>
                             <dt><label for="default_country">Standard-Land:</label></dt>
