@@ -102,7 +102,7 @@ echo '<h1 class="moduleHeadline">'. $_GET['headline']. '</h1>
 <div id="links_overview">
 	<div class="formLayout">
 			<div class="formHead">Redirect</div>
-			<div class="formBody" style="overflow: hidden;">Du verlässt jetzt das Angebot von <i>'. $g_current_organization->getValue('org_longname'). '</i> und		
+			<div class="formBody" style="overflow: hidden;">Du verlässt jetzt das Webangebot von <i>'. $g_current_organization->getValue('org_longname'). '</i> und		
 			 wirst in <span id="counter">'.$g_preferences["weblinks_redirect_seconds"].'</span> Sekunden automatisch zu <b>'.$url_name.'</b> ('.$url.') weitergeleitet.<br><br>
 			 Sollte die automatische Weiterleitung nicht funktionieren, klicke bitte <a href="'.$url.'" target="_self">hier</a>!</div>
 	</div>
