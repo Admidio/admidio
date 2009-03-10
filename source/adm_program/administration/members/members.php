@@ -185,7 +185,19 @@ $g_layout['header'] = '
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/text_tooltip.js"></script>';
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/text_tooltip.js"></script>
+    <script type="text/javascript"><!--
+    	$(document).ready(function() 
+		{
+            var options = {
+                        script:"'.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$req_members.'&",
+                        varname:"query",
+                        minchars:1,
+                        timeout:5000
+            };
+            var as = new AutoSuggest("queryForm", options);
+	 	}); 
+	//--></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -208,14 +220,40 @@ echo '
             <a href="'.$g_root_path.'/adm_program/administration/members/import.php">Benutzer importieren</a>
         </span>
     </li>';
-    if($g_current_user->isWebmaster())
+    if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
     {
+        // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+        if($req_members == 1)
+        {
+            $link_text = 'Alle Benutzer anzeigen';
+            $link_icon = 'group.png';
+            $link_members = 0;
+        }
+        else
+        {
+            $link_text = 'Nur Mitglieder anzeigen';
+            $link_icon = 'profile.png';
+            $link_members = 1;
+        }
+        //Tolltip
+        $tooltip = '';
+        if($req_members)
+        {
+            $tooltip = 'Momentan werden nur alle aktiven Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.';
+        }
+        else
+        {
+            $tooltip = 'Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicke hier um nur aktiven Mitglieder anzuzeigen. ';
+        }   
+        
         echo '
         <li>
             <span class="iconTextLink">
-                <a href="'. $g_root_path. '/adm_program/administration/members/fields.php"><img
-                src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
-                <a href="'. $g_root_path. '/adm_program/administration/members/fields.php">Profilfelder pflegen</a>
+                <a class="textTooltip" href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" 
+                title="'.$tooltip.'"><img
+                src="'. THEME_PATH. '/icons/'.$link_icon.'" alt="'.$link_text.'" /></a>
+                <a class="textTooltip" href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'"
+                 title="'.$tooltip.'">'.$link_text.'</a>
             </span>
         </li>';
     }
@@ -226,62 +264,15 @@ echo '
 <ul class="iconTextLinkList">
     <li>
         <form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'" method="post" style="float: left; margin-right: 40px;">
-            <span id="search_members">
+            <div>
                 <input type="text" value="'.$req_queryForm.'" name="queryForm" id="queryForm" style="width: 200px;"  />
                 <input type="submit" value="Suchen" />
-            </span>
+            </div>
         </form>
     </li>
-    <script type=\'text/javascript\'>
-        var options = {
-                    script:\''.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$req_members.'&\',
-                    varname:\'query\',
-                    minchars:1,
-                    timeout:5000
-        };
-        var as = new AutoSuggest("queryForm", options);
-    </script>
-';
-if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
-{
-    // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-    if($req_members == 1)
-    {
-        $link_text = 'Alle Benutzer anzeigen';
-        $link_icon = 'group.png';
-        $link_members = 0;
-    }
-    else
-    {
-        $link_text = 'Nur Mitglieder anzeigen';
-        $link_icon = 'profile.png';
-        $link_members = 1;
-    }
-    //Tolltip
-    $tooltip = '';
-    if($req_members)
-    {
-        $tooltip = 'Momentan werden nur alle aktiven Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.';
-    }
-    else
-    {
-        $tooltip = 'Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicke hier um nur aktiven Mitglieder anzuzeigen. ';
-    }   
-    
-    echo '
-    <li>
-        <span class="iconTextLink">
-            <a class="textTooltip" href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" 
-            title="'.$tooltip.'"><img
-            src="'. THEME_PATH. '/icons/'.$link_icon.'" alt="'.$link_text.'" /></a>
-            <a class="textTooltip" href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'"
-             title="'.$tooltip.'">'.$link_text.'</a>
-        </span>
-    </li>';
-}
-echo '</ul>';
+</ul>
 
-echo '<div class="pageNavigation">';
+<div class="pageNavigation">';
     // Leiste mit allen Buchstaben des Alphabets anzeigen
     if (strlen($req_letter) == 0 && !$req_queryForm)
     {
