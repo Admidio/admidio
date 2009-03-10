@@ -68,7 +68,7 @@ if($req_mode == 1)
     session_destroy();
     $message = '<strong>Willkommen zur Einrichtung einer weiteren Organisation</strong><br /><br />
                 Auf den nächsten Seiten musst du einige notwendige Informationen der neuen Organisation eingeben.';
-    showPage($message, 'new_organisation.php?mode=2', 'forward.png', 'Organisation festlegen', 3);
+    showPage($message, 'new_organization.php?mode=2', 'forward.png', 'Organisation festlegen', 3);
 }
 elseif($req_mode == 2)
 {
@@ -108,7 +108,7 @@ elseif($req_mode == 2)
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'new_organisation.php?mode=3', 'forward.png', 'Administrator festlegen', 3);
+    showPage($message, 'new_organization.php?mode=3', 'forward.png', 'Administrator festlegen', 3);
 }
 elseif($req_mode == 3)
 {
@@ -124,7 +124,7 @@ elseif($req_mode == 3)
         || strlen($_SESSION['orga_name_long']) == 0 )
         {
             $message = 'Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !';
-            showPage($message, 'new_organisation.php?mode=2', 'back.png', 'Zurück');
+            showPage($message, 'new_organization.php?mode=2', 'back.png', 'Zurück');
         }
     }
 
@@ -161,7 +161,7 @@ elseif($req_mode == 3)
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'new_organisation.php?mode=4', 'forward.png', 'Konfigurationsdatei erzeugen', 3);
+    showPage($message, 'new_organization.php?mode=4', 'forward.png', 'Konfigurationsdatei erzeugen', 3);
 }
 elseif($req_mode == 4)
 {
@@ -177,7 +177,7 @@ elseif($req_mode == 4)
         || strlen($_POST['user_password']) == 0 )
         {
             $message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
-            showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
+            showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
         }
 
         // Verbindung zu Datenbank herstellen
@@ -204,7 +204,7 @@ elseif($req_mode == 4)
         if($user_found != 1)
         {
             $message = 'Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation !';
-            showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
+            showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
         }
         else
         {
@@ -218,19 +218,19 @@ elseif($req_mode == 4)
                 <i>config_default.php</i>.<br /><br />
 
                 <span class="iconTextLink">
-                    <a href="new_organisation.php?mode=5"><img
+                    <a href="new_organization.php?mode=5"><img
                     src="layout/page_white_download.png" alt="config.php herunterladen" /></a>
-                    <a href="new_organisation.php?mode=5">config.php herunterladen</a>
+                    <a href="new_organization.php?mode=5">config.php herunterladen</a>
                 </span>
                 <br />';
-    showPage($message, 'new_organisation.php?mode=6', 'database_in.png', 'Organisation einrichten', 3);
+    showPage($message, 'new_organization.php?mode=6', 'database_in.png', 'Organisation einrichten', 3);
 }
 elseif($req_mode == 5)
 {
 	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
 	{
 		$message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
-        showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
+        showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
    	}
 
     // MySQL-Zugangsdaten in config.php schreiben
@@ -273,14 +273,14 @@ elseif($req_mode == 6)
 	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
 	{
 		$message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
-        showPage($message, 'new_organisation.php?mode=3', 'back.png', 'Zurück', 3);
+        showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
    	}
 
     if(file_exists('../config.php') == false)
     {
         $message = 'Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
                     Laden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.';
-        showPage($message, 'new_organisation.php?mode=4', 'back.png', 'Zurück', 3);
+        showPage($message, 'new_organization.php?mode=4', 'back.png', 'Zurück', 3);
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
