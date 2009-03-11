@@ -74,7 +74,7 @@ if(is_numeric($_GET['mode']) == false
     $g_message->show('invalid');
 }
 
-if(isset($_GET['sequence']) && strtoupper($_GET['sequence']) != 'UP' && strtoupper($_GET['sequence']) != 'DOWN'
+if(isset($_GET['sequence']) && strtoupper($_GET['sequence']) != 'UP' && strtoupper($_GET['sequence']) != 'DOWN')
 {
     $g_message->show('invalid');
 }
