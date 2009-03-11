@@ -293,13 +293,13 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"org_longname\">Name (lang):</label></dt>
-                            <dd><input type=\"text\" id=\"org_longname\" name=\"org_longname\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"org_longname\" name=\"org_longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"org_homepage\">Homepage:</label></dt>
-                            <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
@@ -335,7 +335,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"homepage_logout\">Startseite (Besucher):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" maxlength=\"250\" value=\"". $form_values['homepage_logout']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_logout']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -346,7 +346,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"homepage_login\">Startseite (angemeldete Benutzer):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" maxlength=\"250\" value=\"". $form_values['homepage_login']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_login']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -357,7 +357,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"email_administrator\">E-Mail Adresse des Administrator:</label></dt>
-                            <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
