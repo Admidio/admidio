@@ -252,35 +252,41 @@ if($req_mode != 'csv')
     	$member_status = 'Aktive und ehemalige Mitglieder';
     }
 
-    echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). '</h1>
-    <h3>&#40;'.$role->getValue('cat_name').' - '. $member_status .'&#41;</h3>';
+    echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>
+    <h3>';
 
     //Beschreibung der Rolle einblenden
     if(strlen($role->getValue('rol_description')) > 0)
     {
-        echo '<h3>'. $role->getValue('rol_description'). '</h3>';
+        echo $role->getValue('rol_description'). ' - ';
     }
+    
+    echo $member_status.'</h3>';
 
     if($req_mode == 'html')
     {
-        if(strpos($_SESSION['navigation']->getPreviousUrl(), 'mylist') === false)
-        {
-            echo '<div class="navigationPath">
-                <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'. THEME_PATH. '/icons/application_view_list.png" alt="Zurück" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">Listenübersicht</a>
-            </div>';
-        }
-        else
-        {
-            echo '<div class="navigationPath">
-                <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'"><img
-                src="'. THEME_PATH. '/icons/application_form.png" alt="Zurück" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'">Konfiguration Eigene Liste</a>
-            </div>';
-        }
+        echo '<ul class="iconTextLinkList">
+            <li>
+                <span class="iconTextLink">';
+                // Navigationspunkt zum uebergeordneten Punkt dieser Liste
+                if(strpos($_SESSION['navigation']->getPreviousUrl(), 'mylist') === false)
+                {
+                    echo '
+                    <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="Zurück" /></a>
+                    <a href="'.$g_root_path.'/adm_program/system/back.php">Listenübersicht</a>';
+                }
+                else
+                {
+                    echo '
+                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'"><img
+                    src="'. THEME_PATH. '/icons/application_form.png" alt="Zurück" /></a>
+                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'">Konfiguration Eigene Liste</a>';
+                }
+            echo '</span>
+            </li>';
 
-        echo '<ul class="iconTextLinkList">';
+            // Aufruf des Mailmoduls mit dieser Rolle
             if($g_current_user->mailRole($role->getValue("rol_id")) && $g_preferences['enable_mail_module'] == 1)
             {
                 echo '<li>
@@ -292,61 +298,45 @@ if($req_mode != 'csv')
                 </li>';
             }
 
-            echo "<li>
-                <span class=\"iconTextLink\">
-                    <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?lst_id=".$req_lst_id."&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\"><img
-                    src=\"". THEME_PATH. "/icons/print.png\" alt=\"Druckvorschau\" /></a>
-                    <a href=\"#\" onclick=\"window.open('$g_root_path/adm_program/modules/lists/lists_show.php?lst_id=".$req_lst_id."&amp;mode=print&amp;rol_id=$req_rol_id', '_blank')\">Druckvorschau</a>
+            // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
+            if((  $g_current_user->assignRoles() 
+               || isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')))
+            && $role->getValue('rol_valid') == 1)
+            {
+                // der Webmasterrolle darf nur von Webmastern neue User zugeordnet werden
+                if($role->getValue('rol_name')  != 'Webmaster'
+                || ($role->getValue('rol_name') == 'Webmaster' && $g_current_user->isWebmaster()))
+                {
+                    echo '
+                    <li>
+                        <span class="iconTextLink">
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
+                                src="'. THEME_PATH. '/icons/add.png" alt="Mitglieder zuordnen" title="Mitglieder zuordnen" /></a>
+                            <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">Mitglieder zuordnen</a>
+                        </span>
+                    </li>';
+                }
+            }
+
+            echo '<li>
+                <span class="iconTextLink">
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&amp;mode=print&amp;rol_id='.$req_rol_id.'\', \'_blank\')"><img
+                    src="'. THEME_PATH. '/icons/print.png" alt="Druckvorschau" /></a>
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&amp;mode=print&amp;rol_id='.$req_rol_id.'\', \'_blank\')">Druckvorschau</a>
                 </span>
             </li>
             <li>
-                <span class=\"iconTextLink\">
-                    <img src=\"". THEME_PATH. "/icons/database_out.png\" alt=\"Exportieren\" />
-                    <select size=\"1\" name=\"export_mode\" onchange=\"exportList(this)\">
-                        <option value=\"\" selected=\"selected\">Exportieren nach ...</option>
-                        <option value=\"csv-ms\">Microsoft Excel</option>
-                        <option value=\"csv-ms-2k\">Microsoft Excel 97/2000</option>
-                        <option value=\"csv-oo\">CSV-Datei (OpenOffice)</option>
+                <span class="iconTextLink">
+                    <img src="'. THEME_PATH. '/icons/database_out.png" alt="Exportieren" />
+                    <select size="1" name="export_mode" onchange="exportList(this)">
+                        <option value="" selected="selected">Exportieren nach ...</option>
+                        <option value="csv-ms">Microsoft Excel</option>
+                        <option value="csv-ms-2k">Microsoft Excel 97/2000</option>
+                        <option value="csv-oo">CSV-Datei (OpenOffice)</option>
                     </select>
                 </span>
-            </li>";
-                        
-            //Leute mit entsprechenden Rechten sollenten auch von hier aus die Mitgliedschaftändern können
-            if($g_current_user->assignRoles() 
-               || isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')) 
-               || $g_current_user->editUsers())
-               {
-                   if($role->getValue('rol_name') != 'Webmaster'
-                   || ($role->getValue('rol_name') == 'Webmaster' && $g_current_user->isWebmaster()))
-                   {
-                       if($g_current_user->assignRoles())
-                       {
-                           // nur Moderatoren duerfen Rollen editieren
-                           echo "
-                            <li>
-                                <span class=\"iconTextLink\">
-                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=". $role->getValue("rol_id"). "\"><img
-                                        src=\"". THEME_PATH. "/icons/edit.png\" alt=\"Einstellungen\" title=\"Einstellungen\" /></a>
-                                    <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=". $role->getValue("rol_id"). "\">Rolle bearbeiten</a>
-                                </span>
-                            </li>";
-
-                       }
-                       // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
-                       if($role->getValue("rol_valid") == 1)
-                       {
-                           echo "
-                            <li>
-                                <span class=\"iconTextLink\">
-                                    <a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=". $role->getValue("rol_id"). "\"><img 
-                                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>
-                                    <a href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=". $role->getValue("rol_id"). "\">Mitglieder zuordnen</a>
-                                </span>
-                            </li>";
-                       }
-                   }
-               }
-        echo '</ul>';
+            </li>   
+        </ul>';
     }
 }
 
