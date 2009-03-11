@@ -239,11 +239,11 @@ echo '
         $tooltip = '';
         if($req_members)
         {
-            $tooltip = 'Momentan werden nur alle aktiven Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.';
+            $tooltip = 'Momentan werden nur aktive Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.';
         }
         else
         {
-            $tooltip = 'Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicke hier um nur aktiven Mitglieder anzuzeigen. ';
+            $tooltip = 'Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicke hier um nur aktive Mitglieder anzuzeigen. ';
         }   
         
         echo '

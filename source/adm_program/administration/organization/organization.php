@@ -121,10 +121,10 @@ $g_layout['header'] =  '
             {
                 var ElementsArray = Array("forum_srv","forum_usr","forum_pw","forum_db");
                 var ValuesArray = Array();
-                ValuesArray[0] = Array("Server:","TEXT","200px","50","'. $form_values['forum_srv']. '");
-                ValuesArray[1] = Array("User:","TEXT","200px","50","'. $form_values['forum_usr']. '");
-                ValuesArray[2] = Array("Passwort:","PASSWORD","200px","50","'. $form_values['forum_pw']. '");
-                ValuesArray[3] = Array("Datenbank:","TEXT","200px","50","'. $form_values['forum_db']. '");
+                ValuesArray[0] = Array("Server:","TEXT","50","'. $form_values['forum_srv']. '");
+                ValuesArray[1] = Array("User:","TEXT","50","'. $form_values['forum_usr']. '");
+                ValuesArray[2] = Array("Passwort:","PASSWORD","50","'. $form_values['forum_pw']. '");
+                ValuesArray[3] = Array("Datenbank:","TEXT","50","'. $form_values['forum_db']. '");
                 appendElements(ElementsArray,ValuesArray,layerSetting);
 
                 document.getElementById("forum_access_data").style.visibility = "visible";
@@ -148,9 +148,8 @@ $g_layout['header'] =  '
                     input.type=valuesArray[i][1];
                     input.id = array[i];
                     input.name = array[i];
-                    input.style.width = valuesArray[i][2];
-                    input.maxlength = valuesArray[i][3];
-                    input.value = valuesArray[i][4];
+                    input.maxlength = valuesArray[i][2];
+                    input.value = valuesArray[i][3];
                     li.appendChild(dl);
                     dl.appendChild(dt);
                     dl.appendChild(dd);
@@ -287,29 +286,20 @@ echo "
                 <ul class=\"formFieldList\">
                     <li>
                         <dl>
-                            <dt><label for=\"version\">Admidio-Version:</label></dt>
-                            <dd>
-                                <input type=\"text\" id=\"version\" name=\"version\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". ADMIDIO_VERSION. BETA_VERSION_TEXT. "\" />&nbsp;
-                                <a class=\"thickbox\" href=\"$g_root_path/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350\">auf Update prüfen</a>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
                             <dt><label for=\"org_shortname\">Name (Abk.):</label></dt>
-                            <dd><input type=\"text\" id=\"org_shortname\" name=\"org_shortname\" readonly=\"readonly\" size=\"10\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"org_shortname\" name=\"org_shortname\" readonly=\"readonly\" style=\"width: 100px;\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"org_longname\">Name (lang):</label></dt>
-                            <dd><input type=\"text\" id=\"org_longname\" name=\"org_longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"org_longname\" name=\"org_longname\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
                             <dt><label for=\"org_homepage\">Homepage:</label></dt>
-                            <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\" /></dd>
                         </dl>
                     </li>
                     <li>
@@ -345,7 +335,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"homepage_logout\">Startseite (Besucher):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_logout']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" maxlength=\"250\" value=\"". $form_values['homepage_logout']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -356,7 +346,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"homepage_login\">Startseite (angemeldete Benutzer):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_login']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" maxlength=\"250\" value=\"". $form_values['homepage_login']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -367,7 +357,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"email_administrator\">E-Mail Adresse des Administrator:</label></dt>
-                            <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\" /></dd>
+                            <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\" /></dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -479,13 +469,13 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"logout_minutes\">Automatischer Logout nach:</label></dt>
-                            <dd><input type=\"text\" id=\"logout_minutes\" name=\"logout_minutes\" size=\"4\" maxlength=\"4\" value=\"". $form_values['logout_minutes']. "\" /> Minuten</dd>
+                            <dd><input type=\"text\" id=\"logout_minutes\" name=\"logout_minutes\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['logout_minutes']. "\" /> Minuten</dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
                         Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung
-                        wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat. (Standrad: 20Minuten)
+                        wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat. (Standard: 20 Minuten)
                     </li>
 
                      <li>
@@ -643,14 +633,14 @@ echo "
                             <dt><label for=\"announcements_per_page\">Anzahl Einträge pro Seite:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"announcements_per_page\" name=\"announcements_per_page\"
-                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['announcements_per_page']. "\" />
+                                     style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['announcements_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
                         Anzahl der Ankündigungen die auf einer Seite dargestellt werden. Gibt es mehr Ankündigungen
                         so kann man zwischen den Ankündigungen blättern. Bei dem Wert 0 werden alle Ankündigungen
-                        aufgelistet und die Blättern-Funktion deaktiviert. (Standrad: 10)
+                        aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)
                     </li>
                 </ul>
             </div>
@@ -688,14 +678,14 @@ echo "
                         <dl>
                             <dt><label for=\"max_file_upload_size\">Maximale Dateigr&ouml;&szlig;e:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" size=\"6\"
+                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" style=\"width: 50px;\"
                                     maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\" /> KB
                             </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Benutzer k&ouml;nnen nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standrad: 4000KB)
+                        Benutzer können nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
+                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 4000KB)
                     </li>
                 </ul>
             </div>
@@ -800,8 +790,8 @@ echo "
                         <dl>
                             <dt><label for=\"photo_thumbs_row\">Thumbnails pro Seite (Spalten x Zeilen):</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" /> x
-                                <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" size=\"2\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\" />
+                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" style=\"width: 50px;\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" /> x
+                                <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" style=\"width: 50px;\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\" />
                              </dd>
                         </dl>
                     </li>
@@ -813,7 +803,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_thumbs_scale\">Skalierung Thumbnails:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_scale\" name=\"photo_thumbs_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_thumbs_scale']. "\" /> Pixel
+                                <input type=\"text\" id=\"photo_thumbs_scale\" name=\"photo_thumbs_scale\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_thumbs_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -826,7 +816,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_save_scale\">Skalierung beim Upload:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
+                                <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -839,7 +829,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_preview_scale\">Höhe der Vorschaufotos:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_preview_scale\" name=\"photo_preview_scale\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\" /> Pixel
+                                <input type=\"text\" id=\"photo_preview_scale\" name=\"photo_preview_scale\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -850,8 +840,8 @@ echo "
                         <dl>
                             <dt><label for=\"photo_show_width\">Max. Bildanzeigegröße (Breite x Höhe):</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x
-                                <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\" /> Pixel
+                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x
+                                <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -865,7 +855,7 @@ echo "
                         <dl>
                             <dt><label for=\"photo_image_text\">Bildtext einblenden:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_image_text\" name=\"photo_image_text\" size=\"20\" maxlength=\"60\" value=\"".$form_values['photo_image_text']. "\" />
+                                <input type=\"text\" id=\"photo_image_text\" name=\"photo_image_text\" maxlength=\"60\" value=\"".$form_values['photo_image_text']. "\" />
                             </dd>
                         </dl>
                     </li>
@@ -947,7 +937,7 @@ echo "
                         <dl>
                             <dt><label for=\"forum_width\">Forum Breite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"forum_width\" name=\"forum_width\" size=\"4\" maxlength=\"4\" style=\"width: 50px;\" value=\"". $form_values['forum_width']. "\" /> Pixel
+                                <input type=\"text\" id=\"forum_width\" name=\"forum_width\" style=\"width: 50px;\" maxlength=\"4\" style=\"width: 50px;\" value=\"". $form_values['forum_width']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -1081,7 +1071,7 @@ echo "
                             <dt><label for=\"guestbook_entries_per_page\">Anzahl Einträge pro Seite:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"guestbook_entries_per_page\" name=\"guestbook_entries_per_page\"
-                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['guestbook_entries_per_page']. "\" />
+                                     style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['guestbook_entries_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
@@ -1145,7 +1135,7 @@ echo "
                         <dl>
                             <dt><label for=\"flooding_protection_time\">Flooding Protection Intervall:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" size=\"4\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\" /> Sekunden
+                                <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\" /> Sekunden
                             </dd>
                         </dl>
                     </li>
@@ -1175,7 +1165,7 @@ echo "
                         <dl>
                             <dt><label for=\"lists_roles_per_page\">Anzahl Rollen pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" size=\"4\"
+                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" style=\"width: 50px;\"
                                     maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\" />
                             </dd>
                         </dl>
@@ -1189,7 +1179,7 @@ echo "
                         <dl>
                             <dt><label for=\"lists_members_per_page\">Anzahl Teilnehmer pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" size=\"4\"
+                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" style=\"width: 50px;\"
                                     maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\" />
                             </dd>
                         </dl>
@@ -1255,7 +1245,7 @@ echo "
                             <dt><label for=\"mail_bcc_count\">Anzahl der BCC Empfänger:</label>
                             </dt>
                             <dd>
-                                <input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" size=\"4\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. "\" />
+                                <input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. "\" />
                              </dd>
                         </dl>
                     </li>
@@ -1284,7 +1274,7 @@ echo "
                         <dl>
                             <dt><label for=\"max_email_attachment_size\">Maximale Dateigröße für Anhänge:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" size=\"4\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\" /> KB
+                                <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\" /> KB
                             </dd>
                         </dl>
                     </li>
@@ -1410,9 +1400,9 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"ecard_view_width\">Skalierung Vorschaubild (Breite x Höhe):</label></dt>
-                            <dd><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" />
+                            <dd><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" />
                                 x
-                                <input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" />
+                                <input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" />
                                 Pixel
                             </dd>
                         </dl>
@@ -1424,9 +1414,9 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"ecard_card_picture_width\">Skalierung Grußkartenbild (Breite x Höhe):</label></dt>
-                            <dd><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
+                            <dd><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
                                 x
-                                <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" />
+                                <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" />
                                 Pixel
                              </dd>
                         </dl>
@@ -1457,7 +1447,7 @@ echo "
                                 <div id=\"cc_recipients_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_cc_recipients'] == 1)
                                 {
-                                echo "<input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />";
+                                echo "<input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />";
                                 }
                             echo "</div>
                              </dd>
@@ -1487,7 +1477,7 @@ echo "
                                 <div id=\"text_length_count\" style=\"display:inline;\">";
                                 if($form_values['enable_ecard_text_length'] == 1)
                                 {
-                               echo "<input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" size=\"4\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />";
+                               echo "<input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />";
                                 }
                             echo "</div>
                              </dd>
@@ -1659,7 +1649,7 @@ echo "
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        Um die Profilbilder zu bearbeiten, kannst Du hier zur Profilfeldpflege wechseln. Achtung, alle nicht gespeicherten 
+                        Um die Profilbilder zu bearbeiten, kannst du hier zur Profilfeldpflege wechseln. Achtung, alle nicht gespeicherten 
                         Organisationseinstellungen gehen dabei verloren.
                     </li>
                     <li>
@@ -1852,7 +1842,7 @@ echo "
                             <dt><label for=\"dates_per_page\">Anzahl Einträge pro Seite:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"dates_per_page\" name=\"dates_per_page\"
-                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['dates_per_page']. "\" />
+                                     style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['dates_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
@@ -1946,7 +1936,7 @@ echo "
                             <dt><label for=\"weblinks_per_page\">Anzahl Links pro Seite:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"weblinks_per_page\" name=\"weblinks_per_page\"
-                                    size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_per_page']. "\" />
+                                    style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['weblinks_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
@@ -1982,7 +1972,7 @@ echo "
                     <li>
                         <dl>
                             <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect:</label></dt>
-                            <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" size=\"4\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
+                            <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
@@ -2059,7 +2049,7 @@ echo "
                             <dt><label for="messages_in_box">Anzahl der Nachrichten im Posteingang:</label></dt>
                             <dd>
                                 <input type="text" id="messages_in_box" name="messages_in_box"
-                                    size="4" maxlength="4" value="'. $form_values['messages_in_box']. '" />
+                                    style="width: 50px;" maxlength="4" value="'. $form_values['messages_in_box']. '" />
                             </dd>
                         </dl>
                     </li>
@@ -2073,7 +2063,7 @@ echo "
                             <dt><label for="messages_out_box">Anzahl der Nachrichten im Postausgang:</label></dt>
                             <dd>
                                 <input type="text" id="messages_out_box" name="messages_out_box"
-                                    size="4" maxlength="4" value="'. $form_values['messages_out_box']. '" />
+                                    style="width: 50px;" maxlength="4" value="'. $form_values['messages_out_box']. '" />
                             </dd>
                         </dl>
                     </li>
@@ -2087,7 +2077,7 @@ echo "
                             <dt><label for="messages_archive">Anzahl der Nachrichten im Achriv:</label></dt>
                             <dd>
                                 <input type="text" id="messages_archive" name="messages_archive"
-                                    size="4" maxlength="4" value="'. $form_values['messages_archive']. '" />
+                                    style="width: 50px;" maxlength="4" value="'. $form_values['messages_archive']. '" />
                             </dd>
                         </dl>
                     </li>
