@@ -132,7 +132,14 @@ else {
 
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Umbenennen';
+if($file_id > 0)
+{
+    $g_layout['title']  = 'Datei umbenennen';
+}
+else
+{
+    $g_layout['title']  = 'Ordner umbenennen';
+}
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -146,7 +153,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$folder_id.'&amp;file_id='.$file_id.'">
 <div class="formLayout" id="edit_download_form">
-    <div class="formHead">Datei/Ordner bearbeiten</div>
+    <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">
         <ul class="formFieldList">
             <li>
@@ -159,7 +166,7 @@ echo '
                 <dl>
                     <dt><label for="new_name">Neuer Name:</label></dt>
                     <dd>
-                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 200px;" maxlength="255" tabindex="1" />
+                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 350px;" maxlength="255" tabindex="1" />
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                         <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
 			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=dateiname\',this)" onmouseout="ajax_hideTooltip()"
@@ -171,7 +178,7 @@ echo '
                 <dl>
                     <dt><label for="new_description">Beschreibung:</label></dt>
                     <dd>
-                        <textarea id="new_description" name="new_description" style="width: 200px;" rows="5" cols="40" tabindex="2" >'. $form_values['new_description']. '</textarea>
+                        <textarea id="new_description" name="new_description" style="width: 350px;" rows="5" tabindex="2" >'. $form_values['new_description']. '</textarea>
                     </dd>
                 </dl>
             </li>
@@ -181,7 +188,7 @@ echo '
 
         <div class="formSubmit">
             <button name="rename" type="submit" value="Speichern" tabindex="2">
-            <img src="'. THEME_PATH. '/icons/edit.png" alt="Speichern" />
+            <img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />
             &nbsp;Speichern</button>
         </div>
     </div>
