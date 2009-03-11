@@ -146,7 +146,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$folder_id.'&amp;file_id='.$file_id.'">
 <div class="formLayout" id="edit_download_form">
-    <div class="formHead">Datei/Ordner umbenennen</div>
+    <div class="formHead">Datei/Ordner bearbeiten</div>
     <div class="formBody">
         <ul class="formFieldList">
             <li>
@@ -180,9 +180,9 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button name="rename" type="submit" value="umbenennen" tabindex="2">
-            <img src="'. THEME_PATH. '/icons/edit.png" alt="Umbenennen" />
-            &nbsp;Umbenennen</button>
+            <button name="rename" type="submit" value="Speichern" tabindex="2">
+            <img src="'. THEME_PATH. '/icons/edit.png" alt="Speichern" />
+            &nbsp;Speichern</button>
         </div>
     </div>
 </div>
