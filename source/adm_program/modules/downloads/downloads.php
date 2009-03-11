@@ -236,7 +236,7 @@ else
                     echo '
                     <td style="text-align: center;">
                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '">
-                        <img src="'. THEME_PATH. '/icons/edit.png" alt="Umbenennen" title="Umbenennen" /></a>
+                        <img src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
                         <a class="iconLink" href="javascript:deleteObject(\'fil\', \'row_file_'.$nextFile['fil_id'].'\','.$nextFile['fil_id'].',\''.$nextFile['fil_name'].'\')">
                         <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         if (!$nextFile['fil_exists']) {
@@ -271,7 +271,6 @@ if ($g_current_user->editDownloadRight())
 			<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=additionalFiles&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580"><img 
                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=additionalFiles\',this)" onmouseout="ajax_hideTooltip()"
                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>            
-            />
         </h3>';
 
 
