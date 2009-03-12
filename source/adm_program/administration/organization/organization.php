@@ -353,16 +353,6 @@ echo "
                         Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat.
                         Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
                         (Beispiel: adm_program/index.php)
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"email_administrator\">E-Mail Adresse des Administrator:</label></dt>
-                            <dd><input type=\"text\" id=\"email_administrator\" name=\"email_administrator\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['email_administrator']. "\" /></dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
-                        für Systemnachrichten benutzt, z.B. bei der Registierungsbestätigung. (Standard: webmaster@". $_SERVER['HTTP_HOST'].")
                     </li>";
 
                     //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
@@ -1281,10 +1271,23 @@ echo "
                     <li class=\"smallFontSize\">
                         Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier
                         angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)
+                    </li>";
+                    echo'
+                    <li>
+                        <dl>
+                            <dt><label for="mail_sendmail_address">Absender Mailadresse:</label></dt>
+                            <dd><input type="text" id="mail_sendmail_address" name="mail_sendmail_address" style="width: 200px;" maxlength="50" value="'. $form_values['mail_sendmail_address'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. 
+                        In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt 
+                        werden, (z.B. mailversand@'.$_SERVER['HTTP_HOST'].'). 
+                        Bleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: <i>leer</i>)
                     </li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/
@@ -1316,8 +1319,25 @@ echo "
                         wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen
                         werden als Systemmail verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden.
                         Es sei denn der Server unterstützt keinen Mailversand.
-                        Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)<br /><br />
-
+                        Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)
+                    </li>                  
+                    <li>
+                        <dl>
+                            <dt><label for="email_administrator">Systemmailadresse:</label></dt>
+                            <dd><input type="text" id="email_administrator" name="email_administrator" style="width: 200px;" maxlength="50" value="'. $form_values['email_administrator'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
+                        für Systemnachrichten benutzt, z.B. bei der Registierungsbestätigung. (Standard: webmaster@'. $_SERVER['HTTP_HOST'].')
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label>Systemmail-Texte:</label></dt>
+                            <dd><br /></dd>
+                        </dl>
+                    </li>
+                    <li  class="smallFontSize">
                         Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und
                         werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann
                         der jeweilige Inhalt für diesen Bereich.<br /><br />

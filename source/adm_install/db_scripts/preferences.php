@@ -20,7 +20,6 @@ $orga_preferences = array(
     'enable_bbcode'                 => '1',
     'enable_auto_login'             => '1',
     'logout_minutes'                => '20',
-    'email_administrator'           => 'webmaster@'. $_SERVER['HTTP_HOST'],
     'homepage_logout'               => 'adm_program/index.php',
     'homepage_login'                => 'adm_program/index.php',
     'theme'                         => 'modern',
@@ -85,9 +84,11 @@ $orga_preferences = array(
     'max_email_attachment_size' => '1024',
 	'mail_bcc_count'			=> '50',
     'enable_mail_captcha'       => '1',
+    'mail_sendmail_address'     => '',
 
     // Systemmail
     'enable_system_mails'       => '1',
+    'email_administrator'           => 'webmaster@'. $_SERVER['HTTP_HOST'],
 
     // Grußkartenmodul
     'enable_ecard_module'           => '1',
