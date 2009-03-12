@@ -102,6 +102,8 @@ function Email()
 // Funktion um den Absender zu setzen
 function setSender($address, $name='')
 {
+    global $g_preferences;
+    
     if (isValidEmailAddress($address))
     {
         //Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
