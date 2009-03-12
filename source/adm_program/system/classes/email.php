@@ -104,7 +104,15 @@ function setSender($address, $name='')
 {
     if (isValidEmailAddress($address))
     {
-
+        //Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
+        if($g_preferences['mail_sendmail_address'] != '' && $address != $g_preferences['email_administrator'])
+        {
+            //wenn der Empfänger dann auf anworten klickt soll die natürlich an den wirklichen Absender gehen
+            $this->headerOptions['Reply-To'] = " <". $address. ">";
+            //dannach wird die Adresse ausgetauscht
+            $address = $g_preferences['mail_sendmail_address'];
+        }
+        
         if (strlen($name) > 0) {
             //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
             $this->headerOptions['From'] = '"'. $name. '" <'. $address. '>';
