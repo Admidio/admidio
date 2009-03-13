@@ -234,8 +234,7 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
             if($g_current_user->assignRoles())
             {
                 echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=ROL">
-                    <img src="'. THEME_PATH. '/icons/options.png" alt="Kategorien pflegen" title="Kategorien pflegen" />
-                </a>';
+                    <img src="'. THEME_PATH. '/icons/options.png" alt="Kategorien pflegen" title="Kategorien pflegen" /></a>';
             }
             echo '</li>';
         }
