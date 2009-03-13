@@ -82,7 +82,7 @@ if(isset($_SESSION['links_request']))
 // Html-Kopf ausgeben
 if($_GET['lnk_id'] > 0)
 {
-    $g_layout['title'] = $_GET['headline']. ' ändern';
+    $g_layout['title'] = $_GET['headline']. ' bearbeiten';
 }
 else
 {

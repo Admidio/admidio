@@ -134,11 +134,11 @@ else {
 // Html-Kopf ausgeben
 if($file_id > 0)
 {
-    $g_layout['title']  = 'Datei umbenennen';
+    $g_layout['title']  = 'Datei bearbeiten';
 }
 else
 {
-    $g_layout['title']  = 'Ordner umbenennen';
+    $g_layout['title']  = 'Ordner bearbeiten';
 }
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -168,7 +168,7 @@ echo '
                     <dd>
                         <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 350px;" maxlength="255" tabindex="1" />
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=230&amp;width=580"><img 
 			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=dateiname\',this)" onmouseout="ajax_hideTooltip()"
 			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>

@@ -317,7 +317,7 @@ function getFieldCode($field, $user, $new_user)
 // Html-Kopf ausgeben
 if($new_user == 1)
 {
-    $g_layout['title'] = 'Neuer Benutzer';
+    $g_layout['title'] = 'Benutzer anlegen';
 }
 elseif($new_user == 2)
 {
@@ -325,11 +325,11 @@ elseif($new_user == 2)
 }
 elseif($usr_id == $g_current_user->getValue('usr_id'))
 {
-    $g_layout['title'] = 'Mein Profil';
+    $g_layout['title'] = 'Mein Profil bearbeiten';
 }
 else
 {
-    $g_layout['title'] = 'Profil von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname');
+    $g_layout['title'] = 'Profil bearbeiten';
 }
 
 if($g_current_user->editUsers() || $new_user > 0)

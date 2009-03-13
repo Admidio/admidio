@@ -92,7 +92,7 @@ if($user_field->getValue('usf_system') == 1)
 // zusaetzliche Daten fuer den Html-Kopf setzen
 if($req_usf_id > 0)
 {
-    $g_layout['title']  = 'Profilfeld ändern';
+    $g_layout['title']  = 'Profilfeld bearbeiten';
 }
 else
 {

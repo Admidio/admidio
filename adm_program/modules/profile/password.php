@@ -101,7 +101,7 @@ else
     /***********************************************************************/
     
     // Html-Kopf ausgeben
-    $g_layout['title']    = 'Passwort ändern';
+    $g_layout['title']    = 'Passwort bearbeiten';
     $g_layout['includes'] = false;
     require(THEME_SERVER_PATH. '/overall_header.php');
 

@@ -97,7 +97,7 @@ $childRoleObjects = array();
 // Html-Kopf ausgeben
 if($req_rol_id > 0)
 {
-    $g_layout['title'] = 'Rolle ändern';
+    $g_layout['title'] = 'Rolle bearbeiten';
 }
 else
 {

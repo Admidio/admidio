@@ -107,7 +107,7 @@ else
 // Html-Kopf ausgeben
 if($req_dat_id > 0)
 {
-    $g_layout['title'] = $_GET['headline']. ' ändern';
+    $g_layout['title'] = $_GET['headline']. ' bearbeiten';
 }
 else
 {

@@ -132,7 +132,7 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 // Html-Kopf ausgeben
 if ($_GET['id'] > 0)
 {
-    $g_layout['title'] = 'Gästebucheintrag ändern';
+    $g_layout['title'] = 'Gästebucheintrag bearbeiten';
 }
 else
 {

@@ -88,7 +88,7 @@ if(isset($_SESSION['announcements_request']))
 // Html-Kopf ausgeben
 if($req_ann_id > 0)
 {
-    $g_layout['title'] = $req_headline. ' ändern';
+    $g_layout['title'] = $req_headline. ' bearbeiten';
 }
 else
 {
