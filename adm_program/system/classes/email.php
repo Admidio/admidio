@@ -375,7 +375,9 @@ function prepareBody()
 // Funktion um die Email endgueltig zu versenden...
 function sendEmail()
 {
-    // Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelaende...
+    global $g_preferences;
+    
+	// Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelaende...
     if (!isset($this->headerOptions['From']))
     {
         return false;
@@ -494,9 +496,16 @@ function sendEmail()
         //Das Subject modifizieren
         $subject = "Kopie: ". $subject;
 
-         // Kopie versenden an den originalen Absender...
+        //Empfänger
+        $mailto = $this->headerOptions['From'];
+    	//Wenn gesonderte Versandadresse gesetzt ist die Antwortadresse verwenden
+        if($g_preferences['mail_sendmail_address'] != '' && $mailto != $g_preferences['email_administrator'])
+        {
+            $mailto = $this->headerOptions['Reply-To'];
+        }
+        // Kopie versenden an den originalen Absender...
          // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-         if (!mail(utf8_decode(stripslashes($this->headerOptions['From'])), utf8_decode(stripslashes($subject)),
+         if (!mail(utf8_decode(stripslashes($mailto)), utf8_decode(stripslashes($subject)),
                    utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
          {
              return false;
