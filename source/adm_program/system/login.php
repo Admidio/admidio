@@ -68,7 +68,7 @@ echo '
         if($g_preferences['registration_mode'] > 0)
         {
             echo '<div class="smallFontSize" style="margin-top: 5px;">
-                <a href="'.$g_root_path.'/adm_program/system/registration.php">Ich möchte mich registrieren!</a>
+                <a href="'.$g_root_path.'/adm_program/system/registration.php">Ich mÃ¶chte mich registrieren!</a>
             </div>';
         }
 
