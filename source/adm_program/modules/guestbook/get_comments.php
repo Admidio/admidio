@@ -81,7 +81,7 @@ if (isset($comment_result))
                 if ($g_current_user->editGuestbookRight())
                 {
                     echo '
-                    <a class="iconLink" href="$g_root_path/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$row->gbc_id.'"><img 
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$row->gbc_id.'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
                     <a class="iconLink" href="javascript:deleteObject(\'gbc\', \'gbc_'.$row->gbc_id.'\','.$row->gbc_id.',\''.$row->gbc_name.'\')"><img 
                         src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';

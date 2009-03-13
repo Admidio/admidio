@@ -200,11 +200,11 @@ if($job==NULL)
 
     if($req_usr_id == $g_current_user->getValue('usr_id'))
     {
-        $headline = 'Mein Profilfoto ändern';
+        $headline = 'Mein Profilfoto bearbeiten';
     }
     else
     {
-        $headline = 'Profilfoto von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). ' ändern';
+        $headline = 'Profilfoto von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). ' bearbeiten';
     }
 
     $g_layout['title']  = $headline;

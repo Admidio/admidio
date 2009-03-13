@@ -124,7 +124,7 @@ echo '
                     <dd>
                         <input type="text" id="new_name" name="new_name" tabindex="2" value="'.$form_values['new_name'].'" style="width: 250px;" maxlength="255" />
                         &nbsp;(optional)
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=dateiname&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=230&amp;width=580"><img 
 			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=dateiname\',this)" onmouseout="ajax_hideTooltip()"
 			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>

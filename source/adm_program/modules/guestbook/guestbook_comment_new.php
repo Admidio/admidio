@@ -163,7 +163,7 @@ else
 {
     $id   = $_GET['cid'];
     $mode = '8';
-    $g_layout['title'] = 'Kommentar editieren';
+    $g_layout['title'] = 'Kommentar bearbeiten';
 }
 
 //Script für BBCode laden

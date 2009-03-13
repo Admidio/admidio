@@ -102,7 +102,7 @@ else
    }
 
     // Html-Kopf ausgeben
-    $g_layout['title']    = "Datum ändern";
+    $g_layout['title']    = "Datum bearbeiten";
     $g_layout['includes'] = false;
     require(THEME_SERVER_PATH. "/overall_header.php");
 

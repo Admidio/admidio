@@ -102,7 +102,7 @@ if(isset($_SESSION['categories_request']))
 // Html-Kopf ausgeben
 if($req_cat_id > 0)
 {
-    $g_layout['title']  = $title.' ändern';
+    $g_layout['title']  = $title.' bearbeiten';
 }
 else
 {

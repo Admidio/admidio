@@ -75,7 +75,7 @@ $parentFolderName = $folder->getValue('fol_name');
 
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Ordner erstellen';
+$g_layout['title']  = 'Ordner anlegen';
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -89,13 +89,13 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$folder_id.'">
 <div class="formLayout" id="edit_download_folder_form">
-    <div class="formHead">Ordner erstellen</div>
+    <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">
         <ul class="formFieldList">
             <li>
                 <dl>
                     <dt>
-                        Neuer Ordner in Ordner <b>'.$parentFolderName.'</b> erstellen
+                        Diesen Ordner im Ordner <b>'.$parentFolderName.'</b> anlegen.
                     </dt>
                     <dd>&nbsp;</dd>
                 </dl>
@@ -122,9 +122,9 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button name="erstellen" type="submit" value="erstellen">
-            <img src="'. THEME_PATH. '/icons/folder_create.png" alt="Ordner erstellen" />
-            &nbsp;Ordner erstellen</button>
+            <button name="anlegen" type="submit" value="anlegen">
+            <img src="'. THEME_PATH. '/icons/folder_create.png" alt="Ordner anlegen" />
+            &nbsp;Ordner anlegen</button>
         </div>
     </div>
 </div>

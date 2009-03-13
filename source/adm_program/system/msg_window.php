@@ -145,14 +145,14 @@ switch ($req_err_code)
     case 'field_hidden':
         echo 'Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion
               nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden,
-              die das Recht haben alle Benutzer zu editieren. Im eigenen Profil kann der Benutzer
+              die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer
               diese Daten auch sehen.';
         break;
 
     case 'field_disabled':
         echo 'Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht
               bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht
-              besitzen alle Benutzer zu editieren.';
+              besitzen alle Benutzer zu bearbeiten.';
         break;
 
     case 'field_mandatory':
