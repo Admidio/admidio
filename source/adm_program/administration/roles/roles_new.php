@@ -779,14 +779,12 @@ echo '
                         <div style="float: left;" class="verticalIconList">
                             <ul>
                                 <li>
-                                    <a class="iconLink" href="javascript:hinzufuegen()">
-                                        <img src="'. THEME_PATH. '/icons/forward.png" alt="Rolle hinzufügen" title="Rolle hinzufügen" />
-                                    </a>
+                                    <a class="iconLink" href="javascript:hinzufuegen()"><img
+                                     src="'. THEME_PATH. '/icons/forward.png" alt="Rolle hinzufügen" title="Rolle hinzufügen" /></a>
                                 </li>
                                 <li>
-                                    <a class="iconLink" href="javascript:entfernen()">
-                                        <img src="'. THEME_PATH. '/icons/back.png" alt="Rolle entfernen" title="Rolle entfernen" />
-                                    </a>
+                                    <a class="iconLink" href="javascript:entfernen()"><img 
+                                    src="'. THEME_PATH. '/icons/back.png" alt="Rolle entfernen" title="Rolle entfernen" /></a>
                                 </li>
                             </ul>
                         </div>
