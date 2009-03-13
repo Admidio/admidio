@@ -1661,9 +1661,9 @@ echo "
                             <dt><label for="default_country">Profilfelder pflegen:</label></dt>
                             <dd>
                                 <span class="iconTextLink">
-                                    <a href="'. $g_root_path. '/adm_program/administration/members/fields.php"><img
+                                    <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
                                     src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/administration/members/fields.php">zur Profilfeldpflege wechseln</a>
+                                    <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">zur Profilfeldpflege wechseln</a>
                                 </span>
                             </dd>
                         </dl>

@@ -112,7 +112,7 @@ $g_layout['header'] = '
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
-<form id="edit_field" action="'.$g_root_path.'/adm_program/administration/members/fields_function.php?usf_id='.$req_usf_id.'&amp;mode=1" method="post">
+<form id="edit_field" action="'.$g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$req_usf_id.'&amp;mode=1" method="post">
 <div class="formLayout" id="edit_fields_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">

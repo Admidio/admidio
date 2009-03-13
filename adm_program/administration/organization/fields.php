@@ -82,7 +82,7 @@ $g_layout['header'] = '
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/members/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/organization/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction, true);
                 resObject.send(null);
             }
         }
@@ -97,9 +97,9 @@ echo '
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/members/fields_new.php"><img 
+            <a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php"><img 
             src="'. THEME_PATH. '/icons/add.png" alt="Profilfeld anlegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/members/fields_new.php">Profilfeld anlegen</a>
+            <a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php">Profilfeld anlegen</a>
         </span>
     </li>
     <li>
@@ -164,7 +164,7 @@ echo '
             }           
             echo '
             <tr id="row_usf_'.$row['usf_id'].'" class="tableMouseOver">
-                <td><a href="'.$g_root_path.'/adm_program/administration/members/fields_new.php?usf_id='.$row['usf_id'].'">'.$row['usf_name'].'</a></td>
+                <td><a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'">'.$row['usf_name'].'</a></td>
                 <td style="text-align: right; width: 45px;">
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$row['usf_id'].')"><img
                             src="'. THEME_PATH. '/icons/arrow_up.png" alt="Profilfeld nach oben schieben" title="Profilfeld nach oben schieben" /></a>
@@ -233,7 +233,7 @@ echo '
                     }
                 echo '</td>
                 <td style="text-align: right; width: 45px;">
-                    <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/fields_new.php?usf_id='.$row['usf_id'].'"><img 
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
                     if($row['usf_system'] == 1)
                     {
