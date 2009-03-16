@@ -109,21 +109,33 @@ function setSender($address, $name='')
         //Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
         if($g_preferences['mail_sendmail_address'] != '' && $address != $g_preferences['email_administrator'])
         {
+            //hier wird die Absenderadresse gesetzt
+            $this->headerOptions['From'] = " <". $g_preferences['mail_sendmail_address']. ">";    
             //wenn der Empfänger dann auf anworten klickt soll die natürlich an den wirklichen Absender gehen
-            $this->headerOptions['Reply-To'] = " <". $address. ">";
-            //dannach wird die Adresse ausgetauscht
-            $address = $g_preferences['mail_sendmail_address'];
+            if (strlen($name) > 0)
+            {
+                //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+                $this->headerOptions['Reply-To'] = '"'. $name. '" <'. $address. '>';
+            }
+            else
+            {
+                //Kein Name gesetzt...
+                $this->headerOptions['Reply-To'] = " <". $address. ">";
+            }              
         }
-        
-        if (strlen($name) > 0) {
-            //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
-            $this->headerOptions['From'] = '"'. $name. '" <'. $address. '>';
+        else
+        {
+            if (strlen($name) > 0)
+            {
+                //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+                $this->headerOptions['From'] = '"'. $name. '" <'. $address. '>';
+            }
+            else
+            {
+                //Kein Name gesetzt...
+                $this->headerOptions['From'] = " <". $address. ">";
+            }
         }
-        else {
-            //Kein Name gesetzt...
-            $this->headerOptions['From'] = " <". $address. ">";
-        }
-
         return true;
     }
     return false;
