@@ -123,6 +123,7 @@ function setSender($address, $name='')
                 $this->headerOptions['Reply-To'] = " <". $address. ">";
             }              
         }
+        //Im Normalfall wird aber versucht von der Adresse des schreibenden aus zu schicken
         else
         {
             if (strlen($name) > 0)
