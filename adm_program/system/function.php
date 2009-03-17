@@ -280,7 +280,12 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
     // Selectbox mit allen selektierten Rollen zusammensetzen
     $box_string = '
     <select size="1" id="'.$field_id.'" name="'.$field_id.'">
-        <option value="0" selected="selected">- Bitte wählen -</option>';
+        <option value="0" ';
+        if($default_role == 0)
+        {
+            $box_string .= ' selected="selected" ';
+        }
+        $box_string .= '>- Bitte wählen -</option>';
         $act_category = '';
 
         while($row = $g_db->fetch_object($result_lst))

@@ -135,6 +135,10 @@ $message_text = array(
 'norolle' =>
     'Die Daten können nicht gespeichert werden.<br />
     Dem Benutzer sind keine Rollen zugeordnet.',
+    
+'no_default_role' =>
+    'In den Systemeinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt.
+    Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.',
 
 'no_cookie' =>
     'Der Login kann nicht durchgeführt werden, da dein Browser

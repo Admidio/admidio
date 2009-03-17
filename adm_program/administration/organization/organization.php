@@ -66,7 +66,7 @@ $g_layout['header'] =  '
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
                         "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
-                        "dates-module", "links-module", "messages-module", "systeminfo");
+                        "dates-module", "links-module", "systeminfo");
 
 
         // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
@@ -1187,19 +1187,19 @@ echo "
                                 <input type=\"checkbox\" id=\"lists_hide_overview_details\" name=\"lists_hide_overview_details\" ";
                                 if(isset($form_values['lists_hide_overview_details']) && $form_values['lists_hide_overview_details'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch
                         lassen sich die Details weiterhin anzeigen. (Standard: nein)
-                    </li>
+                    </li>                 
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/
@@ -1780,38 +1780,50 @@ echo "
                             mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)
                         </li>";
                     }
-                echo "
-                 <li>
+                    echo '
+                    <li>
                         <dl>
-                            <dt><label for=\"profile_photo_storage\">Speicherort der Profilbild:</label></dt>
+                            <dt><label for="profile_photo_storage">Speicherort der Profilbild:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"profile_photo_storage\" name=\"profile_photo_storage\">
-                                    <option value=\"\">- Bitte wählen -</option>
-                                    <option value=\"0\" ";
+                                <select size="1" id="profile_photo_storage" name="profile_photo_storage">
+                                    <option value="">- Bitte wählen -</option>
+                                    <option value="0" ';
                                             if($form_values['profile_photo_storage'] == 0)
                                             {
-                                                echo " selected=\"selected\" ";
+                                                echo ' selected="selected" ';
                                             }
-                                            echo ">Datenbank
+                                            echo '>Datenbank
                                     </option>
-                                    <option value=\"1\" ";
+                                    <option value="1" ';
                                             if($form_values['profile_photo_storage'] == 1)
                                             {
-                                                echo " selected=\"selected\" ";
+                                                echo ' selected="selected" ';
                                             }
-                                            echo ">Ordner
+                                            echo '>Ordner
                                     </option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden.
                         Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)
                     </li>
+                    <li>
+                        <dl>
+                            <dt><label for="profile_default_role">Standardrolle:</label></dt>
+                            <dd>
+                                '.generateRoleSelectBox($g_preferences['profile_default_role'], 'profile_default_role').'
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Diese Rolle wird neuen Benutzern automatisch zugeordnet, falls der Ersteller des neuen Benutzers keine Rechte hat,
+                        Rollen zu zuordnen.
+                    </li>                       
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/
@@ -2009,7 +2021,7 @@ echo "
         /**************************************************************************************/
         //Einstellungen Nachrichtenmodul
         /**************************************************************************************/
-
+/*
         echo '
         <div class="groupBox" id="messages-module">
             <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/list_small.png" alt="Nachrichten" />
@@ -2109,7 +2121,7 @@ echo "
                 </ul>
             </div>
         </div>';
-
+*/
 
         /**************************************************************************************/
         //Systeminformationen

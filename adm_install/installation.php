@@ -623,7 +623,6 @@ elseif($req_mode == 7)
     $role_webmaster->setValue('rol_download', 1);
     $role_webmaster->setValue('rol_guestbook', 1);
     $role_webmaster->setValue('rol_guestbook_comments', 1);
-    $role_webmaster->setValue('rol_inventory', 1);
     $role_webmaster->setValue('rol_photo', 1);
     $role_webmaster->setValue('rol_weblinks', 1);
     $role_webmaster->setValue('rol_edit_user', 1);
@@ -659,6 +658,11 @@ elseif($req_mode == 7)
     $role_management->setValue('rol_this_list_view', 1);
     $role_management->setValue('rol_all_lists_view', 1);
     $role_management->save(0);
+    
+    // die Rolle Mitglied wird als Defaultrolle fuer neue User eingestellt
+	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = '. $role_member->getValue('rol_id'). '
+			 WHERE prf_name = "profile_default_role" ';
+	$db->query($sql);
 
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $member = new TableMembers($db);
@@ -713,6 +717,10 @@ elseif($req_mode == 7)
     $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
 
+    // nach der Installation zur Sicherheit bei den Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
+    $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';
+    $g_db->query($sql);
+    
     // Daten der Session loeschen
     unset($_SESSION['g_current_organisation']);
     unset($_SESSION['g_preferences']);
