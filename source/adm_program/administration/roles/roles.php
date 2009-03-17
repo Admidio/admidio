@@ -204,11 +204,11 @@ echo "
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                 }
-    			if($role->getValue("rol_inventory") == 1 && $g_preferences['enable_inventory_module'] > 0)
+    			/*if($role->getValue("rol_inventory") == 1 && $g_preferences['enable_inventory_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                     alt=\"Inventar verwalten\" title=\"Inventar verwalten\" />";
-                }
+                }*/
                 if($role->getValue("rol_all_lists_view") == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"

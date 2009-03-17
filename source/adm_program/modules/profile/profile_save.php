@@ -17,8 +17,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/system_mail.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/system_mail.php');
+require_once('../../system/classes/table_members.php');
 
 // im ausgeloggten Zustand koennen nur Registrierungen gespeichert werden
 if($g_valid_login == false)
@@ -295,33 +296,10 @@ if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
 unset($_SESSION['profile_request']);
 $_SESSION['navigation']->deleteLastUrl();
 
-// hier auf Modus pruefen, damit kein Konflikt mit Editieren der Webanmeldung entsteht
-if($new_user == 3)
-{
-    /*------------------------------------------------------------*/
-    // neuer Benutzer wurde ueber Webanmeldung angelegt und soll nun zugeordnet werden
-    /*------------------------------------------------------------*/
-
-    // User auf aktiv setzen
-    $user->setValue('usr_valid', 1);
-    $user->setValue('usr_reg_org_shortname', '');
-    $user->save();
-
-    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($g_preferences['enable_system_mails'] == 1)
-    {
-        // Mail an den User schicken, um die Anmeldung zu bestaetigen
-        $sysmail = new SystemMail($g_db);
-        $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
-        $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
-    }
-
-    // neuer User -> Rollen zuordnen
-    $location = 'Location: roles.php?user_id='. $user->getValue('usr_id'). '&new_user=1';
-    header($location);
-    exit();
-}
-elseif($new_user == 2)
+/*------------------------------------------------------------*/
+// je nach Aufrufmodus auf die richtige Seite weiterleiten
+/*------------------------------------------------------------*/
+if($new_user == 2)
 {
     /*------------------------------------------------------------*/
     // Registrierung eines neuen Benutzers
@@ -373,16 +351,50 @@ elseif($new_user == 2)
     $g_message->setForwardUrl($g_homepage);
     $g_message->show($err_code, $err_text);
 }
-
-/*------------------------------------------------------------*/
-// auf die richtige Seite weiterleiten
-/*------------------------------------------------------------*/
-
-if($usr_id == 0)
+elseif($new_user == 3 || $usr_id == 0)
 {
+    /*------------------------------------------------------------*/
+    // neuer Benutzer wurde ueber Webanmeldung angelegt und soll nun zugeordnet werden
+    // oder ein neuer User wurde in der Benutzerverwaltung angelegt
+    /*------------------------------------------------------------*/
+
+    if($usr_id > 0) // Webanmeldung
+    {
+        // User auf aktiv setzen
+        $user->setValue('usr_valid', 1);
+        $user->setValue('usr_reg_org_shortname', '');
+        $user->save();
+
+        // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+        if($g_preferences['enable_system_mails'] == 1)
+        {
+            // Mail an den User schicken, um die Anmeldung zu bestaetigen
+            $sysmail = new SystemMail($g_db);
+            $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
+            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
+        }
+    }
+
     // neuer User -> Rollen zuordnen
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='. $user->getValue('usr_id'). '&new_user=1');
-    exit();
+    if($g_current_user->assignRoles())
+    {
+        header('Location: roles.php?user_id='. $user->getValue('usr_id'). '&new_user=1');
+        exit();
+    }
+    else
+    {
+        // da der angemeldete Benutzer keine Rechte besitzt Rollen zu zuordnen, 
+        // wird der neue User der Default-Rolle zugeordnet
+        if($g_preferences['profile_default_role'] == 0)
+        {
+            $g_message->show('no_default_role');
+        }
+        $member = new TableMembers($g_db);
+        $member->startMembership($g_preferences['profile_default_role'], $user->getValue('usr_id'));
+
+        $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+        $g_message->show('save');
+    }
 }
 elseif($new_user == 0 && $user->getValue('usr_valid') == 0)
 {

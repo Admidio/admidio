@@ -112,6 +112,7 @@ $orga_preferences = array(
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',
     'profile_photo_storage'		=> '0',
+    'profile_default_role'      => '0',
 
     // Termine
     'enable_dates_module'        => '1',
