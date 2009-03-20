@@ -340,7 +340,7 @@ if($g_preferences['enable_forum_interface'])
     else
     {
         // Einstellungen des Forums einlesen
-        if(!$g_forum->initialize(session_id(), $g_preferences['forum_praefix'], $g_preferences['forum_export_user'], $g_current_user->getValue('usr_login_name')))
+        if(!$g_forum->initialize(session_id(), $g_preferences['forum_praefix'], $g_preferences['forum_export_user'], $g_preferences['forum_link_intern'], $g_current_user->getValue('usr_login_name')))
         {
             echo '<div style="color: #CC0000;">Verbindungsfehler zum Forum !<br />
                 Das eingegebene Forumpräfix <strong>'. $g_preferences['forum_praefix'].'</strong> ist nicht korrekt oder<br />
