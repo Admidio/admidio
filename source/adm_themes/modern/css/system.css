@@ -51,14 +51,15 @@ h1 {
 }
 
 h3 {
+    font-size:          12pt;
     color:              #333333;
     padding:            15px 0px 7px 0px;
 }
 
 p {
-    padding-bottom: 10px;
-    padding-top: 10px;
-    margin: 0px;
+    padding-bottom:     10px;
+    padding-top:        10px;
+    margin:             0px;
 }
 
 img {
