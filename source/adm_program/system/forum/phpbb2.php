@@ -128,19 +128,21 @@ class PhpBB2
         // Session-Valid und Userdaten loeschen
         $this->session_valid    = false;
         $this->userid           = -1;
-        $this->user             = "Gast";
-        $this->password         = "";
+        $this->user             = 'Gast';
+        $this->password         = '';
         $this->neuePM           = 0;
     }
 
 
     // Notwendige Einstellungen des Forums werden eingelesen.
-    function initialize($session_id, $table_praefix, $user_export, $admidio_login_name)
+    function initialize($session_id, $table_praefix, $user_export, $link_intern, $admidio_login_name)
     {
+        global $g_root_path;
+
         if($session_id != $this->session_id)
         {
             // pruefen, ob das Praefix richtig gesetzt wurde und die Config-Tabelle gefunden werden kann
-            $sql = "SHOW TABLE STATUS LIKE '". $table_praefix. "_config' ";
+            $sql = 'SHOW TABLE STATUS LIKE "'. $table_praefix. '_config" ';
             $this->forum_db->query($sql);
             
             if($this->forum_db->num_rows() == 1)
@@ -148,58 +150,65 @@ class PhpBB2
                 $this->session_id = $session_id;
                 $this->praefix    = $table_praefix;
                 $this->export     = $user_export;
-                $server_name      = "";
-                $script_path      = "";
+                $server_name      = '';
+                $script_path      = '';
                         
                 // wichtige Einstellungen des Forums werden eingelesen
-                $sql    = "SELECT config_name, config_value 
-                             FROM ". $this->praefix. "_config 
-                            WHERE config_name IN ('sitename','cookie_name','cookie_path','cookie_domain',
-                                                  'cookie_secure','server_name','script_path') ";
+                $sql    = 'SELECT config_name, config_value 
+                             FROM '. $this->praefix. '_config 
+                            WHERE config_name IN ("sitename","cookie_name","cookie_path","cookie_domain",
+                                                  "cookie_secure","server_name","script_path") ';
                 $result = $this->forum_db->query($sql);
                 
                 while($row = $this->forum_db->fetch_array($result))
                 {
                     switch($row['config_name'])
                     {
-                        case "sitename":
+                        case 'sitename':
                             $this->sitename = $row['config_value'];
                             break;
 
-                        case "cookie_name":
+                        case 'cookie_name':
                             $this->cookie_name = $row['config_value'];
                             break;
 
-                        case "cookie_path":
+                        case 'cookie_path':
                             $this->cookie_path = $row['config_value'];
                             break;
 
-                        case "cookie_domain":
+                        case 'cookie_domain':
                             $this->cookie_domain = $row['config_value'];
                             break;
 
-                        case "cookie_secure":
+                        case 'cookie_secure':
                             $this->cookie_secure = $row['config_value'];
                             break;
 
-                        case "server_name":
+                        case 'server_name':
                             $server_name = $row['config_value'];
                             break;
 
-                        case "script_path":
+                        case 'script_path':
                             $script_path = $row['config_value'];
                             break;
                     }
                 }
                 
                 // Url zum Forum ermitteln
-                $this->url .= str_replace('http://', '', strtolower($server_name));
-                if(strlen($script_path) > 1)
+                if($link_intern)
                 {
-                    $this->url .= '/'. $script_path;
+                    $this->url = $g_root_path.'/adm_program/index_forum.php';
                 }
-                $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
-                $this->url = 'http://'. $this->url;
+                else
+                {
+                    $this->url .= str_replace('http://', '', strtolower($server_name));
+                    if(strlen($script_path) > 1)
+                    {
+                        $this->url .= '/'. $script_path;
+                    }
+                    $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
+                    $this->url = 'http://'. $this->url;
+                }
             }
             else
             {
@@ -217,8 +226,8 @@ class PhpBB2
     function userExists($username)
     {
         // User im Forum suchen
-        $sql    = "SELECT user_id FROM ". $this->praefix. "_users 
-                    WHERE username LIKE '$username' ";
+        $sql    = 'SELECT user_id FROM '. $this->praefix. '_users 
+                    WHERE username LIKE "'.$username.'" ';
         $result = $this->forum_db->query($sql);
 
         // Wenn ein Ergebis groesser 0 vorliegt, existiert der User bereits.
@@ -244,12 +253,12 @@ class PhpBB2
                 // Export der Admido Daten ins Forum und einen Forum Account erstellen
                 $this->userInsert($login_name, 1, $password_crypt, $email);
 
-                $this->message = "login_forum_new";
+                $this->message = 'login_forum_new';
                 $this->session_valid = TRUE;        
             }
             else
             {
-                $this->message = "login";
+                $this->message = 'login';
                 $this->session_valid = FALSE;
             }
         }
@@ -264,7 +273,7 @@ class PhpBB2
         {
             if($this->setAdmin($login_name))
             {
-                $this->message = "login_forum_admin";
+                $this->message = 'login_forum_admin';
             }
         }
         
@@ -277,16 +286,16 @@ class PhpBB2
             if(!($this->checkPassword($password_crypt, $this->password, $this->userid)))
             {
                 // Password wurde zurueck gesetzt, Meldung vorbereiten
-                $this->message = "login_forum_pass";
+                $this->message = 'login_forum_pass';
             }
 
             // Session anlegen
-            $this->session("insert", $this->userid);
+            $this->session('insert', $this->userid);
 
-            if($this->message == "")
+            if($this->message == '')
             {
                 // Im Forum und in Admidio angemeldet, Meldung vorbereiten
-                $this->message = "login_forum";
+                $this->message = 'login_forum';
             }
         }
     }
@@ -298,12 +307,12 @@ class PhpBB2
         if($this->session_valid)
         {
             // Session wird auf logoff gesetzt
-            $this->session("logoff", $this->userid);
+            $this->session('logoff', $this->userid);
     
             // Last_Visit fuer das Forum aktualisieren
-            $sql    = "UPDATE ". $this->praefix. "_users 
-                       SET user_lastvisit = ". time() . "
-                      WHERE user_id = $this->userid";
+            $sql    = 'UPDATE '. $this->praefix. '_users 
+                       SET user_lastvisit = '. time() . '
+                      WHERE user_id = '.$this->userid;
             $result = $this->forum_db->query($sql);
     
             // Session-Valid und Userdaten loeschen
@@ -315,7 +324,7 @@ class PhpBB2
     // Funktion holt die Userdaten
     function userDaten($forum_user)
     {
-        $sql    = "SELECT user_id, username, user_password FROM ". $this->praefix. "_users WHERE username LIKE '$forum_user' ";
+        $sql    = 'SELECT user_id, username, user_password FROM '. $this->praefix. '_users WHERE username LIKE "'.$forum_user.'" ';
         $result = $this->forum_db->query($sql);
         $row    = $this->forum_db->fetch_array($result);
 
@@ -328,25 +337,25 @@ class PhpBB2
     // Funktion prueft auf neue PM
     function getUserPM($forum_user)
     {
-        $sql    = "SELECT user_new_privmsg FROM ". $this->praefix. "_users WHERE username LIKE '$forum_user' ";
+        $sql    = 'SELECT user_new_privmsg FROM '. $this->praefix. '_users WHERE username LIKE "'.$forum_user.'" ';
         $result = $this->forum_db->query($sql);
         $row    = $this->forum_db->fetch_array($result);
 
         $this->neuePM = $row[0];
-        $neuePM_Text  = "";
+        $neuePM_Text  = '';
 
         // Wenn neue Nachrichten vorliegen, einen ansprechenden Text generieren
         if ($this->neuePM == 0)
         {
-            $neuePM_Text = "und haben <b>keine</b> neue Nachrichten.";
+            $neuePM_Text = ' und haben <b>keine</b> neue Nachrichten.';
         }
         elseif ($this->neuePM == 1)
         {
-            $neuePM_Text = "und haben <b>1</b> neue Nachricht.";
+            $neuePM_Text = ' und haben <b>1</b> neue Nachricht.';
         }
         else
         {
-            $neuePM_Text = "und haben <b>".$this->neuePM."</b> neue Nachrichten.";
+            $neuePM_Text = ' und haben <b>'.$this->neuePM.'</b> neue Nachrichten.';
         }
         
         return $neuePM_Text;
@@ -357,10 +366,10 @@ class PhpBB2
     function setAdmin($username, $admin = true)
     {
         // Administrator nun in Foren-Tabelle suchen und dort das Password, Username & UserID auslesen
-        $sql    = "SELECT user_id 
-                     FROM ". $this->praefix. "_users 
-                    WHERE username   = '". $username. "'
-                      AND user_level = 1";
+        $sql    = 'SELECT user_id 
+                     FROM '. $this->praefix. '_users 
+                    WHERE username   = "'. $username. '"
+                      AND user_level = 1';
         $this->forum_db->query($sql);
         
         if($this->forum_db->num_rows() == 0)
@@ -372,9 +381,9 @@ class PhpBB2
                 $user_level = 1;
             }
             
-            $sql    = "UPDATE ". $this->praefix. "_users 
-                          SET user_level = ". $user_level. "
-                        WHERE username = '". $username. "'";
+            $sql    = 'UPDATE '. $this->praefix. '_users 
+                          SET user_level = '. $user_level. '
+                        WHERE username = "'. $username. '"';
             $this->forum_db->query($sql);
 
             return true;
@@ -398,9 +407,9 @@ class PhpBB2
         else
         {
             // Password in Foren-Tabelle auf das Password in Admidio setzen
-            $sql    = "UPDATE ". $this->praefix. "_users 
-                          SET user_password = '". $password_admidio ."'
-                        WHERE user_id = $forum_userid";
+            $sql    = 'UPDATE '. $this->praefix. '_users 
+                          SET user_password = "'. $password_admidio .'"
+                        WHERE user_id = '.$forum_userid;
             $this->forum_db->query($sql);
 
             return FALSE;
@@ -430,12 +439,12 @@ class PhpBB2
         if($this->userExists($old_username))
         {
             // User im Forum updaten
-            $sql    = "UPDATE ". $this->praefix. "_users
-                          SET username      = '$username'
-                            , user_password = '$password'
-                            , user_active   = $user_aktiv
-                            , user_email    = '$email'
-                        WHERE username LIKE '$old_username' ";
+            $sql    = 'UPDATE '. $this->praefix. '_users
+                          SET username      = "'.$username.'"
+                            , user_password = "'.$password.'"
+                            , user_active   = '.$user_aktiv.'
+                            , user_email    = "'.$email.'"
+                        WHERE username LIKE "'.$old_username.'" ';
             $this->forum_db->query($sql);
         }
         else
@@ -467,7 +476,7 @@ class PhpBB2
         }
             
         // jetzt noch den neuen User ins Forum eintragen, ggf. Fehlermeldung als Standard ausgeben.
-        $sql    = "SELECT MAX(user_id) as anzahl FROM ". $this->praefix. "_users";
+        $sql    = 'SELECT MAX(user_id) as anzahl FROM '. $this->praefix. '_users';
         $result = $this->forum_db->query($sql);
         $row    = $this->forum_db->fetch_array($result);
         $new_user_id = $row[0] + 1;
@@ -635,7 +644,7 @@ class PhpBB2
             if($this->session_valid)
             {
                 // Sofern die Admidio Session gueltig ist, ist auch die Forum Session gueltig
-                $this->session("update", $this->userid);
+                $this->session('update', $this->userid);
             }
         }
         else
@@ -644,7 +653,7 @@ class PhpBB2
             if($this->session_valid)
             {
                 // Admidio Session ist abgelaufen, ungueltig oder ein logoff, also im Forum logoff
-                $this->session("logoff", $this->userid);
+                $this->session('logoff', $this->userid);
             }
             $this->session_valid = false;
         }
@@ -659,74 +668,74 @@ class PhpBB2
         $current_time = time();
 
         // Nachschauen, ob dieser User mehrere SessionIDs hat, diese dann bis auf die aktuelle loeschen
-        $sql    = "SELECT session_id FROM ". $this->praefix. "_sessions
-                   WHERE session_user_id = $forum_userid";
+        $sql    = 'SELECT session_id FROM '. $this->praefix. '_sessions
+                   WHERE session_user_id = '.$forum_userid;
         $result = $this->forum_db->query($sql);
 
         if($this->forum_db->num_rows($result) > 1)
         {
-            $sql    = "DELETE FROM ". $this->praefix. "_sessions WHERE session_user_id = $forum_userid AND session_id NOT LIKE '".$this->session_id."' ";
+            $sql    = 'DELETE FROM '. $this->praefix. '_sessions WHERE session_user_id = '.$forum_userid.' AND session_id NOT LIKE "'.$this->session_id.'" ';
             $result = $this->forum_db->query($sql);
         }
 
         // Pruefen, ob sich die aktuelle Session noch im Session Table des Forums befindet
-        $sql    = "SELECT session_id, session_start, session_time FROM ". $this->praefix. "_sessions
-                   WHERE session_id = '".$this->session_id."' ";
+        $sql    = 'SELECT session_id, session_start, session_time FROM '. $this->praefix. '_sessions
+                   WHERE session_id = "'.$this->session_id.'" ';
         $result = $this->forum_db->query($sql);
 
         if($this->forum_db->num_rows($result))
         {
-            if($aktion == "logoff")
+            if($aktion == 'logoff')
             {
-                $sql    = "UPDATE ". $this->praefix. "_sessions 
-                              SET session_time    = ". $current_time ."
-                                , session_ip      = '". $user_ip ."'
-                                , session_user_id = ". $forum_userid .",  session_logged_in = 0
-                            WHERE session_id = '". $this->session_id. "'";
+                $sql    = 'UPDATE '. $this->praefix. '_sessions 
+                              SET session_time    = '. $current_time .'
+                                , session_ip      = "'. $user_ip .'"
+                                , session_user_id = '. $forum_userid .',  session_logged_in = 0
+                            WHERE session_id      = "'. $this->session_id. '"';
                 $this->forum_db->query($sql);
             }
-            elseif($aktion == "update")
+            elseif($aktion == 'update')
             {
-                $sql    = "UPDATE ". $this->praefix. "_sessions
-                              SET session_time = ". $current_time ."
-                                , session_ip   = '". $user_ip ."' 
-                            WHERE session_id = '". $this->session_id. "'";
+                $sql    = 'UPDATE '. $this->praefix. '_sessions
+                              SET session_time = '. $current_time .'
+                                , session_ip   = "'. $user_ip .'" 
+                            WHERE session_id   = "'. $this->session_id. '"';
                 $this->forum_db->query($sql);
             }
-            elseif($aktion == "insert")
+            elseif($aktion == 'insert')
             {
-                $sql    = "UPDATE ". $this->praefix. "_sessions 
-                              SET session_time    = ". $current_time ."
-                                , session_start   = ". $current_time ."
-                                , session_ip      = '". $user_ip ."'
-                                , session_user_id = ". $forum_userid .",  session_logged_in = 1
-                            WHERE session_id = '". $this->session_id. "'";
+                $sql    = 'UPDATE '. $this->praefix. '_sessions 
+                              SET session_time    = '. $current_time .'
+                                , session_start   = '. $current_time .'
+                                , session_ip      = "'. $user_ip .'"
+                                , session_user_id = '. $forum_userid .',  session_logged_in = 1
+                            WHERE session_id      = "'. $this->session_id. '"';
                 $this->forum_db->query($sql);
             }
         }
         else
         {
             // Session auf jeden Fall in die Forum DB schreiben, damit der User angemeldet ist
-            $sql    = "INSERT INTO " .$this->praefix. "_sessions
+            $sql    = 'INSERT INTO ' .$this->praefix. '_sessions
                       (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-                      VALUES ('$this->session_id', $forum_userid, $current_time, $current_time, '$user_ip', 0, 1, 0)";
+                      VALUES ("'.$this->session_id.'", '.$forum_userid.', '.$current_time.', '.$current_time.', "'.$user_ip.'", 0, 1, 0)';
             $this->forum_db->query($sql);
         }   
 
         // Cookie des Forums einlesen
-        if(isset($_COOKIE[$this->cookie_name."_sid"]))
+        if(isset($_COOKIE[$this->cookie_name.'_sid']))
         {
-            $g_cookie_session_id = $_COOKIE[$this->cookie_name."_sid"];
+            $g_cookie_session_id = $_COOKIE[$this->cookie_name.'_sid'];
             if($g_cookie_session_id != $this->session_id)
             {
                 // Cookie fuer die Anmeldung im Forum setzen
-                setcookie($this->cookie_name."_sid", $this->session_id, 0, $this->cookie_path, $this->cookie_domain, $this->cookie_secure);
+                setcookie($this->cookie_name.'_sid', $this->session_id, 0, $this->cookie_path, $this->cookie_domain, $this->cookie_secure);
             }
         }
         else
         {
             // Cookie fuer die Anmeldung im Forum setzen
-            setcookie($this->cookie_name."_sid", $this->session_id, 0, $this->cookie_path, $this->cookie_domain, $this->cookie_secure);
+            setcookie($this->cookie_name.'_sid', $this->session_id, 0, $this->cookie_path, $this->cookie_domain, $this->cookie_secure);
         }
     }
 }
