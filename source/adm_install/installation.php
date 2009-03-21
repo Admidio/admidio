@@ -719,7 +719,7 @@ elseif($req_mode == 7)
 
     // nach der Installation zur Sicherheit bei den Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';
-    $g_db->query($sql);
+    $db->query($sql);
     
     // Daten der Session loeschen
     unset($_SESSION['g_current_organisation']);
