@@ -473,7 +473,7 @@ echo '
                         <dl>
                             <dt>&nbsp;</dt>
                             <dd>
-                                <img src="$g_root_path/adm_program/system/classes/captcha.php?id='. time(). '" alt="Captcha" />
+                                <img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '" alt="Captcha" />
                             </dd>
                         </dl>
                     </li>
