@@ -72,7 +72,7 @@ $fileSize   = filesize($completePath);
 
 // Passenden Datentyp erzeugen.
 header('Content-Type: application/octet-stream');
-header('Content-Length: $fileSize');
+header('Content-Length: '.$fileSize);
 header('Content-Disposition: attachment; filename="'. $file->getValue('fil_name'). '"');
 // noetig fuer IE6, da sonst pdf und doc nicht direkt geoeffnet werden kann
 header('Cache-Control: private');
