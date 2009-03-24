@@ -119,7 +119,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<form action="'.$g_root_path.'/adm_program/administration/roles/categories_function.php?cat_id='.$req_cat_id.'&amp;type='. $_GET['type']. '&amp;mode=1" method="post">
+<form action="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$req_cat_id.'&amp;type='. $_GET['type']. '&amp;mode=1" method="post">
 <div class="formLayout" id="edit_categories_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">

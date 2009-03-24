@@ -125,7 +125,7 @@ $g_layout['header'] = '
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/roles/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + direction, true);
+                resObject.open("GET", gRootPath + "/adm_program/administration/categories/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + direction, true);
                 resObject.send(null);
             }
         }
@@ -146,9 +146,9 @@ echo '
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?type='.$req_type.'&amp;title='.$title.'"><img
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'"><img
             src="'.THEME_PATH.'/icons/add.png" alt="'.$title.' anlegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$title.' anlegen</a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$title.' anlegen</a>
         </span>
     </li>
 </ul>
@@ -203,7 +203,7 @@ echo '
         }
         echo '
         <tr id="row_'. $cat_row['cat_id']. '" class="tableMouseOver">
-            <td><a href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'">'. $cat_row['cat_name']. '</a></td>
+            <td><a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'">'. $cat_row['cat_name']. '</a></td>
             <td style="text-align: right; width: 45px;"> ';
                 if($cat_row['cat_name'] != "Stammdaten" || $_GET['type'] != "USF")
                 {
@@ -225,7 +225,7 @@ echo '
                 }
             echo '</td>
             <td style="text-align: right; width: 90px;">
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'"><img
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'"><img
                 src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
 
                 if($cat_row['cat_system'] == 1)
@@ -234,7 +234,7 @@ echo '
                 }
                 else
                 {
-                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/categories_function.php?cat_id='. $cat_row['cat_id']. '&amp;mode=3&amp;type='.$req_type.'"><img
+                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='. $cat_row['cat_id']. '&amp;mode=3&amp;type='.$req_type.'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                 }
             echo '</td>

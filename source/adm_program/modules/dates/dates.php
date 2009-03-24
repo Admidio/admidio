@@ -342,7 +342,7 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
             echo '</select>';
             if($g_current_user->editDates())
             {
-                echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender"><img
+                echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender"><img
                      src="'. THEME_PATH. '/icons/options.png" alt="Kalender pflegen" title="Kalender pflegen" /></a>';
             }
             echo '</li>';
@@ -351,9 +351,9 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         {
             echo '
             <li><span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender"><img
+                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender"><img
                     src="'. THEME_PATH. '/icons/application_double.png" alt="Kalender pflegen" title="Kalender pflegen"/></a>
-                <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=DAT&amp;title=Kalender">Kalender pflegen</a>
+                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender">Kalender pflegen</a>
             </span></li>';
         }
     } 
