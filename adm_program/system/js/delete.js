@@ -51,7 +51,7 @@ function deleteObject(type, elementId, databaseId, description)
                 url = gRootPath + "/adm_program/modules/photos/photo_album_function.php?job=delete&pho_id=" + databaseId;
                 break;
             case "usf":
-                url = gRootPath + "/adm_program/administration/members/fields_function.php?mode=2&usf_id=" + databaseId;
+                url = gRootPath + "/adm_program/administration/organization/fields_function.php?mode=2&usf_id=" + databaseId;
                 break;
 
         }
