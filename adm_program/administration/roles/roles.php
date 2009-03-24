@@ -80,9 +80,9 @@ echo "
     </li>
     <li>
         <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\"><img
+            <a href=\"$g_root_path/adm_program/administration/categories/categories.php?type=ROL\"><img
             src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kategorien pflegen\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/roles/categories.php?type=ROL\">Kategorien pflegen</a>
+            <a href=\"$g_root_path/adm_program/administration/categories/categories.php?type=ROL\">Kategorien pflegen</a>
         </span>
     </li>
 </ul>

@@ -233,7 +233,7 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
             echo '</select>';
             if($g_current_user->assignRoles())
             {
-                echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=ROL"><img
+                echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
                  src="'. THEME_PATH. '/icons/options.png" alt="Kategorien pflegen" title="Kategorien pflegen" /></a>';
             }
             echo '</li>';
@@ -242,9 +242,9 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
         {
             echo '
             <li><span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=ROL"><img
+                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
                     src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" title="Kategorien pflegen"/></a>
-                <a href="'.$g_root_path.'/adm_program/administration/roles/categories.php?type=ROL">Kategorien pflegen</a>
+                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">Kategorien pflegen</a>
             </span></li>';
         }    
     }
