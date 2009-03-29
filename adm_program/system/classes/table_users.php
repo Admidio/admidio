@@ -146,7 +146,7 @@ class TableUsers extends TableAccess
         $sql    = 'UPDATE '. TBL_GUESTBOOK. ' SET gbo_usr_id_change = NULL
                     WHERE gbo_usr_id_change = '. $this->getValue('usr_id');
         $this->db->query($sql);
-
+/*
         $sql    = 'UPDATE '. TBL_INVENTORY. ' SET inv_usr_id_create = NULL
                     WHERE inv_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
@@ -154,7 +154,7 @@ class TableUsers extends TableAccess
         $sql    = 'UPDATE '. TBL_INVENTORY. ' SET inv_usr_id_change = NULL
                     WHERE inv_usr_id_change = '. $this->getValue('usr_id');
         $this->db->query($sql);
-
+*/
         $sql    = 'UPDATE '. TBL_LINKS. ' SET lnk_usr_id_create = NULL
                     WHERE lnk_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
@@ -175,7 +175,7 @@ class TableUsers extends TableAccess
         $sql    = 'UPDATE '. TBL_PHOTOS. ' SET pho_usr_id_change = NULL
                     WHERE pho_usr_id_change = '. $this->getValue('usr_id');
         $this->db->query($sql);
-
+/*
         $sql    = 'UPDATE '. TBL_RENTAL_OVERVIEW. ' SET rnt_usr_id_create = NULL
                     WHERE rnt_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
@@ -183,7 +183,7 @@ class TableUsers extends TableAccess
         $sql    = 'UPDATE '. TBL_RENTAL_OVERVIEW. ' SET rnt_usr_id_change = NULL
                     WHERE rnt_usr_id_change = '. $this->getValue('usr_id');
         $this->db->query($sql);
-
+*/
         $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_usr_id_create = NULL
                     WHERE rol_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);

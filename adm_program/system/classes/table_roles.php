@@ -123,7 +123,7 @@ class TableRoles extends TableAccess
             $sql    = 'DELETE FROM '. TBL_MEMBERS. '
                         WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
-
+			/*
             //Auch die Inventarpositionen zur Rolle muessen geloescht werden
             //Alle Inventarpositionen auslesen, die von der Rolle angelegt wurden
         	$sql_inventory = 'SELECT *
@@ -143,7 +143,7 @@ class TableRoles extends TableAccess
         	$sql    = 'DELETE FROM '. TBL_INVENTORY. '
                         WHERE inv_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
-
+			*/
             return parent::delete();
         }
         else

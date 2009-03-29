@@ -182,12 +182,22 @@ class TableCategory extends TableAccess
         }
         elseif($this->getValue('cat_type') == 'ROL')
         {
+            $sql    = 'DELETE FROM '. TBL_MEMBERS. '
+                        WHERE mem_rol_id IN (SELECT rol_id FROM '. TBL_ROLES. '
+                                              WHERE rol_cat_id = '.$this->getValue('cat_id').')';
+            $this->db->query($sql);
+
             $sql    = 'DELETE FROM '. TBL_ROLES. '
                         WHERE rol_cat_id = '. $this->getValue('cat_id');
             $this->db->query($sql);
         }
         elseif($this->getValue('cat_type') == 'USF')
         {
+            $sql    = 'DELETE FROM '. TBL_USER_DATA. '
+                        WHERE usd_usf_id IN (SELECT usf_id FROM '. TBL_USER_FIELDS. '
+                                              WHERE usf_cat_id = '.$this->getValue('cat_id').')';
+            $this->db->query($sql);
+
             $sql    = 'DELETE FROM '. TBL_USER_FIELDS. '
                         WHERE usf_cat_id = '. $this->getValue('cat_id');
             $this->db->query($sql);
