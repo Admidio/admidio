@@ -297,7 +297,7 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'"><img
                 src="'. THEME_PATH. '/icons/add.png" alt="Termin anlegen" title="Termin anlegen"/></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'">Termin Anlegen</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'">Termin anlegen</a>
             </span>
         </li>';
     }

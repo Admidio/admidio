@@ -104,7 +104,7 @@ class TableDate extends TableAccess
     function getIcal($domain)
     {
         $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
-        $uid = mysqldatetime('ymdThis', $this->getValue('dat_timestamp_create')) . '+' . $this->getValue('dat_usr_id') . '@' . $domain;
+        $uid = mysqldatetime('ymdThis', $this->getValue('dat_timestamp_create')) . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
         
         $ical = "BEGIN:VCALENDAR\n".
                 "METHOD:PUBLISH\n".
@@ -112,19 +112,19 @@ class TableDate extends TableAccess
                 "VERSION:2.0\n".
                 "BEGIN:VEVENT\n".
                 "UID:". $uid. "\n".
-                "SUMMARY:". $this->getValue("dat_headline"). "\n".
-                "DESCRIPTION:". $this->getValue("dat_description"). "\n".
-                "DTSTAMP:". mysqldatetime("ymdThisZ", $this->getValue("dat_timestamp_create")). "\n".
+                "SUMMARY:". $this->getValue('dat_headline'). "\n".
+                "DESCRIPTION:". str_replace("\r\n", " ", $this->getValue('dat_description')). "\n".
+                "DTSTAMP:". mysqldatetime('ymdThisZ', $this->getValue('dat_timestamp_create')). "\n".
                 "LOCATION:". $this->getValue("dat_location"). "\n";
-        if($this->getValue("dat_all_day") == 1)
+        if($this->getValue('dat_all_day') == 1)
         {
-            $ical .= "DTSTART;VALUE=DATE:". mysqldate("ymd", $this->getValue("dat_begin")). "\n".
-                     "DTEND;VALUE=DATE:". mysqldate("ymd", $this->getValue("dat_end")). "\n";
+            $ical .= "DTSTART;VALUE=DATE:". mysqldate('ymd', $this->getValue('dat_begin')). "\n".
+                     "DTEND;VALUE=DATE:". mysqldate('ymd', $this->getValue('dat_end')). "\n";
         }
         else
         {
-            $ical .= "DTSTART:". mysqldatetime("ymdThis", $this->getValue("dat_begin")). "\n".
-                     "DTEND:". mysqldatetime("ymdThis", $this->getValue("dat_end")). "\n";
+            $ical .= "DTSTART:". mysqldatetime('ymdThis', $this->getValue('dat_begin')). "\n".
+                     "DTEND:". mysqldatetime('ymdThis', $this->getValue('dat_end')). "\n";
         }
         $ical .= "END:VEVENT\n".
                  "END:VCALENDAR";
