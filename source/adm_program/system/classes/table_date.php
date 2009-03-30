@@ -113,9 +113,9 @@ class TableDate extends TableAccess
                 "BEGIN:VEVENT\n".
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->getValue('dat_headline'). "\n".
-                "DESCRIPTION:". str_replace("\r\n", " ", $this->getValue('dat_description')). "\n".
+                "DESCRIPTION:". str_replace("\r\n", '\n', $this->getValue('dat_description')). "\n".
                 "DTSTAMP:". mysqldatetime('ymdThisZ', $this->getValue('dat_timestamp_create')). "\n".
-                "LOCATION:". $this->getValue("dat_location"). "\n";
+                "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)
         {
             $ical .= "DTSTART;VALUE=DATE:". mysqldate('ymd', $this->getValue('dat_begin')). "\n".
