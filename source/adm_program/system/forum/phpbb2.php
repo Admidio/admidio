@@ -83,7 +83,8 @@ class PhpBB2
     
     // Allgemeine Forums Umgebungsdaten
     var $sitename;                  // Name des Forums
-    var $url;                       // URL zum Forum
+    var $url;                       // URL zum Forum abhaengig von der Admidioeinstellung (iFrame oder neues Fenster)
+    var $url_intern;                // URL zum Forum
     var $cookie_name;               // Name des Forum Cookies
     var $cookie_path;               // Pfad zum Forum Cookies
     var $cookie_domain;             // Domain des Forum Cookies
@@ -194,20 +195,22 @@ class PhpBB2
                     }
                 }
                 
-                // Url zum Forum ermitteln
-                if($link_intern)
+                // URLs zum Forum ermitteln
+                $this->url_intern = str_replace('http://', '', strtolower($server_name));
+                if(strlen($script_path) > 1)
+                {
+                    $this->url_intern .= '/'. $script_path;
+                }
+                $this->url_intern = trim(str_replace('//', '/', $this->url_intern. '/index.php'));
+                $this->url_intern = 'http://'. $this->url_intern;
+
+                if($link_intern == true)
                 {
                     $this->url = $g_root_path.'/adm_program/index_forum.php';
                 }
                 else
                 {
-                    $this->url .= str_replace('http://', '', strtolower($server_name));
-                    if(strlen($script_path) > 1)
-                    {
-                        $this->url .= '/'. $script_path;
-                    }
-                    $this->url = trim(str_replace('//', '/', $this->url. '/index.php'));
-                    $this->url = 'http://'. $this->url;
+                    $this->url = $this->url_intern;
                 }
             }
             else
