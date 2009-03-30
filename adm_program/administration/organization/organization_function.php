@@ -183,6 +183,7 @@ $g_current_organization->setPreferences($g_preferences);
 
 // Aufraeumen
 unset($_SESSION['organization_request']);
+unset($_SESSION['g_forum']);
 $g_current_session->renewOrganizationObject();
 
 // zur Ausgangsseite zurueck

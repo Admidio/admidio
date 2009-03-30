@@ -46,7 +46,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 // -->
 </script>
 <br />
-<iframe id="sizeframe" name="sizeframe" style="padding:0px; margin:0px; width:<?php if ($g_preferences['forum_width']){echo $g_preferences['forum_width'];}else{echo "570";}?>px ;height:100px;" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" marginheight="0" marginwidth="0"  src="<?php echo $g_forum->url; ?>" onload="resizeIframe(this, 'sizeframe');"></iframe>
+<iframe id="sizeframe" name="sizeframe" style="padding:0px; margin:0px; width:<?php if ($g_preferences['forum_width']){echo $g_preferences['forum_width'];}else{echo "570";}?>px ;height:100px;" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" marginheight="0" marginwidth="0"  src="<?php echo $g_forum->url_intern; ?>" onload="resizeIframe(this, 'sizeframe');"></iframe>
 <br />
 <?
 require(THEME_SERVER_PATH. "/overall_footer.php");
