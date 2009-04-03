@@ -2,12 +2,12 @@
 /******************************************************************************
  * Random Photo
  *
- * Version 1.1.0
+ * Version 1.3.0
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
  * und verlinkt neben dem Bild das dazugehörige Album
  *
- * Kompatible ab Admidio-Versions 2.0.0
+ * Kompatible ab Admidio-Versions 2.1.0
  *
  * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
