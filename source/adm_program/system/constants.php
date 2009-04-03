@@ -14,13 +14,10 @@ if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
     die('Diese Seite darf nicht direkt aufgerufen werden !');
 }
 
-// Admidio-Versionsnummer bitte nicht aendern !!!
+// Admidio-Versionsnummern und Flags bitte nicht aendern !!!
 define('ADMIDIO_VERSION', '2.1.0');
+define('BETA_VERSION', '0');
 
-// Beta-Flag (Release) bitte nicht aendern !!!
-define('BETA_VERSION', '1');
-
-// Beta Versionstext bitte nicht aendern !!!
 if(BETA_VERSION > 0)
 {
 	define('BETA_VERSION_TEXT', ' Beta '.BETA_VERSION);
