@@ -213,7 +213,7 @@ if($_GET['mode'] == 1)
 elseif($_GET['mode'] == 2)
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
-    if($date->getValue('dat_org_shortname') == $g_current_organization->getValue('org_shortname'))
+	if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
     {
         $date->delete();
 
