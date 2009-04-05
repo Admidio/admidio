@@ -129,7 +129,7 @@ elseif($_GET["mode"] == 2)
     
     $member = new TableMembers($g_db);
 
-    $sql = "SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_valid, mem_leader
+    $sql = "SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
              WHERE rol_valid  = 1
                AND rol_cat_id = cat_id
