@@ -315,7 +315,19 @@ $javascript = '
         var now_recipients = 0;
         var ecardformid = "ecard_form";
 
-		document.onload = getMenu();
+		function addEvent(obj, evType, fn, useCapture)
+		{
+			if (obj.addEventListener)
+			{
+				obj.addEventListener(evType, fn, useCapture);
+				return true;
+			} 
+			else if (obj.attachEvent)
+			{
+				var r = obj.attachEvent("on"+evType, fn);
+				return r;
+			}
+		} 
         function popup_win(theURL,winName,winOptions)
         {
              win = window.open(theURL,winName,winOptions);
@@ -595,7 +607,7 @@ $javascript = '
         }
         function getMenu()
         {
-            macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1\' , \'basedropdownmenu\' );
+			window.setTimeout("macheRequest(\''.$g_root_path.'/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1\' , basedropdiv );", 500);
         }
         function getMenuRecepientName()
         {
@@ -872,6 +884,7 @@ $javascript = '
             document.getElementById(textdiv).style.font = schrift_bold + \' \'+ schrift_italic + \' \'+ schrift_size + \'px \'+schrift;
             document.getElementById(textdiv).style.color = schrift_farbe;
         }
+		window.onload=getMenu();
     //--></script>';
 
 if ($g_preferences['enable_bbcode'] == 1)
