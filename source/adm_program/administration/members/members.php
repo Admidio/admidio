@@ -106,10 +106,10 @@ if($req_members)
                       email.usd_value as email, homepage.usd_value as homepage,
                       usr_login_name, usr_timestamp_change, 1 member
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
-                RIGHT JOIN '. TBL_USER_DATA. ' as last_name
+                 JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
                   AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                 JOIN '. TBL_USER_DATA. ' as first_name
                    ON first_name.usd_usr_id = usr_id
                   AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as email
@@ -136,9 +136,12 @@ else
                       email.usd_value as email, homepage.usd_value as homepage,
                       usr_login_name, usr_timestamp_change, count(cat_id) member
                  FROM '. TBL_USERS. '
-                RIGHT JOIN '. TBL_USER_DATA. ' as last_name
+                 JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
                   AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                 JOIN '. TBL_USER_DATA. ' as first_name
+                   ON first_name.usd_usr_id = usr_id
+                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
                  LEFT JOIN '. TBL_MEMBERS. '
                    ON mem_usr_id = usr_id
                   AND mem_begin <= "'.DATE_NOW.'"
@@ -149,9 +152,6 @@ else
                  LEFT JOIN '. TBL_CATEGORIES. '
                    ON rol_cat_id = cat_id
                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
-                   ON first_name.usd_usr_id = usr_id
-                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as email
                    ON email.usd_usr_id = usr_id
                   AND email.usd_usf_id = '. $g_current_user->getProperty('E-Mail', 'usf_id'). '
