@@ -73,17 +73,19 @@ if($restrict == 'm')
         AND usr_valid  = 1
         AND rol_cat_id = cat_id
         AND cat_org_id = '. $g_current_organization->getValue('org_id');
+    $tables = TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', ';
 }
 elseif($restrict == 'u')
 {
     //Falls gefordert, aufrufen alle Leute aus der Datenbank
     $condition = ' usr_valid = 1 ';
+    $tables = '';
 }
 
 // SQL-Statement zusammensetzen
 $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
                city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code
-        FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
+        FROM '. $tables. TBL_USERS. '
         LEFT JOIN '. TBL_USER_DATA. ' as last_name
           ON last_name.usd_usr_id = usr_id
          AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
