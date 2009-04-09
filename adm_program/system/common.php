@@ -85,12 +85,13 @@ $g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 // Script fuer das Forum ermitteln und includen, bevor die Session erstellt wird
 Forum::includeForumScript($g_db);
 
-// Cookie-Praefix ermitteln
-$cookie_praefix = 'ADMIDIO_'. str_replace(' ','', $g_organization);
+// Cookie-Praefix ermitteln und Sonderzeichen entfernen
+$cookie_praefix = 'ADMIDIO_'. $g_organization;
 if($g_debug)
 {
-    $cookie_praefix .= '_'. str_replace('.','', ADMIDIO_VERSION). '_'. str_replace('.','', BETA_VERSION);
+    $cookie_praefix .= '_'. ADMIDIO_VERSION. '_'. BETA_VERSION;
 }
+$cookie_praefix = strtr($cookie_praefix, ' .,;:','_____');
 
 // PHP-Session starten
 if(headers_sent() == false)
