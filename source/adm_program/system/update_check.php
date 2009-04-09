@@ -20,22 +20,29 @@ require_once('login_valid.php');
 // Funktion zur Erreichbarkeitsprüfung der Updatedatei
 function domainAvailable($strDomain)
 {
-	$rCurlHandle = curl_init($strDomain);
+	if(function_exists(curl_init))
+	{
+		$rCurlHandle = curl_init($strDomain);
 
-    curl_setopt($rCurlHandle, CURLOPT_CONNECTTIMEOUT, 10);
-    curl_setopt($rCurlHandle, CURLOPT_HEADER, TRUE);
-    curl_setopt($rCurlHandle, CURLOPT_NOBODY, TRUE);
-    curl_setopt($rCurlHandle, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($rCurlHandle, CURLOPT_CONNECTTIMEOUT, 10);
+		curl_setopt($rCurlHandle, CURLOPT_HEADER, TRUE);
+		curl_setopt($rCurlHandle, CURLOPT_NOBODY, TRUE);
+		curl_setopt($rCurlHandle, CURLOPT_RETURNTRANSFER, TRUE);
 
-    $strResponse = curl_exec($rCurlHandle);
+		$strResponse = curl_exec($rCurlHandle);
 
-    curl_close ($rCurlHandle);
+		curl_close ($rCurlHandle);
 
-    if (!$strResponse )
-    {
-      return FALSE;
-    }
-    return TRUE;
+		if (!$strResponse )
+		{
+		  return FALSE;
+		}
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
 }
 
 // Funktion zur Ermittlung der Update-Version
@@ -108,7 +115,16 @@ else
 
 // Erreichbarkeit der Updateinformation prüfen und bei Verbindung
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
-if(domainAvailable('http://www.admidio.org/update.txt'))
+if((!domainAvailable('http://www.admidio.org/update.txt')) || (@file_get_contents('http://www.admidio.org/update.txt') === false))
+{
+	// Admidio Versionen vom Server übergeben
+	$stable_version = 'n/a';
+	$beta_version = 'n/a';
+	$beta_release = '';
+	
+	$version_update = 99;
+}
+else
 {
 	$update_info = file_get_contents('http://www.admidio.org/update.txt');
 	
@@ -133,15 +149,7 @@ if(domainAvailable('http://www.admidio.org/update.txt'))
 	// Auf Update prüfen
 	$version_update = CheckVersion(ADMIDIO_VERSION, $stable_version, $beta_version, $beta_release, BETA_VERSION);
 }
-else
-{
-	// Admidio Versionen vom Server übergeben
-	$stable_version = 'n/a';
-	$beta_version = 'n/a';
-	$beta_release = '';
-	
-	$version_update = 99;
-}
+
 
  // Nur im Anzeigemodus geht es weiter, ansonsten kann der aktuelle Updatestand 
 // in der Variable $version_update abgefragt werden.
