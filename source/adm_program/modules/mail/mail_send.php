@@ -224,12 +224,12 @@ else
                  AND mem_begin  <= '".DATE_NOW."'
                  AND mem_end     > '".DATE_NOW."'
                  AND mem_usr_id  = usr_id
-                 AND usr_valid   = 1";
+                 AND usr_valid   = 1 ";
 	// Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
 	//damit er die Mail nicht an sich selber schickt.
 	if ($g_valid_login)
 	{
-		$sql =$sql. "AND usr_id     <> ". $g_current_user->getValue("usr_id");
+		$sql =$sql. " AND usr_id     <> ". $g_current_user->getValue("usr_id");
     } 
     $result = $g_db->query($sql);
 
