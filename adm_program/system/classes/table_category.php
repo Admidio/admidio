@@ -50,7 +50,7 @@ class TableCategory extends TableAccess
         $row = $this->db->fetch_array();
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(strtoupper($mode) == 'UP')
+        if(mb_strtolower($mode, 'UTF-8') == 'up')
         {
             if($this->getValue('cat_org_id') == 0
             || $this->getValue('cat_sequence') > $row['count']+1)
@@ -66,7 +66,7 @@ class TableCategory extends TableAccess
             }
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(strtoupper($mode) == 'DOWN')
+        elseif(mb_strtolower($mode, 'UTF-8') == 'down')
         {
             if($this->getValue('cat_org_id') > 0
             || $this->getValue('cat_sequence') < $row['count'])
