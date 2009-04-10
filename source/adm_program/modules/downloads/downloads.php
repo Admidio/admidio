@@ -206,7 +206,7 @@ else
             $nextFile = $folderContent['files'][$i];
 
             //Ermittlung der Dateiendung
-            $fileExtension  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
+            $fileExtension  = mb_strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1), 'UTF-8');
 
             //Auszugebendes Icon ermitteln
             $iconFile = 'page_white_question.png';
@@ -310,7 +310,7 @@ if ($g_current_user->editDownloadRight())
                 $nextFile = $folderContent['additionalFiles'][$i];
 
                 //Ermittlung der Dateiendung
-                $fileExtension  = strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1));
+                $fileExtension  = mb_strtolower(substr($nextFile['fil_name'], strrpos($nextFile['fil_name'], '.')+1), 'UTF-8');
 
                 //Auszugebendes Icon ermitteln
                 $iconFile = 'page_white_question.png';

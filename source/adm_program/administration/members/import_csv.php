@@ -11,8 +11,8 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/role_dependency.php');
+require_once('../../system/classes/table_members.php');
+require_once('../../system/classes/role_dependency.php');
 
 // setzt die Ausfuehrungszeit des Scripts auf 8 Min., falls viele Daten importiert werden
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
@@ -78,7 +78,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
     foreach($arr_columns as $col_key => $col_value)
     {
         // Hochkomma und Spaces entfernen
-        $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
+        $col_value = mb_strtolower(trim(strip_tags(str_replace('"', '', $col_value))), 'UTF-8');
 
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
@@ -95,34 +95,34 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
 
                 if($field->getValue('usf_name') == 'Geschlecht')
                 {
-                    if(strtolower($col_value) == 'm'
-                    || strtolower($col_value) == 'männlich'
-                    || $col_value             == '1')
+                    if($col_value == 'm'
+                    || $col_value == 'männlich'
+                    || $col_value == '1')
                     {
                         $user->setValue($field->getValue('usf_name'), '1');
                     }
-                    if(strtolower($col_value) == 'w'
-                    || strtolower($col_value) == 'weiblich'
-                    || $col_value             == '2')
+                    if($col_value == 'w'
+                    || $col_value == 'weiblich'
+                    || $col_value == '2')
                     {
                         $user->setValue($field->getValue('usf_name'), '2');
                     }
                 }
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
-                    if(strtolower($col_value) == 'j'
-                    || strtolower($col_value) == 'ja'
-                    || strtolower($col_value) == 'y'
-                    || strtolower($col_value) == 'yes'
-                    || $col_value             == '1')
+                    if($col_value == 'j'
+                    || $col_value == 'ja'
+                    || $col_value == 'y'
+                    || $col_value == 'yes'
+                    || $col_value == '1')
                     {
                         $user->setValue($field->getValue('usf_name'), '1');
                     }
-                    if(strtolower($col_value) == 'n'
-                    || strtolower($col_value) == 'nein'
-                    || strtolower($col_value) == 'no'
-                    || $col_value             == '0'
-                    || strlen($col_value)     == 0)
+                    if($col_value == 'n'
+                    || $col_value == 'nein'
+                    || $col_value == 'no'
+                    || $col_value  == '0'
+                    || strlen($col_value) == 0)
                     {
                         $user->setValue($field->getValue('usf_name'), '0');
                     }

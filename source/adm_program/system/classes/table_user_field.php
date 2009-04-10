@@ -54,7 +54,7 @@ class TableUserField extends TableAccess
         global $g_current_organization;
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(strtoupper($mode) == 'UP')
+        if(mb_strtoupper($mode, 'UTF-8') == 'up')
         {
             $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = '.$this->getValue('usf_sequence').'
                      WHERE usf_cat_id   = '.$this->getValue('usf_cat_id').'
@@ -64,7 +64,7 @@ class TableUserField extends TableAccess
             $this->save();
         }
         // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(strtoupper($mode) == 'DOWN')
+        elseif(mb_strtoupper($mode, 'UTF-8') == 'down')
         {
             $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = '.$this->getValue('usf_sequence').'
                      WHERE usf_cat_id   = '.$this->getValue('usf_cat_id').'

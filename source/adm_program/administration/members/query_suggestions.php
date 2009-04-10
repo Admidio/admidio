@@ -109,14 +109,15 @@ else
 
 
     // ab hier werden jetzt die zur Query passenden Eintraege ermittelt...
-    $match=array();
+    $match = array();
+    $q = mb_strtolower($query, 'UTF-8');
+
     foreach ($querySuggestions as $suggest)
     {
-        $q=strtolower($query);
-        if (    strpos(strtolower($suggest['lastName']),$q)===0
-            or  strpos(strtolower($suggest['firstName']),$q)===0
-            or  strpos(strtolower($suggest['firstName']). " ". strtolower($suggest['lastName']),str_replace(',', '', $q))===0
-            or  strpos(strtolower($suggest['lastName']). " ". strtolower($suggest['firstName']),str_replace(',', '', $q))===0)
+        if (    strpos(mb_strtolower($suggest['lastName'], 'UTF-8'),$q)===0
+            or  strpos(mb_strtolower($suggest['firstName'], 'UTF-8'),$q)===0
+            or  strpos(mb_strtolower($suggest['firstName'], 'UTF-8'). " ". mb_strtolower($suggest['lastName'], 'UTF-8'),str_replace(',', '', $q))===0
+            or  strpos(mb_strtolower($suggest['lastName'], 'UTF-8'). " ". mb_strtolower($suggest['firstName'], 'UTF-8'),str_replace(',', '', $q))===0)
         {
             $match[]='<rs>'. $suggest['lastName']. ', '. $suggest['firstName']. '</rs>';
         }
