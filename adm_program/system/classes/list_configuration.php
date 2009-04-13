@@ -292,7 +292,7 @@ class ListConfiguration extends TableLists
         }
         elseif($member_status == 1)
         {
-            $sql_member_status = ' AND mem_end < "'.DATE_NOW.'" ';
+            $sql_member_status = ' AND mem_end <= "'.DATE_NOW.'" ';
         }
 
         // SQL-Statement zusammenbasteln
