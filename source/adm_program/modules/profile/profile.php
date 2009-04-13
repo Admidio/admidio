@@ -14,8 +14,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // Uebergabevariablen pruefen
 
@@ -245,9 +245,9 @@ $g_layout['header'] = '
 
         function linkaendern(rolle,id)
         {
-            document.getElementById("enter"+rolle).href = "' . $g_root_path . '/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue('usr_id').'&mode=1&rol_id="+id+"&rol_begin="+document.getElementById("begin"+rolle).value+"&rol_end="+document.getElementById("end"+rolle).value ;
+            document.getElementById("enter"+rolle).href = gRootPath + "/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue('usr_id').'&mode=1&rol_id="+id+"&rol_begin="+document.getElementById("begin"+rolle).value+"&rol_end="+document.getElementById("end"+rolle).value ;
         }
-    --></script>';
+    //--></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -266,8 +266,10 @@ echo '
                     <div class="groupBoxHeadline">
                         <div style="float: left;">'. $user->getValue('Vorname'). ' '. $user->getValue('Nachname');
 
-                            // Icon des Geschlechts anzeigen
-                            if($user->getValue('Geschlecht') > 0)
+                            // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
+                            if($user->getValue('Geschlecht') > 0
+                            && (  $g_current_user->editProfile($a_user_id) == true
+                               || ($g_current_user->editProfile($a_user_id) == false && $g_current_user->getProperty('Geschlecht', 'usf_hidden') == 0 )))
                             {
                                 if($user->getValue('Geschlecht') == 1)
                                 {
