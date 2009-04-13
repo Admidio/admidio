@@ -78,7 +78,8 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
     foreach($arr_columns as $col_key => $col_value)
     {
         // Hochkomma und Spaces entfernen
-        $col_value = mb_strtolower(trim(strip_tags(str_replace('"', '', $col_value))), 'UTF-8');
+        $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
+        $col_value_to_lower = mb_strtolower($col_value, 'UTF-8');
 
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
@@ -95,33 +96,33 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
 
                 if($field->getValue('usf_name') == 'Geschlecht')
                 {
-                    if($col_value == 'm'
-                    || $col_value == 'männlich'
-                    || $col_value == '1')
+                    if($col_value_to_lower == 'm'
+                    || $col_value_to_lower == 'männlich'
+                    || $col_value_to_lower == '1')
                     {
                         $user->setValue($field->getValue('usf_name'), '1');
                     }
-                    if($col_value == 'w'
-                    || $col_value == 'weiblich'
-                    || $col_value == '2')
+                    if($col_value_to_lower == 'w'
+                    || $col_value_to_lower == 'weiblich'
+                    || $col_value_to_lower == '2')
                     {
                         $user->setValue($field->getValue('usf_name'), '2');
                     }
                 }
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
-                    if($col_value == 'j'
-                    || $col_value == 'ja'
-                    || $col_value == 'y'
-                    || $col_value == 'yes'
-                    || $col_value == '1')
+                    if($col_value_to_lower == 'j'
+                    || $col_value_to_lower == 'ja'
+                    || $col_value_to_lower == 'y'
+                    || $col_value_to_lower == 'yes'
+                    || $col_value_to_lower == '1')
                     {
                         $user->setValue($field->getValue('usf_name'), '1');
                     }
-                    if($col_value == 'n'
-                    || $col_value == 'nein'
-                    || $col_value == 'no'
-                    || $col_value  == '0'
+                    if($col_value_to_lower == 'n'
+                    || $col_value_to_lower == 'nein'
+                    || $col_value_to_lower == 'no'
+                    || $col_value_to_lower  == '0'
                     || strlen($col_value) == 0)
                     {
                         $user->setValue($field->getValue('usf_name'), '0');
