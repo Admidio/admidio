@@ -142,9 +142,7 @@ html.* #right_block span {
 }
 
 #sidebar hr {
-    margin-top:     10px;
-    color:          #d7d7d7;
-    border-width:   1px;
-    border-style:   dashed;
-    text-align:     left;
+    margin: 5px 0px 5px 0px;
+    border: 1px dashed #d7d7d7;
+    text-align: left;
 }
