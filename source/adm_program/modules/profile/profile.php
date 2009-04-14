@@ -897,7 +897,21 @@ echo '
                 </div>';
             }
         }
-    echo '</div>
+
+        // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+        echo '<div class="editInformation">';
+            $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
+            echo 'Angelegt von '. $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname').
+            ' am '. mysqldatetime('d.m.y h:i', $user->getValue('usr_timestamp_create'));
+
+            if($user->getValue('usr_usr_id_change') > 0)
+            {
+                $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
+                echo '<br />Zuletzt bearbeitet von '. $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
+                ' am '. mysqldatetime('d.m.y h:i', $user->getValue('usr_timestamp_change'));
+            }
+        echo '</div>    
+    </div>
 </div>';
 
 if(isset($_GET['user_id']) == true)
