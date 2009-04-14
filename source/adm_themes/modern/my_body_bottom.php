@@ -103,7 +103,7 @@
             if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUsers())
             {
                 echo '<h3>Administration</h3>';
-                if($g_current_user->approveUsers())
+                if($g_current_user->approveUsers() && $g_preferences['registration_mode'] > 0)
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php"><img
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/new_registrations.png" alt="Neue Anmeldungen" title="Neue Anmeldungen" /></a>
