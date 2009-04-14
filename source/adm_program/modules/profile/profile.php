@@ -268,8 +268,7 @@ echo '
 
                             // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
                             if($user->getValue('Geschlecht') > 0
-                            && (  $g_current_user->editProfile($a_user_id) == true
-                               || ($g_current_user->editProfile($a_user_id) == false && $g_current_user->getProperty('Geschlecht', 'usf_hidden') == 0 )))
+                            && ($g_current_user->editProfile($a_user_id) == true || $g_current_user->getProperty('Geschlecht', 'usf_hidden') == 0 ))
                             {
                                 if($user->getValue('Geschlecht') == 1)
                                 {
@@ -321,68 +320,82 @@ echo '
                                 </dl>
                             </li>';
 
+                            $bAddressOutput = false;    // Merker, ob die Adresse schon angezeigt wurde
+
                             // Schleife ueber alle Felder der Stammdaten
 
                             foreach($user->userFieldData as $field)
                             {
                                 // nur Felder der Stammdaten anzeigen
                                 if($field->getValue('cat_name') == 'Stammdaten'
-                                && (  $g_current_user->editProfile($a_user_id) == true
-                                    || ($g_current_user->editProfile($a_user_id) == false && $field->getValue('usf_hidden') == 0 )))
+                                && (  $g_current_user->editProfile($a_user_id) == true || $field->getValue('usf_hidden') == 0 ))
                                 {
                                     switch($field->getValue('usf_name'))
                                     {
                                         case 'Nachname':
                                         case 'Vorname':
-                                        case 'PLZ':
-                                        case 'Ort':
-                                        case 'Land':
                                         case 'Geschlecht':
                                             // diese Felder werden nicht einzeln dargestellt
                                             break;
 
                                         case 'Adresse':
-                                            if($field->getValue('usf_name') == 'Adresse')   // nur 1x bei Adresse schreiben
+                                        case 'PLZ':
+                                        case 'Ort':
+                                        case 'Land':
+                                            if($bAddressOutput == false)   // nur 1x bei Adresse schreiben
                                             {
+                                                $bAddressOutput = true;
                                                 echo '<li>
                                                     <dl>
                                                         <dt>Adresse:</dt>
                                                         <dd>';
-                                                            if(strlen($user->getValue('Adresse')) > 0)
-                                                                echo $user->getValue('Adresse');
-                                                            if(strlen($user->getValue('PLZ')) > 0 || strlen($user->getValue('Ort')) > 0)
-                                                            {
-                                                                echo '<br />';
-                                                                if(strlen($user->getValue('PLZ')) > 0)
-                                                                    echo $user->getValue('PLZ'). ' ';
-                                                                if(strlen($user->getValue('Ort')) > 0)
-                                                                    echo $user->getValue('Ort');
-                                                            }
-                                                            if(strlen($user->getValue('Land')) > 0)
-                                                                echo '<br />'. $user->getValue('Land');
+                                                            $address = '';
+                                                            $map_url = 'http://maps.google.com/?q=';
+                                                            $route_url = 'http://maps.google.com/?f=d&amp;saddr='. 
+                                                                urlencode($g_current_user->getValue('Adresse')).
+                                                                ',%20'. urlencode($g_current_user->getValue('PLZ')).
+                                                                ',%20'. urlencode($g_current_user->getValue('Ort')).
+                                                                ',%20'. urlencode($g_current_user->getValue('Land')).
+                                                                '&amp;daddr=';
 
-                                                            if($g_preferences['profile_show_map_link']
-                                                            && strlen($user->getValue('Adresse')) > 0
-                                                            && (  strlen($user->getValue('PLZ'))  > 0
-                                                            || strlen($user->getValue('Ort'))  > 0 ))
+                                                            if(strlen($user->getValue('Adresse')) > 0
+                                                            && ($g_current_user->editProfile($a_user_id) == true || $g_current_user->getProperty('Adresse', 'usf_hidden') == 0))
+                                                            {
+                                                                $address   .= '<div>'.$user->getValue('Adresse'). '</div>';
+                                                                $map_url   .= urlencode($user->getValue('Adresse'));
+                                                                $route_url .= urlencode($user->getValue('Adresse'));
+                                                            }
+
+                                                            if(strlen($user->getValue('PLZ')) > 0
+                                                            && ($g_current_user->editProfile($a_user_id) == true || $g_current_user->getProperty('PLZ', 'usf_hidden') == 0))
+                                                            {
+                                                                $address   .= '<div>'.$user->getValue('PLZ');
+                                                                $map_url   .= ',%20'. urlencode($user->getValue('PLZ'));
+                                                                $route_url .= ',%20'. urlencode($user->getValue('PLZ'));
+                                                            }
+
+                                                            if(strlen($user->getValue('Ort')) > 0
+                                                            && ($g_current_user->editProfile($a_user_id) == true || $g_current_user->getProperty('Ort', 'usf_hidden') == 0))
+                                                            {
+                                                                $address   .= ' '. $user->getValue('Ort'). '</div>';
+                                                                $map_url   .= ',%20'. urlencode($user->getValue('Ort'));
+                                                                $route_url .= ',%20'. urlencode($user->getValue('Ort'));
+                                                            }
+
+                                                            if(strlen($user->getValue('Land')) > 0
+                                                            && ($g_current_user->editProfile($a_user_id) == true || $g_current_user->getProperty('Land', 'usf_hidden') == 0))
+                                                            {
+                                                                $address   .= '<div>'.$user->getValue('Land'). '</div>';
+                                                                $map_url   .= ',%20'. urlencode($user->getValue('Land'));
+                                                                $route_url .= ',%20'. urlencode($user->getValue('Land'));
+                                                            }
+
+                                                            echo $address;
+
+                                                            if($g_preferences['profile_show_map_link'])
                                                             {
                                                                 // Button mit Karte anzeigen
-                                                                $map_url = 'http://maps.google.com/?q='. urlencode($user->getValue('Adresse'));
-                                                                if(strlen($user->getValue('PLZ'))  > 0)
-                                                                {
-                                                                    $map_url .= ',%20'. urlencode($user->getValue('PLZ'));
-                                                                }
-                                                                if(strlen($user->getValue('Ort'))  > 0)
-                                                                {
-                                                                    $map_url .= ',%20'. urlencode($user->getValue('Ort'));
-                                                                }
-                                                                if(strlen($user->getValue('Land'))  > 0)
-                                                                {
-                                                                    $map_url .= ',%20'. urlencode($user->getValue('Land'));
-                                                                }
-
-                                                                echo '<br />
-                                                                <span class="iconTextLink">
+                                                                echo '<span class="iconTextLink">
                                                                     <a href="'. $map_url. '" target="_blank"><img
                                                                         src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
                                                                     <a href="'. $map_url. '" target="_blank">Karte</a>
@@ -390,55 +403,8 @@ echo '
 
                                                                 if($g_current_user->getValue('usr_id') != $a_user_id)
                                                                 {
-                                                                    if(strlen($g_current_user->getValue('Adresse')) > 0
-                                                                    && (  strlen($g_current_user->getValue('PLZ'))  > 0
-                                                                    || strlen($g_current_user->getValue('Ort'))  > 0 ))
-                                                                    {
-                                                                        // Link fuer die Routenplanung
-                                                                        $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue('Adresse'));
-                                                                        if(strlen($g_current_user->getValue('PLZ'))  > 0)
-                                                                        {
-                                                                            $route_url .= ',%20'. urlencode($g_current_user->getValue('PLZ'));
-                                                                        }
-                                                                        if(strlen($g_current_user->getValue('Ort'))  > 0)
-                                                                        {
-                                                                            $route_url .= ',%20'. urlencode($g_current_user->getValue('Ort'));
-                                                                        }
-                                                                        if(strlen($g_current_user->getValue('Land'))  > 0)
-                                                                        {
-                                                                            $route_url .= ',%20'. urlencode($g_current_user->getValue('Land'));
-                                                                        }
-
-                                                                        $route_url .= '&amp;daddr='. urlencode($user->getValue('Adresse'));
-                                                                        if(strlen($user->getValue('PLZ'))  > 0)
-                                                                        {
-                                                                            $route_url .= ',%20'. urlencode($user->getValue('PLZ'));
-                                                                        }
-                                                                        if(strlen($user->getValue('Ort')) > 0)
-                                                                        {
-                                                                            $route_url .= ',%20'. urlencode($user->getValue('Ort'));
-                                                                        }
-                                                                        if(strlen($user->getValue('Land')) > 0)
-                                                                        {
-                                                                            $route_url .= ',%20'. urlencode($user->getValue('Land'));
-                                                                        }
-                                                                        echo ' - <a href="'.$route_url.'" target="_blank">Route anzeigen</a>';
-                                                                    }
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                // Freiraeume ausgeben, damit es layoutmaessig mit dem Bild keine Probleme gibt
-                                                                if(strlen($user->getValue('Adresse')) == 0)
-                                                                {
-                                                                    echo '<br />&nbsp;';
-                                                                }
-                                                                else
-                                                                {
-                                                                    if(strlen($user->getValue('PLZ')) == 0 && strlen($user->getValue('Ort')) == 0 && strlen($g_current_user->getValue('Land'))  > 0)
-                                                                    {
-                                                                        echo '<br />&nbsp;';
-                                                                    }
+                                                                    // Link fuer die Routenplanung
+                                                                    echo ' - <a href="'.$route_url.'" target="_blank">Route anzeigen</a>';
                                                                 }
                                                             }
                                                         echo '</dd>
@@ -570,10 +536,9 @@ echo '
 
             //Array mit allen Berechtigungen
             $authorizations = Array('rol_assign_roles','rol_approve_users','rol_edit_user',
-                                       'rol_mail_to_all','rol_profile','rol_announcements',
-                                       'rol_dates','rol_photo','rol_download','rol_guestbook',
-                                       'rol_guestbook_comments','rol_inventory','rol_weblinks',
-                                       'rol_inventory','rol_all_lists_view');
+                                    'rol_mail_to_all','rol_profile','rol_announcements',
+                                    'rol_dates','rol_photo','rol_download','rol_guestbook',
+                                    'rol_guestbook_comments','rol_weblinks', 'rol_all_lists_view');
 
             //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
             foreach($authorizations as $authorization_db_name)
@@ -665,11 +630,6 @@ echo '
               {
                   echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
                   alt="Weblinks anlegen und bearbeiten" title="Weblinks anlegen und bearbeiten" />';
-              }
-        	  if($user->checkRolesRight('rol_inventory') == 1 && $g_preferences['enable_inventory_module'] > 0)
-              {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_inventory'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
-                  alt="Inventar verwalten" title="Inventar verwalten" />';
               }
               if($user->checkRolesRight('rol_all_lists_view') == 1)
               {

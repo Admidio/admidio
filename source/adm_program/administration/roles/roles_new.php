@@ -649,6 +649,7 @@ echo '
                             </div>
                         </li>';
                     }
+                    /*
                     if($g_preferences['enable_inventory_module'] > 0)
                     {
                         echo '
@@ -665,7 +666,7 @@ echo '
                             </div>
                         </li>';
                
-                    }
+                    }*/
                 echo '</ul>
             </div>
         </div>
