@@ -290,7 +290,7 @@ echo '<div class="photoModuleContainer">';
 			global $g_root_path;
 			       	
 			//Ausrechnen der Seitenzahl
-        	if (settype($photo_album->getValue('pho_quantity'), 'int') || settype($thumb_seiten, 'int'))
+        	if (is_int($photo_album->getValue('pho_quantity')) || is_int($thumb_seiten))
         	{
         	    $thumb_seiten = round($photo_album->getValue('pho_quantity') / $thumbs_per_side);
         	}
