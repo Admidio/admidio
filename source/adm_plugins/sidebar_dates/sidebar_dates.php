@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.2.0
+ * Version 1.2.1
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -17,17 +17,17 @@
  *****************************************************************************/
 
 // Pfad des Plugins ermitteln
-$plugin_folder_pos = strpos(__FILE__, "adm_plugins") + 11;
-$plugin_file_pos   = strpos(__FILE__, "sidebar_dates.php");
+$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$plugin_file_pos   = strpos(__FILE__, 'sidebar_dates.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
-require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/../adm_program/system/classes/table_date.php");
-require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
+require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
+require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_date.php');
+require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -52,7 +52,7 @@ if(isset($plg_link_class))
 }
 else
 {
-    $plg_link_class = "";
+    $plg_link_class = '';
 }
 
 if(isset($plg_link_target))
@@ -61,40 +61,40 @@ if(isset($plg_link_target))
 }
 else
 {
-    $plg_link_target = "_self";
+    $plg_link_target = '_self';
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-$plg_organizations = "";
+$plg_organizations = '';
 $plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($plg_arr_orgas as $key)
 {
-	$plg_organizations = $plg_organizations. $key. ", ";
+	$plg_organizations = $plg_organizations. $key. ', ';
 }
-$plg_organizations = $plg_organizations. $g_current_organization->getValue("org_id");
+$plg_organizations = $plg_organizations. $g_current_organization->getValue('org_id');
 
 // Wenn User nicht eingeloggt ist, Kalender, die hidden sind, aussortieren
-$hidden = "";
+$hidden = '';
 if ($g_valid_login == false)
 {
-	$hidden = " AND cat_hidden = 0 ";
+	$hidden = ' AND cat_hidden = 0 ';
 }
 
 // nun alle relevanten Termine finden
-$sql    = "SELECT * FROM ". TBL_DATES. ", ". TBL_CATEGORIES. "
+$sql    = 'SELECT * FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
             WHERE dat_cat_id = cat_id
-            AND (  cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                OR (   dat_global   = 1
-                   AND cat_org_id IN ($organizations) ))
-			  AND (  DATE_FORMAT(dat_begin, '%Y-%m-%d')       >= '".DATE_NOW."'
-                  OR DATE_FORMAT(dat_end, '%Y-%m-%d %H:%i:%s') > '".DATE_NOW." 00:00:00' )
-            ".$hidden."
+              AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                  OR (   dat_global  = 1
+                     AND cat_org_id IN ('.$plg_organizations.') ) )
+			  AND (  dat_begin >= "'.DATE_NOW.'"
+                  OR dat_end   >  "'.DATE_NOW.' 00:00:00" )
+                  '.$hidden.'
 			ORDER BY dat_begin ASC
-			LIMIT $plg_dates_count";
+			LIMIT '.$plg_dates_count;
 $plg_result = $g_db->query($sql);
 $plg_date = new TableDate($g_db);
 
@@ -106,25 +106,25 @@ if($g_db->num_rows($plg_result) > 0)
     {
         $plg_date->clear();
         $plg_date->setArray($plg_row);
-        $plg_html_end_date = "";
+        $plg_html_end_date = '';
 
-        echo mysqldatetime("d.m.y", $plg_date->getValue("dat_begin")). '&nbsp;&nbsp;';
+        echo mysqldatetime('d.m.y', $plg_date->getValue('dat_begin')). '&nbsp;&nbsp;';
 
-        if ($plg_date->getValue("dat_all_day") != 1)
+        if ($plg_date->getValue('dat_all_day') != 1)
         {
-            echo mysqldatetime("h:i", $plg_date->getValue("dat_begin"));
+            echo mysqldatetime('h:i', $plg_date->getValue('dat_begin'));
         }
 
         // Bis-Datum und Uhrzeit anzeigen
         if($plg_show_date_end)
         {
-            if(mysqldatetime("d.m.y", $plg_date->getValue("dat_begin")) != mysqldatetime("d.m.y", $plg_date->getValue("dat_end")))
+            if(mysqldatetime('d.m.y', $plg_date->getValue('dat_begin')) != mysqldatetime('d.m.y', $plg_date->getValue('dat_end')))
             {
-                $plg_html_end_date .= mysqldatetime("d.m.y", $plg_date->getValue("dat_end"));
+                $plg_html_end_date .= mysqldatetime('d.m.y', $plg_date->getValue('dat_end'));
             }
-            if ($plg_date->getValue("dat_all_day") != 1)
+            if ($plg_date->getValue('dat_all_day') != 1)
             {
-                $plg_html_end_date .= mysqldatetime("h:i", $plg_date->getValue("dat_end"));
+                $plg_html_end_date .= mysqldatetime('h:i', $plg_date->getValue('dat_end'));
             }
             if(strlen($plg_html_end_date) > 0)
             {
@@ -136,11 +136,11 @@ if($g_db->num_rows($plg_result) > 0)
 
         if($plg_max_char_per_word > 0)
         {
-            $plg_new_headline = "";
+            $plg_new_headline = '';
             unset($plg_words);
 
             // Woerter unterbrechen, wenn sie zu lang sind
-            $plg_words = explode(" ", $plg_date->getValue("dat_headline"));
+            $plg_words = explode(' ', $plg_date->getValue('dat_headline'));
 
             foreach($plg_words as $plg_key => $plg_value)
             {
