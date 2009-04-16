@@ -54,14 +54,6 @@ else
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $g_layout['title']  = 'Organisationseinstellungen';
 $g_layout['header'] =  '
-    <style type="text/css">
-        .groupBox {
-            visibility: hidden;
-            display:    none;
-            width:      95%;
-        }
-    </style>
-
     <script type="text/javascript"><!--
         // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
         ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
@@ -76,14 +68,12 @@ $g_layout['header'] =  '
             for (i=0;i<ids.length;i++)
             {
                 // Erstmal alle DIVs aus unsichtbar setzen
-                document.getElementById(ids[i]).style.visibility = "hidden";
                 document.getElementById(ids[i]).style.display    = "none";
             }
             // Angeforderten Bereich anzeigen
-            document.getElementById(element_id).style.visibility = "visible";
             document.getElementById(element_id).style.display    = "block";
-            // window.blur();
         }
+
         // Versteckt oder zeigt weitere Einstellungsmöglichkeiten
         function showHideMoreSettings(LayerSetting,LayerSwith,LayerSettingName,Setting)
         {
@@ -103,34 +93,31 @@ $g_layout['header'] =  '
                     document.getElementById(LayerSetting).innerHTML = "";
             }
         }
-        function drawForumAccessDataTable(LayerSetting,LayerSwith)
+        function drawForumAccessDataTable()
         {
-            var layerSetting = document.getElementById(LayerSetting);
-            if(document.getElementById(LayerSwith).checked == true && layerSetting)
+            var layerSetting = document.getElementById("forum_access_data");
+            if(document.getElementById("forum_sqldata_from_admidio").checked == true && layerSetting)
             {
-                document.getElementById("forum_access_data").style.visibility = "hidden";
-                document.getElementById("forum_access_data").style.display    = "none";
-                document.getElementById("forum_access_data_text").style.visibility = "hidden";
-                document.getElementById("forum_access_data_text").style.display    = "none";
+                $("#" + "forum_access_data").hide("slow");
+                $("#" + "forum_access_data_text").hide("slow");
+
                 document.getElementById("forum_srv").value = "";
                 document.getElementById("forum_usr").value = "";
                 document.getElementById("forum_pw").value = "";
                 document.getElementById("forum_db").value = "";
             }
-            else if (document.getElementById(LayerSwith).checked == false && layerSetting)
+            else if (document.getElementById("forum_sqldata_from_admidio").checked == false && layerSetting)
             {
                 var ElementsArray = Array("forum_srv","forum_usr","forum_pw","forum_db");
                 var ValuesArray = Array();
-                ValuesArray[0] = Array("Server:","TEXT","50","'. $form_values['forum_srv']. '");
-                ValuesArray[1] = Array("User:","TEXT","50","'. $form_values['forum_usr']. '");
-                ValuesArray[2] = Array("Passwort:","PASSWORD","50","'. $form_values['forum_pw']. '");
-                ValuesArray[3] = Array("Datenbank:","TEXT","50","'. $form_values['forum_db']. '");
+                ValuesArray[0] = Array("Server:","TEXT","50", "200","'. $form_values['forum_srv']. '");
+                ValuesArray[1] = Array("User:","TEXT","50", "200","'. $form_values['forum_usr']. '");
+                ValuesArray[2] = Array("Passwort:","PASSWORD","50", "200","'. $form_values['forum_pw']. '");
+                ValuesArray[3] = Array("Datenbank:","TEXT","50", "200","'. $form_values['forum_db']. '");
                 appendElements(ElementsArray,ValuesArray,layerSetting);
 
-                document.getElementById("forum_access_data").style.visibility = "visible";
-                document.getElementById("forum_access_data").style.display    = "";
-                document.getElementById("forum_access_data_text").style.visibility = "visible";
-                document.getElementById("forum_access_data_text").style.display    = "";
+                $("#" + "forum_access_data").show("slow");
+                $("#" + "forum_access_data_text").show("slow");
             }
         }
         function appendElements(array,valuesArray,layer)
@@ -149,7 +136,8 @@ $g_layout['header'] =  '
                     input.id = array[i];
                     input.name = array[i];
                     input.maxlength = valuesArray[i][2];
-                    input.value = valuesArray[i][3];
+                    input.width = valuesArray[i][3];
+                    input.value = valuesArray[i][4];
                     li.appendChild(dl);
                     dl.appendChild(dt);
                     dl.appendChild(dd);
@@ -162,112 +150,113 @@ $g_layout['header'] =  '
         $(document).ready(function()
         {
             toggleDiv("general");
+            drawForumAccessDataTable();
             $("#org_longname").focus();
-         });
-    --></script>';
+        });
+    //--></script>';
 
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. '/overall_header.php');
 
-echo "
-<h1 class=\"moduleHeadline\">Organisationseinstellungen</h1>
+echo '
+<h1 class="moduleHeadline">Organisationseinstellungen</h1>
 
-<div class=\"formLayout\" id=\"organization_menu\">
-    <div class=\"formBody\">
-        <table style=\"border-width: 0px; width: 100%; text-align: left;\">
+<div class="formLayout" id="organization_menu">
+    <div class="formBody">
+        <table style="border-width: 0px; width: 100%; text-align: left;">
         <tr>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('general');\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" title=\"Allgemein\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('general');\">Allgemein</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'general\');"><img src="'.THEME_PATH.'/icons/options.png" alt="Allgemein" title="Allgemein" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'general\');">Allgemein</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('register');\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" title=\"Registrierung\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('register');\">Registrierung</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'register\');"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="Registrierung" title="Registrierung" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'register\');">Registrierung</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('announcement-module');\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" title=\"Ankündigungen\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('announcement-module');\">Ankündigungen</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'announcement-module\');"><img src="'.THEME_PATH.'/icons/announcements.png" alt="Ankündigungen" title="Ankündigungen" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'announcement-module\');">Ankündigungen</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('download-module');\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" title=\"Downloads\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('download-module');\">Downloads</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'download-module\');"><img src="'.THEME_PATH.'/icons/download.png" alt="Downloads" title="Downloads" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'download-module\');">Downloads</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('forum');\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" title=\"Forum\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('forum');\">Forum</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'forum\');"><img src="'.THEME_PATH.'/icons/forum.png" alt="Forum" title="Forum" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'forum\');">Forum</a></span>
         </span>
         </td>
         </tr>
         <tr>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('photo-module');\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" title=\"Fotos\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('photo-module');\">Fotos</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'photo-module\');"><img src="'.THEME_PATH.'/icons/photo.png" alt="Fotos" title="Fotos" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'photo-module\');">Fotos</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('ecard-module');\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" title=\"Grußkarten\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('ecard-module');\">Grußkarten</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'ecard-module\');"><img src="'.THEME_PATH.'/icons/ecard.png" alt="Grußkarten" title="Grußkarten" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'ecard-module\');">Grußkarten</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('guestbook-module');\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" title=\"Gästebuch\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('guestbook-module');\">Gästebuch</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'guestbook-module\');"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="Gästebuch" title="Gästebuch" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'guestbook-module\');">Gästebuch</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('mail-module');\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" title=\"E-Mails\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('mail-module');\">E-Mails</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'mail-module\');"><img src="'.THEME_PATH.'/icons/email.png" alt="E-Mails" title="E-Mails" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'mail-module\');">E-Mails</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('system-mail');\"><img src=\"". THEME_PATH. "/icons/system_mail.png\" alt=\"Systemmails\" title=\"Systemmails\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('system-mail');\">Systemmails</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'system-mail\');"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="Systemmails" title="Systemmails" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'system-mail\');">Systemmails</a></span>
         </span>
         </td>
         </tr>
         <tr>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('list-module');\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" title=\"Listen\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('list-module');\">Listen</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'list-module\');"><img src="'.THEME_PATH.'/icons/list.png" alt="Listen" title="Listen" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'list-module\');">Listen</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('profile-module');\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Profil\" title=\"Profil\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('profile-module');\">Profil</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'profile-module\');"><img src="'.THEME_PATH.'/icons/profile.png" alt="Profil" title="Profil" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'profile-module\');">Profil</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('dates-module');\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" title=\"Termine\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('dates-module');\">Termine</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'dates-module\');"><img src="'.THEME_PATH.'/icons/dates.png" alt="Termine" title="Termine" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'dates-module\');">Termine</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('links-module');\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" title=\"Weblinks\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('links-module');\">Weblinks</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'links-module\');"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="Weblinks" title="Weblinks" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'links-module\');">Weblinks</a></span>
         </span>
         </td>
         <td>
-        <span class=\"iconTextLink\">
-            <a href=\"#\" onclick=\"toggleDiv('systeminfo');\"><img src=\"". THEME_PATH. "/icons/info.png\" alt=\"Systeminformationen\" title=\"Systeminformationen\" /></a>
-            <span class=\"defaultFontSize\"><a href=\"#\" onclick=\"toggleDiv('systeminfo');\">Systeminfo</a></span>
+        <span class="iconTextLink">
+            <a href="#" onclick="toggleDiv(\'systeminfo\');"><img src="'.THEME_PATH.'/icons/info.png" alt="Systeminformationen" title="Systeminformationen" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'systeminfo\');">Systeminfo</a></span>
         </span>
         </td>
         </tr>
@@ -275,53 +264,52 @@ echo "
     </div>
 </div>
 
-<form action=\"$g_root_path/adm_program/administration/organization/organization_function.php\" method=\"post\">
-<div class=\"formLayout\" id=\"organization_form\">
-    <div class=\"formBody\">
-        <div class=\"groupBox\" id=\"general\">
-
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/options.png\" alt=\"Allgemein\" />
+<form action="'.$g_root_path.'/adm_program/administration/organization/organization_function.php" method="post">
+<div class="formLayout" id="organization_form">
+    <div class="formBody">
+        <div class="groupBox" id="general">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/options.png" alt="Allgemein" />
                 Allgemeine Einstellungen</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"org_shortname\">Name (Abk.):</label></dt>
-                            <dd><input type=\"text\" id=\"org_shortname\" name=\"org_shortname\" readonly=\"readonly\" style=\"width: 100px;\" maxlength=\"10\" value=\"". $form_values['org_shortname']. "\" /></dd>
+                            <dt><label for="org_shortname">Name (Abk.):</label></dt>
+                            <dd><input type="text" id="org_shortname" name="org_shortname" readonly="readonly" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"org_longname\">Name (lang):</label></dt>
-                            <dd><input type=\"text\" id=\"org_longname\" name=\"org_longname\" style=\"width: 200px;\" maxlength=\"60\" value=\"". $form_values['org_longname']. "\" /></dd>
+                            <dt><label for="org_longname">Name (lang):</label></dt>
+                            <dd><input type="text" id="org_longname" name="org_longname" style="width: 200px;" maxlength="60" value="'. $form_values['org_longname']. '" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"org_homepage\">Homepage:</label></dt>
-                            <dd><input type=\"text\" id=\"org_homepage\" name=\"org_homepage\" style=\"width: 200px;\" maxlength=\"50\" value=\"". $form_values['org_homepage']. "\" /></dd>
+                            <dt><label for="org_homepage">Homepage:</label></dt>
+                            <dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="50" value="'. $form_values['org_homepage']. '" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"theme\">Admidio-Theme:</label></dt>
+                            <dt><label for="theme">Admidio-Theme:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"theme\" name=\"theme\">
-                                    <option value=\"\">- Bitte wählen -</option>";
-                                    $themes_path = SERVER_PATH. "/adm_themes";
+                                <select size="1" id="theme" name="theme">
+                                    <option value="">- Bitte wählen -</option>';
+                                    $themes_path = SERVER_PATH. '/adm_themes';
                                     $dir_handle  = opendir($themes_path);
 
                                     while (false !== ($filename = readdir($dir_handle)))
                                     {
                                         if(is_file($filename) == false
-                                        && strpos($filename, ".") !== 0)
+                                        && strpos($filename, '.') !== 0)
                                         {
-                                            echo "<option value=\"$filename\" ";
+                                            echo '<option value="'.$filename.'" ';
                                             if($form_values['theme'] == $filename)
                                             {
-                                                echo " selected=\"selected\" ";
+                                                echo ' selected="selected" ';
                                             }
-                                            echo ">$filename</option>";
+                                            echo '>'.$filename.'</option>';
                                         }
                                     }
                                 echo "</select>
@@ -960,22 +948,22 @@ echo "
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators. (Standard: ja)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_praefix\">Forum Tabellen praefix:</label></dt>
+                            <dt><label for="forum_praefix">Forum Tabellen praefix:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"forum_praefix\" name=\"forum_praefix\" style=\"width: 50px;\" value=\"". $form_values['forum_praefix']. "\" />
+                                <input type="text" id="forum_praefix" name="forum_praefix" style="width: 50px;" value="'. $form_values['forum_praefix']. '" />
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Hier wird der prefix der Tabellen des phpBB-Forums angegeben. (Beispiel: phpbb)
                     </li>
                     <li>
@@ -986,32 +974,28 @@ echo "
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_sqldata_from_admidio\">Zugangsdaten von Admidio verwenden:</label></dt>
+                            <dt><label for="forum_sqldata_from_admidio">Zugangsdaten von Admidio verwenden:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"forum_sqldata_from_admidio\" name=\"forum_sqldata_from_admidio\" onclick=\"javascript:drawForumAccessDataTable('forum_access_data','forum_sqldata_from_admidio');\" ";
+                                <input type="checkbox" id="forum_sqldata_from_admidio" name="forum_sqldata_from_admidio" onclick="javascript:drawForumAccessDataTable();" ';
                                 if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und
                         die Zugangsdaten müssen nicht mehr eingegeben werden. (Standard: nein)
                     </li>
-                    <li id=\"forum_access_data\">
-                        <script type=\"text/javascript\"><!--
-                            drawForumAccessDataTable('forum_access_data','forum_sqldata_from_admidio');
-                        --></script>
-                    </li>
-                    <li id=\"forum_access_data_text\" class=\"smallFontSize\">
+                    <li id="forum_access_data"></li>
+                    <li id="forum_access_data_text" class="smallFontSize">
                         Hier müssen die Zugangsdaten des Forums eingegeben werden, falls ein solches ausgewählt und aktiviert wurde.
                     </li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
         /**************************************************************************************/
         //Einstellungen Gaestebuchmodul
