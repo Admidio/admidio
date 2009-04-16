@@ -35,13 +35,13 @@ function domainAvailable($strDomain)
 
 		if (!$strResponse )
 		{
-		  return FALSE;
+		  return 1;
 		}
-		return TRUE;
+		return 0;
 	}
 	else
 	{
-		return FALSE;
+		return 1;
 	}
 }
 
@@ -115,16 +115,34 @@ else
 
 // Erreichbarkeit der Updateinformation prüfen und bei Verbindung
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
-if((!domainAvailable('http://www.admidio.org/update.txt')) || (@file_get_contents('http://www.admidio.org/update.txt') === false))
+// Zunächst die Methode selektieren (CURL bevorzugt)
+$available = 0;
+if(function_exists(curl_init))
 {
-	// Admidio Versionen vom Server übergeben
+	$available = domainAvailable('http://www.admidio.org/update.txt');
+}
+else
+{
+	if(@file_get_contents('http://www.admidio.org/update.txt') == true)
+	{
+		$available = 1;
+	}
+	else
+	{
+		$available = 0;
+	}
+}
+
+if($available == 0)
+{
+	// Admidio Versionen nicht auslesbar
 	$stable_version = 'n/a';
 	$beta_version = 'n/a';
 	$beta_release = '';
 	
 	$version_update = 99;
 }
-else
+else if($available == 1)
 {
 	$update_info = file_get_contents('http://www.admidio.org/update.txt');
 	
