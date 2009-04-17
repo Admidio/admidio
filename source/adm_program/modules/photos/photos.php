@@ -161,7 +161,14 @@ if($locked=='1' || $locked=='0')
 
 /*********************HTML_TEIL*******************************/
 
-$g_layout['title']  = $req_headline;
+if($pho_id > 0)
+{
+    $g_layout['title'] = $photo_album->getValue("pho_name");
+}
+else
+{
+    $g_layout['title'] = $req_headline;
+}
 $g_layout['header'] = '';
 
 if($g_preferences['enable_rss'] == 1)
@@ -270,7 +277,7 @@ echo '<div class="photoModuleContainer">';
         $difference = $g_preferences['photo_thumbs_row']-$g_preferences['photo_thumbs_column'];
 
 		//Thumbnails pro Seite
-        $thumbs_per_side = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
+        $thumbs_per_page = $g_preferences['photo_thumbs_row']*$g_preferences['photo_thumbs_column'];
         	
         //Popupfenstergröße
         $popup_height = $g_preferences['photo_show_height']+210;
@@ -281,25 +288,22 @@ echo '<div class="photoModuleContainer">';
         $thickbox_width  = $g_preferences['photo_show_width'];
 
         //Album Seitennavigation
-		function photoAlbumPageNavigation()
+		function photoAlbumPageNavigation($photo_album, $act_thumb_page, $thumbs_per_page)
 		{
-			global $thumb_seiten;
-			global $thumb_seite;
-			global $photo_album;
-			global $thumbs_per_side;
 			global $g_root_path;
-			       	
+			$max_thumb_page = 0;
+            
 			//Ausrechnen der Seitenzahl
-        	if (is_int($photo_album->getValue('pho_quantity')) || is_int($thumb_seiten))
+        	if($photo_album->getValue('pho_quantity') > 0)
         	{
-        	    $thumb_seiten = round($photo_album->getValue('pho_quantity') / $thumbs_per_side);
+        	    $max_thumb_page = round($photo_album->getValue('pho_quantity') / $thumbs_per_page);
         	}
 			
-        	if ($thumb_seiten * $thumbs_per_side < $photo_album->getValue('pho_quantity'))
+        	if ($max_thumb_page * $thumbs_per_page < $photo_album->getValue('pho_quantity'))
         	{
-        	    $thumb_seiten++;
+        	    $max_thumb_page++;
         	}
-			if($thumb_seiten > 1)
+			if($max_thumb_page > 1)
 			{
 				//Container mit Navigation
         		echo ' <div class="pageNavigation" id="photoPageNavigation">';
@@ -307,7 +311,7 @@ echo '<div class="photoModuleContainer">';
         		    echo 'Seite:&nbsp;';
     			
         		    //Vorherige thumb_seite
-        		    $vorseite=$thumb_seite-1;
+        		    $vorseite=$act_thumb_page-1;
         		    if($vorseite>=1)
         		    {
         		        echo '
@@ -318,20 +322,20 @@ echo '<div class="photoModuleContainer">';
         		    }
     			
         		    //Seitenzahlen
-        		    for($s=1; $s<=$thumb_seiten; $s++)
+        		    for($s=1; $s<=$max_thumb_page; $s++)
         		    {
-        		        if($s==$thumb_seite)
+        		        if($s==$act_thumb_page)
         		        {
-        		            echo $thumb_seite.'&nbsp;';
+        		            echo $act_thumb_page.'&nbsp;';
         		        }
-        		        if($s!=$thumb_seite){
+        		        if($s!=$act_thumb_page){
         		            echo'<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$s.'&pho_id='.$photo_album->getValue('pho_id').'">'.$s.'</a>&nbsp;';
         		        }
         		    }
     			
         		    //naechste thumb_seite
-        		    $nachseite=$thumb_seite+1;
-        		    if($nachseite<=$thumb_seiten){
+        		    $nachseite=$act_thumb_page+1;
+        		    if($nachseite<=$max_thumb_page){
         		        echo '
         		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">Nächste</a>
         		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
@@ -352,7 +356,7 @@ echo '<div class="photoModuleContainer">';
                      echo '<li class="photoThumbnailColumn">';
                      echo '<ul class="photoThumbnailElement">';
                     //Errechnug welches Bild ausgegeben wird
-                    $bild = ($thumb_seite*$thumbs_per_side)-$thumbs_per_side+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
+                    $bild = ($thumb_seite*$thumbs_per_page)-$thumbs_per_page+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
                     {
                         //Popup-Mode
@@ -415,7 +419,7 @@ echo '<div class="photoModuleContainer">';
         echo '</ul>';
 
 		//Seitennavigation
-        photoAlbumPageNavigation($photo_album);
+        photoAlbumPageNavigation($photo_album, $thumb_seite, $thumbs_per_page);
 
         //Datum des Albums
         echo '<div class="editInformation" id="photoAlbumInformation">
