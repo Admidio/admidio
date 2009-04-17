@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar-Kalender
  *
- * Version 1.4
+ * Version 1.4.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -116,12 +116,6 @@ if($plg_ter_aktiv == 1)
 	$ter_aktuell = 0;
 
 	// Datenbankabfrage mit Datum (Monat / Jahr)
-/*	$sql    = "SELECT dat_id, dat_begin, dat_all_day, dat_location, dat_headline FROM ". TBL_DATES. "
-				WHERE DATE_FORMAT(dat_begin, '%Y-%m') = '$sql_dat'
-				  AND (  dat_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
-				      OR (   dat_global   = 1
-					     AND dat_org_shortname IN ($plg_organizations) ))
-				ORDER BY dat_begin ASC";*/
 	$sql    = "SELECT DISTINCT dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline FROM ". TBL_DATES. ", ".TBL_CATEGORIES." 
 				WHERE DATE_FORMAT(dat_begin, '%Y-%m') = '$sql_dat' 
 				".$sql_syntax."
@@ -162,7 +156,6 @@ if($plg_geb_aktiv == 1)
 			  WHERE rol_cat_id = cat_id
                 AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
                 AND rol_id     = mem_rol_id
-                AND mem_valid  = 1
                 AND mem_usr_id = usr_id
                 AND usr_valid  = 1
 		      ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name";

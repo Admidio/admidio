@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar-Kalender
  * Ausgabe der Termine und Geburtstage für Ajax Tooltip
- * Version 1.4
+ * Version 1.4.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann

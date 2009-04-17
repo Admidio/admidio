@@ -2,7 +2,7 @@
 /******************************************************************************
  * Konfigurationsdatei fuer Sidebar-Kalender
  *
- * Version 1.4
+ * Version 1.4.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -27,13 +27,13 @@ $plg_ter_aktiv = 1;
 $plg_ter_login = 0;
 
 // Anzeige der Geburtstage aktiviert (1) oder deaktiviert (0)
-$plg_geb_aktiv = 0;
+$plg_geb_aktiv = 1;
 
 // Anzeige der Geburtstage nur für Mitglieder (eingeloggt) (1) oder alle (0)
 $plg_geb_login = 0;
 
 // Anzeige der Geburtstage mit Icon (1) oder ohne Icon (0)
-$plg_geb_icon = 0;
+$plg_geb_icon = 1;
 
 // Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)
 // Meherer Einträge: $plg_kal_cat = array("abc","cdf")
