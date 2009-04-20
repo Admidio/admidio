@@ -71,7 +71,7 @@ $g_db->setCurrentDB();
 $plg_organizations = '';
 $plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-foreach($plg_arr_orgas as $key)
+foreach($plg_arr_orgas as $key => $value)
 {
 	$plg_organizations = $plg_organizations. $key. ', ';
 }
