@@ -192,7 +192,7 @@ if ($g_valid_login == false)
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
 if($req_id > 0)
 {
-    $conditions .= ' AND dat_id = $req_id '.$hidden;
+    $conditions .= ' AND dat_id = '.$req_id.' '.$hidden;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
