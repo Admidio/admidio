@@ -20,29 +20,22 @@ require_once('login_valid.php');
 // Funktion zur Erreichbarkeitsprüfung der Updatedatei
 function domainAvailable($strDomain)
 {
-	if(function_exists(curl_init))
+	$rCurlHandle = curl_init($strDomain);
+
+	curl_setopt($rCurlHandle, CURLOPT_CONNECTTIMEOUT, 10);
+	curl_setopt($rCurlHandle, CURLOPT_HEADER, TRUE);
+	curl_setopt($rCurlHandle, CURLOPT_NOBODY, TRUE);
+	curl_setopt($rCurlHandle, CURLOPT_RETURNTRANSFER, TRUE);
+
+	$strResponse = curl_exec($rCurlHandle);
+
+	curl_close ($rCurlHandle);
+
+	if (!$strResponse )
 	{
-		$rCurlHandle = curl_init($strDomain);
-
-		curl_setopt($rCurlHandle, CURLOPT_CONNECTTIMEOUT, 10);
-		curl_setopt($rCurlHandle, CURLOPT_HEADER, TRUE);
-		curl_setopt($rCurlHandle, CURLOPT_NOBODY, TRUE);
-		curl_setopt($rCurlHandle, CURLOPT_RETURNTRANSFER, TRUE);
-
-		$strResponse = curl_exec($rCurlHandle);
-
-		curl_close ($rCurlHandle);
-
-		if (!$strResponse )
-		{
-		  return 1;
-		}
-		return 0;
+	  return 0;
 	}
-	else
-	{
-		return 1;
-	}
+	return 1;
 }
 
 // Funktion zur Ermittlung der Update-Version
