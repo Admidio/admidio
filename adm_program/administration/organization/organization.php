@@ -100,11 +100,6 @@ $g_layout['header'] =  '
             {
                 $("#" + "forum_access_data").hide("slow");
                 $("#" + "forum_access_data_text").hide("slow");
-
-                document.getElementById("forum_srv").value = "";
-                document.getElementById("forum_usr").value = "";
-                document.getElementById("forum_pw").value = "";
-                document.getElementById("forum_db").value = "";
             }
             else if (document.getElementById("forum_sqldata_from_admidio").checked == false && layerSetting)
             {
@@ -792,16 +787,16 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_save_scale\">Skalierung beim Upload:</label></dt>
+                            <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen:</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Beim Upload werden alle Fotos neu skaliert. Der hier eingegeben Pixelwert
+                        Beim Hochladen werden alle Fotos neu skaliert. Der eingegebene Pixelwert
                         ist der Parameter für die längere Seite des Fotos, egal ob das Foto im Hoch-
-                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standard: 640Pixel)
+                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standard: 640 Pixel)
                     </li>
                     <li>
                         <dl>
@@ -812,7 +807,7 @@ echo '
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Hier wird die Höhe des jeweiligen Vorschaubildes in der Albenübersicht festgelegt. (Standard: 100Pixel)
+                        Angabe der Höhe des jeweiligen Vorschaubildes in der Albenübersicht festgelegt. (Standard: 100 Pixel)
                     </li>
                     <li>
                         <dl>
@@ -824,10 +819,10 @@ echo '
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Die hier angegeben Werte bestimmen die maximale Größe die ein Bild im Anzeigefenster
-                        haben darf. Das Fenster im Popup- bzw. Thickboxmodus werden automatisch in der Größe angepasst. Besonders bei der H&ouml;he
+                        Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster
+                        haben darf. Das Fenster im Popup- bzw. Thickboxmodus wird automatisch in der Größe angepasst. Besonders bei der Höhe
                         ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
-                        sein muss. (Standard: 500 x 380 Pixel²)
+                        sein muss. (Standard: 500 x 380 Pixel)
                     </li>
                     <li>
                         <dl>
@@ -838,7 +833,7 @@ echo '
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Der hier eingegebene Text wird in alle angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet.
+                        Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet.
                         (Standard: &#169; ".$g_current_organization->getValue("org_homepage").")
                     </li>
                 </ul>
@@ -964,7 +959,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        Hier wird der prefix der Tabellen des phpBB-Forums angegeben. (Beispiel: phpbb)
+                        Hier wird das Präfix der Tabellen des phpBB-Forums angegeben. (Beispiel: phpbb)
                     </li>
                     <li>
                         <dl>
@@ -991,7 +986,8 @@ echo '
                     </li>
                     <li id="forum_access_data"></li>
                     <li id="forum_access_data_text" class="smallFontSize">
-                        Hier müssen die Zugangsdaten des Forums eingegeben werden, falls ein solches ausgewählt und aktiviert wurde.
+                        Läuft das Forum auf einer anderen Datenbank als Admidio, so müssen die Zugangsdaten zu dieser
+                        Datenbank angegeben werden.
                     </li>
                 </ul>
             </div>
