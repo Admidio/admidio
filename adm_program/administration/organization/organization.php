@@ -1763,7 +1763,7 @@ echo '
                     echo '
                     <li>
                         <dl>
-                            <dt><label for="profile_photo_storage">Speicherort der Profilbild:</label></dt>
+                            <dt><label for="profile_photo_storage">Speicherort der Profilbilder:</label></dt>
                             <dd>
                                 <select size="1" id="profile_photo_storage" name="profile_photo_storage">
                                     <option value="">- Bitte wählen -</option>
