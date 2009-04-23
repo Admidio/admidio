@@ -363,8 +363,8 @@ echo '<div class="photoModuleContainer">';
                         if($g_preferences['photo_show_mode']==0)
                         {
                             echo '<div>
-                                <img onclick="window.open("'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'","msg", "height='.$popup_height.', width='.$popup_width.',left=162,top=5")" 
-                                    src="photo_show.php?pho_id='.$pho_id.'&pic_nr='.$bild.'&pho_begin='.$photo_album->getValue('pho_begin').'&thumb=true" alt="'.$bild.'" />
+                                <img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
+                                    src="photo_show.php?pho_id='.$pho_id.'&pic_nr='.$bild.'&pho_begin='.$photo_album->getValue('pho_begin').'&thumb=true" alt="'.$bild.'" style="cursor: pointer"/>
                             </div>';
                         }
 
@@ -382,8 +382,8 @@ echo '<div class="photoModuleContainer">';
                         elseif($g_preferences['photo_show_mode']==2)
                         {
                             echo '<div>
-                                <img onclick="self.location.href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'"" 
-                                    src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;thumb=true" />
+                                <img onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\'" 
+                                    src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;thumb=true" style="cursor: pointer"/>
                             </div>';
                         }   
                         
