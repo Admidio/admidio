@@ -86,11 +86,11 @@ switch ($req_err_code)
                     <td><b>[center]</b>Text zentriert darstellen<b>[/center]</b></td>
                  </tr>
                  <tr>
-                    <td>Einen <a href="http://'. $g_current_organization->getValue('org_homepage'). '">Link</a> setzen</td>
+                    <td>Einen <a href="http://www.admidio.org">Link</a> setzen</td>
                     <td>Einen <b>[url=</b>http://www.admidio.org<b>]</b>Link<b>[/url]</b> setzen</td>
                  </tr>
                  <tr>
-                    <td>Eine <a href="mailto:'. $g_preferences['email_administrator']. '">Mailadresse</a> angeben</td>
+                    <td>Eine <a href="mailto:webmaster@admidio.org">Mailadresse</a> angeben</td>
                     <td>Eine <b>[email=</b>webmaster@admidio.org<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
                  </tr>
                  <tr>
