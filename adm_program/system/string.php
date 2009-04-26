@@ -17,7 +17,7 @@ function strStripTags($srcString, $checkChar = 0)
     if(is_array($srcString))
     {
         // Jedes Funktion fuer jedes Arrayelement aufrufen
-        $srcString = array_map("strStripTags", $srcString);
+        $srcString = array_map('strStripTags', $srcString);
     }
     else
     {
@@ -28,10 +28,10 @@ function strStripTags($srcString, $checkChar = 0)
 
         if($checkChar)
         {
-            $anz = strspn($srcString, "abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789.-_+ ");
+            $anz = strspn($srcString, 'abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789.-_+ ');
             if($anz != strlen($srcString))
             {
-                $srcString = "";
+                $srcString = '';
             }
         }
     }
@@ -44,7 +44,7 @@ function strAddSlashesDeep($value)
 {
     if(is_array($value))
     {
-        $value = array_map("strAddSlashesDeep", $value);
+        $value = array_map('strAddSlashesDeep', $value);
     }
     else
     {
@@ -58,7 +58,7 @@ function strStripSlashesDeep($value)
 {
     if(is_array($value))
     {
-        $value = array_map("strStripSlashesDeep", $value);
+        $value = array_map('strStripSlashesDeep', $value);
     }
     else
     {
@@ -76,10 +76,10 @@ function strStripSlashesDeep($value)
 function strNextLetter($letter, $mode = 0)
 {
     $ascii  = ord($letter);
-    $aSmall = ord("a");
-    $zSmall = ord("z");
-    $aBig   = ord("A");
-    $zBig   = ord("Z");
+    $aSmall = ord('a');
+    $zSmall = ord('z');
+    $aBig   = ord('A');
+    $zBig   = ord('Z');
 
     if ($ascii == $aSmall || $ascii == $zSmall || $ascii == $aBig || $ascii == $zBig)
     {
@@ -115,7 +115,7 @@ function isValidEmailAddress($emailAddress)
     if(strlen(trim($emailAddress)) > 0)
     {
         // nur gueltige Zeichen zulassen
-        $anz = strspn($emailAddress, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+");
+        $anz = strspn($emailAddress, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+');
 
         if($anz == strlen($emailAddress))
         {
@@ -154,7 +154,7 @@ function isValidFileName($file_name, $check_ext = false)
             && strpos($file_name, "..") === false
             && strpos($file_name, ":/") === false)
             {
-                if (substr($file_name, 0, 1) == ".") {
+                if (substr($file_name, 0, 1) == '.') {
                     return -2;
                 }
 
@@ -162,10 +162,11 @@ function isValidFileName($file_name, $check_ext = false)
                 if($check_ext)
                 {
                     // auf gueltige Endungen pruefen
-                    $arr_invalid_ext = array("php", "php3", "php4", "php5", "html", "htm", "htaccess", "htpasswd", "pl");
-                    $file_ext  = substr($file_name, strrpos($file_name, ".")+1);
+                    $arr_invalid_ext = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
+                                             'js', 'vbs', 'asp', 'cgi', 'ssi');
+                    $file_ext  = substr($file_name, strrpos($file_name, '.')+1);
 
-                    if(in_array($file_ext, $arr_invalid_ext))
+                    if(in_array(strtolower($file_ext), $arr_invalid_ext))
                     {
                         return -3;
                     }
