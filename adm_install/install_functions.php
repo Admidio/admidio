@@ -109,4 +109,61 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
     exit();
 }
 
+// prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
+function checkVersions(&$db, &$message)
+{
+    $message = '';
+    $min_mysql_version = '4.1.0';
+    $min_php_version   = '5.1.3';
+
+    // Datenbank pruefen
+    if(version_compare($db->server_info(), $min_mysql_version) == -1)
+    {
+        $message = $message. ' 
+        <li>
+            <dl>
+                <dt>MySQL-Version:</dt>
+                <dd><strong>'.$db->server_info().'</strong><br />
+                    Admidio '.ADMIDIO_VERSION. BETA_VERSION_TEXT.' setzt mindestens die MySQL-Version '.$min_mysql_version.' 
+                    voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine 
+                    <a href="http://www.admidio.org/index.php?page=download">ältere Admidio-Version</a> nutzen, welche
+                    kompatibel zu deiner Datenbank ist.</dd>
+            </dl>
+        </li>';
+    }
+
+    // PHP pruefen
+    if(version_compare(phpversion(), $min_php_version) == -1)
+    {
+        $message = $message. ' 
+        <li>
+            <dl>
+                <dt>PHP-Version:</dt>
+                <dd><strong>'.phpversion().'</strong><br />
+                    Admidio '.ADMIDIO_VERSION. BETA_VERSION_TEXT.' setzt mindestens die PHP-Version '.$min_php_version.' 
+                    voraus. Du solltest versuchen PHP zu aktualisieren oder eine 
+                    <a href="http://www.admidio.org/index.php?page=download">ältere Admidio-Version</a> nutzen, welche
+                    kompatibel zu dieser PHP-Version ist.</dd>
+            </dl>
+        </li>';
+    }
+    
+    if(strlen($message) > 0)
+    {
+        $message = '
+        <div class="groupBox">
+            <div class="groupBoxHeadline"><img src="layout/warning.png" alt="Warnung" />  Warnung</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">'. $message. '</ul>
+            </div>
+        </div>';        
+    }
+
+    if(strlen($message) == 0)
+    {
+        return true;
+    }
+    return false;
+}
+
 ?>
