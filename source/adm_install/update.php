@@ -65,10 +65,16 @@ if($g_current_organization->getValue('org_id') == 0)
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
 $g_preferences = $g_current_organization->getPreferences();
 
-$message = "";
+$message = '';
 
 if($req_mode == 1)
 {
+    //Datenbank- und PHP-Version prüfen
+    if(checkVersions($g_db, $message) == false)
+    {
+        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', 'Übersichtsseite', 2);
+    }
+
     // pruefen, ob ein Update ueberhaupt notwendig ist
     if(isset($g_preferences['db_version']) == false)
     {

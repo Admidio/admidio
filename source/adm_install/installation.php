@@ -85,38 +85,11 @@ if($req_mode == 1)
                     sollte deshalb nur in einer Testumgebung genutzt werden !';
     }
 
-    if((phpversion() !='' && substr(phpversion(), 0, 3)< 4.3 )|| ini_get('safe_mode') == 1)
+    if(ini_get('safe_mode') == 1)
     {    
-        $message = $message.'
-        <div class="groupBox">
-            <div class="groupBoxHeadline"><img src="layout/warning.png" alt="Warnungen" />  Warnungen</div>
-            <div class="groupBoxBody">
-                <ul class="formFieldList">';
-                if(substr(phpversion(), 0, 3)< 4.3)
-                {
-                    $message = $message.'
-                    <li>
-                        <dl>
-                            <dt><label for="server">PHP-Version:</label></dt>
-                            <dd>'.phpversion().' &rarr; Auf dem Webserver muss PHP Version 4.3.0 oder höher verfügbar sein. 
-                                Aufgrund von kritischen Sicherheitslücken in der Scriptsprache PHP empfehlen wir eine Version ab 4.4.1.</dd>
-                        </dl>
-                    </li>';
-                }
-                if(ini_get('safe_mode') == 1)
-                {
-                    $message = $message.'
-                    <li>
-                        <dl>
-                            <dt><label for="server">Safe Mode:</label></dt>
-                            <dd>On &rarr; Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</dd>
-                        </dl>
-                    </li>';
-                }
-                $message = $message.'
-                </ul>
-            </div>
-        </div>';
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" />
+                    Auf deinem Server ist der Save Mode aktiviert. Bei eingeschaltetem Safe Mode 
+                    kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.';
     }
     showPage($message, 'installation.php?mode=2', 'forward.png', 'Datenbank Zugangsdaten');
 }
@@ -239,24 +212,10 @@ elseif($req_mode == 3)
                           ob die Datenbank online ist.';
             showPage($message, 'installation.php?mode=2', 'back.png', 'Zurück');
         }
-        //Datenbankversion prüfen
-        if(substr($db->server_info(), 0, 3)< 4.1)
+
+        //Datenbank- und PHP-Version prüfen
+        if(checkVersions($db, $message) == false)
         {
-            $message = ' 
-            <div class="groupBox">
-                <div class="groupBoxHeadline"><img src="layout/warning.png" alt="Warnung" />  Warnung</div>
-                <div class="groupBoxBody">
-                    <ul class="formFieldList">
-                        <li>
-                            <dl>
-                                <dt>MySQL Server Version:</dt>
-                                <dd>'.$db->server_info().' &rarr; Die MySQL-Datenbank sollte eine 4.1er Version oder höher sein, 
-                                da erst ab diesen Versionen die Kommunikation mit UTF8 vernünftig funktioniert.</dd>
-                            </dl>
-                        </li>
-                    </ul>
-                </div>
-            </div>';
             showPage($message, 'installation.php?mode=2', 'back.png', 'Zurück');
         }
     }
