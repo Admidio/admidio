@@ -65,11 +65,10 @@ class TableUsers extends TableAccess
         $this->setValue('usr_valid', 1);
     }
 
-    // interne Methode, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
     function setValue($field_name, $field_value)
     {
-        if($field_name == 'usr_password')
+        // Passwortfelder sollten verschluesselt als md5-Hash gespeichert werden
+        if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
         {
             // Passwort verschluesselt und unverschluesselt speichern
             $this->real_password = $field_value;
