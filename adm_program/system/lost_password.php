@@ -8,8 +8,8 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *****************************************************************************/
  
-require('common.php');
-require('classes/system_mail.php');
+require_once('common.php');
+require_once('classes/system_mail.php');
 
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -66,13 +66,13 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
     // Passwort und Aktivierungs-ID erzeugen und speichern
     $neues_passwort = generatePassword();
     $activation_id  = generateActivationId($user->getValue('E-Mail'));
-    $user->setValue('usr_password', $neues_passwort);
+    $user->setValue('usr_new_password', $neues_passwort);
     $user->setValue('usr_activation_code', $activation_id);
     
     $sysmail = new SystemMail($g_db);
     $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
     $sysmail->setVariable(1, $user->real_password);
-    $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id=3D'.$user->getValue('usr_id').'&aid=3D'.$activation_id);
+    $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activation_id);
     if($sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user) == true)
     {
         $user->save();
