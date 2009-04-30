@@ -204,7 +204,7 @@ class TableUsers extends TableAccess
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_LIST_COLUMNS. '
-                    WHERE lsc_lst_id IN (SELECT lst_id FROM adm_lists WHERE lst_usr_id = '.$this->getValue('usr_id').' AND lst_global = 0)';
+                    WHERE lsc_lst_id IN (SELECT lst_id FROM '. TBL_LISTS. ' WHERE lst_usr_id = '.$this->getValue('usr_id').' AND lst_global = 0)';
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_LISTS. ' WHERE lst_global = 0 AND lst_usr_id = '. $this->getValue('usr_id');
