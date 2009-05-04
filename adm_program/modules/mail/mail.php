@@ -120,9 +120,6 @@ elseif (isset($_GET['rolle']) && isset($_GET['cat']))
 {
     // Falls eine rolle und eine category uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf
-    $_GET['rolle'] = strStripTags($_GET['rolle']);
-    $_GET['cat']   = strStripTags($_GET['cat']);
-
     if ($g_valid_login)
     {
         $sql    = 'SELECT rol_mail_this_role, rol_id
@@ -145,29 +142,24 @@ elseif (isset($_GET['rolle']) && isset($_GET['cat']))
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
 
-    if (($row[0] != 1 && !$g_valid_login )|| ($g_valid_login && !$g_current_user->mailRole($row['rol_id'])))
+    // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
+    // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
+    if (($g_valid_login == false && $row['rol_mail_this_role'] != 3)
+    ||  ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false))
     {
         $g_message->show('invalid');
     }
 
     $rollenName = $_GET['rolle'];
-    $rollenID   = $row[1];
+    $rollenID   = $row['rol_id'];
 }
 
-if (array_key_exists('subject', $_GET))
-{
-    $_GET['subject'] = strStripTags($_GET['subject']);
-}
-else
+if (array_key_exists('subject', $_GET) == false)
 {
     $_GET['subject'] = '';
 }
 
-if (array_key_exists('body', $_GET))
-{
-    $_GET['body'] = strStripTags($_GET['body']);
-}
-else
+if (array_key_exists('body', $_GET) == false)
 {
     $_GET['body']  = '';
 }
@@ -185,7 +177,6 @@ if (strpos($_SESSION['navigation']->getUrl(),'mail_send.php') > 0 && isset($_SES
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
     $form_values = strStripSlashesDeep($_SESSION['mail_request']);
     unset($_SESSION['mail_request']);
-    //print_r($form_values); exit();
 
     $_SESSION['navigation']->deleteLastUrl();
 }

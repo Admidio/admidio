@@ -280,7 +280,7 @@ class ListConfiguration extends TableLists
                 {  
                     $sql_role_ids = $sql_role_ids. ', ';
                 }
-                $sql_role_ids = $sql_role_ids. '"'.$value.'"';
+                $sql_role_ids = $sql_role_ids. $value;
             }
         }
 
