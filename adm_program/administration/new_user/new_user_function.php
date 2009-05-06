@@ -139,10 +139,12 @@ elseif($req_mode == 4)
     // Registrierung loeschen
     
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_preferences['enable_forum_interface'])
-    {
-        $g_forum->userDelete($new_user->getValue("usr_login_name"));
-    }
+    // Muss an dieser Stelle nicht mehr gemacht werden, da der User erst nach der Vollstaenigen 
+    // registrierung im Forum angelegt wird.
+    //if($g_preferences['enable_forum_interface'])
+    //{
+    //    $g_forum->userDelete($new_user->getValue("usr_login_name"));
+    //}
 
     // nun aus Admidio-DB loeschen
     $new_user->delete();
@@ -155,16 +157,19 @@ elseif($req_mode == 6)
     // Der User existiert schon und besitzt auch ein Login
     
     // Den Username für die Loeschung im Forum zwischenspeichern
-    $forum_user = $new_user->getValue("usr_login_name");
+    //$forum_user = $new_user->getValue("usr_login_name");
 
     // Registrierung loeschen
     $new_user->delete();
     
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($g_preferences['enable_forum_interface'])
-    {
-        $g_forum->userDelete($new_user->getValue("usr_login_name"));
-    }
+    // Muss an dieser Stelle nicht mehr gemacht werden, da der User erst nach der Vollstaenigen 
+    // registrierung im Forum angelegt wird.
+    //if($g_preferences['enable_forum_interface'])
+    //{
+    //    $g_forum->userDelete($new_user->getValue("usr_login_name"));
+    //}
+
 
     // Zugangsdaten neu verschicken
     $_SESSION['navigation']->addUrl("$g_root_path/adm_program/administration/new_user/new_user.php");
