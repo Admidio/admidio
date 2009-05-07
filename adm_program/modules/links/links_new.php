@@ -15,12 +15,13 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_weblink.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_weblink.php');
+
 if ($g_preferences['enable_bbcode'] == 1)
 {
-    require('../../system/bbcode.php');
+    require_once('../../system/bbcode.php');
 }
 
 
@@ -187,7 +188,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="lnk_description" name="lnk_description" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $link->getValue('lnk_description'). '</textarea>
+                        <textarea id="lnk_description" name="lnk_description" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $link->getDescriptionWithBBCode(). '</textarea>
                     </dd>
                 </dl>
             </li>

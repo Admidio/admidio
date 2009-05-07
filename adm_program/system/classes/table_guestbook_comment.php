@@ -10,12 +10,21 @@
  * Diese Klasse dient dazu ein Gaestebuchkommentarobjekt zu erstellen. 
  * Eine Gaestebuchkommentar kann ueber diese Klasse in der Datenbank verwaltet werden
  *
+ * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
+ * folgende Methoden zur Verfuegung:
+ *
+ * getDescriptionWithBBCode() 
+ *                   - liefert die Beschreibung mit dem originalen BBCode zurueck
+ *
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableGuestbookComment extends TableAccess
 {
+    var $bbCode;
+
     // Konstruktor
     function TableGuestbookComment(&$db, $gbc_id = 0)
     {
@@ -42,9 +51,7 @@ class TableGuestbookComment extends TableAccess
         parent::readData($gbc_id, $condition, $tables);
     }
     
-    // interne Methode, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Methode wird innerhalb von setValue() aufgerufen
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
     function setValue($field_name, $field_value)
     {
         if(strlen($field_value) > 0)
@@ -60,9 +67,41 @@ class TableGuestbookComment extends TableAccess
         }
         parent::setValue($field_name, $field_value);
     }
+
+    // liefert die Beschreibung mit dem originalen BBCode zurueck
+    // das einfache getValue liefert den geparsten BBCode in HTML zurueck
+    function getDescriptionWithBBCode()
+    {
+        return parent::getValue('gbc_text');
+    }
+
+    function getValue($field_name)
+    {
+        global $g_preferences;
     
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
+        // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
+        $value = $this->dbColumns[$field_name];
+
+        if($field_name == 'gbc_text')
+        {
+            // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+            if($g_preferences['enable_bbcode'] == 1)
+            {
+                if(is_object($this->bbCode) == false)
+                {
+                    $this->bbCode = new ubbParser();
+                }            
+                return $this->bbCode->parse(parent::getValue($field_name, $value));
+            }
+            else
+            {
+                return nl2br(parent::getValue($field_name, $value));
+            }        
+        }
+        return parent::getValue($field_name, $value);
+    }
+
+    // Methode, die Defaultdaten fur Insert und Update vorbelegt
     function save()
     {
         global $g_current_organization, $g_current_user;

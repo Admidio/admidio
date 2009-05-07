@@ -23,9 +23,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
-require('../../system/classes/table_date.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_date.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($g_preferences['enable_dates_module'] == 0)
@@ -115,12 +114,6 @@ if(isset($_GET['calendar-selection']) != false)
     {
         $dates_show_calendar_select = 0;
     }
-}
-
-if($g_preferences['enable_bbcode'] == 1)
-{
-    // Klasse fuer BBCode
-    $bbcode = new ubbParser();
 }
 
 unset($_SESSION['dates_request']);
@@ -375,11 +368,14 @@ if($g_db->num_rows($dates_result) == 0)
 else
 {
     $date = new TableDate($g_db);
+
     // Termine auflisten
     while($row = $g_db->fetch_array($dates_result))
     {
+        // GB-Objekt initialisieren und neuen DS uebergeben
         $date->clear();
         $date->setArray($row);
+
         echo '
         <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
             <div class="boxHead">
@@ -510,17 +506,7 @@ else
                         </div>';
                   echo '</div>';
                 }
-                echo '<div class="date_description" style="clear: left;">';
-                    // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-                    if($g_preferences['enable_bbcode'] == 1)
-                    {
-                        echo $bbcode->parse($date->getValue('dat_description'));
-                    }
-                    else
-                    {
-                        echo nl2br($date->getValue('dat_description'));
-                    }
-                echo '</div>
+                echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>
                 <div class="editInformation">
                     Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
                     ' am '. mysqldatetime('d.m.y h:i', $date->getValue('dat_timestamp_create'));

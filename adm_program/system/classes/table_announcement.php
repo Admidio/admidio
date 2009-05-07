@@ -13,14 +13,19 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
+ * getDescriptionWithBBCode() 
+ *                   - liefert die Beschreibung mit dem originalen BBCode zurueck 
  * editRight()       - prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableAnnouncement extends TableAccess
 {
+    var $bbCode;
+
     // Konstruktor
     function TableAnnouncement(&$db, $ann_id = 0)
     {
@@ -37,7 +42,40 @@ class TableAnnouncement extends TableAccess
             $this->clear();
         }
     }
+
+    // liefert die Beschreibung mit dem originalen BBCode zurueck
+    // das einfache getValue liefert den geparsten BBCode in HTML zurueck
+    function getDescriptionWithBBCode()
+    {
+        return parent::getValue('ann_description');
+    }
+
+    function getValue($field_name)
+    {
+        global $g_preferences;
     
+        // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
+        $value = $this->dbColumns[$field_name];
+
+        if($field_name == 'ann_description')
+        {
+            // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+            if($g_preferences['enable_bbcode'] == 1)
+            {
+                if(is_object($this->bbCode) == false)
+                {
+                    $this->bbCode = new ubbParser();
+                }            
+                return $this->bbCode->parse(parent::getValue($field_name, $value));
+            }
+            else
+            {
+                return nl2br(parent::getValue($field_name, $value));
+            }        
+        }
+        return parent::getValue($field_name, $value);
+    }
+
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
     function save()

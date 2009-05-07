@@ -9,15 +9,13 @@
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 neuesten Ankuendigungen
  *
- *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
-require('../../system/classes/rss.php');
-
+require_once('../../system/common.php');
+require_once('../../system/classes/rss.php');
+require_once('../../system/classes/table_announcement.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($g_preferences['enable_rss'] != 1)
@@ -33,35 +31,15 @@ if ($g_preferences['enable_announcements_module'] != 1)
     $g_message->show('module_disabled');
 }
 
-// Nachschauen ob BB-Code aktiviert ist...
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    //BB-Parser initialisieren
-    $bbcode = new ubbParser();
-}
-
-// alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$arr_ref_orgas = $g_current_organization->getReferenceOrganizations();
+// alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
-$i             = 0;
+$arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
-while ($orga = current($arr_ref_orgas))
+foreach($arr_ref_orgas as $key => $value)
 {
-    if ($i > 0)
-    {
-        $organizations = $organizations. ', ';
-    }
-    $organizations = $organizations.'"'.$orga.'"';
-    next($arr_ref_orgas);
-    $i++;
+	$organizations = $organizations. '"'.$value.'",';
 }
-
-// damit das SQL-Statement nachher nicht auf die Nase faellt, muss $organizations gefuellt sein
-if (strlen($organizations) == 0)
-{
-    $organizations = '"'. $g_current_organization->getValue('org_shortname'). '"';
-}
-
+$organizations = $organizations. '"'. $g_current_organization->getValue("org_shortname"). '"';
 
 // die neuesten 10 Annkuedigungen aus der DB fischen...
 $sql = 'SELECT ann.*, 
@@ -90,45 +68,40 @@ $result = $g_db->query($sql);
 
 // Ein RSSfeed-Objekt erstellen
 $rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Ankuendigungen', 'Die 10 neuesten Ankuendigungen');
+$announcement = new TableAnnouncement($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_object($result))
 {
+    // ausgelesene Ankuendigungsdaten in Announcement-Objekt schieben
+    $announcement->clear();
+    $announcement->setArray($row);
+
     // Die Attribute fuer das Item zusammenstellen
-    $title = $row->ann_headline;
-    $link  = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='. $row->ann_id;
-    $description = '<b>'.$row->ann_headline.'</b>';
+    $title = $announcement->getValue('ann_headline');
+    $link  = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='. $announcement->getValue('ann_id');
+    $description = '<b>'.$announcement->getValue('ann_headline').'</b>';
 
-
-    // Die Ankuendigungen eventuell durch den UBB-Parser schicken
-    if ($g_preferences['enable_bbcode'] == 1)
-    {
-        $description = $description. '<br /><br />'. $bbcode->parse($row->ann_description);
-    }
-    else
-    {
-        $description = $description. '<br /><br />'. nl2br($row->ann_description);
-    }
-
-    $description = $description. '<br /><br /><a href=\'$link\'>Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+    // Beschreibung und Link zur Homepage ausgeben
+    $description = $description. '<br /><br />'. $announcement->getValue('ann_description').
+                   '<br /><br /><a href=\'$link\'>Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. ' '. $row->create_surname;
-    $description = $description. ' am '. mysqldatetime('d.m.y h:i', $row->ann_timestamp_create). '</i>';
+    $description = $description. ' am '. mysqldatetime('d.m.y h:i', $announcement->getValue('ann_timestamp_create')). '</i>';
 
     if($row->ann_usr_id_change > 0)
     {
         $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname;
-        $description = $description. ' am '. mysqldatetime('d.m.y h:i', $row->ann_timestamp_change). '</i>';
+        $description = $description. ' am '. mysqldatetime('d.m.y h:i', $announcement->getValue('ann_timestamp_change')). '</i>';
     }
                 
-    $pubDate = date('r',strtotime($row->ann_timestamp_create));
+    $pubDate = date('r',strtotime($announcement->getValue('ann_timestamp_create')));
 
 
     // Item hinzufuegen
     $rss->addItem($title, $description, $pubDate, $link);
 }
-
 
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();

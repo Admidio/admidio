@@ -16,11 +16,12 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/table_guestbook_comment.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_guestbook_comment.php');
+
 if ($g_preferences['enable_bbcode'] == 1)
 {
-    require('../../system/bbcode.php');
+    require_once('../../system/bbcode.php');
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -41,7 +42,7 @@ if(($g_preferences['enable_guestbook_module'] == 2 || $g_preferences['enable_gbo
 && isset($_GET['id']))
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 
     if (!$g_current_user->commentGuestbookRight())
     {
@@ -53,7 +54,7 @@ if(($g_preferences['enable_guestbook_module'] == 2 || $g_preferences['enable_gbo
 if (isset($_GET['cid']))
 {
     // Zum editieren von Kommentaren muss der User auch eingeloggt sein
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 
     if (!$g_current_user->editGuestbookRight())
     {
@@ -238,7 +239,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 350px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="Pflichtfeld" style="color: #990000;">*</span>
+                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 350px;" rows="10" cols="40">'. $guestbook_comment->getDescriptionWithBBCode(). '</textarea>&nbsp;<span title="Pflichtfeld" style="color: #990000;">*</span>
                     </dd>
                 </dl>
             </li>';

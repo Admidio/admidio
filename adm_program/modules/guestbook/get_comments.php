@@ -13,27 +13,16 @@
  *
  *****************************************************************************/
 
+require_once('../../system/common.php');
+require_once('../../system/classes/table_guestbook_comment.php');
+
+$cid = 0;
 
 if (isset($_GET['cid']) && is_numeric($_GET['cid']))
 {
     // Script wurde ueber Ajax aufgerufen
     $cid = $_GET['cid'];
-
-    require('../../system/common.php');
-    require('../../system/classes/ubb_parser.php');
-
-    if ($g_preferences['enable_bbcode'] == 1)
-    {
-        // Klasse fuer BBCode
-        $bbcode = new ubbParser();
-    }
 }
-else
-{
-    $cid = 0;
-}
-
-
 
 if ($cid > 0)
 {
@@ -52,66 +41,62 @@ if (isset($comment_result))
 
     //Kommentarnummer auf 1 setzen
     $commentNumber = 1;
+    $gbComment = new TableGuestbookComment($g_db);
 
     // Jetzt nur noch die Kommentare auflisten
     while ($row = $g_db->fetch_object($comment_result))
     {
-        $cid = $row->gbc_gbo_id;
+        // GBComment-Objekt initialisieren und neuen DS uebergeben
+        $gbComment->clear();
+        $gbComment->setArray($row);
+    
+        $cid = $gbComment->getValue('gbc_gbo_id');
 
         echo '
-        <div class="groupBox" id="gbc_'.$row->gbc_id.'" style="overflow: hidden; margin-left: 20px; margin-right: 20px;">
+        <div class="groupBox" id="gbc_'.$gbComment->getValue('gbc_id').'" style="overflow: hidden; margin-left: 20px; margin-right: 20px;">
             <div class="groupBoxHeadline">
                 <div class="boxHeadLeft">
                     <img src="'. THEME_PATH. '/icons/comments.png" style="vertical-align: top;" alt="Kommentar '. $commentNumber. '" />&nbsp;'.
-                    'Kommentar von '. $row->gbc_name;
+                    'Kommentar von '. $gbComment->getValue('gbc_name');
 
                 // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                if (isValidEmailAddress($row->gbc_email))
+                if (isValidEmailAddress($gbComment->getValue('gbc_email')))
                 {
-                    echo '<a class="iconLink" href="mailto:'.$row->gbc_email.'"><img src="'. THEME_PATH. '/icons/email.png" 
-                        alt="Mail an '.$row->gbc_email.'" title="Mail an '.$row->gbc_email.'" /></a>';
+                    echo '<a class="iconLink" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png" 
+                        alt="Mail an '.$gbComment->getValue('gbc_email').'" title="Mail an '.$gbComment->getValue('gbc_email').'" /></a>';
                 }
 
                 echo '
                 </div>
 
-                <div class="boxHeadRight">'. mysqldatetime('d.m.y h:i', $row->gbc_timestamp);
+                <div class="boxHeadRight">'. mysqldatetime('d.m.y h:i', $gbComment->getValue('gbc_timestamp'));
 
                 // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                 if ($g_current_user->editGuestbookRight())
                 {
                     echo '
-                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$row->gbc_id.'"><img 
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$gbComment->getValue('gbc_id').'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
-                    <a class="iconLink" href="javascript:deleteObject(\'gbc\', \'gbc_'.$row->gbc_id.'\','.$row->gbc_id.',\''.$row->gbc_name.'\')"><img 
+                    <a class="iconLink" href="javascript:deleteObject(\'gbc\', \'gbc_'.$gbComment->getValue('gbc_id').'\','.$gbComment->getValue('gbc_id').',\''.$row->gbc_name.'\')"><img 
                         src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                 }
 
                 echo '</div>
             </div>
 
-            <div class="groupBoxBody">';
-                // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-                if ($g_preferences['enable_bbcode'] == 1)
-                {
-                    echo $bbcode->parse($row->gbc_text);
-                }
-                else
-                {
-                    echo nl2br($row->gbc_text);
-                }
+            <div class="groupBoxBody">'.
+                $gbComment->getValue('gbc_text');
 
                 // Falls der Kommentar editiert worden ist, wird dies angezeigt
-                if($row->gbc_usr_id_change > 0)
+                if($gbComment->getValue('gbc_usr_id_change') > 0)
                 {
                     // Userdaten des Editors holen...
-                    $user_change = new User($g_db, $row->gbc_usr_id_change);
+                    $user_change = new User($g_db, $gbComment->getValue('gbc_usr_id_change'));
 
                     echo '
                     <div class="editInformation">
-                        Zuletzt bearbeitet von '.
-                        $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
-                        ' am '. mysqldatetime('d.m.y h:i', $row->gbc_timestamp_change). '
+                        Zuletzt bearbeitet von '.$user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
+                        ' am '. mysqldatetime('d.m.y h:i', $gbComment->getValue('gbc_timestamp_change')). '
                     </div>';
                 }
             echo '

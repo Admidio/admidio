@@ -18,6 +18,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_announcement.php');
+
 if ($g_preferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
@@ -142,7 +143,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="ann_description" name="ann_description" style="width: 350px;" tabindex="2" rows="10" cols="40">'. $announcement->getValue('ann_description'). '</textarea>
+                        <textarea id="ann_description" name="ann_description" style="width: 350px;" tabindex="2" rows="10" cols="40">'. $announcement->getDescriptionWithBBCode(). '</textarea>
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>

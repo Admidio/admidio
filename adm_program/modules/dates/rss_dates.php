@@ -9,15 +9,13 @@
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 naechsten Termine
  *
- *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
-require('../../system/classes/rss.php');
-require('../../system/classes/table_date.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/rss.php');
+require_once('../../system/classes/table_date.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if ($g_preferences['enable_rss'] != 1)
@@ -33,20 +31,13 @@ if ($g_preferences['enable_dates_module'] != 1)
     $g_message->show('module_disabled');
 }
 
-// Nachschauen ob BB-Code aktiviert ist...
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    //BB-Parser initialisieren
-    $bbcode = new ubbParser();
-}
-
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
 $arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_orgas as $org_id => $value)
 {
-	$organizations = $organizations.'"'.$org_id.'",';
+	$organizations = $organizations. $org_id. ', ';
 }
 $organizations = $organizations. $g_current_organization->getValue('org_id');
 
@@ -130,17 +121,9 @@ while ($row = $g_db->fetch_array($result))
         $description = $description. '<br /><br />Treffpunkt:&nbsp;'. $date->getValue('dat_location');
     }
 
-    //eventuell noch die Beschreibung durch den UBB-Parser schicken...
-    if ($g_preferences['enable_bbcode'] == 1)
-    {
-        $description = $description. '<br /><br />'. $bbcode->parse($date->getValue('dat_description'));
-    }
-    else
-    {
-        $description = $description. '<br /><br />'. nl2br($date->getValue('dat_description'));
-    }
-
-    $description = $description. '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+    // Beschreibung und Link zur Homepage ausgeben
+    $description = $description. '<br /><br />'. $date->getValue('dat_description'). 
+                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
     //i-cal downloadlink
     $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=4">Termin in meinen Kalender übernehmen</a>';
@@ -162,7 +145,6 @@ while ($row = $g_db->fetch_array($result))
     $rss->addItem($title, $description, $pubDate, $link);
 
 }
-
 
 // jetzt nur noch den Feed generieren lassen
 $rss->buildFeed();

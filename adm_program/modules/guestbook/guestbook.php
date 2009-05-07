@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/ubb_parser.php');
+require_once('../../system/classes/table_guestbook.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -66,15 +66,8 @@ else
     $_GET['id'] = 0;
 }
 
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    // Klasse fuer BBCode
-    $bbcode = new ubbParser();
-}
-
 unset($_SESSION['guestbook_entry_request']);
 unset($_SESSION['guestbook_comment_request']);
-
 
 // Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
 if($_GET['id'] == 0)
@@ -154,11 +147,11 @@ echo '
 
 // Gucken wieviele Gaestebucheintraege insgesamt vorliegen...
 // Das ist wichtig für die Seitengenerierung...
-$sql    = 'SELECT COUNT(*) FROM '. TBL_GUESTBOOK. '
+$sql    = 'SELECT COUNT(*) AS count FROM '. TBL_GUESTBOOK. '
            WHERE gbo_org_id = '. $g_current_organization->getValue('org_id');
 $result = $g_db->query($sql);
 $row = $g_db->fetch_array($result);
-$num_guestbook = $row[0];
+$num_guestbook = $row['count'];
 
 // Anzahl Gaestebucheintraege pro Seite
 if($g_preferences['guestbook_entries_per_page'] > 0)
@@ -231,79 +224,74 @@ if ($g_db->num_rows($guestbook_result) == 0)
 }
 else
 {
+    $guestbook = new TableGuestbook($g_db);
 
     // Gaestebucheintraege auflisten
     while ($row = $g_db->fetch_object($guestbook_result))
     {
+        // GB-Objekt initialisieren und neuen DS uebergeben
+        $guestbook->clear();
+        $guestbook->setArray($row);
+
         echo '
-        <div class="boxLayout" id="gbo_'.$row->gbo_id.'">
+        <div class="boxLayout" id="gbo_'.$guestbook->getValue('gbo_id').'">
             <div class="boxHead">
                 <div class="boxHeadLeft">
-                    <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$row->gbo_name.'" />'.$row->gbo_name;
+                    <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name');
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
-                    if (strlen(trim($row->gbo_homepage)) > 0)
+                    if (strlen($guestbook->getValue('gbo_homepage')) > 0)
                     {
                         echo '
-                        <a class="iconLink" href="'.$row->gbo_homepage.'" target="_blank"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                            alt="Gehe zu '.$row->gbo_homepage.'" title="Gehe zu '.$row->gbo_homepage.'" /></a>';
+                        <a class="iconLink" href="'.$guestbook->getValue('gbo_homepage').'" target="_blank"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                            alt="Gehe zu '.$guestbook->getValue('gbo_homepage').'" title="Gehe zu '.$guestbook->getValue('gbo_homepage').'" /></a>';
                     }
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                    if (isValidEmailAddress($row->gbo_email))
+                    if (isValidEmailAddress($guestbook->getValue('gbo_email')))
                     {
                         echo '
-                        <a class="iconLink" href="mailto:'.$row->gbo_email.'"><img src="'. THEME_PATH. '/icons/email.png"
-                            alt="Mail an '.$row->gbo_email.'" title="Mail an '.$row->gbo_email.'" /></a>';
+                        <a class="iconLink" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"
+                            alt="Mail an '.$guestbook->getValue('gbo_email').'" title="Mail an '.$guestbook->getValue('gbo_email').'" /></a>';
                     }
-
                 echo '</div>
 
-                <div class="boxHeadRight">'. mysqldatetime('d.m.y h:i', $row->gbo_timestamp). '&nbsp;';
+                <div class="boxHeadRight">'. mysqldatetime('d.m.y h:i', $guestbook->getValue('gbo_timestamp')). '&nbsp;';
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editGuestbookRight())
                     {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$row->gbo_id.'&amp;headline='. $_GET['headline']. '"><img
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $_GET['headline']. '"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
-                            <a class="iconLink" href="javascript:deleteObject(\'gbo\', \'gbo_'.$row->gbo_id.'\','.$row->gbo_id.',\''.$row->gbo_name.'\')"><img
+                            <a class="iconLink" href="javascript:deleteObject(\'gbo\', \'gbo_'.$guestbook->getValue('gbo_id').'\','.$guestbook->getValue('gbo_id').',\''.$guestbook->getValue('gbo_name').'\')"><img
                                 src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                     }
 
                 echo '</div>
             </div>
 
-            <div class="boxBody">';
-                // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-                if ($g_preferences['enable_bbcode'] == 1)
-                {
-                    echo $bbcode->parse($row->gbo_text);
-                }
-                else
-                {
-                    echo nl2br($row->gbo_text);
-                }
-
+            <div class="boxBody">'.
+                $guestbook->getValue('gbo_text');
 
                 // Falls der Eintrag editiert worden ist, wird dies angezeigt
-                if($row->gbo_usr_id_change > 0)
+                if($guestbook->getValue('gbo_usr_id_change') > 0)
                 {
                     // Userdaten des Editors holen...
-                    $user_change = new User($g_db, $row->gbo_usr_id_change);
+                    $user_change = new User($g_db, $guestbook->getValue('gbo_usr_id_change'));
 
                     echo '
                     <div class="editInformation">
                         Zuletzt bearbeitet von '.
                         $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
-                        ' am '. mysqldatetime('d.m.y h:i', $row->gbo_timestamp_change). '
+                        ' am '. mysqldatetime('d.m.y h:i', $guestbook->getValue('gbo_timestamp_change')). '
                     </div>';
                 }
 
 
                 // Alle Kommentare zu diesem Eintrag werden nun aus der DB geholt...
                 $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. '
-                           WHERE gbc_gbo_id = "'.$row->gbo_id.'"
+                           WHERE gbc_gbo_id = "'.$guestbook->getValue('gbo_id').'"
                            ORDER by gbc_timestamp asc';
                 $comment_result = $g_db->query($sql);
 
@@ -327,27 +315,27 @@ else
                     }
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo '
-                    <div id="commentsVisible_'. $row->gbo_id. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
+                    <div id="commentsVisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
                         <span class="iconTextLink">
-                            <a href="javascript:toggleComments('. $row->gbo_id. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')"><img src="'. THEME_PATH. '/icons/comments.png"
                             alt="Kommentare ausblenden" title="Kommentare ausblenden" /></a>
-                            <a href="javascript:toggleComments('. $row->gbo_id. ')">Kommentare ausblenden</a>
+                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')">Kommentare ausblenden</a>
                         </span>
                     </div>';
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                     echo '
-                    <div id="commentsInvisible_'. $row->gbo_id. '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
+                    <div id="commentsInvisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
                         <span class="iconTextLink">
-                            <a href="javascript:toggleComments('. $row->gbo_id. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')"><img src="'. THEME_PATH. '/icons/comments.png"
                             alt="Kommentare anzeigen" title="Kommentare anzeigen" /></a>
-                            <a href="javascript:toggleComments('. $row->gbo_id. ')">'. $g_db->num_rows($comment_result). ' Kommentar(e) zu diesem Eintrag</a>
+                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')">'. $g_db->num_rows($comment_result). ' Kommentar(e) zu diesem Eintrag</a>
                         </span>
-                        <div id="comments_'. $row->gbo_id. '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
+                        <div id="comments_'. $guestbook->getValue('gbo_id'). '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
                     </div>';
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
-                    echo '<div id="commentSection_'. $row->gbo_id. '" class="commentBox" style="display: '. $display_others. ';">';
+                    echo '<div id="commentSection_'. $guestbook->getValue('gbo_id'). '" class="commentBox" style="display: '. $display_others. ';">';
                         if($g_preferences['enable_intial_comments_loading'] == 1)
                         {
                             include("get_comments.php");
@@ -358,7 +346,7 @@ else
                 if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) == 0 && ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1) )
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
-                    $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$row->gbo_id;
+                    $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
                     echo '
                     <div class="editInformation">
                         <span class="iconTextLink">
