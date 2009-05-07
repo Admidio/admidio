@@ -16,9 +16,9 @@
  *
  ****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_category.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_category.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_cat_id = 0;
@@ -99,6 +99,15 @@ if(isset($_SESSION['categories_request']))
     unset($_SESSION['categories_request']);
 }
 
+// Kategorie 'Stammdaten' bei Profilfeldern darf nicht umbenannt werden
+$html_readonly = '';
+$field_focus   = 'cat_name';
+if($category->getValue('cat_type') == 'USF' && $category->getValue('cat_name') == 'Stammdaten')
+{
+    $html_readonly = ' readonly="readonly" ';
+    $field_focus   = 'btn_save';
+}
+
 // Html-Kopf ausgeben
 if($req_cat_id > 0)
 {
@@ -112,7 +121,7 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("#cat_name").focus();
+            $("#'.$field_focus.'").focus();
         }); 
     //--></script>';
 require(THEME_SERVER_PATH. '/overall_header.php');
@@ -128,7 +137,7 @@ echo '
                 <dl>
                     <dt><label for="cat_name">Name:</label></dt>
                     <dd>
-                        <input type="text" id="cat_name" name="cat_name" size="30" maxlength="30" value="'. $category->getValue('cat_name'). '" />
+                        <input type="text" id="cat_name" name="cat_name" '.$html_readonly.' style="width: 150px;" maxlength="30" value="'. $category->getValue('cat_name'). '" />
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>
@@ -185,7 +194,7 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button id="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+            <button id="btn_save" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
     </div>
 </div>

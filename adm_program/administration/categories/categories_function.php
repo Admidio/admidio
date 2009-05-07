@@ -21,9 +21,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_category.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_category.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_cat_id = 0;
