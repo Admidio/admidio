@@ -18,9 +18,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
-require('../../system/classes/table_announcement.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_announcement.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -77,12 +76,6 @@ if(array_key_exists('date', $_GET))
     }
 }
 
-if($g_preferences['enable_bbcode'] == 1)
-{
-    // Klasse fuer BBCode
-    $bbcode = new ubbParser();
-}
-
 unset($_SESSION['announcements_request']);
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
@@ -106,7 +99,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '<h1 class="moduleHeadline">'.$req_headline.'</h1>';
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$organizations = "";
+$organizations = '';
 $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $key => $value)
@@ -255,18 +248,8 @@ else
                     echo '</div>
             </div>
 
-            <div class="boxBody">';
-                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-                if($g_preferences['enable_bbcode'] == 1)
-                {
-                    echo $bbcode->parse($announcement->getValue("ann_description"));
-                }
-                else
-                {
-                    echo nl2br($announcement->getValue("ann_description"));
-                }
-            
-                echo '
+            <div class="boxBody">'.
+                $announcement->getValue("ann_description").'
                 <div class="editInformation">
                     Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
                     ' am '. mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp_create"));

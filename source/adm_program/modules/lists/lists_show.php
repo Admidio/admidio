@@ -103,7 +103,7 @@ if($g_preferences['profile_photo_storage'] == 0)
 
 if($req_mode == 'csv-ms')
 {
-    $separator    = ';'; // Microsoft XP und neuer braucht ein Semicolon
+    $separator    = "\t"; // Microsoft XP und neuer braucht ein Semicolon
     $value_quotes = '"';
     $req_mode     = 'csv';
 }
@@ -703,9 +703,10 @@ if($req_mode == 'csv')
 {
     // nun die erstellte CSV-Datei an den User schicken
     $filename = $g_organization. '-'. str_replace(' ', '_', str_replace('.', '', $role->getValue('rol_name'))). '.csv';
-    header('Content-Type: text/comma-separated-values; charset=ISO-8859-1');
+    header('Content-Type: text/comma-separated-values; charset=utf-8');
     header('Content-Disposition: attachment; filename="'.$filename.'"');
-    echo utf8_decode($str_csv);
+    //echo utf8_decode($str_csv);
+    echo $str_csv;
 }
 else
 {

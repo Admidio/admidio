@@ -171,8 +171,7 @@ switch ($req_err_code)
     case 'mail_max_attachment_size':
         require_once('classes/email.php');
         echo 'Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller 
-              Anhänge zusammen nicht größer als '. Email::getMaxAttachementSize('mb'). 
-              ' MB sein.';
+              Anhänge zusammen '. Email::getMaxAttachementSize('mb'). ' MB nicht überschreiten.';
         break;
 
     case 'profile_login_name':

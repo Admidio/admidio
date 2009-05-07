@@ -9,15 +9,13 @@
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer Gaestebucheintraege
  *
- *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
-require('../../system/classes/rss.php');
-
+require_once('../../system/common.php');
+require_once('../../system/classes/rss.php');
+require_once('../../system/classes/table_guestbook.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($g_preferences['enable_rss'] != 1)
@@ -33,13 +31,6 @@ if ($g_preferences['enable_guestbook_module'] != 1)
     $g_message->show('module_disabled');
 }
 
-// Nachschauen ob BB-Code aktiviert ist...
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    //BB-Parser initialisieren
-    $bbcode = new ubbParser();
-}
-
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
         WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
@@ -52,30 +43,25 @@ $result = $g_db->query($sql);
 
 // Ein RSSfeed-Objekt erstellen
 $rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Gaestebuch', 'Die 10 neuesten Gaestebucheintraege');
-
+$guestbook = new TableGuestbook($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_object($result))
 {
+    // ausgelesene Gaestebuchdaten in Guestbook-Objekt schieben
+    $guestbook->clear();
+    $guestbook->setArray($row);
+
     // Die Attribute fuer das Item zusammenstellen
-    $title = $row->gbo_name;
-    $link  = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $row->gbo_id;
-    $description = '<b>'.$row->gbo_name.' schrieb am '. mysqldatetime('d.m.y h:i', $row->gbo_timestamp).'</b>';
+    $title = $guestbook->getValue('gbo_name');
+    $link  = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
+    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. mysqldatetime('d.m.y h:i', $guestbook->getValue('gbo_timestamp')).'</b>';
 
+    // Beschreibung und Link zur Homepage ausgeben
+    $description = $description. '<br /><br />'. $guestbook->getValue('gbo_text'). 
+                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
-    // Die Ankuendigungen eventuell durch den UBB-Parser schicken
-    if ($g_preferences['enable_bbcode'] == 1)
-    {
-        $description = $description. '<br /><br />'. $bbcode->parse($row->gbo_text);
-    }
-    else
-    {
-        $description = $description. '<br /><br />'. nl2br($row->gbo_text);
-    }
-
-    $description = $description. '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
-
-    $pubDate = date('r', strtotime($row->gbo_timestamp));
+    $pubDate = date('r', strtotime($guestbook->getValue('gbo_timestamp')));
 
 
     // Item hinzufuegen

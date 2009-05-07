@@ -341,7 +341,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="dat_description" name="dat_description" style="width: 345px;" rows="10" cols="40">'. $date->getValue('dat_description'). '</textarea>
+                        <textarea id="dat_description" name="dat_description" style="width: 345px;" rows="10" cols="40">'. $date->getDescriptionWithBBCode(). '</textarea>
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>

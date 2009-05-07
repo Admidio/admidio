@@ -17,6 +17,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook.php');
+
 if ($g_preferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
@@ -230,7 +231,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="gbo_text" name="gbo_text" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $guestbook->getValue('gbo_text'). '</textarea>
+                        <textarea id="gbo_text" name="gbo_text" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $guestbook->getDescriptionWithBBCode(). '</textarea>
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>

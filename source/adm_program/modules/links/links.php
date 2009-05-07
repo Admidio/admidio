@@ -15,8 +15,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_weblink.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_weblinks_module'] == 0)
@@ -27,7 +27,7 @@ if ($g_preferences['enable_weblinks_module'] == 0)
 elseif($g_preferences['enable_weblinks_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 }
 //Kontrolle ob nur Kategorien angezeigt werden
 if(isset($_GET['category']) == false)
@@ -68,12 +68,6 @@ if (array_key_exists('headline', $_GET))
 else
 {
     $_GET['headline'] = 'Weblinks';
-}
-
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    // Klasse fuer BBCode initialisieren
-    $bbcode = new ubbParser();
 }
 
 // Navigation initialisieren - Modul faengt hier an.
@@ -219,22 +213,22 @@ if ($g_db->num_rows($links_result) == 0)
 }
 else
 {
+    $j = 0;         // Zaehlervariable fuer Anzahl von fetch_object
+    $i = 0;         // Zaehlervariable fuer Anzahl der Links in einer Kategorie
+    $previous_cat_id = -1;  // Vorherige Kategorie-ID.
+    $new_category = true;   // Kommt jetzt eine neue Kategorie?
 
-    // Zaehlervariable fuer Anzahl von fetch_object
-    $j = 0;
-    // Zaehlervariable fuer Anzahl der Links in einer Kategorie
-    $i = 0;
-    // Vorherige Kategorie-ID.
-    $previous_cat_id = -1;
-    // Kommt jetzt eine neue Kategorie?
-    $new_category = true;
+    $weblink = new TableWeblink($g_db);
 
     // Solange die vorherige Kategorie-ID sich nicht veraendert...
     // Sonst in die neue Kategorie springen
     while ($row = $g_db->fetch_object($links_result))
     {
+        // Link-Objekt initialisieren und neuen DS uebergeben
+        $weblink->clear();
+        $weblink->setArray($row);
 
-        if ($row->lnk_cat_id != $previous_cat_id)
+        if ($weblink->getValue('lnk_cat_id') != $previous_cat_id)
         {
 			$i = 0;
 			$new_category = true;
@@ -247,7 +241,7 @@ else
 				<div class="formBody" style="overflow: hidden;">';
         }
 
-        echo '<div id="lnk_'.$row->lnk_id.'">';
+        echo '<div id="lnk_'.$weblink->getValue('lnk_id').'">';
     		if($i > 0)
     		{
     			echo '<hr />';
@@ -256,43 +250,32 @@ else
 			if($g_preferences['weblinks_redirect_seconds'] > 0)
 			{
 				echo '
-	    		<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$row->lnk_id.'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-	    			alt="Gehe zu '.$row->lnk_name.'" title="Gehe zu '.$row->lnk_name.'" /></a>
-	    		<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$row->lnk_id.'" target="'. $g_preferences['weblinks_target']. '">'.$row->lnk_name.'</a>';
+	    		<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+	    			alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
+	    		<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
 			}
 			else
 			{
 	    		echo '
-	    		<a class="iconLink" href="'.$row->lnk_url.'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-	    			alt="Gehe zu '.$row->lnk_name.'" title="Gehe zu '.$row->lnk_name.'" /></a>
-	    		<a href="'.$row->lnk_url.'" target="'. $g_preferences['weblinks_target']. '">'.$row->lnk_name.'</a>';
+	    		<a class="iconLink" href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+	    			alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
+	    		<a href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
 
 			}
             // aendern & loeschen duerfen nur User mit den gesetzten Rechten
             if ($g_current_user->editWeblinksRight())
             {
                 echo '
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$row->lnk_id.'&amp;headline='. $_GET['headline']. '"><img
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $_GET['headline']. '"><img
                 	src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
-                <a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$row->lnk_id.'\', \''.$row->lnk_id.'\',\''.$row->lnk_name.'\')">
+                <a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$weblink->getValue('lnk_id').'\', \''.$weblink->getValue('lnk_id').'\',\''.$weblink->getValue('lnk_name').'\')">
                    <img	src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
             }
 
-
-    		//Beschreibung ausgeben falls forhanden
-    		if(strlen($row->lnk_description)>0)
+    		// Beschreibung ausgeben, falls vorhanden
+    		if(strlen($weblink->getValue('lnk_description'))>0)
     		{
-        		echo'<div style="margin-top: 10px;">';
-                // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-                if ($g_preferences['enable_bbcode'] == 1)
-                {
-                    echo $bbcode->parse($row->lnk_description);
-                }
-                else
-                {
-                    echo nl2br($row->lnk_description);
-                }
-        		echo '</div>';
+        		echo '<div style="margin-top: 10px;">'.$weblink->getValue('lnk_description').'</div>';
     		}
 
             //Editimformationen für Leute mit Bearbeitungsrecht
@@ -301,12 +284,12 @@ else
     			echo '
     			<div class="editInformation">';
 
-    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_create);
+    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.' am '. mysqldatetime("d.m.y h:i", $weblink->getValue('lnk_timestamp_create'));
 
     				if($row->lnk_usr_id_change > 0)
     				{
     					echo ' | Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname.
-    					' am '. mysqldatetime("d.m.y h:i", $row->lnk_timestamp_change);
+    					' am '. mysqldatetime("d.m.y h:i", $weblink->getValue('lnk_timestamp_change'));
     				}
     			echo '</div>';
     		}
@@ -316,7 +299,7 @@ else
         $i++;
 
         // Jetzt wird die jtzige die vorherige Kategorie
-        $previous_cat_id = $row->lnk_cat_id;
+        $previous_cat_id = $weblink->getValue('lnk_cat_id');
 
         $new_category = false;
     }  // Ende While-Schleife

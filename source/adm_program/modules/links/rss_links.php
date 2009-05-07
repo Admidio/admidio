@@ -9,15 +9,13 @@
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer alle Links
  *
- *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/ubb_parser.php');
-require('../../system/classes/rss.php');
-
+require_once('../../system/common.php');
+require_once('../../system/classes/rss.php');
+require_once('../../system/classes/table_weblink.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($g_preferences["enable_rss"] != 1)
@@ -31,13 +29,6 @@ if ($g_preferences['enable_weblinks_module'] != 1)
 {
     // das Modul ist deaktiviert
     $g_message->show('module_disabled');
-}
-
-// Nachschauen ob BB-Code aktiviert ist...
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    //BB-Parser initialisieren
-    $bbcode = new ubbParser();
 }
 
 // alle Links aus der DB fischen...
@@ -68,40 +59,35 @@ $result = $g_db->query($sql);
 
 // Ein RSSfeed-Objekt erstellen
 $rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Links', 'Linksammlung von '. $g_current_organization->getValue('org_longname'));
-
+$weblink = new TableWeblink($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_object($result))
 {
+    // ausgelesene Linkdaten in Weblink-Objekt schieben
+    $weblink->clear();
+    $weblink->setArray($row);
+
     // Die Attribute fuer das Item zusammenstellen
-    $title = $row->lnk_name;
-    $link  = $g_root_path. '/adm_program/modules/links/links.php?id='. $row->lnk_id;
-    $description = '<a href="'.$row->lnk_url.'" target="_blank"><b>'.$row->lnk_name.'</b></a>';
+    $title = $weblink->getValue('lnk_name');
+    $link  = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
+    $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank"><b>'.$weblink->getValue('lnk_name').'</b></a>';
 
-
-    // Die Ankuendigungen eventuell durch den UBB-Parser schicken
-    if ($g_preferences['enable_bbcode'] == 1)
-    {
-        $description = $description. '<br /><br />'. $bbcode->parse($row->lnk_description);
-    }
-    else
-    {
-        $description = $description. '<br /><br />'. nl2br($row->lnk_description);
-    }
-
-    $description = $description. '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+    // Beschreibung und Link zur Homepage ausgeben
+    $description = $description. '<br /><br />'. $weblink->getValue('lnk_description'). 
+                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. " ". $row->create_surname.
-                                 ' am '. mysqldatetime('d.m.y h:i', $row->lnk_timestamp_create). '</i>';
+                                 ' am '. mysqldatetime('d.m.y h:i', $weblink->getValue('lnk_timestamp_create')). '</i>';
 
-    if($row->lnk_usr_id_change > 0)
+    if($weblink->getValue('lnk_usr_id_change') > 0)
     {
         $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. " ". $row->change_surname.
-									 ' am '. mysqldatetime('d.m.y h:i', $row->lnk_timestamp_change). '</i>';
+									 ' am '. mysqldatetime('d.m.y h:i', $weblink->getValue('lnk_timestamp_change')). '</i>';
     }
 
-    $pubDate = date("r", strtotime($row->lnk_timestamp_create));
+    $pubDate = date("r", strtotime($weblink->getValue('lnk_timestamp_create')));
 
 
     // Item hinzufuegen

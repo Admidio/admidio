@@ -13,15 +13,20 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
+ * getDescriptionWithBBCode() 
+ *                   - liefert die Beschreibung mit dem originalen BBCode zurueck
  * getIcal($domain)  - gibt String mit dem Termin im iCal-Format zurueck
  * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableDate extends TableAccess
 {
+    var $bbCode;
+
     // Konstruktor
     function TableDate(&$db, $date_id = 0)
     {
@@ -51,6 +56,7 @@ class TableDate extends TableAccess
         }
     }
 
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
     function setValue($field_name, $field_value)
     {
         if($field_name == 'dat_end' && $this->getValue('dat_all_day') == 1)
@@ -62,22 +68,47 @@ class TableDate extends TableAccess
         }
         parent::setValue($field_name, $field_value);
     }
+    
+    // liefert die Beschreibung mit dem originalen BBCode zurueck
+    // das einfache getValue liefert den geparsten BBCode in HTML zurueck
+    function getDescriptionWithBBCode()
+    {
+        return parent::getValue('dat_description');
+    }
 
     function getValue($field_name)
     {
+        global $g_preferences;
+    
         // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
         $value = $this->dbColumns[$field_name];
 
         if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
+            // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
             list($year, $month, $day, $hour, $minute, $second) = split('[- :]', $this->dbColumns['dat_end']);
             $value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) - 86400);
+        }
+        elseif($field_name == 'dat_description')
+        {
+            // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+            if($g_preferences['enable_bbcode'] == 1)
+            {
+                if(is_object($this->bbCode) == false)
+                {
+                    $this->bbCode = new ubbParser();
+                }            
+                return $this->bbCode->parse(parent::getValue($field_name, $value));
+            }
+            else
+            {
+                return nl2br(parent::getValue($field_name, $value));
+            }        
         }
         return parent::getValue($field_name, $value);
     }
     
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
+    // Methode, die Defaultdaten fur Insert und Update vorbelegt
     function save()
     {
         global $g_current_organization, $g_current_user;
@@ -113,13 +144,15 @@ class TableDate extends TableAccess
                 "BEGIN:VEVENT\n".
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->getValue('dat_headline'). "\n".
-                "DESCRIPTION:". str_replace("\r\n", '\n', $this->getValue('dat_description')). "\n".
+                "DESCRIPTION:". str_replace("\r\n", '\n', strStripTags($this->getValue('dat_description'))). "\n".
                 "DTSTAMP:". mysqldatetime('ymdThisZ', $this->getValue('dat_timestamp_create')). "\n".
                 "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)
         {
+            // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
+            // Outlook und Co. zeigen es erst dann korrekt an
             $ical .= "DTSTART;VALUE=DATE:". mysqldate('ymd', $this->getValue('dat_begin')). "\n".
-                     "DTEND;VALUE=DATE:". mysqldate('ymd', $this->getValue('dat_end')). "\n";
+                     "DTEND;VALUE=DATE:". mysqldate('ymd', $this->dbColumns['dat_end']). "\n";
         }
         else
         {
