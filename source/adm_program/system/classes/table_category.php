@@ -83,6 +83,18 @@ class TableCategory extends TableAccess
         }
     }
 
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    function setValue($field_name, $field_value)
+    {
+        // Kategorie 'Stammdaten' bei Profilfeldern darf nicht umbenannt werden
+        if($this->getValue('cat_type') == 'USF' && $field_name == 'cat_name' && $this->getValue('cat_name') == 'Stammdaten')
+        {
+            return false;
+        }
+
+        return parent::setValue($field_name, $field_value);
+    }
+
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     function save()
     {
@@ -133,7 +145,7 @@ class TableCategory extends TableAccess
         }
     }
 
-    // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
+    // Methode bearbeitet die Referenzen, wenn die Kategorie geloescht wird
     function delete()
     {
         global $g_current_session;
