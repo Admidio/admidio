@@ -82,7 +82,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 	
 	unset($SelectedTables);
 
-	set_time_limit(60);
+	@set_time_limit(60);
 	
 	// Liste der Tabellen aus den Tabellen Defines ermitteln
     foreach (get_defined_constants() as $key=>$value)
