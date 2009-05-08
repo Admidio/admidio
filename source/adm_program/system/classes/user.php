@@ -249,20 +249,22 @@ class User extends TableUsers
                 if(strlen($field->getValue('usd_usr_id')) == 0
                 && strlen($field->getValue('usd_value')) > 0)
                 {
-                    $field->setValue('usd_usr_id', $this->getValue('usr_id'));
-                    $field->setValue('usd_usf_id', $field->getValue('usf_id'));
-                    $field->new_record = true;
+                	// PHP4 liefert nur eine Kopie des Objekts, aus diesem Grund muss die Aenderung direkt auf das 
+                	// richtige Objekt verwiesen werden
+                	$this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usr_id', $this->getValue('usr_id'));
+                    $this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usf_id', $field->getValue('usf_id'));
+                    $this->userFieldData[$field->getValue('usf_name')]->new_record = true;
                 }
 
                 // existiert schon ein Wert und dieser wird entfernt, dann auch DS loeschen
                 if($field->getValue('usd_id') > 0
                 && strlen($field->getValue('usd_value')) == 0)
                 {
-                    $field->delete();
+                    $this->userFieldData[$field->getValue('usf_name')]->delete();
                 }
                 else
                 {
-                    $field->save();
+                    $this->userFieldData[$field->getValue('usf_name')]->save();
                 }
             }
         }
