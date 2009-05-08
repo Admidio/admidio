@@ -104,11 +104,11 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 	foreach ($SelectedTables as $selectedtablename) 
 	{
 		OutputInformation('statusinfo', 'Checking table <b>'.$selectedtablename.'</b>');
-		set_time_limit(60);
+		@set_time_limit(60);
 		$result = mysql_query('CHECK TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR);
 		while ($row = mysql_fetch_assoc($result)) 
 		{
-			set_time_limit(60);
+			@set_time_limit(60);
 			if ($row['Msg_text'] == 'OK') 
 			{
 				mysql_query('OPTIMIZE TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR);
@@ -145,7 +145,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 	$alltablesstructure = '';
 
 	for ($t = 0; $t < count($SelectedTables); $t++) {
-		set_time_limit(60);
+		@set_time_limit(60);
 		OutputInformation('statusinfo', 'Creating structure for <b>'.$SelectedTables[$t].'</b>');
 
 		$fieldnames     = array();
@@ -234,7 +234,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 	//Tabelleninhalte aus der Datenbank extrahieren
 	$processedrows    = 0;
-	set_time_limit(300);
+	@set_time_limit(300);
 	for ($t = 0; $t < count($SelectedTables); $t++) {
 		$result = mysql_query('SELECT * FROM '.$SelectedTables[$t]);
 		$rows[$t] = mysql_num_rows($result);
@@ -337,7 +337,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 			}
 			if ((++$currentrow % STATS_INTERVAL) == 0) 
 			{
-				set_time_limit(60);
+				@set_time_limit(60);
 				OutputInformation('rows_'.$SelectedTables[$t], '<b>'.$SelectedTables[$t].' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</b>');
 				$elapsedtime = getmicrotime() - $datastarttime;
 				$percentprocessed = ($processedrows + $currentrow) / $overallrows;
