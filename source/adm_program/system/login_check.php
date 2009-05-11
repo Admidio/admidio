@@ -152,7 +152,7 @@ if ($user_found >= 1)
         // die Startseite verweisen
         if(isset($_SESSION['login_forward_url']) == false)
         {
-            $_SESSION['login_forward_url'] = $g_homepage;
+            $_SESSION['login_forward_url'] = $g_root_path. '/'. $g_preferences['homepage_login'];
         }
 
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
