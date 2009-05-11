@@ -211,13 +211,15 @@ class RoleDependency
         if(0 != $this->role_id_parent and 0 != $this->role_id_child )
         {
             $sql = 'SELECT mem_usr_id FROM '. TBL_MEMBERS.
-                       ' WHERE mem_rol_id = '.$this->role_id_child;
+                   ' WHERE mem_rol_id = '.$this->role_id_child.'
+                       AND mem_begin <= "'.DATE_NOW.'"
+                       AND mem_end    > "'.DATE_NOW.'"';
             $result = $this->db->query($sql);
 
             $num_rows = $this->db->num_rows($result);
             if ($num_rows)
             {
-                $sql='  INSERT IGNORE INTO '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ';
+                $sql = 'INSERT IGNORE INTO '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ';
 
                 while ($row = $this->db->fetch_object($result))
                 {
