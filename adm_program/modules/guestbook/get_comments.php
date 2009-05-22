@@ -85,7 +85,7 @@ if (isset($comment_result))
             </div>
 
             <div class="groupBoxBody">'.
-                $gbComment->getValue('gbc_text');
+                $gbComment->getText('HTML');
 
                 // Falls der Kommentar editiert worden ist, wird dies angezeigt
                 if($gbComment->getValue('gbc_usr_id_change') > 0)

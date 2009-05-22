@@ -13,8 +13,10 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getDescriptionWithBBCode() 
- *                   - liefert die Beschreibung mit dem originalen BBCode zurueck 
+ * getDescription($type = 'HTML') - liefert die Beschreibung je nach Type zurueck
+ *                 type = 'PLAIN'  : reiner Text ohne Html oder BBCode
+ *                 type = 'HTML'   : BB-Code in HTML umgewandelt
+ *                 type = 'BBCODE' : Beschreibung mit BBCode-Tags
  * editRight()       - prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
  *
  *****************************************************************************/
@@ -43,41 +45,38 @@ class TableAnnouncement extends TableAccess
         }
     }
 
-    // liefert die Beschreibung mit dem originalen BBCode zurueck
-    // das einfache getValue liefert den geparsten BBCode in HTML zurueck
-    function getDescriptionWithBBCode()
-    {
-        return parent::getValue('ann_description');
-    }
-
-    function getValue($field_name)
+    // liefert die Beschreibung je nach Type zurueck
+    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
+    // type = 'HTML'   : BB-Code in HTML umgewandelt
+    // type = 'BBCODE' : Beschreibung mit BBCode-Tags
+    function getDescription($type = 'HTML')
     {
         global $g_preferences;
-    
-        // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
-        $value = $this->dbColumns[$field_name];
+        $description = '';
 
-        if($field_name == 'ann_description')
+        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
         {
-            // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-            if($g_preferences['enable_bbcode'] == 1)
+            if(is_object($this->bbCode) == false)
             {
-                if(is_object($this->bbCode) == false)
-                {
-                    $this->bbCode = new ubbParser();
-                }            
-                return $this->bbCode->parse(parent::getValue($field_name, $value));
+                $this->bbCode = new ubbParser();
             }
-            else
+
+            $description = $this->bbCode->parse($this->getValue('ann_description'));
+
+            if($type == 'PLAIN')
             {
-                return nl2br(parent::getValue($field_name, $value));
-            }        
+                $description = strStripTags($description);
+            }
         }
-        return parent::getValue($field_name, $value);
+        else
+        {
+            $description = nl2br($this->getValue('ann_description'));
+        }
+        return $description;
     }
 
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
+    // Methode, die Defaultdaten fur Insert und Update vorbelegt
     function save()
     {
         global $g_current_organization, $g_current_user;

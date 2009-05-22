@@ -239,7 +239,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 350px;" rows="10" cols="40">'. $guestbook_comment->getDescriptionWithBBCode(). '</textarea>&nbsp;<span title="Pflichtfeld" style="color: #990000;">*</span>
+                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 350px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="Pflichtfeld" style="color: #990000;">*</span>
                     </dd>
                 </dl>
             </li>';
