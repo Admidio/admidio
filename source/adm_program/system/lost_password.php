@@ -26,7 +26,7 @@ if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password
 // muss natuerlich der Code ueberprueft werden
 if (! empty($abschicken) && !$g_valid_login && $g_preferences['enable_mail_captcha'] == 1 && !empty($captcha))
 {
-    if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+    if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
         $g_message->show('captcha_code');
     }

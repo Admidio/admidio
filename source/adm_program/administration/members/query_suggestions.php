@@ -110,20 +110,23 @@ else
 
     // ab hier werden jetzt die zur Query passenden Eintraege ermittelt...
     $match = array();
-    $q = mb_strtolower($query, 'UTF-8');
+    $q = admStrToLower($query);
 
     foreach ($querySuggestions as $suggest)
     {
-        if (    strpos(mb_strtolower($suggest['lastName'], 'UTF-8'),$q)===0
-            or  strpos(mb_strtolower($suggest['firstName'], 'UTF-8'),$q)===0
-            or  strpos(mb_strtolower($suggest['firstName'], 'UTF-8'). " ". mb_strtolower($suggest['lastName'], 'UTF-8'),str_replace(',', '', $q))===0
-            or  strpos(mb_strtolower($suggest['lastName'], 'UTF-8'). " ". mb_strtolower($suggest['firstName'], 'UTF-8'),str_replace(',', '', $q))===0)
+        $firstName = admStrToLower($suggest['firstName']);
+        $lastName  = admStrToLower($suggest['lastName']);
+
+        if (strpos($lastName, $q)===0
+        or  strpos($firstName,$q)===0
+        or  strpos($firstName. " ". $lastName,  str_replace(',', '', $q)) === 0
+        or  strpos($lastName.  " ". $firstName, str_replace(',', '', $q)) === 0)
         {
             $match[]='<rs>'. $suggest['lastName']. ', '. $suggest['firstName']. '</rs>';
         }
     }
     //sort($match);
-    $xml .= '<results>\n'.implode('\n',$match).'</results>';
+    $xml .= "<results>\n".implode("\n",$match).'</results>';
 }
 header('Content-Type: text/xml');
 echo $xml;

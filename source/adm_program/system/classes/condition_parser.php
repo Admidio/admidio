@@ -24,7 +24,7 @@ class ConditionParser
 
     function makeStandardSrc($str_src)
     {
-        $this->m_src = strtoupper(trim($str_src));
+        $this->m_src = admStrToUpper(trim($str_src));
         $this->m_src = strtr($this->m_src, '*', '%');
 
         // gueltiges 'ungleich' ist '!'
@@ -159,7 +159,7 @@ class ConditionParser
                         elseif($this->m_str_arr[$this->m_count] == '{')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(strtoupper($str_src), 'J') != FALSE )
+                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE )
                             {
                                 $this->m_dest = $this->m_dest. ' > ';
                             } 
@@ -171,7 +171,7 @@ class ConditionParser
                         elseif($this->m_str_arr[$this->m_count] == '}')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(strtoupper($str_src), 'J') != FALSE ) 
+                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE ) 
                             {
                                 $this->m_dest = $this->m_dest. ' < ';
                             } 
@@ -183,7 +183,7 @@ class ConditionParser
                         elseif($this->m_str_arr[$this->m_count] == '[')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(strtoupper($str_src), 'J') != FALSE ) 
+                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE ) 
                             {
                                 $this->m_dest = $this->m_dest. ' >= ';
                             } 
@@ -195,7 +195,7 @@ class ConditionParser
                         elseif($this->m_str_arr[$this->m_count] == ']')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(strtoupper($str_src), 'J') != FALSE ) 
+                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE ) 
                             {
                                 $this->m_dest = $this->m_dest. ' <= ';
                             } 
@@ -306,7 +306,7 @@ class ConditionParser
 
         // bastwe: check if user searches for age
         $last = substr($date, -1);
-        $last = strtoupper($last);
+        $last = admStrToUpper($last);
         if( $last == 'J' ) 
         {
             $age = substr($date, 0, -1);

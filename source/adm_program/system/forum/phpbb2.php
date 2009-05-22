@@ -196,7 +196,7 @@ class PhpBB2
                 }
                 
                 // URLs zum Forum ermitteln
-                $this->url_intern = str_replace('http://', '', mb_strtolower($server_name, 'UTF-8'));
+                $this->url_intern = str_replace('http://', '', admStrToLower($server_name));
                 if(strlen($script_path) > 1)
                 {
                     $this->url_intern .= '/'. $script_path;

@@ -205,7 +205,7 @@ class ListConfiguration extends TableLists
                     if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
                     {
                         $type = 'checkbox';
-                        $value = mb_strtolower($value,'UTF-8');
+                        $value = admStrToLower($value);
                         
                         // Ja bzw. Nein werden durch 1 bzw. 0 ersetzt, damit Vergleich in DB gemacht werden kann
                         if($value == 'ja' || $value == '1' || $value == 'true')
@@ -223,7 +223,7 @@ class ListConfiguration extends TableLists
                         if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name') == 'Geschlecht')
                         {
                             // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
-                            $value = mb_strtolower($value,'UTF-8');
+                            $value = admStrToLower($value);
                             if($value == 'u' || $value == 'unbekannt')
                             {
                                 $value = '0';

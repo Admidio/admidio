@@ -43,7 +43,7 @@ if(isset($_GET['usf_id']))
     }
 }
 
-if(isset($_GET['sequence']) && strtoupper($_GET['sequence']) != 'UP' && strtoupper($_GET['sequence']) != 'DOWN')
+if(isset($_GET['sequence']) && admStrToUpper($_GET['sequence']) != 'UP' && admStrToUpper($_GET['sequence']) != 'DOWN')
 {
     $g_message->show('invalid');
 }

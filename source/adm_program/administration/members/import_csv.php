@@ -79,7 +79,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
     {
         // Hochkomma und Spaces entfernen
         $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
-        $col_value_to_lower = mb_strtolower($col_value, 'UTF-8');
+        $col_value_to_lower = admStrToLower($col_value);
 
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde

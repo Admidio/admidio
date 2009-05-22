@@ -154,7 +154,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     // muss natuerlich der Code ueberprueft werden
     if ($_GET['mode'] == 1 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
-        if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+        if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
             $g_message->show('captcha_code');
         }
@@ -257,7 +257,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     // muss natuerlich der Code ueberprueft werden
     if ($_GET['mode'] == 4 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
-        if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+        if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
             $g_message->show('captcha_code');
         }

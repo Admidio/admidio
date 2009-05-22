@@ -248,7 +248,7 @@ if($new_user == 2)
 // muss natuerlich der Code ueberprueft werden
 if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
 {
-    if ( !isset($_SESSION['captchacode']) || strtoupper($_SESSION['captchacode']) != strtoupper($_POST['captcha']) )
+    if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
         $g_message->show('captcha_code');
     }
