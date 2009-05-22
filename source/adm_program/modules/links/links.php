@@ -275,7 +275,7 @@ else
     		// Beschreibung ausgeben, falls vorhanden
     		if(strlen($weblink->getValue('lnk_description'))>0)
     		{
-        		echo '<div style="margin-top: 10px;">'.$weblink->getValue('lnk_description').'</div>';
+        		echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
     		}
 
             //Editimformationen für Leute mit Bearbeitungsrecht

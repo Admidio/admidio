@@ -272,7 +272,7 @@ else
             </div>
 
             <div class="boxBody">'.
-                $guestbook->getValue('gbo_text');
+                $guestbook->getText('HTML');
 
                 // Falls der Eintrag editiert worden ist, wird dies angezeigt
                 if($guestbook->getValue('gbo_usr_id_change') > 0)

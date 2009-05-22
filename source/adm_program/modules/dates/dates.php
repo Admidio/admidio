@@ -506,7 +506,7 @@ else
                         </div>';
                   echo '</div>';
                 }
-                echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>
+                echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>
                 <div class="editInformation">
                     Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
                     ' am '. mysqldatetime('d.m.y h:i', $date->getValue('dat_timestamp_create'));

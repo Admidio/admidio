@@ -231,7 +231,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="gbo_text" name="gbo_text" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $guestbook->getDescriptionWithBBCode(). '</textarea>
+                        <textarea id="gbo_text" name="gbo_text" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $guestbook->getValue('gbo_text'). '</textarea>
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                     </dd>
                 </dl>

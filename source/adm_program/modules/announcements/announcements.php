@@ -249,7 +249,7 @@ else
             </div>
 
             <div class="boxBody">'.
-                $announcement->getValue("ann_description").'
+                $announcement->getDescription('HTML').'
                 <div class="editInformation">
                     Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
                     ' am '. mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp_create"));

@@ -13,8 +13,10 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getDescriptionWithBBCode() 
- *                   - liefert die Beschreibung mit dem originalen BBCode zurueck
+ * getDescription($type = 'HTML') - liefert die Beschreibung je nach Type zurueck
+ *                 type = 'PLAIN'  : reiner Text ohne Html oder BBCode
+ *                 type = 'HTML'   : BB-Code in HTML umgewandelt
+ *                 type = 'BBCODE' : Beschreibung mit BBCode-Tags
  * getIcal($domain)  - gibt String mit dem Termin im iCal-Format zurueck
  * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
  *
@@ -69,11 +71,35 @@ class TableDate extends TableAccess
         parent::setValue($field_name, $field_value);
     }
     
-    // liefert die Beschreibung mit dem originalen BBCode zurueck
-    // das einfache getValue liefert den geparsten BBCode in HTML zurueck
-    function getDescriptionWithBBCode()
+    // liefert die Beschreibung je nach Type zurueck
+    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
+    // type = 'HTML'   : BB-Code in HTML umgewandelt
+    // type = 'BBCODE' : Beschreibung mit BBCode-Tags
+    function getDescription($type = 'HTML')
     {
-        return parent::getValue('dat_description');
+        global $g_preferences;
+        $description = '';
+
+        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        {
+            if(is_object($this->bbCode) == false)
+            {
+                $this->bbCode = new ubbParser();
+            }
+
+            $description = $this->bbCode->parse($this->getValue('dat_description'));
+
+            if($type == 'PLAIN')
+            {
+                $description = strStripTags($description);
+            }
+        }
+        else
+        {
+            $description = nl2br($this->getValue('dat_description'));
+        }
+        return $description;
     }
 
     function getValue($field_name)
@@ -89,22 +115,7 @@ class TableDate extends TableAccess
             list($year, $month, $day, $hour, $minute, $second) = split('[- :]', $this->dbColumns['dat_end']);
             $value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) - 86400);
         }
-        elseif($field_name == 'dat_description')
-        {
-            // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-            if($g_preferences['enable_bbcode'] == 1)
-            {
-                if(is_object($this->bbCode) == false)
-                {
-                    $this->bbCode = new ubbParser();
-                }            
-                return $this->bbCode->parse(parent::getValue($field_name, $value));
-            }
-            else
-            {
-                return nl2br(parent::getValue($field_name, $value));
-            }        
-        }
+
         return parent::getValue($field_name, $value);
     }
     
@@ -144,7 +155,7 @@ class TableDate extends TableAccess
                 "BEGIN:VEVENT\n".
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->getValue('dat_headline'). "\n".
-                "DESCRIPTION:". str_replace("\r\n", '\n', strStripTags($this->getValue('dat_description'))). "\n".
+                "DESCRIPTION:". str_replace("\r\n", '\n', $this->getDescription('PLAIN')). "\n".
                 "DTSTAMP:". mysqldatetime('ymdThisZ', $this->getValue('dat_timestamp_create')). "\n".
                 "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)

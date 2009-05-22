@@ -188,7 +188,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="lnk_description" name="lnk_description" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $link->getDescriptionWithBBCode(). '</textarea>
+                        <textarea id="lnk_description" name="lnk_description" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $link->getValue('lnk_description'). '</textarea>
                     </dd>
                 </dl>
             </li>

@@ -122,7 +122,7 @@ while ($row = $g_db->fetch_array($result))
     }
 
     // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $date->getValue('dat_description'). 
+    $description = $description. '<br /><br />'. $date->getDescription('HTML'). 
                    '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
     //i-cal downloadlink
