@@ -79,7 +79,7 @@ class ConditionParser
         if(strlen($str_src) > 0 && strlen($field_name) > 0 && strlen($field_type) > 0)
         {
             $this->m_src     = $this->makeStandardSrc($str_src);
-            $this->m_str_arr = strsplit($this->m_src);
+            $this->m_str_arr = str_split($this->m_src);
     
             // Bedingungen fuer das Feld immer mit UND starten
             if($field_type == 'string')

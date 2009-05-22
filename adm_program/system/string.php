@@ -222,16 +222,4 @@ function isValidFileName($file_name, $check_ext = false)
     }
 }
 
-// wie die PHP-Funktion str_split, aber schon für PHP4
-
-function strsplit($string)
-{
-    for($i = 0; $i < strlen($string); $i++)
-    {
-        $new_arr[$i] = substr($string, $i, 1);
-    }
-
-    return $new_arr;
-}
-
 ?>
