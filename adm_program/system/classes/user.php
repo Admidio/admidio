@@ -169,8 +169,8 @@ class User extends TableUsers
                 // Homepage noch mit http vorbelegen
                 if($this->getProperty($field_name, 'usf_type') == 'URL')
                 {
-                    if(strpos(mb_strtolower($field_value), 'http://', 'UTF-8')  === false
-                    && strpos(mb_strtolower($field_value), 'https://', 'UTF-8') === false )
+                    if(strpos(admStrToLower($field_value), 'http://')  === false
+                    && strpos(admStrToLower($field_value), 'https://') === false )
                     {
                         $field_value = 'http://'. $field_value;
                     }

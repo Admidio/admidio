@@ -9,9 +9,38 @@
  *
  *****************************************************************************/
 
+ // da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
+ // stehen, wird hier eine Fallunterscheidung gemacht
+ // WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
+ function admStrToLower($string)
+ {
+    if(function_exists('mb_strtolower'))
+    {
+        return mb_strtolower($string, 'UTF-8');
+    }
+    else
+    {
+        return strtolower($string);
+    }
+ }
+ 
+ // da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
+ // stehen, wird hier eine Fallunterscheidung gemacht
+ // WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
+ function admStrToUpper($string)
+ {
+    if(function_exists('mb_strtolower'))
+    {
+        return mb_strtoupper($string, 'UTF-8');
+    }
+    else
+    {
+        return strtoupper($string);
+    }
+ }
+ 
 // entfernt Html-, PHP-Codes und Spaces am Anfang und Ende
 // eines Strings oder aller Elemente eines Arrays
-
 function strStripTags($srcString, $checkChar = 0)
 {
     if(is_array($srcString))

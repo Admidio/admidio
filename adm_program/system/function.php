@@ -381,7 +381,7 @@ function getBacktrace()
 function maxUploadSize()
 {
     $post_max_size = trim(ini_get('post_max_size'));
-    switch(strtolower(substr($post_max_size,strlen($post_max_size/1),1)))
+    switch(admStrToLower(substr($post_max_size,strlen($post_max_size/1),1)))
     {
 	    case 'g':
 	        $post_max_size *= 1024;
@@ -391,7 +391,7 @@ function maxUploadSize()
 	        $post_max_size *= 1024;
     }
     $upload_max_filesize = trim(ini_get('upload_max_filesize'));
-    switch(strtolower(substr($upload_max_filesize,strlen($upload_max_filesize/1),1)))
+    switch(admStrToLower(substr($upload_max_filesize,strlen($upload_max_filesize/1),1)))
     {
 	    case 'g':
 	        $upload_max_filesize *= 1024;
@@ -414,7 +414,7 @@ function maxUploadSize()
 function processableImageSize()
 {
 	$memory_limit = trim(ini_get('memory_limit'));
-	switch(strtolower(substr($memory_limit,strlen($memory_limit/1),1)))
+	switch(admStrToLower(substr($memory_limit,strlen($memory_limit/1),1)))
 	{
 	 case 'g':
 	     $memory_limit *= 1024;
