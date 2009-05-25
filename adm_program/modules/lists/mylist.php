@@ -107,7 +107,8 @@ elseif($req_lst_id > 0)
 $g_layout['title']  = 'Eigene Liste - Einstellungen';
 $g_layout['header'] = '
     <script type="text/javascript">
-        var fieldNumberIntern      = 0;
+        var listId             = '.$req_lst_id.';
+        var fieldNumberIntern  = 0;
         var arr_user_fields    = createUserFieldsArray();
         var arr_default_fields = createColumnsArray();
 
@@ -144,17 +145,22 @@ $g_layout['header'] = '
                     htmlCboFields += "<optgroup label=\"" + arr_user_fields[counter]["cat_name"] + "\">";
                     category = arr_user_fields[counter]["cat_name"];
                 }
-                var selected = \'\';
-                if((fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name"] == \'Nachname\')
-                || (fieldNumberIntern == 1 && arr_user_fields[counter]["usf_name"] == \'Vorname\'))
+
+                var selected = "";
+                // bei einer neuen Liste sind Vorname und Nachname in den ersten Spalten vorbelegt
+                if((  (fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name"] == "Nachname")
+                   || (fieldNumberIntern == 1 && arr_user_fields[counter]["usf_name"] == "Vorname"))
+                && listId == 0)
                 {
-                    selected = \' selected="selected" \';
+                    selected = " selected=\"selected\" ";
                 }
+
+                // bei gespeicherten Listen das entsprechende Profilfeld selektieren
                 if(arr_default_fields[fieldNumberIntern])
                 {
-                    if(arr_user_fields[counter]["usf_id"] == arr_default_fields[fieldNumberIntern][\'usf_id\'])
+                    if(arr_user_fields[counter]["usf_id"] == arr_default_fields[fieldNumberIntern]["usf_id"])
                     {
-                        selected = \' selected="selected" \';
+                        selected = " selected=\"selected\" ";
                     }
                 }
                 htmlCboFields += "<option value=\"" + arr_user_fields[counter]["usf_id"] + "\" " + selected + ">" + arr_user_fields[counter]["usf_name"] + "</option>"; 
@@ -163,23 +169,23 @@ $g_layout['header'] = '
             newCellField.innerHTML = htmlCboFields;
             
             // neue Spalte zur Einstellung der Sortierung
-            var selectAsc  = \'\';
-            var selectDesc = \'\';
+            var selectAsc  = "";
+            var selectDesc = "";
             
             if(arr_default_fields[fieldNumberIntern])
             {
-                if(arr_default_fields[fieldNumberIntern][\'sort\'] == "ASC")
+                if(arr_default_fields[fieldNumberIntern]["sort"] == "ASC")
                 {
-                    selectAsc = \' selected="selected" \';
+                    selectAsc = " selected=\"selected\" ";
                 }
-                if(arr_default_fields[fieldNumberIntern][\'sort\'] == "DESC")
+                if(arr_default_fields[fieldNumberIntern]["sort"] == "DESC")
                 {
-                    selectDesc = \' selected="selected" \';
+                    selectDesc = " selected=\"selected\" ";
                 }
             }
             else if(fieldNumberIntern == 0)
             {
-                selectAsc = \' selected="selected" \';
+                selectAsc = " selected=\"selected\" ";
             }
             
             var newCellOrder = newTableRow.insertCell(-1);
@@ -190,12 +196,12 @@ $g_layout['header'] = '
                 "</select>";
             
             // neue Spalte fuer Bedingungen
-            condition = \'\';
+            condition = "";
             if(arr_default_fields[fieldNumberIntern])
             {
-                if(arr_default_fields[fieldNumberIntern][\'condition\'])
+                if(arr_default_fields[fieldNumberIntern]["condition"])
                 {
-                    condition = arr_default_fields[fieldNumberIntern][\'condition\'];
+                    condition = arr_default_fields[fieldNumberIntern]["condition"];
                     condition = condition.replace(/{/g, "<");
                     condition = condition.replace(/}/g, ">");
                 }
@@ -285,9 +291,9 @@ $g_layout['header'] = '
                 {
                     $g_layout['header'] .= '
                     default_fields['. $act_field_count. '] = new Object();
-                    default_fields['. $act_field_count. '][\'usf_id\']    = \''. $form_values['column'. $act_field_count]. '\';
-                    default_fields['. $act_field_count. '][\'sort\']      = \''. $form_values['sort'. $act_field_count]. '\';
-                    default_fields['. $act_field_count. '][\'condition\'] = \''. $form_values['condition'. $act_field_count]. '\';';
+                    default_fields['. $act_field_count. ']["usf_id"]    = "'. $form_values['column'. $act_field_count]. '";
+                    default_fields['. $act_field_count. ']["sort"]      = "'. $form_values['sort'. $act_field_count]. '";
+                    default_fields['. $act_field_count. ']["condition"] = "'. $form_values['condition'. $act_field_count]. '";';
                     
                     $act_field_count++;
                 }
