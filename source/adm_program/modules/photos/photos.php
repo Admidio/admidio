@@ -235,7 +235,7 @@ if($g_current_user->editPhotoRight())
                 <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">
     	           <img src="'. THEME_PATH. '/icons/add.png" alt="Album anlegen" title="Album anlegen" /></a>
                 <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">Album anlegen</a>
-            <span>
+            </span>
     </li>';        
     if($pho_id > 0)
     {
@@ -354,7 +354,6 @@ echo '<div class="photoModuleContainer">';
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
                      echo '<li class="photoThumbnailColumn">';
-                     echo '<ul class="photoThumbnailElement">';
                     //Errechnug welches Bild ausgegeben wird
                     $bild = ($thumb_seite*$thumbs_per_page)-$thumbs_per_page+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
@@ -372,10 +371,10 @@ echo '<div class="photoModuleContainer">';
                         elseif($g_preferences['photo_show_mode']==1)
                         {
                             echo 
-                            '<li>
+                            '<div>
                                 <a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.$thickbox_height.'&amp;width='.$thickbox_width.'">
                                 	<img class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;thumb=true" alt="'.$bild.'" /></a>
-                            </li>';
+                            </div>';
                         }
 
                         //Gleichesfenster-Mode
@@ -387,7 +386,7 @@ echo '<div class="photoModuleContainer">';
                             </div>';
                         }   
                         
-                        //Buttons fuer moderatoren
+                        //Buttons fuer Moderatoren
                         if($g_current_user->editPhotoRight())
                         {
                             echo '
@@ -412,7 +411,7 @@ echo '<div class="photoModuleContainer">';
                         $zeile=$g_preferences['photo_thumbs_row'];
                         $spalte=$g_preferences['photo_thumbs_column'];
                     }
-                    echo '</ul></li>';
+                    echo '</li>';
                 }//for
                 echo '</ul></li>'; //Zeilenende
             }//for

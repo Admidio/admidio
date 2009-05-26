@@ -23,10 +23,6 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
 .photoThumbnailColumn{
     float: left;
-}
-
-/*Abständer der Thumbnails mit ihren Icons zu den anderen Elementen*/
-.photoThumbnailElement{
     padding: 5px;
     margin-top: 5px;
     margin-bottom: 5px;

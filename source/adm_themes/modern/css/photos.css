@@ -24,12 +24,8 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photoThumbnailColumn{
+.photoThumbnailColumn {
     float: left;
-}
-
-/*Abständer der Thumbnails mit ihren Icons zu den anderen Elementen*/
-.photoThumbnailElement{
     padding: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -39,14 +35,14 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photoThumbnailRow{
+.photoThumbnailRow {
     text-align: center;
     list-style-type: none;
     clear: left;
 }
 
 /*Einstellung fuer das Thumbnail selbst, z.B. laesst sich ein Rand um jedes Bild legen*/
-.photoThumbnail{
+.photoThumbnail {
     vertical-align: middle;
     cursor: pointer;
     border: 1px solid #dddddd; 
@@ -70,7 +66,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 	padding: 0px;
 }
 /*die sonstigen Angaben bilden die Definition*/
-.photoAlbumList dd{
+.photoAlbumList dd {
 	margin-left: 170px;
 	margin-bottom: 5px;
 	height: 110px;
