@@ -84,7 +84,7 @@ while ($row = $g_db->fetch_object($result))
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $announcement->getDescription('HTML').
-                   '<br /><br /><a href=\'$link\'>Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. ' '. $row->create_surname;
