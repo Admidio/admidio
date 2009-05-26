@@ -332,28 +332,29 @@ else
     $g_layout['title'] = 'Profil bearbeiten';
 }
 
-if($g_current_user->editUsers() || $new_user > 0)
-{
-    $focusField = 'usr_login_name';
-}
-elseif($g_current_user->getProperty('Nachname','usf_disabled') == 0)
-{
-    $focusField = 'usf-'. $g_current_user->getProperty('Nachname', 'usf_id');
-}
-else
-{
-    $focusField = 'usf-'. $g_current_user->getProperty('Adresse', 'usf_id');
-}
 $g_layout['header'] = '
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
-    <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />
+    <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
 
-    <script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
-            $("#'.$focusField.'").focus();
-	 	}); 
-	//--></script>';
+// setzt den Focus bei Neuanlagen/Registrierung auf das erste Feld im Dialog
+if($new_user == 1 || $new_user == 2)
+{
+    if($new_user == 1)
+    {
+        $focusField = 'usf-'.reset($g_current_user->userFieldData)->getValue('usf_id');
+    }
+    else
+    {
+        $focusField = 'usr_login_name';
+    }
+    $g_layout['header'] .= '
+        <script type="text/javascript"><!--
+            $(document).ready(function() 
+            {
+                $("#'.$focusField.'").focus();
+            }); 
+        //--></script>';
+}
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
