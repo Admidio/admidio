@@ -121,14 +121,15 @@ while ($row = $g_db->fetch_array($result))
             //Zu Sicherheit noch überwachen ob das Foto existiert, wenn ja raus damit
             if (file_exists($bildpfad))
             {
-                $description = $description. '
-                 <img src="$g_root_path/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal=100" border="0" />&nbsp;';
+                $description = $description. '<img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.
+                               $photo_album->getValue('pho_id').'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').
+                               '&amp;scal=100" border="0" />&nbsp;';
             }
         }
     }
 
     //Link zur Momepage
-    $description = $description. '<br /><br /><a href="$link">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+    $description = $description. '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
     // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname').
