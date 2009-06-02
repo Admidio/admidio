@@ -174,10 +174,10 @@ function isValidFileName($file_name, $check_ext = false)
     // If the filename was not empty
     if(strlen(trim($file_name)) > 0)
     {
-        // nur ungueltige Zeichen pruefen (gueltige Pruefung hat zu Problemen bei Sonderzeichen gefuehrt
-        $anz = strspn($file_name, "/\\!\"§$%&<>|");
+        // Dateiname darf nur folgende Zeichen beinhalten (ggf. ergaenzen)
+        $anz = strspn($file_name, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$&!?üäößéè.-_+ ');
 
-        if($anz == 0)
+        if($anz == strlen($file_name))
         {
             if(strlen($file_name) == strlen(strip_tags($file_name))
             && strpos($file_name, "..") === false
