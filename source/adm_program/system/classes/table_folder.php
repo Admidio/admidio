@@ -715,9 +715,19 @@ class TableFolder extends TableAccess
 
     }
 
+    function getValue($field_name)
+    {
+        $value = parent::getValue($field_name, $value);
+        
+        if($field_name == 'fol_name')
+        {
+            // Konvertiert besondere HTML-Auszeichnungen zurück in Buchstaben 
+            $value = htmlspecialchars_decode($value);
+        }
+        return $value;
+    }
 
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
+    // Methode, die Defaultdaten fur Insert und Update vorbelegt
     function save()
     {
         global $g_current_organization, $g_current_user;
