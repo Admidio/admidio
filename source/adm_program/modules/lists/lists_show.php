@@ -87,6 +87,7 @@ else
 {
     $role_ids = $_SESSION['role_ids'];
     $req_rol_id = $role_ids[0];
+    unset($_SESSION['role_ids']);
 }
 
 //Testen ob Recht zur Listeneinsicht besteht

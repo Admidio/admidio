@@ -104,8 +104,6 @@ class TableDate extends TableAccess
 
     function getValue($field_name)
     {
-        global $g_preferences;
-    
         // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
         $value = $this->dbColumns[$field_name];
 
