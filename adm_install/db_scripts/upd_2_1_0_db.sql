@@ -87,6 +87,7 @@ ALTER TABLE %PRAEFIX%_roles ADD COLUMN rol_inventory tinyint(1) unsigned NOT NUL
 ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USF;
 ALTER TABLE %PRAEFIX%_user_data DROP FOREIGN KEY %PRAEFIX%_FK_USD_USR ;
 
+drop table if exists %PRAEFIX%_user_data_old;
 RENAME TABLE %PRAEFIX%_user_data TO %PRAEFIX%_user_data_old;
 
 create table %PRAEFIX%_user_data

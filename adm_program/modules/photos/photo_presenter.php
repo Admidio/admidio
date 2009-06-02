@@ -62,44 +62,12 @@ $ordner_foto = '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$
 $ordner      = SERVER_PATH. $ordner_foto;
 $ordner_url  = $g_root_path. $ordner_foto;
 
-//Ermittlung der Original Bildgroesse
-$bildgroesse = getimagesize($ordner.'/'.$bild.'.jpg');
-
-//Entscheidung ueber scallierung
-//Hochformat Bilder
-if ($bildgroesse[0]<=$bildgroesse[1])
-{
-    $side='y';
-    if ($bildgroesse[1]>$g_preferences['photo_show_height'])
-    {
-        $scal=$g_preferences['photo_show_height'];
-    }
-    else
-    {
-        $scal=$bildgroesse[1];
-    }
-}
-
-//Querformat Bilder
-if ($bildgroesse[0]>$bildgroesse[1])
-{
-    $side='x';
-    if ($bildgroesse[0]>$g_preferences['photo_show_width'])
-    {
-        $scal=$g_preferences['photo_show_width'];
-    }
-    else
-    {
-        $scal=$bildgroesse[0];
-    }
-}
-
 //Naechstes und Letztes Bild
 $prev_image = $bild-1;
 $next_image = $bild+1;
 $url_prev_image = '#';
 $url_next_image = '#';
-$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$scal.'&amp;side='.$side;
+$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
 
 if($prev_image > 0)
 {

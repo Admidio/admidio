@@ -260,7 +260,7 @@ elseif($job=='upload')
     // Foto auf entsprechende Groesse anpassen
     $user_image = new Image($_FILES['foto_upload_file']['tmp_name']);
     $user_image->setImageType('jpeg');
-    $user_image->resize(130, 170);
+    $user_image->scale(130, 170);
     
     //Ordnerspeicherung
 	if($g_preferences['profile_photo_storage'] == 1)
