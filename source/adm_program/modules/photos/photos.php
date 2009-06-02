@@ -339,7 +339,7 @@ echo '<div class="photoModuleContainer">';
         		        echo '
         		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">Nächste</a>
         		        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
-        		            <img src="'. THEME_PATH. '/icons/forward.png" alt="N&auml;chste" />
+        		            <img src="'. THEME_PATH. '/icons/forward.png" alt="Nächste" />
         		        </a>';
         		    }
         		echo '</div>';
@@ -544,7 +544,7 @@ echo '<div class="photoModuleContainer">';
                     {
                         echo '
                         <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'">
-                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;pic_nr='.$shuffle_image['shuffle_img_nr'].'&amp;pho_begin='.$shuffle_image['shuffle_img_begin'].'&amp;scal='.$g_preferences['photo_preview_scale'].'&amp;side=y"
+                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;pic_nr='.$shuffle_image['shuffle_img_nr'].'&amp;pho_begin='.$shuffle_image['shuffle_img_begin'].'&amp;max_height='.$g_preferences['photo_preview_scale'].'&amp;max_width=160"
                             	class="imageFrame" alt="Zufallsfoto" />
                         </a>';
                     }

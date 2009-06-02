@@ -190,7 +190,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     		//Bildobjekt erzeugen und scaliert speichern
     	    $image = new Image($image_file);
             $image->setImageType('jpeg');
-            $image->scale($g_preferences['photo_save_scale']);
+            $image->scaleLargerSide($g_preferences['photo_save_scale']);
             $image->copyToFile(null, $ordner.'/'.$new_quantity.'.jpg');
             $image->delete();
             
@@ -203,7 +203,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     
             //Thumbnail speichern
             $image = new Image($image_file);
-            $image->scale($g_preferences['photo_thumbs_scale']);
+            $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
             $image->copyToFile(null, $ordner.'/thumbnails/'.$new_quantity.'.jpg');
             $image->delete(); 
       
@@ -230,7 +230,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 {
                 	 echo '
                 	  <img class="photoOutput" 
-                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&pic_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin').'&scal=300&side=x" 
+                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&pic_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin').'&max_width=300&max_height=200" 
                 	  alt="Foto '.$new_quantity.'" title="Foto '.$new_quantity.'">
                 	  <br />';
                 }

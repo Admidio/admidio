@@ -12,8 +12,8 @@
  * pho_id    : Id des Albums, aus dem das Bild kommen soll
  * pho_begin : Datum des Albums
  * pic_nr    : Nummer des Bildes, das angezeigt werden soll
- * scal      : Pixelanzahl auf die die Bildseite scaliert werden soll
- * side      : Seite des Bildes die skaliert werden soll (x oder y)
+ * max_width : maximale Breite auf die das Bild skaliert werden kann
+ * max_height: maximale Hoehe auf die das Bild skaliert werden kann
  * thumb	 : ist thumb == true wird ein Thumnail in der Größe der
  *				Voreinstellung zurückgegeben 
  *
@@ -38,8 +38,8 @@ elseif($g_preferences['enable_photo_module'] == 2)
 $pho_id    = NULL;
 $pho_begin = 0;
 $pic_nr    = NULL;
-$scal      = NULL;
-$side      = '';
+$max_width  = 0;
+$max_height = 0;
 $thumb 	   = false;
 $image     = NULL;
 
@@ -64,20 +64,16 @@ if(isset($_GET['pic_nr']))
     $pic_nr = $_GET['pic_nr'];
 } 
 
-// Bildskalierung
-if(isset($_GET['scal']))
+// max. Breite fuer Skalierung
+if(isset($_GET['max_width']) && is_numeric($_GET['max_width']))
 {
-    $scal = $_GET['scal'];
+    $max_width = $_GET['max_width'];
 }
 
-//Seite
-if(isset($_GET['side']))
+// max. Hoehe fuer Skalierung
+if(isset($_GET['max_height']) && is_numeric($_GET['max_height']))
 {
-    $_GET['side'] = admStrToLower($_GET['side']);
-    if($_GET['side'] ==  'x' || $_GET['side'] == 'y')
-    {
-        $side = $_GET['side'];
-    }
+    $max_height = $_GET['max_height'];
 }
 
 //Thumbnail
@@ -117,7 +113,7 @@ if($thumb)
 	if(!file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
 	{
 	    $image = new Image($picpath);
-	    $image->scale($g_preferences['photo_thumbs_scale']);
+	    $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
 	    $image->copyToFile(null, $ordner.'/thumbnails/'.$pic_nr.'.jpg');
 	}
 	else
@@ -134,28 +130,17 @@ else
 	}
 	// Bild einlesen und scalieren
 	$image = new Image($picpath);
-	//Neue Größe berechnen
-	if($side=='x')
-	{
-		$x_side = $scal;
-		$y_side = $scal*($image->imageWidth/$image->imageHeight);
-	}
-	elseif($side=='y')
-	{
-		$y_side = $scal;
-		$x_side = $scal*($image->imageWidth/$image->imageHeight);
-	}
-	$image->resize($x_side, $y_side);
+    $image->scale($max_width, $max_height);
 }
 
 if($image != NULL)
 {
 	// Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-	if (($scal>200) && $g_preferences['photo_image_text'] != '')
+	if (($max_width > 200) && $g_preferences['photo_image_text'] != '')
 	{
 	    $font_c = imagecolorallocate($image->imageResource,255,255,255);
 	    $font_ttf = THEME_SERVER_PATH.'/font.ttf';
-	    $font_s = $scal/40;
+	    $font_s = $max_width / 40;
 	    $font_x = $font_s;
 	    $font_y = $image->imageHeight-$font_s;
 	    $text = $g_preferences['photo_image_text'];

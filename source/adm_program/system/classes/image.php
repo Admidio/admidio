@@ -22,10 +22,10 @@
  * getMimeType()    - gibt den Mime-Type (image/png) des Bildes zurueck
  * rotate($direction = "right")
  *                  - dreht das Bild um 90° in eine Richtung ("left"/"right")
- * scale($new_max_size)
+ * scaleLargerSide($new_max_size)
  *                  - skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
- * resize($new_x_size, $new_y_size, $seitenveraehltnis_beibehalten = true, $enlarge = false)
- *                  - veraendert die Bildgroesse
+ * scale($photo_x_size, $photo_y_size, $aspect_ratio = true)
+ *                  - das Bild wird in einer vorgegebenen maximalen Laenge/Hoehe skaliert
  * delete()         - entfernt das Bild aus dem Speicher
  *
  *****************************************************************************/
@@ -218,7 +218,7 @@ class Image
     
     // Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
     // die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
-    function scale($new_max_size)
+    function scaleLargerSide($new_max_size)
     {
         // Errechnung Seitenverhaeltnis
         $seitenverhaeltnis = $this->imageWidth / $this->imageHeight;
@@ -235,49 +235,39 @@ class Image
             $photo_x_size = round($new_max_size * $seitenverhaeltnis);
             $photo_y_size = $new_max_size;
         }
-        $this->resize($photo_x_size, $photo_y_size, false);
+        $this->scale($photo_x_size, $photo_y_size, false);
     }
 
-    // Methode veraendert die Bildgroesse
+    // das Bild wird in einer vorgegebenen maximalen Laenge/Hoehe skaliert
     // new_x_size : Anzahl Pixel auf die die X-Seite veraendert werden soll
     // new_y_size : Anzahl Pixel auf die die Y-Seite veraendert werden soll
     // seitenverhaeltnis_beibehalten : das aktuelle Seitenverhaeltnis des Bildes wird belassen,
     //                                 dadurch kann eine Seite kleiner werden als die Angabe vorsieht
-    // enlarge    : das Bild wird ggf. vergroessert (Qualtitaetsverlust)
-    function resize($new_x_size, $new_y_size, $seitenveraehltnis_beibehalten = true, $enlarge = false)
+    function scale($photo_x_size, $photo_y_size, $aspect_ratio = true)
     {
-        // schauen, ob das Bild von der Groesse geaendert werden muss
-        if($this->imageWidth  > $new_x_size
-        || $this->imageHeight > $new_y_size
-        || $enlarge == true)
+        if($aspect_ratio == true)
+        {
+            if($photo_x_size < $this->imageWidth || $photo_y_size < $this->imageHeight)
+            {
+                if($this->imageWidth / $this->imageHeight > $photo_x_size / $photo_y_size)
+                {
+                    // auf max. Breite scalieren
+                    $new_width  = $photo_x_size;
+                    $new_height = round($photo_x_size / ($this->imageWidth / $this->imageHeight));
+                }
+                else
+                {
+                    // auf max. Hoehe scalieren
+                    $new_width  = round($photo_y_size * ($this->imageWidth / $this->imageHeight));
+                    $new_height = $photo_y_size;
+                }
+                $this->scale($new_width, $new_height, false);
+            }
+        }
+        else
         {
             //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
             @ini_set('memory_limit', '50M');
-
-            //Errechnung Seitenverhaeltnis
-            $seitenverhaeltnis = $this->imageWidth / $this->imageHeight;
-            
-            if($seitenveraehltnis_beibehalten == true)
-            {
-                //x-Seite soll scalliert werden
-                if(($this->imageWidth / $new_x_size) >= ($this->imageHeight / $new_y_size))
-                {
-                    $photo_x_size = $new_x_size;
-                    $photo_y_size = round($new_x_size / $seitenverhaeltnis);
-                }
-
-                //y-Seite soll scalliert werden
-                if(($this->imageWidth / $new_x_size) < ($this->imageHeight / $new_y_size))
-                {
-                    $photo_x_size = round($new_y_size * $seitenverhaeltnis);
-                    $photo_y_size = $new_y_size;
-                }
-            }
-            else
-            {
-                $photo_x_size = $new_x_size;
-                $photo_y_size = $new_y_size;
-            }
 
             // Erzeugung neues Bild
             $resized_user_photo = imagecreatetruecolor($photo_x_size, $photo_y_size);
@@ -292,7 +282,7 @@ class Image
             $this->imageHeight   = $photo_y_size;
         }
     }
-    
+
     // entfernt das Bild aus dem Speicher
     function delete()
     {
