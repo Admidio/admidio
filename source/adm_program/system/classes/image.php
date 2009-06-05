@@ -239,10 +239,10 @@ class Image
     }
 
     // das Bild wird in einer vorgegebenen maximalen Laenge/Hoehe skaliert
-    // new_x_size : Anzahl Pixel auf die die X-Seite veraendert werden soll
-    // new_y_size : Anzahl Pixel auf die die Y-Seite veraendert werden soll
-    // seitenverhaeltnis_beibehalten : das aktuelle Seitenverhaeltnis des Bildes wird belassen,
-    //                                 dadurch kann eine Seite kleiner werden als die Angabe vorsieht
+    // new_x_size   : Anzahl Pixel auf die die X-Seite maximal veraendert werden soll
+    // new_y_size   : Anzahl Pixel auf die die Y-Seite maximal veraendert werden soll
+    // aspect_ratio : das aktuelle Seitenverhaeltnis des Bildes wird belassen,
+    //                dadurch kann eine Seite kleiner werden als die Angabe vorsieht
     function scale($photo_x_size, $photo_y_size, $aspect_ratio = true)
     {
         if($aspect_ratio == true)
