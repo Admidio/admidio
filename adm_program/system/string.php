@@ -175,7 +175,7 @@ function isValidFileName($file_name, $check_ext = false)
     if(strlen(trim($file_name)) > 0)
     {
         // Dateiname darf nur folgende Zeichen beinhalten (ggf. ergaenzen)
-        $anz = strspn($file_name, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$&!?üäößéè.-_+ ');
+        $anz = strspn($file_name, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789äéèöüßÄÉÈÖÜ$&!?.-_+ ');
 
         if($anz == strlen($file_name))
         {
