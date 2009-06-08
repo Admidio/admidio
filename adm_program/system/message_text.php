@@ -137,7 +137,7 @@ $message_text = array(
     Dem Benutzer sind keine Rollen zugeordnet.',
     
 'no_default_role' =>
-    'In den Systemeinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt.
+    'In den Organisationseinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt.
     Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.',
 
 'no_cookie' =>
