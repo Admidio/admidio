@@ -65,21 +65,20 @@ echo '
     
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
     <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
+
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript"><!-- 
 		var gRootPath  = "'. $g_root_path. '"; 
-		var gThemePath = "'. THEME_PATH. '"; 
+		var gThemePath = "'. THEME_PATH. '";
+		$(document).ready(function(){
+			$("a,td,div.groupBoxHeadline,#page_header,#top_border_img_big,#bottom_border_img_big,#top_border_img_small,#bottom_border_img_small").supersleight({shim: gThemePath + "/icons/blank.gif"});
+		});
 	--></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
     
-    '. $g_layout['header']. '
-
-    <!--[if lt IE 7]>
-        <script type="text/javascript">if (typeof blankImg == \'undefined\') var blankImg = \''.$g_root_path.'/adm_program/libs/iepngfix/blank.gif\';</script>
-        <style type="text/css">img, div {behavior: url('.$g_root_path.'/adm_program/libs/iepngfix/iepngfix.php)}</style>
-    <![endif]-->';
+    '. $g_layout['header'];
 
     if($g_layout['includes'])
     {

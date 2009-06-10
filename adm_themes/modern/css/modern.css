@@ -107,7 +107,7 @@ h4 {
 
 /* spezieller Hack, damit der Block im IE6 auch richtig neben den anderem positioniert ist */
 html.* #right_block{ 
-    width: 268px;
+    width: 300px;
 }
 
 /* spezieller Hack, damit die Menuelinks im IE6 nicht so weit auseinander springen */
