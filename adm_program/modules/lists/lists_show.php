@@ -233,7 +233,8 @@ if($req_mode != 'csv')
 
                     if(sel_list.length > 1)
                     {
-                        self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&mode=" + sel_list;
+                        self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
+                            "lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&mode=" + sel_list + "&show_members='.$show_members.'";
                     }
                 }
             //--></script>';
