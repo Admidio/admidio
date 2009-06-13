@@ -25,7 +25,7 @@ if(isset($_GET['aid']) && isset($_GET['usr_id']) && is_numeric($_GET['usr_id']))
 {
     $user = new TableUsers($g_db, $_GET['usr_id']);
     
-    if($user->getValue('usr_activation_code') == $aid)
+    if($user->getValue('usr_activation_code') == $_GET['aid'])
     {
         // das neue Passwort aktivieren
         $user->setValue('usr_password', $user->getValue('usr_new_password'));
