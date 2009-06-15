@@ -341,7 +341,8 @@ if($new_user == 1 || $new_user == 2)
 {
     if($new_user == 1)
     {
-        $focusField = 'usf-'.reset($g_current_user->userFieldData)->getValue('usf_id');
+    	$first_field = reset($g_current_user->userFieldData);
+        $focusField = 'usf-'.$first_field->getValue('usf_id');
     }
     else
     {
