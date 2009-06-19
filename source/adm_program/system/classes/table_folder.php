@@ -721,8 +721,8 @@ class TableFolder extends TableAccess
         
         if($field_name == 'fol_name')
         {
-            // Konvertiert besondere HTML-Auszeichnungen zurück in Buchstaben 
-            $value = htmlspecialchars_decode($value);
+            // Konvertiert HTML-Auszeichnungen zurück in Buchstaben 
+            $value = html_entity_decode($value);
         }
         return $value;
     }
