@@ -150,14 +150,12 @@ $thickbox_width  = $g_preferences['photo_show_width'];
 // den kompletten Pfad für das Bild generiert
 $bild_server_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$photo_nr.'.jpg';
 
-// Wenn ein Bilderpfad generiert worden ist dann können die Proportionalen Größen berechnet werden
+// Wenn ein Bilderpfad generiert worden ist dann können die proportionalen Groessen berechnet werden
 if(isset($bild_server_path))
 {
     list($width, $height)   = getimagesize($bild_server_path);
     $propotional_size_card  = array();
-    $propotional_size_view  = array();
     $propotional_size_card  = getPropotionalSize($width, $height, $g_preferences['ecard_card_picture_width'], $g_preferences['ecard_card_picture_height']);
-    $propotional_size_view  = getPropotionalSize($width, $height, $g_preferences['ecard_view_width'], $g_preferences['ecard_view_height']);
 }
 
 // ruf die Funktion auf die alle Post und Get Variablen parsed
@@ -285,10 +283,10 @@ if (! empty($submit_action))
         $error_msg = $msg_error_2;
     }
 }
-// Wenn noch keine Anfrage zum versenden der Grußkarte vorhanden ist das Grußkarten Bild setzten
+// Wenn noch keine Anfrage zum versenden der Grusskarte vorhanden ist das Grusskarten Bild setzten
 else
 {
-    $ecard['image_name'] = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;scal='.$propotional_size_card['height'].'&amp;side=y';
+    $ecard['image_name'] = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;max_width='.$g_preferences['ecard_card_picture_width'].'&amp;max_height='.$g_preferences['ecard_card_picture_height'];
 }
 
 /*********************HTML_TEIL*******************************/
@@ -923,9 +921,8 @@ echo '
 if (empty($submit_action))
 {
     // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
-    echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$g_preferences['photo_show_width'].'&amp;side=x&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($thickbox_height+20).'&amp;width='.$thickbox_width.'"><img 
-            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;scal='.$propotional_size_view['height'].'&amp;side=y" 
-            width="'.$propotional_size_view['width'].'" height="'.$propotional_size_view['height'].'" 
+    echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($thickbox_height+20).'&amp;width='.$thickbox_width.'"><img 
+            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
             class="imageFrame" alt="Bild in voller Größe anzeigen"  title="Bild in voller Größe anzeigen" />
           </a>';
 
