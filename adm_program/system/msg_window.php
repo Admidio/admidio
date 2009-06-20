@@ -187,16 +187,15 @@ switch ($req_err_code)
               Es ist später nicht mehr möglich dieses einzusehen.';
         break;
 
-    case 'rolle_benutzer':
-        echo 'Rollen, die diese Option aktiviert haben, haben die Berechtigung
-              Benutzerdaten (außer Passwörter) und Rollenzugehörigkeiten
-              anderer Mitglieder zu bearbeiten.<br />
+    case 'rol_edit_user':
+        echo 'Rollen, die diese Option aktiviert haben, haben die Berechtigung alle
+              Benutzerdaten (außer Passwörter) anderer Mitglieder zu bearbeiten.<br />
               Außerdem haben sie Zugriff auf die Benutzerverwaltung und können
               dort neue Benutzer anlegen oder alte Benutzer löschen.';
         break;
 
     case 'role_mail_this_role':
-        echo 'Diese Einstellung steuert, wer das Recht hat über das Mailmodul Mails an diese Rolle zu schicken.
+        echo 'Diese Einstellung steuert, wer das Recht hat über das Mailmodul Emails an diese Rolle zu schicken.
 			  Das Rollenrecht <strong>Emails an alle Rollen schreiben</strong> steht allerdings noch
               über dieser Einstellung.';
         break;
@@ -208,12 +207,7 @@ switch ($req_err_code)
               über dieser Einstellung.';
         break;
 
-    case 'role_mail_logout':
-        echo 'Besucher der Homepage, die nicht eingeloggt sind, können E-Mails an diese Rolle
-              schreiben, die dann automatisch an alle Mitglieder weitergeleitet wird.';
-        break;
-
-    case 'rolle_zuordnen':
+    case 'rol_assign_roles':
         echo 'Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue
               Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.';
         break;

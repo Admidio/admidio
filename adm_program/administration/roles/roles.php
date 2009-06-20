@@ -14,18 +14,17 @@
  *
  *****************************************************************************/
 
- require("../../system/common.php");
- require("../../system/login_valid.php");
- require("../../system/classes/table_roles.php");
+ require('../../system/common.php');
+ require('../../system/login_valid.php');
+ require('../../system/classes/table_roles.php');
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
-if(isset($_GET['inactive'])
-&& $_GET['inactive'] == 1)
+if(isset($_GET['inactive']) && $_GET['inactive'] == 1)
 {
     $req_valid = 0;
 }
@@ -41,69 +40,68 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['roles_request']);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Rollenverwaltung";
+$g_layout['title']  = 'Rollenverwaltung';
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo "
-<h1 class=\"moduleHeadline\">Rollenverwaltung</h1>";
+echo '<h1 class="moduleHeadline">Rollenverwaltung</h1>';
 
 if($req_valid == true)
 {
-    $description_lnk = "Inaktive Rollen";
-    $description_lst = "Aktive Rollen";
-    $image       = "roles_gray.png";
+    $description_lnk = 'Inaktive Rollen';
+    $description_lst = 'Aktive Rollen';
+    $image           = 'roles_gray.png';
 }
 else
 {
-    $description_lnk = "Aktive Rollen";
-    $description_lst = "Inaktive Rollen";
-    $image       = "roles.png";
+    $description_lnk = 'Aktive Rollen';
+    $description_lst = 'Inaktive Rollen';
+    $image           = 'roles.png';
 }
 
-echo "
-<ul class=\"iconTextLinkList\">
+echo '
+<ul class="iconTextLinkList">
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\"><img
-            src=\"". THEME_PATH. "/icons/add.png\" alt=\"Rolle anlegen\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/roles/roles_new.php\">Rolle anlegen</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php"><img
+            src="'. THEME_PATH. '/icons/add.png" alt="Rolle anlegen" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">Rolle anlegen</a>
         </span>
     </li>
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\"><img
-            src=\"". THEME_PATH. "/icons/$image\" alt=\"$description_lnk\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/roles/roles.php?inactive=$req_valid\">$description_lnk</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$req_valid.'"><img
+            src="'. THEME_PATH. '/icons/'.$image.'" alt="'.$description_lnk.'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$req_valid.'">'.$description_lnk.'</a>
         </span>
     </li>
     <li>
-        <span class=\"iconTextLink\">
-            <a href=\"$g_root_path/adm_program/administration/categories/categories.php?type=ROL\"><img
-            src=\"". THEME_PATH. "/icons/application_double.png\" alt=\"Kategorien pflegen\" /></a>
-            <a href=\"$g_root_path/adm_program/administration/categories/categories.php?type=ROL\">Kategorien pflegen</a>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
+            src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">Kategorien pflegen</a>
         </span>
     </li>
 </ul>
 
-<table class=\"tableList\" cellspacing=\"0\">
+<table class="tableList" cellspacing="0">
     <thead>
         <tr>
-            <th>$description_lst</th>
+            <th>'.$description_lst.'</th>
             <th>Berechtigungen</th>
             <th>Einst.</th>
-            <th style=\"text-align: center;\">Funktionen</th>
+            <th style="text-align: center;">Funktionen</th>
         </tr>
-    </thead>";
-    $cat_id = "";
+    </thead>';
+    $cat_id = '';
 
     // alle Rollen gruppiert nach Kategorie auflisten
-    $sql    = "SELECT * FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                WHERE rol_valid  = $req_valid
+    $sql    = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                WHERE rol_valid  = '.$req_valid.'
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                ORDER BY cat_sequence ASC, rol_name ASC ";
+                  AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                ORDER BY cat_sequence ASC, rol_name ASC ';
     $rol_result = $g_db->query($sql);
 
     // Rollenobjekt anlegen
@@ -114,30 +112,30 @@ echo "
     	// Rollenobjekt mit Daten fuellen
     	$role->setArray($row);
 
-        if($cat_id != $role->getValue("cat_id"))
+        if($cat_id != $role->getValue('cat_id'))
         {
             if($cat_id > 0)
             {
-                echo "</tbody>";
+                echo '</tbody>';
             }
-            $image_hidden = "";
-            $block_id     = "cat_".$role->getValue("cat_id");
-            if($role->getValue("cat_hidden") == 1)
+            $image_hidden = '';
+            $block_id     = 'cat_'.$role->getValue('cat_id');
+            if($role->getValue('cat_hidden') == 1)
             {
-                $image_hidden = "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/user_key.png\"
-                                 alt=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" title=\"Nur sichtbar f&uuml;r eingeloggte Benutzer\" />";
+                $image_hidden = '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png"
+                                 alt="Nur sichtbar für eingeloggte Benutzer" title="Nur sichtbar für eingeloggte Benutzer" />';
             }
-            echo "<tbody>
+            echo '<tbody>
                 <tr>
-                    <td class=\"tableSubHeader\" colspan=\"4\">
-                        <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id')\"><img
-                        id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>".$role->getValue("cat_name")." $image_hidden
+                    <td class="tableSubHeader" colspan="4">
+                        <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\')"><img
+                        id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'.$role->getValue('cat_name').' '.$image_hidden.'
                     </td>
                 </tr>
             </tbody>
-            <tbody id=\"$block_id\">";
+            <tbody id="'.$block_id.'">';
 
-            $cat_id = $role->getValue("cat_id");
+            $cat_id = $role->getValue('cat_id');
         }
         echo "
         <tr class=\"tableMouseOver\">
@@ -156,7 +154,7 @@ echo "
                 if($role->getValue("rol_edit_user") == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
-                    alt=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" title=\"Profildaten und Rollenzuordnungen aller Benutzer bearbeiten\" />";
+                    alt=\"Profildaten aller Benutzer bearbeiten\" title=\"Profildaten aller Benutzer bearbeiten\" />";
                 }
    			    if($role->getValue("rol_mail_to_all") == 1)
                 {
@@ -257,29 +255,29 @@ echo "
                         src=\"". THEME_PATH. "/icons/roles.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\" /></a>";
                 }
 
-                if($role->getValue("rol_name") == "Webmaster")
+                if($role->getValue('rol_name') == 'Webmaster')
                 {
-                    echo "<a class=\"iconLink\"><img src=\"". THEME_PATH. "/icons/dummy.png\" alt=\"dummy\" /></a>";
+                    echo '<a class="iconLink"><img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" /></a>';
                 }
                 else
                 {
                     if($req_valid == true)
                     {
-                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=".$role->getValue("rol_id")."&amp;mode=1\"><img
-                            src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                        echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=1"><img
+                            src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
                     }
                     else
                     {
-                        echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=".$role->getValue("rol_id")."&amp;mode=6\"><img
-                            src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Rolle löschen\" title=\"Rolle löschen\" /></a>";
+                        echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=6"><img
+                            src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
                     }
                 }
-            echo "</td>
-        </tr>";
+            echo '</td>
+        </tr>';
     }
-echo "</tbody>
-</table>";
+echo '</tbody>
+</table>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

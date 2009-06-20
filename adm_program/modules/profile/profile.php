@@ -583,7 +583,7 @@ echo '
               if($user->checkRolesRight('rol_edit_user') == 1)
               {
                   echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/group.png"
-                  alt="Profildaten und Rollenzuordnungen aller Benutzer bearbeiten" title="Profildaten und Rollenzuordnungen aller Benutzer bearbeiten" />';
+                  alt="Profildaten aller Benutzer bearbeiten" title="Profildaten aller Benutzer bearbeiten" />';
               }
 
               if($user->checkRolesRight('rol_mail_to_all') == 1)
