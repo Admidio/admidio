@@ -47,6 +47,7 @@ if(!isset($g_db_type))
 require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/message_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 
  // Verbindung zu Datenbank herstellen
