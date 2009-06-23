@@ -255,7 +255,8 @@ class TableAccess
                             {
                                 // Daten fuer ein Insert aufbereiten
                                 $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' ';
-                                if(is_numeric($value))
+                                // unterscheiden zwischen Numerisch und Text
+                                if(strpos($this->columnsInfos[$key]['type'], 'int') !== false)
                                 {
                                     $sql_value_list = $sql_value_list. ' '.$item_connection.' '.$value.' ';
                                 }
@@ -276,8 +277,9 @@ class TableAccess
                             {
                                 $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = NULL ';
                             }
-                            elseif(is_numeric($value))
+                            elseif(strpos($this->columnsInfos[$key]['type'], 'int') !== false)
                             {
+                                // numerisch
                                 $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = '.$value.' ';
                             }
                             else
