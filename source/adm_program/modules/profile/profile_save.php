@@ -270,7 +270,6 @@ if($user->getValue('usr_id') == 0)
     {
         $user->setValue('usr_usr_id_create', $user->getValue('usr_id'));
     }
-}
 
 // Aenderungen speichern
 $ret_code = $user->save();
