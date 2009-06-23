@@ -414,6 +414,16 @@ function maxUploadSize()
 function processableImageSize()
 {
 	$memory_limit = trim(ini_get('memory_limit'));
+	//falls in php.ini nicht gesetzt
+	if($memory_limit=="")
+	{
+	   $memory_limit=="8M";
+	}
+	//falls in php.ini abgeschaltet
+	if($memory_limit==-1)
+	{
+	   $memory_limit=="128M";
+	}
 	switch(admStrToLower(substr($memory_limit,strlen($memory_limit/1),1)))
 	{
 	 case 'g':
