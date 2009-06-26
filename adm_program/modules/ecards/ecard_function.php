@@ -7,34 +7,12 @@
  * Module-Owner : Roland Eischer 
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *****************************************************************************/
- 
-/****************** includes *************************************************/
-require("../../system/classes/email.php");
-require("../../system/classes/ubb_parser.php");
-/****************** Funktionen fuer ecard_form ********************************/
- 
-// rechnet die propotionale Groeße eines Bildes aus
-// dh. wenn man ein Bild mit der max Aufloesung 600x400 haben will
-// uebergibt mann der Funktion die max_w und max_h und bekommt die propotionale Groeße zurueck
-function getPropotionalSize($src_w, $src_h, $max_w, $max_h)
-{
-    $return_val['width']=$src_w;
-    $return_val['height']=$src_h;
-    if($max_w < $src_w || $max_h < $src_h)
-    {
-        $return_val['width']=$max_w;
-        $return_val['height']=$max_h;
-        if($src_w >= $src_h)
-        { 
-            $return_val['height'] = round(($max_w*$src_h)/$src_w);
-        }
-        else 
-        {
-            $return_val['width']  = round(($max_h*$src_w)/$src_h);
-        }
-    }
-    return $return_val;
-}
+
+require('../../system/classes/email.php');
+require('../../system/classes/image.php');
+require('../../system/classes/ubb_parser.php');
+
+
 // gibt ein Menue fuer die Einstellungen des Template aus
 // Uebergabe: 
 //          $data_array         .. Daten fuer die Einstellungen in einem Array
@@ -95,11 +73,11 @@ function getColorSettings($data_array,$name_ecard_input,$anz,$first_value)
     {   
         if (!is_integer(($i+1)/$anz))
         {
-            echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
+            echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
         }
         else
         {
-            echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
+            echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
             if($i<count($data_array)-1)
             {
                 echo '</tr><tr>';
@@ -131,9 +109,9 @@ function getCCRecipients($ecard,$max_cc_recipients)
     $Versandliste = array();
     for($i=1;$i<=$max_cc_recipients;$i++)
     {
-        if(isset($ecard["name_ccrecipient_".$i.""]) != "" && isset($ecard["email_ccrecipient_".$i.""]) != "")
+        if(isset($ecard['name_ccrecipient_'.$i]) != '' && isset($ecard['email_ccrecipient_'.$i]) != '')
         {
-            array_push($Versandliste,array($ecard["name_ccrecipient_".$i.""],$ecard["email_ccrecipient_".$i.""]));
+            array_push($Versandliste,array($ecard['name_ccrecipient_'.$i],$ecard['email_ccrecipient_'.$i]));
         }
     }
     return $Versandliste;
@@ -145,7 +123,7 @@ function getCCRecipients($ecard,$max_cc_recipients)
 function getElementsFromFile($filepath)
 {
     $elementsFromFile = array();
-    $list = fopen($filepath, "r");
+    $list = fopen($filepath, 'r');
     while (!feof($list))
     {
         array_push($elementsFromFile,trim(fgets($list)));
@@ -197,7 +175,7 @@ function getVars()
 function getEcardTemplate($template_name,$tmpl_folder) 
 {
     $error = false;
-    $file_data = "";
+    $file_data = '';
     $fpread = @fopen($tmpl_folder.$template_name, 'r');
     if (!$fpread) 
     {
@@ -220,8 +198,6 @@ function getEcardTemplate($template_name,$tmpl_folder)
 //      $ecard_data         ..  geparste Information von dem Grußkarten Template
 //      $root_path          ..  der Pfad zu admidio Verzeichnis
 //      $usr_id             ..  die User id
-//      $proportional_width ..  die proportionale Breite des Bildes fuer das Template
-//      $propotional_height ..  die proportionale Hoehe des Bildes fuer das Template
 //      $empfaenger_name    ..  der Name des Empfaengers
 //      $empfaenger_email   ..  die Email des Empfaengers
 //
@@ -235,59 +211,55 @@ function getEcardTemplate($template_name,$tmpl_folder)
 //      Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
 //      Nachricht:              <%ecard_message%>
 */
-function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_width,$propotional_height,$empfaenger_name,$empfaenger_email,$bbcode_enable) 
+function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$empfaenger_name,$empfaenger_email,$bbcode_enable) 
 {   
     // Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
-    if(strip_tags(trim($empfaenger_name)) == "")
+    if(strip_tags(trim($empfaenger_name)) == '')
     {
-      $empfaenger_name  = "< Empf&auml;nger Name >";
+      $empfaenger_name  = '< Empf&auml;nger Name >';
     }
     // Falls die Email des Empfaenger nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-    if(strip_tags(trim($empfaenger_email)) == "")
+    if(strip_tags(trim($empfaenger_email)) == '')
     {
-      $empfaenger_email = "< Empf&auml;nger E-Mail >";
+      $empfaenger_email = '< Empf&auml;nger E-Mail >';
     }
     // Falls die Nachricht nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-    if(trim($ecard["message"]) == "")
+    if(trim($ecard['message']) == '')
     {
-      $ecard["message"]         = "< Deine Nachricht >";
+      $ecard['message']         = '< Deine Nachricht >';
     }
     // Hier wird der Pfad zum Admidio Verzeichnis ersetzt
-    $ecard_data = preg_replace ("/<%g_root_path%>/",            $root_path, $ecard_data);
+    $ecard_data = preg_replace ('/<%g_root_path%>/',            $root_path, $ecard_data);
     // Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
-    $ecard_data = preg_replace ("/<%theme_root_path%>/",        THEME_PATH, $ecard_data);
+    $ecard_data = preg_replace ('/<%theme_root_path%>/',        THEME_PATH, $ecard_data);
     // Hier wird die Style Eigenschaften ersetzt
-    $ecard_data = preg_replace ("/<%ecard_font%>/",             $ecard["schriftart_name"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_font_size%>/",        $ecard["schrift_size"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_font_color%>/",       $ecard["schrift_farbe"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_font_bold%>/",        $ecard["schrift_style_bold"], $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_font_italic%>/",      $ecard["schrift_style_italic"], $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_font%>/',             $ecard['schriftart_name'], $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_font_size%>/',        $ecard['schrift_size'], $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_font_color%>/',       $ecard['schrift_farbe'], $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_font_bold%>/',        $ecard['schrift_style_bold'], $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_font_italic%>/',      $ecard['schrift_style_italic'], $ecard_data);
     // Hier wird der Sender Name, Email und Id ersetzt
-    $ecard_data = preg_replace ("/<%ecard_sender_id%>/",        $usr_id, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_sender_email%>/",     utf8_decode($ecard["email_sender"]), $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_sender_name%>/",      utf8_decode($ecard["name_sender"]), $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_sender_id%>/',        $usr_id, $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_sender_email%>/',     utf8_decode($ecard['email_sender']), $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_sender_name%>/',      htmlentities(utf8_decode($ecard['name_sender'])), $ecard_data);
     // Hier wird der Empfaenger Name und Email ersetzt
-    $ecard_data = preg_replace ("/<%ecard_reciepient_email%>/", utf8_decode($empfaenger_email), $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_reciepient_name%>/",  utf8_decode($empfaenger_name), $ecard_data);
-    // Hier wird die Bild Breite, Hoehe und Name ersetzt
-    $ecard_data = preg_replace ("/<%ecard_image_width%>/",      $propotional_width, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_image_height%>/",     $propotional_height, $ecard_data);
-    $ecard_data = preg_replace ("/<%ecard_image_name%>/",       $ecard["image_name"], $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_reciepient_email%>/', utf8_decode($empfaenger_email), $ecard_data);
+    $ecard_data = preg_replace ('/<%ecard_reciepient_name%>/',  htmlentities(utf8_decode($empfaenger_name)), $ecard_data);
+    // Hier wird der Bildname ersetzt
+    $ecard_data = preg_replace ('/<%ecard_image_name%>/',       $ecard['image_name'], $ecard_data);
 
     // Hier wird die Nachricht ersetzt
     if ($bbcode_enable)
     {
         $bbcode = new ubbParser();
-        $ecard_data = preg_replace ("/<%ecard_message%>/",  preg_replace ("/\r?\n/", "\n", $bbcode->parse($ecard["message"])), $ecard_data);
+        // BBCode wird geparsed, Zeilenumbrueche werden mit XBRX kodiert, um nach der htmlentities wieder zu Zeilenumbruechen decodiert zu werden
+        $ecard_data = preg_replace ('/<%ecard_message%>/',  preg_replace('/XBRX/','<br />',htmlentities(utf8_decode(preg_replace ("/\r?\n/", "\n", preg_replace('/<br \/\>/','XBRX',$bbcode->parse($ecard['message'])))))), $ecard_data);
     }
     else
     {
-        $ecard_data = preg_replace ("/<%ecard_message%>/",  preg_replace ("/\r?\n/", "\n", htmlspecialchars($ecard["message"])), $ecard_data);
+        $ecard_data = preg_replace ('/<%ecard_message%>/',  nl2br(htmlentities(utf8_decode(preg_replace ("/\r?\n/", "\n", $ecard['message'])))), $ecard_data);
     }
-    // Hier werden die Umlaute ersetzt
-    $ecard_data = preg_replace ("/ü\ö\ä\Ü\Ö\Ä\ß/","/&uuml;\&ouml;\&auml;\&Uuml;\&Ouml;\&Auml;\&szlig;/", $ecard_data);
-    // Die fertig geparsten Daten werden jetzt nurnoch als Return Wert zurueckgeliefert
-    return stripslashes($ecard_data);
+    return $ecard_data;
 }
 // Diese Funktion ruft die Mail Klasse auf und uebergibt ihr die zu sendenden Daten
 // Uebergabe:
@@ -297,10 +269,13 @@ function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$propotional_w
 //      $sender_email       .. die Email des Senders
 //      $empfaenger_name    .. der Name des Empfaengers
 //      $empfaenger_email   .. die Email des Empfaengers
-function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger, $photo_server_path = "") 
+function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger, $photo_server_path) 
 {
+    global $g_preferences;
+    $img_photo_path = '';
+
     $email = new Email();
-    $email->setSender($ecard["email_sender"],$ecard["name_sender"]);
+    $email->setSender($ecard['email_sender'],$ecard['name_sender']);
     $email->setSubject('Nachricht erhalten');
     $email->addRecipient($empfaenger_email,$empfaenger_name);
     for($i=0;$i<count($cc_empfaenger);$i++)
@@ -318,33 +293,47 @@ function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$c
             // anstelle der URL muss nun noch der Server-Pfad gesetzt werden
             $img_server_path = str_replace(THEME_PATH, THEME_SERVER_PATH, $matchArray[2][$i]);
             $img_server_path = str_replace($GLOBALS['g_root_path'], SERVER_PATH, $img_server_path);
+
             // wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
-            if(strpos($img_server_path, "photo_show.php") !== false && strlen($photo_server_path) > 0)
+            if(strpos($img_server_path, 'photo_show.php') !== false)
             {
                 $img_server_path = $photo_server_path;
             }
 
             // Bildnamen und Typ ermitteln
-            $img_name = substr(strrchr($img_server_path, "/"), 1);
-            $img_type = substr(strrchr($img_name, "."), 1);
-            if(strpos($matchArray[2][$i], "photo_show.php") !== false)
+            $img_name = substr(strrchr($img_server_path, '/'), 1);
+            $img_type = substr(strrchr($img_name, '.'), 1);
+
+            // das zu versendende eigentliche Bild, muss noch auf das entsprechende Format angepasst werden
+            if(strpos($matchArray[2][$i], 'photo_show.php') !== false)
             {
-                $img_name = "picture.". $img_type;
+                $img_name = 'picture.'. $img_type;
+                $img_name_intern = substr(md5(uniqid($img_name.time())), 0, 8). '.'. $img_type;
+                $img_server_path = SERVER_PATH. '/adm_my_files/photos/'. $img_name_intern;
+                $img_photo_path  = $img_server_path;
+            
+                $image_sized = new Image($photo_server_path);
+                $image_sized->scale($g_preferences['ecard_card_picture_width'],$g_preferences['ecard_card_picture_height']);
+                $image_sized->copyToFile(null, $img_server_path);
             }
 
             // Bild als Anhang an die Mail haengen
-            if($img_name != "none.jpg" && strlen($img_name) > 0)
+            if($img_name != 'none.jpg' && strlen($img_name) > 0)
             {
                 $uid = md5(uniqid($img_name.time()));
-                $email->addAttachment($img_server_path, $img_name, "image/".$img_type."", "inline", $uid);
-                $ecard_html_data = str_replace($matchArray[2][$i],"cid:".$uid,$ecard_html_data);
+                $email->addAttachment($img_server_path, $img_name, 'image/'.$img_type.'', 'inline', $uid);
+                $ecard_html_data = str_replace($matchArray[2][$i],'cid:'.$uid,$ecard_html_data);
             }
         }
     }
     
     $email->setText($ecard_html_data);
     $email->setDataAsHtml();
-    return $email->sendEmail();
+    $return_code = $email->sendEmail();
+
+    // nun noch das von der Groesse angepasste Bild loeschen
+    unlink($img_photo_path);
+    return $return_code;
 }
 // Diese Funktion eleminiert in einem einfachen Array doppelte Einträge
 // Uebergabe

@@ -22,7 +22,7 @@
     </div>
     <hr style="border: 1px solid black; width: 80%;">
     <div align="center">
-        <img src="<%ecard_image_name%>" width="<%ecard_image_width%>" height="<%ecard_image_height%>" style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" alt="Gru&szlig;karte">
+        <img src="<%ecard_image_name%>" style="border: 1px solid rgb(221, 221, 221); padding: 4px; margin: 10pt 10px 10px 10pt;" alt="Gru&szlig;karte">
     </div>
     <hr style="border: 1px solid black; width: 80%;">
     <div align="center" style="margin-top:20px;">
