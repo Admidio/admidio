@@ -139,24 +139,9 @@ if (isset($_GET['usr_id']))
     $user_name  = $user->getValue('Vorname').' '.$user->getValue('Nachname');
 }
 
-$popup_height = $g_preferences['photo_show_height']+210;
-$popup_width  = $g_preferences['photo_show_width']+70;
-
-//Thickboxgröße
-$thickbox_height = $g_preferences['photo_show_height']+17;
-$thickbox_width  = $g_preferences['photo_show_width'];
-
 // Wenn der übergebene Bildernamen und die daszugehörige Photogallerie Id
 // den kompletten Pfad für das Bild generiert
 $bild_server_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$photo_nr.'.jpg';
-
-// Wenn ein Bilderpfad generiert worden ist dann können die proportionalen Groessen berechnet werden
-if(isset($bild_server_path))
-{
-    list($width, $height)   = getimagesize($bild_server_path);
-    $propotional_size_card  = array();
-    $propotional_size_card  = getPropotionalSize($width, $height, $g_preferences['ecard_card_picture_width'], $g_preferences['ecard_card_picture_height']);
-}
 
 // ruf die Funktion auf die alle Post und Get Variablen parsed
 getVars();
@@ -190,7 +175,7 @@ if (! empty($submit_action))
             {
                 array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
                 $email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue('usr_id'),$propotional_size_card['width'],$propotional_size_card['height'],$ecard['name_recipient'],$ecard['email_recipient'],$g_preferences['enable_bbcode']);
+                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue('usr_id'),$ecard['name_recipient'],$ecard['email_recipient'],$g_preferences['enable_bbcode']);
                 $result = sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $bild_server_path);
                 // Wenn die Grußkarte erfolgreich gesendet wurde
                 if ($result)
@@ -249,7 +234,7 @@ if (! empty($submit_action))
                     $i++;
                 }
                 $email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$propotional_size_card['width'],$propotional_size_card['height'],$firstvalue_name,$firstvalue_email,$g_preferences['enable_bbcode']);
+                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$firstvalue_name,$firstvalue_email,$g_preferences['enable_bbcode']);
                 $b=0;
                 foreach($email_versand_liste as $item)
                 {                       
@@ -474,16 +459,16 @@ $javascript = '
         }
         function makePreview()
         {
-            document.getElementById(ecardformid).action = "ecard_preview.php?width='.$propotional_size_card['width'].'&height='.$propotional_size_card['height'].'";
-            popup_win(\'\',\'ecard_preview\',\'resizable=yes,scrollbars=yes,width=1024,height=1024\');
+            document.getElementById(ecardformid).action = "ecard_preview.php";
+            popup_win("","ecard_preview","resizable=yes,scrollbars=yes,width=1024,height=1024");
             document.getElementById(ecardformid).target = "ecard_preview";
             document.getElementById(ecardformid).submit();
         }
 		function tb_sendform(f,c)
 		{
  			f.action.match(/(\bkeepThis=(true|false)&TB_iframe=true.+$)/);
-  			tb_show(c, \'about:blank?\'+RegExp.$1);
- 			f.target=$(\'#TB_iframeContent\').attr(\'name\')
+  			tb_show(c, "about:blank?" + RegExp.$1);
+ 			f.target=$("#TB_iframeContent").attr("name")
   			return true;
 		}
 		function calculateWidthHeightForThickBox()
@@ -519,7 +504,7 @@ $javascript = '
 		function makeThickBoxPreview()
 		{
 			tb_widthheight = calculateWidthHeightForThickBox();
-			document.getElementById("ecard_form").action = "ecard_preview.php?keepThis=true&TB_iframe=true&width="+tb_widthheight[1].toFixed(0)+"&heigth="+tb_widthheight[0].toFixed(0)+"&pwidth='.$propotional_size_card['width'].'&pheight='.$propotional_size_card['height'].'";
+			document.getElementById("ecard_form").action = "ecard_preview.php?keepThis=true&TB_iframe=true&width="+tb_widthheight[1].toFixed(0)+"&heigth="+tb_widthheight[0].toFixed(0);
 		}
         function blendout(id)
         {
@@ -921,7 +906,7 @@ echo '
 if (empty($submit_action))
 {
     // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
-    echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($thickbox_height+20).'&amp;width='.$thickbox_width.'"><img 
+    echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($g_preferences['photo_show_height']+37).'&amp;width='.$g_preferences['photo_show_width'].'"><img 
             src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
             class="imageFrame" alt="Bild in voller Größe anzeigen"  title="Bild in voller Größe anzeigen" />
           </a>';
