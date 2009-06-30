@@ -17,27 +17,6 @@
 require_once('common.php');
 require_once('login_valid.php');
 
-// Funktion zur Erreichbarkeitsprüfung der Updatedatei
-function domainAvailable($strDomain)
-{
-	$rCurlHandle = curl_init($strDomain);
-
-	curl_setopt($rCurlHandle, CURLOPT_CONNECTTIMEOUT, 10);
-	curl_setopt($rCurlHandle, CURLOPT_HEADER, TRUE);
-	curl_setopt($rCurlHandle, CURLOPT_NOBODY, TRUE);
-	curl_setopt($rCurlHandle, CURLOPT_RETURNTRANSFER, TRUE);
-
-	$strResponse = curl_exec($rCurlHandle);
-
-	curl_close ($rCurlHandle);
-
-	if (!$strResponse )
-	{
-	  return 0;
-	}
-	return 1;
-}
-
 // Funktion zur Ermittlung der Update-Version
 function GetUpdateVersion($update_info, $search)
 {
@@ -110,20 +89,13 @@ else
 // verfügbare Admidio Versionen vom Server einlesen (Textfile)
 // Zunächst die Methode selektieren (CURL bevorzugt)
 $available = 0;
-if(function_exists(curl_init))
+if(@file_get_contents('http://www.admidio.org/update.txt') == false)
 {
-	$available = domainAvailable('http://www.admidio.org/update.txt');
+	$available = 0;
 }
 else
 {
-	if(@file_get_contents('http://www.admidio.org/update.txt') == true)
-	{
-		$available = 1;
-	}
-	else
-	{
-		$available = 0;
-	}
+	$available = 1;
 }
 
 if($available == 0)
@@ -192,7 +164,8 @@ if($show == 2)
 	}	
 	else if($version_update == 99)
 	{
-		$versionstext = 'Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal.';
+		$versionstext = 'Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. 
+						Alternativ kannst Du auch manuell auf der <a href="http://www.admidio.org/index.php?page=download"" target="_blank">Admidio Updateseite</a> prüfen ob ein Update vorliegt.';
 	}	
 	else
 	{
