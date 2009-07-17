@@ -7,7 +7,7 @@
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Uebergaben: 
  *
  * mode     = 1 : (Default) Statuspruefung und Anzeige, ob ein Update notwendig ist
  *            2 : Update durchfuehren
@@ -134,11 +134,11 @@ elseif($req_mode == 2)
     else
     {
         $old_version = $g_preferences['db_version'];
-    }
+    } 
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
-    @set_time_limit(120);
+    @set_time_limit(300);
 
     // vor dem Update die Versionsnummer umsetzen, damit keiner mehr was machen kann
     $temp_version = substr(ADMIDIO_VERSION, 0, 4). 'u';

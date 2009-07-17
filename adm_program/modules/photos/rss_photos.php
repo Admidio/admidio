@@ -123,7 +123,7 @@ while ($row = $g_db->fetch_array($result))
             {
                 $description = $description. '<img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.
                                $photo_album->getValue('pho_id').'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').
-                               '&amp;max_width=150&amp;max_height=100" border="0" />&nbsp;';
+                               '&amp;thumb=true" border="0" />&nbsp;';
             }
         }
     }
