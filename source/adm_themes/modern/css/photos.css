@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
  * Cascading-Style-Sheets-Datei um das Aussehen des Fotomoduls weiter anzupassen
  *
  * Copyright    : (c) 2004 - 2009 The Admidio Team
@@ -31,7 +31,6 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
     margin-bottom: 5px;
     margin-right: 0px;
     margin-left: 0px;
-    width: 120px;
 }
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
@@ -67,14 +66,12 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 /*die sonstigen Angaben bilden die Definition*/
 .photoAlbumList dd {
-	margin-left: 170px;
 	margin-bottom: 5px;
-	height: 110px;
-	padding: 0px;
+	padding-left: 40px;
 }
 
 /*die Definition ist selbst wieder eine List*/
-.photoAlbumList ul{
+.photoAlbumList ul {
 	padding: 0px;
 	list-style-type: none;
 }

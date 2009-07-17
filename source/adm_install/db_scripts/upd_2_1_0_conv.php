@@ -9,7 +9,7 @@
  *
  *****************************************************************************/
 
-require_once('systemmails_texts.php');
+require_once('systemmails_texts.php'); 
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 
@@ -145,7 +145,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
 
     // Beta-Flag für Datenbank-Versionsnummer schreiben
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-            VALUES ("'.$row_orga['org_id'].'", "db_version_beta", "1") ';
+            VALUES ('.$row_orga['org_id'].', "db_version_beta", "1") ';
     $g_db->query($sql);
 }
 
@@ -237,7 +237,6 @@ while($row_orga = $g_db->fetch_array($result_orga))
 				SET prf_value = '© ".$row_orga['org_homepage']."'
        			WHERE prf_org_id = ". $row_orga['org_id']. "
                	AND prf_name   = 'photo_image_text' ";
-		$g_db->query($sql);
 	}
 	//wenn nicht
 	else

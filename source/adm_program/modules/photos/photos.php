@@ -537,19 +537,19 @@ echo '<div class="photoModuleContainer">';
 
             //Ausgabe
             echo '
-            <li id="pho_'.$sub_photo_album->getValue('pho_id').'">
+            <li id="pho_'.$sub_photo_album->getValue('pho_id').'" style="height: '.($g_preferences['photo_thumbs_scale']+10).'px;">
             <dl>
                 <dt>';
                     if(file_exists($ordner))
                     {
                         echo '
                         <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'">
-                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;pic_nr='.$shuffle_image['shuffle_img_nr'].'&amp;pho_begin='.$shuffle_image['shuffle_img_begin'].'&amp;max_height='.$g_preferences['photo_preview_scale'].'&amp;max_width=160"
+                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;pic_nr='.$shuffle_image['shuffle_img_nr'].'&amp;pho_begin='.$shuffle_image['shuffle_img_begin'].'&amp;thumb=true"
                             	class="imageFrame" alt="Zufallsfoto" />
                         </a>';
                     }
                 echo '</dt>
-                <dd>
+                <dd style="margin-left: '.($g_preferences['photo_thumbs_scale']).'px;">
     				<ul>
                         <li>';
                         if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($sub_photo_album->getValue('pho_locked')==1 && file_exists($ordner)))

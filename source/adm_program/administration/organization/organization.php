@@ -800,17 +800,6 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_preview_scale\">Höhe der Vorschaufotos:</label></dt>
-                            <dd>
-                                <input type=\"text\" id=\"photo_preview_scale\" name=\"photo_preview_scale\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_preview_scale']. "\" /> Pixel
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Angabe der Höhe des jeweiligen Vorschaubildes in der Albenübersicht festgelegt. (Standard: 100 Pixel)
-                    </li>
-                    <li>
-                        <dl>
                             <dt><label for=\"photo_show_width\">Max. Bildanzeigegröße (Breite x Höhe):</label></dt>
                             <dd>
                                 <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x

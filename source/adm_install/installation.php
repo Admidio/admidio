@@ -433,7 +433,7 @@ elseif($req_mode == 7)
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
-    @set_time_limit(120);
+    @set_time_limit(300);
 
      // Verbindung zu Datenbank herstellen
     $db = new MySqlDB();
