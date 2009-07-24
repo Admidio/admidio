@@ -45,12 +45,12 @@ class TableGuestbookComment extends TableAccess
     }
 
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($gbc_id)
+    function readData($gbc_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        $tables    = TBL_GUESTBOOK;
-        $condition = '       gbc_gbo_id = gbo_id 
-                         AND gbc_id     = '.$gbc_id;
-        parent::readData($gbc_id, $condition, $tables);
+        $sql_additional_tables .= TBL_GUESTBOOK;
+        $sql_where_condition   .= '    gbc_gbo_id = gbo_id 
+                                   AND gbc_id     = '.$gbc_id;
+        parent::readData($gbc_id, $sql_where_condition, $sql_additional_tables);
     }
     
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor

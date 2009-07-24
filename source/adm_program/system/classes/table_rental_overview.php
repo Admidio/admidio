@@ -34,12 +34,11 @@ class TableRentalOverview extends TableAccess
     }
 
     // Leihvorgang mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($rnt_id)
+    function readData($rnt_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        $tables    = TBL_INVENTORY;
-        $condition = "       rnt_inv_id = inv_id
-                         AND rnt_id     = $rnt_id ";
-        parent::readData($rnt_id, $condition, $tables);
+        $sql_additional_tables .= TBL_INVENTORY;
+        $sql_where_condition   .= ' rnt_inv_id = inv_id ';
+        parent::readData($rnt_id, $sql_where_condition, $sql_additional_tables);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

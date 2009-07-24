@@ -47,13 +47,13 @@ class TableFolder extends TableAccess
 
 
     // Folder mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($folder_id)
+    function readData($folder_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
 
-        $condition = '     fol_id     = '.$folder_id.'
-                       AND fol_org_id = '. $g_current_organization->getValue('org_id');
-        parent::readData($folder_id, $condition);
+        $sql_where_condition = '    fol_id     = '.$folder_id.'
+                                AND fol_org_id = '. $g_current_organization->getValue('org_id');
+        parent::readData($folder_id, $sql_where_condition, $sql_additional_tables);
     }
 
 

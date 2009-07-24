@@ -48,24 +48,24 @@ class TableRoles extends TableAccess
     }
 
     // Rolle mit der uebergebenen ID oder dem Rollennamen aus der Datenbank auslesen
-    function readData($role)
+    function readData($role, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
 
         if(is_numeric($role))
         {
-            $condition = ' rol_id = '.$role;
+            $sql_where_condition .= ' rol_id = '.$role;
         }
         else
         {
             $role = addslashes($role);
-            $condition = ' rol_name LIKE "'.$role.'" ';
+            $sql_where_condition .= ' rol_name LIKE "'.$role.'" ';
         }
 
-        $tables    = TBL_CATEGORIES;
-        $condition = $condition. ' AND rol_cat_id = cat_id
-                                   AND cat_org_id = '. $g_current_organization->getValue('org_id');
-        parent::readData($role, $condition, $tables);
+        $sql_additional_tables .= TBL_CATEGORIES;
+        $sql_where_condition   .= ' AND rol_cat_id = cat_id
+                                    AND cat_org_id = '. $g_current_organization->getValue('org_id');
+        parent::readData($role, $sql_where_condition, $sql_additional_tables);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

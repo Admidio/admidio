@@ -12,7 +12,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableInventory extends TableAccess
 {
@@ -21,7 +21,7 @@ class TableInventory extends TableAccess
     {
         $this->db            =& $db;
         $this->table_name     = TBL_INVENTORY;
-        $this->column_praefix = "inv";
+        $this->column_praefix = 'inv';
 
         if($inv_id > 0)
         {
@@ -35,18 +35,17 @@ class TableInventory extends TableAccess
 
 
     //Liest den Eintrag zu einer uebergebenen inv_id aus der DB
-	function readData($inv_id)
+	function readData($inv_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
 		global $g_current_organization, $g_current_user, $g_valid_login;
 
         if(is_numeric($inv_id))
         {
-            $tables    = TBL_CATEGORIES. ", ". TBL_ROLES;
-            $condition = "       inv_cat_id = cat_id
-                             AND inv_id     = $inv_id
-                             AND inv_rol_id = rol_id
-                             AND cat_org_id = ". $g_current_organization->getValue("org_id");
-            parent::readData($inv_id, $condition, $tables);
+            $sql_additional_tables .= TBL_CATEGORIES. ", ". TBL_ROLES;
+            $sql_where_condition   .= '    inv_cat_id = cat_id
+                                       AND inv_rol_id = rol_id
+                                       AND cat_org_id = '. $g_current_organization->getValue('org_id');
+            parent::readData($inv_id, $sql_where_condition, $sql_additional_tables);
         }
 
         //pruefen ob das Inventarobjekt ueberhaupt ausgelesen werden darf

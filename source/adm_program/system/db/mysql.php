@@ -182,15 +182,22 @@ class MySqlDB extends DB
     } 
     
     // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
-    function db_error()
+    function db_error($code = 0, $message = '')
     {
-        if (!$this->connect_id)
+        if($code == 0)
         {
-            parent::db_error(@mysql_errno(), @mysql_error());
+            if (!$this->connect_id)
+            {
+                parent::db_error(@mysql_errno(), @mysql_error());
+            }
+            else
+            {
+                parent::db_error(@mysql_errno($this->connect_id), @mysql_error($this->connect_id));
+            }
         }
         else
         {
-            parent::db_error(@mysql_errno($this->connect_id), @mysql_error($this->connect_id));
+            parent::db_error($code, $message);
         }
     }   
 }

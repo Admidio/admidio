@@ -74,7 +74,7 @@ class DB
     }   
     
     // Ausgabe der Datenbank-Fehlermeldung
-    function db_error($code, $message)
+    function db_error($code = 0, $message = '')
     {
         global $g_root_path, $g_message, $g_preferences, $g_current_organization, $g_debug;
 
