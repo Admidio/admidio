@@ -40,7 +40,7 @@ if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 
 //Einlesen der Mitgliedsdaten
  $mem = NEW TableMembers($g_db);
- $mem->readData($_GET['rol_id'],$_GET['usr_id']);
+ $mem->readData(array('rol_id' => $_GET['rol_id'], 'usr_id' => $_GET['usr_id']));
 
 
 if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)

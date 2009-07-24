@@ -67,7 +67,7 @@ elseif($_REQUEST['mode'] == 3)
     if($g_current_user->isWebmaster())
     {
         $member = new TableMembers($g_db);
-        $member->readData($_REQUEST['rol_id'], $_REQUEST['user_id']);
+        $member->readData(array('rol_id' => $_REQUEST['rol_id'], 'usr_id' => $_REQUEST['user_id']));
         $member->delete();
 
         // Entfernen erfolgreich -> Rueckgabe fuer XMLHttpRequest
