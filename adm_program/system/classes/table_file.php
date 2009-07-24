@@ -44,15 +44,15 @@ class TableFile extends TableAccess
 
 
     // File mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($file_id)
+    function readData($file_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
 
-        $tables    = TBL_FOLDERS;
-        $condition = '     fil_id     = '.$file_id.'
-                       AND fil_fol_id = fol_id
-                       AND fol_org_id = '. $g_current_organization->getValue('org_id');
-        parent::readData($file_id, $condition, $tables);
+        $sql_additional_tables .= TBL_FOLDERS;
+        $sql_where_condition   .= '    fil_id     = '.$file_id.'
+                                   AND fil_fol_id = fol_id
+                                   AND fol_org_id = '. $g_current_organization->getValue('org_id');
+        parent::readData($file_id, $sql_where_condition, $sql_additional_tables);
     }
 
 

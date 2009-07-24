@@ -37,14 +37,14 @@ class TableUserField extends TableAccess
     }
 
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($usf_id)
+    function readData($usf_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         if(is_numeric($usf_id))
         {
-            $tables    = TBL_CATEGORIES;
-            $condition = '       usf_cat_id = cat_id
-                             AND usf_id     = '.$usf_id;
-            parent::readData($usf_id, $condition, $tables);
+            $sql_additional_tables .= TBL_CATEGORIES;
+            $sql_where_condition   .= '    usf_cat_id = cat_id
+                                       AND usf_id     = '.$usf_id;
+            parent::readData($usf_id, $sql_where_condition, $sql_additional_tables);
         }
     }
     

@@ -47,14 +47,14 @@ class TableDate extends TableAccess
     }
 
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($dat_id)
+    function readData($dat_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         if(is_numeric($dat_id))
         {
-            $tables    = TBL_CATEGORIES;
-            $condition = '       dat_cat_id = cat_id
-                             AND dat_id     = '.$dat_id;
-            parent::readData($dat_id, $condition, $tables);
+            $sql_additional_tables .= TBL_CATEGORIES;
+            $sql_where_condition   .= '    dat_cat_id = cat_id
+                                       AND dat_id     = '.$dat_id;
+            parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
         }
     }
 

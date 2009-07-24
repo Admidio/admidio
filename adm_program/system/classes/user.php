@@ -53,9 +53,9 @@ class User extends TableUsers
         $this->TableUsers($db, $usr_id);
     }
 
-    function readData($usr_id)
+    function readData($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        parent::readData($usr_id);
+        parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
 
         $this->readUserData();
     }

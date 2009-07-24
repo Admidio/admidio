@@ -45,15 +45,15 @@ class TableWeblink extends TableAccess
     }
 
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($lnk_id)
+    function readData($lnk_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
         
-        $tables    = TBL_CATEGORIES;
-        $condition = '     lnk_id     = '.$lnk_id.' 
-                       AND lnk_cat_id = cat_id
-                       AND cat_org_id = '. $g_current_organization->getValue('org_id');
-        parent::readData($lnk_id, $condition, $tables);
+        $sql_additional_tables .= TBL_CATEGORIES;
+        $sql_where_condition   .= '     lnk_id     = '.$lnk_id.' 
+                                    AND lnk_cat_id = cat_id
+                                    AND cat_org_id = '. $g_current_organization->getValue('org_id');
+        parent::readData($lnk_id, $sql_where_condition, $sql_additional_tables);
     }
     
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor

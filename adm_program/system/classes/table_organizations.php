@@ -34,18 +34,16 @@ class TableOrganizations extends TableAccess
     }
 
     // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
-    function readData($organization)
+    function readData($organization, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        $condition = '';
-        
         // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($organization) == false)
         {
             $organization = addslashes($organization);
-            $condition = ' org_shortname LIKE "'.$organization.'" ';
+            $sql_where_condition .= ' org_shortname LIKE "'.$organization.'" ';
         }
         
-        parent::readData($organization, $condition);
+        parent::readData($organization, $sql_where_condition, $sql_additional_tables);
     }
 }
 ?>

@@ -45,15 +45,15 @@ class TableSession extends TableAccess
     }
 
     // Session mit der uebergebenen Session-ID aus der Datenbank auslesen
-    function readData($session)
+    function readData($session, $sql_where_condition = '', $sql_additional_tables = '')
     {
         // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
         {
-            $condition = ' ses_session_id = "'.$session.'" ';
+            $sql_where_condition .= ' ses_session_id = "'.$session.'" ';
         }       
         
-        parent::readData($session, $condition);
+        parent::readData($session, $sql_where_condition, $sql_additional_tables);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

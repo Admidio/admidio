@@ -11,7 +11,7 @@
 
 class Forum
 {
-    function includeForumScript($db)
+    public static function includeForumScript($db)
     {
         global $g_organization;
         $forum_enable  = 0;
@@ -52,7 +52,7 @@ class Forum
 
     // Funktion erstellt die Schnittstelle zum entsprechenden Forum
 
-    function createForumObject($forum_type)
+    public static function createForumObject($forum_type)
     {
         switch ($forum_type)
         {

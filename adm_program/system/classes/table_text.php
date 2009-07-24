@@ -36,18 +36,18 @@ class TableText extends TableAccess
     }
 
     // Text mit dem uebergebenen Text-Id oder Namen aus der Datenbank auslesen
-    function readData($name)
+    function readData($name, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
     
         // wurde txt_name uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($name) == false)
         {
-            $condition = '    txt_name   = "'.$name.'" 
-                          AND txt_org_id = '. $g_current_organization->getValue('org_id');
+            $sql_where_condition .= '    txt_name   = "'.$name.'" 
+                                     AND txt_org_id = '. $g_current_organization->getValue('org_id');
         }
         
-        parent::readData($name, $condition);
+        parent::readData($name, $sql_where_condition, $sql_additional_tables);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
