@@ -43,7 +43,7 @@ create table %PRAEFIX%_organizations
    org_longname                   varchar(60)                    not null,
    org_shortname                  varchar(10)                    not null,
    org_org_id_parent              tinyint(4),
-   org_homepage                   varchar(30)                    not null,
+   org_homepage                   varchar(60)                    not null,
    primary key (org_id),
    unique ak_shortname (org_shortname)
 )

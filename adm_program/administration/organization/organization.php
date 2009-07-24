@@ -282,7 +282,7 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="org_homepage">Homepage:</label></dt>
-                            <dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="50" value="'. $form_values['org_homepage']. '" /></dd>
+                            <dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
                         </dl>
                     </li>
                     <li>
@@ -307,36 +307,36 @@ echo '
                                             echo '>'.$filename.'</option>';
                                         }
                                     }
-                                echo "</select>
+                                echo '</select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
                         aus dem Ordner adm_themes angezeigt. (Standard: modern)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"homepage_logout\">Startseite (Besucher):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_logout\" name=\"homepage_logout\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_logout']. "\" /></dd>
+                            <dt><label for="homepage_logout">Startseite (Besucher):</label></dt>
+                            <dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden.
                         Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
                         (Beispiel: adm_program/index.php)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"homepage_login\">Startseite (angemeldete Benutzer):</label></dt>
-                            <dd><input type=\"text\" id=\"homepage_login\" name=\"homepage_login\" style=\"width: 200px;\" maxlength=\"250\" value=\"". $form_values['homepage_login']. "\" /></dd>
+                            <dt><label for="homepage_login">Startseite (angemeldete Benutzer):</label></dt>
+                            <dd><input type="text" id="homepage_login" name="homepage_login" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_login']. '" /></dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat.
                         Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
                         (Beispiel: adm_program/index.php)
-                    </li>";
+                    </li>';
 
                     //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                     if($g_current_organization->hasChildOrganizations() == false)
