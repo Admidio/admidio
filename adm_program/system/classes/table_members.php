@@ -36,9 +36,9 @@ class TableMembers extends TableAccess
         $this->clear();
     }
     
-	
-	// liest den Datensatz mit den ids rol_id und usr_id ein
-	// ids : Array mit den Schlüsseln rol_id und usr_id
+
+    // liest den Datensatz mit den ids rol_id und usr_id ein
+    // ids : Array mit den Schlüsseln rol_id und usr_id
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
     // sql_additioinal_tables : wird nicht verwendet (benötigt wegen Vererbung)
     function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
@@ -46,10 +46,10 @@ class TableMembers extends TableAccess
         if(is_array($ids) && is_numeric($ids['rol_id']) && is_numeric($ids['usr_id']))
         {
             if(strlen($sql_where_condition) > 0)
-			{
-				$condition = $sql_where_condition . ' AND ';
-			}
-			$condition .= '     mem_rol_id = '.$ids['rol_id'].'
+            {
+                $condition = $sql_where_condition . ' AND ';
+            }
+            $condition .= '     mem_rol_id = '.$ids['rol_id'].'
                            AND mem_usr_id = '.$ids['usr_id'];
             parent::readData(0, $condition);
             
@@ -80,7 +80,7 @@ class TableMembers extends TableAccess
         if($this->getValue('mem_rol_id') != $rol_id
         || $this->getValue('mem_usr_id') != $usr_id)
         {
-            $this->readData($rol_id, $usr_id);
+            $this->readData(array('rol_id' => $rol_id, 'usr_id' => $usr_id));
         }
 
         // Beginn nicht ueberschreiben, wenn schon existiert
