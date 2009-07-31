@@ -33,100 +33,100 @@ require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
 $geburtstage = "";
 $termine_uebergabe = 0;
 $geburtstag_uebergabe = 0;
- 
+
 // Übergabe Termin ermitteln
 if($plg_ter_aktiv == 1)
 {
-	if(isset($_GET['titel']))
-	{
-		$titel = $_GET['titel'];
-		$termine_uebergabe = 1;
-	}
-	if(isset($_GET['uhr']))
-	{
-		$uhr = $_GET['uhr'];
-	}
-	if(isset($_GET['ort']))
-	{
-		$ort = $_GET['ort'];
-	}
-	if(isset($_GET['ganztags']))
-	{
-		$ganztags = $_GET['ganztags'];
-	}
-	else
-	{
-		$ganztags = 0;
-	}
-	if(isset($_GET['weitere']))
-	{
-		$weitere = $_GET['weitere'];
-	}
-	else
-	{
-		$weitere = 0;
-	}
+    if(isset($_GET['titel']))
+    {
+        $titel = stripcslashes($_GET['titel']);
+        $termine_uebergabe = 1;
+    }
+    if(isset($_GET['uhr']))
+    {
+        $uhr = $_GET['uhr'];
+    }
+    if(isset($_GET['ort']))
+    {
+        $ort = stripcslashes($_GET['ort']);
+    }
+    if(isset($_GET['ganztags']))
+    {
+        $ganztags = $_GET['ganztags'];
+    }
+    else
+    {
+        $ganztags = 0;
+    }
+    if(isset($_GET['weitere']))
+    {
+        $weitere = $_GET['weitere'];
+    }
+    else
+    {
+        $weitere = 0;
+    }
 }
 
 // Übergabe Geburtstage ermitteln
 if($plg_geb_aktiv == 1)
 {
-	if(isset($_GET['gebanzahl']))
-	{
-		$gebanzahl = $_GET['gebanzahl'];
-		$geburtstag_uebergabe = 1;
-		for($i=1;$i<=$gebanzahl;$i++)
-		{
-			$gebname = $_GET['gebname'. $i];
-			$alter = $_GET['gebalter'. $i];
-			if($plg_geb_icon == 1)
-			{
-				$icon = "<img src=\"$g_root_path/adm_plugins/$plugin_folder/cake.png\" border=\"0\"> ";
-			}
-			else
-			{
-				$icon = "";
-			}
-			$geburtstage = $geburtstage. $icon. "$gebname ($alter)<br>";
-		}
-	}
+    if(isset($_GET['gebanzahl']))
+    {
+        $gebanzahl = $_GET['gebanzahl'];
+        $geburtstag_uebergabe = 1;
+        for($i=1;$i<=$gebanzahl;$i++)
+        {
+            $gebname = $_GET['gebname'. $i];
+            $alter = $_GET['gebalter'. $i];
+            if($plg_geb_icon == 1)
+            {
+                $icon = "<img src=\"$g_root_path/adm_plugins/$plugin_folder/cake.png\" border=\"0\"> ";
+            }
+            else
+            {
+                $icon = "";
+            }
+            $geburtstage = $geburtstage. $icon. "$gebname ($alter)<br>";
+        }
+    }
 }
 
 // Ausgabe formatieren
 if($termine_uebergabe == 1)
 {
-	echo "<div id=\"plgCalendarMSG\" align=\"left\"><b>$titel</b><br>";
-	if($ganztags == 1)
-	{
-		if($ort == "")
-		{
-			echo "<i>(ganzt&auml;giger Termin)</i></div>";
-		}
-		else
-		{
-			echo "$ort <i>(ganzt&auml;giger Termin)</i></div>";
-		}
-	}
-	else
-	{
-		if($ort == "")
-		{
-			echo "$uhr Uhr</div>";
-		}
-		else
-		{
-			echo "$uhr Uhr, $ort</div>";
-		}
-	}
-	if($weitere >> 0)
-	{
-		echo "<div id=\"plgCalendarMSG\" align=\"right\"><i>(... weitere)</i></div>";
-	}
+    echo "<div id=\"plgCalendarMSG\" align=\"left\"><b>$titel</b><br>";
+    if($ganztags == 1)
+    {
+        if($ort == "")
+        {
+            echo "<i>(ganzt&auml;giger Termin)</i></div>";
+        }
+        else
+        {
+            echo "$ort <i>(ganzt&auml;giger Termin)</i></div>";
+        }
+    }
+    else
+    {
+        if($ort == "")
+        {
+            echo "$uhr Uhr</div>";
+        }
+        else
+        {
+            echo "$uhr Uhr, $ort</div>";
+        }
+    }
+    if($weitere >> 0)
+    {
+        echo "<div id=\"plgCalendarMSG\" align=\"right\"><i>(... weitere)</i></div>";
+    }
 }
 
 if($geburtstag_uebergabe == 1)
 {
-	echo "<div id=\"plgCalendarMSG\" align=\"left\">$geburtstage</div>";
+    echo "<div id=\"plgCalendarMSG\" align=\"left\">$geburtstage</div>";
 }
 
 ?>
