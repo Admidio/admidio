@@ -281,11 +281,10 @@ $dates_result = $g_db->query($sql);
 //Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
 if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->editDates())
 {
-    echo '<ul class="iconTextLinkList">';
     //Neue Termine anlegen
     if($g_current_user->editDates())
     {
-        echo '
+        $topNavigation .= '
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'"><img
@@ -314,43 +313,49 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         
         if($g_db->num_rows($result) > 1)
         {
-            echo '<li>Kalender:&nbsp;&nbsp;
+            $topNavigation .= '<li>Kalender:&nbsp;&nbsp;
             <select size="1" id="calendar" onchange="showCalendar()">
                 <option value="Alle" ';
                 if(strlen($req_calendar) == 0)
                 {
-                    echo ' selected="selected" ';
+                    $topNavigation .= ' selected="selected" ';
                 }
-                echo '>Alle</option>';
+                $topNavigation .= '>Alle</option>';
         
                 while($row = $g_db->fetch_object($result))
                 {
-                    echo '<option value="'. urlencode($row->cat_name). '"';
+                    $topNavigation .= '<option value="'. urlencode($row->cat_name). '"';
                     if($req_calendar == $row->cat_name)
                     {
-                        echo ' selected="selected" ';
+                        $topNavigation .= ' selected="selected" ';
                     }
-                    echo '>'.$row->cat_name.'</option>';
+                    $topNavigation .= '>'.$row->cat_name.'</option>';
                 }
-            echo '</select>';
+            $topNavigation .=  '</select>';
             if($g_current_user->editDates())
             {
-                echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender"><img
+                $topNavigation .= '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender"><img
                      src="'. THEME_PATH. '/icons/options.png" alt="Kalender pflegen" title="Kalender pflegen" /></a>';
             }
-            echo '</li>';
+            $topNavigation .= '</li>';
         }
         elseif($g_current_user->editDates())
         {
-            echo '
+            $topNavigation .= '
             <li><span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender"><img
                     src="'. THEME_PATH. '/icons/application_double.png" alt="Kalender pflegen" title="Kalender pflegen"/></a>
                 <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender">Kalender pflegen</a>
             </span></li>';
         }
-    } 
-    echo '</ul>';
+    }
+    
+    if(strlen($topNavigation) > 0)
+    {
+        echo '<ul class="iconTextLinkList">';
+        echo $topNavigation;
+        echo '</ul>';
+    }
 }
 
 if($g_db->num_rows($dates_result) == 0)
