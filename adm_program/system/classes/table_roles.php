@@ -26,9 +26,9 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableRoles extends TableAccess
 {
-	// Alle konfigurierbare Werte für die Bezahlzeitraeume
-	// Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
-	var $role_cost_periods = array(-1,1,2,4,12);
+    // Alle konfigurierbare Werte für die Bezahlzeitraeume
+    // Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
+    var $role_cost_periods = array(-1,1,2,4,12);
 
     // Konstruktor
     function TableRoles(&$db, $role = '')
@@ -123,27 +123,27 @@ class TableRoles extends TableAccess
             $sql    = 'DELETE FROM '. TBL_MEMBERS. '
                         WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
-			/*
+            /*
             //Auch die Inventarpositionen zur Rolle muessen geloescht werden
             //Alle Inventarpositionen auslesen, die von der Rolle angelegt wurden
-        	$sql_inventory = 'SELECT *
+            $sql_inventory = 'SELECT *
                               FROM '. TBL_INVENTORY. '
-							  WHERE inv_rol_id = '. $this->getValue('rol_id');
-        	$result_inventory = $this->db->query($sql_subfolders);
+                              WHERE inv_rol_id = '. $this->getValue('rol_id');
+            $result_inventory = $this->db->query($sql_subfolders);
 
-	        while($row_inventory = $this->db->fetch_object($result_inventory))
-	        {
-	            //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
-	            $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
-                        	WHERE rnt_inv_id = '. $row_inventory->inv_id;
-            	$this->db->query($sql);
-	        }
+            while($row_inventory = $this->db->fetch_object($result_inventory))
+            {
+                //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
+                $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
+                            WHERE rnt_inv_id = '. $row_inventory->inv_id;
+                $this->db->query($sql);
+            }
 
-			//Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
-        	$sql    = 'DELETE FROM '. TBL_INVENTORY. '
+            //Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
+            $sql    = 'DELETE FROM '. TBL_INVENTORY. '
                         WHERE inv_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
-			*/
+            */
             return parent::delete();
         }
         else
@@ -230,34 +230,34 @@ class TableRoles extends TableAccess
         }
         return 999;
     }
-	
-	// die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
-	function getRolCostPeriodDesc($my_rol_cost_period)
-	{
-		if($my_rol_cost_period == -1)
-		{
-			return 'einmalig';
-		}
-		elseif($my_rol_cost_period == 1)
-		{
-			return 'jährlich';
-		}
-		elseif($my_rol_cost_period == 2)
-		{
-			return 'halbjährlich';
-		}
-		elseif($my_rol_cost_period == 4)
-		{
-			return 'vierteljährlich';
-		}
-		elseif($my_rol_cost_period == 12)
-		{
-			return 'monatlich';
-		}
-		else
-		{
-			return '--';
-		}
-	}
+    
+    // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
+    static function getRolCostPeriodDesc($my_rol_cost_period)
+    {
+        if($my_rol_cost_period == -1)
+        {
+            return 'einmalig';
+        }
+        elseif($my_rol_cost_period == 1)
+        {
+            return 'jährlich';
+        }
+        elseif($my_rol_cost_period == 2)
+        {
+            return 'halbjährlich';
+        }
+        elseif($my_rol_cost_period == 4)
+        {
+            return 'vierteljährlich';
+        }
+        elseif($my_rol_cost_period == 12)
+        {
+            return 'monatlich';
+        }
+        else
+        {
+            return '--';
+        }
+    }
 }
 ?>

@@ -102,7 +102,7 @@ class TableDate extends TableAccess
         return $description;
     }
 
-    function getValue($field_name)
+    function getValue($field_name, $field_value = '')
     {
         // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
         $value = $this->dbColumns[$field_name];

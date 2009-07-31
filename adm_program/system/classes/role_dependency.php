@@ -162,7 +162,7 @@ class RoleDependency
         return $allParentIds;
     }
 
-    function getChildRoles(&$db, $parentId)
+    static function getChildRoles(&$db, $parentId)
     {
         $allChildIds = array();
 
