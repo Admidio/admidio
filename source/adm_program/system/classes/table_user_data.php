@@ -33,20 +33,27 @@ class TableUserData extends TableAccess
         
         $this->clear();
     }
-
+    
     // Userdaten mit den Profilfeldinformationen aus der Datenbank auslesen
-    function readData($usr_id, $usf_id)
+    // ids : Array mit den Schlüsseln usr_id und usf_id
+    // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
+    // sql_additioinal_tables : wird nicht verwendet (benötigt wegen Vererbung)
+    function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        if(is_numeric($usr_id) && is_numeric($usf_id))
+        if(is_array($ids) && is_numeric($ids['usr_id']) && is_numeric($ids['usf_id']))
         {
             $tables    = TBL_USER_FIELDS;
-            $condition = $condition. ' AND usd_usr_id = '. $usr_id. '
-                                       AND usd_usf_id = '. $usf_id. '
+            if(strlen($sql_where_condition) > 0)
+            {
+                $sql_where_condition = $sql_where_condition . ' AND ';
+            }
+            $sql_where_condition .= ' AND usd_usr_id = '. $ids['usr_id']. '
+                                       AND usd_usf_id = '. $ids['usf_id']. '
                                        AND usd_usf_id = usf_id ';
-            parent::readData(0, $condition, $tables);
+            parent::readData(0, $sql_where_condition, $tables);
             
-            $this->setValue('usd_usr_id', $usr_id);
-            $this->setValue('usd_usf_id', $usf_id);
+            $this->setValue('usd_usr_id', $ids['usr_id']);
+            $this->setValue('usd_usf_id', $ids['usf_id']);
         }
     }
     
@@ -54,15 +61,15 @@ class TableUserData extends TableAccess
     // die Kategorie und adm_user_field bleiben erhalten
     function clearFieldData()
     {
-    	foreach($this->dbColumns as $name => $value)
-    	{
-    		if(strpos($name, 'usd') !== false)
-    		{
-    			$this->dbColumns[$name] = '';
-    			$this->columnsInfos[$name]['changed'] = false;
-    			$this->new_record = false;
-    		}
-    	}
+        foreach($this->dbColumns as $name => $value)
+        {
+            if(strpos($name, 'usd') !== false)
+            {
+                $this->dbColumns[$name] = '';
+                $this->columnsInfos[$name]['changed'] = false;
+                $this->new_record = false;
+            }
+        }
     }
 }
 ?>
