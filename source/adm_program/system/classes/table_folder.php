@@ -715,7 +715,7 @@ class TableFolder extends TableAccess
 
     }
 
-    function getValue($field_name)
+    function getValue($field_name, $field_value = '')
     {
         $value = parent::getValue($field_name, $value);
         
