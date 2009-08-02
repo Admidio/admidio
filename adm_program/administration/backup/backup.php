@@ -31,7 +31,6 @@ $backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to incl
 if(!file_exists($backupabsolutepath))
 {
     mkdir($backupabsolutepath, 0777);
-    chmod($backupabsolutepath, 0777);
 }
 
 $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
@@ -96,6 +95,8 @@ echo '
 		echo'<tr><td colspan="4">Keine Backupdatei vorhanden!</td></tr>';
 	}
 	
+	$backup_size_sum = 0;
+	
     foreach($old_backup_files as $key => $old_backup_file)
     {
         echo '
@@ -105,14 +106,21 @@ echo '
                 <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="Datei" title="Datei" /></a>
                 <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='. $old_backup_file. '">'. $old_backup_file. '</a></td>
             <td>'. date ("d.m.Y H:i:s", filemtime($backupabsolutepath.$old_backup_file)). '</td>
-            <td>'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' KB&nbsp;</td>
+            <td style="text-align: right;">'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' KB&nbsp;</td>
             <td style="text-align: center;">
                 <a class="iconLink" href="javascript:deleteObject(\'bck\', \'row_file_'.$key.'\',0,\''.$old_backup_file.'\')">
                 <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>
             </td>
         </tr>';
+		$backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
     }
-echo '</table>';
+echo '<tr>
+		<th>&nbsp</th>
+		<th>Summe</th>
+		<th style="text-align: right;">'. $backup_size_sum .' KB&nbsp</th>
+		<th>&nbsp</th>
+</tr>
+		</table>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>
