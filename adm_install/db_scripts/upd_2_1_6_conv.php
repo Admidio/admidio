@@ -43,4 +43,8 @@ while($row_orga = $g_db->fetch_array($result_orga))
 $sql = 'DELETE FROM '. TBL_PREFERENCES. '
    			WHERE prf_name = "photo_preview_scale" ';
 $g_db->query($sql);
+
+$sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_end = "9999-12-31" 
+         WHERE mem_end = "" OR mem_end = "0000-00-00" ';
+$g_db->query($sql);
 ?>
