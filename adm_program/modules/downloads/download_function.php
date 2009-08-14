@@ -23,6 +23,7 @@
 
 require('../../system/common.php');
 require('../../system/login_valid.php');
+require('../../system/classes/folder.php');
 require('../../system/classes/table_folder.php');
 require('../../system/classes/table_file.php');
 
@@ -38,37 +39,6 @@ if (!$g_current_user->editDownloadRight())
 {
     $g_message->show('norights');
 }
-
-//testen ob Schreibrechte fuer adm_my_files bestehen
-if (is_writeable(SERVER_PATH. '/adm_my_files'))
-{
-    if (file_exists(SERVER_PATH. '/adm_my_files/download') == false)
-    {
-        // Ordner fuer die Downloads existiert noch nicht -> erst anlegen
-        $b_return = @mkdir(SERVER_PATH. '/adm_my_files/download', 0777);
-        if ($b_return)
-        {
-            $b_return = @chmod(SERVER_PATH. '/adm_my_files/download', 0777);
-        }
-        if ($b_return == false)
-        {
-            // der entsprechende Ordner konnte nicht angelegt werden
-            $g_message->addVariableContent('adm_my_files/download', 1);
-            $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-            $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
-            $g_message->show('write_access');
-        }
-    }
-}
-else
-{
-    // der entsprechende Ordner konnte nicht angelegt werden
-    $g_message->addVariableContent('adm_my_files', 1);
-    $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-    $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
-    $g_message->show('write_access');
-}
-
 
 // Uebergabevariablen pruefen
 if (isset($_GET['mode']))
@@ -294,17 +264,17 @@ elseif ($req_mode == 3)
 
 
     //Test ob der Ordner schon existiert im Filesystem
-    if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName)) {
+    if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName)) 
+    {
         $g_message->show('folder_exists', $newFolderName);
     }
     else
     {
         // Ordner erstellen
-        $b_return = @mkdir($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName, 0777);
-        if($b_return)
-        {
-            $b_return = @chmod($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName, 0777);
+        $b_return = $targetFolder->createFolder($newFolderName);
 
+        if($b_return['code'] == 0)
+        {
             //Jetzt noch den Ordner der DB hinzufuegen...
             $newFolder = new TableFolder($g_db);
 
@@ -319,12 +289,11 @@ elseif ($req_mode == 3)
 
             //Ordnerberechtigungen des ParentOrdners uebernehmen
             $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
-
         }
-        if($b_return == false)
+        else
         {
             // der entsprechende Ordner konnte nicht angelegt werden
-            $g_message->addVariableContent($targetFolder->getValue('fol_path'). '/'. $targetFolder->getValue('fol_name'). '/'.$newFolderName, 1);
+            $g_message->addVariableContent($error['text'], 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
             $g_message->show('write_access');

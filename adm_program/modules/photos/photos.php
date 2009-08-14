@@ -19,7 +19,6 @@
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 require_once('../../system/classes/image.php');
-require_once('../../system/classes/htaccess.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -93,15 +92,6 @@ else
 {
     $thumb_seite = 1;
 }
-
-//ggf. Ordner für Fotos anlegen
-if(!file_exists(SERVER_PATH. '/adm_my_files/photos'))
-{
-    mkdir(SERVER_PATH. '/adm_my_files/photos', 0777);
-    chmod(SERVER_PATH. '/adm_my_files/photos', 0777);
-}
-$protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-$protection->protectFolder();
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $pho_id)
@@ -262,16 +252,7 @@ echo '<div class="photoModuleContainer">';
         $bilder = $photo_album->getValue('pho_quantity');
         
         //Ordnerpfad
-        $ordner_foto = '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id');
-        $ordner      = SERVER_PATH. $ordner_foto;
-        $ordner_url  = $g_root_path. $ordner_foto;
-
-        //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
-        if(!file_exists($ordner.'/thumbnails'))
-        {
-            mkdir($ordner.'/thumbnails', 0777);
-            chmod($ordner.'/thumbnails', 0777);
-        }
+        $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id');
         
         //Differenz
         $difference = $g_preferences['photo_thumbs_row']-$g_preferences['photo_thumbs_column'];

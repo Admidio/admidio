@@ -187,10 +187,10 @@ $message_text = array(
     'Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von dir eingegebene Begrenzung.',
 
 'write_access' =>
-    'Der Ordner %VAR1% konnte nicht angelegt werden. Du musst dich an den
-    <a href="mailto:%VAR2%">Webmaster</a> wenden, damit dieser die entsprechenden
+    'Der Ordner %VAR1% kann nicht mit Schreibrechten angelegt werden. Du musst dich an den
+    <a href="mailto:%VAR2%">Webmaster</a> wenden, damit dieser die 
     <acronym title="über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.">Schreibrechte</acronym>
-    setzen kann.',
+    für den Ordner setzen kann.',
 
 // Meldungen Listen
 
@@ -376,7 +376,7 @@ $message_text = array(
     Wähle bitte einen anderen Namen für den Ordner aus.',
 
 'invalid_file_extension' =>
-    'Bestimmte Dateiendungen sind auf dem Server nicht erlaubt.',
+    'Dateien dieses Dateityps sind auf dem Server nicht erlaubt.',
 
 'file_not_exist' =>
     'Die ausgewählte Datei existiert nicht auf dem Server.',

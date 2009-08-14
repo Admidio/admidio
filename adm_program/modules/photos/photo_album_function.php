@@ -18,6 +18,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/folder.php');
 require_once('../../system/classes/table_photos.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -166,49 +167,24 @@ if(isset($_POST['submit']) && $_POST['submit'])
     }//if
 
     /********************Aenderung des Ordners***********************************/
-    //Bearbeiten Anfangsdatum und Ordner ge&auml;ndert
+    // Bearbeiten Anfangsdatum und Ordner geaendert
     elseif ($_GET['job']=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$pho_id)
     {
-        $ordnerneu = $_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
-        //testen ob Schreibrechte fuer adm_my_files bestehen
-        if(is_writeable(SERVER_PATH. '/adm_my_files/photos') == false)
+        $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
+        
+        // das komplette Album in den neuen Ordner kopieren
+        $albumFolder = new Folder($ordner);
+        $b_return = $albumFolder->move($newFolder);
+        
+        // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
+        if($b_return == false)
         {
-            $g_message->addVariableContent('adm_my_files/photos', 1);
+            $g_message->addVariableContent($newFolder, 1);
             $g_message->addVariableContent($g_preferences['email_administrator'], 2, false);
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $g_message->show('write_access');
         }
-        //wenn Rechte OK, Ordner erstellen
-        else
-        {
-            mkdir(SERVER_PATH. '/adm_my_files/photos/'.$ordnerneu,0777);
-            chmod(SERVER_PATH. '/adm_my_files/photos/'.$ordnerneu, 0777);
-            mkdir(SERVER_PATH. '/adm_my_files/photos/'.$ordnerneu.'/thumbnails',0777);
-            chmod(SERVER_PATH. '/adm_my_files/photos/'.$ordnerneu.'/thumbnails', 0777);
-        }
 
-        //Fotos verschieben
-        for($x=1; $x<=$photo_album->getValue('pho_quantity'); $x++)
-        {
-            chmod($ordner.'/'.$x.'.jpg', 0777);
-            copy($ordner.'/'.$x.'.jpg', SERVER_PATH. '/adm_my_files/photos/'.$ordnerneu.'/'.$x.'.jpg');
-            unlink($ordner.'/'.$x.'.jpg');
-        }
-        
-        //Thumbnails verschieben
-        for($x=1; $x<=$photo_album->getValue('pho_quantity'); $x++)
-        {
-            chmod($ordner.'/thumbnails/'.$x.'.jpg', 0777);
-            copy($ordner.'/thumbnails/'.$x.'.jpg', SERVER_PATH. '/adm_my_files/photos/'.$ordnerneu.'/thumbnails/'.$x.'.jpg');
-            unlink($ordner.'/thumbnails/'.$x.'.jpg');
-        }
-
-        //alten ordner loeschen
-        chmod($ordner.'/thumbnails', 0777);
-        rmdir($ordner.'/thumbnails');
-        chmod($ordner.'', 0777);
-        rmdir($ordner.'');
-        
         // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
     }//if

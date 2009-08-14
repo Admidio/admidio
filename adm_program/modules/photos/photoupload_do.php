@@ -80,8 +80,9 @@ if (empty($_POST) && $_GET['uploadmethod'] == 1)
 //bei Bedarf Uploadodner erzeugen
 if(!file_exists(SERVER_PATH. '/adm_my_files/photos/upload'))
 {
-    mkdir(SERVER_PATH. '/adm_my_files/photos/upload', 0777);
-    chmod(SERVER_PATH. '/adm_my_files/photos/upload', 0777);
+    require_once('../../system/classes/folder.php');
+    $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
+    $folder->createWriteableFolder('upload');
 }
 
 //Ordnerpfad
@@ -195,10 +196,11 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
             $image->delete();
             
             //Nachsehen ob Thumnailordner existiert
-            if(!file_exists($ordner.'/thumbnails'))
+            if(file_exists($ordner.'/thumbnails') == false)
             {
-                mkdir($ordner.'/thumbnails', 0777);
-                chmod($ordner.'/thumbnails', 0777);
+                require_once('../../system/classes/folder.php');
+                $folder = new Folder($ordner);
+                $folder->createWriteableFolder('thumbnails');
             }
     
             //Thumbnail speichern

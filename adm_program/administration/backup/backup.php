@@ -28,9 +28,16 @@ if($g_current_user->isWebmaster() == false)
 $backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
 
 //ggf. Ordner für Backups anlegen
-if(!file_exists($backupabsolutepath))
+if(file_exists($backupabsolutepath) == false)
 {
-    mkdir($backupabsolutepath, 0777);
+    require_once('../../system/classes/folder.php');
+    $folder = new Folder(SERVER_PATH. '/adm_my_files');
+    if($folder->createWriteableFolder('backup') == false)
+    {
+        $g_message->addVariableContent($backupabsolutepath, 1);
+        $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
+        $g_message->show('write_access');
+    }
 }
 
 $protection = new Htaccess(SERVER_PATH. '/adm_my_files');

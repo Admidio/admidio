@@ -70,9 +70,11 @@ else
 }
 
 //ordner fuer Flexupload anlegen, falls dieser nicht existiert
-if(!file_exists(SERVER_PATH. '/adm_my_files/photos/upload'))
+if(file_exists(SERVER_PATH. '/adm_my_files/photos/upload') == false)
 {
-    mkdir(SERVER_PATH. '/adm_my_files/photos/upload',0777);
+    require_once('../../system/classes/folder.php');
+    $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
+    $folder->createWriteableFolder('upload');
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert

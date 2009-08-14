@@ -25,15 +25,19 @@
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/folder.php');
 
 class TableFolder extends TableAccess
 {
+    protected $folderPath;
+
     // Konstruktor
-    function TableFolder(&$db, $folder_id = 0)
+    public function __construct(&$db, $folder_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_FOLDERS;
         $this->column_praefix = 'fol';
+        $this->folderPath     = new Folder();
 
         if($folder_id > 0)
         {
@@ -47,7 +51,7 @@ class TableFolder extends TableAccess
 
 
     // Folder mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($folder_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($folder_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
 
@@ -58,7 +62,7 @@ class TableFolder extends TableAccess
 
 
     // Folder mit der uebergebenen ID aus der Datenbank fuer das Downloadmodul auslesen
-    function getFolderForDownload($folder_id)
+    public function getFolderForDownload($folder_id)
     {
         global $g_current_organization, $g_current_user, $g_valid_login;
 
@@ -120,7 +124,7 @@ class TableFolder extends TableAccess
 
 
     // Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
-    function getFolderContentsForDownload()
+    public function getFolderContentsForDownload()
     {
         global $g_current_organization, $g_current_user, $g_valid_login;
 
@@ -351,7 +355,7 @@ class TableFolder extends TableAccess
 
 
     //Gibt den kompletten Pfad des Ordners zurueck
-    function getCompletePathOfFolder()
+    public function getCompletePathOfFolder()
     {
         //Pfad zusammen setzen
         $folderPath   = $this->getValue('fol_path');
@@ -363,7 +367,7 @@ class TableFolder extends TableAccess
 
 
     //Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
-    function getNavigationForDownload($folderId = 0, $currentNavigation = '')
+    public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
     {
         global $g_current_organization, $g_root_path;
 
@@ -448,7 +452,7 @@ class TableFolder extends TableAccess
 
 
     //Gibt die aktuellen Rollenbrechtigungen des Ordners als Array zurueck
-    function getRoleArrayOfFolder()
+    public function getRoleArrayOfFolder()
     {
         //RueckgabeArray initialisieren
         $roleArray = null;
@@ -474,7 +478,7 @@ class TableFolder extends TableAccess
 
     // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
     // und all seinen Unterordnern rekursiv
-    function editPublicFlagOnFolder($public_flag, $folder_id = 0)
+    public function editPublicFlagOnFolder($public_flag, $folder_id = 0)
     {
         if ($folder_id == 0)
         {
@@ -505,7 +509,7 @@ class TableFolder extends TableAccess
 
     // Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
     // und all seinen Unterordnern rekursiv
-    function setRolesOnFolder($rolesArray, $folder_id = 0)
+    public function setRolesOnFolder($rolesArray, $folder_id = 0)
     {
         if ($folder_id == 0)
         {
@@ -544,7 +548,7 @@ class TableFolder extends TableAccess
 
     // Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
     // und allen darin enthaltenen Unterordnern und Dateien rekursiv
-    function editLockedFlagOnFolder($locked_flag, $folder_id = 0)
+    public function editLockedFlagOnFolder($locked_flag, $folder_id = 0)
     {
         if ($folder_id == 0)
         {
@@ -577,10 +581,56 @@ class TableFolder extends TableAccess
         $this->db->query($sql_update);
     }
 
+    // Legt den Ordner im Dateisystem an
+    public function createFolder($folderName)
+    {
+        $error = array('code' => '0', 'text' => '');
+    
+        if(is_writeable(SERVER_PATH. '/adm_my_files'))
+        {
+            if(file_exists(SERVER_PATH. '/adm_my_files/download') == false)
+            {
+                // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
+                $this->folderPath->setFolder(SERVER_PATH. '/adm_my_files');
+                $b_return = $this->folderPath->createWriteableFolder('download');
+
+                if($b_return == false)
+                {
+                    $error['code'] = '-2';
+                    $error['text'] = 'adm_my_files/download';
+                }
+            }
+
+            // ist der my_files-Ordner noch nicht mit htAccess gesichert, so muss diese Datei erst angelegt werden
+            if (file_exists(SERVER_PATH. '/adm_my_files/.htaccess') == false)
+            {
+                $absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
+                require_once($absolute_path. '/adm_program/system/classes/htaccess.php');
+                $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
+                $protection->protectFolder();
+            }
+
+            // nun den Ordner anlegen
+            $this->folderPath->setFolder($this->getCompletePathOfFolder());
+            $b_return = $this->folderPath->createWriteableFolder($folderName);
+
+            if($b_return == false)
+            {
+                $error['code'] = '-3';
+                $error['text'] = $this->getCompletePathOfFolder().'/'.$folderName;
+            }
+        }
+        else
+        {
+            $error['code'] = '-1';
+            $error['text'] = 'adm_my_files';
+        }
+        return $error;
+    }
 
     //benennt eine Ordnerinstanz um
     //und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
-    function rename($newName, $newPath, $folder_id = 0)
+    public function rename($newName, $newPath, $folder_id = 0)
     {
         if ($folder_id == 0)
         {
@@ -613,7 +663,7 @@ class TableFolder extends TableAccess
 
     // die Methode wird innerhalb von delete() aufgerufen und entsorgt die Referenzen des Datensatzes
     // und loescht die Verzeichnisse auch physikalisch auf der Platte...
-    function delete($folder_id = 0)
+    public function delete($folder_id = 0)
     {
 
         if ($folder_id == 0)
@@ -658,7 +708,8 @@ class TableFolder extends TableAccess
         //Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
         if (isset($folderPath))
         {
-            $this->_deleteInFilesystem($folderPath, true);
+            $this->folderPath->setFolder($folderPath);
+            $this->folderPath->delete($folderPath);
         }
 
         //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
@@ -669,55 +720,9 @@ class TableFolder extends TableAccess
 
     }
 
-
-    //interne Funktion, die einen Ordner mit allen Inhalten rekursiv loescht
-    function _deleteInFilesystem($folder, $initialCall = false)
+    public function getValue($field_name, $field_value = '')
     {
-
-        $dh  = @opendir($folder);
-        if($dh)
-        {
-            while (false !== ($filename = readdir($dh)))
-            {
-                if($filename != '.' && $filename != '..')
-                {
-                    $act_folder_entry = $folder.'/'.$filename;
-
-                    if(is_dir($act_folder_entry))
-                    {
-                        // nun den entsprechenden Ordner loeschen
-                        $this->_deleteInFilesystem($act_folder_entry);
-                        @chmod($act_folder_entry, 0777);
-                        @rmdir($act_folder_entry);
-
-                    }
-                    else
-                    {
-                        // die Datei loeschen
-                        if(file_exists($act_folder_entry))
-                        {
-                            @chmod($act_folder_entry, 0777);
-                            @unlink($act_folder_entry);
-
-                        }
-                    }
-                }
-            }
-            closedir($dh);
-        }
-
-        if ($initialCall)
-        {
-            //Den Ursprungsordner natuerlich auch noch loeschen
-            @chmod($folder, 0777);
-            @rmdir($folder);
-        }
-
-    }
-
-    function getValue($field_name, $field_value = '')
-    {
-        $value = parent::getValue($field_name, $value);
+        $value = parent::getValue($field_name, $field_value);
         
         if($field_name == 'fol_name')
         {
@@ -728,7 +733,7 @@ class TableFolder extends TableAccess
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
 
