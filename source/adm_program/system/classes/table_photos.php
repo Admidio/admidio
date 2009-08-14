@@ -27,15 +27,18 @@
 
 $absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
 require_once($absolute_path.'/adm_program/system/classes/table_access.php');
+require_once($absolute_path. '/adm_program/system/classes/folder.php');
 
 class TablePhotos extends TableAccess
 {
-    // Konstruktor
-    function TablePhotos(&$db, $photo_id = 0)
+    protected $folderPath;
+
+    public function __construct(&$db, $photo_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_PHOTOS;
         $this->column_praefix = 'pho';
+        $this->folderPath     = new Folder();
         
         if(is_numeric($photo_id))
         {
@@ -49,7 +52,7 @@ class TablePhotos extends TableAccess
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
         
@@ -74,7 +77,7 @@ class TablePhotos extends TableAccess
     
     // Rekursive Funktion gibt die Anzahl aller Bilder inkl. der Unteralben zurueck
     // pho_id noetig fuer rekursiven Aufruf
-    function countImages($pho_id = 0)
+    public function countImages($pho_id = 0)
     {
         $total_images = 0;
 
@@ -102,7 +105,7 @@ class TablePhotos extends TableAccess
 
     // Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album
     // Rueckgabe eines Arrays mit allen noetigen Infos um den Link zu erstellen
-    function shuffleImage($pho_id = 0)
+    public function shuffleImage($pho_id = 0)
     {
         $shuffle_image = array('shuffle_pho_id' => 0, 'shuffle_img_nr' => 0, 'shuffle_img_begin' => '');
 
@@ -149,7 +152,7 @@ class TablePhotos extends TableAccess
     }
 
     // Legt den Ordner fuer die Veranstaltung im Dateisystem an
-    function createFolder()
+    public function createFolder()
     {
         $error = array('code' => '0', 'text' => '');
     
@@ -158,30 +161,34 @@ class TablePhotos extends TableAccess
             if(file_exists(SERVER_PATH. '/adm_my_files/photos') == false)
             {
                 // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
-                $b_return = @mkdir(SERVER_PATH. '/adm_my_files/photos', 0777);
-                if($b_return)
-                {
-                    $b_return = @chmod(SERVER_PATH. '/adm_my_files/photos', 0777);
-                }
+                $this->folderPath->setFolder(SERVER_PATH. '/adm_my_files');
+                $b_return = $this->folderPath->createWriteableFolder('photos');
+
                 if($b_return == false)
                 {
                     $error['code'] = '-2';
                     $error['text'] = 'adm_my_files/photos';
                 }
             }
-            
-            // nun den Ordner fuer die Veranstaltung anlegen
-            $folder_name = $this->getValue('pho_begin'). '_'. $this->getValue('pho_id');
-            
-            $b_return = @mkdir(SERVER_PATH. '/adm_my_files/photos/'.$folder_name, 0777);
-            if($b_return)
+
+            // ist der my_files-Ordner noch nicht mit htAccess gesichert, so muss diese Datei erst angelegt werden
+            if (file_exists(SERVER_PATH. '/adm_my_files/.htaccess') == false)
             {
-                $b_return = @chmod(SERVER_PATH. '/adm_my_files/photos/'.$folder_name, 0777);
+                $absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
+                require_once($absolute_path. '/adm_program/system/classes/htaccess.php');
+                $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
+                $protection->protectFolder();
             }
+
+            // nun den Ordner fuer die Veranstaltung anlegen
+            $folderName = $this->getValue('pho_begin'). '_'. $this->getValue('pho_id');
+            $this->folderPath->setFolder(SERVER_PATH. '/adm_my_files/photos');
+            $b_return = $this->folderPath->createWriteableFolder($folderName);
+
             if($b_return == false)
             {
                 $error['code'] = '-3';
-                $error['text'] = 'adm_my_files/photos/'.$folder_name;
+                $error['text'] = 'adm_my_files/photos/'.$folderName;
             }
         }
         else
@@ -194,7 +201,7 @@ class TablePhotos extends TableAccess
 
     // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
     // die Funktion wird innerhalb von delete() aufgerufen
-    function delete()
+    public function delete()
     {
         if($this->deleteInDatabase($this->getValue('pho_id')))
         {
@@ -205,7 +212,7 @@ class TablePhotos extends TableAccess
 
     // Rekursive Funktion die die uebergebene Veranstaltung und alle
     // Unterveranstaltungen loescht
-    function deleteInDatabase($photo_id)
+    public function deleteInDatabase($photo_id)
     {
         $return_code = true;
     
@@ -232,14 +239,8 @@ class TablePhotos extends TableAccess
             if(file_exists($folder))
             {
                 // nun erst rekursiv den Ordner im Dateisystem loeschen
-                $return_code = $this->deleteInFilesystem($folder);
-    
-                // nun noch den uebergebenen Ordner loeschen
-                @chmod($folder, 0777);
-                if(@rmdir($folder) == false)
-                {
-                    return false;
-                }
+                $this->folderPath->setFolder($folder);
+                $return_code = $this->folderPath->delete($folder);
             }
 
             if($return_code)
@@ -253,49 +254,5 @@ class TablePhotos extends TableAccess
         
         return $return_code;
     }
-    
-    // Rekursive Funktion die alles innerhalb des uebergebenen
-    // Ordners mit Unterordnern und allen Dateien loescht
-    function deleteInFilesystem($folder)
-    {
-        $dh  = @opendir($folder);
-        if($dh)
-        {
-            while (false !== ($filename = readdir($dh)))
-            {
-                if($filename != '.' && $filename != '..')
-                {
-                    $act_folder_entry = $folder.'/'.$filename;
-                    
-                    if(is_dir($act_folder_entry))
-                    {
-                        // nun den entsprechenden Ordner loeschen
-                        $this->deleteInFilesystem($act_folder_entry);
-                        @chmod($act_folder_entry, 0777);
-                        if(@rmdir($act_folder_entry) == false)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        // die Datei loeschen
-                        if(file_exists($act_folder_entry))
-                        {
-                            @chmod($act_folder_entry, 0777);
-                            if(@unlink($act_folder_entry) == false)
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            closedir($dh);
-        }
-                    
-        return true;
-    }
-
 }
 ?>

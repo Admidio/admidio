@@ -24,28 +24,30 @@
  *
  *****************************************************************************/
 
-class Htaccess {
-
-    var $folderPath;
-    var $htaccessFileExistsAlready = false;
-    var $folderExists              = false;
+class Htaccess 
+{
+    protected $folderPath;
+    protected $htaccessFileExistsAlready = false;
+    protected $folderExists              = false;
 
     //Konstruktor
-    function Htaccess($folderPathParam)
+    public function __construct($folderPathParam)
     {
         $this->folderPath = $folderPathParam;
 
-        if (file_exists($this->folderPath)) {
+        if (file_exists($this->folderPath)) 
+        {
             $this->folderExists = true;
 
-            if (file_exists($folderPathParam. '/.htaccess')) {
+            if (file_exists($folderPathParam. '/.htaccess')) 
+            {
                 $this->htaccessFileExistsAlready = true;
             }
         }
     }
 
     //Schuetzt den uebergebenen Ordner
-    function protectFolder()
+    public function protectFolder()
     {
         if ($this->folderExists && !$this->htaccessFileExistsAlready) {
             $file=fopen($this->folderPath. '/.htaccess','w+');
@@ -56,13 +58,12 @@ class Htaccess {
     }
 
     //Entfernt den Ordnerschutz (loeschen der htaccessDatei)
-    function unprotectFolder()
+    public function unprotectFolder()
     {
-        if ($this->folderExists && $this->htaccessFileExistsAlready) {
+        if ($this->folderExists && $this->htaccessFileExistsAlready) 
+        {
             @unlink($this->folderPath. '/.htaccess','w+');
         }
     }
-
-
 }
 ?>

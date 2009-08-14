@@ -58,16 +58,7 @@ if($job != 'save' && $job!='delete' && $job != 'dont_save' && $job != 'upload' &
 if($g_current_user->editProfile($req_usr_id) == false)
 {
     $g_message->show('norights');
-}
-
-//ggf. Ordner für Userfotos anlegen
-if(!file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos') && $g_preferences['profile_photo_storage'] == 1)
-{
-    mkdir(SERVER_PATH. '/adm_my_files/user_profile_photos', 0777);
-    chmod(SERVER_PATH. '/adm_my_files/user_profile_photos', 0777);
-}
-$protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-$protection->protectFolder();                     
+}                    
 
 // User auslesen
 $user = new User($g_db, $req_usr_id);
@@ -79,7 +70,22 @@ if($job=='save')
     if($g_preferences['profile_photo_storage'] == 1)
     {
     	// Foto im Dateisystem speichern
-    
+ 
+		//ggf. Ordner für Userfotos anlegen
+		if(!file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos') && $g_preferences['profile_photo_storage'] == 1)
+		{
+			require_once('../../system/classes/folder.php');
+			$folder = new Folder(SERVER_PATH. '/adm_my_files');
+			if($folder->createWriteableFolder('user_profile_photos') == false)
+			{
+				$g_message->addVariableContent($folder->getFolder() , 1);
+				$g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
+				$g_message->show('write_access');
+			}
+		}
+		$protection = new Htaccess(SERVER_PATH. '/adm_my_files');
+		$protection->protectFolder();  
+
 	    //Nachsehen ob fuer den User ein Photo gespeichert war
 	    if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg'))
 	    {

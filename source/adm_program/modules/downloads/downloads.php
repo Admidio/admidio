@@ -14,7 +14,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/htaccess.php');
 require_once('../../system/classes/table_folder.php');
 require_once('../../system/file_extension_icons.php');
 
@@ -25,11 +24,6 @@ if ($g_preferences['enable_download_module'] != 1)
     // das Modul ist deaktiviert
     $g_message->show('module_disabled');
 }
-
-//htaccessFile erzeugen fuer adm_my_files
-$htaccess = new Htaccess(SERVER_PATH. '/adm_my_files');
-$htaccess->protectFolder();
-
 
 // Uebergabevariablen pruefen
 if (array_key_exists('folder_id', $_GET))
