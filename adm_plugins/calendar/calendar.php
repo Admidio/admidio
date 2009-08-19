@@ -182,7 +182,9 @@ if($erster == 0)
     $erster = 7;
 }
 echo "<table border=\"0\" id=\"plgCalendarTable\">\n";
+echo "<tr>\n";
 echo "<th colspan=\"7\" align=\"center\" id=\"plgCalendarHeader\">".$monate[$monat-1]." ".$jahr."</th>";
+echo "</tr>\n";
 echo "<tr>\n<td><b>Mo</b></td><td><b>Di</b></td>";
 echo "<td><b>Mi</b></td><td><b>Do</b></td>";
 echo "<td><b>Fr</b></td><td id=\"plgCalendarSaturday\"><b>Sa</b></td>";
@@ -329,11 +331,11 @@ while($i<=$insgesamt)
     $rest = ($i+$erster-1)%7;
     if($i == $heute)
     {
-        echo "<td align=center id=\"plgCalendarToday\">";
+        echo "<td align=\"center\" id=\"plgCalendarToday\">";
     }
     else
     {
-        echo "<td align=center>";
+        echo "<td align=\"center\">";
     }
         
     if($i == $heute OR $i == $ter_aktuell OR $i == $geb_aktuell)
@@ -351,7 +353,7 @@ while($i<=$insgesamt)
                     $geb_link = "&". $geb_link;
                 }
                 //echo $ter_link. $geb_link;
-                echo "<a href=\"$plg_link\" target=\"$plg_link_target\" onmouseover=\"ajax_showTooltip(event,'".addcslashes("$g_root_path/adm_plugins/$plugin_folder/calendar_msg.php?$ter_link$geb_link", "'")."',this)\" onmouseout=\"ajax_hideTooltip()\">$i</a>";
+                echo "<a href=\"$plg_link\" target=\"$plg_link_target\" onmouseover=\"ajax_showTooltip(event,'".htmlentities(addcslashes("$g_root_path/adm_plugins/$plugin_folder/calendar_msg.php?$ter_link$geb_link", "'"))."',this)\" onmouseout=\"ajax_hideTooltip()\">$i</a>";
             }
             else
             {
