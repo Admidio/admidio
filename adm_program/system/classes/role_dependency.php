@@ -140,7 +140,7 @@ class RoleDependency
         $this->clear();
     }
 
-    function getParentRoles(&$db, $childId)
+    static function getParentRoles(&$db, $childId)
     {
         $allParentIds = array();
 
