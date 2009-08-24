@@ -2,7 +2,7 @@
 /******************************************************************************
  * Konfigurationsdatei fuer Sidebar-Kalender
  *
- * Version 1.4.1
+ * Version 1.5.0
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -16,6 +16,9 @@
 
 // Einblenden per Ajaxbox (1) oder als normaler Link-Title (0)
 $plg_ajaxbox = 1;
+
+// Monatswechsel per Ajax aktiviert (1) oder deaktiviert (0)
+$plg_ajax_change = 1;
 
 // Angabe des Zielframes
 $plg_link_target = "_self";

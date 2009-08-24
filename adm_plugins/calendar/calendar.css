@@ -1,7 +1,7 @@
 /******************************************************************************
  * Cascading-Style-Sheets-Datei um das Aussehen des Calendar Plugins anzupassen
  *
- * Version 1.4.1
+ * Version 1.5.0
  *
  * Copyright    : (c) 2007-2009 Matthias Roberg
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -9,30 +9,96 @@
  *****************************************************************************/
 
 #plgCalendarTable {
-	font-family:	Arial;
+	width:			100%;
 	font-size:		8pt;
 	color:			#000000;
 }
 
-#plgCalendarHeader {
-	color:			#449BA6;
-	font-size:		12pt;
+#plgCalendarTable td {
+	text-align:		center;
+	line-height:	14pt;
+	width:			14%;
 }
 
-#plgCalendarSaturday {
+#plgCalendarTable td a:link,
+#plgCalendarTable td a:visited,
+#plgCalendarTable td a:active,
+#plgCalendarTable td a:hover {
+	display:		block;
+	line-height:	14pt;
+	background:		#FF9C00;
+	color:          #ffffff;
+	text-decoration:none;
+}
+
+#plgCalendarTable th a:link,
+#plgCalendarTable th a:visited,
+#plgCalendarTable th a:active,
+#plgCalendarTable th a:hover {
+    border:			1px #eeeeee solid;
+	display:		block;
+	line-height:	14pt;
+	background:		#ffffff;
+	color:          #449BA6;
+	text-decoration:none;
+}
+#plgCalendarTable th a:hover {
+    border:			1px #449BA6 solid;
+	background:		#449BA6;
+	color:			#ffffff;
+}
+
+#plgCalendarTable th.plgCalendarHeader {
+	color:			#449BA6;
+	font-size:		12pt;
+	line-height:	20pt;
+}
+
+#plgCalendarTable td.plgCalendarWeekday {
+    border:			1px #cccccc solid;
+	background:		#ffffff;
+}
+
+#plgCalendarTable td.plgCalendarWeekdaySaturday {
+    border:			1px #cccccc solid;
 	color:			#0000CC;
 }
 
-#plgCalendarSunday {
+#plgCalendarTable td.plgCalendarWeekdaySunday {
+    border:			1px #cccccc solid;
 	color:			#C90000;
 }
 
-#plgCalendarToday {
-	background:		#449BA6;
+#plgCalendarTable td.plgCalendarToday {
+    border:			1px #449BA6 solid;
 }
 
-#plgCalendarMSG{
+#plgCalendarTable td.plgCalendarDay {
+    border:			1px #cccccc solid;
+	background:		#eeeeee;
+}
+
+#plgCalendarTable td.plgCalendarSaturday {
+    border:			1px #cccccc solid;
+    background:		#eeeeee;
+	color:			#0000CC;
+}
+
+#plgCalendarTable td.plgCalendarSunday {
+    border:			1px #cccccc solid;
+    background:		#eeeeee;
+	color:			#C90000;
+}
+
+#plgCalendarTable .plgCalendarMSG {
 	font-family:	Arial;
 	font-size:		10pt;
 	color:			#000000;
 }
+
+#plgCalendarReset {
+    font-size:8pt;
+    line-height:12pt;
+    text-align:center;
+}
+
