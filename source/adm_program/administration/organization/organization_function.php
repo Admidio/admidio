@@ -61,6 +61,7 @@ if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_
 // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
 $checkboxes = array('dates_show_map_link'
+                   ,'dates_show_rooms'
                    ,'enable_system_mails'
                    ,'enable_mail_captcha'
                    ,'enable_registration_captcha'

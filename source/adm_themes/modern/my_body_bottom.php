@@ -121,7 +121,13 @@
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/roles.png" alt="Rollenverwaltung" title="Rollenverwaltung" /></a>
                     <a href="'. $g_root_path. '/adm_program/administration/roles/roles.php">Rollenverwaltung</a></span>';
                 }
-				if($g_current_user->isWebmaster())
+                if($g_current_user->assignRoles())
+                {
+                    echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
+                    style="vertical-align: middle;" src="'.$g_root_path.'/adm_themes/classic/icons/home.png" alt="Raumverwaltung" title="Raumverwaltung" /></a>
+                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">Raumverwaltung</a></span>';
+                }
+                if($g_current_user->isWebmaster())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/backup/backup.php"><img
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/backup.png" alt="Datenbank Backup" title="Datenbank Backup" /></a>

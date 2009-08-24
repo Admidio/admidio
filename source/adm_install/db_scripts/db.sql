@@ -33,6 +33,7 @@ drop table if exists %PRAEFIX%_categories;
 drop table if exists %PRAEFIX%_preferences;
 drop table if exists %PRAEFIX%_texts;
 drop table if exists %PRAEFIX%_organizations;
+drop table if exists %PRAEFIX%_rooms;
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -731,3 +732,21 @@ alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CREATE foreign 
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PRAEFIX%_photos add constraint %PRAEFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
       references %PRAEFIX%_users (usr_id) on delete set null on update restrict;
+      
+/*==============================================================*/
+/* Table: adm_rooms                                             */
+/*==============================================================*/
+
+create table %PRAEFIX%_rooms
+(
+    room_id                         int(11) unsigned                not null auto_increment,
+    room_name                       varchar(50)                     not null,
+    room_description                varchar(255),
+    room_capacity                   int(11) unsigned                not null,
+    room_overhang                   int(11) unsigned,
+    room_usr_id_create              int(11) unsigned,
+    room_timestamp_create           datetime                        not null,
+    primary key (room_id)                                                                       
+)
+engine = InnoDB
+auto_increment = 1;
