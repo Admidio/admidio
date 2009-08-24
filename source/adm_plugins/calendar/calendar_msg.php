@@ -1,8 +1,8 @@
 <?php
 /******************************************************************************
  * Sidebar-Kalender
- * Ausgabe der Termine und Geburtstage für Ajax Tooltip
- * Version 1.4.1
+ * Ausgabe der Termine und Geburtstage fÃ¼r Ajax Tooltip
+ * Version 1.5.0
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -34,7 +34,7 @@ $geburtstage = "";
 $termine_uebergabe = 0;
 $geburtstag_uebergabe = 0;
 
-// Übergabe Termin ermitteln
+// Ãœbergabe Termin ermitteln
 if($plg_ter_aktiv == 1)
 {
     if(isset($_GET['titel']))
@@ -68,7 +68,7 @@ if($plg_ter_aktiv == 1)
     }
 }
 
-// Übergabe Geburtstage ermitteln
+// Ãœbergabe Geburtstage ermitteln
 if($plg_geb_aktiv == 1)
 {
     if(isset($_GET['gebanzahl']))
@@ -120,13 +120,13 @@ if($termine_uebergabe == 1)
     }
     if($weitere >> 0)
     {
-        echo "<div id=\"plgCalendarMSG\" align=\"right\"><i>(... weitere)</i></div>";
+        echo "<div class=\"plgCalendarMSG\" align=\"right\"><i>(... weitere)</i></div>";
     }
 }
 
 if($geburtstag_uebergabe == 1)
 {
-    echo "<div id=\"plgCalendarMSG\" align=\"left\">$geburtstage</div>";
+    echo "<div class=\"plgCalendarMSG\" align=\"left\">$geburtstage</div>";
 }
 
 ?>
