@@ -16,7 +16,9 @@
  *         4 - Rolle loeschen
  *         5 - Rolle wieder aktiv setzen
  *         6 - Frage, ob inaktive Rolle geloescht werden soll
- *
+ *         7 - Rolle verstecken 
+ *         8 - Rolle zeigen 
+ *          
  *****************************************************************************/
 
 require("../../system/common.php");
@@ -37,7 +39,7 @@ $req_rol_id = 0;
 
 if(isset($_GET["mode"]) == false
 || is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 6)
+|| $_GET["mode"] < 1 || $_GET["mode"] > 8)
 {
     $g_message->show("invalid");
 }
@@ -377,6 +379,22 @@ elseif($_GET["mode"] == 6)
     // Fragen, ob die inaktive Rolle geloescht werden soll
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=4");
     $g_message->show("delete_role", $role->getValue("rol_name"), "Löschen");
+}
+elseif($_GET['mode'] == 7)
+{
+    $role->setValue('rol_visible',0);
+    $role->save();
+    $msg_code = 'role_invisible';
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $g_message->show($msg_code, $role->getValue("rol_name"));
+}
+elseif($_GET['mode'] == 8)
+{
+    $role->setValue('rol_visible',1);
+    $role->save();
+    $msg_code = 'role_visible';
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $g_message->show($msg_code, $role->getValue("rol_name"));
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);

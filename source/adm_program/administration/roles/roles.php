@@ -33,6 +33,15 @@ else
     $req_valid = 1;
 }
 
+if(isset($_GET['invisible']) && $_GET['invisible']==1)
+{
+    $req_visible = 0;
+}
+else
+{
+    $req_visible = 1;
+}
+
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -60,6 +69,19 @@ else
     $image           = 'roles.png';
 }
 
+if($req_visible == true)
+{
+    $visible_lnk    = 'Unsichtbare Rollen';
+    $visible_lst    = 'Sichtbare Rollen';
+    $visible_image  = 'light_off.png';
+}
+else
+{
+    $visible_lnk    = 'Sichtbare Rollen';
+    $visible_lst    = 'Unsichtbare Rollen';
+    $visible_image  = 'light_on.png';
+}
+
 echo '
 <ul class="iconTextLinkList">
     <li>
@@ -74,6 +96,13 @@ echo '
             <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$req_valid.'"><img
             src="'. THEME_PATH. '/icons/'.$image.'" alt="'.$description_lnk.'" /></a>
             <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$req_valid.'">'.$description_lnk.'</a>
+        </span>
+    </li>
+    <li>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$req_visible.'"><img
+            src="'. THEME_PATH. '/icons/'.$visible_image.'" alt="'.$visible_lnk.'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$req_visible.'">'.$visible_lnk.'</a>
         </span>
     </li>
     <li>
@@ -99,6 +128,7 @@ echo '
     // alle Rollen gruppiert nach Kategorie auflisten
     $sql    = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                 WHERE rol_valid  = '.$req_valid.'
+                  AND rol_visible = '.$req_visible.'
                   AND rol_cat_id = cat_id
                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
                 ORDER BY cat_sequence ASC, rol_name ASC ';
@@ -271,6 +301,16 @@ echo '
                         echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=6"><img
                             src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
                     }
+                }
+                if($req_visible == true)
+                {
+                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=7"><img
+                            src="'. THEME_PATH. '/icons/light_off.png" alt="Rolle unsichtbar machen" title="Rolle verstecken" /></a>';
+                }
+                else
+                {
+                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=8"><img
+                            src="'. THEME_PATH. '/icons/light_on.png" alt="Rolle sichtbar machen" title="Rolle zeigen" /></a>';
                 }
             echo '</td>
         </tr>';

@@ -314,6 +314,7 @@ create table %PRAEFIX%_roles
    rol_timestamp_change           datetime,
    rol_valid                      tinyint(1) unsigned            not null default 1,
    rol_system                     tinyint(1) unsigned            not null default 0,
+   rol_visible                    tinyint(1) unsigned            not null default 1,
    primary key (rol_id)
 )
 engine = InnoDB

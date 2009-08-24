@@ -287,305 +287,307 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
     {
     	// Rollenobjekt mit Daten fuellen
     	$role->setArray($row_lst);
-
-        if($active_role == 1)
+        if($role->getValue('rol_visible') == 1)
         {
-            $sql_member_status = ' AND mem_begin <= "'.DATE_NOW.'"
-                                   AND mem_end    > "'.DATE_NOW.'" ';
-        }
-        else
-        {
-            $sql_member_status = ' AND mem_end < "'.DATE_NOW.'" ';
-        }
-        // Anzahl Mitglieder ermitteln die keine Leiter sind
-        $sql = 'SELECT COUNT(*) as count
-                  FROM '. TBL_MEMBERS. '
-                 WHERE mem_rol_id = '. $role->getValue('rol_id'). '
-                       '.$sql_member_status.'
-                   AND mem_leader = 0';
-        $result = $g_db->query($sql);
-        $row    = $g_db->fetch_array($result);
-        $num_member = $row['count'];
-
-         // Anzahl Mitglieder ermitteln die Leiter sind
-        $sql = 'SELECT COUNT(*) as count
-                  FROM '. TBL_MEMBERS. '
-                 WHERE mem_rol_id = '. $role->getValue('rol_id'). '
-                       '.$sql_member_status.'
-                   AND mem_leader = 1';
-        $result = $g_db->query($sql);
-        $row    = $g_db->fetch_array($result);
-        $num_leader = $row['count'];
-
-        if($active_role)
-        {
-            // Anzahl ehemaliger Mitglieder ermitteln
+            if($active_role == 1)
+            {
+                $sql_member_status = ' AND mem_begin <= "'.DATE_NOW.'"
+                                       AND mem_end    > "'.DATE_NOW.'" ';
+            }
+            else
+            {
+                $sql_member_status = ' AND mem_end < "'.DATE_NOW.'" ';
+            }
+            // Anzahl Mitglieder ermitteln die keine Leiter sind
             $sql = 'SELECT COUNT(*) as count
                       FROM '. TBL_MEMBERS. '
                      WHERE mem_rol_id = '. $role->getValue('rol_id'). '
-                       AND mem_end   <= "'. DATE_NOW.'"';
+                           '.$sql_member_status.'
+                       AND mem_leader = 0';
             $result = $g_db->query($sql);
             $row    = $g_db->fetch_array($result);
-            $num_former = $row['count'];
-        }
-
-        if($previous_cat_id != $role->getValue('cat_id'))
-        {
-            
-            if($i > 0)
+            $num_member = $row['count'];
+    
+             // Anzahl Mitglieder ermitteln die Leiter sind
+            $sql = 'SELECT COUNT(*) as count
+                      FROM '. TBL_MEMBERS. '
+                     WHERE mem_rol_id = '. $role->getValue('rol_id'). '
+                           '.$sql_member_status.'
+                       AND mem_leader = 1';
+            $result = $g_db->query($sql);
+            $row    = $g_db->fetch_array($result);
+            $num_leader = $row['count'];
+    
+            if($active_role)
             {
-                if($count_cat_entries == 0)
+                // Anzahl ehemaliger Mitglieder ermitteln
+                $sql = 'SELECT COUNT(*) as count
+                          FROM '. TBL_MEMBERS. '
+                         WHERE mem_rol_id = '. $role->getValue('rol_id'). '
+                           AND mem_end   <= "'. DATE_NOW.'"';
+                $result = $g_db->query($sql);
+                $row    = $g_db->fetch_array($result);
+                $num_former = $row['count'];
+            }
+    
+            if($previous_cat_id != $role->getValue('cat_id'))
+            {
+                
+                if($i > 0)
                 {
-                    echo 'Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.';
+                    if($count_cat_entries == 0)
+                    {
+                        echo 'Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.';
+                    }
+                    echo '</div></div><br />';
                 }
-                echo '</div></div><br />';
+                echo '<div class="formLayout">
+                    <div class="formHead">'. $role->getValue('cat_name'). '</div>
+                    <div class="formBody">';
+                $previous_cat_id = $role->getValue('cat_id');
+                $count_cat_entries = 0;
             }
-            echo '<div class="formLayout">
-                <div class="formHead">'. $role->getValue('cat_name'). '</div>
-                <div class="formBody">';
-            $previous_cat_id = $role->getValue('cat_id');
-            $count_cat_entries = 0;
-        }
-
-        
-        //Nur anzeigen, wenn User auch die Liste einsehen darf
-        if($g_current_user->viewRole($role->getValue('rol_id')))
-        {
-            if($count_cat_entries > 0)
+    
+            
+            //Nur anzeigen, wenn User auch die Liste einsehen darf
+            if($g_current_user->viewRole($role->getValue('rol_id')))
             {
-                echo '<hr />';
-            }
-            echo '
-            <div>
-                <div style="float: left;">';
-                    //Dreieck zum ein und ausblenden der Details
-			        if($g_preferences['lists_hide_overview_details']==1)
-	                {
-	                    echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
-							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="Einblenden" title="Einblenden" /></a>'; 
-	                }
-                    else
-                    {
-                        echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
-							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>';
-                    }
-
-                    // Link nur anzeigen, wenn Rolle auch Mitglieder hat
-                    if($num_member > 0 || $num_leader > 0)
-                    {
-                        echo '<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '">'. $role->getValue('rol_name'). '</a>';
-                    }
-                    else
-                    {
-                        echo '<strong>'. $role->getValue('rol_name'). '</strong>';
-                    }
-    
-		        	//Mail an Rolle schicken
-                    if($g_current_user->mailRole($role->getValue('rol_id')) && $g_preferences['enable_mail_module'] == 1)
-		            {
-		                echo '
-						<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$role->getValue('rol_id').'"><img
-		                	src="'. THEME_PATH. '/icons/email.png"  alt="E-Mail an Mitglieder" title="E-Mail an Mitglieder" /></a>';
-		            }
-                    
-		            if($g_current_user->assignRoles() 
-                    || isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')))
-                    {
-                        // die Webmasterrolle darf nur von Webmastern bearbeitet werden
-                        if($role->getValue('rol_name') != 'Webmaster'
-                        || ($role->getValue('rol_name') == 'Webmaster' && $g_current_user->isWebmaster()))
+                if($count_cat_entries > 0)
+                {
+                    echo '<hr />';
+                }
+                echo '
+                <div>
+                    <div style="float: left;">';
+                        //Dreieck zum ein und ausblenden der Details
+    			        if($g_preferences['lists_hide_overview_details']==1)
+    	                {
+    	                    echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
+    							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="Einblenden" title="Einblenden" /></a>'; 
+    	                }
+                        else
                         {
-                            if($g_current_user->assignRoles())
-                            {
-                                // nur Moderatoren duerfen Rollen editieren
-                                echo '
-                                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
-                                    src="'.THEME_PATH.'/icons/edit.png" alt="Einstellungen" title="Einstellungen" /></a>';
-                            }
+                            echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
+    							<img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>';
+                        }
     
-                            // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
-                            if($role->getValue("rol_valid") == 1)
+                        // Link nur anzeigen, wenn Rolle auch Mitglieder hat
+                        if($num_member > 0 || $num_leader > 0)
+                        {
+                            echo '<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '">'. $role->getValue('rol_name'). '</a>';
+                        }
+                        else
+                        {
+                            echo '<strong>'. $role->getValue('rol_name'). '</strong>';
+                        }
+        
+    		        	//Mail an Rolle schicken
+                        if($g_current_user->mailRole($role->getValue('rol_id')) && $g_preferences['enable_mail_module'] == 1)
+    		            {
+    		                echo '
+    						<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$role->getValue('rol_id').'"><img
+    		                	src="'. THEME_PATH. '/icons/email.png"  alt="E-Mail an Mitglieder" title="E-Mail an Mitglieder" /></a>';
+    		            }
+                        
+    		            if($g_current_user->assignRoles() 
+                        || isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')))
+                        {
+                            // die Webmasterrolle darf nur von Webmastern bearbeitet werden
+                            if($role->getValue('rol_name') != 'Webmaster'
+                            || ($role->getValue('rol_name') == 'Webmaster' && $g_current_user->isWebmaster()))
                             {
-                                echo '
-                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
-                                    src="'.THEME_PATH.'/icons/add.png" alt="Mitglieder zuordnen" title="Mitglieder zuordnen" /></a>';
+                                if($g_current_user->assignRoles())
+                                {
+                                    // nur Moderatoren duerfen Rollen editieren
+                                    echo '
+                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+                                        src="'.THEME_PATH.'/icons/edit.png" alt="Einstellungen" title="Einstellungen" /></a>';
+                                }
+        
+                                // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
+                                if($role->getValue("rol_valid") == 1)
+                                {
+                                    echo '
+                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
+                                        src="'.THEME_PATH.'/icons/add.png" alt="Mitglieder zuordnen" title="Mitglieder zuordnen" /></a>';
+                                }
                             }
                         }
+                    echo '</div>
+                    <div style="text-align: right;">';
+                        // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat
+                        if($num_member > 0 || $num_leader > 0)
+                        {
+                            echo '
+                            <select size="1" name="list'.$i.'" onchange="showList(this, '. $role->getValue('rol_id'). ')">
+                                <option value="" selected="selected">Liste anzeigen ...</option>';
+                                
+                                // alle globalen Listenkonfigurationen auflisten
+                                $g_db->data_seek($result_config, 0);
+                                $list_global_flag = '';
+                                
+                                while($row = $g_db->fetch_array($result_config))
+                                {
+                                    if($list_global_flag != $row['lst_global'])
+                                    {
+                                        if($row['lst_global'] == 0)
+                                        {
+                                            echo '<optgroup label="Deine Listen">';
+                                        }
+                                        else
+                                        {
+                                            if($list_global_flag > 0)
+                                            {
+                                                echo '</optgroup>';
+                                            }
+                                            echo '<optgroup label="Allgemeine Listen">';
+                                        }
+                                        $list_global_flag = $row['lst_global'];
+                                    }
+                                    echo '<option value="'.$row['lst_id'].'">'.$row['lst_name'].'</option>';
+                                }
+                                
+                                // Link zu den eigenen Listen setzen
+                                echo '</optgroup>
+                                <optgroup label="Konfiguration">
+                                    <option value="mylist">Eigene Liste ...</option>
+                                </optgroup>
+                            </select>';
+                        }
+                        else
+                        {
+                            echo '&nbsp;';
+                        }
+                    echo '</div>
+                </div>
+                
+                <ul id="role_details_'.$role->getValue('rol_id').'" ';
+                    if($g_preferences['lists_hide_overview_details']==1)
+                    {
+                        echo ' style="display: none;" '; 
                     }
-                echo '</div>
-                <div style="text-align: right;">';
-                    // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat
-                    if($num_member > 0 || $num_leader > 0)
+                    echo ' class="formFieldList">';
+                    if(strlen($role->getValue('rol_description')) > 0)
                     {
                         echo '
-                        <select size="1" name="list'.$i.'" onchange="showList(this, '. $role->getValue('rol_id'). ')">
-                            <option value="" selected="selected">Liste anzeigen ...</option>';
-                            
-                            // alle globalen Listenkonfigurationen auflisten
-                            $g_db->data_seek($result_config, 0);
-                            $list_global_flag = '';
-                            
-                            while($row = $g_db->fetch_array($result_config))
-                            {
-                                if($list_global_flag != $row['lst_global'])
-                                {
-                                    if($row['lst_global'] == 0)
+                        <li>
+                            <dl>
+                                <dt>Beschreibung:</dt>
+                                <dd>'.$role->getValue('rol_description').'</dd>
+                            </dl>
+                        </li>';
+                    }
+        
+                    if(strlen($role->getValue('rol_start_date')) > 0)
+                    {
+                        echo '
+                        <li>
+                            <dl>
+                                <dt>Zeitraum:</dt>
+                                <dd>'. mysqldate('d.m.y', $role->getValue('rol_start_date')). ' bis '. mysqldate('d.m.y', $role->getValue('rol_end_date')). '</dd>
+                            </dl>
+                        </li>';
+                    }
+                    if($role->getValue('rol_weekday') > 0
+                    || strlen($role->getValue('rol_start_time')) > 0 )
+                    {
+                        echo '
+                        <li>
+                            <dl>
+                                <dt>Gruppenstunde:</dt>
+                                <dd>'; 
+                                    if($role->getValue('rol_weekday') > 0)
                                     {
-                                        echo '<optgroup label="Deine Listen">';
+                                        echo $arrDay[$role->getValue('rol_weekday')-1];
+                                    }
+                                    if(strlen($role->getValue('rol_start_time')) > 0)
+                                    {
+                                        echo ' von '. mysqltime('h:i', $role->getValue('rol_start_time')). ' bis '. mysqltime('h:i', $role->getValue('rol_end_time'));
+                                    }
+                                echo '</dd>
+                            </dl>
+                        </li>';
+                    }
+                    //Treffpunkt
+                    if(strlen($role->getValue('rol_location')) > 0)
+                    {
+                        echo '
+                        <li>
+                            <dl>
+                                <dt>Treffpunkt:</dt>
+                                <dd>'.$role->getValue('rol_location').'</dd>
+                            </dl>
+                        </li>';
+                    }
+                    //Teinehmer
+                    echo '
+                    <li>
+                        <dl>
+                            <dt>Teilnehmer:</dt>
+                            <dd>'.$num_member;
+                                if($role->getValue('rol_max_members') > 0)
+                                {
+                                    echo ' von max. '. $role->getValue('rol_max_members');
+                                }
+                                if($active_role && $num_former > 0)
+                                {
+                                    // Anzahl Ehemaliger anzeigen
+                                    if($num_former == 1)
+                                    {
+                                        $text_former = 'Ehemaliger';
                                     }
                                     else
                                     {
-                                        if($list_global_flag > 0)
-                                        {
-                                            echo '</optgroup>';
-                                        }
-                                        echo '<optgroup label="Allgemeine Listen">';
+                                        $text_former = 'Ehemalige';
                                     }
-                                    $list_global_flag = $row['lst_global'];
-                                }
-                                echo '<option value="'.$row['lst_id'].'">'.$row['lst_name'].'</option>';
-                            }
-                            
-                            // Link zu den eigenen Listen setzen
-                            echo '</optgroup>
-                            <optgroup label="Konfiguration">
-                                <option value="mylist">Eigene Liste ...</option>
-                            </optgroup>
-                        </select>';
-                    }
-                    else
-                    {
-                        echo '&nbsp;';
-                    }
-                echo '</div>
-            </div>
-            
-            <ul id="role_details_'.$role->getValue('rol_id').'" ';
-                if($g_preferences['lists_hide_overview_details']==1)
-                {
-                    echo ' style="display: none;" '; 
-                }
-                echo ' class="formFieldList">';
-                if(strlen($role->getValue('rol_description')) > 0)
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>Beschreibung:</dt>
-                            <dd>'.$role->getValue('rol_description').'</dd>
-                        </dl>
-                    </li>';
-                }
-    
-                if(strlen($role->getValue('rol_start_date')) > 0)
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>Zeitraum:</dt>
-                            <dd>'. mysqldate('d.m.y', $role->getValue('rol_start_date')). ' bis '. mysqldate('d.m.y', $role->getValue('rol_end_date')). '</dd>
-                        </dl>
-                    </li>';
-                }
-                if($role->getValue('rol_weekday') > 0
-                || strlen($role->getValue('rol_start_time')) > 0 )
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>Gruppenstunde:</dt>
-                            <dd>'; 
-                                if($role->getValue('rol_weekday') > 0)
-                                {
-                                    echo $arrDay[$role->getValue('rol_weekday')-1];
-                                }
-                                if(strlen($role->getValue('rol_start_time')) > 0)
-                                {
-                                    echo ' von '. mysqltime('h:i', $role->getValue('rol_start_time')). ' bis '. mysqltime('h:i', $role->getValue('rol_end_time'));
+                                    echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$num_former.' '.$text_former.'</a>) ';
                                 }
                             echo '</dd>
                         </dl>
                     </li>';
-                }
-                //Treffpunkt
-                if(strlen($role->getValue('rol_location')) > 0)
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>Treffpunkt:</dt>
-                            <dd>'.$role->getValue('rol_location').'</dd>
-                        </dl>
-                    </li>';
-                }
-                //Teinehmer
-                echo '
-                <li>
-                    <dl>
-                        <dt>Teilnehmer:</dt>
-                        <dd>'.$num_member;
-                            if($role->getValue('rol_max_members') > 0)
-                            {
-                                echo ' von max. '. $role->getValue('rol_max_members');
-                            }
-                            if($active_role && $num_former > 0)
-                            {
-                                // Anzahl Ehemaliger anzeigen
-                                if($num_former == 1)
-                                {
-                                    $text_former = 'Ehemaliger';
-                                }
-                                else
-                                {
-                                    $text_former = 'Ehemalige';
-                                }
-                                echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$num_former.' '.$text_former.'</a>) ';
-                            }
-                        echo '</dd>
-                    </dl>
-                </li>';
-    
-                //Leiter
-                if($num_leader>0)
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>Leiter:</dt>
-                            <dd>'.$num_leader.'</dd>
-                        </dl>
-                    </li>';
-                }
-    
-                //Beitrag
-                if(strlen($role->getValue('rol_cost')) > 0)
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>Beitrag:</dt>
-                            <dd>'.$role->getValue('rol_cost').' &euro;</dd>
-                        </dl>
-                    </li>';
-                }
-				
-				//Beitragszeitraum
-                if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
-                {
-                    echo'<li>
-                        <dl>
-                            <dt>Beitragszeitraum:</dt>
-                            <dd>'.TableRoles::getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
-                        </dl>
-                    </li>';
-                }
-				
-            echo '</ul>';
-            $count_cat_entries++;
-        }
-        else
-        {
-            $num_roles--;
+        
+                    //Leiter
+                    if($num_leader>0)
+                    {
+                        echo '
+                        <li>
+                            <dl>
+                                <dt>Leiter:</dt>
+                                <dd>'.$num_leader.'</dd>
+                            </dl>
+                        </li>';
+                    }
+        
+                    //Beitrag
+                    if(strlen($role->getValue('rol_cost')) > 0)
+                    {
+                        echo '
+                        <li>
+                            <dl>
+                                <dt>Beitrag:</dt>
+                                <dd>'.$role->getValue('rol_cost').' &euro;</dd>
+                            </dl>
+                        </li>';
+                    }
+    				
+    				//Beitragszeitraum
+                    if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+                    {
+                        echo'<li>
+                            <dl>
+                                <dt>Beitragszeitraum:</dt>
+                                <dd>'.TableRoles::getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
+                            </dl>
+                        </li>';
+                    }
+    				
+                echo '</ul>';
+                $count_cat_entries++;
+            }
+            else
+            {
+                $num_roles--;
+            }
         }
     }
 }
