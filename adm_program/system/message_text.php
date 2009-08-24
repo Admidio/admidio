@@ -165,6 +165,13 @@ $message_text = array(
     'Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.<br />
     Bitte wähle eine andere Rolle aus.',
 
+'role_invisible' =>
+    'Die Rolle %VAR1% wurde auf <b>unsichtbar</b> gesetzt.',
+
+'role_visible' =>
+    'Die Rolle %VAR1% wurde auf <b>sichtbar</b> gesetzt.',
+
+
 'save' =>
     'Deine Daten wurden erfolgreich gespeichert.',
 

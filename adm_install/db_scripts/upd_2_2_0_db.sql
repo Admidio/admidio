@@ -3,8 +3,8 @@
 ALTER TABLE %PRAEFIX%_organizations MODIFY COLUMN `org_homepage` VARCHAR(60) NOT NULL;
 
 --Raumverwaltungstabelle hinzufügen
-drop table if exists %PRAEFIX%_rooms;
-create table %PRAEFIX%_rooms
+DROP TABLE IF EXISTS %PRAEFIX%_rooms;
+CREATE TABLE %PRAEFIX%_rooms
 (
     room_id                         int(11) unsigned                not null auto_increment,
     room_name                       varchar(50)                     not null,
@@ -17,3 +17,6 @@ create table %PRAEFIX%_rooms
 )
 engine = InnoDB
 auto_increment = 1;
+
+--Attribut hinzufügen
+ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_visible` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1;
