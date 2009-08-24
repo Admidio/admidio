@@ -1886,6 +1886,22 @@ echo '
                         Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine
                         schnelle Suche nach einem Termin zu ermöglichen. (Standard: ja)
                     </li>
+                    <li>
+                        <dl>
+                            <dt><label for=\"dates_show_rooms\">Raum auswählbar:</label></dt>
+                            <dd>
+                                <input type=\"checkbox\" id=\"dates_show_rooms\" name=\"dates_show_rooms\" ";
+                                if($form_values['dates_show_rooms'] == 1)
+                                {
+                                    echo " checked=\"checked\" ";
+                                }
+                                echo " value=\"1\"/>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class=\"smallFontSize\">
+                        Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)
+                    </li>
                 </ul>
             </div>
         </div>";

@@ -65,6 +65,7 @@ define("TBL_PREFERENCES",       $g_tbl_praefix. "_preferences");
 //define("TBL_RENTAL_OVERVIEW",   $g_tbl_praefix. "_rental_overview");
 define("TBL_ROLE_DEPENDENCIES", $g_tbl_praefix. "_role_dependencies");
 define("TBL_ROLES",             $g_tbl_praefix. "_roles");
+define("TBL_ROOMS",             $g_tbl_praefix. "_rooms");
 define("TBL_SESSIONS",          $g_tbl_praefix. "_sessions");
 define("TBL_TEXTS",             $g_tbl_praefix. "_texts");
 define("TBL_USERS",             $g_tbl_praefix. "_users");
