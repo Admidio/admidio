@@ -29,7 +29,7 @@ if($g_valid_login == false)
 
 $new_user = 0;
 $usr_id   = 0;
-
+$_SESSION['login_rol_id']=$_GET['date']; //Rollen_ID
 if(array_key_exists('new_user', $_GET) && is_numeric($_GET['new_user']))
 {
     $new_user = $_GET['new_user'];

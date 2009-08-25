@@ -17,7 +17,8 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_date.php');
+require_once('../../system/classes/date.php');
+require_once('../../system/classes/table_roles.php');
 if ($g_preferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
@@ -102,6 +103,10 @@ else
     // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
     $date_to = mysqldatetime('d.m.y', $date->getValue('dat_end'));
     $time_to = mysqldatetime('h:i',   $date->getValue('dat_end'));
+    if($date->getValue('dat_rol_id') != '')
+    {
+        $_SESSION['dates_request']['keep_rol_id'] = 1;
+    }
 }
 
 // Html-Kopf ausgeben
@@ -112,6 +117,11 @@ if($req_dat_id > 0)
 else
 {
     $g_layout['title'] = $_GET['headline']. ' anlegen';
+}
+$dat_rol = 0;
+if($date->getValue('dat_rol_id')!= '')
+{
+    $dat_rol=$date->getValue('dat_rol_id');
 }
 
 $g_layout['header'] = '
@@ -150,10 +160,43 @@ $g_layout['header'] = '
     calPopup.setCssPrefix("calendar");
 
     $(document).ready(function() 
-	{
-		setAllDay();
+    {
+        setAllDay();
         $("#dat_headline").focus();
- 	}); 
+    }); 
+    var loginChecked = '.$dat_rol.';
+    //öffnet Messagefenster
+    function popupMessage()
+    {
+        if(loginChecked >0 && !document.getElementById("dat_rol_id").checked)
+        {
+            var msg_result = confirm("Wollen Sie die Anmeldung für den Termin wirklich entfernen? Hierbei würden alle bisherigen Teilnehmer gelöscht werden.");
+            if(msg_result)
+            {
+                $("#formDate").submit();
+            }
+        }
+        else
+        {
+            $("#formDate").submit();
+        }
+    }
+    
+    function markVisibilities()
+    {
+        var visibilities = $("input[name=\'dat_visible_for[]\']");
+        jQuery.each(visibilities, function(index, value) {
+            value.checked = true;
+        });
+    }
+    
+    function unmarkVisibilities()
+    {
+        var visibilities = $("input[name=\'dat_visible_for[]\']");
+        jQuery.each(visibilities, function(index, value) {
+            value.checked = false;
+        });
+    }
 //--></script>';
 
 //Script für BBCode laden
@@ -167,7 +210,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
  
 // Html des Modules ausgeben
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$req_dat_id.'&amp;mode=1">
+<form method="post" id="formDate" action="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$req_dat_id.'&amp;mode=1">
 <div class="formLayout" id="edit_dates_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
@@ -284,6 +327,22 @@ echo '
             </li>
             <li>
                 <dl>
+                    <dt>Anmeldung möglich:</dt>
+                    <dd>';
+                    if($req_dat_id==0)
+                    {
+                        echo '<input type="checkbox" id="dat_rol_id" name="dat_rol_id" value="0"'.( ($date->getValue('dat_rol_id') != '') ? ' checked="checked"': '').'/>';
+                    }
+                    else
+                    {
+                        echo '<input type="checkbox" name="dat_rol_id" id="dat_rol_id" value="'.$date->getValue('dat_rol_id').'"'.( ($_SESSION['dates_request']['keep_rol_id']) ? ' checked="checked"' : '').'/>';
+                    }
+                    echo' <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_login_possible&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_login_possible\',this)" onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                    </dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
                     <dt><label for="dat_location">Ort:</label></dt>
                     <dd>
                         <input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
@@ -351,7 +410,7 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button name="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+            <button name="speichern" type="button" onclick="javascript:popupMessage();" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
     </div>
 </div>

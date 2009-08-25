@@ -438,6 +438,7 @@ create table %PRAEFIX%_dates
    dat_timestamp_create           datetime                       not null,
    dat_usr_id_change              int(11) unsigned,
    dat_timestamp_change           datetime,
+   dat_rol_id                     int(11),                       
    primary key (dat_id)
 )
 engine = InnoDB

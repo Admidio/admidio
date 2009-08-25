@@ -17,7 +17,49 @@
  *****************************************************************************/
 
 require('../../system/common.php');
-require('../../system/classes/table_date.php');
+require('../../system/classes/table_members.php');
+require('../../system/classes/table_roles.php');
+require('../../system/classes/date.php');
+
+// Config-Area fuer Roles, mit denen eine neue Rolle angelegt wird wenn eine Anmeldung moeglich ist
+$role_attributes = array(
+    'rol_cat_id'            => null,
+    'rol_name'               => null,
+    'rol_description'        => null,
+    'rol_assign_roles'       => 0,
+    'rol_approve_users'      => 0,
+    'rol_announcements'      => 0,
+    'rol_dates'              => 0,
+    'rol_download'           => 0,
+    'rol_edit_user'          => 0,
+    'rol_guestbook'          => 0,
+    'rol_guestbook_comments' => 0,
+    'rol_inventory'          => 0,
+    'rol_mail_to_all'        => 0,
+    'rol_mail_this_role'     => 0,
+    'rol_photo'              => 0,
+    'rol_profile'            => 0,
+    'rol_weblinks'           => 0,
+    'rol_this_list_view'     => 0,
+    'rol_all_lists_view'     => 0,
+    'rol_start_date'         => null,
+    'rol_start_time'         => null,
+    'rol_end_date'           => null,
+    'rol_end_time'           => null,
+    'rol_weekday'            => null,
+    'rol_location'           => null,
+    'rol_max_members'        => null,
+    'rol_cost'               => null,
+    'rol_cost_period'        => null,
+    'rol_usr_id_create'      => null,
+    'rol_timestamp_create'   => null,
+    'rol_usr_id_change'      => null,
+    'rol_timestamp_change'   => null,
+    'rol_valid'              => 1,
+    'rol_visible'            => 0,
+    'rol_system'             => 0
+    
+);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_dates_module'] == 0)
@@ -75,7 +117,11 @@ if($req_dat_id > 0)
 if($_GET['mode'] == 1)
 {
     $_SESSION['dates_request'] = $_REQUEST;
-
+    
+    if(!isset($_POST['dat_rol_id']))
+    {
+        $_SESSION['dates_request']['keep_rol_id'] = 0;
+    }
     if(strlen($_POST['dat_headline']) == 0)
     {
         $g_message->show('feld', 'Überschrift');
@@ -198,7 +244,81 @@ if($_GET['mode'] == 1)
 
     // Daten in Datenbank schreiben
     $return_code = $date->save();
-
+    if($req_dat_id==0)
+    {
+        if(isset($_POST['dat_rol_id']))
+        {
+            $role = new TableRoles($g_db);  
+            
+            $rol_cat_id             = $date->getValue('dat_cat_id');
+            $rol_name               = 'Terminzusage_'. $date->getValue('dat_id');
+            $rol_timestamp_create   = $date->getValue('dat_timestamp_create');
+            $role_attributes['rol_cat_id'] = $rol_cat_id;
+            $role_attributes['rol_name'] = $rol_name;
+            $role_attributes['rol_timestamp_create'] = $rol_timestamp_create;
+            $role->setValue('rol_visible', '0');
+            // Rolle mit Daten aus Termin befüllen
+            foreach($role_attributes as $key => $value)
+            {
+                $role->setValue($key, $value);
+            }
+           
+            // Rolle in Datenbank speichern
+            $return_code2 = $role->save();
+            if($return_code < 0 || $return_code2 < 0)
+            {
+                $g_message->show('norights');
+            }
+            
+            // dat_rol_id anpassen (Referenz zwischen date und role)
+            $date->setValue('dat_rol_id', $role->getValue('rol_id'));
+            $return_code = $date->save();
+            if($return_code < 0)
+            {
+                $role->delete();
+                $g_message->show('norights');
+            }
+            
+            //Termin-Ersteller als Member und Leader eintragen
+            $member = new TableMembers($g_db);
+            $member->startMembership($role->getValue('rol_id'), $_SESSION['g_current_user']->getValue('usr_id'), 1);
+        }
+    }
+    else    // im Bearbeiten-Modus
+    {
+        $role = new TableRoles($g_db);
+        $role->readData($date->getValue('dat_rol_id'));
+        if(isset($_POST['dat_rol_id']))
+        {
+            $rol_cat_id             = $date->getValue('dat_cat_id');
+            $rol_name               = 'Terminzusage_'. $date->getValue('dat_id');
+            $rol_timestamp_create   = $date->getValue('dat_timestamp_create');
+            $role_attributes['rol_cat_id'] = $rol_cat_id;
+            $role_attributes['rol_name'] = $rol_name;
+            $role_attributes['rol_timestamp_create'] = $rol_timestamp_create;
+            // Rolle mit Daten aus Termin befüllen
+            foreach($role_attributes as $key => $value)
+            {
+                $role->setValue($key, $value);
+            }
+            $role->setValue('rol_visible','0');
+            $role->save();
+            $date->setValue('dat_rol_id', $role->getValue('rol_id'));
+            $date->save();
+            $member = new TableMembers($g_db);
+            $member->startMembership($role->getValue('rol_id'), $_SESSION['g_current_user']->getValue('usr_id'), 1);
+        }
+        else
+        {
+            
+            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = "'.$date->getValue('dat_rol_id').'"';
+            $g_db->query($sql);
+            $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = "'.$date->getValue('dat_rol_id').'"';
+            $g_db->query($sql);
+            $date->setValue('dat_rol_id', null);
+            $date->save();
+        }
+    }
     if($return_code < 0)
     {
         $g_message->show('norights');
@@ -213,8 +333,14 @@ if($_GET['mode'] == 1)
 elseif($_GET['mode'] == 2)
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
-	if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
+    if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
     {
+         //member bzw. Teilnahme löschen
+        $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = "'.$date->getValue('dat_rol_id').'"';
+        $g_db->query($sql);
+        //bestimmte Rolle löschen
+        $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id ="'.$date->getValue('dat_rol_id').'"';
+        $g_db->query($sql);
         $date->delete();
 
         // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest

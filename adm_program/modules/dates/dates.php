@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/table_date.php');
+require_once('../../system/classes/date.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($g_preferences['enable_dates_module'] == 0)
@@ -393,7 +393,16 @@ else
                     }
                     echo ' ' . $date->getValue('dat_headline'). '
                 </div>
-                <div class="boxHeadRight">
+                <div class="boxHeadRight">';
+                    $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id="'.$g_current_user->getValue('usr_id').'" AND mem_rol_id = "'.$date->getValue('dat_rol_id').'" AND mem_leader=1';
+                    $result = $g_db->query($sql);
+                    $row2 = $g_db->num_rows($result);
+                    
+                    if($row2>0) 
+                    {
+                        echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&rol_id='.$date->getValue('dat_rol_id').'"  ><img src="'. THEME_PATH. '/icons/list.png" alt="Mitglieder" title="Mitglieder" /></a>';
+                    }
+                    echo '
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=4"><img
                         src="'. THEME_PATH. '/icons/database_out.png" alt="Exportieren (iCal)" title="Exportieren (iCal)" /></a>';
 
@@ -484,8 +493,8 @@ else
                                             // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
                                             $route_url .= ',%20'. $date->getValue('dat_country');
                                         }
-                                        echo '<spam class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
-                                        src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" title="Route anzeigen"/></a></spam>';
+                                        echo '<span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
+                                        src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" title="Route anzeigen"/></a></span>';
                                     }
                                 } 
                                 else
@@ -521,9 +530,50 @@ else
                         echo '<br />Zuletzt bearbeitet von '. $row['change_firstname']. ' '. $row['change_surname'].
                         ' am '. mysqldatetime('d.m.y h:i', $date->getValue('dat_timestamp_change'));
                     }
-                echo '</div>
-            </div>
-        </div>';
+                $sql = 'SELECT * FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';
+                $result = $g_db->query($sql);
+                $row = $g_db->fetch_array($result);
+                if($row['mem_leader']!=1)
+                {
+                    if($date->getValue('dat_rol_id')!=null && $row == null)
+                    {
+                       
+                       echo '<div style="text-align:right">
+                       
+                       <a class="iconLink" href=';
+                       if($g_current_user->getValue('usr_id')!=null)
+                       {
+                            echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$req_headline.'&amp;login=1">';
+                       }
+                       else
+                       {
+                            echo '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2&amp;date='.$date->getValue('dat_rol_id').'">';
+                       }
+                       
+                        echo    '<button name="loginDate" type="submit" value="loginDate" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" 
+                            alt="login Date" />&nbsp;anmelden
+                            </button>
+                        </a>
+                        </div>';
+                       
+                    }
+                    else if($date->getValue('dat_rol_id')!=null && $row != null)
+                    {
+                       
+                         echo '<div style="text-align:right">
+                       
+                       <a class="iconLink" href=';
+                      
+                        echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$req_headline.'&amp;login=0">
+                            <button name="logoutDate" type="submit" value="logoutDate" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png" 
+                            alt="login Date" />&nbsp;austragen</button> 
+                        </a>
+                        </div>';
+                    }
+                }
+               echo '</div>
+               </div>
+            </div>';
     }  // Ende While-Schleife
 }
 

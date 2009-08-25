@@ -171,9 +171,13 @@ $message_text = array(
 'role_visible' =>
     'Die Rolle %VAR1% wurde auf <b>sichtbar</b> gesetzt.',
 
-
 'save' =>
     'Deine Daten wurden erfolgreich gespeichert.',
+
+'saveDate' =>
+    'Deine Daten wurden erfolgreich gespeichert und du wurdest zum gewünschten Termin angemeldet.<br /><br />
+    Du kannst dich nun einloggen.<br />
+    Sobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.',    
 
 'uhrzeit' =>
     'Es wurde keine sinnvolle Uhrzeit eingegeben.<br /><br />

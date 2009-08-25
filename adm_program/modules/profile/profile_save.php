@@ -275,6 +275,18 @@ if($user->getValue('usr_id') == 0)
 // Aenderungen speichern
 $ret_code = $user->save();
 
+//Falls Registrierung nur fuer Terminanmeldung 
+if($_SESSION['login_rol_id']>0)
+{
+    $date_rol_id = $_SESSION['login_rol_id'];
+    $members = new TableMembers($g_db);
+    $members->setValue('mem_rol_id', $date_rol_id);
+    $members->setValue('mem_usr_id', $user->getValue('usr_id'));
+    $members->save();
+    //User sofort freischalten
+    $user->setValue('usr_valid',1);
+    $user->save();
+}
 // wurde der Loginname vergeben oder geaendert, so muss ein Forumaccount gepflegt werden
 // bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
 if($g_preferences['enable_forum_interface'] && ($login_name_changed || $new_user == 3))
@@ -305,8 +317,16 @@ if($new_user == 2)
     // Registrierung eines neuen Benutzers
     // -> E-Mail an alle Webmaster schreiben
     /*------------------------------------------------------------*/
-    $err_code = 'anmeldung';
+    if($_SESSION['login_rol_id']>0)
+    {
+        $err_code = 'saveDate';
+    }
+    else
+    {
+        $err_code = 'anmeldung';
+    }
     $err_text = '';
+    unset($_SESSION['login_rol_id']);
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
     if($g_preferences['enable_system_mails'] == 1 && $g_preferences['enable_registration_admin_mail'] == 1)
