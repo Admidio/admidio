@@ -11,7 +11,7 @@
  * Übergaben: date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
  *            ajax_change (ist gesetzt bei Monatswechsel per Ajax)
  *
- * Copyright    : (c) 2007-2009 Matthias Roberg
+ * Copyright    : (c) 2007-2009 Matthias Roberg & mpunkt
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
