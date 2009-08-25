@@ -23,3 +23,17 @@ ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_visible` TINYINT(1) UNSIGNED NOT NUL
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_rol_id` INT(11) UNSIGNED;
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_room_id` INT(11) UNSIGNED;
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_max_members` INT(11) UNSIGNED NOT NULL;
+
+--Sichtbarkeitstabelle für Termine hinzufügen
+
+DROP TABLE IF EXISTS %PRAEFIX%_date_role;
+CREATE TABLE %PRAEFIX%_date_role
+(
+    id                              int(11) unsigned                not null auto_increment,
+    dat_id                          int(11) unsigned                not null,
+    rol_id                          int(11) unsigned                not null,
+    primary key (id)
+)
+engine = InnoDB
+auto_increment = 1;
+

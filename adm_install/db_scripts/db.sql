@@ -754,3 +754,17 @@ create table %PRAEFIX%_rooms
 )
 engine = InnoDB
 auto_increment = 1;
+
+/*==============================================================*/
+/* Table: adm_date_role                                         */
+/*==============================================================*/
+
+create table %PRAEFIX%_date_role
+(
+    id                              int(11) unsigned                not null auto_increment,
+    dat_id                          int(11) unsigned                not null,
+    rol_id                          int(11) unsigned                not null,
+    primary key (id)
+)
+engine = InnoDB
+auto_increment = 1;

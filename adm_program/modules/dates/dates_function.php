@@ -281,7 +281,25 @@ if($_GET['mode'] == 1)
     // Daten in Datenbank schreiben
     $return_code = $date->save();
     if($req_dat_id==0)
-    {
+    {   
+        if(is_array($_POST['dat_visible_for']))
+        {
+            $modes = $_POST['dat_visible_for'];
+            $date2 = new Date($g_db);
+            foreach($modes as $value)
+            {
+                $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dat_id, rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
+                $g_db->query($sql);
+            }
+            $date->visible_for = $modes;
+        }
+        else    //nichts ausgewählt
+        {
+            $date->delete();
+            $g_message->show('feld', 'Sichtbarkeit');
+        }
+        
+        // Rollenobjekt anlegen, wenn Anmeldung möglich und kein Bearbeiten-Modus
         if(isset($_POST['dat_rol_id']))
         {
             $role = new TableRoles($g_db);  
@@ -322,10 +340,10 @@ if($_GET['mode'] == 1)
     }
     else    // im Bearbeiten-Modus
     {
-        $role = new TableRoles($g_db);
-        $role->readData($date->getValue('dat_rol_id'));
         if(isset($_POST['dat_rol_id']))
         {
+            $role = new TableRoles($g_db);
+            $role->readData($date->getValue('dat_rol_id'));
             $rol_cat_id             = $date->getValue('dat_cat_id');
             $rol_name               = 'Terminzusage_'. $date->getValue('dat_id');
             $rol_timestamp_create   = $date->getValue('dat_timestamp_create');
@@ -353,6 +371,23 @@ if($_GET['mode'] == 1)
             $date->setValue('dat_rol_id', null);
             $date->save();
         }
+        if(is_array($_POST['dat_visible_for'])) 
+        {
+            $sql='DELETE FROM '.TBL_DATE_ROLE.' WHERE dat_id="'.$date->getValue('dat_id').'"';
+            $g_db->query($sql);
+            $modes = $_POST['dat_visible_for'];
+            $date2 = new Date($g_db);
+            foreach($modes as $value)
+            {
+                $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dat_id,rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
+                $g_db->query($sql);
+            }
+            $date->visible_for = $modes;
+        }
+        else    //nichts ausgewählt
+        {    
+            $g_message->show('feld','Sichtbarkeit');
+        }
     }
     if($return_code < 0)
     {
@@ -370,12 +405,7 @@ elseif($_GET['mode'] == 2)
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
     {
-         //member bzw. Teilnahme löschen
-        $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = "'.$date->getValue('dat_rol_id').'"';
-        $g_db->query($sql);
-        //bestimmte Rolle löschen
-        $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id ="'.$date->getValue('dat_rol_id').'"';
-        $g_db->query($sql);
+         //member bzw. Teilnahme/Rolle löschen
         $date->delete();
 
         // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
