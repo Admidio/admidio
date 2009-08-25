@@ -1,4 +1,4 @@
-﻿-------------------------------------------------------------------------
+-------------------------------------------------------------------------
                        Calendar Plugin for Admidio
            Admidio is a open source user management software
 -------------------------------------------------------------------------
@@ -13,7 +13,7 @@
 
  1. Einleitung
 -------------------------------------------------------------------------
-Calendar stellt den aktuellen Kalender-Monat dar und markiert die in der
+Calendar stellt wechselbaren Kalender-Monat dar und markiert die in der
 Datenbank hinterlegten Termine und Geburtstage ansichtlich. Kurze
 Informationen zu den Terminen und Geburtstagen stehen bei Überfahren mit
 dem Mauszeiger als Tooltip oder Linktext zur Verfügung. Ist ein Termin
@@ -64,6 +64,6 @@ Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
 Für weitere Informationen sollten Sie die gpl-de.html durchlesen.
 
 -------------------------------------------------------------------------
-		      (C) Matthias Roberg, 2007 - 2009
+		      (C) Matthias Roberg & mpunkt, 2007 - 2009
            Admidio is a open source user management software
 -------------------------------------------------------------------------

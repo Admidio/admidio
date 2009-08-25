@@ -9,7 +9,7 @@
  *
  * Kompatible ab Admidio-Versions 2.1.0
  *
- * Copyright    : (c) 2007-2009 Matthias Roberg
+ * Copyright    : (c) 2007-2009 Matthias Roberg & mpunkt
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
