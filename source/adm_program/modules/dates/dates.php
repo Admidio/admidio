@@ -226,14 +226,29 @@ else
 
 if($req_id == 0)
 {
+    $user_id = $_SESSION['g_current_user']->getValue('usr_id');
+    if($user_id != '')
+    {
+        $login_sql = 'AND ( rol_id = 0 OR rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
+    }
+    else
+    {
+        $login_sql = 'AND rol_id = 0';
+    }
+    
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-    $sql = 'SELECT COUNT(1) as count
-              FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
-             WHERE dat_cat_id = cat_id
-               AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                   OR (   dat_global   = 1
-                      AND cat_org_id IN ("'.$organizations.'") ))
-                 '.$conditions. $condition_calendar;
+    $sql = 'SELECT COUNT(DISTINCT '. TBL_DATES. '.dat_id) as count
+            FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
+            WHERE dat_cat_id = cat_id
+                AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                    OR (   dat_global   = 1
+                        AND cat_org_id IN ("'.$organizations.'") 
+                    )
+                )
+                AND '. TBL_DATES. '.dat_id = '.TBL_DATE_ROLE.'.dat_id
+                '.$login_sql.'
+                '.$conditions. $condition_calendar;
+
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
     $num_dates = $row['count'];
@@ -254,10 +269,10 @@ else
 }
 
 // nun die Ankuendigungen auslesen, die angezeigt werden sollen
-$sql = 'SELECT cat.*, dat.*, 
+$sql = 'SELECT DISTINCT cat.*, dat.*, 
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-          FROM '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
+          FROM '.TBL_DATE_ROLE.' dat_rol, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = dat_usr_id_create
            AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
@@ -274,6 +289,8 @@ $sql = 'SELECT cat.*, dat.*,
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                OR (   dat_global   = 1
                   AND cat_org_id IN ('.$organizations.') ))
+                  AND dat.dat_id = dat_rol.dat_id
+               '.$login_sql.'
                '.$conditions. $condition_calendar. $order_by. '
          LIMIT '.$req_start.', '.$dates_per_page;
 $dates_result = $g_db->query($sql);

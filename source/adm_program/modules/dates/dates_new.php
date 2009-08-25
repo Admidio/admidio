@@ -93,6 +93,10 @@ if(isset($_SESSION['dates_request']))
     $time_from = $_SESSION['dates_request']['time_from'];
     $date_to   = $_SESSION['dates_request']['date_to'];
     $time_to   = $_SESSION['dates_request']['time_to'];
+    
+    // Folgende Felder auch vorbelegen wenn Formular nicht korrekt ausgefüllt wurde (rn)
+    // Da diese Felder nicht in der Datenbanktabelle vorkommen und somit in Instanz $date nicht enthalten sind, müssen sie hier gesetzt werden
+    $visible_for = $_SESSION['dates_request']['dat_visible_for'];
     unset($_SESSION['dates_request']);
 }
 else
@@ -378,6 +382,29 @@ echo '
                         </dd>
                     </dl>
                 </li>
+                <li>
+                    <dl>
+                    <dt>Sichtbarkeit:</dt>
+                    <dd>';
+
+                        $visibility_modes = $date->getVisibilityArray();
+                        foreach($visibility_modes as $value => $label)
+                        {
+                            $identity = 'dat_visible_for_'.$value;
+                            echo '<input type="checkbox" name="dat_visible_for[]" value="'.$value.'" id="'.$identity.'"';
+                            if($date->isVisibleFor($value) || (isset($visible_for) && in_array($value,$visible_for)) || $req_dat_id == 0)
+                            {
+                                echo ' checked="checked"';
+                            }
+                            
+                            echo ' />&nbsp;<label for="'.$identity.'">'.$label.'</label>&nbsp;<br/>';
+                        }
+                    
+                echo  '<a href="javascript:markVisibilities();">alle</a>
+                        <a href="javascript:unmarkVisibilities();">keine</a>
+                    </dd>
+                </dl>
+            </li>
             <li>
                 <dl>
                     <dt><label for="dat_location">Ort:</label></dt>

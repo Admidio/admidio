@@ -28,7 +28,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 class TableDate extends TableAccess
 {
     var $bbCode;
-
+    var $visible_for = array();
     // Konstruktor
     function TableDate(&$db, $date_id = 0)
     {
@@ -55,6 +55,14 @@ class TableDate extends TableAccess
             $sql_where_condition   .= '    dat_cat_id = cat_id
                                        AND dat_id     = '.$dat_id;
             parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
+            
+            $sql = 'SELECT DISTINCT rol_id FROM '.TBL_DATE_ROLE.' WHERE dat_id="'.$dat_id.'"';
+            $result = $this->db->query($sql);
+            
+            while($row = $this->db->fetch_array($result))
+            {
+                $this->visible_for[] = intval($row['rol_id']);
+            }
         }
     }
 
@@ -192,6 +200,11 @@ class TableDate extends TableAccess
         }
     
         return false;
-    }    
+    }   
+    // prueft, ob der Termin fuer eine Rolle sichtbar ist
+    function isVisibleFor($rol_id)
+    {
+        return in_array($rol_id, $this->visible_for);
+    } 
 }
 ?>

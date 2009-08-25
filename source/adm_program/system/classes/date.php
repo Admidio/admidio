@@ -19,7 +19,7 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_date.php');
-
+require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 class Date extends TableDate
 {
     // Array mit den Keys für die Datenbank und den Typbeschreibungen
@@ -49,16 +49,6 @@ class Date extends TableDate
         }
     }
     
-    function getRepeatedTypeText($type)
-    {
-        return $this->types[$type];
-    }
-    
-    function getTypesArray()
-    {
-        return $this->types;
-    }
-    
     function getVisibilityMode($mode)
     {
         return $this->visibility[$mode];
@@ -67,6 +57,26 @@ class Date extends TableDate
     function getVisibilityArray()
     {
         return $this->visibility;
+    }
+    function delete()
+    {
+        if($this->getValue('dat_rol_id') > 0)
+        {
+            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = "'.$this->getValue('dat_rol_id').'"';
+            $this->db->query($sql);
+            
+            $role = new TableRoles($this->db);
+            $role->readData($this->getValue('dat_rol_id'));
+            $role->delete();
+        }
+        
+        $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dat_id = "'.$this->getValue('dat_id').'"';
+        $result = $this->db->query($sql);
+        
+        $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dat_id="'.$this->getValue('dat_id').'"';
+        $this->db->query($sql);
+        
+        parent::delete();
     }
 }
 ?>
