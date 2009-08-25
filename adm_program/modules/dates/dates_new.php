@@ -19,6 +19,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/date.php');
 require_once('../../system/classes/table_roles.php');
+require_once('../../system/classes/table_rooms.php');
 if ($g_preferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
@@ -58,7 +59,7 @@ if(!isset($_GET['headline']))
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Terminobjekt anlegen
-$date = new TableDate($g_db);
+$date = new Date($g_db);
 
 if($req_dat_id > 0)
 {
@@ -340,7 +341,43 @@ echo '
                     echo' <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_login_possible&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_login_possible\',this)" onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
-            </li>
+            </li>';
+            if($g_preferences['dates_show_rooms']==1 || $date->getValue('dat_room_id')>0) //nur wenn Raumauswahl aktiviert ist
+            {
+                echo'
+                    <li>
+                        <dl>
+                            <dt>Raum:</dt>
+                            <dd>
+                                <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6">';
+                                $room = new TableRooms($g_db);
+                                $room_choice = $room->getRoomsArray();
+                                foreach($room_choice as $key => $value)
+                                {
+                                    $selected = '';
+                                    if($key == $date->getValue('dat_room_id'))
+                                    {
+                                        $selected = ' selected="selected"';
+                                    }
+                                    
+                                    echo '<option value="'.$key.'"'.$selected.'>'.$value.'</option>';
+                                }
+                                echo '</select>
+                            </dd>
+                        </dl>
+                    </li>';
+            }
+          
+            echo'
+                <li>
+                    <dl>
+                        <dt>Teilnehmerbegrenzung:</dt>
+                        <dd>
+                            <input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
+                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_max_members&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_max_members\',this)" onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                        </dd>
+                    </dl>
+                </li>
             <li>
                 <dl>
                     <dt><label for="dat_location">Ort:</label></dt>

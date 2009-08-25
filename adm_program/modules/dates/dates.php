@@ -25,6 +25,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/date.php');
+require_once('../../system/classes/table_rooms.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($g_preferences['enable_dates_module'] == 0)
@@ -372,7 +373,7 @@ if($g_db->num_rows($dates_result) == 0)
 }
 else
 {
-    $date = new TableDate($g_db);
+    $date = new Date($g_db);
 
     // Termine auflisten
     while($row = $g_db->fetch_array($dates_result))
@@ -428,24 +429,63 @@ else
 
             <div class="boxBody">';
                 // Uhrzeit und Ort anzeigen, falls vorhanden
-                if ($date->getValue("dat_all_day") == 0 || strlen($date->getValue("dat_location")) > 0)
+                if ($date->getValue("dat_all_day") == 0 || strlen($date->getValue("dat_location")) > 0 || $date->getValue('dat_rol_id')>0)
                 {
-                    echo '<div class="date_info_block">';
+                    echo '<div class="date_info_block">
+                            <table style="float:left; width: 200px;">';
                         $margin_left_location = "0";
                         if ($date->getValue("dat_all_day") == 0)
                         {
-                            echo '<div style="float: left;">Beginn:<br />Ende:</div>
-                            <div style="float: left;">
-                                <strong>'. mysqldatetime('h:i', $date->getValue('dat_begin')). '</strong> Uhr<br />
-                                <strong>'. mysqldatetime('h:i', $date->getValue('dat_end')). '</strong> Uhr
-                            </div>';
+                            echo '
+                            
+                                <tr>
+                                    <td>Beginn:</td>
+                                    <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_begin')). '</strong> Uhr</td>
+                                </tr>
+                                <tr>
+                                    <td>Ende:</td>
+                                    <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_end')). '</strong> Uhr</td>
+                                </tr>';
                             $margin_left_location = '40';
                         }
-
-                        if (strlen($date->getValue('dat_location')) > 0)
+                        if(($date->getValue('dat_rol_id'))!=null)
                         {
-                            echo '<div style="float: left; padding-left: '. $margin_left_location. 'px;">Kalender:&nbsp;<br />Ort:</div>
-                            <strong>'. $date->getValue("cat_name"). '</strong><br/><div>';
+                            if($date->getValue('dat_max_members')!=0)
+                            {
+                                echo '
+                                    <tr>
+                                        <td>Plätze:</td>';
+                                        $sql = 'SELECT DISTINCT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
+                                        $result = $g_db->query($sql);
+                                        $number_taken = $g_db->num_rows($result); //belegte Plätze
+                                        $number_free = intval($date->getValue('dat_max_members')) - intval($number_taken); //freie Plätze
+                                echo '
+                                    <td><strong>'.$number_free.' </strong>frei <strong></td></tr>';
+                                }
+                            else 
+                            {
+                                echo '
+                                    <tr>
+                                        <td>Plätze:</td>
+                                        <td><strong>unbegrenzt</strong></td></tr>';
+                            }
+                        }
+                        echo '</table>';
+
+                        if (strlen($date->getValue('dat_location')) > 0 || $date->getValue('dat_room_id')>0 || $date->getValue('dat_rol_id')>0)
+                        {
+                            echo '
+                            <table style="padding-left: '. $margin_left_location. 'px;">
+                                <tr>
+                                    <td>Kalender:</td>
+                                    <td><strong>'. $date->getValue("cat_name"). '</strong></td>
+                                </tr>';
+                            if($date->getValue('dat_location') > 0 || $date->getValue('dat_room_id')>0)
+                            {
+                            
+                              echo '  <tr>
+                                    <td>Ort:</td>
+                                    <td>';
                                 // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
                                 // die jeweils laenger als 3 Zeichen sind
                                 $map_info_count = 0;
@@ -501,7 +541,45 @@ else
                                 {
                                     echo '<strong>'. $date->getValue('dat_location'). '</strong>';
                                 }
-                            echo '</div>';
+                                $room = new TableRooms($g_db);
+                                $room->readData($date->getValue('dat_room_id'));
+                                $room_name = $room->getValue('room_name');
+                                if($date->getValue('dat_room_id')>0)
+                                {
+                                    echo '<strong> (<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a>)</strong>';
+                                }
+                                        
+                                        echo '
+                                    </td>
+                                </tr>';
+                                }
+                                
+                               if(!is_null($date->getValue('dat_rol_id')))
+                               { 
+                                   echo ' <tr>
+                                        <td>
+                                            Teilnehmer:
+                                        </td>
+                                        <td>';
+                                            $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
+                                            $result = $g_db->query($sql);
+                                            $row2 = $g_db->num_rows($result);
+                                            echo '&nbsp;'.$row2.' (davon ' ;
+                                            $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
+                                            $result = $g_db->query($sql);
+                                            $row2 = $g_db->num_rows($result);
+                                            if(intval($row2)==1)
+                                            {
+                                                echo $row2.' Organisator) ';
+                                            }
+                                            else
+                                            {
+                                                echo $row2.' Organisatoren) ';
+                                            }
+                                  echo' </td>
+                                    </tr>';
+                                }
+                          echo' </table>';
                         }
                         else 
                         {

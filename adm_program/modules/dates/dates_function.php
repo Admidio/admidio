@@ -20,6 +20,7 @@ require('../../system/common.php');
 require('../../system/classes/table_members.php');
 require('../../system/classes/table_roles.php');
 require('../../system/classes/date.php');
+require('../../system/classes/table_rooms.php');
 
 // Config-Area fuer Roles, mit denen eine neue Rolle angelegt wird wenn eine Anmeldung moeglich ist
 $role_attributes = array(
@@ -56,7 +57,7 @@ $role_attributes = array(
     'rol_usr_id_change'      => null,
     'rol_timestamp_change'   => null,
     'rol_valid'              => 1,
-    'rol_visible'            => 0,
+    'rol_visible'            => '0',
     'rol_system'             => 0
     
 );
@@ -226,6 +227,22 @@ if($_GET['mode'] == 1)
     {
         $_POST['dat_all_day'] = 0;
     }
+    //Wenn Räume aktiviert
+    if($g_preferences['dates_show_rooms']==1 && $req_dat_id ==0)
+    {
+        if($_POST['dat_room_id']>0)
+        {
+            // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
+            $sql = 'SELECT COUNT(dat_id) AS is_reserved FROM '.TBL_DATES.' WHERE '.
+                    '(dat_begin >= "'.$date_begin.'" AND dat_begin <= "'.$date_end.'") OR '.
+                    '(dat_end >= "'.$date_begin.'" AND dat_end <= "'.$date_end.'") OR (dat_begin = "'.$date_begin.'" AND dat_end = "'.$date_end.'") AND dat_room_id = "'.$_POST['dat_room_id'].'"';
+            $result = $g_db->query($sql);
+            $row = $g_db->fetch_object($result);
+            if($row->is_reserved) $g_message->show('room_is_reserved');
+        }
+        
+    }
+    
 
     // das Land nur zusammen mit dem Ort abspeichern
     if(strlen($_POST['dat_location']) == 0)
@@ -240,6 +257,25 @@ if($_GET['mode'] == 1)
         {
             $date->setValue($key, $value);
         }
+    }
+    if($g_preferences['dates_show_rooms']==1)
+    {
+        if($_POST['dat_room_id'] > 0)
+        {
+            $date->setValue('dat_room_id',$_POST['dat_room_id']);
+            $room = new TableRooms($g_db);
+            $room->readData($_POST['dat_room_id']);
+            $number = intval($room->getValue('room_capacity')) + intval($room->getValue('room_overhang'));
+            $date->setValue('dat_max_members', $number);
+            if($_POST['dat_max_members']<$number && $_POST['dat_max_members']!=null)
+            {
+                $date->setValue('dat_max_members', $_POST['dat_max_members']);
+            }
+        }
+    }
+    else
+    {
+        $date->setValue('dat_max_members', $_POST['dat_max_members']);
     }
 
     // Daten in Datenbank schreiben
@@ -256,7 +292,6 @@ if($_GET['mode'] == 1)
             $role_attributes['rol_cat_id'] = $rol_cat_id;
             $role_attributes['rol_name'] = $rol_name;
             $role_attributes['rol_timestamp_create'] = $rol_timestamp_create;
-            $role->setValue('rol_visible', '0');
             // Rolle mit Daten aus Termin befüllen
             foreach($role_attributes as $key => $value)
             {
@@ -267,6 +302,7 @@ if($_GET['mode'] == 1)
             $return_code2 = $role->save();
             if($return_code < 0 || $return_code2 < 0)
             {
+                $date->delete();
                 $g_message->show('norights');
             }
             
@@ -301,7 +337,6 @@ if($_GET['mode'] == 1)
             {
                 $role->setValue($key, $value);
             }
-            $role->setValue('rol_visible','0');
             $role->save();
             $date->setValue('dat_rol_id', $role->getValue('rol_id'));
             $date->save();
