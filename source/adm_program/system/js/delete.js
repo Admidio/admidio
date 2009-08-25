@@ -9,7 +9,7 @@
  *****************************************************************************/
 
 var objectDeleted;
-
+var typeGlobal;
 function deleteObject(type, elementId, databaseId, description)
 {
     var msg_result = confirm("Willst du den Eintrag \n\n" + description + "\n\nwirklich löschen ?");
@@ -17,7 +17,7 @@ function deleteObject(type, elementId, databaseId, description)
     {
         var url  = "";
         objectDeleted = document.getElementById(elementId);
-        
+        typeGlobal = type;
         switch (type)
         {
             case "ann":
@@ -50,6 +50,9 @@ function deleteObject(type, elementId, databaseId, description)
             case "pho":
                 url = gRootPath + "/adm_program/modules/photos/photo_album_function.php?job=delete&pho_id=" + databaseId;
                 break;
+            case "room":
+                url = gRootPath + "/adm_program/administration/rooms/rooms_function.php?mode=2&room_id=" + databaseId;
+                break;
             case "usf":
                 url = gRootPath + "/adm_program/administration/organization/fields_function.php?mode=2&usf_id=" + databaseId;
                 break;
@@ -76,7 +79,14 @@ function afterDeleteObject()
         }
         else
         {
-            alert("Es ist ein Fehler aufgetreten !\n\nDer Eintrag konnte nicht gelöscht werden.");
+            if(typeGlobal=="room")
+            {
+                alert("Es ist ein Fehler aufgetreten !\n\nDer Raum konnte nicht gelöscht werden, da er bereits einem Termin zugeordnet ist.");
+            }
+            else
+            {
+                alert("Es ist ein Fehler aufgetreten !\n\nDer Eintrag konnte nicht gelöscht werden.");
+            }
         }
     }
 }

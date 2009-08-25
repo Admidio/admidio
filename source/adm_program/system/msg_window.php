@@ -127,10 +127,19 @@ switch ($req_err_code)
         echo 'Hier können Sie auswählen, ob eine Anmeldung zu dem von Ihnen angegebenen Termin möglich sein soll oder nicht. <br/> Falls Sie die Anmeldung nachträglich löschen, so werden auch alle bisherigen Teilnehmer vom Termin entfernt. <br/> Wenn Sie hingegen nur die Anmeldung für neue Teilnehmer beenden möchten, so setzen Sie die
         derzeitige Teilnehmerzahl als Teilnahmebegrenzung.';
         break;
+        
+    case 'date_max_members': 
+        echo 'Hier können Sie die Teilnehmeranzahl beschränken. Ist die Anzahl nicht begrenzt, so können Sie dieses Feld leer lassen.';
+        break;
 
     case 'date_location_link':
         echo 'Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, 
         so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.';
+        break;
+        
+    case 'room_overhang':
+        echo 'Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche
+              Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden. ';
         break;
 
     case 'enable_rss':
@@ -234,6 +243,31 @@ switch ($req_err_code)
         echo 'Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.<br /><br />
         Dir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen,
         falls du diese selber nicht besitzt.';
+        break;
+    
+    case 'room_detail':
+        $room = new TableRooms($g_db);
+        $room->readData($_GET['room_id']);
+        echo '
+        <table>
+            <tr>
+                <td><strong>Raumname:</strong></td>
+                <td>'.$room->getValue('room_name').'</td>
+            </tr>
+            <tr>
+                <td><strong>Kapazität:</strong></td>
+                <td>'.$room->getValue('room_capacity').'</td>
+            </tr>
+            <tr>
+                <td><strong>Überhang:</strong></td>
+                <td>'.$room->getValue('room_overhang').'</td>
+            </tr>
+            <tr>
+                <td><strong>Raumbeschreibung:</strong></td>
+                <td>'.$room->getValue('room_description').'</td>
+            </tr>
+        </table>
+        ';
         break;
 
     case 'user_field_description':

@@ -78,8 +78,15 @@ if($_GET['mode'] == 1)
 //Löschen des Raums
 else if($_GET['mode'] == 2) 
 {
-    $room->delete();
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-    echo 'done';
+    $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = "'.$_GET['room_id'].'"';
+    $result = $g_db->query($sql);
+    $row = $g_db->num_rows($result);
+    if($row == 0)
+    {
+        $room->delete();
+        echo 'done';
+    }
+   // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    
 }
 ?>

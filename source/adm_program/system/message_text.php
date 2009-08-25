@@ -179,6 +179,9 @@ $message_text = array(
     Du kannst dich nun einloggen.<br />
     Sobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.',    
 
+'room_is_reserved' =>
+    'Der gewählte <b>Raum</b> ist zu dieser Zeit bereits reserviert.', 
+    
 'uhrzeit' =>
     'Es wurde keine sinnvolle Uhrzeit eingegeben.<br /><br />
     Die Uhrzeit muss zwischen 00:00 und 23:59 liegen!',
