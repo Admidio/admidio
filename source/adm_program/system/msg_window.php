@@ -14,7 +14,7 @@
  *****************************************************************************/
 
 require_once('common.php');
-
+require_once('classes/table_rooms.php');
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_err_code = null;
 $req_err_text = null;
@@ -38,15 +38,15 @@ if(isset($_GET['err_text']))
 // Html-Kopf ausgeben
 if(isset($_GET['window']))
 {
-	$g_layout['title']    = 'Hinweis';
-	$g_layout['includes'] = false;
-	require(THEME_SERVER_PATH. '/overall_header.php');
-	
-	
-	// Html des Modules ausgeben
-	echo '
+    $g_layout['title']    = 'Hinweis';
+    $g_layout['includes'] = false;
+    require(THEME_SERVER_PATH. '/overall_header.php');
+
+    $title=$_GET['room_id']==null?'Hinweis':'Raumdetails';
+    // Html des Modules ausgeben
+    echo '
     <div class="formLayout" id="message_window">
-            <div class="formHead">Hinweis</div>
+            <div class="formHead">'.$title.'</div>
             <div class="formBody">';
 }
 
@@ -121,6 +121,11 @@ switch ($req_err_code)
               <p><strong>- '.$organizations.'</strong></p>
               Moderatoren dieser Organisationen können den Termin / Ankündigung dann bearbeiten
               bzw. die Option zurücksetzen.';
+        break;
+        
+    case 'date_login_possible': 
+        echo 'Hier können Sie auswählen, ob eine Anmeldung zu dem von Ihnen angegebenen Termin möglich sein soll oder nicht. <br/> Falls Sie die Anmeldung nachträglich löschen, so werden auch alle bisherigen Teilnehmer vom Termin entfernt. <br/> Wenn Sie hingegen nur die Anmeldung für neue Teilnehmer beenden möchten, so setzen Sie die
+        derzeitige Teilnehmerzahl als Teilnahmebegrenzung.';
         break;
 
     case 'date_location_link':
@@ -425,9 +430,9 @@ if(isset($_GET['window']))
 	<ul class="iconTextLinkList">
 	    <li>
 	        <span class="iconTextLink">
-	            <a href="javascript:self.parent.tb_remove();"><img
+	            <a href="javascript:self.parent.tb_remove()?\'\':\'\';"><img
 	            src="'.THEME_PATH.'/icons/door_in.png" alt="Schließen" /></a>
-	            <a href="javascript:self.parent.tb_remove();">Schließen</a>
+	            <a href="javascript:self.parent.tb_remove()?\'\':\'\';">Schließen</a>
 	        </span>
 	    </li>
 	</ul>';
