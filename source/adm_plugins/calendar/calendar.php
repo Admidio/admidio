@@ -135,11 +135,22 @@ if($plg_ter_aktiv == 1)
     $ter_aktuell = 0;
 
     // Datenbankabfrage mit Datum (Monat / Jahr)
+    $user_id = isset($_SESSION['g_current_user']) ? $_SESSION['g_current_user']->getValue('usr_id') : '';
+    if($user_id != '')
+    {
+        $login_sql = 'AND ( rol_id = 0 OR rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
+    }
+    else
+    {
+        $login_sql = 'AND rol_id = 0';
+    }
     $sql = 'SELECT DISTINCT '.
                 TBL_DATES. '.dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline 
             FROM '.
-                TBL_DATES. ', '.TBL_CATEGORIES.'
-            WHERE DATE_FORMAT(dat_begin, "%Y-%m") = "'.$sql_dat.'"
+                TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
+            WHERE '. TBL_DATES. '.dat_id = '.TBL_DATE_ROLE.'.dat_id
+                '.$login_sql.'
+                AND DATE_FORMAT(dat_begin, "%Y-%m") = "'.$sql_dat.'"
                 '.$sql_syntax.'
             ORDER BY dat_begin ASC';
     $result = $g_db->query($sql);
