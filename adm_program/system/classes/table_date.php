@@ -27,14 +27,33 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableDate extends TableAccess
 {
+    var $max_members_role = array();
+    
+    // Standard für Date ist alle Rollen aktiv => 0=Gast hinzufügen
+    var $visible_for = array(0);
+    
     var $bbCode;
-    var $visible_for = array();
+
+
+    // Array mit Keys für Sichtbarkeit der Termine
+    var $visibility = array(
+                    '0' => 'Gäste'
+                );
+    
     // Konstruktor
     function TableDate(&$db, $date_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_DATES;
         $this->column_praefix = 'dat';
+        
+        $sql = 'SELECT rol_id, rol_name FROM '.TBL_ROLES.' WHERE rol_id NOT IN(SELECT rol_id FROM '.TBL_ROLES.', '.TBL_DATES.' WHERE rol_id = dat_rol_id)';
+        $result = $db->query($sql);
+        while($row = $db->fetch_array($result))
+        {
+            $this->visibility[$row['rol_id']]=$row['rol_name'];
+            $this->visible_for[] = $row['rol_id'];
+        }
         
         if($date_id > 0)
         {
@@ -56,13 +75,24 @@ class TableDate extends TableAccess
                                        AND dat_id     = '.$dat_id;
             parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
             
+            $this->visible_for = array();
             $sql = 'SELECT DISTINCT rol_id FROM '.TBL_DATE_ROLE.' WHERE dat_id="'.$dat_id.'"';
             $result = $this->db->query($sql);
-            
+
             while($row = $this->db->fetch_array($result))
             {
                 $this->visible_for[] = intval($row['rol_id']);
             }
+            
+            $this->max_members_role = array();
+            $sql = 'SELECT * FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dat_id = '.$dat_id;
+            $result = $this->db->query($sql);
+            while($row = $this->db->fetch_array($result))
+            {
+                $this->max_members_role[$row['rol_id']] = $row['max_members'];
+            }
+            
+            //print_r($this);
         }
     }
 
@@ -180,7 +210,7 @@ class TableDate extends TableAccess
                  "END:VCALENDAR";
 
         return $ical;
-    }    
+    }
     
     // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
     function editRight()
@@ -200,11 +230,25 @@ class TableDate extends TableAccess
         }
     
         return false;
-    }   
+    }
+    
+    // gibt die Anzahl der maximalen Teilnehmer einer Rolle zurueck
+    function getMaxMembers($rol_id)
+    {
+        if(array_key_exists($rol_id, $this->max_members_role))
+        {
+            return $this->max_members_role[$rol_id];
+        }
+        else
+        {
+            return '';
+        }
+    }
+    
     // prueft, ob der Termin fuer eine Rolle sichtbar ist
     function isVisibleFor($rol_id)
     {
         return in_array($rol_id, $this->visible_for);
-    } 
+    }
 }
 ?>

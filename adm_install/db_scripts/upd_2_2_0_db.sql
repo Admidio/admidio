@@ -23,6 +23,8 @@ ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_visible` TINYINT(1) UNSIGNED NOT NUL
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_rol_id` INT(11) UNSIGNED;
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_room_id` INT(11) UNSIGNED;
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_max_members` INT(11) UNSIGNED NOT NULL;
+ALTER TABLE %PRAEFIX%_members ADD COLUMN `mem_from_rol_id` INT(11) UNSIGNED NULL;
+ALTER TABLE %PRAEFIX%_members ADD INDEX (`mem_from_rol_id`) ;
 
 --Sichtbarkeitstabelle für Termine hinzufügen
 

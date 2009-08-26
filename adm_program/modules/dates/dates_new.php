@@ -18,8 +18,9 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/date.php');
-require_once('../../system/classes/table_roles.php');
 require_once('../../system/classes/table_rooms.php');
+require_once('../../system/classes/table_roles.php');
+
 if ($g_preferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
@@ -64,7 +65,7 @@ $date = new Date($g_db);
 if($req_dat_id > 0)
 {
     $date->readData($req_dat_id);
-
+    
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false)
     {
@@ -89,6 +90,8 @@ if(isset($_SESSION['dates_request']))
             $date->setValue($key, stripslashes($value));
         }
     }
+    $date->visible_for = isset($_SESSION['dates_request']['dat_visible_for']) ? $_SESSION['dates_request']['dat_visible_for']: array();
+    
     $date_from = $_SESSION['dates_request']['date_from'];
     $time_from = $_SESSION['dates_request']['time_from'];
     $date_to   = $_SESSION['dates_request']['date_to'];
@@ -96,7 +99,9 @@ if(isset($_SESSION['dates_request']))
     
     // Folgende Felder auch vorbelegen wenn Formular nicht korrekt ausgefüllt wurde (rn)
     // Da diese Felder nicht in der Datenbanktabelle vorkommen und somit in Instanz $date nicht enthalten sind, müssen sie hier gesetzt werden
-    $visible_for = $_SESSION['dates_request']['dat_visible_for'];
+    $max_members_role = $_SESSION['dates_request']['dat_max_members_role'];
+    
+    $keep_rol_id = $_SESSION['dates_request']['keep_rol_id'];
     unset($_SESSION['dates_request']);
 }
 else
@@ -108,9 +113,10 @@ else
     // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
     $date_to = mysqldatetime('d.m.y', $date->getValue('dat_end'));
     $time_to = mysqldatetime('h:i',   $date->getValue('dat_end'));
+    
     if($date->getValue('dat_rol_id') != '')
     {
-        $_SESSION['dates_request']['keep_rol_id'] = 1;
+        $keep_rol_id = 1;
     }
 }
 
@@ -169,6 +175,7 @@ $g_layout['header'] = '
         setAllDay();
         $("#dat_headline").focus();
     }); 
+    
     var loginChecked = '.$dat_rol.';
     //öffnet Messagefenster
     function popupMessage()
@@ -202,6 +209,39 @@ $g_layout['header'] = '
             value.checked = false;
         });
     }
+    
+    function toggleMaxMembers()
+    {
+        if(document.getElementById("dat_rol_id").checked)
+        {
+            $("#max_members").css("display", "");
+            var visibilities = $("input[name^=\'dat_max_members_role\']");
+            jQuery.each(visibilities, function(index, value) {
+                value.style.display = "";
+            });
+        }
+        else
+        {
+            $("#max_members").css("display", "none");
+            var visibilities = $("input[name^=\'dat_max_members_role\']");
+            jQuery.each(visibilities, function(index, value) {
+                value.style.display = "none";
+            });
+        }
+    }
+    
+    function toggleRolId()
+    {
+        if($("#dat_room_id option:selected").val() == "0")
+        {
+            document.getElementById("dat_rol_id").checked = false;
+        }
+        else
+        {
+            document.getElementById("dat_rol_id").checked = true;
+        }
+        toggleMaxMembers();
+    }
 //--></script>';
 
 //Script für BBCode laden
@@ -232,7 +272,7 @@ echo '
 
             // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
             if($g_current_organization->getValue('org_org_id_parent') > 0
-            || $g_current_organization->hasChildOrganizations())
+                || $g_current_organization->hasChildOrganizations())
             {
                 echo '
                 <li>
@@ -254,7 +294,7 @@ echo '
                 </li>';
             }
 
-          echo '<li><hr /></li>
+        echo '<li><hr /></li>
 
             <li>
                 <dl>
@@ -263,7 +303,7 @@ echo '
                         <span>
                             <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$date_from.'" />
                             <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-                            	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                                src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                             <span id="calendardiv" style="position: absolute; visibility: hidden; "></span>
                         </span>
                         <span style="margin-left: 10px;">
@@ -272,7 +312,7 @@ echo '
                         </span>
                         <span style="margin-left: 15px;">
                             <input type="checkbox" id="dat_all_day" name="dat_all_day" ';
-                            if($date->getValue("dat_all_day") == 1)
+                            if($date->getValue('dat_all_day') == 1)
                             {
                                 echo ' checked="checked" ';
                             }
@@ -289,11 +329,16 @@ echo '
                         <span>
                             <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$date_to.'" />
                             <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-                            	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                                src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                         </span>
                         <span style="margin-left: 10px;">
                             <input type="text" id="time_to" name="time_to" size="5" maxlength="5" value="'.$time_to.'" />
-                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                            <span class="mandatoryFieldMarker" title="Pflichtfeld" id="timeToMandatory"';
+                            if($date->getValue('dat_repeat_type') != 0)
+                            {
+                                echo ' style="visibility: hidden;"';
+                            }
+                            echo '>*</span>
                         </span>
                     </dd>
                 </dl>
@@ -302,13 +347,13 @@ echo '
                 <dl>
                     <dt><label for="dat_cat_id">Kalender:</label></dt>
                     <dd>
-                        <select id="dat_cat_id" name="dat_cat_id" size="1" tabindex="3">
+                        <select id="dat_cat_id" name="dat_cat_id" size="1" tabindex="4">
                             <option value=" "';
-                           	if($date->getValue("dat_cat_id") == 0)
-                           	{
-                              	echo ' selected="selected" ';
-                           	}
-                          	echo '>- Bitte wählen -</option>';
+                            if($date->getValue("dat_cat_id") == 0)
+                            {
+                                echo ' selected="selected" ';
+                            }
+                            echo '>- Bitte wählen -</option>';
 
                             $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
                                      WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
@@ -333,27 +378,29 @@ echo '
             <li>
                 <dl>
                     <dt>Anmeldung möglich:</dt>
-                    <dd>';
+                    <dd>
+                        <input type="checkbox" id="dat_rol_id" name="dat_rol_id"';
                     if($req_dat_id==0)
                     {
-                        echo '<input type="checkbox" id="dat_rol_id" name="dat_rol_id" value="0"'.( ($date->getValue('dat_rol_id') != '') ? ' checked="checked"': '').'/>';
+                        echo ' value="0"'.( ($date->getValue('dat_rol_id') != '') ? ' checked="checked"': '');
                     }
                     else
                     {
-                        echo '<input type="checkbox" name="dat_rol_id" id="dat_rol_id" value="'.$date->getValue('dat_rol_id').'"'.( ($_SESSION['dates_request']['keep_rol_id']) ? ' checked="checked"' : '').'/>';
+                        echo ' value="'.$date->getValue('dat_rol_id').'"'.( ($keep_rol_id) ? ' checked="checked"' : '');
                     }
-                    echo' <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_login_possible&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_login_possible\',this)" onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                    echo' onclick="toggleMaxMembers();" />
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_login_possible&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_login_possible\',this)" onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
             </li>';
-            if($g_preferences['dates_show_rooms']==1 || $date->getValue('dat_room_id')>0) //nur wenn Raumauswahl aktiviert ist
+            if($g_preferences['dates_show_rooms']==1) //nur wenn Raumauswahl aktiviert ist
             {
                 echo'
-                    <li>
+                    <li id="room">
                         <dl>
                             <dt>Raum:</dt>
                             <dd>
-                                <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6">';
+                                <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6" onchange="toggleRolId()">';
                                 $room = new TableRooms($g_db);
                                 $room_choice = $room->getRoomsArray();
                                 foreach($room_choice as $key => $value)
@@ -373,7 +420,7 @@ echo '
             }
           
             echo'
-                <li>
+                <li id="max_members">
                     <dl>
                         <dt>Teilnehmerbegrenzung:</dt>
                         <dd>
@@ -381,26 +428,35 @@ echo '
                             <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_max_members&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_max_members\',this)" onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                         </dd>
                     </dl>
-                </li>
-                <li>
-                    <dl>
-                    <dt>Sichtbarkeit:</dt>
-                    <dd>';
+                </li>';
+            
+            echo '
+            <li>
+                <dl>
+                    <dt>Sichtbarkeit und<br /> Kontingentierung:</dt>
+                    <dd>
+                        <table>
+                            <tr>';
 
-                        $visibility_modes = $date->getVisibilityArray();
-                        foreach($visibility_modes as $value => $label)
-                        {
-                            $identity = 'dat_visible_for_'.$value;
-                            echo '<input type="checkbox" name="dat_visible_for[]" value="'.$value.'" id="'.$identity.'"';
-                            if($date->isVisibleFor($value) || (isset($visible_for) && in_array($value,$visible_for)) || $req_dat_id == 0)
+                            $visibility_modes = $date->getVisibilityArray();
+                            foreach($visibility_modes as $value => $label)
                             {
-                                echo ' checked="checked"';
+                                $identity = 'dat_visible_for_'.$value;
+                                echo '<td><input type="checkbox" name="dat_visible_for[]" value="'.$value.'" id="'.$identity.'"';
+                                if($date->isVisibleFor($value))
+                                {
+                                    echo ' checked="checked"';
+                                }
+                                
+                                echo ' />&nbsp;<label for="'.$identity.'">'.$label.'</label></td>
+                                <td><input type="text" name="dat_max_members_role['.$value.']" value="'.($max_members_role[$value] ? $max_members_role[$value] : $date->getMaxMembers($value)).'" /></td>
+                                </tr><tr>';
                             }
-                            
-                            echo ' />&nbsp;<label for="'.$identity.'">'.$label.'</label>&nbsp;<br/>';
-                        }
-                    
-                echo  '<a href="javascript:markVisibilities();">alle</a>
+                        
+                            echo  '
+                            </tr>
+                        </table>
+                        <a href="javascript:markVisibilities();">alle</a>
                         <a href="javascript:unmarkVisibilities();">keine</a>
                     </dd>
                 </dl>
@@ -412,9 +468,7 @@ echo '
                         <input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
                         if($g_preferences['dates_show_map_link'])
                         {
-                            echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_location_link\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+                            echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_location_link&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_location_link\',this)" onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                         }
                     echo '</dd>
                 </dl>
@@ -449,7 +503,7 @@ echo '
                     </dl>
                 </li>';
             }
-
+            
             if ($g_preferences['enable_bbcode'] == 1)
             {
                printBBcodeIcons();
@@ -488,7 +542,12 @@ echo '
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
         </span>
     </li>
-</ul>';
+</ul>
+
+<script type="text/javascript">
+    toggleMaxMembers();
+</script>
+';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>

@@ -20,33 +20,12 @@
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_date.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
+
 class Date extends TableDate
 {
-    // Array mit den Keys für die Datenbank und den Typbeschreibungen
-     var $types = array(
-                    0 => '- kein -',
-                    10 => 'täglich',
-                    20 => 'werktags',
-                    30 => 'wöchentlich',
-                    40 => 'vierzehntägig',
-                    50 => 'monatlich'
-                );
-    // Array mit Keys für Sichtbarkeit der Termine
-    
-    var $visibility = array(
-                    '0' => 'Gäste'
-                );
-    
     function Date(&$db, $date_id = 0)
     {
         $this->TableDate($db, $date_id);
-        
-        $sql = 'SELECT rol_id, rol_name FROM '.TBL_ROLES.' WHERE rol_id NOT IN(SELECT rol_id FROM '.TBL_ROLES.', '.TBL_DATES.' WHERE rol_id = dat_rol_id)';
-        $result = $db->query($sql);
-        while($row = $db->fetch_array($result))
-        {
-            $this->visibility[$row['rol_id']]=$row['rol_name'];
-        }
     }
     
     function getVisibilityMode($mode)
@@ -58,6 +37,7 @@ class Date extends TableDate
     {
         return $this->visibility;
     }
+    
     function delete()
     {
         if($this->getValue('dat_rol_id') > 0)

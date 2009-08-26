@@ -282,6 +282,7 @@ if($_SESSION['login_rol_id']>0)
     $members = new TableMembers($g_db);
     $members->setValue('mem_rol_id', $date_rol_id);
     $members->setValue('mem_usr_id', $user->getValue('usr_id'));
+    $members->setValue('mem_from_rol_id', '0'); // 0 = Gastrolle
     $members->save();
     //User sofort freischalten
     $user->setValue('usr_valid',1);
