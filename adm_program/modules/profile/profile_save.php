@@ -411,7 +411,7 @@ elseif($new_user == 3 || $usr_id == 0)
         }
         $member = new TableMembers($g_db);
         $member->startMembership($g_preferences['profile_default_role'], $user->getValue('usr_id'));
-
+        
         $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
         $g_message->show('save');
     }

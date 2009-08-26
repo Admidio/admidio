@@ -678,7 +678,7 @@ echo '
                     <ul class="formFieldList" id="role_list">';
                         while($row = $g_db->fetch_array($result_role))
                         {
-                            if($g_current_user->viewRole($row['mem_rol_id'])&& $row['rol_visible']==1)
+                            if($g_current_user->viewRole($row['mem_rol_id']) && $row['rol_visible']==1)
                             {
                                 // jede einzelne Rolle anzeigen
                                 echo '<li id="role_'. $row['mem_rol_id']. '">

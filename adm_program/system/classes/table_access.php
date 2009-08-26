@@ -155,7 +155,7 @@ class TableAccess
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
     function setValue($field_name, $field_value)
     {
-    	$return_code = false;
+        $return_code = false;
 
         if(array_key_exists($field_name, $this->dbColumns))
         {

@@ -20,11 +20,11 @@ define('BETA_VERSION', '1');
 
 if(BETA_VERSION > 0)
 {
-	define('BETA_VERSION_TEXT', ' Beta '.BETA_VERSION);
+    define('BETA_VERSION_TEXT', ' Beta '.BETA_VERSION);
 }
 else
 {
-	define('BETA_VERSION_TEXT', '');
+    define('BETA_VERSION_TEXT', '');
 }
 
 
