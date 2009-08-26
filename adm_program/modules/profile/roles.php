@@ -125,7 +125,7 @@ echo '
                         WHERE rol_valid  = 1
                           AND rol_cat_id = cat_id
                           AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                        ORDER BY cat_sequence, rol_name";
+                        ORDER BY cat_sequence, cat_id, rol_name";
         }
         else
         {
@@ -146,7 +146,7 @@ echo '
                           AND rol_valid      = 1
                           AND rol_cat_id     = cat_id
                           AND cat_org_id     = ". $g_current_organization->getValue("org_id"). "
-                        ORDER BY cat_sequence, rol_name";
+                        ORDER BY cat_sequence, cat_id, rol_name";
         }
         $result = $g_db->query($sql);
         $category = "";
@@ -155,7 +155,7 @@ echo '
         {
             if($row->rol_visible==1)
             {
-                if($category != $row->cat_name)
+                if($category != $row->cat_id)
                 {
                     if(strlen($category) > 0)
                     {
@@ -172,7 +172,7 @@ echo '
                     </tbody>
                     <tbody id=\"$block_id\">";
     
-                    $category = $row->cat_name;
+                    $category = $row->cat_id;
                 }
                 echo "
                 <tr class=\"tableMouseOver\">
