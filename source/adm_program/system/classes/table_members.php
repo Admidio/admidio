@@ -75,7 +75,7 @@ class TableMembers extends TableAccess
     } 
     
     // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beginnen bzw. zu aktualisieren
-    function startMembership($rol_id, $usr_id, $leader = '')
+    function startMembership($rol_id, $usr_id, $leader = '', $from_rol_id = false)
     {
         if($this->getValue('mem_rol_id') != $rol_id
         || $this->getValue('mem_usr_id') != $usr_id)
@@ -100,6 +100,14 @@ class TableMembers extends TableAccess
         {
             $this->setValue('mem_leader', $leader);
         }
+        
+        // Bei Rollen für Terminzusagen:
+        // Hier wird optional festgelegt aus welcher Rolle die Rollenmitgliedschaft erstellt wird
+        if($from_rol_id !== false && is_numeric($from_rol_id))
+        {
+            $this->setValue('mem_from_rol_id', $from_rol_id);
+        }
+
         $this->setValue('mem_end', '9999-12-31');
         $this->save();
     }

@@ -204,7 +204,21 @@ $message_text = array(
     'Der Ordner %VAR1% kann nicht mit Schreibrechten angelegt werden. Du musst dich an den
     <a href="mailto:%VAR2%">Webmaster</a> wenden, damit dieser die 
     <acronym title="über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.">Schreibrechte</acronym>
-    für den Ordner setzen kann.',
+    setzen kann.',
+
+'quota_exceeded' =>
+    'Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (<b>Kontigentierung</b>) sein wie Teilnehmer 
+    insgesamt (<b>Teilnehmerbegrenzung</b>)',
+    
+'quota_with_maximum' =>
+    'Eine <b>Kontingentierung</b> kann nur bei einer <b>Teilnehmerbegrenzung</b> stattfinden',
+
+'quota_for_role' =>
+    'Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.',
+
+'quota_and_max_members_must_match' =>
+    'Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierung mit
+    der maximalen Anzahl übereinstimmen.',
 
 // Meldungen Listen
 

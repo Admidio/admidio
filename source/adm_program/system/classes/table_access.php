@@ -169,13 +169,13 @@ class TableAccess
                     {
                         $field_value = '';
                     }
-                    
+
                     // Schluesselfelder
                     if((  $this->columnsInfos[$field_name]['key'] == 'PRI'
                        || $this->columnsInfos[$field_name]['key'] == 'MUL')
                     && $field_value == 0)
                     {
-                        $field_value = '';    
+                        if($field_name != 'mem_from_rol_id') $field_value = '';
                     }
                 }
                 

@@ -42,7 +42,7 @@ echo '
 //--></script>
 <h1 class="moduleHeadline">'. $g_layout['title']. '</h1>';
 
-if($_GET['login']!=0)
+if($_GET['login']!=0 && isset($_GET['from_rol_id']))
 {
     
     $timestamp = time();
@@ -50,7 +50,7 @@ if($_GET['login']!=0)
     $sql = 'SELECT * FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date['dat_rol_id'].'" AND mem_usr_id="'.$user_id.'"';
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
-    $member->startMembership($date['dat_rol_id'],$user_id);
+    $member->startMembership($date['dat_rol_id'],$user_id,'',$_GET['from_rol_id']);
     echo 'Sie haben sich erfolgreich f&uuml;r den Termin "'.$date['dat_headline'].'" am '.$date['dat_begin'].' angemeldet.';
     
 }
