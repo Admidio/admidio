@@ -131,7 +131,7 @@ switch ($req_err_code)
     case 'date_max_members': 
         echo 'Hier können Sie die Teilnehmeranzahl beschränken. Ist die Anzahl nicht begrenzt, so können Sie dieses Feld leer lassen.';
         break;
-
+    
     case 'date_location_link':
         echo 'Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, 
         so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.';
@@ -141,7 +141,7 @@ switch ($req_err_code)
         echo 'Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche
               Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden. ';
         break;
-
+    
     case 'enable_rss':
         echo 'Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen,
               Termine, Gästebuch und Weblinks) auf den jeweiligen Übersichtsseiten

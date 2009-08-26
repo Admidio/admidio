@@ -86,7 +86,7 @@ else if($_GET['mode'] == 2)
         $room->delete();
         echo 'done';
     }
-   // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     
 }
 ?>
