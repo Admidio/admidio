@@ -19,9 +19,7 @@
                 echo "<h3>Anmelden</h3>";
             }
             include(SERVER_PATH. "/adm_plugins/login_form/login_form.php");
-            echo '<br/>';
-            include(SERVER_PATH. "/adm_plugins/calendar/calendar.php");
-            echo '<br />
+            echo '<br/>
             
             <h3>Module</h3>
             <span class="menu" style="margin-bottom: 10px;"><a href="'. $g_root_path. '/adm_program/index.php"><img
