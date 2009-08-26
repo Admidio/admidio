@@ -131,7 +131,7 @@ echo '
                   AND rol_visible = '.$req_visible.'
                   AND rol_cat_id = cat_id
                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                ORDER BY cat_sequence ASC, rol_name ASC ';
+                ORDER BY cat_id ASC, rol_name ASC ';
     $rol_result = $g_db->query($sql);
 
     // Rollenobjekt anlegen
@@ -139,9 +139,9 @@ echo '
 
     while($row = $g_db->fetch_array($rol_result))
     {
-    	// Rollenobjekt mit Daten fuellen
-    	$role->setArray($row);
-
+        // Rollenobjekt mit Daten fuellen
+        $role->setArray($row);
+        
         if($cat_id != $role->getValue('cat_id'))
         {
             if($cat_id > 0)
@@ -186,7 +186,7 @@ echo '
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
                     alt=\"Profildaten aller Benutzer bearbeiten\" title=\"Profildaten aller Benutzer bearbeiten\" />";
                 }
-   			    if($role->getValue("rol_mail_to_all") == 1)
+                if($role->getValue("rol_mail_to_all") == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
                     alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
@@ -232,7 +232,7 @@ echo '
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                     alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
                 }
-    			/*if($role->getValue("rol_inventory") == 1 && $g_preferences['enable_inventory_module'] > 0)
+                /*if($role->getValue("rol_inventory") == 1 && $g_preferences['enable_inventory_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                     alt=\"Inventar verwalten\" title=\"Inventar verwalten\" />";
@@ -264,7 +264,7 @@ echo '
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email_key.png\"
                     alt=\"Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben.\" />";
                 }
-    			if($role->getValue("rol_mail_this_role") == 3 && $g_preferences['enable_mail_module'] > 0)
+                if($role->getValue("rol_mail_this_role") == 3 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
                     alt=\"Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.\" title=\"Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben\" />";
