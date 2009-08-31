@@ -166,15 +166,8 @@ if (array_key_exists("rol_id", $_POST))
     
     $role->readData($_POST['rol_id']);
 
-	// Prüfung ob und wer man an die Rolle mails schicken darf:
-	// rol_mail_this_role = 
-	// 0 : niemand
-	// 1 : nur Rollenmitglieder
-	// 2 : nur eingeloggte User
-	// 3 : jeder
-		
-	// Falls der User eingeloggt ist darf der Wert 1,2 oder 3 sein
-	if ($g_valid_login == true && $role->getValue("rol_mail_this_role") < 1)
+	// Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
+	if ($g_valid_login == true && !$g_current_user->mailRole($_POST['rol_id']))
     {
         $g_message->show("invalid");
     }
