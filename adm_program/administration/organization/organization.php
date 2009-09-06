@@ -1871,7 +1871,7 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"dates_show_calendar_select\">Auswahlbox anzeigen:</label></dt>
+                            <dt><label for=\"dates_show_calendar_select\">Kalenderauswahlbox anzeigen:</label></dt>
                             <dd>
                                 <input type=\"checkbox\" id=\"dates_show_calendar_select\" name=\"dates_show_calendar_select\" ";
                                 if($form_values['dates_show_calendar_select'] == 1)

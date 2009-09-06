@@ -29,15 +29,15 @@ class TableDate extends TableAccess
 {
     var $max_members_role = array();
     
-    // Standard für Date ist alle Rollen aktiv => 0=Gast hinzufügen
+    // Standard fÃ¼r Date ist alle Rollen aktiv => 0=Gast hinzufÃ¼gen
     var $visible_for = array(0);
     
     var $bbCode;
 
 
-    // Array mit Keys für Sichtbarkeit der Termine
+    // Array mit Keys fÃ¼r Sichtbarkeit der Termine
     var $visibility = array(
-                    '0' => 'Gäste'
+                    '0' => 'GÃ¤ste'
                 );
     
     // Konstruktor
