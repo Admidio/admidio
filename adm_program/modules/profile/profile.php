@@ -372,11 +372,24 @@ echo '
                                                                 $address   .= '<div>'.$user->getValue('PLZ');
                                                                 $map_url   .= ',%20'. urlencode($user->getValue('PLZ'));
                                                                 $route_url .= ',%20'. urlencode($user->getValue('PLZ'));
+
+																// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
+	                                                            if(strlen($user->getValue('Ort')) == 0
+	                                                            || ($g_current_user->editProfile($a_user_id) == false && $g_current_user->getProperty('Ort', 'usf_hidden') == 1))
+	                                                            {
+	                                                                $address   .= '</div>';
+	                                                            }
                                                             }
 
                                                             if(strlen($user->getValue('Ort')) > 0
                                                             && ($g_current_user->editProfile($a_user_id) == true || $g_current_user->getProperty('Ort', 'usf_hidden') == 0))
                                                             {
+                                                            	// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
+	                                                            if(strlen($user->getValue('PLZ')) == 0
+	                                                            || ($g_current_user->editProfile($a_user_id) == false && $g_current_user->getProperty('PLZ', 'usf_hidden') == 1))
+	                                                            {
+	                                                                $address   .= '<div>';
+	                                                            }
                                                                 $address   .= ' '. $user->getValue('Ort'). '</div>';
                                                                 $map_url   .= ',%20'. urlencode($user->getValue('Ort'));
                                                                 $route_url .= ',%20'. urlencode($user->getValue('Ort'));
