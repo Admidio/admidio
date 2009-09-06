@@ -769,7 +769,7 @@ echo '
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 4 x 5)
+                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 3 x 5)
                     </li>
 
                     <li>
@@ -783,7 +783,7 @@ echo '
                     <li class=\"smallFontSize\">
                         Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige
                         skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
-                        Ggf. weniger Thumbnailspalten einstellen. (Standard: 110Pixel)
+                        Ggf. weniger Thumbnailspalten einstellen. (Standard: 160Pixel)
                     </li>
                     <li>
                         <dl>
@@ -811,7 +811,8 @@ echo '
                         Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster
                         haben darf. Das Fenster im Popup- bzw. Thickboxmodus wird automatisch in der Größe angepasst. Besonders bei der Höhe
                         ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
-                        sein muss. (Standard: 500 x 380 Pixel)
+                        sein muss. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder
+                        für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 480 Pixel)
                     </li>
                     <li>
                         <dl>
