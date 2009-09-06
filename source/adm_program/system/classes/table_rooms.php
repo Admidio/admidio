@@ -12,7 +12,7 @@ class TableRooms extends TableAccess
 {
     var $room_choice = array(
                 0 => '---'
-    ); //beihnaltet alle in der DB gespeicherten Räume
+    ); //beihnaltet alle in der DB gespeicherten RÃ¤ume
     // Konstruktor
     function TableRooms(&$db, $room = '')
     {
@@ -29,7 +29,7 @@ class TableRooms extends TableAccess
             $this->clear();
         }
         
-        //room_choice befüllen
+        //room_choice befÃ¼llen
         $sql = 'SELECT room_id, room_name FROM '.TBL_ROOMS.'';
         $result = $this->db->query($sql);
         while($row = $this->db->fetch_array($result))

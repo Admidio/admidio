@@ -2,7 +2,8 @@
 -- Feldgroessen anpasssen
 ALTER TABLE %PRAEFIX%_organizations MODIFY COLUMN `org_homepage` VARCHAR(60) NOT NULL;
 
---Raumverwaltungstabelle hinzufügen
+-- Raumverwaltungstabelle hinzufuegen
+
 DROP TABLE IF EXISTS %PRAEFIX%_rooms;
 CREATE TABLE %PRAEFIX%_rooms
 (
@@ -18,7 +19,8 @@ CREATE TABLE %PRAEFIX%_rooms
 engine = InnoDB
 auto_increment = 1;
 
---Attribut hinzufügen
+-- Attribut hinzufuegen
+
 ALTER TABLE %PRAEFIX%_roles ADD COLUMN `rol_visible` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1;
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_rol_id` INT(11) UNSIGNED;
 ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_room_id` INT(11) UNSIGNED;
@@ -26,7 +28,7 @@ ALTER TABLE %PRAEFIX%_dates ADD COLUMN `dat_max_members` INT(11) UNSIGNED NOT NU
 ALTER TABLE %PRAEFIX%_members ADD COLUMN `mem_from_rol_id` INT(11) UNSIGNED NULL;
 ALTER TABLE %PRAEFIX%_members ADD INDEX (`mem_from_rol_id`) ;
 
---Sichtbarkeitstabelle für Termine hinzufügen
+-- Sichtbarkeitstabelle fÃ¼r Termine hinzufuegen
 
 DROP TABLE IF EXISTS %PRAEFIX%_date_role;
 CREATE TABLE %PRAEFIX%_date_role
