@@ -41,3 +41,15 @@ CREATE TABLE %PRAEFIX%_date_role
 engine = InnoDB
 auto_increment = 1;
 
+-- Tabelle für maximale Zusagen an Termine
+
+CREATE TABLE `admidio_sf`.`adm_date_max_members` (
+    `id`              INT NOT NULL AUTO_INCREMENT ,
+    `dat_id`          INT NOT NULL ,
+    `rol_id`          INT NOT NULL ,
+    `max_members`     INT NOT NULL ,
+    PRIMARY KEY ( `id` )
+) 
+ENGINE = InnoDB
+auto_increment = 1;
+
