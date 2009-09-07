@@ -176,8 +176,7 @@ $message_text = array(
     
 'saveDate' =>
     'Deine Daten wurden erfolgreich gespeichert und du wurdest zum gewünschten Termin angemeldet.<br /><br />
-    Du kannst dich nun einloggen.<br />
-    Sobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.',    
+    Du kannst dich nun einloggen.<br />',
 
 'room_is_reserved' =>
     'Der gewählte <b>Raum</b> ist zu dieser Zeit bereits reserviert.',

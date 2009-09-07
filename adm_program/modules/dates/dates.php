@@ -838,7 +838,7 @@ else
                                     $content_signin .= '&nbsp;<form action=';
                                     if($g_current_user->getValue('usr_id')!=null)
                                     {
-                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
+                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php" style="float:right">
                                             <input type="hidden" name="dat_id" value="'.$date->getValue('dat_id'). '" />
                                             <input type="hidden" name="headline" value="'.$req_headline.'" />
                                             <input type="hidden" name="login" value="1" />
@@ -847,7 +847,7 @@ else
                                     }
                                     else
                                     {
-                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php">
+                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php" style="float:right">
                                             <input type="hidden" name="new_user" value="2" />
                                             <input type="hidden" name="date" value="'.$date->getValue('dat_rol_id').'" />
                                         ';

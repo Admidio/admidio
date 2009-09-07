@@ -118,7 +118,7 @@ class TableMembers extends TableAccess
         if($this->getValue('mem_rol_id') != $rol_id
         || $this->getValue('mem_usr_id') != $usr_id)
         {
-            $this->readData($rol_id, $usr_id);
+            $this->readData(array('rol_id' => $rol_id, 'usr_id' => $usr_id));
         }
 
         if($this->new_record == false)
