@@ -20,7 +20,6 @@ require('../../system/common.php');
 require('../../system/classes/table_members.php');
 require('../../system/classes/table_roles.php');
 require('../../system/classes/table_rooms.php');
-require('../../system/classes/table_recurring_dates.php');
 require('../../system/classes/date.php');
 
 

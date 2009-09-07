@@ -835,19 +835,27 @@ else
                             {
                                 if(in_array($k,$date->visible_for) && !isset($non_available_rols[$k]))
                                 {
-                                    $content_signin .= '&nbsp;<a class="iconLink" href=';
+                                    $content_signin .= '&nbsp;<form action=';
                                     if($g_current_user->getValue('usr_id')!=null)
                                     {
-                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$req_headline.'&amp;login=1&amp;from_rol_id='.$k.'">';
+                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
+                                            <input type="hidden" name="dat_id" value="'.$date->getValue('dat_id'). '" />
+                                            <input type="hidden" name="headline" value="'.$req_headline.'" />
+                                            <input type="hidden" name="login" value="1" />
+                                            <input type="hidden" name="from_rol_id" value="'.$k.'" />
+                                        ';
                                     }
                                     else
                                     {
-                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2&amp;date='.$date->getValue('dat_rol_id').'">';
+                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php">
+                                            <input type="hidden" name="new_user" value="2" />
+                                            <input type="hidden" name="date" value="'.$date->getValue('dat_rol_id').'" />
+                                        ';
                                     }
-                                    $content_signin .= '<button name="loginDate" type="submit" value="loginDate" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" alt="login Date" />&nbsp;'.$v.'</button></a>';
+                                    $content_signin .= '<button name="loginDate" type="submit" value="loginDate" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" alt="login Date" />&nbsp;'.$v.'</button></form>';
                                 }
                             }
-                            if($content_signin) echo '<b>Anmelden als:</b> '.$content_signin;
+                            if($content_signin) echo '<b>Anmelden als:</b>'.$content_signin;
                             else echo 'Keine Anmeldung mehr möglich.';
                         }
                         else
@@ -868,12 +876,15 @@ else
                         {
                             echo '<div style="text-align:right">
 
-                            <a class="iconLink" href=';
+                            <form action=';
 
-                            echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$req_headline.'&amp;login=0">
+                            echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
+                                <input type="hidden" name="dat_id" value="'. $date->getValue('dat_id'). '" />
+                                <input type="hidden" name="headline" value="'.$req_headline.'" />
+                                <input type="hidden" name="login" value="0" />
                                 <button name="logoutDate" type="submit" value="logoutDate" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
                                 alt="login Date" />&nbsp;austragen</button>
-                            </a>
+                            </form>
                             </div>';
                         }
                     }

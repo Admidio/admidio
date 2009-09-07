@@ -20,6 +20,7 @@ if(isset($_GET['dat_id']))
     $req_dat_id = $_GET['dat_id'];
 }
 
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_id ="'.$_GET['dat_id'].'"';
 $result = $g_db->query($sql);
