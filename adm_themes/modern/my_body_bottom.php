@@ -19,8 +19,9 @@
                 echo "<h3>Anmelden</h3>";
             }
             include(SERVER_PATH. "/adm_plugins/login_form/login_form.php");
+            echo '<br/>';
+            include(SERVER_PATH. "/adm_plugins/calendar/calendar.php");
             echo '<br/>
-            
             <h3>Module</h3>
             <span class="menu" style="margin-bottom: 10px;"><a href="'. $g_root_path. '/adm_program/index.php"><img
                 style="vertical-align: middle;" src="'. THEME_PATH. '/icons/home.png" alt="Übersicht" title="Übersicht" /></a>
@@ -120,7 +121,7 @@
                     style="vertical-align: middle;" src="'. THEME_PATH. '/icons/roles.png" alt="Rollenverwaltung" title="Rollenverwaltung" /></a>
                     <a href="'. $g_root_path. '/adm_program/administration/roles/roles.php">Rollenverwaltung</a></span>';
                 }
-                if($g_current_user->assignRoles())
+                if($g_current_user->isWebmaster())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
                     style="vertical-align: middle;" src="'.$g_root_path.'/adm_themes/classic/icons/home.png" alt="Raumverwaltung" title="Raumverwaltung" /></a>
