@@ -331,8 +331,25 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         </dl>
                     </li>';
                 }
-				
-				if($g_current_user->isWebmaster())
+                
+                if($g_current_user->isWebmaster())
+                {
+                    echo '
+                    <li>
+                        <dl>
+                            <dt>
+                                <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms.php"><img
+                                src="'.THEME_PATH.'/icons/home_big.png" alt="Raumverwaltung" title="Raumverwaltung" /></a>
+                            </dt>
+                            <dd>
+                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/rooms/rooms.php">Raumverwaltung</a></span><br />
+                                <span class="smallFontSize">Räume anlegen, bearbeiten udn löschen.</span>
+                            </dd>
+                        </dl>
+                    </li>';
+                }
+                
+                if($g_current_user->isWebmaster())
                 {
                     echo '
                     <li>
