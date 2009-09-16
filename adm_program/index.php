@@ -343,7 +343,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                             </dt>
                             <dd>
                                 <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/rooms/rooms.php">Raumverwaltung</a></span><br />
-                                <span class="smallFontSize">Räume anlegen, bearbeiten udn löschen.</span>
+                                <span class="smallFontSize">Räume anlegen, bearbeiten und löschen.</span>
                             </dd>
                         </dl>
                     </li>';
