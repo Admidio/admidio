@@ -442,18 +442,19 @@ echo '
                             foreach($visibility_modes as $value => $label)
                             {
                                 $identity = 'dat_visible_for_'.$value;
-                                echo '<td><input type="checkbox" name="dat_visible_for[]" value="'.$value.'" id="'.$identity.'"';
+                                $visibility_row = '<td><input type="checkbox" name="dat_visible_for[]" value="'.$value.'" id="'.$identity.'"';
                                 if($date->isVisibleFor($value))
                                 {
-                                    echo ' checked="checked"';
+                                    $visibility_row .= ' checked="checked"';
                                 }
                                 
-                                echo ' />&nbsp;<label for="'.$identity.'">'.$label.'</label></td>
-                                <td><input type="text" name="dat_max_members_role['.$value.']" value="'.($max_members_role[$value] ? $max_members_role[$value] : $date->getMaxMembers($value)).'" /></td>
-                                </tr><tr>';
+                                $visibility_row .= ' />&nbsp;<label for="'.$identity.'">'.$label.'</label></td>
+                                <td><input type="text" name="dat_max_members_role['.$value.']" value="'.($max_members_role[$value] ? $max_members_role[$value] : $date->getMaxMembers($value)).'" /></td>';
+                                //'</tr><tr>';
+                                $visibilities[] = $visibility_row;
                             }
                         
-                            echo  '
+                            echo  implode('</tr><tr>', $visibilities).'
                             </tr>
                         </table>
                         <a href="javascript:markVisibilities();">alle</a>
