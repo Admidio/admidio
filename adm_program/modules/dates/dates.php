@@ -186,7 +186,7 @@ if ($g_valid_login == false)
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
 if($req_id > 0)
 {
-    $conditions .= ' AND dat_id = '.$req_id.' '.$hidden;
+    $conditions .= ' AND dat.dat_id = '.$req_id.' '.$hidden;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
@@ -315,7 +315,7 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
     {
         // Combobox mit allen Kalendern anzeigen, denen auch Termine zugeordnet sind
         $sql = 'SELECT DISTINCT cat_name
-                FROM '. TBL_CATEGORIES. ', '. TBL_DATES. '
+                FROM '. TBL_CATEGORIES. ', '. TBL_DATES. ' dat
                 WHERE cat_type   = "DAT"
                     AND dat_cat_id = cat_id 
                     AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
