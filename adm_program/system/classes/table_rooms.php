@@ -7,14 +7,16 @@
        
 *****************************************************************************/ 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableRooms extends TableAccess
 {
-    var $room_choice = array(
+	protected $bbCode;
+    protected $room_choice = array(
                 0 => '---'
     ); //beihnaltet alle in der DB gespeicherten Räume
     // Konstruktor
-    function TableRooms(&$db, $room = '')
+    public function __construct(&$db, $room = '')
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ROOMS;
@@ -39,7 +41,7 @@ class TableRooms extends TableAccess
     }
     
     // Raum mit der uebergebenen ID oder dem Raumnamen aus der Datenbank auslesen
-    function readData($room, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($room, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
 
@@ -59,9 +61,40 @@ class TableRooms extends TableAccess
         parent::readData($room, $sql_where_condition, $sql_additional_tables);
     }
     
+    // liefert die Beschreibung je nach Type zurueck
+    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
+    // type = 'HTML'   : BB-Code in HTML umgewandelt
+    // type = 'BBCODE' : Beschreibung mit BBCode-Tags
+    public function getDescription($type = 'HTML')
+    {
+        global $g_preferences;
+        $description = '';
+
+        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
+        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        {
+            if(is_object($this->bbCode) == false)
+            {
+                $this->bbCode = new ubbParser();
+            }
+
+            $description = $this->bbCode->parse($this->getValue('room_description'));
+
+            if($type == 'PLAIN')
+            {
+                $description = strStripTags($description);
+            }
+        }
+        else
+        {
+            $description = nl2br($this->getValue('room_description'));
+        }
+        return $description;
+    }
+
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function save()
+    public function save()
     {
         global $g_current_user, $g_current_session;
         $fields_changed = $this->columnsValueChanged;
@@ -94,7 +127,7 @@ class TableRooms extends TableAccess
         }
     }
     
-    function getRoomsArray()
+    public function getRoomsArray()
     {
         return $this->room_choice;
     }

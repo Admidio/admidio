@@ -2,7 +2,6 @@
 require('../../system/common.php');
 require('../../system/login_valid.php');
 require('../../system/classes/table_rooms.php'); 
-require(THEME_SERVER_PATH. '/overall_header.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_room_id   = 0;
@@ -41,6 +40,16 @@ else
 {
     $g_layout['title'] = $_GET['headline']. ' anlegen';
 }
+
+//Script für BBCode laden
+$javascript = '';
+if ($g_preferences['enable_bbcode'] == 1)
+{
+    $javascript = getBBcodeJS('room_description');
+}
+
+$g_layout['header'] = $javascript;
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/administration/rooms/rooms_function.php?room_id='.$req_room_id.'&amp;mode=1">

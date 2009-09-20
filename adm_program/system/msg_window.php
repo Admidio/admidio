@@ -264,7 +264,7 @@ switch ($req_err_code)
             </tr>
             <tr>
                 <td><strong>Raumbeschreibung:</strong></td>
-                <td>'.$room->getValue('room_description').'</td>
+                <td>'.$room->getDescription('HTML').'</td>
             </tr>
         </table>
         ';

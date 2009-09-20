@@ -26,10 +26,10 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableAnnouncement extends TableAccess
 {
-    var $bbCode;
+    protected $bbCode;
 
     // Konstruktor
-    function TableAnnouncement(&$db, $ann_id = 0)
+    public function __construct(&$db, $ann_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_ANNOUNCEMENTS;
@@ -49,7 +49,7 @@ class TableAnnouncement extends TableAccess
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
     // type = 'BBCODE' : Beschreibung mit BBCode-Tags
-    function getDescription($type = 'HTML')
+    public function getDescription($type = 'HTML')
     {
         global $g_preferences;
         $description = '';
@@ -77,7 +77,7 @@ class TableAnnouncement extends TableAccess
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
         
@@ -101,7 +101,7 @@ class TableAnnouncement extends TableAccess
     }
     
     // prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
-    function editRight()
+    public function editRight()
     {
         global $g_current_organization;
         
