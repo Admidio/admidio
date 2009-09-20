@@ -88,7 +88,7 @@ else
                     if($room->getValue('room_description')!=null)
                     {
                        echo '<div class="date_description" style="clear: left;"><br/>'
-                            .$room->getValue('room_description').'</div>';
+                            .$room->getDescription('HTML').'</div>';
                     }
                     $sql = 'SELECT room_usr_id_create, room_timestamp_create, usr_login_name FROM '.TBL_ROOMS.', '.TBL_USERS.' WHERE room_id="'.$room->getValue('room_id').'" AND usr_id = room_usr_id_create';
                     $result = $g_db->query($sql);
