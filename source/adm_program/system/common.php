@@ -172,7 +172,9 @@ if(isset($g_preferences['db_version']) == false
 || version_compare($g_preferences['db_version_beta'], BETA_VERSION) != 0)
 {
     unset($_SESSION['g_current_organization']);
-    $g_message->addVariableContent($g_preferences['email_administrator'], 1, false);
+	$g_message->addVariableContent($g_preferences['db_version'], 1, false);
+    $g_message->addVariableContent(ADMIDIO_VERSION, 2, false);
+    $g_message->addVariableContent($g_preferences['email_administrator'], 3, false);
     $g_message->show('database_invalid');
 }
 
