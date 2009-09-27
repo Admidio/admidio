@@ -1,7 +1,22 @@
 <?php
+/******************************************************************************
+ * Uebersicht und Pflege aller organisationsspezifischen Profilfelder
+ *
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ ****************************************************************************/
+
 require('../../system/common.php');
 require('../../system/login_valid.php');
 require('../../system/classes/table_rooms.php'); 
+
+// nur berechtigte User duerfen die Profilfelder bearbeiten
+if (!$g_current_user->isWebmaster())
+{
+    $g_message->show('norights');
+}
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_room_id   = 0;
@@ -41,7 +56,7 @@ else
     $g_layout['title'] = $_GET['headline']. ' anlegen';
 }
 
-//Script für BBCode laden
+//Script fÃ¼r BBCode laden
 $javascript = '';
 if ($g_preferences['enable_bbcode'] == 1)
 {
@@ -134,7 +149,7 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zur&uuml;ck"/></a>
+            src="'. THEME_PATH. '/icons/back.png" alt="ZurÃ¼ck" title="Zur&uuml;ck"/></a>
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zur&uuml;ck</a>
         </span>
     </li>
