@@ -1628,7 +1628,7 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="default_country">Profilfelder pflegen:</label></dt>
+                            <dt><label>Profilfelder pflegen:</label></dt>
                             <dd>
                                 <span class="iconTextLink">
                                     <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
@@ -1639,8 +1639,10 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        Um die Profilbilder zu bearbeiten, kannst du hier zur Profilfeldpflege wechseln. Achtung, alle nicht gespeicherten 
-                        Organisationseinstellungen gehen dabei verloren.
+                        In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in 
+                        Kategorien zusammengefasst werden.<br />
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="Warnhinweis" title="Warnhinweis" />
+                        Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.
                     </li>
                     <li>
                         <dl>
@@ -1894,18 +1896,36 @@ echo '
                                 <input type=\"checkbox\" id=\"dates_show_rooms\" name=\"dates_show_rooms\" ";
                                 if($form_values['dates_show_rooms'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\"/>
+                                echo ' value="1"/>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)
+                    <li class="smallFontSize">
+                        Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl 
+                        eines Raums zu ermöglichen. (Standard: nein)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label>Räume pflegen:</label></dt>
+                            <dd>
+                                <span class="iconTextLink">
+                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
+                                    src="'. THEME_PATH. '/icons/home.png" alt="Räume anlegen und bearbeiten" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">zur Raumpflege wechseln</a>
+                                </span>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Hier können Räume angelegt und bearbeitet werden.<br />
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="Warnhinweis" title="Warnhinweis" />
+                        Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.
                     </li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/

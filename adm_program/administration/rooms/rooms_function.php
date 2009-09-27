@@ -1,25 +1,29 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen für Räume
+ * Verschiedene Funktionen zur Pflege der Raeume
+ *
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Uebergaben:
  * 
  *  mode:   1 - Neuen Raum anlegen
- *          2 - Raum löschen 
+ *          2 - Raum lÃ¶schen 
  *****************************************************************************/
+
 require('../../system/common.php');
 require('../../system/classes/table_rooms.php');
 
-if($_GET['mode'] != 4 || $g_preferences['enable_dates_module'] == 2)
-{
-    // Alle Funktionen, ausser Exportieren, duerfen nur eingeloggte User
-    require('../../system/login_valid.php');
-}
-// erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$g_current_user->editDates() && $_GET['mode'] != 4)
+// nur berechtigte User duerfen die Profilfelder bearbeiten
+if (!$g_current_user->isWebmaster())
 {
     $g_message->show('norights');
 }
+
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_room_id = 0;
+
 // Uebergabevariablen pruefen
 
 if(isset($_GET['room_id']))
@@ -75,7 +79,7 @@ if($_GET['mode'] == 1)
     header('Location: '. $_SESSION['navigation']->getUrl());
     exit();
 }
-//Löschen des Raums
+//LÃ¶schen des Raums
 else if($_GET['mode'] == 2) 
 {
     $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = "'.$_GET['room_id'].'"';

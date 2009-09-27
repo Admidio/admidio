@@ -557,7 +557,6 @@ elseif($req_mode == 7)
                                             0,1,"'.DATETIME_NOW.'")';
     $db->query($sql);
 
-
     // User Webmaster anlegen
     $g_current_user = new User($db);
     $g_current_user->setValue('Nachname', $_SESSION['user_last_name']);
@@ -567,6 +566,13 @@ elseif($req_mode == 7)
     $g_current_user->setValue('usr_password', $_SESSION['user_password']);
     $g_current_user->b_set_last_change = false;
     $g_current_user->save();
+
+    //Defaultraum fuer Raummodul in der DB anlegen:
+    $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
+                                    VALUES ("Besprechnungsraum", "Hier können Besprechungen stattfinden. Der Raum muss vorher
+                                             reserviert werden. Beamer steht zur Verfügung.", 15, '.
+                                             $g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")';
+    $db->query($sql);
 
     // nun die Default-Rollen anlegen
 
