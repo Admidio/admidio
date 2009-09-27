@@ -31,8 +31,8 @@ $message_text = array(
     'Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.',
 
 'database_invalid' =>
-    'Die Datenbankversion stimmt nicht mit der Version der Admidio-Scripte überein.<br /><br />
-    Wende dich bitte an den <a href="mailto:%VAR1%">Webmaster</a> dieser Webseite.',
+    'Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.<br /><br />
+    Wende dich bitte an den <a href="mailto:%VAR3%">Webmaster</a> dieser Webseite.',
 
 'date_invalid' =>
     'Es wurde kein gültiges Datum in das Feld %VAR1% eingegeben.<br /><br />
