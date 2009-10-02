@@ -430,6 +430,38 @@ else
         $date->clear();
         $date->setArray($row);
         $date->readData($date->getValue('dat_id'));
+        
+        // HTML-code für Teilnehmeranzeige generieren
+        $participants_html = '';
+        if(($date->getValue('dat_rol_id'))!=null)
+        {
+            if($date->getValue('dat_max_members')!=0)
+            {
+                $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
+                $result = $g_db->query($sql);
+                $row2 = $g_db->num_rows($result);
+                
+                $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
+                $result = $g_db->query($sql);
+                $row3 = $g_db->num_rows($result);
+                            
+                $participants_html = '
+                    <tr>
+                        <td>Teilnehmer:</td>
+                        <td>
+                            <strong>'.$row2.'</strong> (davon '.$row3. ((intval($row3)==1)?' Organisator':' Organisatoren') . ')
+                        </td>
+                    </tr>';
+            }
+            else 
+            {
+                $participants_html = '
+                    <tr>
+                        <td>Teilnehmer:</td>
+                        <td><strong>unbegrenzt</strong></td>
+                    </tr>';
+            }
+        }
 
         echo '
         <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
@@ -450,7 +482,7 @@ else
                     
                     if($row2>0) 
                     {
-                        echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&rol_id='.$date->getValue('dat_rol_id').'"  ><img src="'. THEME_PATH. '/icons/list.png" alt="Mitglieder" title="Mitglieder" /></a>';
+                        echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"  ><img src="'. THEME_PATH. '/icons/list.png" alt="Mitglieder" title="Mitglieder" /></a>';
                     }
                     echo'  <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=4"><img
                     src="'. THEME_PATH. '/icons/database_out.png" alt="Exportieren (iCal)" title="Exportieren (iCal)" /></a>';
@@ -469,7 +501,7 @@ else
                         if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
                         {
                             echo '
-                            <a class="iconLink" href="javascript:deleteObject(\'dat\', \'dat_'.$date->getValue('dat_id').'\','.$date->getValue('dat_id').',\''.$date->getValue('dat_headline').'\')"><img
+                            <a class="iconLink" href="#" onclick="deleteObject(\'dat\', \'dat_'.$date->getValue('dat_id').'\','.$date->getValue('dat_id').',\''.$date->getValue('dat_headline').'\')"><img
                                 src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
                         }
                     }
@@ -481,209 +513,136 @@ else
                 if ($date->getValue("dat_all_day") == 0 || strlen($date->getValue("dat_location")) > 0)
                 {
                     echo '<div class="date_info_block">';
-                        $margin_left_location = "0";
-                        if ($date->getValue("dat_all_day") == 0)
-                        {
-                            echo '
-                            <table style="float:left; width: 250px;">
-                                <tr>
-                                    <td>Beginn:</td>
-                                    <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_begin')). '</strong> Uhr</td>
-                                </tr>
-                                <tr>
-                                    <td>Ende:</td>
-                                    <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_end')). '</strong> Uhr</td>
-                                </tr>';
-                            if(($date->getValue('dat_rol_id'))!=null)
-                            {
-                                if($date->getValue('dat_max_members')!=0)
-                                {
-                                    echo '
-                                        <tr>
-                                            <td>Teilnehmer:</td>
-                                            <td>';
-                                                $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
-                                                $result = $g_db->query($sql);
-                                                $row2 = $g_db->num_rows($result);
-                                                echo '<strong>'.$row2.'</strong> (davon ' ;
-                                                $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
-                                                $result = $g_db->query($sql);
-                                                $row2 = $g_db->num_rows($result);
-                                                if(intval($row2)==1)
-                                                {
-                                                    echo $row2.' Organisator) ';
-                                                }
-                                                else
-                                                {
-                                                    echo $row2.' Organisatoren) ';
-                                                }
-                                    echo '  </td>
-                                        </tr>';
-                                }
-                                else 
-                                {
-                                    echo '
-                                        <tr>
-                                            <td>Teilnehmer:</td>
-                                            <td><strong>unbegrenzt</strong></td>
-                                        </tr>';
-                                }
-                            }
-                            echo '</table>';
-                            $margin_left_location = '40';
-                        }
+                    $margin_left_location = "0";
+                    if ($date->getValue("dat_all_day") == 0)
+                    {
+                        echo '
+                        <table style="float:left; width: 250px;">
+                            <tr>
+                                <td>Beginn:</td>
+                                <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_begin')). '</strong> Uhr</td>
+                            </tr>
+                            <tr>
+                                <td>Ende:</td>
+                                <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_end')). '</strong> Uhr</td>
+                            </tr>';
+                        echo $participants_html;
+                        echo '</table>';
+                        $margin_left_location = '40';
+                    }
 
-                        if (strlen($date->getValue('dat_location')) > 0)
-                        {
-                            echo '
-                            <table style="padding-left: '. $margin_left_location. 'px;">
-                                <tr>
-                                    <td>Kalender:</td>
-                                    <td><strong>'. $date->getValue("cat_name"). '</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Ort:</td>
-                                    <td>';
-                                        // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
-                                        // die jeweils laenger als 3 Zeichen sind
-                                        $map_info_count = 0;
-                                        foreach(split('[,; ]', $date->getValue('dat_location')) as $key => $value)
+                    if (strlen($date->getValue('dat_location')) > 0)
+                    {
+                        echo '
+                        <table style="padding-left: '. $margin_left_location. 'px;">
+                            <tr>
+                                <td>Kalender:</td>
+                                <td><strong>'. $date->getValue("cat_name"). '</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Ort:</td>
+                                <td>';
+                                    // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
+                                    // die jeweils laenger als 3 Zeichen sind
+                                    $map_info_count = 0;
+                                    foreach(split('[,; ]', $date->getValue('dat_location')) as $key => $value)
+                                    {
+                                        if(strlen($value) > 3)
                                         {
-                                            if(strlen($value) > 3)
-                                            {
-                                                $map_info_count++;
-                                            }
+                                            $map_info_count++;
                                         }
+                                    }
 
-                                        if($g_preferences['dates_show_map_link'] == true
-                                            && $map_info_count > 1)
+                                    if($g_preferences['dates_show_map_link'] == true
+                                        && $map_info_count > 1)
+                                    {
+                                        // Google-Maps-Link fuer den Ort zusammenbauen
+                                        $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
+                                        if(strlen($date->getValue('dat_country')) > 0)
                                         {
-                                            // Google-Maps-Link fuer den Ort zusammenbauen
-                                            $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
+                                            // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
+                                            $location_url .= ',%20'. $date->getValue('dat_country');
+                                        }
+                                        echo '<a href="'. $location_url. '" target="_blank" title="Auf Karte zeigen"/><strong>'.$date->getValue("dat_location").'</strong></a>';
+
+                                        // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
+                                        if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
+                                            && (  strlen($g_current_user->getValue("PLZ"))  > 0 || strlen($g_current_user->getValue("Ort"))  > 0 ))
+                                        {
+                                            $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue('Adresse'));
+                                            if(strlen($g_current_user->getValue('PLZ'))  > 0)
+                                            {
+                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('PLZ'));
+                                            }
+                                            if(strlen($g_current_user->getValue('Ort'))  > 0)
+                                            {
+                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('Ort'));
+                                            }
+                                            if(strlen($g_current_user->getValue('Land'))  > 0)
+                                            {
+                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('Land'));
+                                            }
+
+                                            $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
                                             if(strlen($date->getValue('dat_country')) > 0)
                                             {
                                                 // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
-                                                $location_url .= ',%20'. $date->getValue('dat_country');
+                                                $route_url .= ',%20'. $date->getValue('dat_country');
                                             }
-                                            echo '<a href="'. $location_url. '" target="_blank" title="Auf Karte zeigen"/><strong>'.$date->getValue("dat_location").'</strong></a>';
-
-                                            // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
-                                            if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
-                                                && (  strlen($g_current_user->getValue("PLZ"))  > 0 || strlen($g_current_user->getValue("Ort"))  > 0 ))
-                                            {
-                                                $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue('Adresse'));
-                                                if(strlen($g_current_user->getValue('PLZ'))  > 0)
-                                                {
-                                                    $route_url .= ',%20'. urlencode($g_current_user->getValue('PLZ'));
-                                                }
-                                                if(strlen($g_current_user->getValue('Ort'))  > 0)
-                                                {
-                                                    $route_url .= ',%20'. urlencode($g_current_user->getValue('Ort'));
-                                                }
-                                                if(strlen($g_current_user->getValue('Land'))  > 0)
-                                                {
-                                                    $route_url .= ',%20'. urlencode($g_current_user->getValue('Land'));
-                                                }
-
-                                                $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
-                                                if(strlen($date->getValue('dat_country')) > 0)
-                                                {
-                                                    // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
-                                                    $route_url .= ',%20'. $date->getValue('dat_country');
-                                                }
-                                                echo '
-                                                    <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank">
-                                                        <img src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" title="Route anzeigen"/></a>
-                                                    </span>';
-                                            }
-                                        } 
-                                        else
-                                        {
-                                            
-                                            echo '<strong>'. $date->getValue('dat_location'). '</strong>';
+                                            echo '
+                                                <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank">
+                                                    <img src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" title="Route anzeigen"/></a>
+                                                </span>';
                                         }
-                                        if($date->getValue('dat_room_id')>0)
-                                        {
-                                            $room = new TableRooms($g_db);
-                                            $room->readData($date->getValue('dat_room_id'));
-                                            $room_name = $room->getValue('room_name');
-                                            echo '<strong> (<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a>)</strong>';
-                                        }
-                                        echo '
-                                    </td>
-                                </tr>';
-                                
-                                if(!is_null($date->getValue('dat_rol_id')))
-                                {
-                                    echo ' <tr>
-                                        <td>
-                                            Teilnehmer:
-                                        </td>
-                                        <td>';
-                                            $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
-                                            $result = $g_db->query($sql);
-                                            $row2 = $g_db->num_rows($result);
-                                            echo '<strong>'.$row2.'</strong> (davon ' ;
-                                            $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
-                                            $result = $g_db->query($sql);
-                                            $row2 = $g_db->num_rows($result);
-                                            if(intval($row2)==1)
-                                            {
-                                                echo $row2.' Organisator) ';
-                                            }
-                                            else
-                                            {
-                                                echo $row2.' Organisatoren) ';
-                                            }
-                                    echo' </td>
-                                    </tr>';
-                                }
-                            echo' </table>';
-                        }
-                        else 
+                                    } 
+                                    else
+                                    {
+                                        
+                                        echo '<strong>'. $date->getValue('dat_location'). '</strong>';
+                                    }
+                                    if($date->getValue('dat_room_id')>0)
+                                    {
+                                        $room = new TableRooms($g_db);
+                                        $room->readData($date->getValue('dat_room_id'));
+                                        $room_name = $room->getValue('room_name');
+                                        echo '<strong> (<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a>)</strong>';
+                                    }
+                                    echo '
+                                </td>
+                            </tr>';
+                        
+                        if ($date->getValue("dat_all_day") != 0)
                         {
-                            echo '<table style="padding-left: '. $margin_left_location. 'px;">
-                                <tr>
-                                    <td>Kalender:</td>
-                                    <td><strong>'. $date->getValue('cat_name'). '</strong></td>
-                                </tr>';
-                            if($date->getValue('dat_room_id')>0)
-                            {
-                                $room = new TableRooms($g_db);
-                                $room->readData($date->getValue('dat_room_id'));
-                                $room_name = $room->getValue('room_name');
-                                echo '
-                                <tr>
-                                    <td>Ort:</td>
-                                    <td>
-                                        <strong><a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a></strong>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Teilnehmer:
-                                    </td>
-                                    <td>';
-                                        $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
-                                        $result = $g_db->query($sql);
-                                        $row2 = $g_db->num_rows($result);
-                                        echo '<strong>'.$row2.'</strong> (davon ' ;
-                                        $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
-                                        $result = $g_db->query($sql);
-                                        $row2 = $g_db->num_rows($result);
-                                        if(intval($row2)==1)
-                                        {
-                                            echo $row2.' Organisator) ';
-                                        }
-                                        else
-                                        {
-                                            echo $row2.' Organisatoren) ';
-                                        }
-                                echo' </td>
-                                </tr>';
-                            }
-                            echo '    </table>';
+                            echo $participants_html;
                         }
+                        echo' </table>';
+                    }
+                    else 
+                    {
+                        echo '<table style="padding-left: '. $margin_left_location. 'px;">
+                            <tr>
+                                <td>Kalender:</td>
+                                <td><strong>'. $date->getValue('cat_name'). '</strong></td>
+                            </tr>';
+                        if($date->getValue('dat_room_id')>0)
+                        {
+                            $room = new TableRooms($g_db);
+                            $room->readData($date->getValue('dat_room_id'));
+                            $room_name = $room->getValue('room_name');
+                            echo '
+                            <tr>
+                                <td>Ort:</td>
+                                <td>
+                                    <strong><a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a></strong>
+                                </td>
+                            </tr>';
+                            if ($date->getValue("dat_all_day") != 0)
+                            {
+                                echo $participants_html;
+                            }
+                        }
+                        echo '    </table>';
+                    }
                     echo '</div>';
                 }
                 else 
@@ -706,68 +665,9 @@ else
                             <td>
                                 <strong><a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a></strong>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Teilnehmer:
-                            </td>
-                            <td>';
-                                $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
-                                $result = $g_db->query($sql);
-                                $row2 = $g_db->num_rows($result);
-                                echo '<strong>'.$row2.'</strong> (davon ' ;
-                                $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
-                                $result = $g_db->query($sql);
-                                $row2 = $g_db->num_rows($result);
-                                if(intval($row2)==1)
-                                {
-                                    echo $row2.' Organisator) ';
-                                }
-                                else
-                                {
-                                    echo $row2.' Organisatoren) ';
-                                }
-                        echo' </td>
                         </tr>';
                     }
-                    else
-                    {
-                        if(($date->getValue('dat_rol_id'))!=null)
-                        {
-                            if($date->getValue('dat_max_members')!=0)
-                            {
-                                echo '
-                                    <tr>
-                                        <td>Teilnehmer:</td>
-                                        <td>';
-                                            $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
-                                            $result = $g_db->query($sql);
-                                            $row2 = $g_db->num_rows($result);
-                                            echo '<strong>'.$row2.'</strong> (davon ' ;
-                                            $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
-                                            $result = $g_db->query($sql);
-                                            $row2 = $g_db->num_rows($result);
-                                            if(intval($row2)==1)
-                                            {
-                                                echo $row2.' Organisator) ';
-                                            }
-                                            else
-                                            {
-                                                echo $row2.' Organisatoren) ';
-                                            }
-                                echo '  </td>
-                                    </tr>';
-                            }
-                            else 
-                            {
-                                echo '
-                                    <tr>
-                                        <td>Teilnehmer:</td>
-                                        <td><strong>unbegrenzt</strong></td>
-                                    </tr>';
-                            }
-                        }
-                    }
+                    echo $participants_html;
                     echo '</table>';
                           
                     echo '</div>';
@@ -789,7 +689,6 @@ else
                 $sql = 'SELECT * FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';
                 $result = $g_db->query($sql);
                 $row = $g_db->fetch_array($result);
-                echo '<nobr/>';
                 
 //                 echo '<pre>';
 //                 echo $date->getValue('dat_max_members').'<br>';

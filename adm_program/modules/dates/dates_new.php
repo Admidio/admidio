@@ -411,7 +411,7 @@ echo '
                                         $selected = ' selected="selected"';
                                     }
                                     
-                                    echo '<option value="'.$key.'"'.$selected.'>'.$value['name'].' ('.$value['capacity'].')</option>';
+                                    echo '<option value="'.$key.'"'.$selected.'>'.$value['name'].' ('.$value['capacity'].'+'.$value['overhang'].')</option>';
                                 }
                                 echo '</select>
                             </dd>
