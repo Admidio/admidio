@@ -440,7 +440,10 @@ if($_GET['mode'] == 1)
             $g_db->query($sql);
             $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = "'.$date->getValue('dat_rol_id').'"';
             $g_db->query($sql);
+            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dat_id = "'.$date->getValue('dat_id').'"';
+            $g_db->query($sql);
             $date->setValue('dat_rol_id', null);
+            $date->setValue('dat_max_members', null);
             $date->save();
         }
         
@@ -510,6 +513,11 @@ if($_GET['mode'] == 1)
                     $g_message->show('quota_exceeded');
                 }
             }
+        }
+        else
+        {
+            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dat_id = "'.$date->getValue('dat_id').'"';
+            $g_db->query($sql);
         }
     }
     unset($_SESSION['dates_request']);

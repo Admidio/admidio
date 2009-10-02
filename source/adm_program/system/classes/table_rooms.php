@@ -32,11 +32,11 @@ class TableRooms extends TableAccess
         }
         
         //room_choice befüllen
-        $sql = 'SELECT room_id, room_name, room_capacity FROM '.TBL_ROOMS.'';
+        $sql = 'SELECT room_id, room_name, room_capacity, room_overhang FROM '.TBL_ROOMS.'';
         $result = $this->db->query($sql);
         while($row = $this->db->fetch_array($result))
         {
-            $this->room_choice[$row['room_id']] = array('name' => $row['room_name'], 'capacity' => $row['room_capacity']);
+            $this->room_choice[$row['room_id']] = array('name' => $row['room_name'], 'capacity' => $row['room_capacity'], 'overhang' => $row['room_overhang']);
         }
     }
     

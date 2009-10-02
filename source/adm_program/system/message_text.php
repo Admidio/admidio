@@ -216,8 +216,8 @@ $message_text = array(
     'Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.',
 
 'quota_and_max_members_must_match' =>
-    'Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierung mit
-    der maximalen Anzahl übereinstimmen.',
+    'Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit
+    der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.',
 
 // Meldungen Listen
 
