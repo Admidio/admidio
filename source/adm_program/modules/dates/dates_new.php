@@ -411,7 +411,7 @@ echo '
                                         $selected = ' selected="selected"';
                                     }
                                     
-                                    echo '<option value="'.$key.'"'.$selected.'>'.$value.'</option>';
+                                    echo '<option value="'.$key.'"'.$selected.'>'.$value['name'].' ('.$value['capacity'].')</option>';
                                 }
                                 echo '</select>
                             </dd>
@@ -512,7 +512,7 @@ echo '
            echo '
             <li>
                 <dl>
-                    <dt><label for="dat_description">Text:</label>';
+                    <dt><label for="dat_description">Beschreibung:</label>';
                         if($g_preferences['enable_bbcode'] == 1)
                         {
                             printEmoticons();
