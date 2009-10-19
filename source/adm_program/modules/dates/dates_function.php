@@ -16,11 +16,11 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/table_members.php');
-require('../../system/classes/table_roles.php');
-require('../../system/classes/table_rooms.php');
-require('../../system/classes/date.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_date.php');
+require_once('../../system/classes/table_members.php');
+require_once('../../system/classes/table_roles.php');
+require_once('../../system/classes/table_rooms.php');
 
 
 // Config-Area fuer Roles, mit denen eine neue Rolle angelegt wird wenn eine Anmeldung moeglich ist
@@ -103,7 +103,7 @@ if(is_numeric($_GET['mode']) == false
 }
 
 // Terminobjekt anlegen
-$date = new Date($g_db);
+$date = new TableDate($g_db);
 
 if($req_dat_id > 0)
 {
@@ -300,10 +300,10 @@ if($_GET['mode'] == 1)
         if(is_array($_POST['dat_visible_for']))
         {
             $modes = $_POST['dat_visible_for'];
-            $date2 = new Date($g_db);
+            $date2 = new TableDate($g_db);
             foreach($modes as $value)
             {
-                $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dat_id, rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
+                $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dtr_dat_id, dtr_rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
                 $g_db->query($sql);
             }
             $date->visible_for = $modes;
@@ -393,7 +393,7 @@ if($_GET['mode'] == 1)
                 {
                     if(is_numeric($rol_id) && is_numeric($max_members))
                     {
-                        $sql = 'INSERT INTO '.TBL_DATE_MAX_MEMBERS.' (`dat_id` , `rol_id` , `max_members`) VALUES ('.$date->getValue('dat_id').', '.$rol_id.', '.$max_members.'); ';
+                        $sql = 'INSERT INTO '.TBL_DATE_MAX_MEMBERS.' (`dmm_dat_id` , `dmm_rol_id` , `dmm_max_members`) VALUES ('.$date->getValue('dat_id').', '.$rol_id.', '.$max_members.'); ';
                         $g_db->query($sql);
                     }
                 }
@@ -447,13 +447,13 @@ if($_GET['mode'] == 1)
             $date->save();
         }
         
-        $sql='DELETE FROM '.TBL_DATE_ROLE.' WHERE dat_id="'.$date->getValue('dat_id').'"';
+        $sql='DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id="'.$date->getValue('dat_id').'"';
         $g_db->query($sql);
         $modes = $_POST['dat_visible_for'];
-        $date2 = new Date($g_db);
+        $date2 = new TableDate($g_db);
         foreach($modes as $value)
         {
-            $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dat_id,rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
+            $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dtr_dat_id,dtr_rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
             $g_db->query($sql);
         }
         $date->visible_for = $modes;
@@ -493,7 +493,7 @@ if($_GET['mode'] == 1)
             
             if(($sum > 0 && $date->getValue('dat_max_members') != '' && $date->getValue('dat_max_members') > 0) || $sum == 0)
             {
-                $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE `dat_id` = '.$date->getValue('dat_id');
+                $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE `dmm_dat_id` = '.$date->getValue('dat_id');
                 $g_db->query($sql);
                 
                 // Nur eintragen wenn die Teilnehmerbegrenzung größer oder gleich der insgesamt Teilnehmerbegrenzung ist
@@ -503,7 +503,7 @@ if($_GET['mode'] == 1)
                     {
                         if(is_numeric($rol_id) && is_numeric($max_members))
                         {
-                            $sql = 'INSERT INTO '.TBL_DATE_MAX_MEMBERS.' (`dat_id` , `rol_id` , `max_members`) VALUES ('.$date->getValue('dat_id').', '.$rol_id.', '.$max_members.'); ';
+                            $sql = 'INSERT INTO '.TBL_DATE_MAX_MEMBERS.' (`dmm_dat_id` , `dmm_rol_id` , `dmm_max_members`) VALUES ('.$date->getValue('dat_id').', '.$rol_id.', '.$max_members.'); ';
                             $g_db->query($sql);
                         }
                     }

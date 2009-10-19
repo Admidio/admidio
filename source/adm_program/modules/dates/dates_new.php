@@ -17,7 +17,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/date.php');
+require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 require_once('../../system/classes/table_roles.php');
 
@@ -60,7 +60,7 @@ if(!isset($_GET['headline']))
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Terminobjekt anlegen
-$date = new Date($g_db);
+$date = new TableDate($g_db);
 
 if($req_dat_id > 0)
 {
