@@ -23,6 +23,7 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableDate extends TableAccess
@@ -72,24 +73,24 @@ class TableDate extends TableAccess
         {
             $sql_additional_tables .= TBL_CATEGORIES;
             $sql_where_condition   .= '    dat_cat_id = cat_id
-                                       AND '.TBL_DATES.'.dat_id     = '.$dat_id;
+                                       AND dat_id     = '.$dat_id;
             parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
             
             $this->visible_for = array();
-            $sql = 'SELECT DISTINCT rol_id FROM '.TBL_DATE_ROLE.' WHERE dat_id="'.$dat_id.'"';
+            $sql = 'SELECT DISTINCT dtr_rol_id FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id="'.$dat_id.'"';
             $result = $this->db->query($sql);
 
             while($row = $this->db->fetch_array($result))
             {
-                $this->visible_for[] = intval($row['rol_id']);
+                $this->visible_for[] = intval($row['dtr_rol_id']);
             }
             
             $this->max_members_role = array();
-            $sql = 'SELECT * FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dat_id = '.$dat_id;
+            $sql = 'SELECT * FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id = '.$dat_id;
             $result = $this->db->query($sql);
             while($row = $this->db->fetch_array($result))
             {
-                $this->max_members_role[$row['rol_id']] = $row['max_members'];
+                $this->max_members_role[$row['dmm_rol_id']] = $row['dmm_max_members'];
             }
             
             //print_r($this);
@@ -177,6 +178,29 @@ class TableDate extends TableAccess
         }
         parent::save();
     }
+    
+    // Methode, die den Termin in der DB loescht
+    function delete()
+    {
+        // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
+        if($this->getValue('dat_rol_id') > 0)
+        {
+            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = "'.$this->getValue('dat_rol_id').'"';
+            $this->db->query($sql);
+            
+            $role = new TableRoles($this->db);
+            $role->readData($this->getValue('dat_rol_id'));
+            $role->delete();
+        }
+        
+        $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = "'.$this->getValue('dat_id').'"';
+        $result = $this->db->query($sql);
+        
+        $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id="'.$this->getValue('dat_id').'"';
+        $this->db->query($sql);
+        
+        parent::delete();
+    }    
    
     // gibt einen Termin im iCal-Format zurueck
     function getIcal($domain)
@@ -250,5 +274,15 @@ class TableDate extends TableAccess
     {
         return in_array($rol_id, $this->visible_for);
     }
+    
+    function getVisibilityMode($mode)
+    {
+        return $this->visibility[$mode];
+    }
+    
+    function getVisibilityArray()
+    {
+        return $this->visibility;
+    }    
 }
 ?>

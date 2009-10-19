@@ -144,11 +144,9 @@ if($plg_ter_aktiv == 1)
     {
         $login_sql = 'AND rol_id = 0';
     }
-    $sql = 'SELECT DISTINCT '.
-                TBL_DATES. '.dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline 
-            FROM '.
-                TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
-            WHERE '. TBL_DATES. '.dat_id = '.TBL_DATE_ROLE.'.dat_id
+    $sql = 'SELECT DISTINCT dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline 
+            FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
+            WHERE dat_id = dtr_dat_id
                 '.$login_sql.'
                 AND DATE_FORMAT(dat_begin, "%Y-%m") = "'.$sql_dat.'"
                 '.$sql_syntax.'

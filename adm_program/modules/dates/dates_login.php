@@ -1,6 +1,6 @@
 <?php
 require_once('../../system/common.php');
-require_once('../../system/classes/date.php');
+require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_members.php');
 require(THEME_SERVER_PATH. '/overall_header.php');
 $req_headline = 'Anmeldung';
@@ -22,10 +22,7 @@ if(isset($_GET['dat_id']))
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-$sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_id ="'.$_GET['dat_id'].'"';
-$result = $g_db->query($sql);
-$date = $g_db->fetch_array($result); 
-$user_id = $_SESSION['g_current_user']->getValue('usr_id');
+$date   = new TableDate($g_db, $_GET['dat_id']);
 $member = new TableMembers($g_db);
 
 // Html des Modules ausgeben
@@ -48,18 +45,18 @@ if($_GET['login']!=0 && isset($_GET['from_rol_id']))
     
     $timestamp = time();
     $current = date('Y-m-d H:i:s', $timestamp);
-    $sql = 'SELECT * FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date['dat_rol_id'].'" AND mem_usr_id="'.$user_id.'"';
+    $sql = 'SELECT * FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'" AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
-    $member->startMembership($date['dat_rol_id'],$user_id,'',$_GET['from_rol_id']);
-    echo 'Sie haben sich erfolgreich f&uuml;r den Termin "'.$date['dat_headline'].'" am '.$date['dat_begin'].' angemeldet.';
+    $member->startMembership($date->getValue('dat_rol_id'),$g_current_user->getValue('usr_id'),'',$_GET['from_rol_id']);
+    echo 'Sie haben sich erfolgreich fÃ¼r den Termin "'.$date->getValue('dat_headline').'" am '.$date->getValue('dat_begin').' angemeldet.';
     
 }
 else
 {
-    $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date['dat_rol_id'].'" AND mem_usr_id="'.$user_id.'"';
+    $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'" AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';
     $g_db->query($sql);
-    echo 'Sie haben sich erfolgreich aus dem Termin "'.$date['dat_headline'].'" am '.$date['dat_begin'].' ausgetragen.';
+    echo 'Sie haben sich erfolgreich aus dem Termin "'.$date->getValue('dat_headline').'" am '.$date->getValue('dat_begin').' ausgetragen.';
 }
 
 echo '      
@@ -67,7 +64,7 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zurück"/></a>
+            src="'. THEME_PATH. '/icons/back.png" alt="ZurÃ¼ck" title="ZurÃ¼ck"/></a>
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zur&uuml;ck</a>
         </span>
     </li>

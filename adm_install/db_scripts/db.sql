@@ -19,7 +19,10 @@ drop table if exists %PRAEFIX%_files;
 drop table if exists %PRAEFIX%_folders;
 drop table if exists %PRAEFIX%_list_columns;
 drop table if exists %PRAEFIX%_lists;
+drop table if exists %PRAEFIX%_date_max_members;
+drop table if exists %PRAEFIX%_date_role;
 drop table if exists %PRAEFIX%_dates;
+drop table if exists %PRAEFIX%_rooms;
 drop table if exists %PRAEFIX%_announcements;
 drop table if exists %PRAEFIX%_members;
 drop table if exists %PRAEFIX%_role_dependencies;
@@ -33,7 +36,6 @@ drop table if exists %PRAEFIX%_categories;
 drop table if exists %PRAEFIX%_preferences;
 drop table if exists %PRAEFIX%_texts;
 drop table if exists %PRAEFIX%_organizations;
-drop table if exists %PRAEFIX%_rooms;
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -763,10 +765,44 @@ auto_increment = 1;
 
 create table %PRAEFIX%_date_role
 (
-    id                              int(11) unsigned                not null auto_increment,
-    dat_id                          int(11) unsigned                not null,
-    rol_id                          int(11) unsigned                not null,
-    primary key (id)
+    dtr_id                          int(11) unsigned                not null auto_increment,
+    dtr_dat_id                      int(11) unsigned                not null,
+    dtr_rol_id                      int(11) unsigned,
+    primary key (dtr_id)
 )
 engine = InnoDB
 auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_date_role add index DTR_DAT_FK (dtr_dat_id);
+alter table %PRAEFIX%_date_role add index DTR_ROL_FK (dtr_rol_id);
+
+-- Constraints
+alter table %PRAEFIX%_date_role add constraint %PRAEFIX%_FK_DTR_DAT foreign key (dtr_dat_id)
+      references %PRAEFIX%_dates (dat_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_date_role add constraint %PRAEFIX%_FK_DTR_ROL foreign key (dtr_rol_id)
+      references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;
+
+/*==============================================================*/
+/* Table: adm_date_max_members                                  */
+/*==============================================================*/
+
+CREATE TABLE %PRAEFIX%_date_max_members (
+    dmm_id                          int(11) unsigned                not null auto_increment,
+    dmm_dat_id                      int(11) unsigned                not null,
+    dmm_rol_id                      int(11) unsigned                not null,
+    dmm_max_members                 int(11) unsigned                not null,
+    PRIMARY KEY (dmm_id)
+) 
+ENGINE = InnoDB
+auto_increment = 1;
+
+-- Index
+alter table %PRAEFIX%_date_max_members add index DMM_DAT_FK (dmm_dat_id);
+alter table %PRAEFIX%_date_max_members add index DMM_ROL_FK (dmm_rol_id);
+
+-- Constraints
+alter table %PRAEFIX%_date_max_members add constraint %PRAEFIX%_FK_DMM_DAT foreign key (dmm_dat_id)
+      references %PRAEFIX%_dates (dat_id) on delete restrict on update restrict;
+alter table %PRAEFIX%_date_max_members add constraint %PRAEFIX%_FK_DMM_ROL foreign key (dmm_rol_id)
+      references %PRAEFIX%_roles (rol_id) on delete restrict on update restrict;

@@ -24,7 +24,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/date.php');
+require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -186,7 +186,7 @@ if ($g_valid_login == false)
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
 if($req_id > 0)
 {
-    $conditions .= ' AND dat.dat_id = '.$req_id.' '.$hidden;
+    $conditions .= ' AND dat_id = '.$req_id.' '.$hidden;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
@@ -229,15 +229,15 @@ if($req_id == 0)
     $user_id = $_SESSION['g_current_user']->getValue('usr_id');
     if($user_id != '')
     {
-        $login_sql = 'AND ( rol_id = 0 OR rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
+        $login_sql = 'AND ( dtr_rol_id = 0 OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
     }
     else
     {
-        $login_sql = 'AND rol_id = 0';
+        $login_sql = 'AND dtr_rol_id = 0';
     }
     
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-    $sql = 'SELECT COUNT(DISTINCT '. TBL_DATES. '.dat_id) as count
+    $sql = 'SELECT COUNT(DISTINCT dat_id) as count
             FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
             WHERE dat_cat_id = cat_id
                 AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
@@ -245,7 +245,7 @@ if($req_id == 0)
                         AND cat_org_id IN ("'.$organizations.'") 
                     )
                 )
-                AND '. TBL_DATES. '.dat_id = '.TBL_DATE_ROLE.'.dat_id
+                AND dat_id = dtr_dat_id
                 '.$login_sql.'
                 '.$conditions. $condition_calendar;
 
@@ -272,7 +272,7 @@ else
 $sql = 'SELECT DISTINCT cat.*, dat.*, 
             cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
             cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-        FROM '.TBL_DATE_ROLE.' dat_rol, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
+        FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
             LEFT JOIN '. TBL_USER_DATA .' cre_surname 
                 ON cre_surname.usd_usr_id = dat_usr_id_create
             AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
@@ -289,7 +289,7 @@ $sql = 'SELECT DISTINCT cat.*, dat.*,
             AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
             OR (   dat_global   = 1
             AND cat_org_id IN ('.$organizations.') ))
-            AND dat.dat_id = dat_rol.dat_id
+            AND dat_id = dtr_dat_id
             '.$login_sql.'
             '.$conditions. $condition_calendar. $order_by. '
         LIMIT '.$req_start.', '.$dates_per_page;
@@ -421,7 +421,7 @@ else
     }
     
 
-    $date = new Date($g_db);
+    $date = new TableDate($g_db);
 
     // Termine auflisten
     while($row = $g_db->fetch_array($dates_result))
