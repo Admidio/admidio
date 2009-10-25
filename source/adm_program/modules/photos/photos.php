@@ -518,7 +518,7 @@ echo '<div class="photoModuleContainer">';
 
             //Ausgabe
             echo '
-            <li id="pho_'.$sub_photo_album->getValue('pho_id').'" style="height: '.($g_preferences['photo_thumbs_scale']+10).'px;">
+            <li id="pho_'.$sub_photo_album->getValue('pho_id').'" style="height: '.($g_preferences['photo_thumbs_scale']+20).'px;">
             <dl>
                 <dt>';
                     if(file_exists($ordner))
