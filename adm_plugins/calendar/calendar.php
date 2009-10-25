@@ -138,11 +138,11 @@ if($plg_ter_aktiv == 1)
     $user_id = isset($_SESSION['g_current_user']) ? $_SESSION['g_current_user']->getValue('usr_id') : '';
     if($user_id != '')
     {
-        $login_sql = 'AND ( rol_id = 0 OR rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
+        $login_sql = 'AND ( dtr_rol_id = 0 OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
     }
     else
     {
-        $login_sql = 'AND rol_id = 0';
+        $login_sql = 'AND dtr_rol_id = 0';
     }
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline 
             FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
