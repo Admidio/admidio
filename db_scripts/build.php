@@ -2,8 +2,9 @@
 
 // Demo-DB neu erstellen
 
-include("../config.php");
-include("mysql.php");
+include('../config.php');
+include('mysql.php');
+include('folder.php');
 
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "db_scripts")-1));
 
@@ -72,9 +73,26 @@ function getBacktrace()
 
 // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
-@set_time_limit(240); 
+@set_time_limit(300); 
 
-echo "Beginne mit der Installation ...<br />";
+echo 'Beginne mit der Installation ...<br />';
+
+// Inhalt des Ordner adm_my_files in den Produktivordner kopieren
+$srcFolder = SERVER_PATH. '/db_scripts/adm_my_files';
+$newFolder = SERVER_PATH. '/adm_my_files';
+
+$myFilesFolder = new Folder($srcFolder);
+$b_return = $myFilesFolder->delete($newFolder.'/backup');
+$b_return = $myFilesFolder->delete($newFolder.'/download');
+$b_return = $myFilesFolder->delete($newFolder.'/photos');
+$b_return = $myFilesFolder->copy($newFolder);
+if($b_return == false)
+{
+    echo 'Der Ordner <strong>adm_my_files</strong> besitzt wahrscheinlich keine Schreibrechte.<br />
+    Es konnten keine Dateien in diesen kopiert werden.';
+    exit();
+}
+echo 'Der Ordner <strong>adm_my_files</strong> wurde kopiert<br />';
 
  // Verbindung zu Datenbank herstellen
 $db = new MySqlDB();
@@ -117,6 +135,16 @@ foreach($sql_arr as $sql)
 		$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
 		$db->query($sql);
 	}
+}
+
+
+// falls dies der Admidio-Demo-bereich ist, dann das Theme auf demo setzen
+if(strpos(__FILE__, "db_scripts") > 0)
+{
+    $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = "demo"
+             WHERE prf_name   = "theme" 
+               AND prf_org_id = 1 ';
+    $db->query($sql);
 }
 
 

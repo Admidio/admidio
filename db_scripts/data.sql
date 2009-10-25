@@ -18,7 +18,7 @@ INSERT INTO `%PRAEFIX%_preferences` VALUES  (1,1,'enable_rss','1'),
  (6,1,'email_administrator','webmaster@admidio.org'),
  (7,1,'homepage_logout','adm_program/index.php'),
  (8,1,'homepage_login','adm_program/index.php'),
- (9,1,'theme','demo'),
+ (9,1,'theme','modern'),
  (10,1,'enable_password_recovery','1'),
  (11,1,'registration_mode','2'),
  (12,1,'enable_registration_captcha','1'),
@@ -90,15 +90,9 @@ INSERT INTO `%PRAEFIX%_preferences` VALUES  (1,1,'enable_rss','1'),
  (79,1,'weblinks_per_page','0'),
  (80,1,'weblinks_redirect_seconds','10'),
  (81,1,'weblinks_target','_blank'),
- (82,1,'enable_messages_module','1'),
- (83,1,'messages_reminder','1'),
- (84,1,'messages_in_box','0'),
- (85,1,'messages_out_box','0'),
- (86,1,'messages_archive','0'),
- (87,1,'enable_inventory_module','0'),
- (88,1,'inventory_items_per_page','0'),
- (89,1,'db_version_beta','1'),
- (90,1,'enable_billing_module','0');
+ (82,1,'db_version_beta','0'),
+ (83,1,'profile_default_role','2'),
+ (84,1,'mail_sendmail_address','');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_preferences` ENABLE KEYS */;
 
@@ -2329,8 +2323,8 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `%PRAEFIX%_announcements` DISABLE KEYS */;
 LOCK TABLES `%PRAEFIX%_announcements` WRITE;
-INSERT INTO `%PRAEFIX%_announcements` VALUES  (1,'DEMO',0,'Neue Trikots','Ab der kommenden Saison gibt es neue Trikots für alle aktiven Spieler. Diese können vor dem ersten Training beim Trainer abgeholt werden.',1,'2009-02-20 00:00:00',NULL,NULL),
- (2,'DEMO',0,'Aerobik-Kurs','Während der Schulferien bieten wir einen [i]Aerobic-Kurs[/i] für alle interessierten Mitglieder an.\r\n\r\nAnmeldungen werden auf der [b]Homepage[/b] oder in der [b]Geschäftsstelle[/b] entgegen genommen.',1,'2009-01-27 00:00:00',1,'2008-07-06 17:33:53');
+INSERT INTO `%PRAEFIX%_announcements` VALUES  (1,'DEMO',0,'Neue Trikots','Ab der kommenden Saison gibt es neue Trikots für alle aktiven Spieler. Diese können vor dem ersten Training beim Trainer abgeholt werden.',1,concat(date_add(date(sysdate()), interval -7 day),' 00:00:00'),NULL,NULL),
+ (2,'DEMO',0,'Aerobik-Kurs','Während der Schulferien bieten wir einen [i]Aerobic-Kurs[/i] für alle interessierten Mitglieder an.\r\n\r\nAnmeldungen werden auf der [b]Homepage[/b] oder in der [b]Geschäftsstelle[/b] entgegen genommen.',1,concat(date_add(date(sysdate()), interval -3 day),' 00:00:00'),1,concat(date_add(date(sysdate()), interval -2 day),' 17:33:53'));
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_announcements` ENABLE KEYS */;
 
@@ -2338,40 +2332,50 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `%PRAEFIX%_dates` DISABLE KEYS */;
 LOCK TABLES `%PRAEFIX%_dates` WRITE;
-INSERT INTO `%PRAEFIX%_dates` VALUES  (3,10,0,'2009-03-09 16:00:00','2009-03-09 18:00:00',0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen',NULL,'Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL),
- (4,10,0,'2009-03-27 19:00:00','2009-03-27 23:30:00',0,'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.',NULL,NULL,'Grillfest',1,'2008-07-06 17:41:18',NULL,NULL),
- (5,10,0,'2009-04-13 00:00:00','2009-04-18 00:00:00',1,'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)','Jugendherberge Esens',NULL,'Trainerlehrgang',1,'2008-07-06 17:49:13',NULL,NULL);
+INSERT INTO `%PRAEFIX%_dates` VALUES  (3,10,0,concat(date_add(date(sysdate()), interval 14 day),' 16:00:00'),concat(date_add(date(sysdate()), interval 14 day),' 18:00:00'),0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen',NULL,'Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL),
+ (4,10,0,concat(date_add(date(sysdate()), interval 4 day),' 19:00:00'),concat(date_add(date(sysdate()), interval 4 day),' 23:30:00'),0,'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.',NULL,NULL,'Grillfest',1,'2008-07-06 17:41:18',NULL,NULL),
+ (5,10,0,concat(date_add(date(sysdate()), interval 30 day),' 00:00:00'),concat(date_add(date(sysdate()), interval 35 day),' 00:00:00'),1,'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)','Jugendherberge Esens',NULL,'Trainerlehrgang',1,'2008-07-06 17:49:13',NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_dates` ENABLE KEYS */;
 
 
+/*!40000 ALTER TABLE `adm_photos` DISABLE KEYS */;
+LOCK TABLES `%PRAEFIX%_photos` WRITE;
+INSERT INTO `%PRAEFIX%_photos` VALUES  (1,'DEMO',0,'Kroatien','2009-10-05','2009-10-11','Karl Müller und andere',0,NULL,1,'2009-10-23 18:15:37',NULL,NULL),
+ (2,'DEMO',3,'Plitwitzer Seen','2009-10-05','2009-10-07','Karl Müller und andere',0,1,1,'2009-10-23 18:17:44',NULL,NULL),
+ (3,'DEMO',3,'Krka','2009-10-08','2009-10-11','Karl Müller und andere',0,1,1,'2009-10-23 18:18:44',NULL,NULL),
+ (4,'DEMO',6,'Machu Picchu','2009-09-14','2009-09-17','Admin',0,NULL,1,'2009-10-23 18:20:50',NULL,NULL);
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `adm_photos` ENABLE KEYS */;
+
+
 /*!40000 ALTER TABLE `%PRAEFIX%_folders` DISABLE KEYS */;
 LOCK TABLES `%PRAEFIX%_folders` WRITE;
-INSERT INTO `%PRAEFIX%_folders` VALUES  (1,1,NULL,'DOWNLOAD','download',NULL,'/adm_my_files',0,1,NULL,'2008-04-20 22:35:07');
+INSERT INTO `%PRAEFIX%_folders` VALUES  (1,1,NULL,'DOWNLOAD','download',NULL,'/adm_my_files',0,1,NULL,concat(date_add(date(sysdate()), interval -7 day),' 22:35:07'));
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_folders` ENABLE KEYS */;
 
 
 /*!40000 ALTER TABLE `%PRAEFIX%_guestbook` DISABLE KEYS */;
 LOCK TABLES `%PRAEFIX%_guestbook` WRITE;
-INSERT INTO `%PRAEFIX%_guestbook` VALUES  (1,1,1,'Heinz Webmaster','Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.','webmaster@admidio.org','http://www.admidio.org','2009-02-13 15:34:56','84.63.38.55',NULL,NULL),
- (2,1,NULL,'Sepp Mayerchen','Dann werde ich mir das Programm mal anschauen.',NULL,NULL,'2009-02-22 20:16:42','84.63.38.55',NULL,NULL);
+INSERT INTO `%PRAEFIX%_guestbook` VALUES  (1,1,1,'Heinz Webmaster','Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.','webmaster@admidio.org','http://www.admidio.org',concat(date_add(date(sysdate()), interval -14 day),' 12:14:42'),'84.63.38.55',NULL,NULL),
+ (2,1,NULL,'Sepp Mayerchen','Dann werde ich mir das Programm mal anschauen.',NULL,NULL,concat(date_add(date(sysdate()), interval -5 day),' 20:16:42'),'84.63.38.55',NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_guestbook` ENABLE KEYS */;
 
 
 /*!40000 ALTER TABLE `%PRAEFIX%_guestbook_comments` DISABLE KEYS */;
 LOCK TABLES `%PRAEFIX%_guestbook_comments` WRITE;
-INSERT INTO `%PRAEFIX%_guestbook_comments` VALUES  (1,2,1,'Heinz Webmaster','Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.','webmaster@admidio.org','2009-02-23 14:02:12','84.63.38.55',NULL,NULL);
+INSERT INTO `%PRAEFIX%_guestbook_comments` VALUES  (1,2,1,'Heinz Webmaster','Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.','webmaster@admidio.org',concat(date_add(date(sysdate()), interval -4 day),' 16:23:12'),'84.63.38.55',NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_guestbook_comments` ENABLE KEYS */;
 
 
 /*!40000 ALTER TABLE `%PRAEFIX%_links` DISABLE KEYS */;
 LOCK TABLES `%PRAEFIX%_links` WRITE;
-INSERT INTO `%PRAEFIX%_links` VALUES  (1,7,'Beispielseite','Auf dieser Seite gibt es nicht viele Neuigkeiten :(','http://www.example.com',1,'2008-04-21 22:13:26',1,'2008-04-22 21:16:32'),
- (2,9,'Admidio','Die Homepage der [b]besten[/b] Open Source Mitgliederverwaltung im Netz.','http://www.admidio.org',1,'2008-04-22 21:13:32',NULL,NULL),
- (3,9,'Admidio-Forum','Das Forum zur Online-Mitgliederverwaltung. Hier wird jedem geholfen, der auf ein Problem bei der Installation oder Einrichtung von Admidio gestoßen ist. Aber auch Verbesserungen können hier gepostet werden.','http://forum.admidio.org',1,'2008-04-22 21:15:44',NULL,NULL);
+INSERT INTO `%PRAEFIX%_links` VALUES  (1,7,'Beispielseite','Auf dieser Seite gibt es nicht viele Neuigkeiten :(','http://www.example.com',1,concat(date_add(date(sysdate()), interval -4 day),' 22:13:26'),1,concat(date_add(date(sysdate()), interval -3 day),' 21:16:32')),
+ (2,9,'Admidio','Die Homepage der [b]besten[/b] Open Source Mitgliederverwaltung im Netz.','http://www.admidio.org',1,concat(date_add(date(sysdate()), interval -4 day),' 21:13:32'),NULL,NULL),
+ (3,9,'Admidio-Forum','Das Forum zur Online-Mitgliederverwaltung. Hier wird jedem geholfen, der auf ein Problem bei der Installation oder Einrichtung von Admidio gestoßen ist. Aber auch Verbesserungen können hier gepostet werden.','http://forum.admidio.org',1,concat(date_add(date(sysdate()), interval -4 day),' 21:15:44'),NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_links` ENABLE KEYS */;
 
