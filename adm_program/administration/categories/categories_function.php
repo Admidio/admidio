@@ -219,9 +219,16 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
     if($_GET['mode'] == 2)
     {
         // Feld loeschen
-        $category->delete();
+        $ret_code = $category->delete();
 
-        $err_code = 'delete';
+        if($ret_code)
+        {
+            $err_code = 'delete';
+        }
+        else
+        {
+            $err_code = 'category_not_delete';
+        }
     }
     elseif($_GET['mode'] == 3)
     {
@@ -238,6 +245,6 @@ elseif($_GET['mode'] == 4)
 }
 
 // zur Kategorienuebersicht zurueck
-$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+$g_message->setForwardUrl($_SESSION['navigation']->getUrl());
 $g_message->show($err_code);
 ?>

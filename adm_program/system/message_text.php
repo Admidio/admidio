@@ -30,6 +30,10 @@ $message_text = array(
 'category_exist' =>
     'Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.',
 
+'category_not_delete' =>
+    'Sie können nicht alle Kategorien eines Moduls löschen. 
+    Erstellen Sie vorher eine neue Kategorie für dieses Modul.',
+
 'database_invalid' =>
     'Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.<br /><br />
     Wende dich bitte an den <a href="mailto:%VAR3%">Webmaster</a> dieser Webseite.',
