@@ -31,4 +31,9 @@ $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity,
                                          $row_webmaster['webmaster_id'].',"'. DATETIME_NOW.'")';
 $g_db->query($sql);
 
+// Defaulteintraege fuer alle existierenden Termine bei der Rollenzuordnung
+$sql = 'INSERT INTO '. TBL_DATE_ROLE. ' (dtr_dat_id, dtr_rol_id)
+        SELECT dat_id, NULL FROM '. TBL_DATES;
+$g_db->query($sql);
+
 ?>

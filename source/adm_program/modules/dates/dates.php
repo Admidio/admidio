@@ -226,14 +226,13 @@ else
 
 if($req_id == 0)
 {
-    $user_id = $_SESSION['g_current_user']->getValue('usr_id');
-    if($user_id != '')
+    if($g_current_user->getValue('usr_id') > 0)
     {
-        $login_sql = 'AND ( dtr_rol_id = 0 OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
+        $login_sql = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$g_current_user->getValue('usr_id').') )';
     }
     else
     {
-        $login_sql = 'AND dtr_rol_id = 0';
+        $login_sql = 'AND dtr_rol_id IS NULL';
     }
     
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
