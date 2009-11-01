@@ -149,76 +149,92 @@ class TableCategory extends TableAccess
     function delete()
     {
         global $g_current_session;
-
-        // Luecke in der Reihenfolge schliessen
-        $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence - 1
+        
+        $sql = 'SELECT count(1) AS anzahl FROM '. TBL_CATEGORIES. '
                  WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
-                   AND cat_sequence > '. $this->getValue('cat_sequence'). '
                    AND cat_type     = "'. $this->getValue('cat_type'). '"';
-        $this->db->query($sql);
+        $result = $this->db->query($sql);
+        
+        $row = $this->db->fetch_array($result);
 
-        // Abhaenigigkeiten loeschen
-        if($this->getValue('cat_type') == 'DAT')
+        if($row['anzahl'] > 1)
         {
-            $sql    = 'DELETE FROM '. TBL_DATES. '
-                        WHERE dat_cat_id = '. $this->getValue('cat_id');
+            // Luecke in der Reihenfolge schliessen
+            $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence - 1
+                     WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
+                           OR cat_org_id IS NULL )
+                       AND cat_sequence > '. $this->getValue('cat_sequence'). '
+                       AND cat_type     = "'. $this->getValue('cat_type'). '"';
             $this->db->query($sql);
+    
+            // Abhaenigigkeiten loeschen
+            if($this->getValue('cat_type') == 'DAT')
+            {
+                $sql    = 'DELETE FROM '. TBL_DATES. '
+                            WHERE dat_cat_id = '. $this->getValue('cat_id');
+                $this->db->query($sql);
+            }
+            elseif($this->getValue('cat_type') == 'INV')
+            {
+                //Alle Inventarpositionen auslesen, die in der Kategorie enthalten sind
+            	$sql_inventory = 'SELECT *
+                                  FROM '. TBL_INVENTORY. '
+    							  WHERE inv_cat_id = '. $this->getValue('cat_id');
+            	$result_inventory = $this->db->query($sql_subfolders);
+    
+    	        while($row_inventory = $this->db->fetch_object($result_inventory))
+    	        {
+    	            //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
+    	            $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
+                            	WHERE rnt_inv_id = '. $row_inventory->inv_id;
+                	$this->db->query($sql);
+    	        }
+    
+    			//Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
+            	$sql    = 'DELETE FROM '. TBL_INVENTORY. '
+                            WHERE inv_cat_id = '. $this->getValue('cat_id');
+                $this->db->query($sql);
+            }
+        	elseif($this->getValue('cat_type') == 'LNK')
+            {
+                $sql    = 'DELETE FROM '. TBL_LINKS. '
+                            WHERE lnk_cat_id = '. $this->getValue('cat_id');
+                $this->db->query($sql);
+            }
+            elseif($this->getValue('cat_type') == 'ROL')
+            {
+                $sql    = 'DELETE FROM '. TBL_MEMBERS. '
+                            WHERE mem_rol_id IN (SELECT rol_id FROM '. TBL_ROLES. '
+                                                  WHERE rol_cat_id = '.$this->getValue('cat_id').')';
+                $this->db->query($sql);
+    
+                $sql    = 'DELETE FROM '. TBL_ROLES. '
+                            WHERE rol_cat_id = '. $this->getValue('cat_id');
+                $this->db->query($sql);
+            }
+            elseif($this->getValue('cat_type') == 'USF')
+            {
+                $sql    = 'DELETE FROM '. TBL_USER_DATA. '
+                            WHERE usd_usf_id IN (SELECT usf_id FROM '. TBL_USER_FIELDS. '
+                                                  WHERE usf_cat_id = '.$this->getValue('cat_id').')';
+                $this->db->query($sql);
+    
+                $sql    = 'DELETE FROM '. TBL_USER_FIELDS. '
+                            WHERE usf_cat_id = '. $this->getValue('cat_id');
+                $this->db->query($sql);
+    
+                // einlesen aller Userobjekte der angemeldeten User anstossen,
+                // da Aenderungen in den Profilfeldern vorgenommen wurden
+                $g_current_session->renewUserObject();
+            }
+            return parent::delete();
         }
-        elseif($this->getValue('cat_type') == 'INV')
+        else
         {
-            //Alle Inventarpositionen auslesen, die in der Kategorie enthalten sind
-        	$sql_inventory = 'SELECT *
-                              FROM '. TBL_INVENTORY. '
-							  WHERE inv_cat_id = '. $this->getValue('cat_id');
-        	$result_inventory = $this->db->query($sql_subfolders);
-
-	        while($row_inventory = $this->db->fetch_object($result_inventory))
-	        {
-	            //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
-	            $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
-                        	WHERE rnt_inv_id = '. $row_inventory->inv_id;
-            	$this->db->query($sql);
-	        }
-
-			//Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
-        	$sql    = 'DELETE FROM '. TBL_INVENTORY. '
-                        WHERE inv_cat_id = '. $this->getValue('cat_id');
-            $this->db->query($sql);
+            // die letzte Kategorie darf nicht geloescht werden
+            return false;
         }
-    	elseif($this->getValue('cat_type') == 'LNK')
-        {
-            $sql    = 'DELETE FROM '. TBL_LINKS. '
-                        WHERE lnk_cat_id = '. $this->getValue('cat_id');
-            $this->db->query($sql);
-        }
-        elseif($this->getValue('cat_type') == 'ROL')
-        {
-            $sql    = 'DELETE FROM '. TBL_MEMBERS. '
-                        WHERE mem_rol_id IN (SELECT rol_id FROM '. TBL_ROLES. '
-                                              WHERE rol_cat_id = '.$this->getValue('cat_id').')';
-            $this->db->query($sql);
-
-            $sql    = 'DELETE FROM '. TBL_ROLES. '
-                        WHERE rol_cat_id = '. $this->getValue('cat_id');
-            $this->db->query($sql);
-        }
-        elseif($this->getValue('cat_type') == 'USF')
-        {
-            $sql    = 'DELETE FROM '. TBL_USER_DATA. '
-                        WHERE usd_usf_id IN (SELECT usf_id FROM '. TBL_USER_FIELDS. '
-                                              WHERE usf_cat_id = '.$this->getValue('cat_id').')';
-            $this->db->query($sql);
-
-            $sql    = 'DELETE FROM '. TBL_USER_FIELDS. '
-                        WHERE usf_cat_id = '. $this->getValue('cat_id');
-            $this->db->query($sql);
-
-            // einlesen aller Userobjekte der angemeldeten User anstossen,
-            // da Aenderungen in den Profilfeldern vorgenommen wurden
-            $g_current_session->renewUserObject();
-        }
-        return parent::delete();
     }
 }
 ?>
