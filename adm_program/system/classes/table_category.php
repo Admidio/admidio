@@ -18,10 +18,8 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableCategory extends TableAccess
 {
-    var $calc_sequence;
-
     // Konstruktor
-    function TableCategory(&$db, $cat_id = 0)
+    public function __construct(&$db, $cat_id = 0)
     {
         $this->db            =& $db;
         $this->table_name     = TBL_CATEGORIES;
@@ -38,7 +36,7 @@ class TableCategory extends TableAccess
     }
 
     // die Kategorie wird um eine Position in der Reihenfolge verschoben
-    function moveSequence($mode)
+    public function moveSequence($mode)
     {
         global $g_current_organization;
 
@@ -84,7 +82,7 @@ class TableCategory extends TableAccess
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         // Kategorie 'Stammdaten' bei Profilfeldern darf nicht umbenannt werden
         if($this->getValue('cat_type') == 'USF' && $field_name == 'cat_name' && $this->getValue('cat_name') == 'Stammdaten')
@@ -96,12 +94,10 @@ class TableCategory extends TableAccess
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_session;
         $fields_changed = $this->columnsValueChanged;
-
-        $this->calc_sequence = false;
 
         if($this->new_record)
         {
@@ -146,10 +142,12 @@ class TableCategory extends TableAccess
     }
 
     // Methode bearbeitet die Referenzen, wenn die Kategorie geloescht wird
-    function delete()
+    // Rueckgabe ist true, wenn das Loeschen erfolgreich war und false, falls es nicht durchgefuehrt werden konnte
+    public function delete()
     {
         global $g_current_session;
         
+        // pruefen, ob noch mind. eine Kategorie fuer diesen Typ existiert, ansonsten das Loeschen nicht erlauben
         $sql = 'SELECT count(1) AS anzahl FROM '. TBL_CATEGORIES. '
                  WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )

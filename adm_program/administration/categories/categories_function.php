@@ -227,6 +227,7 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
         }
         else
         {
+            // Kategorie konnte nicht geloescht werden, da evtl. die letzte Kategorie fuer diesen Typ
             $err_code = 'category_not_delete';
         }
     }
