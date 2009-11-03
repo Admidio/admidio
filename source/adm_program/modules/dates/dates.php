@@ -226,6 +226,7 @@ else
 
 if($req_id == 0)
 {
+    // Bedingungen fuer die Rollenfreigabe hinzufuegen
     if($g_current_user->getValue('usr_id') > 0)
     {
         $login_sql = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$g_current_user->getValue('usr_id').') )';
