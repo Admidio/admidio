@@ -760,7 +760,7 @@ else
                             echo'<li>
                                 <dl>
                                     <dt>Zeitraum:</dt>
-                                    <dd>'. mysqldate('d.m.y', $role->getValue('rol_start_date')). ' bis '. mysqldate('d.m.y', $role->getValue('rol_end_date')). '</dd>
+                                    <dd>'. $role->getValue('rol_start_date', $g_preferences['system_date']). ' bis '. $role->getValue('rol_end_date', $g_preferences['system_date']). '</dd>
                                 </dl>
                             </li>';
                         }
@@ -778,7 +778,7 @@ else
                                         }
                                         if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
-                                            echo ' von '. mysqltime('h:i', $role->getValue('rol_start_time')). ' bis '. mysqltime('h:i', $role->getValue('rol_end_time'));
+                                            echo ' von '. $role->getValue('rol_start_time', $g_preferences['system_time']). ' bis '. $role->getValue('rol_end_time', $g_preferences['system_time']);
                                         }
 
                                     echo'</dd>

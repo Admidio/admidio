@@ -177,11 +177,11 @@ if($g_preferences['photo_show_mode']==2)
 {	
     echo'
     <p>
-        Datum: '.mysqldate('d.m.y', $photo_album->getValue('pho_begin'));
+        Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
         if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin')
         && strlen($photo_album->getValue('pho_end')) > 0)
         {
-            echo ' bis '.mysqldate('d.m.y', $photo_album->getValue('pho_end'));
+            echo ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
         }
         echo '<br />Fotos von: '.$photo_album->getValue('pho_photographers').'
     </p>';

@@ -88,12 +88,12 @@ while ($row = $g_db->fetch_object($result))
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. ' '. $row->create_surname;
-    $description = $description. ' am '. mysqldatetime('d.m.y h:i', $announcement->getValue('ann_timestamp_create')). '</i>';
+    $description = $description. ' am '. $announcement->getValue('ann_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
 
     if($row->ann_usr_id_change > 0)
     {
         $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname;
-        $description = $description. ' am '. mysqldatetime('d.m.y h:i', $announcement->getValue('ann_timestamp_change')). '</i>';
+        $description = $description. ' am '. $announcement->getValue('ann_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
     }
                 
     $pubDate = date('r',strtotime($announcement->getValue('ann_timestamp_create')));

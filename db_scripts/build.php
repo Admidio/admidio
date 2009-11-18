@@ -6,7 +6,7 @@ include('../config.php');
 include('mysql.php');
 include('folder.php');
 
-define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, "db_scripts")-1));
+define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'db_scripts')-1));
 
 // Teile dieser Funktion sind von get_backtrace aus phpBB3
 // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
@@ -17,7 +17,6 @@ function getBacktrace()
 
     $output = '<div style="font-family: monospace;">';
     $backtrace = debug_backtrace();
-    //$path = phpbb_realpath($phpbb_root_path);
     $path = SERVER_PATH;
 
     foreach ($backtrace as $number => $trace)
@@ -98,48 +97,48 @@ echo 'Der Ordner <strong>adm_my_files</strong> wurde kopiert<br />';
 $db = new MySqlDB();
 $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
-$filename = "db.sql";
-$file     = fopen($filename, "r")
-			or showPage("Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.", "installation.php?mode=5", "back.png", "Zurück");
+$filename = 'db.sql';
+$file     = fopen($filename, 'r')
+			or showPage('Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.', 'installation.php?mode=5', 'back.png', 'Zurück');
 $content  = fread($file, filesize($filename));
-$sql_arr  = explode(";", $content);
+$sql_arr  = explode(';', $content);
 fclose($file);
 
-echo "Datei db.sql einlesen ...<br />";
+echo 'Datei db.sql einlesen ...<br />';
 
 foreach($sql_arr as $sql)
 {
 	if(strlen(trim($sql)) > 0)
 	{
 		// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-		$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
+		$sql = str_replace('%PRAEFIX%', $g_tbl_praefix, $sql);
 		$db->query($sql);
 	}
 }
 
 
-$filename = "data.sql";
-$file     = fopen($filename, "r")
-			or showPage("Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.", "installation.php?mode=5", "back.png", "Zurück");
+$filename = 'data.sql';
+$file     = fopen($filename, 'r')
+			or showPage('Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.', 'installation.php?mode=5', 'back.png', 'Zurück');
 $content  = fread($file, filesize($filename));
-$sql_arr  = explode(";", $content);
+$sql_arr  = explode(';', $content);
 fclose($file);
 
-echo "Datei data.sql einlesen ...<br />";
+echo 'Datei data.sql einlesen ...<br />';
 
 foreach($sql_arr as $sql)
 {
 	if(strlen(trim($sql)) > 0)
 	{
 		// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-		$sql = str_replace("%PRAEFIX%", $g_tbl_praefix, $sql);
+		$sql = str_replace('%PRAEFIX%', $g_tbl_praefix, $sql);
 		$db->query($sql);
 	}
 }
 
 
 // falls dies der Admidio-Demo-bereich ist, dann das Theme auf demo setzen
-if(strpos(__FILE__, "db_scripts") > 0)
+if(strpos(__FILE__, 'demo') > 0)
 {
     $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = "demo"
              WHERE prf_name   = "theme" 
@@ -148,6 +147,6 @@ if(strpos(__FILE__, "db_scripts") > 0)
 }
 
 
-echo "Installation erfolgreich !<br />";
+echo 'Installation erfolgreich !<br />';
 
 ?>

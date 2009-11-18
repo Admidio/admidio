@@ -403,10 +403,10 @@ echo '<div class="photoModuleContainer">';
 
         //Datum des Albums
         echo '<div class="editInformation" id="photoAlbumInformation">
-            Datum: '.mysqldate('d.m.y', $photo_album->getValue('pho_begin'));
+            Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
             if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
             {
-                echo ' bis '.mysqldate('d.m.y', $photo_album->getValue('pho_end'));
+                echo ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
             }
         echo '
         	<br />Fotos von: '.$photo_album->getValue('pho_photographers').'
@@ -417,13 +417,13 @@ echo '<div class="photoModuleContainer">';
         <div class="editInformation">';
             $user_create = new User($g_db, $photo_album->getValue('pho_usr_id_create'));
             echo 'Angelegt von '. $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname')
-            .' am '. mysqldatetime('d.m.y h:i', $photo_album->getValue('pho_timestamp_create'));
+            .' am '. $photo_album->getValue('pho_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
             
             if($photo_album->getValue('pho_usr_id_change') > 0)
             {
                 $user_change = new User($g_db, $photo_album->getValue('pho_usr_id_change'));
                 echo '<br />Zuletzt bearbeitet von '. $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname')
-                .' am '. mysqldatetime('d.m.y h:i', $photo_album->getValue('pho_timestamp_change'));
+                .' am '. $photo_album->getValue('pho_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
             }
         echo '</div>';
     }
@@ -564,10 +564,10 @@ echo '<div class="photoModuleContainer">';
 
                         echo '</li>
                             <li>Fotos: '.$sub_photo_album->countImages().' </li>
-                            <li>Datum: '.mysqldate('d.m.y', $sub_photo_album->getValue('pho_begin'));
+                            <li>Datum: '.$sub_photo_album->getValue('pho_begin', $g_preferences['system_date']);
                             if($sub_photo_album->getValue('pho_end') != $sub_photo_album->getValue('pho_begin'))
                             {
-                                echo ' bis '.mysqldate('d.m.y', $sub_photo_album->getValue('pho_end'));
+                                echo ' bis '.$sub_photo_album->getValue('pho_end', $g_preferences['system_date']);
                             }
                             echo '</li> 
     						<li>Fotos von: '.$sub_photo_album->getValue('pho_photographers').'</li>';

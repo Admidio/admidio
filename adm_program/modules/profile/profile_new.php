@@ -546,13 +546,13 @@ echo '
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
                 echo 'Angelegt von '. $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname').
-                ' am '. mysqldatetime('d.m.y h:i', $user->getValue('usr_timestamp_create'));
+                ' am '. $user->getValue('usr_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
 
                 if($user->getValue('usr_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
                     echo '<br />Zuletzt bearbeitet von '. $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
-                    ' am '. mysqldatetime('d.m.y h:i', $user->getValue('usr_timestamp_change'));
+                    ' am '. $user->getValue('usr_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
                 }
             echo '</div>';
         }

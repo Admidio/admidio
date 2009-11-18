@@ -206,11 +206,12 @@ class TableAccess
     }    
     
     // Methode gibt den Wert eines Feldes ($field_name) zurueck
-    // $field_value dient als Uebergabe aus ueberschreibenden Methoden heraus
-    function getValue($field_name, $field_value = '')
+    // $format kann fuer Datetime-Felder das Format aus der PHP-Funktion date() angegeben werden
+    function getValue($field_name, $format = '')
     {
-        if(strlen($field_value) == 0
-        && isset($this->dbColumns[$field_name]))
+        $field_value = '';
+        
+        if(isset($this->dbColumns[$field_name]))
         {
             $field_value = $this->dbColumns[$field_name];
         }
@@ -222,11 +223,36 @@ class TableAccess
         {
             return htmlspecialchars($field_value, ENT_QUOTES);
         }
+        elseif(isset($this->columnsInfos[$field_name]['type'])
+        &&  (  strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false
+            || strpos($this->columnsInfos[$field_name]['type'], 'date') !== false
+            || strpos($this->columnsInfos[$field_name]['type'], 'time') !== false))
+        {
+            // Datum in dem uebergebenen Format zurueckgeben
+            if(strlen($format) > 0 && strlen($field_value) > 0)
+            {
+                $dateArray = split("[- :]", $field_value);
+                if(strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false)
+                {
+                    $timestamp = mktime($dateArray[3], $dateArray[4], $dateArray[5], $dateArray[1], $dateArray[2], $dateArray[0]);
+                }
+                elseif(strpos($this->columnsInfos[$field_name]['type'], 'date') !== false)
+                {
+                    $timestamp = mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
+                }
+                else
+                {
+                    $timestamp = mktime($dateArray[0], $dateArray[1], $dateArray[2], 1, 1, 2000);
+                }
+                $field_value = date($format, $timestamp);
+            }
+            return $field_value;
+        }
         else
         {
             return $field_value;
         }
-    }    
+    }
     
     // die Methode speichert die Organisationsdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht

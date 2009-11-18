@@ -76,8 +76,8 @@ if(isset($_SESSION['roles_request']))
 else
 {
     // Datum formatieren
-    $role->setValue('rol_start_date', mysqldate('d.m.y', $role->getValue('rol_start_date')));
-    $role->setValue('rol_end_date', mysqldate('d.m.y', $role->getValue('rol_end_date')));
+    $role->setValue('rol_start_date', $role->getValue('rol_start_date', $g_preferences['system_date']));
+    $role->setValue('rol_end_date', $role->getValue('rol_end_date', $g_preferences['system_date']));
 }
 
 // holt eine Liste der ausgewaehlten abhaengigen Rolen
@@ -809,15 +809,15 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($g_db, $role->getValue("rol_usr_id_create"));
-                echo 'Angelegt von '. $user_create->getValue("Vorname"). ' '. $user_create->getValue("Nachname").
-                ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_create"));
+                $user_create = new User($g_db, $role->getValue('rol_usr_id_create'));
+                echo 'Angelegt von '. $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname').
+                ' am '. $role->getValue('rol_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
 
-                if($role->getValue("rol_usr_id_change") > 0)
+                if($role->getValue('rol_usr_id_change') > 0)
                 {
-                    $user_change = new User($g_db, $role->getValue("rol_usr_id_change"));
-                    echo '<br />Zuletzt bearbeitet von '. $user_change->getValue("Vorname"). ' '. $user_change->getValue("Nachname").
-                    ' am '. mysqldatetime("d.m.y h:i", $role->getValue("rol_timestamp_change"));
+                    $user_change = new User($g_db, $role->getValue('rol_usr_id_change'));
+                    echo '<br />Zuletzt bearbeitet von '. $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
+                    ' am '. $role->getValue('rol_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
                 }
             echo '</div>';
         }

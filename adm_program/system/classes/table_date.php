@@ -141,19 +141,20 @@ class TableDate extends TableAccess
         return $description;
     }
 
-    function getValue($field_name, $field_value = '')
+    function getValue($field_name, $format = '')
     {
-        // innerhalb dieser Methode kein getValue nutzen, da sonst eine Endlosschleife erzeugt wird !!!
-        $value = $this->dbColumns[$field_name];
-
         if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
             list($year, $month, $day, $hour, $minute, $second) = split('[- :]', $this->dbColumns['dat_end']);
-            $value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) - 86400);
+            $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
+        }
+        else
+        {
+            $value = parent::getValue($field_name, $format);
         }
 
-        return parent::getValue($field_name, $value);
+        return $value;
     }
     
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
@@ -206,7 +207,7 @@ class TableDate extends TableAccess
     function getIcal($domain)
     {
         $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
-        $uid = mysqldatetime('ymdThis', $this->getValue('dat_timestamp_create')) . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
+        $uid = $this->getValue('dat_timestamp_create', 'ymdThis') . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
         
         $ical = "BEGIN:VCALENDAR\n".
                 "METHOD:PUBLISH\n".
@@ -216,19 +217,19 @@ class TableDate extends TableAccess
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->getValue('dat_headline'). "\n".
                 "DESCRIPTION:". str_replace("\r\n", '\n', $this->getDescription('PLAIN')). "\n".
-                "DTSTAMP:". mysqldatetime('ymdThisZ', $this->getValue('dat_timestamp_create')). "\n".
+                "DTSTAMP:". $this->getValue('dat_timestamp_create', 'ymdThisZ'). "\n".
                 "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $ical .= "DTSTART;VALUE=DATE:". mysqldate('ymd', $this->getValue('dat_begin')). "\n".
-                     "DTEND;VALUE=DATE:". mysqldate('ymd', $this->dbColumns['dat_end']). "\n";
+            $ical .= "DTSTART;VALUE=DATE:". $this->getValue('dat_begin', 'ymd'). "\n".
+                     "DTEND;VALUE=DATE:". $this->getValue('dat_end', 'ymd'). "\n";
         }
         else
         {
-            $ical .= "DTSTART:". mysqldatetime('ymdThis', $this->getValue('dat_begin')). "\n".
-                     "DTEND:". mysqldatetime('ymdThis', $this->getValue('dat_end')). "\n";
+            $ical .= "DTSTART:". $this->getValue('dat_begin', 'ymdThis'). "\n".
+                     "DTEND:". $this->getValue('dat_end', 'ymdThis'). "\n";
         }
         $ical .= "END:VEVENT\n".
                  "END:VCALENDAR";

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="EN">
+<announcement>
+<text id="ANN_ANNOUNCEMENT" version="2.2.0">Announcement</text>
+</announcement>
+<system>
+<text id="SYS_BACK" version="2.2.0">Back</text>
+<text id="SYS_CREATE" version="2.2.0">Create</text>
+<text id="SYS_EDIT" version="2.2.0">Edit</text>
+<text id="SYS_DELETE" version="2.2.0">Delete</text>
+<text id="SYS_HEADLINE" version="2.2.0">Headline</text>
+<text id="SYS_HELP" version="2.2.0">Help</text>
+<text id="SYS_MANDATORY_FIELD" version="2.2.0">Mandatory field</text>
+<text id="SYS_SAVE" version="2.2.0">Save</text>
+<text id="SYS_TEXT" version="2.2.0">Text</text>
+<text id="SYS_PHR_CREATE" version="2.2.0">Create %VAR1%</text>
+<text id="SYS_PHR_CREATED_BY" version="2.2.0">Created by %VAR1% on %VAR2%</text>
+<text id="SYS_PHR_EDIT" version="2.2.0">Edit %VAR1%</text>
+<text id="SYS_PHR_ENTRY_MULTI_ORGA" version="2.2.0">Eintrag für mehrere Organisationen sichtbar</text>
+<text id="SYS_PHR_LAST_EDITED_BY" version="2.2.0">Last edited by %VAR1% on %VAR2%</text>
+<text id="SYS_PHR_NO_ENTRY" version="2.2.0">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
+<text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
+</system>
+</language>

@@ -256,7 +256,7 @@ else
                     }
                 echo '</div>
 
-                <div class="boxHeadRight">'. mysqldatetime('d.m.y h:i', $guestbook->getValue('gbo_timestamp')). '&nbsp;';
+                <div class="boxHeadRight">'. $guestbook->getValue('gbo_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']). '&nbsp;';
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editGuestbookRight())
@@ -284,7 +284,7 @@ else
                     <div class="editInformation">
                         Zuletzt bearbeitet von '.
                         $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
-                        ' am '. mysqldatetime('d.m.y h:i', $guestbook->getValue('gbo_timestamp_change')). '
+                        ' am '. $guestbook->getValue('gbo_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '
                     </div>';
                 }
 

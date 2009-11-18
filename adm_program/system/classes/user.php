@@ -187,12 +187,11 @@ class User extends TableUsers
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
     // angefordert wurde und gibt diesen zurueck
-    // die Funktion wird innerhalb von getValue() aufgerufen
-    function getValue($field_name, $field_value = '')
+    function getValue($field_name, $format = '')
     {
         if(strpos($field_name, 'usr_') === 0)
         {
-            return parent::getValue($field_name, $field_value);
+            return parent::getValue($field_name, $format);
         }
         else
         {
@@ -360,7 +359,7 @@ class User extends TableUsers
         }
         if (strlen($this->getValue('usr_timestamp_change')) > 0)
         {
-            $vcard .= (string) "REV:" . mysqldatetime('ymdThis', $this->getValue('usr_timestamp_change')) . "\r\n";
+            $vcard .= (string) "REV:" . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
         }
 
         $vcard .= (string) "END:VCARD\r\n";

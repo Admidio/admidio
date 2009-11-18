@@ -107,12 +107,12 @@ if(isset($_SESSION['dates_request']))
 else
 {
     // Zeitangaben von/bis aus Datetime-Feld aufsplitten
-    $date_from = mysqldatetime('d.m.y', $date->getValue('dat_begin'));
-    $time_from = mysqldatetime('h:i',   $date->getValue('dat_begin'));
+    $date_from = $date->getValue('dat_begin', $g_preferences['system_date']);
+    $time_from = $date->getValue('dat_begin', $g_preferences['system_time']);
 
     // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-    $date_to = mysqldatetime('d.m.y', $date->getValue('dat_end'));
-    $time_to = mysqldatetime('h:i',   $date->getValue('dat_end'));
+    $date_to = $date->getValue('dat_end', $g_preferences['system_date']);
+    $time_to = $date->getValue('dat_end', $g_preferences['system_time']);
     
     if($date->getValue('dat_rol_id') != '')
     {

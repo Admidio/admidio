@@ -51,6 +51,7 @@ require_once(SERVER_PATH. '/adm_program/system/date.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
 require_once(SERVER_PATH. '/adm_program/system/message_text.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
@@ -157,6 +158,10 @@ else
     $g_current_user  = new User($g_db);
     $_SESSION['g_current_user'] =& $g_current_user;
 }
+
+// Sprachdateien einlesen
+$language_path = SERVER_PATH. '/adm_program/languages/'.$g_preferences['system_language'].'/system.xml';
+$l10n = new Language($language_path, 0, true);
 
 // Objekt fuer die Zuruecknavigation in den Modulen
 // hier werden die Urls in einem Stack gespeichert
