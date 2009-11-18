@@ -17,16 +17,16 @@
  *****************************************************************************/
 
 // Pfad des Plugins ermitteln
-$plugin_folder_pos = strpos(__FILE__, "adm_plugins") + 11;
-$plugin_file_pos   = strpos(__FILE__, "birthday.php");
+$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$plugin_file_pos   = strpos(__FILE__, 'birthday.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
-require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
+require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
+require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -51,7 +51,7 @@ if(isset($plg_link_target))
 }
 else
 {
-    $plg_link_target = "_self";
+    $plg_link_target = '_self';
 }
 
 if(isset($plg_show_hinweis_keiner) == false || is_numeric($plg_show_names_extern) == false)
@@ -75,7 +75,7 @@ if(isset($plg_show_future) == false || is_numeric($plg_show_names_extern) == fal
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
-if($plg_show_names_extern == 0 && $g_session_valid == 0)
+if($plg_show_names_extern == 0 && $g_valid_login == 0)
 {
     $plg_show_zeitraum = 0;
     $plg_show_future = 0;
@@ -83,14 +83,6 @@ if($plg_show_names_extern == 0 && $g_session_valid == 0)
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
-
-/*$sql = "SELECT 'dsf' as temp
-FROM adm_users a right join adm_user_data birthday
-on usd_usr_id = usr_id and usd_usf_id = 21
-where usr_login_name = 'fasse' " ;
-         $result = $g_db->query($sql);
-         $row = $g_db->fetch_array($result);
-         echo $row['temp']. "blubb"; exit();*/
 
 $sql    = "SELECT DISTINCT usr_id, usr_login_name, 
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 
@@ -166,7 +158,7 @@ if($anz_geb > 0)
 	    echo '<ul id="plgBirthdayNameList">';
             while($row = $g_db->fetch_array($result))
             {
-                $plg_age = $row["age"]; 
+                $plg_age = $row['age']; 
 
                 // Anzeigeart des Namens beruecksichtigen
                 if($plg_show_names == 2)        // Nachname, Vorname
@@ -212,18 +204,18 @@ if($anz_geb > 0)
                     {
                         if (($row->gender) > 1)
                         {
-                            $plg_show_name = "Frau $row->last_name";
+                            $plg_show_name = 'Frau '.$row->last_name;
                         }
                         else
                         {
                             // Eine kleine Feinheit zur Textanpassung bei den Herren ;-)
                             if ($plg_show_zeitraum > 0)
                             {
-                                $plg_show_name = "Herrn $row->last_name";
+                                $plg_show_name = 'Herrn '.$row->last_name;
                             }
                             else
                             {
-                                $plg_show_name = "Herr $row->last_name";
+                                $plg_show_name = 'Herr '.$row->last_name;
                             }
                         }
                     }
@@ -233,57 +225,57 @@ if($anz_geb > 0)
                 if($plg_show_names_extern < 2 || $g_valid_login == true)
                 {
                     // Geburtstagskinder am aktuellen Tag bekommen anderen Text
-                    if($row["days_to_bdate"] == 0)
+                    if($row['days_to_bdate'] == 0)
                     {
-                        echo "<li>$plg_show_name<br/>wird heute $plg_age</li>";
+                        echo '<li>'.$plg_show_name.'<br/>wird heute '.$plg_age.'</li>';
                     }
                     else
                     {
-                        $plg_date = mysqldatetime("d.m.y", $row['bdate']);
+                        $plg_date = mysqldatetime('d.m.y', $row['bdate']);
             			$plg_age = $row['age'];
             			$plg_dtb = $row['days_to_bdate'];
-            			$plg_tage = "";
-            			$plg_alter_text = "";
+            			$plg_tage = '';
+            			$plg_alter_text = '';
             			if ($plg_dtb < 0) 
                         {
                             if($plg_dtb == -1)
                             {
-                                $plg_alter_text = "wurde gestern";
+                                $plg_alter_text = 'wurde gestern';
                             }
                             else
                             {
-                                $plg_alter_text = "wurde";
-                                $plg_tage = "vor ". -$plg_dtb. " Tagen";
+                                $plg_alter_text = 'wurde';
+                                $plg_tage = 'vor '. -$plg_dtb. ' Tagen';
                             }
             			} 
                         elseif ($plg_dtb > 0) 
                         {
                             if($plg_dtb == 1)
                             {
-                                $plg_alter_text = "wird morgen";
+                                $plg_alter_text = 'wird morgen';
                             }
                             else
                             {
-                                $plg_alter_text = "wird";
-                                $plg_tage = "in ". $plg_dtb. " Tagen";
+                                $plg_alter_text = 'wird';
+                                $plg_tage = 'in '. $plg_dtb. ' Tagen';
                             }
             			}
-                        echo "<li>$plg_show_name $plg_alter_text $plg_age<br/>$plg_tage, am <b>$plg_date</b><br/></li>";
+                        echo '<li>'.$plg_show_name.' '.$plg_alter_text.' '.$plg_age.'<br/>'.$plg_tage.', am <b>'.$plg_date.'</b><br/></li>';
                     }
                 }
 		
             }
-        echo "</ul>";
+        echo '</ul>';
     }
     else
     {
         if($anz_geb == 1)
         {
-            echo "<p>Heute hat ein Benutzer Geburtstag !</p>";
+            echo '<p>Heute hat ein Benutzer Geburtstag !</p>';
         }
         else
         {
-            echo "<p>Heute haben $anz_geb Benutzer Geburtstag !</p>";
+            echo '<p>Heute haben '.$anz_geb.' Benutzer Geburtstag !</p>';
         }
     }
 }
@@ -292,7 +284,7 @@ else
     // Bei entsprechend gesetzter Konfiguration wird auch im Fall, dass keiner Geburtstag hat, eine Meldung ausgegeben.
     if($plg_show_hinweis_keiner == 0)
     {
-        echo "<p>Heute hat keiner Geburtstag.</p>";
+        echo '<p>Heute hat keiner Geburtstag.</p>';
     }
 }
 
