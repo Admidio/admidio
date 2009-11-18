@@ -232,12 +232,12 @@ if(isset($_POST['submit']) && $_POST['submit'])
 
                 <li><dl>
                     <dt>Anfangsdatum:</dt>
-                    <dd>'.mysqldate('d.m.y', $photo_album->getValue('pho_begin')).'</dd>
+                    <dd>'.$photo_album->getValue('pho_begin', $g_preferences['system_date']).'</dd>
                 </dl></li>
 
                 <li><dl>
                     <dt>Enddatum:</dt>
-                    <dd>'.mysqldate('d.m.y', $photo_album->getValue('pho_end')).'</dd>
+                    <dd>'.$photo_album->getValue('pho_end', $g_preferences['system_date']).'</dd>
                 </dl></li>
 
                 <li><dl>

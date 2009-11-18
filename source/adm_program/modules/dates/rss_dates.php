@@ -90,29 +90,29 @@ while ($row = $g_db->fetch_array($result))
     $date->setArray($row);
 
     // Die Attribute fuer das Item zusammenstellen
-    $title = mysqldatetime('d.m.y', $date->getValue('dat_begin'));
-    if(mysqldatetime('d.m.y', $date->getValue('dat_begin')) != mysqldatetime('d.m.y', $date->getValue('dat_end')))
+    $title = $date->getValue('dat_begin', $g_preferences['system_date']);
+    if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
     {
-        $title = $title. ' - '. mysqldatetime('d.m.y', $date->getValue('dat_end'));
+        $title = $title. ' - '. $date->getValue('dat_end', $g_preferences['system_date']);
     }
     $title = $title. ' '. $date->getValue('dat_headline');
     $link  = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
-    $description = '<b>'.$date->getValue('dat_headline').'</b> <br />'. mysqldatetime('d.m.y', $date->getValue('dat_begin'));
+    $description = '<b>'.$date->getValue('dat_headline').'</b> <br />'. $date->getValue('dat_begin', $g_preferences['system_date']);
 
     if ($date->getValue('dat_all_day') == 0)
     {
-        $description = $description. ' von '. mysqldatetime('h:i', $date->getValue('dat_begin')). ' Uhr bis ';
-        if(mysqldatetime('d.m.y', $date->getValue('dat_begin')) != mysqldatetime('d.m.y', $date->getValue('dat_end')))
+        $description = $description. ' von '. $date->getValue('dat_begin', $g_preferences['system_time']). ' Uhr bis ';
+        if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
         {
-            $description = $description. mysqldatetime('d.m.y', $date->getValue('dat_end')). ' ';
+            $description = $description. $date->getValue('dat_end', $g_preferences['system_date']). ' ';
         }
-        $description = $description. mysqldatetime('h:i', $date->getValue('dat_end')). ' Uhr';
+        $description = $description. $date->getValue('dat_end', $g_preferences['system_time']). ' Uhr';
     }
     else
     {
-        if(mysqldatetime('d.m.y', $date->getValue('dat_begin')) != mysqldatetime('d.m.y', $date->getValue('dat_end')))
+        if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
         {
-            $description = $description. ' bis '. mysqldatetime('d.m.y', $date->getValue('dat_end'));
+            $description = $description. ' bis '. $date->getValue('dat_end', $g_preferences['system_date']);
         }
     }
 
@@ -130,12 +130,12 @@ while ($row = $g_db->fetch_array($result))
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
-     							 ' am '. mysqldatetime('d.m.y h:i', $date->getValue('dat_timestamp_create')). '</i>';
+     							 ' am '. $date->getValue('dat_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
 
     if($date->getValue('dat_usr_id_change') > 0)
     {
         $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row['change_firstname']. ' '. $row['change_surname'].
-                                     ' am '. mysqldatetime('d.m.y h:i', $date->getValue('dat_timestamp_change')). '</i>';
+                                     ' am '. $date->getValue('dat_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
     }
 
     $pubDate = date('r',strtotime($date->getValue('dat_timestamp_create')));

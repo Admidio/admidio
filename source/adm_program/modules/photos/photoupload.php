@@ -148,8 +148,8 @@ echo '
 	    <div class="formHead">Fotos hochladen</div>
 	    <div class="formBody">
 	        <p>
-	            Die Fotos werden zu dem Album <strong>'.$photo_album->getValue("pho_name").'</strong> hinzugefügt.<br />
-	            (Beginn: '. mysqldate("d.m.y", $photo_album->getValue("pho_begin")). ')
+	            Die Fotos werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
+	            (Beginn: '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
 	        </p>
 	
 	        <ul class="formFieldList">
@@ -186,7 +186,7 @@ echo '
 	<h2>Fotos hochladen</h2>
 	<p>
         Die Fotos werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
-        (Beginn: '. mysqldate('d.m.y', $photo_album->getValue('pho_begin')). ')
+        (Beginn: '. $photo_album->getValue('pho_begin', $g_preferences['system_date']). ')
     </p>';
 
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll

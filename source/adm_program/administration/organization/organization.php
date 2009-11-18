@@ -29,6 +29,8 @@ if($g_debug == 0 && file_exists('../../../adm_install'))
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
+$languages = array('de' => 'deutsch', 'en' => 'english');
+
 if(isset($_SESSION['organization_request']))
 {
     $form_values = strStripSlashesDeep($_SESSION['organization_request']);
@@ -287,6 +289,25 @@ echo '
                     </li>
                     <li>
                         <dl>
+                            <dt><label for="system_language">Sprache:</label></dt>
+                            <dd>
+                                <select size="1" id="system_language" name="system_language">
+                                    <option value="">- Bitte wählen -</option>';
+                                    foreach($languages as $key => $value)
+                                    {
+                                        echo '<option value="'.$key.'" ';
+                                        if($key == $form_values['system_language'])
+                                        {
+                                            echo ' selected="selected" ';
+                                        }
+                                        echo '>'.$value.'</option>';
+                                    }
+                                echo '</select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
                             <dt><label for="theme">Admidio-Theme:</label></dt>
                             <dd>
                                 <select size="1" id="theme" name="theme">
@@ -314,6 +335,24 @@ echo '
                     <li class="smallFontSize">
                         Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
                         aus dem Ordner adm_themes angezeigt. (Standard: modern)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_date">Datumformat:</label></dt>
+                            <dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Das Format entspricht der PHP-Funktion <a href="http://www.php.net/date">date()</a>. (Standard: d.m.Y)
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_time">Zeitformat:</label></dt>
+                            <dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        Das Format entspricht der PHP-Funktion <a href="http://www.php.net/date">date()</a>. (Standard: H:i)
                     </li>
                     <li>
                         <dl>

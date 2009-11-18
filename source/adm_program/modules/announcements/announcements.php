@@ -35,7 +35,7 @@ elseif($g_preferences['enable_announcements_module'] == 2)
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_start    = 0;
-$req_headline = 'Ankündigungen';
+$req_headline = $l10n->get('ANN_ANNOUNCEMENT');
 $req_id       = 0;
 $sql_datum    = '';
 
@@ -189,8 +189,8 @@ if($g_current_user->editAnnouncements())
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="Neu anlegen" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">Anlegen</a>
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$l10n->get('SYS_CREATE').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$l10n->get('SYS_CREATE').'</a>
             </span>
         </li>
     </ul>';        
@@ -201,11 +201,11 @@ if ($g_db->num_rows($announcements_result) == 0)
     // Keine Ankuendigungen gefunden
     if($req_id > 0)
     {
-        echo '<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>';
+        echo '<p>'.$l10n->get('SYS_PHR_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>Es sind keine Einträge vorhanden.</p>';
+        echo '<p>'.$l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -224,8 +224,7 @@ else
                     <img src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
                     $announcement->getValue("ann_headline"). '
                 </div>
-                <div class="boxHeadRight">'.
-                    mysqldatetime("d.m.y", $announcement->getValue("ann_timestamp_create")). '&nbsp;';
+                <div class="boxHeadRight">'.$announcement->getValue("ann_timestamp_create", $g_preferences['system_date']).'&nbsp;';
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($g_current_user->editAnnouncements())
@@ -234,7 +233,7 @@ else
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$req_headline.'"><img 
-                                src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
+                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$l10n->get('SYS_EDIT').'" title="'.$l10n->get('SYS_EDIT').'" /></a>';
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
@@ -242,7 +241,7 @@ else
                         {
                             echo '
                             <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue("ann_id").'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$l10n->get('SYS_DELETE').'" title="'.$l10n->get('SYS_DELETE').'" /></a>';
                         }    
                     }
                     echo '</div>
@@ -250,14 +249,12 @@ else
 
             <div class="boxBody">'.
                 $announcement->getDescription('HTML').'
-                <div class="editInformation">
-                    Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
-                    ' am '. mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp_create"));
+                <div class="editInformation">'.
+                    $l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue("ann_timestamp_create", $g_preferences['system_date'].' '.$g_preferences['system_time']));
 
                     if($announcement->getValue("ann_usr_id_change") > 0)
                     {
-                        echo '<br />Zuletzt bearbeitet von '. $row['change_firstname']. ' '. $row['change_surname'].
-                        ' am '. mysqldatetime("d.m.y h:i", $announcement->getValue("ann_timestamp_change"));
+                        echo '<br />'.$l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'],  $announcement->getValue("ann_timestamp_change", $g_preferences['system_date'].' '.$g_preferences['system_time']));
                     }
                 echo '</div>
             </div>

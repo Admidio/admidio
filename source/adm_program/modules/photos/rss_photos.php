@@ -103,11 +103,11 @@ while ($row = $g_db->fetch_array($result))
     //Inhalt zusammensetzen
     $description = 'Fotogalerien'.$parents.' > '. $photo_album->getValue('pho_name');
     $description = $description. '<br /><br /> Fotos: '.$photo_album->countImages();
-    $description = $description. '<br /> Datum: '.mysqldate('d.m.y', $photo_album->getValue('pho_begin'));
+    $description = $description. '<br /> Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
     //Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
     {
-        $description = $description. ' bis '.mysqldate('d.m.y', $photo_album->getValue('pho_end'));
+        $description = $description. ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
     }
     $description = $description. '<br />Fotos von: '.$photo_album->getValue('pho_photographers');
 
@@ -133,12 +133,12 @@ while ($row = $g_db->fetch_array($result))
 
     // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname').
-								 ' am '. mysqldatetime('d.m.y h:i', $photo_album->getValue('pho_timestamp_create')). '</i>';
+								 ' am '. $photo_album->getValue('pho_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
 
     if($photo_album->getValue('pho_usr_id_change') > 0)
     {
         $description = $description. '<br /><i>Zuletzt bearbeitet von '. $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname').
-									 ' am '. mysqldatetime('d.m.y h:i', $photo_album->getValue('pho_timestamp_change')). '</i>';
+									 ' am '. $photo_album->getValue('pho_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
     }
 
     $pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));

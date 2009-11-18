@@ -69,7 +69,7 @@ if (isset($comment_result))
                 echo '
                 </div>
 
-                <div class="boxHeadRight">'. mysqldatetime('d.m.y h:i', $gbComment->getValue('gbc_timestamp'));
+                <div class="boxHeadRight">'. $gbComment->getValue('gbc_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']);
 
                 // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                 if ($g_current_user->editGuestbookRight())
@@ -96,7 +96,7 @@ if (isset($comment_result))
                     echo '
                     <div class="editInformation">
                         Zuletzt bearbeitet von '.$user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
-                        ' am '. mysqldatetime('d.m.y h:i', $gbComment->getValue('gbc_timestamp_change')). '
+                        ' am '. $gbComment->getValue('gbc_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '
                     </div>';
                 }
             echo '

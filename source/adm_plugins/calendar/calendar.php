@@ -16,23 +16,23 @@
  *
  *****************************************************************************/
 
-if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
-{
-    // Header kodieren
-    header('Content-Type: text/html; charset=UTF-8');
-}
-
 // Pfad des Plugins ermitteln
-$plugin_folder_pos = strpos(__FILE__, "adm_plugins") + 11;
-$plugin_file_pos   = strpos(__FILE__, "calendar.php");
+$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$plugin_file_pos   = strpos(__FILE__, 'calendar.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
-require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
+require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
+require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+
+if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
+{
+    // Header kodieren
+    header('Content-Type: text/html; charset=UTF-8');
+}
 
 // Auf gesetzte Standardwerte aus config.php überprüfen und notfalls setzen
 if(isset($plg_ajaxbox) == false)
@@ -65,15 +65,17 @@ if(isset($plg_geb_icon) == false)
 }
 if(isset($plg_kal_cat) == false)
 {
-    $plg_kal_cat =  array("all");
+    $plg_kal_cat =  array('all');
 }
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
-if(array_key_exists("date_id", $_GET))
+$heute = 0;
+
+if(array_key_exists('date_id', $_GET))
 {
-    if(is_numeric($_GET["date_id"]) == false)
+    if(is_numeric($_GET['date_id']) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show('invalid');
     }
     else
     {
@@ -81,7 +83,7 @@ if(array_key_exists("date_id", $_GET))
         $monat = substr($date_id,0,2);
         $jahr = substr($date_id,2,4);
         $_SESSION['plugin_calendar_last_month'] = $monat.$jahr;
-        $heute = 0;
+
         if($monat == date("m") AND $jahr == date("Y"))
         {
             $heute = date("d");
@@ -135,14 +137,13 @@ if($plg_ter_aktiv == 1)
     $ter_aktuell = 0;
 
     // Datenbankabfrage mit Datum (Monat / Jahr)
-    $user_id = isset($_SESSION['g_current_user']) ? $_SESSION['g_current_user']->getValue('usr_id') : '';
-    if($user_id != '')
+    if($g_current_user->getValue('usr_id') > 0)
     {
-        $login_sql = 'AND ( dtr_rol_id = 0 OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$user_id.') )';
+        $login_sql = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$g_current_user->getValue('usr_id').') )';
     }
     else
     {
-        $login_sql = 'AND dtr_rol_id = 0';
+        $login_sql = 'AND dtr_rol_id IS NULL';
     }
     $sql = 'SELECT DISTINCT dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline 
             FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'

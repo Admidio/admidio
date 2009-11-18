@@ -55,7 +55,7 @@ while ($row = $g_db->fetch_object($result))
     // Die Attribute fuer das Item zusammenstellen
     $title = $guestbook->getValue('gbo_name');
     $link  = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
-    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. mysqldatetime('d.m.y h:i', $guestbook->getValue('gbo_timestamp')).'</b>';
+    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']).'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $guestbook->getText('HTML'). 

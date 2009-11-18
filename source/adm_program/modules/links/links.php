@@ -284,12 +284,12 @@ else
     			echo '
     			<div class="editInformation">';
 
-    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.' am '. mysqldatetime("d.m.y h:i", $weblink->getValue('lnk_timestamp_create'));
+    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.' am '. $weblink->getValue('lnk_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
 
     				if($row->lnk_usr_id_change > 0)
     				{
     					echo ' | Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname.
-    					' am '. mysqldatetime("d.m.y h:i", $weblink->getValue('lnk_timestamp_change'));
+    					' am '. $weblink->getValue('lnk_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
     				}
     			echo '</div>';
     		}

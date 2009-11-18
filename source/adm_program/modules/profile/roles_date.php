@@ -94,12 +94,12 @@ else
     /***********************************************************************/
     /* Datum anzeigen */
     /***********************************************************************/
-   //Varaibeln
-   $rol_from = mysqldatetime("d.m.y", $mem->getValue('mem_begin'));
-   $rol_to = NULL;
-   if ($mem->getValue('mem_end') != NULL) {
-      $rol_to = mysqldatetime("d.m.y", $mem->getValue('mem_end'));
-   }
+    // Variablen
+    $rol_from = $mem->getValue('mem_begin', $g_preferences['system_date']);
+    $rol_to = NULL;
+    if ($mem->getValue('mem_end') != NULL) {
+        $rol_to = $mem->getValue('mem_end', $g_preferences['system_date']);
+    }
 
     // Html-Kopf ausgeben
     $g_layout['title']    = "Datum bearbeiten";

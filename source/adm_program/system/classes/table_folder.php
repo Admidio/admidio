@@ -720,9 +720,9 @@ class TableFolder extends TableAccess
 
     }
 
-    public function getValue($field_name, $field_value = '')
+    public function getValue($field_name, $format = '')
     {
-        $value = parent::getValue($field_name, $field_value);
+        $value = parent::getValue($field_name, $format);
         
         if($field_name == 'fol_name')
         {

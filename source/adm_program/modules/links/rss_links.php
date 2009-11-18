@@ -79,12 +79,12 @@ while ($row = $g_db->fetch_object($result))
 
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
     $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. " ". $row->create_surname.
-                                 ' am '. mysqldatetime('d.m.y h:i', $weblink->getValue('lnk_timestamp_create')). '</i>';
+                                 ' am '. $weblink->getValue('lnk_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
 
     if($weblink->getValue('lnk_usr_id_change') > 0)
     {
         $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. " ". $row->change_surname.
-									 ' am '. mysqldatetime('d.m.y h:i', $weblink->getValue('lnk_timestamp_change')). '</i>';
+									 ' am '. $weblink->getValue('lnk_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
     }
 
     $pubDate = date("r", strtotime($weblink->getValue('lnk_timestamp_create')));

@@ -40,12 +40,13 @@ elseif($g_preferences['enable_dates_module'] == 2)
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_mode     = 'actual';
-$req_start    = 0;
-$req_headline = 'Termine';
-$req_id       = 0;
-$sql_datum    = '';
-$req_calendar = '';
+$req_mode      = 'actual';
+$req_start     = 0;
+$req_headline  = 'Termine';
+$req_id        = 0;
+$sql_datum     = '';
+$req_calendar  = '';
+$topNavigation = '';
 
 // Uebergabevariablen pruefen
 
@@ -468,10 +469,10 @@ else
             <div class="boxHead">
                 <div class="boxHeadLeft">
                     <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />'
-                    . mysqldatetime('d.m.y', $date->getValue('dat_begin'));
-                    if(mysqldatetime('d.m.y', $date->getValue('dat_begin')) != mysqldatetime('d.m.y', $date->getValue('dat_end')))
+                    . $date->getValue('dat_begin', $g_preferences['system_date']);
+                    if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
                     {
-                        echo ' - '. mysqldatetime('d.m.y', $date->getValue('dat_end'));
+                        echo ' - '. $date->getValue('dat_end', $g_preferences['system_date']);
                     }
                     echo ' ' . $date->getValue('dat_headline'). '
                 </div>
@@ -520,11 +521,11 @@ else
                         <table style="float:left; width: 250px;">
                             <tr>
                                 <td>Beginn:</td>
-                                <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_begin')). '</strong> Uhr</td>
+                                <td><strong>'. $date->getValue('dat_begin', $g_preferences['system_time']). '</strong> Uhr</td>
                             </tr>
                             <tr>
                                 <td>Ende:</td>
-                                <td><strong>'. mysqldatetime('h:i', $date->getValue('dat_end')). '</strong> Uhr</td>
+                                <td><strong>'. $date->getValue('dat_end', $g_preferences['system_time']). '</strong> Uhr</td>
                             </tr>';
                         echo $participants_html;
                         echo '</table>';
@@ -678,12 +679,12 @@ else
                 echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>
                 <div class="editInformation">
                     Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
-                    ' am '. mysqldatetime('d.m.y h:i', $date->getValue('dat_timestamp_create'));
+                    ' am '. $date->getValue('dat_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
 
                     if($date->getValue('dat_usr_id_change') > 0)
                     {
                         echo '<br />Zuletzt bearbeitet von '. $row['change_firstname']. ' '. $row['change_surname'].
-                        ' am '. mysqldatetime('d.m.y h:i', $date->getValue('dat_timestamp_change'));
+                        ' am '. $date->getValue('dat_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
                     }
                
                 $sql = 'SELECT * FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';

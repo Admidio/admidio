@@ -79,8 +79,8 @@ if(isset($_SESSION['photo_album_request']))
 else
 {
     // Datum formatieren
-    $photo_album->setValue('pho_begin', mysqldate('d.m.y', $photo_album->getValue('pho_begin')));
-    $photo_album->setValue('pho_end', mysqldate('d.m.y', $photo_album->getValue('pho_end')));
+    $photo_album->setValue('pho_begin', $photo_album->getValue('pho_begin', $g_preferences['system_date']));
+    $photo_album->setValue('pho_end', $photo_album->getValue('pho_end', $g_preferences['system_date']));
 }
 
 // einlesen der Albumliste

@@ -24,6 +24,9 @@ $orga_preferences = array(
     'homepage_login'                => 'adm_program/index.php',
     'theme'                         => 'modern',
     'enable_password_recovery'      => '1',
+    'system_language'               => 'de',
+    'system_date'                   => 'd.m.Y',
+    'system_time'                   => 'H:i',
 
     // Registrierung
     'registration_mode'              => '1',
@@ -118,6 +121,7 @@ $orga_preferences = array(
     'dates_per_page'             => '10',
     'dates_show_map_link'        => '1',
     'dates_show_calendar_select' => '1',
+    'dates_show_rooms'           => '0',
 
     // Weblinks
     'enable_weblinks_module'    => '1',
