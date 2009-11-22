@@ -309,7 +309,7 @@ elseif($req_mode == 6)
     include('db_scripts/preferences.php');
 
     // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
-    $orga_preferences['email_administrator'] = $_SESSION['user_email'];
+    $orga_preferences['email_administrator'] = $g_current_user->getValue('E-Mail');
 
     $g_current_organization->setPreferences($orga_preferences, false);
 
