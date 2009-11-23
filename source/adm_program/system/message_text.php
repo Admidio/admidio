@@ -73,6 +73,9 @@ $message_text = array(
 'field_exist' =>
     ' Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.',
 
+'field_empty_area' =>
+    'Das Feld %VAR1% im Bereich %VAR2% ist nicht gefüllt.',
+
 'feld' =>
     'Das Feld %VAR1% ist nicht gefüllt.',
 

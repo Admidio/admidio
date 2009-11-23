@@ -9,14 +9,14 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_text.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/table_text.php');
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show("norights");
+    $g_message->show('norights');
 }
 
 $_SESSION['organization_request'] = $_REQUEST;
@@ -27,34 +27,44 @@ $_SESSION['organization_request'] = $_REQUEST;
 
 if(strlen($_POST['org_longname']) == 0)
 {
-    $g_message->show("feld", "Name (lang)");
+    $g_message->addVariableContent('Name (lang)', 1);
+    $g_message->addVariableContent('Allgemein', 2);
+    $g_message->show('field_empty_area');
 }
 
 if(strlen($_POST['email_administrator']) == 0)
 {
-    $g_message->show("feld", "E-Mail Adresse des Administrator");
+    $g_message->addVariableContent('Systemmailadresse', 1);
+    $g_message->addVariableContent('Systemmails', 2);
+    $g_message->show('field_empty_area');
 }
 else
 {
     if(!isValidEmailAddress($_POST['email_administrator']))
     {
-        $g_message->show("email_invalid");
+        $g_message->show('email_invalid');
     }
 }
 
 if(strlen($_POST['theme']) == 0)
 {
-    $g_message->show("feld", "Admidio-Theme");
+    $g_message->addVariableContent('Admidio-Theme', 1);
+    $g_message->addVariableContent('Allgemein', 2);
+    $g_message->show('field_empty_area');
 }
 
 if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
 {
-    $g_message->show("feld", "Automatischer Logout");
+    $g_message->addVariableContent('Automatischer Logout', 1);
+    $g_message->addVariableContent('Allgemein', 2);
+    $g_message->show('field_empty_area');
 }
 
 if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
 {
-    $g_message->show("feld", "Anzeige Redirect");
+    $g_message->addVariableContent('Anzeige Redirect', 1);
+    $g_message->addVariableContent('Weblinks', 2);
+    $g_message->show('field_empty_area');
 }
 
 // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
@@ -105,12 +115,12 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 {
     if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
     {
-        $g_message->show("forum_access_data");
+        $g_message->show('forum_access_data');
     }
     else
     {
         // Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
-        if($_POST['forum_pw'] == "0000")
+        if($_POST['forum_pw'] == '0000')
         {
             $_POST['forum_pw'] = $g_preferences['forum_pw'];
         }
@@ -127,7 +137,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
         }
         if($connect_id == false)
         {
-            $g_message->show("forum_db_connection_failed");
+            $g_message->show('forum_db_connection_failed');
         }
     }
 }
@@ -143,23 +153,23 @@ $text = new TableText($g_db);
 foreach($_POST as $key => $value)
 {
     // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
-    if($key != "version" && $key != "save")
+    if($key != 'version' && $key != 'save')
     {
-        if(strpos($key, "org_") === 0)
+        if(strpos($key, 'org_') === 0)
         {
             $g_current_organization->setValue($key, $value);
         }
-        elseif(strpos($key, "SYSMAIL_") === 0)
+        elseif(strpos($key, 'SYSMAIL_') === 0)
         {
             $text->readData($key);
-            $text->setValue("txt_text", $value);
+            $text->setValue('txt_text', $value);
             $text->save();
         }
         else
         {
             // Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
             // 0000 bedeutet, dass das PW sich nicht veraendert hat
-            if($key == "forum_pw" && $value == "0000")
+            if($key == 'forum_pw' && $value == '0000')
             {
                 $g_preferences[$key] = $g_preferences[$key];
             }
@@ -176,7 +186,7 @@ $ret_code = $g_current_organization->save();
 if($ret_code != 0)
 {
     $g_current_organization->clear();
-    $g_message->show("mysql", $ret_code);
+    $g_message->show('mysql', $ret_code);
 }
 
 $g_current_organization->setPreferences($g_preferences);
@@ -188,5 +198,5 @@ $g_current_session->renewOrganizationObject();
 
 // zur Ausgangsseite zurueck
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show("save");
+$g_message->show('save');
 ?>
