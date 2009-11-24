@@ -564,7 +564,8 @@ elseif($req_mode == 7)
     $g_current_user->setValue('E-Mail', $_SESSION['user_email']);
     $g_current_user->setValue('usr_login_name', $_SESSION['user_login']);
     $g_current_user->setValue('usr_password', $_SESSION['user_password']);
-    $g_current_user->b_set_last_change = false;
+    $g_current_user->setValue('usr_timestamp_create', DATETIME_NOW);
+    $g_current_user->b_set_last_change = false; // kein angemeldeter User -> ErstelltVon kann nicht gefuellt werden
     $g_current_user->save();
 
     //Defaultraum fuer Raummodul in der DB anlegen:
