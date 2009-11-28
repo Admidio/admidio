@@ -21,4 +21,58 @@
 <text id="SYS_PHR_NO_ENTRY" version="2.2.0">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
 <text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
 </system>
+<ecards>
+<text id="ECA_GREETING_CARD_NEED_JAVASCRIPT" version="2.2.0">To send a greeting card you have to enable javascript!<br/>Please enable javascript in order to send a greeting card!</text>
+<text id="ECA_VIEW_PICTURE_FULL_SIZED" version="2.2.0">Show picture in full-size</text>
+<text id="ECA_GREETING_CARD_EDIT" version="2.2.0">Edit greeting card</text>
+<text id="ECA_GREETING_CARD_SEND" version="2.2.0">Send greeting card</text>
+<text id="ECA_TO" version="2.2.0">To</text>
+<text id="ECA_PLEASE_CHOOSE" version="2.2.0">Please choose</text>
+<text id="ECA_CONTENT_LOADING" version="2.2.0">Content is loading - please wait!</text>
+<text id="ECA_NO_USER_WITH_VALID_EMAIL" version="2.2.0">No User with a valid email is available!</text>
+<text id="ECA_EMAIL_LOOKS_INVALID" version="2.2.0">Email address looks invalid!</text>
+<text id="ECA_INTERNAL_RECIPIENT" version="2.2.0">internal recipient</text>
+<text id="ECA_EXTERNAL_RECIPIENT" version="2.2.0">external recipient</text>
+<text id="ECA_OTHER_RECIPIENT" version="2.2.0">Other recipient</text>
+<text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" version="2.2.0">To all members from a role</text>
+<text id="ECA_PLEASE_CHOOSE_VALID_ROLE" version="2.2.0">Please choose a valid role!</text>
+<text id="ECA_MORE_RECIPIENTS" version="2.2.0">More recipients</text>
+<text id="ECA_NO_MORE_RECIPIENTS" version="2.2.0">No more recipients</text>
+<text id="ECA_SHURE_YOU_WHANT_TO_DELETE_ALL" version="2.2.0">Are your shure you want to delete all?</text>
+<text id="ECA_RECIPIENT_NAME" version="2.2.0">recipient name</text>
+<text id="ECA_RECIPIENT_EMAIL" version="2.2.0">recipient email</text>
+<text id="ECA_RECIPIENT" version="2.2.0">Recipient</text>
+<text id="ECA_NAME" version="2.2.0">Name</text>
+<text id="ECA_EMAIL" version="2.2.0">Email</text>
+<text id="ECA_ADD_RECIPIENTS" version="2.2.0">Add recipient</text>
+<text id="ECA_SENDER" version="2.2.0">Sender</text>
+<text id="ECA_MESSAGE" version="2.2.0">Message</text>
+<text id="ECA_NAME_OF_SENDER" version="2.2.0">Name of the recipient</text>
+<text id="ECA_EMAIL_OF_SENDER" version="2.2.0">Email of the sender</text>
+<text id="ECA_NAME_OF_RECIPIENT" version="2.2.0">Name from%VAR1%recipient</text>
+<text id="ECA_EMAIL_OF_RECIPIENT" version="2.2.0">E-Mail from%VAR1%recipient</text>
+<text id="ECA_THE_MESSAGE" version="2.2.0">A Message</text>
+<text id="ECA_YOUR_MESSAGE" version="2.2.0">Your Message</text>
+<text id="ECA_STILL_XCHARS_AVAILABLE" version="2.2.0">still %VAR1% chars left</text>
+<text id="ECA_BLEND_IN_SETTINGS" version="2.2.0">Blend in settings</text>
+<text id="ECA_BLEND_OUT_SETTINGS" version="2.2.0">Blend out settings</text>
+<text id="ECA_SETTINGS" version="2.2.0">Settings</text>
+<text id="ECA_TEMPLATE" version="2.2.0">Template</text>
+<text id="ECA_FONT" version="2.2.0">Font</text>
+<text id="ECA_FONT_SIZE" version="2.2.0">Font-size</text>
+<text id="ECA_FONT_COLOR" version="2.2.0">Font-color</text>
+<text id="ECA_FONT_STYLE" version="2.2.0">Font-style</text>
+<text id="ECA_BOLD" version="2.2.0">Bold</text>
+<text id="ECA_ITALIC" version="2.2.0">ITALIC</text>
+<text id="ECA_PREVIEW" version="2.2.0">Preview</text>
+<text id="ECA_SEND" version="2.2.0">Send</text>
+<text id="ECA_MESSAGE_HAS_TO_BE_ONLY_XCHARS_LONG" version="2.2.0">The message must be %VAR1% chars long!</text>
+<text id="ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT" version="2.2.0">You have following, for the \ngreeting card necessary input fields,\nnot or not right filled:</text>
+<text id="ECA_PLEASE_FILL_THE_NAMED_INPUT_FIELDS" version="2.2.0">Please fill the named input fields\ncompletely and then click on the "Send" button.</text>
+<text id="ECA_A_ECARD_FROM" version="2.2.0">A greeting card from</text>
+<text id="ECA_GREETING_CARD_PREVIEW" version="2.2.0">Greeting card preview:</text>
+<text id="ECA_GREETING_CARD_SUCCESSFULLY_SEND">Your greeting card has been successfully send!</text>
+<text id="ECA_NEW_MESSAGE_RECEIVED" version="2.2.0">A new message received</text>
+<text id="ECA_GREETING_CARD" version="2.2.0">greeting card</text>
+</ecards>
 </language>
