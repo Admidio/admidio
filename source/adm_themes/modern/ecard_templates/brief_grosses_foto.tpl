@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Gru&szlig;karte</title>
+<title><%ecard_greeting_card_string%></title>
 <style type="text/css">
     *{
         font-family:<%ecard_font%>; 
@@ -32,7 +32,7 @@
                         <table  border="0" cellpadding="0" cellspacing="2">
                           <tbody>
                             <tr>
-                              <td align="center"><img src="<%ecard_image_name%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Gru&szlig;karte"></td>
+                              <td align="center"><img src="<%ecard_image_name%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="<%ecard_greeting_card_string%>"></td>
                             </tr>
                           </tbody>
                         </table>
@@ -60,7 +60,7 @@
 	  <table  border="0" cellpadding="0" style="height:270px; min-height:400px; width:400px; " cellspacing="2">
 	   <tbody>
        <tr>
-	    <td>Eine Gru&szlig;karte von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+	    <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
 	   </tr>
        <tr>
          <td style="height:10px;"></td>
@@ -84,7 +84,7 @@
                <tr style="vertical-align:top; margin:5px 5px 5px 5px;">
                 <td>
                       <div align="right">
-                        <img src="<%theme_root_path%>/images/stamp.png" alt="Briefmarke"  style="border:0px;" height="129" width="150">
+                        <img src="<%theme_root_path%>/images/stamp.png" alt="stamp"  style="border:0px;" height="129" width="150">
                       </div>
                 </td>
                </tr>

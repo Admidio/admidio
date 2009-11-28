@@ -23,14 +23,14 @@ if ($g_preferences['enable_bbcode'] == 1)
     require('../../system/bbcode.php');
 }
 
-
+$funcClass 					= new FunctionClass($l10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
 $error_msg                  = '';
 $font_sizes                 = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
-$font_colors                = getElementsFromFile('../../system/schriftfarben.txt');
-$fonts                      = getElementsFromFile('../../system/schriftarten.txt');
-$templates                  = getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
+$font_colors                = $funcClass->getElementsFromFile('../../system/schriftfarben.txt');
+$fonts                      = $funcClass->getElementsFromFile('../../system/schriftarten.txt');
+$templates                  = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
 $template                   = THEME_SERVER_PATH. '/ecard_templates/';
 $msg_error_1                = 'ecard_send_error';
 $msg_error_2                = 'ecard_feld_error';
@@ -94,7 +94,6 @@ if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization
     $g_message->show('invalid');
 }
 
-
 if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
@@ -144,13 +143,13 @@ if (isset($_GET['usr_id']))
 $bild_server_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$photo_nr.'.jpg';
 
 // ruf die Funktion auf die alle Post und Get Variablen parsed
-getVars();
+$funcClass->getVars();
 $ecard_send = false;
 // Wenn versucht wird die Grußkarte zu versenden werden die notwendigen FElder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
 if (! empty($submit_action))
 {
     // Wenn die Felder Name E-mail von dem Empaenger und Sender nicht leer sind
-    if ( checkEmail($ecard['email_recipient']) && checkEmail($ecard['email_sender'])
+    if ( $funcClass->checkEmail($ecard['email_recipient']) && $funcClass->checkEmail($ecard['email_sender'])
     && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') )
     {
         // Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
@@ -159,7 +158,7 @@ if (! empty($submit_action))
             $ecard['message'] = substr($ecard['message'],0,$g_preferences['ecard_text_length']-1);
         }
         // Template wird geholt
-        list($error,$ecard_data_to_parse) = getEcardTemplate($ecard['template_name'],$template);
+        list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($ecard['template_name'],$template);
         // Wenn es einen Error gibt ihn ausgeben
         if ($error)
         {
@@ -174,9 +173,9 @@ if (! empty($submit_action))
             if(!is_numeric($rolle))
             {
                 array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
-                $email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue('usr_id'),$ecard['name_recipient'],$ecard['email_recipient'],$g_preferences['enable_bbcode']);
-                $result = sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $bild_server_path);
+                $email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
+                $ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue('usr_id'),$ecard['name_recipient'],$ecard['email_recipient'],$g_preferences['enable_bbcode']);
+                $result = $funcClass->sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $bild_server_path);
                 // Wenn die Grußkarte erfolgreich gesendet wurde
                 if ($result)
                 {
@@ -233,18 +232,18 @@ if (! empty($submit_action))
                     }
                     $i++;
                 }
-                $email_versand_liste_cc = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-                $ecard_html_data = parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$firstvalue_name,$firstvalue_email,$g_preferences['enable_bbcode']);
+                $email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
+                $ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue("usr_id"),$firstvalue_name,$firstvalue_email,$g_preferences['enable_bbcode']);
                 $b=0;
                 foreach($email_versand_liste as $item)
                 {                       
                     if($b<1)
                     {
-                        $result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],$email_versand_liste_cc,$bild_server_path);
+                        $result = $funcClass->sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],$email_versand_liste_cc,$bild_server_path);
                     }
                     else
                     {
-                        $result = sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],array(), $bild_server_path);
+                        $result = $funcClass->sendEcard($ecard,$ecard_html_data,$email_versand_liste[$b][0],$email_versand_liste[$b][1],array(), $bild_server_path);
                     }
                     // Wenn die Grußkarte erfolgreich gesendet wurde
                     if ($result)
@@ -279,11 +278,11 @@ else
 // Html-Kopf ausgeben
 if(! empty($submit_action))
 {
-    $g_layout['title'] = 'Grußkarte wegschicken';
+    $g_layout['title'] = $l10n->get("ECA_GREETING_CARD_SEND");
 }
 else
 {
-    $g_layout['title'] = 'Grußkarte bearbeiten';
+    $g_layout['title'] = $l10n->get("ECA_GREETING_CARD_EDIT");
 }
 
 $javascript = '
@@ -335,36 +334,36 @@ $javascript = '
         function check()
         {
             var error         = false;
-            var error_message = "Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:\n\n";
+            var error_message = "'.$l10n->get("ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT").'\n\n";
 
             if (document.getElementById(ecardformid)["ecard[name_sender]"] && document.getElementById(ecardformid)["ecard[name_sender]"].value == "")
             {
                 error = true;
-                error_message += "- Name des Absenders\n";
+                error_message += "- '.$l10n->get("ECA_NAME_OF_SENDER").'\n";
             }
 
             if (document.getElementById(ecardformid)["ecard[email_sender]"] && (document.getElementById(ecardformid)["ecard[email_sender]"].value == "") ||
                (echeck(document.getElementById(ecardformid)["ecard[email_sender]"].value) == false))
             {
                 error = true;
-                error_message += "- E-Mail des Absenders\n";
+                error_message += "- '.$l10n->get("ECA_EMAIL_OF_SENDER").'\n";
             }
 
-            if (document.getElementById(ecardformid)["ecard[name_recipient]"] && (document.getElementById(ecardformid)["ecard[name_recipient]"].value == "" || document.getElementById(ecardformid)["ecard[name_recipient]"].value == "< Empfänger Name >"))
+            if (document.getElementById(ecardformid)["ecard[name_recipient]"] && (document.getElementById(ecardformid)["ecard[name_recipient]"].value == "" || document.getElementById(ecardformid)["ecard[name_recipient]"].value == "< '.$l10n->get("ECA_RECIPIENT_NAME").' >"))
             {
                 error = true;
-                error_message += "- Name des Empfängers\n";
+                error_message += "- '.$l10n->get("ECA_NAME_OF_RECIPIENT", $var1=" ").'\n";
             }
             if ((document.getElementById(ecardformid)["ecard[email_recipient]"].value == "") ||
                (echeck(document.getElementById(ecardformid)["ecard[email_recipient]"].value) == false))
             {
                 error = true;
-                error_message += "- E-Mail des Empfängers\n";
+                error_message += "- '.$l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1=" ").'\n";
             }
             if (document.getElementById(ecardformid)["ecard[message]"].value == "")
             {
                 error = true;
-                error_message += "- Eine Nachricht\n";
+                error_message += "- '.$l10n->get("ECA_THE_MESSAGE").'\n";
             }
             for(var i=1; i <= now_recipients; i++)
             {
@@ -376,7 +375,7 @@ $javascript = '
                 {
                     if(namedoc.value == "")
                     {
-                        message += " - Name des "+[i]+". CC - Empfängers \n";
+                        message += " - '.$l10n->get("ECA_NAME_OF_RECIPIENT", $var1=" \"+[i]+\". CC - ").' \n";
                         error = true;
                         goterror = true;
                     }
@@ -385,14 +384,14 @@ $javascript = '
                 {
                     if(emaildoc.value == "" || !echeck(emaildoc.value))
                     {
-                        message += " - E-Mail des "+[i]+". CC - Empfängers \n";
+                        message += " - '.$l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1=" \"+[i]+\". CC - ").' \n";
                         error = true;
                         goterror = true;
                     }
                 }
                 if(goterror && i==1)
                 {
-                    error_message += \'\nCC - Empfänger\n_________________________________\n\n\'+message;
+                    error_message += \'\nCC - '.$l10n->get("ECA_RECIPIENT").'\n_________________________________\n\n\'+message;
                 }
                 else if(goterror)
                 {
@@ -401,7 +400,7 @@ $javascript = '
             }
             if (error)
             {
-                error_message += "\n\nBitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf \'Abschicken\'.";
+                error_message += \'\n\n'.$l10n->get("ECA_PLEASE_FILL_THE_NAMED_INPUT_FIELDS").'\';
                 alert(error_message);
                 return false;  // Formular wird nicht abgeschickt.
             }
@@ -508,7 +507,7 @@ $javascript = '
 		}
         function blendout(id)
         {
-            if(document.getElementById(id).value == "< Empfänger Name >" || document.getElementById(id).value == "< Empfänger E-Mail >")
+            if(document.getElementById(id).value == "< '.$l10n->get("ECA_RECIPIENT_NAME").' >" || document.getElementById(id).value == "< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >")
             {
                 document.getElementById(id).value = "";
             }
@@ -517,24 +516,24 @@ $javascript = '
         {
             if(document.getElementById(id).value == "" && type == 1)
             {
-                document.getElementById(id).value = "< Empfänger Name >";
+                document.getElementById(id).value = "< '.$l10n->get("ECA_RECIPIENT_NAME").' >";
             }
             else if(document.getElementById(id).value == "" && type == 2)
             {
-                document.getElementById(id).value = "< Empfänger E-Mail >";
+                document.getElementById(id).value = "< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >";
                 document.getElementById(id).style.color = "black";
                 document.getElementById(\'Menue\').style.height = "49px";
                 document.getElementById(\'wrong\').style.display = "none";
                 document.getElementById(\'wrong\').innerHTML = "";
             }
-            else if(document.getElementById(id).value != "" && document.getElementById(id).value != "< Empfänger E-Mail >"&& type == 2)
+            else if(document.getElementById(id).value != "" && document.getElementById(id).value != "< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >"&& type == 2)
             {
                 if(!echeck(document.getElementById(id).value))
                 {
                     document.getElementById(id).style.color = "red";
                     document.getElementById(\'wrong\').style.display = "block";
                     document.getElementById(\'Menue\').style.height = "75px";
-                    document.getElementById(\'wrong\').innerHTML = "E-mail Adresse scheint falsch zu sein!";
+                    document.getElementById(\'wrong\').innerHTML = "'.$l10n->get("ECA_EMAIL_LOOKS_INVALID").'";
                 }
                 else
                 {
@@ -578,7 +577,7 @@ $javascript = '
             {
                 if(xmlHttp.readyState==1 && document.getElementById(divId))
                 {
-                    document.getElementById(divId).innerHTML = "Inhalt wird geladen - Bitte warten!";
+                    document.getElementById(divId).innerHTML = "'.$l10n->get("ECA_CONTENT_LOADING").'";
                 }
                 if(xmlHttp.readyState==4 && document.getElementById(divId))
                 {
@@ -681,7 +680,7 @@ $javascript = '
                 if (now_recipients > 0)
                 {
                     document.getElementById(\'moreRecipient\').style.display = "block";
-                    document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Keine weiteren Empf.<\/a>";
+                    document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>";
                 }
             }
         }
@@ -722,12 +721,12 @@ $javascript = '
             }
             if (now_recipients == 0)
             {
-                if(document.getElementById(\'getmoreRecipient\').innerHTML == "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Keine weiteren Empf.<\/a>")
+                if(document.getElementById(\'getmoreRecipient\').innerHTML == "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>")
                 {
                     showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');
                 }
                 document.getElementById(\'moreRecipient\').style.display = "none";
-                document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">Mehr Empfänger<\/a>";
+                document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$l10n->get("ECA_MORE_RECIPIENTS").'<\/a>";
             }
         }
         function delAllRecipients(t)
@@ -735,7 +734,7 @@ $javascript = '
             var anzrecipients = now_recipients;
             if(!t)
             {
-                var x = window.confirm("Bist du sicher das du alle löschen willst?")
+                var x = window.confirm("'.$l10n->get("ECA_SHURE_YOU_WHANT_TO_DELETE_ALL").'")
             }
             if (x || t)
             {
@@ -755,13 +754,13 @@ $javascript = '
             if($("#" + divLayer).css("display") == "none")
             {
                 $("#" + divLayer).show("slow");
-                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">Keine weiteren Empf.<\/a>";
+                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">'.$l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>";
                 addRecipient();
             }
             else
             {
                 $("#" + divLayer).hide("slow");
-                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">Mehr Empfänger<\/a>";
+                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">'.$l10n->get("ECA_MORE_RECIPIENTS").'<\/a>";
                 delAllRecipients(\'ja\');
             }
         }
@@ -770,12 +769,12 @@ $javascript = '
             if($("#" + divLayerSetting).css("display") == "none")
             {
                 $("#" + divLayerSetting).show("slow");
-                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen ausblenden<\/a>";
+                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">'.$l10n->get("ECA_BLEND_OUT_SETTINGS").'<\/a>";
             }
             else
             {
                 $("#" + divLayerSetting).hide("slow");
-                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">Einstellungen einblenden<\/a>";
+                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">'.$l10n->get("ECA_BLEND_IN_SETTINGS").'<\/a>";
             }
         }
         function getExtern()
@@ -785,7 +784,7 @@ $javascript = '
                 document.getElementById(basedropdiv).style.display = \'block\';
                 document.getElementById(dropdiv).style.display = \'block\';
                 document.getElementById(externdiv).style.display = \'none\';
-                document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recipient]" value="< Empfänger E-Mail >" /><input type="hidden" name="ecard[name_recipient]"  value="< Empfänger Name >" />\';
+                document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recipient]" value="< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >" /><input type="hidden" name="ecard[name_recipient]"  value="< '.$l10n->get("ECA_RECIPIENT_NAME").' >" />\';
                 getMenu();
                 document.getElementById(switchdiv).innerHTML = \'&nbsp;\';
             }
@@ -797,7 +796,7 @@ $javascript = '
                 document.getElementById(externdiv).style.display = \'block\';
                 document.getElementById(basedropdiv).innerHTML  = "&nbsp;";
                 document.getElementById(dropdiv).innerHTML  = "&nbsp;";
-                document.getElementById(switchdiv).innerHTML = \'<a href="javascript:getExtern();">interner Empfänger<\/a>\';
+                document.getElementById(switchdiv).innerHTML = \'<a href="javascript:getExtern();">'.$l10n->get("ECA_INTERNAL_RECIPIENT").'<\/a>\';
             }
 
             if(document.getElementById(\'wrong\'))
@@ -825,7 +824,7 @@ $javascript = '
             }
             if (wert < 0)
             {
-                alert("Die Nachricht darf maximal " + max + " Zeichen lang sein.!");
+                alert("'.$l10n->get("ECA_MESSAGE_HAS_TO_BE_ONLY_XCHARS_LONG",$var1="\" + max + \"").'");
                 wert = 0;
                 document.getElementById(ecardformid)["ecard[message]"].value = document.getElementById(ecardformid)["ecard[message]"].value.substring(0,max);
                 document.getElementById(counterdiv).innerHTML = \'<b>\' + wert + \'<\/b>\';
@@ -898,8 +897,7 @@ echo '
                     background-color: #FFFFE0;
                     padding-left: 28px;
                     text-align:left;">
-         Um eine Grußkarte versenden zu können wird Javascript benötigt!<br/>
-         Bitte aktiviere Javascript um eine Grußkarte versenden zu können!
+         '.$l10n->get("ECA_GREETING_CARD_NEED_JAVASCRIPT").'
          </div>
     </div>
 </noscript>';
@@ -908,7 +906,7 @@ if (empty($submit_action))
     // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
     echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($g_preferences['photo_show_height']+37).'&amp;width='.$g_preferences['photo_show_width'].'"><img 
             src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
-            class="imageFrame" alt="Bild in voller Größe anzeigen"  title="Bild in voller Größe anzeigen" />
+            class="imageFrame" alt="'.$l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
           </a>';
 
     if ($error_msg != '')
@@ -916,7 +914,7 @@ if (empty($submit_action))
         $g_message->show($error_msg);
     }
 
-    echo '<form id="ecard_form" action="" onsubmit="return tb_sendform(this,\'Vorschau der Grußkarte:\')" method="post">
+    echo '<form id="ecard_form" action="" onsubmit="return tb_sendform(this,\''.$l10n->get("ECA_GREETING_CARD_PREVIEW").'\')" method="post">
             <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
             <input type="hidden" name="submit_action" value="" />
             <ul class="formFieldList">
@@ -926,12 +924,12 @@ if (empty($submit_action))
             <li>
                 <dl>
                     <dt>
-                        <label>An:</label>
+                        <label>'.$l10n->get("ECA_TO").':</label>
                         ';
                         if($g_preferences['enable_ecard_cc_recipients'])
                         {
                             echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
-                            <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">Mehr Empfänger</a>
+                            <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$l10n->get("ECA_MORE_RECIPIENTS").'</a>
                             </div>';
                         }
                        echo'
@@ -968,18 +966,18 @@ if (empty($submit_action))
                 <div id="moreRecipient" style="display:none;">
                 <hr />
                     <dl>
-                        <dt>Weitere Empfänger:</dt>
+                        <dt>'.$l10n->get("ECA_MORE_RECIPIENTS").':</dt>
                         <dd>
                             <table summary="TableccContainer" border="0" >
                                 <tr>
-                                    <td style="width:150px; text-align: left;">Name</td>
-                                    <td style="width:200px; padding-left:14px; text-align: left;">Email</td>
+                                    <td style="width:150px; text-align: left;">'.$l10n->get("ECA_NAME").'</td>
+                                    <td style="width:200px; padding-left:14px; text-align: left;">'.$l10n->get("ECA_EMAIL").'</td>
                                 </tr>
                             </table>
                             <div id="ccrecipientContainer" style="width:490px; border:0px; text-align: left;"></div>
                             <table summary="TableCCRecipientSettings" border="0">
                                     <tr>
-                                        <td style="text-align: left;"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="Empfänger hinzufügen" /></a><a href="javascript:addRecipient()">Empfänger hinzufügen</a></span></td>
+                                        <td style="text-align: left;"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="'.$l10n->get("ECA_ADD_RECIPIENTS").'" /></a><a href="javascript:addRecipient()">'.$l10n->get("ECA_ADD_RECIPIENTS").'</a></span></td>
                                     </tr>
                             </table>
                         </dd>
@@ -991,7 +989,7 @@ if (empty($submit_action))
             </li>
             <li>
                 <dl>
-                    <dt><label>Absender:</label></dt>
+                    <dt><label>'.$l10n->get("ECA_SENDER").':</label></dt>
                     <dd>
                       <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
                         if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
@@ -1008,7 +1006,7 @@ if (empty($submit_action))
             </li>
              <li>
                 <dl>
-                    <dt><label>E-Mail:</label></dt>
+                    <dt><label>'.$l10n->get("ECA_EMAIL").':</label></dt>
                     <dd>
                        <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
                         if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
@@ -1034,12 +1032,10 @@ if (empty($submit_action))
             <li>
                 <dl>
                     <dt>
-                        <label>Nachricht:</label>';
+                        <label>'.$l10n->get("ECA_MESSAGE").':</label>';
                         if($g_preferences['enable_ecard_text_length'])
                         {
-                            echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">
-                                noch&nbsp;<div id="counter" style="border:0px; display:inline;"><b>'; echo $g_preferences['ecard_text_length'].'</b></div>&nbsp;Zeichen
-                            </div>';
+                            echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">'.$l10n->get("ECA_STILL_XCHARS_AVAILABLE",$var1="&nbsp;<div id=\"counter\" style=\"border:0px; display:inline;\"><b>".$g_preferences['ecard_text_length']."</b></div>&nbsp;").'</div>';
                         }
                         echo '<div id="getmoreSettings" style="';
                         if($g_preferences['enable_ecard_text_length'])
@@ -1051,7 +1047,7 @@ if (empty($submit_action))
                             echo 'padding-top:155px;';
                         }
                         echo '  height:1px;">
-                            <a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">Einstellungen einblenden</a>
+                            <a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">'.$l10n->get("ECA_BLEND_IN_SETTINGS").'</a>
                         </div>
                     </dt>
                     <dd>
@@ -1075,43 +1071,43 @@ if (empty($submit_action))
                 <hr />
                 <dl>
                     <dt>
-                        <label>Einstellungen:</label>
+                        <label>'.$l10n->get("ECA_SETTINGS").':</label>
                     </dt>
                     <dd>';
                         $first_value_array = array();
                         echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:350px;"  border="0px">
                             <tr>
-                              <td>Template:</td>
-                              <td>Schriftart:</td>
-                              <td>Schriftgröße:</td>
+                              <td>'.$l10n->get("ECA_TEMPLATE").':</td>
+                              <td>'.$l10n->get("ECA_FONT").':</td>
+                              <td>'.$l10n->get("ECA_FONT_SIZE").':</td>
                             </tr>
                             <tr>
                                 <td>';
-                                    array_push($first_value_array,array(getMenueSettings($templates,"ecard[template_name]",$g_preferences['ecard_template'],"120","false"),"ecard[template_name]"));
+                                    array_push($first_value_array,array($funcClass->getMenueSettings($templates,"ecard[template_name]",$g_preferences['ecard_template'],"120","false"),"ecard[template_name]"));
                                 echo '</td>
                                 <td>';
-                                    array_push($first_value_array,array(getMenueSettings($fonts,"ecard[schriftart_name]",$g_preferences['ecard_text_font'],"120","true"),"ecard[schriftart_name]"));
+                                    array_push($first_value_array,array($funcClass->getMenueSettings($fonts,"ecard[schriftart_name]",$g_preferences['ecard_text_font'],"120","true"),"ecard[schriftart_name]"));
                                 echo '</td>
                                 <td>';
-                                    array_push($first_value_array,array(getMenueSettings($font_sizes,"ecard[schrift_size]",$g_preferences['ecard_text_size'],"50","false"),"ecard[schrift_size]"));
+                                    array_push($first_value_array,array($funcClass->getMenueSettings($font_sizes,"ecard[schrift_size]",$g_preferences['ecard_text_size'],"50","false"),"ecard[schrift_size]"));
                                 echo  '</td>
                             </tr>
                             <tr>
-                              <td>Schriftfarbe:</td>
-                              <td style="padding-left:40px;">Style:</td>
+                              <td>'.$l10n->get("ECA_FONT_COLOR").':</td>
+                              <td style="padding-left:40px;">'.$l10n->get("ECA_FONT_STYLE").':</td>
                               <td></td>
                             </tr>
                             <tr>
                                 <td>';
-                                    array_push($first_value_array,array(getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
+                                    array_push($first_value_array,array($funcClass->getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
                                 echo '</td>
                                 <td colspan="2" style="padding-left:40px;">
-                                    <b>Bold: </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />
-                                    <i>Italic: </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />
+                                    <b>'.$l10n->get("ECA_BOLD").': </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />
+                                    <i>'.$l10n->get("ECA_ITALIC").': </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />
                                 </td>
                             </tr>
                         </table>';
-                        getFirstSettings($first_value_array);
+                        $funcClass->getFirstSettings($first_value_array);
                         echo '<input type="hidden" name="ecard[schrift_style_bold]" value="" />
                         <input type="hidden" name="ecard[schrift_style_italic]" value="" />
                     </dd>
@@ -1121,10 +1117,10 @@ if (empty($submit_action))
         </ul>
         <hr />
         <div class="formSubmit">
-            <button onclick="javascript:makeThickBoxPreview();" type="submit" value="vorschau"><img 
-            	src="'. THEME_PATH. '/icons/eye.png" alt="Vorschau" />&nbsp;Vorschau</button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button onclick="javascript:sendEcard();" type="button" value="abschicken"><img 
-            	src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
+            <button onclick="javascript:makeThickBoxPreview();" type="submit" value="'.$l10n->get("ECA_PREVIEW").'"><img 
+            	src="'. THEME_PATH. '/icons/eye.png" alt="'.$l10n->get("ECA_PREVIEW").'" />&nbsp;'.$l10n->get("ECA_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onclick="javascript:sendEcard();" type="button" value="'.$l10n->get("ECA_SEND").'"><img 
+            	src="'. THEME_PATH. '/icons/email.png" alt="'.$l10n->get("ECA_SEND").'" />&nbsp;'.$l10n->get("ECA_SEND").'</button>
         </div>
     </form>';
 }
@@ -1140,14 +1136,14 @@ else
         padding:20px 0px 5px 5px;
         background-color: #FFFFE0;
         vertical-align:middle;">
-            <span style="font-size:16px; font-weight:bold">Deine Grußkarte wurde erfolgreich versendet.</span>
+            <span style="font-size:16px; font-weight:bold">'.$l10n->get("ECA_GREETING_CARD_SUCCESSFULLY_SEND").'</span>
         </dv>
     </div>
     <br /><br />
 
     <table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" style="text-align: center;">
     <tr>
-        <td style="text-align: left;" colspan="2"><b>Absender:</b></td>
+        <td style="text-align: left;" colspan="2"><b>'.$l10n->get("ECA_SENDER").':</b></td>
     </tr>
     <tr>
         <td style="padding-right:5px; text-align: left;">'. $ecard['name_sender'].',</td><td style="text-align: left;">'.$ecard['email_sender'].'</td>
@@ -1156,7 +1152,7 @@ else
         <td style="text-align: left;">&nbsp;</td>
     </tr>
     <tr>
-        <td style="text-align: left;" colspan="2"><b>Empfänger:</b></td>
+        <td style="text-align: left;" colspan="2"><b>'.$l10n->get("ECA_RECIPIENT").':</b></td>
     </tr><tr>';
     foreach($email_versand_liste as $item)
     {
@@ -1176,10 +1172,10 @@ else
     }
     echo '</tr>';
     $Liste = array();
-    $Liste = getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
+    $Liste = $funcClass->getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
     if(count($Liste)>0)
     {
-        echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>Zusätzliche Empfänger:</b></td></tr><tr>';
+        echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>'.$l10n->get("ECA_MORE_RECIPIENTS").':</b></td></tr><tr>';
         foreach($Liste as $item)
         {
             $i=0;
@@ -1209,8 +1205,8 @@ if($photo_album->getValue('pho_id') > 0)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'.THEME_PATH.'/icons/back.png" alt="Zurück" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+                src="'.THEME_PATH.'/icons/back.png" alt="'.$l10n->get("SYS_BACK").'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$l10n->get("SYS_BACK").'</a>
             </span>
         </li>
     </ul>';
