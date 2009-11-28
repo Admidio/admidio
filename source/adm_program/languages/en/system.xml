@@ -63,11 +63,11 @@
 <text id="ECA_FONT_COLOR" version="2.2.0">Font-color</text>
 <text id="ECA_FONT_STYLE" version="2.2.0">Font-style</text>
 <text id="ECA_BOLD" version="2.2.0">Bold</text>
-<text id="ECA_ITALIC" version="2.2.0">ITALIC</text>
+<text id="ECA_ITALIC" version="2.2.0">Italic</text>
 <text id="ECA_PREVIEW" version="2.2.0">Preview</text>
 <text id="ECA_SEND" version="2.2.0">Send</text>
 <text id="ECA_MESSAGE_HAS_TO_BE_ONLY_XCHARS_LONG" version="2.2.0">The message must be %VAR1% chars long!</text>
-<text id="ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT" version="2.2.0">You have following, for the \ngreeting card necessary input fields,\nnot or not right filled:</text>
+<text id="ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT" version="2.2.0">You have following,\nfor the greeting card necessary input fields,\nnot or not right filled:</text>
 <text id="ECA_PLEASE_FILL_THE_NAMED_INPUT_FIELDS" version="2.2.0">Please fill the named input fields\ncompletely and then click on the "Send" button.</text>
 <text id="ECA_A_ECARD_FROM" version="2.2.0">A greeting card from</text>
 <text id="ECA_GREETING_CARD_PREVIEW" version="2.2.0">Greeting card preview:</text>

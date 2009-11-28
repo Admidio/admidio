@@ -28,6 +28,8 @@ class FunctionClass
 		$this->newMessageReceivedString 	= $l10n->get("ECA_NEW_MESSAGE_RECEIVED");
 		$this->greetingCardFrom				= $l10n->get("ECA_A_ECARD_FROM");
 		$this->greetingCardString			= $l10n->get("ECA_GREETING_CARD");
+		$this->sendToString					= $l10n->get("ECA_TO");	
+		$this->emailString					= $l10n->get("ECA_EMAIL");	
 	}
 	// gibt ein Menue fuer die Einstellungen des Template aus
 	// Uebergabe: 
@@ -264,8 +266,10 @@ class FunctionClass
 		// Hier wird der Bildname ersetzt
 		$ecard_data = preg_replace ('/<%ecard_image_name%>/',       $ecard['image_name'], $ecard_data);
 		
-		$ecard_data = preg_replace ('/<%ecard_greeting_card_from%>/', htmlentities(utf8_decode($this->greetingCardFrom)), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_greeting_card_string%>/', htmlentities(utf8_decode($this->greetingCardString)), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_greeting_card_from%>/'	, htmlentities(utf8_decode($this->greetingCardFrom)), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_greeting_card_string%>/'	, htmlentities(utf8_decode($this->greetingCardString)), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_to_string%>/'				, htmlentities(utf8_decode($this->sendToString)), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_email_string%>/'			, htmlentities(utf8_decode($this->emailString)), $ecard_data); 
 		
 	
 		// Hier wird die Nachricht ersetzt
