@@ -58,7 +58,7 @@
                    <td style="height:90%; vertical-align:middle; padding:5px; width:300px;">
                      <table cellpadding="0" cellspacing="0" rules="none" border="0" width="300px">
                          <tr>
-                             <td><b>An:</b></td>
+                             <td><b><%ecard_to_string%>:</b></td>
                              <td style="padding-left:5px;"><%ecard_reciepient_name%></td>
                          </tr>
                          <tr style="height:1px;">
@@ -66,7 +66,7 @@
                          	<td><hr style="border: 1px solid black;"></td>
                          </tr>
                          <tr>
-                             <td><b>E-Mail:</b></td>
+                             <td><b><%ecard_email_string%>:</b></td>
                              <td  style="padding-left:5px;"><%ecard_reciepient_email%></td>
                          </tr>
                          <tr style="height:1px;">
