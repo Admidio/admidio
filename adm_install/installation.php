@@ -357,14 +357,20 @@ elseif($req_mode == 5)
 
         if(strlen($_SESSION['user_last_name'])  == 0
         || strlen($_SESSION['user_first_name']) == 0
-        || strlen($_SESSION['user_email'])      == 0
+        || strlen($_SESSION['user_email'])     == 0
         || strlen($_SESSION['user_login'])      == 0
         || strlen($_SESSION['user_password'])   == 0 )
         {
             $message = 'Es sind nicht alle Daten für den Administrator eingegeben worden !';
             showPage($message, 'installation.php?mode=4', 'back.png', 'Zurück');
         }
-
+		
+		if(!isValidEmailAddress($_SESSION['user_email']))
+		{
+            $message = 'Die E-Mail Adresse ist ungültig !';
+            showPage($message, 'installation.php?mode=4', 'back.png', 'Zurück');
+        }
+		
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
         {
             $message = 'Das Passwort stimmt nicht mit der Wiederholung überein !';
