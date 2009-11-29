@@ -148,8 +148,8 @@ $ecard_send = false;
 // Wenn versucht wird die Grußkarte zu versenden werden die notwendigen FElder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
 if (! empty($submit_action))
 {
-    // Wenn die Felder Name E-mail von dem Empaenger und Sender nicht leer sind
-    if ( $funcClass->checkEmail($ecard['email_recipient']) && $funcClass->checkEmail($ecard['email_sender'])
+    // Wenn die Felder Name E-mail von dem Empaenger und Sender nicht leer und gültig sind
+    if ( isValidEmailAddress($ecard['email_recipient']) && isValidEmailAddress($ecard['email_sender'])
     && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') )
     {
         // Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
