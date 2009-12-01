@@ -114,7 +114,7 @@ function checkVersions(&$db, &$message)
 {
     $message = '';
     $min_mysql_version = '4.1.0';
-    $min_php_version   = '5.1.3';
+    $min_php_version   = '5.2.0';
 
     // Datenbank pruefen
     if(version_compare($db->server_info(), $min_mysql_version) == -1)
