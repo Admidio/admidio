@@ -23,7 +23,7 @@ if ($g_preferences['enable_bbcode'] == 1)
     require('../../system/bbcode.php');
 }
 
-$funcClass 					= new FunctionClass($l10n);
+$funcClass 					= new FunctionClass($g_l10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
 $error_msg                  = '';
@@ -39,12 +39,12 @@ $msg_error_2                = 'ecard_feld_error';
 if ($g_preferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 // pruefen ob User eingeloggt ist
 if(!$g_valid_login)
 {
- $g_message->show('invalid');
+ $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 // Uebergaben pruefen
 if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']))
@@ -53,7 +53,7 @@ if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']))
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['photo']) && is_numeric($_GET['photo']))
@@ -62,7 +62,7 @@ if(isset($_GET['photo']) && is_numeric($_GET['photo']))
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 unset($_SESSION['photo_album_request']);
@@ -91,7 +91,7 @@ else
 // pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
 if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
@@ -109,12 +109,12 @@ if (isset($_GET['usr_id']))
     if (!$g_valid_login)
     {
         //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if (is_numeric($_GET['usr_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
@@ -278,11 +278,11 @@ else
 // Html-Kopf ausgeben
 if(! empty($submit_action))
 {
-    $g_layout['title'] = $l10n->get("ECA_GREETING_CARD_SEND");
+    $g_layout['title'] = $g_l10n->get("ECA_GREETING_CARD_SEND");
 }
 else
 {
-    $g_layout['title'] = $l10n->get("ECA_GREETING_CARD_EDIT");
+    $g_layout['title'] = $g_l10n->get("ECA_GREETING_CARD_EDIT");
 }
 
 $javascript = '
@@ -334,36 +334,36 @@ $javascript = '
         function check()
         {
             var error         = false;
-            var error_message = "'.$l10n->get("ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT").'\n\n";
+            var error_message = "'.$g_l10n->get("ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT").'\n\n";
 
             if (document.getElementById(ecardformid)["ecard[name_sender]"] && document.getElementById(ecardformid)["ecard[name_sender]"].value == "")
             {
                 error = true;
-                error_message += "- '.$l10n->get("ECA_NAME_OF_SENDER").'\n";
+                error_message += "- '.$g_l10n->get("ECA_NAME_OF_SENDER").'\n";
             }
 
             if (document.getElementById(ecardformid)["ecard[email_sender]"] && (document.getElementById(ecardformid)["ecard[email_sender]"].value == "") ||
                (echeck(document.getElementById(ecardformid)["ecard[email_sender]"].value) == false))
             {
                 error = true;
-                error_message += "- '.$l10n->get("ECA_EMAIL_OF_SENDER").'\n";
+                error_message += "- '.$g_l10n->get("ECA_EMAIL_OF_SENDER").'\n";
             }
 
-            if (document.getElementById(ecardformid)["ecard[name_recipient]"] && (document.getElementById(ecardformid)["ecard[name_recipient]"].value == "" || document.getElementById(ecardformid)["ecard[name_recipient]"].value == "< '.$l10n->get("ECA_RECIPIENT_NAME").' >"))
+            if (document.getElementById(ecardformid)["ecard[name_recipient]"] && (document.getElementById(ecardformid)["ecard[name_recipient]"].value == "" || document.getElementById(ecardformid)["ecard[name_recipient]"].value == "< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >"))
             {
                 error = true;
-                error_message += "- '.$l10n->get("ECA_NAME_OF_RECIPIENT", $var1=" ").'\n";
+                error_message += "- '.$g_l10n->get("ECA_NAME_OF_RECIPIENT", $var1=" ").'\n";
             }
             if ((document.getElementById(ecardformid)["ecard[email_recipient]"].value == "") ||
                (echeck(document.getElementById(ecardformid)["ecard[email_recipient]"].value) == false))
             {
                 error = true;
-                error_message += "- '.$l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1=" ").'\n";
+                error_message += "- '.$g_l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1=" ").'\n";
             }
             if (document.getElementById(ecardformid)["ecard[message]"].value == "")
             {
                 error = true;
-                error_message += "- '.$l10n->get("ECA_THE_MESSAGE").'\n";
+                error_message += "- '.$g_l10n->get("ECA_THE_MESSAGE").'\n";
             }
             for(var i=1; i <= now_recipients; i++)
             {
@@ -375,7 +375,7 @@ $javascript = '
                 {
                     if(namedoc.value == "")
                     {
-                        message += " - '.$l10n->get("ECA_NAME_OF_RECIPIENT", $var1=" \"+[i]+\". CC - ").' \n";
+                        message += " - '.$g_l10n->get("ECA_NAME_OF_RECIPIENT", $var1=" \"+[i]+\". CC - ").' \n";
                         error = true;
                         goterror = true;
                     }
@@ -384,14 +384,14 @@ $javascript = '
                 {
                     if(emaildoc.value == "" || !echeck(emaildoc.value))
                     {
-                        message += " - '.$l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1=" \"+[i]+\". CC - ").' \n";
+                        message += " - '.$g_l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1=" \"+[i]+\". CC - ").' \n";
                         error = true;
                         goterror = true;
                     }
                 }
                 if(goterror && i==1)
                 {
-                    error_message += \'\nCC - '.$l10n->get("ECA_RECIPIENT").'\n_________________________________\n\n\'+message;
+                    error_message += \'\nCC - '.$g_l10n->get("ECA_RECIPIENT").'\n_________________________________\n\n\'+message;
                 }
                 else if(goterror)
                 {
@@ -400,7 +400,7 @@ $javascript = '
             }
             if (error)
             {
-                error_message += \'\n\n'.$l10n->get("ECA_PLEASE_FILL_THE_NAMED_INPUT_FIELDS").'\';
+                error_message += \'\n\n'.$g_l10n->get("ECA_PLEASE_FILL_THE_NAMED_INPUT_FIELDS").'\';
                 alert(error_message);
                 return false;  // Formular wird nicht abgeschickt.
             }
@@ -507,7 +507,7 @@ $javascript = '
 		}
         function blendout(id)
         {
-            if(document.getElementById(id).value == "< '.$l10n->get("ECA_RECIPIENT_NAME").' >" || document.getElementById(id).value == "< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >")
+            if(document.getElementById(id).value == "< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >" || document.getElementById(id).value == "< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >")
             {
                 document.getElementById(id).value = "";
             }
@@ -516,24 +516,24 @@ $javascript = '
         {
             if(document.getElementById(id).value == "" && type == 1)
             {
-                document.getElementById(id).value = "< '.$l10n->get("ECA_RECIPIENT_NAME").' >";
+                document.getElementById(id).value = "< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >";
             }
             else if(document.getElementById(id).value == "" && type == 2)
             {
-                document.getElementById(id).value = "< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >";
+                document.getElementById(id).value = "< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >";
                 document.getElementById(id).style.color = "black";
                 document.getElementById(\'Menue\').style.height = "49px";
                 document.getElementById(\'wrong\').style.display = "none";
                 document.getElementById(\'wrong\').innerHTML = "";
             }
-            else if(document.getElementById(id).value != "" && document.getElementById(id).value != "< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >"&& type == 2)
+            else if(document.getElementById(id).value != "" && document.getElementById(id).value != "< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >"&& type == 2)
             {
                 if(!echeck(document.getElementById(id).value))
                 {
                     document.getElementById(id).style.color = "red";
                     document.getElementById(\'wrong\').style.display = "block";
                     document.getElementById(\'Menue\').style.height = "75px";
-                    document.getElementById(\'wrong\').innerHTML = "'.$l10n->get("ECA_EMAIL_LOOKS_INVALID").'";
+                    document.getElementById(\'wrong\').innerHTML = "'.$g_l10n->get("ECA_EMAIL_LOOKS_INVALID").'";
                 }
                 else
                 {
@@ -577,7 +577,7 @@ $javascript = '
             {
                 if(xmlHttp.readyState==1 && document.getElementById(divId))
                 {
-                    document.getElementById(divId).innerHTML = "'.$l10n->get("ECA_CONTENT_LOADING").'";
+                    document.getElementById(divId).innerHTML = "'.$g_l10n->get("ECA_CONTENT_LOADING").'";
                 }
                 if(xmlHttp.readyState==4 && document.getElementById(divId))
                 {
@@ -680,7 +680,7 @@ $javascript = '
                 if (now_recipients > 0)
                 {
                     document.getElementById(\'moreRecipient\').style.display = "block";
-                    document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>";
+                    document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$g_l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>";
                 }
             }
         }
@@ -721,12 +721,12 @@ $javascript = '
             }
             if (now_recipients == 0)
             {
-                if(document.getElementById(\'getmoreRecipient\').innerHTML == "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>")
+                if(document.getElementById(\'getmoreRecipient\').innerHTML == "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$g_l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>")
                 {
                     showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');
                 }
                 document.getElementById(\'moreRecipient\').style.display = "none";
-                document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$l10n->get("ECA_MORE_RECIPIENTS").'<\/a>";
+                document.getElementById(\'getmoreRecipient\').innerHTML = "<a href=\"javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');\">'.$g_l10n->get("ECA_MORE_RECIPIENTS").'<\/a>";
             }
         }
         function delAllRecipients(t)
@@ -734,7 +734,7 @@ $javascript = '
             var anzrecipients = now_recipients;
             if(!t)
             {
-                var x = window.confirm("'.$l10n->get("ECA_SHURE_YOU_WHANT_TO_DELETE_ALL").'")
+                var x = window.confirm("'.$g_l10n->get("ECA_SHURE_YOU_WHANT_TO_DELETE_ALL").'")
             }
             if (x || t)
             {
@@ -754,13 +754,13 @@ $javascript = '
             if($("#" + divLayer).css("display") == "none")
             {
                 $("#" + divLayer).show("slow");
-                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">'.$l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>";
+                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">'.$g_l10n->get("ECA_NO_MORE_RECIPIENTS").'<\/a>";
                 addRecipient();
             }
             else
             {
                 $("#" + divLayer).hide("slow");
-                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">'.$l10n->get("ECA_MORE_RECIPIENTS").'<\/a>";
+                document.getElementById(divMenu).innerHTML = "<a href=\"javascript:showHideMoreRecipient(divLayer,divMenu);\">'.$g_l10n->get("ECA_MORE_RECIPIENTS").'<\/a>";
                 delAllRecipients(\'ja\');
             }
         }
@@ -769,12 +769,12 @@ $javascript = '
             if($("#" + divLayerSetting).css("display") == "none")
             {
                 $("#" + divLayerSetting).show("slow");
-                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">'.$l10n->get("ECA_BLEND_OUT_SETTINGS").'<\/a>";
+                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">'.$g_l10n->get("ECA_BLEND_OUT_SETTINGS").'<\/a>";
             }
             else
             {
                 $("#" + divLayerSetting).hide("slow");
-                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">'.$l10n->get("ECA_BLEND_IN_SETTINGS").'<\/a>";
+                document.getElementById(divMenuSetting).innerHTML = "<a href=\"javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');\">'.$g_l10n->get("ECA_BLEND_IN_SETTINGS").'<\/a>";
             }
         }
         function getExtern()
@@ -784,7 +784,7 @@ $javascript = '
                 document.getElementById(basedropdiv).style.display = \'block\';
                 document.getElementById(dropdiv).style.display = \'block\';
                 document.getElementById(externdiv).style.display = \'none\';
-                document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recipient]" value="< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >" /><input type="hidden" name="ecard[name_recipient]"  value="< '.$l10n->get("ECA_RECIPIENT_NAME").' >" />\';
+                document.getElementById(externdiv).innerHTML = \'<input type="hidden" name="ecard[email_recipient]" value="< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >" /><input type="hidden" name="ecard[name_recipient]"  value="< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >" />\';
                 getMenu();
                 document.getElementById(switchdiv).innerHTML = \'&nbsp;\';
             }
@@ -796,7 +796,7 @@ $javascript = '
                 document.getElementById(externdiv).style.display = \'block\';
                 document.getElementById(basedropdiv).innerHTML  = "&nbsp;";
                 document.getElementById(dropdiv).innerHTML  = "&nbsp;";
-                document.getElementById(switchdiv).innerHTML = \'<a href="javascript:getExtern();">'.$l10n->get("ECA_INTERNAL_RECIPIENT").'<\/a>\';
+                document.getElementById(switchdiv).innerHTML = \'<a href="javascript:getExtern();">'.$g_l10n->get("ECA_INTERNAL_RECIPIENT").'<\/a>\';
             }
 
             if(document.getElementById(\'wrong\'))
@@ -824,7 +824,7 @@ $javascript = '
             }
             if (wert < 0)
             {
-                alert("'.$l10n->get("ECA_MESSAGE_HAS_TO_BE_ONLY_XCHARS_LONG",$var1="\" + max + \"").'");
+                alert("'.$g_l10n->get("ECA_MESSAGE_HAS_TO_BE_ONLY_XCHARS_LONG",$var1="\" + max + \"").'");
                 wert = 0;
                 document.getElementById(ecardformid)["ecard[message]"].value = document.getElementById(ecardformid)["ecard[message]"].value.substring(0,max);
                 document.getElementById(counterdiv).innerHTML = \'<b>\' + wert + \'<\/b>\';
@@ -897,7 +897,7 @@ echo '
                     background-color: #FFFFE0;
                     padding-left: 28px;
                     text-align:left;">
-         '.$l10n->get("ECA_GREETING_CARD_NEED_JAVASCRIPT").'
+         '.$g_l10n->get("ECA_GREETING_CARD_NEED_JAVASCRIPT").'
          </div>
     </div>
 </noscript>';
@@ -906,7 +906,7 @@ if (empty($submit_action))
     // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
     echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($g_preferences['photo_show_height']+37).'&amp;width='.$g_preferences['photo_show_width'].'"><img 
             src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
-            class="imageFrame" alt="'.$l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
+            class="imageFrame" alt="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
           </a>';
 
     if ($error_msg != '')
@@ -914,7 +914,7 @@ if (empty($submit_action))
         $g_message->show($error_msg);
     }
 
-    echo '<form id="ecard_form" action="" onsubmit="return tb_sendform(this,\''.$l10n->get("ECA_GREETING_CARD_PREVIEW").'\')" method="post">
+    echo '<form id="ecard_form" action="" onsubmit="return tb_sendform(this,\''.$g_l10n->get("ECA_GREETING_CARD_PREVIEW").'\')" method="post">
             <input type="hidden" name="ecard[image_name]" value="'; if (! empty($ecard["image_name"])) echo $ecard["image_name"]; echo'" />
             <input type="hidden" name="submit_action" value="" />
             <ul class="formFieldList">
@@ -924,12 +924,12 @@ if (empty($submit_action))
             <li>
                 <dl>
                     <dt>
-                        <label>'.$l10n->get("ECA_TO").':</label>
+                        <label>'.$g_l10n->get("ECA_TO").':</label>
                         ';
                         if($g_preferences['enable_ecard_cc_recipients'])
                         {
                             echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
-                            <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$l10n->get("ECA_MORE_RECIPIENTS").'</a>
+                            <a href="javascript:showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$g_l10n->get("ECA_MORE_RECIPIENTS").'</a>
                             </div>';
                         }
                        echo'
@@ -966,18 +966,18 @@ if (empty($submit_action))
                 <div id="moreRecipient" style="display:none;">
                 <hr />
                     <dl>
-                        <dt>'.$l10n->get("ECA_MORE_RECIPIENTS").':</dt>
+                        <dt>'.$g_l10n->get("ECA_MORE_RECIPIENTS").':</dt>
                         <dd>
                             <table summary="TableccContainer" border="0" >
                                 <tr>
-                                    <td style="width:150px; text-align: left;">'.$l10n->get("ECA_NAME").'</td>
-                                    <td style="width:200px; padding-left:14px; text-align: left;">'.$l10n->get("ECA_EMAIL").'</td>
+                                    <td style="width:150px; text-align: left;">'.$g_l10n->get("ECA_NAME").'</td>
+                                    <td style="width:200px; padding-left:14px; text-align: left;">'.$g_l10n->get("ECA_EMAIL").'</td>
                                 </tr>
                             </table>
                             <div id="ccrecipientContainer" style="width:490px; border:0px; text-align: left;"></div>
                             <table summary="TableCCRecipientSettings" border="0">
                                     <tr>
-                                        <td style="text-align: left;"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="'.$l10n->get("ECA_ADD_RECIPIENTS").'" /></a><a href="javascript:addRecipient()">'.$l10n->get("ECA_ADD_RECIPIENTS").'</a></span></td>
+                                        <td style="text-align: left;"><span class="iconTextLink"><a href="javascript:addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get("ECA_ADD_RECIPIENTS").'" /></a><a href="javascript:addRecipient()">'.$g_l10n->get("ECA_ADD_RECIPIENTS").'</a></span></td>
                                     </tr>
                             </table>
                         </dd>
@@ -989,7 +989,7 @@ if (empty($submit_action))
             </li>
             <li>
                 <dl>
-                    <dt><label>'.$l10n->get("ECA_SENDER").':</label></dt>
+                    <dt><label>'.$g_l10n->get("ECA_SENDER").':</label></dt>
                     <dd>
                       <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
                         if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
@@ -1006,7 +1006,7 @@ if (empty($submit_action))
             </li>
              <li>
                 <dl>
-                    <dt><label>'.$l10n->get("ECA_EMAIL").':</label></dt>
+                    <dt><label>'.$g_l10n->get("ECA_EMAIL").':</label></dt>
                     <dd>
                        <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
                         if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
@@ -1032,10 +1032,10 @@ if (empty($submit_action))
             <li>
                 <dl>
                     <dt>
-                        <label>'.$l10n->get("ECA_MESSAGE").':</label>';
+                        <label>'.$g_l10n->get("ECA_MESSAGE").':</label>';
                         if($g_preferences['enable_ecard_text_length'])
                         {
-                            echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">'.$l10n->get("ECA_STILL_XCHARS_AVAILABLE",$var1="&nbsp;<div id=\"counter\" style=\"border:0px; display:inline;\"><b>".$g_preferences['ecard_text_length']."</b></div>&nbsp;").'</div>';
+                            echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">'.$g_l10n->get("ECA_STILL_XCHARS_AVAILABLE",$var1="&nbsp;<div id=\"counter\" style=\"border:0px; display:inline;\"><b>".$g_preferences['ecard_text_length']."</b></div>&nbsp;").'</div>';
                         }
                         echo '<div id="getmoreSettings" style="';
                         if($g_preferences['enable_ecard_text_length'])
@@ -1047,7 +1047,7 @@ if (empty($submit_action))
                             echo 'padding-top:155px;';
                         }
                         echo '  height:1px;">
-                            <a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">'.$l10n->get("ECA_BLEND_IN_SETTINGS").'</a>
+                            <a href="javascript:showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">'.$g_l10n->get("ECA_BLEND_IN_SETTINGS").'</a>
                         </div>
                     </dt>
                     <dd>
@@ -1071,15 +1071,15 @@ if (empty($submit_action))
                 <hr />
                 <dl>
                     <dt>
-                        <label>'.$l10n->get("ECA_SETTINGS").':</label>
+                        <label>'.$g_l10n->get("ECA_SETTINGS").':</label>
                     </dt>
                     <dd>';
                         $first_value_array = array();
                         echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:350px;"  border="0px">
                             <tr>
-                              <td>'.$l10n->get("ECA_TEMPLATE").':</td>
-                              <td>'.$l10n->get("ECA_FONT").':</td>
-                              <td>'.$l10n->get("ECA_FONT_SIZE").':</td>
+                              <td>'.$g_l10n->get("ECA_TEMPLATE").':</td>
+                              <td>'.$g_l10n->get("ECA_FONT").':</td>
+                              <td>'.$g_l10n->get("ECA_FONT_SIZE").':</td>
                             </tr>
                             <tr>
                                 <td>';
@@ -1093,8 +1093,8 @@ if (empty($submit_action))
                                 echo  '</td>
                             </tr>
                             <tr>
-                              <td>'.$l10n->get("ECA_FONT_COLOR").':</td>
-                              <td style="padding-left:40px;">'.$l10n->get("ECA_FONT_STYLE").':</td>
+                              <td>'.$g_l10n->get("ECA_FONT_COLOR").':</td>
+                              <td style="padding-left:40px;">'.$g_l10n->get("ECA_FONT_STYLE").':</td>
                               <td></td>
                             </tr>
                             <tr>
@@ -1102,8 +1102,8 @@ if (empty($submit_action))
                                     array_push($first_value_array,array($funcClass->getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
                                 echo '</td>
                                 <td colspan="2" style="padding-left:40px;">
-                                    <b>'.$l10n->get("ECA_BOLD").': </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />
-                                    <i>'.$l10n->get("ECA_ITALIC").': </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />
+                                    <b>'.$g_l10n->get("ECA_BOLD").': </b><input name="Bold" value="bold" onclick="javascript: getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />
+                                    <i>'.$g_l10n->get("ECA_ITALIC").': </i><input name="Italic" value="italic" onclick="javascript: getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />
                                 </td>
                             </tr>
                         </table>';
@@ -1117,10 +1117,10 @@ if (empty($submit_action))
         </ul>
         <hr />
         <div class="formSubmit">
-            <button onclick="javascript:makeThickBoxPreview();" type="submit" value="'.$l10n->get("ECA_PREVIEW").'"><img 
-            	src="'. THEME_PATH. '/icons/eye.png" alt="'.$l10n->get("ECA_PREVIEW").'" />&nbsp;'.$l10n->get("ECA_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button onclick="javascript:sendEcard();" type="button" value="'.$l10n->get("ECA_SEND").'"><img 
-            	src="'. THEME_PATH. '/icons/email.png" alt="'.$l10n->get("ECA_SEND").'" />&nbsp;'.$l10n->get("ECA_SEND").'</button>
+            <button onclick="javascript:makeThickBoxPreview();" type="submit" value="'.$g_l10n->get("ECA_PREVIEW").'"><img 
+            	src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get("ECA_PREVIEW").'" />&nbsp;'.$g_l10n->get("ECA_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onclick="javascript:sendEcard();" type="button" value="'.$g_l10n->get("ECA_SEND").'"><img 
+            	src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get("ECA_SEND").'" />&nbsp;'.$g_l10n->get("ECA_SEND").'</button>
         </div>
     </form>';
 }
@@ -1136,14 +1136,14 @@ else
         padding:20px 0px 5px 5px;
         background-color: #FFFFE0;
         vertical-align:middle;">
-            <span style="font-size:16px; font-weight:bold">'.$l10n->get("ECA_GREETING_CARD_SUCCESSFULLY_SEND").'</span>
+            <span style="font-size:16px; font-weight:bold">'.$g_l10n->get("ECA_GREETING_CARD_SUCCESSFULLY_SEND").'</span>
         </dv>
     </div>
     <br /><br />
 
     <table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" style="text-align: center;">
     <tr>
-        <td style="text-align: left;" colspan="2"><b>'.$l10n->get("ECA_SENDER").':</b></td>
+        <td style="text-align: left;" colspan="2"><b>'.$g_l10n->get("ECA_SENDER").':</b></td>
     </tr>
     <tr>
         <td style="padding-right:5px; text-align: left;">'. $ecard['name_sender'].',</td><td style="text-align: left;">'.$ecard['email_sender'].'</td>
@@ -1152,7 +1152,7 @@ else
         <td style="text-align: left;">&nbsp;</td>
     </tr>
     <tr>
-        <td style="text-align: left;" colspan="2"><b>'.$l10n->get("ECA_RECIPIENT").':</b></td>
+        <td style="text-align: left;" colspan="2"><b>'.$g_l10n->get("ECA_RECIPIENT").':</b></td>
     </tr><tr>';
     foreach($email_versand_liste as $item)
     {
@@ -1175,7 +1175,7 @@ else
     $Liste = $funcClass->getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
     if(count($Liste)>0)
     {
-        echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>'.$l10n->get("ECA_MORE_RECIPIENTS").':</b></td></tr><tr>';
+        echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2"><b>'.$g_l10n->get("ECA_MORE_RECIPIENTS").':</b></td></tr><tr>';
         foreach($Liste as $item)
         {
             $i=0;
@@ -1205,8 +1205,8 @@ if($photo_album->getValue('pho_id') > 0)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'.THEME_PATH.'/icons/back.png" alt="'.$l10n->get("SYS_BACK").'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$l10n->get("SYS_BACK").'</a>
+                src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get("SYS_BACK").'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get("SYS_BACK").'</a>
             </span>
         </li>
     </ul>';

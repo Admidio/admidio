@@ -19,19 +19,19 @@ require("../../system/login_valid.php");
 // nur Webmaster duerfen ein Backup starten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show("norights");
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 $backupabsolutepath = SERVER_PATH. "/adm_my_files/backup/"; // make sure to include trailing slash
 
 if(isset($_GET['job']) && $_GET['job'] != 'rename' && $_GET['job'] != 'delete')
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(!isset($_GET['file_id']))
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['job']) && $_GET['job']=='delete')

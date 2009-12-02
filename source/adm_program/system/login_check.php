@@ -48,12 +48,12 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
 
 if(strlen($loginname) == 0)
 {
-    $g_message->show('feld', 'Benutzername');
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Benutzername'));
 }
 
 if(strlen($password) == 0)
 {
-    $g_message->show('feld', 'Passwort');
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Passwort'));
 }
 $password = md5($password);
 
@@ -145,7 +145,7 @@ if ($user_found >= 1)
         // bei einer Beta-Version noch einen Hinweis ausgeben !
         if(BETA_VERSION > 0 && $g_debug == false)
         {
-            $login_message = 'beta_version';
+            $login_message = 'SYS_PHR_BETA_VERSION';
         }
 
         // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
@@ -183,7 +183,7 @@ if ($user_found >= 1)
         }
         else
         {
-            $g_message->show('password_unknown');
+            $g_message->show($g_l10n->get('SYS_PHR_PASSWORD_UNKNOWN'));
         }
     }
 }

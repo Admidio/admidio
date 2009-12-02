@@ -25,9 +25,9 @@ if ($g_valid_login && isset($_GET['base']) =="1")
     echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:getMenuRecepientName()">';
     if (isset($form_values['rol_id']) == "")
     {
-        echo '<option value="" selected="selected" disabled="disabled">- '.$l10n->get("ECA_PLEASE_CHOOSE").' -</option>';
-        echo '<optgroup label="'.$l10n->get("ECA_OTHER_RECIPIENT").'">';
-        echo '<option value="externMail" >'.$l10n->get("ECA_EXTERNAL_RECIPIENT").'</option>';
+        echo '<option value="" selected="selected" disabled="disabled">- '.$g_l10n->get("ECA_PLEASE_CHOOSE").' -</option>';
+        echo '<optgroup label="'.$g_l10n->get("ECA_OTHER_RECIPIENT").'">';
+        echo '<option value="externMail" >'.$g_l10n->get("ECA_EXTERNAL_RECIPIENT").'</option>';
     }
     
     if ($g_valid_login)
@@ -83,7 +83,7 @@ if ($g_valid_login && isset($_GET['base']) =="1")
     <span class="mandatoryFieldMarker" title="Pflichtfeld" >*</span>
     <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rolle_ecard&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()"
-        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$l10n->get("SYS_HELP").'" title="" /></a>';                  
+        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get("SYS_HELP").'" title="" /></a>';                  
 }
 // Wenn die Rolle ausgewaehlt worden ist wird dieses Menue gezeichnet
 // Es werden alle Mitglieder in dieser Rolle aufgelistet die eine gueltuige 
@@ -117,7 +117,7 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
         $menubody     = '</select>';
         if(mysql_num_rows($result)>0)
         {
-            $menudata     = '<option value="Rolle_'.$_GET['rol_id'].'" style="font-weight:bold;"><b>'.$l10n->get("ECA_TO_ALL_MEMBERS_FROM_A_ROLE").'</b></option>';
+            $menudata     = '<option value="Rolle_'.$_GET['rol_id'].'" style="font-weight:bold;"><b>'.$g_l10n->get("ECA_TO_ALL_MEMBERS_FROM_A_ROLE").'</b></option>';
         }
         while ($row = $g_db->fetch_object($result))
         {
@@ -125,16 +125,16 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
         }
         if (!empty($menudata))
         {
-            echo $menuheader.'<option value="bw" selected="selected" disabled="disabled">- '.$l10n->get("ECA_PLEASE_CHOOSE").' -</option>'.$menudata.$menubody;
+            echo $menuheader.'<option value="bw" selected="selected" disabled="disabled">- '.$g_l10n->get("ECA_PLEASE_CHOOSE").' -</option>'.$menudata.$menubody;
         }
         else
         {
-            echo '<div style="width:340px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:    1px;  border:       1px solid #ccc;padding:          5px; background-color: #FFFFE0; padding-left:     28px;\">'.$l10n->get("ECA_NO_USER_WITH_VALID_EMAIL").'</div>';
+            echo '<div style="width:340px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:    1px;  border:       1px solid #ccc;padding:          5px; background-color: #FFFFE0; padding-left:     28px;\">'.$g_l10n->get("ECA_NO_USER_WITH_VALID_EMAIL").'</div>';
         }
     }
     else
     {
-        echo '<div style="width:340px; background-image: url(\''.THEME_PATH.'/icons/error.png\');background-repeat: no-repeat; background-position:5px 5px;margin-top:1px;  border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left:28px;\">'.$l10n->get("ECA_PLEASE_CHOOSE_VALID_ROLE").'</div>';
+        echo '<div style="width:340px; background-image: url(\''.THEME_PATH.'/icons/error.png\');background-repeat: no-repeat; background-position:5px 5px;margin-top:1px;  border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left:28px;\">'.$g_l10n->get("ECA_PLEASE_CHOOSE_VALID_ROLE").'</div>';
     }
 }
 // Wenn ein User ausgewaehlt worden ist werden zwei input Boxen ausgegeben
@@ -180,8 +180,8 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 // Namen und Empfaenger geboten
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-    echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< '.$l10n->get("ECA_RECIPIENT_NAME").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-    echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< '.$l10n->get("ECA_RECIPIENT_EMAIL").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+    echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+    echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 
 ?>

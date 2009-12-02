@@ -23,7 +23,7 @@ require_once('../../system/classes/table_guestbook.php');
 if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
@@ -37,7 +37,7 @@ if (array_key_exists('start', $_GET))
 {
     if (is_numeric($_GET['start']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else
@@ -58,7 +58,7 @@ if (array_key_exists('id', $_GET))
 {
     if (is_numeric($_GET['id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else

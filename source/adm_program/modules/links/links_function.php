@@ -27,13 +27,13 @@ require('../../system/classes/table_weblink.php');
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editWeblinksRight())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -41,7 +41,7 @@ if (array_key_exists('lnk_id', $_GET))
 {
     if (is_numeric($_GET['lnk_id']) == false)
     {
-         $g_message->show('invalid');
+         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else
@@ -54,7 +54,7 @@ if (array_key_exists('mode', $_GET))
 {
     if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 
@@ -76,15 +76,15 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
 {
     if(strlen(strStripTags($_POST['lnk_name'])) == 0)
     {
-        $g_message->show('feld', 'Linkname');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Linkname'));
     }
     if(strlen(strStripTags($_POST['lnk_url'])) == 0)
     {
-        $g_message->show('feld', 'Linkadresse');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Linkadresse'));
     }
     if(strlen($_POST['lnk_cat_id']) == 0)
     {
-        $g_message->show('feld', 'Kategorie');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kategorie'));
     }
    
     // POST Variablen in das Ankuendigungs-Objekt schreiben
@@ -101,7 +101,7 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
 
     if($return_code < 0)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     unset($_SESSION['links_request']);
@@ -123,7 +123,7 @@ elseif ($_GET['mode'] == 2 && $_GET['lnk_id'] > 0)
 else
 {
     // Falls der mode unbekannt ist, ist natürlich Ende...
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 ?>

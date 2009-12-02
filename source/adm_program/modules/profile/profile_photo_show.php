@@ -28,7 +28,7 @@ $picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 
 if(  (isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)|| isset($_GET['usr_id']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 else
 {
@@ -43,7 +43,7 @@ if(isset($_GET['new_photo']) && $_GET['new_photo'] == 1)
 //Testen ob Recht besteht Profil einzusehn
 if(!$g_current_user->viewProfile($req_usr_id))
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 //Foto aus adm_my_files

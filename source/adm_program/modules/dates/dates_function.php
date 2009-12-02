@@ -67,7 +67,7 @@ $role_attributes = array(
 if ($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 if($_GET['mode'] != 4 || $g_preferences['enable_dates_module'] == 2)
@@ -79,7 +79,7 @@ if($_GET['mode'] != 4 || $g_preferences['enable_dates_module'] == 2)
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!$g_current_user->editDates() && $_GET['mode'] != 4)
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -91,7 +91,7 @@ if(isset($_GET['dat_id']))
 {
     if(is_numeric($_GET['dat_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_dat_id = $_GET['dat_id'];
 }
@@ -99,7 +99,7 @@ if(isset($_GET['dat_id']))
 if(is_numeric($_GET['mode']) == false
     || $_GET['mode'] < 1 || $_GET['mode'] > 5)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Terminobjekt anlegen
@@ -112,7 +112,7 @@ if($req_dat_id > 0)
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false )
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
@@ -131,31 +131,31 @@ if($_GET['mode'] == 1)
     
     if(strlen($_POST['dat_headline']) == 0)
     {
-        $g_message->show('feld', 'Überschrift');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Überschrift'));
     }
     if(strlen($_POST['dat_description']) == 0)
     {
-        $g_message->show('feld', 'Beschreibung');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Beschreibung'));
     }
     if(strlen($_POST['date_from']) == 0)
     {
-        $g_message->show('feld', 'Datum Beginn');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datum Beginn'));
     }
     if(strlen($_POST['date_to']) == 0 && $_POST['dat_repeat_type'] == 0)
     {
-        $g_message->show('feld', 'Datum Ende');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datum Ende'));
     }
     if(strlen($_POST['time_from']) == 0 && isset($_POST['dat_all_day']) == false)
     {
-        $g_message->show('feld', 'Uhrzeit Beginn');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Uhrzeit Beginn'));
     }
     if(strlen($_POST['time_to']) == 0 && isset($_POST['dat_all_day']) == false)
     {
-        $g_message->show('feld', 'Uhrzeit Ende');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Uhrzeit Ende'));
     }
     if(strlen($_POST['dat_cat_id']) == 0)
     {
-        $g_message->show('feld', 'Kalender');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kalender'));
     }
 
     if(isset($_POST['dat_all_day']))
@@ -167,7 +167,7 @@ if($_GET['mode'] == 1)
     
     if(!is_array($_POST['dat_visible_for']))
     {
-        $g_message->show('feld','Sichtbarkeit');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY','Sichtbarkeit'));
     }
 
     // Datum und Uhrzeit auf Gueltigkeit pruefen
@@ -311,7 +311,7 @@ if($_GET['mode'] == 1)
         else    //nichts ausgewählt
         {
             $date->delete();
-            $g_message->show('feld', 'Sichtbarkeit');
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Sichtbarkeit'));
         }
         
         // Rollenobjekt anlegen, wenn Anmeldung möglich und kein Bearbeiten-Modus
@@ -337,7 +337,7 @@ if($_GET['mode'] == 1)
             if($return_code < 0 || $return_code2 < 0)
             {
                 $date->delete();
-                $g_message->show('norights');
+                $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
             }
             
             // dat_rol_id anpassen (Referenz zwischen date und role)
@@ -346,7 +346,7 @@ if($_GET['mode'] == 1)
             if($return_code < 0)
             {
                 $role->delete();
-                $g_message->show('norights');
+                $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
             }
             
             //Termin-Ersteller als Member und Leader eintragen

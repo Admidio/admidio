@@ -16,7 +16,7 @@ require_once('../../system/classes/table_text.php');
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // der Installationsordner darf aus Sicherheitsgruenden nicht existieren

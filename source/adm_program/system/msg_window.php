@@ -27,7 +27,7 @@ if(isset($_GET['err_code']) && strlen($_GET['err_code']) > 0)
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['err_text']))

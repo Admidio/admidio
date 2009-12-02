@@ -10,45 +10,10 @@
  *****************************************************************************/
 
 $message_text = array(
-'anmeldung' =>
-    'Deine Daten wurden gespeichert.<br /><br />
-    Du kannst dich noch nicht einloggen.<br />
-    Sobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.',
-
-'assign_login' =>
-    'Die Logindaten wurden erfolgreich zugeordnet.',
-
-'assign_login_mail' =>
-    'Die Logindaten wurden erfolgreich zugeordnet und der
-    Benutzer ist darüber per E-Mail benachrichtigt worden.',
-
-'beta_version' =>
-    'Dies ist eine Beta-Version von Admidio.<br /><br />
-    Sie kann zu Stabilitätsproblemen und Datenverlust führen und
-    sollte deshalb nur in einer Testumgebung genutzt werden !',
-
-'category_exist' =>
-    'Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.',
-
-'category_not_delete' =>
-    'Sie können nicht alle Kategorien eines Moduls löschen. 
-    Erstellen Sie vorher eine neue Kategorie für dieses Modul.',
-
-'database_invalid' =>
-    'Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.<br /><br />
-    Wende dich bitte an den <a href="mailto:%VAR3%">Webmaster</a> dieser Webseite.',
 
 'date_invalid' =>
     'Es wurde kein gültiges Datum in das Feld %VAR1% eingegeben.<br /><br />
     Das Format des Datums sollte <i>dd.mm.yyyy</i> sein.',
-
-'delete' =>
-    'Die Daten wurden gelöscht!',
-
-'delete_category' =>
-    'Soll die Kategorie %VAR1% wirklich gelöscht werden ?<br /><br />
-    Es werden alle Daten, die dieser Kategorie zugeordnet sind
-    (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.',
 
 'delete_role' =>
     'Willst du die Rolle %VAR1% wirklich löschen?<br /><br />
@@ -76,8 +41,6 @@ $message_text = array(
 'field_empty_area' =>
     'Das Feld %VAR1% im Bereich %VAR2% ist nicht gefüllt.',
 
-'feld' =>
-    'Das Feld %VAR1% ist nicht gefüllt.',
 
 'felder' =>
     'Es sind nicht alle Felder gefüllt worden.',
@@ -88,9 +51,6 @@ $message_text = array(
 'installFolderExists' =>
     'Das Installationsverzeichnis <b>adm_install</b> existiert noch auf dem Server.
      Aus Sicherheitsgründen muss dieses gelöscht werden!',
-
-'invalid' =>
-    'Ungültiger Seitenaufruf!',
 
 'login_failed' =>
     'Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem
@@ -114,9 +74,6 @@ $message_text = array(
     'Bei der Verarbeitung der Bedingungen ist ein Fehler aufgetreten.<br /><br />
     Prüfe bitte, ob die Syntax bei allen Bedingungen korrekt ist.',
 
-'module_disabled' =>
-    'Dieses Modul ist nicht freigegeben.',
-
 'missing_orga' =>
     'Die Organisation aus der config.php konnte in der Datenbank nicht gefunden werden.',
 
@@ -133,8 +90,6 @@ $message_text = array(
 'nodata' =>
     'Es sind keine Daten vorhanden!',
 
-'norights' =>
-    'Du hast keine Rechte, diese Aktion auszuführen',
 
 'nomembers' =>
     'Es sind keine Anmeldungen vorhanden.',
@@ -177,9 +132,6 @@ $message_text = array(
 
 'role_visible' =>
     'Die Rolle %VAR1% wurde auf <b>sichtbar</b> gesetzt.',
-
-'save' =>
-    'Deine Daten wurden erfolgreich gespeichert.',
     
 'saveDate' =>
     'Deine Daten wurden erfolgreich gespeichert und du wurdest zum gewünschten Termin angemeldet.<br /><br />
@@ -205,12 +157,6 @@ $message_text = array(
 
 'max_members_roles_change' =>
     'Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von dir eingegebene Begrenzung.',
-
-'write_access' =>
-    'Der Ordner %VAR1% kann nicht mit Schreibrechten angelegt werden. Du musst dich an den
-    <a href="mailto:%VAR2%">Webmaster</a> wenden, damit dieser die 
-    <acronym title="über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen.">Schreibrechte</acronym>
-    setzen kann.',
 
 'quota_exceeded' =>
     'Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (<b>Kontigentierung</b>) sein wie Teilnehmer 
@@ -307,22 +253,6 @@ $message_text = array(
  //Ende Fehlermeldungen Profilfoto
 
 // Passwort
-'password_length' =>
-    'Das Passwort muss aus mindestens 6 Zeichen bestehen.',
-
-'passwords_not_equal' =>
-    'Das Passwort stimmt nicht mit der Wiederholung überein.',
-
-'password_unknown' =>
-    'Du hast ein falsches Passwort eingegeben und
-    konntest deshalb nicht angemeldet werden.<br /><br />
-    Überprüf bitte dein Passwort und gib dieses dann erneut ein.',
-
-'password_old_wrong' =>
-    'Das alte Passwort ist falsch.',
-
-'password_changed' =>
-    'Das Passwort wurde erfolgreich geändert.',
 
 'lost_password_send' =>
     'Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!',
@@ -412,9 +342,6 @@ $message_text = array(
 'invalid_file_extension' =>
     'Dateien dieses Dateityps sind auf dem Server nicht erlaubt.',
 
-'file_not_exist' =>
-    'Die ausgewählte Datei existiert nicht auf dem Server.',
-
 'folder_not_exist' =>
     'Der aufgerufene Ordner existiert nicht.',
 
@@ -471,11 +398,6 @@ $message_text = array(
 
 
 //Fehlermeldungen Mailmodul
-'mail_send' =>
-    'Die E-Mail wurde erfolgreich an %VAR1% versendet.',
-
-'mail_not_send' =>
-    'Die E-Mail konnte leider nicht an %VAR1% gesendet werden.',
 
 'attachment' =>
     'Dein Dateinanhang konnte nicht hochgeladen werden.<br />
@@ -520,8 +442,5 @@ $message_text = array(
     'Die Servereinstellungen lassen leider keine Dateiuploads zu.',
 //Fehlermeldungen Servereinstellungen
 
-'default' =>
-    'Es ist ein Fehler aufgetreten.<br /><br />
-    Der gesuchte Hinweis %VAR1% konnte nicht gefunden werden!'
  )
 ?>

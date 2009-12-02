@@ -30,7 +30,7 @@ $err_text = "";
 // nur berechtigte User duerfen Funktionen aufrufen
 if(!$g_current_user->editUsers())
 {
-    $g_message->show("norights");
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -38,12 +38,12 @@ if(!$g_current_user->editUsers())
 if(is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 6)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
@@ -116,7 +116,7 @@ elseif($_GET["mode"] == 2)
     if($g_current_user->isWebmaster() == false
     && $user->isWebmaster()           == true)
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     // User muss zur aktuellen Orga dazugehoeren
@@ -124,7 +124,7 @@ elseif($_GET["mode"] == 2)
     if($this_orga == false
     || $g_current_user->getValue("usr_id") == $_GET['usr_id'])
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     
     $member = new TableMembers($g_db);
@@ -157,7 +157,7 @@ elseif($_GET["mode"] == 3)
     // nur Webmaster duerfen dies
     if($g_current_user->isWebmaster() == false)
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     
     // User darf in keiner anderen Orga aktiv sein
@@ -165,7 +165,7 @@ elseif($_GET["mode"] == 3)
     if($other_orga > 0
     || $g_current_user->getValue("usr_id") == $_GET['usr_id'])
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
@@ -177,7 +177,7 @@ elseif($_GET["mode"] == 3)
     }
     else
     {
-        $err_code = "delete";
+        $phrase = $g_l10n->get('SYS_PHR_DELETE');
     }
     
     // User aus der Admidio Datenbank loeschen
@@ -192,30 +192,30 @@ elseif($_GET["mode"] == 4)
     || $g_preferences['enable_system_mails'] != 1
     || $this_orga == false)
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     if($g_preferences['enable_system_mails'] == 1)
     {
         // neues Passwort generieren und abspeichern
         $password = substr(md5(time()), 0, 8);
-        $user->setValue("usr_password", $password);
+        $user->setValue('usr_password', $password);
         $user->save();
 
         // Mail an den User mit den Loginaten schicken
         $sysmail = new SystemMail($g_db);
-        $sysmail->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+        $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
         $sysmail->setVariable(1, $user->real_password);
-        if($sysmail->sendSystemMail("SYSMAIL_NEW_PASSWORD", $user) == true)
+        if($sysmail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user) == true)
         {
-            $err_code = "mail_send";
-            $err_text = $user->getValue("E-Mail");
+            $phrase = $g_l10n->get('SYS_PHR_EMAIL_SEND', $user->getValue('E-Mail'));
         }
         else
         {
-            $err_code = "mail_not_send";
-            $err_text = $user->getValue("E-Mail");
+            $phrase = $g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('E-Mail'));
         }
+        $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+        $g_message->show($phrase);
     }
 }
 elseif($_GET["mode"] == 5)
@@ -253,5 +253,5 @@ elseif($_GET["mode"] == 6)
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($err_code, $err_text);
+$g_message->show($phrase);
 ?>

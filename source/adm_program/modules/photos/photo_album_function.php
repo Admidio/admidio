@@ -25,7 +25,7 @@ require_once('../../system/classes/table_photos.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -38,12 +38,12 @@ if(!$g_current_user->editPhotoRight())
 
 if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false && $_GET['pho_id']!=NULL)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['job']) && $_GET['job'] != 'new' && $_GET['job'] != 'delete' && $_GET['job'] != 'change')
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Gepostete Variablen in Session speichern
@@ -62,7 +62,7 @@ if($_GET['job'] != 'new')
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $g_organization)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
@@ -83,7 +83,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Album
     if(strlen($_POST['pho_name']) == 0)
     {
-        $g_message->show('feld', 'Album');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Album'));
     }
     
     //Beginn
@@ -100,7 +100,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     }
     else
     {
-        $g_message->show('feld', 'Beginn');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Beginn'));
     }    
     
     //Ende
@@ -154,10 +154,8 @@ if(isset($_POST['submit']) && $_POST['submit'])
             $photo_album->delete();
             
             // der entsprechende Ordner konnte nicht angelegt werden
-            $g_message->addVariableContent($error['text'], 1);
-            $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $g_message->show('write_access');
+            $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $error['text'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
         
         $pho_id = $photo_album->getValue('pho_id');
@@ -179,10 +177,8 @@ if(isset($_POST['submit']) && $_POST['submit'])
         // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
         if($b_return == false)
         {
-            $g_message->addVariableContent($newFolder, 1);
-            $g_message->addVariableContent($g_preferences['email_administrator'], 2, false);
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $g_message->show('write_access');
+            $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
 
         // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen

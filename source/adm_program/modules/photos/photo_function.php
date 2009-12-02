@@ -29,7 +29,7 @@ if(isset($_GET['job']))
     if ($g_preferences['enable_photo_module'] == 0)
     {
         // das Modul ist deaktiviert
-        $g_message->show('module_disabled');
+        $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
     }
 
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -57,17 +57,17 @@ else
 if(isset($_GET['job']) == false 
 || ($_GET['job'] != 'rotate' && $_GET['job'] != 'delete_request' && $_GET['job'] != 'do_delete'))
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['direction']) && $_GET['direction'] != 'left' && $_GET['direction'] != 'right')
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['job']) && (isset($_GET['bild']) == false || is_numeric($_GET['bild']) == false) )
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 

@@ -29,7 +29,12 @@ if($g_valid_login == false)
 
 $new_user = 0;
 $usr_id   = 0;
-$_SESSION['login_rol_id']=$_GET['date']; //Rollen_ID
+
+if(array_key_exists('dat_rol_id', $_GET) && is_numeric($_GET['dat_rol_id']))
+{
+    $_SESSION['login_rol_id'] = $_GET['dat_rol_id']; //Rollen_ID
+}
+
 if(array_key_exists('new_user', $_GET) && is_numeric($_GET['new_user']))
 {
     $new_user = $_GET['new_user'];
@@ -40,7 +45,7 @@ if(isset($_GET['user_id']) && ($new_user == 0 || $new_user == 3))
 {
     if(is_numeric($_GET['user_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $usr_id  = $_GET['user_id'];
 }
@@ -52,7 +57,7 @@ switch($new_user)
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
         if($g_current_user->editProfile($usr_id) == false)
         {
-            $g_message->show('norights');
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
         break;
 
@@ -60,7 +65,7 @@ switch($new_user)
         // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
         if($g_current_user->editUsers() == false)
         {
-            $g_message->show('norights');
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
         break;
 
@@ -69,7 +74,7 @@ switch($new_user)
         // Registrierung deaktiviert, also auch diesen Modus sperren
         if($g_preferences['registration_mode'] == 0)
         {
-            $g_message->show('module_disabled');
+            $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
         }
         break;
 }

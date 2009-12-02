@@ -77,7 +77,6 @@ if(get_magic_quotes_gpc() == false)
 // Globale Variablen
 $g_valid_login = false;
 $g_layout      = array();
-$g_message     = new Message();
 
  // Verbindung zu Datenbank herstellen
 $g_db = new MySqlDB();
@@ -160,8 +159,11 @@ else
 }
 
 // Sprachdateien einlesen
-$language_path = SERVER_PATH. '/adm_program/languages/'.$g_preferences['system_language'].'/system.xml';
-$l10n = new Language($language_path, 0, true);
+$language_path = SERVER_PATH. '/adm_program/languages/'.$g_preferences['system_language'].'.xml';
+$g_l10n = new Language($language_path, 0, true);
+
+// Nachrichtenklasse anlegen
+$g_message = new Message();
 
 // Objekt fuer die Zuruecknavigation in den Modulen
 // hier werden die Urls in einem Stack gespeichert
@@ -177,10 +179,7 @@ if(isset($g_preferences['db_version']) == false
 || version_compare($g_preferences['db_version_beta'], BETA_VERSION) != 0)
 {
     unset($_SESSION['g_current_organization']);
-	$g_message->addVariableContent($g_preferences['db_version'], 1, false);
-    $g_message->addVariableContent(ADMIDIO_VERSION, 2, false);
-    $g_message->addVariableContent($g_preferences['email_administrator'], 3, false);
-    $g_message->show('database_invalid');
+    $g_message->show($g_l10n->get('SYS_PHR_DATABASE_INVALID', $g_preferences['db_version'], ADMIDIO_VERSION, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
 }
 
 /*********************************************************************************

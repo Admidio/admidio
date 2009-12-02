@@ -28,7 +28,7 @@ if ($g_preferences['enable_rss'] != 1)
 if ($g_preferences['enable_guestbook_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // die 10 letzten Eintraege aus der DB fischen...

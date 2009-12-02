@@ -21,7 +21,7 @@
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 if(isset($_GET['inactive']) && $_GET['inactive'] == 1)

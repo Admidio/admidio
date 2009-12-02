@@ -16,23 +16,23 @@ require_once('../../system/classes/table_roles.php');
 // Uebergabevariablen pruefen
 if(isset($_POST['rol_id']) == false || is_numeric($_POST['rol_id']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_POST['user_import_mode']) == false || is_numeric($_POST['user_import_mode']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 if(strlen($_FILES['userfile']['tmp_name']) == 0)
 {
-    $g_message->show('feld', 'Datei');
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datei'));
 }
 else if($_FILES['userfile']['error'] == 1)
 {
@@ -41,7 +41,7 @@ else if($_FILES['userfile']['error'] == 1)
 }
 else if($_POST['rol_id'] == 0)
 {
-    $g_message->show('feld', 'Rolle');
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Rolle'));
 }
 
 // Rolle einlesen und pruefen, ob der User diese selektieren kann und dadurch nicht

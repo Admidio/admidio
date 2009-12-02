@@ -28,17 +28,17 @@ if ($g_preferences['enable_bbcode'] == 1)
 if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 if(!$g_current_user->editAnnouncements())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_ann_id   = 0;
-$req_headline = $l10n->get('ANN_ANNOUNCEMENT');
+$req_headline = $g_l10n->get('ANN_ANNOUNCEMENT');
 
 // Uebergabevariablen pruefen
 
@@ -46,7 +46,7 @@ if(isset($_GET['ann_id']))
 {
     if(is_numeric($_GET['ann_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_ann_id = $_GET['ann_id'];
 }
@@ -68,7 +68,7 @@ if($req_ann_id > 0)
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
@@ -89,11 +89,11 @@ if(isset($_SESSION['announcements_request']))
 // Html-Kopf ausgeben
 if($req_ann_id > 0)
 {
-    $g_layout['title'] = $l10n->get('SYS_PHR_EDIT', $l10n->get('ANN_ANNOUNCEMENT'));
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
 else
 {
-    $g_layout['title'] = $l10n->get('SYS_PHR_CREATE', $l10n->get('ANN_ANNOUNCEMENT'));
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
 //Script für BBCode laden
 $javascript = '';
@@ -121,10 +121,10 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="ann_headline">'.$l10n->get('SYS_HEADLINE').'</label></dt>
+                    <dt><label for="ann_headline">'.$g_l10n->get('SYS_HEADLINE').':</label></dt>
                     <dd>
                         <input type="text" id="ann_headline" name="ann_headline" style="width: 350px;" tabindex="1" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -136,7 +136,7 @@ echo '
          echo '
             <li>
                 <dl>
-                    <dt><label for="ann_description">Text:</label>';
+                    <dt><label for="ann_description">'.$g_l10n->get('SYS_TEXT').':</label>';
                         if($g_preferences['enable_bbcode'] == 1)
                         {
                             printEmoticons();
@@ -144,7 +144,7 @@ echo '
                     echo '</dt>
                     <dd>
                         <textarea id="ann_description" name="ann_description" style="width: 350px;" tabindex="2" rows="10" cols="40">'. $announcement->getValue('ann_description'). '</textarea>
-                        <span class="mandatoryFieldMarker" title="'.$l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>';
@@ -164,10 +164,10 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="ann_global">'.$l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
+                            <label for="ann_global">'.$g_l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
                             <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_global&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=320&amp;width=580"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_global\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$l10n->get('SYS_HELP').'" title="" /></a>
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                         </dd>
                     </dl>
                 </li>';
@@ -177,7 +177,7 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button name="save" type="submit" value="save" tabindex="4"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$l10n->get('SYS_SAVE').'" />&nbsp;'.$l10n->get('SYS_SAVE').'</button>
+            <button name="save" type="submit" value="save" tabindex="4"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>
@@ -187,8 +187,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$l10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$l10n->get('SYS_BACK').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

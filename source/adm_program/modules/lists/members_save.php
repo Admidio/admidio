@@ -23,7 +23,7 @@ require_once('../../system/classes/table_roles.php');
 
 if(isset($_GET['rol_id']) == false || is_numeric($_GET['rol_id']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Objekt der uebergeben Rollen-ID erstellen
@@ -38,7 +38,7 @@ if(  (!$g_current_user->assignRoles()
    && $role->getValue('rol_name') == 'Webmaster')
 || $role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
 {
-   $g_message->show('norights');
+   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Verarbeitung der Daten

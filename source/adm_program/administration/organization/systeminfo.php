@@ -17,7 +17,7 @@ require_once('../../system/login_valid.php');
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -25,7 +25,7 @@ if (isset($_GET['mode']))
 {
     if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $req_mode = $_GET['mode'];

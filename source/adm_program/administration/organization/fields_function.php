@@ -24,7 +24,7 @@ require('../../system/classes/table_user_field.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -32,20 +32,20 @@ if (!$g_current_user->isWebmaster())
 if(is_numeric($_GET['mode']) == false
 || $_GET['mode'] < 1 || $_GET['mode'] > 4)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['usf_id']))
 {
     if(is_numeric($_GET['usf_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 
 if(isset($_GET['sequence']) && admStrToUpper($_GET['sequence']) != 'UP' && admStrToUpper($_GET['sequence']) != 'DOWN')
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // UserField-objekt anlegen
@@ -59,7 +59,7 @@ if($_GET['usf_id'] > 0)
     if($user_field->getValue('cat_org_id') >  0
     && $user_field->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
@@ -75,7 +75,7 @@ if($_GET['mode'] == 1)
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
     {
-        $g_message->show('feld', 'Name');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
     }    
 
     if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
@@ -154,20 +154,20 @@ if($_GET['mode'] == 1)
 
     if($return_code < 0)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }    
 
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
-    $err_code = 'save';
+    $err_code = 'SYS_PHR_SAVE';
 }
 elseif($_GET['mode'] == 2)
 {
     if($user_field->getValue('usf_system') == 1)
     {
         // Systemfelder duerfen nicht geloescht werden
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     // Feld loeschen
@@ -187,5 +187,5 @@ elseif($_GET['mode'] == 4)
          
 // zu den Organisationseinstellungen zurueck
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($err_code);
+$g_message->show($g_l10n->get($err_code));
 ?>

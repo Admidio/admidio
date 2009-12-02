@@ -24,13 +24,13 @@ require('../../system/classes/system_mail.php');
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
 {
-   $g_message->show('norights');
+   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -44,7 +44,7 @@ if(isset($_GET['user_id']))
 {
     if(is_numeric($_GET['user_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_user_id = $_GET['user_id'];
 }
@@ -53,7 +53,7 @@ if(isset($_GET['new_user_id']))
 {
     if(is_numeric($_GET['new_user_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_new_user_id = $_GET['new_user_id'];
 }
@@ -61,7 +61,7 @@ if(isset($_GET['new_user_id']))
 if(is_numeric($_GET['mode']) == false
 || $_GET['mode'] < 1 || $_GET['mode'] > 6)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 else
 {
@@ -110,6 +110,8 @@ if($req_mode == 2)
 
 if($req_mode == 1 || $req_mode == 3)
 {
+    $g_message->setForwardUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');
+
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($g_preferences['enable_system_mails'] == 1)
     {
@@ -118,21 +120,17 @@ if($req_mode == 1 || $req_mode == 3)
         $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
         if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == true)
         {
-            $err_code = 'assign_login_mail';
+            $g_message->show($g_l10n->get('ASS_PHR_ASSIGN_LOGIN_EMAIL'));
         }
         else
         {
-            $err_code = 'mail_not_send';
-            $err_text = $user->getValue('E-Mail');
+            $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('E-Mail')));
         }
     }
     else
     {
-        $err_code = 'assign_login';
+        $g_message->show($g_l10n->get('ASS_PHR_ASSIGN_LOGIN'));
     }
-
-    $g_message->setForwardUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');
-    $g_message->show($err_code, $err_text);
 }
 elseif($req_mode == 4)
 {

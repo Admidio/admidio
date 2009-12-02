@@ -38,7 +38,7 @@ $req_mode   = strStripTags($_GET['mode']);
 
 if(in_array($req_mode, $arr_mode) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['lst_id']) && is_numeric($_GET['lst_id']))
@@ -60,7 +60,7 @@ if(isset($_GET['rol_id']))
 {
     if(is_numeric($_GET['rol_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_rol_id = $_GET['rol_id'];
 }
@@ -69,7 +69,7 @@ if(isset($_GET['start']))
 {
     if(is_numeric($_GET['start']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_start = $_GET['start'];
 }
@@ -92,7 +92,7 @@ else
 //Testen ob Recht zur Listeneinsicht besteht
 if(!$g_current_user->viewRole($req_rol_id))
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 //SESSION array fuer bilder initialisieren
@@ -175,7 +175,7 @@ if($num_members == 0)
 
 if($num_members < $req_start)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if($req_mode == 'html' && $req_start == 0)
@@ -426,7 +426,7 @@ else
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
 if(!$g_db->data_seek($result_list, $req_start))
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)

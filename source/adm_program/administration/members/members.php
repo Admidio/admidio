@@ -23,7 +23,7 @@ require('../../system/login_valid.php');
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
 if (!$g_current_user->editUsers())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen initialisieren
@@ -51,7 +51,7 @@ if (isset($_GET['letter']))
 
     if(strlen($_GET['letter']) > 1)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_letter = $_GET['letter'];
 }
@@ -60,7 +60,7 @@ if(isset($_GET['start']))
 {
     if(is_numeric($_GET['start']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_start = $_GET['start'];
 }
@@ -168,7 +168,7 @@ $num_members = $g_db->num_rows($result_mgl);
 
 if($num_members < $req_start)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // User zaehlen, die mind. einer Rolle zugeordnet sind
@@ -387,7 +387,7 @@ if($num_members > 0)
         // jetzt erst einmal zu dem ersten relevanten Datensatz springen
         if(!$g_db->data_seek($result_mgl, $req_start))
         {
-            $g_message->show('invalid');
+            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
         }
 
         for($i = 0; $i < $members_per_page && $i + $req_start < $num_members; $i++)

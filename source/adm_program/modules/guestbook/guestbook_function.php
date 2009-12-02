@@ -30,7 +30,7 @@ require('../../system/classes/table_guestbook_comment.php');
 if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
@@ -45,7 +45,7 @@ if (array_key_exists('id', $_GET))
 {
     if (is_numeric($_GET['id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else
@@ -58,7 +58,7 @@ if (array_key_exists('mode', $_GET))
 {
     if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 
@@ -87,7 +87,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
             if (!$g_current_user->commentGuestbookRight())
             {
-                $g_message->show('norights');
+                $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
             }
         }
 
@@ -105,7 +105,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
         if(!$g_current_user->editGuestbookRight())
         {
-            $g_message->show('norights');
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
     }
 }
@@ -122,7 +122,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mod
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
         {
-            $g_message->show('norights');
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
     }
 }
@@ -138,7 +138,7 @@ else
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook_comment->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
         {
-            $g_message->show('norights');
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
     }
 }
@@ -208,7 +208,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     
         if($return_code < 0)
         {
-            $g_message->show('norights');
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -229,11 +229,11 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     {
         if(strlen($guestbook->getValue('gbo_name')) > 0)
         {
-            $g_message->show('feld', 'Text');
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Text'));
         }
         else
         {
-            $g_message->show('feld', 'Name');
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
         }
     }
 }
@@ -314,7 +314,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     
         if($return_code < 0)
         {
-            $g_message->show('norights');
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -334,11 +334,11 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     {
         if(strlen($guestbook_comment->getValue('gbc_name')) > 0)
         {
-            $g_message->show('feld', 'Text');
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Text'));
         }
         else
         {
-            $g_message->show('feld', 'Name');
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
         }
     }
 }
@@ -355,6 +355,6 @@ elseif ($_GET['mode'] == 5)
 else
 {
     // Falls der Mode unbekannt ist, ist natürlich auch Ende...
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 ?>

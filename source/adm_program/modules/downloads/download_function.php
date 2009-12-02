@@ -31,13 +31,13 @@ require('../../system/classes/table_file.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -45,7 +45,7 @@ if (isset($_GET['mode']))
 {
     if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $req_mode = $_GET['mode'];
@@ -54,14 +54,14 @@ if (isset($_GET['mode']))
 else
 {
     //ohne mode geht es nicht weiter
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if (isset($_GET['folder_id']))
 {
     if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $folder_id = $_GET['folder_id'];
@@ -75,7 +75,7 @@ if (isset($_GET['file_id']))
 {
     if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $file_id = $_GET['file_id'];
@@ -93,7 +93,7 @@ if ($req_mode == 1)
 {
     if ($folder_id == 0) {
         //FolderId ist zum hochladen erforderlich
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -104,7 +104,7 @@ if ($req_mode == 1)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if (empty($_POST))
@@ -142,7 +142,7 @@ if ($req_mode == 1)
     {
         if($ret_code == -1)
         {
-            $g_message->show('feld', 'Datei auswählen');
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datei auswählen'));
         }
         elseif($ret_code == -2)
         {
@@ -190,7 +190,7 @@ elseif ($req_mode == 2)
     {
         //Es muss eine FileID uebergeben werden
         //beides ist auch nicht erlaubt
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if($file_id > 0)
@@ -219,7 +219,7 @@ elseif ($req_mode == 3)
 
     if ($folder_id == 0) {
         //FolderId ist zum Anlegen eines Unterordners erforderlich
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -230,7 +230,7 @@ elseif ($req_mode == 3)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $newFolderName = null;
@@ -247,7 +247,7 @@ elseif ($req_mode == 3)
         {
             if ($ret_code == -1)
             {
-                $g_message->show('feld', 'Name');
+                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
             }
             elseif ($ret_code == -2)
             {
@@ -257,7 +257,7 @@ elseif ($req_mode == 3)
     }
     else
     {
-        $g_message->show('feld', 'Name');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
     }
 
     $newFolderDescription = $_POST['new_description'];
@@ -293,10 +293,8 @@ elseif ($req_mode == 3)
         else
         {
             // der entsprechende Ordner konnte nicht angelegt werden
-            $g_message->addVariableContent($error['text'], 1);
-            $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
-            $g_message->show('write_access');
+            $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $error['text'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
@@ -312,7 +310,7 @@ elseif ($req_mode == 4)
     {
         //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
         //beides ist auch nicht erlaubt
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if($file_id > 0)
@@ -325,7 +323,7 @@ elseif ($req_mode == 4)
             $oldFile = $file->getCompletePathOfFile();
         }
         else {
-            $g_message->show('invalid');
+            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
         }
 
         $newFile = null;
@@ -338,7 +336,7 @@ elseif ($req_mode == 4)
             {
                 if($ret_code == -1)
                 {
-                    $g_message->show('feld', 'Neuer Name');
+                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Neuer Name'));
                 }
                 elseif($ret_code == -2)
                 {
@@ -355,7 +353,7 @@ elseif ($req_mode == 4)
         }
         else
         {
-            $g_message->show('feld', 'Neuer Name');
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Neuer Name'));
         }
 
         $newDescription = $_POST['new_description'];
@@ -397,7 +395,7 @@ elseif ($req_mode == 4)
             $oldFolder = $folder->getCompletePathOfFolder();
         }
         else {
-            $g_message->show('invalid');
+            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
         }
 
         $newFolder = null;
@@ -414,7 +412,7 @@ elseif ($req_mode == 4)
             {
                 if ($ret_code == -1)
                 {
-                    $g_message->show('feld', 'Neuer Name');
+                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Neuer Name'));
                 }
                 elseif ($ret_code == -2)
                 {
@@ -464,7 +462,7 @@ elseif ($req_mode == 5)
     if (!$folder_id)
     {
         //Es muss eine FolderId uebergeben werden
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     else if ($folder_id > 0)
     {
@@ -491,7 +489,7 @@ elseif ($req_mode == 6)
 {
     if ($folder_id == 0) {
         //FolderId ist zum hinzufuegen erforderlich
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if (isset($_GET['name']))
@@ -516,7 +514,7 @@ elseif ($req_mode == 6)
     else
     {
         //name ist zum hinzufuegen erforderlich
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -527,7 +525,7 @@ elseif ($req_mode == 6)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Pruefen ob das neue Element eine Datei order ein Ordner ist.
@@ -575,7 +573,7 @@ elseif ($req_mode == 7)
 {
     if ($folder_id == 0) {
         //FolderId ist zum hinzufuegen erforderlich
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Informationen zum Zielordner aus der DB holen
@@ -586,7 +584,7 @@ elseif ($req_mode == 7)
     if (!$targetFolder->getValue('fol_id'))
     {
         //Datensatz konnte nicht in DB gefunden werden...
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Formularinhalt aufbereiten
@@ -631,7 +629,7 @@ elseif ($req_mode == 7)
     $targetFolder->save();
 
     $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-    $g_message->show('save');
+    $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
 }
 
 

@@ -38,7 +38,7 @@ if(isset($_GET['usr_id']))
 {
     if(is_numeric($_GET['usr_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_usr_id = $_GET['usr_id'];
 }
@@ -51,13 +51,13 @@ if(isset($_GET['job']))
 
 if($job != 'save' && $job!='delete' && $job != 'dont_save' && $job != 'upload' && $job != 'msg_delete' && $job != NULL)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if($g_current_user->editProfile($req_usr_id) == false)
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }                    
 
 // User auslesen
@@ -69,51 +69,49 @@ if($job=='save')
     
     if($g_preferences['profile_photo_storage'] == 1)
     {
-    	// Foto im Dateisystem speichern
- 
-		//ggf. Ordner für Userfotos anlegen
-		if(!file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos') && $g_preferences['profile_photo_storage'] == 1)
-		{
-			require_once('../../system/classes/folder.php');
-			$folder = new Folder(SERVER_PATH. '/adm_my_files');
-			if($folder->createWriteableFolder('user_profile_photos') == false)
-			{
-				$g_message->addVariableContent($folder->getFolder() , 1);
-				$g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-				$g_message->show('write_access');
-			}
-		}
-		$protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-		$protection->protectFolder();  
+        // Foto im Dateisystem speichern
 
-	    //Nachsehen ob fuer den User ein Photo gespeichert war
-	    if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg'))
-	    {
-			if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg'))
-			{
-				unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg');
-			}
-			
-			rename(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg', SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg');
-	    }
-	}
-	else
-	{
-		// Foto in der Datenbank speichern
+        //ggf. Ordner für Userfotos anlegen
+        if(!file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos') && $g_preferences['profile_photo_storage'] == 1)
+        {
+            require_once('../../system/classes/folder.php');
+            $folder = new Folder(SERVER_PATH. '/adm_my_files');
+            if($folder->createWriteableFolder('user_profile_photos') == false)
+            {
+                $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $folder->getFolder(), '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+            }
+        }
+        $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
+        $protection->protectFolder();  
 
-		//Nachsehen ob fuer den User ein Photo gespeichert war
-		if(strlen($g_current_session->getValue('ses_blob')) > 0)
-		{
-		    //Fotodaten in User-Tabelle schreiben
-		    $user->setValue('usr_photo', $g_current_session->getValue('ses_blob'));
-		    $user->save();
+        //Nachsehen ob fuer den User ein Photo gespeichert war
+        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg'))
+        {
+            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg'))
+            {
+                unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg');
+            }
+            
+            rename(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg', SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg');
+        }
+    }
+    else
+    {
+        // Foto in der Datenbank speichern
+
+        //Nachsehen ob fuer den User ein Photo gespeichert war
+        if(strlen($g_current_session->getValue('ses_blob')) > 0)
+        {
+            //Fotodaten in User-Tabelle schreiben
+            $user->setValue('usr_photo', $g_current_session->getValue('ses_blob'));
+            $user->save();
 
             // Foto aus Session entfernen und neues Einlesen des Users veranlassen
-		    $g_current_session->setValue('ses_blob', '');
-		    $g_current_session->save();
+            $g_current_session->setValue('ses_blob', '');
+            $g_current_session->save();
             $g_current_session->renewUserObject($req_usr_id);
-   		}
-	}
+        }
+    }
     
     // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
@@ -125,17 +123,17 @@ elseif($job=='dont_save')
     /*****************************Foto nicht speichern*************************************/
     //Ordnerspeicherung
     if($g_preferences['profile_photo_storage'] == 1)
-	{
-    	if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg'))
-		{
-			unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg');
-		}
+    {
+        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg'))
+        {
+            unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg');
+        }
     }
     //Datenbankspeicherung
     else
     {
-		$g_current_session->setValue('ses_blob', '');
-    	$g_current_session->save();
+        $g_current_session->setValue('ses_blob', '');
+        $g_current_session->save();
     }
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
@@ -150,19 +148,19 @@ elseif($job=='msg_delete')
 elseif($job=='delete')
 {
     /***************************** Foto loeschen *************************************/
-	//Ordnerspeicherung, Datei löschen
-	if($g_preferences['profile_photo_storage'] == 1)
-	{
-	    unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg');
-	}
-	//Datenbankspeicherung, Daten aus Session entfernen
-	else
-	{
-	    $user->setValue('usr_photo', '');
-	    $user->save();
+    //Ordnerspeicherung, Datei löschen
+    if($g_preferences['profile_photo_storage'] == 1)
+    {
+        unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'.jpg');
+    }
+    //Datenbankspeicherung, Daten aus Session entfernen
+    else
+    {
+        $user->setValue('usr_photo', '');
+        $user->save();
         $g_current_session->renewUserObject($req_usr_id);
-	}
-	    
+    }
+        
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
     $g_message->show('profile_photo_deleted');
@@ -214,13 +212,13 @@ if($job==NULL)
     }
 
     $g_layout['title']  = $headline;
-	$g_layout['header'] = '
-	<script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
+    $g_layout['header'] = '
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
             $("#foto_upload_file").focus();
-	 	}); 
-	//--></script>';
+        }); 
+    //--></script>';
     require(THEME_SERVER_PATH. '/overall_header.php');
     
     echo '
@@ -230,7 +228,7 @@ if($job==NULL)
         <div class="formBody">
             <p>Aktuelles Foto:</p>
             <img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="Aktuelles Foto" />
-			<p>Bitte hier ein neues Foto auswählen:</p>
+            <p>Bitte hier ein neues Foto auswählen:</p>
             <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="durchsuchen" /></p>
 
             <hr />
@@ -251,11 +249,11 @@ if($job==NULL)
             </span>
         </li>
         <li>
-	        <span class="iconTextLink">
-	            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580"><img 
-	            	src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
-	            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580">Hilfe</a>
-	        </span>        
+            <span class="iconTextLink">
+                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580"><img 
+                    src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
+                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580">Hilfe</a>
+            </span>        
         </li>
     </ul>';    
 }
@@ -269,22 +267,22 @@ elseif($job=='upload')
     $user_image->scale(130, 170);
     
     //Ordnerspeicherung
-	if($g_preferences['profile_photo_storage'] == 1)
-	{
-		$user_image->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg');
-	}
-	//Datenbankspeicherung
-	else
-	{
-		//Foto in PHP-Temp-Ordner übertragen
-		$user_image->copyToFile(null, ($_FILES['foto_upload_file']['tmp_name']));
-		// Foto aus PHP-Temp-Ordner einlesen
+    if($g_preferences['profile_photo_storage'] == 1)
+    {
+        $user_image->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg');
+    }
+    //Datenbankspeicherung
+    else
+    {
+        //Foto in PHP-Temp-Ordner übertragen
+        $user_image->copyToFile(null, ($_FILES['foto_upload_file']['tmp_name']));
+        // Foto aus PHP-Temp-Ordner einlesen
         $user_image_data = fread(fopen($_FILES['foto_upload_file']['tmp_name'], 'r'), $_FILES['foto_upload_file']['size']);
         
-		// Zwischenspeichern des neuen Fotos in der Session
+        // Zwischenspeichern des neuen Fotos in der Session
         $g_current_session->setValue('ses_blob', $user_image_data);
-		$g_current_session->save();
-	}
+        $g_current_session->save();
+    }
     
     //Image-Objekt löschen	
     $user_image->delete();
@@ -311,8 +309,8 @@ elseif($job=='upload')
                     <td>Neues Foto:</td>
                 </tr>
                 <tr style="text-align: center;">
-                	<td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="Aktuelles Profilfoto" /></td>
-					<td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'&new_photo=1" alt="Neues Profilfoto" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="Aktuelles Profilfoto" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'&new_photo=1" alt="Neues Profilfoto" /></td>
                 </tr>
             </table>
 

@@ -20,7 +20,7 @@ require('../../system/classes/table_file.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 //pruefen ob eine brauchbare File_ID uebergeben wurde
@@ -29,13 +29,13 @@ if (array_key_exists('file_id', $_GET))
     if (is_numeric($_GET['file_id']) == false)
     {
         //FileId ist nicht numerisch
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else
 {
     // ohne FileId gehts auch nicht weiter
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
@@ -49,7 +49,7 @@ $file->getFileForDownload($_GET['file_id']);
 if (!$file->getValue('fil_id'))
 {
     //Datensatz konnte nicht in DB gefunden werden...
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //kompletten Pfad der Datei holen
@@ -59,7 +59,7 @@ $completePath = $file->getCompletePathOfFile();
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
 {
-    $g_message->show('file_not_exist');
+    $g_message->show($g_l10n->get('SYS_PHR_FILE_NOT_EXIST')');
 }
 
 //Downloadcounter inkrementieren

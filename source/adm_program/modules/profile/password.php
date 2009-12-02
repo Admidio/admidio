@@ -21,14 +21,16 @@ require('../../system/login_valid.php');
 // nur Webmaster duerfen fremde Passwoerter aendern
 if($g_current_user->isWebmaster() == false && $g_current_user->getValue('usr_id') != $_GET['usr_id'])
 {
-    $g_message->show('norights', '', '', false);
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
 {
-    $g_message->show('invalid', '', '', false);
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
@@ -38,10 +40,10 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
     /***********************************************************************/
     if($g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'] )
     {
-    	$_POST['old_password'] = '';
+        $_POST['old_password'] = '';
     }
     
-	if( (strlen($_POST['old_password']) > 0 || $g_current_user->isWebmaster() )
+    if( (strlen($_POST['old_password']) > 0 || $g_current_user->isWebmaster() )
     && strlen($_POST['new_password']) > 0
     && strlen($_POST['new_password2']) > 0)
     {
@@ -72,27 +74,29 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
                     }
 
                     $g_message->setForwardUrl('javascript:self.parent.tb_remove()');
-                    $g_message->show('password_changed', '', 'Hinweis', false);
+                    $phrase = $g_l10n->get('PRO_PHR_PASSWORD_CHANGED');
                 }
                 else
                 {
-                    $g_message->show('password_old_wrong', '', '', false);
+                    $phrase = $g_l10n->get('PRO_PHR_PASSWORD_OLD_WRONG');
                 }
             }
             else
             {
-                $g_message->show('passwords_not_equal', '', '', false);
+                $phrase = $g_l10n->get('PRO_PHR_PASSWORDS_NOT_EQUAL');
             }
         }
         else
         {
-            $g_message->show('password_length', '', '', false);
+            $phrase = $g_l10n->get('PRO_PHR_PASSWORD_LENGTH');
         }
     }
     else
     {
-        $g_message->show('felder', '', '', false);
+        $phrase = $g_l10n->get('SYS_PHR_FIELDS_EMPTY');
     }
+    $g_message->setExcludeThemeBody();
+    $g_message->show($phrase);
 }
 else
 {
@@ -113,9 +117,9 @@ else
         <div class="formBody">
             <ul class="formFieldList">';
                 if($g_current_user->getValue('usr_id') == $_GET['usr_id'] )
-    			{
-    			echo'
-        			<li>
+                {
+                echo'
+                    <li>
                         <dl>
                             <dt><label for="old_password">Aktuelles Passwort:</label></dt>
                             <dd><input type="password" id="old_password" name="old_password" size="12" maxlength="20" />
@@ -123,7 +127,7 @@ else
                         </dl>
                     </li>
                     <li><hr /></li>';
-				}    
+                }    
                 echo'
                 <li>
                     <dl>
@@ -131,7 +135,7 @@ else
                         <dd><input type="password" id="new_password" name="new_password" size="12" maxlength="20" />
                             <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                             <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
-					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />
                         </dd>
                     </dl>
                 </li>

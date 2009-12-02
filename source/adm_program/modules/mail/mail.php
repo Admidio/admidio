@@ -26,7 +26,7 @@ require_once('../../system/common.php');
 if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 
@@ -42,7 +42,7 @@ if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
 //Falls ein Rollenname uebergeben wurde muss auch der Kategoriename uebergeben werden und umgekehrt...
 if ( (isset($_GET['rolle']) && !isset($_GET['cat'])) || (!isset($_GET['rolle']) && isset($_GET['cat'])) )
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
@@ -53,12 +53,12 @@ if (isset($_GET['usr_id']))
     if (!$g_valid_login)
     {
         //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if (is_numeric($_GET['usr_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
@@ -86,7 +86,7 @@ elseif (isset($_GET['rol_id']))
     // auf diese zugreifen darf
     if (is_numeric($_GET['rol_id']) == false || ($g_valid_login && !$g_current_user->mailRole($_GET['rol_id'])))
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 	    
     if ($g_valid_login)
@@ -110,7 +110,7 @@ elseif (isset($_GET['rol_id']))
 
     if ((!$g_valid_login && $row[0] != 3))
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $rollenName = $row['rol_name'];
@@ -147,7 +147,7 @@ elseif (isset($_GET['rolle']) && isset($_GET['cat']))
     if (($g_valid_login == false && $row['rol_mail_this_role'] != 3)
     ||  ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false))
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $rollenName = $_GET['rolle'];

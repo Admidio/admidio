@@ -29,7 +29,7 @@ require("../../system/classes/role_dependency.php");
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show("norights");
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -41,14 +41,14 @@ if(isset($_GET["mode"]) == false
 || is_numeric($_GET["mode"]) == false
 || $_GET["mode"] < 1 || $_GET["mode"] > 8)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET["rol_id"]))
 {
     if(is_numeric($_GET["rol_id"]) == false)
     {
-        $g_message->show("invalid");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     $req_rol_id = $_GET["rol_id"];
 }
@@ -63,7 +63,7 @@ if($req_rol_id > 0)
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if($role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
@@ -334,7 +334,7 @@ elseif($_GET["mode"] == 2)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
-    $msg_code = "save";
+    $msg_code = 'SYS_PHR_SAVE';
 }
 elseif($_GET["mode"] == 3)
 {
@@ -343,7 +343,7 @@ elseif($_GET["mode"] == 3)
 
     if($return_code < 0)
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     $msg_code = "role_inactive";
@@ -356,10 +356,10 @@ elseif($_GET["mode"] == 4)
 
     if($return_code == false)
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
-    $msg_code = "delete";
+    $msg_code = 'SYS_PHR_DELETE';
 }
 elseif($_GET["mode"] == 5)
 {
@@ -368,7 +368,7 @@ elseif($_GET["mode"] == 5)
 
     if($return_code < 0)
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     $msg_code = "role_active";
@@ -398,5 +398,5 @@ elseif($_GET['mode'] == 8)
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($msg_code);
+$g_message->show($g_l10n->get($msg_code));
 ?>
