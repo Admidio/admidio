@@ -21,7 +21,7 @@ require_once('../../system/classes/role_dependency.php');
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -33,7 +33,7 @@ if(isset($_GET['rol_id']))
 {
     if(is_numeric($_GET['rol_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_rol_id = $_GET['rol_id'];
 }
@@ -50,14 +50,14 @@ if($req_rol_id > 0)
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
     if($role->getValue('rol_name')    == 'Webmaster'
     && $g_current_user->isWebmaster() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 if(isset($_SESSION['roles_request']))

@@ -21,7 +21,7 @@ require('../../system/common.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_photo_module'] == 2)
 {
@@ -33,12 +33,12 @@ elseif($g_preferences['enable_photo_module'] == 2)
 
 if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['bild']) && is_numeric($_GET['bild']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Uebernahme der uebergebenen variablen

@@ -97,11 +97,11 @@ class User extends TableUsers
     // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
     function clearUserFieldArray($delete_db_data = false)
     {
-    	// Jedes Feld durchgehen und alle Inhalte der Tabelle adm_user_data entfernen
-    	foreach($this->userFieldData as $field_name => $object)
-    	{
-    		$this->userFieldData[$field_name]->clearFieldData();
-    	}
+        // Jedes Feld durchgehen und alle Inhalte der Tabelle adm_user_data entfernen
+        foreach($this->userFieldData as $field_name => $object)
+        {
+            $this->userFieldData[$field_name]->clearFieldData();
+        }
         
         // Daten in der DB auch loeschen
         if($delete_db_data)
@@ -134,35 +134,35 @@ class User extends TableUsers
     // und ungueltige Werte auf leer setzt
     function setValue($field_name, $field_value)
     {
-    	global $g_current_user;
-    	$return_code  = false;
-    	$update_field = false;
+        global $g_current_user;
+        $return_code  = false;
+        $update_field = false;
 
         if(strpos($field_name, 'usr_') !== 0)
         {
-        	// Daten fuer User-Fields-Tabelle
+            // Daten fuer User-Fields-Tabelle
 
-        	// gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
-        	// bei Registrierung muss die Eingabe auch erlaubt sein
-        	if((  $this->getProperty($field_name, 'usf_disabled') == 1
-        	   && $g_current_user->editUsers() == true)
-        	|| $this->getProperty($field_name, 'usf_disabled') == 0
-        	|| ($g_current_user->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
-        	{
-        		$update_field = true;
-        	}
+            // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
+            // bei Registrierung muss die Eingabe auch erlaubt sein
+            if((  $this->getProperty($field_name, 'usf_disabled') == 1
+               && $g_current_user->editUsers() == true)
+            || $this->getProperty($field_name, 'usf_disabled') == 0
+            || ($g_current_user->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
+            {
+                $update_field = true;
+            }
 
-        	// versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
-        	// oder im eigenen Profil
-        	if((  $this->getProperty($field_name, 'usf_hidden') == 1
-        	   && $g_current_user->editUsers() == true)
-        	|| $this->getProperty($field_name, 'usf_hidden') == 0
-        	|| $g_current_user->getValue('usr_id') == $this->getValue('usr_id'))
-        	{
-        		$update_field = true;
-        	}
+            // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
+            // oder im eigenen Profil
+            if((  $this->getProperty($field_name, 'usf_hidden') == 1
+               && $g_current_user->editUsers() == true)
+            || $this->getProperty($field_name, 'usf_hidden') == 0
+            || $g_current_user->getValue('usr_id') == $this->getValue('usr_id'))
+            {
+                $update_field = true;
+            }
 
-        	// nur Updaten, wenn sich auch der Wert geaendert hat
+            // nur Updaten, wenn sich auch der Wert geaendert hat
             if($update_field == true
             && $field_value  != $this->userFieldData[$field_name]->getValue('usd_value'))
             {
@@ -204,11 +204,11 @@ class User extends TableUsers
     // hier koennen auch noch bestimmte Formatierungen angewandt werden
     function getProperty($field_name, $property)
     {
-    	if(isset($this->userFieldData[$field_name]))
-    	{
-        	return $this->userFieldData[$field_name]->getValue($property);
-       	}
-       	return '';
+        if(isset($this->userFieldData[$field_name]))
+        {
+            return $this->userFieldData[$field_name]->getValue($property);
+        }
+        return '';
     }
 
     // aehnlich getProperty, allerdings suche ueber usf_id
@@ -379,7 +379,7 @@ class User extends TableUsers
                                             'rol_announcements' => '0', 'rol_dates' => '0',
                                             'rol_download' => '0', 'rol_edit_user' => '0',
                                             'rol_guestbook' => '0', 'rol_guestbook_comments' => '0',
-                							'rol_inventory' => '0',
+                                            'rol_inventory' => '0',
                                             'rol_mail_to_all' => '0',
                                             'rol_photo' => '0', 'rol_profile' => '0',
                                             'rol_weblinks' => '0', 'rol_all_lists_view' => '0');

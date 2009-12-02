@@ -21,13 +21,13 @@ require('../../system/classes/table_folder.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -35,14 +35,14 @@ if (array_key_exists('folder_id', $_GET))
 {
     if (is_numeric($_GET['folder_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $folder_id = $_GET['folder_id'];
 }
 else
 {
     // ohne FolderId gehts auch nicht weiter
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
@@ -68,7 +68,7 @@ $folder->getFolderForDownload($folder_id);
 if (!$folder->getValue('fol_id'))
 {
     //Datensatz konnte nicht in DB gefunden werden...
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 $parentFolderName = $folder->getValue('fol_name');

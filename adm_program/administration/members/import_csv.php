@@ -27,7 +27,7 @@ define('USER_IMPORT_COMPLETE', '4');
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Pflichtfelder prüfen
@@ -37,7 +37,7 @@ foreach($g_current_user->userFieldData as $field)
     if($field->getValue('usf_mandatory') == 1
     && strlen($_POST['usf-'. $field->getValue('usf_id')]) == 0)
     {
-        $g_message->show('feld', $field->getValue('usf_name'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $field->getValue('usf_name')));
     }
 }
 

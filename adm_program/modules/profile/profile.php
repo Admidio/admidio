@@ -23,7 +23,7 @@ if(isset($_GET['user_id']))
 {
     if(is_numeric($_GET['user_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     // Daten des uebergebenen Users anzeigen
     $a_user_id = $_GET['user_id'];
@@ -37,7 +37,7 @@ else
 //Testen ob Recht besteht Profil einzusehn
 if(!$g_current_user->viewProfile($a_user_id))
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder

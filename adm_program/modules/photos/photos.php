@@ -24,7 +24,7 @@ require_once('../../system/classes/image.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_photo_module'] == 2)
 {
@@ -70,7 +70,7 @@ if(array_key_exists('start', $_GET))
 {
     if(is_numeric($_GET['start']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $album_element = $_GET['start'];
 }
@@ -84,7 +84,7 @@ if(array_key_exists('thumb_seite', $_GET))
 {
     if(is_numeric($_GET['thumb_seite']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $thumb_seite = $_GET['thumb_seite'];
 }
@@ -114,7 +114,7 @@ else
 // pruefen, ob Album zur aktuellen Organisation gehoert
 if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }   
 
 /*********************LOCKED************************************/
@@ -129,7 +129,7 @@ else
 
 if(!is_numeric($locked) && $locked!=NULL)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Falls gefordert und Foto-edit-rechte, aendern der Freigabe

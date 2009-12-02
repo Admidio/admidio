@@ -35,7 +35,7 @@ require_once('../../system/classes/image.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -59,17 +59,17 @@ else
 //Übergabevariable prüfen
 if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false || !isset($_GET['pho_id']))
 {
-   $g_message->show('invalid');
+   $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 if(!isset($_GET['uploadmethod']) || (isset($_GET['uploadmethod']) && !is_numeric($_GET['pho_id'])))
 {
-    $g_message->show('invalid');  
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));  
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
 if($photo_album->getValue('pho_org_shortname') != $g_organization)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if (empty($_POST) && $_GET['uploadmethod'] == 1)

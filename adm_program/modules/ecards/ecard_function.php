@@ -20,16 +20,16 @@ class FunctionClass
 	public $newMessageReceivedString 	= "";
 	public $greetingCardFrom			= "";
 	public $greetingCardString			= "";
-	function __construct($l10n)
+	function __construct($g_l10n)
 	{
-		$this->nameRecipientString 			= $l10n->get("ECA_RECIPIENT_NAME");
-		$this->emailRecipientString 		= $l10n->get("ECA_RECIPIENT_EMAIL");
-		$this->yourMessageString 			= $l10n->get("ECA_MESSAGE");
-		$this->newMessageReceivedString 	= $l10n->get("ECA_NEW_MESSAGE_RECEIVED");
-		$this->greetingCardFrom				= $l10n->get("ECA_A_ECARD_FROM");
-		$this->greetingCardString			= $l10n->get("ECA_GREETING_CARD");
-		$this->sendToString					= $l10n->get("ECA_TO");	
-		$this->emailString					= $l10n->get("ECA_EMAIL");	
+		$this->nameRecipientString 			= $g_l10n->get("ECA_RECIPIENT_NAME");
+		$this->emailRecipientString 		= $g_l10n->get("ECA_RECIPIENT_EMAIL");
+		$this->yourMessageString 			= $g_l10n->get("ECA_MESSAGE");
+		$this->newMessageReceivedString 	= $g_l10n->get("ECA_NEW_MESSAGE_RECEIVED");
+		$this->greetingCardFrom				= $g_l10n->get("ECA_A_ECARD_FROM");
+		$this->greetingCardString			= $g_l10n->get("ECA_GREETING_CARD");
+		$this->sendToString					= $g_l10n->get("ECA_TO");	
+		$this->emailString					= $g_l10n->get("ECA_EMAIL");	
 	}
 	// gibt ein Menue fuer die Einstellungen des Template aus
 	// Uebergabe: 

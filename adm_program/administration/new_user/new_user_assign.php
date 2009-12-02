@@ -19,13 +19,13 @@ require_once('../../system/login_valid.php');
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
 {
-   $g_message->show('norights');
+   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // Uebergabevariablen pruefen und initialisieren
@@ -37,7 +37,7 @@ if(isset($_GET['new_user_id']) && is_numeric($_GET['new_user_id']))
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // neuen User erst einmal als Objekt erzeugen

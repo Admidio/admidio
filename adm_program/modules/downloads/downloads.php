@@ -22,7 +22,7 @@ require_once('../../system/file_extension_icons.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // Uebergabevariablen pruefen
@@ -30,7 +30,7 @@ if (array_key_exists('folder_id', $_GET))
 {
     if (is_numeric($_GET['folder_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $folderId = $_GET['folder_id'];
 }
@@ -55,7 +55,7 @@ if (!$currentFolder->getValue('fol_id'))
 {
     //Datensatz konnte nicht in DB gefunden werden
     //oder Benutzer darf nicht zugreifen
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 $folderId = $currentFolder->getValue('fol_id');

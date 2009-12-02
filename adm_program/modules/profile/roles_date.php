@@ -23,19 +23,22 @@ require("../../system/classes/table_members.php");
 // nur Webmaster duerfen fremde Passwoerter aendern
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show("norights", "", "", false);
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
-    $g_message->show("invalid", "", "", false);
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET["rol_id"]) && is_numeric($_GET["rol_id"]) == false)
 {
-    $g_message->show("invalid", "", "", false);
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Einlesen der Mitgliedsdaten
@@ -86,7 +89,7 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
    $mem->save();
    $adress=$g_root_path."/adm_program/modules/profile/profile.php?user_id=".$_GET['usr_id'];
    $g_message->setForwardUrl($adress, 2000);
-   $g_message->show("save");
+   $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
 
 }
 else

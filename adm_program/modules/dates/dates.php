@@ -31,7 +31,7 @@ require_once('../../system/classes/table_rooms.php');
 if($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_dates_module'] == 2)
 {
@@ -60,7 +60,7 @@ if(isset($_GET['mode']))
 {
     if($_GET['mode'] != 'actual' && $_GET['mode'] != 'old')
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_mode = $_GET['mode'];
 }
@@ -69,7 +69,7 @@ if(isset($_GET['start']))
 {
     if(is_numeric($_GET['start']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_start = $_GET['start'];
 }
@@ -83,7 +83,7 @@ if(isset($_GET['id']))
 {
     if(is_numeric($_GET['id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_id = $_GET['id'];
 }
@@ -92,7 +92,7 @@ if(array_key_exists('date', $_GET))
 {
     if(is_numeric($_GET['date']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     else
     {
@@ -749,7 +749,7 @@ else
                                     {
                                         $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php" style="float:right">
                                             <input type="hidden" name="new_user" value="2" />
-                                            <input type="hidden" name="date" value="'.$date->getValue('dat_rol_id').'" />
+                                            <input type="hidden" name="dat_rol_id" value="'.$date->getValue('dat_rol_id').'" />
                                         ';
                                     }
                                     $content_signin .= '<button name="loginDate" type="submit" value="loginDate" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" alt="login Date" />&nbsp;'.$v.'</button></form>';

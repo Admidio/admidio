@@ -16,7 +16,7 @@ require('../../system/classes/table_text.php');
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 $_SESSION['organization_request'] = $_REQUEST;
@@ -198,5 +198,5 @@ $g_current_session->renewOrganizationObject();
 
 // zur Ausgangsseite zurueck
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show('save');
+$g_message->show($g_l10n->get('SYS_PHR_SAVE'));
 ?>

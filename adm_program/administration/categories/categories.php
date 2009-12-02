@@ -37,29 +37,29 @@ if(isset($_GET['type']))
 {
     if($_GET['type'] != 'ROL' && $_GET['type'] != 'LNK' && $_GET['type'] != 'USF' && $_GET['type'] != 'DAT')
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     if($_GET['type'] == 'DAT' && $g_current_user->editdates() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     $req_type = $_GET['type'];
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);

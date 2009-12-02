@@ -22,7 +22,7 @@ require_once('backup.functions.php');
 // nur Webmaster duerfen ein Backup starten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 $backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
@@ -34,9 +34,7 @@ if(file_exists($backupabsolutepath) == false)
     $folder = new Folder(SERVER_PATH. '/adm_my_files');
     if($folder->createWriteableFolder('backup') == false)
     {
-        $g_message->addVariableContent($backupabsolutepath, 1);
-        $g_message->addVariableContent($g_preferences['email_administrator'], 2 ,false);
-        $g_message->show('write_access');
+        $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $backupabsolutepath, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
     }
 }
 

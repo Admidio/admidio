@@ -25,7 +25,7 @@ require_once('../../libs/flexupload/class.flexupload.inc.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -38,7 +38,7 @@ if(!$g_current_user->editPhotoRight())
 
 if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // im Zweifel den klassischen Upload nehmen
@@ -80,7 +80,7 @@ if(file_exists(SERVER_PATH. '/adm_my_files/photos/upload') == false)
 // pruefen, ob Album zur aktuellen Organisation gehoert
 if($photo_album->getValue('pho_org_shortname') != $g_organization)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Uploadtechnik auswaehlen

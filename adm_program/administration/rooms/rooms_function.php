@@ -18,7 +18,7 @@ require('../../system/classes/table_rooms.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -30,7 +30,7 @@ if(isset($_GET['room_id']))
 {
     if(is_numeric($_GET['room_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_room_id = $_GET['room_id'];
 }
@@ -38,7 +38,7 @@ if(isset($_GET['room_id']))
 if(is_numeric($_GET['mode']) == false
 || $_GET['mode'] < 1 || $_GET['mode'] > 2)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Raumobjekt anlegen
@@ -56,11 +56,11 @@ if($_GET['mode'] == 1)
 
     if(strlen($_POST['room_name']) == 0)
     {
-        $g_message->show('feld', 'Name/Raumnummer');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name/Raumnummer'));
     }
     if(strlen($_POST['room_capacity']) == 0)
     {
-        $g_message->show('feld', 'Kapazit&auml;t');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kapazit&auml;t'));
     }
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)

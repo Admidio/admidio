@@ -75,7 +75,7 @@ if(array_key_exists('date_id', $_GET))
 {
     if(is_numeric($_GET['date_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     else
     {

@@ -25,18 +25,18 @@ require_once("../../system/classes/table_members.php");
 
 if(isset($_REQUEST['user_id']) && is_numeric($_REQUEST['user_id']) == false)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_REQUEST['rol_id']) && is_numeric($_REQUEST['rol_id']) == false)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(is_numeric($_REQUEST['mode']) == false
 || $_REQUEST['mode'] < 1 || $_REQUEST['mode'] > 3)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if($_REQUEST['mode'] == 1)

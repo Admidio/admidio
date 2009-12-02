@@ -29,14 +29,14 @@ if ($g_preferences['enable_bbcode'] == 1)
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 
 // Ist ueberhaupt das Recht vorhanden?
 if (!$g_current_user->editWeblinksRight())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -44,7 +44,7 @@ if (array_key_exists('lnk_id', $_GET))
 {
     if (is_numeric($_GET['lnk_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else

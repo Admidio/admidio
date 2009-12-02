@@ -27,7 +27,7 @@ else
     // Uebergabevariable pruefen     
     if(isset($_GET['message_code']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     
     // Loginseite aus Url-Stack entfernen

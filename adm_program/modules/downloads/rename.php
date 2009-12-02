@@ -24,13 +24,13 @@ require('../../system/classes/table_folder.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -38,7 +38,7 @@ if (array_key_exists('folder_id', $_GET))
 {
     if (is_numeric($_GET['folder_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $folder_id = $_GET['folder_id'];
 }
@@ -51,7 +51,7 @@ if (array_key_exists('file_id', $_GET))
 {
     if (is_numeric($_GET['file_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $file_id = $_GET['file_id'];
 }
@@ -64,7 +64,7 @@ if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
 {
     //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
     //beides ist auch nicht erlaubt
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
@@ -98,7 +98,7 @@ if (is_a($class,'TableFile')) {
         $originalName = $class->getValue('fil_name');
     }
     else {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if ($form_values['new_name'] == null) {
@@ -116,7 +116,7 @@ else {
         $originalName = $class->getValue('fol_name');
     }
     else {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if ($form_values['new_name'] == null) {

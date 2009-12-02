@@ -30,12 +30,12 @@ $_SESSION['mail_request'] = $_REQUEST;
 
 if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if (isset($_POST["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
@@ -44,7 +44,7 @@ if (isset($_POST["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
 // in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
 if (array_key_exists("usr_id", $_GET) && !$g_valid_login)
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
@@ -77,7 +77,7 @@ if (array_key_exists("usr_id", $_GET))
 // Deswegen muss dies ueberprueft werden...
 if (empty($_POST))
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Erst mal ein neues Emailobjekt erstellen...
@@ -97,7 +97,7 @@ if ( $g_valid_login
 && (  $_POST['mailfrom'] != $g_current_user->getValue("E-Mail") 
    || $_POST['name'] != $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname")) )
 {
-    $g_message->show("invalid");
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Absenderangaben setzen
@@ -112,7 +112,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
             //noch mal schnell pruefen ob der User wirklich eingelogt ist...
             if (!$g_valid_login)
             {
-                $g_message->show("invalid");
+                $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
             }
             $attachment_size = 0;
             // Nun jedes Attachment
@@ -169,12 +169,12 @@ if (array_key_exists("rol_id", $_POST))
 	// Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
 	if ($g_valid_login == true && !$g_current_user->mailRole($_POST['rol_id']))
     {
-        $g_message->show("invalid");
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 	// Falls der User nicht eingeloggt ist, muss der Wert 3 sein
     if ($g_valid_login == false && $role->getValue("rol_mail_this_role") != 3)
     {
-        $g_message->show("invalid");
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 
@@ -305,24 +305,24 @@ if ($email->sendEmail())
         $g_message->setForwardUrl($g_homepage);
     }
     
-    if ($role->getValue("rol_id") > 0)
+    if ($role->getValue('rol_id') > 0)
     {
-        $g_message->show("mail_send", "die Rolle ". $role->getValue("rol_name"), "Hinweis");
+        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_SEND', $g_l10n->get('MAI_PHR_TO_ROLE', $role->getValue('rol_name'))));
     }
     else
     {
-        $g_message->show("mail_send", $_POST['mailto'], "Hinweis");
+        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_SEND', $_POST['mailto']));
     }
 }
 else
 {
-    if ($role->getValue("rol_id") > 0)
+    if ($role->getValue('rol_id') > 0)
     {
-        $g_message->show("mail_not_send", "die Rolle ". $role->getValue("rol_name"));
+        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $g_l10n->get('MAI_PHR_TO_ROLE', $role->getValue('rol_name'))));
     }
     else
     {
-        $g_message->show("mail_not_send", $_POST['mailto']);
+        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $_POST['mailto']));
     }
 }
 

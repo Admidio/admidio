@@ -21,7 +21,7 @@ require('../../system/login_valid.php');
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('usr_id')))
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -34,7 +34,7 @@ if(isset($_GET['user_id']))
 {
     if(is_numeric($_GET['user_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_usr_id = $_GET['user_id'];
 }
@@ -43,7 +43,7 @@ if(isset($_GET['new_user']))
 {
     if(is_numeric($_GET['new_user']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_new_user = $_GET['new_user'];
 }

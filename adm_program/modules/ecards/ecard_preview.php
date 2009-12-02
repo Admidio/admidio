@@ -12,7 +12,7 @@
 require_once('../../system/common.php');
 require_once('ecard_function.php');
 
-$funcClass = new FunctionClass($l10n);
+$funcClass = new FunctionClass($g_l10n);
 /****************** Ausgabe des geparsten Templates **************************/
 $bbcode_enable = false;
 if($g_preferences['enable_bbcode'])

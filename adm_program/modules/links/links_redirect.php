@@ -18,7 +18,7 @@ require('../../system/common.php');
 if ($g_preferences['weblinks_redirect_seconds'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_weblinks_module'] == 2)
 {
@@ -31,12 +31,12 @@ if (array_key_exists('lnk_id', $_GET))
 {
     if (is_numeric($_GET['lnk_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 if (array_key_exists('headline', $_GET))
 {
@@ -75,7 +75,7 @@ while($row = $g_db->fetch_array($result))
 // Wenn kein Link gefunden wurde Fehler ausgeben
 if ($url == '')
 {
-	$g_message->show('invalid');
+	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 $g_layout['header'] = '<meta http-equiv="refresh" content="'. $g_preferences["weblinks_redirect_seconds"].'; url='.$url.'">';

@@ -15,7 +15,7 @@ require("../../system/login_valid.php");
 // nur Webmaster dürfen User bestätigen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
 {
-    $g_message->show("norights");
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf

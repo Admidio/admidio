@@ -23,26 +23,26 @@ require('../../system/classes/table_announcement.php');
 if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // pruefen, ob der User auch die entsprechenden Rechte hat
 if(!$g_current_user->editAnnouncements())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET['ann_id']) && is_numeric($_GET['ann_id']) == false)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(is_numeric($_GET['mode']) == false
 || $_GET['mode'] < 1 || $_GET['mode'] > 3)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Ankuendigungsobjekt anlegen
@@ -55,7 +55,7 @@ if($_GET['ann_id'] > 0)
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
@@ -65,11 +65,11 @@ if($_GET['mode'] == 1)
 {
     if(strlen($_POST['ann_headline']) == 0)
     {
-        $g_message->show('feld', 'Überschrift');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_HEADLINE')));
     }
     if(strlen($_POST['ann_description']) == 0)
     {
-        $g_message->show('feld', 'Beschreibung');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_TEXT')));
     }
 
     if(isset($_POST['ann_global']) == false)
@@ -91,7 +91,7 @@ if($_GET['mode'] == 1)
 
     if($return_code < 0)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     
     unset($_SESSION['announcements_request']);

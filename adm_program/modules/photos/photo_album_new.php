@@ -22,7 +22,7 @@ require_once('../../system/classes/table_photos.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
@@ -35,13 +35,13 @@ if(!$g_current_user->editPhotoRight())
 //Albumsuebergabe Numerisch und != Null?
 if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false && $_GET['pho_id']!=NULL)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Aufgabe gesetzt, welche Aufgabe
 if(isset($_GET['job']) && $_GET['job'] != 'new' && $_GET['job'] != 'change')
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Variablen initialisieren
@@ -59,7 +59,7 @@ if ($_GET['job'] == 'change')
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $g_organization)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 

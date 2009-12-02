@@ -28,7 +28,7 @@ if ($g_preferences['enable_rss'] != 1)
 if ($g_preferences['enable_announcements_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist

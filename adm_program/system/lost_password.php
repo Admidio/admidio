@@ -19,7 +19,7 @@ getVars();
 // Systemmails und Passwort zusenden muessen aktiviert sein
 if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password_recovery'] != 1)
 {
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,

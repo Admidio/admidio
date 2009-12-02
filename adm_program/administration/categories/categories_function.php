@@ -34,7 +34,7 @@ if(isset($_GET['cat_id']))
 {
     if(is_numeric($_GET['cat_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_cat_id = $_GET['cat_id'];
 }
@@ -44,39 +44,39 @@ if(isset($_GET['type']))
 {
     if($_GET['type'] != 'ROL' && $_GET['type'] != 'LNK' && $_GET['type'] != 'USF' && $_GET['type'] != 'DAT')
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     if($_GET['type'] == 'DAT' && $g_current_user->editUsers() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(is_numeric($_GET['mode']) == false
 || $_GET['mode'] < 1 || $_GET['mode'] > 4)
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_GET['sequence']) && admStrToUpper($_GET['sequence']) != 'UP' && admStrToUpper($_GET['sequence']) != 'DOWN')
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Kategorie-Objekt anlegen
@@ -90,7 +90,7 @@ if($req_cat_id > 0)
     if($category->getValue('cat_org_id') >  0
     && $category->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 else
@@ -110,7 +110,7 @@ if($_GET['mode'] == 1)
 
     if(strlen($_POST['cat_name']) == 0)
     {
-        $g_message->show('feld', 'Name');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY','Name'));
     }
 
     // Kategorie ist immer Orga-spezifisch, ausser manuell angelegte Orga-Felder-Kategorie
@@ -147,7 +147,7 @@ if($_GET['mode'] == 1)
 
         if($row['count'] > 0)
         {
-            $g_message->show('category_exist');
+            $g_message->show($g_l10n->get('CAT_PHR_CATEGORY_EXIST'));
         }
     }
 
@@ -172,7 +172,7 @@ if($_GET['mode'] == 1)
 
     if($return_code < 0)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
@@ -204,7 +204,7 @@ if($_GET['mode'] == 1)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    $err_code = 'save';
+    $err_code = 'SYS_PHR_SAVE';
 }
 elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
 {
@@ -213,7 +213,7 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
     if($category->getValue('cat_system') == 1)
     {
         // Systemfelder duerfen nicht geloescht werden
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     if($_GET['mode'] == 2)
@@ -223,19 +223,19 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
 
         if($ret_code)
         {
-            $err_code = 'delete';
+            $err_code = 'SYS_PHR_DELETE';
         }
         else
         {
             // Kategorie konnte nicht geloescht werden, da evtl. die letzte Kategorie fuer diesen Typ
-            $err_code = 'category_not_delete';
+            $err_code = 'CAT_PHR_CATEGORY_NOT_DELETE';
         }
     }
     elseif($_GET['mode'] == 3)
     {
         // Frage, ob Kategorie geloescht werden soll
         $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$req_cat_id.'&mode=2&type='. $_GET['type']);
-        $g_message->show('delete_category', $category->getValue('cat_name'), 'Löschen');
+        $g_message->show($g_l10n->get('CAT_PHR_DELETE_CATEGORY', $category->getValue('cat_name')), $g_l10n->get('SYS_DELETE'));
     }
 }
 elseif($_GET['mode'] == 4)
@@ -247,5 +247,5 @@ elseif($_GET['mode'] == 4)
 
 // zur Kategorienuebersicht zurueck
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-$g_message->show($err_code);
+$g_message->show($g_l10n->get($err_code));
 ?>

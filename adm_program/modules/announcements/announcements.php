@@ -25,7 +25,7 @@ require_once('../../system/classes/table_announcement.php');
 if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_announcements_module'] == 2)
 {
@@ -35,7 +35,7 @@ elseif($g_preferences['enable_announcements_module'] == 2)
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_start    = 0;
-$req_headline = $l10n->get('ANN_ANNOUNCEMENT');
+$req_headline = $g_l10n->get('ANN_ANNOUNCEMENT');
 $req_id       = 0;
 $sql_datum    = '';
 
@@ -45,7 +45,7 @@ if(isset($_GET['start']))
 {
     if(is_numeric($_GET['start']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_start = $_GET['start'];
 }
@@ -59,7 +59,7 @@ if(isset($_GET['id']))
 {
     if(is_numeric($_GET['id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_id = $_GET['id'];
 }
@@ -68,7 +68,7 @@ if(array_key_exists('date', $_GET))
 {
     if(is_numeric($_GET['date']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     else
     {
@@ -189,8 +189,8 @@ if($g_current_user->editAnnouncements())
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$l10n->get('SYS_CREATE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$l10n->get('SYS_CREATE').'</a>
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_CREATE').'</a>
             </span>
         </li>
     </ul>';        
@@ -201,11 +201,11 @@ if ($g_db->num_rows($announcements_result) == 0)
     // Keine Ankuendigungen gefunden
     if($req_id > 0)
     {
-        echo '<p>'.$l10n->get('SYS_PHR_NO_ENTRY').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>'.$l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -233,7 +233,7 @@ else
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$req_headline.'"><img 
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$l10n->get('SYS_EDIT').'" title="'.$l10n->get('SYS_EDIT').'" /></a>';
+                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
@@ -241,7 +241,7 @@ else
                         {
                             echo '
                             <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue("ann_id").'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$l10n->get('SYS_DELETE').'" title="'.$l10n->get('SYS_DELETE').'" /></a>';
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         }    
                     }
                     echo '</div>
@@ -250,11 +250,11 @@ else
             <div class="boxBody">'.
                 $announcement->getDescription('HTML').'
                 <div class="editInformation">'.
-                    $l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue("ann_timestamp_create", $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue("ann_timestamp_create", $g_preferences['system_date'].' '.$g_preferences['system_time']));
 
                     if($announcement->getValue("ann_usr_id_change") > 0)
                     {
-                        echo '<br />'.$l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'],  $announcement->getValue("ann_timestamp_change", $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'],  $announcement->getValue("ann_timestamp_change", $g_preferences['system_date'].' '.$g_preferences['system_time']));
                     }
                 echo '</div>
             </div>

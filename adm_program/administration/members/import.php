@@ -15,7 +15,7 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...

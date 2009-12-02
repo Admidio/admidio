@@ -15,7 +15,7 @@ require('../../system/classes/table_rooms.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 $g_layout['header'] = '

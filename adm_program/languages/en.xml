@@ -10,9 +10,11 @@
 <text id="SYS_DELETE" version="2.2.0">Delete</text>
 <text id="SYS_HEADLINE" version="2.2.0">Headline</text>
 <text id="SYS_HELP" version="2.2.0">Help</text>
+<text id="SYS_INVALID_PAGE_VIEW" version="2.2.0">Invalid page view</text>
 <text id="SYS_MANDATORY_FIELD" version="2.2.0">Mandatory field</text>
 <text id="SYS_SAVE" version="2.2.0">Save</text>
 <text id="SYS_TEXT" version="2.2.0">Text</text>
+<text id="SYS_WEBMASTER" version="2.2.0">Webmaster</text>
 <text id="SYS_PHR_CREATE" version="2.2.0">Create %VAR1%</text>
 <text id="SYS_PHR_CREATED_BY" version="2.2.0">Created by %VAR1% on %VAR2%</text>
 <text id="SYS_PHR_EDIT" version="2.2.0">Edit %VAR1%</text>
@@ -22,7 +24,7 @@
 <text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
 </system>
 <ecards>
-<text id="ECA_GREETING_CARD_NEED_JAVASCRIPT" version="2.2.0">To send a greeting card you have to enable javascript!<br/>Please enable javascript in order to send a greeting card!</text>
+<text id="ECA_GREETING_CARD_NEED_JAVASCRIPT" version="2.2.0">To send a greeting card you have to enable javascript!\nPlease enable javascript in order to send a greeting card!</text>
 <text id="ECA_VIEW_PICTURE_FULL_SIZED" version="2.2.0">Show picture in full-size</text>
 <text id="ECA_GREETING_CARD_EDIT" version="2.2.0">Edit greeting card</text>
 <text id="ECA_GREETING_CARD_SEND" version="2.2.0">Send greeting card</text>

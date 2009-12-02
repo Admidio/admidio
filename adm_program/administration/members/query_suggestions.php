@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen Querysuggestions empfangen
 if (!$g_current_user->editUsers())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 if (isset($_GET['members']) && is_numeric($_GET['members']))

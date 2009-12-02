@@ -15,12 +15,12 @@ require('../../system/login_valid.php');
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 if(count($_SESSION['file_lines']) == 0)
 {
-    $g_message->show('file_not_exist');
+    $g_message->show($g_l10n->get('SYS_PHR_FILE_NOT_EXIST'));
 }
 
 // feststellen, welches Trennzeichen in der Datei verwendet wurde

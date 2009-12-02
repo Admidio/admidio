@@ -28,13 +28,13 @@ if ($g_preferences['enable_bbcode'] == 1)
 if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show('module_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // Es muss ein (nicht zwei) Parameter uebergeben werden: Entweder id oder cid...
 if (isset($_GET['id']) && isset($_GET['cid']))
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Erst einmal die Rechte abklopfen...
@@ -47,7 +47,7 @@ if(($g_preferences['enable_guestbook_module'] == 2 || $g_preferences['enable_gbo
     if (!$g_current_user->commentGuestbookRight())
     {
         // der User hat kein Recht zu kommentieren
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
@@ -59,7 +59,7 @@ if (isset($_GET['cid']))
     if (!$g_current_user->editGuestbookRight())
     {
         // der User hat kein Recht Kommentare zu editieren
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
 }
@@ -70,19 +70,19 @@ if (array_key_exists('id', $_GET))
 {
     if (is_numeric($_GET['id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 elseif (array_key_exists('cid', $_GET))
 {
     if (is_numeric($_GET['cid']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
@@ -107,7 +107,7 @@ if(isset($_GET['cid']) && $_GET['cid'] > 0)
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook_comment->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 

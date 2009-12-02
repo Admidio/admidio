@@ -33,7 +33,7 @@ if(isset($_GET['lst_id']))
 {
     if(is_numeric($_GET['lst_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }   
     $req_lst_id = $_GET['lst_id'];
 } 
@@ -42,7 +42,7 @@ if(isset($_GET['rol_id']))
 {
     if(is_numeric($_GET['rol_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }   
     $req_rol_id = $_GET['rol_id'];
 }  

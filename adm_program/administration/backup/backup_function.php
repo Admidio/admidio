@@ -36,7 +36,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // nur Webmaster duerfen ein Backup starten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 $g_layout['title'] = 'Datenbank Backup';

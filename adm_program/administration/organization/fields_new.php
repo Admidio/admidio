@@ -20,7 +20,7 @@ require_once('../../system/classes/table_user_field.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show('norights');
+    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -32,7 +32,7 @@ if(isset($_GET['usf_id']))
 {
     if(is_numeric($_GET['usf_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     $req_usf_id = $_GET['usf_id'];
 }
@@ -50,7 +50,7 @@ if($req_usf_id > 0)
     if($user_field->getValue('cat_org_id') >  0
     && $user_field->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 

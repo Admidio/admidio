@@ -256,7 +256,7 @@ $count_cat_entries = 0;
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
 if(!$g_db->data_seek($result_lst, $_GET['start']))
 {
-    $g_message->show('invalid');
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // SQL-Statement fuer alle Listenkonfigurationen vorbereiten, die angezeigt werdne sollen

@@ -29,7 +29,7 @@ if (array_key_exists('lst_id', $_GET))
 {
     if (is_numeric($_GET['lst_id']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 else
@@ -41,21 +41,21 @@ if (array_key_exists('mode', $_GET))
 {
     if (is_numeric($_GET['mode']) == false)
     {
-        $g_message->show('invalid');
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 
 // Mindestens ein Feld sollte zugeordnet sein
 if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
 {
-    $g_message->show('feld', 'Feld 1');
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Feld 1'));
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($_GET['mode'] == 2
 && (isset($_POST['rol_id']) == false || $_POST['rol_id'] == 0 || is_numeric($_POST['rol_id']) == false))
 {
-    $g_message->show('feld', 'Rolle');
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Rolle'));
 }
 
 if(isset($_POST['show_members']) == false)
@@ -82,13 +82,13 @@ if($_GET['mode'] != 2)
     // globale Listen duerfen nur von Webmastern editiert werden
     if($list->getValue('lst_global') == 1 && $g_current_user->isWebmaster() == false)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     elseif($list->getValue('lst_usr_id') != $g_current_user->getValue('usr_id')
     && $list->getValue('lst_global') == 0
     && $list->getValue('lst_id') > 0)
     {
-        $g_message->show('norights');
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
