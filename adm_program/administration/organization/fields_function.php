@@ -111,7 +111,7 @@ if($_GET['mode'] == 1)
 
         if($row['count'] > 0)
         {
-            $g_message->show('field_exist');
+            $g_message->show($g_l10n->get('ORG_PHR_FIELD_EXIST'));
         }      
     }
 

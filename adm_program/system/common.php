@@ -127,7 +127,7 @@ else
     if($g_current_organization->getValue('org_id') == 0)
     {
         // Organisation wurde nicht gefunden
-        die('<div style="color: #CC0000;">Error: '. $message_text['missing_orga']. '</div>');
+        die('<div style="color: #CC0000;">Error: The organization out of config.php could not be found in the database!</div>');
     }
     
     // organisationsspezifische Einstellungen aus adm_preferences auslesen

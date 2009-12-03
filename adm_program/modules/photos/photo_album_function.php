@@ -95,7 +95,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
         }
         else
         {
-            $g_message->show('date_invalid', 'Beginn');
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Beginn', $g_preferences['system_date']));
         }
     }
     else
@@ -112,7 +112,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
         }
         else
         {
-            $g_message->show('date_invalid', 'Ende');
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Ende', $g_preferences['system_date']));
         }
     }
     else

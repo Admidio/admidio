@@ -23,7 +23,16 @@ class Language
     public function __construct($data, $options, $data_is_url)
     {
         $this->l10nObject = new SimpleXMLElement($data, $options, $data_is_url);
-        $this->modules = array('SYS' => 'system', 'ANN' => 'announcement', 'ASS' => 'assign', 'CAT' => 'category', 'ECA' => 'ecards', 'MAI' => 'mail', 'PRO' => 'profile');
+        $this->modules = array('ANN' => 'announcement', 
+                               'ASS' => 'assign', 
+                               'CAT' => 'category', 
+                               'ECA' => 'ecards', 
+                               'MAI' => 'mail', 
+                               'MEM' => 'members', 
+                               'ORG' => 'organizsation', 
+                               'PRO' => 'profile', 
+                               'ROL' => 'roles',
+                               'SYS' => 'system');
     }
 
     // liest den Text mit der uebergebenen ID aus und gibt diese zurueck

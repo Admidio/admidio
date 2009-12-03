@@ -27,44 +27,34 @@ $_SESSION['organization_request'] = $_REQUEST;
 
 if(strlen($_POST['org_longname']) == 0)
 {
-    $g_message->addVariableContent('Name (lang)', 1);
-    $g_message->addVariableContent('Allgemein', 2);
-    $g_message->show('field_empty_area');
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Name (lang)', 'Allgemein'));
 }
 
 if(strlen($_POST['email_administrator']) == 0)
 {
-    $g_message->addVariableContent('Systemmailadresse', 1);
-    $g_message->addVariableContent('Systemmails', 2);
-    $g_message->show('field_empty_area');
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Systemmailadresse', 'Systemmails'));
 }
 else
 {
     if(!isValidEmailAddress($_POST['email_administrator']))
     {
-        $g_message->show('email_invalid');
+        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_INVALID'));
     }
 }
 
 if(strlen($_POST['theme']) == 0)
 {
-    $g_message->addVariableContent('Admidio-Theme', 1);
-    $g_message->addVariableContent('Allgemein', 2);
-    $g_message->show('field_empty_area');
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Admidio-Theme', 'Allgemein'));
 }
 
 if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
 {
-    $g_message->addVariableContent('Automatischer Logout', 1);
-    $g_message->addVariableContent('Allgemein', 2);
-    $g_message->show('field_empty_area');
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Automatischer Logout', 'Allgemein'));
 }
 
 if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
 {
-    $g_message->addVariableContent('Anzeige Redirect', 1);
-    $g_message->addVariableContent('Weblinks', 2);
-    $g_message->show('field_empty_area');
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Anzeige Redirect', 'Weblinks'));
 }
 
 // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde

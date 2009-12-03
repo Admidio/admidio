@@ -200,7 +200,7 @@ elseif($_GET["mode"] == 2)
                 }
                 else
                 {
-                    $g_message->show("date_invalid", "Zeitraum bis");
+                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Zeitraum bis', $g_preferences['system_date']));
                 }
             }
             else
@@ -210,7 +210,7 @@ elseif($_GET["mode"] == 2)
         }
         else
         {
-            $g_message->show("date_invalid", "Zeitraum von");
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Zeitraum von', $g_preferences['system_date']));
         }
     }
 
@@ -374,11 +374,11 @@ elseif($_GET["mode"] == 5)
     $msg_code = "role_active";
     $g_message->addVariableContent($role->getValue("rol_name"));
 }
-elseif($_GET["mode"] == 6)
+elseif($_GET['mode'] == 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=$req_rol_id&amp;mode=4");
-    $g_message->show("delete_role", $role->getValue("rol_name"), "Löschen");
+    $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$req_rol_id.'&amp;mode=4');
+    $g_message->show($g_l10n->get('ROL_PHR_ROLE_DELETE', $role->getValue('rol_name'));
 }
 elseif($_GET['mode'] == 7)
 {

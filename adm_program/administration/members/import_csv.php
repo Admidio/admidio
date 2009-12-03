@@ -233,5 +233,5 @@ $_SESSION['file_lines']       = '';
 $_SESSION['value_separator']  = '';
 
 $g_message->setForwardUrl($g_root_path.'/adm_program/administration/members/members.php');
-$g_message->show('import', $count_import);
+$g_message->show($g_l10n->get('MEM_PHR_IMPORT_SUCCESSFUL', $count_import));
 ?>

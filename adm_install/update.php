@@ -47,7 +47,6 @@ if(!isset($g_db_type))
 require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
-require_once(SERVER_PATH. '/adm_program/system/message_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 
  // Verbindung zu Datenbank herstellen
@@ -60,7 +59,7 @@ $g_current_organization = new Organization($g_db, $g_organization);
 if($g_current_organization->getValue('org_id') == 0)
 {
     // Organisation wurde nicht gefunden
-    die('<div style="color: #CC0000;">Error: '. $message_text['missing_orga']. '</div>');
+    die('<div style="color: #CC0000;">Error: The organization out of config.php could not be found in the database!</div>');
 }
 
 // organisationsspezifische Einstellungen aus adm_preferences auslesen

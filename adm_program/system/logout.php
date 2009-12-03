@@ -35,7 +35,7 @@ unset($_SESSION['g_current_user']);
 // da der Inhalt noch auf der eingeloggten Seite steht, hier umsetzen
 $g_homepage = $g_root_path. '/'. $g_preferences['homepage_logout'];
 
-$message_code = 'logout';
+$message_code = 'SYS_PHR_LOGOUT_SUCCESSFUL';
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
 if($g_preferences['enable_forum_interface'] && $g_forum->session_valid)
@@ -46,5 +46,5 @@ if($g_preferences['enable_forum_interface'] && $g_forum->session_valid)
 
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite
 $g_message->setForwardUrl($g_homepage, 2000);
-$g_message->show($message_code);
+$g_message->show($g_l10n->get($message_code));
 ?>

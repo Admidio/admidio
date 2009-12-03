@@ -237,10 +237,10 @@ elseif($_GET["mode"] == 6)
     {
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
-        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=3");
-        $g_message->addVariableContent($user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        $g_message->addVariableContent($g_current_organization->getValue("org_longname"));
-        $g_message->show("delete_user", "", "Löschen");
+        $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=3');
+        $g_message->addVariableContent($user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
+        $g_message->addVariableContent($g_current_organization->getValue('org_longname'));
+        $g_message->show($g_l10n->get('MEM_PHR_USER_DELETE'));
     }
     else
     {
