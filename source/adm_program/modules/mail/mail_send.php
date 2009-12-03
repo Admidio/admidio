@@ -154,7 +154,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
 }
 else
 {
-    $g_message->show("email_invalid");
+    $g_message->show($g_l10n->get('SYS_PHR_EMAIL_INVALID'));
 }
 
 if (array_key_exists("rol_id", $_POST))

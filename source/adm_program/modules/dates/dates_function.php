@@ -190,7 +190,7 @@ if($_GET['mode'] == 1)
     }
     else
     {
-        $g_message->show('date_invalid', 'Datum Beginn');
+        $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Beginn', $g_preferences['system_date']));
     }
 
     // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
@@ -221,7 +221,7 @@ if($_GET['mode'] == 1)
     }
     else
     {
-        $g_message->show('date_invalid', 'Datum Ende');
+        $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Ende', $g_preferences['system_date']));
     }
     
     if($date_from_timestamp > $date_to_timestamp)

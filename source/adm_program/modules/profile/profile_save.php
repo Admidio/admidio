@@ -148,7 +148,7 @@ foreach($user->userFieldData as $field)
                 // Datum muss gueltig sein und formatiert werden
                 if(dtCheckDate($_POST[$post_id]) == false)
                 {
-                    $g_message->show('date_invalid', $field->getValue('usf_name'));
+                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
                 }
                 $_POST[$post_id] = dtFormatDate($_POST[$post_id], 'Y-m-d');
             }
@@ -157,7 +157,7 @@ foreach($user->userFieldData as $field)
                 // Pruefung auf gueltige E-Mail-Adresse
                 if(!isValidEmailAddress($_POST[$post_id]))
                 {
-                    $g_message->show('email_invalid');
+                    $g_message->show($g_l10n->get('SYS_PHR_EMAIL_INVALID'));
                 }        
             }
             elseif($field->getValue('usf_type') == 'NUMERIC')
@@ -165,7 +165,7 @@ foreach($user->userFieldData as $field)
                 // Zahl muss numerisch sein
                 if(is_numeric(strtr($_POST[$post_id], ',.', '00')) == false)
                 {
-                    $g_message->show('field_numeric', $field->getValue('usf_name'));
+                    $g_message->show($g_l10n->get('PRO_PHR_FIELD_NUMERIC', $field->getValue('usf_name')));
                 }
             }
         }
@@ -207,7 +207,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
 
                 if(strcmp($row['usr_id'], $usr_id) != 0)
                 {
-                    $g_message->show('login_name');
+                    $g_message->show($g_l10n->get('PRO_PHR_LOGIN_NAME_EXIST'));
                 }
             }
 

@@ -61,27 +61,33 @@ if(isset($_GET["mode"]) && is_numeric($_GET["mode"]) && $_GET["mode"] == 1)
     }
     else
     {
-        $g_message->show("date_invalid", "Beginn", "Hinweis", false);
+        $g_message->setExcludeThemeBody();
+        $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Beginn', $g_preferences['system_date']));
     }
     //Falls gesetzt wird das Enddatum gecheckt
-    if($_GET['rol_end'] != '') {
-       if(dtCheckDate($_GET['rol_end']))
-      {
-         // Datum formatiert zurueckschreiben
-         $date_arr = explode(".", $_GET['rol_end']);
-         $date_from_timestamp = mktime(0,0,0,$date_arr[1],$date_arr[0],$date_arr[2]);
-         $date_end = date("Y-m-d H:i:s", $date_from_timestamp);
-       }
-       else
-       {
-           $g_message->show("date_invalid", "Ende", "Hinweis", false);
-       }
-       if ($date_end < $date_begin) {
-          $g_message->show("date_invalid", "Anfang/Ende", "Hinweis", false);
-       }
+    if($_GET['rol_end'] != '') 
+    {
+        if(dtCheckDate($_GET['rol_end']))
+        {
+            // Datum formatiert zurueckschreiben
+            $date_arr = explode(".", $_GET['rol_end']);
+            $date_from_timestamp = mktime(0,0,0,$date_arr[1],$date_arr[0],$date_arr[2]);
+            $date_end = date("Y-m-d H:i:s", $date_from_timestamp);
+        }
+        else
+        {
+            $g_message->setExcludeThemeBody();
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Ende', $g_preferences['system_date']));
+        }
+        if ($date_end < $date_begin) 
+        {
+            $g_message->setExcludeThemeBody();
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Anfang/Ende', $g_preferences['system_date']));
+        }
     }
-    else {
-      $date_end = "9999-12-31";
+    else 
+    {
+        $date_end = "9999-12-31";
     }
 
    $mem->setValue('mem_begin',$date_begin);

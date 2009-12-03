@@ -22,7 +22,7 @@ if($g_current_user->isWebmaster() == false)
 // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
 if($g_debug == 0 && file_exists('../../../adm_install'))
 {
-    $g_message->show('installFolderExists');
+    $g_message->show($g_l10n->get('SYS_PHR_INSTALL_FOLDER_EXIST'));
 }
 
 // Navigation faengt hier im Modul an

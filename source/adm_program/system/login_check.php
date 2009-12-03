@@ -86,7 +86,7 @@ if ($user_found >= 1)
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
         if(time() - mysqlmaketimestamp($g_current_user->getValue('usr_date_invalid')) < 900)
         {
-            $g_message->show('login_failed');
+            $g_message->show($g_l10n->get('SYS_PHR_LOGIN_FAILED'));
         }
     }
 
@@ -139,7 +139,7 @@ if ($user_found >= 1)
         else
         {
             // User gibt es im Forum nicht, also eine reine Admidio-Anmeldung.
-            $login_message = 'login';
+            $login_message = 'SYS_PHR_LOGIN_SUCCESSFUL';
         }
 
         // bei einer Beta-Version noch einen Hinweis ausgeben !
@@ -179,7 +179,7 @@ if ($user_found >= 1)
 
         if($g_current_user->getValue('usr_number_invalid') >= 3)
         {
-            $g_message->show('login_failed');
+            $g_message->show($g_l10n->get('SYS_PHR_LOGIN_FAILED'));
         }
         else
         {
@@ -189,7 +189,7 @@ if ($user_found >= 1)
 }
 else
 {
-    $g_message->show('login_unknown');
+    $g_message->show($g_l10n->get('SYS_PHR_LOGIN_UNKNOWN'));
 }
 
 ?>
