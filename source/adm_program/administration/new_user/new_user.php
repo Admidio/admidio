@@ -21,7 +21,7 @@ if($g_current_user->approveUsers() == false)
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show("module_disabled");
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
 // Navigation faengt hier im Modul an
@@ -50,16 +50,16 @@ $member_found = $g_db->num_rows($usr_result);
 if ($member_found == 0)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show("nomembers", "", "Anmeldungen");
+    $g_message->show($g_l10n->get('NWU_PHR_NO_REGISTRATIONS'), $g_l10n->get('NWU_REGISTRATION'));
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Neue Anmeldungen";
+$g_layout['title']  = $g_l10n->get('NWU_NEW_REGISTRATIONS');
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo '

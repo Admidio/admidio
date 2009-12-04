@@ -261,7 +261,7 @@ class PhpBB2
             }
             else
             {
-                $this->message = 'login';
+                $this->message = 'SYS_PHR_LOGIN_SUCCESSFUL';
                 $this->session_valid = FALSE;
             }
         }
@@ -298,7 +298,7 @@ class PhpBB2
             if($this->message == '')
             {
                 // Im Forum und in Admidio angemeldet, Meldung vorbereiten
-                $this->message = 'login_forum';
+                $this->message = 'SYS_PHR_LOGIN_FORUM_SUCCESSFUL';
             }
         }
     }

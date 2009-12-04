@@ -11,30 +11,11 @@
 
 $message_text = array(
 
-'noaccept' =>
-    'Deine Anmeldung wurde noch nicht vom Administrator bestätigt.<br /><br />
-    Das Einloggen ist noch nicht möglich',
-
-'nodata' =>
-    'Es sind keine Daten vorhanden!',
-
-
-'nomembers' =>
-    'Es sind keine Anmeldungen vorhanden.',
-
-'norolle' =>
-    'Die Daten können nicht gespeichert werden.<br />
-    Dem Benutzer sind keine Rollen zugeordnet.',
     
 'no_default_role' =>
     'In den Organisationseinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt.
     Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.',
 
-'no_cookie' =>
-    'Der Login kann nicht durchgeführt werden, da dein Browser
-    das Setzen von Cookies verbietet!<br /><br />
-    Damit du dich erfolgreich anmelden kannst, musst du in deinem Browser
-    so einstellen, dass dieser Cookies von %VAR1% akzeptiert.',
 
 'remove_member' =>
     'Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?',
@@ -113,9 +94,6 @@ $message_text = array(
 // Ende Meldungen Listen
 
 //Meldungen Anmeldung im Forum
-'login_forum' =>
-    'Du hast dich erfolgreich auf Admidio und <br />im Forum %VAR2%
-    als User %VAR1% angemeldet.',
 
 'login_forum_pass' =>
     'Dein Password im Forum %VAR2% wurde auf das Admidio-Password zurückgesetz.<br />

@@ -189,7 +189,22 @@ if ($user_found >= 1)
 }
 else
 {
-    $g_message->show($g_l10n->get('SYS_PHR_LOGIN_UNKNOWN'));
+    // nun noch pruefen ob Login ggf. noch nicht freigeschaltet wurde
+    $sql    = 'SELECT usr_id
+                 FROM '. TBL_USERS. '
+                WHERE usr_login_name LIKE "'. $loginname. '"
+                  AND usr_valid      = 0
+                  AND usr_reg_org_shortname LIKE "'.$g_current_organization->getValue('org_shortname').'" ';
+    $result = $g_db->query($sql);
+
+    if($g_db->num_rows($result) == 1)
+    {
+        $g_message->show($g_l10n->get('SYS_PHR_LOGIN_NOT_ACTIVATED'));
+    }
+    else
+    {
+        $g_message->show($g_l10n->get('SYS_PHR_LOGIN_UNKNOWN'));
+    }
 }
 
 ?>

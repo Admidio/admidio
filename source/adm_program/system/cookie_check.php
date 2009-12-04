@@ -20,7 +20,7 @@ if(isset($_COOKIE[$cookie_praefix. '_ID']) == false)
 {
     unset($_SESSION['login_forward_url']);
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show('no_cookie', $g_current_organization->getValue('org_homepage'));
+    $g_message->show($g_l10n->get('SYS_PHR_COOKIE_NOT_SET', $g_current_organization->getValue('org_homepage')));
 }
 else
 {
@@ -43,7 +43,7 @@ else
         $g_message->addVariableContent($g_forum->sitename);
     }
 
-    if($message_code != 'login' && $message_code != 'login_forum')
+    if($message_code != 'SYS_PHR_LOGIN_SUCCESSFUL' && $message_code != 'SYS_PHR_LOGIN_FORUM_SUCCESSFUL')
     {
         // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
         $show_time = 0;
@@ -56,6 +56,6 @@ else
     }
     $g_message->setForwardUrl($_SESSION['login_forward_url'], $show_time);
     unset($_SESSION['login_forward_url']);  
-    $g_message->show($message_code);
+    $g_message->show($g_l10n->get($message_code));
 }
 ?>

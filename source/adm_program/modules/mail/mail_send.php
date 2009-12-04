@@ -20,7 +20,7 @@ require("../../system/classes/table_roles.php");
 if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show("module_disabled");
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 } 
 
 // Der Inhalt des Formulars wird nun in der Session gespeichert...

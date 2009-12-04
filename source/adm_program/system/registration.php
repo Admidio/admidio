@@ -9,17 +9,17 @@
  *
  *****************************************************************************/
 
-require("common.php");
+require('common.php');
 
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show("module_disabled");
+    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 else
 {
     // bei Registrierung wird ueber das Profil weiter bearbeitet
-    header("Location: $g_root_path/adm_program/modules/profile/profile_new.php?new_user=2");
+    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2');
     exit();
 }
 
