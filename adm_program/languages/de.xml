@@ -66,6 +66,9 @@
     <text id="ECA_NEW_MESSAGE_RECEIVED" version="2.2.0">Neue Nachricht erhalten</text>
     <text id="ECA_GREETING_CARD" version="2.2.0">Grußkarte</text>
 </ecards>
+<lists>
+    <text id="LST_PHR_NO_USER_FOUND" version="2.2.0">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
+</lists>
 <mail>
     <text id="MAI_PHR_TO_ROLE" version="2.2.0" description="E-Mail an die Rolle XY schreiben">die Rolle %VAR1_BOLD%</text>
 </mail>
@@ -73,6 +76,11 @@
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" version="2.2.0">%VAR1% Datensätze wurden erfolgreich importiert!</text>
     <text id="MEM_PHR_USER_DELETE" version="2.2.0">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
 </members>
+<new_user>
+    <text id="NWU_REGISTRATION" version="2.2.0">Anmeldung</text>
+    <text id="NWU_NEW_REGISTRATIONS" version="2.2.0">Neue Anmeldungen</text>
+    <text id="NWU_PHR_NO_REGISTRATIONS" version="2.2.0">Es sind keine Anmeldungen vorhanden.</text>
+</new_user>
 <organization>
     <text id="ORG_PHR_FIELD_EMPTY_AREA" version="2.2.0">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
     <text id="ORG_PHR_FIELD_EXIST" version="2.2.0">Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.</text>
@@ -86,6 +94,7 @@
     <text id="PRO_PHR_PASSWORD_LENGTH" version="2.2.0">Das Passwort muss aus mindestens 6 Zeichen bestehen.</text>
     <text id="PRO_PHR_PASSWORD_OLD_WRONG" version="2.2.0">Das alte Passwort ist falsch.</text>
     <text id="PRO_PHR_PASSWORDS_NOT_EQUAL" version="2.2.0">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
+    <text id="PRO_PHR_ROLE_NOT_ASSIGNED" version="2.2.0">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
 </profile>
 <roles>
     <text id="ROL_PHR_ROLE_DELETE" version="2.2.0">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
@@ -103,6 +112,7 @@
     <text id="SYS_TEXT" version="2.2.0">Text</text>
     <text id="SYS_WEBMASTER" version="2.2.0">Webmaster</text>
     <text id="SYS_PHR_BETA_VERSION" version="2.2.0">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
+    <text id="SYS_PHR_COOKIE_NOT_SET" version="2.2.0">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" version="2.2.0">%VAR1% anlegen</text>
     <text id="SYS_PHR_CREATED_BY" version="2.2.0">Angelegt von %VAR1% am %VAR2%</text>
     <text id="SYS_PHR_DATABASE_INVALID" version="2.2.0" description="Var3 und Var4 erzeugen den MailTo-Link">Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.\n\nWende dich bitte an den %VAR3%Webmaster%VAR4% dieser Webseite.</text>
@@ -118,6 +128,12 @@
     <text id="SYS_PHR_FILE_NOT_EXIST" version="2.2.0">Die ausgewählte Datei existiert nicht auf dem Server.</text>
     <text id="SYS_PHR_INSTALL_FOLDER_EXIST" version="2.2.0">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_PHR_LAST_EDITED_BY" version="2.2.0">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
+    <text id="SYS_PHR_LOGIN_FAILED" version="2.2.0">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</text>
+    <text id="SYS_PHR_LOGIN_NOT_ACTIVATED" version="2.2.0">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</text>
+    <text id="SYS_PHR_LOGIN_FORUM_SUCCESSFUL" version="2.2.0">Du hast dich erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1_BOLD% angemeldet.</text>
+    <text id="SYS_PHR_LOGIN_SUCCESSFUL" version="2.2.0">Du hast dich erfolgreich angemeldet.</text>
+    <text id="SYS_PHR_LOGIN_UNKNOWN" version="2.2.0">Der angegebene Benutzername existiert nicht.</text>
+    <text id="SYS_PHR_LOGOUT_SUCCESSFUL" version="2.2.0">Du wurdest erfolgreich abgemeldet.</text>
     <text id="SYS_PHR_MODULE_DISABLED" version="2.2.0">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_PHR_NO_ENTRY" version="2.2.0">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
@@ -125,9 +141,5 @@
     <text id="SYS_PHR_PASSWORD_UNKNOWN" version="2.2.0">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
     <text id="SYS_PHR_SAVE" version="2.2.0">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_WRITE_ACCESS" version="2.2.0" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
-    <text id="SYS_PHR_LOGIN_FAILED" version="2.2.0">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</text>
-    <text id="SYS_PHR_LOGIN_UNKNOWN" version="2.2.0">Der angegebene Benutzername existiert nicht.</text>
-    <text id="SYS_PHR_LOGIN_SUCCESSFUL" version="2.2.0">Du hast dich erfolgreich angemeldet.</text>
-    <text id="SYS_PHR_LOGOUT_SUCCESSFUL" version="2.2.0">Du wurdest erfolgreich abgemeldet.</text>
 </system>
 </language>

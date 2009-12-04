@@ -170,7 +170,7 @@ $num_members = $g_db->num_rows($result_list);
 if($num_members == 0)
 {
     // Es sind keine Daten vorhanden !
-    $g_message->show('nodata', '', 'Hinweis');
+    $g_message->show($g_l10n->get('LST_PHR_NO_USER_FOUND'));
 }
 
 if($num_members < $req_start)

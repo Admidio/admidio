@@ -188,12 +188,12 @@ $g_current_session->renewUserObject();
 
 if(count($parentRoles) > 0 )
 {
-    $sql = "REPLACE INTO ". TBL_MEMBERS. " (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ";
+    $sql = 'REPLACE INTO '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ';
 
     // alle einzufuegenden Rollen anhaengen
     foreach($parentRoles as $actRole)
     {
-        $sql .= " ($actRole, $req_usr_id, '".DATE_NOW."', '9999-12-31', 0),";
+        $sql .= ' ('.$actRole.', '.$req_usr_id.', "'.DATE_NOW.'", "9999-12-31", 0),';
     }
 
     // Das letzte Komma wieder wegschneiden
@@ -205,11 +205,11 @@ if(count($parentRoles) > 0 )
 if($req_new_user == 1 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
-    $g_message->show("norolle");
+    $g_message->show($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED'));
 }
 
 // zur Ausgangsseite zurueck
-if(strpos($_SESSION['navigation']->getUrl(), "new_user_assign.php") > 0)
+if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
 {
     // von hier aus direkt zur Registrierungsuebersicht zurueck
     $_SESSION['navigation']->deleteLastUrl();
