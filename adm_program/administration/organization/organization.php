@@ -202,8 +202,8 @@ echo '
         </td>
         <td>
         <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'ecard-module\');"><img src="'.THEME_PATH.'/icons/ecard.png" alt="Grußkarten" title="Grußkarten" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'ecard-module\');">Grußkarten</a></span>
+            <a href="#" onclick="toggleDiv(\'ecard-module\');"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" title="'.$g_l10n->get("ECA_GREETING_CARDS").'" /></a>
+            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'ecard-module\');">'.$g_l10n->get("ECA_GREETING_CARDS").'</a></span>
         </span>
         </td>
         <td>
@@ -1402,167 +1402,162 @@ echo '
         /**************************************************************************************/
         //Einstellungen Grußkartenmodul
         /**************************************************************************************/
-        echo "
-        <div class=\"groupBox\" id=\"ecard-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/ecard.png\" alt=\"Grußkarten\" />
-                Einstellungen Grußkartenmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="ecard-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" />'.$g_l10n->get("ECA_SETTINGS_GREETING_CARDS").'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_ecard_module\">Grußkartenmodul aktivieren:</label></dt>
+                            <dt><label for="enable_ecard_module">'.$g_l10n->get("ECA_ACTIVATE_GREETING_CARDS").':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_ecard_module\" name=\"enable_ecard_module\" ";
-                                if(isset($form_values['enable_ecard_module']) && $form_values['enable_ecard_module'] == 1)
+                                <input type="checkbox" id="enable_ecard_module" name="enable_ecard_module" ';
+                                if(isset($form_values["enable_ecard_module"]) && $form_values["enable_ecard_module"] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.
-                        Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.
-                        Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)
+                    <li class="smallFontSize">
+						'.$g_l10n->get("ECA_DESC_ACTIVATE_GREETING_CARDS").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_view_width\">Skalierung Vorschaubild (Breite x Höhe):</label></dt>
-                            <dd><input type=\"text\" id=\"ecard_view_width\" name=\"ecard_view_width\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_view_width']. "\" />
+                            <dt><label for="ecard_view_width">'.$g_l10n->get("ECA_SCALING_PREVIEW").':</label></dt>
+                            <dd><input type="text" id="ecard_view_width" name="ecard_view_width" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_view_width"].'" />
                                 x
-                                <input type=\"text\" id=\"ecard_view_height\" name=\"ecard_view_height\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_view_height']. "\" />
+                                <input type="text" id="ecard_view_height" name="ecard_view_height" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_view_height"].'" />
                                 Pixel
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann festgelegt werden auf welchen Wert die Breite und H&ouml;he des Vorschau-Bildes skaliert werden soll.
-                        (Standard: 250 x 250 Pixel²)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ECA_DESC_SCALING_PREVIEW").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_card_picture_width\">Skalierung Grußkartenbild (Breite x Höhe):</label></dt>
-                            <dd><input type=\"text\" id=\"ecard_card_picture_width\" name=\"ecard_card_picture_width\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_width']. "\" />
+                            <dt><label for="ecard_card_picture_width">'.$g_l10n->get("ECA_SCALING_GREETING_CARD").':</label></dt>
+                            <dd><input type="text" id="ecard_card_picture_width" name="ecard_card_picture_width" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_card_picture_width"].'" />
                                 x
-                                <input type=\"text\" id=\"ecard_card_picture_height\" name=\"ecard_card_picture_height\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_card_picture_height']. "\" />
+                                <input type="text" id="ecard_card_picture_height" name="ecard_card_picture_height" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_card_picture_height"].'" />
                                 Pixel
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                       Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll.
-                       (Standard: 400 x 250 Pixel²)
+                    <li class="smallFontSize">
+                       '.$g_l10n->get("ECA_DESC_SCALING_GREETING_CARD").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_cc_recipients\">Max. weitere Empfänger</label>
+                            <dt><label for="ecard_cc_recipients">'.$g_l10n->get("ECA_MAX_CC").':</label>
                             </dt>
                             <dd>
-                            <select size=\"1\" id=\"enable_ecard_cc_recipients\" name=\"enable_ecard_cc_recipients\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('cc_recipients_count','enable_ecard_cc_recipients','ecard_cc_recipients',0);\">
-                                    <option value=\"0\" ";
-                                    if($form_values['enable_ecard_cc_recipients'] == 0)
+                            <select size="1" id="enable_ecard_cc_recipients" name="enable_ecard_cc_recipients" style="margin-right:20px;" onchange="javascript:showHideMoreSettings(\'cc_recipients_count\',\'enable_ecard_cc_recipients\',\'ecard_cc_recipients\',0);">
+                                    <option value="0" ';
+                                    if($form_values["enable_ecard_cc_recipients"] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['enable_ecard_cc_recipients'] == 1)
+                                    echo '>'.$g_l10n->get("SYS_DEACTIVATED").'</option>
+                                    <option value="1" ';
+                                    if($form_values["enable_ecard_cc_recipients"] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
+                                    echo '>'.$g_l10n->get("SYS_ACTIVATED").'</option>
                                 </select>
-                                <div id=\"cc_recipients_count\" style=\"display:inline;\">";
-                                if($form_values['enable_ecard_cc_recipients'] == 1)
+                                <div id="cc_recipients_count" style="display:inline;">';
+                                if($form_values["enable_ecard_cc_recipients"] == 1)
                                 {
-                                echo "<input type=\"text\" id=\"ecard_cc_recipients\" name=\"ecard_cc_recipients\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_cc_recipients']. "\" />";
+                                echo '<input type="text" id="ecard_cc_recipients" name="ecard_cc_recipients" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_cc_recipients"].'" />';
                                 }
-                            echo "</div>
+                            echo '</div>
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ECA_DESC_MAX_CC").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_text_length\">Max. Länge des Mitteilungstextes:</label></dt>
+                            <dt><label for="ecard_text_length">'.$g_l10n->get("ECA_MAX_MESSAGE_LENGTH").':</label></dt>
                             <dd>
-                             <select size=\"1\" id=\"enable_ecard_text_length\" name=\"enable_ecard_text_length\" style=\"margin-right:20px;\" onchange=\"javascript:showHideMoreSettings('text_length_count','enable_ecard_text_length','ecard_text_length',1);\">
-                                    <option value=\"0\" ";
-                                    if($form_values['enable_ecard_text_length'] == 0)
+                             <select size="1" id="enable_ecard_text_length" name="enable_ecard_text_length" style="margin-right:20px;" onchange="javascript:showHideMoreSettings(\'text_length_count\',\'enable_ecard_text_length\',\'ecard_text_length\',1);">
+                                    <option value="0" ';
+                                    if($form_values["enable_ecard_text_length"] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
-                                    if($form_values['enable_ecard_text_length'] == 1)
+                                    echo '>'.$g_l10n->get("SYS_DEACTIVATED").'</option>
+                                    <option value="1" ';
+                                    if($form_values["enable_ecard_text_length"] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
+                                    echo '>'.$g_l10n->get("SYS_ACTIVATED").'</option>
                                 </select>
-                                <div id=\"text_length_count\" style=\"display:inline;\">";
-                                if($form_values['enable_ecard_text_length'] == 1)
+                                <div id="text_length_count" style="display:inline;">';
+                                if($form_values["enable_ecard_text_length"] == 1)
                                 {
-                               echo "<input type=\"text\" id=\"ecard_text_length\" name=\"ecard_text_length\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['ecard_text_length']. "\" />";
+                               		echo '<input type="text" id="ecard_text_length" name="ecard_text_length" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_text_length"].'" />';
                                 }
-                            echo "</div>
+                            	echo '</div>
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ECA_DESC_MAX_MESSAGE_LENGTH").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_text_length\">Template:</label></dt>
-                            <dd>";
-                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH. '/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
-                             echo "</dd>
+                            <dt><label for="ecard_text_length">'.$g_l10n->get("ECA_TEMPLATE").':</label></dt>
+                            <dd>';
+                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values["ecard_template"],'180','false','false');
+                             echo '</dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier wird das Standard Template festgelegt. (Standard: Brief standard)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ECA_DESC_TEMPLATE").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_text_length\">Schriftart:</label></dt>
-                            <dd>";
-                                echo getMenueSettings(getElementsFromFile('../../system/schriftarten.txt'),'ecard_text_font',$form_values['ecard_text_font'],'120','true','false');
-                             echo "</dd>
+                            <dt><label for="ecard_text_length">'.$g_l10n->get("SYS_FONT").':</label></dt>
+                            <dd>';
+                                echo getMenueSettings(getElementsFromFile('../../system/schriftarten.txt'),'ecard_text_font',$form_values["ecard_text_font"],'120','true','false');
+                             echo '</dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ECA_DESC_FONT").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_text_length\">Schriftgr&ouml;&szlig;e:</label></dt>
-                            <dd>";
-                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'ecard_text_size',$form_values['ecard_text_size'],'120','false','false');
-                             echo "</dd>
+                            <dt><label for="ecard_text_length">'.$g_l10n->get("SYS_FONT_SIZE").':</label></dt>
+                            <dd>';
+                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'ecard_text_size',$form_values["ecard_text_size"],'120','false','false');
+                             echo '</dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                       Hier wird die Standard Schriftgr&ouml;&szlig;e festgelegt. (Standard: 20)
+                    <li class="smallFontSize">
+                       '.$g_l10n->get("ECA_DESC_FONT_SIZE").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"ecard_text_color\">Schriftfarbe:</label></dt>
-                            <dd>";
-                             echo getMenueSettings(getElementsFromFile('../../system/schriftfarben.txt'),'ecard_text_color',$form_values['ecard_text_color'],'120','false','true');
-                             echo "</dd>
+                            <dt><label for="ecard_text_color">'.$g_l10n->get("SYS_FONT_COLOR").':</label></dt>
+                            <dd>';
+                             echo getMenueSettings(getElementsFromFile('../../system/schriftfarben.txt'),'ecard_text_color',$form_values["ecard_text_color"],'120','false','true');
+                             echo '</dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ECA_DESC_FONT_COLOR").'
                     </li>
 
                 </ul>
             </div>
-        </div>";
+        </div>';
         function getfilenames($directory)
         {
             $array_files    = array();
