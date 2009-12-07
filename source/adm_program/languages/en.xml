@@ -22,13 +22,32 @@
 <text id="SYS_PHR_LAST_EDITED_BY" version="2.2.0">Last edited by %VAR1% on %VAR2%</text>
 <text id="SYS_PHR_NO_ENTRY" version="2.2.0">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
 <text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
+<text id="SYS_TO" version="2.2.0">To</text>
+<text id="SYS_RECIPIENT" version="2.2.0">Recipient</text>
+<text id="SYS_NAME" version="2.2.0">Name</text>
+<text id="SYS_EMAIL" version="2.2.0">Email</text>
+<text id="SYS_ADD_RECIPIENTS" version="2.2.0">Add recipient</text>
+<text id="SYS_SENDER" version="2.2.0">Sender</text>
+<text id="SYS_MESSAGE" version="2.2.0">Message</text>
+<text id="SYS_PREVIEW" version="2.2.0">Preview</text>
+<text id="SYS_SETTINGS" version="2.2.0">Settings</text>
+<text id="SYS_FONT" version="2.2.0">Font</text>
+<text id="SYS_FONT_SIZE" version="2.2.0">Font-size</text>
+<text id="SYS_FONT_COLOR" version="2.2.0">Font-color</text>
+<text id="SYS_FONT_STYLE" version="2.2.0">Font-style</text>
+<text id="SYS_BOLD" version="2.2.0">Bold</text>
+<text id="SYS_ITALIC" version="2.2.0">Italic</text>
+<text id="SYS_SEND" version="2.2.0">Send</text>
+<text id="SYS_ACTIVATED" version="2.2.0">activated</text>
+<text id="SYS_DEACTIVATED" version="2.2.0">deactivated</text>
 </system>
 <ecards>
-<text id="ECA_GREETING_CARD_NEED_JAVASCRIPT" version="2.2.0">To send a greeting card you have to enable javascript!\nPlease enable javascript in order to send a greeting card!</text>
+<text id="ECA_GREETING_CARD" version="2.2.0">greeting card</text>
+<text id="ECA_GREETING_CARDS" version="2.2.0">greeting cards</text>
+<text id="ECA_PHR_NEED_JAVASCRIPT" version="2.2.0">To send a greeting card you have to enable javascript!\nPlease enable javascript in order to send a greeting card!</text>
 <text id="ECA_VIEW_PICTURE_FULL_SIZED" version="2.2.0">Show picture in full-size</text>
 <text id="ECA_GREETING_CARD_EDIT" version="2.2.0">Edit greeting card</text>
 <text id="ECA_GREETING_CARD_SEND" version="2.2.0">Send greeting card</text>
-<text id="ECA_TO" version="2.2.0">To</text>
 <text id="ECA_PLEASE_CHOOSE" version="2.2.0">Please choose</text>
 <text id="ECA_CONTENT_LOADING" version="2.2.0">Content is loading - please wait!</text>
 <text id="ECA_NO_USER_WITH_VALID_EMAIL" version="2.2.0">No User with a valid email is available!</text>
@@ -40,15 +59,8 @@
 <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" version="2.2.0">Please choose a valid role!</text>
 <text id="ECA_MORE_RECIPIENTS" version="2.2.0">More recipients</text>
 <text id="ECA_NO_MORE_RECIPIENTS" version="2.2.0">No more recipients</text>
-<text id="ECA_SHURE_YOU_WHANT_TO_DELETE_ALL" version="2.2.0">Are your shure you want to delete all?</text>
 <text id="ECA_RECIPIENT_NAME" version="2.2.0">recipient name</text>
 <text id="ECA_RECIPIENT_EMAIL" version="2.2.0">recipient email</text>
-<text id="ECA_RECIPIENT" version="2.2.0">Recipient</text>
-<text id="ECA_NAME" version="2.2.0">Name</text>
-<text id="ECA_EMAIL" version="2.2.0">Email</text>
-<text id="ECA_ADD_RECIPIENTS" version="2.2.0">Add recipient</text>
-<text id="ECA_SENDER" version="2.2.0">Sender</text>
-<text id="ECA_MESSAGE" version="2.2.0">Message</text>
 <text id="ECA_NAME_OF_SENDER" version="2.2.0">Name of the recipient</text>
 <text id="ECA_EMAIL_OF_SENDER" version="2.2.0">Email of the sender</text>
 <text id="ECA_NAME_OF_RECIPIENT" version="2.2.0">Name from%VAR1%recipient</text>
@@ -58,23 +70,29 @@
 <text id="ECA_STILL_XCHARS_AVAILABLE" version="2.2.0">still %VAR1% chars left</text>
 <text id="ECA_BLEND_IN_SETTINGS" version="2.2.0">Blend in settings</text>
 <text id="ECA_BLEND_OUT_SETTINGS" version="2.2.0">Blend out settings</text>
-<text id="ECA_SETTINGS" version="2.2.0">Settings</text>
 <text id="ECA_TEMPLATE" version="2.2.0">Template</text>
-<text id="ECA_FONT" version="2.2.0">Font</text>
-<text id="ECA_FONT_SIZE" version="2.2.0">Font-size</text>
-<text id="ECA_FONT_COLOR" version="2.2.0">Font-color</text>
-<text id="ECA_FONT_STYLE" version="2.2.0">Font-style</text>
-<text id="ECA_BOLD" version="2.2.0">Bold</text>
-<text id="ECA_ITALIC" version="2.2.0">Italic</text>
-<text id="ECA_PREVIEW" version="2.2.0">Preview</text>
-<text id="ECA_SEND" version="2.2.0">Send</text>
-<text id="ECA_MESSAGE_HAS_TO_BE_ONLY_XCHARS_LONG" version="2.2.0">The message must be %VAR1% chars long!</text>
-<text id="ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT" version="2.2.0">You have following,\nfor the greeting card necessary input fields,\nnot or not right filled:</text>
-<text id="ECA_PLEASE_FILL_THE_NAMED_INPUT_FIELDS" version="2.2.0">Please fill the named input fields\ncompletely and then click on the "Send" button.</text>
+<text id="ECA_PHR_MESSAGE_TOO_LONG" version="2.2.0">The message must be %VAR1% chars long!</text>
+<text id="ECA_PHR_INPUT_INCORRECT" version="2.2.0">You have following,\nfor the greeting card necessary input fields,\nnot or not right filled:</text>
+<text id="ECA_PHR_FILL_INPUTS" version="2.2.0">Please fill the named input fields\ncompletely and then click on the "Send" button.</text>
 <text id="ECA_A_ECARD_FROM" version="2.2.0">A greeting card from</text>
 <text id="ECA_GREETING_CARD_PREVIEW" version="2.2.0">Greeting card preview:</text>
-<text id="ECA_GREETING_CARD_SUCCESSFULLY_SEND">Your greeting card has been successfully send!</text>
+<text id="ECA_PHR_SUCCESSFULLY_SEND">Your greeting card has been successfully send!</text>
 <text id="ECA_NEW_MESSAGE_RECEIVED" version="2.2.0">A new message received</text>
-<text id="ECA_GREETING_CARD" version="2.2.0">greeting card</text>
+<text id="ECA_SETTINGS_GREETING_CARDS" version="2.2.0">Greeting cards settings</text>
+<text id="ECA_ACTIVATE_GREETING_CARDS" version="2.2.0">Activate greeting cards</text>
+<text id="ECA_SCALING_PREVIEW" version="2.2.0">Preview scaling (width x height)</text>
+<text id="ECA_SCALING_GREETING_CARD" version="2.2.0">Greeting card scaling (width x height):</text>
+<text id="ECA_MAX_CC" version="2.2.0">Max. CC recipients</text>
+<text id="ECA_MAX_MESSAGE_LENGTH" version="2.2.0">Max. length of message:</text>
+
+<text id="ECA_DESC_ACTIVATE_GREETING_CARDS" version="2.2.0">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
+<text id="ECA_DESC_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
+<text id="ECA_DESC_SCALING_GREETING_CARD" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
+<text id="ECA_DESC_MAX_CC" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
+<text id="ECA_DESC_MAX_MESSAGE_LENGTH" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
+<text id="ECA_DESC_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
+<text id="ECA_DESC_FONT" version="2.2.0">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
+<text id="ECA_DESC_FONT_SIZE" version="2.2.0">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
+<text id="ECA_DESC_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black) </text>
 </ecards>
 </language>

@@ -13,11 +13,12 @@
     <text id="CAT_PHR_DELETE_CATEGORY" version="2.2.0">Soll die Kategorie %VAR1% wirklich gelöscht werden ?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
 </category>
 <ecards>
-    <text id="ECA_GREETING_CARD_NEED_JAVASCRIPT" version="2.2.0">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
+	<text id="ECA_GREETING_CARD" version="2.2.0">Grußkarte</text>
+	<text id="ECA_GREETING_CARDS" version="2.2.0">Grußkarten</text>
+    <text id="ECA_PHR_NEED_JAVASCRIPT" version="2.2.0">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" version="2.2.0">Bild in voller Größe anzeigen</text>
     <text id="ECA_GREETING_CARD_EDIT" version="2.2.0">Grußkarte bearbeiten</text>
     <text id="ECA_GREETING_CARD_SEND" version="2.2.0">Grußkarte wegschicken</text>
-    <text id="ECA_TO" version="2.2.0">An</text>
     <text id="ECA_PLEASE_CHOOSE" version="2.2.0">Bitte wählen</text>
     <text id="ECA_CONTENT_LOADING" version="2.2.0">Inhalt wird geladen - Bitte warten!</text>
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" version="2.2.0">Kein User vorhanden der eine gültige E-mail besitzt!</text>
@@ -29,42 +30,41 @@
     <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" version="2.2.0">Bitte wählen Sie eine gültige Rolle aus!</text>
     <text id="ECA_MORE_RECIPIENTS" version="2.2.0">Weitere Empfänger</text>
     <text id="ECA_NO_MORE_RECIPIENTS" version="2.2.0">Keine weiteren Empfänger</text>
-    <text id="ECA_SHURE_YOU_WHANT_TO_DELETE_ALL" version="2.2.0">Bist du sicher das du alle löschen willst?</text>
     <text id="ECA_RECIPIENT_NAME" version="2.2.0">Empfänger Name</text>
     <text id="ECA_RECIPIENT_EMAIL" version="2.2.0">Empfänger Email</text>
-    <text id="ECA_RECIPIENT" version="2.2.0">Empfänger</text>
-    <text id="ECA_NAME" version="2.2.0">Name</text>
-    <text id="ECA_EMAIL" version="2.2.0">E-mail</text>
-    <text id="ECA_ADD_RECIPIENTS" version="2.2.0">Empfänger hinzufügen</text>
-    <text id="ECA_SENDER" version="2.2.0">Absender</text>
-    <text id="ECA_MESSAGE" version="2.2.0">Nachricht</text>
     <text id="ECA_NAME_OF_SENDER" version="2.2.0">Name des Absenders</text>
     <text id="ECA_EMAIL_OF_SENDER" version="2.2.0">E-Mail des Absenders</text>
-    <text id="ECA_NAME_OF_RECIPIENT" version="2.2.0">Name des%VAR1%Empfängers</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" version="2.2.0">E-Mail des%VAR1%Empfängers</text>
+    <text id="ECA_NAME_OF_RECIPIENT" version="2.2.0" description="%VAR1% wird durch eine Nummer ersetzt">Name des%VAR1%Empfängers</text>
+    <text id="ECA_EMAIL_OF_RECIPIENT" version="2.2.0" description="%VAR1% wird durch eine Nummer ersetzt">E-Mail des%VAR1%Empfängers</text>
     <text id="ECA_THE_MESSAGE" version="2.2.0">Eine Nachricht</text>
     <text id="ECA_YOUR_MESSAGE" version="2.2.0">Deine Nachricht</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" version="2.2.0">noch %VAR1% Zeichen</text>
     <text id="ECA_BLEND_IN_SETTINGS" version="2.2.0">Einstellungen einblenden</text>
     <text id="ECA_BLEND_OUT_SETTINGS" version="2.2.0">Einstellungen ausblenden</text>
-    <text id="ECA_SETTINGS" version="2.2.0">Einstellungen</text>
     <text id="ECA_TEMPLATE" version="2.2.0">Template</text>
-    <text id="ECA_FONT" version="2.2.0">Schriftart</text>
-    <text id="ECA_FONT_SIZE" version="2.2.0">Schriftgröße</text>
-    <text id="ECA_FONT_COLOR" version="2.2.0">Schriftfarbe</text>
-    <text id="ECA_FONT_STYLE" version="2.2.0">Schrifttyp</text>
-    <text id="ECA_BOLD" version="2.2.0">Fett</text>
-    <text id="ECA_ITALIC" version="2.2.0">Kursiv</text>
-    <text id="ECA_PREVIEW" version="2.2.0">Vorschau</text>
-    <text id="ECA_SEND" version="2.2.0">Abschicken</text>
-    <text id="ECA_MESSAGE_HAS_TO_BE_ONLY_XCHARS_LONG" version="2.2.0">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
-    <text id="ECA_FOLLOWING_INPUT_FIELD_ARE_INCORRECT" version="2.2.0">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
-    <text id="ECA_PLEASE_FILL_THE_NAMED_INPUT_FIELDS" version="2.2.0">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf \"Abschicken\".</text>
+    <text id="ECA_PHR_MESSAGE_TOO_LONG" version="2.2.0" description="%VAR1% wird durch die derzeitige Anzahl ersetzt">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
+    <text id="ECA_PHR_INPUT_INCORRECT" version="2.2.0">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
+    <text id="ECA_PHR_FILL_INPUTS" version="2.2.0">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf \"Abschicken\".</text>
     <text id="ECA_A_ECARD_FROM" version="2.2.0">Eine Grußkarte von</text>
     <text id="ECA_GREETING_CARD_PREVIEW" version="2.2.0">Vorschau der Grußkarte:</text>
-    <text id="ECA_GREETING_CARD_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</text>
+    <text id="ECA_PHR_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" version="2.2.0">Neue Nachricht erhalten</text>
-    <text id="ECA_GREETING_CARD" version="2.2.0">Grußkarte</text>
+	<text id="ECA_SETTINGS_GREETING_CARDS" version="2.2.0">Einstellungen Grußkarten</text>
+	<text id="ECA_ACTIVATE_GREETING_CARDS" version="2.2.0">Grußkarten aktivieren</text>
+	<text id="ECA_SCALING_PREVIEW" version="2.2.0">Skalierung Vorschaubild (Breite x Höhe)</text>
+	<text id="ECA_SCALING_GREETING_CARD" version="2.2.0">Skalierung Grußkartenbild (Breite x Höhe):</text>
+	<text id="ECA_MAX_CC" version="2.2.0">Max. weitere Empfänger</text>
+	<text id="ECA_MAX_MESSAGE_LENGTH" version="2.2.0">Max. Länge des Mitteilungstextes:</text>
+	
+	<text id="ECA_DESC_ACTIVATE_GREETING_CARDS" version="2.2.0">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
+	<text id="ECA_DESC_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
+	<text id="ECA_DESC_SCALING_GREETING_CARD" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
+	<text id="ECA_DESC_MAX_CC" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
+	<text id="ECA_DESC_MAX_MESSAGE_LENGTH" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
+	<text id="ECA_DESC_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
+	<text id="ECA_DESC_FONT" version="2.2.0">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
+	<text id="ECA_DESC_FONT_SIZE" version="2.2.0">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
+	<text id="ECA_DESC_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black) </text>
 </ecards>
 <lists>
     <text id="LST_PHR_NO_USER_FOUND" version="2.2.0">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
@@ -141,5 +141,23 @@
     <text id="SYS_PHR_PASSWORD_UNKNOWN" version="2.2.0">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
     <text id="SYS_PHR_SAVE" version="2.2.0">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_WRITE_ACCESS" version="2.2.0" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
+	<text id="SYS_TO" version="2.2.0">An</text>
+    <text id="SYS_NAME" version="2.2.0">Name</text>
+    <text id="SYS_EMAIL" version="2.2.0">E-mail</text>
+	<text id="SYS_SENDER" version="2.2.0">Absender</text>
+	<text id="SYS_RECIPIENT" version="2.2.0">Empfänger</text>
+	<text id="SYS_ADD_RECIPIENTS" version="2.2.0">Empfänger hinzufügen</text>
+    <text id="SYS_MESSAGE" version="2.2.0">Nachricht</text>
+	<text id="SYS_PREVIEW" version="2.2.0">Vorschau</text>
+	<text id="SYS_SETTINGS" version="2.2.0">Einstellungen</text>
+    <text id="SYS_FONT" version="2.2.0">Schriftart</text>
+    <text id="SYS_FONT_SIZE" version="2.2.0">Schriftgröße</text>
+    <text id="SYS_FONT_COLOR" version="2.2.0">Schriftfarbe</text>
+    <text id="SYS_FONT_STYLE" version="2.2.0">Schrifttyp</text>
+    <text id="SYS_BOLD" version="2.2.0">Fett</text>
+    <text id="SYS_ITALIC" version="2.2.0">Kursiv</text>
+    <text id="SYS_SEND" version="2.2.0">Abschicken</text>
+	<text id="SYS_ACTIVATED" version="2.2.0">Aktiktivert</text>
+	<text id="SYS_DEACTIVATED" version="2.2.0">Desktiviert</text>
 </system>
 </language>

@@ -24,12 +24,12 @@ class FunctionClass
 	{
 		$this->nameRecipientString 			= $g_l10n->get("ECA_RECIPIENT_NAME");
 		$this->emailRecipientString 		= $g_l10n->get("ECA_RECIPIENT_EMAIL");
-		$this->yourMessageString 			= $g_l10n->get("ECA_MESSAGE");
+		$this->yourMessageString 			= $g_l10n->get("SYS_MESSAGE");
 		$this->newMessageReceivedString 	= $g_l10n->get("ECA_NEW_MESSAGE_RECEIVED");
 		$this->greetingCardFrom				= $g_l10n->get("ECA_A_ECARD_FROM");
 		$this->greetingCardString			= $g_l10n->get("ECA_GREETING_CARD");
-		$this->sendToString					= $g_l10n->get("ECA_TO");	
-		$this->emailString					= $g_l10n->get("ECA_EMAIL");	
+		$this->sendToString					= $g_l10n->get("SYS_TO");	
+		$this->emailString					= $g_l10n->get("SYS_EMAIL");	
 	}
 	// gibt ein Menue fuer die Einstellungen des Template aus
 	// Uebergabe: 
