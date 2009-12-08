@@ -40,6 +40,19 @@
 <text id="SYS_SEND" version="2.2.0">Send</text>
 <text id="SYS_ACTIVATED" version="2.2.0">activated</text>
 <text id="SYS_DEACTIVATED" version="2.2.0">deactivated</text>
+<text id="SYS_SEND_NEW_PW" version="2.2.0">Neues Passwort zusenden</text>
+<text id="SYS_CAPTCHA" version="2.2.0">Captcha</text>
+<text id="SYS_PHR_WRONG_CAPTCHA_CODE" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
+<text id="SYS_PHR_LOSTPW_AREADY_LOGGED_ID" version="2.2.0">Du bist am System angemeldet folglich kennst du ja dein Passwort!</text>
+<text id="SYS_PHR_LOSTPW_EMAIL_ERROR" version="2.2.0">Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!</text>
+<text id="SYS_PHR_LOSTPW_SEND" version="2.2.0">Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!</text>
+<text id="SYS_PHR_LOSTPW_SEND_ERROR" version="2.2.0">Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
+<text id="SYS_PW_FORGOTTEN" version="2.2.0">Passwort vergessen</text>
+<text id="SYS_PHR_PW_FORGOTTEN" version="2.2.0">Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
+<text id="SYS_CAPTCHA_CODE" version="2.2.0">Bestätigungscode</text>
+<text id="SYS_PHR_PWACT_PW_SAVED" version="2.2.0">Das neue Passwort wurde nun übernommen!</text>
+<text id="SYS_PHR_PWACT_CODE_INVALID" version="2.2.0">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</text>
+<text id="SYS_ERROR_PAGE_NOT_FOUND" version="2.2.0">ERROR 404 - PAGE NOT FOUND!</text>
 </system>
 <ecards>
 <text id="ECA_GREETING_CARD" version="2.2.0">greeting card</text>
@@ -84,6 +97,8 @@
 <text id="ECA_SCALING_GREETING_CARD" version="2.2.0">Greeting card scaling (width x height):</text>
 <text id="ECA_MAX_CC" version="2.2.0">Max. CC recipients</text>
 <text id="ECA_MAX_MESSAGE_LENGTH" version="2.2.0">Max. length of message:</text>
+<text id="ECA_FIELD_ERROR" version="2.2.0">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.</text>
+<text id="ECA_SEND_ERROR" version="2.2.0">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
 
 <text id="ECA_DESC_ACTIVATE_GREETING_CARDS" version="2.2.0">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
 <text id="ECA_DESC_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>

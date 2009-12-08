@@ -277,7 +277,7 @@ class FunctionClass
 		{
 			$bbcode = new ubbParser();
 			// BBCode wird geparsed, Zeilenumbrueche werden mit XBRX kodiert, um nach der htmlentities wieder zu Zeilenumbruechen decodiert zu werden
-			$ecard_data = preg_replace ('/<%ecard_message%>/',  preg_replace('/XBRX/','<br />',htmlentities(utf8_decode(preg_replace ("/\r?\n/", "\n", preg_replace('/<br \/\>/','XBRX',$bbcode->parse($ecard['message'])))))), $ecard_data);
+			$ecard_data =  preg_replace ('/<%ecard_message%>/',$bbcode->parse(nl2br(htmlentities(utf8_decode(preg_replace ("/\r?\n/", "\n",$ecard['message']))))), $ecard_data);
 		}
 		else
 		{

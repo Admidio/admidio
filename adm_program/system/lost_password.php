@@ -28,13 +28,13 @@ if (! empty($abschicken) && !$g_valid_login && $g_preferences['enable_mail_captc
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
-        $g_message->show('captcha_code');
+        $g_message->show($g_l10n->get('SYS_PHR_WRONG_CAPTCHA_CODE'));
     }
 }
 if($g_valid_login)
 {
     $g_message->setForwardUrl($g_root_path.'/adm_program/', 2000);
-    $g_message->show('lost_password_allready_logged_in');   
+    $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_AREADY_LOGGED_ID'));   
 }
 
 if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
@@ -58,7 +58,7 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
     
     if(strlen($row['usr_id']) == 0)
     {
-        $g_message->show('lost_password_email_error',$empfaenger_email);    
+        $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_EMAIL_ERROR',$empfaenger_email));    
     }
 
     $user = new User($g_db, $row['usr_id']);
@@ -78,11 +78,11 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
         $user->save();
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/login.php');
-        $g_message->show('lost_password_send',$empfaenger_email);
+        $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_SEND',$empfaenger_email));
     }
     else
     {
-        $g_message->show('lost_password_send_error',$empfaenger_email); 
+        $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_SEND_ERROR',$empfaenger_email)); 
     }
 }
 else
@@ -90,27 +90,26 @@ else
     /*********************HTML_TEIL*******************************/
 
     // Html-Kopf ausgeben
-    $g_layout['title'] = $g_organization.' - Passwort vergessen?';
+    $g_layout['title'] = $g_organization.' - '.$g_l10n->get('SYS_PW_FORGOTTEN').'?';
 
     require(THEME_SERVER_PATH. '/overall_header.php');
 
     echo'
     <div class="formLayout" id="profile_form">
-        <div class="formHead">Passwort vergessen?</div>
+        <div class="formHead">'.$g_l10n->get('SYS_PW_FORGOTTEN').'?</div>
             <div class="formBody">
             <form name="password_form" action="'.$g_root_path.'/adm_program/system/lost_password.php" method="post">
                 <ul class="formFieldList">
                     <li>
                         <div>
-                            Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden. 
-                            Gib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".
+                          '.$g_l10n->get('SYS_PHR_PW_FORGOTTEN').'
                         </div>
                     </li>
                     <li>&nbsp;</li>
                     <li>
                         <dl>
                             <dt>
-                                <label>E-Mail:</label>
+                                <label>'.$g_l10n->get('SYS_EMAIL').':</label>
                             </dt>
                             <dd>
                                 <input type="text" name="empfaenger_email" style="width: 300px;" maxlength="50" />
@@ -127,25 +126,25 @@ else
                         <dl>
                             <dt>&nbsp;</dt>
                             <dd>
-                                <img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '" alt="Captcha" />
+                                <img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="captcha">Bestätigungscode:</label></dt>
+                            <dt><label for="captcha">'.$g_l10n->get('SYS_CAPTCHA_CODE').':</label></dt>
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                                 <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                 <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=280&amp;width=580"><img 
 					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                             </dd>
                         </dl>
                     </li>';
                 }
                 echo'<hr />                                 
-                <button name="abschicken" type="submit" value="abschicken"><img src="'. THEME_PATH.'/icons/email.png" alt="Abschicken" />&nbsp;Neues Passwort zusenden</button>
+                <button name="abschicken" type="submit" value="'.$g_l10n->get('SYS_SEND').'"><img src="'. THEME_PATH.'/icons/email.png" alt="'.$g_l10n->get('SYS_SEND').'" />&nbsp;'.$g_l10n->get('SYS_SEND_NEW_PW').'</button>
                 </ul>
             </form>
             </div>
@@ -154,8 +153,8 @@ else
         <li>
             <span class="iconTextLink">
                 <a href="$g_root_path/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="Zurück"></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'"></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';
