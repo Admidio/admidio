@@ -26,14 +26,13 @@ if ($g_preferences['enable_bbcode'] == 1)
 $funcClass 					= new FunctionClass($g_l10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
-$error_msg                  = '';
 $font_sizes                 = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
 $font_colors                = $funcClass->getElementsFromFile('../../system/schriftfarben.txt');
 $fonts                      = $funcClass->getElementsFromFile('../../system/schriftarten.txt');
 $templates                  = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
 $template                   = THEME_SERVER_PATH. '/ecard_templates/';
-$msg_error_1                = 'ecard_send_error';
-$msg_error_2                = 'ecard_feld_error';
+$error_msg                  = '';
+$msg_send_error             = $g_l10n->get('ECA_SEND_ERROR');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_ecard_module'] != 1)
@@ -162,7 +161,7 @@ if (! empty($submit_action))
         // Wenn es einen Error gibt ihn ausgeben
         if ($error)
         {
-            $error_msg = $msg_error_1;
+            $error_msg = $msg_send_error;
         }
         // Wenn nicht dann die Grußkarte versuchen zu versenden
         else
@@ -184,7 +183,7 @@ if (! empty($submit_action))
                 // Wenn nicht dann die dementsprechende Error Nachricht ausgeben
                 else
                 {
-                    $error_msg = $msg_error_1;
+                    $error_msg = $msg_send_error;
                 }
             }
             // Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
@@ -253,7 +252,7 @@ if (! empty($submit_action))
                     // Wenn nicht dann die dementsprechende Error Nachricht ausgeben
                     else
                     {
-                        $error_msg = $msg_error_1;
+                        $error_msg = $msg_send_error;
                     }
                     $b++;               
                 }
@@ -264,7 +263,7 @@ if (! empty($submit_action))
     // Wenn die Felder leer sind oder ungültig dann eine dementsprechente Error Nachricht ausgeben
     else
     {
-        $error_msg = $msg_error_2;
+        $error_msg = $g_l10n->get('ECA_FIELD_ERROR');
     }
 }
 // Wenn noch keine Anfrage zum versenden der Grusskarte vorhanden ist das Grusskarten Bild setzten

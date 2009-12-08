@@ -24,7 +24,7 @@ $funcClass->getVars();
 list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($ecard['template_name'], THEME_SERVER_PATH. '/ecard_templates/');
 if ($error) 
 {
-    echo 'ERROR - PAGE NOT FOUND!';
+    echo $g_l10n->get('SYS_ERROR_PAGE_NOT_FOUND');
 } 
 else 
 {

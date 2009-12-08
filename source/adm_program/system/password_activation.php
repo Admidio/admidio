@@ -34,11 +34,11 @@ if(isset($_GET['aid']) && isset($_GET['usr_id']) && is_numeric($_GET['usr_id']))
         $user->save();
         
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
-        $g_message->show('password_activation_password_saved');
+        $g_message->show($g_l10n->get('SYS_PHR_PWACT_PW_SAVED'));
     }
     else
     {
-        $g_message->show('password_activation_id_not_valid');
+        $g_message->show($g_l10n->get('SYS_PHR_PWACT_CODE_INVALID'));
     }
 }
 else
