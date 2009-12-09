@@ -115,18 +115,18 @@ $g_layout['header'] = '
         // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
         function addColumn() 
         {
-        	// MySQL erlaubt nur 61 gejointe Tabellen
-        	if(fieldNumberIntern >= 57)
-        	{
-        		alert("Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.");
-        		return;
-        	}
-        	
+            // MySQL erlaubt nur 61 gejointe Tabellen
+            if(fieldNumberIntern >= 57)
+            {
+                alert("Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.");
+                return;
+            }
+            
             var category = "";
             var fieldNumberShow  = fieldNumberIntern + 1;
             var table = document.getElementById("mylist_fields_tbody");
             var newTableRow = table.insertRow(fieldNumberIntern);
-            $(newTableRow).css("display", "none");
+            //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
             var newCellCount = newTableRow.insertCell(-1);
             newCellCount.innerHTML = (fieldNumberShow) + ". Spalte :";
             
