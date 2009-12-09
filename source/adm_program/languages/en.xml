@@ -5,6 +5,7 @@
 </announcement>
 <system>
 <text id="SYS_BACK" version="2.2.0">Back</text>
+<text id="SYS_CLOSE" version="2.2.0">Close</text>
 <text id="SYS_CREATE" version="2.2.0">Create</text>
 <text id="SYS_EDIT" version="2.2.0">Edit</text>
 <text id="SYS_DELETE" version="2.2.0">Delete</text>
@@ -12,10 +13,13 @@
 <text id="SYS_HELP" version="2.2.0">Help</text>
 <text id="SYS_INVALID_PAGE_VIEW" version="2.2.0">Invalid page view</text>
 <text id="SYS_MANDATORY_FIELD" version="2.2.0">Mandatory field</text>
+<text id="SYS_NEXT" version="2.2.0">Next</text>
+<text id="SYS_NO" version="2.2.0">No</text>
 <text id="SYS_REMOVE" version="2.2.0">Remove</text>
 <text id="SYS_SAVE" version="2.2.0">Save</text>
 <text id="SYS_TEXT" version="2.2.0">Text</text>
 <text id="SYS_WEBMASTER" version="2.2.0">Webmaster</text>
+<text id="SYS_YES" version="2.2.0">Yes</text>
 <text id="SYS_PHR_CREATE" version="2.2.0">Create %VAR1%</text>
 <text id="SYS_PHR_CREATED_BY" version="2.2.0">Created by %VAR1% on %VAR2%</text>
 <text id="SYS_PHR_EDIT" version="2.2.0">Edit %VAR1%</text>
