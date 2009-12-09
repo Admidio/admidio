@@ -114,7 +114,7 @@ class Message
         if($this->inline == false)
         {
             // Html-Kopf ausgeben
-            $g_layout['title']    = 'Hinweis';
+            $g_layout['title']    = $g_l10n->get('SYS_NOTE');
             $g_layout['includes'] = $this->includeThemeBody;
             if ($this->timer > 0)
             {
@@ -140,18 +140,18 @@ class Message
                             if($this->showYesNoButtons == true)
                             {
                                 echo '
-                                <button id="ja" type="button" value="ja" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="Ja" />&nbsp;&nbsp;Ja&nbsp;&nbsp;&nbsp;</button>
+                                <button id="yes" type="button" value="yes" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button id="nein" type="button" value="nein" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" alt="Nein" />&nbsp;Nein</button>';
+                                <button id="no" type="button" value="no" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" alt="'.$g_l10n->get('SYS_NO').'" />&nbsp;'.$g_l10n->get('SYS_NO').'</button>';
                             }
                             else
                             {
                                 // Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
                                 echo '
                                 <span class="iconTextLink">
-                                    <a href="'. $this->forwardUrl. '">Weiter</a>
+                                    <a href="'. $this->forwardUrl. '">'.$g_l10n->get('SYS_NEXT').'</a>
                                     <a href="'. $this->forwardUrl. '"><img 
-                                        src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" title="Weiter" /></a>
+                                        src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" title="'.$g_l10n->get('SYS_NEXT').'" /></a>
                                 </span>';
                             }
                         }
@@ -164,8 +164,8 @@ class Message
                                 echo '
                                 <span class="iconTextLink">
                                     <a href="javascript:window.close()"><img 
-                                        src="'. THEME_PATH. '/icons/door_in.png" alt="Schließen" title="Schließen" /></a>
-                                    <a href="javascript:window.close()">Schließen</a>
+                                        src="'. THEME_PATH. '/icons/door_in.png" alt="'.$g_l10n->get('SYS_CLOSE').'" title="'.$g_l10n->get('SYS_CLOSE').'" /></a>
+                                    <a href="javascript:window.close()">'.$g_l10n->get('SYS_CLOSE').'</a>
                                 </span>';
                             }
                             else
@@ -173,8 +173,8 @@ class Message
                                 echo '
                                 <span class="iconTextLink">
                                     <a href="javascript:history.back()"><img 
-                                        src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zurück" /></a>
-                                    <a href="javascript:history.back()">Zurück</a>
+                                        src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" title="'.$g_l10n->get('SYS_BACK').'" /></a>
+                                    <a href="javascript:history.back()">'.$g_l10n->get('SYS_BACK').'</a>
                                 </span>';
                             }
                         }

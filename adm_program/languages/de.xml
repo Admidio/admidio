@@ -113,6 +113,7 @@
 <system>
     <text id="SYS_ACTIVE" version="2.2.0">Aktiv</text>
     <text id="SYS_BACK" version="2.2.0">Zurück</text>
+    <text id="SYS_CLOSE" version="2.2.0">Schließen</text>
     <text id="SYS_CREATE" version="2.2.0">Anlegen</text>
     <text id="SYS_EDIT" version="2.2.0">Bearbeiten</text>
     <text id="SYS_DELETE" version="2.2.0">Löschen</text>
@@ -122,11 +123,15 @@
     <text id="SYS_INVALID_PAGE_VIEW" version="2.2.0">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" version="2.2.0">Unsichtbar</text>
     <text id="SYS_MANDATORY_FIELD" version="2.2.0">Pflichtfeld</text>
+    <text id="SYS_NEXT" version="2.2.0">Weiter</text>
+    <text id="SYS_NO" version="2.2.0">Nein</text>
+    <text id="SYS_NOTE" version="2.2.0">Hinweis</text>
     <text id="SYS_REMOVE" version="2.2.0">Entfernen</text>
     <text id="SYS_SAVE" version="2.2.0">Speichern</text>
     <text id="SYS_TEXT" version="2.2.0">Text</text>
     <text id="SYS_VISIBLE" version="2.2.0">Sichtbar</text>
     <text id="SYS_WEBMASTER" version="2.2.0">Webmaster</text>
+    <text id="SYS_YES" version="2.2.0">Ja</text>
     <text id="SYS_PHR_BETA_VERSION" version="2.2.0">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
     <text id="SYS_PHR_COOKIE_NOT_SET" version="2.2.0">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" version="2.2.0">%VAR1% anlegen</text>
