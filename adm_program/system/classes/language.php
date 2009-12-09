@@ -23,9 +23,10 @@ class Language
     public function __construct($data, $options, $data_is_url)
     {
         $this->l10nObject = new SimpleXMLElement($data, $options, $data_is_url);
-        $this->modules = array('ANN' => 'announcement', 
+        $this->modules = array('ANN' => 'announcements', 
                                'ASS' => 'assign', 
                                'CAT' => 'category', 
+                               'DAT' => 'dates',
                                'ECA' => 'ecards', 
                                'LST' => 'lists',
                                'MAI' => 'mail', 

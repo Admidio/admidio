@@ -185,7 +185,7 @@ if($_GET['mode'] == 1)
         }
         else
         {
-            $g_message->show('uhrzeit');
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
         }
     }
     else
@@ -216,7 +216,7 @@ if($_GET['mode'] == 1)
         }
         else
         {
-            $g_message->show('uhrzeit');
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
         }
     }
     else
@@ -251,7 +251,10 @@ if($_GET['mode'] == 1)
                     ') AND dat_room_id = "'.(int)$_POST['dat_room_id'].'" AND dat_id != "'.(int)$req_dat_id.'"';
             $result = $g_db->query($sql);
             $row = $g_db->fetch_object($result);
-            if($row->is_reserved) $g_message->show('room_is_reserved');
+            if($row->is_reserved) 
+            {
+                $g_message->show($g_l10n->get('DAT_ROOM_RESERVED'));
+            }
         }
         
     }

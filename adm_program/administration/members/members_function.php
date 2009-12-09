@@ -147,8 +147,8 @@ elseif($_GET["mode"] == 2)
         $member->stopMembership($row['mem_rol_id'], $row['mem_usr_id']);
     }
 
-    $err_code = "remove_member_ok";
-    $err_text = $g_current_organization->getValue("org_longname");
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $g_message->show($g_l10n->get('MEM_PHR_REMOVE_MEMBERSHIP_OK', $g_current_organization->getValue('org_longname')));
 }
 elseif($_GET["mode"] == 3)
 {
@@ -224,13 +224,13 @@ elseif($_GET["mode"] == 5)
     $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=4");
     $g_message->show("send_new_login", $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
 }
-elseif($_GET["mode"] == 6)
+elseif($_GET['mode'] == 6)
 {
     if($this_orga == true && $other_orga == 0 && $g_current_user->isWebmaster())
     {
         // nur Webmaster duerfen dies
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
-        header("Location: $g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=1");
+        header('Location: '.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=1');
         exit();
     }
     elseif($this_orga == false && $other_orga == 0 && $g_current_user->isWebmaster())
@@ -238,17 +238,13 @@ elseif($_GET["mode"] == 6)
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=3');
-        $g_message->addVariableContent($user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
-        $g_message->addVariableContent($g_current_organization->getValue('org_longname'));
-        $g_message->show($g_l10n->get('MEM_PHR_USER_DELETE'));
+        $g_message->show($g_l10n->get('MEM_PHR_USER_DELETE', $user->getValue('Vorname'). ' '. $user->getValue('Nachname'), $g_current_organization->getValue('org_longname')),$g_l10n->get('SYS_DELETE'));
     }
     else
     {
         // User kann nur aus dieser Orga entfernt werden
-        $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=2");
-        $g_message->addVariableContent($user->getValue("Vorname"). " ". $user->getValue("Nachname"));
-        $g_message->addVariableContent($g_current_organization->getValue("org_longname"));
-        $g_message->show("remove_member", "", "Entfernen");
+        $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=2');
+        $g_message->show($g_l10n->get('MEM_PHR_REMOVE_MEMBERSHIP', $user->getValue('Vorname'). ' '. $user->getValue('Nachname'), $g_current_organization->getValue('org_longname')),$g_l10n->get('SYS_REMOVE'));
     }
 }
 
