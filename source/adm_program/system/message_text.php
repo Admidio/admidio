@@ -11,48 +11,6 @@
 
 $message_text = array(
 
-    
-'no_default_role' =>
-    'In den Organisationseinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt.
-    Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.',
-
-
-'remove_member' =>
-    'Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?',
-
-'remove_member_ok' =>
-    'Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet!',
-
-'role_active' =>
-    'Die Rolle %VAR1% wurde auf <b>aktiv</b> gesetzt.',
-
-'role_inactive' =>
-    'Die Rolle %VAR1% wurde auf <b>inaktiv</b> gesetzt.',
-
-'role_exist' =>
-    'Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.',
-
-'role_select_right' =>
-    'Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.<br />
-    Bitte wähle eine andere Rolle aus.',
-
-'role_invisible' =>
-    'Die Rolle %VAR1% wurde auf <b>unsichtbar</b> gesetzt.',
-
-'role_visible' =>
-    'Die Rolle %VAR1% wurde auf <b>sichtbar</b> gesetzt.',
-    
-'saveDate' =>
-    'Deine Daten wurden erfolgreich gespeichert und du wurdest zum gewünschten Termin angemeldet.<br /><br />
-    Du kannst dich nun einloggen.<br />',
-
-'room_is_reserved' =>
-    'Der gewählte <b>Raum</b> ist zu dieser Zeit bereits reserviert.',
-    
-'uhrzeit' =>
-    'Es wurde keine sinnvolle Uhrzeit eingegeben.<br /><br />
-    Die Uhrzeit muss zwischen 00:00 und 23:59 liegen!',
-
 'send_new_login' =>
     'Möchtest du %VAR1% eine E-Mail mit dem Benutzernamen
     und einem neuen Passwort zumailen?',

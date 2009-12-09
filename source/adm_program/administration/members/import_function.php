@@ -51,7 +51,7 @@ $role = new TableRoles($g_db, $_POST['rol_id']);
 if($g_current_user->viewRole($role->getValue('rol_id')) == false
 || ($g_current_user->assignRoles() == false && $role->getValue('rol_assign_roles') == false))
 {
-    $g_message->show('role_select_right', $role->getValue('rol_name'));
+    $g_message->show($g_l10n->get('MEM_PHR_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
 }
 
 $_SESSION['rol_id']           = $role->getValue('rol_id');

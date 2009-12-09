@@ -409,7 +409,7 @@ elseif($new_user == 3 || $usr_id == 0)
         // wird der neue User der Default-Rolle zugeordnet
         if($g_preferences['profile_default_role'] == 0)
         {
-            $g_message->show('no_default_role');
+            $g_message->show($g_l10n->get('PRO_PHR_NO_DEFAULT_ROLE'));
         }
         $member = new TableMembers($g_db);
         $member->startMembership($g_preferences['profile_default_role'], $user->getValue('usr_id'));

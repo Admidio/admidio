@@ -139,18 +139,18 @@ elseif($_GET["mode"] == 2)
                       AND rol_cat_id = ". $_POST['rol_cat_id']. "
                       AND rol_id    <> ". $req_rol_id. "
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = ". $g_current_organization->getValue("org_id");
+                      AND cat_org_id = ". $g_current_organization->getValue('org_id');
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);
 
         if($row['count'] > 0)
         {
-            $g_message->show("role_exist");
+            $g_message->show($g_l10n->get('ROL_PHR_ROLE_NAME_EXISTS'));
         }
     }
 
     // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
-    if(strcmp($_POST['rol_name'], "Webmaster") == 0)
+    if(strcmp($_POST['rol_name'], 'Webmaster') == 0)
     {
         $_POST['rol_assign_roles']   = 1;
         $_POST['rol_all_lists_view'] = 1;
@@ -224,7 +224,7 @@ elseif($_GET["mode"] == 2)
         }
         else
         {
-            $g_message->show("uhrzeit");
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
         }
 
         if(strlen($_POST['rol_end_time']) > 0)
@@ -235,7 +235,7 @@ elseif($_GET["mode"] == 2)
             }
             else
             {
-                $g_message->show("uhrzeit");
+                $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
             }
         }
         else
@@ -346,8 +346,7 @@ elseif($_GET["mode"] == 3)
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
-    $msg_code = "role_inactive";
-    $g_message->addVariableContent($role->getValue("rol_name"));
+    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INACTIVE')));
 }
 elseif($_GET["mode"] == 4)
 {
@@ -371,8 +370,7 @@ elseif($_GET["mode"] == 5)
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
-    $msg_code = "role_active";
-    $g_message->addVariableContent($role->getValue("rol_name"));
+    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_ACTIVE')));
 }
 elseif($_GET['mode'] == 6)
 {
@@ -384,17 +382,17 @@ elseif($_GET['mode'] == 7)
 {
     $role->setValue('rol_visible',0);
     $role->save();
-    $msg_code = 'role_invisible';
+
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-    $g_message->show($msg_code, $role->getValue("rol_name"));
+    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INVISIBLE')));
 }
 elseif($_GET['mode'] == 8)
 {
     $role->setValue('rol_visible',1);
     $role->save();
-    $msg_code = 'role_visible';
+
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-    $g_message->show($msg_code, $role->getValue("rol_name"));
+    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_VISIBLE')));
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
