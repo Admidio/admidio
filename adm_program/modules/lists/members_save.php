@@ -78,9 +78,9 @@ if($role->getValue('rol_max_members') != NULL)
             $counter++;
         }
     }
-    if($counter>$role->getValue('rol_max_members'))
+    if($counter > $role->getValue('rol_max_members'))
     {
-        $g_message->show('max_members');
+        $g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
     }
 
     //Dateizeiger zurueck zum Anfang

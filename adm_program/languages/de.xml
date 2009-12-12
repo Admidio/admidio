@@ -13,7 +13,11 @@
     <text id="CAT_PHR_DELETE_CATEGORY" version="2.2.0">Soll die Kategorie %VAR1% wirklich gelöscht werden ?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
 </category>
 <dates>
-    <text id="DAT_ROOM_RESERVED" version="2.2.0">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</text>
+    <text id="DAT_PHR_ROOM_RESERVED" version="2.2.0">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</text>
+    <text id="DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH" version="2.2.0">Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.</text>
+    <text id="DAT_PHR_QUOTA_EXCEEDED" version="2.2.0">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</text>
+    <text id="DAT_PHR_QUOTA_FOR_ROLE" version="2.2.0">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</text>
+    <text id="DAT_PHR_QUOTA_WITH_MAXIMUM" version="2.2.0">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</text>
 </dates>
 <ecards>
     <text id="ECA_GREETING_CARD" version="2.2.0">Grußkarte</text>
@@ -69,10 +73,12 @@
     <text id="ECA_DESC_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
     <text id="ECA_DESC_FONT" version="2.2.0">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
     <text id="ECA_DESC_FONT_SIZE" version="2.2.0">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
-    <text id="ECA_DESC_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black) </text>
+    <text id="ECA_DESC_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
 </ecards>
 <lists>
     <text id="LST_PHR_NO_USER_FOUND" version="2.2.0">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
+    <text id="LST_PHR_NO_ROLES_REMOVED" version="2.2.0">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
+    <text id="LST_PHR_NO_RIGHTS_VIEW_LIST" version="2.2.0">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
 </lists>
 <mail>
     <text id="MAI_PHR_TO_ROLE" version="2.2.0" description="E-Mail an die Rolle XY schreiben">die Rolle %VAR1_BOLD%</text>
@@ -81,8 +87,9 @@
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" version="2.2.0">%VAR1% Datensätze wurden erfolgreich importiert!</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP" version="2.2.0">Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP_OK" version="2.2.0">Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet!</text>
-    <text id="MEM_PHR_USER_DELETE" version="2.2.0">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_PHR_ROLE_SELECT_RIGHT" version="2.2.0">Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.\nBitte wähle eine andere Rolle aus.</text>
+    <text id="MEM_PHR_USER_DELETE" version="2.2.0">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
+    <text id="MEM_PHR_SEND_NEW_LOGIN" version="2.2.0">Möchtest du %VAR1_BOLD% eine E-Mail mit dem Benutzernamen und einem neuen Passwort zumailen?</text>
 </members>
 <new_user>
     <text id="NWU_REGISTRATION" version="2.2.0">Anmeldung</text>
@@ -160,10 +167,13 @@
     <text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
     <text id="SYS_PHR_NO_RIGHTS" version="2.2.0">Du hast keine Rechte, diese Aktion auszuführen.</text>
     <text id="SYS_PHR_PASSWORD_UNKNOWN" version="2.2.0">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
+    <text id="SYS_PHR_ROLE_MAX_MEMBERS" version="2.2.0">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
     <text id="SYS_PHR_SAVE" version="2.2.0">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_TIME_INVALID" version="2.2.0">Es wurde keine sinnvolle Uhrzeit eingegeben.\n\nDie Uhrzeit muss zwischen 00:00 und 23:59 liegen!</text>
     <text id="SYS_PHR_WRITE_ACCESS" version="2.2.0" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
     <text id="SYS_PHR_SERVER_NO_UPLOAD" version="2.2.0">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
+    <text id="SYS_PHR_RSS_DISABLED" version="2.2.0">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
+    <text id="SYS_PHR_CAPTCHA_CODE_INVALID" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
 	<text id="SYS_TO" version="2.2.0">An</text>
     <text id="SYS_NAME" version="2.2.0">Name</text>
     <text id="SYS_EMAIL" version="2.2.0">E-mail</text>

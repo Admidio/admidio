@@ -254,14 +254,14 @@ elseif($_GET["mode"] == 2)
 
         if($num_free_places == 0)
         {
-            $g_message->show("max_members_roles_change");
+            $g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
         }
     }
 
     // POST Variablen in das Role-Objekt schreiben
     foreach($_POST as $key => $value)
     {
-        if(strpos($key, "rol_") === 0)
+        if(strpos($key, 'rol_') === 0)
         {
             $role->setValue($key, $value);
         }
@@ -272,13 +272,13 @@ elseif($_GET["mode"] == 2)
 
     if($return_code < 0)
     {
-        $g_message->show("norights");
+        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 
     // holt die Role ID des letzten Insert Statements
     if($req_rol_id == 0)
     {
-        $req_rol_id = $role->getValue("rol_id");
+        $req_rol_id = $role->getValue('rol_id');
     }
 
     //Rollenabhaengigkeiten setzten

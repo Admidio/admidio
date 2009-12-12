@@ -184,7 +184,7 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
-        $g_message->show("captcha_code");
+        $g_message->show($g_l10n->get('SYS_PHR_CAPTCHA_CODE_INVALID'));
     }
 }
 

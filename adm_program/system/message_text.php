@@ -11,46 +11,6 @@
 
 $message_text = array(
 
-'send_new_login' =>
-    'Möchtest du %VAR1% eine E-Mail mit dem Benutzernamen
-    und einem neuen Passwort zumailen?',
-
-'max_members' =>
-    'Speichern nicht möglich, die maximale Mitgliederzahl würde überschritten.',
-
-'max_members_profile' =>
-    'Speichern nicht möglich, bei der Rolle &bdquo;%VAR1%&rdquo;
-    würde die maximale Mitgliederzahl überschritten werden.',
-
-'max_members_roles_change' =>
-    'Speichern nicht möglich, die Rolle hat bereits mehr Mitglieder als die von dir eingegebene Begrenzung.',
-
-'quota_exceeded' =>
-    'Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (<b>Kontigentierung</b>) sein wie Teilnehmer 
-    insgesamt (<b>Teilnehmerbegrenzung</b>)',
-    
-'quota_with_maximum' =>
-    'Eine <b>Kontingentierung</b> kann nur bei einer <b>Teilnehmerbegrenzung</b> stattfinden',
-
-'quota_for_role' =>
-    'Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.',
-
-'quota_and_max_members_must_match' =>
-    'Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit
-    der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.',
-
-// Meldungen Listen
-
-'no_old_roles' =>
-    'Es sind noch keine Rollen aus dem System entfernt worden.<br /><br />
-    Erst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei
-    den "Entfernten Rollen".',
-
-'no_enabled_lists' =>
-    'Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.',
-
-// Ende Meldungen Listen
-
 //Meldungen Anmeldung im Forum
 
 'login_forum_pass' =>
@@ -288,17 +248,6 @@ $message_text = array(
 'usrmail_not_found' =>
     'Der User hat keine gültige E-Mailadresse in seinem Profil hinterlegt!',
 //Ende Fehlermeldungen Mailmodul
-
-
-//Fehlermeldungen RSSmodul
-'rss_disabled' =>
-    'Die RSS-Funktion wurde vom Webmaster deaktiviert',
-//Ende Fehlermeldungen RSSmodul
-
-//Fehlermeldungen Capcha-Klasse
-'captcha_code' =>
-    'Der Bestätigungscode wurde falsch eingegeben.',
-//Ende Fehlermeldungen Capcha-Klasse
 
  )
 ?>

@@ -156,7 +156,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     {
         if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
-            $g_message->show('captcha_code');
+            $g_message->show($g_l10n->get('SYS_PHR_CAPTCHA_CODE_INVALID'));
         }
     }
 
@@ -259,7 +259,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     {
         if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
-            $g_message->show('captcha_code');
+            $g_message->show($g_l10n->get('SYS_PHR_CAPTCHA_CODE_INVALID'));
         }
     }
 
