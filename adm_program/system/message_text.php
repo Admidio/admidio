@@ -300,11 +300,5 @@ $message_text = array(
     'Der Bestätigungscode wurde falsch eingegeben.',
 //Ende Fehlermeldungen Capcha-Klasse
 
-
-//Fehlermeldungen Servereinstellungen
-'no_file_upload_server' =>
-    'Die Servereinstellungen lassen leider keine Dateiuploads zu.',
-//Fehlermeldungen Servereinstellungen
-
  )
 ?>

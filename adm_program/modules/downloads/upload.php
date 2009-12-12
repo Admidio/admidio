@@ -39,7 +39,7 @@ if (!$g_current_user->editDownloadRight())
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show('no_file_upload_server');
+    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
 }
 
 // Uebergabevariablen pruefen

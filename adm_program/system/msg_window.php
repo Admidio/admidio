@@ -148,6 +148,10 @@ switch ($req_err_code)
               bereitstellen, die dann über den Browser einem Feedreader zugeordnet
               werden können.';
         break;
+        
+    case 'existing_user':
+        echo 'Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.';
+        break;
 
     case 'field':
         echo 'Es können beliebig viele zusätzliche Felder definiert werden.

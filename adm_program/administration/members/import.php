@@ -21,7 +21,7 @@ if(!$g_current_user->editUsers())
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show('no_fileuploads');
+    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
 }
 
 // Html-Kopf ausgeben
@@ -76,7 +76,10 @@ echo '
                     <option value="2">duplizieren</option>
                     <option value="3">ersetzen</option>
                     <option value="4">ergänzen</option>
-                </select>
+                </select>&nbsp;
+                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=existing_user&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=existing_user\',this)" onmouseout="ajax_hideTooltip()"
+	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
             </li>
         </ul>
 
