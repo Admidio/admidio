@@ -218,11 +218,11 @@ elseif($_GET["mode"] == 4)
         $g_message->show($phrase);
     }
 }
-elseif($_GET["mode"] == 5)
+elseif($_GET['mode'] == 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
-    $g_message->setForwardYesNo("$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET["usr_id"]. "&mode=4");
-    $g_message->show("send_new_login", $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+    $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=4');
+    $g_message->show($g_l10n->get('MEM_PHR_SEND_NEW_LOGIN', $user->getValue('Vorname'). ' '. $user->getValue('Nachname')));
 }
 elseif($_GET['mode'] == 6)
 {

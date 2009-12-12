@@ -125,11 +125,11 @@ if($num_roles == 0)
         // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
         if($active_role == 0)
         {
-            $g_message->show('no_old_roles', '', 'Hinweis');
+            $g_message->show($g_l10n->get('LST_PHR_NO_ROLES_REMOVED'));
         }
         else
         {
-            $g_message->show('no_enabled_lists', '', 'Hinweis');
+            $g_message->show($g_l10n->get('LST_PHR_NO_RIGHTS_VIEW_LIST'));
         }
     }
     else

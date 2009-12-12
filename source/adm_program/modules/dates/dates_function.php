@@ -253,7 +253,7 @@ if($_GET['mode'] == 1)
             $row = $g_db->fetch_object($result);
             if($row->is_reserved) 
             {
-                $g_message->show($g_l10n->get('DAT_ROOM_RESERVED'));
+                $g_message->show($g_l10n->get('DAT_PHR_ROOM_RESERVED'));
             }
         }
         
@@ -368,7 +368,7 @@ if($_GET['mode'] == 1)
             if($max_members != '' && !$date->isVisibleFor($rol_id))
             {
                 $date->delete();
-                $g_message->show('quota_for_role');
+                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_FOR_ROLE'));
             }
             else
             {
@@ -383,7 +383,7 @@ if($_GET['mode'] == 1)
         if($count_max_members_role == count($date->visible_for) && $sum != $date->getValue('dat_max_members'))
         {
             $date->delete();
-            $g_message->show('quota_and_max_members_must_match');
+            $g_message->show($g_l10n->get('DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH'));
         }
         
         if($sum > 0 && $date->getValue('dat_max_members') != '' && $date->getValue('dat_max_members') > 0)
@@ -404,13 +404,13 @@ if($_GET['mode'] == 1)
             else
             {
                 $date->delete();
-                $g_message->show('quota_exceeded');
+                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_EXCEEDED'));
             }
         }
         elseif($sum > 0 && ($date->getValue('dat_max_members') == '' || $date->getValue('dat_max_members') == 0))
         {
             $date->delete();
-            $g_message->show('quota_with_maximum');
+            $g_message->show($g_l10n->get('DAT_PHR_QUOTA_WITH_MAXIMUM'));
         }
     }
     else    // im Bearbeiten-Modus
@@ -472,7 +472,7 @@ if($_GET['mode'] == 1)
             {
                 if($max_members != '' && !$date->isVisibleFor($rol_id))
                 {
-                    $g_message->show('quota_for_role');
+                    $g_message->show($g_l10n->get('DAT_PHR_QUOTA_FOR_ROLE'));
                 }
                 else
                 {
@@ -486,12 +486,12 @@ if($_GET['mode'] == 1)
             
             if($count_max_members_role == count($date->visible_for) && $sum != $date->getValue('dat_max_members'))
             {
-                $g_message->show('quota_and_max_members_must_match');
+                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH'));
             }
             
             if($sum > 0 && ($date->getValue('dat_max_members') == '' || $date->getValue('dat_max_members') == 0))
             {
-                $g_message->show('quota_with_maximum');
+                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_WITH_MAXIMUM'));
             }
             
             if(($sum > 0 && $date->getValue('dat_max_members') != '' && $date->getValue('dat_max_members') > 0) || $sum == 0)
@@ -513,7 +513,7 @@ if($_GET['mode'] == 1)
                 }
                 else
                 {
-                    $g_message->show('quota_exceeded');
+                    $g_message->show($g_l10n->get('DAT_PHR_QUOTA_EXCEEDED'));
                 }
             }
         }

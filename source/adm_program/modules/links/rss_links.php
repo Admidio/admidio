@@ -21,7 +21,7 @@ require_once('../../system/classes/table_weblink.php');
 if ($g_preferences["enable_rss"] != 1)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show('rss_disabled');
+    $g_message->show($g_l10n->get('SYS_PHR_RSS_DISABLED'));
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist

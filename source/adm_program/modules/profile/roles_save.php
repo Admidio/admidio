@@ -121,10 +121,10 @@ while($row = $g_db->fetch_array($result_rol))
 
             //Bedingungen fuer Abbruch und Abbruch
             if($row_members[0] >= $row['rol_max_members']
-            && isset($_POST["leader-".$row['rol_id']]) && $_POST["leader-".$row['rol_id']] == false
-            && isset($_POST["role-".$row['rol_id']])   && $_POST["role-".$row['rol_id']]   == true)
+            && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
+            && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
             {
-                $g_message->show("max_members_profile", $row['rol_name']);
+                $g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $row['rol_name']));
             }
         }
     }
