@@ -140,6 +140,7 @@
     <text id="SYS_WEBMASTER" version="2.2.0">Webmaster</text>
     <text id="SYS_YES" version="2.2.0">Ja</text>
     <text id="SYS_PHR_BETA_VERSION" version="2.2.0">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
+    <text id="SYS_PHR_CAPTCHA_CODE_INVALID" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
     <text id="SYS_PHR_COOKIE_NOT_SET" version="2.2.0">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" version="2.2.0">%VAR1% anlegen</text>
     <text id="SYS_PHR_CREATED_BY" version="2.2.0">Angelegt von %VAR1% am %VAR2%</text>
@@ -168,12 +169,11 @@
     <text id="SYS_PHR_NO_RIGHTS" version="2.2.0">Du hast keine Rechte, diese Aktion auszuführen.</text>
     <text id="SYS_PHR_PASSWORD_UNKNOWN" version="2.2.0">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
     <text id="SYS_PHR_ROLE_MAX_MEMBERS" version="2.2.0">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
+    <text id="SYS_PHR_RSS_DISABLED" version="2.2.0">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_PHR_SAVE" version="2.2.0">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_TIME_INVALID" version="2.2.0">Es wurde keine sinnvolle Uhrzeit eingegeben.\n\nDie Uhrzeit muss zwischen 00:00 und 23:59 liegen!</text>
     <text id="SYS_PHR_WRITE_ACCESS" version="2.2.0" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
     <text id="SYS_PHR_SERVER_NO_UPLOAD" version="2.2.0">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
-    <text id="SYS_PHR_RSS_DISABLED" version="2.2.0">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
-    <text id="SYS_PHR_CAPTCHA_CODE_INVALID" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
 	<text id="SYS_TO" version="2.2.0">An</text>
     <text id="SYS_NAME" version="2.2.0">Name</text>
     <text id="SYS_EMAIL" version="2.2.0">E-mail</text>
