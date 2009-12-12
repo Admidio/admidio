@@ -51,7 +51,7 @@ if(!isset($_GET['mode']) || $_GET['mode'] < 1 || $_GET['mode'] > 2)
 $ini = ini_get('file_uploads');
 if($ini!=1)
 {
-    $g_message->show('no_file_upload_server');
+    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
 }
 
 //URL auf Navigationstack ablegen

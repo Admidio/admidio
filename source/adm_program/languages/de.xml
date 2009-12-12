@@ -163,6 +163,7 @@
     <text id="SYS_PHR_SAVE" version="2.2.0">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_TIME_INVALID" version="2.2.0">Es wurde keine sinnvolle Uhrzeit eingegeben.\n\nDie Uhrzeit muss zwischen 00:00 und 23:59 liegen!</text>
     <text id="SYS_PHR_WRITE_ACCESS" version="2.2.0" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
+    <text id="SYS_PHR_SERVER_NO_UPLOAD" version="2.2.0">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
 	<text id="SYS_TO" version="2.2.0">An</text>
     <text id="SYS_NAME" version="2.2.0">Name</text>
     <text id="SYS_EMAIL" version="2.2.0">E-mail</text>

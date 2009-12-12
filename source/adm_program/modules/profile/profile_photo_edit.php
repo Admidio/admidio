@@ -25,7 +25,7 @@ require('../../system/classes/htaccess.php');
 //pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show('no_file_upload_server');
+    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
