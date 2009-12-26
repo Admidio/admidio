@@ -138,7 +138,7 @@ if($locked=='1' || $locked=='0')
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$g_current_user->editPhotoRight())
     {
-        $g_message->show('photoverwaltunsrecht');
+        $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
     }
     
     $photo_album->setValue('pho_locked', $locked);

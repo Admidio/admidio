@@ -25,27 +25,16 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableGuestbook extends TableAccess
 {
-    var $bbCode;
+    protected $bbCode;
 
     // Konstruktor
-    function TableGuestbook(&$db, $gbo_id = 0)
+    public function __construct(&$db, $gbo_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_GUESTBOOK;
-        $this->column_praefix = 'gbo';
-        
-        if($gbo_id > 0)
-        {
-            $this->readData($gbo_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_GUESTBOOK, 'gbo', $gbo_id);
     }
     
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         if(strlen($field_value) > 0)
         {
@@ -73,7 +62,7 @@ class TableGuestbook extends TableAccess
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
     // type = 'BBCODE' : Text mit BBCode-Tags
-    function getText($type = 'HTML')
+    public function getText($type = 'HTML')
     {
         global $g_preferences;
         $description = '';
@@ -101,7 +90,7 @@ class TableGuestbook extends TableAccess
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
         
@@ -126,7 +115,7 @@ class TableGuestbook extends TableAccess
     }
     
     // die Methode loescht den Gaestebucheintrag mit allen zugehoerigen Kommentaren
-    function delete()
+    public function delete()
     {
         //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
         $sql = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');

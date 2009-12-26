@@ -23,24 +23,13 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableAutoLogin extends TableAccess
 {
     // Konstruktor
-    function TableAutoLogin(&$db, $session = '')
+    public function __construct(&$db, $session = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_AUTO_LOGIN;
-        $this->column_praefix = 'atl';
-        
-        if(strlen($session) > 0)
-        {
-            $this->readData($session);
-        }
-        else
-        {
-            $this->clear();
-        }
-    }
+        parent::__construct($db, TBL_AUTO_LOGIN, 'atl', $session);
+    }    
 
     // interne Methode, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         if($this->new_record)
         {
@@ -63,7 +52,7 @@ class TableAutoLogin extends TableAccess
     }  
     
     // diese Methode loescht Datensaetze aus der AutoLogin-Tabelle die nicht mehr gebraucht werden
-    function tableCleanup()
+    public function tableCleanup()
     {
         // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
         $date_session_delete = time() - 60*60*24*365;

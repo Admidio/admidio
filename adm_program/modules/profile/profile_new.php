@@ -211,7 +211,7 @@ function getFieldCode($field, $user, $new_user)
             $maxlength = '10';
             if(strlen($field->getValue('usd_value')) > 0)
             {
-                $field->setValue('usd_value', mysqldate('d.m.y', $field->getValue('usd_value')));
+                $field->setValue('usd_value', $field->getValue('usd_value', $g_preferences['system_date']));
             }
         }
         elseif($field->getValue('usf_type') == 'EMAIL' || $field->getValue('usf_type') == 'URL')

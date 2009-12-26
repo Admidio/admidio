@@ -95,41 +95,49 @@ if($g_debug == 1)
 //Wenn Thumbnail existiert laengere Seite ermitteln
 if($thumb)
 {
-	$thumb_length=1;
-	if(file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg'))
-	{
-	    //Ermittlung der Original Bildgroesse
-	    $bildgroesse = getimagesize($ordner.'/thumbnails/'.$pic_nr.'.jpg');
-	    
-	    $thumb_length = $bildgroesse[1];
-	    if($bildgroesse[0]>$bildgroesse[1])
-	    {
-	        $thumb_length = $bildgroesse[0];
-	    }
-	}
-	
-	//Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
-	//Wenn nicht anlegen
-	if(!file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
-	{
-        //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
-        if(file_exists($ordner.'/thumbnails') == false)
-        {
-            require_once('../../system/classes/folder.php');
-            $folder = new Folder($ordner);
-            $folder->createWriteableFolder('thumbnails');
-        }
-
-        // nun das Thumbnail anlegen
-	    $image = new Image($picpath);
+    if($pic_nr > 0)
+    {
+    	$thumb_length=1;
+    	if(file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg'))
+    	{
+    	    //Ermittlung der Original Bildgroesse
+    	    $bildgroesse = getimagesize($ordner.'/thumbnails/'.$pic_nr.'.jpg');
+    	    
+    	    $thumb_length = $bildgroesse[1];
+    	    if($bildgroesse[0]>$bildgroesse[1])
+    	    {
+    	        $thumb_length = $bildgroesse[0];
+    	    }
+    	}
+    	
+    	//Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
+    	//Wenn nicht anlegen
+    	if(!file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
+    	{
+            //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
+            if(file_exists($ordner.'/thumbnails') == false)
+            {
+                require_once('../../system/classes/folder.php');
+                $folder = new Folder($ordner);
+                $folder->createWriteableFolder('thumbnails');
+            }
+    
+            // nun das Thumbnail anlegen
+    	    $image = new Image($picpath);
+    	    $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
+    	    $image->copyToFile(null, $ordner.'/thumbnails/'.$pic_nr.'.jpg');
+    	}
+    	else
+    	{
+    		readfile($ordner.'/thumbnails/'.$pic_nr.'.jpg');
+    	}
+    }
+    else
+    {
+        // kein Bild uebergeben, dann NoPix anzeigen
+	    $image = new Image(THEME_SERVER_PATH. '/images/nopix.jpg');
 	    $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
-	    $image->copyToFile(null, $ordner.'/thumbnails/'.$pic_nr.'.jpg');
-	}
-	else
-	{
-		readfile($ordner.'/thumbnails/'.$pic_nr.'.jpg');
-	}
-
+    }
 }
 else
 {

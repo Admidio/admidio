@@ -256,7 +256,7 @@ class PhpBB2
                 // Export der Admido Daten ins Forum und einen Forum Account erstellen
                 $this->userInsert($login_name, 1, $password_crypt, $email);
 
-                $this->message = 'login_forum_new';
+                $this->message = 'SYS_PHR_FORUM_LOGIN_NEW';
                 $this->session_valid = TRUE;        
             }
             else
@@ -276,7 +276,7 @@ class PhpBB2
         {
             if($this->setAdmin($login_name))
             {
-                $this->message = 'login_forum_admin';
+                $this->message = 'SYS_PHR_FORUM_LOGIN_ADMIN';
             }
         }
         
@@ -289,7 +289,7 @@ class PhpBB2
             if(!($this->checkPassword($password_crypt, $this->password, $this->userid)))
             {
                 // Password wurde zurueck gesetzt, Meldung vorbereiten
-                $this->message = 'login_forum_pass';
+                $this->message = 'SYS_PHR_FORUM_LOGIN_PASSWORD';
             }
 
             // Session anlegen
@@ -298,7 +298,7 @@ class PhpBB2
             if($this->message == '')
             {
                 // Im Forum und in Admidio angemeldet, Meldung vorbereiten
-                $this->message = 'SYS_PHR_LOGIN_FORUM_SUCCESSFUL';
+                $this->message = 'SYS_PHR_FORUM_LOGIN_SUCCESSFUL';
             }
         }
     }

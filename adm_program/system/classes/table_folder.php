@@ -34,19 +34,9 @@ class TableFolder extends TableAccess
     // Konstruktor
     public function __construct(&$db, $folder_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_FOLDERS;
-        $this->column_praefix = 'fol';
-        $this->folderPath     = new Folder();
-
-        if($folder_id > 0)
-        {
-            $this->readData($folder_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_FOLDERS, 'fol', $folder_id);
+        
+        $this->folderPath = new Folder();
     }
 
 
@@ -66,20 +56,20 @@ class TableFolder extends TableAccess
     {
         global $g_current_organization, $g_current_user, $g_valid_login;
 
-        if ($folder_id > 0) {
+        if ($folder_id > 0) 
+        {
             $condition = '     fol_id     = '.$folder_id.'
                            AND fol_type   = "DOWNLOAD"
                            AND fol_org_id = '. $g_current_organization->getValue('org_id');
             parent::readData($folder_id, $condition);
-
         }
-        else {
+        else 
+        {
             $condition = '     fol_name   = "download"
                            AND fol_type   = "DOWNLOAD"
                            AND fol_path   = "/adm_my_files"
                            AND fol_org_id = '. $g_current_organization->getValue('org_id');
             parent::readData($folder_id, $condition);
-
         }
 
 

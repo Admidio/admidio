@@ -17,24 +17,13 @@ require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
 class TableRentalOverview extends TableAccess
 {
     // Konstruktor
-    function TableRentalOverview(&$db, $rnt_id = 0)
+    public function __construct(&$db, $rnt_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_RENTAL_OVERVIEW;
-        $this->column_praefix = "rnt";
-
-        if($rnt_id > 0)
-        {
-            $this->readData($rnt_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_RENTAL_OVERVIEW, 'rnt', $rnt_id);
     }
 
     // Leihvorgang mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($rnt_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($rnt_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         $sql_additional_tables .= TBL_INVENTORY;
         $sql_where_condition   .= ' rnt_inv_id = inv_id ';
@@ -43,7 +32,7 @@ class TableRentalOverview extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function save()
+    public function save()
     {
         global $g_current_user;
 

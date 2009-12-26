@@ -22,24 +22,13 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableLists extends TableAccess
 {
     // Konstruktor
-    function TableLists(&$db, $lst_id = 0)
+    public function __construct(&$db, $lst_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_LISTS;
-        $this->column_praefix = 'lst';
-        
-        if($lst_id > 0)
-        {
-            $this->readData($lst_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_LISTS, 'lst', $lst_id);
     }
     
     // Aktuelle Liste wird zur Default-Liste der Organisation
-    function setDefault()
+    public function setDefault()
     {
         global $g_current_organization;
         
@@ -55,7 +44,7 @@ class TableLists extends TableAccess
         $this->db->query($sql);
     }
 
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
         
@@ -82,7 +71,7 @@ class TableLists extends TableAccess
     }
 
     // Liste samt Abhaengigkeiten loeschen
-    function delete()
+    public function delete()
     {
         // alle Spalten der Liste loeschen
         $sql = 'DELETE FROM '. TBL_LIST_COLUMNS. ' WHERE lsc_lst_id = '. $this->getValue('lst_id');

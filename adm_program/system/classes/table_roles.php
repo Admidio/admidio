@@ -28,23 +28,12 @@ class TableRoles extends TableAccess
 {
     // Alle konfigurierbare Werte für die Bezahlzeitraeume
     // Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
-    var $role_cost_periods = array(-1,1,2,4,12);
+    protected $role_cost_periods = array(-1,1,2,4,12);
 
     // Konstruktor
-    function TableRoles(&$db, $role = '')
+    public function __construct(&$db, $role = '')
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_ROLES;
-        $this->column_praefix = 'rol';
-
-        if(strlen($role) > 0)
-        {
-            $this->readData($role);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_ROLES, 'rol', $role);
     }
 
     // Rolle mit der uebergebenen ID oder dem Rollennamen aus der Datenbank auslesen
@@ -70,7 +59,7 @@ class TableRoles extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function save()
+    public function save()
     {
         global $g_current_user, $g_current_session;
         $fields_changed = $this->columnsValueChanged;
@@ -104,7 +93,7 @@ class TableRoles extends TableAccess
     }
 
     // Loescht die Abhaengigkeiten zur Rolle und anschliessend die Rolle selbst...
-    function delete()
+    public function delete()
     {
         global $g_current_session;
 
@@ -152,13 +141,13 @@ class TableRoles extends TableAccess
         }
     }
     
-    function getCostPeriode()
+    public function getCostPeriode()
     {
         return $this->role_cost_periods;
     }
 
     // aktuelle Rolle wird auf inaktiv gesetzt
-    function setInactive()
+    public function setInactive()
     {
         global $g_current_session;
 
@@ -185,7 +174,7 @@ class TableRoles extends TableAccess
     }
 
     // aktuelle Rolle wird auf aktiv gesetzt
-    function setActive()
+    public function setActive()
     {
         global $g_current_session;
 
@@ -211,7 +200,7 @@ class TableRoles extends TableAccess
 
     // die Funktion gibt die Anzahl freier Plaetze zurueck
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
-    function countVacancies($count_leaders = false)
+    public function countVacancies($count_leaders = false)
     {
         if($this->getValue('rol_max_members') > 0)
         {
@@ -232,7 +221,7 @@ class TableRoles extends TableAccess
     }
     
     // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
-    static function getRolCostPeriodDesc($my_rol_cost_period)
+    public static function getRolCostPeriodDesc($my_rol_cost_period)
     {
         if($my_rol_cost_period == -1)
         {

@@ -198,7 +198,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show('flooding_protection', $g_preferences['flooding_protection_time']);
+                    $g_message->show($g_l10n->get('GBO_PHR_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
                 }
             }
         }
@@ -304,7 +304,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show('flooding_protection', $g_preferences['flooding_protection_time']);
+                    $g_message->show($g_l10n->get('GBO_PHR_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
                 }
             }
         }

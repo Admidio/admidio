@@ -35,7 +35,7 @@ if(isset($_GET['job']))
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$g_current_user->editPhotoRight())
     {
-        $g_message->show('photoverwaltunsrecht');
+        $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
     }
 
     //URL auf Navigationstack ablegen
@@ -167,15 +167,14 @@ if($_GET['job'] == 'rotate')
     }    
     
     // zur Ausgangsseite zurueck
-    $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
-    header($location);
+    header('Location: '.$g_root_path.'/adm_program/system/back.php');
     exit();
 }
 elseif($_GET['job'] == 'delete_request')
 {
     // Nachfrage ob geloescht werden soll
    $g_message->setForwardYesNo($g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&bild='. $_GET['bild'].'&job=do_delete');
-   $g_message->show('delete_photo');
+   $g_message->show($g_l10n->get('PHO_PHR_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
 }
 elseif($_GET['job'] == 'do_delete')
 {
@@ -191,8 +190,9 @@ elseif($_GET['job'] == 'do_delete')
 
     $_SESSION['photo_album'] =& $photo_album;
     
+    // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
-    $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php', 2000);
-    $g_message->show('photo_deleted');
+    header('Location: '.$g_root_path.'/adm_program/system/back.php');
+    exit();
 }
 ?>

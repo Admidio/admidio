@@ -3,6 +3,61 @@
 <announcement>
 	<text id="ANN_ANNOUNCEMENT" version="2.2.0">Announcement</text>
 </announcement>
+<ecards>
+	<text id="ECA_A_ECARD_FROM" version="2.2.0">Eine Grußkarte von</text>
+	<text id="ECA_ACTIVATE_GREETING_CARDS" version="2.2.0">Grußkarten aktivieren</text>
+	<text id="ECA_BLEND_IN_SETTINGS" version="2.2.0">Einstellungen einblenden</text>
+    <text id="ECA_BLEND_OUT_SETTINGS" version="2.2.0">Einstellungen ausblenden</text>
+	<text id="ECA_CONTENT_LOADING" version="2.2.0">Inhalt wird geladen - Bitte warten!</text>
+    <text id="ECA_EMAIL_LOOKS_INVALID" version="2.2.0">E-mail Adresse scheint falsch zu sein!</text>
+	<text id="ECA_EXTERNAL_RECIPIENT" version="2.2.0">externer Empfänger</text>
+	<text id="ECA_EMAIL_OF_RECIPIENT" version="2.2.0" description="%VAR1% wird durch eine Nummer ersetzt">E-Mail des%VAR1%Empfängers</text>
+	<text id="ECA_EMAIL_OF_SENDER" version="2.2.0">E-Mail des Absenders</text>
+	<text id="ECA_FIELD_ERROR" version="2.2.0">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.</text>
+    <text id="ECA_GREETING_CARD" version="2.2.0">Grußkarte</text>
+    <text id="ECA_GREETING_CARDS" version="2.2.0">Grußkarten</text>
+	<text id="ECA_GREETING_CARD_EDIT" version="2.2.0">Grußkarte bearbeiten</text>
+    <text id="ECA_GREETING_CARD_SEND" version="2.2.0">Grußkarte wegschicken</text>
+	<text id="ECA_GREETING_CARD_PREVIEW" version="2.2.0">Vorschau der Grußkarte:</text>
+	<text id="ECA_INTERNAL_RECIPIENT" version="2.2.0">interner Empfänger</text>
+	<text id="ECA_MAX_CC" version="2.2.0">Max. weitere Empfänger</text>
+    <text id="ECA_MAX_MESSAGE_LENGTH" version="2.2.0">Max. Länge des Mitteilungstextes:</text>
+	<text id="ECA_MORE_RECIPIENTS" version="2.2.0">Weitere Empfänger</text>
+	<text id="ECA_NAME_OF_SENDER" version="2.2.0">Name des Absenders</text>
+    <text id="ECA_NAME_OF_RECIPIENT" version="2.2.0" description="%VAR1% wird durch eine Nummer ersetzt">Name des%VAR1%Empfängers</text>
+	<text id="ECA_NO_USER_WITH_VALID_EMAIL" version="2.2.0">Kein User vorhanden der eine gültige E-mail besitzt!</text>
+	<text id="ECA_NO_MORE_RECIPIENTS" version="2.2.0">Keine weiteren Empfänger</text>
+	<text id="ECA_NEW_MESSAGE_RECEIVED" version="2.2.0">Neue Nachricht erhalten</text>
+	<text id="ECA_OTHER_RECIPIENT" version="2.2.0">Anderer Empfänger</text>
+	<text id="ECA_PHR_ACTIVATE_GREETING_CARDS" version="2.2.0">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
+	<text id="ECA_PHR_FILL_INPUTS" version="2.2.0">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf "Abschicken".</text>
+    <text id="ECA_PHR_FONT" version="2.2.0">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
+    <text id="ECA_PHR_FONT_SIZE" version="2.2.0">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
+    <text id="ECA_PHR_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
+    <text id="ECA_PHR_INPUT_INCORRECT" version="2.2.0">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
+	<text id="ECA_PHR_MAX_CC" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
+    <text id="ECA_PHR_MAX_MESSAGE_LENGTH" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
+	<text id="ECA_PHR_MESSAGE_TOO_LONG" version="2.2.0" description="%VAR1% wird durch die max. Länge ersetzt">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
+	<text id="ECA_PHR_NEED_JAVASCRIPT" version="2.2.0">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
+	<text id="ECA_PHR_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
+    <text id="ECA_PHR_SCALING_GREETING_CARD" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
+	<text id="ECA_PHR_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</text>
+	<text id="ECA_PHR_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
+	<text id="ECA_PLEASE_CHOOSE" version="2.2.0">Bitte wählen</text>
+	<text id="ECA_SEND_ERROR" version="2.2.0">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
+	<text id="ECA_SETTINGS_GREETING_CARDS" version="2.2.0">Einstellungen Grußkarten</text>
+    <text id="ECA_SCALING_PREVIEW" version="2.2.0">Skalierung Vorschaubild (Breite x Höhe)</text>
+    <text id="ECA_SCALING_GREETING_CARD" version="2.2.0">Skalierung Grußkartenbild (Breite x Höhe):</text>
+	<text id="ECA_STILL_XCHARS_AVAILABLE" version="2.2.0">noch %VAR1% Zeichen</text>
+	<text id="ECA_TEMPLATE" version="2.2.0">Template</text>
+	<text id="ECA_THE_MESSAGE" version="2.2.0">Eine Nachricht</text>
+	<text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" version="2.2.0">An die gesamte Rolle</text>
+	<text id="ECA_PLEASE_CHOOSE_VALID_ROLE" version="2.2.0">Bitte wählen Sie eine gültige Rolle aus!</text>
+    <text id="ECA_RECIPIENT_EMAIL" version="2.2.0">Empfänger Email</text>
+    <text id="ECA_RECIPIENT_NAME" version="2.2.0">Empfänger Name</text>
+    <text id="ECA_VIEW_PICTURE_FULL_SIZED" version="2.2.0">Bild in voller Größe anzeigen</text>
+    <text id="ECA_YOUR_MESSAGE" version="2.2.0">Deine Nachricht</text>
+</ecards>
 <system>
 	<text id="SYS_ACTIVATED" version="2.2.0">activated</text>
 	<text id="SYS_ADD_RECIPIENTS" version="2.2.0">Add recipient</text>
@@ -30,6 +85,7 @@
 	<text id="SYS_NAME" version="2.2.0">Name</text>
 	<text id="SYS_NEXT" version="2.2.0">Next</text>
 	<text id="SYS_NO" version="2.2.0">No</text>
+	<text id="SYS_PASSWORD_FORGOTTEN" version="2.2.0">Password forgotten</text>
 	<text id="SYS_PHR_CREATE" version="2.2.0">Create %VAR1%</text>
 	<text id="SYS_PHR_CREATED_BY" version="2.2.0">Created by %VAR1% on %VAR2%</text>
 	<text id="SYS_PHR_EDIT" version="2.2.0">Edit %VAR1%</text>
@@ -37,16 +93,14 @@
 	<text id="SYS_PHR_LAST_EDITED_BY" version="2.2.0">Last edited by %VAR1% on %VAR2%</text>
 	<text id="SYS_PHR_NO_ENTRY" version="2.2.0">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
 	<text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
-	<text id="SYS_PHR_WRONG_CAPTCHA_CODE" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
 	<text id="SYS_PHR_LOSTPW_AREADY_LOGGED_ID" version="2.2.0">Du bist am System angemeldet folglich kennst du ja dein Passwort!</text>
 	<text id="SYS_PHR_LOSTPW_EMAIL_ERROR" version="2.2.0">Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!</text>
 	<text id="SYS_PHR_LOSTPW_SEND" version="2.2.0">Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!</text>
 	<text id="SYS_PHR_LOSTPW_SEND_ERROR" version="2.2.0">Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
-	<text id="SYS_PHR_PW_FORGOTTEN" version="2.2.0">Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
+	<text id="SYS_PHR_PASSWORD_FORGOTTEN" version="2.2.0">Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
 	<text id="SYS_PHR_PWACT_PW_SAVED" version="2.2.0">Das neue Passwort wurde nun übernommen!</text>
 	<text id="SYS_PHR_PWACT_CODE_INVALID" version="2.2.0">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</text>
 	<text id="SYS_PREVIEW" version="2.2.0">Preview</text>
-	<text id="SYS_PW_FORGOTTEN" version="2.2.0">Passwort vergessen</text>
 	<text id="SYS_RECIPIENT" version="2.2.0">Recipient</text>
 	<text id="SYS_REMOVE" version="2.2.0">Remove</text>
 	<text id="SYS_SAVE" version="2.2.0">Save</text>
@@ -60,59 +114,4 @@
 	<text id="SYS_WEBMASTER" version="2.2.0">Webmaster</text>
 	<text id="SYS_YES" version="2.2.0">Yes</text>
 </system>
-<ecards>
-	<text id="ECA_A_ECARD_FROM" version="2.2.0">Eine Grußkarte von</text>
-	<text id="ECA_ACTIVATE_GREETING_CARDS" version="2.2.0">Grußkarten aktivieren</text>
-	<text id="ECA_BLEND_IN_SETTINGS" version="2.2.0">Einstellungen einblenden</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" version="2.2.0">Einstellungen ausblenden</text>
-	<text id="ECA_CONTENT_LOADING" version="2.2.0">Inhalt wird geladen - Bitte warten!</text>
-	<text id="ECA_DESC_ACTIVATE_GREETING_CARDS" version="2.2.0">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
-    <text id="ECA_DESC_FONT" version="2.2.0">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
-    <text id="ECA_DESC_FONT_SIZE" version="2.2.0">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
-    <text id="ECA_DESC_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
-	<text id="ECA_DESC_MAX_CC" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
-    <text id="ECA_DESC_MAX_MESSAGE_LENGTH" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
-	<text id="ECA_DESC_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
-    <text id="ECA_DESC_SCALING_GREETING_CARD" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
-	<text id="ECA_DESC_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" version="2.2.0">E-mail Adresse scheint falsch zu sein!</text>
-	<text id="ECA_EXTERNAL_RECIPIENT" version="2.2.0">externer Empfänger</text>
-	<text id="ECA_EMAIL_OF_RECIPIENT" version="2.2.0" description="%VAR1% wird durch eine Nummer ersetzt">E-Mail des%VAR1%Empfängers</text>
-	<text id="ECA_EMAIL_OF_SENDER" version="2.2.0">E-Mail des Absenders</text>
-	<text id="ECA_FIELD_ERROR" version="2.2.0">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.</text>
-    <text id="ECA_GREETING_CARD" version="2.2.0">Grußkarte</text>
-    <text id="ECA_GREETING_CARDS" version="2.2.0">Grußkarten</text>
-	<text id="ECA_GREETING_CARD_EDIT" version="2.2.0">Grußkarte bearbeiten</text>
-    <text id="ECA_GREETING_CARD_SEND" version="2.2.0">Grußkarte wegschicken</text>
-	<text id="ECA_GREETING_CARD_PREVIEW" version="2.2.0">Vorschau der Grußkarte:</text>
-	<text id="ECA_INTERNAL_RECIPIENT" version="2.2.0">interner Empfänger</text>
-	<text id="ECA_MAX_CC" version="2.2.0">Max. weitere Empfänger</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH" version="2.2.0">Max. Länge des Mitteilungstextes:</text>
-	<text id="ECA_MORE_RECIPIENTS" version="2.2.0">Weitere Empfänger</text>
-	<text id="ECA_NAME_OF_SENDER" version="2.2.0">Name des Absenders</text>
-    <text id="ECA_NAME_OF_RECIPIENT" version="2.2.0" description="%VAR1% wird durch eine Nummer ersetzt">Name des%VAR1%Empfängers</text>
-	<text id="ECA_NO_USER_WITH_VALID_EMAIL" version="2.2.0">Kein User vorhanden der eine gültige E-mail besitzt!</text>
-	<text id="ECA_NO_MORE_RECIPIENTS" version="2.2.0">Keine weiteren Empfänger</text>
-	<text id="ECA_NEW_MESSAGE_RECEIVED" version="2.2.0">Neue Nachricht erhalten</text>
-	<text id="ECA_OTHER_RECIPIENT" version="2.2.0">Anderer Empfänger</text>
-	<text id="ECA_PHR_FILL_INPUTS" version="2.2.0">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf "Abschicken".</text>
-    <text id="ECA_PHR_INPUT_INCORRECT" version="2.2.0">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
-	<text id="ECA_PHR_NEED_JAVASCRIPT" version="2.2.0">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
-	<text id="ECA_PHR_MESSAGE_TOO_LONG" version="2.2.0" description="%VAR1% wird durch die max. Länge ersetzt">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
-	<text id="ECA_PHR_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</text>
-	<text id="ECA_PLEASE_CHOOSE" version="2.2.0">Bitte wählen</text>
-	<text id="ECA_SEND_ERROR" version="2.2.0">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
-	<text id="ECA_SETTINGS_GREETING_CARDS" version="2.2.0">Einstellungen Grußkarten</text>
-    <text id="ECA_SCALING_PREVIEW" version="2.2.0">Skalierung Vorschaubild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_GREETING_CARD" version="2.2.0">Skalierung Grußkartenbild (Breite x Höhe):</text>
-	<text id="ECA_STILL_XCHARS_AVAILABLE" version="2.2.0">noch %VAR1% Zeichen</text>
-	<text id="ECA_TEMPLATE" version="2.2.0">Template</text>
-	<text id="ECA_THE_MESSAGE" version="2.2.0">Eine Nachricht</text>
-	<text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" version="2.2.0">An die gesamte Rolle</text>
-	<text id="ECA_PLEASE_CHOOSE_VALID_ROLE" version="2.2.0">Bitte wählen Sie eine gültige Rolle aus!</text>
-    <text id="ECA_RECIPIENT_EMAIL" version="2.2.0">Empfänger Email</text>
-    <text id="ECA_RECIPIENT_NAME" version="2.2.0">Empfänger Name</text>
-    <text id="ECA_VIEW_PICTURE_FULL_SIZED" version="2.2.0">Bild in voller Größe anzeigen</text>
-    <text id="ECA_YOUR_MESSAGE" version="2.2.0">Deine Nachricht</text>
-</ecards>
 </language>

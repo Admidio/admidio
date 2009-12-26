@@ -20,24 +20,13 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableUserField extends TableAccess
 {
     // Konstruktor
-    function TableUserField(&$db, $usf_id = 0)
+    public function __construct(&$db, $usf_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_USER_FIELDS;
-        $this->column_praefix = 'usf';
-        
-        if($usf_id > 0)
-        {
-            $this->readData($usf_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_USER_FIELDS, 'usf', $usf_id);
     }
 
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($usf_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($usf_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         if(is_numeric($usf_id))
         {
@@ -49,7 +38,7 @@ class TableUserField extends TableAccess
     }
     
     // das Feld wird um eine Position in der Reihenfolge verschoben
-    function moveSequence($mode)
+    public function moveSequence($mode)
     {
         global $g_current_organization;
 
@@ -78,7 +67,7 @@ class TableUserField extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         if($field_name == 'usf_cat_id'
         && $this->getValue($field_name) != $field_value)
@@ -96,7 +85,7 @@ class TableUserField extends TableAccess
     }
 
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
-    function save()
+    public function save()
     {
         global $g_current_session;
         $fields_changed = $this->columnsValueChanged;
@@ -113,7 +102,7 @@ class TableUserField extends TableAccess
     
     // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
     // die Funktion wird innerhalb von delete() aufgerufen
-    function delete()
+    public function delete()
     {
         global $g_current_session;
         

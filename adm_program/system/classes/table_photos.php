@@ -35,19 +35,9 @@ class TablePhotos extends TableAccess
 
     public function __construct(&$db, $photo_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_PHOTOS;
-        $this->column_praefix = 'pho';
-        $this->folderPath     = new Folder();
+        parent::__construct($db, TBL_PHOTOS, 'pho', $photo_id);
         
-        if(is_numeric($photo_id))
-        {
-            $this->readData($photo_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        $this->folderPath     = new Folder();
     }
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
@@ -113,15 +103,16 @@ class TablePhotos extends TableAccess
         if($pho_id == 0)
         {
             $pho_id = $this->getValue('pho_id');
+            $shuffle_image['shuffle_pho_id']    = $this->getValue('pho_id');
+            $shuffle_image['shuffle_img_begin'] = $this->getValue('pho_begin');
+
             if($this->getValue('pho_quantity') > 0)
             {
                 $shuffle_image['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
-                $shuffle_image['shuffle_pho_id'] = $this->getValue('pho_id');
-                $shuffle_image['shuffle_img_begin'] = $this->getValue('pho_begin');
             }
         }
         
-        if($shuffle_image['shuffle_pho_id'] == 0)
+        if($shuffle_image['shuffle_img_nr'] == 0)
         {   
             // kein Bild vorhanden, dann in einem Unteralbum suchen
             $sql = 'SELECT *
@@ -133,13 +124,14 @@ class TablePhotos extends TableAccess
             
             while($pho_row = $this->db->fetch_array($result_child))
             {
-                if($shuffle_image['shuffle_pho_id'] == 0)
+                if($shuffle_image['shuffle_img_nr'] == 0)
                 {
+                    $shuffle_image['shuffle_pho_id'] = $pho_row['pho_id'];
+                    $shuffle_image['shuffle_img_begin'] = $pho_row['pho_begin'];
+
                     if($pho_row['pho_quantity'] > 0)
                     {
                         $shuffle_image['shuffle_img_nr'] = mt_rand(1, $pho_row['pho_quantity']);
-                        $shuffle_image['shuffle_pho_id'] = $pho_row['pho_id'];
-                        $shuffle_image['shuffle_img_begin'] = $pho_row['pho_begin'];
                     }
                     else
                     {

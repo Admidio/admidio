@@ -145,13 +145,13 @@ while($row = $g_db->fetch_array($result_rol))
     if($row['rol_name'] != 'Webmaster' || $g_current_user->isWebmaster())
     {
         $role_assign = 0;
-        if(isset($_POST["role-".$row['rol_id']]) && $_POST["role-".$row['rol_id']] == 1)
+        if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)
         {
             $role_assign = 1;
         }
 
         $role_leader = 0;
-        if(isset($_POST["leader-".$row['rol_id']]) && $_POST["leader-".$row['rol_id']] == 1)
+        if(isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == 1)
         {
             $role_leader = 1;
         }

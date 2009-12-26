@@ -22,28 +22,17 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableUsers extends TableAccess
 {
-    var $real_password;     // Unverschluesseltes Passwort. Ist nur gefuellt, wenn gerade das Passwort gesetzt wurde
-    var $b_set_last_change; // Kennzeichen, ob User und Zeitstempel der aktuellen Aenderung gespeichert werden sollen
+    public $real_password;     // Unverschluesseltes Passwort. Ist nur gefuellt, wenn gerade das Passwort gesetzt wurde
+    public $b_set_last_change; // Kennzeichen, ob User und Zeitstempel der aktuellen Aenderung gespeichert werden sollen
 
     // Konstruktor
-    function TableUsers(&$db, $usr_id = 0)
+    public function __construct(&$db, $usr_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_USERS;
-        $this->column_praefix = 'usr';
-
-        if(strlen($usr_id) > 0)
-        {
-            $this->readData($usr_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_USERS, 'usr', $usr_id);
     }
 
     // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
-    function updateLoginData()
+    public function updateLoginData()
     {
         $this->setValue('usr_last_login',   $this->getValue('usr_actual_login'));
         $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
@@ -55,7 +44,7 @@ class TableUsers extends TableAccess
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
-    function clear()
+    public function clear()
     {
         parent::clear();
 
@@ -65,7 +54,7 @@ class TableUsers extends TableAccess
         $this->setValue('usr_valid', 1);
     }
 
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         // Passwortfelder sollten verschluesselt als md5-Hash gespeichert werden
         if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
@@ -80,7 +69,7 @@ class TableUsers extends TableAccess
 
     // die Funktion speichert die Userdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    function save()
+    public function save()
     {
         global $g_current_user;
         $fields_changed = $this->columnsValueChanged;
@@ -110,7 +99,7 @@ class TableUsers extends TableAccess
 
     // Referenzen zum aktuellen Benutzer loeschen
     // die Methode wird innerhalb von delete() aufgerufen
-    function delete()
+    public function delete()
     {
         $this->db->startTransaction();
 

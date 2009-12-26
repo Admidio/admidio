@@ -17,25 +17,14 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableInventory extends TableAccess
 {
     // Konstruktor
-    function TableInventory(&$db, $inv_id = 0)
+    public function __construct(&$db, $inv_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_INVENTORY;
-        $this->column_praefix = 'inv';
-
-        if($inv_id > 0)
-        {
-            $this->readData($inv_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_INVENTORY, 'inv', $inv_id);
     }
 
 
     //Liest den Eintrag zu einer uebergebenen inv_id aus der DB
-	function readData($inv_id, $sql_where_condition = '', $sql_additional_tables = '')
+	public function readData($inv_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
 		global $g_current_organization, $g_current_user, $g_valid_login;
 
@@ -81,7 +70,7 @@ class TableInventory extends TableAccess
 
 
     //Gibt alle Inventargegenstaende, die der Benutzer sehen darf zurueck
-    function getAllInventoryItems()
+    public function getAllInventoryItems()
     {
 
 
@@ -89,7 +78,7 @@ class TableInventory extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function save()
+    public function save()
     {
         global $g_current_user;
 
@@ -112,7 +101,7 @@ class TableInventory extends TableAccess
     }
 
     // die Methode wird innerhalb von delete() aufgerufen
-    function delete()
+    public function delete()
     {
         //erst einmal alle vorhanden Leihvorgaenge zu diesem Inventareintrag loeschen...
         $sql = "DELETE FROM ". TBL_RENTAL_OVERVIEW. " WHERE rnt_inv_id = ". $this->getValue("inv_id");

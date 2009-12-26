@@ -218,7 +218,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
                 // pruefen, ob der Benutzername bereits im Forum vergeben ist
                 if($g_forum->userExists($_POST['usr_login_name']))
                 {
-                    $g_message->show('login_name_forum');
+                    $g_message->show($g_l10n->get('SYS_PHR_FORUM_USER_EXIST'));
                 }
                 
                 // bisherigen Loginnamen merken, damit dieser spaeter im Forum geaendert werden kann

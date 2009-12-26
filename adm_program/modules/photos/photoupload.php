@@ -31,7 +31,7 @@ if ($g_preferences['enable_photo_module'] == 0)
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show('photoverwaltunsrecht');
+    $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen

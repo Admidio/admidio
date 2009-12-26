@@ -28,7 +28,7 @@ if (! empty($abschicken) && !$g_valid_login && $g_preferences['enable_mail_captc
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
-        $g_message->show($g_l10n->get('SYS_PHR_WRONG_CAPTCHA_CODE'));
+        $g_message->show($g_l10n->get('SYS_PHR_CAPTCHA_CODE_INVALID'));
     }
 }
 if($g_valid_login)
@@ -90,19 +90,19 @@ else
     /*********************HTML_TEIL*******************************/
 
     // Html-Kopf ausgeben
-    $g_layout['title'] = $g_organization.' - '.$g_l10n->get('SYS_PW_FORGOTTEN').'?';
+    $g_layout['title'] = $g_organization.' - '.$g_l10n->get('SYS_PASSWORD_FORGOTTEN').'?';
 
     require(THEME_SERVER_PATH. '/overall_header.php');
 
     echo'
     <div class="formLayout" id="profile_form">
-        <div class="formHead">'.$g_l10n->get('SYS_PW_FORGOTTEN').'?</div>
+        <div class="formHead">'.$g_l10n->get('SYS_PASSWORD_FORGOTTEN').'?</div>
             <div class="formBody">
             <form name="password_form" action="'.$g_root_path.'/adm_program/system/lost_password.php" method="post">
                 <ul class="formFieldList">
                     <li>
                         <div>
-                          '.$g_l10n->get('SYS_PHR_PW_FORGOTTEN').'
+                          '.$g_l10n->get('SYS_PHR_PASSWORD_FORGOTTEN').'
                         </div>
                     </li>
                     <li>&nbsp;</li>

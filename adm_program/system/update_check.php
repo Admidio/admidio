@@ -73,7 +73,7 @@ if(isset($_GET['show']))
 {
 	if(is_numeric($_GET['show']) == false || $_GET['show'] > 2)
 	{
-		$g_message->show('invalid', '', '', false);
+		$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 	}
 	else
 	{

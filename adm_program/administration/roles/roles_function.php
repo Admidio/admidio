@@ -122,15 +122,15 @@ elseif($_GET["mode"] == 2)
     if(strlen($_POST['rol_name']) == 0)
     {
         // es sind nicht alle Felder gefuellt
-        $g_message->show("feld", "Name");
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
     }
     if($_POST['rol_cat_id'] == 0)
     {
         // es sind nicht alle Felder gefuellt
-        $g_message->show("feld", "Kategorie");
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kategorie'));
     }
 
-    if($role->getValue("rol_name") != $_POST['rol_name'])
+    if($role->getValue('rol_name') != $_POST['rol_name'])
     {
         // Schauen, ob die Rolle bereits existiert
         $sql    = "SELECT COUNT(*) as count
@@ -205,7 +205,7 @@ elseif($_GET["mode"] == 2)
             }
             else
             {
-                $g_message->show("feld", "Zeitraum bis");
+                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Zeitraum bis'));
             }
         }
         else
@@ -240,7 +240,7 @@ elseif($_GET["mode"] == 2)
         }
         else
         {
-            $g_message->show("feld", "Uhrzeit bis");
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Uhrzeit bis'));
         }
     }
 

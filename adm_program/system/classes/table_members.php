@@ -27,13 +27,9 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableMembers extends TableAccess
 {
     // Konstruktor
-    function TableMembers(&$db)
+    public function __construct(&$db)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_MEMBERS;
-        $this->column_praefix = 'mem';
-        
-        $this->clear();
+        parent::__construct($db, TBL_MEMBERS, 'mem');
     }
     
 
@@ -41,7 +37,7 @@ class TableMembers extends TableAccess
     // ids : Array mit den Schlüsseln rol_id und usr_id
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
     // sql_additioinal_tables : wird nicht verwendet (benötigt wegen Vererbung)
-    function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
     {
         if(is_array($ids) && is_numeric($ids['rol_id']) && is_numeric($ids['usr_id']))
         {
@@ -59,7 +55,7 @@ class TableMembers extends TableAccess
     }       
 
     // Speichert die Mitgliedschaft und aktualisiert das
-    function save()
+    public function save()
     {
         global $g_current_session;
         $fields_changed = $this->columnsValueChanged;
@@ -75,7 +71,7 @@ class TableMembers extends TableAccess
     } 
     
     // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beginnen bzw. zu aktualisieren
-    function startMembership($rol_id, $usr_id, $leader = '', $from_rol_id = false)
+    public function startMembership($rol_id, $usr_id, $leader = '', $from_rol_id = false)
     {
         if($this->getValue('mem_rol_id') != $rol_id
         || $this->getValue('mem_usr_id') != $usr_id)
@@ -113,7 +109,7 @@ class TableMembers extends TableAccess
     }
 
     // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beenden
-    function stopMembership($rol_id, $usr_id)
+    public function stopMembership($rol_id, $usr_id)
     {
         if($this->getValue('mem_rol_id') != $rol_id
         || $this->getValue('mem_usr_id') != $usr_id)

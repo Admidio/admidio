@@ -41,7 +41,7 @@ if ($g_preferences['enable_photo_module'] == 0)
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show('photoverwaltunsrecht');
+    $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
 }
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
@@ -74,7 +74,7 @@ if($photo_album->getValue('pho_org_shortname') != $g_organization)
 
 if (empty($_POST) && $_GET['uploadmethod'] == 1)
 {
-    $g_message->show('empty_photo_post', ini_get(post_max_size));
+    $g_message->show($g_l10n->get('PHO_PHR_NO_FILES_OR_TO_LARGE', ini_get(post_max_size)));
 }
 
 //bei Bedarf Uploadodner erzeugen
@@ -120,7 +120,7 @@ if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
             //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
             if($_FILES['Filedata']['error'][$x]==1)
             {
-                $g_message->show('photo_2big', maxUploadSize());
+                $g_message->show($g_l10n->get('PHO_PHR_PHOTO_FILES_TO_LARGE', maxUploadSize()));
                 $x = 5;
             }
         }
@@ -128,7 +128,7 @@ if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
     //Kontrolle ob Fotos ausgewaehlt wurden
     if($counter==0)
     {
-        $g_message->show('photodateiphotoup');
+        $g_message->show($g_l10n->get('PHO_PHR_NO_FILES_SELECTED'));
     }
     // Fotos wurden erfolgreich hochgeladen -> Upload-Seite aus der Navi-Klasse entfernen
     $_SESSION['navigation']->deleteLastUrl();
@@ -181,7 +181,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	//Typkontrolle
         elseif($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
         {
-            $g_message->show('dateiendungphotoup');
+            $g_message->show($g_l10n->get('PHO_PHR_PHOTO_FORMAT_INVALID'));
         }
     	
     	//Bild in Tempordner verschieben und weiterverarbeiten

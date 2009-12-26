@@ -71,7 +71,7 @@ function getFieldCode($field, $user_id)
         case 'DATE':
             if(strlen($field->getValue('usd_value')) > 0)
             {
-                $value = mysqldate('d.m.y', $field->getValue('usd_value'));
+                $value = $field->getValue('usd_value', $g_preferences['system_date']);
                 if($field->getValue('usf_name') == 'Geburtstag')
                 {
                     // Alter mit ausgeben

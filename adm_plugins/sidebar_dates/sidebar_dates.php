@@ -108,23 +108,23 @@ if($g_db->num_rows($plg_result) > 0)
         $plg_date->setArray($plg_row);
         $plg_html_end_date = '';
 
-        echo mysqldatetime('d.m.y', $plg_date->getValue('dat_begin')). '&nbsp;&nbsp;';
+        echo $plg_date->getValue('dat_begin', $g_preferences['system_date']). '&nbsp;&nbsp;';
 
         if ($plg_date->getValue('dat_all_day') != 1)
         {
-            echo mysqldatetime('h:i', $plg_date->getValue('dat_begin'));
+            echo $plg_date->getValue('dat_begin', $g_preferences['system_time']);
         }
 
         // Bis-Datum und Uhrzeit anzeigen
         if($plg_show_date_end)
         {
-            if(mysqldatetime('d.m.y', $plg_date->getValue('dat_begin')) != mysqldatetime('d.m.y', $plg_date->getValue('dat_end')))
+            if($plg_date->getValue('dat_begin', $g_preferences['system_date']) != $plg_date->getValue('dat_end', $g_preferences['system_date']))
             {
-                $plg_html_end_date .= mysqldatetime('d.m.y', $plg_date->getValue('dat_end'));
+                $plg_html_end_date .= $plg_date->getValue('dat_end', $g_preferences['system_date']);
             }
             if ($plg_date->getValue('dat_all_day') != 1)
             {
-                $plg_html_end_date .= mysqldatetime('h:i', $plg_date->getValue('dat_end'));
+                $plg_html_end_date .= $plg_date->getValue('dat_end', $g_preferences['system_time']);
             }
             if(strlen($plg_html_end_date) > 0)
             {

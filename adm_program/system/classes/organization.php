@@ -30,17 +30,17 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_organizations.php')
 
 class Organization extends TableOrganizations
 {
-    var $b_check_childs;        // Flag, ob schon nach Kinderorganisationen gesucht wurde
-    var $child_orgas = array(); // Array mit allen Kinderorganisationen
+    protected $b_check_childs;        // Flag, ob schon nach Kinderorganisationen gesucht wurde
+    protected $child_orgas = array(); // Array mit allen Kinderorganisationen
     
     // Konstruktor
-    function Organization(&$db, $organization = '')
+    public function __construct(&$db, $organization = '')
     {
-        $this->TableOrganizations($db, $organization);
+        parent::__construct($db, $organization);
     }
     
     // interne Funktion, die spezielle Daten des Organizationobjekts loescht
-    function clear()
+    public function clear()
     {
         parent::clear();
 
@@ -50,7 +50,7 @@ class Organization extends TableOrganizations
         
     // gibt ein Array mit allen organisationsspezifischen Einstellungen
     // aus adm_preferences zurueck
-    function getPreferences()
+    public function getPreferences()
     {
         $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
                     WHERE prf_org_id = '. $this->getValue('org_id');
@@ -69,7 +69,7 @@ class Organization extends TableOrganizations
     // zurueck in die Datenbank, dabei werden nur die veraenderten oder
     // neuen Parameter geschrieben
     // $update : bestimmt, ob vorhandene Werte aktualisiert werden
-    function setPreferences($preferences, $update = true)
+    public function setPreferences($preferences, $update = true)
     {
         $db_preferences = $this->getPreferences();
 
@@ -103,7 +103,7 @@ class Organization extends TableOrganizations
     //
     // org_id ist der Schluessel und org_shortname der Wert des Arrays
     // falls $longname = true gesetzt ist, ist org_longname der Wert des Arrays
-    function getReferenceOrganizations($child = true, $parent = true, $longname = false)
+    public function getReferenceOrganizations($child = true, $parent = true, $longname = false)
     {
         $arr_child_orgas = array();
     
@@ -140,7 +140,7 @@ class Organization extends TableOrganizations
     
     // prueft, ob die uebergebene Orga (ID oder Shortname) ein Kind
     // der aktuellen Orga ist
-    function isChildOrganization($organization)
+    public function isChildOrganization($organization)
     {
         if($this->b_check_childs == false)
         {
@@ -163,7 +163,7 @@ class Organization extends TableOrganizations
     }
     
     // prueft, ob die Orga Kinderorganisationen besitzt
-    function hasChildOrganizations()
+    public function hasChildOrganizations()
     {
         if($this->b_check_childs == false)
         {

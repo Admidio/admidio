@@ -31,18 +31,7 @@ class TableAnnouncement extends TableAccess
     // Konstruktor
     public function __construct(&$db, $ann_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_ANNOUNCEMENTS;
-        $this->column_praefix = 'ann';
-        
-        if($ann_id > 0)
-        {
-            $this->readData($ann_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_ANNOUNCEMENTS, 'ann', $ann_id);
     }
 
     // liefert die Beschreibung je nach Type zurueck

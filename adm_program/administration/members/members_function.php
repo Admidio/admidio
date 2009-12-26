@@ -171,9 +171,9 @@ elseif($_GET["mode"] == 3)
     // Paralell im Forum loeschen, wenn g_forum gesetzt ist
     if($g_preferences['enable_forum_interface'])
     {
-        $g_forum->userDelete($user->getValue("usr_login_name"));
+        $g_forum->userDelete($user->getValue('usr_login_name'));
         
-        $err_code = "delete_forum_user";
+        $phrase = $g_l10n->get('SYS_PHR_FORUM_USER_DELETE');
     }
     else
     {

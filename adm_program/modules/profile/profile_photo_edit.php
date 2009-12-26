@@ -116,7 +116,7 @@ if($job=='save')
     // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show('profile_photo_update');
+    $g_message->show($g_l10n->get('PRO_PHR_PHOTO_SAVED'));
 }    
 elseif($job=='dont_save')
 {
@@ -137,13 +137,13 @@ elseif($job=='dont_save')
     }
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show('profile_photo_update_cancel');
+    $g_message->show($g_l10n->get('SYS_PHR_PROCESS_CANCELED'));
 }
 elseif($job=='msg_delete')
 {
     /*********************** Nachfrage Foto loeschen *************************************/
     $g_message->setForwardYesNo($g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$req_usr_id.'&job=delete');
-    $g_message->show('delete_photo', '', 'Löschen');
+    $g_message->show($g_l10n->get('PRO_PHR_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
 }
 elseif($job=='delete')
 {
@@ -163,7 +163,7 @@ elseif($job=='delete')
         
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show('profile_photo_deleted');
+    $g_message->show($g_l10n->get('PRO_PHR_PHOTO_DELETED'));
 }
 
 /*********************** Kontrollmechanismen *********************************/
@@ -172,27 +172,27 @@ elseif( isset($_POST['upload']))
     //Dateigroesse
     if ($_FILES['foto_upload_file']['error']==1)
     {
-        $g_message->show('profile_photo_2big', round(maxUploadSize()/pow(1024, 2)));
+        $g_message->show($g_l10n->get('PRO_PHR_PHOTO_FILE_TO_LARGE', round(maxUploadSize()/pow(1024, 2))));
     }
 
     //Kontrolle ob Fotos ausgewaehlt wurden
     if(file_exists($_FILES['foto_upload_file']['tmp_name']) == false)
     {
-        $g_message->show('profile_photo_nopic');
+        $g_message->show($g_l10n->get('PRO_PHR_PHOTO_NOT_CHOOSEN'));
     }
 
     //Dateiendung
     $image_properties = getimagesize($_FILES['foto_upload_file']['tmp_name']);
     if ($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
     {
-        $g_message->show('dateiendungphotoup');
+        $g_message->show($g_l10n->get('PRO_PHR_PHOTO_INVALID_FORMAT'));
     }
 
     //Auflösungskontrolle
     $image_dimensions = $image_properties[0]*$image_properties[1];
     if($image_dimensions > processableImageSize())
     {
-    	$g_message->show('profile_photo_resolution_2large', round(processableImageSize()/1000000, 2));
+    	$g_message->show($g_l10n->get('PRO_PHR_PHOTO_RESOLUTION_TO_LARGE', round(processableImageSize()/1000000, 2)));
     }
 }//Kontrollmechanismen
 

@@ -15,21 +15,11 @@ class TableRooms extends TableAccess
     protected $room_choice = array(
                 0 => '---'
     ); //beihnaltet alle in der DB gespeicherten Räume
+    
     // Konstruktor
     public function __construct(&$db, $room = '')
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_ROOMS;
-        $this->column_praefix = 'room';
-
-        if(strlen($room) > 0)
-        {
-            $this->readData($room);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_ROOMS, 'room', $room);
         
         //room_choice befüllen
         $sql = 'SELECT room_id, room_name, room_capacity, room_overhang FROM '.TBL_ROOMS.'';
@@ -54,10 +44,6 @@ class TableRooms extends TableAccess
             $room = addslashes($room);
             $sql_where_condition .= ' room_name LIKE "'.$room.'" ';
         }
-
-      //  $sql_additional_tables .= TBL_CATEGORIES;
-      //  $sql_where_condition   .= ' AND rol_cat_id = cat_id
-      //                              AND cat_org_id = '. $g_current_organization->getValue('org_id');
         parent::readData($room, $sql_where_condition, $sql_additional_tables);
     }
     

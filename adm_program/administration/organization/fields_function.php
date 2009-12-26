@@ -80,12 +80,12 @@ if($_GET['mode'] == 1)
 
     if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
     {
-        $g_message->show('Datentyp', 'Name');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datentyp'));
     }    
 
     if($user_field->getValue('usf_system') == 0 && $_POST['usf_cat_id'] == 0)
     {
-        $g_message->show('Kategorie', 'Name');
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kategorie'));
     }
     
     // Nachname und Vorname sollen immer Pflichtfeld bleiben

@@ -25,27 +25,16 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableGuestbookComment extends TableAccess
 {
-    var $bbCode;
+    protected $bbCode;
 
     // Konstruktor
-    function TableGuestbookComment(&$db, $gbc_id = 0)
+    public function __construct(&$db, $gbc_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_GUESTBOOK_COMMENTS;
-        $this->column_praefix = 'gbc';
-        
-        if($gbc_id > 0)
-        {
-            $this->readData($gbc_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbc_id);
     }
 
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($gbc_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($gbc_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         $sql_additional_tables .= TBL_GUESTBOOK;
         $sql_where_condition   .= '    gbc_gbo_id = gbo_id 
@@ -54,7 +43,7 @@ class TableGuestbookComment extends TableAccess
     }
     
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         if(strlen($field_value) > 0)
         {
@@ -74,7 +63,7 @@ class TableGuestbookComment extends TableAccess
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
     // type = 'BBCODE' : Text mit BBCode-Tags
-    function getText($type = 'HTML')
+    public function getText($type = 'HTML')
     {
         global $g_preferences;
         $description = '';
@@ -102,7 +91,7 @@ class TableGuestbookComment extends TableAccess
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
         

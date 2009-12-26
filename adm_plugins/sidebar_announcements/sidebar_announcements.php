@@ -128,7 +128,7 @@ if($g_db->num_rows($plg_result) > 0)
             echo $plg_announcement->getValue("ann_headline")."</a><br />";
         }
          
-        echo '(&nbsp;'. mysqldatetime("d.m.y", $plg_announcement->getValue("ann_timestamp_create")). '&nbsp;)<hr />';
+        echo '(&nbsp;'. $plg_announcement->getValue('ann_timestamp_create', $g_preferences['system_date']). '&nbsp;)<hr />';
     }
     
     echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">Alle '.$plg_headline.'</a>';
