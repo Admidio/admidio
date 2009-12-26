@@ -31,7 +31,7 @@ if ($g_preferences['enable_photo_module'] == 0)
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show('photoverwaltunsrecht');
+    $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -123,7 +123,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Anfang muss vor oder gleich Ende sein
     if(strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
     {
-        $g_message->show('startvorend');
+        $g_message->show($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
     }
 
     //Photographen

@@ -116,7 +116,7 @@ if($req_dat_id > 0)
     }
 }
 
-if($_GET['mode'] == 1)
+if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
 {
     $_SESSION['dates_request'] = $_REQUEST;
     
@@ -128,6 +128,10 @@ if($_GET['mode'] == 1)
     {
         $_SESSION['dates_request']['keep_rol_id'] = 0;
     }
+    
+    // ------------------------------------
+    // pruefen ob alle notwendigen Felder gefuellt sind
+    // ------------------------------------
     
     if(strlen($_POST['dat_headline']) == 0)
     {
@@ -227,7 +231,7 @@ if($_GET['mode'] == 1)
     if($date_from_timestamp > $date_to_timestamp)
     // Enddatum muss groesser oder gleich dem Startdatum sein
     {
-        $g_message->show('startvorend', 'Datum Ende oder Uhrzeit Ende');
+        $g_message->show($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
     }
 
     if(isset($_POST['dat_global']) == false)
@@ -295,28 +299,51 @@ if($_GET['mode'] == 1)
         $date->setValue('dat_max_members', $_POST['dat_max_members']);
     }
 
-    // Daten in Datenbank schreiben
-    $return_code = $date->save();
+    // -----------------------------------
+    // Termin in Datenbank schreiben
+    // -----------------------------------
     
-    if($req_dat_id==0)
-    {   
-        if(is_array($_POST['dat_visible_for']))
+    $return_code = $date->save();
+
+    // -----------------------------------
+    // Sichbarkeit der Rollen wegschreiben
+    // -----------------------------------
+
+    if($req_dat_id > 0)
+    {
+        // erst einmal alle bisherigen Rollenzuordnungen loeschen, damit alles neu aufgebaut werden kann
+        $sql='DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$date->getValue('dat_id');
+        $g_db->query($sql);
+    }
+
+    if(is_array($_POST['dat_visible_for']))
+    {
+        // nun alle Rollenzuordnungen wegschreiben
+        $modes = $_POST['dat_visible_for'];
+        $date_role = new TableAccess($g_db, TBL_DATE_ROLE, 'dtr');
+
+        foreach($modes as $value)
         {
-            $modes = $_POST['dat_visible_for'];
-            $date2 = new TableDate($g_db);
-            foreach($modes as $value)
-            {
-                $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dtr_dat_id, dtr_rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
-                $g_db->query($sql);
-            }
-            $date->visible_for = $modes;
+            $date_role->setValue('dtr_dat_id', $date->getValue('dat_id'));
+            $date_role->setValue('dtr_rol_id', $value);
+            $date_role->save();
+            $date_role->clear();
         }
-        else    //nichts ausgewählt
-        {
-            $date->delete();
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Sichtbarkeit'));
-        }
-        
+        $date->visible_for = $modes;
+    }
+    else    //nichts ausgewählt
+    {
+        $date->delete();
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY'));
+    }
+
+    
+    // ----------------------------------------
+    // ggf. Rolle fuer Anmeldungen wegschreiben
+    // ----------------------------------------
+    
+    if($req_dat_id == 0)
+    {           
         // Rollenobjekt anlegen, wenn Anmeldung möglich und kein Bearbeiten-Modus
         if(isset($_POST['dat_rol_id']))
         {
@@ -443,23 +470,12 @@ if($_GET['mode'] == 1)
             $g_db->query($sql);
             $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = "'.$date->getValue('dat_rol_id').'"';
             $g_db->query($sql);
-            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dat_id = "'.$date->getValue('dat_id').'"';
+            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id = "'.$date->getValue('dat_id').'"';
             $g_db->query($sql);
             $date->setValue('dat_rol_id', null);
             $date->setValue('dat_max_members', null);
             $date->save();
         }
-        
-        $sql='DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id="'.$date->getValue('dat_id').'"';
-        $g_db->query($sql);
-        $modes = $_POST['dat_visible_for'];
-        $date2 = new TableDate($g_db);
-        foreach($modes as $value)
-        {
-            $sql = 'INSERT INTO '.TBL_DATE_ROLE.'(dtr_dat_id,dtr_rol_id) VALUES("'.$date->getValue('dat_id').'", "'.$value.'")';
-            $g_db->query($sql);
-        }
-        $date->visible_for = $modes;
         
         if($date->getValue('dat_max_members') != '')
         {
@@ -519,7 +535,7 @@ if($_GET['mode'] == 1)
         }
         else
         {
-            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dat_id = "'.$date->getValue('dat_id').'"';
+            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id = "'.$date->getValue('dat_id').'"';
             $g_db->query($sql);
         }
     }
@@ -529,7 +545,7 @@ if($_GET['mode'] == 1)
     header('Location: '. $_SESSION['navigation']->getUrl());
     exit();
 }
-elseif($_GET['mode'] == 2)
+elseif($_GET['mode'] == 2)  // Termin loeschen
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
@@ -541,7 +557,7 @@ elseif($_GET['mode'] == 2)
         echo 'done';
     }
 }
-elseif($_GET['mode'] == 4)
+elseif($_GET['mode'] == 4)  // Termin im iCal-Format exportieren
 {
     header('Content-Type: text/calendar');
     header('Content-Disposition: attachment; filename='. $date->getValue('dat_headline'). '.ics');

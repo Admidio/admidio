@@ -26,25 +26,14 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableFile extends TableAccess
 {
     // Konstruktor
-    function TableFile(&$db, $file_id = 0)
+    public function __construct(&$db, $fil_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_FILES;
-        $this->column_praefix = 'fil';
-
-        if($file_id > 0)
-        {
-            $this->readData($file_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_FILES, 'fil', $fil_id);
     }
 
 
     // File mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($file_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($file_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
 
@@ -58,7 +47,7 @@ class TableFile extends TableAccess
 
     // File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
     // Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
-    function getFileForDownload($file_id)
+    public function getFileForDownload($file_id)
     {
         global $g_current_organization, $g_current_user, $g_valid_login;
 
@@ -111,7 +100,7 @@ class TableFile extends TableAccess
 
 
     //Gibt den kompletten Pfad der Datei zurueck
-    function getCompletePathOfFile()
+    public function getCompletePathOfFile()
     {
         //Dateinamen und Pfad zusammen setzen
         $fileName     = $this->getValue('fil_name');
@@ -125,7 +114,7 @@ class TableFile extends TableAccess
 
     // die Methode wird innerhalb von delete() aufgerufen
     //und loescht das File physikalisch von der Platte bevor es aus der DB geloescht wird
-    function delete()
+    public function delete()
     {
         @chmod($this->getCompletePathOfFile(), 0777);
         @unlink($this->getCompletePathOfFile());
@@ -138,7 +127,7 @@ class TableFile extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
 

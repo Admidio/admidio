@@ -126,7 +126,7 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
     if($row[0] > 0)
     {
           //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-          $g_message->show('flooding_protection', $g_preferences['flooding_protection_time']);
+          $g_message->show($g_l10n->get('GBO_PHR_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
     }
 }
 

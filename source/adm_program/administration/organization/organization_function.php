@@ -105,7 +105,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 {
     if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
     {
-        $g_message->show('forum_access_data');
+        $g_message->show($g_l10n->get('SYS_PHR_FORUM_ACCESS_DATA'));
     }
     else
     {
@@ -127,7 +127,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
         }
         if($connect_id == false)
         {
-            $g_message->show('forum_db_connection_failed');
+            $g_message->show($g_l10n->get('SYS_PHR_FORUM_DB_CONNECTION_FAILED'));
         }
     }
 }
@@ -176,7 +176,7 @@ $ret_code = $g_current_organization->save();
 if($ret_code != 0)
 {
     $g_current_organization->clear();
-    $g_message->show('mysql', $ret_code);
+    $g_message->show($g_l10n->get('SYS_PHR_DATABASE_ERROR', $ret_code));
 }
 
 $g_current_organization->setPreferences($g_preferences);

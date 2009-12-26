@@ -19,24 +19,13 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableText extends TableAccess
 {
     // Konstruktor
-    function TableText(&$db, $name = '')
+    public function __construct(&$db, $name = '')
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_TEXTS;
-        $this->column_praefix = 'txt';
-        
-        if(strlen($name) > 0)
-        {
-            $this->readData($name);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_TEXTS, 'txt', $name);
     }
 
     // Text mit dem uebergebenen Text-Id oder Namen aus der Datenbank auslesen
-    function readData($name, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($name, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
     
@@ -52,7 +41,7 @@ class TableText extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    function save()
+    public function save()
     {
         if($this->new_record)
         {

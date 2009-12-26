@@ -32,15 +32,34 @@
 
 class TableAccess
 {
-    var $table_name;
-    var $column_praefix;
-    var $key_name;
-    var $db;
+    protected $table_name;
+    protected $column_praefix;
+    protected $key_name;
+    public    $db;
     
-    var $new_record;             // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    var $columnsValueChanged;    // Merker ob an den dbColumns Daten was geaendert wurde
-    var $dbColumns = array();    // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
-    var $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+    protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
+    protected $columnsValueChanged; // Merker ob an den dbColumns Daten was geaendert wurde
+    public $dbColumns = array();    // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
+    public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
+    
+    // wird diese Klasse nicht abgeleitet, so muss dem Konstruktor neben der DB-Objekt auch der Tabellenname,
+    // das Präfix der Spalten übergeben werden und optional noch die ID, die direkt eingelesen werden soll
+    public function __construct(&$db, $tableName, $columnPraefix, $id = '')
+    {
+        $this->db            =& $db;
+        $this->table_name     = $tableName;
+        $this->column_praefix = $columnPraefix;
+
+        // wurde eine ID uebergeben, dann Daten aus DB einlesen
+        if(strlen($id) > 0 || (is_numeric($id) && $id > 0))
+        {
+            $this->readData($id);
+        }
+        else
+        {
+            $this->clear();
+        }
+    }
 
     // liest den Datensatz von $id ein
     // id : Schluesselwert von dem der Datensatz gelesen werden soll
@@ -48,7 +67,7 @@ class TableAccess
     // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
     //                          eingelesen werden soll, dabei muessen die Verknuepfungen
     //                          in sql_where_condition stehen
-    function readData($id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
         $this->clear();
@@ -91,7 +110,7 @@ class TableAccess
     }
     
     // alle Klassenvariablen wieder zuruecksetzen
-   function clear()
+   public function clear()
    {
         $this->columnsValueChanged = false;
         $this->new_record   = true;
@@ -130,7 +149,7 @@ class TableAccess
     }
     
     // Methode gibt die Anzahl aller Datensaetze dieser Tabelle zurueck
-    function countAllRecords()
+    public function countAllRecords()
     {
         $sql = 'SELECT COUNT(1) as count FROM '.$this->table_name;
         $this->db->query($sql);
@@ -141,7 +160,7 @@ class TableAccess
     // es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
     // uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
     // Mit dieser Methode kann das Einlesen der Werte umgangen werden.
-    function setArray($field_array)
+    public function setArray($field_array)
     {
         foreach($field_array as $field => $value)
         {
@@ -153,7 +172,7 @@ class TableAccess
 
     // Methode setzt den Wert eines Feldes neu, 
     // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         $return_code = false;
 
@@ -170,7 +189,7 @@ class TableAccess
                         $field_value = '';
                     }
 
-                    // Schluesselfelder
+                    // Schluesselfelder duerfen keine 0 enthalten
                     if((  $this->columnsInfos[$field_name]['key'] == 'PRI'
                        || $this->columnsInfos[$field_name]['key'] == 'MUL')
                     && $field_value == 0)
@@ -207,7 +226,7 @@ class TableAccess
     
     // Methode gibt den Wert eines Feldes ($field_name) zurueck
     // $format kann fuer Datetime-Felder das Format aus der PHP-Funktion date() angegeben werden
-    function getValue($field_name, $format = '')
+    public function getValue($field_name, $format = '')
     {
         $field_value = '';
         
@@ -256,7 +275,7 @@ class TableAccess
     
     // die Methode speichert die Organisationsdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    function save()
+    public function save()
     {
         if($this->columnsValueChanged || strlen($this->dbColumns[$this->key_name]) == 0)
         {
@@ -346,7 +365,7 @@ class TableAccess
     }
     
     // aktuelle Datensatz loeschen und ggf. noch die Referenzen
-    function delete()
+    public function delete()
     {
         $sql    = 'DELETE FROM '.$this->table_name.' 
                     WHERE '.$this->key_name.' = "'. $this->dbColumns[$this->key_name]. '"';

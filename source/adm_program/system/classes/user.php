@@ -40,20 +40,20 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_user_data.php');
 
 class User extends TableUsers
 {
-    var $webmaster;
+    protected $webmaster;
 
-    var $userFieldData    = array();    // Array ueber alle Userdatenobjekte mit den entsprechenden Feldeigenschaften
-    var $roles_rights     = array();    // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-    var $list_view_rights = array();    // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
-    var $role_mail_rights = array();    // Array ueber Mailrechte einzelner Rollen
+    public $userFieldData       = array(); // Array ueber alle Userdatenobjekte mit den entsprechenden Feldeigenschaften
+    protected $roles_rights     = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
+    protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
+    protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
 
     // Konstruktor
-    function User(&$db, $usr_id = 0)
+    public function __construct(&$db, $usr_id = 0)
     {
-        $this->TableUsers($db, $usr_id);
+        parent::__construct($db, $usr_id);
     }
 
-    function readData($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
 
@@ -61,7 +61,7 @@ class User extends TableUsers
     }
 
     // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
-    function readUserData()
+    public function readUserData()
     {
     	global $g_current_organization;
 
@@ -95,7 +95,7 @@ class User extends TableUsers
     }
     
     // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
-    function clearUserFieldArray($delete_db_data = false)
+    public function clearUserFieldArray($delete_db_data = false)
     {
         // Jedes Feld durchgehen und alle Inhalte der Tabelle adm_user_data entfernen
         foreach($this->userFieldData as $field_name => $object)
@@ -112,7 +112,7 @@ class User extends TableUsers
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
-    function clear()
+    public function clear()
     {
         parent::clear();
 
@@ -132,7 +132,7 @@ class User extends TableUsers
 
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         global $g_current_user;
         $return_code  = false;
@@ -187,7 +187,7 @@ class User extends TableUsers
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
     // angefordert wurde und gibt diesen zurueck
-    function getValue($field_name, $format = '')
+    public function getValue($field_name, $format = '')
     {
         if(strpos($field_name, 'usr_') === 0)
         {
@@ -202,7 +202,7 @@ class User extends TableUsers
     // Methode gibt den Wert eines Profilfeldes zurueck
     // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
     // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    function getProperty($field_name, $property)
+    public function getProperty($field_name, $property)
     {
         if(isset($this->userFieldData[$field_name]))
         {
@@ -212,7 +212,7 @@ class User extends TableUsers
     }
 
     // aehnlich getProperty, allerdings suche ueber usf_id
-    function getPropertyById($field_id, $property)
+    public function getPropertyById($field_id, $property)
     {
         foreach($this->userFieldData as $field)
         {
@@ -225,13 +225,13 @@ class User extends TableUsers
     }
     
     // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
-    function getListViewRights()
+    public function getListViewRights()
     {
         $this->checkRolesRight();
         return $this->list_view_rights;
     }
 
-    function save()
+    public function save()
     {
         global $g_current_session;
         $fields_changed = $this->columnsValueChanged;
@@ -278,7 +278,7 @@ class User extends TableUsers
 
     // gibt die Userdaten als VCard zurueck
     // da das Windows-Adressbuch einschliesslich XP kein UTF8 verarbeiten kann, alles in ISO-8859-1 ausgeben
-    function getVCard()
+    public function getVCard()
     {
         global $g_current_user;
 
@@ -326,7 +326,7 @@ class User extends TableUsers
         if (strlen($this->getValue('Geburtstag')) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geburtstag']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "BDAY:" . mysqldatetime("ymd", $this->getValue("Geburtstag")) . "\r\n";
+            $vcard .= (string) "BDAY:" . $this->getValue('Geburtstag', 'Ymd') . "\r\n";
         }
         if (strlen($this->getValue('E-Mail')) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['E-Mail']->getValue('usf_hidden') == 0)))
@@ -368,7 +368,7 @@ class User extends TableUsers
 
     // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags,
     // welche Rollen der User einsehen darf
-    function checkRolesRight($right = '')
+    public function checkRolesRight($right = '')
     {
         if($this->getValue('usr_id') > 0)
         {
@@ -484,49 +484,49 @@ class User extends TableUsers
     }
 
     // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
-    function editAnnouncements()
+    public function editAnnouncements()
     {
         return $this->checkRolesRight('rol_announcements');
     }
 
     // Funktion prueft, ob der angemeldete User Registrierungen bearbeiten und zuordnen darf
-    function approveUsers()
+    public function approveUsers()
     {
         return $this->checkRolesRight('rol_approve_users');
     }
 
     // Funktion prueft, ob der angemeldete User Rollen zuordnen, anlegen und bearbeiten darf
-    function assignRoles()
+    public function assignRoles()
     {
         return $this->checkRolesRight('rol_assign_roles');
     }
 
     //Ueberprueft ob der User das Recht besitzt, alle Rollenlisten einsehen zu duerfen
-    function viewAllLists()
+    public function viewAllLists()
     {
         return $this->checkRolesRight('rol_all_lists_view');
     }
 
     //Ueberprueft ob der User das Recht besitzt, allen Rollenmails zu zusenden
-    function mailAllRoles()
+    public function mailAllRoles()
     {
         return $this->checkRolesRight('rol_mail_to_all');
     }
 
     // Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
-    function editDates()
+    public function editDates()
     {
         return $this->checkRolesRight('rol_dates');
     }
 
     // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
-    function editDownloadRight()
+    public function editDownloadRight()
     {
         return $this->checkRolesRight('rol_download');
     }
 
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
-    function editProfile($profileID = NULL)
+    public function editProfile($profileID = NULL)
     {
         if($profileID == NULL)
         {
@@ -555,43 +555,43 @@ class User extends TableUsers
     }
 
     // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
-    function editUsers()
+    public function editUsers()
     {
         return $this->checkRolesRight('rol_edit_user');
     }
 
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
-    function editGuestbookRight()
+    public function editGuestbookRight()
     {
         return $this->checkRolesRight('rol_guestbook');
     }
 
     // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
-    function commentGuestbookRight()
+    public function commentGuestbookRight()
     {
         return $this->checkRolesRight('rol_guestbook_comments');
     }
 
 	// Funktion prueft, ob der angemeldete User Inventargegenstaende verwalten darf
-    function editInventoryRight()
+    public function editInventoryRight()
     {
         return $this->checkRolesRight('rol_inventory');
     }
 
     // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
-    function editPhotoRight()
+    public function editPhotoRight()
     {
         return $this->checkRolesRight('rol_photo');
     }
 
     // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
-    function editWeblinksRight()
+    public function editWeblinksRight()
     {
         return $this->checkRolesRight('rol_weblinks');
     }
 
     // Funktion prueft, ob der User ein Profil einsehen darf
-    function viewProfile($usr_id)
+    public function viewProfile($usr_id)
     {
         global $g_current_organization;
         $view_profile = false;
@@ -644,7 +644,7 @@ class User extends TableUsers
     }
 
     // Methode prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf
-    function viewRole($rol_id)
+    public function viewRole($rol_id)
     {
         $view_role = false;
         // Abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
@@ -664,7 +664,7 @@ class User extends TableUsers
     }
 
 	// Methode prueft, ob der angemeldete User einer bestimmten oder allen Rolle E-Mails zusenden darf
-    function mailRole($rol_id)
+    public function mailRole($rol_id)
     {
         $mail_role = false;
         // Abfrage ob der User durch irgendeine Rolle das Recht bekommt alle Listen einzusehen
@@ -684,7 +684,7 @@ class User extends TableUsers
     }
 
     // Methode liefert true zurueck, wenn der User Mitglied der Rolle "Webmaster" ist
-    function isWebmaster()
+    public function isWebmaster()
     {
         $this->checkRolesRight();
         return $this->webmaster;

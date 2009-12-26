@@ -25,24 +25,20 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableUserData extends TableAccess
 {
     // Konstruktor
-    function TableUserData(&$db)
+    public function __construct(&$db)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_USER_DATA;
-        $this->column_praefix = 'usd';
-        
-        $this->clear();
+        parent::__construct($db, TBL_USER_DATA, 'usd');
     }
     
     // Userdaten mit den Profilfeldinformationen aus der Datenbank auslesen
     // ids : Array mit den Schlüsseln usr_id und usf_id
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
     // sql_additioinal_tables : wird nicht verwendet (benötigt wegen Vererbung)
-    function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
     {
         if(is_array($ids) && is_numeric($ids['usr_id']) && is_numeric($ids['usf_id']))
         {
-            $tables    = TBL_USER_FIELDS;
+            $tables = TBL_USER_FIELDS;
             if(strlen($sql_where_condition) > 0)
             {
                 $sql_where_condition = $sql_where_condition . ' AND ';
@@ -59,7 +55,7 @@ class TableUserData extends TableAccess
     
     // es werden nur die Daten der Tabelle adm_user_data entfernt
     // die Kategorie und adm_user_field bleiben erhalten
-    function clearFieldData()
+    public function clearFieldData()
     {
         foreach($this->dbColumns as $name => $value)
         {
@@ -70,6 +66,21 @@ class TableUserData extends TableAccess
                 $this->new_record = false;
             }
         }
+    }
+    
+    // Methode formatiert bei Datumsfeldern in das eingestellte Datumsformat
+    public function getValue($field_name, $format = '')
+    {
+        $value = parent::getValue($field_name, $format);
+        
+        // ist das Feld ein Datumsfeld, dann das Datum formatieren
+        if($this->dbColumns['usf_type'] == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
+        {
+            $dateArray = split("[- :]", $value);
+            $timestamp = mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
+            $value = date($format, $timestamp);
+        }
+        return $value;
     }
 }
 ?>

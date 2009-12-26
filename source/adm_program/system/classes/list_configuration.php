@@ -28,16 +28,16 @@
 
 require_once(SERVER_PATH. '/adm_program/system/classes/condition_parser.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_lists.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_list_columns.php');
 
 class ListConfiguration extends TableLists
 {
-    var $columns = array();     // Array ueber alle Listenspaltenobjekte
+    protected $columns = array();     // Array ueber alle Listenspaltenobjekte
 
     // Konstruktor
-    function ListConfiguration(&$db, $lst_id = 0)
+    public function __construct(&$db, $lst_id = 0)
     {
-        $this->TableLists($db, $lst_id);
+        parent::__construct($db, $lst_id);
+
         if($lst_id > 0)
         {
             $this->readColumns();
@@ -45,7 +45,7 @@ class ListConfiguration extends TableLists
     }
         
     // Daten der zugehoerigen Spalten einlesen und in Objekten speichern
-    function readColumns()
+    public function readColumns()
     {
         $sql = 'SELECT * FROM '. TBL_LIST_COLUMNS. '
                  WHERE lsc_lst_id = '. $this->getValue('lst_id'). '
@@ -54,13 +54,13 @@ class ListConfiguration extends TableLists
         
         while($lsc_row = $this->db->fetch_array($lsc_result))
         {
-            $this->columns[$lsc_row['lsc_number']] = new TableListColumns($this->db);
+            $this->columns[$lsc_row['lsc_number']] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
             $this->columns[$lsc_row['lsc_number']]->setArray($lsc_row);
         }
     }
     
     // fuegt eine neue Spalte dem Spaltenarray hinzu
-    function addColumn($number, $field, $sort = '', $filter = '')
+    public function addColumn($number, $field, $sort = '', $filter = '')
     {
         // MySQL kann nicht mehr als 61 Tabellen joinen
         // Uebergaben muessen sinnvoll gefuellt sein
@@ -69,7 +69,7 @@ class ListConfiguration extends TableLists
             // falls Spalte noch nicht existiert, dann Objekt anlegen
             if(isset($this->columns[$number]) == false)
             {
-                $this->columns[$number] = new TableListColumns($this->db);
+                $this->columns[$number] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
                 $this->columns[$number]->setValue('lsc_lsf_id', $this->getValue('lst_id'));
             }
 
@@ -94,7 +94,7 @@ class ListConfiguration extends TableLists
     
     // entfernt die entsprechende Spalte aus der Konfiguration
     // all : gibt an, ob alle folgenden Spalten auch geloescht werden sollen
-    function deleteColumn($number, $all = false)
+    public function deleteColumn($number, $all = false)
     {
         if($number <= $this->countColumns())
         {
@@ -125,13 +125,13 @@ class ListConfiguration extends TableLists
     }
     
     // Anzahl der Spalten der Liste zurueckgeben
-    function countColumns()
+    public function countColumns()
     {
         return count($this->columns);
     }
     
     // liefert das entsprechende TableListColumns-Objekt zurueck
-    function getColumnObject($number)
+    public function getColumnObject($number)
     {
         return $this->columns[$number];
     }
@@ -141,7 +141,7 @@ class ListConfiguration extends TableLists
     // member_status : 0 - Nur aktive Rollenmitglieder
     //                 1 - Nur ehemalige Rollenmitglieder
     //                 2 - Aktive und ehemalige Rollenmitglieder
-    function getSQL($role_ids, $member_status = 0)
+    public function getSQL($role_ids, $member_status = 0)
     {
         global $g_current_user, $g_current_organization;
         $sql = '';
@@ -316,14 +316,14 @@ class ListConfiguration extends TableLists
         return $sql;
     }
     
-    function clear()
+    public function clear()
     {
         $this->columns = array();
     
         parent::clear();
     }
 
-    function save()
+    public function save()
     {
         parent::save();
         
@@ -338,7 +338,7 @@ class ListConfiguration extends TableLists
         }
     }
     
-    function delete()
+    public function delete()
     {
         // erst einmal die einzelnen Spalten loeschen
         foreach($this->columns as $number => $list_column)

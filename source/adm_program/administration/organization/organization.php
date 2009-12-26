@@ -1421,7 +1421,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-						'.$g_l10n->get("ECA_DESC_ACTIVATE_GREETING_CARDS").'
+						'.$g_l10n->get("ECA_PHR_ACTIVATE_GREETING_CARDS").'
                     </li>
                     <li>
                         <dl>
@@ -1434,7 +1434,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_DESC_SCALING_PREVIEW").'
+                        '.$g_l10n->get("ECA_PHR_SCALING_PREVIEW").'
                     </li>
                     <li>
                         <dl>
@@ -1447,7 +1447,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                       '.$g_l10n->get("ECA_DESC_SCALING_GREETING_CARD").'
+                       '.$g_l10n->get("ECA_PHR_SCALING_GREETING_CARD").'
                     </li>
                     <li>
                         <dl>
@@ -1478,7 +1478,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_DESC_MAX_CC").'
+                        '.$g_l10n->get("ECA_PHR_MAX_CC").'
                     </li>
                     <li>
                         <dl>
@@ -1508,7 +1508,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_DESC_MAX_MESSAGE_LENGTH").'
+                        '.$g_l10n->get("ECA_PHR_MAX_MESSAGE_LENGTH").'
                     </li>
                     <li>
                         <dl>
@@ -1519,7 +1519,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_DESC_TEMPLATE").'
+                        '.$g_l10n->get("ECA_PHR_TEMPLATE").'
                     </li>
                     <li>
                         <dl>
@@ -1530,7 +1530,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_DESC_FONT").'
+                        '.$g_l10n->get("ECA_PHR_FONT").'
                     </li>
                     <li>
                         <dl>
@@ -1541,7 +1541,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                       '.$g_l10n->get("ECA_DESC_FONT_SIZE").'
+                       '.$g_l10n->get("ECA_PHR_FONT_SIZE").'
                     </li>
                     <li>
                         <dl>
@@ -1552,7 +1552,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_DESC_FONT_COLOR").'
+                        '.$g_l10n->get("ECA_PHR_FONT_COLOR").'
                     </li>
 
                 </ul>

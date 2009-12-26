@@ -50,7 +50,6 @@ require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/date.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
-require_once(SERVER_PATH. '/adm_program/system/message_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
@@ -127,7 +126,7 @@ else
     if($g_current_organization->getValue('org_id') == 0)
     {
         // Organisation wurde nicht gefunden
-        die('<div style="color: #CC0000;">Error: The organization out of config.php could not be found in the database!</div>');
+        die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     
     // organisationsspezifische Einstellungen aus adm_preferences auslesen

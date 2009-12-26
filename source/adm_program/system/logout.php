@@ -41,7 +41,7 @@ $message_code = 'SYS_PHR_LOGOUT_SUCCESSFUL';
 if($g_preferences['enable_forum_interface'] && $g_forum->session_valid)
 {
     $g_forum->userLogoff();
-    $message_code = 'logout_forum';
+    $message_code = 'SYS_PHR_FORUM_LOGOUT';
 }
 
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite

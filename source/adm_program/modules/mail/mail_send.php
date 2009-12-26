@@ -28,12 +28,12 @@ $_SESSION['mail_request'] = $_REQUEST;
 
 // Uebergabevariablen pruefen
 
-if (isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+if (isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if (isset($_POST["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
+if (isset($_POST['rol_id']) && is_numeric($_POST['rol_id']) == false)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -42,7 +42,7 @@ if (isset($_POST["rol_id"]) && is_numeric($_POST["rol_id"]) == false)
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
 // in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-if (array_key_exists("usr_id", $_GET) && !$g_valid_login)
+if (array_key_exists('usr_id', $_GET) && !$g_valid_login)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -53,23 +53,23 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
 // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
-if (array_key_exists("usr_id", $_GET))
+if (array_key_exists('usr_id', $_GET))
 {
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($g_db, $_GET['usr_id']);
 
     // darf auf die User-Id zugegriffen werden    
     if((  $g_current_user->editUsers() == false
-       && isMember($user->getValue("usr_id")) == false)
-    || strlen($user->getValue("usr_id")) == 0 )
+       && isMember($user->getValue('usr_id')) == false)
+    || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show("usrid_not_found");
+        $g_message->show($g_l10n->get('SYS_PHR_USER_ID_NOT_FOUND'));
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!isValidEmailAddress($user->getValue("E-Mail")))
+    if (!isValidEmailAddress($user->getValue('E-Mail')))
     {
-        $g_message->show("usrmail_not_found");
+        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('Vorname').' '.$user->getValue('Nachname')));
     }
 }
 
@@ -89,7 +89,7 @@ $role = new TableRoles($g_db);
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if(strlen($_POST['name']) == 0)
 {
-    $g_message->show("feld", "Name");
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
 }
 
 //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
@@ -121,7 +121,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                 //Pruefen ob ein Fehler beim Upload vorliegt
                 if (($_FILES['userfile']['error'][$act_attachment_nr] != 0) &&  ($_FILES['userfile']['error'][$act_attachment_nr] != 4))
                 {
-                    $g_message->show("attachment");
+                    $g_message->show($g_l10n->get('MAI_PHR_ATTACHMENT_TO_LARGE'));
                 }
                 //Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
                 if ($_FILES['userfile']['error'][$act_attachment_nr] == 0)
@@ -130,7 +130,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                     $attachment_size = $attachment_size + $_FILES['userfile']['size'][$act_attachment_nr];
                     if($attachment_size > $email->getMaxAttachementSize("b"))
                     {
-                        $g_message->show("attachment");
+                        $g_message->show($g_l10n->get('MAI_PHR_ATTACHMENT_TO_LARGE'));
                     }
                     
                     if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) > 0)
@@ -149,7 +149,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
     }
     else
     {
-        $g_message->show("feld", "Betreff");
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Betreff'));
     }
 }
 else
@@ -157,11 +157,11 @@ else
     $g_message->show($g_l10n->get('SYS_PHR_EMAIL_INVALID'));
 }
 
-if (array_key_exists("rol_id", $_POST))
+if (array_key_exists('rol_id', $_POST))
 {    
     if (strlen($_POST['rol_id']) == 0)
     {
-        $g_message->show("mail_rolle");
+        $g_message->show($g_l10n->get('MAI_PHR_CHOOSE_ROLE'));
     }
     
     $role->readData($_POST['rol_id']);
@@ -238,7 +238,7 @@ else
     {
         // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
         // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
-        $g_message->show("role_empty");
+        $g_message->show($g_l10n->get('MAI_PHR_ROLE_NO_EMAILS'));
     }
 
 }

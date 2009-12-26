@@ -75,7 +75,6 @@ INSERT INTO `%PRAEFIX%_preferences` VALUES  (1,1,'enable_rss','1'),
  (64,1,'enable_dates_module','1'),
  (65,1,'dates_show_map_link','1'),
  (66,1,'enable_weblinks_module','1'),
- (67,1,'db_version','2.1.6'),
  (68,1,'announcements_per_page','10'),
  (69,1,'photo_upload_mode','1'),
  (70,1,'forum_set_admin','1'),
@@ -93,6 +92,7 @@ INSERT INTO `%PRAEFIX%_preferences` VALUES  (1,1,'enable_rss','1'),
  (82,1,'db_version_beta','0'),
  (83,1,'profile_default_role','2'),
  (84,1,'mail_sendmail_address','');
+ (85,1,'db_version','2.1.7'),
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_preferences` ENABLE KEYS */;
 

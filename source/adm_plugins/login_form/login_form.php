@@ -97,21 +97,21 @@ if($g_valid_login == 1)
             <dl>
                 <dt>Benutzer:</dt>
                 <dd>
-                    <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $g_current_user->getValue("usr_id"). '" 
-                    '. $plg_link_target. ' title="Profil aufrufen">'. $g_current_user->getValue("Vorname"). ' '. $g_current_user->getValue("Nachname"). '</a>
+                    <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $g_current_user->getValue('usr_id'). '" 
+                    '. $plg_link_target. ' title="Profil aufrufen">'. $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'). '</a>
                 </dd>
             </dl>
         </li>
         <li>
             <dl>
                 <dt>Aktiv seit:</dt>
-                <dd>'. mysqldatetime("h:i", $g_current_session->getValue("ses_begin")). ' Uhr</dd>
+                <dd>'. $g_current_session->getValue('ses_begin', $g_preferences['system_time']). ' Uhr</dd>
             </dl>
         </li>
         <li>
             <dl>
                 <dt>Anzahl Logins:</dt>
-                <dd>'. $g_current_user->getValue("usr_number_login");
+                <dd>'. $g_current_user->getValue('usr_number_login');
     
                     // Zeigt einen Rank des Benutzers an, sofern diese in der config.php hinterlegt sind
                     if(count($plg_rank) > 0)
@@ -122,7 +122,7 @@ if($g_valid_login == 1)
                         while($value != false)
                         {
                             $count_rank = key($plg_rank);
-                            if($count_rank < $g_current_user->getValue("usr_number_login"))
+                            if($count_rank < $g_current_user->getValue('usr_number_login'))
                             {
                                 $rank = strip_tags($value);
                             }
@@ -131,12 +131,12 @@ if($g_valid_login == 1)
 
                         if(strlen($rank) > 0)
                         {
-                            echo "&nbsp;$rank";
+                            echo '&nbsp;'.$rank;
                         }
                     }
-                echo "</dd>
+                echo '</dd>
             </dl>
-        </li>";
+        </li>';
     
         // Link zum Ausloggen
         if($plg_show_logout_link)

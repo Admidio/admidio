@@ -9,7 +9,7 @@
  *
  * Uebergaben:
  *
- * message_code : Name der Nachricht aus message_text.php, 
+ * message_code : ID der Nachricht aus der Sprach-XML-Datei, 
  *                die nach Login angezeigt werden soll
  *
  *****************************************************************************/
@@ -43,7 +43,7 @@ else
         $g_message->addVariableContent($g_forum->sitename);
     }
 
-    if($message_code != 'SYS_PHR_LOGIN_SUCCESSFUL' && $message_code != 'SYS_PHR_LOGIN_FORUM_SUCCESSFUL')
+    if($message_code != 'SYS_PHR_LOGIN_SUCCESSFUL' && $message_code != 'SYS_PHR_FORUM_LOGIN_SUCCESSFUL')
     {
         // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
         $show_time = 0;

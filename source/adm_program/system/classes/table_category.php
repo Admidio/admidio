@@ -21,18 +21,7 @@ class TableCategory extends TableAccess
     // Konstruktor
     public function __construct(&$db, $cat_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_CATEGORIES;
-        $this->column_praefix = 'cat';
-
-        if($cat_id > 0)
-        {
-            $this->readData($cat_id);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_CATEGORIES, 'cat', $cat_id);
     }
 
     // die Kategorie wird um eine Position in der Reihenfolge verschoben

@@ -28,46 +28,36 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableDate extends TableAccess
 {
-    var $max_members_role = array();
+    protected $max_members_role = array();
     
     // Standard für Date ist alle Rollen aktiv => 0=Gast hinzufügen
-    var $visible_for = array(0);
-    
-    var $bbCode;
-
+    public $visible_for = array(0);    
+    protected $bbCode;
 
     // Array mit Keys für Sichtbarkeit der Termine
-    var $visibility = array(
-                    '0' => 'Gäste'
-                );
+    protected $visibility = array('0' => 'Gäste');
     
     // Konstruktor
-    function TableDate(&$db, $date_id = 0)
+    public function __construct(&$db, $dat_id = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_DATES;
-        $this->column_praefix = 'dat';
+        parent::__construct($db, TBL_DATES, 'dat', $dat_id);
         
-        $sql = 'SELECT rol_id, rol_name FROM '.TBL_ROLES.' WHERE rol_id NOT IN(SELECT rol_id FROM '.TBL_ROLES.', '.TBL_DATES.' WHERE rol_id = dat_rol_id)';
+        // Rollenname und ID der Rollen mit Sichtbarkeit des Termins einlesen
+        $sql = 'SELECT rol_id, rol_name 
+                  FROM '.TBL_ROLES.' 
+                 WHERE rol_id NOT IN(SELECT rol_id 
+                                       FROM '.TBL_ROLES.', '.TBL_DATES.' 
+                                      WHERE rol_id = dat_rol_id)';
         $result = $db->query($sql);
         while($row = $db->fetch_array($result))
         {
             $this->visibility[$row['rol_id']]=$row['rol_name'];
             $this->visible_for[] = $row['rol_id'];
         }
-        
-        if($date_id > 0)
-        {
-            $this->getDate($date_id);
-        }
-        else
-        {
-            $this->clear();
-        }
     }
 
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    function readData($dat_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($dat_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
         if(is_numeric($dat_id))
         {
@@ -92,13 +82,11 @@ class TableDate extends TableAccess
             {
                 $this->max_members_role[$row['dmm_rol_id']] = $row['dmm_max_members'];
             }
-            
-            //print_r($this);
         }
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value)
     {
         if($field_name == 'dat_end' && $this->getValue('dat_all_day') == 1)
         {
@@ -114,7 +102,7 @@ class TableDate extends TableAccess
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
     // type = 'BBCODE' : Beschreibung mit BBCode-Tags
-    function getDescription($type = 'HTML')
+    public function getDescription($type = 'HTML')
     {
         global $g_preferences;
         $description = '';
@@ -141,7 +129,7 @@ class TableDate extends TableAccess
         return $description;
     }
 
-    function getValue($field_name, $format = '')
+    public function getValue($field_name, $format = '')
     {
         if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
@@ -158,7 +146,7 @@ class TableDate extends TableAccess
     }
     
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         global $g_current_organization, $g_current_user;
 
@@ -181,7 +169,7 @@ class TableDate extends TableAccess
     }
     
     // Methode, die den Termin in der DB loescht
-    function delete()
+    public function delete()
     {
         // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
         if($this->getValue('dat_rol_id') > 0)
@@ -204,7 +192,7 @@ class TableDate extends TableAccess
     }    
    
     // gibt einen Termin im iCal-Format zurueck
-    function getIcal($domain)
+    public function getIcal($domain)
     {
         $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
         $uid = $this->getValue('dat_timestamp_create', 'ymdThis') . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
@@ -238,7 +226,7 @@ class TableDate extends TableAccess
     }
     
     // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
-    function editRight()
+    public function editRight()
     {
         global $g_current_organization;
         
@@ -258,7 +246,7 @@ class TableDate extends TableAccess
     }
     
     // gibt die Anzahl der maximalen Teilnehmer einer Rolle zurueck
-    function getMaxMembers($rol_id)
+    public function getMaxMembers($rol_id)
     {
         if(array_key_exists($rol_id, $this->max_members_role))
         {
@@ -271,17 +259,17 @@ class TableDate extends TableAccess
     }
     
     // prueft, ob der Termin fuer eine Rolle sichtbar ist
-    function isVisibleFor($rol_id)
+    public function isVisibleFor($rol_id)
     {
         return in_array($rol_id, $this->visible_for);
     }
     
-    function getVisibilityMode($mode)
+    public function getVisibilityMode($mode)
     {
         return $this->visibility[$mode];
     }
     
-    function getVisibilityArray()
+    public function getVisibilityArray()
     {
         return $this->visibility;
     }    

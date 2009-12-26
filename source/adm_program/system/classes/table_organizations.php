@@ -17,24 +17,13 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableOrganizations extends TableAccess
 {
     // Konstruktor
-    function TableOrganizations(&$db, $organization = '')
+    public function __construct(&$db, $organization = '')
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_ORGANIZATIONS;
-        $this->column_praefix = 'org';
-        
-        if(strlen($organization) > 0)
-        {
-            $this->readData($organization);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_ORGANIZATIONS, 'org', $organization);
     }
 
     // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
-    function readData($organization, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($organization, $sql_where_condition = '', $sql_additional_tables = '')
     {
         // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($organization) == false)

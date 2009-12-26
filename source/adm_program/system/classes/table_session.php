@@ -28,24 +28,13 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableSession extends TableAccess
 {
     // Konstruktor
-    function TableSession(&$db, $session = 0)
+    public function __construct(&$db, $session = 0)
     {
-        $this->db            =& $db;
-        $this->table_name     = TBL_SESSIONS;
-        $this->column_praefix = 'ses';
-        
-        if(strlen($session) > 0)
-        {
-            $this->readData($session);
-        }
-        else
-        {
-            $this->clear();
-        }
+        parent::__construct($db, TBL_SESSIONS, 'ses', $session);
     }
 
     // Session mit der uebergebenen Session-ID aus der Datenbank auslesen
-    function readData($session, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($session, $sql_where_condition = '', $sql_additional_tables = '')
     {
         // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
@@ -57,7 +46,7 @@ class TableSession extends TableAccess
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    function save()
+    public function save()
     {
         if($this->new_record)
         {
@@ -79,7 +68,7 @@ class TableSession extends TableAccess
     // diese Funktion stoesst ein Neueinlesen des User-Objekts bei allen angemeldeten
     // Usern beim naechsten Seitenaufruf an
     // wird usr_id uebergeben, dann nur das Einlesen fuer diese usr_id anstossen
-    function renewUserObject($usr_id = 0)
+    public function renewUserObject($usr_id = 0)
     {
         $sql_usr_id = '';
         if($usr_id > 0)
@@ -92,14 +81,14 @@ class TableSession extends TableAccess
     
     // diese Funktion stoesst ein Neueinlesen des Organisations-Objekts bei allen angemeldeten
     // Usern beim naechsten Seitenaufruf an
-    function renewOrganizationObject()
+    public function renewOrganizationObject()
     {
         $sql    = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 2 ';
         $this->db->query($sql);
     }
     
     // diese Funktion loescht Datensaetze aus der Session-Tabelle die nicht mehr gebraucht werden
-    function tableCleanup($max_inactive_time)
+    public function tableCleanup($max_inactive_time)
     {
         // Zeitpunkt bestimmen, ab dem die Sessions geloescht werden, mind. 1 Stunde
         if($max_inactive_time > 60)

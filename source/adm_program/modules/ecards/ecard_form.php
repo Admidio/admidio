@@ -97,8 +97,7 @@ if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $g_message->addVariableContent($g_root_path.'/adm_program/modules/profile/profile.php', 1, false);
-    $g_message->show('profile_mail');
+    $g_message->show($g_l10n->get('SYS_PHR_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
 
 if (isset($_GET['usr_id']))
@@ -124,17 +123,14 @@ if (isset($_GET['usr_id']))
        && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show('usrid_not_found');
+        $g_message->show($g_l10n->get('SYS_PHR_USER_ID_NOT_FOUND'));
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!isValidEmailAddress($user->getValue('E-Mail')))
     {
-        $g_message->show('usrmail_not_found');
+        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('Vorname').' '.$user->getValue('Nachname')));
     }
-
-    $user_email = $user->getValue('E-Mail');
-    $user_name  = $user->getValue('Vorname').' '.$user->getValue('Nachname');
 }
 
 // Wenn der übergebene Bildernamen und die daszugehörige Photogallerie Id
@@ -931,8 +927,8 @@ if (empty($submit_action))
                         {
                             // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                             echo '<div id="extern">
-                                    <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user_name.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-                            echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user_email.'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                    <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('Vorname').' '.$user->getValue('Nachname').'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                            echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user->getValue('E-Mail').'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                  </div>';
 
                         }

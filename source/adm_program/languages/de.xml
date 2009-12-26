@@ -19,21 +19,28 @@
     <text id="DAT_PHR_QUOTA_FOR_ROLE" version="2.2.0">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</text>
     <text id="DAT_PHR_QUOTA_WITH_MAXIMUM" version="2.2.0">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</text>
 </dates>
+<downloads>
+	<text id="DOW_PHR_FILE_NAME_INVALID" version="2.2.0">Der ausgewählte Dateiname enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für die Datei aus.</text>
+	<text id="DOW_PHR_FOLDER_NAME_INVALID" version="2.2.0">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
+	<text id="DOW_PHR_FILE_EXTENSION_INVALID" version="2.2.0">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</text>
+	<text id="DOW_PHR_FILE_UPLOADED" version="2.2.0">Die Datei %VAR1% wurde hochgeladen</text>
+	<text id="DOW_PHR_FOLDER_CREATED" version="2.2.0">Der Ordner %VAR1% wurde angelegt.</text>
+	<text id="DOW_PHR_FOLDER_EXISTS" version="2.2.0">Der Ordner %VAR1% existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
+	<text id="DOW_PHR_FILE_EXIST" version="2.2.0">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
+	<text id="DOW_PHR_FOLDER_RENAME" version="2.2.0">Der Ordner %VAR1% wurde umbenannt.</text>
+	<text id="DOW_PHR_FILE_RENAME" version="2.2.0">Die Datei %VAR1% wurde umbenannt.</text>
+	<text id="DOW_PHR_FOLDER_RENAME_ERROR" version="2.2.0">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
+	<text id="DOW_PHR_FILE_RENAME_ERROR" version="2.2.0">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
+	<text id="DOW_PHR_FILE_TO_LARGE" version="2.2.0">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% KB.</text>
+	<text id="DOW_PHR_UPLOAD_POST_EMPTY" version="2.2.0">Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1% B. überschritten!</text>
+	<text id="DOW_PHR_FILE_UPLOAD_ERROR" version="2.2.0">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
+</downloads>
 <ecards>
 	<text id="ECA_A_ECARD_FROM" version="2.2.0">Eine Grußkarte von</text>
 	<text id="ECA_ACTIVATE_GREETING_CARDS" version="2.2.0">Grußkarten aktivieren</text>
 	<text id="ECA_BLEND_IN_SETTINGS" version="2.2.0">Einstellungen einblenden</text>
     <text id="ECA_BLEND_OUT_SETTINGS" version="2.2.0">Einstellungen ausblenden</text>
 	<text id="ECA_CONTENT_LOADING" version="2.2.0">Inhalt wird geladen - Bitte warten!</text>
-	<text id="ECA_DESC_ACTIVATE_GREETING_CARDS" version="2.2.0">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
-    <text id="ECA_DESC_FONT" version="2.2.0">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
-    <text id="ECA_DESC_FONT_SIZE" version="2.2.0">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
-    <text id="ECA_DESC_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
-	<text id="ECA_DESC_MAX_CC" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
-    <text id="ECA_DESC_MAX_MESSAGE_LENGTH" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
-	<text id="ECA_DESC_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
-    <text id="ECA_DESC_SCALING_GREETING_CARD" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
-	<text id="ECA_DESC_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
     <text id="ECA_EMAIL_LOOKS_INVALID" version="2.2.0">E-mail Adresse scheint falsch zu sein!</text>
 	<text id="ECA_EXTERNAL_RECIPIENT" version="2.2.0">externer Empfänger</text>
 	<text id="ECA_EMAIL_OF_RECIPIENT" version="2.2.0" description="%VAR1% wird durch eine Nummer ersetzt">E-Mail des%VAR1%Empfängers</text>
@@ -42,7 +49,7 @@
     <text id="ECA_GREETING_CARD" version="2.2.0">Grußkarte</text>
     <text id="ECA_GREETING_CARDS" version="2.2.0">Grußkarten</text>
 	<text id="ECA_GREETING_CARD_EDIT" version="2.2.0">Grußkarte bearbeiten</text>
-    <text id="ECA_GREETING_CARD_SEND" version="2.2.0">Grußkarte wegschicken</text>
+    <text id="ECA_GREETING_CARD_SEND" version="2.2.0">Grußkarte abschicken</text>
 	<text id="ECA_GREETING_CARD_PREVIEW" version="2.2.0">Vorschau der Grußkarte:</text>
 	<text id="ECA_INTERNAL_RECIPIENT" version="2.2.0">interner Empfänger</text>
 	<text id="ECA_MAX_CC" version="2.2.0">Max. weitere Empfänger</text>
@@ -54,11 +61,20 @@
 	<text id="ECA_NO_MORE_RECIPIENTS" version="2.2.0">Keine weiteren Empfänger</text>
 	<text id="ECA_NEW_MESSAGE_RECEIVED" version="2.2.0">Neue Nachricht erhalten</text>
 	<text id="ECA_OTHER_RECIPIENT" version="2.2.0">Anderer Empfänger</text>
+	<text id="ECA_PHR_ACTIVATE_GREETING_CARDS" version="2.2.0">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
 	<text id="ECA_PHR_FILL_INPUTS" version="2.2.0">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf "Abschicken".</text>
+    <text id="ECA_PHR_FONT" version="2.2.0">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
+    <text id="ECA_PHR_FONT_SIZE" version="2.2.0">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
+    <text id="ECA_PHR_FONT_COLOR" version="2.2.0">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
     <text id="ECA_PHR_INPUT_INCORRECT" version="2.2.0">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
-	<text id="ECA_PHR_NEED_JAVASCRIPT" version="2.2.0">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
+	<text id="ECA_PHR_MAX_CC" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
+    <text id="ECA_PHR_MAX_MESSAGE_LENGTH" version="2.2.0">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
 	<text id="ECA_PHR_MESSAGE_TOO_LONG" version="2.2.0" description="%VAR1% wird durch die max. Länge ersetzt">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
+	<text id="ECA_PHR_NEED_JAVASCRIPT" version="2.2.0">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
+	<text id="ECA_PHR_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
+    <text id="ECA_PHR_SCALING_GREETING_CARD" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
 	<text id="ECA_PHR_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</text>
+	<text id="ECA_PHR_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
 	<text id="ECA_PLEASE_CHOOSE" version="2.2.0">Bitte wählen</text>
 	<text id="ECA_SEND_ERROR" version="2.2.0">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
 	<text id="ECA_SETTINGS_GREETING_CARDS" version="2.2.0">Einstellungen Grußkarten</text>
@@ -74,6 +90,9 @@
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" version="2.2.0">Bild in voller Größe anzeigen</text>
     <text id="ECA_YOUR_MESSAGE" version="2.2.0">Deine Nachricht</text>
 </ecards>
+<guestbook>
+    <text id="GBO_PHR_FLOODING_PROTECTION" version="2.2.0">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
+</guestbook>
 <lists>
     <text id="LST_PHR_NO_USER_FOUND" version="2.2.0">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" version="2.2.0">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
@@ -81,6 +100,9 @@
 </lists>
 <mail>
     <text id="MAI_PHR_TO_ROLE" version="2.2.0" description="E-Mail an die Rolle XY schreiben">die Rolle %VAR1_BOLD%</text>
+    <text id="MAI_PHR_ATTACHMENT_TO_LARGE" version="2.2.0">Dein Dateinanhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
+    <text id="MAI_PHR_CHOOSE_ROLE" version="2.2.0">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
+    <text id="MAI_PHR_ROLE_NO_EMAILS" version="2.2.0">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
 </mail>
 <members>
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" version="2.2.0">%VAR1% Datensätze wurden erfolgreich importiert!</text>
@@ -99,6 +121,14 @@
     <text id="ORG_PHR_FIELD_EMPTY_AREA" version="2.2.0">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
     <text id="ORG_PHR_FIELD_EXIST" version="2.2.0">Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.</text>
 </organization>
+<photos>
+    <text id="PHO_PHR_NO_FILES_OR_TO_LARGE" version="2.2.0">Die Seite wurde ungültig aufgerufen oder die Datei(en) nd angezeigt werden.</text>
+    <text id="PHO_PHR_NO_FILES_SELECTED" version="2.2.0">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
+    <text id="PHO_PHR_NO_RIGHTS" version="2.2.0">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
+    <text id="PHO_PHR_PHOTO_FORMAT_INVALID" version="2.2.0">Es können nur Fotos im JPG und PNG-Format hochgeladen u
+    <text id="PHO_PHR_PHOTO_FILES_TO_LARGE" version="2.2.0">Eine der Dateien oder alle gemeinsam übersteigen die vom Server zugelassenen Uploadgröße von %VAR1% MB.</text>
+    <text id="PHO_PHR_WANT_DELETE_PHOTO" version="2.2.0">Soll das ausgewählte Foto wirklich gelöscht werden?</text>konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1%B überstiegen!</text>
+</photos>
 <profile>
     <text id="PRO_PHR_FIELD_NUMERIC" version="2.2.0">Das Feld %VAR1% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
     <text id="PRO_PHR_CONFIRM_REGISTRATION_SYSTEM" version="2.2.0">Deine Daten wurden gespeichert.\n\nDu kannst dich noch nicht einloggen.\nSobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.</text>
@@ -109,7 +139,14 @@
     <text id="PRO_PHR_PASSWORD_LENGTH" version="2.2.0">Das Passwort muss aus mindestens 6 Zeichen bestehen.</text>
     <text id="PRO_PHR_PASSWORD_OLD_WRONG" version="2.2.0">Das alte Passwort ist falsch.</text>
     <text id="PRO_PHR_PASSWORDS_NOT_EQUAL" version="2.2.0">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
+    <text id="PRO_PHR_PHOTO_DELETED" version="2.2.0">Das Profilfoto wurde gelöscht.</text>
+    <text id="PRO_PHR_PHOTO_FILE_TO_LARGE" version="2.2.0">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von %VAR1% B.</text>
+    <text id="PRO_PHR_PHOTO_FORMAT_INVALID" version="2.2.0">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</text>
+    <text id="PRO_PHR_PHOTO_NOT_CHOOSEN" version="2.2.0">Es wurde keine Bilddatei ausgewählt.</text>
+    <text id="PRO_PHR_PHOTO_RESOLUTION_TO_LARGE" version="2.2.0">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von %VAR1% Megapixeln.</text>
+    <text id="PRO_PHR_PHOTO_SAVED" version="2.2.0">Das neue Profilfoto wurde erfolgreich gespeichert.</text>
     <text id="PRO_PHR_ROLE_NOT_ASSIGNED" version="2.2.0">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
+    <text id="PRO_PHR_WANT_DELETE_PHOTO" version="2.2.0">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
 </profile>
 <roles>
     <text id="ROL_PHR_ROLE_DELETE" version="2.2.0">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
@@ -147,12 +184,16 @@
     <text id="SYS_NEXT" version="2.2.0">Weiter</text>
     <text id="SYS_NO" version="2.2.0">Nein</text>
     <text id="SYS_NOTE" version="2.2.0">Hinweis</text>
+    <text id="SYS_PASSWORD_FORGOTTEN" version="2.2.0">Passwort vergessen</text>
     <text id="SYS_PHR_BETA_VERSION" version="2.2.0">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
     <text id="SYS_PHR_CAPTCHA_CODE_INVALID" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
     <text id="SYS_PHR_COOKIE_NOT_SET" version="2.2.0">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" version="2.2.0">%VAR1% anlegen</text>
     <text id="SYS_PHR_CREATED_BY" version="2.2.0">Angelegt von %VAR1% am %VAR2%</text>
+    <text id="SYS_PHR_CURRENT_USER_NO_EMAIL" version="2.2.0" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mailadresse hinterlegt!\n\nTrage bitte in deinem %VAR1%Profil%VAR1% eine E-Mailadresse ein.</text>
+    <text id="SYS_PHR_DATABASE_ERROR" version="2.2.0">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
     <text id="SYS_PHR_DATABASE_INVALID" version="2.2.0" description="Var3 und Var4 erzeugen den MailTo-Link">Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.\n\nWende dich bitte an den %VAR3%Webmaster%VAR4% dieser Webseite.</text>
+    <text id="SYS_PHR_DATE_END_BEFORE_BEGIN" version="2.2.0">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</text>
     <text id="SYS_PHR_DATE_INVALID" version="2.2.0">Es wurde kein gültiges Datum in das Feld %VAR1_BOLD% eingegeben.\n\nDas Format des Datums sollte %VAR2_BOLD% sein.</text>
     <text id="SYS_PHR_DELETE" version="2.2.0">Die Daten wurden gelöscht.</text>
     <text id="SYS_PHR_EDIT" version="2.2.0">%VAR1% bearbeiten</text>
@@ -163,34 +204,44 @@
     <text id="SYS_PHR_FIELD_EMPTY" version="2.2.0">Das Feld %VAR1_BOLD% ist nicht gefüllt.</text>
     <text id="SYS_PHR_FIELDS_EMPTY" version="2.2.0">Es sind nicht alle Felder gefüllt worden.</text>
     <text id="SYS_PHR_FILE_NOT_EXIST" version="2.2.0">Die ausgewählte Datei existiert nicht auf dem Server.</text>
+    <text id="SYS_PHR_FILE_TO_LARGE_SERVER" version="2.2.0">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1%.</text>
+	<text id="SYS_PHR_FORUM_ACCESS_DATA" version="2.2.0">Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!</text>
+	<text id="SYS_PHR_FORUM_DB_CONNECTION_FAILED" version="2.2.0">Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!</text>
+	<text id="SYS_PHR_FORUM_LOGIN_ADMIN" version="2.2.0">Dein Administrator-Account vom Forum %VAR2% wurde auf den Admidio-Account zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
+	<text id="SYS_PHR_FORUM_LOGIN_NEW" version="2.2.0">Dein Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
+	<text id="SYS_PHR_FORUM_LOGIN_PASSWORD" version="2.2.0">Dein Password im Forum %VAR2% wurde auf das Admidio-Passwort zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
+    <text id="SYS_PHR_FORUM_LOGIN_SUCCESSFUL" version="2.2.0">Du hast dich erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1_BOLD% angemeldet.</text>
+	<text id="SYS_PHR_FORUM_LOGOUT" version="2.2.0">Du wurdest erfolgreich auf Admidio und im Forum abgemeldet.</text>
+	<text id="SYS_PHR_FORUM_USER_DELETE" version="2.2.0">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
+	<text id="SYS_PHR_FORUM_USER_EXIST" version="2.2.0">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="SYS_PHR_INSTALL_FOLDER_EXIST" version="2.2.0">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_PHR_LAST_EDITED_BY" version="2.2.0">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
     <text id="SYS_PHR_LOGIN_FAILED" version="2.2.0">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</text>
     <text id="SYS_PHR_LOGIN_NOT_ACTIVATED" version="2.2.0">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</text>
-    <text id="SYS_PHR_LOGIN_FORUM_SUCCESSFUL" version="2.2.0">Du hast dich erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1_BOLD% angemeldet.</text>
     <text id="SYS_PHR_LOGIN_SUCCESSFUL" version="2.2.0">Du hast dich erfolgreich angemeldet.</text>
     <text id="SYS_PHR_LOGIN_UNKNOWN" version="2.2.0">Der angegebene Benutzername existiert nicht.</text>
     <text id="SYS_PHR_LOGOUT_SUCCESSFUL" version="2.2.0">Du wurdest erfolgreich abgemeldet.</text>
-    <text id="SYS_PHR_MODULE_DISABLED" version="2.2.0">Dieses Modul ist nicht freigegeben.</text>
-    <text id="SYS_PHR_NO_ENTRY" version="2.2.0">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
-    <text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
-    <text id="SYS_PHR_NO_RIGHTS" version="2.2.0">Du hast keine Rechte, diese Aktion auszuführen.</text>
-    <text id="SYS_PHR_PASSWORD_UNKNOWN" version="2.2.0">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
-    <text id="SYS_PHR_ROLE_MAX_MEMBERS" version="2.2.0">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
-    <text id="SYS_PHR_RSS_DISABLED" version="2.2.0">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
-    <text id="SYS_PHR_SAVE" version="2.2.0">Die Daten wurden gespeichert.</text>
-    <text id="SYS_PHR_TIME_INVALID" version="2.2.0">Es wurde keine sinnvolle Uhrzeit eingegeben.\n\nDie Uhrzeit muss zwischen 00:00 und 23:59 liegen!</text>
-    <text id="SYS_PHR_WRITE_ACCESS" version="2.2.0" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
-    <text id="SYS_PHR_SERVER_NO_UPLOAD" version="2.2.0">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
-	<text id="SYS_PHR_WRONG_CAPTCHA_CODE" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
 	<text id="SYS_PHR_LOSTPW_AREADY_LOGGED_ID" version="2.2.0">Du bist am System angemeldet folglich kennst du ja dein Passwort!</text>
 	<text id="SYS_PHR_LOSTPW_EMAIL_ERROR" version="2.2.0">Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!</text>
 	<text id="SYS_PHR_LOSTPW_SEND" version="2.2.0">Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!</text>
 	<text id="SYS_PHR_LOSTPW_SEND_ERROR" version="2.2.0">Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
-	<text id="SYS_PW_FORGOTTEN" version="2.2.0">Passwort vergessen</text>
-	<text id="SYS_PHR_PW_FORGOTTEN" version="2.2.0">Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
+    <text id="SYS_PHR_MODULE_DISABLED" version="2.2.0">Dieses Modul ist nicht freigegeben.</text>
+    <text id="SYS_PHR_NO_ENTRY" version="2.2.0">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
+    <text id="SYS_PHR_NO_ENTRIES" version="2.2.0">Es sind keine Einträge vorhanden.</text>
+    <text id="SYS_PHR_NO_RIGHTS" version="2.2.0">Du hast keine Rechte, diese Aktion auszuführen.</text>
+	<text id="SYS_PHR_PASSWORD_FORGOTTEN" version="2.2.0">Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
+    <text id="SYS_PHR_PASSWORD_UNKNOWN" version="2.2.0">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
+    <text id="SYS_PHR_PROCESS_CANCELED" version="2.2.0">Der Vorgang wurde abgebrochen.</text>
 	<text id="SYS_PHR_PWACT_PW_SAVED" version="2.2.0">Das neue Passwort wurde nun übernommen!</text>
 	<text id="SYS_PHR_PWACT_CODE_INVALID" version="2.2.0">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</text>
+    <text id="SYS_PHR_ROLE_MAX_MEMBERS" version="2.2.0">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
+    <text id="SYS_PHR_RSS_DISABLED" version="2.2.0">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
+    <text id="SYS_PHR_SAVE" version="2.2.0">Die Daten wurden gespeichert.</text>
+    <text id="SYS_PHR_SERVER_NO_UPLOAD" version="2.2.0">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
+    <text id="SYS_PHR_TIME_INVALID" version="2.2.0">Es wurde keine sinnvolle Uhrzeit eingegeben.\n\nDie Uhrzeit muss zwischen 00:00 und 23:59 liegen!</text>
+    <text id="SYS_PHR_USER_ID_NOT_FOUND" version="2.2.0">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
+    <text id="SYS_PHR_USER_NO_EMAIL" version="2.2.0">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
+    <text id="SYS_PHR_WRITE_ACCESS" version="2.2.0" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
 	<text id="SYS_PREVIEW" version="2.2.0">Vorschau</text>
 	<text id="SYS_RECIPIENT" version="2.2.0">Empfänger</text>
     <text id="SYS_REMOVE" version="2.2.0">Entfernen</text>
