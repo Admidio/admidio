@@ -158,8 +158,7 @@ else
 }
 
 // Sprachdateien einlesen
-$language_path = SERVER_PATH. '/adm_program/languages/'.$g_preferences['system_language'].'.xml';
-$g_l10n = new Language($language_path, 0, true);
+$g_l10n = new Language($g_preferences['system_language']);
 
 // Nachrichtenklasse anlegen
 $g_message = new Message();

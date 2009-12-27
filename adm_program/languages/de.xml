@@ -13,11 +13,23 @@
     <text id="CAT_PHR_DELETE_CATEGORY" version="2.2.0">Soll die Kategorie %VAR1% wirklich gelöscht werden ?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
 </category>
 <dates>
+    <text id="DAT_CALENDAR" version="2.2.0">Kalender</text>
+    <text id="DAT_CREATE_DATE" version="2.2.0">Termine anlegen</text>
+    <text id="DAT_DATES" version="2.2.0">Termine</text>
+    <text id="DAT_EXPORT_ICAL" version="2.2.0">Exportieren (iCal)</text>
+    <text id="DAT_LOCATION" version="2.2.0" description="Location of a date">Ort</text>
+    <text id="DAT_MANAGE_CALENDARS" version="2.2.0">Kalender verwalten</text>
+    <text id="DAT_ORGANIZER" version="2.2.0" description="The Person">Organisator</text>
+    <text id="DAT_ORGANIZERS" version="2.2.0" description="The Personen">Organisatoren</text>
+    <text id="DAT_PARTICIPANTS" version="2.2.0">Teilnehmer</text>
     <text id="DAT_PHR_ROOM_RESERVED" version="2.2.0">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</text>
     <text id="DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH" version="2.2.0">Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.</text>
     <text id="DAT_PHR_QUOTA_EXCEEDED" version="2.2.0">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</text>
     <text id="DAT_PHR_QUOTA_FOR_ROLE" version="2.2.0">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</text>
     <text id="DAT_PHR_QUOTA_WITH_MAXIMUM" version="2.2.0">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</text>
+    <text id="DAT_PREVIOUS_DATES" version="2.2.0" description="Vergangene Termine">Vergangene %VAR1%</text>
+    <text id="DAT_SHOW_ON_MAP" version="2.2.0">Auf Karte zeigen</text>
+    <text id="DAT_SHOW_ROUTE" version="2.2.0">Route anzeigen</text>
 </dates>
 <downloads>
 	<text id="DOW_PHR_FILE_NAME_INVALID" version="2.2.0">Der ausgewählte Dateiname enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für die Datei aus.</text>
@@ -157,6 +169,7 @@
     <text id="SYS_ACTIVE" version="2.2.0">Aktiv</text>
 	<text id="SYS_ACTIVATED" version="2.2.0">Aktiktivert</text>
 	<text id="SYS_ADD_RECIPIENTS" version="2.2.0">Empfänger hinzufügen</text>
+	<text id="SYS_ALL" version="2.2.0">Alle</text>
     <text id="SYS_BACK" version="2.2.0">Zurück</text>
 	<text id="SYS_BOLD" version="2.2.0">Fett</text>
 	<text id="SYS_CAPTCHA" version="2.2.0">Captcha</text>
@@ -167,6 +180,7 @@
 	<text id="SYS_DELETE" version="2.2.0">Löschen</text>
     <text id="SYS_EDIT" version="2.2.0">Bearbeiten</text>
 	<text id="SYS_EMAIL" version="2.2.0">E-mail</text>
+	<text id="SYS_END" version="2.2.0" description="End of a date">Ende</text>
 	<text id="SYS_ERROR_PAGE_NOT_FOUND" version="2.2.0">ERROR 404 - Seite nicht gefunden!</text>
 	<text id="SYS_FONT" version="2.2.0">Schriftart</text>
 	<text id="SYS_FONT_COLOR" version="2.2.0">Schriftfarbe</text>
@@ -179,6 +193,7 @@
     <text id="SYS_INVISIBLE" version="2.2.0">Unsichtbar</text>
 	<text id="SYS_ITALIC" version="2.2.0">Kursiv</text>
     <text id="SYS_MANDATORY_FIELD" version="2.2.0">Pflichtfeld</text>
+    <text id="SYS_MEMBERS" version="2.2.0">Mitglieder</text>
 	<text id="SYS_MESSAGE" version="2.2.0">Nachricht</text>
 	<text id="SYS_NAME" version="2.2.0">Name</text>
     <text id="SYS_NEXT" version="2.2.0">Weiter</text>
@@ -250,8 +265,10 @@
 	<text id="SYS_SEND_NEW_PW" version="2.2.0">Neues Passwort zusenden</text>
 	<text id="SYS_SENDER" version="2.2.0">Absender</text>
 	<text id="SYS_SETTINGS" version="2.2.0">Einstellungen</text>
+	<text id="SYS_START" version="2.2.0" description="Start of a date">Beginn</text>
     <text id="SYS_TEXT" version="2.2.0">Text</text>
 	<text id="SYS_TO" version="2.2.0">An</text>
+	<text id="SYS_UNLIMITED" version="2.2.0">Unbegrenzt</text>
 	<text id="SYS_VISIBLE" version="2.2.0">Sichtbar</text>
     <text id="SYS_WEBMASTER" version="2.2.0">Webmaster</text>
     <text id="SYS_YES" version="2.2.0">Ja</text>

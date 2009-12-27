@@ -263,7 +263,6 @@ else
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
-// erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
 $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$req_headline;
 echo generatePagination($base_url, $num_announcements, $announcements_per_page, $req_start, TRUE);
         
