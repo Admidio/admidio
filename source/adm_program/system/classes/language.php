@@ -17,28 +17,38 @@ class Language
 {
     private $l10nObject;
     private $referenceL10nObject;
+    
     private $modules;
     
-    // die Uebergaben sind identisch zur PHP-SimpleXML-Klasse -> siehe Doku dort
-    public function __construct($data, $options, $data_is_url)
+    private $language;
+    private $languageFilePath;
+    private $referenceLanguage = 'de';
+    
+    // es muss das Sprachkuerzel uebergeben werden (Beispiel: 'de')
+    public function __construct($language)
     {
-        $this->l10nObject = new SimpleXMLElement($data, $options, $data_is_url);
-        $this->modules = array('ANN' => 'announcements', 
-                               'ASS' => 'assign', 
-                               'CAT' => 'category', 
-                               'DAT' => 'dates',
-                               'DOW' => 'downloads',
-                               'ECA' => 'ecards', 
-                               'GBO' => 'guestbook',
-                               'LST' => 'lists',
-                               'MAI' => 'mail', 
-                               'MEM' => 'members', 
-                               'NWU' => 'new_user',
-                               'ORG' => 'organizsation', 
-                               'PHO' => 'photos',
-                               'PRO' => 'profile', 
-                               'ROL' => 'roles',
-                               'SYS' => 'system');
+        if(strlen($language) == 2)
+        {
+            $this->language = $language;
+            $this->languageFilePath = SERVER_PATH. '/adm_program/languages/'.$language.'.xml';
+            $this->l10nObject = new SimpleXMLElement($this->languageFilePath, 0, true);
+            $this->modules = array('ANN' => 'announcements', 
+                                   'ASS' => 'assign', 
+                                   'CAT' => 'category', 
+                                   'DAT' => 'dates',
+                                   'DOW' => 'downloads',
+                                   'ECA' => 'ecards', 
+                                   'GBO' => 'guestbook',
+                                   'LST' => 'lists',
+                                   'MAI' => 'mail', 
+                                   'MEM' => 'members', 
+                                   'NWU' => 'new_user',
+                                   'ORG' => 'organizsation', 
+                                   'PHO' => 'photos',
+                                   'PRO' => 'profile', 
+                                   'ROL' => 'roles',
+                                   'SYS' => 'system');
+        }
     }
 
     // liest den Text mit der uebergebenen ID aus und gibt diese zurueck
@@ -80,7 +90,7 @@ class Language
                 }
             }
         }
-        else
+        elseif($this->referenceLanguage != $this->language)
         {
             $text = $this->getReferenceText($text_id, $var1, $var2, $var3, $var4);
         }
@@ -92,7 +102,7 @@ class Language
     {
         if(is_object($this->referenceL10nObject) == false)
         {
-            $language_path = SERVER_PATH. '/adm_program/languages/de.xml';
+            $language_path = SERVER_PATH. '/adm_program/languages/'.$this->referenceLanguage.'.xml';
             $this->referenceL10nObject = new Language($language_path, 0, true);
         }
         return $this->referenceL10nObject->get($text_id, $var1, $var2, $var3);

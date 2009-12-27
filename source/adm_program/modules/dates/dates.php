@@ -42,7 +42,7 @@ elseif($g_preferences['enable_dates_module'] == 2)
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_mode      = 'actual';
 $req_start     = 0;
-$req_headline  = 'Termine';
+$req_headline  = $g_l10n->get('DAT_DATES');
 $req_id        = 0;
 $sql_datum     = '';
 $req_calendar  = '';
@@ -135,7 +135,7 @@ else
 }
 if($req_mode == 'old')
 {
-    $g_layout['title'] = 'Vergangene '. $g_layout['title'];
+    $g_layout['title'] = $g_l10n->get('DAT_PREVIOUS_DATES', ' '.$g_layout['title']);
 }
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
@@ -307,8 +307,8 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="Termin anlegen" title="Termin anlegen"/></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'">Termin anlegen</a>
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_CREATE_DATE').'" title="'.$g_l10n->get('DAT_CREATE_DATE').'"/></a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'">'.$g_l10n->get('DAT_CREATE_DATE').'</a>
             </span>
         </li>';
     }
@@ -334,14 +334,14 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         
         if($g_db->num_rows($result) > 1)
         {
-            $topNavigation .= '<li>Kalender:&nbsp;&nbsp;
+            $topNavigation .= '<li>'.$g_l10n->get('DAT_CALENDAR').':&nbsp;&nbsp;
             <select size="1" id="calendar" onchange="showCalendar()">
-                <option value="Alle" ';
+                <option value="0" ';
                 if(strlen($req_calendar) == 0)
                 {
                     $topNavigation .= ' selected="selected" ';
                 }
-                $topNavigation .= '>Alle</option>';
+                $topNavigation .= '>'.$g_l10n->get('SYS_ALL').'</option>';
         
                 while($row = $g_db->fetch_object($result))
                 {
@@ -355,8 +355,8 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
             $topNavigation .=  '</select>';
             if($g_current_user->editDates())
             {
-                $topNavigation .= '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender"><img
-                     src="'. THEME_PATH. '/icons/options.png" alt="Kalender pflegen" title="Kalender pflegen" /></a>';
+                $topNavigation .= '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$g_l10n->get('DAT_CALENDAR').'"><img
+                     src="'. THEME_PATH. '/icons/options.png" alt="'.$g_l10n->get('DAT_MANAGE_CALENDARS').'" title="'.$g_l10n->get('DAT_MANAGE_CALENDARS').'" /></a>';
             }
             $topNavigation .= '</li>';
         }
@@ -364,9 +364,9 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         {
             $topNavigation .= '
             <li><span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender"><img
-                    src="'. THEME_PATH. '/icons/application_double.png" alt="Kalender pflegen" title="Kalender pflegen"/></a>
-                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title=Kalender">Kalender pflegen</a>
+                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$g_l10n->get('DAT_CALENDAR').'"><img
+                    src="'. THEME_PATH. '/icons/application_double.png" alt="'.$g_l10n->get('DAT_MANAGE_CALENDARS').'" title="'.$g_l10n->get('DAT_MANAGE_CALENDARS').'"/></a>
+                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$g_l10n->get('DAT_CALENDAR').'">'.$g_l10n->get('DAT_MANAGE_CALENDARS').'</a>
             </span></li>';
         }
     }
@@ -384,11 +384,11 @@ if($g_db->num_rows($dates_result) == 0)
     // Keine Termine gefunden
     if($req_id > 0)
     {
-        echo '<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>Es sind keine Einträge vorhanden.</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -448,9 +448,9 @@ else
                             
                 $participants_html = '
                     <tr>
-                        <td>Teilnehmer:</td>
+                        <td>'.$g_l10n->get('DAT_PARTICIPANTS').':</td>
                         <td>
-                            <strong>'.$row2.'</strong> (davon '.$row3. ((intval($row3)==1)?' Organisator':' Organisatoren') . ')
+                            <strong>'.$row2.'</strong> (davon '.$row3.' '. ((intval($row3)==1) ? $g_l10n->get('DAT_ORGANIZER') : $g_l10n->get('DAT_ORGANIZERS')) . ')
                         </td>
                     </tr>';
             }
@@ -458,8 +458,8 @@ else
             {
                 $participants_html = '
                     <tr>
-                        <td>Teilnehmer:</td>
-                        <td><strong>unbegrenzt</strong></td>
+                        <td>'.$g_l10n->get('DAT_PARTICIPANTS').':</td>
+                        <td><strong>'.$g_l10n->get('SYS_UNLIMITED').'</strong></td>
                     </tr>';
             }
         }
@@ -483,10 +483,11 @@ else
                     
                     if($row2>0) 
                     {
-                        echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"  ><img src="'. THEME_PATH. '/icons/list.png" alt="Mitglieder" title="Mitglieder" /></a>';
+                        echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
+                            src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('SYS_MEMBERS').'" title="'.$g_l10n->get('SYS_MEMBERS').'" /></a>';
                     }
                     echo'  <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=4"><img
-                    src="'. THEME_PATH. '/icons/database_out.png" alt="Exportieren (iCal)" title="Exportieren (iCal)" /></a>';
+                    src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('DAT_EXPORT_ICAL').'" title="'.$g_l10n->get('DAT_EXPORT_ICAL').'" /></a>';
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editDates())
@@ -495,7 +496,7 @@ else
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$req_headline.'"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
+                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                         }
 
                         // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
@@ -503,7 +504,7 @@ else
                         {
                             echo '
                             <a class="iconLink" href="#" onclick="deleteObject(\'dat\', \'dat_'.$date->getValue('dat_id').'\','.$date->getValue('dat_id').',\''.$date->getValue('dat_headline').'\')"><img
-                                src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         }
                     }
                 echo'</div>
@@ -520,11 +521,11 @@ else
                         echo '
                         <table style="float:left; width: 250px;">
                             <tr>
-                                <td>Beginn:</td>
+                                <td>'.$g_l10n->get('SYS_START').':</td>
                                 <td><strong>'. $date->getValue('dat_begin', $g_preferences['system_time']). '</strong> Uhr</td>
                             </tr>
                             <tr>
-                                <td>Ende:</td>
+                                <td>'.$g_l10n->get('SYS_END').':</td>
                                 <td><strong>'. $date->getValue('dat_end', $g_preferences['system_time']). '</strong> Uhr</td>
                             </tr>';
                         echo $participants_html;
@@ -537,11 +538,11 @@ else
                         echo '
                         <table style="padding-left: '. $margin_left_location. 'px;">
                             <tr>
-                                <td>Kalender:</td>
-                                <td><strong>'. $date->getValue("cat_name"). '</strong></td>
+                                <td>'.$g_l10n->get('DAT_CALENDAR').':</td>
+                                <td><strong>'. $date->getValue('cat_name'). '</strong></td>
                             </tr>
                             <tr>
-                                <td>Ort:</td>
+                                <td>'.$g_l10n->get('DAT_LOCATION').':</td>
                                 <td>';
                                     // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
                                     // die jeweils laenger als 3 Zeichen sind
@@ -564,7 +565,7 @@ else
                                             // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
                                             $location_url .= ',%20'. $date->getValue('dat_country');
                                         }
-                                        echo '<a href="'. $location_url. '" target="_blank" title="Auf Karte zeigen"/><strong>'.$date->getValue("dat_location").'</strong></a>';
+                                        echo '<a href="'. $location_url. '" target="_blank" title="'.$g_l10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
                                         // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
                                         if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
@@ -592,7 +593,7 @@ else
                                             }
                                             echo '
                                                 <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank">
-                                                    <img src="'. THEME_PATH. '/icons/map.png" alt="Route anzeigen" title="Route anzeigen"/></a>
+                                                    <img src="'. THEME_PATH. '/icons/map.png" alt="'.$g_l10n->get('DAT_SHOW_ROUTE').'" title="'.$g_l10n->get('DAT_SHOW_ROUTE').'"/></a>
                                                 </span>';
                                         }
                                     } 
@@ -612,7 +613,7 @@ else
                                 </td>
                             </tr>';
                         
-                        if ($date->getValue("dat_all_day") != 0)
+                        if ($date->getValue('dat_all_day') != 0)
                         {
                             echo $participants_html;
                         }
@@ -622,7 +623,7 @@ else
                     {
                         echo '<table style="padding-left: '. $margin_left_location. 'px;">
                             <tr>
-                                <td>Kalender:</td>
+                                <td>'.$g_l10n->get('DAT_CALENDAR').':</td>
                                 <td><strong>'. $date->getValue('cat_name'). '</strong></td>
                             </tr>';
                         if($date->getValue('dat_room_id')>0)
@@ -632,7 +633,7 @@ else
                             $room_name = $room->getValue('room_name');
                             echo '
                             <tr>
-                                <td>Ort:</td>
+                                <td>'.$g_l10n->get('DAT_LOCATION').':</td>
                                 <td>
                                     <strong><a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a></strong>
                                 </td>
@@ -652,7 +653,7 @@ else
                     $margin_left_location = "0";
                     echo '  <table>
                                 <tr>
-                                    <td>Kalender:</td>
+                                    <td>'.$g_l10n->get('DAT_CALENDAR').':</td>
                                     <td><strong>'.$date->getValue('cat_name'). '</strong></td>
                                 </tr>';
                     if($date->getValue('dat_room_id')>0)
@@ -662,7 +663,7 @@ else
                         $room_name = $room->getValue('room_name');
                         echo '
                         <tr>
-                            <td>Ort:</td>
+                            <td>'.$g_l10n->get('DAT_LOCATION').':</td>
                             <td>
                                 <strong><a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=room_detail&amp;room_id='.$date->getValue('dat_room_id').'&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=580&amp;modal=true">'.$room_name.'</a></strong>
                             </td>
@@ -677,26 +678,22 @@ else
                 
             
                 echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>
-                <div class="editInformation">
-                    Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
-                    ' am '. $date->getValue('dat_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
+                <div class="editInformation">'.
+                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']));
 
                     if($date->getValue('dat_usr_id_change') > 0)
                     {
-                        echo '<br />Zuletzt bearbeitet von '. $row['change_firstname']. ' '. $row['change_surname'].
-                        ' am '. $date->getValue('dat_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
+                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']));
                     }
+                echo '</div>';
                
-                $sql = 'SELECT * FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';
+                $sql = 'SELECT * FROM '.TBL_MEMBERS.' 
+                         WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" 
+                           AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';
                 $result = $g_db->query($sql);
                 $row = $g_db->fetch_array($result);
                 
-//                 echo '<pre>';
-//                 echo $date->getValue('dat_max_members').'<br>';
-//                 print_r($date->visible_for);
-//                 print_r($date->max_members_role);
-//                 echo '</pre>';
-                if($row['mem_leader']!=1)
+                if($row['mem_leader'] != 1)
                 {
                     if($date->getValue('dat_rol_id')!=null && $row == null)
                     {
@@ -755,8 +752,15 @@ else
                                     $content_signin .= '<button name="loginDate" type="submit" value="loginDate" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" alt="login Date" />&nbsp;'.$v.'</button></form>';
                                 }
                             }
-                            if($content_signin) echo '<b>Anmelden als:</b>'.$content_signin;
-                            else echo 'Keine Anmeldung mehr möglich.';
+
+                            if($content_signin)
+                            {
+                                echo '<b>Anmelden als:</b>'.$content_signin;
+                            }
+                            else 
+                            {
+                                echo 'Keine Anmeldung mehr möglich.';
+                            }
                         }
                         else
                         {
@@ -765,7 +769,7 @@ else
                         echo '</div>';
 
                     }
-                    else if($date->getValue('dat_rol_id')!=null && $row != null)
+                    elseif($date->getValue('dat_rol_id')!=null && $row != null)
                     {
                         if($user_roles_base[0])
                         {
@@ -774,29 +778,26 @@ else
                         }
                         else
                         {
-                            echo '<div style="text-align:right">
-
-                            <form action=';
-
-                            echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
-                                <input type="hidden" name="dat_id" value="'. $date->getValue('dat_id'). '" />
-                                <input type="hidden" name="headline" value="'.$req_headline.'" />
-                                <input type="hidden" name="login" value="0" />
-                                <button name="logoutDate" type="submit" value="logoutDate" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
-                                alt="login Date" />&nbsp;austragen</button>
-                            </form>
+                            echo '
+                            <div style="text-align:right">
+                                <form action=';
+                                echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
+                                    <input type="hidden" name="dat_id" value="'. $date->getValue('dat_id'). '" />
+                                    <input type="hidden" name="headline" value="'.$req_headline.'" />
+                                    <input type="hidden" name="login" value="0" />
+                                    <button name="logoutDate" type="submit" value="logoutDate" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
+                                    alt="login Date" />&nbsp;austragen</button>
+                                </form>
                             </div>';
                         }
                     }
                 }
-               echo '</div>';
-          echo '</div>
+            echo '</div>
         </div>';
     }  // Ende While-Schleife
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
-// erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
 $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$req_mode.'&headline='.$req_headline;
 echo generatePagination($base_url, $num_dates, $dates_per_page, $req_start, TRUE);
 
