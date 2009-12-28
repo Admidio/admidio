@@ -59,7 +59,7 @@ $completePath = $file->getCompletePathOfFile();
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FILE_NOT_EXIST')');
+    $g_message->show($g_l10n->get('SYS_PHR_FILE_NOT_EXIST'));
 }
 
 //Downloadcounter inkrementieren
