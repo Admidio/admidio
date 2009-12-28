@@ -91,8 +91,8 @@ INSERT INTO `%PRAEFIX%_preferences` VALUES  (1,1,'enable_rss','1'),
  (81,1,'weblinks_target','_blank'),
  (82,1,'db_version_beta','0'),
  (83,1,'profile_default_role','2'),
- (84,1,'mail_sendmail_address','');
- (85,1,'db_version','2.1.7'),
+ (84,1,'mail_sendmail_address',''),
+ (85,1,'db_version','2.1.7');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PRAEFIX%_preferences` ENABLE KEYS */;
 
