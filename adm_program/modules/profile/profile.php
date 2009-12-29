@@ -681,9 +681,31 @@ echo '
                         && $user->getValue('usr_reg_org_shortname') != $g_current_organization->getValue('org_shortname'))
                         {
                             echo '
+							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
+							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/jQueryFunctionStack.js"></script>
+							<script type="text/javascript">
+								var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
+								jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
+								function jQueryAjaxLoadRolesAppend(html)
+								{
+									$("#TB_ajaxContent").html(html);
+									$("#TB_load,legend").remove();
+									$("#TB_ajaxContent").append("\n<div id=\'TB_err\'></div>");
+									$("#power").ajaxForm({
+										target: \'#TB_err\',
+										success: function(data) {
+											$("#TB_ajaxContent").animate({
+												scrollTop: $("#TB_ajaxContent").offset().top
+											  }, 0);
+											$("#TB_err .jsison").show("slow");
+										}
+									});	
+								}
+							</script>
                             <div style="text-align: right;">
-                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$a_user_id.'"><img
-                                    src="'.THEME_PATH.'/icons/edit.png" title="Rollenmitgliedschaften ändern" alt="Rollenmitgliedschaften ändern" /></a>
+								<a href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$a_user_id.'&inline=1" title="Rollenmitgliedschaften ändern" class="thickbox">
+									<img src="'.THEME_PATH.'/icons/edit.png" title="Rollenmitgliedschaften ändern" alt="Rollenmitgliedschaften ändern" />
+								</a>
                             </div>';
                         }
                 echo '</div>

@@ -254,7 +254,17 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 				}	
 			};
 		}
-		
+		if(jQueryAjaxLoadAppendStack)
+		{
+			var jQueryArray = jQueryAjaxLoadAppendStack.getArray();
+			for(var i = 0;i < jQueryArray.length;i++)
+			{
+				if(eval(jQueryArray[i]))
+				{
+					eval('$.ajax({type: "GET",url: url,dataType: "html",success: function(html){'+jQueryArray[i]+'(html);}});');
+				}
+			}
+		}
 	} catch(e) {
 		//nothing here
 	}

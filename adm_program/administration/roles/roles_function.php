@@ -376,7 +376,7 @@ elseif($_GET['mode'] == 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
     $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$req_rol_id.'&amp;mode=4');
-    $g_message->show($g_l10n->get('ROL_PHR_ROLE_DELETE', $role->getValue('rol_name'));
+    $g_message->show($g_l10n->get('ROL_PHR_ROLE_DELETE', $role->getValue('rol_name')));
 }
 elseif($_GET['mode'] == 7)
 {

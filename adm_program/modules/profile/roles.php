@@ -12,6 +12,8 @@
  * user_id     - Funktionen der uebergebenen user_id aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
+ * inline: 	 0 - wird als eigene Seite angezeigt
+ *			 1 - nur "body" HTML Code (z.B. für thickbox)
  *
  *****************************************************************************/
 
@@ -27,6 +29,7 @@ if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_usr_id   = 0;
 $req_new_user = 0;
+$req_inlineView = 0;
 
 // Uebergabevariablen pruefen
 
@@ -48,9 +51,20 @@ if(isset($_GET['new_user']))
     $req_new_user = $_GET['new_user'];
 }
 
-$user     = new User($g_db, $req_usr_id);
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+if(isset($_GET['inline']))
+{
+    if(is_numeric($_GET['inline']) == false)
+    {
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
+    $req_inlineView = $_GET['inline'];
+}
 
+$user     = new User($g_db, $req_usr_id);
+if($req_inlineView == 0)
+{
+	$_SESSION['navigation']->addUrl(CURRENT_URL);
+}
 //Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))
 {
@@ -65,8 +79,8 @@ else
 // Html-Kopf ausgeben
 $g_layout['title']  = 'Rollenzuordnung für "'. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). '"';
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/show_hide_block.js"></script>
-    <script type="text/javascript"><!--
+    <script type="text/javascript">
+	<!--
         function markMember(element)
         {
             if(element.checked == true)
@@ -90,25 +104,59 @@ $g_layout['header'] = '
                 document.getElementById(role_name).checked = false;
             }
         }
-    //--></script>';
-
-require(THEME_SERVER_PATH. "/overall_header.php");
+    //-->
+	</script>';
+if($req_inlineView == 0)
+{
+	require(THEME_SERVER_PATH. "/overall_header.php");
+}
+else
+{
+	echo $g_layout['header'];
+	echo '<style type="text/css">
+				#TB_err{
+					margin-top:15px;
+				}
+				.jsison{
+					background:#6A6A6A;
+					color :#6A6A6A;
+					width :0;
+					height :0;
+					border : 2px solid #FF8C00;
+				}
+				.feed{
+					color :#FFFFFF;
+					background:#6A6A6A;
+					width :auto;
+					max-width:50%;
+					height :auto;
+				}
+			</style>';
+}
 
 echo '
 <h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 
-<form action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$req_usr_id.'&amp;new_user='.$req_new_user.'" method="post">
+<form id="power" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$req_usr_id.'&amp;new_user='.$req_new_user.'&amp;inline='.$req_inlineView.'" method="post">
     <table class="tableList" cellspacing="0">
         <thead>
             <tr>
                 <th>&nbsp;</th>
                 <th>Rolle</th>
                 <th>Beschreibung</th>
-                <th style="text-align: center; width: 80px;">Leiter<a 
-                	class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+                <th style="text-align: center; width: 80px;">Leiter';
+				if($req_inlineView == 0)
+				{
+					echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
 		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
-		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
-                </th>
+		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+				}
+				else
+				{
+					echo '<img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
+		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />';
+				}
+                echo'</th>
             </tr>
         </thead>';
 
@@ -221,24 +269,27 @@ echo '
                 </tr>";
             }
         }
-    	echo "</tbody>
+    	echo '</tbody>
     </table>
 
-    <div class=\"formSubmit\">
-        <button name=\"speichern\" type=\"submit\" value=\"speichern\"><img src=\"". THEME_PATH. "/icons/disk.png\" alt=\"Speichern\" />&nbsp;Speichern</button>
-    </div>
-
-    <ul class=\"iconTextLinkList\">
-        <li>
-            <span class=\"iconTextLink\">
-                <a href=\"$g_root_path/adm_program/system/back.php\"><img
-                src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" /></a>
-                <a href=\"$g_root_path/adm_program/system/back.php\">Zurück</a>
-            </span>
-        </li>
-    </ul>
-</form>";
-
-require(THEME_SERVER_PATH. '/overall_footer.php');
-
+    <div class="formSubmit">
+        <button name="speichern" type="submit" value="speichern"><img src="'.THEME_PATH.'/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+    </div>';
+	if($req_inlineView == 0)
+	{
+    	echo '<ul class="iconTextLinkList">
+				<li>
+					<span class="iconTextLink">
+						<a href="$g_root_path/adm_program/system/back.php"><img
+						src="'.THEME_PATH.'/icons/back.png" alt="Zurück" /></a>
+						<a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+					</span>
+				</li>
+			 </ul>';
+	}
+echo '</form>';
+if($req_inlineView == 0)
+{
+	require(THEME_SERVER_PATH. '/overall_footer.php');
+}
 ?>

@@ -12,6 +12,8 @@
  * user_id     - Funktionen der uebergebenen ID aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
+ * inline: 	 0 - Ausgaben werden als eigene Seite angezeigt
+ *			 1 - nur "body" HTML Code (z.B. für thickbox)
  *
  *****************************************************************************/
 
@@ -24,15 +26,23 @@ require("../../system/classes/role_dependency.php");
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_usr_id   = 0;
 $req_new_user = 0;
+$req_inlineView = 0;
 
 // Uebergabevariablen pruefen
-
+if(isset($_GET['inline']))
+{
+    if(is_numeric($_GET['inline']) == false)
+    {
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
+    $req_inlineView = $_GET['inline'];
+}
 if(isset($_GET["user_id"]))
 {
     if(is_numeric($_GET["user_id"]) == false)
@@ -46,9 +56,29 @@ if(isset($_GET["new_user"]))
 {
     if(is_numeric($_GET["new_user"]) == false)
     {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+		if($req_inlineView == 0)
+		{
+        	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+		}
+		else
+		{
+			echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+		}
     }
     $req_new_user = $_GET["new_user"];
+}
+
+$roleCount = 0;
+foreach($_POST as $key=>$value)
+{
+	if(preg_match("/^(role-)[0-9]{0,1}$/i",$key))
+		$roleCount++;
+}
+
+if($roleCount == 0)
+{
+	echo $g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED');
+	die();
 }
 
 if($g_current_user->assignRoles())
@@ -124,7 +154,14 @@ while($row = $g_db->fetch_array($result_rol))
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $row['rol_name']));
+				if($req_inlineView == 0)
+				{
+                	$g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $row['rol_name']));
+				}
+				else
+				{
+					echo $g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $row['rol_name']);
+				}
             }
         }
     }
@@ -205,7 +242,14 @@ if(count($parentRoles) > 0 )
 if($req_new_user == 1 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
-    $g_message->show($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED'));
+	if($req_inlineView == 0)
+	{
+    	$g_message->show($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED'));
+	}
+	else
+	{
+		echo $g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED');
+	}
 }
 
 // zur Ausgangsseite zurueck
@@ -214,5 +258,12 @@ if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
     // von hier aus direkt zur Registrierungsuebersicht zurueck
     $_SESSION['navigation']->deleteLastUrl();
 }
-$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+if($req_inlineView == 0)
+{
+	$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+	$g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+}
+else
+{
+	echo $g_l10n->get('SYS_PHR_SAVE');
+}
