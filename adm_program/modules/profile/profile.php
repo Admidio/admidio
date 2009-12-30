@@ -16,6 +16,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('roles_functions.php');
 
 // Uebergabevariablen pruefen
 
@@ -658,24 +659,13 @@ echo '
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
             $count_show_roles = 0;
-            $sql = 'SELECT *
-                      FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-                     WHERE mem_rol_id = rol_id
-                       AND mem_begin <= "'.DATE_NOW.'"
-                       AND mem_end    > "'.DATE_NOW.'"
-                       AND mem_usr_id = '.$a_user_id.'
-                       AND rol_valid  = 1
-                       AND rol_cat_id = cat_id
-                       AND cat_org_id = org_id
-                       AND org_id     = '. $g_current_organization->getValue('org_id'). '
-                     ORDER BY org_shortname, cat_sequence, rol_name';
-            $result_role = $g_db->query($sql);
+            $result_role = getRolesFromDatabase($g_db,$a_user_id,$g_current_organization);
             $count_role  = $g_db->num_rows($result_role);
 
             //Ausgabe
             echo '<div class="groupBox" id="profile_roles_box">
                 <div class="groupBoxHeadline">
-                    <div style="float: left;">Rollenmitgliedschaften&nbsp;</div>';
+                    <div style="float: left;">'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS').'&nbsp;</div>';
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
                         if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue('usr_id')))
                         && $user->getValue('usr_reg_org_shortname') != $g_current_organization->getValue('org_shortname'))
@@ -684,120 +674,47 @@ echo '
 							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
 							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/jQueryFunctionStack.js"></script>
 							<script type="text/javascript">
+								var profileJS = new profileJSClass();
+								profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL',"[rol_name]").'\';
+								profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
+								profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
+								profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
+								profileJS.usr_id = '.$a_user_id.';
+								
 								var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
 								jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
 								function jQueryAjaxLoadRolesAppend(html)
 								{
 									$("#TB_ajaxContent").html(html);
 									$("#TB_load,legend").remove();
-									$("#TB_ajaxContent").append("\n<div id=\'TB_err\'></div>");
+									$("#TB_ajaxContent").append("\n<div id=\'TB_err\' style=\'margin-top:15px;\'></div>");
 									$("#power").ajaxForm({
 										target: \'#TB_err\',
 										success: function(data) {
+											if(data.match(/<TBClose\/>/gi))
+											{
+												profileJS.reloadRoleMemberships();
+												profileJS.reloadFormerRoleMemberships();
+												setTimeout("tb_remove()",500);	
+											}
 											$("#TB_ajaxContent").animate({
 												scrollTop: $("#TB_ajaxContent").offset().top
 											  }, 0);
-											$("#TB_err .jsison").show("slow");
 										}
 									});	
 								}
 							</script>
                             <div style="text-align: right;">
-								<a href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$a_user_id.'&inline=1" title="Rollenmitgliedschaften ändern" class="thickbox">
-									<img src="'.THEME_PATH.'/icons/edit.png" title="Rollenmitgliedschaften ändern" alt="Rollenmitgliedschaften ändern" />
+								<a href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$a_user_id.'&inline=1" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" class="thickbox">
+									<img src="'.THEME_PATH.'/icons/edit.png" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />
 								</a>
                             </div>';
                         }
                 echo '</div>
-                <div class="groupBoxBody">
-                    <ul class="formFieldList" id="role_list">';
-                        while($row = $g_db->fetch_array($result_role))
-                        {
-                            if($g_current_user->viewRole($row['mem_rol_id']) && $row['rol_visible']==1)
-                            {
-                                // jede einzelne Rolle anzeigen
-                                echo '<li id="role_'. $row['mem_rol_id']. '">
-                                    <dl>
-                                        <dt>
-                                            '. $row['cat_name']. ' - ';
-                                                if($g_current_user->viewRole($row['mem_rol_id']))
-                                                {
-                                                    echo '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $row['mem_rol_id']. '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
-                                                }
-                                                else
-                                                {
-                                                    echo $row['rol_name'];
-                                                }
-                                                if($row['mem_leader'] == 1)
-                                                {
-                                                    echo ' - Leiter';
-                                                }
-                                            echo '&nbsp;
-                                        </dt>
-                                        <dd>
-                                            seit '. mysqldate('d.m.y', $row['mem_begin']);
-                                            // Datum für die Bearbeitung der Mitgliedschaft wird vorbereitet
-                                            $rol_from = mysqldatetime('d.m.y', $row['mem_begin']);
-                                            $rol_to = NULL;
-                                            if ($row['mem_end'] != '9999-12-31')
-                                            {
-                                               $rol_to = mysqldatetime('d.m.y', $row['mem_end']);
-                                            }
-
-                                            if($g_current_user->assignRoles())
-                                            {
-                                                // Löschen wird nur bei anderen Webmastern ermöglicht
-                                                if (($row['rol_name'] == 'Webmaster' && $g_current_user->getValue('usr_id') != $a_user_id) || ($row['rol_name'] != 'Webmaster'))
-                                                {
-                                                    echo '
-                                                    <a class="iconLink" href="javascript:deleteRole('.$row['rol_id'].', \''.$row['rol_name'].'\', '.$row['rol_valid'].', '.$user->getValue('usr_id').', \''.
-                                                   	$row['cat_name']. '\', \''.mysqldate('d.m.y', $row['mem_begin']).'\', '.$row['mem_leader'].', '.$g_current_user->isWebmaster().')"><img
-                                                        src="'.THEME_PATH.'/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
-                                                }
-												else
-												{
-													echo '
-                                                    <a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
-												}
-                                                // Bearbeiten des Datums nicht bei Webmastern möglich
-                                                if ($row['rol_name'] != 'Webmaster')
-                                                {
-                                                    echo '<a class="iconLink" style="cursor:pointer;" onclick="toggleDetailson('.$row['rol_id'].')"><img
-                                                        src="'.THEME_PATH.'/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
-                                                }
-												else
-												{
-													echo '<a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
-												}
-
-                                            }
-                                        echo '</dd>
-                                    </dl>
-                                </li>
-                                <li id="mem_rol_'.$row['rol_id'].'" style="text-align: right; visibility: hidden; display: none;">
-                                    <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue("usr_id").'&amp;mode=1&amp;rol_id='.$row['rol_id'].'" method="post">
-                                        <div>
-                                            <label for="begin'.$row['rol_name'].'">Beginn:</label>
-                                            <input type="text" id="begin'.$row['rol_name'].'" name="rol_begin" size="10" maxlength="20" value="'.$rol_from.'"/>&nbsp;
-                                            <label for="end'.$row['rol_name'].'">Ende:</label>
-                                            <input type="text" id="end'.$row['rol_name'].'" name="rol_end" size="10" maxlength="20" value="'.$rol_to.'"/>
-                                            <a class="iconLink" href="javascript:linkaendern(\''.$row['rol_name'].'\',\''.$row['rol_id'].'\')" id="enter'.$row['rol_name'].'"><img src="'.THEME_PATH.'/icons/disk.png" alt="Speichern" title="Speichern"/></a>
-                                            <a class="iconLink" href="javascript:toggleDetailsoff('.$row['rol_id'].')"><img src="'.THEME_PATH.'/icons/delete.png" alt="Abbrechen" title="Abbrechen"/></a>
-                                        </div>
-                                    </form>
-                                </li>';
-                                $count_show_roles++;
-                            }
-                        }
-
-                        if($count_show_roles == 0)
-                        {
-                            echo 'Diese Person ist kein Mitglied der Organisation '.
-                            $g_current_organization->getValue('org_longname'). ' bzw. es sind keine Rollen sichtbar.';
-                        }
-                    echo '</ul>
-                </div>
-            </div>';
+					<div id="profile_roles_box_body" class="groupBoxBody">
+						'.getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false).'
+					</div>
+				</div>';
         }
 
         if($g_preferences['profile_show_former_roles'] == 1)
@@ -809,74 +726,26 @@ echo '
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
 
             $count_show_roles = 0;
-            $sql    = 'SELECT *
-                         FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-                        WHERE mem_rol_id = rol_id
-                          AND mem_end   <= "'.DATE_NOW.'"
-                          AND mem_usr_id = '.$a_user_id.'
-                          AND rol_valid  = 1
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = org_id
-                          AND org_id     = '. $g_current_organization->getValue('org_id'). '
-                        ORDER BY org_shortname, cat_sequence, rol_name';
-            $result_role = $g_db->query($sql);
+            $result_role = getFormerRolesFromDatabase($g_db,$a_user_id,$g_current_organization);
             $count_role  = $g_db->num_rows($result_role);
             $visible     = "";
 
             if($count_role == 0)
-            {
-                $visible = ' style="display: none;" ';
-            }
+			{
+				$visible = ' style="display: none;" ';
+			}
+			else
+			{
+				echo '<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>';	
+			}
+			echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
+				  <div class="groupBoxHeadline">Ehemalige Rollenmitgliedschaften&nbsp;</div>
+					<div id="profile_former_roles_box_body" class="groupBoxBody">
+					'.getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false).'
+					</div>
+				  </div>';
 
-            echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
-                <div class="groupBoxHeadline">Ehemalige Rollenmitgliedschaften&nbsp;</div>
-                <div class="groupBoxBody">
-                    <ul class="formFieldList" id="former_role_list">';
-                        while($row = $g_db->fetch_array($result_role))
-                        {
-                            if($g_current_user->viewRole($row['mem_rol_id']))
-                            {
-                                // jede einzelne Rolle anzeigen
-                                echo '
-                                <li id="former_role_'. $row['mem_rol_id']. '">
-                                    <dl>
-                                        <dt>'.
-                                            $row['cat_name'];
-                                            if($g_current_user->viewRole($row['mem_rol_id']))
-                                            {
-                                                echo ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $row['mem_rol_id']. '">'. $row['rol_name']. '</a>';
-                                            }
-                                            else
-                                            {
-                                                echo ' - '. $row['rol_name'];
-                                            }
-                                            if($row['mem_leader'] == 1)
-                                            {
-                                                echo ' - Leiter';
-                                            }
-                                        echo '</dt>
-                                        <dd>
-                                            vom '. mysqldate('d.m.y', $row['mem_begin']). '
-                                            bis '. mysqldate('d.m.y', $row['mem_end']);
-                                            if($g_current_user->isWebmaster())
-                                            {
-                                                echo '
-                                                <a class="iconLink" href="javascript:deleteFormerRole('. $row['rol_id']. ', \''. $row['rol_name']. '\', '. $user->getValue("usr_id"). ')"><img
-                                                    src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
-                                            }
-                                        echo '</dd>
-                                    </dl>
-                                </li>';
-                                $count_show_roles++;
-                            }
-                        }
-                        if($count_show_roles == 0 && $count_role > 0)
-                        {
-                            echo 'Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.';
-                        }
-                    echo '</ul>
-                </div>
-            </div>';
+            
         }
 
         if($g_preferences['profile_show_extern_roles'] == 1
@@ -956,8 +825,8 @@ if(isset($_GET['user_id']) == true)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'.THEME_PATH.'/icons/back.png" alt="Zurück" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+                src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';

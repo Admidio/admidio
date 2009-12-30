@@ -161,8 +161,15 @@
     <text id="PRO_PHR_WANT_DELETE_PHOTO" version="2.2.0">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
 </profile>
 <roles>
+	<text id="ROL_ROLE" version="2.2.0">Rolle</text>
+	<text id="ROL_ROLE_ASSIGNMENT" version="2.2.0">Rollenzuordnung für "%VAR1% %VAR2%"</text>
+	<text id="ROL_ROLE_MEMBERSHIPS" version="2.2.0">Rollenmitgliedschaften</text>
+	<text id="ROL_ROLE_MEMBERSHIPS_CHANGE" version="2.2.0">Rollenmitgliedschaften ändern</text>
     <text id="ROL_PHR_ROLE_DELETE" version="2.2.0">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
     <text id="ROL_PHR_ROLE_SET_MODE" version="2.2.0">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
+	<text id="ROL_PHR_MEMBERSHIP_DEL" version="2.2.0">Willst du die Mitgliedschaft bei der Rolle %VAR1% wirklich beenden ?</text>
+	<text id="ROL_PHR_MEMBERSHIP_DEL_ERROR" version="2.2.0">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>
+	<text id="ROL_PHR_LINK_MEMBERSHIP_DEL" version="2.2.0">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1% wirklich entfernen ?</text>
     <text id="ROL_PHR_ROLE_NAME_EXISTS" version="2.2.0">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</text>
 </roles>
 <system>
@@ -172,12 +179,14 @@
 	<text id="SYS_ALL" version="2.2.0">Alle</text>
     <text id="SYS_BACK" version="2.2.0">Zurück</text>
 	<text id="SYS_BOLD" version="2.2.0">Fett</text>
+	<text id="SYS_BLEND_OUT" version="2.2.0">ausblenden</text>
 	<text id="SYS_CAPTCHA" version="2.2.0">Captcha</text>
 	<text id="SYS_CAPTCHA_CODE" version="2.2.0">Bestätigungscode</text>
     <text id="SYS_CLOSE" version="2.2.0">Schließen</text>
     <text id="SYS_CREATE" version="2.2.0">Anlegen</text>
 	<text id="SYS_DEACTIVATED" >Deaktiviert</text>
 	<text id="SYS_DELETE" version="2.2.0">Löschen</text>
+	<text id="SYS_DESCRIPTION" version="2.2.0">Beschreibung</text>
     <text id="SYS_EDIT" version="2.2.0">Bearbeiten</text>
 	<text id="SYS_EMAIL" version="2.2.0">E-mail</text>
 	<text id="SYS_END" version="2.2.0" description="End of a date">Ende</text>
@@ -192,6 +201,7 @@
     <text id="SYS_INVALID_PAGE_VIEW" version="2.2.0">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" version="2.2.0">Unsichtbar</text>
 	<text id="SYS_ITALIC" version="2.2.0">Kursiv</text>
+	<text id="SYS_LEADER" version="2.2.0">Leiter</text>
     <text id="SYS_MANDATORY_FIELD" version="2.2.0">Pflichtfeld</text>
     <text id="SYS_MEMBERS" version="2.2.0">Mitglieder</text>
 	<text id="SYS_MESSAGE" version="2.2.0">Nachricht</text>
