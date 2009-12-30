@@ -32,25 +32,6 @@ $req_new_user = 0;
 $req_inlineView = 0;
 
 // Uebergabevariablen pruefen
-
-if(isset($_GET['user_id']))
-{
-    if(is_numeric($_GET['user_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_usr_id = $_GET['user_id'];
-}
-
-if(isset($_GET['new_user']))
-{
-    if(is_numeric($_GET['new_user']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_new_user = $_GET['new_user'];
-}
-
 if(isset($_GET['inline']))
 {
     if(is_numeric($_GET['inline']) == false)
@@ -59,6 +40,39 @@ if(isset($_GET['inline']))
     }
     $req_inlineView = $_GET['inline'];
 }
+if(isset($_GET['user_id']))
+{
+    if(is_numeric($_GET['user_id']) == false)
+    {
+		if($req_inlineView == 0)
+		{
+        	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+		}
+		else
+		{
+			echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+		}
+    }
+    $req_usr_id = $_GET['user_id'];
+}
+
+if(isset($_GET['new_user']))
+{
+    if(is_numeric($_GET['new_user']) == false)
+    {
+		if($req_inlineView == 0)
+		{
+        	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+		}
+		else
+		{
+			echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+		}
+    }
+    $req_new_user = $_GET['new_user'];
+}
+
+
 
 $user     = new User($g_db, $req_usr_id);
 if($req_inlineView == 0)
@@ -77,7 +91,7 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Rollenzuordnung für "'. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). '"';
+$g_layout['title']  = $g_l10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('Nachname'),$user->getValue('Vorname'));
 $g_layout['header'] = '
     <script type="text/javascript">
 	<!--
@@ -113,25 +127,6 @@ if($req_inlineView == 0)
 else
 {
 	echo $g_layout['header'];
-	echo '<style type="text/css">
-				#TB_err{
-					margin-top:15px;
-				}
-				.jsison{
-					background:#6A6A6A;
-					color :#6A6A6A;
-					width :0;
-					height :0;
-					border : 2px solid #FF8C00;
-				}
-				.feed{
-					color :#FFFFFF;
-					background:#6A6A6A;
-					width :auto;
-					max-width:50%;
-					height :auto;
-				}
-			</style>';
 }
 
 echo '
@@ -142,19 +137,19 @@ echo '
         <thead>
             <tr>
                 <th>&nbsp;</th>
-                <th>Rolle</th>
-                <th>Beschreibung</th>
-                <th style="text-align: center; width: 80px;">Leiter';
+                <th>'.$g_l10n->get('ROL_ROLE').'</th>
+                <th>'.$g_l10n->get('SYS_DESCRIPTION').'</th>
+                <th style="text-align: center; width: 80px;">'.$g_l10n->get('SYS_LEADER');
 				if($req_inlineView == 0)
 				{
 					echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
 		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
-		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>';
 				}
 				else
 				{
 					echo '<img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
-		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />';
+		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" />';
 				}
                 echo'</th>
             </tr>
@@ -209,33 +204,33 @@ echo '
                     {
                         echo "</tbody>";
                     }
-                    $block_id = "cat_$row->cat_id";
-                    echo "<tbody>
+                    $block_id = 'cat_'.$row->cat_id;
+                    echo '<tbody>
                         <tr>
-                            <td class=\"tableSubHeader\" colspan=\"4\">
-                                <a class=\"iconShowHide\" href=\"javascript:showHideBlock('$block_id')\"><img
-                                id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$row->cat_name
+                            <td class="tableSubHeader" colspan="4">
+                                <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\');"><img
+                                id="img_'.$block_id.'" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_BLEND_OUT').'" /></a>'.$row->cat_name.'
                             </td>
                         </tr>
                     </tbody>
-                    <tbody id=\"$block_id\">";
+                    <tbody id="'.$block_id.'">';
     
                     $category = $row->cat_id;
                 }
-                echo "
-                <tr class=\"tableMouseOver\">
-                   <td style=\"text-align: center;\">
-                      <input type=\"checkbox\" id=\"role-$row->rol_id\" name=\"role-$row->rol_id\" ";
+                echo '
+                <tr class="tableMouseOver">
+                   <td style="text-align: center;">
+                      <input type="checkbox" id="role-'.$row->rol_id.'" name="role-'.$row->rol_id.'" ';
                          if($row->mem_usr_id > 0)
                          {
-                            echo " checked=\"checked\" ";
+                            echo ' checked="checked" ';
                          }
     
                          // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
                          // entsprechende Rolle sofort hinzufuegen
                          if($row->rol_id == $set_rol_id)
                          {
-                            echo " checked=\"checked\" ";
+                            echo ' checked="checked" ';
                          }
     
                          // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
@@ -244,36 +239,36 @@ echo '
                             ($g_current_user->isWebmaster() && $req_usr_id == $g_current_user->getValue("usr_id")))
                            )
                          {
-                           echo " readonly=\"readonly\" ";
+                           echo ' readonly="readonly" ';
                          }
     
-                         echo " onclick=\"unmarkLeader(this)\" value=\"1\" />
+                         echo ' onclick="javascript:unmarkLeader(this);" value="1" />
                    </td>
-                   <td><label for=\"role-$row->rol_id\">$row->rol_name</label></td>
-                   <td>$row->rol_description</td>
-                   <td style=\"text-align: center;\">
-                            <input type=\"checkbox\" id=\"leader-$row->rol_id\" name=\"leader-$row->rol_id\" ";
+                   <td><label for="role-'.$row->rol_id.'">'.$row->rol_name.'</label></td>
+                   <td>'.$row->rol_description.'</td>
+                   <td style="text-align: center;">
+                            <input type="checkbox" id="leader-'.$row->rol_id.'" name="leader-'.$row->rol_id.'" ';
                             if($row->mem_leader > 0)
                             {
-                                echo " checked=\"checked\" ";
+                                echo ' checked="checked" ';
                             }
     
                             // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
                             if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
                             {
-                                echo " disabled=\"disabled\" ";
+                                echo ' disabled="disabled" ';
                             }
     
-                            echo " onclick=\"markMember(this)\" value=\"1\" />
+                            echo ' onclick="javascript:markMember(this);" value="1" />
                    </td>
-                </tr>";
+                </tr>';
             }
         }
     	echo '</tbody>
     </table>
 
     <div class="formSubmit">
-        <button name="speichern" type="submit" value="speichern"><img src="'.THEME_PATH.'/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+        <button name="save" type="submit" value="'.$g_l10n->get('SYS_SAVE').'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
     </div>';
 	if($req_inlineView == 0)
 	{
@@ -281,8 +276,8 @@ echo '
 				<li>
 					<span class="iconTextLink">
 						<a href="$g_root_path/adm_program/system/back.php"><img
-						src="'.THEME_PATH.'/icons/back.png" alt="Zurück" /></a>
-						<a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+						src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+						<a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
 					</span>
 				</li>
 			 </ul>';
