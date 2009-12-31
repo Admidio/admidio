@@ -75,6 +75,10 @@ switch($action)
 		{
 			echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
 		}
+		else
+		{
+			echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'block\' })</script>';
+		}
 	break;
 }
 ?>

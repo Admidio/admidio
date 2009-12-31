@@ -674,35 +674,41 @@ echo '
 							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
 							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/jQueryFunctionStack.js"></script>
 							<script type="text/javascript">
-								var profileJS = new profileJSClass();
-								profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL',"[rol_name]").'\';
-								profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
-								profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
-								profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
-								profileJS.usr_id = '.$a_user_id.';
-								
-								var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
-								jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
-								function jQueryAjaxLoadRolesAppend(html)
-								{
-									$("#TB_ajaxContent").html(html);
-									$("#TB_load,legend").remove();
-									$("#TB_ajaxContent").append("\n<div id=\'TB_err\' style=\'margin-top:15px;\'></div>");
-									$("#power").ajaxForm({
-										target: \'#TB_err\',
-										success: function(data) {
-											if(data.match(/<TBClose\/>/gi))
-											{
-												profileJS.reloadRoleMemberships();
-												profileJS.reloadFormerRoleMemberships();
-												setTimeout("tb_remove()",500);	
-											}
-											$("#TB_ajaxContent").animate({
-												scrollTop: $("#TB_ajaxContent").offset().top
-											  }, 0);
-										}
-									});	
-								}
+									var profileJS = new profileJSClass();
+									profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL',"[rol_name]").'\';
+									profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
+									profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
+									profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
+									profileJS.usr_id = '.$a_user_id.';
+									
+									var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
+									jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
+										
+									function jQueryAjaxLoadRolesAppend(html)
+									{
+										$("#TB_ajaxContent").html(html);
+										$("#TB_load,legend").remove();
+										$("#TB_ajaxContent").append("\n<div id=\'TB_err\' style=\'padding:15px 0px 5px 0px; display:none;\'></div>");
+										 
+										$("#rolesForm").ajaxForm({ 
+											target:        \'#TB_err\',  							 // target element(s) to be updated with server response 
+											beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
+												$("#TB_err").css({ "display":"block" });
+												return true; 
+											},  													
+											success:       function(responseText, statusText){		 // post-submit callback
+												if(responseText.match(/<TBClose\/>/gi))
+												{
+														profileJS.reloadRoleMemberships();
+														profileJS.reloadFormerRoleMemberships();
+														setTimeout("tb_remove()",500);	
+												}
+												$("#TB_ajaxContent").animate({
+														scrollTop: $("#TB_ajaxContent").offset().top
+													  }, 0); 
+											}	 
+										});
+									}
 							</script>
                             <div style="text-align: right;">
 								<a href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$a_user_id.'&inline=1" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" class="thickbox">
