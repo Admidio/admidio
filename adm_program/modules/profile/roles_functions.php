@@ -180,6 +180,7 @@ function getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$coun
 								$formerRoleMemHTML .= 'Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.';
 							}
 						$formerRoleMemHTML .= '</ul>';
+	$formerRoleMemHTML .= '<script type="text/javascript">if(profileJS){profileJS.formerRoleCount="'.$count_role.'";}</script>';
 	if($directOutput)
 	{
 		echo $formerRoleMemHTML;

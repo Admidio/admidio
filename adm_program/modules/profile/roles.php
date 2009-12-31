@@ -132,7 +132,7 @@ else
 echo '
 <h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 
-<form id="power" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$req_usr_id.'&amp;new_user='.$req_new_user.'&amp;inline='.$req_inlineView.'" method="post">
+<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$req_usr_id.'&amp;new_user='.$req_new_user.'&amp;inline='.$req_inlineView.'" method="post">
     <table class="tableList" cellspacing="0">
         <thead>
             <tr>
@@ -268,7 +268,7 @@ echo '
     </table>
 
     <div class="formSubmit">
-        <button name="save" type="submit" value="'.$g_l10n->get('SYS_SAVE').'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+        <button type="submit" value="'.$g_l10n->get('SYS_SAVE').'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
     </div>';
 	if($req_inlineView == 0)
 	{

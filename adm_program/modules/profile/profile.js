@@ -55,8 +55,11 @@ function profileJSClass()
 				dataType: "html",
 				success: function(html){
 					$("#role_" + rol_id).fadeOut("slow");
-					profileJS.formerRoleCount++;
-					profileJS.reloadFormerRoleMemberships();
+					if(profileJS)
+					{
+						profileJS.formerRoleCount++;
+						profileJS.reloadFormerRoleMemberships();
+					}
 				},
 				error: function (xhr, ajaxOptions, thrownError){
 					alert(this.deleteRole_ErrorText);
@@ -77,10 +80,13 @@ function profileJSClass()
 				dataType: "html",
 				success: function(html){
 					$("#former_role_" + rol_id).fadeOut("slow");
-					profileJS.formerRoleCount--;
-					if(profileJS.formerRoleCount == 0)
+					if(profileJS)
 					{
-						$("#profile_former_roles_box").fadeOut("slow");
+						profileJS.formerRoleCount--;
+						if(profileJS.formerRoleCount == 0)
+						{
+							$("#profile_former_roles_box").fadeOut("slow");
+						}
 					}
 				},
 				error: function (xhr, ajaxOptions, thrownError){
