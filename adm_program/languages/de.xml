@@ -106,15 +106,16 @@
     <text id="GBO_PHR_FLOODING_PROTECTION" version="2.2.0">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
 </guestbook>
 <lists>
+    <text id="LST_PHR_DEFAULT_LIST_NOT_SET_UP" version="2.2.0">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
     <text id="LST_PHR_NO_USER_FOUND" version="2.2.0">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" version="2.2.0">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
     <text id="LST_PHR_NO_RIGHTS_VIEW_LIST" version="2.2.0">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
 </lists>
 <mail>
-    <text id="MAI_PHR_TO_ROLE" version="2.2.0" description="E-Mail an die Rolle XY schreiben">die Rolle %VAR1_BOLD%</text>
-    <text id="MAI_PHR_ATTACHMENT_TO_LARGE" version="2.2.0">Dein Dateinanhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
+    <text id="MAI_PHR_ATTACHMENT_TO_LARGE" version="2.2.0">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
     <text id="MAI_PHR_CHOOSE_ROLE" version="2.2.0">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_PHR_ROLE_NO_EMAILS" version="2.2.0">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
+    <text id="MAI_PHR_TO_ROLE" version="2.2.0" description="E-Mail an die Rolle XY schreiben">die Rolle %VAR1_BOLD%</text>
 </mail>
 <members>
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" version="2.2.0">%VAR1% Datensätze wurden erfolgreich importiert!</text>

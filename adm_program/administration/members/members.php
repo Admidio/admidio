@@ -205,7 +205,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <h1 class="moduleHeadline">Benutzerverwaltung</h1>
 
-<ul class="iconTextLinkList">
+<ul class="iconTextLinkList" style="margin-bottom: 0px;">
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img
@@ -261,9 +261,9 @@ echo '</ul>';
 
 //Hier gibt es jetzt noch die Suchbox...
 echo '
-<ul class="iconTextLinkList">
+<ul class="iconTextLinkList" style="margin-top: 0px; margin-bottom: 0px;">
     <li>
-        <form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'" method="post" style="float: left; margin-right: 40px;">
+        <form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'" method="post">
             <div>
                 <input type="text" value="'.$req_queryForm.'" name="queryForm" id="queryForm" style="width: 200px;"  />
                 <input type="submit" value="Suchen" />
@@ -272,7 +272,7 @@ echo '
     </li>
 </ul>
 
-<div class="pageNavigation">';
+<div class="pageNavigation" style="margin-top: 0px;">';
     // Leiste mit allen Buchstaben des Alphabets anzeigen
     if (strlen($req_letter) == 0 && !$req_queryForm)
     {

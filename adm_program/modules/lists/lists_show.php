@@ -54,6 +54,11 @@ else
 	$g_db->query($sql);
 	$row = $g_db->fetch_array();
 	$req_lst_id = $row[0];
+
+	if(is_numeric($req_lst_id) == false || $req_lst_id == 0)
+	{
+	   $g_message->show($g_l10n->get('LST_PHR_DEFAULT_LIST_NOT_SET_UP'));
+	}
 }
 
 if(isset($_GET['rol_id']))
