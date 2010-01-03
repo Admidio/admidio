@@ -232,7 +232,15 @@ class TableAccess
         
         if(isset($this->dbColumns[$field_name]))
         {
-            $field_value = $this->dbColumns[$field_name];
+            // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
+            if($field_name == $this->key_name && empty($this->dbColumns[$field_name]))
+            {
+                $field_value = 0;
+            }
+            else
+            {
+                $field_value = $this->dbColumns[$field_name];
+            }
         }
 
         // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
