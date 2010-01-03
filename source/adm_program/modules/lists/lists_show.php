@@ -21,7 +21,6 @@
  *****************************************************************************/
 
 require('../../system/common.php');
-require('../../system/login_valid.php');
 require('../../system/classes/list_configuration.php');
 require('../../system/classes/table_roles.php');
 
