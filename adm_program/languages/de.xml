@@ -164,16 +164,21 @@
 <roles>
 	<text id="ROL_ROLE" version="2.2.0">Rolle</text>
 	<text id="ROL_ROLE_ASSIGNMENT" version="2.2.0">Rollenzuordnung für "%VAR1% %VAR2%"</text>
+	<text id="ROL_ROLE_DELETE" version="2.2.0">Rolle löschen</text>
 	<text id="ROL_ROLE_MEMBERSHIPS" version="2.2.0">Rollenmitgliedschaften</text>
 	<text id="ROL_ROLE_MEMBERSHIPS_CHANGE" version="2.2.0">Rollenmitgliedschaften ändern</text>
+	<text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" version="2.2.0">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
     <text id="ROL_PHR_ROLE_DELETE" version="2.2.0">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
     <text id="ROL_PHR_ROLE_SET_MODE" version="2.2.0">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
 	<text id="ROL_PHR_MEMBERSHIP_DEL" version="2.2.0">Willst du die Mitgliedschaft bei der Rolle %VAR1% wirklich beenden ?</text>
 	<text id="ROL_PHR_MEMBERSHIP_DEL_ERROR" version="2.2.0">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>
+	<text id="ROL_PHR_NO_MEMBER_RESP_ROLE_VISIBLE" version="2.2.0">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
 	<text id="ROL_PHR_LINK_MEMBERSHIP_DEL" version="2.2.0">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1% wirklich entfernen ?</text>
     <text id="ROL_PHR_ROLE_NAME_EXISTS" version="2.2.0">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</text>
+	<text id="ROL_PHR_CHANGE_ROLE_DATES_ERROR" version="2.2.0">Es ist ein Fehler aufgetreten !\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
 </roles>
 <system>
+	<text id="SYS_ABORT" version="2.2.0">Abbrechen</text>
     <text id="SYS_ACTIVE" version="2.2.0">Aktiv</text>
 	<text id="SYS_ACTIVATED" version="2.2.0">Aktiktivert</text>
 	<text id="SYS_ADD_RECIPIENTS" version="2.2.0">Empfänger hinzufügen</text>
@@ -275,7 +280,11 @@
 	<text id="SYS_SEND" version="2.2.0">Abschicken</text>
 	<text id="SYS_SEND_NEW_PW" version="2.2.0">Neues Passwort zusenden</text>
 	<text id="SYS_SENDER" version="2.2.0">Absender</text>
+	<text id="SYS_SET_BY" version="2.2.0">Gesetzt durch</text>
 	<text id="SYS_SETTINGS" version="2.2.0">Einstellungen</text>
+	<text id="SYS_SHOW_CALENDAR" version="2.2.0">Kalender anzeigen</text>
+	<text id="SYS_SINCE" version="2.2.0">seit %VAR1%</text>
+	<text id="SYS_SINCE_TO" version="2.2.0">seit %VAR1% bis %VAR2%</text>
 	<text id="SYS_START" version="2.2.0" description="Start of a date">Beginn</text>
     <text id="SYS_TEXT" version="2.2.0">Text</text>
 	<text id="SYS_TO" version="2.2.0">An</text>

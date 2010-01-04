@@ -92,41 +92,13 @@ else
 
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('Nachname'),$user->getValue('Vorname'));
-$g_layout['header'] = '
-    <script type="text/javascript">
-	<!--
-        function markMember(element)
-        {
-            if(element.checked == true)
-            {
-                var name   = element.name;
-                var pos_number = name.search("-") + 1;
-                var number = name.substr(pos_number, name.length - pos_number);
-                var role_name = "role-" + number;
-                document.getElementById(role_name).checked = true;
-            }
-        }
-
-        function unmarkLeader(element)
-        {
-            if(element.checked == false)
-            {
-                var name   = element.name;
-                var pos_number = name.search("-") + 1;
-                var number = name.substr(pos_number, name.length - pos_number);
-                var role_name = "leader-" + number;
-                document.getElementById(role_name).checked = false;
-            }
-        }
-    //-->
-	</script>';
+$g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
+<script type="text/javascript">
+	var profileJS = new profileJSClass();
+</script>';
 if($req_inlineView == 0)
 {
 	require(THEME_SERVER_PATH. "/overall_header.php");
-}
-else
-{
-	echo $g_layout['header'];
 }
 
 echo '
@@ -242,7 +214,7 @@ echo '
                            echo ' readonly="readonly" ';
                          }
     
-                         echo ' onclick="javascript:unmarkLeader(this);" value="1" />
+                         echo ' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />
                    </td>
                    <td><label for="role-'.$row->rol_id.'">'.$row->rol_name.'</label></td>
                    <td>'.$row->rol_description.'</td>
@@ -259,7 +231,7 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
     
-                            echo ' onclick="javascript:markMember(this);" value="1" />
+                            echo ' onclick="javascript:profileJS.markLeader(this);" value="1" />
                    </td>
                 </tr>';
             }

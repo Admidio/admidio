@@ -151,7 +151,7 @@ else
             <hr />
 
             <div class="formSubmit">
-                <button name="save" type="submit" value="Speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+                <button name="save" type="submit" value="'.$g_l10n->get('SYS_SAVE').'"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
             </div>
         </div>
     </form>';

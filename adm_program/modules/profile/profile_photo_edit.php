@@ -234,7 +234,7 @@ if($job==NULL)
             <hr />
 
             <div class="formSubmit">
-                <button name="upload" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Speichern" />&nbsp;Foto Hochladen</button>
+                <button name="upload" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;Foto Hochladen</button>
             </div>
         </div>
     </div>
