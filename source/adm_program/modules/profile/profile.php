@@ -221,34 +221,20 @@ else
     $g_layout['title'] = 'Profil von '.$user->getValue('Vorname').' '.$user->getValue('Nachname');
 }
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
+	<link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
-
-    <script type="text/javascript"><!--
-        function infoanzeigen(name)
-        {
-            document.getElementById("anzeige").firstChild.nodeValue = "Gesetzt durch: " + name;
-        }
-        function infoanzeigenloeschen()
-        {
-            document.getElementById("anzeige").firstChild.nodeValue = "Gesetzt durch: ";
-        }
-        function toggleDetailson(role_details_ID)
-        {
-            document.getElementById("mem_rol_"+role_details_ID).style.visibility = "visible";
-            document.getElementById("mem_rol_"+role_details_ID).style.display    = "block";
-        }
-        function toggleDetailsoff(role_details_ID)
-        {
-            document.getElementById("mem_rol_"+role_details_ID).style.visibility = "hidden";
-            document.getElementById("mem_rol_"+role_details_ID).style.display    = "none";
-		}
-
-        function linkaendern(rolle,id)
-        {
-            document.getElementById("enter"+rolle).href = gRootPath + "/adm_program/modules/profile/roles_date.php?usr_id='. $user->getValue('usr_id').'&mode=1&rol_id="+id+"&rol_begin="+document.getElementById("begin"+rolle).value+"&rol_end="+document.getElementById("end"+rolle).value ;
-        }
-    //--></script>';
+    <script type="text/javascript">
+	<!--
+		var profileJS = new profileJSClass();
+			profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL',"[rol_name]").'\';
+			profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
+			profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
+			profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
+			profileJS.changeRoleDates_ErrorText = \''.$g_l10n->get('ROL_PHR_CHANGE_ROLE_DATES_ERROR').'\';
+			profileJS.setBy_Text				= \''.$g_l10n->get('SYS_SET_BY').'\';
+			profileJS.usr_id = '.$a_user_id.';
+    //-->
+	</script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -582,72 +568,72 @@ echo '
                      <div class="groupBoxHeadline">
                         <div style="float: left;">Berechtigungen&nbsp;</div>
                      </div>
-                     <div class="groupBoxBody" onmouseout="infoanzeigenloeschen()">';
+                     <div class="groupBoxBody" onmouseout="profileJS.deleteShowInfo()">';
             //checkRolesRight($right)
               if($user->checkRolesRight('rol_assign_roles') == 1)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
                   alt="Rollen anlegen, bearbeiten, löschen und zuordnen" title="Rollen anlegen, bearbeiten, löschen und zuordnen" />';
               }
               if($user->checkRolesRight('rol_approve_users') == 1)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_approve_users'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/new_registrations.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_approve_users'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/new_registrations.png"
                   alt="Registrierungen verwalten und zuordnen" title="Registrierungen verwalten und zuordnen" />';
               }
               if($user->checkRolesRight('rol_edit_user') == 1)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/group.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/group.png"
                   alt="Profildaten aller Benutzer bearbeiten" title="Profildaten aller Benutzer bearbeiten" />';
               }
 
               if($user->checkRolesRight('rol_mail_to_all') == 1)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/email.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/email.png"
                   alt="Emails an alle Rollen schreiben" title="Emails an alle Rollen schreiben" />';
               }
               if($user->checkRolesRight('rol_profile') == 1)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_profile'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/profile.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_profile'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/profile.png"
                   alt="Eigenes Profil bearbeiten" title="Eigenes Profil bearbeiten" />';
               }
               if($user->checkRolesRight('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_announcements'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/announcements.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_announcements'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/announcements.png"
                   alt="Ankündigungen anlegen und bearbeiten" title="Ankündigungen anlegen und bearbeiten" />';
               }
               if($user->checkRolesRight('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_dates'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/dates.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_dates'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/dates.png"
                   alt="Termine anlegen und bearbeiten" title="Termine anlegen und bearbeiten" />';
               }
               if($user->checkRolesRight('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_photo'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/photo.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_photo'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/photo.png"
                   alt="Fotos hochladen und bearbeiten" title="Fotos hochladen und bearbeiten" />';
               }
               if($user->checkRolesRight('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_download'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/download.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_download'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/download.png"
                   alt="Downloads hochladen und bearbeiten" title="Downloads hochladen und bearbeiten" />';
               }
               if($user->checkRolesRight('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_guestbook'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/guestbook.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/guestbook.png"
                   alt="Gästebucheinträge bearbeiten und löschen" title="Gästebucheinträge bearbeiten und löschen" />';
               }
               if($user->checkRolesRight('rol_guestbook_comments') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/comments.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/comments.png"
                   alt="Kommentare zu Gästebucheinträgen anlegen" title="Kommentare zu Gästebucheinträgen anlegen" />';
               }
               if($user->checkRolesRight('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
                   alt="Weblinks anlegen und bearbeiten" title="Weblinks anlegen und bearbeiten" />';
               }
               if($user->checkRolesRight('rol_all_lists_view') == 1)
               {
-                  echo '<img onmouseover="infoanzeigen(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/lists.png"
+                  echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/lists.png"
                   alt="Mitgliederlisten aller Rollen einsehen" title="Mitgliederlisten aller Rollen einsehen" />';
               }
               echo '</div><div><p id="anzeige">Gesetzt durch:</p></div>
@@ -673,14 +659,8 @@ echo '
                             echo '
 							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
 							<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/jQueryFunctionStack.js"></script>
+							<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
 							<script type="text/javascript">
-									var profileJS = new profileJSClass();
-									profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL',"[rol_name]").'\';
-									profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
-									profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
-									profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
-									profileJS.usr_id = '.$a_user_id.';
-									
 									var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
 									jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
 										
@@ -697,7 +677,7 @@ echo '
 												return true; 
 											},  													
 											success:       function(responseText, statusText){		 // post-submit callback
-												if(responseText.match(/<TBClose\/>/gi))
+												if(responseText.match(/<SAVED\/>/gi))
 												{
 														profileJS.reloadRoleMemberships();
 														profileJS.reloadFormerRoleMemberships();
@@ -709,6 +689,9 @@ echo '
 											}	 
 										});
 									}
+									// Calendarobjekt fuer das Popup anlegen
+									var calPopup = new CalendarPopup("calendardiv");
+									calPopup.setCssPrefix("calendar");
 							</script>
                             <div style="text-align: right;">
 								<a href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$a_user_id.'&inline=1" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" class="thickbox">
@@ -718,7 +701,7 @@ echo '
                         }
                 echo '</div>
 					<div id="profile_roles_box_body" class="groupBoxBody">
-						'.getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false).'
+						'.getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false,$g_l10n).'
 					</div>
 				</div>';
         }
@@ -747,7 +730,7 @@ echo '
 			echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
 				  <div class="groupBoxHeadline">Ehemalige Rollenmitgliedschaften&nbsp;</div>
 					<div id="profile_former_roles_box_body" class="groupBoxBody">
-					'.getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false).'
+					'.getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false,$g_l10n).'
 					</div>
 				  </div>';
 
@@ -794,11 +777,11 @@ echo '
                                                 $row['cat_name']. ' - '. $row['rol_name'];
                                                 if($row['mem_leader'] == 1)
                                                 {
-                                                    echo ' - Leiter';
+                                                    echo ' - '.$g_l10n->get('SYS_LEADER');
                                                 }
                                             echo '&nbsp;
                                         </dt>
-                                        <dd>seit '. mysqldate('d.m.y', $row['mem_begin']). '</dd>
+                                        <dd>'.$g_l10n->get('SYS_SINCE',mysqldate('d.m.y', $row['mem_begin'])).'</dd>
                                     </dl>
                                 </li>';
                             }

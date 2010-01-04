@@ -77,8 +77,14 @@ foreach($_POST as $key=>$value)
 
 if($roleCount == 0)
 {
-	echo $g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED');
-	die();
+	if($req_inlineView == 0)
+	{
+		die($g_message->show($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED')));
+	}
+	else
+	{
+		die($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED'));
+	}
 }
 
 if($g_current_user->assignRoles())
@@ -265,5 +271,5 @@ if($req_inlineView == 0)
 }
 else
 {
-	echo $g_l10n->get('SYS_PHR_SAVE')."<TBClose/>";
+	echo $g_l10n->get('SYS_PHR_SAVE')."<SAVED/>";
 }

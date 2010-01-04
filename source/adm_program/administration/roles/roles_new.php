@@ -685,11 +685,11 @@ echo '
                             <dd>
                                 <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue("rol_start_date").'" />
                                 <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img
-                                	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                                	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                                 <label for="rol_end_date">bis</label>
                                 <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue("rol_end_date").'" />
                                 <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img
-                                	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>&nbsp;(Datum)
+                                	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;(Datum)
                                 <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
                             </dd>
                         </dl>
@@ -824,8 +824,8 @@ echo '
 
         echo '<div class="formSubmit">
             <button name="speichern" type="submit" value="speichern" onclick="absenden()">
-                <img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />
-                &nbsp;Speichern</button>
+                <img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />
+                &nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>
