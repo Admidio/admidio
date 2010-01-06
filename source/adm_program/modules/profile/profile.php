@@ -664,12 +664,10 @@ echo '
 									var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
 									jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
 										
-									function jQueryAjaxLoadRolesAppend(html)
+									function jQueryAjaxLoadRolesAppend()
 									{
-										$("#TB_ajaxContent").html(html);
-										$("#TB_load,legend").remove();
 										$("#TB_ajaxContent").append("\n<div id=\'TB_err\' style=\'padding:15px 0px 5px 0px; display:none;\'></div>");
-										 
+
 										$("#rolesForm").ajaxForm({ 
 											target:        \'#TB_err\',  							 // target element(s) to be updated with server response 
 											beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
