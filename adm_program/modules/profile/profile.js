@@ -1,5 +1,5 @@
 /******************************************************************************
- * Funktionen zum entfernen von Rollen im Profil
+ * Profil Javascript Funktionen
  *
  * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
