@@ -17,6 +17,9 @@ function ecardJSClass()
 	this.counterDiv_id			= "counter";
 	this.menueDiv_id			= "Menue";
 	this.wrongDiv_id			= "wrong";
+	this.moreRecipientDiv_id	= "moreRecipient";
+	this.getmoreRecipientDiv_id = "getmoreRecipient";
+	this.ccrecipientConDiv_id	= "ccrecipientContainer";
 	this.max_ecardTextLength	= 500;
 	this.max_recipients			= 5;
 	this.now_recipients			= 0;
@@ -116,7 +119,7 @@ function ecardJSClass()
 		}
 		if (error)
 		{
-			error_message += "\n\n " + this.errMsg_End_Text;
+			error_message += "\n\n" + this.errMsg_End_Text;
 			alert(error_message);
 			return false;  // Formular wird nicht abgeschickt.
 		}
@@ -336,6 +339,8 @@ function ecardJSClass()
 	{
 		if (this.now_recipients < this.max_recipients && this.now_recipients >= 0)
 		{
+			this.saveData();
+			
 			this.now_recipients++;
 			var data    = '<div id="'+ [this.now_recipients] +'">';
 			data += '<table id="table_'+ [this.now_recipients] +'" border="0" summary="data'+ [this.now_recipients] +'">';
@@ -344,16 +349,9 @@ function ecardJSClass()
 			data += '<td style="width:200px; padding-left:10px;"><input name="ecard[email_ccrecipient_'+ [this.now_recipients] +']" size="15" maxlength="50" style="width: 200px;" value="" type="text" /><\/td><td><span class="iconTextLink"><a href="javascript:ecardJS.delRecipient('+ [this.now_recipients] +');"><img src="'+ gThemePath +'/icons/delete.png" alt="Inhalt löschen" \/><\/a><\/span><\/td>';
 			data += '<\/tr><\/table>';
 			data += '<\/div>';
+			$("#" + this.ccrecipientConDiv_id).append(data);
 			
-			this.saveData();
-			$("#ccrecipientContainer").append(data);
 			this.restoreSavedData();
-			
-			if (this.now_recipients > 0)
-			{
-				$("#moreRecipient").css("display","block");
-				$("getmoreRecipient a").html( this.noMoreRecipients_Text );
-			}
 		}
 		else
 			this.now_recipients = this.max_recipients;
@@ -377,18 +375,18 @@ function ecardJSClass()
 		}
 		if (this.now_recipients == 0)
 		{
-			if($("#" + "getmoreRecipient a").html() == this.noMoreRecipients_Text)
+			if($("#" + this.getmoreRecipientDiv_id +" a").html() == this.noMoreRecipients_Text)
 			{
-				this.showHideMoreRecipient('moreRecipient','getmoreRecipient');
+				this.showHideMoreRecipient(this.moreRecipientDiv_id,this.getmoreRecipientDiv_id);
 			}
-			$("#" + "moreRecipient").css("display","none");
-			$("#" + "getmoreRecipient a").html(this.moreRecipients_Text);
+			$("#" + this.moreRecipientDiv_id).css("display","none");
+			$("#" + this.getmoreRecipientDiv_id +" a").html(this.moreRecipients_Text);
 		}
 	}
 	this.delAllRecipients = function()
 	{
 		this.now_recipients = 0;
-		$("#ccrecipientContainer").empty();
+		$("#" + this.ccrecipientConDiv_id).empty();
 	}
 	this.getSetting = function(name,input_value)
 	{
