@@ -40,7 +40,7 @@ class FunctionClass
 	//          $schowfont          .. wenn gesetzt bekommen die Menue Eintraege einen universellen font-style
 	function getMenueSettings($data_array,$name_ecard_input,$first_value,$width,$schowfont)
 	{
-		echo  '<select size="1" onchange="getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
+		echo  '<select size="1" onchange="ecardJS.getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
 		for($i=0; $i<count($data_array);$i++)
 		{
 			$name = "";
@@ -91,11 +91,11 @@ class FunctionClass
 		{   
 			if (!is_integer(($i+1)/$anz))
 			{
-				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
+				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
 			}
 			else
 			{
-				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
+				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
 				if($i<count($data_array)-1)
 				{
 					echo '</tr><tr>';
@@ -317,13 +317,12 @@ class FunctionClass
 				// anstelle der URL muss nun noch der Server-Pfad gesetzt werden
 				$img_server_path = str_replace(THEME_PATH, THEME_SERVER_PATH, $matchArray[2][$i]);
 				$img_server_path = str_replace($GLOBALS['g_root_path'], SERVER_PATH, $img_server_path);
-	
+
 				// wird das Bild aus photo_show.php generiert, dann den uebergebenen Pfad zum Bild einsetzen
 				if(strpos($img_server_path, 'photo_show.php') !== false)
 				{
 					$img_server_path = $photo_server_path;
 				}
-	
 				// Bildnamen und Typ ermitteln
 				$img_name = substr(strrchr($img_server_path, '/'), 1);
 				$img_type = substr(strrchr($img_name, '.'), 1);
@@ -345,7 +344,7 @@ class FunctionClass
 				if($img_name != 'none.jpg' && strlen($img_name) > 0)
 				{
 					$uid = md5(uniqid($img_name.time()));
-					$email->addAttachment($img_server_path, $img_name, 'image/'.$img_type.'', 'inline', $uid);
+					$email->addAttachment($img_server_path, $img_name, 'image/'.$img_type, 'inline', $uid);
 					$ecard_html_data = str_replace($matchArray[2][$i],'cid:'.$uid,$ecard_html_data);
 				}
 			}

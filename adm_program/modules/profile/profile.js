@@ -26,8 +26,8 @@ function profileJSClass()
 			type: "GET",
 			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=0&user_id=" + this.usr_id,
 			dataType: "html",
-			success: function(html){
-				$("#profile_roles_box_body").html(html);
+			success: function(responseText, statusText){
+				$("#profile_roles_box_body").html(responseText);
 			}
 		});
 	}
@@ -37,8 +37,8 @@ function profileJSClass()
 			type: "GET",
 			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=1&user_id=" + this.usr_id,
 			dataType: "html",
-			success: function(html){
-				$("#profile_former_roles_box_body").html(html);
+			success: function(responseText, statusText){
+				$("#profile_former_roles_box_body").html(responseText);
 			}
 		});
 	}
@@ -56,7 +56,7 @@ function profileJSClass()
 				url: gRootPath + "/adm_program/modules/profile/profile_function.php",
 				data: "mode=2&user_id=" + this.usr_id + "&rol_id=" + rol_id,
 				dataType: "html",
-				success: function(html){
+				success: function(responseText, statusText){
 					$("#role_" + rol_id).fadeOut("slow");
 					if(profileJS)
 					{
@@ -81,7 +81,7 @@ function profileJSClass()
 				url: gRootPath + "/adm_program/modules/profile/profile_function.php",
 				data: "mode=3&user_id=" + this.usr_id + "&rol_id=" + rol_id,
 				dataType: "html",
-				success: function(html){
+				success: function(responseText, statusText){
 					$("#former_role_" + rol_id).fadeOut("slow");
 					if(profileJS)
 					{

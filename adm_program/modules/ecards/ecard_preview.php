@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Grusskarte Vorschau
+ * Grußkarte Vorschau
  *
  * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
