@@ -86,6 +86,7 @@
 	<text id="ECA_PHR_SCALING_PREVIEW" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
     <text id="ECA_PHR_SCALING_GREETING_CARD" version="2.2.0">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
 	<text id="ECA_PHR_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</text>
+	<text id="ECA_PHR_NOT_SUCCESSFULLY_SEND">Deine Grußkarte wurde leider nicht erfolgreich versendet!</text>
 	<text id="ECA_PHR_TEMPLATE" version="2.2.0">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
 	<text id="ECA_PLEASE_CHOOSE" version="2.2.0">Bitte wählen</text>
 	<text id="ECA_SEND_ERROR" version="2.2.0">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
@@ -216,6 +217,7 @@
     <text id="SYS_NO" version="2.2.0">Nein</text>
     <text id="SYS_NOTE" version="2.2.0">Hinweis</text>
     <text id="SYS_PASSWORD_FORGOTTEN" version="2.2.0">Passwort vergessen</text>
+	<text id="SYS_PHR_AJAX_REQUEST_ERROR" version="2.2.0">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text> 
     <text id="SYS_PHR_BETA_VERSION" version="2.2.0">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
     <text id="SYS_PHR_CAPTCHA_CODE_INVALID" version="2.2.0">Der Bestätigungscode wurde falsch eingegeben.</text>
     <text id="SYS_PHR_COOKIE_NOT_SET" version="2.2.0">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>

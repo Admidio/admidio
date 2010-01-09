@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Grusskarte Draw Dropdown Menue
+ * Grußkarte Draw Dropdown Menue
  *
  * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -22,7 +22,7 @@ require_once('../../system/common.php');
 if ($g_valid_login && isset($_GET['base']) =="1")
 {
         global $g_current_user;
-    echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:getMenuRecepientName()">';
+    echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:ecardJS.getMenuRecepientName()">';
     if (isset($form_values['rol_id']) == "")
     {
         echo '<option value="" selected="selected" disabled="disabled">- '.$g_l10n->get("ECA_PLEASE_CHOOSE").' -</option>';
@@ -113,7 +113,7 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
                 ORDER BY last_name,first_name ASC";
         
         $result       = $g_db->query($sql);
-        $menuheader   = '<select size="1" id="menu" name="menu" onchange="javascript:getMenuRecepientNameEmail(this.value)">';
+        $menuheader   = '<select size="1" id="menu" name="menu" onchange="javascript:ecardJS.getMenuRecepientNameEmail(this.value)">';
         $menubody     = '</select>';
         if(mysql_num_rows($result)>0)
         {
@@ -180,8 +180,7 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 // Namen und Empfaenger geboten
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-    echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,1);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-    echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:blendout(this.id);" onfocus="javascript:blendout(this.id);" onmouseout="javascript:blendin(this.id,2);" onkeydown="javascript:blendout(this.id);" onkeyup="javascript:blendout(this.id);" onkeypress="javascript:blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+    echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:ecardJS.blendout(this.id);" onfocus="javascript:ecardJS.blendout(this.id);" onmouseout="javascript:ecardJS.blendin(this.id,1);" onkeydown="javascript:ecardJS.blendout(this.id);" onkeyup="javascript:ecardJS.blendout(this.id);" onkeypress="javascript:ecardJS.blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span><input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:ecardJS.blendout(this.id);" onfocus="javascript:ecardJS.blendout(this.id);" onmouseout="javascript:ecardJS.blendin(this.id,2);" onkeydown="javascript:ecardJS.blendout(this.id);" onkeyup="javascript:ecardJS.blendout(this.id);" onkeypress="javascript:ecardJS.blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
 }
 
 ?>
