@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar-Kalender
  *
- * Version 1.5.0
+ * Version 1.5.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -157,8 +157,8 @@ if($plg_ter_aktiv == 1)
     while($row = $g_db->fetch_array($result))
     {
         $termin_id[$ter]= $row['dat_id'];
-        $termin_tag[$ter]= mysqldatetime("d", $row['dat_begin']);
-        $termin_uhr[$ter]= mysqldatetime("h:i", $row['dat_begin']);
+        $termin_tag[$ter]= mysqldatetime('d', $row['dat_begin']);
+        $termin_uhr[$ter]= mysqldatetime('h:i', $row['dat_begin']);
         $termin_ganztags[$ter]= $row['dat_all_day'];
         $termin_ort[$ter]= $row['dat_location'];
         $termin_titel[$ter]= $row['dat_headline'];
@@ -175,40 +175,42 @@ if($plg_geb_aktiv == 1)
     $geb_aktuell = 0;
     
     // Datenbankabfrage nach Geburtstagen im Monat
-    $sql = "SELECT DISTINCT 
-                usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, 
-                birthday.usd_value AS birthday
-            FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                RIGHT JOIN ". TBL_USER_DATA. " AS birthday ON birthday.usd_usr_id = usr_id
-                    AND birthday.usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). "
-                    AND MONTH(birthday.usd_value) = $monat
-                LEFT JOIN ". TBL_USER_DATA. " AS last_name ON last_name.usd_usr_id = usr_id
-                    AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
-                LEFT JOIN ". TBL_USER_DATA. " AS first_name ON first_name.usd_usr_id = usr_id
-                    AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
-            WHERE rol_cat_id = cat_id
-                AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                AND rol_id     = mem_rol_id
-                AND mem_usr_id = usr_id
-                AND usr_valid  = 1
-            ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name";
+    $sql = 'SELECT DISTINCT 
+                   usr_id, last_name.usd_value AS last_name, first_name.usd_value AS first_name, 
+                   birthday.usd_value AS birthday
+              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+              JOIN '. TBL_USER_DATA. ' AS birthday ON birthday.usd_usr_id = usr_id
+               AND birthday.usd_usf_id = '. $g_current_user->getProperty('Geburtstag', 'usf_id'). '
+               AND MONTH(birthday.usd_value) = '.$monat.'
+              LEFT JOIN '. TBL_USER_DATA. ' AS last_name ON last_name.usd_usr_id = usr_id
+               AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+              LEFT JOIN '. TBL_USER_DATA. ' AS first_name ON first_name.usd_usr_id = usr_id
+               AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+             WHERE rol_cat_id = cat_id
+               AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+               AND rol_id     = mem_rol_id
+               AND mem_usr_id = usr_id
+               AND mem_begin <= "'.DATE_NOW.'"
+               AND mem_end    > "'.DATE_NOW.'"
+               AND usr_valid  = 1
+             ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name';
     
     $result = $g_db->query($sql);
     $anz_geb = $g_db->num_rows($result);
     
     while($row = $g_db->fetch_array($result))
     {
-        $geb_day[$geb] = mysqldatetime("d", $row['birthday']);
-        $geb_year[$geb] = mysqldatetime("y", $row['birthday']);
+        $geb_day[$geb] = mysqldatetime('d', $row['birthday']);
+        $geb_year[$geb] = mysqldatetime('y', $row['birthday']);
         $alter[$geb] = $jahr-$geb_year[$geb];
-        $geb_name[$geb] = $row['first_name']. " ". $row['last_name'];
+        $geb_name[$geb] = $row['first_name']. ' '. $row['last_name'];
         $geb++;
     }
 }
 
 // Kalender erstellen
-$erster = date("w", mktime(0,0,0,$monat,1,$jahr));
-$insgesamt = date("t", mktime(0,0,0,$monat,1,$jahr));
+$erster = date('w', mktime(0,0,0,$monat,1,$jahr));
+$insgesamt = date('t', mktime(0,0,0,$monat,1,$jahr));
 $monate = array("Januar","Februar","M&auml;rz","April","Mai","Juni","Juli","August", "September","Oktober","November","Dezember");
 if($erster == 0)
 {
