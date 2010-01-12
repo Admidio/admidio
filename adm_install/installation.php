@@ -9,23 +9,22 @@
  *
  * Uebergaben:
  *
- * mode     = 1 : (Default) Willkommen zur Installation
- *            2 : Zugangsdaten zur Datenbank eingeben
- *            3 : Organisationsnamen eingeben
- *            4 : Daten des Administrator eingeben
- *            5 : Konfigurationsdatei erzeugen
- *            6 : Konfigurationsdatei herunterladen
- *            7 : Installation starten
+ * mode     = 1 : (Default) Sprache auswaehlen
+ *            2 : Willkommen zur Installation
+ *            3 : Zugangsdaten zur Datenbank eingeben
+ *            4 : Organisationsnamen eingeben
+ *            5 : Daten des Administrator eingeben
+ *            6 : Konfigurationsdatei erzeugen
+ *            7 : Konfigurationsdatei herunterladen
+ *            8 : Installation starten
  *
  *****************************************************************************/
-
-require_once('install_functions.php');
 
 // Uebergabevariablen pruefen
 
 if(isset($_GET['mode']) && is_numeric($_GET['mode']))
 {
-   $req_mode = $_GET['mode'];
+    $req_mode = $_GET['mode'];
 }
 else
 {
@@ -35,9 +34,9 @@ else
 session_name('admidio_php_session_id');
 session_start();
 
-if(isset($_SESSION['praefix']))
+if(isset($_SESSION['prefix']))
 {
-    $g_tbl_praefix = $_SESSION['praefix'];
+    $g_tbl_praefix = $_SESSION['prefix'];
 }
 else
 {
@@ -48,8 +47,10 @@ $admidio_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1);
 
 // Konstanten und Konfigurationsdatei einbinden
 require_once($admidio_path. '/adm_program/system/constants.php');
+require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
@@ -62,129 +63,159 @@ if(!isset($g_db_type))
 {
     $g_db_type = 'mysql';
 }
-
 require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 
-$message = "";
-
-if($req_mode == 1)
+// Sprachdateien einlesen
+if(isset($_SESSION['language']))
 {
-    // Willkommen zur Installation
+    $language = $_SESSION['language'];
+}
+else
+{
+    $language = 'en';
+}
+$g_l10n = new Language($language);
+
+$message = '';
+
+if($req_mode == 1)  // (Default) Sprache auswaehlen
+{
     session_destroy();
-    $message = '<strong>Willkommen zur Installation von Admidio</strong><br /><br />
-                Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung
-                von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der
-                Datenbank, auf der Admidio zukünftig laufen soll.';
+    $languages = array('de' => 'deutsch', 'en' => 'english');
+
+    $message = '<div class="groupBox">
+                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_PHR_CHOOSE_LANGUAGE').'</div>
+                    <div class="groupBoxBody">
+                        <ul class="formFieldList">
+                            <li>
+                                <dl>
+                                    <dt><label for="system_language">'.$g_l10n->get('INS_LANGUAGE').':</label></dt>
+                                    <dd>
+                                        <select size="1" id="system_language" name="system_language">
+                                            <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+                                            foreach($languages as $key => $value)
+                                            {
+                                                $message .= '<option value="'.$key.'">'.$value.'</option>';
+                                            }
+                                        $message .= '</select>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <br />';
+    showPage($message, 'installation.php?mode=2', 'forward.png', $g_l10n->get('SYS_NEXT'));
+}
+elseif($req_mode == 2)  // Willkommen zur Installation
+{   
+    // Pruefen ob Sprache uebergeben wurde
+    if(isset($_POST['system_language']) == false || strlen($_POST['system_language']) == 0)
+    {
+        showPage($g_l10n->get('INS_PHR_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', 'back.png', $g_l10n->get('SYS_BACK'));
+    }
+    else
+    {
+        $_SESSION['language'] = $_POST['system_language'];
+        $g_l10n->setLanguage($_SESSION['language']);
+    }
+    
+    $message = '<strong>'.$g_l10n->get('INS_PHR_WELCOME_TO_INSTALLATION').'</strong><br /><br />'.$g_l10n->get('INS_PHR_WELCOME_TEXT');
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
     {
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" />
-                    Dies ist eine Beta-Version von Admidio.<br /><br />
-                    Sie kann zu Stabilitätsproblemen und Datenverlust führen und
-                    sollte deshalb nur in einer Testumgebung genutzt werden !';
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_PHR_WARNING_BETA_VERSION');
     }
 
     if(ini_get('safe_mode') == 1)
     {    
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" />
-                    Auf deinem Server ist der Save Mode aktiviert. Bei eingeschaltetem Safe Mode 
-                    kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.';
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_PHR_WARNING_SAFE_MODE');
     }
-    showPage($message, 'installation.php?mode=2', 'forward.png', 'Datenbank Zugangsdaten');
+    showPage($message, 'installation.php?mode=3', 'forward.png', $g_l10n->get('INS_DATABASE_LOGIN'));
 }
-elseif($req_mode == 2)
+elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
 {
-    // Zugangsdaten zur Datenbank eingeben
-
     // Formular vorbelegen
     if(isset($_SESSION['server']))
     {
         $server   = $_SESSION['server'];
         $user     = $_SESSION['user'];
         $database = $_SESSION['database'];
-        $praefix  = $_SESSION['praefix'];
+        $prefix  = $_SESSION['prefix'];
     }
     else
     {
         $server   = '';
         $user     = '';
         $database = '';
-        $praefix  = 'adm';
+        $prefix  = 'adm';
     }
 
-    $message = '<strong>Zugangsdaten zur Datenbank eingeben</strong><br /><br />
-                Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das
-                Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere
-                Admidio-Installationen auf derselben Datenbank einrichten möchten.
-
+    $message = '<strong>'.$g_l10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</strong><br /><br />'.$g_l10n->get('INS_PHR_DATABASE_LOGIN').'
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">Zugangsdaten zur Datenbank</div>
+                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_DATABASE_LOGIN').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="server">Server:</label></dt>
+                                    <dt><label for="server">'.$g_l10n->get('INS_SERVER').':</label></dt>
                                     <dd><input type="text" name="server" id="server" style="width: 250px;" maxlength="50" value="'. $server. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user">Login:</label></dt>
+                                    <dt><label for="user">'.$g_l10n->get('INS_LOGIN').':</label></dt>
                                     <dd><input type="text" name="user" id="user" style="width: 250px;" maxlength="50" value="'. $user. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="password">Passwort:</label></dt>
+                                    <dt><label for="password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
                                     <dd><input type="password" name="password" id="password" style="width: 250px;" maxlength="50" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="database">Datenbank:</label></dt>
+                                    <dt><label for="database">'.$g_l10n->get('INS_DATABASE').':</label></dt>
                                     <dd><input type="text" name="database" id="database" style="width: 250px;" maxlength="50" value="'. $database. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="praefix">Tabellenpr&auml;fix:</label></dt>
-                                    <dd><input type="text" name="praefix" id="praefix" style="width: 80px;" maxlength="10" value="'. $praefix. '" /></dd>
+                                    <dt><label for="prefix">'.$g_l10n->get('INS_TABLE_PREFIX').':</label></dt>
+                                    <dd><input type="text" name="prefix" id="prefix" style="width: 80px;" maxlength="10" value="'. $prefix. '" /></dd>
                                 </dl>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <br />
-                <img src="layout/warning.png" alt="Warnung" /> Bereits vorhandene Daten unter diesem Tabellenpräfix werden überschrieben !
-                <br />';
-    showPage($message, 'installation.php?mode=3', 'forward.png', 'Organisation festlegen');
+                <img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_PHR_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
+    showPage($message, 'installation.php?mode=4', 'forward.png', $g_l10n->get('INS_SET_ORGANIZATION'));
 }
-elseif($req_mode == 3)
+elseif($req_mode == 4)  // Organisationsnamen eingeben
 {
-    // Organisationsnamen eingeben
-
     if(isset($_POST['server']))
     {
-        if(strlen($_POST['praefix']) == 0)
+        if(strlen($_POST['prefix']) == 0)
         {
-            $_POST['praefix'] = 'adm';
+            $_POST['prefix'] = 'adm';
         }
         else
         {
             // wenn letztes Zeichen ein _ dann abschneiden
-            if(strrpos($_POST['praefix'], '_')+1 == strlen($_POST['praefix']))
+            if(strrpos($_POST['prefix'], '_')+1 == strlen($_POST['prefix']))
             {
-                $_POST['praefix'] = substr($_POST['praefix'], 0, strlen($_POST['praefix'])-1);
+                $_POST['prefix'] = substr($_POST['prefix'], 0, strlen($_POST['prefix'])-1);
             }
 
             // nur gueltige Zeichen zulassen
-            $anz = strspn($_POST['praefix'], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_');
+            $anz = strspn($_POST['prefix'], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_');
 
-            if($anz != strlen($_POST['praefix']))
+            if($anz != strlen($_POST['prefix']))
             {
-                $message   = 'Das Tabellenpräfix enthält ungültige Zeichen !';
-                showPage($message, 'installation.php?mode=2', 'back.png', 'Zurück');
+                showPage($g_l10n->get('INS_PHR_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
             }
         }
 
@@ -193,30 +224,26 @@ elseif($req_mode == 3)
         $_SESSION['user']     = strStripTags($_POST['user']);
         $_SESSION['password'] = strStripTags($_POST['password']);
         $_SESSION['database'] = strStripTags($_POST['database']);
-        $_SESSION['praefix']  = strStripTags($_POST['praefix']);
+        $_SESSION['prefix']   = strStripTags($_POST['prefix']);
 
         if(strlen($_SESSION['server'])   == 0
         || strlen($_SESSION['user'])     == 0
         || strlen($_SESSION['database']) == 0 )
         {
-            $message   = 'Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !';
-            showPage($message, 'installation.php?mode=2', 'back.png', 'Zurück');
+            showPage($g_l10n->get('INS_PHR_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
         }
 
         // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
         $db = new MySqlDB();
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
-            $message   = 'Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden !<br /><br />
-                          Korrigiere gegebenenfalls deine Zugangsdaten bzw. kontrolliere,
-                          ob die Datenbank online ist.';
-            showPage($message, 'installation.php?mode=2', 'back.png', 'Zurück');
+            showPage($g_l10n->get('INS_PHR_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
         }
 
         //Datenbank- und PHP-Version prüfen
         if(checkVersions($db, $message) == false)
         {
-            showPage($message, 'installation.php?mode=2', 'back.png', 'Zurück');
+            showPage($message, 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
         }
     }
 
@@ -232,23 +259,20 @@ elseif($req_mode == 3)
         $orga_name_long  = '';
     }
 
-    $message = $message.'<strong>Organisation festlegen</strong><br /><br />
-                Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein
-                ein, für die du Admidio nutzen möchtest.
-
+    $message = $message.'<strong>'.$g_l10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />'.$g_l10n->get('INS_PHR_NAME_OF_ORGANIZATION').'
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">Name der Organisation</div>
+                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_NAME_OF_ORGANIZATION').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_short">Name (Abkürzung):</label></dt>
+                                    <dt><label for="orga_name_short">'.$g_l10n->get('INS_NAME_ABBREVIATION').':</label></dt>
                                     <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_long">Name (ausgeschrieben):</label></dt>
+                                    <dt><label for="orga_name_long">'.$g_l10n->get('SYS_NAME').':</label></dt>
                                     <dd><input type="text" name="orga_name_long" id="orga_name_long" style="width: 250px;" maxlength="60" value="'. $orga_name_long. '" /></dd>
                                 </dl>
                             </li>
@@ -256,12 +280,10 @@ elseif($req_mode == 3)
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'installation.php?mode=4', 'forward.png', 'Administrator anlegen');
+    showPage($message, 'installation.php?mode=5', 'forward.png', $g_l10n->get('INS_CREATE_ADMINISTRATOR'));
 }
-elseif($req_mode == 4)
+elseif($req_mode == 5)  // Daten des Administrator eingeben
 {
-    // Daten des Administrator eingeben
-
     if(isset($_POST['orga_name_short']))
     {
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
@@ -271,8 +293,7 @@ elseif($req_mode == 4)
         if(strlen($_SESSION['orga_name_short']) == 0
         || strlen($_SESSION['orga_name_long']) == 0 )
         {
-            $message = 'Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !';
-            showPage($message, 'installation.php?mode=3', 'back.png', 'Zurück');
+            showPage($g_l10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', 'back.png', $g_l10n->get('SYS_BACK'));
         }
     }
 
@@ -291,47 +312,45 @@ elseif($req_mode == 4)
         $user_email      = '';
         $user_login      = '';
     }
-    $message = '<strong>Administrator anlegen</strong><br /><br />
-                Gib in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an.
-                Mit diesem Benutzer kannst du dich nach der Installation bei Admidio anmelden.
-
+    $message = '<strong>'.$g_l10n->get('INS_CREATE_ADMINISTRATOR').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_DATA_OF_ADMINISTRATOR').'
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">Daten des Administrators</div>
+                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_DATA_OF_ADMINISTRATOR').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="user_last_name">Nachname:</label></dt>
+                                    <dt><label for="user_last_name">'.$g_l10n->get('SYS_SURNAME').':</label></dt>
                                     <dd><input type="text" name="user_last_name" id="user_last_name" style="width: 250px;" maxlength="50" value="'. $user_last_name. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_first_name">Vorname:</label></dt>
+                                    <dt><label for="user_first_name">'.$g_l10n->get('SYS_FIRST_NAME').':</label></dt>
                                     <dd><input type="text" name="user_first_name" id="user_first_name" style="width: 250px;" maxlength="50" value="'. $user_first_name. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_email">E-Mail:</label></dt>
+                                    <dt><label for="user_email">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
                                     <dd><input type="text" name="user_email" id="user_email" style="width: 250px;" maxlength="50" value="'. $user_email. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_login">Benutzername:</label></dt>
+                                    <dt><label for="user_login">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
                                     <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="35" value="'. $user_login. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_password">Passwort:</label></dt>
+                                    <dt><label for="user_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
                                     <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="20" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_password_confirm">Passwort bestätigen:</label></dt>
+                                    <dt><label for="user_password_confirm">'.$g_l10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
                                     <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="20" /></dd>
                                 </dl>
                             </li>
@@ -339,12 +358,10 @@ elseif($req_mode == 4)
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'installation.php?mode=5', 'forward.png', 'Konfigurationsdatei erzeugen');
+    showPage($message, 'installation.php?mode=6', 'forward.png', $g_l10n->get('INS_CREATE_CONFIGURATION_FILE'));
 }
-elseif($req_mode == 5)
+elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
 {
-    // Konfigurationsdatei erzeugen
-
     if(isset($_POST['user_last_name']))
     {
         // Daten des Administrators in Sessionvariablen gefiltert speichern
@@ -361,37 +378,32 @@ elseif($req_mode == 5)
         || strlen($_SESSION['user_login'])      == 0
         || strlen($_SESSION['user_password'])   == 0 )
         {
-            $message = 'Es sind nicht alle Daten für den Administrator eingegeben worden !';
-            showPage($message, 'installation.php?mode=4', 'back.png', 'Zurück');
+            showPage($g_l10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }
-		
-		if(!isValidEmailAddress($_SESSION['user_email']))
-		{
-            $message = 'Die E-Mail Adresse ist ungültig !';
-            showPage($message, 'installation.php?mode=4', 'back.png', 'Zurück');
+
+        if(!isValidEmailAddress($_SESSION['user_email']))
+        {
+            showPage($g_l10n->get('SYS_PHR_EMAIL_INVALID'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }
-		
+
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
         {
-            $message = 'Das Passwort stimmt nicht mit der Wiederholung überein !';
-            showPage($message, 'installation.php?mode=4', 'back.png', 'Zurück');
+            showPage($g_l10n->get('INS_PHR_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }
     }
 
-    $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
-                Lade die Konfigurationsdatei <strong>config.php</strong> herunter und kopiere
-                diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine <i>config_default.php</i>.<br /><br />
-                Erst nachdem die Datei dort abgelegt wurde, kannst du mit der Installation fortfahren.<br /><br />
+    $message = '<strong>'.$g_l10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_default.php').'<br /><br />
 
                 <span class="iconTextLink">
-                    <a href="installation.php?mode=6"><img
-                    src="layout/page_white_download.png" alt="config.php herunterladen" /></a>
-                    <a href="installation.php?mode=6">config.php herunterladen</a>
+                    <a href="installation.php?mode=7"><img
+                    src="layout/page_white_download.png" alt="'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'" /></a>
+                    <a href="installation.php?mode=7">'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'</a>
                 </span>
                 <br />';
-    showPage($message, 'installation.php?mode=7', 'database_in.png', 'Admidio installieren');
+    showPage($message, 'installation.php?mode=8', 'database_in.png', $g_l10n->get('INS_INSTALL_ADMIDIO'));
 }
-elseif($req_mode == 6)
+elseif($req_mode == 7)
 {
     // MySQL-Zugangsdaten in config.php schreiben
     // Datei auslesen
@@ -408,7 +420,7 @@ elseif($req_mode == 6)
         $root_path = 'http://'. $root_path;
     }
 
-    $file_content = str_replace('%PRAEFIX%', $_SESSION['praefix'], $file_content);
+    $file_content = str_replace('%PREFIX%', $_SESSION['prefix'], $file_content);
     $file_content = str_replace('%SERVER%',  $_SESSION['server'],  $file_content);
     $file_content = str_replace('%USER%',    $_SESSION['user'],    $file_content);
     $file_content = str_replace('%PASSWORD%',  $_SESSION['password'], $file_content);
@@ -426,15 +438,13 @@ elseif($req_mode == 6)
     echo $file_content;
     exit();
 }
-elseif($req_mode == 7)
+elseif($req_mode == 8)
 {
     // Installation starten
 
     if(file_exists('../config.php') == false)
     {
-        $message = 'Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
-                    Lade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.';
-        showPage($message, 'installation.php?mode=5', 'back.png', 'Zurück');
+        showPage($g_l10n->get('INS_PHR_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
@@ -447,7 +457,7 @@ elseif($req_mode == 7)
 
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
-                or showPage('Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.', 'installation.php?mode=5', 'back.png', 'Zurück');
+                or showPage($g_l10n->get('INS_PHR_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_install/db_scripts'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
     $content  = fread($file, filesize($filename));
     $sql_arr  = explode(';', $content);
     fclose($file);
@@ -456,8 +466,8 @@ elseif($req_mode == 7)
     {
         if(strlen(trim($sql)) > 0)
         {
-            // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-            $sql = str_replace('%PRAEFIX%', $g_tbl_praefix, $sql);
+            // Prefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+            $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
             $db->query($sql);
         }
     }
@@ -488,8 +498,7 @@ elseif($req_mode == 7)
                                             , ('.$cat_id_stammdaten.', "TEXT", "Fax", NULL, 0, 0, 0, 9)
                                             , ('.$cat_id_stammdaten.', "DATE", "Geburtstag", NULL, 1, 0, 0, 10)
                                             , ('.$cat_id_stammdaten.', "NUMERIC", "Geschlecht", NULL, 1, 0, 0, 11)
-                                            , ('.$cat_id_stammdaten.', "EMAIL","E-Mail", "Es muss eine gültige E-Mail-Adresse angegeben werden.
-                                                                    Ohne diese kann das Programm nicht genutzt werden.", 1, 0, 1, 12)
+                                            , ('.$cat_id_stammdaten.', "EMAIL","E-Mail", NULL, 1, 0, 1, 12)
                                             , ('.$cat_id_stammdaten.', "URL",  "Homepage", NULL, 1, 0, 0, 13) ';
     $db->query($sql);
     $usf_id_homepage = $db->insert_id();
@@ -532,6 +541,12 @@ elseif($req_mode == 7)
         $text->save();
     }
 
+    // nun noch die ausgewaehlte Sprache in den Einstellungen speichern
+    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'.$_SESSION['language'].'"
+             WHERE prf_name   = "system_language" 
+               AND prf_org_id = '. $g_current_organization->getValue('org_id');
+    $db->query($sql);
+
     // Admidio-Versionsnummer schreiben
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
                                        VALUES ('. $g_current_organization->getValue('org_id'). ', "db_version",      "'. ADMIDIO_VERSION. '") 
@@ -540,20 +555,20 @@ elseif($req_mode == 7)
 
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                           VALUES ('. $g_current_organization->getValue('org_id'). ', "ROL", "Allgemein", 0, 1)';
+                                           VALUES ('. $g_current_organization->getValue('org_id'). ', "ROL", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)';
     $db->query($sql);
     $category_common = $db->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "Gruppen", 0, 2)
-                                           , ('. $g_current_organization->getValue('org_id').', "ROL", "Kurse", 0, 3)
-                                           , ('. $g_current_organization->getValue('org_id').', "ROL", "Mannschaften", 0, 4)
-                                           , ('. $g_current_organization->getValue('org_id').', "LNK", "Allgemein", 0, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "LNK", "Intern", 1, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "Allgemein", 0, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "Kurse", 0, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "Training", 0, 1)
-                                           , (NULL, "USF", "Zusätzliche Daten", 0, 3) ';
+                                      VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_GROUPS').'", 0, 2)
+                                           , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_COURSES').'", 0, 3)
+                                           , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_TEAMS').'", 0, 4)
+                                           , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
+                                           , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('INS_INTERN').'", 1, 1)
+                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
+                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_TRAINING').'", 0, 1)
+                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_COURSES').'", 0, 1)
+                                           , (NULL, "USF", "'.$g_l10n->get('INS_ADDIDIONAL_DATA').'", 0, 3) ';
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
@@ -576,9 +591,8 @@ elseif($req_mode == 7)
 
     //Defaultraum fuer Raummodul in der DB anlegen:
     $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
-                                    VALUES ("Besprechnungsraum", "Hier können Besprechungen stattfinden. Der Raum muss vorher
-                                             reserviert werden. Beamer steht zur Verfügung.", 15, '.
-                                             $g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")';
+                                    VALUES ("'.$g_l10n->get('INS_CONFERENCE_ROOM').'", "'.$g_l10n->get('INS_PHR_DESCRIPTION_CONFERENCE_ROOM').'", 
+                                            15, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")';
     $db->query($sql);
 
     // nun die Default-Rollen anlegen
@@ -586,8 +600,8 @@ elseif($req_mode == 7)
     // Webmaster
     $role_webmaster = new TableRoles($db);
     $role_webmaster->setValue('rol_cat_id', $category_common);
-    $role_webmaster->setValue('rol_name', 'Webmaster');
-    $role_webmaster->setValue('rol_description', 'Gruppe der Administratoren des Systems');
+    $role_webmaster->setValue('rol_name', $g_l10n->get('SYS_WEBMASTER'));
+    $role_webmaster->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_WEBMASTER'));
     $role_webmaster->setValue('rol_assign_roles', 1);
     $role_webmaster->setValue('rol_approve_users', 1);
     $role_webmaster->setValue('rol_announcements', 1);
@@ -608,8 +622,8 @@ elseif($req_mode == 7)
     // Mitglied
     $role_member = new TableRoles($db);
     $role_member->setValue('rol_cat_id', $category_common);
-    $role_member->setValue('rol_name', 'Mitglied');
-    $role_member->setValue('rol_description', 'Alle Mitglieder der Organisation');
+    $role_member->setValue('rol_name', $g_l10n->get('SYS_MEMBER'));
+    $role_member->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_MEMBER'));
     $role_member->setValue('rol_mail_this_role', 2);
     $role_member->setValue('rol_profile', 1);
     $role_member->setValue('rol_this_list_view', 1);
@@ -618,8 +632,8 @@ elseif($req_mode == 7)
     // Vorstand
     $role_management = new TableRoles($db);
     $role_management->setValue('rol_cat_id', $category_common);
-    $role_management->setValue('rol_name', 'Vorstand');
-    $role_management->setValue('rol_description', 'Vorstand des Vereins');
+    $role_management->setValue('rol_name', $g_l10n->get('INS_BOARD'));
+    $role_management->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_BOARD'));
     $role_management->setValue('rol_announcements', 1);
     $role_management->setValue('rol_dates', 1);
     $role_management->setValue('rol_weblinks', 1);
@@ -643,7 +657,7 @@ elseif($req_mode == 7)
 
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($db);
-    $address_list->setValue('lst_name', 'Adressliste');
+    $address_list->setValue('lst_name', $g_l10n->get('INS_ADDRESS_LIST'));
     $address_list->setValue('lst_global', 1);
     $address_list->setValue('lst_default', 1);
     $address_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
@@ -655,7 +669,7 @@ elseif($req_mode == 7)
     $address_list->save();
 
     $phone_list = new ListConfiguration($db);
-    $phone_list->setValue('lst_name', 'Telefonliste');
+    $phone_list->setValue('lst_name', $g_l10n->get('INS_PHONE_LIST'));
     $phone_list->setValue('lst_global', 1);
     $phone_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
     $phone_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
@@ -666,7 +680,7 @@ elseif($req_mode == 7)
     $phone_list->save();
 
     $contact_list = new ListConfiguration($db);
-    $contact_list->setValue('lst_name', 'Kontaktdaten');
+    $contact_list->setValue('lst_name', $g_l10n->get('INS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
     $contact_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
     $contact_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
@@ -680,7 +694,7 @@ elseif($req_mode == 7)
     $contact_list->save();
 
     $former_list = new ListConfiguration($db);
-    $former_list->setValue('lst_name', 'Mitgliedschaft');
+    $former_list->setValue('lst_name', $g_l10n->get('INS_MEMBERSHIP'));
     $former_list->setValue('lst_global', 1);
     $former_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'));
     $former_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'));
@@ -698,16 +712,13 @@ elseif($req_mode == 7)
     unset($_SESSION['g_preferences']);
     unset($_SESSION['g_current_user']);
 
-    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Installation war erfolgreich</strong><br /><br />
-                Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet.
-                Du kannst nun mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.';
+    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_INSTALLATION_SUCCESSFUL');
     if(is_writeable("../adm_my_files") == false)
     {
-        $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> Der Ordner <strong>adm_my_files</strong>
-                   besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien
-                   für das Downloadmodul hochgeladen werden können.';
+        $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$g_l10n->get('INS_PHR_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
-    showPage($message, '../adm_program/index.php', 'application_view_list.png', 'Übersichtsseite');
+    showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'));
 }
 
 ?>

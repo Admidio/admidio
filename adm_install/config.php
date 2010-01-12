@@ -10,7 +10,7 @@
 
 // Tabellenpraefix fuer die Admidio-Tabellen in der Datenbank angeben
 // Beispiel: 'adm'
-$g_tbl_praefix = '%PRAEFIX%';
+$g_tbl_praefix = '%PREFIX%';
 
 // Daten für die MySQL-Datenbank-Verbindung
 $g_adm_srv = '%SERVER%';      // Server

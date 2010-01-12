@@ -11,14 +11,21 @@
  * SimpleXMLElement ein und bietet Zugriffsmethoden um auf einfache Weise
  * zu bestimmten IDs die sprachabhaengigen Texte auszugeben.
  *
+ * Folgende Funktionen stehen zur Verfuegung:
+ *
+ * get($text_id, $var1='', $var2='', $var3='', $var4='')
+ *         - liest den Text mit der uebergebenen ID aus und gibt diese zurueck
+ * getReferenceText($text_id, $var1='', $var2='', $var3='', $var4='')
+ *         - liefert den Text der ID aus der eingestellten Referenzsprache zurueck
+ * setLanguage($language)
+ *         - es wird die Sprache gesetzt und damit auch die entsprechende Sprachdatei eingelesen
+ *
  *****************************************************************************/
 
 class Language
 {
     private $l10nObject;
     private $referenceL10nObject;
-    
-    private $modules;
     
     private $language;
     private $languageFilePath;
@@ -27,36 +34,14 @@ class Language
     // es muss das Sprachkuerzel uebergeben werden (Beispiel: 'de')
     public function __construct($language)
     {
-        if(strlen($language) == 2)
-        {
-            $this->language = $language;
-            $this->languageFilePath = SERVER_PATH. '/adm_program/languages/'.$language.'.xml';
-            $this->l10nObject = new SimpleXMLElement($this->languageFilePath, 0, true);
-            $this->modules = array('ANN' => 'announcements', 
-                                   'ASS' => 'assign', 
-                                   'CAT' => 'category', 
-                                   'DAT' => 'dates',
-                                   'DOW' => 'downloads',
-                                   'ECA' => 'ecards', 
-                                   'GBO' => 'guestbook',
-                                   'LST' => 'lists',
-                                   'MAI' => 'mail', 
-                                   'MEM' => 'members', 
-                                   'NWU' => 'new_user',
-                                   'ORG' => 'organizsation', 
-                                   'PHO' => 'photos',
-                                   'PRO' => 'profile', 
-                                   'ROL' => 'roles',
-                                   'SYS' => 'system');
-        }
+        $this->setLanguage($language);
     }
 
     // liest den Text mit der uebergebenen ID aus und gibt diese zurueck
     public function get($text_id, $var1='', $var2='', $var3='', $var4='')
     {
-        $text = '';
-        $module = $this->modules[substr($text_id, 0, 3)];
-        $node = $this->l10nObject->xpath("/language/".$module."/text[@id='".$text_id."']");
+        $text   = '';
+        $node   = $this->l10nObject->xpath("/language/version/text[@id='".$text_id."']");
 
         if($node != false)
         {
@@ -102,10 +87,20 @@ class Language
     {
         if(is_object($this->referenceL10nObject) == false)
         {
-            $language_path = SERVER_PATH. '/adm_program/languages/'.$this->referenceLanguage.'.xml';
-            $this->referenceL10nObject = new Language($language_path, 0, true);
+            $this->referenceL10nObject = new Language($this->referenceLanguage);
         }
-        return $this->referenceL10nObject->get($text_id, $var1, $var2, $var3);
+        return $this->referenceL10nObject->get($text_id, $var1, $var2, $var3, $var4);
+    }
+
+    // es wird die Sprache gesetzt und damit auch die entsprechende Sprachdatei eingelesen
+    public function setLanguage($language)
+    {
+        if(strlen($language) == 2 && $language != $this->language)
+        {
+            $this->language = $language;
+            $this->languageFilePath = SERVER_PATH. '/adm_program/languages/'.$language.'.xml';
+            $this->l10nObject = new SimpleXMLElement($this->languageFilePath, 0, true);
+        }
     }
 }
 ?>

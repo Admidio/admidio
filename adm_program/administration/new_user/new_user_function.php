@@ -120,7 +120,7 @@ if($req_mode == 1 || $req_mode == 3)
         $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
         if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == true)
         {
-            $g_message->show($g_l10n->get('ASS_PHR_ASSIGN_LOGIN_EMAIL'));
+            $g_message->show($g_l10n->get('NWU_PHR_ASSIGN_LOGIN_EMAIL'));
         }
         else
         {
@@ -129,7 +129,7 @@ if($req_mode == 1 || $req_mode == 3)
     }
     else
     {
-        $g_message->show($g_l10n->get('ASS_PHR_ASSIGN_LOGIN'));
+        $g_message->show($g_l10n->get('NWU_PHR_ASSIGN_LOGIN'));
     }
 }
 elseif($req_mode == 4)
