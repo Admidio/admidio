@@ -108,18 +108,18 @@ echo 'Datei db.sql einlesen ...<br />';
 
 foreach($sql_arr as $sql)
 {
-	if(strlen(trim($sql)) > 0)
-	{
-		// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-		$sql = str_replace('%PRAEFIX%', $g_tbl_praefix, $sql);
-		$db->query($sql);
-	}
+    if(strlen(trim($sql)) > 0)
+    {
+        // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+        $db->query($sql);
+    }
 }
 
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-			or showPage('Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.', 'installation.php?mode=5', 'back.png', 'Zurück');
+            or showPage('Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.', 'installation.php?mode=5', 'back.png', 'Zurück');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -128,12 +128,12 @@ echo 'Datei data.sql einlesen ...<br />';
 
 foreach($sql_arr as $sql)
 {
-	if(strlen(trim($sql)) > 0)
-	{
-		// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-		$sql = str_replace('%PRAEFIX%', $g_tbl_praefix, $sql);
-		$db->query($sql);
-	}
+    if(strlen(trim($sql)) > 0)
+    {
+        // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+        $db->query($sql);
+    }
 }
 
 

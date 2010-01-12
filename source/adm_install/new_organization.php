@@ -53,6 +53,7 @@ if(!isset($g_db_type))
 require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
@@ -60,15 +61,34 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 
+// Verbindung zu Datenbank herstellen
+$g_db = new MySqlDB();
+$g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+
+// Daten der aktuellen Organisation einlesen
+$g_current_organization = new Organization($g_db, $g_organization);
+
+if($g_current_organization->getValue('org_id') == 0)
+{
+    // Organisation wurde nicht gefunden
+    die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
+}
+
+// organisationsspezifische Einstellungen aus adm_preferences auslesen
+$g_preferences = $g_current_organization->getPreferences();
+
+// Sprachdateien einlesen
+$g_l10n = new Language($g_preferences['system_language']);
+
 $message  = '';
 
 if($req_mode == 1)
 {
     // Willkommen zur Installation
     session_destroy();
-    $message = '<strong>Willkommen zur Einrichtung einer weiteren Organisation</strong><br /><br />
-                Auf den nächsten Seiten musst du einige notwendige Informationen der neuen Organisation eingeben.';
-    showPage($message, 'new_organization.php?mode=2', 'forward.png', 'Organisation festlegen', 3);
+    $message = '<strong>'.$g_l10n->get('INS_PHR_WELCOME_INSTALLATION_NEW_ORGANIZATION').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_NECESSARY_INFORMATION');
+    showPage($message, 'new_organization.php?mode=2', 'forward.png', $g_l10n->get('INS_SET_ORGANIZATION'), 3);
 }
 elseif($req_mode == 2)
 {
@@ -248,7 +268,7 @@ elseif($req_mode == 5)
         $root_path = 'http://'. $root_path;
     }
 
-    $file_content = str_replace('%PRAEFIX%',   $g_tbl_praefix, $file_content);
+    $file_content = str_replace('%PREFIX%',    $g_tbl_praefix, $file_content);
     $file_content = str_replace('%SERVER%',    $g_adm_srv,     $file_content);
     $file_content = str_replace('%USER%',      $g_adm_usr,     $file_content);
     $file_content = str_replace('%PASSWORD%',  $g_adm_pw,      $file_content);

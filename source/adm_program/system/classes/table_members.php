@@ -43,11 +43,11 @@ class TableMembers extends TableAccess
         {
             if(strlen($sql_where_condition) > 0)
             {
-                $condition = $sql_where_condition . ' AND ';
+                $sql_where_condition .= ' AND ';
             }
-            $condition .= '     mem_rol_id = '.$ids['rol_id'].'
-                           AND mem_usr_id = '.$ids['usr_id'];
-            parent::readData(0, $condition);
+            $sql_where_condition .= '    mem_rol_id = '.$ids['rol_id'].'
+                                     AND mem_usr_id = '.$ids['usr_id'];
+            parent::readData(0, $sql_where_condition);
             
             $this->setValue('mem_rol_id', $ids['rol_id']);
             $this->setValue('mem_usr_id', $ids['usr_id']);
