@@ -104,23 +104,22 @@ elseif($req_mode == 2)
         $orga_name_long  = '';
     }
 
-    $message = '<strong>Organisation festlegen</strong><br /><br />
-                Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein
-                ein, die du nun hinzufügen möchtest.
+    $message = '<strong>'.$g_l10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_NAME_OF_NEW_ORGANIZATION').'
 
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">Name der Organisation</div>
+                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_NAME_OF_ORGANIZATION').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_short">Name (Abkürzung):</label></dt>
+                                    <dt><label for="orga_name_short">'.$g_l10n->get('INS_NAME_ABBREVIATION').':</label></dt>
                                     <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_long">Name (ausgeschrieben):</label></dt>
+                                    <dt><label for="orga_name_long">'.$g_l10n->get('SYS_NAME').':</label></dt>
                                     <dd><input type="text" name="orga_name_long" id="orga_name_long" style="width: 250px;" maxlength="60" value="'. $orga_name_long. '" /></dd>
                                 </dl>
                             </li>
@@ -128,7 +127,7 @@ elseif($req_mode == 2)
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'new_organization.php?mode=3', 'forward.png', 'Administrator festlegen', 3);
+    showPage($message, 'new_organization.php?mode=3', 'forward.png', $g_l10n->get('INS_SET_ADMINISTRATOR'), 3);
 }
 elseif($req_mode == 3)
 {
@@ -143,8 +142,7 @@ elseif($req_mode == 3)
         if(strlen($_SESSION['orga_name_short']) == 0
         || strlen($_SESSION['orga_name_long']) == 0 )
         {
-            $message = 'Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !';
-            showPage($message, 'new_organization.php?mode=2', 'back.png', 'Zurück');
+            showPage($g_l10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'new_organization.php?mode=2', 'back.png', $g_l10n->get('SYS_BACK'));
         }
     }
 
@@ -157,23 +155,22 @@ elseif($req_mode == 3)
     {
         $user_login = '';
     }
-    $message = '<strong>Administrator anlegen</strong><br /><br />
-                Gib in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein.
-                Dieser wird der neue Administrator der neuen Organisation mit dem du dich direkt an der Organisation anmelden kannst.
+    $message = '<strong>'.$g_l10n->get('INS_SET_ADMINISTRATOR').'</strong><br /><br />
+               '.$g_l10n->get('INS_PHR_LOGIN_OF_WEBMASTER').'
 
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">Zugangsdaten eines Webmasters</div>
+                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_LOGIN_OF_WEBMASTER').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="user_login">Benutzername:</label></dt>
+                                    <dt><label for="user_login">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
                                     <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="35" value="'. $user_login. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_password">Passwort:</label></dt>
+                                    <dt><label for="user_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
                                     <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="20" /></dd>
                                 </dl>
                             </li>
@@ -181,7 +178,7 @@ elseif($req_mode == 3)
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'new_organization.php?mode=4', 'forward.png', 'Konfigurationsdatei erzeugen', 3);
+    showPage($message, 'new_organization.php?mode=4', 'forward.png', $g_l10n->get('INS_CREATE_CONFIGURATION_FILE'), 3);
 }
 elseif($req_mode == 4)
 {
@@ -196,8 +193,7 @@ elseif($req_mode == 4)
         if(strlen($_SESSION['user_login']) == 0
         || strlen($_POST['user_password']) == 0 )
         {
-            $message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
-            showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
+            showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
         }
 
         // Verbindung zu Datenbank herstellen
@@ -223,8 +219,7 @@ elseif($req_mode == 4)
 
         if($user_found != 1)
         {
-            $message = 'Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation !';
-            showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
+            showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_VALID'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
         }
         else
         {
@@ -232,25 +227,22 @@ elseif($req_mode == 4)
         }
     }
 
-    $message = '<strong>Konfigurationsdatei anlegen</strong><br /><br />
-                Lade die Konfigurationsdatei <strong>config.php</strong> herunter und kopiere 
-                diese in das Admidio Hauptverzeichnis der neuen Organisation. Dort liegt auch schon eine
-                <i>config_default.php</i>.<br /><br />
+    $message = '<strong>'.$g_l10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_default.php').'<br /><br />
 
                 <span class="iconTextLink">
                     <a href="new_organization.php?mode=5"><img
-                    src="layout/page_white_download.png" alt="config.php herunterladen" /></a>
-                    <a href="new_organization.php?mode=5">config.php herunterladen</a>
+                    src="layout/page_white_download.png" alt="'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'" /></a>
+                    <a href="new_organization.php?mode=5">'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'</a>
                 </span>
                 <br />';
-    showPage($message, 'new_organization.php?mode=6', 'database_in.png', 'Organisation einrichten', 3);
+    showPage($message, 'new_organization.php?mode=6', 'database_in.png', $g_l10n->get('INS_SET_UP_ORGANIZATION'), 3);
 }
 elseif($req_mode == 5)
 {
 	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
 	{
-		$message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
-        showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
+        showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
    	}
 
     // MySQL-Zugangsdaten in config.php schreiben
@@ -292,15 +284,12 @@ elseif($req_mode == 6)
 
 	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
 	{
-		$message = 'Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !';
-        showPage($message, 'new_organization.php?mode=3', 'back.png', 'Zurück', 3);
+        showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
    	}
 
     if(file_exists('../config.php') == false)
     {
-        $message = 'Die Datei <strong>config.php</strong> befindet sich nicht im Admidio Hauptverzeichnis !<br /><br />
-                    Laden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.';
-        showPage($message, 'new_organization.php?mode=4', 'back.png', 'Zurück', 3);
+        showPage($g_l10n->get('INS_PHR_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'new_organization.php?mode=4', 'back.png', $g_l10n->get('SYS_BACK'), 3);
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
@@ -345,38 +334,34 @@ elseif($req_mode == 6)
         $text->save();
     }
 
-    // Datenbank-Versionsnummer schreiben
-    $sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-                                       VALUES (". $g_current_organization->getValue("org_id"). ", 'db_version', '". ADMIDIO_VERSION. "') ";
+    // Admidio-Versionsnummer schreiben
+    $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
+                                       VALUES ('. $g_current_organization->getValue('org_id'). ', "db_version",      "'. ADMIDIO_VERSION. '") 
+                                            , ('. $g_current_organization->getValue('org_id'). ', "db_version_beta", "'. BETA_VERSION. '")';
     $db->query($sql);
 
-	// Beta-Flag für Datenbank-Versionsnummer schreiben
-	$sql = "INSERT INTO ". TBL_PREFERENCES. " (prf_org_id, prf_name, prf_value)
-									   VALUES (". $g_current_organization->getValue("org_id"). ", 'db_version_beta', '". BETA_VERSION. "') ";
-	$db->query($sql);
-
     // Default-Kategorie fuer Rollen und Links eintragen
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                           VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Allgemein', 0, 1)";
+    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+                                           VALUES ('. $g_current_organization->getValue('org_id'). ', "ROL", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)';
     $db->query($sql);
     $category_common = $db->insert_id();
 
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Gruppen', 0, 2)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Kurse', 0, 3)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'ROL', 'Mannschaften', 0, 4)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Allgemein', 0, 1)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'LNK', 'Intern', 1, 1)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Allgemein', 0, 1)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Kurse', 0, 1)
-                                           , (". $g_current_organization->getValue("org_id"). ", 'DAT', 'Training', 0, 1) ";
+    $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+                                     VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_GROUPS').'", 0, 2)
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_COURSES').'", 0, 3)
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_TEAMS').'", 0, 4)
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('INS_INTERN').'", 1, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_TRAINING').'", 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_COURSES').'", 0, 1) ';
     $db->query($sql);
 
-    //Default-Ordner fuer Downloadmodul in der DB anlegen:
-    $sql = "INSERT INTO ". TBL_FOLDERS. " (fol_org_id, fol_type, fol_name, fol_path,
+    //DefaultOrdner fuer Downloadmodul in der DB anlegen:
+    $sql = 'INSERT INTO '. TBL_FOLDERS. ' (fol_org_id, fol_type, fol_name, fol_path,
                                            fol_locked, fol_public, fol_timestamp)
-                                    VALUES (". $g_current_organization->getValue("org_id"). ", 'DOWNLOAD', 'download', '/adm_my_files',
-                                            0,1, '". DATETIME_NOW. "')";
+                                    VALUES ('. $g_current_organization->getValue('org_id'). ', "DOWNLOAD", "download", "/adm_my_files",
+                                            0,1,"'.DATETIME_NOW.'")';
     $db->query($sql);
 
     // nun die Default-Rollen anlegen
@@ -384,8 +369,8 @@ elseif($req_mode == 6)
     // Webmaster
     $role_webmaster = new TableRoles($db);
     $role_webmaster->setValue('rol_cat_id', $category_common);
-    $role_webmaster->setValue('rol_name', 'Webmaster');
-    $role_webmaster->setValue('rol_description', 'Gruppe der Administratoren des Systems');
+    $role_webmaster->setValue('rol_name', $g_l10n->get('SYS_WEBMASTER'));
+    $role_webmaster->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_WEBMASTER'));
     $role_webmaster->setValue('rol_assign_roles', 1);
     $role_webmaster->setValue('rol_approve_users', 1);
     $role_webmaster->setValue('rol_announcements', 1);
@@ -406,8 +391,8 @@ elseif($req_mode == 6)
     // Mitglied
     $role_member = new TableRoles($db);
     $role_member->setValue('rol_cat_id', $category_common);
-    $role_member->setValue('rol_name', 'Mitglied');
-    $role_member->setValue('rol_description', 'Alle Mitglieder der Organisation');
+    $role_member->setValue('rol_name', $g_l10n->get('SYS_MEMBER'));
+    $role_member->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_MEMBER'));
     $role_member->setValue('rol_mail_this_role', 2);
     $role_member->setValue('rol_profile', 1);
     $role_member->setValue('rol_this_list_view', 1);
@@ -416,8 +401,8 @@ elseif($req_mode == 6)
     // Vorstand
     $role_management = new TableRoles($db);
     $role_management->setValue('rol_cat_id', $category_common);
-    $role_management->setValue('rol_name', 'Vorstand');
-    $role_management->setValue('rol_description', 'Vorstand des Vereins');
+    $role_management->setValue('rol_name', $g_l10n->get('INS_BOARD'));
+    $role_management->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_BOARD'));
     $role_management->setValue('rol_announcements', 1);
     $role_management->setValue('rol_dates', 1);
     $role_management->setValue('rol_weblinks', 1);
@@ -441,7 +426,7 @@ elseif($req_mode == 6)
 
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($db);
-    $address_list->setValue('lst_name', 'Adressliste');
+    $address_list->setValue('lst_name', $g_l10n->get('INS_ADDRESS_LIST'));
     $address_list->setValue('lst_global', 1);
     $address_list->setValue('lst_default', 1);
     $address_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
@@ -453,7 +438,7 @@ elseif($req_mode == 6)
     $address_list->save();
 
     $phone_list = new ListConfiguration($db);
-    $phone_list->setValue('lst_name', 'Telefonliste');
+    $phone_list->setValue('lst_name', $g_l10n->get('INS_PHONE_LIST'));
     $phone_list->setValue('lst_global', 1);
     $phone_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
     $phone_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
@@ -464,7 +449,7 @@ elseif($req_mode == 6)
     $phone_list->save();
 
     $contact_list = new ListConfiguration($db);
-    $contact_list->setValue('lst_name', 'Kontaktdaten');
+    $contact_list->setValue('lst_name', $g_l10n->get('INS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
     $contact_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'), 'ASC');
     $contact_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'), 'ASC');
@@ -478,7 +463,7 @@ elseif($req_mode == 6)
     $contact_list->save();
 
     $former_list = new ListConfiguration($db);
-    $former_list->setValue('lst_name', 'Mitgliedschaft');
+    $former_list->setValue('lst_name', $g_l10n->get('INS_MEMBERSHIP'));
     $former_list->setValue('lst_global', 1);
     $former_list->addColumn(1, $g_current_user->getProperty('Nachname', 'usf_id'));
     $former_list->addColumn(2, $g_current_user->getProperty('Vorname', 'usf_id'));
@@ -494,15 +479,13 @@ elseif($req_mode == 6)
     unset($_SESSION['g_preferences']);
     unset($_SESSION['g_current_user']);
 
-    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>Die Einrichtung war erfolgreich</strong><br /><br />
-                Die neue Organisation '. $_SESSION['orga_name_short']. ' wurde eingerichtet und die Konfigurationsdatei erstellt.
-                Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.';
+    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_SETUP_WAS_SUCCESSFUL').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_SETUP_NEW_ORGANIZATION_SUCCESSFUL', $_SESSION['orga_name_long']);
     if(is_writeable('../adm_my_files') == false)
     {
-        $message = $message. '<br /><br />Zuvor sollten Sie allerdings dem Ordner <strong>adm_my_files</strong>
-                   Schreibrechte geben. Ohne diese können Sie keine Fotos oder Dateien hochladen.';
+        $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$g_l10n->get('INS_PHR_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
-    showPage($message, '../adm_program/index.php', 'application_view_list.png', 'Übersichtsseite');
+    showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'));
 }
 
 ?>
