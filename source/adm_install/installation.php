@@ -259,7 +259,8 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         $orga_name_long  = '';
     }
 
-    $message = $message.'<strong>'.$g_l10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />'.$g_l10n->get('INS_PHR_NAME_OF_ORGANIZATION').'
+    $message = $message.'<strong>'.$g_l10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
+                '.$g_l10n->get('INS_PHR_NAME_OF_ORGANIZATION').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$g_l10n->get('INS_NAME_OF_ORGANIZATION').'</div>
                     <div class="groupBoxBody">
@@ -560,15 +561,15 @@ elseif($req_mode == 8)
     $category_common = $db->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_GROUPS').'", 0, 2)
-                                           , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_COURSES').'", 0, 3)
-                                           , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_TEAMS').'", 0, 4)
-                                           , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('INS_INTERN').'", 1, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_TRAINING').'", 0, 1)
-                                           , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_COURSES').'", 0, 1)
-                                           , (NULL, "USF", "'.$g_l10n->get('INS_ADDIDIONAL_DATA').'", 0, 3) ';
+                                     VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_GROUPS').'", 0, 2)
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_COURSES').'", 0, 3)
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_TEAMS').'", 0, 4)
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('INS_INTERN').'", 1, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_TRAINING').'", 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_COURSES').'", 0, 1)
+                                          , (NULL, "USF", "'.$g_l10n->get('INS_ADDIDIONAL_DATA').'", 0, 3) ';
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
