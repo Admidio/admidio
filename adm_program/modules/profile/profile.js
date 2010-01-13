@@ -110,7 +110,7 @@ function profileJSClass()
 		}
 	}
 
-	this.unmarkLeader = function(element)
+	this.unMarkLeader = function(element)
 	{
 		if(element.checked == false)
 		{

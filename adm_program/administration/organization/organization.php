@@ -1404,7 +1404,7 @@ echo '
         /**************************************************************************************/
         echo '
         <div class="groupBox" id="ecard-module">
-            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" />'.$g_l10n->get("ECA_SETTINGS_GREETING_CARDS").'</div>
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" /> '.$g_l10n->get("ECA_SETTINGS_GREETING_CARDS").'</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
                     <li>
