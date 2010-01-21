@@ -242,10 +242,7 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 							var jQueryArray = jQueryAjaxLoadAppendStack.getArray();
 							for(var i = 0;i < jQueryArray.length;i++)
 							{
-								if(eval(jQueryArray[i]))
-								{
-									eval(jQueryArray[i]+'();');
-								}
+								eval(jQueryArray[i]);
 							}
 						}
 					});
@@ -285,6 +282,14 @@ function tb_remove() {
 	if (typeof document.body.style.maxHeight == "undefined") {//if IE 6
 		$("body","html").css({height: "auto", width: "auto"});
 		$("html").css("overflow","");
+	}
+	if(jQueryCloseAppendStack)
+	{
+		var jQueryArray = jQueryCloseAppendStack.getArray();
+		for(var i = 0;i < jQueryArray.length;i++)
+		{
+			eval(jQueryArray[i]);
+		}
 	}
 	document.onkeydown = "";
 	document.onkeyup = "";
