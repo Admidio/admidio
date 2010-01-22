@@ -163,64 +163,68 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
         }
     }
 
-    // schauen, ob schon User mit dem Namen existieren und Daten einlesen
-    $sql = 'SELECT MAX(usr_id) AS usr_id
-              FROM '. TBL_USERS. '
-              JOIN '. TBL_USER_DATA. ' last_name
-                ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '.  $user->getProperty('Nachname', 'usf_id'). '
-               AND last_name.usd_value  = "'. $user->getValue('Nachname'). '"
-              JOIN '. TBL_USER_DATA. ' first_name
-                ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '.  $user->getProperty('Vorname', 'usf_id'). '
-               AND first_name.usd_value  = "'. $user->getValue('Vorname'). '"
-             WHERE usr_valid = 1 ';
-    $result = $g_db->query($sql);
-    $row_duplicate_user = $g_db->fetch_array($result);
-    if($row_duplicate_user['usr_id'] > 0)
+    // nur Benutzer anlegen, wenn Vor- und Nachname vorhanden sind
+    if(strlen($user->getValue('Nachname')) > 0 && strlen($user->getValue('Vorname')) > 0)
     {
-        $duplicate_user = new User($g_db, $row_duplicate_user['usr_id']);
-    }
-
-    if($row_duplicate_user['usr_id'] > 0)
-    {
-        if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
+        // schauen, ob schon User mit dem Namen existieren und Daten einlesen
+        $sql = 'SELECT MAX(usr_id) AS usr_id
+                  FROM '. TBL_USERS. '
+                  JOIN '. TBL_USER_DATA. ' last_name
+                    ON last_name.usd_usr_id = usr_id
+                   AND last_name.usd_usf_id = '.  $user->getProperty('Nachname', 'usf_id'). '
+                   AND last_name.usd_value  = "'. $user->getValue('Nachname'). '"
+                  JOIN '. TBL_USER_DATA. ' first_name
+                    ON first_name.usd_usr_id = usr_id
+                   AND first_name.usd_usf_id = '.  $user->getProperty('Vorname', 'usf_id'). '
+                   AND first_name.usd_value  = "'. $user->getValue('Vorname'). '"
+                 WHERE usr_valid = 1 ';
+        $result = $g_db->query($sql);
+        $row_duplicate_user = $g_db->fetch_array($result);
+        if($row_duplicate_user['usr_id'] > 0)
         {
-            // alle vorhandene Profilfelddaten des Users loeschen
-            $duplicate_user->clearUserFieldArray(true);
+            $duplicate_user = new User($g_db, $row_duplicate_user['usr_id']);
         }
-
-        if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE
-        || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
+    
+        if($row_duplicate_user['usr_id'] > 0)
         {
-            // Daten des Nutzers werden angepasst
-            foreach($imported_fields as $key => $field_name)
+            if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
-                if($duplicate_user->getValue($field_name) != $user->getValue($field_name))
-                {
-                    $duplicate_user->setValue($field_name, $user->getValue($field_name));
-                }
+                // alle vorhandene Profilfelddaten des Users loeschen
+                $duplicate_user->clearUserFieldArray(true);
             }
-            $user = $duplicate_user;
+    
+            if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE
+            || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
+            {
+                // Daten des Nutzers werden angepasst
+                foreach($imported_fields as $key => $field_name)
+                {
+                    if($duplicate_user->getValue($field_name) != $user->getValue($field_name))
+                    {
+                        $duplicate_user->setValue($field_name, $user->getValue($field_name));
+                    }
+                }
+                $user = $duplicate_user;
+            }
         }
-    }
-
-    if( $row_duplicate_user['usr_id'] == 0
-    || ($row_duplicate_user['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
-    {
-        // Usersatz anlegen
-        $user->save();
-        $count_import++;
-        // Rollenmitgliedschaft zuordnen
-        $member->startMembership($_SESSION['rol_id'], $user->getValue('usr_id'));
-        
-        //abhängige Rollen zuordnen
-        foreach($depRoles as $depRole)
+    
+        if( $row_duplicate_user['usr_id'] == 0
+        || ($row_duplicate_user['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
         {
-            $member->startMembership($depRole, $user->getValue('usr_id'));
+            // Usersatz anlegen
+            $user->save();
+            $count_import++;
+            // Rollenmitgliedschaft zuordnen
+            $member->startMembership($_SESSION['rol_id'], $user->getValue('usr_id'));
+            
+            //abhängige Rollen zuordnen
+            foreach($depRoles as $depRole)
+            {
+                $member->startMembership($depRole, $user->getValue('usr_id'));
+            }
+            
+            
         }
-        
-        
     }
 
     $line = next($_SESSION['file_lines']);

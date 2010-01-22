@@ -89,8 +89,8 @@ if($req_mode == 1)
         // bei einem Update von Admidio 1.x muss die spezielle Version noch erfragt werden,
         // da in Admidio 1.x die Version noch nicht in der DB gepflegt wurde
         $message = '<img style="vertical-align: top;" src="layout/warning.png" />
-                    <strong>'.$g_l10n->get('INS_PHR_CHOOSE_LANGUAGE').'</strong><br /><br />
-                    '.$g_l10n->get('INS_PHR_CHOOSE_LANGUAGE', ADMIDIO_VERSION).'<br /><br />
+                    <strong>'.$g_l10n->get('INS_PHR_DATABASE_NEEDS_UPDATED').'</strong><br /><br />
+                    '.$g_l10n->get('INS_PHR_UPDATE_FROM_ADMIDIO_1X', ADMIDIO_VERSION).'<br /><br />
                     '.$g_l10n->get('INS_PREVIOUS_ADMIDIO_VERSION').':&nbsp;
                     <select id="old_version" name="old_version" size="1">
                         <option value="0" selected="selected">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>
@@ -102,7 +102,7 @@ if($req_mode == 1)
     elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0 || $g_preferences['db_version_beta'] != BETA_VERSION)
     {
         $message = '<img style="vertical-align: top;" src="layout/warning.png" />
-                    <strong>'.$g_l10n->get('INS_PHR_CHOOSE_LANGUAGE').'</strong>';
+                    <strong>'.$g_l10n->get('INS_PHR_DATABASE_NEEDS_UPDATED').'</strong>';
     }
     else
     {
