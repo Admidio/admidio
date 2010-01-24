@@ -251,7 +251,7 @@ function getFieldCode($field, $user, $new_user)
             $value .= '
                     <input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" 
                         maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue('usd_value'). '" '.$readonly.' />
-                    <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\'dd.MM.yyyy\');"><img 
+                    <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\''.$g_preferences['system_date'].'\');"><img 
                     	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
@@ -338,6 +338,7 @@ else
 }
 
 $g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
 

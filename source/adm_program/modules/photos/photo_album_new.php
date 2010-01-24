@@ -146,6 +146,7 @@ elseif($_GET['job']=='change')
     $g_layout['title'] = 'Album bearbeiten';
 }
 $g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
     <script type="text/javascript"><!--
@@ -218,7 +219,7 @@ echo '
                     <dt><label for="pho_begin">Beginn:</label></dt>
                     <dd>
                         <input type="text" id="pho_begin" name="pho_begin" size="10" tabindex="3" maxlength="10" value="'. $photo_album->getValue("pho_begin").'" />
-                        <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\');"><img 
+                        <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
                         	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                         <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
@@ -230,7 +231,7 @@ echo '
                     <dt><label for="pho_end">Ende:</label></dt>
                     <dd>
                         <input type="text" id="pho_end" name="pho_end" size="10" tabindex="4" maxlength="10" value="'. $photo_album->getValue("pho_end").'">
-                        <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\'dd.MM.yyyy\',\'pho_begin\',\'pho_end\');"><img 
+                        <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
                         	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                     </dd>
                 </dl>

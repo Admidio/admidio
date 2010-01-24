@@ -428,9 +428,9 @@ else
     while($row = $g_db->fetch_array($dates_result))
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
-        $date->clear();
-        $date->setArray($row);
-        $date->readData($date->getValue('dat_id'));
+        //$date->clear();
+        //$date->setArray($row);
+        $date->readData($row['dat_id']);
         
         // HTML-code für Teilnehmeranzeige generieren
         $participants_html = '';

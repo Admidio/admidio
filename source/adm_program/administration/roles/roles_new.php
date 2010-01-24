@@ -106,6 +106,7 @@ else
     $role->setValue('rol_mail_this_role', '2');
 }
 $g_layout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />
     <script type="text/javascript"><!--
@@ -684,11 +685,11 @@ echo '
                             <dt><label for="rol_start_date">Gültig von:</label></dt>
                             <dd>
                                 <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue("rol_start_date").'" />
-                                <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img
+                                <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\''.$g_preferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                                 <label for="rol_end_date">bis</label>
                                 <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue("rol_end_date").'" />
-                                <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'rol_start_date\',\'rol_end_date\');"><img
+                                <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\''.$g_preferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;(Datum)
                                 <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
                             </dd>
