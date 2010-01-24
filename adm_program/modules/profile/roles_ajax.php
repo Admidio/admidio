@@ -17,6 +17,7 @@
  *****************************************************************************/
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once("../../system/classes/table_members.php");
 require_once('roles_functions.php');
 
 $action = 0;
@@ -95,7 +96,7 @@ switch($action)
 		{
 			die($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 		}
-		require("../../system/classes/table_members.php");
+
 		//Einlesen der Mitgliedsdaten
 		 $mem = NEW TableMembers($g_db);
 		 $mem->readData(array('rol_id' => $_GET['rol_id'], 'usr_id' => $_GET['usr_id']));

@@ -136,6 +136,7 @@ if($date->getValue('dat_rol_id')!= '')
 }
 
 $g_layout['header'] = '
+<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
 <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
 <script type="text/javascript"><!--
@@ -161,9 +162,12 @@ $g_layout['header'] = '
     // Funktion belegt das Datum-bis entsprechend dem Datum-Von
     function setDateTo()
     {
-        if(document.getElementById("date_from").value > document.getElementById("date_to").value)
+        var dateFrom = Date.parseDate($("#date_from").val(), "'.$g_preferences['system_date'].'");
+        var dateTo   = Date.parseDate($("#date_to").val(), "'.$g_preferences['system_date'].'");
+
+        if(dateFrom.getTime() > dateTo.getTime())
         {
-            document.getElementById("date_to").value = document.getElementById("date_from").value;
+            $("#date_to").val($("#date_from").val());
         }
     }
 
@@ -302,7 +306,7 @@ echo '
                     <dd>
                         <span>
                             <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$date_from.'" />
-                            <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\'dd.MM.yyyy\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
+                            <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
                                 src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                             <span id="calendardiv" style="position: absolute; visibility: hidden; "></span>
                         </span>
@@ -328,7 +332,7 @@ echo '
                     <dd>
                         <span>
                             <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$date_to.'" />
-                            <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\'dd.MM.yyyy\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
+                            <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
                                 src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                         </span>
                         <span style="margin-left: 10px;">

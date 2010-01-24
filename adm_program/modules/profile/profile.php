@@ -222,6 +222,7 @@ else
 }
 $g_layout['header'] = '
 	<link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>	
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
     <script type="text/javascript">
 	<!--
