@@ -29,4 +29,9 @@ $plg_link_target = '_self';
 // bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert)) 
 $plg_max_char_per_word = 0;
 
+// Angabe der Prefix-Url für den Aufruf in Joomla
+// wenn keine Angabe erfolgt dann wird die Standard-URL von Admidio verwendet
+$plg_link_url = $g_root_path. '/adm_program/modules/dates/dates.php';
+
+
 ?>
