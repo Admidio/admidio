@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.2.1
+ * Version 1.2.3
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -62,6 +62,13 @@ if(isset($plg_link_target))
 else
 {
     $plg_link_target = '_self';
+}
+
+// Prüfen ob the Link-URL gesetzt wurde oder leer ist
+// wenn leer, dann Standardpfad zum Admidio-Modul
+if(isset($plg_link_url) == false || ($plg_link_url) =="")
+{
+$plg_link_url = $g_root_path."/adm_program/modules/dates/dates.php";
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
@@ -132,7 +139,8 @@ if($g_db->num_rows($plg_result) > 0)
             }
         }
 
-        echo $plg_html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php?id='. $plg_date->getValue("dat_id"). '" target="'. $plg_link_target. '">';
+        // Über $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
+        echo $plg_html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $plg_link_url. '?id='. $plg_date->getValue("dat_id"). '" target="'. $plg_link_target. '">';
 
         if($plg_max_char_per_word > 0)
         {
@@ -162,7 +170,8 @@ if($g_db->num_rows($plg_result) > 0)
         }
     }
 
-    echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/dates/dates.php" target="'. $plg_link_target. '">Alle Termine</a>';
+    // WEiterleitung über $plg_link_url ohne weiteren Übergabeparameter
+    echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">Alle Termine</a>';
 }
 else
 {
