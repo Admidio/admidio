@@ -1,7 +1,7 @@
 /******************************************************************************
  * Cascading-Style-Sheets-Datei um das Aussehen des Birthday Plugins anzupassen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,43 @@
     padding:            0px;
     list-style-type:    none;
 }
- 
+
+/* ********************************************************** */
+/* CSS Klasse für heutigen Geburtstag                         */
+/* ********************************************************** */
+
+#plgBirthdayNameHighlight { 
+    color:              #FFFF00;
+}
+
+#plgBirthdayDateHighlight { 
+    color:              #FFFF00;
+}
+
+/* ********************************************************** */
+/* CSS Klasse für vergangene Geburtstage                      */
+/* ********************************************************** */
+
+#plgBirthdayNameHighlightAgo { 
+    color:              #FF6600;
+}
+
+#plgBirthdayDateHighlightAgo { 
+    color:              #FF6600;
+}
+
+/* ********************************************************** */
+/* CSS Klasse für zukünftige Geburtstage                      */
+/* ********************************************************** */
+
+#plgBirthdayNameHighlightFuture { 
+    color:              #99FF00;
+}
+
+#plgBirthdayDateHighlightFuture { 
+    color:              #99FF00;
+}
+
 #plgBirthdayNameList li { 
     display:            inline;
     text-align:         left;
@@ -23,6 +59,8 @@
     margin-bottom:      3px;
     border-bottom:      1px dashed #d7d7d7;
 }
+
+
 
 /* Hack, da der IE mit diesem CSS nicht klar kommt */
 ul[id]#plgBirthdayNameList li {

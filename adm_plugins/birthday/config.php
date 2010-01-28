@@ -38,6 +38,7 @@ $plg_show_nachtraeglich = 0;
 // Bei registrierten Benutzern wird immer ein Link auf das Mailmodul gesetzt
 // 0 = (Default) Es wird nur der Name ohne Link mit E-Mail-Adresse angezeigt
 // 1 = E-Mail-Adresse ist fuer Besucher verlinkt
+// 2 = keine Verlinkung fuer Besucher und registrierte Benutzer
 $plg_show_email_extern = 0;
 
 // Wie soll der Name des Geburtstagskindes angezeigt werden ?
@@ -50,5 +51,14 @@ $plg_show_names = 1;
 // Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';
+
+// Angabe welche Rollen selektiert werden sollen
+// Aufzählung mit Komma vornehmen "(4,5)"
+$plg_rolle_sql = "";
+
+// Angabe in welcher Sortierfolge die Geburtstage dargestellt werden sollen
+// Aufsteigend bzw. absteigend "asc bzw. desc"
+$plg_sort_sql = "desc";
+
 
 ?>
