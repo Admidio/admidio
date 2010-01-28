@@ -2,7 +2,7 @@
 /******************************************************************************
  * Birthday
  *
- * Version 1.5.1
+ * Version 1.5.2
  *
  * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
  * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
@@ -74,6 +74,26 @@ if(isset($plg_show_future) == false || is_numeric($plg_show_names_extern) == fal
     $plg_show_future = 10;
 }
 
+// Prüfen, ob die Rollenbedingung gesetzt wurde            //
+if(isset($plg_rolle_sql) == false || ($plg_rolle_sql) =="")
+{
+    $rol_sql = "is not null";
+}
+else
+{
+    $rol_sql = "in ".$plg_rolle_sql;
+}
+
+// Prüfen, ob die Sotierbedingung gesetzt wurde            //
+if(isset($plg_sort_sql) == false || ($plg_sort_sql) =="")
+{
+    $sort_sql = "desc";
+}
+else
+{
+    $sort_sql = $plg_sort_sql;
+}
+
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
 if($plg_show_names_extern == 0 && $g_valid_login == 0)
 {
@@ -86,39 +106,36 @@ $g_db->setCurrentDB();
 
 $sql    = "SELECT DISTINCT usr_id, usr_login_name, 
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 
-                           birthday.bday as birthday,
-			   birthday.bdate,
-			   DATEDIFF(birthday.bdate, '".DATETIME_NOW."') AS days_to_bdate,
-			   YEAR(bdate) - YEAR(bday) AS age,
-			   email.usd_value as email,
-                           gender.usd_value as gender
+                           birthday.bday as birthday, birthday.bdate,
+                           DATEDIFF(birthday.bdate, '".DATETIME_NOW."') AS days_to_bdate,
+                           YEAR(bdate) - YEAR(bday) AS age,
+                           email.usd_value as email, gender.usd_value as gender
              FROM ". TBL_USERS. " users
-            RIGHT JOIN 
-	    	(
-			(SELECT 
-				usd_usr_id,
-				usd_value AS bday,
-				CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)) AS bdate
-				FROM ". TBL_USER_DATA. " bd1
-				WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-              			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
-		UNION
-			(SELECT 
-				usd_usr_id,
-				usd_value AS bday,
-				CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)) AS bdate
-				FROM ". TBL_USER_DATA. " bd2
-				WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-              			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
-		UNION
-			(SELECT 
-				usd_usr_id,
-				usd_value AS bday,
-				CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)) AS bdate
-				FROM ". TBL_USER_DATA. " bd3
-				WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-              			AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
-		 ) AS birthday
+             JOIN (
+            (SELECT 
+                usd_usr_id,
+                usd_value AS bday,
+                CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)) AS bdate
+                FROM ". TBL_USER_DATA. " bd1
+                WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
+                        AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+        UNION
+            (SELECT 
+                usd_usr_id,
+                usd_value AS bday,
+                CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)) AS bdate
+                FROM ". TBL_USER_DATA. " bd2
+                WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
+                        AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+        UNION
+            (SELECT 
+                usd_usr_id,
+                usd_value AS bday,
+                CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)) AS bdate
+                FROM ". TBL_USER_DATA. " bd3
+                WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
+                        AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+         ) AS birthday
                ON birthday.usd_usr_id = usr_id
              LEFT JOIN ". TBL_USER_DATA. " as last_name
                ON last_name.usd_usr_id = usr_id
@@ -136,14 +153,16 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
                ON mem_usr_id = usr_id
               AND mem_begin <= '".DATE_NOW."'
               AND mem_end    > '".DATE_NOW."'
-            RIGHT JOIN ". TBL_ROLES. "
+             JOIN ". TBL_ROLES. "
                ON mem_rol_id = rol_id
               AND rol_valid  = 1
-            RIGHT JOIN ". TBL_CATEGORIES. "
+             JOIN ". TBL_CATEGORIES. "
                ON rol_cat_id = cat_id
               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
             WHERE usr_valid = 1
-            ORDER BY days_to_bdate, last_name, first_name ";
+              AND mem_rol_id ".$rol_sql."
+            ORDER BY days_to_bdate ".$sort_sql.", last_name, first_name ";
+//echo $sql; exit();
 $result = $g_db->query($sql);
 
 $anz_geb = $g_db->num_rows($result);
@@ -180,7 +199,7 @@ if($anz_geb > 0)
 
                 // Namen mit Alter und Mail-Link anzeigen
                 if(strlen($row['email']) > 0
-                && ($g_valid_login || $plg_show_email_extern))
+                && ($g_valid_login || $plg_show_email_extern == 1))
                 {
                     if($g_valid_login)
                     {
@@ -227,16 +246,18 @@ if($anz_geb > 0)
                     // Geburtstagskinder am aktuellen Tag bekommen anderen Text
                     if($row['days_to_bdate'] == 0)
                     {
-                        echo '<li>'.$plg_show_name.'<br/>wird heute '.$plg_age.'</li>';
+                        // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
+                        echo '<li><span id="plgBirthdayNameHighlight">'.$plg_show_name.'</span> wird <span id="plgBirthdayDateHighlight"> heute </span>'.$plg_age.'</li>';
                     }
                     else
                     {
                         $plg_date = mysqldatetime('d.m.y', $row['bdate']);
-            			$plg_age = $row['age'];
-            			$plg_dtb = $row['days_to_bdate'];
-            			$plg_tage = '';
-            			$plg_alter_text = '';
-            			if ($plg_dtb < 0) 
+                        $plg_age = $row['age'];
+                        $plg_dtb = $row['days_to_bdate'];
+                        $plg_tage = '';
+                        $plg_alter_text = '';
+
+                        if ($plg_dtb < 0) 
                         {
                             if($plg_dtb == -1)
                             {
@@ -247,7 +268,7 @@ if($anz_geb > 0)
                                 $plg_alter_text = 'wurde';
                                 $plg_tage = 'vor '. -$plg_dtb. ' Tagen';
                             }
-            			} 
+                        } 
                         elseif ($plg_dtb > 0) 
                         {
                             if($plg_dtb == 1)
@@ -259,11 +280,20 @@ if($anz_geb > 0)
                                 $plg_alter_text = 'wird';
                                 $plg_tage = 'in '. $plg_dtb. ' Tagen';
                             }
-            			}
-                        echo '<li>'.$plg_show_name.' '.$plg_alter_text.' '.$plg_age.'<br/>'.$plg_tage.', am <b>'.$plg_date.'</b><br/></li>';
+                        }
+                        // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
+                        if($plg_dtb < -0)
+                        {
+                            // liegt der Geburtstag in der Vergangenheit, dann CSS HighlightAGO verwenden
+                            echo '<li><span id="plgBirthdayNameHighlightAgo">'.$plg_show_name.'</span> '.$plg_alter_text.' <span id="plgBirthdayNameHighlightAgo">'.$plg_age.' Jahre</span> '.$plg_tage.', am <span id="plgBirthdayDateHighlightAgo">'.$plg_date.'</span><br/></li>';
+                        }
+                        if ($plg_dtb > 0)
+                        {
+                            // liegt der Geburtstag in der Zukunft, dann CSS HighlightFUTURE verwenden
+                            echo '<li><span id="plgBirthdayNameHighlightFuture">'.$plg_show_name.'</span> '.$plg_alter_text.' <span id="plgBirthdayNameHighlightFuture">'.$plg_age.' Jahre</span> '.$plg_tage.', am <span id="plgBirthdayDateHighlightFuture">'.$plg_date.'</span><br/></li>';
+                        }	
                     }
-                }
-		
+                }		
             }
         echo '</ul>';
     }

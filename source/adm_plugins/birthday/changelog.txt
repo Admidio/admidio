@@ -1,0 +1,56 @@
+﻿-------------------------------------------------------------------------
+                          Sidebar Birthday 
+     	        Copyright (c) 2004 - 2009 The Admidio Team
+           Admidio is a open source user management software
+-------------------------------------------------------------------------
+
+1.5.2 (20.01.2010)
+* Das Plugin wurde so erweitert, dass mittels css-Datei die Geburtstage für
+  zukünftige, heutige und vergangene Tage farblich separat angezeigt werden können.
+* Über die Config-Datei kann nun festgelegt werden, in welcher Sortierreihenfolge die 
+  Geburtstage ausgegeben werden sollen. Absteigend bzw. aufsteigend.
+* Über die Config.php-Datei kann festgelegt werden, welche Mitgliederrollen selektiert werden sollen.
+
+1.5.1 (18.11.2009)
+* Korrektur bei Geburtstagsanzeige, wenn nur Registrierte Geburtstage sehen dürfen
+
+1.5.0 (03.04.2009)
+* Plugin kompatibel mit Admidio 2.1
+
+1.4.2 (25.6.2008) (hinzugefügt von roben)
+* Geburtstage beim Jahreswechsel korrekt anzeigen
+* Neue Darstellung der vergangenen und zukünftigen Geburtstage
+* Anzahl Tage bis zum Geburtstag werden angezeigt
+* Alter bei vergangenen und zukünftigen Geburtstage anzeigen
+
+1.4.1 (25.6.2008)
+* SQL-Statement funktioniert jetzt auch mit MySQL-Version 4.0
+
+1.4.0 (15.6.2008) (hinzugefügt von roben)
+* Geburtstage der nächsten X Tage können angezeigt werden
+
+1.3.1 (25.5.2008)
+* Fehler im SQL-Statement
+
+1.3.0 (11.5.2008)
+* Plugin kompatibel mit Admidio 2.0
+* Layout kann über eigene CSS-Datei angepasst werden
+
+1.2.1 (5.11.2007)
+* Der gesetzte Zeitraum wird jetzt wieder berücksichtigt
+
+1.2.0 (4.9.2007) (hinzugefügt von Joesch)
+* Geburtstage der letzten X Tage anzeigen
+* Alter der Geburtstagskinder kann vor Besuchern versteckt werden
+* Ab X Jahren können die Geburtstagskinder mit Herr/Frau angeredet werden
+* Meldung, wenn keiner Geburtstag hat, kann unterdrückt werden
+
+1.1.1 (6.3.2007)
+* Admidio-DB explizit setzen
+
+1.1 (2.3.2007)
+* Der Name kann nun auf 4 verschiedene Arten angezeigt werden
+* Link im eingeloggten Zustand geht nun zum Profil
+
+1.0 (24.2.2007)
+* Sidebar Birthday zum ersten Mal erschienen
