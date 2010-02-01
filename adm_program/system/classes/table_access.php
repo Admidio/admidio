@@ -258,20 +258,8 @@ class TableAccess
             // Datum in dem uebergebenen Format zurueckgeben
             if(strlen($format) > 0 && strlen($field_value) > 0)
             {
-                $dateArray = split("[- :]", $field_value);
-                if(strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false)
-                {
-                    $timestamp = mktime($dateArray[3], $dateArray[4], $dateArray[5], $dateArray[1], $dateArray[2], $dateArray[0]);
-                }
-                elseif(strpos($this->columnsInfos[$field_name]['type'], 'date') !== false)
-                {
-                    $timestamp = mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
-                }
-                else
-                {
-                    $timestamp = mktime($dateArray[0], $dateArray[1], $dateArray[2], 1, 1, 2000);
-                }
-                $field_value = date($format, $timestamp);
+                $datetime = new DateTime($field_value);
+                $field_value = $datetime->format($format);
             }
             return $field_value;
         }
