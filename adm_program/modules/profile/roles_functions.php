@@ -42,7 +42,7 @@ function getFormerRolesFromDatabase($g_db,$user_id,$g_current_organization)
 }
 function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,$directOutput,$g_l10n)
 {
-    global $g_preferences, $g_root_path;
+    global $g_preferences, $g_root_path, $g_current_organization;
     
     $count_show_roles  = 0;
     $member = new TableMembers($g_db);
