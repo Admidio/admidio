@@ -96,11 +96,13 @@ if($_GET['mode'] != 2)
 if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 4)
 {
     // alle vorhandenen Spalten durchgehen
+    $columnNumber = 0;
     for($number = 1; isset($_POST['column'. $number]); $number++)
     {
         if(strlen($_POST['column'. $number]) > 0)
         {
-            $list->addColumn($number, $_POST['column'. $number], $_POST['sort'. $number], $_POST['condition'. $number]);
+            $columnNumber++;
+            $list->addColumn($columnNumber, $_POST['column'. $number], $_POST['sort'. $number], $_POST['condition'. $number]);
         }
         else
         {
