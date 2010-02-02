@@ -228,6 +228,7 @@ class TableAccess
     // $format kann fuer Datetime-Felder das Format aus der PHP-Funktion date() angegeben werden
     public function getValue($field_name, $format = '')
     {
+        global $g_preferences;
         $field_value = '';
         
         if(isset($this->dbColumns[$field_name]))
@@ -256,8 +257,12 @@ class TableAccess
             || strpos($this->columnsInfos[$field_name]['type'], 'time') !== false))
         {
             // Datum in dem uebergebenen Format zurueckgeben
-            if(strlen($format) > 0 && strlen($field_value) > 0)
+            if(strlen($field_value) > 0)
             {
+                if(strlen($format) == 0 && isset($g_preferences))
+                {
+                    $format = $g_preferences['system_date'];
+                }
                 $datetime = new DateTime($field_value);
                 $field_value = $datetime->format($format);
             }

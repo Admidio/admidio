@@ -73,12 +73,6 @@ if(isset($_SESSION['roles_request']))
     }
     unset($_SESSION['roles_request']);
 }
-else
-{
-    // Datum formatieren
-    $role->setValue('rol_start_date', $role->getValue('rol_start_date', $g_preferences['system_date']));
-    $role->setValue('rol_end_date', $role->getValue('rol_end_date', $g_preferences['system_date']));
-}
 
 // holt eine Liste der ausgewaehlten abhaengigen Rolen
 $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
@@ -684,11 +678,11 @@ echo '
                         <dl>
                             <dt><label for="rol_start_date">Gültig von:</label></dt>
                             <dd>
-                                <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue("rol_start_date").'" />
+                                <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue('rol_start_date').'" />
                                 <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\''.$g_preferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                                 <label for="rol_end_date">bis</label>
-                                <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue("rol_end_date").'" />
+                                <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue('rol_end_date').'" />
                                 <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\''.$g_preferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;(Datum)
                                 <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
@@ -699,9 +693,9 @@ echo '
                         <dl>
                             <dt><label for="rol_start_time">Uhrzeit:</label></dt>
                             <dd>
-                                <input type="text" id="rol_start_time" name="rol_start_time" size="5" maxlength="5" value="'.$role->getValue("rol_start_time").'" />
+                                <input type="text" id="rol_start_time" name="rol_start_time" size="10" maxlength="10" value="'.$role->getValue('rol_start_time', $g_preferences['system_time']).'" />
                                 <label for="rol_end_time">bis</label>
-                                <input type="text" id="rol_end_time" name="rol_end_time" size="5" maxlength="5" value="'.$role->getValue("rol_end_time").'" />
+                                <input type="text" id="rol_end_time" name="rol_end_time" size="10" maxlength="10" value="'.$role->getValue('rol_end_time', $g_preferences['system_time']).'" />
                             </dd>
                         </dl>
                     </li>
