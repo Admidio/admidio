@@ -302,6 +302,7 @@ class ConditionParser
     // liefert das Datum fertig formatiert fuer das SQL-Statement 'YYYY-MM-DD'
     function getFormatDate($date)
     {
+        global $g_preferences;
         $format_date = '';
 
         // bastwe: check if user searches for age
@@ -317,24 +318,13 @@ class ConditionParser
             return '"'. $ret. '"';
         }
         
-        if(strlen($date) <= 10 && strlen($date) >= 6)
+        // Datum validieren und im MySQL-Format ausgeben
+        if(strlen($date) > 0)
         {
-            $dateArray    = split('[- :.]', $date);
-            // zweistelliges Jahr in 4 stelliges Jahr umwandeln
-            if(strlen($dateArray[2]) == 2)
+            $date = new DateTimeExtended($date.' 01:00:00', $g_preferences['system_date'].' h:i:s');
+            if($date->valid())
             {
-                if($dateArray[2] < 30)
-                {
-                    $dateArray[2] = '20'. $dateArray[2];
-                }
-                else
-                {
-                    $dateArray[2] = '19'. $dateArray[2];
-                }
-            }
-            if(dtCheckDate($dateArray[0]. '.'. $dateArray[1]. '.'. $dateArray[2]))
-            {
-                $format_date = date('Y-m-d', strtotime($dateArray[2].'-'.$dateArray[1].'-'.$dateArray[0]));
+                $format_date = $date->format('Y-m-d');
             }
         }
         return '"'. $format_date. '"';

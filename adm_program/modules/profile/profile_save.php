@@ -146,11 +146,12 @@ foreach($user->userFieldData as $field)
             elseif($field->getValue('usf_type') == 'DATE')
             {
                 // Datum muss gueltig sein und formatiert werden
-                if(dtCheckDate($_POST[$post_id]) == false)
+                $date = new DateTimeExtended($_POST[$post_id].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+                if($date->valid() == false)
                 {
                     $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
                 }
-                $_POST[$post_id] = dtFormatDate($_POST[$post_id], 'Y-m-d');
+                $_POST[$post_id] = $date->format('Y-m-d');
             }
             elseif($field->getValue('usf_type') == 'EMAIL')
             {

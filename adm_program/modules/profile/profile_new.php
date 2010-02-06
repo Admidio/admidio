@@ -96,11 +96,6 @@ if(isset($_SESSION['profile_request']))
         $field_name = 'usf-'. $field->getValue('usf_id');
         if(isset($form_values[$field_name]))
         {
-            // Datum rest einmal wieder in MySQL-Format bringen
-            if($field->getValue('usf_type') == 'DATE' && strlen($form_values[$field_name]) > 0)
-            {
-                $form_values[$field_name] = dtFormatDate($form_values[$field_name], 'Y-m-d');
-            }
             $user->setValue($field->getValue('usf_name'), $form_values[$field_name]);
         }
     }
@@ -209,10 +204,6 @@ function getFieldCode($field, $user, $new_user)
         {
             $width = '80px';
             $maxlength = '10';
-            if(strlen($field->getValue('usd_value')) > 0)
-            {
-                $field->setValue('usd_value', $field->getValue('usd_value', $g_preferences['system_date']));
-            }
         }
         elseif($field->getValue('usf_type') == 'EMAIL' || $field->getValue('usf_type') == 'URL')
         {

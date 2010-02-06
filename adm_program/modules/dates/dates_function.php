@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Termine
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -129,9 +129,9 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $_SESSION['dates_request']['keep_rol_id'] = 0;
     }
     
-    // ------------------------------------
+    // ------------------------------------------------
     // pruefen ob alle notwendigen Felder gefuellt sind
-    // ------------------------------------
+    // ------------------------------------------------
     
     if(strlen($_POST['dat_headline']) == 0)
     {
@@ -165,7 +165,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     if(isset($_POST['dat_all_day']))
     {
         $_POST['time_from'] = '00:00';
-        $_POST['time_to'] = '23:59'; // Ganztägig ist nur logisch bei 23:59 Uhr (rn)
+        $_POST['time_to']   = '00:00'; // Ganztägig ist nur logisch bei 23:59 Uhr (rn)
         $date->setValue('dat_all_day', 1);
     }
     
@@ -173,28 +173,36 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     {
         $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY','Sichtbarkeit'));
     }
-
-    // Datum und Uhrzeit auf Gueltigkeit pruefen
-
-    if(dtCheckDate($_POST['date_from']))
+    
+    // das Land nur zusammen mit dem Ort abspeichern
+    if(strlen($_POST['dat_location']) == 0)
     {
-        if(strlen($_POST['time_from']) > 0 && dtCheckTime($_POST['time_from']))
-        {
-            // Datum & Uhrzeit formatiert zurueckschreiben
-            $date_arr = explode('.', $_POST['date_from']);
-            $time_arr = explode(':', $_POST['time_from']);
-            $date_from_timestamp = mktime($time_arr[0],$time_arr[1],0,$date_arr[1],$date_arr[0],$date_arr[2]);
-            $date_begin = date('Y-m-d H:i:s', $date_from_timestamp);
-            $date->setValue('dat_begin', $date_begin);
-        }
-        else
-        {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
-        }
+        $_POST['dat_country'] = '';
+    }
+
+    // ------------------------------------------------
+    // Datum und Uhrzeit auf Gueltigkeit pruefen
+    // ------------------------------------------------
+
+    $startDateTime = new DateTimeExtended($_POST['date_from'].' '.$_POST['time_from'], $g_preferences['system_date'].' '.$g_preferences['system_time']);
+
+    if($startDateTime->valid())
+    {
+        // Datum & Uhrzeit formatiert zurueckschreiben
+        $date->setValue('dat_begin', $startDateTime->getDateTimeEnglish());
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Beginn', $g_preferences['system_date']));
+        // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
+        $startDateTime->setDateTime($_POST['date_from'], $g_preferences['system_date']);
+        if($startDateTime->valid())
+        {
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Beginn', $g_preferences['system_date']));
+        }
+        else
+        {
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit Beginn', $g_preferences['system_time']));
+        }
     }
 
     // wenn Datum-bis nicht gefüllt ist, dann mit Datum-von nehmen
@@ -207,29 +215,29 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $_POST['time_to'] = $_POST['time_from'];
     }
     
-    if(dtCheckDate($_POST['date_to']))
+    $endDateTime = new DateTimeExtended($_POST['date_to'].' '.$_POST['time_to'], $g_preferences['system_date'].' '.$g_preferences['system_time']);
+
+    if($endDateTime->valid())
     {
-        if(strlen($_POST['time_to']) > 0 && dtCheckTime($_POST['time_to']))
-        {
-            // Datum & Uhrzeit formatiert zurueckschreiben
-            $date_arr = explode('.', $_POST['date_to']);
-            $time_arr = explode(':', $_POST['time_to']);
-            $date_to_timestamp = mktime($time_arr[0],$time_arr[1],0,$date_arr[1],$date_arr[0],$date_arr[2]);
-            $date_end = date('Y-m-d H:i:s', $date_to_timestamp);
-            $date->setValue('dat_end', $date_end);
-        }
-        else
-        {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
-        }
+        // Datum & Uhrzeit formatiert zurueckschreiben
+        $date->setValue('dat_end', $endDateTime->getDateTimeEnglish());
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Ende', $g_preferences['system_date']));
-    }
+        // Fehler: pruefen, ob Datum oder Uhrzeit falsches Format hat
+        $endDateTime->setDateTime($_POST['date_to'], $g_preferences['system_date']);
+        if($endDateTime->valid())
+        {
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Ende', $g_preferences['system_date']));
+        }
+        else
+        {
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit Ende', $g_preferences['system_time']));
+        }
+    }   
     
-    if($date_from_timestamp > $date_to_timestamp)
-    // Enddatum muss groesser oder gleich dem Startdatum sein
+    // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
+    if($startDateTime->getTimestamp() > $endDateTime->getTimestamp())
     {
         $g_message->show($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
     }
@@ -243,10 +251,13 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $_POST['dat_all_day'] = 0;
     }
 
+    // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
-    if($g_preferences['dates_show_rooms']==1)
+    // ------------------------------------------------
+    
+    if($g_preferences['dates_show_rooms'] == 1)
     {
-        if($_POST['dat_room_id']!=0)
+        if($_POST['dat_room_id'] > 0)
         {
             $sql = 'SELECT COUNT(dat_id) AS is_reserved FROM '.TBL_DATES.' WHERE ('.
                     '(dat_begin <= "'.$date_begin.'" AND dat_end >= "'.$date_begin.'") OR '.
@@ -259,30 +270,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
             {
                 $g_message->show($g_l10n->get('DAT_PHR_ROOM_RESERVED'));
             }
-        }
-        
-    }
-    
-
-    // das Land nur zusammen mit dem Ort abspeichern
-    if(strlen($_POST['dat_location']) == 0)
-    {
-        $_POST['dat_country'] = '';
-    }
-
-    // POST Variablen in das Termin-Objekt schreiben
-    foreach($_POST as $key => $value)
-    {
-        if(strpos($key, 'dat_') === 0)
-        {
-            $date->setValue($key, $value);
-        }
-    }
-    
-    if($g_preferences['dates_show_rooms'] == 1)
-    {
-        if($_POST['dat_room_id'] > 0)
-        {
+            
             $date->setValue('dat_room_id',$_POST['dat_room_id']);
             $room = new TableRooms($g_db);
             $room->readData($_POST['dat_room_id']);
@@ -302,7 +290,16 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     // -----------------------------------
     // Termin in Datenbank schreiben
     // -----------------------------------
-    
+
+    // POST Variablen in das Termin-Objekt schreiben
+    foreach($_POST as $key => $value)
+    {
+        if(strpos($key, 'dat_') === 0)
+        {
+            $date->setValue($key, $value);
+        }
+    }
+
     $return_code = $date->save();
 
     // -----------------------------------

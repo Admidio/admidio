@@ -76,7 +76,8 @@ function getFieldCode($field, $user_id)
                 if($field->getValue('usf_name') == 'Geburtstag')
                 {
                     // Alter mit ausgeben
-                    $value = $value. '&nbsp;&nbsp;&nbsp;('. dtGetAge($field->getValue('usd_value')). ' Jahre)';
+                    $birthday = new DateTimeExtended($field->getValue('usd_value').' 01:00:00', $g_preferences['system_date'].' h:i:s');
+                    $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' Jahre)';
                 }
             }
             break;

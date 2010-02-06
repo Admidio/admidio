@@ -165,6 +165,7 @@ if($role->getValue('rol_valid') == 0)
 // Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
 $list = new ListConfiguration($g_db, $req_lst_id);
 $main_sql = $list->getSQL($role_ids, $show_members);
+//echo $main_sql; exit();
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
 $result_list = $g_db->query($main_sql);
@@ -632,7 +633,8 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
     
                         case 'DATE':
                             // Datum muss noch formatiert werden
-                            $content = mysqldate('d.m.y', $row[$sql_column_number]);
+                            $date = new DateTimeExtended($row[$sql_column_number].' 01:00:00', 'Y-m-d h:i:s');
+                            $content = $date->format($g_preferences['system_date']);
                             break;
     
                         case 'EMAIL':

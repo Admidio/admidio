@@ -130,10 +130,13 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 }
                 elseif($field->getValue('usf_type') == 'DATE')
                 {
-                    if(strlen($col_value) > 0
-                    && dtCheckDate($col_value))
+                    if(strlen($col_value) > 0)
                     {
-                        $user->setValue($field->getValue('usf_name'), dtFormatDate($col_value, 'Y-m-d'));
+                        $date = new DateTimeExtended($col_value.' 01:00:00', $g_preferences['system_date'].' h:i:s');
+                        if($date->valid())
+                        {
+                            $user->setValue($field->getValue('usf_name'), $date->format('Y-m-d'));
+                        }
                     }
                 }
                 elseif($field->getValue('usf_type') == 'EMAIL')
