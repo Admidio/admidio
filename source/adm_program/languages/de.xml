@@ -318,7 +318,7 @@
     <text id="SYS_PHR_DATABASE_ERROR" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
     <text id="SYS_PHR_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="todo">Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.\n\nWende dich bitte an den %VAR3%Webmaster%VAR4% dieser Webseite.</text>
     <text id="SYS_PHR_DATE_END_BEFORE_BEGIN" development="new" translation="todo">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</text>
-    <text id="SYS_PHR_DATE_INVALID" development="new" translation="todo">Es wurde kein gültiges Datum in das Feld %VAR1_BOLD% eingegeben.\n\nDas Format des Datums sollte %VAR2_BOLD% sein.</text>
+    <text id="SYS_PHR_DATE_INVALID" development="new" translation="todo">Es wurde kein gültiges Datum in das Feld %VAR1_BOLD% eingegeben.\n\nDas Datum muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
     <text id="SYS_PHR_DELETE" development="new" translation="todo">Die Daten wurden gelöscht.</text>
     <text id="SYS_PHR_EDIT" development="new" translation="todo">%VAR1% bearbeiten</text>
     <text id="SYS_PHR_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse ist nicht gültig.</text>
@@ -362,7 +362,7 @@
     <text id="SYS_PHR_RSS_DISABLED" development="new" translation="todo">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_PHR_SAVE" development="new" translation="todo">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_SERVER_NO_UPLOAD" development="new" translation="todo">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
-    <text id="SYS_PHR_TIME_INVALID" development="new" translation="todo">Es wurde keine sinnvolle Uhrzeit eingegeben.\n\nDie Uhrzeit muss zwischen 00:00 und 23:59 liegen!</text>
+    <text id="SYS_PHR_TIME_INVALID" development="new" translation="todo">Es wurde keine gültige Uhrzeit in das Feld %VAR1_BOLD% eingegeben.\n\nDie Uhrzeit muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
     <text id="SYS_PHR_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_PHR_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
     <text id="SYS_PHR_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>

@@ -21,10 +21,10 @@
  *          
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_roles.php");
-require("../../system/classes/role_dependency.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_roles.php');
+require_once('../../system/classes/role_dependency.php');
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!$g_current_user->assignRoles())
@@ -37,20 +37,20 @@ $req_rol_id = 0;
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET["mode"]) == false
-|| is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 8)
+if(isset($_GET['mode']) == false
+|| is_numeric($_GET['mode']) == false
+|| $_GET['mode'] < 1 || $_GET['mode'] > 8)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if(isset($_GET["rol_id"]))
+if(isset($_GET['rol_id']))
 {
-    if(is_numeric($_GET["rol_id"]) == false)
+    if(is_numeric($_GET['rol_id']) == false)
     {
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
-    $req_rol_id = $_GET["rol_id"];
+    $req_rol_id = $_GET['rol_id'];
 }
 
 // Rollenobjekt anlegen
@@ -61,20 +61,20 @@ if($req_rol_id > 0)
     $role->readData($req_rol_id);
 
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue("cat_org_id") != $g_current_organization->getValue("org_id"))
+    if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
 
 $_SESSION['roles_request'] = $_REQUEST;
-$msg_code = "";
+$msg_code = '';
 
-if($_GET["mode"] == 1)
+if($_GET['mode'] == 1)
 {
     // Html-Kopf ausgeben
-    $g_layout['title'] = "Messagebox";
-    require(THEME_SERVER_PATH. "/overall_header.php");
+    $g_layout['title'] = 'Messagebox';
+    require(THEME_SERVER_PATH. '/overall_header.php');
 
     // Html des Modules ausgeben
     echo '
@@ -112,10 +112,10 @@ if($_GET["mode"] == 1)
         </div>
     </div>';
 
-    require(THEME_SERVER_PATH. "/overall_footer.php");
+    require(THEME_SERVER_PATH. '/overall_footer.php');
     exit();
 }
-elseif($_GET["mode"] == 2)
+elseif($_GET['mode'] == 2)
 {
     // Rolle anlegen oder updaten
 
@@ -188,29 +188,39 @@ elseif($_GET["mode"] == 2)
 
     if(strlen($_POST['rol_start_date']) > 0)
     {
-        if(dtCheckDate($_POST['rol_start_date']))
+        $startDate = new DateTimeExtended($_POST['rol_start_date'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+
+        if($startDate->valid())
         {
-            $_POST['rol_start_date'] = dtFormatDate($_POST['rol_start_date'], "Y-m-d");
+            $_POST['rol_start_date'] = $startDate->format('Y-m-d');
 
             if(strlen($_POST['rol_end_date']) > 0)
             {
-                if(dtCheckDate($_POST['rol_end_date']))
+                $endDate = new DateTimeExtended($_POST['rol_end_date'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+
+                if($endDate->valid())
                 {
-                    $_POST['rol_end_date'] = dtFormatDate($_POST['rol_end_date'], "Y-m-d");
+                    $_POST['rol_end_date'] = $endDate->format('Y-m-d');
                 }
                 else
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Zeitraum bis', $g_preferences['system_date']));
+                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Gültig bis', $g_preferences['system_date']));
                 }
+
+                // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
+    			if ($startDate->getTimestamp() > $endDate->getTimestamp()) 
+    			{
+    				$g_message->show($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
+    			}
             }
             else
             {
-                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Zeitraum bis'));
+                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Gültig bis'));
             }
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Zeitraum von', $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Gültig von', $g_preferences['system_date']));
         }
     }
 
@@ -218,24 +228,28 @@ elseif($_GET["mode"] == 2)
 
     if(strlen($_POST['rol_start_time']) > 0)
     {
-        if(dtCheckTime($_POST['rol_start_time']))
+        $startTime = new DateTimeExtended('2000-01-01 '.$_POST['rol_start_time'], 'Y-m-d '.$g_preferences['system_time']);
+
+        if($startTime->valid())
         {
-            $_POST['rol_start_time'] = dtFormatTime($_POST['rol_start_time'], "H:i:s");
+            $_POST['rol_start_time'] = $startTime->format('H:i:s');
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit von', $g_preferences['system_time']));
         }
 
         if(strlen($_POST['rol_end_time']) > 0)
         {
-            if(dtCheckTime($_POST['rol_end_time']))
+            $endTime = new DateTimeExtended('2000-01-01 '.$_POST['rol_end_time'], 'Y-m-d '.$g_preferences['system_time']);
+
+            if($endTime->valid())
             {
-                $_POST['rol_end_time'] = dtFormatTime($_POST['rol_end_time'], "H:i:s");
+                $_POST['rol_end_time'] = $endTime->format('H:i:s');
             }
             else
             {
-                $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID'));
+                $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit bis', $g_preferences['system_time']));
             }
         }
         else
@@ -282,7 +296,7 @@ elseif($_GET["mode"] == 2)
     }
 
     //Rollenabhaengigkeiten setzten
-    if(array_key_exists("ChildRoles", $_POST))
+    if(array_key_exists('ChildRoles', $_POST))
     {
         $sentChildRoles = $_POST['ChildRoles'];
 
@@ -316,7 +330,7 @@ elseif($_GET["mode"] == 2)
                 $roleDep->clear();
                 $roleDep->setChild($sentChildRole);
                 $roleDep->setParent($req_rol_id);
-                $roleDep->insert($g_current_user->getValue("usr_id"));
+                $roleDep->insert($g_current_user->getValue('usr_id'));
 
                 //füge alle Mitglieder der ChildRole der ParentRole zu
                 $roleDep->updateMembership();
@@ -336,7 +350,7 @@ elseif($_GET["mode"] == 2)
 
     $msg_code = 'SYS_PHR_SAVE';
 }
-elseif($_GET["mode"] == 3)
+elseif($_GET['mode'] == 3)
 {
     // Rolle zur inaktiven Rolle machen
     $return_code = $role->setInactive();
@@ -348,7 +362,7 @@ elseif($_GET["mode"] == 3)
 
     $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INACTIVE')));
 }
-elseif($_GET["mode"] == 4)
+elseif($_GET['mode'] == 4)
 {
     // Rolle aus der DB loeschens
     $return_code = $role->delete();
@@ -360,7 +374,7 @@ elseif($_GET["mode"] == 4)
 
     $msg_code = 'SYS_PHR_DELETE';
 }
-elseif($_GET["mode"] == 5)
+elseif($_GET['mode'] == 5)
 {
     // Rolle wieder aktiv setzen
     $return_code = $role->setActive();

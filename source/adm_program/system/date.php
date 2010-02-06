@@ -11,7 +11,7 @@
  
 // Arrays fuer die Monatsnamen und Wochentage
 
-$arrMonth    = array('Monat', 'Januar', 'Februar', 'M&auml;rz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
+$arrMonth    = array('Monat', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
 $arrDay      = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag');
 $arrDayShort = array('Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So');
 
@@ -179,7 +179,7 @@ function mysqltime($dateFormat, $time)
 }
 
 // wandelt ein DateTime- oder Date-Feld einer MySql-Datenbank in einen Timestamp um
-
+/*
 function mysqlmaketimestamp($dateTime)
 {
     if(strlen($dateTime) > 10)
@@ -196,7 +196,7 @@ function mysqlmaketimestamp($dateTime)
         $second = 0;
     }
     return mktime($hour, $minute, $second, $month, $day, $year);
-}
+}*/
 
 // prueft ein Datum auf Gueltigkeit
 // das Datum wird in d.m.y Format erwartet

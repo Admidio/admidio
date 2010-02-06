@@ -263,8 +263,17 @@ class TableAccess
                 {
                     $format = $g_preferences['system_date'];
                 }
-                $datetime = new DateTime($field_value);
-                $field_value = $datetime->format($format);
+
+                // probieren das Datum zu formatieren, ansonsten Ausgabe der vorhandenen Daten
+                try
+                {
+                    $datetime = new DateTime($field_value);
+                    $field_value = $datetime->format($format);
+                }
+                catch(Exception $e)
+                {
+                    $field_value = $this->dbColumns[$field_name];
+                }
             }
             return $field_value;
         }

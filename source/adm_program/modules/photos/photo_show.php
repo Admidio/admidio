@@ -50,9 +50,10 @@ if(isset($_GET['pho_id']))
 }
 
 //pho_begin
-if(isset($_GET['pho_begin']) && strlen($_GET['pho_begin']) == 10)
+if(isset($_GET['pho_begin']))
 {
-    if(dtCheckDate(mysqldate('d.m.y', $_GET['pho_begin'])))
+    $albumStartDate = new DateTimeExtended($_GET['pho_begin'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+    if($albumStartDate->valid())
     {
         $pho_begin = $_GET['pho_begin'];
     }

@@ -49,12 +49,13 @@ require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/date.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_session.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/messages.php');
 
@@ -256,7 +257,8 @@ if($g_current_session->getValue('ses_id') > 0)
         if($g_current_session->getValue('ses_usr_id') == $g_current_user->getValue('usr_id'))
         {
             // Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
-            $time_gap = time() - mysqlmaketimestamp($g_current_session->getValue('ses_timestamp'));
+            //$time_gap = time() - mysqlmaketimestamp($g_current_session->getValue('ses_timestamp'));
+            $time_gap = time() - strtotime($g_current_session->getValue('ses_timestamp', 'Y-m-d H:i:s'));
             
             // wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
             if($time_gap < $g_preferences['logout_minutes'] * 60 || $b_auto_login == true) 

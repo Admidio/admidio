@@ -89,9 +89,11 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Beginn
     if(strlen($_POST['pho_begin'] > 0))
     {
-        if(dtCheckDate($_POST['pho_begin']))
+        $startDate = new DateTimeExtended($_POST['pho_begin'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+        
+        if($startDate->valid())
         {
-            $_POST['pho_begin'] = dtFormatDate($_POST['pho_begin'], 'Y-m-d');
+            $_POST['pho_begin'] = $startDate->format('Y-m-d');
         }
         else
         {
@@ -106,9 +108,11 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Ende
     if(strlen($_POST['pho_end']) > 0)
     {
-        if(dtCheckDate($_POST['pho_end']))
+        $endDate = new DateTimeExtended($_POST['pho_end'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+
+        if($endDate->valid())
         {
-            $_POST['pho_end'] = dtFormatDate($_POST['pho_end'], 'Y-m-d');
+            $_POST['pho_end'] = $endDate->format('Y-m-d');
         }
         else
         {
