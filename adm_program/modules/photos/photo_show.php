@@ -52,7 +52,7 @@ if(isset($_GET['pho_id']))
 //pho_begin
 if(isset($_GET['pho_begin']))
 {
-    $albumStartDate = new DateTimeExtended($_GET['pho_begin'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+    $albumStartDate = new DateTimeExtended($_GET['pho_begin'], $g_preferences['system_date'], 'date');
     if($albumStartDate->valid())
     {
         $pho_begin = $_GET['pho_begin'];

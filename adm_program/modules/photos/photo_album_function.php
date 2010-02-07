@@ -89,7 +89,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Beginn
     if(strlen($_POST['pho_begin'] > 0))
     {
-        $startDate = new DateTimeExtended($_POST['pho_begin'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+        $startDate = new DateTimeExtended($_POST['pho_begin'], $g_preferences['system_date'], 'date');
         
         if($startDate->valid())
         {
@@ -108,7 +108,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Ende
     if(strlen($_POST['pho_end']) > 0)
     {
-        $endDate = new DateTimeExtended($_POST['pho_end'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+        $endDate = new DateTimeExtended($_POST['pho_end'], $g_preferences['system_date'], 'date');
 
         if($endDate->valid())
         {

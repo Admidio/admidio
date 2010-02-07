@@ -132,7 +132,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 {
                     if(strlen($col_value) > 0)
                     {
-                        $date = new DateTimeExtended($col_value.' 01:00:00', $g_preferences['system_date'].' h:i:s');
+                        $date = new DateTimeExtended($col_value, $g_preferences['system_date'], 'date');
                         if($date->valid())
                         {
                             $user->setValue($field->getValue('usf_name'), $date->format('Y-m-d'));

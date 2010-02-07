@@ -75,11 +75,13 @@ echo '
 
     while($row = $g_db->fetch_array($usr_result))
     {
+        $timestampCreate = new DateTimeExtended($row['usr_timestamp_create'], 'Y-m-d H:i:s');
+        $datetimeCreate  = $timestampCreate->format($g_preferences['system_date'].' '.$g_preferences['system_time']);
         echo '
         <tr class="tableMouseOver" id="row_user_'.$row['usr_id'].'">
             <td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a></td>
             <td><img class="iconInformation" src="'. THEME_PATH. '/icons/calendar_time.png"
-                    alt="Registriert am '. mysqldatetime("d.m.y h:i", $row['usr_timestamp_create']). '" title="Registriert am '. mysqldatetime("d.m.y h:i", $row['usr_timestamp_create']). '" /></td>
+                    alt="Registriert am '. $datetimeCreate. '" title="Registriert am '. $datetimeCreate. '" /></td>
             <td>'.$row['usr_login_name'].'</td>
             <td>';
                 if($g_preferences['enable_mail_module'] == 1)

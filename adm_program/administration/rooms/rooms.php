@@ -38,7 +38,15 @@ echo '<h1 class="moduleHeadline">Raumverwaltung</h1>
 </span>
 <br/>';
 
-$sql = 'SELECT * FROM adm_rooms ORDER BY room_id';
+$sql = 'SELECT room.*, cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname
+          FROM adm_rooms room
+          LEFT JOIN '. TBL_USER_DATA .' cre_surname 
+            ON cre_surname.usd_usr_id = room_usr_id_create
+           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
+            ON cre_firstname.usd_usr_id = room_usr_id_create
+           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+         ORDER BY room_name';
 $rooms_result = $g_db->query($sql);
 
 if($g_db->num_rows($rooms_result) == 0)
@@ -46,11 +54,11 @@ if($g_db->num_rows($rooms_result) == 0)
     // Keine Räume gefunden
     if($req_id > 0)
     {
-        echo '<p>Der angeforderte Eintrag existiert nicht (mehr) in der Datenbank.</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>Es sind keine Eintr&auml;ge vorhanden.</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -88,28 +96,25 @@ else
                 <div class="date_info_block">
                     <table style="float:left; width: 200px;">
                         <tr>
-                            <td>Kapazit&auml;t:</td>
+                            <td>Kapazität:</td>
                             <td><strong>'.$room->getValue('room_capacity').'</strong></td>
                         </tr>';
                         if($room->getValue('room_overhang')!=null)
                         {
                             echo '<tr>
-                                    <td>&Uuml;berhang:</td>
+                                    <td>Überhang:</td>
                                     <td><strong>'.$room->getValue('room_overhang').'</strong></td>
                                   </tr>';
                         }
-              echo '</table>';
+                    echo '</table>';
                     if($room->getValue('room_description')!=null)
                     {
                        echo '<div class="date_description" style="clear: left;"><br/>'
                             .$room->getDescription('HTML').'</div>';
                     }
-                    $sql = 'SELECT room_usr_id_create, room_timestamp_create, usr_login_name FROM '.TBL_ROOMS.', '.TBL_USERS.' WHERE room_id="'.$room->getValue('room_id').'" AND usr_id = room_usr_id_create';
-                    $result = $g_db->query($sql);
-                    $row = $g_db->fetch_array($result);
-            echo ' <div class="editInformation"><br/>
-                            Angelegt von '.$row['usr_login_name'].' am '.mysqldatetime('d.m.y h:i',$row['room_timestamp_create']).'
-                   </div>
+                    echo '<div class="editInformation">'.
+                        $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                    echo '</div>
                 </div>
             </div>
         </div>';

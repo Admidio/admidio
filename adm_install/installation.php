@@ -50,6 +50,7 @@ require_once($admidio_path. '/adm_program/system/constants.php');
 require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');

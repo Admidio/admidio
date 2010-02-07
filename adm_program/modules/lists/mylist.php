@@ -434,36 +434,40 @@ echo '
                 $list_name_flag   = '';
                 $optgroup_flag    = 0;
                 $counter_unsaved_lists = 0;
+                $tableList = new TableLists($g_db);
                 
                 while($row = $g_db->fetch_array($lst_result))
                 {
+                    $tableList->clear();
+                    $tableList->setArray($row);
+                
                     // maximal nur die letzten 5 Konfigurationen ohne Namen speichern
-                    if(strlen($row['lst_name']) == 0)
+                    if(strlen($tableList->getValue('lst_name')) == 0)
                     {
                         $counter_unsaved_lists++;
                     }
 
-                    if($counter_unsaved_lists > 5 && strlen($row['lst_name']) == 0)
+                    if($counter_unsaved_lists > 5 && strlen($tableList->getValue('lst_name')) == 0)
                     {
                         // alle weiteren Konfigurationen ohne Namen loeschen
-                        $del_list = new ListConfiguration($g_db, $row['lst_id']);
+                        $del_list = new ListConfiguration($g_db, $tableList->getValue('lst_id'));
                         $del_list->delete();
                     }
                     else
                     {
                         // erst mal schauen, ob eine neue Gruppe von Konfigurationen angefangen hat
-                        if($row['lst_global'] != $list_global_flag
-                        || ($row['lst_name']  != $list_name_flag && strlen($list_name_flag) == 0))
+                        if($tableList->getValue('lst_global') != $tableList_global_flag
+                        || ($tableList->getValue('lst_name')  != $tableList_name_flag && strlen($tableList_name_flag) == 0))
                         {
                             if($optgroup_flag == 1)
                             {
                                 echo '</optgroup>';
                             }
-                            if($row['lst_global'] == 0 && strlen($row['lst_name']) == 0)
+                            if($tableList->getValue('lst_global') == 0 && strlen($tableList->getValue('lst_name')) == 0)
                             {
                                 echo '<optgroup label="Deine letzten Konfigurationen">';
                             }
-                            elseif($row['lst_global'] == 0 && strlen($row['lst_name']) > 0)
+                            elseif($tableList->getValue('lst_global') == 0 && strlen($tableList->getValue('lst_name')) > 0)
                             {
                                 echo '<optgroup label="Deine Konfigurationen">';
                             }
@@ -471,12 +475,12 @@ echo '
                             {
                                 echo '<optgroup label="Vorgegebene Konfigurationen">';
                             }
-                            $list_global_flag = $row['lst_global'];
-                            $list_name_flag   = $row['lst_name'];
+                            $tableList_global_flag = $tableList->getValue('lst_global');
+                            $tableList_name_flag   = $tableList->getValue('lst_name');
                         }
                         
                         // auf die Konfiguration selektieren, die uebergeben wurde
-                        if($req_lst_id == $row['lst_id'])
+                        if($req_lst_id == $tableList->getValue('lst_id'))
                         {
                             $selected = ' selected="selected" ';
                         }
@@ -486,16 +490,16 @@ echo '
                         }
 
                         // Zeitstempel der Konfigurationen ohne Namen oder Namen anzeigen
-                        if(strlen($row['lst_name']) == 0)
+                        if(strlen($tableList->getValue('lst_name')) == 0)
                         {
-                            $description = mysqldatetime('d.m.y h:i', $row['lst_timestamp']);
+                            $description = $tableList->getValue('lst_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']);
                         }
                         else
                         {
-                            $description = $row['lst_name'];
+                            $description = $tableList->getValue('lst_name');
                         }
                         // Comboboxeintrag ausgeben
-                        echo '<option '.$selected.' value="'.$row['lst_id'].'">'.$description.'</option>';
+                        echo '<option '.$selected.' value="'.$tableList->getValue('lst_id').'">'.$description.'</option>';
                     }
                 }
                 echo '</optgroup>';

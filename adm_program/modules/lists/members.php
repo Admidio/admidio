@@ -579,7 +579,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 //Geburtstag nur ausgeben wenn bekannt
                 if(strlen($user['birthday']) > 0)
                 {
-                    echo mysqldate("d.m.y", $user['birthday']);
+                    $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d', 'date');
+                    echo $birthdayDate->format($g_preferences['system_date']);
                 }
             echo "</td>
 

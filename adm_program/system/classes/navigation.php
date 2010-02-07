@@ -28,16 +28,16 @@
 
 class Navigation
 {
-    var $url_arr = array();
-    var $count;
+    private $url_arr = array();
+    private $count;
 
-    function Navigation()
+    public function __construct()
     {
         $this->count = 0;
     }
 
     // entfernt alle Urls aus dem Array
-    function clear()
+    public function clear()
     {
         for($i = 0; $i < $this->count; $i++)
         {
@@ -47,7 +47,7 @@ class Navigation
     }
 
     // Funktion entfernt die letzte Url aus dem Array
-    function deleteLastUrl()
+    public function deleteLastUrl()
     {
         if($this->count > 0)
         {
@@ -57,7 +57,7 @@ class Navigation
     }
 
     // fuegt eine Seite zum Navigationsstack hinzu
-    function addUrl($url)
+    public function addUrl($url)
     {
         // Url nur hinzufuegen, wenn sie nicht schon als letzte im Array steht
         if($this->count == 0 || $url != $this->url_arr[$this->count-1])
@@ -68,7 +68,7 @@ class Navigation
     }
 
     // gibt die vorletzte Url aus dem Stack zurueck
-    function getPreviousUrl()
+    public function getPreviousUrl()
     {
         if($this->count > 1)
         {
@@ -83,7 +83,7 @@ class Navigation
     }
 
     // gibt die letzte Url aus dem Stack zurueck
-    function getUrl()
+    public function getUrl()
     {
         if($this->count > 0)
         {

@@ -32,13 +32,13 @@
 
 class Image
 {
-    var $imagePath;
-    var $imageResource = false;
-    var $imageWidth    = 0;
-    var $imageHeight   = 0;
-    var $imageType     = null;
+    private $imagePath;
+    private $imageType     = null;
+    public  $imageResource = false;
+    public  $imageWidth    = 0;
+    public  $imageHeight   = 0;
     
-    function Image($pathAndFilename = '')
+    public function __construct($pathAndFilename = '')
     {
         if(strlen($pathAndFilename) > 0)
         {
@@ -47,7 +47,7 @@ class Image
     }
 
     // Methode setzt den Pfad zum Bild und liest Bildinformationen ein
-    function setImageFromPath($pathAndFilename)
+    public function setImageFromPath($pathAndFilename)
     {
         if(file_exists($pathAndFilename))
         {
@@ -70,7 +70,7 @@ class Image
     // imageData : String mit den Bilddaten, dieser sollte vorher mit addslashes 
     //             bearbeitet werden, da ansonsten bei der Verarbeitung Daten
     //             verloren gehen und es zu Fehlern kommt
-    function setImageFromData($imageData)
+    public function setImageFromData($imageData)
     {
         $this->imageResource = imagecreatefromstring(stripslashes($imageData));
         if($this->imageResource !== false)
@@ -86,7 +86,7 @@ class Image
         }
     } 
     
-    function createResource($pathAndFilename)
+    private function createResource($pathAndFilename)
     {
         switch ($this->imageType)
         {
@@ -112,7 +112,7 @@ class Image
     //           - ein andere Datei kann zur Ausgabe angegeben werden
     //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
     // Rueckgabe: true, falls erfolgreich
-    function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
+    public function copyToFile($imageResource = null, $pathAndFilename = '', $quality = 95)
     {
         $returnValue = false;
         
@@ -142,7 +142,7 @@ class Image
     // Methode gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
     // Optional: - eine andere Bild-Resource kann uebergeben werden
     //           - die Qualitaet kann fuer jpeg-Dateien veraendert werden
-    function copyToBrowser($imageResource = null, $quality = 95)
+    public function copyToBrowser($imageResource = null, $quality = 95)
     {
         if($imageResource == null)
         {
@@ -162,13 +162,13 @@ class Image
     }     
     
     // gibt den Mime-Type (image/png) des Bildes zurueck
-    function getMimeType()
+    public function getMimeType()
     {
         return image_type_to_mime_type($this->imageType);
     }
 
     // setzt den Image-Type des Bildes neu
-    function setImageType($imageType)
+    public function setImageType($imageType)
     {
         switch ($imageType)
         {
@@ -184,7 +184,7 @@ class Image
 
     // Methode dreht das Bild um 90° in eine Richtung
     // direction : 'right' o. 'left' Richtung, in die gedreht wird
-    function rotate($direction = 'right')
+    public function rotate($direction = 'right')
     {
         // nur bei gueltigen Uebergaben weiterarbeiten
         if(($direction == 'left' || $direction == 'right'))
@@ -218,7 +218,7 @@ class Image
     
     // Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
     // die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
-    function scaleLargerSide($new_max_size)
+    public function scaleLargerSide($new_max_size)
     {
         // Errechnung Seitenverhaeltnis
         $seitenverhaeltnis = $this->imageWidth / $this->imageHeight;
@@ -243,7 +243,7 @@ class Image
     // new_y_size   : Anzahl Pixel auf die die Y-Seite maximal veraendert werden soll
     // aspect_ratio : das aktuelle Seitenverhaeltnis des Bildes wird belassen,
     //                dadurch kann eine Seite kleiner werden als die Angabe vorsieht
-    function scale($photo_x_size, $photo_y_size, $aspect_ratio = true)
+    public function scale($photo_x_size, $photo_y_size, $aspect_ratio = true)
     {
         if($aspect_ratio == true)
         {
@@ -284,7 +284,7 @@ class Image
     }
 
     // entfernt das Bild aus dem Speicher
-    function delete()
+    public function delete()
     {
     	imagedestroy($this->imageResource);
     	$this->imageResource = null;

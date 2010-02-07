@@ -47,8 +47,11 @@ require_once('../common.php');
 
 class Captcha
 {
+    private $font, $width, $height, $codeSize, $allowedChars;
+    private $backgroundColourR, $backgroundColourG, $backgroundColourB;
+    private $backgroundWriting, $backgroundWritingSize;
 
-    function Captcha()
+    public function __construct()
     {
         // Hier wird jetzt die Schriftart festgelegt...
         $this->font = THEME_SERVER_PATH. '/font.ttf';
@@ -76,7 +79,7 @@ class Captcha
 
     }
 
-    function getCaptcha()
+    public function getCaptcha()
     {
         // erst einmal einen Code generieren
         $this->generateNewCaptchaCode();
@@ -86,7 +89,7 @@ class Captcha
     }
 
 
-    function generateNewCaptchaCode()
+    private function generateNewCaptchaCode()
     {
         // neuen CaptchaCode erzeugen...
 
@@ -105,7 +108,7 @@ class Captcha
     }
 
 
-    function makeCaptcha()
+    private function makeCaptcha()
     {
 
         // ein leeres Bild definieren

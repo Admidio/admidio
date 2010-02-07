@@ -104,7 +104,7 @@ switch($action)
         $mem->readData(array('rol_id' => $_GET['rol_id'], 'usr_id' => $_GET['usr_id']));
 		 
 		//Check das Beginn Datum
-		$startDate = new DateTimeExtended($_GET['rol_begin'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+		$startDate = new DateTimeExtended($_GET['rol_begin'], $g_preferences['system_date'], 'date');
 		if($startDate->valid())
 		{
 			// Datum formatiert zurueckschreiben
@@ -118,7 +118,7 @@ switch($action)
 		//Falls gesetzt wird das Enddatum gecheckt
 		if(strlen($_GET['rol_end']) > 0) 
 		{
-            $endDate = new DateTimeExtended($_GET['rol_end'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+            $endDate = new DateTimeExtended($_GET['rol_end'], $g_preferences['system_date'], 'date');
 			if($endDate->valid())
 			{
 				// Datum formatiert zurueckschreiben

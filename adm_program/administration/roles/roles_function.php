@@ -188,7 +188,7 @@ elseif($_GET['mode'] == 2)
 
     if(strlen($_POST['rol_start_date']) > 0)
     {
-        $startDate = new DateTimeExtended($_POST['rol_start_date'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+        $startDate = new DateTimeExtended($_POST['rol_start_date'], $g_preferences['system_date'], 'date');
 
         if($startDate->valid())
         {
@@ -196,7 +196,7 @@ elseif($_GET['mode'] == 2)
 
             if(strlen($_POST['rol_end_date']) > 0)
             {
-                $endDate = new DateTimeExtended($_POST['rol_end_date'].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+                $endDate = new DateTimeExtended($_POST['rol_end_date'], $g_preferences['system_date'], 'date');
 
                 if($endDate->valid())
                 {
@@ -228,7 +228,7 @@ elseif($_GET['mode'] == 2)
 
     if(strlen($_POST['rol_start_time']) > 0)
     {
-        $startTime = new DateTimeExtended('2000-01-01 '.$_POST['rol_start_time'], 'Y-m-d '.$g_preferences['system_time']);
+        $startTime = new DateTimeExtended($_POST['rol_start_time'], $g_preferences['system_time'], 'time');
 
         if($startTime->valid())
         {
@@ -241,7 +241,7 @@ elseif($_GET['mode'] == 2)
 
         if(strlen($_POST['rol_end_time']) > 0)
         {
-            $endTime = new DateTimeExtended('2000-01-01 '.$_POST['rol_end_time'], 'Y-m-d '.$g_preferences['system_time']);
+            $endTime = new DateTimeExtended($_POST['rol_end_time'], $g_preferences['system_time'], 'time');
 
             if($endTime->valid())
             {
