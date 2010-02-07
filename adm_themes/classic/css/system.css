@@ -342,10 +342,10 @@ ul.autosuggest li.highlight a:visited  {
     vertical-align:     top;
 }
 
-.organisationLink span{
+.organisationLink{
 	cursor:pointer;
 }
-.organisationLink span:link, .organisationLink span:visited{
+.organisationLink span{
 	color:              #E0791F;
     font-weight:        bold;
     text-decoration:    none;
