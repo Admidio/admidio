@@ -76,7 +76,7 @@ function getFieldCode($field, $user_id)
                 if($field->getValue('usf_name') == 'Geburtstag')
                 {
                     // Alter mit ausgeben
-                    $birthday = new DateTimeExtended($field->getValue('usd_value').' 01:00:00', $g_preferences['system_date'].' h:i:s');
+                    $birthday = new DateTimeExtended($field->getValue('usd_value'), $g_preferences['system_date'], 'date');
                     $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' Jahre)';
                 }
             }
@@ -768,6 +768,7 @@ echo '
                         <ul class="formFieldList">';
                             while($row = $g_db->fetch_array($result_role))
                             {
+                                $startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d', 'date');
                                 // jede einzelne Rolle anzeigen
                                 echo '
                                 <li>
@@ -781,7 +782,7 @@ echo '
                                                 }
                                             echo '&nbsp;
                                         </dt>
-                                        <dd>'.$g_l10n->get('SYS_SINCE',mysqldate('d.m.y', $row['mem_begin'])).'</dd>
+                                        <dd>'.$g_l10n->get('SYS_SINCE',$startDate->format($g_preferences['system_date'])).'</dd>
                                     </dl>
                                 </li>';
                             }

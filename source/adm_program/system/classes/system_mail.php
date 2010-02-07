@@ -28,14 +28,14 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 
 class SystemMail extends Email
 {
-    var $textObject;
-    var $db;
-    var $mailText;
-    var $mailHeader;
-    var $variables = array();   // speichert zusaetzliche Variablen fuer den Mailtext
+    private $textObject;
+    private $db;
+    private $mailText;
+    private $mailHeader;
+    private $variables = array();   // speichert zusaetzliche Variablen fuer den Mailtext
 
     // Konstruktor
-    function SystemMail(&$db)
+    public function __construct(&$db)
     {
         $this->textObject = new TableText($db);
         $this->Email();
@@ -44,7 +44,7 @@ class SystemMail extends Email
     // diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
     // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
-    function getMailText($sysmail_id, &$user)
+    public function getMailText($sysmail_id, &$user)
     {
         global $g_current_organization, $g_preferences;
     
@@ -94,7 +94,7 @@ class SystemMail extends Email
     }
     
     // die Methode setzt den Inhalt fuer spezielle Variablen
-    function setVariable($number, $value)
+    public function setVariable($number, $value)
     {
         $this->variables[$number] = $value;
     }
@@ -102,7 +102,7 @@ class SystemMail extends Email
     // diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
     // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden    
-    function sendSystemMail($sysmail_id, &$user)
+    public function sendSystemMail($sysmail_id, &$user)
     {
         global $g_preferences;
         

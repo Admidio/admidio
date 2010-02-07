@@ -28,8 +28,11 @@ class DateTimeExtended extends DateTime
     private $errorCode;
     private $year, $month, $day, $hour, $minute, $second;
 
-    // es muss das Datum und das dazugehoerige Format (aehnlich date()) uebergeben werden
-    public function __construct($date, $format)
+    // es muss das Datum und das dazugehoerige Format uebergeben werden
+    // date : String mit dem Datum
+    // format : das zum Datum passende Format (Schreibweise aus date())
+    // type   : 'datetime', 'date' oder 'time'
+    public function __construct($date, $format, $type = 'datetime')
     {
         $this->year   = 0;
         $this->month  = 0;
@@ -38,12 +41,24 @@ class DateTimeExtended extends DateTime
         $this->minute = 0;
         $this->second = 0;
         
-        $this->setDateTime($date, $format);
+        // je nach Type das Format erweitern, da nur Datetime verarbeitet werden kann
+        if($type == 'date')
+        {
+            $this->setDateTime($date.' 01:00:00', $format.' h:i:s');
+        }
+        elseif($type == 'time')
+        {
+            $this->setDateTime('2000-01-01 '.$date, 'Y-m-d '.$format);
+        }
+        else
+        {
+            $this->setDateTime($date, $format);
+        }
         parent::__construct($this->getDateTimeEnglish());
     }
     
     // berechnet aus dem Datum das Alter einer Person
-    function getAge()
+    public function getAge()
     {
         // Alter berechnen
         // Hier muss man aufpassen, da viele PHP-Funkionen nicht mit einem Datum vor 1970 umgehen koennen !!!

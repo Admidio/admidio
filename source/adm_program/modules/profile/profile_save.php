@@ -146,7 +146,7 @@ foreach($user->userFieldData as $field)
             elseif($field->getValue('usf_type') == 'DATE')
             {
                 // Datum muss gueltig sein und formatiert werden
-                $date = new DateTimeExtended($_POST[$post_id].' 01:00:00', $g_preferences['system_date'].' h:i:s');
+                $date = new DateTimeExtended($_POST[$post_id], $g_preferences['system_date'], 'date');
                 if($date->valid() == false)
                 {
                     $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));

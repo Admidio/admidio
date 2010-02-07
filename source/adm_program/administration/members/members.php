@@ -394,6 +394,8 @@ if($num_members > 0)
         {
             if($row = $g_db->fetch_array($result_mgl))
             {
+                $timestampChange = new DateTimeExtended($row['usr_timestamp_change'], 'Y-m-d H:i:s');
+
                 echo '
                 <tr class="tableMouseOver">
                     <td>'. ($req_start + $i + 1). '</td>
@@ -436,7 +438,7 @@ if($num_members > 0)
                         }
                     echo '</td>
                     <td>'. $row['usr_login_name']. '</td>
-                    <td>'. mysqldatetime('d.m.y h:i' , $row['usr_timestamp_change']). '</td>
+                    <td>'. $timestampChange->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
                     <td style="text-align: center;">';
                         // pruefen, ob der User noch in anderen Organisationen aktiv ist
                         $sql    = 'SELECT *

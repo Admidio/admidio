@@ -9,20 +9,56 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/date.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
  
 class ConditionParser
 {
-    var $m_src;
-    var $m_dest;
-    var $m_str_arr;   // m_src aufgesplittet in ein Array
-    var $m_count;     // aktueller interne Position in m_str_arr -Array
-    var $m_error;     // enthaelt den Fehlercode, ansonsten 0
+    private $m_src;
+    private $m_dest;
+    private $m_str_arr;   // m_src aufgesplittet in ein Array
+    private $m_count;     // aktueller interne Position in m_str_arr -Array
+    private $m_error;     // enthaelt den Fehlercode, ansonsten 0
+
+    public function error()
+    {
+        return $this->m_error;
+    }
+
+    // liefert das Datum fertig formatiert fuer das SQL-Statement 'YYYY-MM-DD'
+    private function getFormatDate($date)
+    {
+        global $g_preferences;
+        $format_date = '';
+
+        // bastwe: check if user searches for age
+        $last = substr($date, -1);
+        $last = admStrToUpper($last);
+        if( $last == 'J' ) 
+        {
+            $age = substr($date, 0, -1);
+            $now_year= date('Y');
+            $now_day = date('d');
+            $now_month = date('m');
+            $ret = date('Y-m-d', mktime(0,0,0, $now_month, $now_day, $now_year - $age));
+            return '"'. $ret. '"';
+        }
+        
+        // Datum validieren und im MySQL-Format ausgeben
+        if(strlen($date) > 0)
+        {
+            $date = new DateTimeExtended($date, $g_preferences['system_date'], 'date');
+            if($date->valid())
+            {
+                $format_date = $date->format('Y-m-d');
+            }
+        }
+        return '"'. $format_date. '"';
+    }
 
     // Ersetzt alle Bedingungen der User-Eingabe durch eine Standardbedingung
     // str_src = String mit der Bedingung, die der User eingegeben hat
 
-    function makeStandardSrc($str_src)
+    private function makeStandardSrc($str_src)
     {
         $this->m_src = admStrToUpper(trim($str_src));
         $this->m_src = strtr($this->m_src, '*', '%');
@@ -67,7 +103,7 @@ class ConditionParser
     // str_src = String mit der Bedingung, die der User eingegeben hat
     // field_type = Typ des Feldes, auf die sich die Bedingung bezieht (string, int, date)
 
-    function makeSqlStatement($str_src, $field_name, $field_type)
+    public function makeSqlStatement($str_src, $field_name, $field_type)
     {
         $b_cond_start = true;   // gibt an, dass eine neue Bedingung angefangen wurde
         $b_new_cond   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
@@ -88,7 +124,7 @@ class ConditionParser
             }
             elseif($field_type == 'checkbox')
             {
-                // !!! Sonderfall !!!
+                // Sonderfall !!!
                 // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
                 if($str_src == 1)
                 {
@@ -297,42 +333,6 @@ class ConditionParser
         }
 
         return $this->m_dest;
-    }
-    
-    // liefert das Datum fertig formatiert fuer das SQL-Statement 'YYYY-MM-DD'
-    function getFormatDate($date)
-    {
-        global $g_preferences;
-        $format_date = '';
-
-        // bastwe: check if user searches for age
-        $last = substr($date, -1);
-        $last = admStrToUpper($last);
-        if( $last == 'J' ) 
-        {
-            $age = substr($date, 0, -1);
-            $now_year= date('Y');
-            $now_day = date('d');
-            $now_month = date('m');
-            $ret = date('Y-m-d', mktime(0,0,0, $now_month, $now_day, $now_year - $age));
-            return '"'. $ret. '"';
-        }
-        
-        // Datum validieren und im MySQL-Format ausgeben
-        if(strlen($date) > 0)
-        {
-            $date = new DateTimeExtended($date.' 01:00:00', $g_preferences['system_date'].' h:i:s');
-            if($date->valid())
-            {
-                $format_date = $date->format('Y-m-d');
-            }
-        }
-        return '"'. $format_date. '"';
-    }
-    
-    function error()
-    {
-        return $this->m_error;
     }
 }
 ?>

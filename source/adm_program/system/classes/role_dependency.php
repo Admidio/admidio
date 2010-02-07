@@ -26,14 +26,14 @@ class RoleDependency
 
 
     // Konstruktor
-    function RoleDependency(&$db)
+    public function __construct(&$db)
     {
         $this->db =& $db;
         $this->clear();
     }
 
     // Rollenabhaengigkeit aus der Datenbank auslesen
-    function get($childRoleId,$parentRoleId)
+    public function get($childRoleId,$parentRoleId)
     {
 
         $this->clear();
@@ -69,7 +69,7 @@ class RoleDependency
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
-    function clear()
+    public function clear()
     {
         $this->role_id_parent      = 0;
         $this->role_id_child       = 0;
@@ -85,7 +85,7 @@ class RoleDependency
 
     // Es muss die ID des eingeloggten Users uebergeben werden,
     // damit die Aenderung protokolliert werden kann
-    function update($login_user_id)
+    public function update($login_user_id)
     {
         if(!isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
@@ -103,7 +103,7 @@ class RoleDependency
         return -1;
     }
 
-    function insert($login_user_id)
+    public function insert($login_user_id)
     {
         if(!$this->isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
@@ -117,7 +117,7 @@ class RoleDependency
         return -1;
     }
 
-    function isEmpty()
+    public function isEmpty()
     {
         if ($this->role_id_parent == 0 && $this->role_id_child == 0)
         {
@@ -130,7 +130,7 @@ class RoleDependency
     }
 
     // aktuelle Rollenabhaengigkeit loeschen
-    function delete()
+    public function delete()
     {
         $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES.
                   ' WHERE rld_rol_id_child  = '.$this->role_id_child_orig.
@@ -140,7 +140,7 @@ class RoleDependency
         $this->clear();
     }
 
-    static function getParentRoles(&$db, $childId)
+    static public function getParentRoles(&$db, $childId)
     {
         $allParentIds = array();
 
@@ -162,7 +162,7 @@ class RoleDependency
         return $allParentIds;
     }
 
-    static function getChildRoles(&$db, $parentId)
+    static public function getChildRoles(&$db, $parentId)
     {
         $allChildIds = array();
 
@@ -184,7 +184,7 @@ class RoleDependency
         return $allChildIds;
     }
 
-    function setParent($parentId)
+    public function setParent($parentId)
     {
         if($parentId > 0 && is_numeric($parentId))
         {
@@ -195,7 +195,7 @@ class RoleDependency
         return -1;
     }
 
-    function setChild($childId)
+    public function setChild($childId)
     {
         if($childId > 0 && is_numeric($childId))
         {
@@ -206,7 +206,7 @@ class RoleDependency
         return -1;
     }
 
-    function updateMembership()
+    public function updateMembership()
     {
         if(0 != $this->role_id_parent and 0 != $this->role_id_child )
         {
@@ -235,7 +235,7 @@ class RoleDependency
         return -1;
     }
 
-    function removeChildRoles(&$db, $parentId)
+    public function removeChildRoles(&$db, $parentId)
     {
         if($parentId > 0 && is_numeric($parentId))
         {

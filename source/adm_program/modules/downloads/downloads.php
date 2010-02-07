@@ -208,6 +208,9 @@ else
             {
                 $iconFile = $icon_file_extension[$fileExtension];
             }
+            
+            // Zeitstempel formatieren
+            $timestamp = new DateTimeExtended($nextFile['fil_timestamp'], 'Y-m-d H:i:s');
 
             echo '
             <tr class="tableMouseOver" id="row_file_'.$nextFile['fil_id'].'">
@@ -221,7 +224,7 @@ else
                     echo '<span class="iconLink" ><a class="textTooltip" title="'.$nextFile['fil_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="Ordner"/></a></span>';
                 }
                 echo'</td>
-                <td>'. mysqldatetime('d.m.y h:i', $nextFile['fil_timestamp']). '</td>
+                <td>'. $timestamp->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
                 <td>'. $nextFile['fil_size']. ' KB&nbsp;</td>
                 <td>'. $nextFile['fil_counter'];
                 if ($g_current_user->editDownloadRight())

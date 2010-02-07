@@ -633,7 +633,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
     
                         case 'DATE':
                             // Datum muss noch formatiert werden
-                            $date = new DateTimeExtended($row[$sql_column_number].' 01:00:00', 'Y-m-d h:i:s');
+                            $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
                             $content = $date->format($g_preferences['system_date']);
                             break;
     

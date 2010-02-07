@@ -156,12 +156,13 @@ if($plg_ter_aktiv == 1)
 
     while($row = $g_db->fetch_array($result))
     {
-        $termin_id[$ter]= $row['dat_id'];
-        $termin_tag[$ter]= mysqldatetime('d', $row['dat_begin']);
-        $termin_uhr[$ter]= mysqldatetime('h:i', $row['dat_begin']);
-        $termin_ganztags[$ter]= $row['dat_all_day'];
-        $termin_ort[$ter]= $row['dat_location'];
-        $termin_titel[$ter]= $row['dat_headline'];
+        $startDate = new DateTimeExtended($row['dat_begin'], 'Y-m-d H:i:s');
+        $termin_id[$ter]       = $row['dat_id'];
+        $termin_tag[$ter]      = $startDate->format('d');
+        $termin_uhr[$ter]      = $startDate->format('h:i');
+        $termin_ganztags[$ter] = $row['dat_all_day'];
+        $termin_ort[$ter]      = $row['dat_location'];
+        $termin_titel[$ter]    = $row['dat_headline'];
         $ter++;
     }
 }
@@ -200,9 +201,10 @@ if($plg_geb_aktiv == 1)
     
     while($row = $g_db->fetch_array($result))
     {
-        $geb_day[$geb] = mysqldatetime('d', $row['birthday']);
-        $geb_year[$geb] = mysqldatetime('y', $row['birthday']);
-        $alter[$geb] = $jahr-$geb_year[$geb];
+        $birthdayDate   = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
+        $geb_day[$geb]  = $birthdayDate->format('d');
+        $geb_year[$geb] = $birthdayDate->format('y');
+        $alter[$geb]    = $jahr-$geb_year[$geb];
         $geb_name[$geb] = $row['first_name']. ' '. $row['last_name'];
         $geb++;
     }

@@ -251,9 +251,10 @@ if($anz_geb > 0)
                     }
                     else
                     {
-                        $plg_date = mysqldatetime('d.m.y', $row['bdate']);
-                        $plg_age = $row['age'];
-                        $plg_dtb = $row['days_to_bdate'];
+                        $birthayDate = new DateTimeExtended($row['bdate'], 'Y-m-d', 'date');
+                        $plg_date = $birthayDate->format($g_preferences['system_date']);
+                        $plg_age  = $row['age'];
+                        $plg_dtb  = $row['days_to_bdate'];
                         $plg_tage = '';
                         $plg_alter_text = '';
 

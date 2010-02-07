@@ -35,7 +35,7 @@ class RSSfeed
 {
 
 //Konstruktor
-function RSSfeed($homepage, $title, $description)
+public function __construct($homepage, $title, $description)
 {
     $this->channel=array();
     $this->channel['title']=$title;
@@ -45,13 +45,13 @@ function RSSfeed($homepage, $title, $description)
     $this->feed='http://'. $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
-function addItem($title, $description, $date, $link)
+public function addItem($title, $description, $date, $link)
 {
     $item=array('title' => $title, 'description' => $description, 'pubDate' => $date, 'link' => $link);
     $this->items[]=$item;
 }
 
-function buildFeed()
+public function buildFeed()
 {
     $this->rssHeader();
     $this->openChannel();
@@ -61,19 +61,19 @@ function buildFeed()
     $this->rssFooter();
 }
 
-function rssHeader()
+public function rssHeader()
 {
     header('Content-type: application/xml');
     echo '<?xml version="1.0" encoding="utf-8"?>'. chr(10). '<rss version="2.0">'. chr(10);
 }
 
-function openChannel()
+public function openChannel()
 {
     echo '<channel>'. chr(10);
 }
 
 
-function addChannelInfos()
+public function addChannelInfos()
 {
     foreach (array('title', 'link', 'description') as $field)
     {
@@ -88,7 +88,7 @@ function addChannelInfos()
 }
 
 
-function buildItems()
+public function buildItems()
 {
     foreach ($this->items as $item)
     {
@@ -106,12 +106,12 @@ function buildItems()
     }
 }
 
-function closeChannel()
+public function closeChannel()
 {
     echo '</channel>'. chr(10);
 }
 
-function rssFooter()
+public function rssFooter()
 {
     echo '</rss>'. chr(10);
 }

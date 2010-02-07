@@ -73,7 +73,7 @@ class Email
 {
 
 //Konstruktor der Klasse.
-function Email()
+public function __construct()
 {
     global $g_preferences;
 
@@ -100,7 +100,7 @@ function Email()
 }
 
 // Funktion um den Absender zu setzen
-function setSender($address, $name='')
+public function setSender($address, $name='')
 {
     global $g_preferences;
     
@@ -143,7 +143,7 @@ function setSender($address, $name='')
 }
 
 // Funktion um den Betreff zu setzen
-function setSubject($subject)
+public function setSubject($subject)
 {
     if (strlen($subject) > 0)
     {
@@ -154,7 +154,7 @@ function setSubject($subject)
 }
 
 // Funktion um Hauptempfaenger hinzuzufuegen
-function addRecipient($address, $name='')
+public function addRecipient($address, $name='')
 {
     if (isValidEmailAddress($address))
     {
@@ -173,7 +173,7 @@ function addRecipient($address, $name='')
 }
 
 // Funktion um Ccs hinzuzufuegen
-function addCopy($address, $name='')
+public function addCopy($address, $name='')
 {
     if (isValidEmailAddress($address))
     {
@@ -192,7 +192,7 @@ function addCopy($address, $name='')
 }
 
 // Funktion um Bccs hinzuzufuegen
-function addBlindCopy($address, $name='')
+public function addBlindCopy($address, $name='')
 {
     if (isValidEmailAddress($address))
     {
@@ -204,7 +204,7 @@ function addBlindCopy($address, $name='')
 }
 
 // Funktion um den Nachrichtentext an die Mail uebergeben
-function setText($text)
+public function setText($text)
 {
     //Erst mal die Zeilenumbrueche innerhalb des Mailtextes umwandeln in einfache Umbrueche
     // statt \r und \r\n nur noch \n
@@ -215,7 +215,7 @@ function setText($text)
 }
 
 // Funktion um ein Attachment an die Mail zu uebergeben...
-function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream' ,
+public function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream' ,
 					   $file_disposition = 'attachment',$file_id = '')
 {
     $this->attachments[] = array(
@@ -232,26 +232,26 @@ function addAttachment($tmp_filename, $orig_filename = '', $file_type='applicati
 }
 
 // Funktion um das Flag zu setzen, dass eine Kopie verschickt werden soll...
-function setCopyToSenderFlag()
+public function setCopyToSenderFlag()
 {
     $this->copyToSender = true;
 }
 
 // Funktion um das Flag zu setzen, dass in der Kopie alle Empfaenger der Mail aufgelistet werden
-function setListRecipientsFlag()
+public function setListRecipientsFlag()
 {
     $this->listRecipients = true;
 }
 
 // Funktion um die zu sendenden Daten als HTML Code zu inerpretieren zu lassen.
-function setDataAsHtml()
+public function setDataAsHtml()
 {
     $this->sendAsHTML = true;
 	$this->headerOptions['Content-Type'] = "multipart/alternative;\n\tboundary=\"". $this->mailBoundary. '"';
 }
 
 // Funktion um den Header aufzubereiten
-function prepareHeader()
+private function prepareHeader()
 {
     $this->mail_properties = '';
     foreach ($this->headerOptions as $key => $value)
@@ -264,7 +264,7 @@ function prepareHeader()
 
 // Methode gibt die maximale Groesse der Anhaenge zurueck
 // size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
-function getMaxAttachementSize($size_unit = 'kb')
+public function getMaxAttachementSize($size_unit = 'kb')
 {
     global $g_preferences;
     
@@ -289,7 +289,7 @@ function getMaxAttachementSize($size_unit = 'kb')
 }
 
 // Funktion um den Body zusammenzusetzen
-function prepareBody()
+private function prepareBody()
 {
     $this->mail_body = '';
 
@@ -386,7 +386,7 @@ function prepareBody()
 }
 
 // Funktion um die Email endgueltig zu versenden...
-function sendEmail()
+public function sendEmail()
 {
     global $g_preferences;
     

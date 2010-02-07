@@ -76,62 +76,52 @@ if(isset($_SESSION['photo_album_request']))
     }
     unset($_SESSION['photo_album_request']);
 }
-else
-{
-    // Datum formatieren
-    $photo_album->setValue('pho_begin', $photo_album->getValue('pho_begin', $g_preferences['system_date']));
-    $photo_album->setValue('pho_end', $photo_album->getValue('pho_end', $g_preferences['system_date']));
-}
 
-// einlesen der Albumliste
-$pho_id_condition = '';
-if($photo_album->getValue('pho_id') > 0)
-{
-    $pho_id_condition = ' AND pho_id <> '. $photo_album->getValue('pho_id');
-}
 
-$sql='  SELECT *
-        FROM '. TBL_PHOTOS. '
-        WHERE pho_org_shortname ="'.$g_organization.'"
-        AND   pho_pho_id_parent IS NULL
-        '.$pho_id_condition.'
-        ORDER BY pho_begin DESC ';
-$result_list = $g_db->query($sql);
-
-//Parent
-//Suchen nach Kindern, Funktion mit selbstaufruf
+// die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
 function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 {
     global $g_db;
-    $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;&nbsp;';
+    $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;';
+    $pho_id_condition = '';
+    $parentPhotoAlbum = new TablePhotos($g_db);
 
     //Erfassen des auszugebenden Albums
-    $pho_id_condition = '';
-    if($photo_album->getValue('pho_id') > 0)
+    if($parent_id > 0)
     {
-        $pho_id_condition = ' AND pho_id <> '. $photo_album->getValue('pho_id');
+        $pho_id_condition .= ' AND pho_pho_id_parent = "'.$parent_id.'" ';
+    }
+    else
+    {
+        $pho_id_condition .= ' AND pho_pho_id_parent IS NULL ';
     }
 
     $sql = 'SELECT *
-            FROM '. TBL_PHOTOS. '
-            WHERE pho_pho_id_parent = "'.$parent_id.'"
-            '.$pho_id_condition.' ';
+              FROM '. TBL_PHOTOS. '
+             WHERE pho_id <> '. $photo_album->getValue('pho_id').
+                   $pho_id_condition;
     $result_child = $g_db->query($sql);
 
     while($adm_photo_child = $g_db->fetch_array($result_child))
     {
-        //Wenn die Elternveranstaltung von pho_id dann selected
         $selected = '';
-        if(($adm_photo_child['pho_id'] == $photo_album->getValue('pho_pho_id_parent'))
-        ||  $adm_photo_child['pho_id'] == $pho_id)
+        
+        $parentPhotoAlbum->clear();
+        $parentPhotoAlbum->setArray($adm_photo_child);
+        
+        //Wenn die Elternveranstaltung von pho_id dann selected
+        if(($parentPhotoAlbum->getValue('pho_id') == $photo_album->getValue('pho_pho_id_parent'))
+        ||  $parentPhotoAlbum->getValue('pho_id') == $pho_id)
         {
             $selected = 'selected="selected"';
         }
 
-        echo'<option value="'.$adm_photo_child['pho_id'].'" '.$selected.'>'.$vorschub.'&#151;'.$adm_photo_child['pho_name']
-        .'&nbsp('.mysqldate('y', $adm_photo_child['pho_begin']).')</option>';
+        // Ausgabe des Albums in der Liste der Auswahlbox
+        echo'<option value="'.$parentPhotoAlbum->getValue('pho_id').'" '.$selected.'>'.
+        $vorschub.'&#151; '.$parentPhotoAlbum->getValue('pho_name')
+        .'&nbsp('.$parentPhotoAlbum->getValue('pho_begin', 'Y').')</option>';
 
-        subfolder($adm_photo_child['pho_id'], $vorschub, $photo_album, $pho_id);
+        subfolder($parentPhotoAlbum->getValue('pho_id'), $vorschub, $photo_album, $pho_id);
     }//while
 }//function
 
@@ -189,25 +179,9 @@ echo '
                     <dd>
                         <select size="1" id="pho_pho_id_parent" name="pho_pho_id_parent" style="max-width: 95%;" tabindex="2">
                             <option value="0">Fotogalerien(Hauptordner)</option>';
-
-                           while($adm_photo_list = $g_db->fetch_array($result_list))
-                            {
-                                //Wenn das Elternalbum von pho_id dann selected
-                                $selected = 0;
-                                if(($adm_photo_list['pho_id'] == $photo_album->getValue('pho_pho_id_parent'))
-                                ||  $adm_photo_list['pho_id'] == $pho_id)
-                                {
-                                    $selected = ' selected="selected" ';
-                                }
-
-                                echo'<option value="'.$adm_photo_list['pho_id'].'" '.$selected.' style="maxlength: 40px;">'.$adm_photo_list['pho_name']
-                                .'&nbsp;('.mysqldate('y', $adm_photo_list['pho_begin']).')</option>';
-
-                                //Auftruf der Funktion
+                                // die Albenstruktur darstellen und das aktuelle Album vorauswählen
                                 subfolder($adm_photo_list['pho_id'], '', $photo_album, $pho_id);
-                            }//while
-                            echo'
-                        </select>
+                        echo '</select>
                     </dd>
                 </dl>
             </li>';
@@ -218,7 +192,7 @@ echo '
                 <dl>
                     <dt><label for="pho_begin">Beginn:</label></dt>
                     <dd>
-                        <input type="text" id="pho_begin" name="pho_begin" size="10" tabindex="3" maxlength="10" value="'. $photo_album->getValue("pho_begin").'" />
+                        <input type="text" id="pho_begin" name="pho_begin" size="10" tabindex="3" maxlength="10" value="'. $photo_album->getValue('pho_begin').'" />
                         <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
                         	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                         <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
@@ -230,7 +204,7 @@ echo '
                 <dl>
                     <dt><label for="pho_end">Ende:</label></dt>
                     <dd>
-                        <input type="text" id="pho_end" name="pho_end" size="10" tabindex="4" maxlength="10" value="'. $photo_album->getValue("pho_end").'">
+                        <input type="text" id="pho_end" name="pho_end" size="10" tabindex="4" maxlength="10" value="'. $photo_album->getValue('pho_end').'">
                         <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
                         	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                     </dd>

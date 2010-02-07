@@ -28,12 +28,12 @@ if(!$dat_result) showError(mysql_error());
 
 while($dat_row = mysql_fetch_object($dat_result))
 {
-    $date = mysqldatetime("y-m-d", $dat_row->dat_end);
-    $time = mysqldatetime("h:i:s", $dat_row->dat_begin);
-    $datetime = "$date $time";
+    $startDate = new DateTimeExtended($dat_row->dat_begin, 'Y-m-d H:i:s');
+    $endDate = new DateTimeExtended($dat_row->dat_end, 'Y-m-d H:i:s');
+    $datetime = $endDate->format('Y-m-d').' '.$startDate->format('H:i:s');
     
-    $sql = "UPDATE ". TBL_DATES. " SET dat_end = '$datetime'
-             WHERE dat_id = $dat_row->dat_id ";
+    $sql = 'UPDATE '. TBL_DATES. ' SET dat_end = "'.$datetime.'"
+             WHERE dat_id = '.$dat_row->dat_id;
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
 }

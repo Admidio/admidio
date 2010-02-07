@@ -47,7 +47,6 @@ if(!isset($g_db_type))
 // includes OHNE Datenbankverbindung
 require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
-require_once(SERVER_PATH. '/adm_program/system/date.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
