@@ -183,7 +183,7 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>alle PHP-Informationen:</dt><dd><a href="systeminfo.php?mode=2" target="_blank2">phpinfo()</a></dd>
+                <dt>alle PHP-Informationen:</dt><dd><a href="systeminfo.php?mode=2" target="_blank">phpinfo()</a></dd>
                 
             </dl>
         </li>';
