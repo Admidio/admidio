@@ -237,7 +237,7 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 						$("#TB_load").remove();
 						tb_init("#TB_ajaxContent a.thickbox");
 						$("#TB_window").css({display:"block"});
-						if(jQueryAjaxLoadAppendStack)
+						if(typeof(jQueryAjaxLoadAppendStack) != "undefined" && typeof(jQueryAjaxLoadAppendStack) == "object")
 						{
 							var jQueryArray = jQueryAjaxLoadAppendStack.getArray();
 							for(var i = 0;i < jQueryArray.length;i++)
@@ -283,7 +283,7 @@ function tb_remove() {
 		$("body","html").css({height: "auto", width: "auto"});
 		$("html").css("overflow","");
 	}
-	if(jQueryCloseAppendStack)
+	if(typeof(jQueryCloseAppendStack) != "undefined" && typeof(jQueryCloseAppendStack) == "object")
 	{
 		var jQueryArray = jQueryCloseAppendStack.getArray();
 		for(var i = 0;i < jQueryArray.length;i++)

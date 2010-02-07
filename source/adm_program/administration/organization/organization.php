@@ -56,98 +56,27 @@ else
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $g_layout['title']  = 'Organisationseinstellungen';
 $g_layout['header'] =  '
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
     <script type="text/javascript"><!--
-        // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
-        ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
-                        "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
-                        "dates-module", "links-module", "systeminfo");
-
-
-        // Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
-        function toggleDiv(element_id)
-        {
-            var i;
-            for (i=0;i<ids.length;i++)
-            {
-                // Erstmal alle DIVs aus unsichtbar setzen
-                document.getElementById(ids[i]).style.display    = "none";
-            }
-            // Angeforderten Bereich anzeigen
-            document.getElementById(element_id).style.display    = "block";
-        }
-
-        // Versteckt oder zeigt weitere Einstellungsmöglichkeiten
-        function showHideMoreSettings(LayerSetting,LayerSwith,LayerSettingName,Setting)
-        {
-            if(document.getElementById(LayerSwith).value == "1" && document.getElementById(LayerSetting))
-            {
-                if(Setting == 0)
-                {
-                    document.getElementById(LayerSetting).innerHTML = \'<input type="text" id="LayerSettingName" name="LayerSettingName" size="4" maxlength="4" value="'. $form_values["ecard_cc_recipients"]. '" />\';
-                }
-                else if(Setting == 1)
-                {
-                    document.getElementById(LayerSetting).innerHTML = \'<input type="text" id="LayerSettingName" name="LayerSettingName" size="4" maxlength="4" value="'. $form_values["ecard_text_length"]. '" />\';
-                }
-            }
-            else if(document.getElementById(LayerSetting))
-            {
-                    document.getElementById(LayerSetting).innerHTML = "";
-            }
-        }
-        function drawForumAccessDataTable()
-        {
-            var layerSetting = document.getElementById("forum_access_data");
-            if(document.getElementById("forum_sqldata_from_admidio").checked == true && layerSetting)
-            {
-                $("#" + "forum_access_data").hide("slow");
-                $("#" + "forum_access_data_text").hide("slow");
-            }
-            else if (document.getElementById("forum_sqldata_from_admidio").checked == false && layerSetting)
-            {
-                var ElementsArray = Array("forum_srv","forum_usr","forum_pw","forum_db");
-                var ValuesArray = Array();
-                ValuesArray[0] = Array("Server:","TEXT","50", "200","'. $form_values['forum_srv']. '");
-                ValuesArray[1] = Array("User:","TEXT","50", "200","'. $form_values['forum_usr']. '");
-                ValuesArray[2] = Array("Passwort:","PASSWORD","50", "200","'. $form_values['forum_pw']. '");
-                ValuesArray[3] = Array("Datenbank:","TEXT","50", "200","'. $form_values['forum_db']. '");
-                appendElements(ElementsArray,ValuesArray,layerSetting);
-
-                $("#" + "forum_access_data").show("slow");
-                $("#" + "forum_access_data_text").show("slow");
-            }
-        }
-        function appendElements(array,valuesArray,layer)
-        {
-            layer.innerHTML="";
-            for(var i = 0; i < array.length;i++)
-            {
-                    var li = document.createElement("LI");
-                    var dl = document.createElement("DL");
-                    var dt = document.createElement("DT");
-                    var dd = document.createElement("DD");
-                    var label = document.createElement("label");
-                    var input = document.createElement("input");
-                    label.appendChild(document.createTextNode(valuesArray[i][0]));
-                    input.type=valuesArray[i][1];
-                    input.id = array[i];
-                    input.name = array[i];
-                    input.maxlength = valuesArray[i][2];
-                    input.width = valuesArray[i][3];
-                    input.value = valuesArray[i][4];
-                    li.appendChild(dl);
-                    dl.appendChild(dt);
-                    dl.appendChild(dd);
-                    dd.appendChild(input);
-                    dt.appendChild(label);
-                    layer.appendChild(li);
-            }
-        }
-
+		var organizationJS = new organizationClass();
+		organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
+					"guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
+					"dates-module", "links-module", "systeminfo");
+		organizationJS.ecard_CCRecipients = \''.$form_values["ecard_cc_recipients"].'\';
+		organizationJS.ecard_textLength = \''.$form_values["ecard_text_length"].'\';
+		organizationJS.forum_Server = \''.$form_values["forum_srv"].'\';
+		organizationJS.forum_User = \''.$form_values["forum_usr"].'\';
+		organizationJS.forum_PW = \''.$form_values["forum_pw"].'\';
+		organizationJS.forum_DB = \''.$form_values["forum_db"].'\';
+		organizationJS.text_Server = \'Server:\';
+		organizationJS.text_User = \'User:\';
+		organizationJS.text_PW = \'Passwort:\';
+		organizationJS.text_DB = \'Datenbank:\';
         $(document).ready(function()
         {
-            toggleDiv("general");
-            drawForumAccessDataTable();
+			organizationJS.init();
+            organizationJS.toggleDiv(organizationJS.ids[0]);
+            organizationJS.drawForumAccessDataTable();
             $("#org_longname").focus();
         });
     //--></script>';
@@ -163,98 +92,98 @@ echo '
         <table style="border-width: 0px; width: 100%; text-align: left;">
         <tr>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'general\');"><img src="'.THEME_PATH.'/icons/options.png" alt="Allgemein" title="Allgemein" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'general\');">Allgemein</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="general_link"><img src="'.THEME_PATH.'/icons/options.png" alt="Allgemein" title="Allgemein" />
+            <span class="defaultFontSize">Allgemein</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'register\');"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="Registrierung" title="Registrierung" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'register\');">Registrierung</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="register_link"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="Registrierung" title="Registrierung" />
+            <span class="defaultFontSize">Registrierung</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'announcement-module\');"><img src="'.THEME_PATH.'/icons/announcements.png" alt="Ankündigungen" title="Ankündigungen" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'announcement-module\');">Ankündigungen</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="announcement-module_link"><img src="'.THEME_PATH.'/icons/announcements.png" alt="Ankündigungen" title="Ankündigungen" />
+            <span class="defaultFontSize">Ankündigungen</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'download-module\');"><img src="'.THEME_PATH.'/icons/download.png" alt="Downloads" title="Downloads" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'download-module\');">Downloads</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="download-module_link"><img src="'.THEME_PATH.'/icons/download.png" alt="Downloads" title="Downloads" />
+            <span class="defaultFontSize">Downloads</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'forum\');"><img src="'.THEME_PATH.'/icons/forum.png" alt="Forum" title="Forum" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'forum\');">Forum</a></span>
-        </span>
-        </td>
-        </tr>
-        <tr>
-        <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'photo-module\');"><img src="'.THEME_PATH.'/icons/photo.png" alt="Fotos" title="Fotos" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'photo-module\');">Fotos</a></span>
-        </span>
-        </td>
-        <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'ecard-module\');"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" title="'.$g_l10n->get("ECA_GREETING_CARDS").'" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'ecard-module\');">'.$g_l10n->get("ECA_GREETING_CARDS").'</a></span>
-        </span>
-        </td>
-        <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'guestbook-module\');"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="Gästebuch" title="Gästebuch" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'guestbook-module\');">Gästebuch</a></span>
-        </span>
-        </td>
-        <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'mail-module\');"><img src="'.THEME_PATH.'/icons/email.png" alt="E-Mails" title="E-Mails" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'mail-module\');">E-Mails</a></span>
-        </span>
-        </td>
-        <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'system-mail\');"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="Systemmails" title="Systemmails" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'system-mail\');">Systemmails</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="forum_link"><img src="'.THEME_PATH.'/icons/forum.png" alt="Forum" title="Forum" />
+            <span class="defaultFontSize">Forum</span></div>
+        </div>
         </td>
         </tr>
         <tr>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'list-module\');"><img src="'.THEME_PATH.'/icons/list.png" alt="Listen" title="Listen" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'list-module\');">Listen</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="photo-module_link"><img src="'.THEME_PATH.'/icons/photo.png" alt="Fotos" title="Fotos" />
+            <span class="defaultFontSize">Fotos</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'profile-module\');"><img src="'.THEME_PATH.'/icons/profile.png" alt="Profil" title="Profil" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'profile-module\');">Profil</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="ecard-module_link"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" title="'.$g_l10n->get("ECA_GREETING_CARDS").'" />
+            <span class="defaultFontSize">'.$g_l10n->get("ECA_GREETING_CARDS").'</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'dates-module\');"><img src="'.THEME_PATH.'/icons/dates.png" alt="Termine" title="Termine" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'dates-module\');">Termine</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="guestbook-module_link"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="Gästebuch" title="Gästebuch" />
+            <span class="defaultFontSize">Gästebuch</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'links-module\');"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="Weblinks" title="Weblinks" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'links-module\');">Weblinks</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="mail-module_link"><img src="'.THEME_PATH.'/icons/email.png" alt="E-Mails" title="E-Mails" />
+            <span class="defaultFontSize">E-Mails</span></div>
+        </div>
         </td>
         <td>
-        <span class="iconTextLink">
-            <a href="#" onclick="toggleDiv(\'systeminfo\');"><img src="'.THEME_PATH.'/icons/info.png" alt="Systeminformationen" title="Systeminformationen" /></a>
-            <span class="defaultFontSize"><a href="#" onclick="toggleDiv(\'systeminfo\');">Systeminfo</a></span>
-        </span>
+        <div class="iconTextLink organisationLink">
+            <div id="system-mail_link"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="Systemmails" title="Systemmails" />
+            <span class="defaultFontSize">Systemmails</span></div>
+        </div>
+        </td>
+        </tr>
+        <tr>
+        <td>
+        <div class="iconTextLink organisationLink">
+            <div id="list-module_link"><img src="'.THEME_PATH.'/icons/list.png" alt="Listen" title="Listen" />
+            <span class="defaultFontSize">Listen</span></div>
+        </div>
+        </td>
+        <td>
+        <div class="iconTextLink organisationLink">
+            <div id="profile-module_link"><img src="'.THEME_PATH.'/icons/profile.png" alt="Profil" title="Profil" />
+            <span class="defaultFontSize">Profil</span></div>
+        </div>
+        </td>
+        <td>
+        <div class="iconTextLink organisationLink">
+            <div id="dates-module_link"><img src="'.THEME_PATH.'/icons/dates.png" alt="Termine" title="Termine" />
+            <span class="defaultFontSize">Termine</span></div>
+        </div>
+        </td>
+        <td>
+        <div class="iconTextLink organisationLink">
+            <div id="links-module_link"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="Weblinks" title="Weblinks" />
+            <span class="defaultFontSize">Weblinks</span></div>
+        </div>
+        </td>
+        <td>
+        <div class="iconTextLink organisationLink">
+            <div id="systeminfo_link"><img src="'.THEME_PATH.'/icons/info.png" alt="Systeminformationen" title="Systeminformationen" />
+            <span class="defaultFontSize">Systeminfo</span></div>
+        </div>
         </td>
         </tr>
         </table>
@@ -939,7 +868,7 @@ echo '
                         <dl>
                             <dt><label for=\"forum_width\">Forum Breite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"forum_width\" name=\"forum_width\" style=\"width: 50px;\" maxlength=\"4\" style=\"width: 50px;\" value=\"". $form_values['forum_width']. "\" /> Pixel
+                                <input type=\"text\" id=\"forum_width\" name=\"forum_width\" maxlength=\"4\" style=\"width: 50px;\" value=\"". $form_values['forum_width']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
@@ -1000,7 +929,7 @@ echo '
                         <dl>
                             <dt><label for="forum_sqldata_from_admidio">Zugangsdaten von Admidio verwenden:</label></dt>
                             <dd>
-                                <input type="checkbox" id="forum_sqldata_from_admidio" name="forum_sqldata_from_admidio" onclick="javascript:drawForumAccessDataTable();" ';
+                                <input type="checkbox" id="forum_sqldata_from_admidio" name="forum_sqldata_from_admidio" onclick="javascript:organizationJS.drawForumAccessDataTable();" ';
                                 if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
                                 {
                                     echo ' checked="checked" ';
@@ -1454,7 +1383,7 @@ echo '
                             <dt><label for="ecard_cc_recipients">'.$g_l10n->get("ECA_MAX_CC").':</label>
                             </dt>
                             <dd>
-                            <select size="1" id="enable_ecard_cc_recipients" name="enable_ecard_cc_recipients" style="margin-right:20px;" onchange="javascript:showHideMoreSettings(\'cc_recipients_count\',\'enable_ecard_cc_recipients\',\'ecard_cc_recipients\',0);">
+                            <select size="1" id="enable_ecard_cc_recipients" name="enable_ecard_cc_recipients" style="margin-right:20px;" onchange="javascript:organizationJS.showHideMoreSettings(\'cc_recipients_count\',\'enable_ecard_cc_recipients\',\'ecard_cc_recipients\',0);">
                                     <option value="0" ';
                                     if($form_values["enable_ecard_cc_recipients"] == 0)
                                     {
@@ -1484,7 +1413,7 @@ echo '
                         <dl>
                             <dt><label for="ecard_text_length">'.$g_l10n->get("ECA_MAX_MESSAGE_LENGTH").':</label></dt>
                             <dd>
-                             <select size="1" id="enable_ecard_text_length" name="enable_ecard_text_length" style="margin-right:20px;" onchange="javascript:showHideMoreSettings(\'text_length_count\',\'enable_ecard_text_length\',\'ecard_text_length\',1);">
+                             <select size="1" id="enable_ecard_text_length" name="enable_ecard_text_length" style="margin-right:20px;" onchange="javascript:organizationJS.showHideMoreSettings(\'text_length_count\',\'enable_ecard_text_length\',\'ecard_text_length\',1);">
                                     <option value="0" ';
                                     if($form_values["enable_ecard_text_length"] == 0)
                                     {
@@ -1664,11 +1593,11 @@ echo '
                         <dl>
                             <dt><label>Profilfelder pflegen:</label></dt>
                             <dd>
-                                <span class="iconTextLink">
+                                <div class="iconTextLink">
                                     <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
                                     src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
                                     <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">zur Profilfeldpflege wechseln</a>
-                                </span>
+                                </div>
                             </dd>
                         </dl>
                     </li>
@@ -1944,11 +1873,11 @@ echo '
                         <dl>
                             <dt><label>Räume pflegen:</label></dt>
                             <dd>
-                                <span class="iconTextLink">
+                                <div class="iconTextLink">
                                     <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
                                     src="'. THEME_PATH. '/icons/home.png" alt="Räume anlegen und bearbeiten" /></a>
                                     <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">zur Raumpflege wechseln</a>
-                                </span>
+                                </div>
                             </dd>
                         </dl>
                     </li>
