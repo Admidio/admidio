@@ -14,8 +14,8 @@
  *
  *****************************************************************************/
 
-require('../../system/classes/table_photos.php');
-require('../../system/common.php');
+require_once('../../system/classes/table_photos.php');
+require_once('../../system/common.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -26,7 +26,7 @@ if ($g_preferences['enable_photo_module'] == 0)
 elseif($g_preferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 }
 
 // Uebergabevariablen pruefen
@@ -67,7 +67,7 @@ $prev_image = $bild-1;
 $next_image = $bild+1;
 $url_prev_image = '#';
 $url_next_image = '#';
-$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
+$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
 
 if($prev_image > 0)
 {

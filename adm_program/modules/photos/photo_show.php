@@ -35,13 +35,13 @@ elseif($g_preferences['enable_photo_module'] == 2)
 }
 
 //Uebergaben pruefen
-$pho_id    = NULL;
-$pho_begin = 0;
-$pic_nr    = NULL;
+$pho_id     = NULL;
+$pho_begin  = 0;
+$pic_nr     = NULL;
 $max_width  = 0;
 $max_height = 0;
-$thumb 	   = false;
-$image     = NULL;
+$thumb      = false;
+$image      = NULL;
 
 // Album-ID
 if(isset($_GET['pho_id']))
@@ -52,10 +52,10 @@ if(isset($_GET['pho_id']))
 //pho_begin
 if(isset($_GET['pho_begin']))
 {
-    $albumStartDate = new DateTimeExtended($_GET['pho_begin'], $g_preferences['system_date'], 'date');
+    $albumStartDate = new DateTimeExtended($_GET['pho_begin'], 'Y-m-d', 'date');
     if($albumStartDate->valid())
     {
-        $pho_begin = $_GET['pho_begin'];
+        $pho_begin = $albumStartDate->format('Y-m-d');
     }
 }
 
@@ -80,11 +80,11 @@ if(isset($_GET['max_height']) && is_numeric($_GET['max_height']))
 //Thumbnail
 if(isset($_GET['thumb']))
 {
-	$thumb = $_GET['thumb'];
+    $thumb = $_GET['thumb'];
 }
 
 // Bildpfad zusammensetzten
-$ordner = SERVER_PATH. '/adm_my_files/photos/'.$pho_begin.'_'.$pho_id;
+$ordner  = SERVER_PATH. '/adm_my_files/photos/'.$pho_begin.'_'.$pho_id;
 $picpath = $ordner.'/'.$pic_nr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
@@ -98,23 +98,23 @@ if($thumb)
 {
     if($pic_nr > 0)
     {
-    	$thumb_length=1;
-    	if(file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg'))
-    	{
-    	    //Ermittlung der Original Bildgroesse
-    	    $bildgroesse = getimagesize($ordner.'/thumbnails/'.$pic_nr.'.jpg');
-    	    
-    	    $thumb_length = $bildgroesse[1];
-    	    if($bildgroesse[0]>$bildgroesse[1])
-    	    {
-    	        $thumb_length = $bildgroesse[0];
-    	    }
-    	}
-    	
-    	//Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
-    	//Wenn nicht anlegen
-    	if(!file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
-    	{
+        $thumb_length=1;
+        if(file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg'))
+        {
+            //Ermittlung der Original Bildgroesse
+            $bildgroesse = getimagesize($ordner.'/thumbnails/'.$pic_nr.'.jpg');
+            
+            $thumb_length = $bildgroesse[1];
+            if($bildgroesse[0]>$bildgroesse[1])
+            {
+                $thumb_length = $bildgroesse[0];
+            }
+        }
+        
+        //Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
+        //Wenn nicht anlegen
+        if(!file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
+        {
             //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if(file_exists($ordner.'/thumbnails') == false)
             {
@@ -122,52 +122,52 @@ if($thumb)
                 $folder = new Folder($ordner);
                 $folder->createWriteableFolder('thumbnails');
             }
-    
+
             // nun das Thumbnail anlegen
-    	    $image = new Image($picpath);
-    	    $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
-    	    $image->copyToFile(null, $ordner.'/thumbnails/'.$pic_nr.'.jpg');
-    	}
-    	else
-    	{
-    		readfile($ordner.'/thumbnails/'.$pic_nr.'.jpg');
-    	}
+            $image = new Image($picpath);
+            $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
+            $image->copyToFile(null, $ordner.'/thumbnails/'.$pic_nr.'.jpg');
+        }
+        else
+        {
+            readfile($ordner.'/thumbnails/'.$pic_nr.'.jpg');
+        }
     }
     else
     {
         // kein Bild uebergeben, dann NoPix anzeigen
-	    $image = new Image(THEME_SERVER_PATH. '/images/nopix.jpg');
-	    $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
+        $image = new Image(THEME_SERVER_PATH. '/images/nopix.jpg');
+        $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
     }
 }
 else
 {
-	if(file_exists($picpath) == false)
-	{
-    	$picpath = THEME_SERVER_PATH. '/images/nopix.jpg';
-	}
-	// Bild einlesen und scalieren
-	$image = new Image($picpath);
+    if(file_exists($picpath) == false)
+    {
+        $picpath = THEME_SERVER_PATH. '/images/nopix.jpg';
+    }
+    // Bild einlesen und scalieren
+    $image = new Image($picpath);
     $image->scale($max_width, $max_height);
 }
 
 if($image != NULL)
 {
-	// Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-	if (($max_width > 200) && $g_preferences['photo_image_text'] != '')
-	{
-	    $font_c = imagecolorallocate($image->imageResource,255,255,255);
-	    $font_ttf = THEME_SERVER_PATH.'/font.ttf';
-	    $font_s = $max_width / 40;
-	    $font_x = $font_s;
-	    $font_y = $image->imageHeight-$font_s;
-	    $text = $g_preferences['photo_image_text'];
-	    imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
-	}
-	
-	// Rueckgabe des neuen Bildes
-	header('Content-Type: '. $image->getMimeType());
-	$image->copyToBrowser();
-	$image->delete();
+    // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
+    if (($max_width > 200) && $g_preferences['photo_image_text'] != '')
+    {
+        $font_c = imagecolorallocate($image->imageResource,255,255,255);
+        $font_ttf = THEME_SERVER_PATH.'/font.ttf';
+        $font_s = $max_width / 40;
+        $font_x = $font_s;
+        $font_y = $image->imageHeight-$font_s;
+        $text = $g_preferences['photo_image_text'];
+        imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
+    }
+
+    // Rueckgabe des neuen Bildes
+    header('Content-Type: '. $image->getMimeType());
+    $image->copyToBrowser();
+    $image->delete();
 }
 ?>

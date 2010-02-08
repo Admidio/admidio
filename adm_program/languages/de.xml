@@ -228,12 +228,12 @@
     <text id="ORG_PHR_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.</text>
 
     <!-- Phrases only in Photomodule -->
-    <text id="PHO_PHR_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) nd angezeigt werden.</text>
+    <text id="PHO_PHR_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_PHR_NO_FILES_SELECTED" development="new" translation="todo">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
     <text id="PHO_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
-    <text id="PHO_PHR_PHOTO_FORMAT_INVALID" development="new" translation="todo">Es können nur Fotos im JPG und PNG-Format hochgeladen u
+    <text id="PHO_PHR_PHOTO_FORMAT_INVALID" development="new" translation="todo">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</text>
     <text id="PHO_PHR_PHOTO_FILES_TO_LARGE" development="new" translation="todo">Eine der Dateien oder alle gemeinsam übersteigen die vom Server zugelassenen Uploadgröße von %VAR1% MB.</text>
-    <text id="PHO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1%B überstiegen!</text>
+    <text id="PHO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
 
     <!-- Phrases only in Profilemodule -->
     <text id="PRO_PHR_FIELD_NUMERIC" development="new" translation="todo">Das Feld %VAR1% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
