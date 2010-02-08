@@ -370,6 +370,8 @@ class User extends TableUsers
     // welche Rollen der User einsehen darf
     public function checkRolesRight($right = '')
     {
+        global $g_l10n;
+
         if($this->getValue('usr_id') > 0)
         {
             if(count($this->roles_rights) == 0)
@@ -414,7 +416,7 @@ class User extends TableUsers
                     }
 
                     // Webmasterflag setzen
-                    if($row['mem_usr_id'] > 0 && $row['rol_name'] == 'Webmaster')
+                    if($row['mem_usr_id'] > 0 && $row['rol_name'] == $g_l10n->get('SYS_WEBMASTER'))
                     {
                         $this->webmaster = 1;
                     }

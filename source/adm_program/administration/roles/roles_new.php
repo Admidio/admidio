@@ -54,7 +54,7 @@ if($req_rol_id > 0)
     }
 
     // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
-    if($role->getValue('rol_name')    == 'Webmaster'
+    if($role->getValue('rol_name')    == $g_l10n->get('SYS_WEBMASTER')
     && $g_current_user->isWebmaster() == false)
     {
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
@@ -248,7 +248,7 @@ echo '
                     <dd>
                         <input type="text" id="rol_name" name="rol_name" ';
                         // bei bestimmte Rollen darf der Name nicht geaendert werden
-                        if($role->getValue('rol_name') == 'Webmaster')
+                        if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
                         {
                             echo ' readonly="readonly" ';
                         }
@@ -446,16 +446,16 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            if($role->getValue('rol_name') == 'Webmaster')
+                            if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
                             {
                                 echo ' disabled="disabled" ';
                             }
                             echo ' onchange="markRoleRight(\'rol_assign_roles\', \'rol_all_lists_view\', true)" value="1" />
                             <label for="rol_assign_roles"><img src="'. THEME_PATH. '/icons/roles.png" alt="Rollen verwalten und zuordnen" /></label>&nbsp;
                             <label for="rol_assign_roles">Rollen verwalten und zuordnen</label>
-							<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rol_assign_roles&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
-				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rol_assign_roles\',this)" onmouseout="ajax_hideTooltip()"
-				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
+                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rol_assign_roles&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rol_assign_roles\',this)" onmouseout="ajax_hideTooltip()"
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
                         </div>
                     </li>
                     <li>
@@ -465,7 +465,7 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            if($role->getValue('rol_name') == 'Webmaster')
+                            if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
                             {
                                 echo ' disabled="disabled" ';
                             }

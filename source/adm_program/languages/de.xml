@@ -19,12 +19,17 @@
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
     <text id="DAT_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
+    <text id="DAT_PHR_LOCATION_LINK" development="new1" translation="todo">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</text>
+    <text id="DAT_PHR_LOGIN_POSSIBLE" development="new1" translation="todo">Hier können Sie auswählen, ob eine Anmeldung zu dem von Ihnen angegebenen Termin möglich sein soll oder nicht.\nFalls Sie die Anmeldung nachträglich löschen, so werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn Sie hingegen nur die Anmeldung für neue Teilnehmer beenden möchten, so setzen Sie die derzeitige Teilnehmerzahl als Teilnahmebegrenzung.</text>
+    <text id="DAT_PHR_MAX_MEMBERS" development="new1" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
+    <text id="DAT_PHR_ROOM_OVERHANG" development="new1" translation="todo">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</text>
     <text id="DAT_PHR_ROOM_RESERVED" development="new" translation="todo">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</text>
     <text id="DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH" development="new" translation="todo">Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.</text>
     <text id="DAT_PHR_QUOTA_EXCEEDED" development="new" translation="todo">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</text>
     <text id="DAT_PHR_QUOTA_FOR_ROLE" development="new" translation="todo">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</text>
     <text id="DAT_PHR_QUOTA_WITH_MAXIMUM" development="new" translation="todo">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</text>
     <text id="DAT_PREVIOUS_DATES" description="Vergangene Termine" development="new" translation="todo">Vergangene %VAR1%</text>
+    <text id="DAT_ROOM_INFORMATIONS" development="new1" translation="todo">Rauminformationen</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="todo">Auf Karte zeigen</text>
     <text id="DAT_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
 
@@ -203,6 +208,7 @@
     <text id="MAI_PHR_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="todo">die Rolle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
+    <text id="MEM_PHR_IDENTIFY_USERS" development="new1" translation="todo">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</text>
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" development="new" translation="todo">%VAR1% Datensätze wurden erfolgreich importiert!</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP" development="new" translation="todo">Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP_OK" development="new" translation="todo">Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet!</text>
@@ -298,6 +304,7 @@
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
+    <text id="SYS_LOGIN" development="new1" translation="todo">Login</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
@@ -306,6 +313,7 @@
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
     <text id="SYS_NO" development="new" translation="todo">Nein</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
+    <text id="SYS_PAGE" development="new1" translation="todo">Seite</text>
     <text id="SYS_PASSWORD" development="new" translation="todo">Passwort</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
     <text id="SYS_PHR_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
@@ -389,5 +397,20 @@
     <text id="SYS_WARNING" development="new" translation="todo">Warnung</text>
     <text id="SYS_WEBMASTER" development="new" translation="todo">Webmaster</text>
     <text id="SYS_YES" development="new" translation="todo">Ja</text>
+    <text id="SYS_ADD_LINK" development="new1" translation="todo">Link einfügen</text>
+    <text id="SYS_ADD_EMAIL" development="new1" translation="todo">E-Mail-Adresse einfügen</text>
+    <text id="SYS_ADD_IMAGE" development="new1" translation="todo">Bild einfügen</text>
+    <text id="SYS_BOLD" development="new1" translation="todo">Fett</text>
+    <text id="SYS_CENTERED" development="new1" translation="todo">Zentriert</text>
+    <text id="SYS_CLOSE_ALL_TAGS" development="new1" translation="todo">Alle Tags schließen</text>
+    <text id="SYS_DECREASE_FONT_SIZE" development="new1" translation="todo">Schriftgrad veringern</text>
+    <text id="SYS_INCREASE_FONT_SIZE" development="new1" translation="todo">Schriftgrad erhöhen</text>
+    <text id="SYS_ITALIC" development="new1" translation="todo">Kursiv</text>
+    <text id="SYS_LOGIN_PROBLEMS" development="new1" translation="todo">Loginprobleme</text>
+    <text id="SYS_PHR_PASSWORD_FORGOTTEN" development="new1" translation="todo">Ich habe mein Passwort vergessen!</text>
+    <text id="SYS_PHR_WANT_REGISTER" development="new1" translation="todo">Ich möchte mich registrieren!</text>
+    <text id="SYS_REMEMBER_ME" development="new1" translation="todo">Angemeldet bleiben</text>
+    <text id="SYS_SHOW_HELP" development="new1" translation="todo">Hilfe anzeigen</text>
+    <text id="SYS_UNDERLINE" development="new1" translation="todo">Unterstrichen</text>
 </version>
 </language>

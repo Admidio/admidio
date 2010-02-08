@@ -206,7 +206,7 @@ echo '
                          }
     
                          // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                         if($row->rol_name == 'Webmaster' && (!$g_current_user->isWebmaster()
+                         if($row->rol_name == $g_l10n->get('SYS_WEBMASTER') && (!$g_current_user->isWebmaster()
                             ||  // man darf sich selbst an dieser Stelle aber nicht aus der Rolle Webmaster entfernen
                             ($g_current_user->isWebmaster() && $req_usr_id == $g_current_user->getValue("usr_id")))
                            )
@@ -226,7 +226,7 @@ echo '
                             }
     
                             // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                            if($row->rol_name == 'Webmaster' && !$g_current_user->isWebmaster())
+                            if($row->rol_name == $g_l10n->get('SYS_WEBMASTER') && !$g_current_user->isWebmaster())
                             {
                                 echo ' disabled="disabled" ';
                             }

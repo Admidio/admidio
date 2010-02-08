@@ -185,7 +185,7 @@ $member = new TableMembers($g_db);
 while($row = $g_db->fetch_array($result_rol))
 {
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
-    if($row['rol_name'] != 'Webmaster' || $g_current_user->isWebmaster())
+    if($row['rol_name'] != $g_l10n->get('SYS_WEBMASTER') || $g_current_user->isWebmaster())
     {
         $role_assign = 0;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)

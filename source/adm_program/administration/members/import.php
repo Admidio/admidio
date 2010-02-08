@@ -77,8 +77,8 @@ echo '
                     <option value="3">ersetzen</option>
                     <option value="4">ergänzen</option>
                 </select>&nbsp;
-                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=existing_user&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
-	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=existing_user\',this)" onmouseout="ajax_hideTooltip()"
+                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_PHR_IDENTIFY_USERS&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_PHR_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
 	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
             </li>
         </ul>

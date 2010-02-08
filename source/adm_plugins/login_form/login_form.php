@@ -227,7 +227,7 @@ else
                         if($plg_show_email_link)
                         {
                             // Rollenobjekt fuer 'Webmaster' anlegen
-                            $role_webmaster = new TableRoles($g_db, 'Webmaster');
+                            $role_webmaster = new TableRoles($g_db, $g_l10n->get('SYS_WEBMASTER'));
 
                             // Link bei Loginproblemen
                             if($g_preferences['enable_password_recovery'] == 1

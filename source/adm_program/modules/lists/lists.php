@@ -392,8 +392,8 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         || isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')))
                         {
                             // die Webmasterrolle darf nur von Webmastern bearbeitet werden
-                            if($role->getValue('rol_name') != 'Webmaster'
-                            || ($role->getValue('rol_name') == 'Webmaster' && $g_current_user->isWebmaster()))
+                            if($role->getValue('rol_name')  != $g_l10n->get('SYS_WEBMASTER')
+                            || ($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER') && $g_current_user->isWebmaster()))
                             {
                                 if($g_current_user->assignRoles())
                                 {

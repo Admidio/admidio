@@ -578,7 +578,7 @@ echo '
                     <th style="width: 37%;">Inhalt</th>
                     <th style="width: 18%;">Sortierung</th>
                     <th style="width: 27%;">Bedingung
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=mylist_condition&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=500&amp;width=580"><img 
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=500&amp;width=580"><img 
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
                     </th>
                 </tr>

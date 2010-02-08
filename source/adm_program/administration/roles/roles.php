@@ -285,7 +285,7 @@ echo '
                         src=\"". THEME_PATH. "/icons/roles.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\" /></a>";
                 }
 
-                if($role->getValue('rol_name') == 'Webmaster')
+                if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
                 {
                     echo '<a class="iconLink"><img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" /></a>';
                 }

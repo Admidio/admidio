@@ -294,8 +294,8 @@ function getFieldCode($field, $user, $new_user)
     $description = '';
     if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name') != 'Messenger')
     {
-        $description = '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
-            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=user_field_description&amp;err_text='. $field->getValue('usf_name'). '\',this)" onmouseout="ajax_hideTooltip()"
+        $description = '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_text='. $field->getValue('usf_name'). '&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_text='. $field->getValue('usf_name'). '\',this)" onmouseout="ajax_hideTooltip()"
             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
     }
     

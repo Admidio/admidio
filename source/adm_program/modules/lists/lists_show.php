@@ -310,8 +310,8 @@ if($req_mode != 'csv')
             && $role->getValue('rol_valid') == 1)
             {
                 // der Webmasterrolle darf nur von Webmastern neue User zugeordnet werden
-                if($role->getValue('rol_name')  != 'Webmaster'
-                || ($role->getValue('rol_name') == 'Webmaster' && $g_current_user->isWebmaster()))
+                if($role->getValue('rol_name')  != $g_l10n->get('SYS_WEBMASTER')
+                || ($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER') && $g_current_user->isWebmaster()))
                 {
                     echo '
                     <li>

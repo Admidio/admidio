@@ -2,7 +2,7 @@
 
 if ('roles_functions.php' == basename($_SERVER['SCRIPT_FILENAME']))
 {
-    die('Diese Seite darf nicht direkt aufgerufen werden !');
+    die('This page may not be called directly !');
 }
 
 require_once('../../system/classes/table_members.php');
@@ -95,7 +95,7 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
                         if($g_current_user->assignRoles())
                         {
                             // Löschen wird nur bei anderen Webmastern ermöglicht
-                            if (($row['rol_name'] == 'Webmaster' && $g_current_user->getValue('usr_id') != $user->getValue('usr_id')) || ($row['rol_name'] != 'Webmaster'))
+                            if (($row['rol_name'] == $g_l10n->get('SYS_WEBMASTER') && $g_current_user->getValue('usr_id') != $user->getValue('usr_id')) || ($row['rol_name'] != $g_l10n->get('SYS_WEBMASTER')))
                             {
                                 $roleMemHTML .= '
                                 <a class="iconLink" href="javascript:profileJS.deleteRole('.$row['rol_id'].', \''.$row['rol_name'].'\')"><img
@@ -107,7 +107,7 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
                                 <a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
                             }
                             // Bearbeiten des Datums nicht bei Webmastern möglich
-                            if ($row['rol_name'] != 'Webmaster')
+                            if ($row['rol_name'] != $g_l10n->get('SYS_WEBMASTER'))
                             {
                                 $roleMemHTML .= '<a class="iconLink" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$row['rol_id'].')"><img
                                     src="'.THEME_PATH.'/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
