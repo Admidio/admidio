@@ -104,7 +104,7 @@ class TablePhotos extends TableAccess
         {
             $pho_id = $this->getValue('pho_id');
             $shuffle_image['shuffle_pho_id']    = $this->getValue('pho_id');
-            $shuffle_image['shuffle_img_begin'] = $this->getValue('pho_begin');
+            $shuffle_image['shuffle_img_begin'] = $this->getValue('pho_begin', 'Y-m-d');
 
             if($this->getValue('pho_quantity') > 0)
             {

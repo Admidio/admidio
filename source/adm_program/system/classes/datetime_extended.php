@@ -103,7 +103,6 @@ class DateTimeExtended extends DateTime
     // erwartet wird ein String und das dazugehoerige Format aehnlich date()
     public function setDateTime($date, $format)
     {
-        error_log($date. ' '.$format);
         $this->year   = 0;
         $this->month  = 0;
         $this->day    = 0;
@@ -147,7 +146,6 @@ class DateTimeExtended extends DateTime
         );
 
         $regexp = preg_replace('/[a-zA-Z]/e', 'isset($formatPatterns["$0"])?$formatPatterns["$0"]:"$0"', $format);
-        error_log($regexp);
         if (preg_match('/^'.$regexp.'$/', trim($date), $match))
         {
             foreach ($match as $format => $value) 
