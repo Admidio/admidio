@@ -3,7 +3,7 @@
  * Meldet den User bei Admidio an, wenn sich dieser einloggen darf
  * Cookies setzen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,12 +48,12 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
 
 if(strlen($loginname) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Benutzername'));
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
 }
 
 if(strlen($password) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Passwort'));
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
 }
 $password = md5($password);
 

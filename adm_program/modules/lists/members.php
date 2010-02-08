@@ -55,7 +55,7 @@ $role = new TableRoles($g_db, $role_id);
 if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($g_current_user->getValue('usr_id'), $role_id))
 || (  !$g_current_user->isWebmaster()
-   && $role->getValue('rol_name') == 'Webmaster')
+   && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
 || $role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
 {
     $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
@@ -205,7 +205,7 @@ $g_layout['header'] = '
             }
             else
             {
-            	decreaseMemberCount();
+                decreaseMemberCount();
             }
         }
 
@@ -218,74 +218,74 @@ $g_layout['header'] = '
                 var number = name.substr(pos_number, name.length - pos_number);
                 var role_name = "leader_" + number;
                 document.getElementById(role_name).checked = false;
-     			//
-     			decreaseMemberCount();
+                //
+                decreaseMemberCount();
             }
             else
             {
-            	increaseMemberCount();
+                increaseMemberCount();
             }
         }
 
-	 	function decreaseMemberCount()
-	 	{
-	 		if(member_count==-1)
-	 		{
-	 			initializeMemberCount(+1);
-	 		}
-	 		member_count--;
-	 	}
+        function decreaseMemberCount()
+        {
+            if(member_count==-1)
+            {
+                initializeMemberCount(+1);
+            }
+            member_count--;
+        }
 
-	 	function increaseMemberCount()
-	 	{
-	 		if(member_count==-1)
-	 		{
-	 			initializeMemberCount(-1);
-	 		}
-	 		member_count++;
-	 	}';
-	if($role->getValue('rol_name') == 'Webmaster')
-	{
-		$g_layout['header'] =  $g_layout['header'] .'
-	 	function chkMemberCount()
-	 	{
-	 		if(member_count == 0)
-	 		{
-	 			alert("Die Rolle Webmaster muss mindestens ein Mitglied haben!");
-	 			return false;
-	 		}
-	 		else
-	 			return true;
-	 	}';
-	}
-	else
-	{
-		$g_layout['header'] =  $g_layout['header'] .'
-	 	function chkMemberCount()
-	 	{
-	 		return true;
-	 	}';
-	}
-		$g_layout['header'] =  $g_layout['header'] .'
+        function increaseMemberCount()
+        {
+            if(member_count==-1)
+            {
+                initializeMemberCount(-1);
+            }
+            member_count++;
+        }';
+    if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
+    {
+        $g_layout['header'] =  $g_layout['header'] .'
+        function chkMemberCount()
+        {
+            if(member_count == 0)
+            {
+                alert("Die Rolle Webmaster muss mindestens ein Mitglied haben!");
+                return false;
+            }
+            else
+                return true;
+        }';
+    }
+    else
+    {
+        $g_layout['header'] =  $g_layout['header'] .'
+        function chkMemberCount()
+        {
+            return true;
+        }';
+    }
+        $g_layout['header'] =  $g_layout['header'] .'
         function initializeMemberCount(action)
         {
-        	member_count = 0;
-        	all_inputs = document.getElementsByTagName("input");
-        	for(var i=0;i < all_inputs.length; ++i)
-        	{
-        		if(all_inputs[i].name.search(/member.+/)!=-1 && all_inputs[i].checked==true)
-        		{
-        			member_count++;
-        		}
-        	}
-        	if(action == -1)
-        	{
-        		member_count--;
-        	}
-        	else
-        	{
-        		member_count++;
-        	}
+            member_count = 0;
+            all_inputs = document.getElementsByTagName("input");
+            for(var i=0;i < all_inputs.length; ++i)
+            {
+                if(all_inputs[i].name.search(/member.+/)!=-1 && all_inputs[i].checked==true)
+                {
+                    member_count++;
+                }
+            }
+            if(action == -1)
+            {
+                member_count--;
+            }
+            else
+            {
+                member_count++;
+            }
         }
 
     // Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen

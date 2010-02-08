@@ -130,7 +130,7 @@ function isGroupLeader($user_id, $role_id = 0)
 
 function generatePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true)
 {
-    global $g_root_path;
+    global $g_root_path, $g_l10n;
 
     if ( $num_items == 0)
     {
@@ -212,20 +212,20 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
         if ( $on_page > 1 )
         {
             $page_string = '<a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                                class="navigationArrow" src="'. THEME_PATH. '/icons/back.png" alt="Vorherige" /></a>
-                            <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">Vorherige</a>&nbsp;&nbsp;' . $page_string;
+                                class="navigationArrow" src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                            <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$g_l10n->get('SYS_BACK').'</a>&nbsp;&nbsp;' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">Nächste</a>
+            $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$g_l10n->get('SYS_NEXT').'</a>
                             <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
-                                 src="'. THEME_PATH. '/icons/forward.png" alt="Nächste" /></a>';
+                                 src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>';
         }
 
     }
 
-    $page_string = '<div class="pageNavigation">Seite:&nbsp;&nbsp;' . $page_string. '</div>';
+    $page_string = '<div class="pageNavigation">'.$g_l10n->get('SYS_PAGE').':&nbsp;&nbsp;' . $page_string. '</div>';
 
     return $page_string;
 }
@@ -244,7 +244,7 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 
 function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0)
 {
-    global $g_current_user, $g_current_organization, $g_db;
+    global $g_current_user, $g_current_organization, $g_db, $g_l10n;
     
     if(strlen($field_id) == 0)
     {
@@ -262,7 +262,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
     elseif($show_mode == 1 && $g_current_user->isWebmaster() == false)
     {
         // Webmasterrolle nicht anzeigen
-        $condition .= ' AND rol_name <> "Webmaster" ';
+        $condition .= ' AND rol_name <> "'.$g_l10n->get('SYS_WEBMASTER').'" ';
     }
     elseif($show_mode == 2)
     {
@@ -285,7 +285,7 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
         {
             $box_string .= ' selected="selected" ';
         }
-        $box_string .= '>- Bitte wählen -</option>';
+        $box_string .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
         $act_category = '';
 
         while($row = $g_db->fetch_object($result_lst))
@@ -383,22 +383,22 @@ function maxUploadSize()
     $post_max_size = trim(ini_get('post_max_size'));
     switch(admStrToLower(substr($post_max_size,strlen($post_max_size/1),1)))
     {
-	    case 'g':
-	        $post_max_size *= 1024;
-	    case 'm':
-	        $post_max_size *= 1024;
-	    case 'k':
-	        $post_max_size *= 1024;
+        case 'g':
+            $post_max_size *= 1024;
+        case 'm':
+            $post_max_size *= 1024;
+        case 'k':
+            $post_max_size *= 1024;
     }
     $upload_max_filesize = trim(ini_get('upload_max_filesize'));
     switch(admStrToLower(substr($upload_max_filesize,strlen($upload_max_filesize/1),1)))
     {
-	    case 'g':
-	        $upload_max_filesize *= 1024;
-	    case 'm':
-	        $upload_max_filesize *= 1024;
-	    case 'k':
-	        $upload_max_filesize *= 1024;
+        case 'g':
+            $upload_max_filesize *= 1024;
+        case 'm':
+            $upload_max_filesize *= 1024;
+        case 'k':
+            $upload_max_filesize *= 1024;
     }
     if($upload_max_filesize < $post_max_size)
     {
@@ -413,29 +413,29 @@ function maxUploadSize()
 //Funktion gibt die maximale Pixelzahl zurück die der Speicher verarbeiten kann
 function processableImageSize()
 {
-	$memory_limit = trim(ini_get('memory_limit'));
-	//falls in php.ini nicht gesetzt
-	if($memory_limit=="")
-	{
-	   $memory_limit=="8M";
-	}
-	//falls in php.ini abgeschaltet
-	if($memory_limit==-1)
-	{
-	   $memory_limit=="128M";
-	}
-	switch(admStrToLower(substr($memory_limit,strlen($memory_limit/1),1)))
-	{
-	 case 'g':
-	     $memory_limit *= 1024;
-	 case 'm':
-	     $memory_limit *= 1024;
-	 case 'k':
-	     $memory_limit *= 1024;
-	}
-	//Für jeden Pixel werden 3Byte benötigt (RGB)
-	//der Speicher muss doppelt zur Verfügung stehen
-	//nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
-	return $memory_limit/(3*2.5); 
+    $memory_limit = trim(ini_get('memory_limit'));
+    //falls in php.ini nicht gesetzt
+    if($memory_limit=="")
+    {
+       $memory_limit=="8M";
+    }
+    //falls in php.ini abgeschaltet
+    if($memory_limit==-1)
+    {
+       $memory_limit=="128M";
+    }
+    switch(admStrToLower(substr($memory_limit,strlen($memory_limit/1),1)))
+    {
+     case 'g':
+         $memory_limit *= 1024;
+     case 'm':
+         $memory_limit *= 1024;
+     case 'k':
+         $memory_limit *= 1024;
+    }
+    //Für jeden Pixel werden 3Byte benötigt (RGB)
+    //der Speicher muss doppelt zur Verfügung stehen
+    //nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
+    return $memory_limit/(3*2.5); 
 }
 ?>

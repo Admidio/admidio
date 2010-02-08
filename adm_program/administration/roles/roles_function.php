@@ -150,7 +150,7 @@ elseif($_GET['mode'] == 2)
     }
 
     // bei der Rolle "Webmaster" muessen bestimmte Flags gesetzt sein
-    if(strcmp($_POST['rol_name'], 'Webmaster') == 0)
+    if(strcmp($_POST['rol_name'], $g_l10n->get('SYS_WEBMASTER')) == 0)
     {
         $_POST['rol_assign_roles']   = 1;
         $_POST['rol_all_lists_view'] = 1;

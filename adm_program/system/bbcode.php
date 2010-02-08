@@ -78,7 +78,7 @@ function getBBcodeJS($target_textbox)
 
 function printBBcodeIcons()
 {
-    global $g_root_path;
+    global $g_root_path, $g_l10n;
     echo '
     <li>
         <dl>
@@ -87,29 +87,29 @@ function printBBcodeIcons()
                 <div style="width: 350px;">
                     <div style="float: left;">
                         <a class="iconLink" href="javascript:bbcode(0)"><img id="b"
-                            src="'. THEME_PATH. '/icons/text_bold.png" title="Fett schreiben" alt="Fett schreiben" /></a>
+                            src="'. THEME_PATH. '/icons/text_bold.png" title="'.$g_l10n->get('SYS_BOLD').'" alt="'.$g_l10n->get('SYS_BOLD').'" /></a>
                         <a class="iconLink" href="javascript:bbcode(1)"><img id="u"
-                            src="'. THEME_PATH. '/icons/text_underline.png" title="Text unterstreichen" alt="Text unterstreichen" /></a>
+                            src="'. THEME_PATH. '/icons/text_underline.png" title="'.$g_l10n->get('SYS_ITALIC').'" alt="'.$g_l10n->get('SYS_ITALIC').'" /></a>
                         <a class="iconLink" href="javascript:bbcode(2)"><img id="i"
-                            src="'. THEME_PATH. '/icons/text_italic.png" title="Kursiv schreiben" alt="Kursiv schreiben" /></a>
+                            src="'. THEME_PATH. '/icons/text_italic.png" title="'.$g_l10n->get('SYS_UNDERLINE').'" alt="'.$g_l10n->get('SYS_UNDERLINE').'" /></a>
                         <a class="iconLink" href="javascript:bbcode(3)"><img id="big"
-                            src="'. THEME_PATH. '/icons/text_bigger.png" title="Größer schreiben" alt="Größer schreiben" /></a>
+                            src="'. THEME_PATH. '/icons/text_bigger.png" title="'.$g_l10n->get('SYS_INCREASE_FONT_SIZE').'" alt="'.$g_l10n->get('SYS_INCREASE_FONT_SIZE').'" /></a>
                         <a class="iconLink" href="javascript:bbcode(4)"><img id="small"
-                            src="'. THEME_PATH. '/icons/text_smaller.png" title="Kleiner schreiben" alt="Kleiner schreiben" /></a>
+                            src="'. THEME_PATH. '/icons/text_smaller.png" title="'.$g_l10n->get('SYS_DECREASE_FONT_SIZE').'" alt="'.$g_l10n->get('SYS_DECREASE_FONT_SIZE').'" /></a>
                         <a class="iconLink" href="javascript:bbcode(5)"><img id="center"
-                            src="'. THEME_PATH. '/icons/text_align_center.png" title="Text zentrieren" alt="Text zentrieren" /></a>
+                            src="'. THEME_PATH. '/icons/text_align_center.png" title="'.$g_l10n->get('SYS_CENTERED').'" alt="'.$g_l10n->get('SYS_CENTERED').'" /></a>
                         <a class="iconLink" href="javascript:emoticon(\'[url=http://www.admidio.org]Linktext[/url]\')"><img id="url"
-                            src="'. THEME_PATH. '/icons/link.png" title="Link einfügen" alt="Link einfügen" /></a>
+                            src="'. THEME_PATH. '/icons/link.png" title="'.$g_l10n->get('SYS_ADD_LINK').'" alt="'.$g_l10n->get('SYS_ADD_LINK').'" /></a>
                         <a class="iconLink" href="javascript:emoticon(\'[email=name@admidio.org]Linktext[/email]\')"><img id="email"
-                            src="'. THEME_PATH. '/icons/email.png" title="E-Mail-Adresse einfügen" alt="E-Mail-Adresse einfügen" /></a>
+                            src="'. THEME_PATH. '/icons/email.png" title="'.$g_l10n->get('SYS_ADD_EMAIL').'" alt="'.$g_l10n->get('SYS_ADD_EMAIL').'" /></a>
                         <a class="iconLink" href="javascript:emoticon(\'[img]http://www.admidio.org/images/admidio_small.png[/img]\')"><img id="img"
-                            src="'. THEME_PATH. '/icons/image.png" title="Bild einfügen" alt="Bild einfügen" /></a>
+                            src="'. THEME_PATH. '/icons/image.png" title="'.$g_l10n->get('SYS_ADD_IMAGE').'" alt="'.$g_l10n->get('SYS_ADD_IMAGE').'" /></a>
                     </div>
                     <div style="float: right;">
                         <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
-                            src="'.THEME_PATH.'/icons/delete.png" title="Alle Tags schließen" alt="Alle Tags schließen" /></a>
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=bbcode&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=580"><img 
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
+                            src="'.THEME_PATH.'/icons/delete.png" title="'.$g_l10n->get('SYS_CLOSE_ALL_TAGS').'" alt="'.$g_l10n->get('SYS_CLOSE_ALL_TAGS').'" /></a>
+                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=bbcode&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=580"><img 
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_SHOW_HELP').'" title="'.$g_l10n->get('SYS_SHOW_HELP').'" /></a>
                     </div>
                 </div>
             </dd>

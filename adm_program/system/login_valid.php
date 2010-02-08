@@ -14,7 +14,7 @@
 
 if ('login_valid.php' == basename($_SERVER['SCRIPT_FILENAME']))
 {
-    die('Diese Seite darf nicht direkt aufgerufen werden !');
+    die('This page may not be called directly !');
 }
 
 if($g_valid_login == false)
@@ -26,7 +26,7 @@ if($g_valid_login == false)
     }
     
     // User nicht eingeloggt -> Loginseite aufrufen
-    $location = "Location: $g_root_path/adm_program/system/login.php";
+    $location = 'Location: '.$g_root_path.'/adm_program/system/login.php';
     header($location);
     exit();
 }

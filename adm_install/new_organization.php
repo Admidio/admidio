@@ -212,7 +212,7 @@ elseif($req_mode == 4)
                       AND mem_begin   <= "'.DATE_NOW.'"
                       AND mem_end      > "'.DATE_NOW.'"
                       AND rol_valid    = 1
-                      AND rol_name     = "Webmaster" ';
+                      AND rol_name     = "'.$g_l10n->get('SYS_WEBMASTER').'" ';
         $result = $db->query($sql);
 
         $user_found = $db->num_rows($result);

@@ -1,56 +1,68 @@
 <?php
 /******************************************************************************
- * Popup-Window mit Informationen
+ * Popup-Fenster mit Informationen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * err_code - Code fuer die Information, die angezeigt werden soll
- * err_text - Text, der innerhalb einer Meldung angezeigt werden kann
- * window    - true wenn das script über window.open anstatt über das tooltip aufgerufen wird
+ * message_id    - ID des Sprachtextes, der angezeigt werden soll
+ * message_title - (optional) Titel des Fensters (Default: Hinweis)
+ * message_text  - (optional) Text, der innerhalb einer Meldung angezeigt werden kann
+ * window        - true wenn das script über window.open anstatt über das tooltip aufgerufen wird
  *
  *****************************************************************************/
 
 require_once('common.php');
 require_once('classes/table_rooms.php');
+
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_err_code = null;
-$req_err_text = null;
+$req_message_id    = '';
+$req_message_title = '';
+$req_message_text  = '';
 
 // Uebergabevariablen pruefen
 
-if(isset($_GET['err_code']) && strlen($_GET['err_code']) > 0)
+if(isset($_GET['message_id']) && strlen($_GET['message_id']) > 0)
 {
-    $req_err_code = strStripTags($_GET['err_code']);
+    $req_message_id = strStripTags($_GET['message_id']);
 }
 else
 {
+    $g_message->setExcludeThemeBody();
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if(isset($_GET['err_text']))
+if(isset($_GET['message_title']))
 {
-    $req_err_text = strStripTags($_GET['err_text']);
+    $req_message_title = strStripTags($_GET['message_title']);
+}
+else
+{
+    $req_message_title = $g_l10n->get('SYS_NOTE');
+}
+
+if(isset($_GET['message_text']))
+{
+    $req_message_text = strStripTags($_GET['message_text']);
 }
 
 // Html-Kopf ausgeben
 if(isset($_GET['window']))
 {
-    $g_layout['title']    = 'Hinweis';
+    $g_layout['title']    = $req_message_title;
     $g_layout['includes'] = false;
     require(THEME_SERVER_PATH. '/overall_header.php');
 
-    $title=$_GET['room_id']==null?'Hinweis':'Raumdetails';
     // Html des Modules ausgeben
     echo '
     <div class="formLayout" id="message_window">
-            <div class="formHead">'.$title.'</div>
+            <div class="formHead">'.$req_message_title.'</div>
             <div class="formBody">';
 }
 
-switch ($req_err_code)
+switch ($req_message_id)
 {
     case 'bbcode':
         echo 'Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks)
@@ -121,36 +133,6 @@ switch ($req_err_code)
               <p><strong>- '.$organizations.'</strong></p>
               Moderatoren dieser Organisationen können den Termin / Ankündigung dann bearbeiten
               bzw. die Option zurücksetzen.';
-        break;
-        
-    case 'date_login_possible': 
-        echo 'Hier können Sie auswählen, ob eine Anmeldung zu dem von Ihnen angegebenen Termin möglich sein soll oder nicht. <br/> Falls Sie die Anmeldung nachträglich löschen, so werden auch alle bisherigen Teilnehmer vom Termin entfernt. <br/> Wenn Sie hingegen nur die Anmeldung für neue Teilnehmer beenden möchten, so setzen Sie die
-        derzeitige Teilnehmerzahl als Teilnahmebegrenzung.';
-        break;
-        
-    case 'date_max_members': 
-        echo 'Hier können Sie die Teilnehmeranzahl beschränken. Ist die Anzahl nicht begrenzt, so können Sie dieses Feld leer lassen.';
-        break;
-    
-    case 'date_location_link':
-        echo 'Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, 
-        so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.';
-        break;
-        
-    case 'room_overhang':
-        echo 'Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche
-              Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden. ';
-        break;
-    
-    case 'enable_rss':
-        echo 'Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen,
-              Termine, Gästebuch und Weblinks) auf den jeweiligen Übersichtsseiten
-              bereitstellen, die dann über den Browser einem Feedreader zugeordnet
-              werden können.';
-        break;
-        
-    case 'existing_user':
-        echo 'Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.';
         break;
 
     case 'field':
@@ -250,32 +232,34 @@ switch ($req_err_code)
         break;
     
     case 'room_detail':
-        $room = new TableRooms($g_db);
-        $room->readData($_GET['room_id']);
-        echo '
-        <table>
-            <tr>
-                <td><strong>Raumname:</strong></td>
-                <td>'.$room->getValue('room_name').'</td>
-            </tr>
-            <tr>
-                <td><strong>Kapazität:</strong></td>
-                <td>'.$room->getValue('room_capacity').'</td>
-            </tr>
-            <tr>
-                <td><strong>Überhang:</strong></td>
-                <td>'.$room->getValue('room_overhang').'</td>
-            </tr>
-            <tr>
-                <td><strong>Raumbeschreibung:</strong></td>
-                <td>'.$room->getDescription('HTML').'</td>
-            </tr>
-        </table>
-        ';
+        if(is_numeric($req_message_text))
+        {
+            $room = new TableRooms($g_db);
+            $room->readData($req_message_text);
+            echo '
+            <table>
+                <tr>
+                    <td><strong>Raumname:</strong></td>
+                    <td>'.$room->getValue('room_name').'</td>
+                </tr>
+                <tr>
+                    <td><strong>Kapazität:</strong></td>
+                    <td>'.$room->getValue('room_capacity').'</td>
+                </tr>
+                <tr>
+                    <td><strong>Überhang:</strong></td>
+                    <td>'.$room->getValue('room_overhang').'</td>
+                </tr>
+                <tr>
+                    <td><strong>Raumbeschreibung:</strong></td>
+                    <td>'.$room->getDescription('HTML').'</td>
+                </tr>
+            </table>';
+        }
         break;
 
     case 'user_field_description':
-        echo $g_current_user->getProperty($req_err_text, 'usf_description');
+        echo $g_current_user->getProperty($req_message_text, 'usf_description');
         break;
 
     //Downloadmodulhilfen
@@ -361,47 +345,47 @@ switch ($req_err_code)
               </table>';
         break;
 
-	case 'mylist_config_webmaster':
-		echo '<h3>Vorgegebene Konfigurationen</h3>
-		    Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen.
-		 	Konfiguriere die entsprechende Spalten und Bedingungen und speicher diese unter dem gewünschten Namen. 
-		 	Wähle nun die neu erstellte Liste aus und klick auf dieses Symbol: 
-		 	<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />
-		 	<h3>Standardkonfigurationen</h3>
-		 	Eine vorgegebene Konfiguration kannst du zur Standardkonfiguration machen. Wähle dazu die entsprechende 
-		 	vorgegebene Konfiguration aus und klick auf folgendes Symbol: 
-		 	<img src="'. THEME_PATH. '/icons/star.png" alt="star" />. Die gewählte Konfiguration wird nun
-		 	an allen Stellen angezeigt, bei denen der Anwender eine Rollenliste angezeigt bekommt, ohne
-		 	vorher die Möglichkeit zu haben, eine Konfiguration auszuwählen.';
-		break;
+    case 'mylist_config_webmaster':
+        echo '<h3>Vorgegebene Konfigurationen</h3>
+            Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen.
+            Konfiguriere die entsprechende Spalten und Bedingungen und speicher diese unter dem gewünschten Namen. 
+            Wähle nun die neu erstellte Liste aus und klick auf dieses Symbol: 
+            <img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />
+            <h3>Standardkonfigurationen</h3>
+            Eine vorgegebene Konfiguration kannst du zur Standardkonfiguration machen. Wähle dazu die entsprechende 
+            vorgegebene Konfiguration aus und klick auf folgendes Symbol: 
+            <img src="'. THEME_PATH. '/icons/star.png" alt="star" />. Die gewählte Konfiguration wird nun
+            an allen Stellen angezeigt, bei denen der Anwender eine Rollenliste angezeigt bekommt, ohne
+            vorher die Möglichkeit zu haben, eine Konfiguration auszuwählen.';
+        break;
 
     //Fotomodulhifen
 
    case 'photo_up_help':
         echo '<h3>Was ist zu tun?</h3>
             <ul>
-				<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</li>
-				<li>Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</li>
-				<li>Dann auf &bdquo;Fotos hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
-			</ul>  
+                <li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</li>
+                <li>Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</li>
+                <li>Dann auf &bdquo;Fotos hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+            </ul>  
             <h3>Einschränkungen:</h3>
             <ul>
-				<li>Die Fotos müssen im Format JPG oder PNG gespeichert sein.</li>
-				<li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
-				<li>Die hochgeladenen Dateien dürfen nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
+                <li>Die Fotos müssen im Format JPG oder PNG gespeichert sein.</li>
+                <li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
+                <li>Die hochgeladenen Dateien dürfen nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
                 <li>
-					Die Fotos werden automatisch auf eine Auflösung von '.$g_preferences['photo_save_scale'].' Pixel der
-                	längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.
-				</li>
-				<li>Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender Nummer benannt werden.</li>
+                    Die Fotos werden automatisch auf eine Auflösung von '.$g_preferences['photo_save_scale'].' Pixel der
+                    längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.
+                </li>
+                <li>Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender Nummer benannt werden.</li>
                 <li>
-					Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
-                	Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Fotos in einen
-                	Sammelordner zu kopieren und diese dann mit einer Fotobearbeitungssoftware auf '.$g_preferences['photo_save_scale'].' Pixel
-                	(längere Seite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
-                	(also geringe Komprimierung) gestellt werden.
-				</li>
-			</ul>
+                    Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
+                    Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Fotos in einen
+                    Sammelordner zu kopieren und diese dann mit einer Fotobearbeitungssoftware auf '.$g_preferences['photo_save_scale'].' Pixel
+                    (längere Seite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
+                    (also geringe Komprimierung) gestellt werden.
+                </li>
+            </ul>
             ';
         break;
 
@@ -440,41 +424,41 @@ switch ($req_err_code)
     //Profil
 
     case 'profile_photo_up_help':
-		echo '<h3>Was ist zu tun?</h3>
-			<ul>
-				<li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Fotodatei von der Festplatte auswählen.</li>
-				<li>Danach auf &bdquo;Foto hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
-			</ul>
-			<h3>Einschränkungen:</h3>
-			<ul>
-				<li>Du solltest selbst auf dem Foto zu sehen sein.</li>
-				<li>Das Foto muss im Format JPG oder PNG gespeichert sein.</li>
-				<li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
-				<li>Die hochgeladene Datei darf nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
-			</ul>
-			';
-		break;
+        echo '<h3>Was ist zu tun?</h3>
+            <ul>
+                <li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Fotodatei von der Festplatte auswählen.</li>
+                <li>Danach auf &bdquo;Foto hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+            </ul>
+            <h3>Einschränkungen:</h3>
+            <ul>
+                <li>Du solltest selbst auf dem Foto zu sehen sein.</li>
+                <li>Das Foto muss im Format JPG oder PNG gespeichert sein.</li>
+                <li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
+                <li>Die hochgeladene Datei darf nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
+            </ul>
+            ';
+        break;
 
     default:
-        echo 'Es ist ein Fehler aufgetreten.';
+        echo $g_l10n->get(strtoupper($req_message_id));
         break;
 }
 
 if(isset($_GET['window']))
 {
-	echo '</div>
-	</div>
-	
-	<ul class="iconTextLinkList">
-	    <li>
-	        <span class="iconTextLink">
-	            <a href="javascript:self.parent.tb_remove()?\'\':\'\';"><img
-	            src="'.THEME_PATH.'/icons/door_in.png" alt="Schließen" /></a>
-	            <a href="javascript:self.parent.tb_remove()?\'\':\'\';">Schließen</a>
-	        </span>
-	    </li>
-	</ul>';
-	
-	require(THEME_SERVER_PATH. '/overall_footer.php');
+    echo '</div>
+    </div>
+
+    <ul class="iconTextLinkList">
+        <li>
+            <span class="iconTextLink">
+                <a href="javascript:self.parent.tb_remove()?\'\':\'\';"><img
+                src="'.THEME_PATH.'/icons/door_in.png" alt="'.$g_l10n->get('SYS_CLOSE').'" /></a>
+                <a href="javascript:self.parent.tb_remove()?\'\':\'\';">'.$g_l10n->get('SYS_CLOSE').'</a>
+            </span>
+        </li>
+    </ul>';
+
+    require(THEME_SERVER_PATH. '/overall_footer.php');
 }
 ?>

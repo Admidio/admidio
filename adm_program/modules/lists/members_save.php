@@ -35,7 +35,7 @@ $role = new TableRoles($g_db, $_GET['rol_id']);
 if(  (!$g_current_user->assignRoles()
    && !isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')))
 || (  !$g_current_user->isWebmaster()
-   && $role->getValue('rol_name') == 'Webmaster')
+   && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
 || $role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
 {
    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));

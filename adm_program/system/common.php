@@ -12,7 +12,7 @@
 
 if ('common.php' == basename($_SERVER['SCRIPT_FILENAME']))
 {
-    die('Diese Seite darf nicht direkt aufgerufen werden !');
+    die('This page may not be called directly !');
 }
 
 // Konstanten und Konfigurationsdatei einbinden
@@ -56,7 +56,6 @@ require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_session.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/messages.php');
 
 // Variablen von HMTL & PHP-Code befreien
 $_REQUEST = array_map('strStripTags', $_REQUEST);
@@ -137,6 +136,9 @@ else
     $_SESSION['g_preferences']          =& $g_preferences;
 }
 
+// Sprachdateien einlesen
+$g_l10n = new Language($g_preferences['system_language']);
+
 // Pfad zum gewaehlten Theme zusammensetzen
 if(isset($g_preferences['theme']) == false)
 {
@@ -156,9 +158,6 @@ else
     $g_current_user  = new User($g_db);
     $_SESSION['g_current_user'] =& $g_current_user;
 }
-
-// Sprachdateien einlesen
-$g_l10n = new Language($g_preferences['system_language']);
 
 // Nachrichtenklasse anlegen
 $g_message = new Message();

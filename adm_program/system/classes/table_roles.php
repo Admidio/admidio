@@ -101,8 +101,8 @@ class TableRoles extends TableAccess
         // eine Rechteaenderung vorgenommen wurde
         $g_current_session->renewUserObject();
 
-        // die Rolle 'Webmaster' darf nicht geloescht werden
-        if($this->getValue('rol_name') != 'Webmaster')
+        // die Systemrollem duerfen nicht geloescht werden
+        if($this->getValue('rol_system') == true)
         {
             $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
                         WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
@@ -151,8 +151,8 @@ class TableRoles extends TableAccess
     {
         global $g_current_session;
 
-        // die Rolle 'Webmaster' darf nicht auf inaktiv gesetzt werden
-        if($this->getValue('rol_name') != 'Webmaster')
+        // die Systemrollem sind immer aktiv
+        if($this->getValue('rol_system') == true)
         {
             $sql    = 'UPDATE '. TBL_MEMBERS. ' SET mem_end   = "'.DATE_NOW.'"
                         WHERE mem_rol_id = '. $this->getValue('rol_id'). '
@@ -178,8 +178,8 @@ class TableRoles extends TableAccess
     {
         global $g_current_session;
 
-        // die Rolle 'Webmaster' ist immer aktiv
-        if($this->getValue('rol_name') != 'Webmaster')
+        // die Systemrollem sind immer aktiv
+        if($this->getValue('rol_system') == true)
         {
             $sql    = 'UPDATE '. TBL_MEMBERS. ' SET mem_end   = "9999-12-31"
                         WHERE mem_rol_id = '. $this->getValue('rol_id');
