@@ -64,7 +64,7 @@ echo '
     <title>'. $g_page_title. '</title>    
     
     <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
-    <link rel="stylesheet" href="'.THEME_PATH. '/css/thickbox.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="'.THEME_PATH. '/css/colorbox.css" type="text/css" media="screen" />
 
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript"><!-- 
@@ -72,9 +72,10 @@ echo '
 		var gThemePath = "'. THEME_PATH. '";
 		$(document).ready(function(){
 			$("a,td,div.groupBoxHeadline,#page_header,#top_border_img_big,#bottom_border_img_big,#top_border_img_small,#bottom_border_img_small").supersleight({shim: gThemePath + "/icons/blank.gif"});
+			$("a[rel=\'colorboxHelp\']").colorbox({preloading:false,photo:false,speed:300,rel:\'nofollow\'});
 		});
 	--></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/thickbox/thickbox.js"></script>
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js"></script>
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
     

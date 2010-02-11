@@ -563,8 +563,8 @@ echo '
         if($g_current_user->isWebmaster())
         {
             echo '
-            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=mylist_config_webmaster&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=410&amp;width=580"><img 
-                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=mylist_config_webmaster\',this)" onmouseout="ajax_hideTooltip()"
+            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true"><img 
+                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=mylist_config_webmaster\',this)" onmouseout="ajax_hideTooltip()"
                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
         }
         echo '</p>
@@ -578,7 +578,7 @@ echo '
                     <th style="width: 37%;">Inhalt</th>
                     <th style="width: 18%;">Sortierung</th>
                     <th style="width: 27%;">Bedingung
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=500&amp;width=580"><img 
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
                     </th>
                 </tr>

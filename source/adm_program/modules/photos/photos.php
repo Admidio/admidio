@@ -174,6 +174,16 @@ if($g_current_user->editPhotoRight())
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
 }
+if($g_preferences['photo_show_mode']==1)
+{
+	$g_layout['header'] = $g_layout['header']. '
+			<script type="text/javascript"><!--
+				$(document).ready(function(){
+				$("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,preloading:true});
+				});
+			-->
+			</script>';
+}
 
 //Photomodulspezifische CSS laden
 $g_layout['header'] = $g_layout['header']. '
@@ -350,7 +360,7 @@ echo '<div class="photoModuleContainer">';
                         {
                             echo 
                             '<div>
-                                <a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.$thickbox_height.'&amp;width='.$thickbox_width.'">
+                                <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'">
                                 	<img class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" alt="'.$bild.'" /></a>
                             </div>';
                         }
@@ -540,16 +550,16 @@ echo '<div class="photoModuleContainer">';
                             //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                             if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                             {
-                                echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=folder_not_found&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=folder_not_found\',this)" onmouseout="ajax_hideTooltip()"
+                                echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=folder_not_found&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=folder_not_found\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
                             }
                             
                             //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                             {
-                                echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=not_approved&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=not_approved\',this)" onmouseout="ajax_hideTooltip()"
+                                echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=not_approved&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=not_approved\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="Gesperrt" title="" /></a>';
                             }
                         }

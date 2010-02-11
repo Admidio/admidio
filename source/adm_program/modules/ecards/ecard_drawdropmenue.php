@@ -81,8 +81,8 @@ if ($g_valid_login && isset($_GET['base']) =="1")
     echo '</optgroup>
     </select>
     <span class="mandatoryFieldMarker" title="Pflichtfeld" >*</span>
-    <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=rolle_ecard&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()"
+    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=rolle_ecard&amp;inline=true"><img 
+        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=rolle_ecard\',this)" onmouseout="ajax_hideTooltip()"
         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get("SYS_HELP").'" title="" /></a>';                  
 }
 // Wenn die Rolle ausgewaehlt worden ist wird dieses Menue gezeichnet

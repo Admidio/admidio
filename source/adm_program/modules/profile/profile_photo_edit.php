@@ -250,9 +250,8 @@ if($job==NULL)
         </li>
         <li>
             <span class="iconTextLink">
-                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580"><img 
-                    src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
-                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_photo_up_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=400&amp;width=580">Hilfe</a>
+                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;inline=true"><img src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
+                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;inline=true">Hilfe</a>
             </span>        
         </li>
     </ul>';    

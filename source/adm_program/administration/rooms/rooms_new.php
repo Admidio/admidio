@@ -99,7 +99,7 @@ echo '
                         <input type="text" id="room_overhang" name="room_overhang" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_overhang'). '" />';
                         if($g_preferences['dates_show_map_link'])
                         {
-                            echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_ROOM_OVERHANG&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_ROOM_OVERHANG&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_ROOM_OVERHANG\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                         }

@@ -260,9 +260,9 @@ echo '
     </li>
     <li>
         <span class="iconTextLink">
-            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=album_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=330&amp;width=580"><img 
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=album_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=330&amp;width=580"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
-            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=album_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=330&amp;width=580">Hilfe</a>
+            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=album_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=330&amp;width=580">Hilfe</a>
         </span>
     </li>
 </ul>';

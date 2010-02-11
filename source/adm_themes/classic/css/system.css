@@ -523,9 +523,10 @@ ul.autosuggest li.highlight a:visited  {
     text-align:         left;
 }
 
-/*spezielle Anpassung Hilfe Thickbox*/
+/*spezielle Anpassung Hilfe Colorbox*/
 #message_window .formBody ul {
     padding-left:       20px;
+	padding-right:      20px;
 }
 
 /* spezielle Anpassung fuer die Terminseite */

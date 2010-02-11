@@ -13,7 +13,7 @@
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
  * inline: 	 0 - wird als eigene Seite angezeigt
- *			 1 - nur "body" HTML Code (z.B. für thickbox)
+ *			 1 - nur "body" HTML Code (z.B. für colorbox)
  *
  *****************************************************************************/
 
@@ -95,6 +95,7 @@ $g_layout['title']  = $g_l10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('Nachna
 $g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
 <script type="text/javascript">
 	var profileJS = new profileJSClass();
+	profileJS.init();
 </script>';
 if($req_inlineView == 0)
 {
@@ -114,13 +115,13 @@ echo '
                 <th style="text-align: center; width: 80px;">'.$g_l10n->get('SYS_LEADER');
 				if($req_inlineView == 0)
 				{
-					echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
+					echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=leader&amp;inline=true"><img 
+		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=leader\',this)" onmouseout="ajax_hideTooltip()"
 		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>';
 				}
 				else
 				{
-					echo '<img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
+					echo '<img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=leader\',this)" onmouseout="ajax_hideTooltip()"
 		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" />';
 				}
                 echo'</th>

@@ -125,8 +125,8 @@ echo '
 <table class="tableList" cellspacing="0">
     <thead>
         <tr>
-            <th>Feld<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=field&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=field\',this)" onmouseout="ajax_hideTooltip()"
+            <th>Feld<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=field&amp;inline=true"><img 
+                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=field\',this)" onmouseout="ajax_hideTooltip()"
                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a></th>
             <th>&nbsp;</th>
             <th>Beschreibung</th>

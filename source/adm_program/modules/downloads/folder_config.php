@@ -178,8 +178,8 @@ echo '
                             echo ' value="0" onclick="toggleElement(\'rolesBox\');" />
                             <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="Der Ordner ist &ouml;ffentlich." /></label>&nbsp;
                             <label for="fol_public">Öffentlicher Zugriff ist nicht erlaubt.</label>
-                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=publicDownloadFlag&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=publicDownloadFlag\',this)" onmouseout="ajax_hideTooltip()"
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=publicDownloadFlag&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=publicDownloadFlag\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
 
                             //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.

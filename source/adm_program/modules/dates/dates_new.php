@@ -290,8 +290,8 @@ echo '
                             }
                             echo ' value="1" />
                             <label for="dat_global">'. $_GET['headline']. ' für mehrere Organisationen sichtbar</label>
-                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=date_global&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=320&amp;width=580"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=date_global\',this)" onmouseout="ajax_hideTooltip()"
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=date_global&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=date_global\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                         </dd>
                     </dl>
@@ -393,7 +393,7 @@ echo '
                         echo ' value="'.$date->getValue('dat_rol_id').'"'.( ($keep_rol_id) ? ' checked="checked"' : '');
                     }
                     echo ' onclick="toggleMaxMembers();" />
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_LOGIN_POSSIBLE&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=270&amp;width=580"><img 
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_LOGIN_POSSIBLE&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_LOGIN_POSSIBLE\',this)" 
                             onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
@@ -431,7 +431,7 @@ echo '
                         <dt>Teilnehmerbegrenzung:</dt>
                         <dd>
                             <input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
-                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS\',this)" 
                                 onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                         </dd>
@@ -477,7 +477,7 @@ echo '
                         <input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
                         if($g_preferences['dates_show_map_link'])
                         {
-                            echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_LOCATION_LINK&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=220&amp;width=580"><img 
+                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_LOCATION_LINK&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_LOCATION_LINK\',this)" 
                                 onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                         }

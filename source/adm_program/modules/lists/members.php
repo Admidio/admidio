@@ -472,8 +472,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 <th>Name</th>
                 <th>Vorname</th>
                 <th>Geburtsdatum</th>
-                <th style="text-align: center;">Leiter<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=leader&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=leader\',this)" onmouseout="ajax_hideTooltip()"
+                <th style="text-align: center;">Leiter<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=leader&amp;inline=true"><img 
+	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=leader\',this)" onmouseout="ajax_hideTooltip()"
 	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a></th>
             </tr>
         </thead>';

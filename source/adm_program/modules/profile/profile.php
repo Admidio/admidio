@@ -223,7 +223,8 @@ else
 }
 $g_layout['header'] = '
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>	
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
     <script type="text/javascript">
     <!--
@@ -235,6 +236,9 @@ $g_layout['header'] = '
             profileJS.changeRoleDates_ErrorText = \''.$g_l10n->get('ROL_PHR_CHANGE_ROLE_DATES_ERROR').'\';
             profileJS.setBy_Text				= \''.$g_l10n->get('SYS_SET_BY').'\';
             profileJS.usr_id = '.$user->getValue('usr_id').';
+			$(document).ready(function() {
+				profileJS.init();
+			});
     //-->
     </script>';
 
@@ -279,7 +283,7 @@ echo '
                             if($user->getValue('usr_id') == $g_current_user->getValue('usr_id') || $g_current_user->isWebmaster())
                             {
                                 echo'
-                                <a class="thickbox" href="password.php?usr_id='. $user->getValue('usr_id'). '&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350"><img
+                                <a rel="colorboxPWContent" href="password.php?usr_id='. $user->getValue('usr_id'). '&amp;inline=1"><img
                                     src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>';
                             }
                             // Nur berechtigte User duerfen ein Profil editieren
@@ -659,42 +663,14 @@ echo '
                         && $user->getValue('usr_reg_org_shortname') != $g_current_organization->getValue('org_shortname'))
                         {
                             echo '
-                            <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
-                            <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/jQueryFunctionStack.js"></script>
                             <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
                             <script type="text/javascript">
-                                    var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
-                                    jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
-                                        
-                                    function jQueryAjaxLoadRolesAppend()
-                                    {
-                                        $("#TB_ajaxContent").append("\n<div id=\'TB_err\' style=\'padding:15px 0px 5px 0px; display:none;\'></div>");
-
-                                        $("#rolesForm").ajaxForm({ 
-                                            target:        \'#TB_err\',  							 // target element(s) to be updated with server response 
-                                            beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
-                                                $("#TB_err").css({ "display":"block" });
-                                                return true; 
-                                            },  													
-                                            success:       function(responseText, statusText){		 // post-submit callback
-                                                if(responseText.match(/<SAVED\/>/gi))
-                                                {
-                                                        profileJS.reloadRoleMemberships();
-                                                        profileJS.reloadFormerRoleMemberships();
-                                                        setTimeout("tb_remove()",500);	
-                                                }
-                                                $("#TB_ajaxContent").animate({
-                                                        scrollTop: $("#TB_ajaxContent").offset().top
-                                                      }, 0); 
-                                            }	 
-                                        });
-                                    }
                                     // Calendarobjekt fuer das Popup anlegen
                                     var calPopup = new CalendarPopup("calendardiv");
                                     calPopup.setCssPrefix("calendar");
                             </script>
                             <div style="text-align: right;">
-                                <a href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$user->getValue('usr_id').'&inline=1" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" class="thickbox">
+                                <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$user->getValue('usr_id').'&inline=1" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'">
                                     <img src="'.THEME_PATH.'/icons/edit.png" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />
                                 </a>
                             </div>';

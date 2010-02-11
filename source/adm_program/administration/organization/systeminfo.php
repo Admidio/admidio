@@ -45,7 +45,7 @@ if($req_mode == 1)
             <dl>
                 <dt>Admidio-Version:</dt>
                 <dd>'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'&nbsp;
-                    <a class="thickbox" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350">auf Update prüfen</a>
+                    <a rel="colorboxHelp" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;inline=true">auf Update prüfen</a>
                 </dd>
             </dl>
         </li>';
