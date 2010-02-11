@@ -10,8 +10,7 @@
  * message_id    - ID des Sprachtextes, der angezeigt werden soll
  * message_title - (optional) Titel des Fensters (Default: Hinweis)
  * message_text  - (optional) Text, der innerhalb einer Meldung angezeigt werden kann
- * window        - true wenn das script über window.open anstatt über das tooltip aufgerufen wird
- *
+ * inline		 - true wenn das sc
  *****************************************************************************/
 
 require_once('common.php');
@@ -48,13 +47,15 @@ if(isset($_GET['message_text']))
     $req_message_text = strStripTags($_GET['message_text']);
 }
 
-// Html-Kopf ausgeben
-if(isset($_GET['window']))
+$inlineView = false;
+if (isset($_GET["inline"]) && $_GET["inline"] == true)
 {
-    $g_layout['title']    = $req_message_title;
-    $g_layout['includes'] = false;
-    require(THEME_SERVER_PATH. '/overall_header.php');
+	$inlineView = true;
+}
 
+// Html-Kopf ausgeben
+if($inlineView)
+{
     // Html des Modules ausgeben
     echo '
     <div class="formLayout" id="message_window">
@@ -444,21 +445,9 @@ switch ($req_message_id)
         break;
 }
 
-if(isset($_GET['window']))
+if($inlineView)
 {
     echo '</div>
-    </div>
-
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="javascript:self.parent.tb_remove()?\'\':\'\';"><img
-                src="'.THEME_PATH.'/icons/door_in.png" alt="'.$g_l10n->get('SYS_CLOSE').'" /></a>
-                <a href="javascript:self.parent.tb_remove()?\'\':\'\';">'.$g_l10n->get('SYS_CLOSE').'</a>
-            </span>
-        </li>
-    </ul>';
-
-    require(THEME_SERVER_PATH. '/overall_footer.php');
+    </div>';
 }
 ?>

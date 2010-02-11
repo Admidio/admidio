@@ -108,7 +108,7 @@ function printBBcodeIcons()
                     <div style="float: right;">
                         <a class="iconLink" href="javascript:bbcodeclose()"><img id="all-closed"
                             src="'.THEME_PATH.'/icons/delete.png" title="'.$g_l10n->get('SYS_CLOSE_ALL_TAGS').'" alt="'.$g_l10n->get('SYS_CLOSE_ALL_TAGS').'" /></a>
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=bbcode&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=520&amp;width=580"><img 
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=bbcode&amp;inline=true"><img 
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_SHOW_HELP').'" title="'.$g_l10n->get('SYS_SHOW_HELP').'" /></a>
                     </div>
                 </div>

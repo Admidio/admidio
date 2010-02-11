@@ -20,6 +20,12 @@ function profileJSClass()
 	this.setBy_Text					= "";
 	this.errorID					= 0;
 	
+	this.init = function()
+	{
+		$("a[rel='colorboxContent']").colorbox();
+		$("a[rel='colorboxRoles']").colorbox({onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
+		$("a[rel='colorboxPWContent']").colorbox({onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
+	}
 	this.reloadRoleMemberships = function()
 	{
 		$.ajax({
@@ -163,5 +169,45 @@ function profileJSClass()
 					alert(this.changeRoleDates_ErrorText);
 				}
 			});
+	}
+	this.jQueryAjaxLoadRolesAppend = function()
+	{
+		$("#cboxLoadedContent").append('\n<div id="colorBox_resultInfo"></div>');
+
+		$("#rolesForm").ajaxForm({ 
+			target:        '#colorBox_resultInfo',  							 // target element(s) to be updated with server response 
+			beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
+				$("#colorBox_resultInfo").css({ "display":"block" });
+				return true; 
+			},  													
+			success:       function(responseText, statusText){		 // post-submit callback
+				$.fn.colorbox.resize();
+				if(responseText.match(/<SAVED\/>/gi))
+				{
+						profileJS.reloadRoleMemberships();
+						profileJS.reloadFormerRoleMemberships();
+						setTimeout("$.fn.colorbox.close()",1000);	
+				}
+			}	 
+		});
+	}
+	this.jQueryAjaxLoadPWAppend = function()
+	{
+		$("#cboxLoadedContent").append('\n<div id="colorBox_resultInfo"></div>');
+
+		$("#passwordForm").ajaxForm({ 
+			target:        '#colorBox_resultInfo',  							 // target element(s) to be updated with server response 
+			beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
+				$("#colorBox_resultInfo").css({ "display":"block" });
+				return true; 
+			},  													
+			success:       function(responseText, statusText){		 // post-submit callback
+				$.fn.colorbox.resize();
+				if(responseText.match(/<SAVED\/>/gi))
+				{
+						setTimeout("$.fn.colorbox.close()",1000);	
+				}
+			}	 
+		});
 	}
 }

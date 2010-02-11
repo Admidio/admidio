@@ -223,8 +223,8 @@ echo '
                         }
                         echo ' value="1" />
                         <label for="usf_hidden">Feld für alle Benutzer sichtbar</label>
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=field_hidden&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=field_hidden\',this)" onmouseout="ajax_hideTooltip()"
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=field_hidden&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=field_hidden\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
@@ -244,8 +244,8 @@ echo '
                         }
                         echo ' value="1" />
                         <label for="usf_disabled">Feld nur für berechtigte Benutzer bearbeitbar</label>
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=field_disabled&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=field_disabled\',this)" onmouseout="ajax_hideTooltip()"
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=field_disabled&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=field_disabled\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
@@ -270,8 +270,8 @@ echo '
                         }
                         echo ' value="1" />
                         <label for="usf_mandatory">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden</label>
-                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=field_mandatory&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=field_mandatory\',this)" onmouseout="ajax_hideTooltip()"
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=field_mandatory&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=field_mandatory\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>

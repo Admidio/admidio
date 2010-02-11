@@ -136,7 +136,7 @@ else
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                                 <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                                <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=280&amp;width=580"><img 
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=captcha_help&amp;inline=true"><img 
 					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                             </dd>

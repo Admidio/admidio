@@ -294,7 +294,7 @@ function getFieldCode($field, $user, $new_user)
     $description = '';
     if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name') != 'Messenger')
     {
-        $description = '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_text='. $field->getValue('usf_name'). '&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=200&amp;width=580"><img 
+        $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_text='. $field->getValue('usf_name'). '&amp;inline=true"><img 
             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_text='. $field->getValue('usf_name'). '\',this)" onmouseout="ajax_hideTooltip()"
             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
     }
@@ -331,6 +331,7 @@ else
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
 
 // setzt den Focus bei Neuanlagen/Registrierung auf das erste Feld im Dialog
@@ -347,9 +348,11 @@ if($new_user == 1 || $new_user == 2)
     }
     $g_layout['header'] .= '
         <script type="text/javascript"><!--
+			var profileJS = new profileJSClass();
             $(document).ready(function() 
             {
                 $("#'.$focusField.'").focus();
+				profileJS.init();
             }); 
         //--></script>';
 }
@@ -429,8 +432,8 @@ echo '
                                     if($new_user > 0)
                                     {
                                         echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_login_name&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_login_name\',this)" onmouseout="ajax_hideTooltip()"
+                                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_login_name&amp;inline=true"><img 
+								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=profile_login_name\',this)" onmouseout="ajax_hideTooltip()"
 								            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                                     }
                                 echo '</dd>
@@ -445,8 +448,8 @@ echo '
                                     <dd>
                                         <input type="password" id="usr_password" name="usr_password" style="width: 130px;" maxlength="20" />
                                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                                        <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=profile_password&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
-								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
+                                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_password&amp;inline=true"><img 
+								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=profile_password\',this)" onmouseout="ajax_hideTooltip()"
 								            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                                     </dd>
                                 </dl>
@@ -471,9 +474,9 @@ echo '
                                         <dt><label>Passwort:</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
-                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350"><img 
+                                                <a rel="colorboxContent" href="password.php?usr_id='. $usr_id. '"><img 
                                                 	src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
-                                                <a class="thickbox" href="password.php?usr_id='. $usr_id. '&amp;KeepThis=true&amp;TB_iframe=true&amp;height=300&amp;width=350">Passwort ändern</a>
+                                                <a rel="colorboxContent" href="password.php?usr_id='. $usr_id. '">Passwort ändern</a>
                                             </span>
                                         </dd>
                                     </dl>
@@ -514,8 +517,8 @@ echo '
                         <dd>
                             <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                             <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                            <a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=captcha_help&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=270&amp;width=580"><img 
-					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=captcha_help&amp;inline=true"><img 
+					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
 					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                         </dd>
                     </dl>

@@ -60,6 +60,12 @@ else
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
+//Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
+if ($pho_id == NULL)
+{
+    $_SESSION['navigation']->clear();
+}
+
 unset($_SESSION['photo_album_request']);
 
 //URL auf Navigationstack ablegen
@@ -73,7 +79,7 @@ if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id
 }
 else
 {
-    // einlesen der Veranstaltung falls noch nicht in Session gespeichert
+    // einlesen des Albums falls noch nicht in Session gespeichert
     $photo_album = new TablePhotos($g_db);
     if($pho_id > 0)
     {
@@ -83,11 +89,11 @@ else
     $_SESSION['photo_album'] =& $photo_album;
 }
 
-// pruefen, ob Veranstaltung zur aktuellen Organisation gehoert
+// pruefen, ob Album zur aktuellen Organisation gehoert
 if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
+}  
 
 if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
 {
@@ -137,7 +143,6 @@ $funcClass->getVars();
 $javascript = '
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/ecards/ecard.js" ></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js" ></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/jQueryFunctionStack.js" ></script>
     <script type="text/javascript">
 	<!--
 			var ecardJS = new ecardJSClass();
@@ -165,37 +170,13 @@ $javascript = '
 			ecardJS.blendOutSettings_Text	= \''.$g_l10n->get("ECA_BLEND_OUT_SETTINGS").'\';
 			ecardJS.internalRecipient_Text	= \''.$g_l10n->get("ECA_INTERNAL_RECIPIENT").'\';
 			ecardJS.messageTooLong			= \''.$g_l10n->get("ECA_PHR_MESSAGE_TOO_LONG",$var1="[MAX]").'\';
-			ecardJS.getMenu();
+			ecardJS.loading_Text			= \''.$g_l10n->get("SYS_LOADING").'\';
+			ecardJS.send_Text				= \''.$g_l10n->get("SYS_SEND").'\';
 			
-			var jQueryAjaxLoadAppendStack = new jQueryFunctionStack();
-			jQueryAjaxLoadAppendStack.add("jQueryAjaxLoadRolesAppend");
-				
-			function jQueryAjaxLoadRolesAppend()
-			{
-				if($("#" + ecardJS.ecardformid + " input[name=submit_action]").attr("value") == "send")
-				{
-					var options = { 
-						target:        \'#TB_ajaxContent\',  							 // target element(s) to be updated with server response
-						url: gRootPath + \'/adm_program/modules/ecards/ecard_send.php\',													
-						success:       function(responseText, statusText){		 // post-submit callback
-							$("#TB_ajaxContent").animate({
-									scrollTop: $("#TB_ajaxContent").offset().top
-								  }, 0); 
-						}	 
-					}; 
-					$("#" + ecardJS.ecardformid).submit(function() {
-						if($("#" + ecardJS.ecardformid + " input[name=submit_action]").attr("value") == "send")
-						{										 
-							$(this).ajaxSubmit(options);
-							return false;
-						}
-				 		else
-							return true;
-					}); 
-					$("#" + ecardJS.ecardformid).submit();
-				}
-				$("#" + ecardJS.ecardformid).attr("action","ecardJS.makePreview();");
-			}
+			$(document).ready(function() {
+				$("a[rel=\'colorboxImage\']").colorbox({photo:true});
+				ecardJS.getMenu();
+			});
     -->
 	</script>';
 
@@ -229,8 +210,8 @@ echo '
 		</noscript>';
 
 // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
-echo '<a class="thickbox" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'&amp;KeepThis=true&amp;TB_iframe=true&amp;height='.($g_preferences['photo_show_height']+37).'&amp;width='.$g_preferences['photo_show_width'].'"><img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue("pho_begin").'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
-		class="imageFrame" alt="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
+echo '<a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'"><img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
+		 class="imageFrame" alt="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
 	  </a>';
 
 if ($error_msg != '')
@@ -444,7 +425,7 @@ echo '<form id="ecard_form" action="javascript:ecardJS.makePreview();" method="p
 	<div class="formSubmit">
 		<button onclick="javascript:ecardJS.makePreview();" type="button" value="'.$g_l10n->get("SYS_PREVIEW").'"><img 
 			src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get("SYS_PREVIEW").'" />&nbsp;'.$g_l10n->get("SYS_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
-		<button onclick="javascript:ecardJS.sendEcard();" type="button" value="'.$g_l10n->get("SYS_SEND").'"><img 
+		<button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button" value="'.$g_l10n->get("SYS_SEND").'"><img 
 			src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get("SYS_SEND").'" />&nbsp;'.$g_l10n->get("SYS_SEND").'</button>
 	</div>
 </form></div></div>';

@@ -11,11 +11,18 @@
  *
  * show         : 1 - (Default) Nur Verfügbarkeit des Updates prüfen
  *                2 - Updateregbnis anzeigen
+ * inline		: true - damit keiner Header und Footer angezeigt werden
  *
  *****************************************************************************/
 
 require_once('common.php');
 require_once('login_valid.php');
+
+$inlineView = false;
+if ( isset($_GET["inline"]) && $_GET["inline"] === true)
+{
+	$inlineView = true;
+}
 
 // Funktion zur Ermittlung der Update-Version
 function GetUpdateVersion($update_info, $search)
@@ -171,11 +178,14 @@ if($show == 2)
     {
         $versionstext = '<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/ok.png" alt="Ok" /> Du benutzt eine aktuelle Admidio-Version!';
     }
-
-    // Html-Kopf ausgeben
-    $g_layout['title']    = 'Update Prüfung';
-    $g_layout['includes'] = false;
-    require(THEME_SERVER_PATH. '/overall_header.php');
+	
+	if (!$inlineView)
+	{
+		// Html-Kopf ausgeben
+		$g_layout['title']    = 'Update Prüfung';
+		$g_layout['includes'] = false;
+		require(THEME_SERVER_PATH. '/overall_header.php');
+	}
 
     // Html des Modules ausgeben
     echo '
@@ -211,8 +221,10 @@ if($show == 2)
 
             <div style="margin-top: 20px;">' .$versionstext. '</div>
         </div>';
-      
-    require(THEME_SERVER_PATH. '/overall_footer.php');
+    if (!$inlineView)
+	{  
+		require(THEME_SERVER_PATH. '/overall_footer.php');
+	}
 }
 
 ?>

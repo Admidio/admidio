@@ -80,118 +80,113 @@ if($next_image <= $photo_album->getValue('pho_quantity'))
 
 $body_with   = $g_preferences['photo_show_width']  + 20;
 
-//Photomodulspezifische CSS laden
-$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
-
-//Photomodulspezifische CSS laden
 if($g_preferences['photo_show_mode']==1)
 {
-	$g_layout['header'] = '<style rel="stylesheet" type="text/css" media="screen">body{ padding: 0px;}</style>';
-}
-
-
-// Html-Kopf ausgeben
-$g_layout['title']    = 'Fotogalerien';
-
-//wenn Popupmode oder Thickbox, dann normalen Kopf unterdruecken
-if($g_preferences['photo_show_mode']==0 || $g_preferences['photo_show_mode']==1)
-{                      
-    $g_layout['includes'] = false;
-}
-
-require(THEME_SERVER_PATH. '/overall_header.php');
-
-//Ausgabe der Kopfzelle mit Ueberschrift, Photographen und Datum
-//untere Zelle mit Buttons Bild und Fenster Schließen Button
-if($g_preferences['photo_show_mode'] != 1)
-{ 
-    echo '
-    <div class="formLayout" id="photo_presenter" style="width: '.$body_with.'px;">
-        <div class="formHead">'.$photo_album->getValue('pho_name').'</div>
-        <div class="formBody">';
-}
-
-//Ausgabe Bild 
-if($next_image <= $photo_album->getValue('pho_quantity'))
-{
-    echo '<div><a href="'.$url_next_image.'"><img class="photoOutput" src="'.$url_act_image.'" alt="Foto"></a></div>';
+	echo '<div style="width:'.$g_preferences['photo_show_width'].'px;height:'.$g_preferences['photo_show_height'].'px;"><img style="margin: auto; border: medium none; display: block; float: none; cursor: pointer;" id="cboxPhoto" src="'.$url_act_image.'" ></div>';
 }
 else
 {
-    echo '<div><img class="photoOutput" src="'.$url_act_image.'" alt="Foto"></div>';
-}
+	
+	//Photomodulspezifische CSS laden
+	$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
+	
+	// Html-Kopf ausgeben
+	$g_layout['title']    = 'Fotogalerien';
+	
+	//wenn Popupmode oder Thickbox, dann normalen Kopf unterdruecken
+	if($g_preferences['photo_show_mode']==0)
+	{                      
+		$g_layout['includes'] = false;
+	}
+	
+	require(THEME_SERVER_PATH. '/overall_header.php');
+	
+	//Ausgabe der Kopfzelle mit Ueberschrift, Photographen und Datum
+	//untere Zelle mit Buttons Bild und Fenster Schließen Button
 
-//Vor und zurück Buttons
-echo'
-<ul class="iconTextLinkList">';
-    //Vor und zurueck buttons
-    if($prev_image > 0)
-    {
-        echo'<li>
-            <span class="iconTextLink">
-                <a href="'.$url_prev_image.'"><img src="'. THEME_PATH. '/icons/back.png" alt="Vorheriges Bild" /></a>
-                <a href="'.$url_prev_image.'">Vorheriges Bild</a>
-            </span>
-        </li>';
-    }
-    if($next_image <= $photo_album->getValue('pho_quantity'))
-    {
-        echo'<li>
-            <span class="iconTextLink">
-                <a href="'.$url_next_image.'">Nächstes Bild</a>
-                <a href="'.$url_next_image.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="Nächstes Bild" /></a>
-            </span>
-        </li>';
-    }
-    echo'
-</ul>';    
-
-if($g_preferences['photo_show_mode']==0)
-{   
-    // im Popupmodus Fenster schliessen Button
-    echo'<ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="javascript:parent.window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Fenster schließen" /></a>
-                <a href="javascript:parent.window.close()">Fenster schließen</a>
-            </span>
-        </li>
-    </ul>';
+	echo '
+	<div class="formLayout" id="photo_presenter" style="width: '.$body_with.'px;">
+		<div class="formHead">'.$photo_album->getValue('pho_name').'</div>
+		<div class="formBody">';
+	
+	//Ausgabe Bild 
+	if($next_image <= $photo_album->getValue('pho_quantity'))
+	{
+		echo '<div><a href="'.$url_next_image.'"><img class="photoOutput" src="'.$url_act_image.'" alt="Foto"></a></div>';
+	}
+	else
+	{
+		echo '<div><img class="photoOutput" src="'.$url_act_image.'" alt="Foto" /></div>';
+	}
+	
+	//Vor und zurück Buttons
+	echo'
+	<ul class="iconTextLinkList">';
+		//Vor und zurueck buttons
+		if($prev_image > 0)
+		{
+			echo'<li>
+				<span class="iconTextLink">
+					<a href="'.$url_prev_image.'"><img src="'. THEME_PATH. '/icons/back.png" alt="Vorheriges Bild" /></a>
+					<a href="'.$url_prev_image.'">Vorheriges Bild</a>
+				</span>
+			</li>';
+		}
+		if($next_image <= $photo_album->getValue('pho_quantity'))
+		{
+			echo'<li>
+				<span class="iconTextLink">
+					<a href="'.$url_next_image.'">Nächstes Bild</a>
+					<a href="'.$url_next_image.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="Nächstes Bild" /></a>
+				</span>
+			</li>';
+		}
+		echo'
+	</ul>';    
+	
+	if($g_preferences['photo_show_mode']==0)
+	{   
+		// im Popupmodus Fenster schliessen Button
+		echo'<ul class="iconTextLinkList">
+			<li>
+				<span class="iconTextLink">
+					<a href="javascript:parent.window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Fenster schließen" /></a>
+					<a href="javascript:parent.window.close()">Fenster schließen</a>
+				</span>
+			</li>
+		</ul>';
+	}
+	elseif($g_preferences['photo_show_mode']==2)
+	{   
+		// im Fenstermodus zurueck zur Uebersicht Button
+		echo'<ul class="iconTextLinkList">
+			<li>
+				<span class="iconTextLink">
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="zur &Uuml;bersicht" /></a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">zur &Uuml;bersicht</a>
+				</span>
+			</li>
+		</ul>';
+	}
+	
+	
+	//Zusatzinformationen zum Album nur wenn im gleichen Fenster
+	if($g_preferences['photo_show_mode']==2)
+	{	
+		echo'
+		<p>
+			Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
+			if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin')
+			&& strlen($photo_album->getValue('pho_end')) > 0)
+			{
+				echo ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
+			}
+			echo '<br />Fotos von: '.$photo_album->getValue('pho_photographers').'
+		</p>';
+	}
+	
+	echo'</div></div>';
+	require(THEME_SERVER_PATH. '/overall_footer.php');
 }
-elseif($g_preferences['photo_show_mode']==2)
-{   
-    // im Fenstermodus zurueck zur Uebersicht Button
-    echo'<ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="zur &Uuml;bersicht" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">zur &Uuml;bersicht</a>
-            </span>
-        </li>
-    </ul>';
-}
-
-
-//Zusatzinformationen zum Album nur wenn im gleichen Fenster
-if($g_preferences['photo_show_mode']==2)
-{	
-    echo'
-    <p>
-        Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
-        if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin')
-        && strlen($photo_album->getValue('pho_end')) > 0)
-        {
-            echo ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
-        }
-        echo '<br />Fotos von: '.$photo_album->getValue('pho_photographers').'
-    </p>';
-}
-
-if($g_preferences['photo_show_mode'] != 1)
-{
-    echo'</div></div>';
-}
-        
-require(THEME_SERVER_PATH. '/overall_footer.php');
 
 ?>

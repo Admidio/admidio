@@ -12,6 +12,7 @@
  * usr_id     - Passwort der übergebenen User-Id aendern
  * mode   : 0 - (Default) Anzeige des Passwordaenderungsformulars
  *          1 - Passwortaenderung wird verarbeitet
+ * inline : 1 - für z.B.: colorbox nur Content ohne Header wird angezeigt
  *
  *****************************************************************************/
  
@@ -31,6 +32,11 @@ if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
 {
     $g_message->setExcludeThemeBody();
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+$inlineView = 0;
+if(isset($_GET['inline']) && is_numeric($_GET['inline']) == true)
+{
+    $inlineView = 1;
 }
 
 if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
@@ -74,7 +80,7 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
                     }
 
                     $g_message->setForwardUrl('javascript:self.parent.tb_remove()');
-                    $phrase = $g_l10n->get('PRO_PHR_PASSWORD_CHANGED');
+                    $phrase = $g_l10n->get('PRO_PHR_PASSWORD_CHANGED')."<SAVED/>";
                 }
                 else
                 {
@@ -95,8 +101,15 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
     {
         $phrase = $g_l10n->get('SYS_PHR_FIELDS_EMPTY');
     }
-    $g_message->setExcludeThemeBody();
-    $g_message->show($phrase);
+	if ($inlineView == 0)
+	{
+		$g_message->setExcludeThemeBody();
+		$g_message->show($phrase);
+	}
+	else
+	{
+		echo $phrase;
+	}
 }
 else
 {
@@ -107,11 +120,14 @@ else
     // Html-Kopf ausgeben
     $g_layout['title']    = 'Passwort bearbeiten';
     $g_layout['includes'] = false;
-    require(THEME_SERVER_PATH. '/overall_header.php');
+    if ($inlineView == 0)
+	{
+		require(THEME_SERVER_PATH. '/overall_header.php');
+	}
 
     // Html des Modules ausgeben
     echo '
-    <form action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $_GET['usr_id']. '&mode=1" method="post">
+    <form id="passwordForm" action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $_GET['usr_id']. '&mode=1&inline=1" method="post">
     <div class="formLayout" id="password_form" style="width: 300px">
         <div class="formHead">'. $g_layout['title']. '</div>
         <div class="formBody">
@@ -134,7 +150,7 @@ else
                         <dt><label for="new_password">Neues Passwort:</label></dt>
                         <dd><input type="password" id="new_password" name="new_password" size="12" maxlength="20" />
                             <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                            <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=profile_password\',this)" onmouseout="ajax_hideTooltip()"
+                            <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=profile_password\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />
                         </dd>
                     </dl>
@@ -155,8 +171,10 @@ else
             </div>
         </div>
     </form>';
-      
-    require(THEME_SERVER_PATH. '/overall_footer.php');
+    if ($inlineView == 0)
+	{  
+		require(THEME_SERVER_PATH. '/overall_footer.php');
+	}
 }
 
 ?>

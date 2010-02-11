@@ -692,7 +692,7 @@ echo '
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">Thickbox</option>
+                                    echo ">ColorBox</option>
                                     <option value=\"2\" ";
                                     if($form_values['photo_show_mode'] == 2)
                                     {
@@ -705,8 +705,8 @@ echo '
                     </li>
                     <li class=\"smallFontSize\">
                         Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen.
-                        Dies kann über ein Popup-Fenster, über eine Javascript-Animation (Thickbox) oder auf
-                        dergleichen Seite in HTML erfolgen. (Standard: Thickbox)
+                        Dies kann über ein Popup-Fenster, über eine Javascript-Animation (ColorBox) oder auf
+                        dergleichen Seite in HTML erfolgen. (Standard: ColorBox)
                     </li>
                      <li>
                         <dl>
@@ -777,10 +777,9 @@ echo '
                     </li>
                     <li class=\"smallFontSize\">
                         Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster
-                        haben darf. Das Fenster im Popup- bzw. Thickboxmodus wird automatisch in der Größe angepasst. Besonders bei der Höhe
-                        ist Vorsicht angebracht, da über und unter dem Bild noch genug Platz für Layout und Browser
-                        sein muss. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder
-                        für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 480 Pixel)
+                        haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst.
+						Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder
+                        für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)
                     </li>
                     <li>
                         <dl>

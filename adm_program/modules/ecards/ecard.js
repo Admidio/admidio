@@ -46,6 +46,8 @@ function ecardJSClass()
 	this.blendOutSettings_Text	= "";
 	this.internalRecipient_Text	= "";
 	this.messageTooLong			= "";
+	this.loading_Text			= "";
+	this.send_Text				= "";
 
 	this.ccSaveDataArray		= new Array();
 	
@@ -177,55 +179,26 @@ function ecardJSClass()
 	}
 	this.makePreview = function()
 	{
+		$.fn.colorbox.init();
 		$("#" + this.ecardformid + " input[name=submit_action]").attr("value","preview");
-		var tb_widthheight = this.calculateWidthHeightForThickBox();
-		$("#" + this.ecardformid).attr("action","ecard_preview.php?keepThis=true&TB_iframe=true&width="+tb_widthheight[1].toFixed(0)+"&heigth="+tb_widthheight[0].toFixed(0));
-		tb_show(this.ecardPreview_Text, "ecard_preview.php?keepThis=true&TB_iframe=true&width="+tb_widthheight[1].toFixed(0)+"&heigth="+tb_widthheight[0].toFixed(0));
-		$("#" + this.ecardformid).attr("target",$("#TB_iframeContent").attr("name"));
-		$("#" + this.ecardformid).submit();
+		$("#" + this.ecardformid).attr("action","ecard_preview.php");
+		$.fn.colorbox({href:"ecard_preview.php",width:"50%",height:"50%",iframe:true,onComplete:function(){
+								$("#" + ecardJS.ecardformid).attr("target",$("#cboxIframe").attr("name"));
+								$("#" + ecardJS.ecardformid).submit();}});
 	}
 	this.sendEcard = function()
 	{
 		if (this.validateForm())
 		{
 			$("#" + this.ecardformid + " input[name=submit_action]").attr("value","send");
-			tb_show(this.ecardSend_Text, "index.html?keepThis=true");
+			this.jQueryAjaxLoadRolesAppend();
+			jQuery.fn.SubmitEcard();
 		}
 		else
 		{
 			$("#" + this.ecardformid).attr("onsubmit","");
 			$("#" + this.ecardformid + " input[name=submit_action]").attr("value","");
 		}
-	}
-	this.calculateWidthHeightForThickBox = function()
-	{
-		var viewportwidth		= 0;
-		var viewportheight		= 0;
-		var tb_widthheight = new Array(0,0);
-	
-		if( typeof( window.innerWidth ) == "number" ) 
-		{
-			//Non-IE
-			viewportwidth = window.innerWidth;
-			viewportheight = window.innerHeight;
-		} 
-		else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) 
-		{
-			//IE 6+ in "standards compliant mode"
-			viewportwidth = document.documentElement.clientWidth;
-			viewportheight = document.documentElement.clientHeight;
-		} 
-		else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) 
-		{
-			//IE 4 compatible
-			viewportwidth = document.body.clientWidth;
-			viewportheight = document.body.clientHeight;
-		}
-		
-		tb_widthheight[0] 	= viewportheight * 0.8;
-		tb_widthheight[1] 	= viewportwidth * 0.8;
-		
-		return tb_widthheight;
 	}
 	this.blendout = function(id)
 	{
@@ -267,8 +240,31 @@ function ecardJSClass()
 			}
 		}
 	}
+	this.jQueryAjaxLoadRolesAppend = function()
+	{
+		if($("#" + ecardJS.ecardformid + " input[name=submit_action]").attr("value") == "send")
+		{
+			var options = { 
+				target:        '#cboxLoadedContent',  							 // target element(s) to be updated with server response
+				url: gRootPath + '/adm_program/modules/ecards/ecard_send.php',
+				beforeSubmit: function(formData, jqForm, options) { 
+					$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + this.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/loader.gif" alt="' + this.loading_Text + '" />');
+				},
+				success:       function(responseText, statusText){		 // post-submit callback
+					$.fn.colorbox({html:responseText});
+					$("#ecardSubmit").html('<img src="'+ gThemePath+ '/icons/email.png" alt="' + this.send_Text + '" />&nbsp;' + this.send_Text);
+				}	 
+			}; 
+			jQuery.fn.SubmitEcard = function(){
+				$.fn.colorbox.init()
+				if($("#" + ecardJS.ecardformid + " input[name=submit_action]").attr("value") == "send")
+					$("#" + ecardJS.ecardformid).ajaxSubmit(options);
+			};
+		}
+		$("#" + ecardJS.ecardformid).attr("action","ecardJS.makePreview();");
+	}
 
-	this.makeAjaxRequest = function(url,divId)
+	this.makeAjaxRequest = function(url,divId,funcSuccess)
 	{
 		$("#" + divId).html(this.contentIsLoading_Text);
 		$.ajax({
@@ -277,6 +273,8 @@ function ecardJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#" + divId).html(responseText);
+				if(funcSuccess != null)
+					funcSuccess();
 			},
 			error: function (xhr, ajaxOptions, thrownError){
 				alert(ecardJS.ajaxExecution_ErrorText.replace('[ERROR]',"\n\tResponse text: "+xhr.responseText+"\n\tAjax options: "+ajaxOptions+"\n\tTrown error: "+thrownError));
@@ -285,13 +283,13 @@ function ecardJSClass()
 	}
 	this.getMenu = function()
 	{
-		window.setTimeout("ecardJS.makeAjaxRequest('"+ gRootPath +"/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1' , \'"+ this.baseDropDiv_id+"\' );", 500);
+		this.makeAjaxRequest(gRootPath + "/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1" ,this.baseDropDiv_id);
 	}
 	this.getMenuRecepientName = function()
 	{
 		if($("#" + this.ecardformid + " #rol_id").val() != "externMail")
 		{
-			this.makeAjaxRequest(gRootPath + '/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id='+ $("#" + this.ecardformid + " #rol_id").val() , 'dropdownmenu' );
+			this.makeAjaxRequest(gRootPath + '/adm_program/modules/ecards/ecard_drawdropmenue.php?rol_id='+ $("#" + this.ecardformid + " #rol_id").val() , 'dropdownmenu');
 		}
 		else
 		{
