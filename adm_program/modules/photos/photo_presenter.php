@@ -93,7 +93,7 @@ else
 	// Html-Kopf ausgeben
 	$g_layout['title']    = 'Fotogalerien';
 	
-	//wenn Popupmode oder Thickbox, dann normalen Kopf unterdruecken
+	//wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
 	if($g_preferences['photo_show_mode']==0)
 	{                      
 		$g_layout['includes'] = false;

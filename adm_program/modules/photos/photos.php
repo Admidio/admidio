@@ -270,10 +270,6 @@ echo '<div class="photoModuleContainer">';
         //Popupfenstergröße
         $popup_height = $g_preferences['photo_show_height']+210;
         $popup_width  = $g_preferences['photo_show_width']+70;
-        
-        //Thickboxgröße
-        $thickbox_height = $g_preferences['photo_show_height']+90;
-        $thickbox_width  = $g_preferences['photo_show_width'];
 
         //Album Seitennavigation
         function photoAlbumPageNavigation($photo_album, $act_thumb_page, $thumbs_per_page)
@@ -355,7 +351,7 @@ echo '<div class="photoModuleContainer">';
                             </div>';
                         }
 
-                        //Thickbox-Mode
+                        //Colorbox-Mode
                         elseif($g_preferences['photo_show_mode']==1)
                         {
                             echo 
@@ -550,7 +546,7 @@ echo '<div class="photoModuleContainer">';
                             //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                             if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                             {
-                                echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=folder_not_found&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=folder_not_found&amp;inline=true"><img 
 					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=folder_not_found\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
                             }
@@ -558,7 +554,7 @@ echo '<div class="photoModuleContainer">';
                             //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                             {
-                                echo '<a class="thickbox" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=not_approved&amp;window=true&amp;KeepThis=true&amp;TB_iframe=true&amp;height=250&amp;width=580"><img 
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=not_approved&amp;inline=true"><img 
 					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=not_approved\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="Gesperrt" title="" /></a>';
                             }
