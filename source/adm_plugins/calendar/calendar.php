@@ -260,6 +260,7 @@ while($i<$erster)
     $i++;
 }
 $i = 1;
+$boolNewStart = false;
 while($i<=$insgesamt)
 {
     $ter_link = "";
@@ -390,7 +391,11 @@ while($i<=$insgesamt)
             }
         }
     }
-    
+    if ($boolNewStart)
+	{
+		echo "<tr>\n";
+		$boolNewStart = false;
+	}
     $rest = ($i+$erster-1)%7;
     if($i == $heute)
     {
@@ -455,13 +460,13 @@ while($i<=$insgesamt)
     echo "</td>\n";
     if($rest == 0)
     {
-        echo "</tr>\n<tr>\n";
+        echo "</tr>\n";
+		$boolNewStart = true;
     }
     $i++;
     $ter_anzahl = 0;
     $geb_anzahl = 0;
 }
-echo "</tr>\n";
 echo "</table>\n";
 if($monat.$jahr != date('mY'))
 {
