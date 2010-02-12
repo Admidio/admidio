@@ -179,7 +179,7 @@ if($g_preferences['photo_show_mode']==1)
 	$g_layout['header'] = $g_layout['header']. '
 			<script type="text/javascript"><!--
 				$(document).ready(function(){
-				$("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,preloading:true});
+				$("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,slideshowAuto:false,preloading:true});
 				});
 			-->
 			</script>';
