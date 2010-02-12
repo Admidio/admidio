@@ -23,7 +23,6 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableDate extends TableAccess
@@ -42,16 +41,14 @@ class TableDate extends TableAccess
     {
         parent::__construct($db, TBL_DATES, 'dat', $dat_id);
         
-        // Rollenname und ID der Rollen mit Sichtbarkeit des Termins einlesen
+        // Rollenname und ID aller Rollen mit Sichtbarkeit des Termins einlesen
         $sql = 'SELECT rol_id, rol_name 
                   FROM '.TBL_ROLES.' 
-                 WHERE rol_id NOT IN(SELECT rol_id 
-                                       FROM '.TBL_ROLES.', '.TBL_DATES.' 
-                                      WHERE rol_id = dat_rol_id)';
+                 WHERE rol_visible = 1';
         $result = $db->query($sql);
         while($row = $db->fetch_array($result))
         {
-            $this->visibility[$row['rol_id']]=$row['rol_name'];
+            $this->visibility[$row['rol_id']] = $row['rol_name'];
             $this->visible_for[] = $row['rol_id'];
         }
     }
@@ -73,14 +70,6 @@ class TableDate extends TableAccess
             while($row = $this->db->fetch_array($result))
             {
                 $this->visible_for[] = intval($row['dtr_rol_id']);
-            }
-            
-            $this->max_members_role = array();
-            $sql = 'SELECT * FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id = '.$dat_id;
-            $result = $this->db->query($sql);
-            while($row = $this->db->fetch_array($result))
-            {
-                $this->max_members_role[$row['dmm_rol_id']] = $row['dmm_max_members'];
             }
         }
     }
@@ -171,22 +160,18 @@ class TableDate extends TableAccess
     // Methode, die den Termin in der DB loescht
     public function delete()
     {
+        $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+        $result = $this->db->query($sql);
+
         // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
         if($this->getValue('dat_rol_id') > 0)
         {
-            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = "'.$this->getValue('dat_rol_id').'"';
+            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = '.$this->getValue('dat_rol_id');
             $this->db->query($sql);
             
-            $role = new TableRoles($this->db);
-            $role->readData($this->getValue('dat_rol_id'));
-            $role->delete();
+            $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = '.$this->getValue('dat_rol_id');
+            $this->db->query($sql);
         }
-        
-        $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = "'.$this->getValue('dat_id').'"';
-        $result = $this->db->query($sql);
-        
-        $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id="'.$this->getValue('dat_id').'"';
-        $this->db->query($sql);
         
         parent::delete();
     }    

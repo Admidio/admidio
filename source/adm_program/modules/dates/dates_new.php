@@ -90,7 +90,7 @@ if(isset($_SESSION['dates_request']))
             $date->setValue($key, stripslashes($value));
         }
     }
-    $date->visible_for = isset($_SESSION['dates_request']['dat_visible_for']) ? $_SESSION['dates_request']['dat_visible_for']: array();
+    $date->visible_for = isset($_SESSION['dates_request']['date_visible_for']) ? $_SESSION['dates_request']['date_visible_for']: array();
     
     $date_from = $_SESSION['dates_request']['date_from'];
     $time_from = $_SESSION['dates_request']['time_from'];
@@ -200,7 +200,7 @@ $g_layout['header'] = '
     
     function markVisibilities()
     {
-        var visibilities = $("input[name=\'dat_visible_for[]\']");
+        var visibilities = $("input[name=\'date_visible_for[]\']");
         jQuery.each(visibilities, function(index, value) {
             value.checked = true;
         });
@@ -208,7 +208,7 @@ $g_layout['header'] = '
     
     function unmarkVisibilities()
     {
-        var visibilities = $("input[name=\'dat_visible_for[]\']");
+        var visibilities = $("input[name=\'date_visible_for[]\']");
         jQuery.each(visibilities, function(index, value) {
             value.checked = false;
         });
@@ -216,7 +216,7 @@ $g_layout['header'] = '
     
     function toggleMaxMembers()
     {
-        if(document.getElementById("dat_rol_id").checked)
+        if(document.getElementById("date_login").checked)
         {
             $("#max_members").css("display", "");
             var visibilities = $("input[name^=\'dat_max_members_role\']");
@@ -290,8 +290,8 @@ echo '
                             }
                             echo ' value="1" />
                             <label for="dat_global">'. $_GET['headline']. ' für mehrere Organisationen sichtbar</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=date_global&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=date_global\',this)" onmouseout="ajax_hideTooltip()"
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                         </dd>
                     </dl>
@@ -383,16 +383,13 @@ echo '
                 <dl>
                     <dt>Anmeldung möglich:</dt>
                     <dd>
-                        <input type="checkbox" id="dat_rol_id" name="dat_rol_id"';
-                    if($req_dat_id==0)
-                    {
-                        echo ' value="0"'.( ($date->getValue('dat_rol_id') != '') ? ' checked="checked"': '');
-                    }
-                    else
-                    {
-                        echo ' value="'.$date->getValue('dat_rol_id').'"'.( ($keep_rol_id) ? ' checked="checked"' : '');
-                    }
-                    echo ' onclick="toggleMaxMembers();" />
+                        <input type="checkbox" id="date_login" name="date_login"';
+                        if($date->getValue('dat_rol_id') > 0 
+                        || (isset($_SESSION['dates_request']['date_login']) && $_SESSION['dates_request']['date_login'] == 1))
+                        {
+                            echo ' checked="checked" ';
+                        }
+                        echo ' onclick="toggleMaxMembers()" value="1" />
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_LOGIN_POSSIBLE&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_LOGIN_POSSIBLE\',this)" 
                             onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
@@ -441,28 +438,29 @@ echo '
             echo '
             <li>
                 <dl>
-                    <dt>Sichtbarkeit und<br /> Kontingentierung:</dt>
+                    <dt>Sichtbarkeit:</dt>
                     <dd>
                         <table>
                             <tr>';
+                            
+                            $sql    = 'SELECT rol_id, rol_name FROM '.TBL_ROLES.' WHERE rol_visible = 1 ';
+                            $result = $db->query($sql);
 
                             $visibility_modes = $date->getVisibilityArray();
                             foreach($visibility_modes as $value => $label)
                             {
-                                $identity = 'dat_visible_for_'.$value;
-                                $visibility_row = '<td><input type="checkbox" name="dat_visible_for[]" value="'.$value.'" id="'.$identity.'"';
+                                $identity = 'date_visible_for_'.$value;
+                                $visibility_row = '<td><input type="checkbox" name="date_visible_for[]" value="'.$value.'" id="'.$identity.'"';
                                 if($date->isVisibleFor($value))
                                 {
                                     $visibility_row .= ' checked="checked"';
                                 }
                                 
-                                $visibility_row .= ' />&nbsp;<label for="'.$identity.'">'.$label.'</label></td>
-                                <td><input type="text" name="dat_max_members_role['.$value.']" value="'.($max_members_role[$value] ? $max_members_role[$value] : $date->getMaxMembers($value)).'" /></td>';
-                                //'</tr><tr>';
+                                $visibility_row .= ' />&nbsp;<label for="'.$identity.'">'.$label.'</label></td>';
                                 $visibilities[] = $visibility_row;
                             }
                         
-                            echo  implode('</tr><tr>', $visibilities).'
+                            echo  '
                             </tr>
                         </table>
                         <a href="javascript:markVisibilities();">alle</a>

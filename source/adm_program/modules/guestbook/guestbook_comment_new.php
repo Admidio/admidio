@@ -263,8 +263,8 @@ echo '
                            <dd>
                                <input type="text" id="captcha" name="captcha" tabindex="4" style="width: 200px;" maxlength="8" value="" />
                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                               <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=captcha_help&amp;inline=true"><img 
-				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
+                               <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                            </dd>
                     </dl>

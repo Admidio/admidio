@@ -12,13 +12,13 @@
  * user_id     - Funktionen der uebergebenen user_id aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
- * inline: 	 0 - wird als eigene Seite angezeigt
- *			 1 - nur "body" HTML Code (z.B. für colorbox)
+ * inline:   0 - wird als eigene Seite angezeigt
+ *           1 - nur "body" HTML Code (z.B. für colorbox)
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('usr_id')))
@@ -44,14 +44,14 @@ if(isset($_GET['user_id']))
 {
     if(is_numeric($_GET['user_id']) == false)
     {
-		if($req_inlineView == 0)
-		{
-        	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-		}
-		else
-		{
-			echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
-		}
+        if($req_inlineView == 0)
+        {
+            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        }
+        else
+        {
+            echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+        }
     }
     $req_usr_id = $_GET['user_id'];
 }
@@ -60,14 +60,14 @@ if(isset($_GET['new_user']))
 {
     if(is_numeric($_GET['new_user']) == false)
     {
-		if($req_inlineView == 0)
-		{
-        	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-		}
-		else
-		{
-			echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
-		}
+        if($req_inlineView == 0)
+        {
+            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        }
+        else
+        {
+            echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+        }
     }
     $req_new_user = $_GET['new_user'];
 }
@@ -77,7 +77,7 @@ if(isset($_GET['new_user']))
 $user     = new User($g_db, $req_usr_id);
 if($req_inlineView == 0)
 {
-	$_SESSION['navigation']->addUrl(CURRENT_URL);
+    $_SESSION['navigation']->addUrl(CURRENT_URL);
 }
 //Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))
@@ -94,12 +94,12 @@ else
 $g_layout['title']  = $g_l10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('Nachname'),$user->getValue('Vorname'));
 $g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
 <script type="text/javascript">
-	var profileJS = new profileJSClass();
+    var profileJS = new profileJSClass();
 	profileJS.init();
 </script>';
 if($req_inlineView == 0)
 {
-	require(THEME_SERVER_PATH. "/overall_header.php");
+    require(THEME_SERVER_PATH. '/overall_header.php');
 }
 
 echo '
@@ -115,13 +115,13 @@ echo '
                 <th style="text-align: center; width: 80px;">'.$g_l10n->get('SYS_LEADER');
 				if($req_inlineView == 0)
 				{
-					echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=leader&amp;inline=true"><img 
-		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=leader\',this)" onmouseout="ajax_hideTooltip()"
+					echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION&amp;inline=true"><img 
+		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>';
 				}
 				else
 				{
-					echo '<img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=leader\',this)" onmouseout="ajax_hideTooltip()"
+					echo '<img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" />';
 				}
                 echo'</th>
@@ -131,41 +131,41 @@ echo '
         if($g_current_user->assignRoles())
         {
             // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, mem_usr_id, mem_leader
-                         FROM ". TBL_CATEGORIES. ", ". TBL_ROLES. "
-                         LEFT JOIN ". TBL_MEMBERS. "
+            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, mem_usr_id, mem_leader
+                         FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
+                         LEFT JOIN '. TBL_MEMBERS. '
                            ON rol_id     = mem_rol_id
-                          AND mem_usr_id = $req_usr_id
-                          AND mem_begin <= '".DATE_NOW."'
-                          AND mem_end    > '".DATE_NOW."'
+                          AND mem_usr_id = '.$req_usr_id.'
+                          AND mem_begin <= "'.DATE_NOW.'"
+                          AND mem_end    > "'.DATE_NOW.'"
                         WHERE rol_valid  = 1
                           AND rol_cat_id = cat_id
-                          AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                        ORDER BY cat_sequence, cat_id, rol_name";
+                          AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                        ORDER BY cat_sequence, cat_id, rol_name';
         }
         else
         {
             // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-            $sql    = "SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible,
+            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible,
                               mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
-                         FROM ". TBL_MEMBERS. " bm, ". TBL_CATEGORIES. ", ". TBL_ROLES. "
-                         LEFT JOIN ". TBL_MEMBERS. " mgl
+                         FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
+                         LEFT JOIN '. TBL_MEMBERS. ' mgl
                            ON rol_id         = mgl.mem_rol_id
-                          AND mgl.mem_usr_id = $req_usr_id
-                          AND mgl.mem_begin <= '".DATE_NOW."'
-                          AND mgl.mem_end    > '".DATE_NOW."'
-                        WHERE bm.mem_usr_id  = ". $g_current_user->getValue("usr_id"). "
-                          AND bm.mem_begin  <= '".DATE_NOW."'
-                          AND bm.mem_end     > '".DATE_NOW."'
+                          AND mgl.mem_usr_id = '.$req_usr_id.'
+                          AND mgl.mem_begin <= "'.DATE_NOW.'"
+                          AND mgl.mem_end    > "'.DATE_NOW.'"
+                        WHERE bm.mem_usr_id  = '. $g_current_user->getValue('usr_id'). '
+                          AND bm.mem_begin  <= "'.DATE_NOW.'"
+                          AND bm.mem_end     > "'.DATE_NOW.'"
                           AND bm.mem_leader  = 1
                           AND rol_id         = bm.mem_rol_id
                           AND rol_valid      = 1
                           AND rol_cat_id     = cat_id
-                          AND cat_org_id     = ". $g_current_organization->getValue("org_id"). "
-                        ORDER BY cat_sequence, cat_id, rol_name";
+                          AND cat_org_id     = '. $g_current_organization->getValue('org_id'). '
+                        ORDER BY cat_sequence, cat_id, rol_name';
         }
         $result = $g_db->query($sql);
-        $category = "";
+        $category = '';
 
         while($row = $g_db->fetch_object($result))
         {
@@ -175,7 +175,7 @@ echo '
                 {
                     if(strlen($category) > 0)
                     {
-                        echo "</tbody>";
+                        echo '</tbody>';
                     }
                     $block_id = 'cat_'.$row->cat_id;
                     echo '<tbody>
@@ -237,27 +237,27 @@ echo '
                 </tr>';
             }
         }
-    	echo '</tbody>
+        echo '</tbody>
     </table>
 
     <div class="formSubmit">
         <button type="submit" value="'.$g_l10n->get('SYS_SAVE').'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
     </div>';
-	if($req_inlineView == 0)
-	{
-    	echo '<ul class="iconTextLinkList">
-				<li>
-					<span class="iconTextLink">
-						<a href="$g_root_path/adm_program/system/back.php"><img
-						src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-						<a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
-					</span>
-				</li>
-			 </ul>';
-	}
+    if($req_inlineView == 0)
+    {
+        echo '<ul class="iconTextLinkList">
+                <li>
+                    <span class="iconTextLink">
+                        <a href="$g_root_path/adm_program/system/back.php"><img
+                        src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                        <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+                    </span>
+                </li>
+             </ul>';
+    }
 echo '</form>';
 if($req_inlineView == 0)
 {
-	require(THEME_SERVER_PATH. '/overall_footer.php');
+    require(THEME_SERVER_PATH. '/overall_footer.php');
 }
 ?>

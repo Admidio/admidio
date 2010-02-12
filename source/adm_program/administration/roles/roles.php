@@ -14,9 +14,9 @@
  *
  *****************************************************************************/
 
- require('../../system/common.php');
- require('../../system/login_valid.php');
- require('../../system/classes/table_roles.php');
+ require_once('../../system/common.php');
+ require_once('../../system/login_valid.php');
+ require_once('../../system/classes/table_roles.php');
 
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!$g_current_user->assignRoles())
@@ -167,83 +167,83 @@ echo '
 
             $cat_id = $role->getValue('cat_id');
         }
-        echo "
-        <tr class=\"tableMouseOver\">
-            <td>&nbsp;<a href=\"$g_root_path/adm_program/administration/roles/roles_new.php?rol_id=".$role->getValue("rol_id")."\" title=\"".$role->getValue("rol_description")."\">".$role->getValue("rol_name")."</a></td>
-            <td>";
-                if($role->getValue("rol_assign_roles") == 1)
+        echo '
+        <tr class="tableMouseOver">
+            <td>&nbsp;<a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a></td>
+            <td>';
+                if($role->getValue('rol_assign_roles') == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/roles.png\"
-                    alt=\"Rollen verwalten und zuordnen\" title=\"Rollen verwalten und zuordnen\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/roles.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" />';
                 }
-                if($role->getValue("rol_approve_users") == 1)
+                if($role->getValue('rol_approve_users') == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/new_registrations.png\"
-                    alt=\"Registrierungen verwalten und zuordnen\" title=\"Registrierungen verwalten und zuordnen\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/new_registrations.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" />';
                 }
-                if($role->getValue("rol_edit_user") == 1)
+                if($role->getValue('rol_edit_user') == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/group.png\"
-                    alt=\"Profildaten aller Benutzer bearbeiten\" title=\"Profildaten aller Benutzer bearbeiten\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/group.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" />';
                 }
-                if($role->getValue("rol_mail_to_all") == 1)
+                if($role->getValue('rol_mail_to_all') == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
-                    alt=\"Emails an alle Rollen schreiben\" title=\"Emails an alle Rollen schreiben\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/email.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" />';
                 }
-                if($role->getValue("rol_profile") == 1)
+                if($role->getValue('rol_profile') == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\"
-                    alt=\"Eigenes Profil bearbeiten\" title=\"Eigenes Profil bearbeiten\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/profile.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" />';
                 }
-                if($role->getValue("rol_announcements") == 1 && $g_preferences['enable_announcements_module'] > 0)
+                if($role->getValue('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/announcements.png\"
-                    alt=\"Ankündigungen anlegen und bearbeiten\" title=\"Ankündigungen anlegen und bearbeiten\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/announcements.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" />';
                 }
-                if($role->getValue("rol_dates") == 1 && $g_preferences['enable_dates_module'] > 0)
+                if($role->getValue('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/dates.png\"
-                    alt=\"Termine anlegen und bearbeiten\" title=\"Termine anlegen und bearbeiten\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/dates.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" />';
                 }
-                if($role->getValue("rol_photo") == 1 && $g_preferences['enable_photo_module'] > 0)
+                if($role->getValue('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/photo.png\"
-                    alt=\"Fotos hochladen und bearbeiten\" title=\"Fotos hochladen und bearbeiten\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/photo.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" />';
                 }
-                if($role->getValue("rol_download") == 1 && $g_preferences['enable_download_module'] > 0)
+                if($role->getValue('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/download.png\"
-                    alt=\"Downloads hochladen und bearbeiten\" title=\"Downloads hochladen und bearbeiten\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" />';
                 }
-                if($role->getValue("rol_guestbook") == 1 && $g_preferences['enable_guestbook_module'] > 0)
+                if($role->getValue('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/guestbook.png\"
-                    alt=\"Gästebucheinträge bearbeiten und löschen\" title=\"Gästebucheinträge bearbeiten und löschen\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/guestbook.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" />';
                 }
                 // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
-                if($role->getValue("rol_guestbook_comments") == 1  && $g_preferences['enable_guestbook_module'] > 0 && $g_preferences['enable_gbook_comments4all'] == false)
+                if($role->getValue('rol_guestbook_comments') == 1  && $g_preferences['enable_guestbook_module'] > 0 && $g_preferences['enable_gbook_comments4all'] == false)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/comments.png\"
-                    alt=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" title=\"Kommentare zu G&auml;stebucheintr&auml;gen anlegen\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/comments.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" />';
                 }
-                if($role->getValue("rol_weblinks") == 1 && $g_preferences['enable_weblinks_module'] > 0)
+                if($role->getValue('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
-                    alt=\"Weblinks anlegen und bearbeiten\" title=\"Weblinks anlegen und bearbeiten\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/weblinks.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" />';
                 }
                 /*if($role->getValue("rol_inventory") == 1 && $g_preferences['enable_inventory_module'] > 0)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/weblinks.png\"
                     alt=\"Inventar verwalten\" title=\"Inventar verwalten\" />";
                 }*/
-                if($role->getValue("rol_all_lists_view") == 1)
+                if($role->getValue('rol_all_lists_view') == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/lists.png\"
-                    alt=\"Mitgliederlisten aller Rollen einsehen\" title=\"Mitgliederlisten aller Rollen einsehen\" />";
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/lists.png"
+                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" />';
                 }
-            echo "</td>
-            <td>";
+            echo '</td>
+            <td>';
                 if($role->getValue("rol_this_list_view") == 1)
                 {
                     echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list_role.png\"

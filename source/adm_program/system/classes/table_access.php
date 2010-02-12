@@ -251,17 +251,28 @@ class TableAccess
         {
             return htmlspecialchars($field_value, ENT_QUOTES);
         }
+        // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
         elseif(isset($this->columnsInfos[$field_name]['type'])
         &&  (  strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false
             || strpos($this->columnsInfos[$field_name]['type'], 'date') !== false
             || strpos($this->columnsInfos[$field_name]['type'], 'time') !== false))
         {
-            // Datum in dem uebergebenen Format zurueckgeben
             if(strlen($field_value) > 0)
             {
                 if(strlen($format) == 0 && isset($g_preferences))
                 {
-                    $format = $g_preferences['system_date'];
+                    if(strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false)
+                    {
+                        $format = $g_preferences['system_date'].' '.$g_preferences['system_time'];
+                    }
+                    elseif(strpos($this->columnsInfos[$field_name]['type'], 'date') !== false)
+                    {
+                        $format = $g_preferences['system_date'];
+                    }
+                    else
+                    {
+                        $format = $g_preferences['system_time'];
+                    }
                 }
 
                 // probieren das Datum zu formatieren, ansonsten Ausgabe der vorhandenen Daten

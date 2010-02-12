@@ -113,117 +113,18 @@ switch ($req_message_id)
               </table>';
         break;
 
-    case 'category_global':
+    case 'CAT_PHR_CATEGORY_GLOBAL':
         // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-        $organizations = $g_current_organization->getValue('org_longname');
+        $organizations = '- '.$g_current_organization->getValue('org_longname').',<br />- ';
         $organizations .= implode(',<br />- ', $g_current_organization->getReferenceOrganizations(true, true, true));
-
-        echo 'Profilfelder von Kategorien bei denen diese Option aktiviert ist, erscheinen im Profil
-              folgender Organisationen:
-              <p><strong>- '.$organizations.'</strong></p>
-              Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.';
+        echo $g_l10n->get(strtoupper($req_message_id), $organizations);
         break;
 
-    case 'date_global':
+    case 'SYS_PHR_DATA_GLOBAL':
         // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-        $organizations = $g_current_organization->getValue('org_longname');
+        $organizations = '- '.$g_current_organization->getValue('org_longname').',<br />- ';
         $organizations .= implode(',<br />- ', $g_current_organization->getReferenceOrganizations(true, true, true));
-
-        echo 'Termine / Ankündigungen, die diese Option aktiviert haben, erscheinen auf den Webseiten
-              folgender Organisationen:
-              <p><strong>- '.$organizations.'</strong></p>
-              Moderatoren dieser Organisationen können den Termin / Ankündigung dann bearbeiten
-              bzw. die Option zurücksetzen.';
-        break;
-
-    case 'field':
-        echo 'Es können beliebig viele zusätzliche Felder definiert werden.
-              Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch
-              bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur
-              Verfügung.';
-        break;
-
-    case 'field_hidden':
-        echo 'Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion
-              nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden,
-              die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer
-              diese Daten auch sehen.';
-        break;
-
-    case 'field_disabled':
-        echo 'Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht
-              bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht
-              besitzen alle Benutzer zu bearbeiten.';
-        break;
-
-    case 'field_mandatory':
-        echo 'Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden.
-              Dies gilt für die Registrierung, aber auch bei der gewöhnlichen
-              Profildatenbearbeitung.';
-        break;
-
-    case 'leader':
-        echo 'Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen
-              haben Leiter mehr Rechte als ein normales Rollenmitglied.<br /><br />
-              Leiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten
-              immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.';
-        break;
-
-    case 'mail_max_attachment_size':
-        require_once('classes/email.php');
-        echo 'Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller 
-              Anhänge zusammen '. Email::getMaxAttachementSize('mb'). ' MB nicht überschreiten.';
-        break;
-
-    case 'profile_login_name':
-        echo 'Mit diesem Namen kannst du dich später auf der Homepage anmelden.<br /><br />
-              Damit du ihn dir leicht merken kannst, solltest du deinen Spitznamen oder Vornamen nehmen.
-              Auch Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>, sind möglich.';
-        break;
-
-    case 'profile_password':
-        echo 'Das Passwort muss mindestens aus 6 Zeichen bestehen. Es sollte sowohl Zahlen,  
-              Buchstaben als auch Sonderzeichen beinhalten.<br /><br />
-              Aus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert.
-              Es ist später nicht mehr möglich dieses einzusehen.';
-        break;
-
-    case 'rol_edit_user':
-        echo 'Rollen, die diese Option aktiviert haben, haben die Berechtigung alle
-              Benutzerdaten (außer Passwörter) anderer Mitglieder zu bearbeiten.<br />
-              Außerdem haben sie Zugriff auf die Benutzerverwaltung und können
-              dort neue Benutzer anlegen oder alte Benutzer löschen.';
-        break;
-
-    case 'role_mail_this_role':
-        echo 'Diese Einstellung steuert, wer das Recht hat über das Mailmodul Emails an diese Rolle zu schicken.
-			  Das Rollenrecht <strong>Emails an alle Rollen schreiben</strong> steht allerdings noch
-              über dieser Einstellung.';
-        break;
-        
-    case 'role_show_list':
-        echo 'Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und
-              die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht
-              <strong>Mitgliederlisten aller Rollen einsehen</strong> steht allerdings noch
-              über dieser Einstellung.';
-        break;
-
-    case 'rol_assign_roles':
-        echo 'Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue
-              Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.';
-        break;
-
-    case 'rolle_mail':
-        echo 'Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern
-              diese ihre E-Mail-Adresse im System hinterlegt haben.<br /><br />
-              Wenn du eingeloggt bist stehen dir weitere Rollen zur Verfügung, an die du E-Mails
-              schreiben kannst.';
-        break;
-
-    case 'rolle_ecard':
-        echo 'Deine Grußkarte wird an ein Mitglied der ausgewählten Rolle geschickt, sofern
-              diese ihre E-Mail-Adresse im System hinterlegt hat.<br /><br />
-              Unter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.';
+        echo $g_l10n->get(strtoupper($req_message_id), $organizations);
         break;
 
     case 'role_assign':
@@ -413,15 +314,6 @@ switch ($req_message_id)
             das entsprechende Symbol <img src="'. THEME_PATH. '/icons/key.png" alt="key" /> in der Bearbeitungszeile nutzen.';
         break;
 
-    //Captcha-Hilfen
-
-    case 'captcha_help':
-        echo ' <h3>Was ist das für ein Bestätigungscode?</h3>
-            Hierbei handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes 
-            wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde. <br /> 
-            Bitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.';
-        break;
-
     //Profil
 
     case 'profile_photo_up_help':
@@ -441,7 +333,18 @@ switch ($req_message_id)
         break;
 
     default:
-        echo $g_l10n->get(strtoupper($req_message_id));
+        // im Standardfall wird mit der ID der Text aus der Sprachdatei gelesen
+        // falls die Textvariable gefuellt ist, pruefen ob dies auch eine ID aus der Sprachdatei ist
+        $msg_text = '';
+        if(strlen($req_message_text) > 0)
+        {
+            $msg_text = $g_l10n->get($req_message_text);
+            if(strlen($msg_text) == 0)
+            {
+                $msg_text = $req_message_text;
+            }
+        }
+        echo $g_l10n->get(strtoupper($req_message_id), $msg_text);
         break;
 }
 

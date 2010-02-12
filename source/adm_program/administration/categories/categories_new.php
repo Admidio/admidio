@@ -161,8 +161,8 @@ echo '
                                 }
                                 echo ' value="1" />
                                 <label for=\"cat_org_id\">'.$title.' für alle Organisationen sichtbar</label>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=category_global&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=category_global\',this)" onmouseout="ajax_hideTooltip()"
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=CAT_PHR_CATEGORY_GLOBAL&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=CAT_PHR_CATEGORY_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                             </dd>
                         </dl>

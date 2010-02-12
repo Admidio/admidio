@@ -642,7 +642,7 @@ echo '
 </form>';
 
 // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
-if($_SESSION['navigation']->count > 1)
+if($_SESSION['navigation']->count() > 1)
 {
     echo '
     <ul class="iconTextLinkList">

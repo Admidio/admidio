@@ -49,25 +49,3 @@ alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_DAT foreign key (d
       references %PREFIX%_dates (dat_id) on delete restrict on update restrict;
 alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_ROL foreign key (dtr_rol_id)
       references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
-
--- Tabelle für maximale Zusagen an Termine
-
-CREATE TABLE %PREFIX%_date_max_members (
-    dmm_id                          int(11) unsigned                not null auto_increment,
-    dmm_dat_id                      int(11) unsigned                not null,
-    dmm_rol_id                      int(11) unsigned                not null,
-    dmm_max_members                 int(11) unsigned                not null,
-    PRIMARY KEY (dmm_id)
-) 
-ENGINE = InnoDB
-auto_increment = 1;
-
--- Index
-alter table %PREFIX%_date_max_members add index DMM_DAT_FK (dmm_dat_id);
-alter table %PREFIX%_date_max_members add index DMM_ROL_FK (dmm_rol_id);
-
--- Constraints
-alter table %PREFIX%_date_max_members add constraint %PREFIX%_FK_DMM_DAT foreign key (dmm_dat_id)
-      references %PREFIX%_dates (dat_id) on delete restrict on update restrict;
-alter table %PREFIX%_date_max_members add constraint %PREFIX%_FK_DMM_ROL foreign key (dmm_rol_id)
-      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
