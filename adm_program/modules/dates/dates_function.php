@@ -22,47 +22,6 @@ require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_roles.php');
 require_once('../../system/classes/table_rooms.php');
 
-
-// Config-Area fuer Roles, mit denen eine neue Rolle angelegt wird wenn eine Anmeldung moeglich ist
-$role_attributes = array(
-    'rol_cat_id'            => null,
-    'rol_name'               => null,
-    'rol_description'        => null,
-    'rol_assign_roles'       => 0,
-    'rol_approve_users'      => 0,
-    'rol_announcements'      => 0,
-    'rol_dates'              => 0,
-    'rol_download'           => 0,
-    'rol_edit_user'          => 0,
-    'rol_guestbook'          => 0,
-    'rol_guestbook_comments' => 0,
-    'rol_inventory'          => 0,
-    'rol_mail_to_all'        => 0,
-    'rol_mail_this_role'     => 0,
-    'rol_photo'              => 0,
-    'rol_profile'            => 0,
-    'rol_weblinks'           => 0,
-    'rol_this_list_view'     => 0,
-    'rol_all_lists_view'     => 0,
-    'rol_start_date'         => null,
-    'rol_start_time'         => null,
-    'rol_end_date'           => null,
-    'rol_end_time'           => null,
-    'rol_weekday'            => null,
-    'rol_location'           => null,
-    'rol_max_members'        => null,
-    'rol_cost'               => null,
-    'rol_cost_period'        => null,
-    'rol_usr_id_create'      => null,
-    'rol_timestamp_create'   => null,
-    'rol_usr_id_change'      => null,
-    'rol_timestamp_change'   => null,
-    'rol_valid'              => 1,
-    'rol_visible'            => '0',
-    'rol_system'             => 0
-    
-);
-
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_dates_module'] == 0)
 {
@@ -120,15 +79,6 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
 {
     $_SESSION['dates_request'] = $_REQUEST;
     
-    if(isset($_POST['dat_rol_id']))
-    {
-        $_SESSION['dates_request']['keep_rol_id'] = 1;
-    }
-    else
-    {
-        $_SESSION['dates_request']['keep_rol_id'] = 0;
-    }
-    
     // ------------------------------------------------
     // pruefen ob alle notwendigen Felder gefuellt sind
     // ------------------------------------------------
@@ -169,7 +119,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $date->setValue('dat_all_day', 1);
     }
     
-    if(!is_array($_POST['dat_visible_for']))
+    if(!is_array($_POST['date_visible_for']))
     {
         $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY','Sichtbarkeit'));
     }
@@ -250,6 +200,10 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['dat_all_day'] = 0;
     }
+    if(isset($_POST['date_login']) == false)
+    {
+        $_POST['date_login'] = 0;
+    }
 
     // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
@@ -313,10 +267,10 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $g_db->query($sql);
     }
 
-    if(is_array($_POST['dat_visible_for']))
+    if(is_array($_POST['date_visible_for']))
     {
         // nun alle Rollenzuordnungen wegschreiben
-        $modes = $_POST['dat_visible_for'];
+        $modes = $_POST['date_visible_for'];
         $date_role = new TableAccess($g_db, TBL_DATE_ROLE, 'dtr');
 
         foreach($modes as $value)
@@ -337,205 +291,47 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     
     // ----------------------------------------
     // ggf. Rolle fuer Anmeldungen wegschreiben
-    // ----------------------------------------
-    
-    if($req_dat_id == 0)
-    {           
-        // Rollenobjekt anlegen, wenn Anmeldung möglich und kein Bearbeiten-Modus
-        if(isset($_POST['dat_rol_id']))
-        {
-            $role = new TableRoles($g_db);  
-            
-            $rol_cat_id             = $date->getValue('dat_cat_id');
-            $rol_name               = 'Terminzusage_'. $date->getValue('dat_id');
-            $rol_timestamp_create   = $date->getValue('dat_timestamp_create');
-            $role_attributes['rol_cat_id'] = $rol_cat_id;
-            $role_attributes['rol_name'] = $rol_name;
-            $role_attributes['rol_timestamp_create'] = $rol_timestamp_create;
-            
-            // Rolle mit Daten aus Termin befüllen
-            foreach($role_attributes as $key => $value)
-            {
-                $role->setValue($key, $value);
-            }
-            
-            // Rolle in Datenbank speichern
-            $return_code2 = $role->save();
-            if($return_code < 0 || $return_code2 < 0)
-            {
-                $date->delete();
-                $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
-            }
-            
-            // dat_rol_id anpassen (Referenz zwischen date und role)
-            $date->setValue('dat_rol_id', $role->getValue('rol_id'));
-            $return_code = $date->save();
-            if($return_code < 0)
-            {
-                $role->delete();
-                $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
-            }
-            
-            //Termin-Ersteller als Member und Leader eintragen
-            $member = new TableMembers($g_db);
-            $member->startMembership($role->getValue('rol_id'), $_SESSION['g_current_user']->getValue('usr_id'), 1);
-        }
-        
-        //Kontingentierung anlegen
-        $max_members_role = $_POST['dat_max_members_role'];
-        
-        // Angegebene Kontingente aufsummieren
-        $sum = 0;
-        $count_max_members_role = 0;
-        foreach($max_members_role as $rol_id => $max_members)
-        {
-            if($max_members != '' && !$date->isVisibleFor($rol_id))
-            {
-                $date->delete();
-                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_FOR_ROLE'));
-            }
-            else
-            {
-                $sum += $max_members;
-                if($max_members != '')
-                {
-                    $count_max_members_role++;
-                }
-            }
-        }
-        
-        if($count_max_members_role == count($date->visible_for) && $sum != $date->getValue('dat_max_members'))
-        {
-            $date->delete();
-            $g_message->show($g_l10n->get('DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH'));
-        }
-        
-        if($sum > 0 && $date->getValue('dat_max_members') != '' && $date->getValue('dat_max_members') > 0)
-        {
-            // Nur eintragen wenn die Teilnehmerbegrenzung größer oder gleich der insgesamt
-            // Teilnehmerbegrenzung ist
-            if($sum <= $date->getValue('dat_max_members'))
-            {
-                foreach($max_members_role as $rol_id => $max_members)
-                {
-                    if(is_numeric($rol_id) && is_numeric($max_members))
-                    {
-                        $sql = 'INSERT INTO '.TBL_DATE_MAX_MEMBERS.' (`dmm_dat_id` , `dmm_rol_id` , `dmm_max_members`) VALUES ('.$date->getValue('dat_id').', '.$rol_id.', '.$max_members.'); ';
-                        $g_db->query($sql);
-                    }
-                }
-            }
-            else
-            {
-                $date->delete();
-                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_EXCEEDED'));
-            }
-        }
-        elseif($sum > 0 && ($date->getValue('dat_max_members') == '' || $date->getValue('dat_max_members') == 0))
-        {
-            $date->delete();
-            $g_message->show($g_l10n->get('DAT_PHR_QUOTA_WITH_MAXIMUM'));
-        }
-    }
-    else    // im Bearbeiten-Modus
+    // ----------------------------------------         
+
+    if($_POST['date_login'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
     {
-        if(isset($_POST['dat_rol_id']))
+        // Rolle fuer die Anmeldung anlegen
+        $role = new TableRoles($g_db);
+        $role->setValue('rol_cat_id', $date->getValue('dat_cat_id'));
+        $role->setValue('rol_name', 'Terminzusage_'. $date->getValue('dat_id'));
+        $role->setValue('rol_visible', 0);
+        
+        // Rolle in Datenbank speichern
+        $return_code2 = $role->save();
+        if($return_code < 0 || $return_code2 < 0)
         {
-            $role = new TableRoles($g_db);
-            $role->readData($date->getValue('dat_rol_id'));
-            $rol_cat_id             = $date->getValue('dat_cat_id');
-            $rol_name               = 'Terminzusage_'. $date->getValue('dat_id');
-            $rol_timestamp_create   = $date->getValue('dat_timestamp_create');
-            $role_attributes['rol_cat_id'] = $rol_cat_id;
-            $role_attributes['rol_name'] = $rol_name;
-            $role_attributes['rol_timestamp_create'] = $rol_timestamp_create;
-            // Rolle mit Daten aus Termin befüllen
-            foreach($role_attributes as $key => $value)
-            {
-                $role->setValue($key, $value);
-            }
-            $role->save();
-            $date->setValue('dat_rol_id', $role->getValue('rol_id'));
-            $date->save();
-            $member = new TableMembers($g_db);
-            $member->startMembership($role->getValue('rol_id'), $_SESSION['g_current_user']->getValue('usr_id'), 1);
-        }
-        else
-        {
-            
-            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = "'.$date->getValue('dat_rol_id').'"';
-            $g_db->query($sql);
-            $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = "'.$date->getValue('dat_rol_id').'"';
-            $g_db->query($sql);
-            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id = "'.$date->getValue('dat_id').'"';
-            $g_db->query($sql);
-            $date->setValue('dat_rol_id', null);
-            $date->setValue('dat_max_members', null);
-            $date->save();
+            $date->delete();
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
         
-        if($date->getValue('dat_max_members') != '')
+        // dat_rol_id anpassen (Referenz zwischen date und role)
+        $date->setValue('dat_rol_id', $role->getValue('rol_id'));
+        $return_code = $date->save();
+        if($return_code < 0)
         {
-            // Kontingentierung ändern
-            $max_members_role = $_POST['dat_max_members_role'];
-            
-            // Angegebene Kontingente aufsummieren
-            $sum = 0;
-            foreach($max_members_role as $rol_id => $max_members)
-            {
-                if($max_members != '' && !$date->isVisibleFor($rol_id))
-                {
-                    $g_message->show($g_l10n->get('DAT_PHR_QUOTA_FOR_ROLE'));
-                }
-                else
-                {
-                    $sum += $max_members;
-                    if($max_members != '')
-                    {
-                        $count_max_members_role++;
-                    }
-                }
-            }
-            
-            if($count_max_members_role == count($date->visible_for) && $sum != $date->getValue('dat_max_members'))
-            {
-                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH'));
-            }
-            
-            if($sum > 0 && ($date->getValue('dat_max_members') == '' || $date->getValue('dat_max_members') == 0))
-            {
-                $g_message->show($g_l10n->get('DAT_PHR_QUOTA_WITH_MAXIMUM'));
-            }
-            
-            if(($sum > 0 && $date->getValue('dat_max_members') != '' && $date->getValue('dat_max_members') > 0) || $sum == 0)
-            {
-                $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE `dmm_dat_id` = '.$date->getValue('dat_id');
-                $g_db->query($sql);
-                
-                // Nur eintragen wenn die Teilnehmerbegrenzung größer oder gleich der insgesamt Teilnehmerbegrenzung ist
-                if($sum <= $date->getValue('dat_max_members'))
-                {
-                    foreach($max_members_role as $rol_id => $max_members)
-                    {
-                        if(is_numeric($rol_id) && is_numeric($max_members))
-                        {
-                            $sql = 'INSERT INTO '.TBL_DATE_MAX_MEMBERS.' (`dmm_dat_id` , `dmm_rol_id` , `dmm_max_members`) VALUES ('.$date->getValue('dat_id').', '.$rol_id.', '.$max_members.'); ';
-                            $g_db->query($sql);
-                        }
-                    }
-                }
-                else
-                {
-                    $g_message->show($g_l10n->get('DAT_PHR_QUOTA_EXCEEDED'));
-                }
-            }
+            $role->delete();
+            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
-        else
-        {
-            $sql = 'DELETE FROM '.TBL_DATE_MAX_MEMBERS.' WHERE dmm_dat_id = "'.$date->getValue('dat_id').'"';
-            $g_db->query($sql);
-        }
+        
+        //Termin-Ersteller als Member und Leader eintragen
+        $member = new TableMembers($g_db);
+        $member->startMembership($role->getValue('rol_id'), $_SESSION['g_current_user']->getValue('usr_id'), 1);
     }
+    elseif($_POST['date_login'] == 0 && $date->getValue('dat_rol_id') > 0)
+    {
+        // die Anmeldungsmoeglichkeit wurde wieder abgewaehlt -> Rolle loeschen
+        $role = new TableRoles($g_db, $date->getValue('dat_rol_id'));
+        $role->delete();
+        
+        $date->setValue('dat_rol_id', '');
+        $date->save();
+    }
+
     unset($_SESSION['dates_request']);
     $_SESSION['navigation']->deleteLastUrl();
 

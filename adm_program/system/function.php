@@ -9,6 +9,9 @@
  *
  *****************************************************************************/
 
+$arrMonth    = array('Monat', 'Januar', 'Februar', 'M&auml;rz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
+$arrDay      = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag');
+$arrDayShort = array('Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So');
 
 // Funktion prueft, ob ein User die uebergebene Rolle besitzt
 // $role_name - Name der zu pruefenden Rolle

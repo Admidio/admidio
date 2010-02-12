@@ -255,7 +255,6 @@ if($g_current_session->getValue('ses_id') > 0)
         if($g_current_session->getValue('ses_usr_id') == $g_current_user->getValue('usr_id'))
         {
             // Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
-            //$time_gap = time() - mysqlmaketimestamp($g_current_session->getValue('ses_timestamp'));
             $time_gap = time() - strtotime($g_current_session->getValue('ses_timestamp', 'Y-m-d H:i:s'));
             
             // wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen

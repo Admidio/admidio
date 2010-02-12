@@ -8,6 +8,7 @@
     <text id="CAT_PHR_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>
     <text id="CAT_PHR_CATEGORY_NOT_DELETE" development="new" translation="todo">Sie können nicht alle Kategorien eines Moduls löschen.\nErstellen Sie vorher eine neue Kategorie für dieses Modul.</text>
     <text id="CAT_PHR_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden ?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
+    <text id="CAT_PHR_CATEGORY_GLOBAL" development="new1" translation="todo">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n%VAR1_BOLD%\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</text>
 
     <!-- Phrases only in Datesmodule -->
     <text id="DAT_CALENDAR" development="new" translation="todo">Kalender</text>
@@ -88,6 +89,7 @@
     <text id="ECA_PHR_NOT_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde leider nicht erfolgreich versendet!</text>
     <text id="ECA_PHR_SCALING_PREVIEW" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
     <text id="ECA_PHR_SCALING_GREETING_CARD" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
+    <text id="ECA_PHR_SEND_ECARD_TO_ROLE" development="new1" translation="todo">Deine Grußkarte wird an ein Mitglied der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt hat.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
     <text id="ECA_PHR_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde erfolgreich versendet.</text>
     <text id="ECA_PHR_TEMPLATE" development="new" translation="todo">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
     <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
@@ -103,6 +105,7 @@
     <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="todo">Bild in voller Größe anzeigen</text>
     <text id="ECA_YOUR_MESSAGE" development="new" translation="todo">Deine Nachricht</text>
+
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_PHR_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
@@ -204,7 +207,9 @@
     <!-- Phrases only in Mailmodule -->
     <text id="MAI_PHR_ATTACHMENT_TO_LARGE" development="new" translation="todo">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
     <text id="MAI_PHR_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
+    <text id="MAI_PHR_MAX_ATTACHMENT_SIZE" development="new1" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
     <text id="MAI_PHR_ROLE_NO_EMAILS" development="new" translation="todo">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
+    <text id="MAI_PHR_SEND_MAIL_TO_ROLE" development="new1" translation="todo">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nWenn du eingeloggt bist stehen dir weitere Rollen zur Verfügung, an die du E-Mails schreiben kannst.</text>
     <text id="MAI_PHR_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="todo">die Rolle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
@@ -224,8 +229,12 @@
     <text id="NWU_PHR_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Anmeldungen vorhanden.</text>
 
     <!-- Phrases only in Organizationadministration -->
+    <text id="ORG_PHR_FIELD_DESCRIPTION" development="new1" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
+    <text id="ORG_PHR_FIELD_DISABLED" development="new1" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
     <text id="ORG_PHR_FIELD_EMPTY_AREA" development="new" translation="todo">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
     <text id="ORG_PHR_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.</text>
+    <text id="ORG_PHR_FIELD_HIDDEN" development="new1" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen.</text>
+    <text id="ORG_PHR_FIELD_MANDATORY" development="new1" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_PHR_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
@@ -242,6 +251,7 @@
     <text id="PRO_PHR_LOGIN_NAME_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="PRO_PHR_NO_DEFAULT_ROLE" development="new" translation="todo">In den Organisationseinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
     <text id="PRO_PHR_PASSWORD_CHANGED" development="new" translation="todo">Das Passwort wurde erfolgreich geändert.</text>
+    <text id="PRO_PHR_PASSWORD_DESCRIPTION" development="new1" translation="todo">Das Passwort muss mindestens aus 6 Zeichen bestehen. Es sollte sowohl Zahlen,  Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</text>
     <text id="PRO_PHR_PASSWORD_LENGTH" development="new" translation="todo">Das Passwort muss aus mindestens 6 Zeichen bestehen.</text>
     <text id="PRO_PHR_PASSWORD_OLD_WRONG" development="new" translation="todo">Das alte Passwort ist falsch.</text>
     <text id="PRO_PHR_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
@@ -253,27 +263,48 @@
     <text id="PRO_PHR_PHOTO_SAVED" development="new" translation="todo">Das neue Profilfoto wurde erfolgreich gespeichert.</text>
     <text id="PRO_PHR_ROLE_NOT_ASSIGNED" development="new" translation="todo">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
     <text id="PRO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
+    <text id="PRO_PHR_USERNAME_DESCRIPTION" development="new1" translation="todo">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>.</text>
 
     <!-- Phrases only in Rolesmodule -->
+    <text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
+    <text id="ROL_PHR_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
+    <text id="ROL_PHR_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1% wirklich entfernen ?</text>
+    <text id="ROL_PHR_MEMBERSHIP_DEL" development="new" translation="todo">Willst du die Mitgliedschaft bei der Rolle %VAR1% wirklich beenden ?</text>
+    <text id="ROL_PHR_MEMBERSHIP_DEL_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>
+    <text id="ROL_PHR_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
+    <text id="ROL_PHR_RIGHT_ALL_LISTS_VIEW" development="new1" translation="todo">Mitgliederlisten aller Rollen einsehen</text>
+    <text id="ROL_PHR_RIGHT_ANNOUNCEMENTS" development="new1" translation="todo">Ankündigungen anlegen und bearbeiten</text>
+    <text id="ROL_PHR_RIGHT_APPROVE_USERS" development="new1" translation="todo">Registrierungen verwalten und zuordnen</text>
+    <text id="ROL_PHR_RIGHT_ASSIGN_ROLES" development="new1" translation="todo">Rollen verwalten und zuordnen</text>
+    <text id="ROL_PHR_RIGHT_ASSIGN_ROLES_DESC" development="new1" translation="todo">Benutzer dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue Rollen erstellen, verwalten und anderen Benutzern Rollen zuordnen.</text>
+    <text id="ROL_PHR_RIGHT_DATES" development="new1" translation="todo">Termine anlegen und bearbeiten</text>
+    <text id="ROL_PHR_RIGHT_DOWNLOAD" development="new1" translation="todo">Downloads hochladen und bearbeiten</text>
+    <text id="ROL_PHR_RIGHT_EDIT_USER" development="new1" translation="todo">Profildaten aller Benutzer bearbeiten</text>
+    <text id="ROL_PHR_RIGHT_EDIT_USER_DESC" development="new1" translation="todo">Rollen, die diese Option aktiviert haben, haben die Berechtigung alle Benutzerdaten (außer Passwörter) anderer Mitglieder zu bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</text>
+    <text id="ROL_PHR_RIGHT_GUESTBOOK" development="new1" translation="todo">Gästebucheinträge bearbeiten und löschen</text>
+    <text id="ROL_PHR_RIGHT_GUESTBOOK_COMMENTS" development="new1" translation="todo">Kommentare zu Gästebucheinträgen anlegen</text>
+    <text id="ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC" development="new1" translation="todo">Diese Einstellung steuert, wer das Recht hat über das Mailmodul Emails an diese Rolle zu schicken. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</text>
+    <text id="ROL_PHR_RIGHT_MAIL_TO_ALL" development="new1" translation="todo">Emails an alle Rollen schreiben</text>
+    <text id="ROL_PHR_RIGHT_PHOTO" development="new1" translation="todo">Fotos hochladen und bearbeiten</text>
+    <text id="ROL_PHR_RIGHT_PROFILE" development="new1" translation="todo">Eigenes Profil bearbeiten</text>
+    <text id="ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC" development="new1" translation="todo">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</text>
+    <text id="ROL_PHR_RIGHT_WEBLINKS" development="new1" translation="todo">Weblinks anlegen und bearbeiten</text>
+    <text id="ROL_PHR_ROLE_DELETE" development="new" translation="todo">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
+    <text id="ROL_PHR_ROLE_NAME_EXISTS" development="new" translation="todo">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</text>
+    <text id="ROL_PHR_ROLE_SET_MODE" development="new" translation="todo">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
     <text id="ROL_ROLE" development="new" translation="todo">Rolle</text>
     <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="todo">Rollenzuordnung für "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="todo">Rolle löschen</text>
     <text id="ROL_ROLE_MEMBERSHIPS" development="new" translation="todo">Rollenmitgliedschaften</text>
     <text id="ROL_ROLE_MEMBERSHIPS_CHANGE" development="new" translation="todo">Rollenmitgliedschaften ändern</text>
-    <text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
-    <text id="ROL_PHR_ROLE_DELETE" development="new" translation="todo">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
-    <text id="ROL_PHR_ROLE_SET_MODE" development="new" translation="todo">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
-    <text id="ROL_PHR_MEMBERSHIP_DEL" development="new" translation="todo">Willst du die Mitgliedschaft bei der Rolle %VAR1% wirklich beenden ?</text>
-    <text id="ROL_PHR_MEMBERSHIP_DEL_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>
-    <text id="ROL_PHR_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
-    <text id="ROL_PHR_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1% wirklich entfernen ?</text>
-    <text id="ROL_PHR_ROLE_NAME_EXISTS" development="new" translation="todo">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</text>
-    <text id="ROL_PHR_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="todo">Abbrechen</text>
     <text id="SYS_ACTIVE" development="new" translation="todo">Aktiv</text>
     <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiktivert</text>
+    <text id="SYS_ADD_EMAIL" development="new1" translation="todo">E-Mail-Adresse einfügen</text>
+    <text id="SYS_ADD_IMAGE" development="new1" translation="todo">Bild einfügen</text>
+    <text id="SYS_ADD_LINK" development="new1" translation="todo">Link einfügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
@@ -281,11 +312,14 @@
     <text id="SYS_BLEND_OUT" development="new" translation="todo">ausblenden</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
     <text id="SYS_CAPTCHA_CODE" development="new" translation="todo">Bestätigungscode</text>
+    <text id="SYS_CENTERED" development="new1" translation="todo">Zentriert</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
+    <text id="SYS_CLOSE_ALL_TAGS" development="new1" translation="todo">Alle Tags schließen</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
     <text id="SYS_CONFIRM_PASSWORD" development="new" translation="todo">Passwort bestätigen</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
     <text id="SYS_DEACTIVATED" >Deaktiviert</text>
+    <text id="SYS_DECREASE_FONT_SIZE" development="new1" translation="todo">Schriftgrad veringern</text>
     <text id="SYS_DELETE" development="new" translation="todo">Löschen</text>
     <text id="SYS_DESCRIPTION" development="new" translation="todo">Beschreibung</text>
     <text id="SYS_EDIT" development="new" translation="todo">Bearbeiten</text>
@@ -300,11 +334,13 @@
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>
     <text id="SYS_HELP" development="new" translation="todo">Hilfe</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
+    <text id="SYS_INCREASE_FONT_SIZE" development="new1" translation="todo">Schriftgrad erhöhen</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
     <text id="SYS_LOGIN" development="new1" translation="todo">Login</text>
+    <text id="SYS_LOGIN_PROBLEMS" development="new1" translation="todo">Loginprobleme</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
@@ -319,6 +355,7 @@
     <text id="SYS_PHR_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
     <text id="SYS_PHR_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
     <text id="SYS_PHR_CAPTCHA_CODE_INVALID" development="new" translation="todo">Der Bestätigungscode wurde falsch eingegeben.</text>
+    <text id="SYS_PHR_CAPTCHA_DESCRIPTION" development="new1" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
     <text id="SYS_PHR_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" development="new" translation="todo">%VAR1% anlegen</text>
     <text id="SYS_PHR_CREATED_BY" development="new" translation="todo">Angelegt von %VAR1% am %VAR2%</text>
@@ -326,6 +363,7 @@
     <text id="SYS_PHR_DATABASE_ERROR" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
     <text id="SYS_PHR_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="todo">Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.\n\nWende dich bitte an den %VAR3%Webmaster%VAR4% dieser Webseite.</text>
     <text id="SYS_PHR_DATE_END_BEFORE_BEGIN" development="new" translation="todo">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</text>
+    <text id="SYS_PHR_DATA_GLOBAL" development="new1" translation="todo">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n%VAR1_BOLD%</text>
     <text id="SYS_PHR_DATE_INVALID" development="new" translation="todo">Es wurde kein gültiges Datum in das Feld %VAR1_BOLD% eingegeben.\n\nDas Datum muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
     <text id="SYS_PHR_DELETE" development="new" translation="todo">Die Daten wurden gelöscht.</text>
     <text id="SYS_PHR_EDIT" development="new" translation="todo">%VAR1% bearbeiten</text>
@@ -348,20 +386,22 @@
     <text id="SYS_PHR_FORUM_USER_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="SYS_PHR_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_PHR_LAST_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
+    <text id="SYS_PHR_LEADER_DESCRIPTION" development="new1" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
     <text id="SYS_PHR_LOGIN_FAILED" development="new" translation="todo">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</text>
     <text id="SYS_PHR_LOGIN_NOT_ACTIVATED" development="new" translation="todo">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</text>
     <text id="SYS_PHR_LOGIN_SUCCESSFUL" development="new" translation="todo">Du hast dich erfolgreich angemeldet.</text>
     <text id="SYS_PHR_LOGIN_UNKNOWN" development="new" translation="todo">Der angegebene Benutzername existiert nicht.</text>
     <text id="SYS_PHR_LOGOUT_SUCCESSFUL" development="new" translation="todo">Du wurdest erfolgreich abgemeldet.</text>
     <text id="SYS_PHR_LOSTPW_AREADY_LOGGED_ID" development="new" translation="todo">Du bist am System angemeldet folglich kennst du ja dein Passwort!</text>
-    <text id="SYS_PHR_LOSTPW_EMAIL_ERROR" development="new" translation="todo">Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!</text>
+    <text id="SYS_PHR_LOSTPW_EMAIL_ERROR" development="new" translation="todo">Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden erden!</text>
     <text id="SYS_PHR_LOSTPW_SEND" development="new" translation="todo">Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!</text>
     <text id="SYS_PHR_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
     <text id="SYS_PHR_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_PHR_NO_ENTRY" development="new" translation="todo">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_PHR_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
     <text id="SYS_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.</text>
-    <text id="SYS_PHR_PASSWORD_FORGOTTEN" development="new" translation="todo">Wenn du dein Passwort vergessen hast, kann das System ein Neues erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
+    <text id="SYS_PHR_PASSWORD_FORGOTTEN" development="new1" translation="todo">Ich habe mein Passwort vergessen!</text>
+    <text id="SYS_PHR_PASSWORD_FORGOTTEN_DESCRIPTION" development="new1" translation="todo">Wenn du dein Passwort vergessen hast, kann das System ein neues Passwort erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
     <text id="SYS_PHR_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
     <text id="SYS_PHR_PROCESS_CANCELED" development="new" translation="todo">Der Vorgang wurde abgebrochen.</text>
     <text id="SYS_PHR_PWACT_PW_SAVED" development="new" translation="todo">Das neue Passwort wurde nun übernommen!</text>
@@ -370,13 +410,15 @@
     <text id="SYS_PHR_RSS_DISABLED" development="new" translation="todo">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_PHR_SAVE" development="new" translation="todo">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_SERVER_NO_UPLOAD" development="new" translation="todo">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
-    <text id="SYS_PHR_TIME_INVALID" development="new" translation="todo">Es wurde keine gültige Uhrzeit in das Feld %VAR1_BOLD% eingegeben.\n\nDie Uhrzeit muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
+    <text id="SYS_PHR_TIME_INVALID" development="new1" translation="todo">Es wurde keine gültige Uhrzeit in das Feld %VAR1_BOLD% eingegeben.\n\nDie Uhrzeit muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
     <text id="SYS_PHR_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_PHR_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
+    <text id="SYS_PHR_WANT_REGISTER" development="new1" translation="todo">Ich möchte mich registrieren!</text>
     <text id="SYS_PHR_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_RECIPIENT" development="new" translation="todo">Empfänger</text>
+    <text id="SYS_REMEMBER_ME" development="new1" translation="todo">Angemeldet bleiben</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
@@ -385,32 +427,19 @@
     <text id="SYS_SET_BY" development="new" translation="todo">Gesetzt durch</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
+    <text id="SYS_SHOW_HELP" development="new1" translation="todo">Hilfe anzeigen</text>
     <text id="SYS_SINCE" development="new" translation="todo">seit %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="todo">seit %VAR1% bis %VAR2%</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_SURNAME" development="new" translation="todo">Nachname</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TO" development="new" translation="todo">An</text>
+    <text id="SYS_UNDERLINE" development="new1" translation="todo">Unterstrichen</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
     <text id="SYS_VISIBLE" development="new" translation="todo">Sichtbar</text>
     <text id="SYS_WARNING" development="new" translation="todo">Warnung</text>
     <text id="SYS_WEBMASTER" development="new" translation="todo">Webmaster</text>
     <text id="SYS_YES" development="new" translation="todo">Ja</text>
-    <text id="SYS_ADD_LINK" development="new1" translation="todo">Link einfügen</text>
-    <text id="SYS_ADD_EMAIL" development="new1" translation="todo">E-Mail-Adresse einfügen</text>
-    <text id="SYS_ADD_IMAGE" development="new1" translation="todo">Bild einfügen</text>
-    <text id="SYS_BOLD" development="new1" translation="todo">Fett</text>
-    <text id="SYS_CENTERED" development="new1" translation="todo">Zentriert</text>
-    <text id="SYS_CLOSE_ALL_TAGS" development="new1" translation="todo">Alle Tags schließen</text>
-    <text id="SYS_DECREASE_FONT_SIZE" development="new1" translation="todo">Schriftgrad veringern</text>
-    <text id="SYS_INCREASE_FONT_SIZE" development="new1" translation="todo">Schriftgrad erhöhen</text>
-    <text id="SYS_ITALIC" development="new1" translation="todo">Kursiv</text>
-    <text id="SYS_LOGIN_PROBLEMS" development="new1" translation="todo">Loginprobleme</text>
-    <text id="SYS_PHR_PASSWORD_FORGOTTEN" development="new1" translation="todo">Ich habe mein Passwort vergessen!</text>
-    <text id="SYS_PHR_WANT_REGISTER" development="new1" translation="todo">Ich möchte mich registrieren!</text>
-    <text id="SYS_REMEMBER_ME" development="new1" translation="todo">Angemeldet bleiben</text>
-    <text id="SYS_SHOW_HELP" development="new1" translation="todo">Hilfe anzeigen</text>
-    <text id="SYS_UNDERLINE" development="new1" translation="todo">Unterstrichen</text>
 </version>
 </language>

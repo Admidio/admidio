@@ -102,7 +102,7 @@ else
                 <ul class="formFieldList">
                     <li>
                         <div>
-                          '.$g_l10n->get('SYS_PHR_PASSWORD_FORGOTTEN').'
+                          '.$g_l10n->get('SYS_PHR_PASSWORD_FORGOTTEN_DESCRIPTION').'
                         </div>
                     </li>
                     <li>&nbsp;</li>
@@ -136,8 +136,8 @@ else
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                                 <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=captcha_help&amp;inline=true"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
+					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                             </dd>
                         </dl>

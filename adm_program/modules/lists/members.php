@@ -65,7 +65,7 @@ if($restrict == 'm')
 {
     //Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
     $condition = '
-    		usr_id   = mem_usr_id
+            usr_id   = mem_usr_id
         AND mem_rol_id = rol_id
         AND mem_begin <= "'.DATE_NOW.'"
         AND mem_end    > "'.DATE_NOW.'"
@@ -472,8 +472,8 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 <th>Name</th>
                 <th>Vorname</th>
                 <th>Geburtsdatum</th>
-                <th style="text-align: center;">Leiter<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=leader&amp;inline=true"><img 
-	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=leader\',this)" onmouseout="ajax_hideTooltip()"
+                <th style="text-align: center;">Leiter<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION&amp;inline=true"><img 
+	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a></th>
             </tr>
         </thead>';
@@ -650,7 +650,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
 </form>';
 
 // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
-if($_SESSION['navigation']->count > 1)
+if($_SESSION['navigation']->count() > 1)
 {
     echo '
     <ul class="iconTextLinkList">

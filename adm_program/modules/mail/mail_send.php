@@ -296,7 +296,7 @@ if ($email->sendEmail())
     unset($_SESSION['mail_request']);
 
     // Meldung ueber erfolgreichen Versand und danach weiterleiten
-    if($_SESSION['navigation']->count > 0)
+    if($_SESSION['navigation']->count() > 0)
     {
         $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     }

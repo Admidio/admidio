@@ -36,6 +36,17 @@ class Navigation
         $this->count = 0;
     }
 
+    // fuegt eine Seite zum Navigationsstack hinzu
+    public function addUrl($url)
+    {
+        // Url nur hinzufuegen, wenn sie nicht schon als letzte im Array steht
+        if($this->count == 0 || $url != $this->url_arr[$this->count-1])
+        {
+            $this->url_arr[$this->count] = $url;
+            $this->count++;
+        }
+    }
+
     // entfernt alle Urls aus dem Array
     public function clear()
     {
@@ -45,6 +56,12 @@ class Navigation
         }
         $this->count = 0;
     }
+    
+    // Anzahl der URLs aus dem Stack zurueckgeben
+    public function count()
+    {
+        return $this->count;
+    }
 
     // Funktion entfernt die letzte Url aus dem Array
     public function deleteLastUrl()
@@ -53,17 +70,6 @@ class Navigation
         {
             $this->count--;
             unset($this->url_arr[$this->count]);
-        }
-    }
-
-    // fuegt eine Seite zum Navigationsstack hinzu
-    public function addUrl($url)
-    {
-        // Url nur hinzufuegen, wenn sie nicht schon als letzte im Array steht
-        if($this->count == 0 || $url != $this->url_arr[$this->count-1])
-        {
-            $this->url_arr[$this->count] = $url;
-            $this->count++;
         }
     }
 

@@ -103,12 +103,12 @@ if ($g_preferences['enable_bbcode'] == 1)
 }
 
 $g_layout['header'] = $javascript. '
-	<script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
             $("#ann_headline").focus();
-	 	}); 
-	//--></script>';
+        }); 
+    //--></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -165,8 +165,8 @@ echo '
                             }
                             echo ' value="1" />
                             <label for="ann_global">'.$g_l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=date_global&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?massage_id=date_global\',this)" onmouseout="ajax_hideTooltip()"
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?massage_id=SYS_PHR_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                         </dd>
                     </dl>

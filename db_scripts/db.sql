@@ -19,7 +19,6 @@ drop table if exists %PREFIX%_files;
 drop table if exists %PREFIX%_folders;
 drop table if exists %PREFIX%_list_columns;
 drop table if exists %PREFIX%_lists;
-drop table if exists %PREFIX%_date_max_members;
 drop table if exists %PREFIX%_date_role;
 drop table if exists %PREFIX%_dates;
 drop table if exists %PREFIX%_rooms;

@@ -56,25 +56,25 @@ else
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $g_layout['title']  = 'Organisationseinstellungen';
 $g_layout['header'] =  '
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
     <script type="text/javascript"><!--
-		var organizationJS = new organizationClass();
-		organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
-					"guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
-					"dates-module", "links-module", "systeminfo");
-		organizationJS.ecard_CCRecipients = \''.$form_values["ecard_cc_recipients"].'\';
-		organizationJS.ecard_textLength = \''.$form_values["ecard_text_length"].'\';
-		organizationJS.forum_Server = \''.$form_values["forum_srv"].'\';
-		organizationJS.forum_User = \''.$form_values["forum_usr"].'\';
-		organizationJS.forum_PW = \''.$form_values["forum_pw"].'\';
-		organizationJS.forum_DB = \''.$form_values["forum_db"].'\';
-		organizationJS.text_Server = \'Server:\';
-		organizationJS.text_User = \'User:\';
-		organizationJS.text_PW = \'Passwort:\';
-		organizationJS.text_DB = \'Datenbank:\';
+        var organizationJS = new organizationClass();
+        organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
+                    "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
+                    "dates-module", "links-module", "systeminfo");
+        organizationJS.ecard_CCRecipients = \''.$form_values["ecard_cc_recipients"].'\';
+        organizationJS.ecard_textLength = \''.$form_values["ecard_text_length"].'\';
+        organizationJS.forum_Server = \''.$form_values["forum_srv"].'\';
+        organizationJS.forum_User = \''.$form_values["forum_usr"].'\';
+        organizationJS.forum_PW = \''.$form_values["forum_pw"].'\';
+        organizationJS.forum_DB = \''.$form_values["forum_db"].'\';
+        organizationJS.text_Server = \'Server:\';
+        organizationJS.text_User = \'User:\';
+        organizationJS.text_PW = \'Passwort:\';
+        organizationJS.text_DB = \'Datenbank:\';
         $(document).ready(function()
         {
-			organizationJS.init();
+            organizationJS.init();
             organizationJS.toggleDiv(organizationJS.ids[0]);
             organizationJS.drawForumAccessDataTable();
             $("#org_longname").focus();
@@ -518,7 +518,7 @@ echo '
                         </dl>
                     </li>
                     <li class=\"smallFontSize\">
-                        Mitglieder aller Rollen mit der Berechtigung <strong>Registrierungen verwalten und zuordnen</strong> erhalten eine E-Mail,
+                        Mitglieder aller Rollen mit der Berechtigung <strong>".$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS')."</strong> erhalten eine E-Mail,
                         sobald sich ein neuer User im System registriert hat. (Standard: ja)
                     </li>
                 </ul>

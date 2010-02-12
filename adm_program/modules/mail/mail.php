@@ -21,6 +21,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/email.php');
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 if ($g_preferences['enable_mail_module'] != 1)
@@ -124,7 +125,7 @@ elseif (isset($_GET['rolle']) && isset($_GET['cat']))
         $sql    = 'SELECT rol_mail_this_role, rol_id
                     FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
                    WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
-				   AND rol_cat_id        = cat_id
+                   AND rol_cat_id        = cat_id
                    AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
                    AND UPPER(cat_name)   = UPPER("'. $_GET['cat']. '")';
     }
@@ -134,7 +135,7 @@ elseif (isset($_GET['rolle']) && isset($_GET['cat']))
                     FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
                    WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
                    AND rol_mail_this_role = 3
-				   AND rol_cat_id        = cat_id
+                   AND rol_cat_id        = cat_id
                    AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
                    AND UPPER(cat_name)   = UPPER("'. $_GET['cat']. '")';
     }
@@ -316,30 +317,30 @@ echo '
                                 {
                                   	if(!$g_valid_login || ($g_valid_login && $g_current_user->mailRole($row->rol_id)))
                                     {
-										if($act_category != $row->cat_name)
-	                                    {
-	                                        if(strlen($act_category) > 0)
-	                                        {
-	                                            echo '</optgroup>';
-	                                        }
-	                                        echo '<optgroup label="'.$row->cat_name.'">';
-	                                        $act_category = $row->cat_name;
-	                                    }
-	                                    echo '<option value="'.$row->rol_id.'" ';
-	                                    if (isset($form_values['rol_id']) 
+                                        if($act_category != $row->cat_name)
+                                        {
+                                            if(strlen($act_category) > 0)
+                                            {
+                                                echo '</optgroup>';
+                                            }
+                                            echo '<optgroup label="'.$row->cat_name.'">';
+                                            $act_category = $row->cat_name;
+                                        }
+                                        echo '<option value="'.$row->rol_id.'" ';
+                                        if (isset($form_values['rol_id']) 
                                         && $row->rol_id == $form_values['rol_id'])
-	                                    {
-	                                        echo ' selected="selected" ';
-	                                    }
-	                                    echo '>'.$row->rol_name.'</option>';
+                                        {
+                                            echo ' selected="selected" ';
+                                        }
+                                        echo '>'.$row->rol_name.'</option>';
                                     }
                                 }
 
                                 echo '</optgroup>
                                 </select>
                                 <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=rolle_mail&amp;inline=true"><img 
-						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=rolle_mail\',this)" onmouseout="ajax_hideTooltip()"
+	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_SEND_MAIL_TO_ROLE&amp;inline=true"><img 
+						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_SEND_MAIL_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
 						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                             }
                         echo'
@@ -430,8 +431,8 @@ echo '
                                     <a href="javascript:addAttachment()"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="Anhang hinzufügen" /></a>
                                     <a href="javascript:addAttachment()">Anhang hinzufügen</a>
-		                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mail_max_attachment_size&amp;inline=true"><img 
-							            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=mail_max_attachment_size\',this)" onmouseout="ajax_hideTooltip()"
+		                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_text='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
+							            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_text='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
 							            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                                 </span>
                             </dd>
@@ -473,8 +474,8 @@ echo '
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                                 <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=captcha_help&amp;inline=true"><img 
-						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=captcha_help\',this)" onmouseout="ajax_hideTooltip()"
+	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
+						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                             </dd>
                         </dl>

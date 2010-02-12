@@ -78,12 +78,12 @@ if(isset($_SESSION['roles_request']))
 $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
 
 // Alle Rollen auflisten, die der Benutzer sehen darf
-$sql = "SELECT *
-          FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
+$sql = 'SELECT *
+          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
          WHERE rol_valid  = 1
            AND rol_cat_id = cat_id
-           AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-         ORDER BY rol_name ";
+           AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+         ORDER BY rol_name ';
 $allRoles = $g_db->query($sql);
 
 $childRoleObjects = array();
@@ -311,41 +311,41 @@ echo '
                     {
                         echo '
                         <li>
-	                        <dl>
-	                            <dt><label for="rol_mail_this_role">Mails zusenden:</label></dt>
-	                            <dd>
-	                                <select size="1" id="rol_mail_this_role" name="rol_mail_this_role">
-	                                    <option value="0" ';
-	                                        if($role->getValue('rol_mail_this_role') == 0)
-	                                        {
-	                                            echo ' selected="selected" ';
-	                                        }
-	                                        echo '>niemand</option>
-	                                    <option value="1" ';
-	                                        if($role->getValue('rol_mail_this_role') == 1)
-	                                        {
-	                                            echo ' selected="selected" ';
-	                                        }
-	                                        echo '>nur Rollenmitglieder</option>
-	                                    <option value="2" ';
-	                                        if($role->getValue('rol_mail_this_role') == 2)
-	                                        {
-	                                            echo ' selected="selected" ';
-	                                        }
-	                                        echo '>alle angemeldeten Benutzer</option>
-										<option value="3" ';
-	                                        if($role->getValue('rol_mail_this_role') == 3)
-	                                        {
-	                                            echo ' selected="selected" ';
-	                                        }
-	                                        echo '>alle Besucher der Seite</option>
-	                                </select>
-									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=role_mail_this_role&amp;inline=true"><img 
-						                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=role_mail_this_role\',this)" onmouseout="ajax_hideTooltip()"
-						                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
-	                            </dd>
-		                    </dl>
-	                    </li>';
+                            <dl>
+                                <dt><label for="rol_mail_this_role">Mails zusenden:</label></dt>
+                                <dd>
+                                    <select size="1" id="rol_mail_this_role" name="rol_mail_this_role">
+                                        <option value="0" ';
+                                            if($role->getValue('rol_mail_this_role') == 0)
+                                            {
+                                                echo ' selected="selected" ';
+                                            }
+                                            echo '>niemand</option>
+                                        <option value="1" ';
+                                            if($role->getValue('rol_mail_this_role') == 1)
+                                            {
+                                                echo ' selected="selected" ';
+                                            }
+                                            echo '>nur Rollenmitglieder</option>
+                                        <option value="2" ';
+                                            if($role->getValue('rol_mail_this_role') == 2)
+                                            {
+                                                echo ' selected="selected" ';
+                                            }
+                                            echo '>alle angemeldeten Benutzer</option>
+                                        <option value="3" ';
+                                            if($role->getValue('rol_mail_this_role') == 3)
+                                            {
+                                                echo ' selected="selected" ';
+                                            }
+                                            echo '>alle Besucher der Seite</option>
+                                    </select>
+                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_text=ROL_PHR_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_text=ROL_PHR_RIGHT_MAIL_TO_ALL\',this)" onmouseout="ajax_hideTooltip()"
+                                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
+                                </dd>
+                            </dl>
+                        </li>';
                     }
                     echo '
                     <li>
@@ -372,9 +372,9 @@ echo '
                                         }
                                         echo '>alle angemeldeten Benutzer</option>
                                 </select>
-								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=role_show_list&amp;inline=true><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=role_show_list\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_text=ROL_PHR_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_text=ROL_PHR_RIGHT_ALL_LISTS_VIEW\',this)" onmouseout="ajax_hideTooltip()"
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                             </dd>
                         </dl>
                     </li>
@@ -401,28 +401,28 @@ echo '
                             </dd>
                         </dl>
                     </li>
-					<li>
+                    <li>
                         <dl>
                             <dt><label for="rol_cost_period">Beitragszeitraum:</label></dt>
                             <dd>
                                 <select size="1" id="rol_cost_period" name="rol_cost_period">';
-									// Zunaechst den unkonfigurierten Fall
-									echo '<option value="0" ';
-									if($role->getValue('rol_cost_period') == 0 || $role->getValue('rol_cost_period') == '')
+                                    // Zunaechst den unkonfigurierten Fall
+                                    echo '<option value="0" ';
+                                    if($role->getValue('rol_cost_period') == 0 || $role->getValue('rol_cost_period') == '')
                                     {
                                             echo ' selected="selected"';
                                     }
-									echo '>--</option>';
-									// Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
-									foreach ($role->getCostPeriode() as $role_cost_period) {
-										echo '<option value="'.$role_cost_period.'" ';
-										if($role->getValue('rol_cost_period') == $role_cost_period)
-										{
-											echo 'selected="selected"';
-										}
-										echo '>'.TableRoles::getRolCostPeriodDesc($role_cost_period).'</option>';
-									}
-									echo '
+                                    echo '>--</option>';
+                                    // Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
+                                    foreach ($role->getCostPeriode() as $role_cost_period) {
+                                        echo '<option value="'.$role_cost_period.'" ';
+                                        if($role->getValue('rol_cost_period') == $role_cost_period)
+                                        {
+                                            echo 'selected="selected"';
+                                        }
+                                        echo '>'.TableRoles::getRolCostPeriodDesc($role_cost_period).'</option>';
+                                    }
+                                    echo '
                                 </select>
                             </dd>
                         </dl>
@@ -451,10 +451,10 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
                             echo ' onchange="markRoleRight(\'rol_assign_roles\', \'rol_all_lists_view\', true)" value="1" />
-                            <label for="rol_assign_roles"><img src="'. THEME_PATH. '/icons/roles.png" alt="Rollen verwalten und zuordnen" /></label>&nbsp;
-                            <label for="rol_assign_roles">Rollen verwalten und zuordnen</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=rol_assign_roles&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=rol_assign_roles\',this)" onmouseout="ajax_hideTooltip()"
+                            <label for="rol_assign_roles"><img src="'. THEME_PATH. '/icons/roles.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" /></label>&nbsp;
+                            <label for="rol_assign_roles">'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'</label>
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_ASSIGN_ROLES_DESC&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_ASSIGN_ROLES_DESC\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
                         </div>
                     </li>
@@ -470,8 +470,8 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
                             echo ' onchange="markRoleRight(\'rol_all_lists_view\', \'rol_assign_roles\', false)" value="1" />
-                            <label for="rol_all_lists_view"><img src="'. THEME_PATH. '/icons/lists.png" alt="Mitgliederlisten aller Rollen einsehen" /></label>&nbsp;
-                            <label for="rol_all_lists_view">Mitgliederlisten aller Rollen einsehen</label>
+                            <label for="rol_all_lists_view"><img src="'. THEME_PATH. '/icons/lists.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" /></label>&nbsp;
+                            <label for="rol_all_lists_view">'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'</label>
                         </div>
                     </li>
                     <li>
@@ -482,8 +482,8 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="rol_approve_users"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="Registrierungen verwalten und zuordnen" /></label>&nbsp;
-                            <label for="rol_approve_users">Registrierungen verwalten und zuordnen</label>
+                            <label for="rol_approve_users"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" /></label>&nbsp;
+                            <label for="rol_approve_users">'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'</label>
                         </div>
                     </li>
                     <li>
@@ -494,14 +494,14 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="rol_edit_user"><img src="'. THEME_PATH. '/icons/group.png" alt="Profildaten aller Benutzer bearbeiten" /></label>&nbsp;
-                            <label for="rol_edit_user">Profildaten aller Benutzer bearbeiten</label>
-							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=rol_edit_user&amp;inline=true"><img 
-				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=rol_edit_user\',this)" onmouseout="ajax_hideTooltip()"
+                            <label for="rol_edit_user"><img src="'. THEME_PATH. '/icons/group.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" /></label>&nbsp;
+                            <label for="rol_edit_user">'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'</label>
+							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_EDIT_USER_DESC&amp;inline=true"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_EDIT_USER_DESC\',this)" onmouseout="ajax_hideTooltip()"
 				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
                         </div>
                     </li>';
-					if($g_preferences['enable_mail_module'] > 0)
+                    if($g_preferences['enable_mail_module'] > 0)
                     {
                         echo '
                         <li>
@@ -512,13 +512,13 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_mail_to_all"><img src="'. THEME_PATH. '/icons/email.png" alt="Emails an alle Rollen schreiben" /></label>&nbsp;
-                                <label for="rol_mail_to_all">Emails an alle Rollen schreiben&nbsp;</label>
+                                <label for="rol_mail_to_all"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" /></label>&nbsp;
+                                <label for="rol_mail_to_all">'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'</label>
                             </div>
                         </li>';
                     }
                     echo '
-					<li>
+                    <li>
                         <div>
                             <input type="checkbox" id="rol_profile" name="rol_profile" ';
                             if($role->getValue('rol_profile') == 1)
@@ -526,8 +526,8 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="rol_profile"><img src="'. THEME_PATH. '/icons/profile.png" alt="Eigenes Profil bearbeiten" /></label>&nbsp;
-                            <label for="rol_profile">Eigenes Profil bearbeiten</label>
+                            <label for="rol_profile"><img src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" /></label>&nbsp;
+                            <label for="rol_profile">'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'</label>
                         </div>
                     </li>';
 
@@ -542,8 +542,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_announcements"><img src="'. THEME_PATH. '/icons/announcements.png" alt="Ankündigungen anlegen und bearbeiten" /></label>&nbsp;
-                                <label for="rol_announcements">Ankündigungen anlegen und bearbeiten&nbsp;</label>
+                                <label for="rol_announcements"><img src="'. THEME_PATH. '/icons/announcements.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" /></label>&nbsp;
+                                <label for="rol_announcements">'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'</label>
                             </div>
                         </li>';
                     }
@@ -558,8 +558,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_dates"><img src="'. THEME_PATH. '/icons/dates.png" alt="Termine anlegen und bearbeiten" /></label>&nbsp;
-                                <label for="rol_dates">Termine anlegen und bearbeiten</label>
+                                <label for="rol_dates"><img src="'. THEME_PATH. '/icons/dates.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" /></label>&nbsp;
+                                <label for="rol_dates">'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'</label>
                             </div>
                         </li>';
                     }
@@ -574,8 +574,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_photo"><img src="'. THEME_PATH. '/icons/photo.png" alt="Fotos hochladen und bearbeiten" /></label>&nbsp;
-                                <label for="rol_photo">Fotos hochladen und bearbeiten</label>
+                                <label for="rol_photo"><img src="'. THEME_PATH. '/icons/photo.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" /></label>&nbsp;
+                                <label for="rol_photo">'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'</label>
                             </div>
                         </li>';
                     }
@@ -590,8 +590,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_download"><img src="'. THEME_PATH. '/icons/download.png" alt="Downloads hochladen und bearbeiten" /></label>&nbsp;
-                                <label for="rol_download">Downloads hochladen und bearbeiten</label>
+                                <label for="rol_download"><img src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" /></label>&nbsp;
+                                <label for="rol_download">'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'</label>
                             </div>
                         </li>';
                     }
@@ -606,8 +606,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_guestbook"><img src="'. THEME_PATH. '/icons/guestbook.png" alt="Gästebucheinträge bearbeiten und löschen" /></label>&nbsp;
-                                <label for="rol_guestbook">Gästebucheinträge bearbeiten und löschen</label>
+                                <label for="rol_guestbook"><img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" /></label>&nbsp;
+                                <label for="rol_guestbook">'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'</label>
                             </div>
                         </li>';
                         // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
@@ -622,8 +622,8 @@ echo '
                                         echo ' checked="checked" ';
                                     }
                                     echo ' value="1" />
-                                    <label for="rol_guestbook_comments"><img src="'. THEME_PATH. '/icons/comments.png" alt="Kommentare zu Gästebucheinträgen anlegen" /></label>&nbsp;
-                                    <label for="rol_guestbook_comments">Kommentare zu Gästebucheinträgen anlegen</label>
+                                    <label for="rol_guestbook_comments"><img src="'. THEME_PATH. '/icons/comments.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" /></label>&nbsp;
+                                    <label for="rol_guestbook_comments">'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'</label>
                                 </div>
                             </li>';
                         }
@@ -639,8 +639,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_weblinks"><img src="'. THEME_PATH. '/icons/weblinks.png" alt="Weblinks anlegen und bearbeiten" /></label>&nbsp;
-                                <label for="rol_weblinks">Weblinks anlegen und bearbeiten</label>
+                                <label for="rol_weblinks"><img src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" /></label>&nbsp;
+                                <label for="rol_weblinks">'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'</label>
                             </div>
                         </li>';
                     }
