@@ -283,7 +283,7 @@ function ecardJSClass()
 	}
 	this.getMenu = function()
 	{
-		this.makeAjaxRequest(gRootPath + "/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1" ,this.baseDropDiv_id);
+		this.makeAjaxRequest(gRootPath + "/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1" ,this.baseDropDiv_id,function(){$("a[rel='colorboxHelp']").colorbox({preloading:false,photo:false,speed:300,rel:'nofollow'});});
 	}
 	this.getMenuRecepientName = function()
 	{

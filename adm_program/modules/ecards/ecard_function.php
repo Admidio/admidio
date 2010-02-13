@@ -91,11 +91,11 @@ class FunctionClass
 		{   
 			if (!is_integer(($i+1)/$anz))
 			{
-				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
+				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
 			}
 			else
 			{
-				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.            $data_array[$i].'\');"></td>';
+				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
 				if($i<count($data_array)-1)
 				{
 					echo '</tr><tr>';
