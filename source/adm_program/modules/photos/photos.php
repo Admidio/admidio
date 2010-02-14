@@ -331,13 +331,13 @@ echo '<div class="photoModuleContainer">';
         }
                   
         //Thumbnailtabelle
-        $photoThumbnailTable = '<ul id="photoThumbnailTable">';
+        $photoThumbnailTable = '<ul class="photoThumbnailRow">';
             for($zeile=1;$zeile<=$g_preferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
             {
-                $photoThumbnailTable .= '<li class="photoThumbnailRow"><ul>';
+                $photoThumbnailTable .= '<li><ul class="photoThumbnailColumn">';
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
-                     $photoThumbnailTable .= '<li class="photoThumbnailColumn">';
+                     $photoThumbnailTable .= '<li>';
                     //Errechnug welches Bild ausgegeben wird
                     $bild = ($thumb_seite*$thumbs_per_page)-$thumbs_per_page+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
