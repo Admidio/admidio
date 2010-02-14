@@ -16,25 +16,26 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 #photoPageNavigation{
     clear: both;
 }
-#photoThumbnailTable li{
+
+/* Einstellung fuer die Thumbnailtabellenzeilen */
+.photoThumbnailRow{
+    padding: 0px;
     list-style-type: none;
 }
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photoThumbnailColumn{
+.photoThumbnailColumn {
+    list-style-type: none;
+    padding: 0px;
+}
+
+.photoThumbnailColumn li {
     float: left;
     padding: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-right: 0px;
     margin-left: 0px;
-}
-
-/*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
-.photoThumbnailRow{
-    text-align: center;
-    list-style-type: none;
-    clear: left;
 }
 
 /*Einstellung fuer das Thumbnail selbst, z.B. laesst sich ein Rand um jedes Bild legen*/
