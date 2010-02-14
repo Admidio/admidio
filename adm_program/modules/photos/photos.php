@@ -331,40 +331,39 @@ echo '<div class="photoModuleContainer">';
         }
                   
         //Thumbnailtabelle
-        echo '<ul id="photoThumbnailTable">';
+        $photoThumbnailTable = '<ul id="photoThumbnailTable">';
             for($zeile=1;$zeile<=$g_preferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
             {
-                echo '<li class="photoThumbnailRow"><ul>';
+                $photoThumbnailTable .= '<li class="photoThumbnailRow"><ul>';
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
-                     echo '<li class="photoThumbnailColumn">';
+                     $photoThumbnailTable .= '<li class="photoThumbnailColumn">';
                     //Errechnug welches Bild ausgegeben wird
                     $bild = ($thumb_seite*$thumbs_per_page)-$thumbs_per_page+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
                     {
                         //Popup-Mode
-                        if($g_preferences['photo_show_mode']==0)
+                        if ($g_preferences['photo_show_mode'] == 0)
                         {
-                            echo '<div>
+                            $photoThumbnailTable .= '<div>
                                 <img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
                                     src="photo_show.php?pho_id='.$pho_id.'&pic_nr='.$bild.'&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&thumb=true" alt="'.$bild.'" style="cursor: pointer"/>
                             </div>';
                         }
 
                         //Colorbox-Mode
-                        elseif($g_preferences['photo_show_mode']==1)
+                        else if ($g_preferences['photo_show_mode'] == 1)
                         {
-                            echo 
-                            '<div>
+                            $photoThumbnailTable .= '<div>
                                 <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'">
                                 	<img class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" alt="'.$bild.'" /></a>
                             </div>';
                         }
 
                         //Gleichesfenster-Mode
-                        elseif($g_preferences['photo_show_mode']==2)
+                        else if ($g_preferences['photo_show_mode'] == 2)
                         {
-                            echo '<div>
+                            $photoThumbnailTable .= '<div>
                                 <img onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\'" 
                                     src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" style="cursor: pointer"/>
                             </div>';
@@ -373,7 +372,7 @@ echo '<div class="photoModuleContainer">';
                         //Buttons fuer Moderatoren
                         if($g_current_user->editPhotoRight())
                         {
-                            echo '
+                           $photoThumbnailTable .= '
                             <a class="iconLink" 
                             href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=rotate&amp;direction=left"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="Gegen den Uhrzeigersinn drehen" title="Gegen den Uhrzeigersinn drehen" /></a>
@@ -384,23 +383,49 @@ echo '<div class="photoModuleContainer">';
                         }
                         if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
                         {
-                            echo '
+                            $photoThumbnailTable .= '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo='.$bild.'&amp;pho_id='.$pho_id.'"><img 
                                 src="'. THEME_PATH. '/icons/ecard.png" alt="Foto als Grußkarte versenden" title="Foto als Grußkarte versenden" /></a>';
                         }
-                    }//if
+                    }
+					//if
                     //schleifen abbrechen
                     if ($bild == $bilder)
                     {
                         $zeile=$g_preferences['photo_thumbs_row'];
                         $spalte=$g_preferences['photo_thumbs_column'];
                     }
-                    echo '</li>';
+                    $photoThumbnailTable .= '</li>';
                 }//for
-                echo '</ul></li>'; //Zeilenende
+                $photoThumbnailTable .= '</ul></li>'; //Zeilenende
             }//for
-        echo '</ul>';
-
+        $photoThumbnailTable .= '</ul>';
+		
+		// Damit man mit der Colobox auch alle anderen Bilder im Album sehen kann werden hier die restilichen Links zu den Bildern "unsichtbar" ausgegeben
+		if ($g_preferences['photo_show_mode'] == 1)
+		{
+			$photoThumbnailTable_shown = false;
+			for ($i = 1; $i <= $bilder; $i++)
+			{
+				if( $i <= $thumb_seite*$thumbs_per_page && $i >= (($thumb_seite*$thumbs_per_page)-$thumbs_per_page))
+				{
+						if(!$photoThumbnailTable_shown)
+						{
+							echo $photoThumbnailTable;
+							$photoThumbnailTable_shown = true;
+						}
+				}
+				else
+				{
+					echo '<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$i.'&amp;pho_id='.$pho_id.'">&nbsp;</a>';
+				}
+			}
+		}
+		else // wenn die Fotos nicht mit der Colorbox aufgerufen werden
+		{
+			echo $photoThumbnailTable;
+		}		
+		
         //Seitennavigation
         photoAlbumPageNavigation($photo_album, $thumb_seite, $thumbs_per_page);
 
