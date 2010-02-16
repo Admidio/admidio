@@ -63,8 +63,8 @@ echo '
                         echo generateRoleSelectBox(0,'',1);
 
                         echo '&nbsp;
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=role_assign&amp;inline=true"><img 
-			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=role_assign\',this)" onmouseout="ajax_hideTooltip()"
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_PHR_ASSIGN_ROLE_FOR_IMPORT&amp;inline=true"><img 
+			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_PHR_ASSIGN_ROLE_FOR_IMPORT\',this)" onmouseout="ajax_hideTooltip()"
 			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>

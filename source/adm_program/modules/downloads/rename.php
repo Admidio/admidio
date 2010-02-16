@@ -168,8 +168,8 @@ echo '
                     <dd>
                         <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 350px;" maxlength="255" tabindex="1" />
                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=dateiname&amp;inline=true"><img 
-			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=dateiname\',this)" onmouseout="ajax_hideTooltip()"
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NAME_RULES&amp;inline=true"><img 
+			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
 			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
