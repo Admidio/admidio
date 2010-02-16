@@ -16,7 +16,7 @@ function getRolesFromDatabase($g_db,$user_id,$g_current_organization)
               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
              WHERE mem_rol_id = rol_id
                AND mem_begin <= "'.DATE_NOW.'"
-               AND mem_end    > "'.DATE_NOW.'"
+               AND mem_end   >= "'.DATE_NOW.'"
                AND mem_usr_id = '.$user_id.'
                AND rol_valid  = 1
                AND rol_cat_id = cat_id
@@ -31,7 +31,7 @@ function getFormerRolesFromDatabase($g_db,$user_id,$g_current_organization)
     $sql    = 'SELECT *
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
                 WHERE mem_rol_id = rol_id
-                  AND mem_end   <= "'.DATE_NOW.'"
+                  AND mem_end    < "'.DATE_NOW.'"
                   AND mem_usr_id = '.$user_id.'
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
@@ -162,7 +162,7 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
 }
 function getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,$directOutput,$g_l10n)
 {
-    global $g_preferences;
+    global $g_preferences, $g_root_path;
 
     $count_show_roles = 0;
     $member = new TableMembers($g_db);
