@@ -571,16 +571,16 @@ echo '<div class="photoModuleContainer">';
                             //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                             if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                             {
-                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=folder_not_found&amp;inline=true"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=folder_not_found\',this)" onmouseout="ajax_hideTooltip()"
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND&amp;inline=true"><img 
+					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
                             }
                             
                             //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                             {
-                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=not_approved&amp;inline=true"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=not_approved\',this)" onmouseout="ajax_hideTooltip()"
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED&amp;inline=true"><img 
+					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="Gesperrt" title="" /></a>';
                             }
                         }

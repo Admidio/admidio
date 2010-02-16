@@ -126,12 +126,6 @@ switch ($req_message_id)
         $organizations .= implode(',<br />- ', $g_current_organization->getReferenceOrganizations(true, true, true));
         echo $g_l10n->get(strtoupper($req_message_id), $organizations);
         break;
-
-    case 'role_assign':
-        echo 'Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.<br /><br />
-        Dir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen,
-        falls du diese selber nicht besitzt.';
-        break;
     
     case 'room_detail':
         if(is_numeric($req_message_text))
@@ -162,32 +156,6 @@ switch ($req_message_id)
 
     case 'user_field_description':
         echo $g_current_user->getProperty($req_message_text, 'usf_description');
-        break;
-
-    //Downloadmodulhilfen
-
-    case 'dateiname':
-        echo 'Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann.
-           Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle
-           gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).';
-        break;
-
-    case 'folderNotExists':
-        echo 'Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.';
-        break;
-
-    case 'fileNotExists':
-        echo 'Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.';
-        break;
-
-    case 'additionalFiles':
-        echo 'In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden.
-            Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.';
-        break;
-
-    case 'publicDownloadFlag':
-        echo 'Wenn diese Option aktiviert ist, können nur eingeloggte Besucher,
-            die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.';
         break;
 
 	// Eigene Listen
@@ -300,18 +268,6 @@ switch ($req_message_id)
             Homepagebesucher sichtbar. Möchte man z.B. erst alle Fotos hochladen
             oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.
             Danach auf Speichern klicken.';
-        break;
-
-    case 'folder_not_found':
-        echo 'Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein
-            oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, bitte
-            den Datensatz mit klick auf das Symbol <img src="'. THEME_PATH. '/icons/delete.png" style="vertical-align: top;" alt="delete" /> löschen.<br />
-            Besuchern der Website ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.';
-        break;
-
-    case 'not_approved':
-        echo 'Das Album ist z.Zt. gesperrt und wird Homepagebesuchern deswegen nicht angezeigt. Zum Freigeben bitte
-            das entsprechende Symbol <img src="'. THEME_PATH. '/icons/key.png" alt="key" /> in der Bearbeitungszeile nutzen.';
         break;
 
     //Profil

@@ -35,20 +35,25 @@
     <text id="DAT_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
 
     <!-- Phrases only in Downloadsmodule -->
-    <text id="DOW_PHR_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für die Datei aus.</text>
-    <text id="DOW_PHR_FOLDER_NAME_INVALID" development="new" translation="todo">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
+    <text id="DOW_PHR_ADDITIONAL_FILES" development="new" translation="todo">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</text>
+    <text id="DOW_PHR_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
     <text id="DOW_PHR_FILE_EXTENSION_INVALID" development="new" translation="todo">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</text>
+    <text id="DOW_PHR_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für die Datei aus.</text>
+    <text id="DOW_PHR_FILE_NAME_RULES" development="new" translation="todo">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</text>
+    <text id="DOW_PHR_FILE_NOT_EXISTS" development="new" translation="todo">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</text>
+    <text id="DOW_PHR_FILE_RENAME" development="new" translation="todo">Die Datei %VAR1% wurde umbenannt.</text>
+    <text id="DOW_PHR_FILE_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
+    <text id="DOW_PHR_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% KB.</text>
+    <text id="DOW_PHR_FILE_UPLOAD_ERROR" development="new" translation="todo">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
     <text id="DOW_PHR_FILE_UPLOADED" development="new" translation="todo">Die Datei %VAR1% wurde hochgeladen</text>
     <text id="DOW_PHR_FOLDER_CREATED" development="new" translation="todo">Der Ordner %VAR1% wurde angelegt.</text>
     <text id="DOW_PHR_FOLDER_EXISTS" development="new" translation="todo">Der Ordner %VAR1% existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
-    <text id="DOW_PHR_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
+    <text id="DOW_PHR_FOLDER_NAME_INVALID" development="new" translation="todo">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
+    <text id="DOW_PHR_FOLDER_NOT_EXISTS" development="new" translation="todo">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</text>
     <text id="DOW_PHR_FOLDER_RENAME" development="new" translation="todo">Der Ordner %VAR1% wurde umbenannt.</text>
-    <text id="DOW_PHR_FILE_RENAME" development="new" translation="todo">Die Datei %VAR1% wurde umbenannt.</text>
     <text id="DOW_PHR_FOLDER_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
-    <text id="DOW_PHR_FILE_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
-    <text id="DOW_PHR_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% KB.</text>
+    <text id="DOW_PHR_PUBLIC_DOWNLOAD_FLAG" development="new" translation="todo">Wenn diese Option aktiviert ist, können nur eingeloggte Besucher, die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.</text>
     <text id="DOW_PHR_UPLOAD_POST_EMPTY" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1% B. überschritten!</text>
-    <text id="DOW_PHR_FILE_UPLOAD_ERROR" development="new" translation="todo">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
 
     <!-- Phrases only in Ecardsmodule -->
     <text id="ECA_A_ECARD_FROM" development="new" translation="todo">Eine Grußkarte von</text>
@@ -220,6 +225,7 @@
     <text id="MEM_PHR_ROLE_SELECT_RIGHT" development="new" translation="todo">Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.\nBitte wähle eine andere Rolle aus.</text>
     <text id="MEM_PHR_USER_DELETE" development="new" translation="todo">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_PHR_SEND_NEW_LOGIN" development="new" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem Benutzernamen und einem neuen Passwort zumailen?</text>
+    <text id="MEM_PHR_ASSIGN_ROLE_FOR_IMPORT" development="new" translation="todo">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</text>
 
     <!-- Phrases only in New-User-Registration -->
     <text id="NWU_REGISTRATION" development="new" translation="todo">Anmeldung</text>
@@ -237,6 +243,8 @@
     <text id="ORG_PHR_FIELD_MANDATORY" development="new1" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
 
     <!-- Phrases only in Photomodule -->
+    <text id="PHO_PHR_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
+    <text id="PHO_PHR_FOLDER_NOT_FOUND" development="new" translation="todo">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</text>
     <text id="PHO_PHR_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_PHR_NO_FILES_SELECTED" development="new" translation="todo">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
     <text id="PHO_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
