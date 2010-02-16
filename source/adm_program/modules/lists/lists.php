@@ -291,7 +291,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
             if($active_role == 1)
             {
                 $sql_member_status = ' AND mem_begin <= "'.DATE_NOW.'"
-                                       AND mem_end    > "'.DATE_NOW.'" ';
+                                       AND mem_end   >= "'.DATE_NOW.'" ';
             }
             else
             {
@@ -323,7 +323,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                 $sql = 'SELECT COUNT(*) as count
                           FROM '. TBL_MEMBERS. '
                          WHERE mem_rol_id = '. $role->getValue('rol_id'). '
-                           AND mem_end   <= "'. DATE_NOW.'"';
+                           AND mem_end    < "'. DATE_NOW.'"';
                 $result = $g_db->query($sql);
                 $row    = $g_db->fetch_array($result);
                 $num_former = $row['count'];
