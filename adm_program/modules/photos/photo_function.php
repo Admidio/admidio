@@ -79,8 +79,8 @@ function deleteThumbnail(&$photo_album, $pic_nr)
     if(is_numeric($pic_nr))
     {
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/thumbnails/'.$pic_nr.'.jpg';
-        
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id').'/thumbnails/'.$pic_nr.'.jpg';
+		
         //Thumbnail loeschen
         if(file_exists($photo_path))
         {
@@ -102,7 +102,7 @@ function deletePhoto($pho_id, $pic_nr)
         $photo_album = new TablePhotos($g_db, $pho_id);
         
         //Speicherort
-        $album_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id');
+        $album_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id');
         
         //Bilder loeschen
         if(file_exists($album_path.'/'.$pic_nr.'.jpg'))
@@ -158,7 +158,7 @@ if($_GET['job'] == 'rotate')
         deleteThumbnail($photo_album, $_GET['bild']);
         
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id'). '/'. $_GET['bild']. '.jpg';
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id'). '/'. $_GET['bild']. '.jpg';
         
         // Bild drehen
         $image = new Image($photo_path);

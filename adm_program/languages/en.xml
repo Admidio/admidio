@@ -126,12 +126,16 @@
     <text id="SYS_PHR_LAST_EDITED_BY" development="new" translation="todo">Last edited by %VAR1% on %VAR2%</text>
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Please choose</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Preview</text>
+	<text id="SYS_PREVIOUS" development="new" translation="todo">previous</text>
     <text id="SYS_RECIPIENT" development="new" translation="todo">Recipient</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Remove</text>
     <text id="SYS_SAVE" development="new" translation="todo">Save</text>
     <text id="SYS_SEND" development="new" translation="todo">Send</text>
     <text id="SYS_SENDER" development="new" translation="todo">Sender</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Settings</text>
+	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} of {total}</text>
+	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">start slideshow</text>
+	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">stop slideshow</text>
     <text id="SYS_START" development="new" translation="todo" description="Start of a date">Start</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TO" development="new" translation="todo">To</text>
