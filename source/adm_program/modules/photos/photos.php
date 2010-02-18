@@ -179,7 +179,15 @@ if($g_preferences['photo_show_mode']==1)
 	$g_layout['header'] = $g_layout['header']. '
 			<script type="text/javascript"><!--
 				$(document).ready(function(){
-				$("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,slideshowAuto:false,preloading:true});
+				$("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
+														   slideshowAuto:false,
+														   preloading:true,
+														   close:\''.$g_l10n->get('SYS_CLOSE').'\',
+														   slideshowStart:\''.$g_l10n->get('SYS_SLIDESHOW_START').'\',
+														   slideshowStop:\''.$g_l10n->get('SYS_SLIDESHOW_STOP').'\',
+														   current:\''.$g_l10n->get('SYS_SLIDESHOW_CURRENT').'\',
+														   previous:\''.$g_l10n->get('SYS_PREVIOUS').'\',
+														   next:\''.$g_l10n->get('SYS_NEXT').'\'});
 				});
 			-->
 			</script>';

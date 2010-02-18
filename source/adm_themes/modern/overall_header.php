@@ -71,8 +71,8 @@ echo '
 		var gRootPath  = "'. $g_root_path. '"; 
 		var gThemePath = "'. THEME_PATH. '";
 		$(document).ready(function(){
-			$("a,td,div.groupBoxHeadline,#page_header,#top_border_img_big,#bottom_border_img_big,#top_border_img_small,#bottom_border_img_small").supersleight({shim: gThemePath + "/icons/blank.gif"});
-			$("a[rel=\'colorboxHelp\']").colorbox({preloading:false,photo:false,speed:300,rel:\'nofollow\'});
+$("a,td,div.groupBoxHeadline,#page_header,#top_border_img_big,#bottom_border_img_big,#top_border_img_small,#bottom_border_img_small").supersleight({shim: gThemePath + "/icons/blank.gif"});
+			$("a[rel=\'colorboxHelp\']").colorbox({preloading:false,photo:false,speed:300,rel:\'nofollow\',close:\''.$g_l10n->get('SYS_CLOSE').'\'});
 		});
 	--></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js"></script>
