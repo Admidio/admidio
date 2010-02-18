@@ -119,7 +119,9 @@ class TableMembers extends TableAccess
 
         if($this->new_record == false)
         {
-            $this->setValue('mem_end', DATE_NOW);
+            // einen Tag abziehen, damit User direkt aus der Rolle entfernt werden
+            $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
+            $this->setValue('mem_end', $newEndDate);
             $this->save();
         }
     }

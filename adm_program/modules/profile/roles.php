@@ -138,7 +138,8 @@ echo '
                           AND mem_usr_id = '.$req_usr_id.'
                           AND mem_begin <= "'.DATE_NOW.'"
                           AND mem_end    > "'.DATE_NOW.'"
-                        WHERE rol_valid  = 1
+                        WHERE rol_valid   = 1
+                          AND rol_visible = 1
                           AND rol_cat_id = cat_id
                           AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
                         ORDER BY cat_sequence, cat_id, rol_name';
@@ -160,6 +161,7 @@ echo '
                           AND bm.mem_leader  = 1
                           AND rol_id         = bm.mem_rol_id
                           AND rol_valid      = 1
+                          AND rol_visible    = 1
                           AND rol_cat_id     = cat_id
                           AND cat_org_id     = '. $g_current_organization->getValue('org_id'). '
                         ORDER BY cat_sequence, cat_id, rol_name';

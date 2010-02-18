@@ -340,8 +340,8 @@ echo '
                                             }
                                             echo '>alle Besucher der Seite</option>
                                     </select>
-                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_text=ROL_PHR_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
-                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_text=ROL_PHR_RIGHT_MAIL_TO_ALL\',this)" onmouseout="ajax_hideTooltip()"
+                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_PHR_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_PHR_RIGHT_MAIL_TO_ALL\',this)" onmouseout="ajax_hideTooltip()"
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
                                 </dd>
                             </dl>
@@ -372,8 +372,8 @@ echo '
                                         }
                                         echo '>alle angemeldeten Benutzer</option>
                                 </select>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_text=ROL_PHR_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_text=ROL_PHR_RIGHT_ALL_LISTS_VIEW\',this)" onmouseout="ajax_hideTooltip()"
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_PHR_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_PHR_RIGHT_ALL_LISTS_VIEW\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                             </dd>
                         </dl>

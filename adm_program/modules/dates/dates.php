@@ -607,7 +607,7 @@ else
                                         $room = new TableRooms($g_db);
                                         $room->readData($date->getValue('dat_room_id'));
                                         $room_name = $room->getValue('room_name');
-                                        echo '<strong> (<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_text='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a>)</strong>';
+                                        echo '<strong> (<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a>)</strong>';
                                     }
                                     echo '
                                 </td>
@@ -635,7 +635,7 @@ else
                             <tr>
                                 <td>'.$g_l10n->get('DAT_LOCATION').':</td>
                                 <td>
-                                    <strong><a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_text='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a></strong>
+                                    <strong><a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a></strong>
                                 </td>
                             </tr>';
                             if ($date->getValue("dat_all_day") != 0)
@@ -665,7 +665,7 @@ else
                         <tr>
                             <td>'.$g_l10n->get('DAT_LOCATION').':</td>
                             <td>
-                                <strong><a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_text='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a></strong>
+                                <strong><a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a></strong>
                             </td>
                         </tr>';
                     }

@@ -9,8 +9,8 @@
  *
  * message_id    - ID des Sprachtextes, der angezeigt werden soll
  * message_title - (optional) Titel des Fensters (Default: Hinweis)
- * message_text  - (optional) Text, der innerhalb einer Meldung angezeigt werden kann
- * inline		 - true wenn das sc
+ * message_var1  - (optional) Text, der innerhalb einer Meldung angezeigt werden kann
+ * inline        - true wenn die Nachricht nicht in einem separaten Fenster angezeigt wird
  *****************************************************************************/
 
 require_once('common.php');
@@ -19,7 +19,8 @@ require_once('classes/table_rooms.php');
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_message_id    = '';
 $req_message_title = '';
-$req_message_text  = '';
+$req_message_var1  = '';
+$inlineView        = false;
 
 // Uebergabevariablen pruefen
 
@@ -42,15 +43,14 @@ else
     $req_message_title = $g_l10n->get('SYS_NOTE');
 }
 
-if(isset($_GET['message_text']))
+if(isset($_GET['message_var1']))
 {
-    $req_message_text = strStripTags($_GET['message_text']);
+    $req_message_var1 = strStripTags($_GET['message_var1']);
 }
-
-$inlineView = false;
+´
 if (isset($_GET["inline"]) && $_GET["inline"] == true)
 {
-	$inlineView = true;
+    $inlineView = true;
 }
 
 // Html-Kopf ausgeben
@@ -128,10 +128,10 @@ switch ($req_message_id)
         break;
     
     case 'room_detail':
-        if(is_numeric($req_message_text))
+        if(is_numeric($req_message_var1))
         {
             $room = new TableRooms($g_db);
-            $room->readData($req_message_text);
+            $room->readData($req_message_var1);
             echo '
             <table>
                 <tr>
@@ -155,7 +155,7 @@ switch ($req_message_id)
         break;
 
     case 'user_field_description':
-        echo $g_current_user->getProperty($req_message_text, 'usf_description');
+        echo $g_current_user->getProperty($req_message_var1, 'usf_description');
         break;
 
 	// Eigene Listen
@@ -291,16 +291,16 @@ switch ($req_message_id)
     default:
         // im Standardfall wird mit der ID der Text aus der Sprachdatei gelesen
         // falls die Textvariable gefuellt ist, pruefen ob dies auch eine ID aus der Sprachdatei ist
-        $msg_text = '';
-        if(strlen($req_message_text) > 0)
+        $msg_var1 = '';
+        if(strlen($req_message_var1) > 0)
         {
-            $msg_text = $g_l10n->get($req_message_text);
+            $msg_var1 = $g_l10n->get($req_message_var1);
             if(strlen($msg_text) == 0)
             {
-                $msg_text = $req_message_text;
+                $msg_var1 = $req_message_var1;
             }
         }
-        echo $g_l10n->get(strtoupper($req_message_id), $msg_text);
+        echo $g_l10n->get(strtoupper($req_message_id), $msg_var1);
         break;
 }
 
