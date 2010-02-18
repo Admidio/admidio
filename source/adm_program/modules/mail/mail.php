@@ -431,8 +431,8 @@ echo '
                                     <a href="javascript:addAttachment()"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="Anhang hinzufügen" /></a>
                                     <a href="javascript:addAttachment()">Anhang hinzufügen</a>
-		                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_text='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
-							            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_text='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
+		                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
+							            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
 							            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                                 </span>
                             </dd>

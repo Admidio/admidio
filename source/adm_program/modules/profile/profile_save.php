@@ -277,11 +277,10 @@ if($user->getValue('usr_id') == 0)
 $ret_code = $user->save();
 
 //Falls Registrierung nur fuer Terminanmeldung 
-if($_SESSION['login_rol_id']>0)
+if(isset($_SESSION['login_rol_id']) && $_SESSION['login_rol_id'] > 0)
 {
-    $date_rol_id = $_SESSION['login_rol_id'];
     $members = new TableMembers($g_db);
-    $members->setValue('mem_rol_id', $date_rol_id);
+    $members->setValue('mem_rol_id', $_SESSION['login_rol_id']);
     $members->setValue('mem_usr_id', $user->getValue('usr_id'));
     $members->setValue('mem_from_rol_id', '0'); // 0 = Gastrolle
     $members->save();
@@ -356,20 +355,26 @@ if($new_user == 2)
             }
         }
     }
-    
-    // nach Registrierungmeldung auf die Startseite verweisen
-    $g_message->setForwardUrl($g_homepage);
-    
-    if($_SESSION['login_rol_id'] > 0)
+        
+    if(isset($_SESSION['login_rol_id']))
     {
-        $g_message->show($g_l10n->get('PRO_PHR_CONFIRM_REGISTRATION_DATE'));
+        if($_SESSION['login_rol_id'] > 0)
+        {
+            $g_message->show($g_l10n->get('PRO_PHR_CONFIRM_REGISTRATION_DATE'));
+        }
+        else
+        {
+            $g_message->show($g_l10n->get('PRO_PHR_CONFIRM_REGISTRATION_SYSTEM'));
+        }
+
+        unset($_SESSION['login_rol_id']);
     }
     else
     {
-        $g_message->show($g_l10n->get('PRO_PHR_CONFIRM_REGISTRATION_SYSTEM'));
+        // nach Registrierungmeldung auf die Startseite verweisen
+        $g_message->setForwardUrl($g_homepage);
+        $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
     }
-
-    unset($_SESSION['login_rol_id']);
 }
 elseif($new_user == 3 || $usr_id == 0)
 {
@@ -393,7 +398,7 @@ elseif($new_user == 3 || $usr_id == 0)
             $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == false)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $row['email']));
+                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('E-Mail')));
             }
         }
     }

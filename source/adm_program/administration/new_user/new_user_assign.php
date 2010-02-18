@@ -15,6 +15,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_members.php');
 
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
@@ -77,9 +78,53 @@ $member_found = $g_db->num_rows($result_usr);
 
 if($member_found == 0)
 {
-    // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&new_user=3');
-    exit();
+    // neuer User -> Rollen zuordnen
+    if($g_current_user->editUsers())
+    {
+        // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
+        header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$new_user->getValue('usr_id').'&new_user=3');
+        exit();
+    }
+    else
+    {
+        // User auf aktiv setzen
+        $new_user->setValue('usr_valid', 1);
+        $new_user->setValue('usr_reg_org_shortname', '');
+        $new_user->save();
+
+        // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+        if($g_preferences['enable_system_mails'] == 1)
+        {
+            // Mail an den User schicken, um die Anmeldung zu bestaetigen
+            $sysmail = new SystemMail($g_db);
+            $sysmail->addRecipient($new_user->getValue('E-Mail'), $new_user->getValue('Vorname'). ' '. $new_user->getValue('Nachname'));
+            if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $new_user) == false)
+            {
+                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $new_user->getValue('E-Mail')));
+            }
+        }
+
+        if($g_current_user->assignRoles())
+        {
+            // neuer User -> Rollen zuordnen
+            header('Location: roles.php?user_id='. $new_user->getValue('usr_id'). '&new_user=1');
+            exit();
+        }
+        else
+        {
+            // da der angemeldete Benutzer keine Rechte besitzt Rollen zu zuordnen, 
+            // wird der neue User der Default-Rolle zugeordnet
+            if($g_preferences['profile_default_role'] == 0)
+            {
+                $g_message->show($g_l10n->get('PRO_PHR_NO_DEFAULT_ROLE'));
+            }
+            $member = new TableMembers($g_db);
+            $member->startMembership($g_preferences['profile_default_role'], $new_user->getValue('usr_id'));
+            
+            $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+            $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+        }
+    }
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);

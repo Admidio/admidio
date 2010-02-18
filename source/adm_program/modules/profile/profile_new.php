@@ -294,8 +294,8 @@ function getFieldCode($field, $user, $new_user)
     $description = '';
     if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name') != 'Messenger')
     {
-        $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_text='. $field->getValue('usf_name'). '&amp;inline=true"><img 
-            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_text='. $field->getValue('usf_name'). '\',this)" onmouseout="ajax_hideTooltip()"
+        $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name'). '&amp;inline=true"><img 
+            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name'). '\',this)" onmouseout="ajax_hideTooltip()"
             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
     }
     
@@ -433,8 +433,8 @@ echo '
                                     {
                                         echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PHR_USERNAME_DESCRIPTION&amp;inline=true"><img 
-								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_USERNAME_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-								            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+                                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_USERNAME_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
+                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
                                     }
                                 echo '</dd>
                             </dl>
@@ -449,8 +449,8 @@ echo '
                                         <input type="password" id="usr_password" name="usr_password" style="width: 130px;" maxlength="20" />
                                         <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION&amp;inline=true"><img 
-								            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-								            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
+                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                                     </dd>
                                 </dl>
                             </li>

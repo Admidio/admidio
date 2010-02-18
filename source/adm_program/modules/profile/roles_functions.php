@@ -1,4 +1,13 @@
 <?php
+/******************************************************************************
+ * Funktionen zum Verwalten der Rollenmitgliedschaft im Profil
+ *
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
 
 if ('roles_functions.php' == basename($_SERVER['SCRIPT_FILENAME']))
 {
