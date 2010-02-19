@@ -241,7 +241,7 @@ function getFieldCode($field, $user, $new_user)
             }
             $value .= '
                     <input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" 
-                        maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue('usd_value'). '" '.$readonly.' />
+                        maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue('usd_value',$g_preferences['system_date']). '" '.$readonly.' />
                     <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\''.$g_preferences['system_date'].'\');"><img 
                     	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
@@ -331,8 +331,17 @@ else
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
+
+$g_layout['header'] .= '
+        <script type="text/javascript"><!--
+			var profileJS = new profileJSClass();
+			$(document).ready(function() 
+            {
+				profileJS.init();
+				';
 
 // setzt den Focus bei Neuanlagen/Registrierung auf das erste Feld im Dialog
 if($new_user == 1 || $new_user == 2)
@@ -346,17 +355,10 @@ if($new_user == 1 || $new_user == 2)
     {
         $focusField = 'usr_login_name';
     }
-    $g_layout['header'] .= '
-        <script type="text/javascript"><!--
-			var profileJS = new profileJSClass();
-            $(document).ready(function() 
-            {
-                $("#'.$focusField.'").focus();
-				profileJS.init();
-            }); 
-        //--></script>';
+	$g_layout['header'] .= '$("#'.$focusField.'").focus();';
 }
-
+$g_layout['header'] .= '}); 
+        //--></script>';
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
@@ -474,9 +476,9 @@ echo '
                                         <dt><label>Passwort:</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
-                                                <a rel="colorboxContent" href="password.php?usr_id='. $usr_id. '"><img 
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $usr_id. '&amp;inline=1"><img 
                                                 	src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
-                                                <a rel="colorboxContent" href="password.php?usr_id='. $usr_id. '">Passwort ändern</a>
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $usr_id. '&amp;inline=1">Passwort ändern</a>
                                             </span>
                                         </dd>
                                     </dl>

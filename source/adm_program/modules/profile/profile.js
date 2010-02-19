@@ -22,9 +22,9 @@ function profileJSClass()
 	
 	this.init = function()
 	{
-		$("a[rel='colorboxContent']").colorbox();
-		$("a[rel='colorboxRoles']").colorbox({onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
-		$("a[rel='colorboxPWContent']").colorbox({onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
+		$("a[rel='colorboxContent']").colorbox({rel:'nofollow'});
+		$("a[rel='colorboxRoles']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
+		$("a[rel='colorboxPWContent']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
 	}
 	this.reloadRoleMemberships = function()
 	{
@@ -194,7 +194,6 @@ function profileJSClass()
 	this.jQueryAjaxLoadPWAppend = function()
 	{
 		$("#cboxLoadedContent").append('\n<div id="colorBox_resultInfo"></div>');
-
 		$("#passwordForm").ajaxForm({ 
 			target:        '#colorBox_resultInfo',  							 // target element(s) to be updated with server response 
 			beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 

@@ -47,7 +47,7 @@ if(isset($_GET['message_var1']))
 {
     $req_message_var1 = strStripTags($_GET['message_var1']);
 }
-´
+
 if (isset($_GET["inline"]) && $_GET["inline"] == true)
 {
     $inlineView = true;
