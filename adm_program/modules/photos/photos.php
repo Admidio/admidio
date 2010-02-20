@@ -54,7 +54,7 @@ if ($pho_id == NULL)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 //Modulüberschrift
-$req_headline = 'Fotogalerien';
+$req_headline = $g_l10n->get('PHO_PHR_DEFAULT_HEADLINE');
 if(isset($_GET['headline']))
 {
     $_SESSION['photomodul_headline'] = strStripTags($_GET['headline']);
@@ -164,7 +164,7 @@ $g_layout['header'] = '';
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  $g_layout['header']. '
-        <link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Fotos"
+        <link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('PHO_PHOTOS').'"
             href="'.$g_root_path.'/adm_program/modules/photos/rss_photos.php" />';
 };
 
@@ -226,8 +226,8 @@ if($pho_id > 0)
 {
     //Ausgabe des Linkpfads
     echo '<div class="navigationPath">
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="Fotogalerien" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">Fotogalerien</a>'.$navilink.'
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_PHOTO_GALLARYS').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$g_l10n->get('PHO_PHOTO_GALLARYS').'</a>'.$navilink.'
             &nbsp;&gt;&nbsp;'.$photo_album->getValue('pho_name').'         
         </div>';
 }
@@ -241,8 +241,8 @@ if($g_current_user->editPhotoRight())
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">
-    	           <img src="'. THEME_PATH. '/icons/add.png" alt="Album anlegen" title="Album anlegen" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">Album anlegen</a>
+    	           <img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('PHO_CREATE_ALBUM').'" title="'.$g_l10n->get('PHO_CREATE_ALBUM').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$pho_id.'">'.$g_l10n->get('PHO_CREATE_ALBUM').'</a>
             </span>
     </li>';        
     if($pho_id > 0)
@@ -251,8 +251,8 @@ if($g_current_user->editPhotoRight())
         <li>
             <span class="iconTextLink">
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">
-                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Fotos hochladen" title="Fotos hochladen"/></a>
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">Fotos hochladen</a>
+                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'" title="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'"/></a>
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$pho_id.'">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</a>
             </span>
         </li>';
     }
@@ -300,7 +300,7 @@ echo '<div class="photoModuleContainer">';
                 //Container mit Navigation
                 echo ' <div class="pageNavigation" id="photoPageNavigation">';
                     //Seitennavigation
-                    echo 'Seite:&nbsp;';
+                    echo $g_l10n->get('SYS_PAGE').':&nbsp;';
                 
                     //Vorherige thumb_seite
                     $vorseite=$act_thumb_page-1;
@@ -308,9 +308,9 @@ echo '<div class="photoModuleContainer">';
                     {
                         echo '
                         <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$vorseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
-                            <img src="'. THEME_PATH. '/icons/back.png" alt="Vorherige" />
+                            <img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_PAGE_PREVIOUS').'" />
                         </a>
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$vorseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">Vorherige</a>&nbsp;';
+                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$vorseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">'.$g_l10n->get('SYS_PAGE_PREVIOUS').'</a>&nbsp;';
                     }
                 
                     //Seitenzahlen
@@ -329,9 +329,9 @@ echo '<div class="photoModuleContainer">';
                     $nachseite=$act_thumb_page+1;
                     if($nachseite<=$max_thumb_page){
                         echo '
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">Nächste</a>
+                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">'.$g_l10n->get('SYS_PAGE_NEXT').'</a>
                         <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?thumb_seite='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
-                            <img src="'. THEME_PATH. '/icons/forward.png" alt="Nächste" />
+                            <img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_PAGE_NEXT').'" />
                         </a>';
                     }
                 echo '</div>';
@@ -383,17 +383,17 @@ echo '<div class="photoModuleContainer">';
                            $photoThumbnailTable .= '
                             <a class="iconLink" 
                             href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=rotate&amp;direction=left"><img 
-                                src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="Gegen den Uhrzeigersinn drehen" title="Gegen den Uhrzeigersinn drehen" /></a>
+                                src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=rotate&amp;direction=right"><img 
-                                src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="Mit dem Uhrzeigersinn drehen" title="Mit dem Uhrzeigersinn drehen" /></a>
+                                src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=delete_request"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="Foto löschen" title="Foto löschen" /></a>';
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PHO_PHOTO_DELETE').'" title="'.$g_l10n->get('PHO_PHOTO_DELETE').'" /></a>';
                         }
                         if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
                         {
                             $photoThumbnailTable .= '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo='.$bild.'&amp;pho_id='.$pho_id.'"><img 
-                                src="'. THEME_PATH. '/icons/ecard.png" alt="Foto als Grußkarte versenden" title="Foto als Grußkarte versenden" /></a>';
+                                src="'. THEME_PATH. '/icons/ecard.png" alt="'.$g_l10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$g_l10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                         }
                     }
 					//if
@@ -439,27 +439,26 @@ echo '<div class="photoModuleContainer">';
 
         //Datum des Albums
         echo '<div class="editInformation" id="photoAlbumInformation">
-            Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
+            '.$g_l10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
             if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
             {
-                echo ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
+                echo ' '.$g_l10n->get('SYS_DATE_TO').' '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
             }
         echo '
-        	<br />Fotos von: '.$photo_album->getValue('pho_photographers').'
+        	<br />'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers').'
         </div>';
 
-        // Anleger und Veraendererinfos
+        // Anleger und Veraendererinfos SYS_PHR_CREATED_BY
         echo '
         <div class="editInformation">';
             $user_create = new User($g_db, $photo_album->getValue('pho_usr_id_create'));
-            echo 'Angelegt von '. $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname')
-            .' am '. $photo_album->getValue('pho_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
-            
+            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $photo_album->getValue('pho_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                        
             if($photo_album->getValue('pho_usr_id_change') > 0)
             {
+                
                 $user_change = new User($g_db, $photo_album->getValue('pho_usr_id_change'));
-                echo '<br />Zuletzt bearbeitet von '. $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname')
-                .' am '. $photo_album->getValue('pho_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
+                echo '<br />'.$g_l10n->get('SYS_PHR_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $photo_album->getValue('pho_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']));
             }
         echo '</div>';
     }
@@ -581,7 +580,7 @@ echo '<div class="photoModuleContainer">';
                             {
                                 echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND&amp;inline=true"><img 
 					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
+					                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_NOTE').'" title="" /></a>';
                             }
                             
                             //Hinweis fur Leute mit Photorechten: Album ist gesperrt
@@ -589,7 +588,7 @@ echo '<div class="photoModuleContainer">';
                             {
                                 echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED&amp;inline=true"><img 
 					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="Gesperrt" title="" /></a>';
+					                class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('SYS_LOCKED').'" title="" /></a>';
                             }
                         }
 
@@ -604,14 +603,14 @@ echo '<div class="photoModuleContainer">';
                         }
 
                         echo '</li>
-                            <li>Fotos: '.$sub_photo_album->countImages().' </li>
-                            <li>Datum: '.$sub_photo_album->getValue('pho_begin', $g_preferences['system_date']);
+                            <li>'.$g_l10n->get('PHO_PHOTOS').': '.$sub_photo_album->countImages().' </li>
+                            <li>'.$g_l10n->get('SYS_DATE').': '.$sub_photo_album->getValue('pho_begin', $g_preferences['system_date']);
                             if($sub_photo_album->getValue('pho_end') != $sub_photo_album->getValue('pho_begin'))
                             {
-                                echo ' bis '.$sub_photo_album->getValue('pho_end', $g_preferences['system_date']);
+                                echo ' '.$g_l10n->get('SYS_DATE_TO').' '.$sub_photo_album->getValue('pho_end', $g_preferences['system_date']);
                             }
                             echo '</li> 
-    						<li>Fotos von: '.$sub_photo_album->getValue('pho_photographers').'</li>';
+    						<li>'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>';
 
                             //bei Moderationrecheten
                             if ($g_current_user->editPhotoRight())
@@ -622,28 +621,28 @@ echo '<div class="photoModuleContainer">';
                                 {
 	                                echo '
 	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
-	                                    src="'. THEME_PATH. '/icons/photo_upload.png" alt="Fotos hochladen" title="Fotos hochladen" /></a>
+	                                    src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'" title="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'" /></a>
 
     								<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
-                                        src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
+                                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
     	                            
                                     if($sub_photo_album->getValue('pho_locked')==1)
     	                            {
     	                                echo '
     	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=0"><img 
-    	                                    src="'. THEME_PATH. '/icons/key.png"  alt="Freigeben" title="Freigeben" /></a>';
+    	                                    src="'. THEME_PATH. '/icons/key.png"  alt="'.$g_l10n->get('SYS_UNLOCK').'" title="'.$g_l10n->get('SYS_UNLOCK').'" /></a>';
     	                            }
     	                            elseif($sub_photo_album->getValue('pho_locked')==0)
     	                            {
     	                                echo '
     	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=1"><img 
-    	                                    src="'. THEME_PATH. '/icons/key.png" alt="Sperren" title="Sperren" /></a>';
+    	                                    src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOCK').'" title="'.$g_l10n->get('SYS_LOCK').'" /></a>';
     	                            }
                                 }
 
                                 echo '
                                 <a class="iconLink" href="javascript:deleteObject(\'pho\', \'pho_'.$sub_photo_album->getValue('pho_id').'\','.$sub_photo_album->getValue('pho_id').',\''.$sub_photo_album->getValue('pho_name').'\')"><img 
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="Album löschen" title="Album löschen" /></a>
+                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PHO_ALBUM_DELETE').'" title="'.$g_l10n->get('PHO_ALBUM_DELETE').'" /></a>
     							</li>';
                             }
                     echo '</ul>
@@ -664,7 +663,7 @@ echo '<div class="photoModuleContainer">';
     //Falls das Album weder Fotos noch Unterordner enthaelt
     if(($photo_album->getValue('pho_quantity')=='0' || strlen($photo_album->getValue('pho_quantity')) == 0) && $albums<1)  // alle vorhandenen Albumen werden ignoriert
     {
-        echo'Dieses Album enthält leider noch keine Fotos.';
+        echo $g_l10n->get('PHO_PHR_NO_ALBUM_CONTENT');
     }
     
     if($g_db->num_rows($result_list) > 2)
@@ -684,8 +683,8 @@ if($photo_album->getValue('pho_id') > 0)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';
