@@ -173,7 +173,7 @@ class TablePhotos extends TableAccess
             }
 
             // nun den Ordner fuer die Veranstaltung anlegen
-            $folderName = $this->getValue('pho_begin'). '_'. $this->getValue('pho_id');
+            $folderName = $this->getValue('pho_begin', 'Y-m-d'). '_'. $this->getValue('pho_id');
             $this->folderPath->setFolder(SERVER_PATH. '/adm_my_files/photos');
             $b_return = $this->folderPath->createWriteableFolder($folderName);
 
@@ -225,7 +225,7 @@ class TablePhotos extends TableAccess
         if($return_code)
         {
             //Ordnerpfad zusammensetzen
-            $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin').'_'.$photo_id;
+            $folder = SERVER_PATH. '/adm_my_files/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photo_id;
             
             // aktuellen Ordner incl. Unterordner und Dateien loeschen, falls er existiert
             if(file_exists($folder))
