@@ -86,7 +86,7 @@ if(!file_exists(SERVER_PATH. '/adm_my_files/photos/upload'))
 }
 
 //Ordnerpfad
-$ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id');
+$ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 //Bei Klassischem Upload beginn der Seitenausgabe
 if($_GET['uploadmethod'] == 1)
