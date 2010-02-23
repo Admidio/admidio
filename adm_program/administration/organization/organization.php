@@ -54,7 +54,7 @@ else
 }
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
-$g_layout['title']  = 'Organisationseinstellungen';
+$g_layout['title']  = $g_l10n->get('ORG_ORGANIZATION_PROPERTIES');
 $g_layout['header'] =  '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
     <script type="text/javascript"><!--
@@ -85,104 +85,104 @@ $g_layout['header'] =  '
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
-<h1 class="moduleHeadline">Organisationseinstellungen</h1>
+<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
 <div class="formLayout" id="organization_menu">
     <div class="formBody">
         <table style="border-width: 0px; width: 100%; text-align: left;">
         <tr>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="general_link"><img src="'.THEME_PATH.'/icons/options.png" alt="Allgemein" title="Allgemein" />
-            <span class="defaultFontSize">Allgemein</span></div>
+        <div id="general_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/options.png" alt="'.$g_l10n->get('SYS_COMMON').'" title="'.$g_l10n->get('SYS_COMMON').'" /></a>
+            <a href="#">'.$g_l10n->get('SYS_COMMON').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="register_link"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="Registrierung" title="Registrierung" />
-            <span class="defaultFontSize">Registrierung</span></div>
+        <div id="register_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$g_l10n->get('SYS_REGISTRATION').'" title="'.$g_l10n->get('SYS_REGISTRATION').'" /></a>
+            <a href="#">'.$g_l10n->get('SYS_REGISTRATION').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="announcement-module_link"><img src="'.THEME_PATH.'/icons/announcements.png" alt="Ankündigungen" title="Ankündigungen" />
-            <span class="defaultFontSize">Ankündigungen</span></div>
+        <div id="announcement-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" /></a>
+            <a href="#">'.$g_l10n->get('ANN_ANNOUNCEMENTS').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="download-module_link"><img src="'.THEME_PATH.'/icons/download.png" alt="Downloads" title="Downloads" />
-            <span class="defaultFontSize">Downloads</span></div>
+        <div id="download-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/download.png" alt="'.$g_l10n->get('DOW_DOWNLOADS').'" title="'.$g_l10n->get('DOW_DOWNLOADS').'" /></a>
+            <a href="#">'.$g_l10n->get('DOW_DOWNLOADS').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="forum_link"><img src="'.THEME_PATH.'/icons/forum.png" alt="Forum" title="Forum" />
-            <span class="defaultFontSize">Forum</span></div>
-        </div>
-        </td>
-        </tr>
-        <tr>
-        <td>
-        <div class="iconTextLink organisationLink">
-            <div id="photo-module_link"><img src="'.THEME_PATH.'/icons/photo.png" alt="Fotos" title="Fotos" />
-            <span class="defaultFontSize">Fotos</span></div>
-        </div>
-        </td>
-        <td>
-        <div class="iconTextLink organisationLink">
-            <div id="ecard-module_link"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" title="'.$g_l10n->get("ECA_GREETING_CARDS").'" />
-            <span class="defaultFontSize">'.$g_l10n->get("ECA_GREETING_CARDS").'</span></div>
-        </div>
-        </td>
-        <td>
-        <div class="iconTextLink organisationLink">
-            <div id="guestbook-module_link"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="Gästebuch" title="Gästebuch" />
-            <span class="defaultFontSize">Gästebuch</span></div>
-        </div>
-        </td>
-        <td>
-        <div class="iconTextLink organisationLink">
-            <div id="mail-module_link"><img src="'.THEME_PATH.'/icons/email.png" alt="E-Mails" title="E-Mails" />
-            <span class="defaultFontSize">E-Mails</span></div>
-        </div>
-        </td>
-        <td>
-        <div class="iconTextLink organisationLink">
-            <div id="system-mail_link"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="Systemmails" title="Systemmails" />
-            <span class="defaultFontSize">Systemmails</span></div>
+        <div id="forum_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/forum.png" alt="'.$g_l10n->get('SYS_FORUM').'" title="'.$g_l10n->get('SYS_FORUM').'" /></a>
+            <a href="#">'.$g_l10n->get('SYS_FORUM').'</a>
         </div>
         </td>
         </tr>
         <tr>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="list-module_link"><img src="'.THEME_PATH.'/icons/list.png" alt="Listen" title="Listen" />
-            <span class="defaultFontSize">Listen</span></div>
+        <div id="photo-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/photo.png" alt="'.$g_l10n->get('PHO_PHOTOS').'" title="'.$g_l10n->get('PHO_PHOTOS').'" /></a>
+            <a href="#">'.$g_l10n->get('PHO_PHOTOS').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="profile-module_link"><img src="'.THEME_PATH.'/icons/profile.png" alt="Profil" title="Profil" />
-            <span class="defaultFontSize">Profil</span></div>
+        <div id="ecard-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get('ECA_GREETING_CARDS').'" title="'.$g_l10n->get('ECA_GREETING_CARDS').'" /></a>
+            <a href="#">'.$g_l10n->get('ECA_GREETING_CARDS').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="dates-module_link"><img src="'.THEME_PATH.'/icons/dates.png" alt="Termine" title="Termine" />
-            <span class="defaultFontSize">Termine</span></div>
+        <div id="guestbook-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$g_l10n->get('GBO_GUESTBOOK').'" title="'.$g_l10n->get('GBO_GUESTBOOK').'" /></a>
+            <a href="#">'.$g_l10n->get('GBO_GUESTBOOK').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="links-module_link"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="Weblinks" title="Weblinks" />
-            <span class="defaultFontSize">Weblinks</span></div>
+        <div id="mail-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$g_l10n->get('MAI_EMAILS').'" title="'.$g_l10n->get('MAI_EMAILS').'" /></a>
+            <a href="#">'.$g_l10n->get('MAI_EMAILS').'</a>
         </div>
         </td>
         <td>
-        <div class="iconTextLink organisationLink">
-            <div id="systeminfo_link"><img src="'.THEME_PATH.'/icons/info.png" alt="Systeminformationen" title="Systeminformationen" />
-            <span class="defaultFontSize">Systeminfo</span></div>
+        <div id="system-mail_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$g_l10n->get('SYS_SYSTEM_MAIL').'" title="'.$g_l10n->get('SYS_SYSTEM_MAIL').'" /></a>
+            <a href="#">'.$g_l10n->get('SYS_SYSTEM_MAIL').'</a>
+        </div>
+        </td>
+        </tr>
+        <tr>
+        <td>
+        <div id="list-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/list.png" alt="'.$g_l10n->get('LST_LISTS').'" title="'.$g_l10n->get('LST_LISTS').'" /></a>
+            <a href="#">'.$g_l10n->get('LST_LISTS').'</a>
+        </div>
+        </td>
+        <td>
+        <div id="profile-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('PRO_PROFILE').'" title="'.$g_l10n->get('PRO_PROFILE').'" /></a>
+            <a href="#">'.$g_l10n->get('PRO_PROFILE').'</a>
+        </div>
+        </td>
+        <td>
+        <div id="dates-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/dates.png" alt="'.$g_l10n->get('DAT_DATES').'" title="'.$g_l10n->get('DAT_DATES').'" /></a>
+            <a href="#">'.$g_l10n->get('DAT_DATES').'</a>
+        </div>
+        </td>
+        <td>
+        <div id="links-module_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$g_l10n->get('LNK_WEBLINKS').'" title="'.$g_l10n->get('LNK_WEBLINKS').'" /></a>
+            <a href="#">'.$g_l10n->get('LNK_WEBLINKS').'</a>
+        </div>
+        </td>
+        <td>
+        <div id="systeminfo_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$g_l10n->get('ORG_SYSTEM_INFO').'" title="'.$g_l10n->get('ORG_SYSTEM_INFO').'" /></a>
+            <a href="#">'.$g_l10n->get('ORG_SYSTEM_INFO').'</a>
         </div>
         </td>
         </tr>

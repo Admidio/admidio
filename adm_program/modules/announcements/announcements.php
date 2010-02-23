@@ -35,7 +35,7 @@ elseif($g_preferences['enable_announcements_module'] == 2)
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_start    = 0;
-$req_headline = $g_l10n->get('ANN_ANNOUNCEMENT');
+$req_headline = $g_l10n->get('ANN_ANNOUNCEMENTS');
 $req_id       = 0;
 $sql_datum    = '';
 
