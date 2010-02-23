@@ -342,20 +342,6 @@ ul.autosuggest li.highlight a:visited  {
     vertical-align:     top;
 }
 
-.organisationLink{
-	cursor:pointer;
-}
-.organisationLink span{
-	color:              #E0791F;
-    font-weight:        bold;
-    text-decoration:    none;
-}
-.organisationLink span:hover, .organisationLink span:active{
-	color:              #E0791F;
-    font-weight:        bold;
-    text-decoration:    underline;
-}
-
 /* Iconlinks um Funktionen aufzurufen (ohne Text) in vertikaler Anordnung*/
 .verticalIconList ul{
     padding-left:       0px;

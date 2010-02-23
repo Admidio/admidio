@@ -3,6 +3,7 @@
 <version id="2.2.0">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
+    <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>
 
     <!-- Phrases only in Category-Administration -->
     <text id="CAT_PHR_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>
@@ -35,6 +36,7 @@
     <text id="DAT_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
 
     <!-- Phrases only in Downloadsmodule -->
+    <text id="DOW_DOWNLOADS" development="new" translation="todo">Downlaods</text>
     <text id="DOW_PHR_ADDITIONAL_FILES" development="new" translation="todo">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</text>
     <text id="DOW_PHR_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
     <text id="DOW_PHR_FILE_EXTENSION_INVALID" development="new" translation="todo">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</text>
@@ -114,6 +116,7 @@
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_PHR_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
+    <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
 
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="todo">Weitere Organisation hinzufügen</text>
@@ -203,13 +206,18 @@
     <text id="INS_UPDATE_DATABASE" development="new" translation="todo">Datenbank aktualisieren</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="todo">Die Aktualisierung war erfolgreich</text>
 
+    <!-- Phrases only in Linkmodule -->
+    <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
+
     <!-- Phrases only in Listsmodule -->
+    <text id="LST_LISTS" development="new" translation="todo">Listen</text>
     <text id="LST_PHR_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
     <text id="LST_PHR_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
     <text id="LST_PHR_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
 
     <!-- Phrases only in Mailmodule -->
+    <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_PHR_ATTACHMENT_TO_LARGE" development="new" translation="todo">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
     <text id="MAI_PHR_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_PHR_MAX_ATTACHMENT_SIZE" development="new1" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
@@ -235,12 +243,14 @@
     <text id="NWU_PHR_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Anmeldungen vorhanden.</text>
 
     <!-- Phrases only in Organizationadministration -->
+    <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
     <text id="ORG_PHR_FIELD_DESCRIPTION" development="new1" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
     <text id="ORG_PHR_FIELD_DISABLED" development="new1" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
     <text id="ORG_PHR_FIELD_EMPTY_AREA" development="new" translation="todo">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
     <text id="ORG_PHR_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.</text>
     <text id="ORG_PHR_FIELD_HIDDEN" development="new1" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen.</text>
     <text id="ORG_PHR_FIELD_MANDATORY" development="new1" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
+    <text id="ORG_SYSTEM_INFO" development="new" translation="todo">Systeminfo</text>
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
@@ -254,6 +264,7 @@
     <text id="PHO_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
     <text id="PHO_PHR_PHOTO_FORMAT_INVALID" development="new" translation="todo">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</text>
     <text id="PHO_PHR_PHOTO_FILES_TO_LARGE" development="new" translation="todo">Eine der Dateien oder alle gemeinsam übersteigen die vom Server zugelassenen Uploadgröße von %VAR1% MB.</text>
+    <text id="PHO_PHR_PHOTOGRAPHER" development="new" translation="todo">Fotos von</text>
     <text id="PHO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
     <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>
     <text id="PHO_PHOTO_GALLARYS" development="new" translation="todo">Fotogalerien</text>   
@@ -280,11 +291,10 @@
     <text id="PRO_PHR_PHOTO_NOT_CHOOSEN" development="new" translation="todo">Es wurde keine Bilddatei ausgewählt.</text>
     <text id="PRO_PHR_PHOTO_RESOLUTION_TO_LARGE" development="new" translation="todo">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von %VAR1% Megapixeln.</text>
     <text id="PRO_PHR_PHOTO_SAVED" development="new" translation="todo">Das neue Profilfoto wurde erfolgreich gespeichert.</text>
-    <text id="PHO_PHR_PHOTOGRAPHER" development="new" translation="todo">Fotos von</text>
     <text id="PRO_PHR_ROLE_NOT_ASSIGNED" development="new" translation="todo">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
     <text id="PRO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
     <text id="PRO_PHR_USERNAME_DESCRIPTION" development="new1" translation="todo">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>.</text>
-    
+    <text id="PRO_PROFILE" development="new" translation="todo">Profil</text>
 
     <!-- Phrases only in Rolesmodule -->
     <text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
@@ -354,6 +364,7 @@
     <text id="SYS_FONT_COLOR" development="new" translation="todo">Schriftfarbe</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
     <text id="SYS_FONT_STYLE" development="new" translation="todo">Schrifttyp</text>
+    <text id="SYS_FORUM" development="new" translation="todo">Forum</text>
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>
     <text id="SYS_HELP" development="new" translation="todo">Hilfe</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
@@ -445,8 +456,9 @@
     <text id="SYS_PHR_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
-	<text id="SYS_PREVIOUS" development="new" translation="todo">voriges</text>
+    <text id="SYS_PREVIOUS" development="new" translation="todo">voriges</text>
     <text id="SYS_RECIPIENT" development="new" translation="todo">Empfänger</text>
+    <text id="SYS_REGISTRATION" development="new" translation="todo">Registrierung</text>
     <text id="SYS_REMEMBER_ME" development="new1" translation="todo">Angemeldet bleiben</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
@@ -464,6 +476,7 @@
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">stoppe slideshow</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_SURNAME" development="new" translation="todo">Nachname</text>
+    <text id="SYS_SYSTEM_MAIL" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TO" development="new" translation="todo">An</text>
     <text id="SYS_UNDERLINE" development="new1" translation="todo">Unterstrichen</text>
