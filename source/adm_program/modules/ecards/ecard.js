@@ -248,11 +248,11 @@ function ecardJSClass()
 				target:        '#cboxLoadedContent',  							 // target element(s) to be updated with server response
 				url: gRootPath + '/adm_program/modules/ecards/ecard_send.php',
 				beforeSubmit: function(formData, jqForm, options) { 
-					$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + this.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/loader.gif" alt="' + this.loading_Text + '" />');
+					$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/loader.gif" alt="' + this.loading_Text + '" />');
 				},
 				success:       function(responseText, statusText){		 // post-submit callback
 					$.fn.colorbox({html:responseText});
-					$("#ecardSubmit").html('<img src="'+ gThemePath+ '/icons/email.png" alt="' + this.send_Text + '" />&nbsp;' + this.send_Text);
+					$("#ecardSubmit").html('<img src="'+ gThemePath+ '/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;' + ecardJS.send_Text);
 				}	 
 			}; 
 			jQuery.fn.SubmitEcard = function(){
