@@ -122,9 +122,13 @@
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="todo">Weitere Organisation hinzufügen</text>
     <text id="INS_ADD_ORGANIZATION" development="new" translation="todo">Organisation hinzufügen</text>
     <text id="INS_ADDIDIONAL_DATA" development="new" translation="todo">Zusätzliche Daten</text>
+    <text id="INS_ADDRESS" development="new" translation="todo">Adresse</text>
     <text id="INS_ADDRESS_LIST" development="new" translation="todo">Adressliste</text>
     <text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Daten für den Administrator eingegeben worden !</text>
+    <text id="INS_AOL_INSTANT_MESSENGER" development="new1" translation="todo">AOL Instant Messenger</text>
+    <text id="INS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
     <text id="INS_BOARD" development="new" translation="todo">Vorstand</text>
+    <text id="INS_CITY" development="new" translation="todo">Ort</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
     <text id="INS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
     <text id="INS_COURSES" development="new" translation="todo">Kurse</text>
@@ -136,7 +140,12 @@
     <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Datenbank Zugangsdaten</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Datenbank wird eingerichtet</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank eingeben</text>
+    <text id="INS_FAX" development="new" translation="todo">Fax</text>
+    <text id="INS_FIRST_NAME" development="new" translation="todo">Vorname</text>
+    <text id="INS_GENDER" development="new" translation="todo">Geschlecht</text>
+    <text id="INS_GOOGLE_TALK" development="new1" translation="todo">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="todo">Gruppen</text>
+    <text id="INS_ICQ" development="new1" translation="todo">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="new" translation="todo">Admidio installieren</text>
     <text id="INS_INSTALLATION" development="new" translation="todo">Installation</text>
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="todo">Die Installation war erfolgreich</text>
@@ -144,12 +153,17 @@
     <text id="INS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="INS_LOGIN" description="Login to database" development="new" translation="todo">Login</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="todo">Zugangsdaten eines Webmasters</text>
+    <text id="INS_MASTER_DATA" development="new" translation="todo">Stammdaten</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
+    <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
+    <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
+    <text id="INS_MSN_MESSENGER" development="new1" translation="todo">MSN Messenger</text>
     <text id="INS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
     <text id="INS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !</text>
     <text id="INS_OVERVIEW" development="new" translation="todo">Übersichtsseite</text>
+    <text id="INS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="INS_PHR_CHOOSE_LANGUAGE" development="new" translation="todo">Wähle bitte eine Sprache aus</text>
@@ -193,18 +207,22 @@
     <text id="INS_PHR_WELCOME_TEXT" development="new" translation="todo">Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen soll.</text>
     <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu deiner Datenbank ist.</text>
     <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Du solltest versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
+    <text id="INS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
     <text id="INS_SERVER" development="new" translation="todo">Server</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="todo">Organisation einrichten</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="todo">Die Einrichtung war erfolgreich</text>
+    <text id="INS_SKYPE" development="new1" translation="todo">Skype</text>
+    <text id="INS_SURNAME" development="new" translation="todo">Nachname</text>
     <text id="INS_TABLE_PREFIX" development="new" translation="todo">Tabellenpräfix</text>
     <text id="INS_TEAMS" development="new" translation="todo">Mannschaften</text>
     <text id="INS_TRAINING" development="new" translation="todo">Training</text>
     <text id="INS_UPDATE" development="new" translation="todo">Update</text>
     <text id="INS_UPDATE_DATABASE" development="new" translation="todo">Datenbank aktualisieren</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="todo">Die Aktualisierung war erfolgreich</text>
+    <text id="INS_YAHOO_MESSENGER" development="new1" translation="todo">Yahoo! Messenger</text>
 
     <!-- Phrases only in Linkmodule -->
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
@@ -340,7 +358,6 @@
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
     <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
-    <text id="SYS_BLEND_OUT" development="new" translation="todo">ausblenden</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
     <text id="SYS_CAPTCHA_CODE" development="new" translation="todo">Bestätigungscode</text>
     <text id="SYS_CENTERED" development="new1" translation="todo">Zentriert</text>
@@ -348,6 +365,7 @@
     <text id="SYS_CLOSE_ALL_TAGS" development="new1" translation="todo">Alle Tags schließen</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
     <text id="SYS_CONFIRM_PASSWORD" development="new" translation="todo">Passwort bestätigen</text>
+    <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
     <text id="SYS_DATE" development="new" translation="todo">Datum</text>
     <text id="SYS_DATE_TO" development="new" translation="todo">bis</text>
@@ -359,7 +377,6 @@
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
-    <text id="SYS_FIRST_NAME" development="new" translation="todo">Vorname</text>
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
     <text id="SYS_FONT_COLOR" development="new" translation="todo">Schriftfarbe</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
@@ -367,6 +384,8 @@
     <text id="SYS_FORUM" development="new" translation="todo">Forum</text>
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>
     <text id="SYS_HELP" development="new" translation="todo">Hilfe</text>
+    <text id="SYS_HIDE" development="new" translation="todo">Ausblenden</text>
+    <text id="SYS_HOMEPAGE" development="new" translation="todo">Homepage</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
     <text id="SYS_INCREASE_FONT_SIZE" development="new1" translation="todo">Schriftgrad erhöhen</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
@@ -475,7 +494,6 @@
 	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">starte slideshow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">stoppe slideshow</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
-    <text id="SYS_SURNAME" development="new" translation="todo">Nachname</text>
     <text id="SYS_SYSTEM_MAIL" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TO" development="new" translation="todo">An</text>
