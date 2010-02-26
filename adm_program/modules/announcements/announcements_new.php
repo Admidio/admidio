@@ -166,7 +166,7 @@ echo '
                             echo ' value="1" />
                             <label for="ann_global">'.$g_l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?massage_id=SYS_PHR_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                         </dd>
                     </dl>
