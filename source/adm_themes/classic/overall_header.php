@@ -70,6 +70,9 @@ echo '
     <script type="text/javascript"><!-- 
 		var gRootPath  = "'. $g_root_path. '"; 
 		var gThemePath = "'. THEME_PATH. '";
+		$(document).ready(function(){
+			$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'});
+		});
 	--></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js"></script>
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
