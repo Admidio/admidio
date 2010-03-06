@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Photogalerien
+ * Photoalben
  *
  * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -54,7 +54,7 @@ if ($pho_id == NULL)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 //Modulüberschrift
-$req_headline = $g_l10n->get('PHO_PHR_DEFAULT_HEADLINE');
+$req_headline = $g_l10n->get('PHO_PHOTO_ALBUMS');
 if(isset($_GET['headline']))
 {
     $_SESSION['photomodul_headline'] = strStripTags($_GET['headline']);
@@ -226,7 +226,7 @@ if($pho_id > 0)
 {
     //Ausgabe des Linkpfads
     echo '<div class="navigationPath">
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_PHOTO_GALLARYS').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_PHOTO_ALBEN').'" /></a>
             <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$g_l10n->get('PHO_PHOTO_GALLARYS').'</a>'.$navilink.'
             &nbsp;&gt;&nbsp;'.$photo_album->getValue('pho_name').'         
         </div>';
@@ -445,7 +445,7 @@ echo '<div class="photoModuleContainer">';
                 echo ' '.$g_l10n->get('SYS_DATE_TO').' '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
             }
         echo '
-        	<br />'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers').'
+        	<br />'.$g_l10n->get('PHO_PHR_PHOTOS_BY').': '.$photo_album->getValue('pho_photographers').'
         </div>';
 
         // Anleger und Veraendererinfos SYS_PHR_CREATED_BY
