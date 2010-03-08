@@ -190,7 +190,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag erzeugt hat...
                 $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
-                        where unix_timestamp(gbo_timestamp) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
+                        where unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
                           and gbo_org_id = '. $g_current_organization->getValue('org_id'). '
                           and gbo_ip_address = "'. $guestbook->getValue('gbo_ip_adress'). '"';
                 $result = $g_db->query($sql);
@@ -297,7 +297,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag/Kommentar erzeugt hat...
                 $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
-                         WHERE unix_timestamp(gbc_timestamp) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
+                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
                            AND gbc_ip_address = "'. $guestbook_comment->getValue('gbc_ip_adress'). '"';
                 $result = $g_db->query($sql);
                 $row = $g_db->fetch_array($result);

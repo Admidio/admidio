@@ -679,11 +679,11 @@ else
             
                 echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>
                 <div class="editInformation">'.
-                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
 
                     if($date->getValue('dat_usr_id_change') > 0)
                     {
-                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
                     }
                 echo '</div>';
                

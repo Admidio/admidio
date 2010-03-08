@@ -34,7 +34,7 @@ if ($g_preferences['enable_guestbook_module'] != 1)
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
         WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
-        ORDER BY gbo_timestamp DESC
+        ORDER BY gbo_timestamp_create DESC
         LIMIT 10 ';
 $result = $g_db->query($sql);
 
@@ -55,13 +55,13 @@ while ($row = $g_db->fetch_object($result))
     // Die Attribute fuer das Item zusammenstellen
     $title = $guestbook->getValue('gbo_name');
     $link  = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
-    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']).'</b>';
+    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']).'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $guestbook->getText('HTML'). 
                    '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
 
-    $pubDate = date('r', strtotime($guestbook->getValue('gbo_timestamp')));
+    $pubDate = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));
 
 
     // Item hinzufuegen

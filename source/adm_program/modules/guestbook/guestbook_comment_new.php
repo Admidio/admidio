@@ -142,7 +142,7 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
     $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
-            where unix_timestamp(gbc_timestamp) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
+            where unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
               and gbc_ip_address = "'. $guestbook_comment->getValue('gbc_ip_address'). '"';
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
@@ -272,9 +272,24 @@ echo '
             }
         echo '</ul>
 
-        <hr />
+        <hr />';
 
-        <div class="formSubmit">
+        if($guestbook_comment->getValue('gbc_usr_id_create') > 0)
+        {
+            // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+            echo '<div class="editInformation">';
+                $user_create = new User($g_db, $guestbook_comment->getValue('gbc_usr_id_create'));
+                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $guestbook_comment->getValue('gbc_timestamp_create'));
+
+                if($guestbook_comment->getValue('gbc_usr_id_change') > 0)
+                {
+                    $user_change = new User($g_db, $guestbook_comment->getValue('gbc_usr_id_change'));
+                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $guestbook_comment->getValue('gbc_timestamp_change'));
+                }
+            echo '</div>';
+        }
+
+        echo '<div class="formSubmit">
             <button name="speichern" type="submit" value="speichern" tabindex="5"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>';
 

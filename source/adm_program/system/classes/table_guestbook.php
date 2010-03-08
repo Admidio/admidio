@@ -33,29 +33,14 @@ class TableGuestbook extends TableAccess
         parent::__construct($db, TBL_GUESTBOOK, 'gbo', $gbo_id);
     }
     
-    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    public function setValue($field_name, $field_value)
+    // die Methode loescht den Gaestebucheintrag mit allen zugehoerigen Kommentaren
+    public function delete()
     {
-        if(strlen($field_value) > 0)
-        {
-            if($field_name == 'gbo_homepage')
-            {
-                // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
-                if (substr($field_value, 0, 7) != 'http://' && substr($field_value, 0, 8) != 'https://' )
-                {
-                    $field_value = 'http://'. $field_value;
-                }
-            }
-            elseif($field_name == 'gbo_email')
-            {
-                if (!isValidEmailAddress($field_value))
-                {
-                    // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
-                    $field_value = '';
-                }
-            }
-        }
-        parent::setValue($field_name, $field_value);
+        //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
+        $sql = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
+        $result = $this->db->query($sql);
+        
+        return parent::delete();
     }
 
     // liefert den Text je nach Type zurueck
@@ -92,36 +77,40 @@ class TableGuestbook extends TableAccess
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
     public function save()
     {
-        global $g_current_organization, $g_current_user;
+        global $g_current_organization;
         
         if($this->new_record)
         {
-            $this->setValue('gbo_timestamp', DATETIME_NOW);
-            $this->setValue('gbo_usr_id', $g_current_user->getValue('usr_id'));
             $this->setValue('gbo_org_id', $g_current_organization->getValue('org_id'));
             $this->setValue('gbo_ip_address', $_SERVER['REMOTE_ADDR']);
         }
-        else
-        {
-            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue('gbo_timestamp')) + 900)
-            || $g_current_user->getValue('usr_id') != $this->getValue('gbo_usr_id') )
-            {
-                $this->setValue('gbo_timestamp_change', DATETIME_NOW);
-                $this->setValue('gbo_usr_id_change', $g_current_user->getValue('usr_id'));
-            }
-        }
+
         parent::save();
     }
-    
-    // die Methode loescht den Gaestebucheintrag mit allen zugehoerigen Kommentaren
-    public function delete()
+
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    public function setValue($field_name, $field_value)
     {
-        //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
-        $sql = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
-        $result = $this->db->query($sql);
-        
-        return parent::delete();
-    }    
+        if(strlen($field_value) > 0)
+        {
+            if($field_name == 'gbo_homepage')
+            {
+                // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
+                if (substr($field_value, 0, 7) != 'http://' && substr($field_value, 0, 8) != 'https://' )
+                {
+                    $field_value = 'http://'. $field_value;
+                }
+            }
+            elseif($field_name == 'gbo_email')
+            {
+                if (!isValidEmailAddress($field_value))
+                {
+                    // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
+                    $field_value = '';
+                }
+            }
+        }
+        parent::setValue($field_name, $field_value);
+    } 
 }
 ?>

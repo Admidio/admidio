@@ -194,9 +194,24 @@ echo '
             </li>
         </ul>
 
-        <hr />
+        <hr />';
 
-        <div class="formSubmit">
+        if($link->getValue('lnk_usr_id_create') > 0)
+        {
+            // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+            echo '<div class="editInformation">';
+                $user_create = new User($g_db, $link->getValue('lnk_usr_id_create'));
+                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $link->getValue('lnk_timestamp_create'));
+
+                if($link->getValue('lnk_usr_id_change') > 0)
+                {
+                    $user_change = new User($g_db, $link->getValue('lnk_usr_id_change'));
+                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $link->getValue('lnk_timestamp_change'));
+                }
+            echo '</div>';
+        }
+
+        echo '<div class="formSubmit">
             <button name="speichern" type="submit" value="speichern" tabindex="5"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
     </div>

@@ -53,319 +53,6 @@ class User extends TableUsers
         parent::__construct($db, $usr_id);
     }
 
-    public function readData($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
-
-        $this->readUserData();
-    }
-
-    // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
-    public function readUserData()
-    {
-    	global $g_current_organization;
-
-        if($this->getValue('usr_id') > 0)
-        {
-            $join_user_data  = 'LEFT JOIN '. TBL_USER_DATA. '
-                                  ON usd_usf_id = usf_id
-                                 AND usd_usr_id = '. $this->getValue('usr_id');
-        }
-        else
-        {
-            $join_user_data  = '';
-        }
-
-        $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
-                       '.$join_user_data.'
-                 WHERE usf_cat_id = cat_id
-                   AND (  cat_org_id IS NULL
-                       OR cat_org_id  = '. $g_current_organization->getValue('org_id'). ' )
-                 ORDER BY cat_sequence ASC, usf_sequence ASC ';
-        $usf_result   = $this->db->query($sql);
-
-        while($usf_row = $this->db->fetch_array($usf_result))
-        {
-            if(isset($this->userFieldData[$usf_row['usf_name']]) == false)
-            {
-                $this->userFieldData[$usf_row['usf_name']] = new TableUserData($this->db);
-            }
-            $this->userFieldData[$usf_row['usf_name']]->setArray($usf_row);
-        }
-    }
-    
-    // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
-    public function clearUserFieldArray($delete_db_data = false)
-    {
-        // Jedes Feld durchgehen und alle Inhalte der Tabelle adm_user_data entfernen
-        foreach($this->userFieldData as $field_name => $object)
-        {
-            $this->userFieldData[$field_name]->clearFieldData();
-        }
-        
-        // Daten in der DB auch loeschen
-        if($delete_db_data)
-        {
-            $sql    = 'DELETE FROM '. TBL_USER_DATA. ' WHERE usd_usr_id = '. $this->getValue('usr_id');
-            $this->db->query($sql);
-        }
-    }
-
-    // alle Klassenvariablen wieder zuruecksetzen
-    public function clear()
-    {
-        parent::clear();
-
-        // die Daten der Profilfelder werden geloescht, die Struktur bleibt
-        $this->clearUserFieldArray();
-
-        $this->webmaster = 0;
-        $this->b_set_last_change = true;
-
-        // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
-        $this->setValue('usr_valid', 1);
-
-        // Arrays initialisieren
-        $this->roles_rights = array();
-        $this->list_view_rights = array();
-    }
-
-    // interne Methode, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    public function setValue($field_name, $field_value)
-    {
-        global $g_current_user;
-        $return_code  = false;
-        $update_field = false;
-
-        if(strpos($field_name, 'usr_') !== 0)
-        {
-            // Daten fuer User-Fields-Tabelle
-
-            // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
-            // bei Registrierung muss die Eingabe auch erlaubt sein
-            if((  $this->getProperty($field_name, 'usf_disabled') == 1
-               && $g_current_user->editUsers() == true)
-            || $this->getProperty($field_name, 'usf_disabled') == 0
-            || ($g_current_user->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
-            {
-                $update_field = true;
-            }
-
-            // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
-            // oder im eigenen Profil
-            if((  $this->getProperty($field_name, 'usf_hidden') == 1
-               && $g_current_user->editUsers() == true)
-            || $this->getProperty($field_name, 'usf_hidden') == 0
-            || $g_current_user->getValue('usr_id') == $this->getValue('usr_id'))
-            {
-                $update_field = true;
-            }
-
-            // nur Updaten, wenn sich auch der Wert geaendert hat
-            if($update_field == true
-            && $field_value  != $this->userFieldData[$field_name]->getValue('usd_value'))
-            {
-                // Homepage noch mit http vorbelegen
-                if($this->getProperty($field_name, 'usf_type') == 'URL')
-                {
-                    if(strpos(admStrToLower($field_value), 'http://')  === false
-                    && strpos(admStrToLower($field_value), 'https://') === false )
-                    {
-                        $field_value = 'http://'. $field_value;
-                    }
-                }
-                $return_code = $this->userFieldData[$field_name]->setValue('usd_value', $field_value);
-            }
-        }
-        else
-        {
-            $return_code = parent::setValue($field_name, $field_value);
-        }
-        return $return_code;
-    }
-
-    // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
-    // angefordert wurde und gibt diesen zurueck
-    public function getValue($field_name, $format = '')
-    {
-        if(strpos($field_name, 'usr_') === 0)
-        {
-            return parent::getValue($field_name, $format);
-        }
-        else
-        {
-            return htmlspecialchars($this->getProperty($field_name, 'usd_value'), ENT_QUOTES);
-        }
-    }
-
-    // Methode gibt den Wert eines Profilfeldes zurueck
-    // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
-    // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    public function getProperty($field_name, $property)
-    {
-        if(isset($this->userFieldData[$field_name]))
-        {
-            return $this->userFieldData[$field_name]->getValue($property);
-        }
-        return '';
-    }
-
-    // aehnlich getProperty, allerdings suche ueber usf_id
-    public function getPropertyById($field_id, $property)
-    {
-        foreach($this->userFieldData as $field)
-        {
-            if($field->getValue('usf_id') == $field_id)
-            {
-                return $field->getValue($property);
-            }
-        }
-        return '';
-    }
-    
-    // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
-    public function getListViewRights()
-    {
-        $this->checkRolesRight();
-        return $this->list_view_rights;
-    }
-
-    public function save()
-    {
-        global $g_current_session;
-        $fields_changed = $this->columnsValueChanged;
-
-        parent::save();
-
-        // jetzt noch die einzelnen Spalten sichern
-        foreach($this->userFieldData as $field)
-        {
-            // update nur machen, wenn auch noetig
-            if($field->getValue('usd_id') > 0 || strlen($field->getValue('usd_value')) > 0)
-            {
-                // wird das Feld neu gefuellt, dann auch User-ID setzen
-                if(strlen($field->getValue('usd_usr_id')) == 0
-                && strlen($field->getValue('usd_value')) > 0)
-                {
-                	// PHP4 liefert nur eine Kopie des Objekts, aus diesem Grund muss die Aenderung direkt auf das 
-                	// richtige Objekt verwiesen werden
-                	$this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usr_id', $this->getValue('usr_id'));
-                    $this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usf_id', $field->getValue('usf_id'));
-                    $this->userFieldData[$field->getValue('usf_name')]->new_record = true;
-                }
-
-                // existiert schon ein Wert und dieser wird entfernt, dann auch DS loeschen
-                if($field->getValue('usd_id') > 0
-                && strlen($field->getValue('usd_value')) == 0)
-                {
-                    $this->userFieldData[$field->getValue('usf_name')]->delete();
-                }
-                else
-                {
-                    $this->userFieldData[$field->getValue('usf_name')]->save();
-                }
-            }
-        }
-
-        if($fields_changed && is_object($g_current_session))
-        {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
-            // eine Rechteaenderung vorgenommen wurde
-            $g_current_session->renewUserObject($this->getValue('usr_id'));
-        }
-    }
-
-    // gibt die Userdaten als VCard zurueck
-    // da das Windows-Adressbuch einschliesslich XP kein UTF8 verarbeiten kann, alles in ISO-8859-1 ausgeben
-    public function getVCard()
-    {
-        global $g_current_user;
-
-        $editAllUsers = $g_current_user->editProfile($this->getValue("usr_id"));
-
-        $vcard  = (string) "BEGIN:VCARD\r\n";
-        $vcard .= (string) "VERSION:2.1\r\n";
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Vorname']->getValue('usf_hidden') == 0))
-        {
-            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("Nachname")). ";". utf8_decode($this->getValue("Vorname")) . ";;;\r\n";
-        }
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Nachname']->getValue('usf_hidden') == 0))
-        {
-            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue("Vorname")) . " ". utf8_decode($this->getValue("Nachname")) . "\r\n";
-        }
-        if (strlen($this->getValue('usr_login_name')) > 0)
-        {
-            $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
-        }
-        if (strlen($this->getValue('Telefon')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Telefon']->getValue('usf_hidden') == 0)))
-        {
-            $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue("Telefon"). "\r\n";
-        }
-        if (strlen($this->getValue('Handy')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Handy']->getValue('usf_hidden') == 0)))
-        {
-            $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue("Handy"). "\r\n";
-        }
-        if (strlen($this->getValue('Fax')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Fax']->getValue('usf_hidden') == 0)))
-        {
-            $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue("Fax"). "\r\n";
-        }
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Adresse']->getValue('usf_hidden') == 0 && $this->userFieldData['Ort']->getValue('usf_hidden') == 0
-        && $this->userFieldData['PLZ']->getValue('usf_hidden') == 0  && $this->userFieldData['Land']->getValue('usf_hidden') == 0))
-        {
-            $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue("Adresse")). ";" . utf8_decode($this->getValue("Ort")). ";;" . utf8_decode($this->getValue("PLZ")). ";" . utf8_decode($this->getValue("Land")). "\r\n";
-        }
-        if (strlen($this->getValue('Homepage')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Homepage']->getValue('usf_hidden') == 0)))
-        {
-            $vcard .= (string) "URL;HOME:" . $this->getValue("Homepage"). "\r\n";
-        }
-        if (strlen($this->getValue('Geburtstag')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geburtstag']->getValue('usf_hidden') == 0)))
-        {
-            $vcard .= (string) "BDAY:" . $this->getValue('Geburtstag', 'Ymd') . "\r\n";
-        }
-        if (strlen($this->getValue('E-Mail')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['E-Mail']->getValue('usf_hidden') == 0)))
-        {
-            $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
-        }
-        if (file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $g_preferences['profile_photo_storage'] == 1)
-        {
-            $img_handle = fopen (SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
-            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode(fread ($img_handle, filesize (SERVER_PATH. "/adm_my_files/user_profile_photos/".$this->getValue("usr_id").".jpg"))). "\r\n";
-            fclose($img_handle);
-        }
-        if (strlen($this->getValue('usr_photo')) > 0 && $g_preferences['profile_photo_storage'] == 0)
-        {
-            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
-        }
-        // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->getValue('Geschlecht') > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geschlecht']->getValue('usf_hidden') == 0)))
-        {
-            if($this->getValue('Geschlecht') == 1)
-            {
-                $wab_gender = 2;
-            }
-            else
-            {
-                $wab_gender = 1;
-            }
-            $vcard .= (string) "X-WAB-GENDER:" . $wab_gender . "\r\n";
-        }
-        if (strlen($this->getValue('usr_timestamp_change')) > 0)
-        {
-            $vcard .= (string) "REV:" . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
-        }
-
-        $vcard .= (string) "END:VCARD\r\n";
-        return $vcard;
-    }
-
     // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags,
     // welche Rollen der User einsehen darf
     public function checkRolesRight($right = '')
@@ -483,6 +170,318 @@ class User extends TableUsers
             }
         }
         return 0;
+    }
+
+    // alle Klassenvariablen wieder zuruecksetzen
+    public function clear()
+    {
+        parent::clear();
+
+        // die Daten der Profilfelder werden geloescht, die Struktur bleibt
+        $this->clearUserFieldArray();
+
+        $this->webmaster = 0;
+
+        // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
+        $this->setValue('usr_valid', 1);
+
+        // Arrays initialisieren
+        $this->roles_rights = array();
+        $this->list_view_rights = array();
+    }
+    
+    // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
+    public function clearUserFieldArray($delete_db_data = false)
+    {
+        // Jedes Feld durchgehen und alle Inhalte der Tabelle adm_user_data entfernen
+        foreach($this->userFieldData as $field_name => $object)
+        {
+            $this->userFieldData[$field_name]->clearFieldData();
+        }
+        
+        // Daten in der DB auch loeschen
+        if($delete_db_data)
+        {
+            $sql    = 'DELETE FROM '. TBL_USER_DATA. ' WHERE usd_usr_id = '. $this->getValue('usr_id');
+            $this->db->query($sql);
+        }
+    }
+
+    // Methode gibt den Wert eines Profilfeldes zurueck
+    // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
+    // hier koennen auch noch bestimmte Formatierungen angewandt werden
+    public function getProperty($field_name, $property)
+    {
+        if(isset($this->userFieldData[$field_name]))
+        {
+            return $this->userFieldData[$field_name]->getValue($property);
+        }
+        return '';
+    }
+
+    // aehnlich getProperty, allerdings suche ueber usf_id
+    public function getPropertyById($field_id, $property)
+    {
+        foreach($this->userFieldData as $field)
+        {
+            if($field->getValue('usf_id') == $field_id)
+            {
+                return $field->getValue($property);
+            }
+        }
+        return '';
+    }
+    
+    // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
+    public function getListViewRights()
+    {
+        $this->checkRolesRight();
+        return $this->list_view_rights;
+    }
+
+    // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
+    // angefordert wurde und gibt diesen zurueck
+    public function getValue($field_name, $format = '')
+    {
+        if(strpos($field_name, 'usr_') === 0)
+        {
+            return parent::getValue($field_name, $format);
+        }
+        else
+        {
+            return htmlspecialchars($this->getProperty($field_name, 'usd_value'), ENT_QUOTES);
+        }
+    }
+
+    // gibt die Userdaten als VCard zurueck
+    // da das Windows-Adressbuch einschliesslich XP kein UTF8 verarbeiten kann, alles in ISO-8859-1 ausgeben
+    public function getVCard()
+    {
+        global $g_current_user;
+
+        $editAllUsers = $g_current_user->editProfile($this->getValue("usr_id"));
+
+        $vcard  = (string) "BEGIN:VCARD\r\n";
+        $vcard .= (string) "VERSION:2.1\r\n";
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Vorname']->getValue('usf_hidden') == 0))
+        {
+            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("Nachname")). ";". utf8_decode($this->getValue("Vorname")) . ";;;\r\n";
+        }
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Nachname']->getValue('usf_hidden') == 0))
+        {
+            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue("Vorname")) . " ". utf8_decode($this->getValue("Nachname")) . "\r\n";
+        }
+        if (strlen($this->getValue('usr_login_name')) > 0)
+        {
+            $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
+        }
+        if (strlen($this->getValue('Telefon')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Telefon']->getValue('usf_hidden') == 0)))
+        {
+            $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue("Telefon"). "\r\n";
+        }
+        if (strlen($this->getValue('Handy')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Handy']->getValue('usf_hidden') == 0)))
+        {
+            $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue("Handy"). "\r\n";
+        }
+        if (strlen($this->getValue('Fax')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Fax']->getValue('usf_hidden') == 0)))
+        {
+            $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue("Fax"). "\r\n";
+        }
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Adresse']->getValue('usf_hidden') == 0 && $this->userFieldData['Ort']->getValue('usf_hidden') == 0
+        && $this->userFieldData['PLZ']->getValue('usf_hidden') == 0  && $this->userFieldData['Land']->getValue('usf_hidden') == 0))
+        {
+            $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue("Adresse")). ";" . utf8_decode($this->getValue("Ort")). ";;" . utf8_decode($this->getValue("PLZ")). ";" . utf8_decode($this->getValue("Land")). "\r\n";
+        }
+        if (strlen($this->getValue('Homepage')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Homepage']->getValue('usf_hidden') == 0)))
+        {
+            $vcard .= (string) "URL;HOME:" . $this->getValue("Homepage"). "\r\n";
+        }
+        if (strlen($this->getValue('Geburtstag')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geburtstag']->getValue('usf_hidden') == 0)))
+        {
+            $vcard .= (string) "BDAY:" . $this->getValue('Geburtstag', 'Ymd') . "\r\n";
+        }
+        if (strlen($this->getValue('E-Mail')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['E-Mail']->getValue('usf_hidden') == 0)))
+        {
+            $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
+        }
+        if (file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $g_preferences['profile_photo_storage'] == 1)
+        {
+            $img_handle = fopen (SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
+            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode(fread ($img_handle, filesize (SERVER_PATH. "/adm_my_files/user_profile_photos/".$this->getValue("usr_id").".jpg"))). "\r\n";
+            fclose($img_handle);
+        }
+        if (strlen($this->getValue('usr_photo')) > 0 && $g_preferences['profile_photo_storage'] == 0)
+        {
+            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
+        }
+        // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
+        if ($this->getValue('Geschlecht') > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geschlecht']->getValue('usf_hidden') == 0)))
+        {
+            if($this->getValue('Geschlecht') == 1)
+            {
+                $wab_gender = 2;
+            }
+            else
+            {
+                $wab_gender = 1;
+            }
+            $vcard .= (string) "X-WAB-GENDER:" . $wab_gender . "\r\n";
+        }
+        if (strlen($this->getValue('usr_timestamp_change')) > 0)
+        {
+            $vcard .= (string) "REV:" . $this->getValue('usr_timestamp_change', 'ymdThis') . "\r\n";
+        }
+
+        $vcard .= (string) "END:VCARD\r\n";
+        return $vcard;
+    }
+
+    public function readData($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
+    {
+        parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
+
+        $this->readUserData();
+    }
+
+    // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
+    public function readUserData()
+    {
+    	global $g_current_organization;
+
+        if($this->getValue('usr_id') > 0)
+        {
+            $join_user_data  = 'LEFT JOIN '. TBL_USER_DATA. '
+                                  ON usd_usf_id = usf_id
+                                 AND usd_usr_id = '. $this->getValue('usr_id');
+        }
+        else
+        {
+            $join_user_data  = '';
+        }
+
+        $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
+                       '.$join_user_data.'
+                 WHERE usf_cat_id = cat_id
+                   AND (  cat_org_id IS NULL
+                       OR cat_org_id  = '. $g_current_organization->getValue('org_id'). ' )
+                 ORDER BY cat_sequence ASC, usf_sequence ASC ';
+        $usf_result   = $this->db->query($sql);
+
+        while($usf_row = $this->db->fetch_array($usf_result))
+        {
+            if(isset($this->userFieldData[$usf_row['usf_name']]) == false)
+            {
+                $this->userFieldData[$usf_row['usf_name']] = new TableUserData($this->db);
+            }
+            $this->userFieldData[$usf_row['usf_name']]->setArray($usf_row);
+        }
+    }
+
+    public function save($updateFingerPrint = true)
+    {
+        global $g_current_session;
+        $fields_changed = $this->columnsValueChanged;
+
+        parent::save($updateFingerPrint);
+
+        // jetzt noch die einzelnen Spalten sichern
+        foreach($this->userFieldData as $field)
+        {
+            // update nur machen, wenn auch noetig
+            if($field->getValue('usd_id') > 0 || strlen($field->getValue('usd_value')) > 0)
+            {
+                // wird das Feld neu gefuellt, dann auch User-ID setzen
+                if(strlen($field->getValue('usd_usr_id')) == 0
+                && strlen($field->getValue('usd_value')) > 0)
+                {
+                	// PHP4 liefert nur eine Kopie des Objekts, aus diesem Grund muss die Aenderung direkt auf das 
+                	// richtige Objekt verwiesen werden
+                	$this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usr_id', $this->getValue('usr_id'));
+                    $this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usf_id', $field->getValue('usf_id'));
+                    $this->userFieldData[$field->getValue('usf_name')]->new_record = true;
+                }
+
+                // existiert schon ein Wert und dieser wird entfernt, dann auch DS loeschen
+                if($field->getValue('usd_id') > 0
+                && strlen($field->getValue('usd_value')) == 0)
+                {
+                    $this->userFieldData[$field->getValue('usf_name')]->delete();
+                }
+                else
+                {
+                    $this->userFieldData[$field->getValue('usf_name')]->save();
+                }
+            }
+        }
+
+        if($fields_changed && is_object($g_current_session))
+        {
+            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
+            // eine Rechteaenderung vorgenommen wurde
+            $g_current_session->renewUserObject($this->getValue('usr_id'));
+        }
+    }
+
+    // interne Methode, die bei setValue den uebergebenen Wert prueft
+    // und ungueltige Werte auf leer setzt
+    public function setValue($field_name, $field_value)
+    {
+        global $g_current_user;
+        $return_code  = false;
+        $update_field = false;
+
+        if(strpos($field_name, 'usr_') !== 0)
+        {
+            // Daten fuer User-Fields-Tabelle
+
+            // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
+            // bei Registrierung muss die Eingabe auch erlaubt sein
+            if((  $this->getProperty($field_name, 'usf_disabled') == 1
+               && $g_current_user->editUsers() == true)
+            || $this->getProperty($field_name, 'usf_disabled') == 0
+            || ($g_current_user->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
+            {
+                $update_field = true;
+            }
+
+            // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
+            // oder im eigenen Profil
+            if((  $this->getProperty($field_name, 'usf_hidden') == 1
+               && $g_current_user->editUsers() == true)
+            || $this->getProperty($field_name, 'usf_hidden') == 0
+            || $g_current_user->getValue('usr_id') == $this->getValue('usr_id'))
+            {
+                $update_field = true;
+            }
+
+            // nur Updaten, wenn sich auch der Wert geaendert hat
+            if($update_field == true
+            && $field_value  != $this->userFieldData[$field_name]->getValue('usd_value'))
+            {
+                // Homepage noch mit http vorbelegen
+                if($this->getProperty($field_name, 'usf_type') == 'URL')
+                {
+                    if(strpos(admStrToLower($field_value), 'http://')  === false
+                    && strpos(admStrToLower($field_value), 'https://') === false )
+                    {
+                        $field_value = 'http://'. $field_value;
+                    }
+                }
+                $return_code = $this->userFieldData[$field_name]->setValue('usd_value', $field_value);
+            }
+        }
+        else
+        {
+            $return_code = parent::setValue($field_name, $field_value);
+        }
+        return $return_code;
     }
 
     // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf

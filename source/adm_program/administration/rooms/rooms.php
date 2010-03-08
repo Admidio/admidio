@@ -38,7 +38,9 @@ echo '<h1 class="moduleHeadline">Raumverwaltung</h1>
 </span>
 <br/>';
 
-$sql = 'SELECT room.*, cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname
+$sql = 'SELECT room.*, 
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
           FROM adm_rooms room
           LEFT JOIN '. TBL_USER_DATA .' cre_surname 
             ON cre_surname.usd_usr_id = room_usr_id_create
@@ -46,6 +48,12 @@ $sql = 'SELECT room.*, cre_surname.usd_value as create_surname, cre_firstname.us
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
             ON cre_firstname.usd_usr_id = room_usr_id_create
            AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_surname 
+            ON cha_surname.usd_usr_id = room_usr_id_change
+           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_firstname 
+            ON cha_firstname.usd_usr_id = room_usr_id_change
+           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
          ORDER BY room_name';
 $rooms_result = $g_db->query($sql);
 
@@ -113,8 +121,13 @@ else
                             .$room->getDescription('HTML').'</div>';
                     }
                     echo '<div class="editInformation">'.
-                        $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']));
-                    echo '</div>
+                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('dat_timestamp_create'));
+
+                    if($room->getValue('dat_usr_id_change') > 0)
+                    {
+                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $room->getValue('dat_timestamp_change'));
+                    }
+                echo '</div>
                 </div>
             </div>
         </div>';

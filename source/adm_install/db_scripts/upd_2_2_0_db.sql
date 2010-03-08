@@ -1,4 +1,29 @@
 
+-- Tabelle User_Fields erweitern
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_name_intern` VARCHAR(110) AFTER usf_type;
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_usr_id_create` INT(11) unsigned;
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_timestamp_create` datetime;
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_usr_id_change` INT(11) unsigned;
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_timestamp_change` datetime;
+
+ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_description` `usf_description_old` varchar(255);
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_description` text AFTER usf_name;
+UPDATE %PREFIX%_user_fields SET usf_description = usf_description_old;
+ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_description_old;
+
+-- Gaestebuchtabellenspalten auf Standardbezeichnung umstellen
+ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_FK_GBO_USR;
+ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_usr_id` `gbo_usr_id_create` int(11) unsigned;
+alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_USR_CREATE foreign key (gbo_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_timestamp` `gbo_timestamp_create` datetime NOT NULL;
+
+ALTER TABLE %PREFIX%_guestbook_comments DROP FOREIGN KEY %PREFIX%_FK_GBC_USR;
+ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_usr_id` `gbc_usr_id_create` int(11) unsigned;
+alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CREATE foreign key (gbc_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_timestamp` `gbc_timestamp_create` datetime NOT NULL;
+
 -- Feldgroessen anpasssen
 ALTER TABLE %PREFIX%_organizations MODIFY COLUMN `org_homepage` VARCHAR(60) NOT NULL;
 
@@ -14,6 +39,8 @@ CREATE TABLE %PREFIX%_rooms
     room_overhang                   int(11) unsigned,
     room_usr_id_create              int(11) unsigned,
     room_timestamp_create           datetime                        not null,
+    room_usr_id_change              int(11) unsigned,
+    room_timestamp_change           datetime,
     primary key (room_id)                                                                       
 )
 engine = InnoDB

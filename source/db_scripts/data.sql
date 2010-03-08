@@ -2228,7 +2228,8 @@ INSERT INTO `%PREFIX%_roles` VALUES (1,3,'Webmaster','Gruppe der Administratoren
  (2,3,'Mitglied','Alle Mitglieder der Organisation',0,0,0,0,0,0,0,1,0,0,2,0,1,0,2,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2008-05-03 16:26:36',1,'2008-05-03 16:26:36',1,0),
  (3,3,'Vorstand','Vorstand des Vereins',0,0,1,1,0,1,0,0,0,0,3,0,1,1,2,1,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2008-05-03 16:26:12',1,'2008-05-03 16:26:12',1,0),
  (4,6,'1. Jugendmannschaft','Jugendliche zwischen 12 und 15 Jahren',0,0,0,0,0,0,0,1,0,0,2,0,1,0,1,0,NULL,'15:00:00',NULL,'16:00:00',3,'Sportplatz',NULL,NULL,NULL,1,'2008-05-03 16:24:41',1,'2008-05-03 16:24:41',1,0),
- (5,6,'2. Jugendmannschaft','Jugendliche zwischen 16 und 18 Jahren',0,0,0,0,0,0,0,1,0,0,2,0,1,0,1,0,NULL,'16:00:00',NULL,'17:00:00',5,'Sportplatz',NULL,NULL,NULL,1,'2008-05-03 16:25:58',1,'2008-05-03 16:25:58',1,0);
+ (5,6,'2. Jugendmannschaft','Jugendliche zwischen 16 und 18 Jahren',0,0,0,0,0,0,0,1,0,0,2,0,1,0,1,0,NULL,'16:00:00',NULL,'17:00:00',5,'Sportplatz',NULL,NULL,NULL,1,'2008-05-03 16:25:58',1,'2008-05-03 16:25:58',1,0),
+ (6,13,'Webmaster','Gruppe der Administratoren des Systems',1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2009-05-20 22:35:08',1,'2010-01-21 20:35:08',1,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PREFIX%_roles` ENABLE KEYS */;
 
@@ -2237,6 +2238,7 @@ UNLOCK TABLES;
 LOCK TABLES `%PREFIX%_members` WRITE;
 INSERT INTO `%PREFIX%_members` VALUES  (1,1,1,'2008-04-20','9999-12-31',0),
  (2,4,1,'2008-04-20','2009-10-31',0),
+ (3,6,1,'2009-04-20','9999-12-31',0),
  (201,2,202,'2008-04-26','9999-12-31',0),
  (202,2,203,'2008-04-26','9999-12-31',0),
  (203,2,204,'2008-04-26','9999-12-31',0),

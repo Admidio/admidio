@@ -174,8 +174,7 @@ if ($user_found >= 1)
             $g_current_user->setValue('usr_number_invalid', $g_current_user->getValue('usr_number_invalid') + 1);
         }
         $g_current_user->setValue('usr_date_invalid', DATETIME_NOW);
-        $g_current_user->b_set_last_change = false;
-        $g_current_user->save();
+        $g_current_user->save(false);   // Zeitstempel nicht aktualisieren
 
         if($g_current_user->getValue('usr_number_invalid') >= 3)
         {

@@ -60,54 +60,6 @@ class TableAccess
             $this->clear();
         }
     }
-
-    // liest den Datensatz von $id ein
-    // id : Schluesselwert von dem der Datensatz gelesen werden soll
-    // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
-    // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
-    //                          eingelesen werden soll, dabei muessen die Verknuepfungen
-    //                          in sql_where_condition stehen
-    public function readData($id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
-        $this->clear();
-
-        // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen, 
-        // falls diese sinnvoll gefuellt ist
-        if(strlen($sql_where_condition) == 0 && strlen($id) > 0 && $id != '0')
-        {
-            $sql_where_condition = ' '.$this->key_name.' = "'.$id.'" ';
-        }
-        if(strlen($sql_additional_tables) > 0)
-        {
-            $sql_additional_tables = ', '. $sql_additional_tables;
-        }
-        
-        if(strlen($sql_where_condition) > 0)
-        {
-            $sql = 'SELECT * FROM '.$this->table_name.' '.$sql_additional_tables.'
-                     WHERE '.$sql_where_condition.' ';
-            $result = $this->db->query($sql);
-    
-            if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
-            {
-                $this->new_record = false;
-                
-                // Daten in das Klassenarray schieben
-                foreach($row as $key => $value)
-                {
-                    if(is_null($value))
-                    {
-                        $this->dbColumns[$key] = '';
-                    }
-                    else
-                    {
-                        $this->dbColumns[$key] = $value;
-                    }
-                }
-            }
-        }       
-    }
     
     // alle Klassenvariablen wieder zuruecksetzen
    public function clear()
@@ -156,74 +108,18 @@ class TableAccess
         $row = $this->db->fetch_array();
         return $row['count'];
     }
-    
-    // es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
-    // uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
-    // Mit dieser Methode kann das Einlesen der Werte umgangen werden.
-    public function setArray($field_array)
+
+    // aktuelle Datensatz loeschen und ggf. noch die Referenzen
+    public function delete()
     {
-        foreach($field_array as $field => $value)
-        {
-            $this->dbColumns[$field] = $value;
-            $this->columnsInfos[$field]['changed'] = false;
-        }
-        $this->new_record = false;
+        $sql    = 'DELETE FROM '.$this->table_name.' 
+                    WHERE '.$this->key_name.' = "'. $this->dbColumns[$this->key_name]. '"';
+        $this->db->query($sql);
+
+        $this->clear();
+        return true;
     }
 
-    // Methode setzt den Wert eines Feldes neu, 
-    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
-    public function setValue($field_name, $field_value)
-    {
-        $return_code = false;
-
-        if(array_key_exists($field_name, $this->dbColumns))
-        {
-            // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
-            if(strlen($field_value) > 0)
-            {
-                // Numerische Felder
-                if(strpos($this->columnsInfos[$field_name]['type'], 'int') !== false)
-                {
-                    if(is_numeric($field_value) == false)
-                    {
-                        $field_value = '';
-                    }
-
-                    // Schluesselfelder duerfen keine 0 enthalten
-                    if((  $this->columnsInfos[$field_name]['key'] == 'PRI'
-                       || $this->columnsInfos[$field_name]['key'] == 'MUL')
-                    && $field_value == 0)
-                    {
-                        if($field_name != 'mem_from_rol_id') $field_value = '';
-                    }
-                }
-                
-                // Strings
-                elseif(strpos($this->columnsInfos[$field_name]['type'], 'char') !== false
-                ||     strpos($this->columnsInfos[$field_name]['type'], 'text') !== false)
-                {
-                    $field_value = strStripTags($field_value);
-                }
-
-                // Daten
-                elseif(strpos($this->columnsInfos[$field_name]['type'], 'blob') !== false)
-                {
-                    $field_value = addslashes($field_value);
-                }
-            }
-    
-            if(array_key_exists($field_name, $this->dbColumns)
-            && $field_value != $this->dbColumns[$field_name])
-            {
-                $this->dbColumns[$field_name] = $field_value;
-                $this->columnsValueChanged      = true;
-                $this->columnsInfos[$field_name]['changed'] = true;
-                $return_code = true;
-            }
-        }
-        return $return_code;
-    }    
-    
     // Methode gibt den Wert eines Feldes ($field_name) zurueck
     // $format kann fuer Datetime-Felder das Format aus der PHP-Funktion date() angegeben werden
     public function getValue($field_name, $format = '')
@@ -293,10 +189,59 @@ class TableAccess
             return $field_value;
         }
     }
+
+    // liest den Datensatz von $id ein
+    // id : Schluesselwert von dem der Datensatz gelesen werden soll
+    // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
+    // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
+    //                          eingelesen werden soll, dabei muessen die Verknuepfungen
+    //                          in sql_where_condition stehen
+    public function readData($id, $sql_where_condition = '', $sql_additional_tables = '')
+    {
+        // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
+        $this->clear();
+
+        // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen, 
+        // falls diese sinnvoll gefuellt ist
+        if(strlen($sql_where_condition) == 0 && strlen($id) > 0 && $id != '0')
+        {
+            $sql_where_condition = ' '.$this->key_name.' = "'.$id.'" ';
+        }
+        if(strlen($sql_additional_tables) > 0)
+        {
+            $sql_additional_tables = ', '. $sql_additional_tables;
+        }
+        
+        if(strlen($sql_where_condition) > 0)
+        {
+            $sql = 'SELECT * FROM '.$this->table_name.' '.$sql_additional_tables.'
+                     WHERE '.$sql_where_condition.' ';
+            $result = $this->db->query($sql);
+    
+            if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
+            {
+                $this->new_record = false;
+                
+                // Daten in das Klassenarray schieben
+                foreach($row as $key => $value)
+                {
+                    if(is_null($value))
+                    {
+                        $this->dbColumns[$key] = '';
+                    }
+                    else
+                    {
+                        $this->dbColumns[$key] = $value;
+                    }
+                }
+            }
+        }       
+    }
     
     // die Methode speichert die Organisationsdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht
-    public function save()
+    // updateFingerPrint : steuert, ob in den Tabellen der Ersteller und Aenderer aktualisiert wird
+    public function save($updateFingerPrint = true)
     {
         if($this->columnsValueChanged || strlen($this->dbColumns[$this->key_name]) == 0)
         {
@@ -304,6 +249,29 @@ class TableAccess
             $item_connection = '';                
             $sql_field_list  = '';
             $sql_value_list  = '';
+
+            if($updateFingerPrint)
+            {
+                // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung, 
+                // dann diese hier automatisiert fuellen
+                if($this->new_record && isset($this->dbColumns[$this->column_praefix.'_usr_id_create']))
+                {
+                    global $g_current_user;
+                    $this->setValue($this->column_praefix.'_timestamp_create', DATETIME_NOW);
+                    $this->setValue($this->column_praefix.'_usr_id_create', $g_current_user->getValue('usr_id'));
+                }
+                elseif(isset($this->dbColumns[$this->column_praefix.'_usr_id_change']))
+                {
+                    global $g_current_user;
+                    // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
+                    if(time() > (strtotime($this->getValue($this->column_praefix.'_timestamp_create')) + 900)
+                    || $g_current_user->getValue('usr_id') != $this->getValue($this->column_praefix.'_usr_id_create') )
+                    {
+                        $this->setValue($this->column_praefix.'_timestamp_change', DATETIME_NOW);
+                        $this->setValue($this->column_praefix.'_usr_id_change', $g_current_user->getValue('usr_id'));
+                    }
+                }
+            }
 
             // Schleife ueber alle DB-Felder und diese dem Update hinzufuegen                
             foreach($this->dbColumns as $key => $value)
@@ -384,16 +352,72 @@ class TableAccess
         $this->columnsValueChanged = false;
         return 0;
     }
-    
-    // aktuelle Datensatz loeschen und ggf. noch die Referenzen
-    public function delete()
-    {
-        $sql    = 'DELETE FROM '.$this->table_name.' 
-                    WHERE '.$this->key_name.' = "'. $this->dbColumns[$this->key_name]. '"';
-        $this->db->query($sql);
 
-        $this->clear();
-        return true;
-    }    
+    // es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
+    // uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
+    // Mit dieser Methode kann das Einlesen der Werte umgangen werden.
+    public function setArray($field_array)
+    {
+        foreach($field_array as $field => $value)
+        {
+            $this->dbColumns[$field] = $value;
+            $this->columnsInfos[$field]['changed'] = false;
+        }
+        $this->new_record = false;
+    }
+
+    // Methode setzt den Wert eines Feldes neu, 
+    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
+    public function setValue($field_name, $field_value)
+    {
+        $return_code = false;
+
+        if(array_key_exists($field_name, $this->dbColumns))
+        {
+            // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
+            if(strlen($field_value) > 0)
+            {
+                // Numerische Felder
+                if(strpos($this->columnsInfos[$field_name]['type'], 'int') !== false)
+                {
+                    if(is_numeric($field_value) == false)
+                    {
+                        $field_value = '';
+                    }
+
+                    // Schluesselfelder duerfen keine 0 enthalten
+                    if((  $this->columnsInfos[$field_name]['key'] == 'PRI'
+                       || $this->columnsInfos[$field_name]['key'] == 'MUL')
+                    && $field_value == 0)
+                    {
+                        if($field_name != 'mem_from_rol_id') $field_value = '';
+                    }
+                }
+                
+                // Strings
+                elseif(strpos($this->columnsInfos[$field_name]['type'], 'char') !== false
+                ||     strpos($this->columnsInfos[$field_name]['type'], 'text') !== false)
+                {
+                    $field_value = strStripTags($field_value);
+                }
+
+                // Daten
+                elseif(strpos($this->columnsInfos[$field_name]['type'], 'blob') !== false)
+                {
+                    $field_value = addslashes($field_value);
+                }
+            }
+    
+            if(array_key_exists($field_name, $this->dbColumns)
+            && $field_value != $this->dbColumns[$field_name])
+            {
+                $this->dbColumns[$field_name] = $field_value;
+                $this->columnsValueChanged      = true;
+                $this->columnsInfos[$field_name]['changed'] = true;
+                $return_code = true;
+            }
+        }
+        return $return_code;
+    } 
 }
 ?>
