@@ -275,13 +275,13 @@ create table %PREFIX%_guestbook
 (
    gbo_id                         int(11) unsigned               not null AUTO_INCREMENT,
    gbo_org_id                     tinyint(4)                     not null,
-   gbo_usr_id                     int(11) unsigned,
    gbo_name                       varchar(60)                    not null,
    gbo_text                       text                           not null,
    gbo_email                      varchar(50),
    gbo_homepage                   varchar(50),
-   gbo_timestamp                  datetime                       not null,
    gbo_ip_address                 varchar(15)                    not null,
+   gbo_usr_id_create              int(11) unsigned,
+   gbo_timestamp_create           datetime                       not null,
    gbo_usr_id_change              int(11) unsigned,
    gbo_timestamp_change           datetime,
    primary key (gbo_id)
@@ -291,13 +291,13 @@ auto_increment = 1;
 
 -- Index
 alter table %PREFIX%_guestbook add index GBO_ORG_FK (gbo_org_id);
-alter table %PREFIX%_guestbook add index GBO_USR_FK (gbo_usr_id);
+alter table %PREFIX%_guestbook add index GBO_USR_CREATE_FK (gbo_usr_id_create);
 alter table %PREFIX%_guestbook add index GBO_USR_CHANGE_FK (gbo_usr_id_change);
 
 -- Constraints
 alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_ORG foreign key (gbo_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
-alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_USR foreign key (gbo_usr_id)
+alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_USR_CREATE foreign key (gbo_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_guestbook add constraint %PREFIX%_FK_GBO_USR_CHANGE foreign key (gbo_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
@@ -309,12 +309,12 @@ create table %PREFIX%_guestbook_comments
 (
    gbc_id                         int(11) unsigned               not null AUTO_INCREMENT,
    gbc_gbo_id                     int(11) unsigned               not null,
-   gbc_usr_id                     int(11) unsigned,
    gbc_name                       varchar(60)                    not null,
    gbc_text                       text                           not null,
    gbc_email                      varchar(50),
-   gbc_timestamp                  datetime                       not null,
    gbc_ip_address                 varchar(15)                    not null,
+   gbc_usr_id_create              int(11) unsigned,
+   gbc_timestamp_create           datetime                       not null,
    gbc_usr_id_change              int(11) unsigned,
    gbc_timestamp_change           datetime,
    primary key (gbc_id)
@@ -324,13 +324,13 @@ auto_increment = 1;
 
 -- Index
 alter table %PREFIX%_guestbook_comments add index GBC_GBO_FK (gbc_gbo_id);
-alter table %PREFIX%_guestbook_comments add index GBC_USR_FK (gbc_usr_id);
+alter table %PREFIX%_guestbook_comments add index GBC_USR_CREATE_FK (gbc_usr_id_create);
 alter table %PREFIX%_guestbook_comments add index GBC_USR_CHANGE_FK (gbc_usr_id_change);
 
 -- Constraints
 alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_GBO foreign key (gbc_gbo_id)
       references %PREFIX%_guestbook (gbo_id) on delete restrict on update restrict;
-alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR foreign key (gbc_usr_id)
+alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CREATE foreign key (gbc_usr_id_create)
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
@@ -634,6 +634,8 @@ create table %PREFIX%_rooms
     room_overhang                   int(11) unsigned,
     room_usr_id_create              int(11) unsigned,
     room_timestamp_create           datetime                        not null,
+    room_usr_id_change              int(11) unsigned,
+    room_timestamp_change           datetime,
     primary key (room_id)                                                                       
 )
 engine = InnoDB
@@ -698,14 +700,20 @@ create table %PREFIX%_user_fields
    usf_id                         int(11) unsigned               not null AUTO_INCREMENT,
    usf_cat_id                     int(11) unsigned               not null,
    usf_type                       varchar(10)                    not null,
+   usf_name_intern                varchar(110)                   not null,
    usf_name                       varchar(100)                   not null,
-   usf_description                varchar(255),
+   usf_description                text,
    usf_system                     tinyint(1) unsigned            not null default 0,
    usf_disabled                   tinyint(1) unsigned            not null default 0,
    usf_hidden                     tinyint(1) unsigned            not null default 0,
    usf_mandatory                  tinyint(1) unsigned            not null default 0,
-   usf_sequence                         smallint                       not null,
-   primary key (usf_id)
+   usf_sequence                   smallint                       not null,
+   usf_usr_id_create              int(11) unsigned,
+   usf_timestamp_create           datetime                       not null,
+   usf_usr_id_change              int(11) unsigned,
+   usf_timestamp_change           datetime,
+   primary key (usf_id),
+   unique ak_name_intern (usf_name_intern)
 )
 engine = InnoDB
 auto_increment = 1;

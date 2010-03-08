@@ -33,35 +33,6 @@ class TableWeblink extends TableAccess
         parent::__construct($db, TBL_LINKS, 'lnk', $lnk_id);
     }
 
-    // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($lnk_id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        global $g_current_organization;
-        
-        $sql_additional_tables .= TBL_CATEGORIES;
-        $sql_where_condition   .= '     lnk_id     = '.$lnk_id.' 
-                                    AND lnk_cat_id = cat_id
-                                    AND cat_org_id = '. $g_current_organization->getValue('org_id');
-        parent::readData($lnk_id, $sql_where_condition, $sql_additional_tables);
-    }
-    
-    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    public function setValue($field_name, $field_value)
-    {
-        if(strlen($field_value) > 0)
-        {
-            if($field_name == 'lnk_url')
-            {
-                // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
-                if (substr($field_value, 0, 7) != 'http://' && substr($field_value, 0, 8) != 'https://' )
-                {
-                    $field_value = 'http://'. $field_value;
-                }
-            }
-        }
-        parent::setValue($field_name, $field_value);
-    }
-
     // liefert die Beschreibung je nach Type zurueck
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
@@ -93,27 +64,33 @@ class TableWeblink extends TableAccess
         return $description;
     }
 
-    // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
+    // Termin mit der uebergebenen ID aus der Datenbank auslesen
+    public function readData($lnk_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        global $g_current_organization, $g_current_user;
+        global $g_current_organization;
         
-        if($this->new_record)
+        $sql_additional_tables .= TBL_CATEGORIES;
+        $sql_where_condition   .= '     lnk_id     = '.$lnk_id.' 
+                                    AND lnk_cat_id = cat_id
+                                    AND cat_org_id = '. $g_current_organization->getValue('org_id');
+        parent::readData($lnk_id, $sql_where_condition, $sql_additional_tables);
+    }
+    
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    public function setValue($field_name, $field_value)
+    {
+        if(strlen($field_value) > 0)
         {
-            $this->setValue('lnk_timestamp_create', DATETIME_NOW);
-            $this->setValue('lnk_usr_id_create', $g_current_user->getValue('usr_id'));
-        }
-        else
-        {
-            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue('lnk_timestamp_create')) + 900)
-            || $g_current_user->getValue('usr_id') != $this->getValue('lnk_usr_id_create') )
+            if($field_name == 'lnk_url')
             {
-                $this->setValue('lnk_timestamp_change', DATETIME_NOW);
-                $this->setValue('lnk_usr_id_change', $g_current_user->getValue('usr_id'));
+                // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
+                if (substr($field_value, 0, 7) != 'http://' && substr($field_value, 0, 8) != 'https://' )
+                {
+                    $field_value = 'http://'. $field_value;
+                }
             }
         }
-        parent::save();
-    }   
+        parent::setValue($field_name, $field_value);
+    } 
 }
 ?>

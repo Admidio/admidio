@@ -250,11 +250,11 @@ else
             <div class="boxBody">'.
                 $announcement->getDescription('HTML').'
                 <div class="editInformation">'.
-                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue("ann_timestamp_create", $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue('ann_timestamp_create'));
 
-                    if($announcement->getValue("ann_usr_id_change") > 0)
+                    if($announcement->getValue('ann_usr_id_change') > 0)
                     {
-                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'],  $announcement->getValue("ann_timestamp_change", $g_preferences['system_date'].' '.$g_preferences['system_time']));
+                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'],  $announcement->getValue('ann_timestamp_change'));
                     }
                 echo '</div>
             </div>

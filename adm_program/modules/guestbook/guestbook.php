@@ -174,7 +174,7 @@ else
 {
     $sql    = 'SELECT * FROM '. TBL_GUESTBOOK. '
                WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
-               ORDER BY gbo_timestamp DESC
+               ORDER BY gbo_timestamp_create DESC
                LIMIT '. $_GET['start']. ', '. $guestbook_entries_per_page;
 }
 
@@ -256,7 +256,7 @@ else
                     }
                 echo '</div>
 
-                <div class="boxHeadRight">'. $guestbook->getValue('gbo_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']). '&nbsp;';
+                <div class="boxHeadRight">'. $guestbook->getValue('gbo_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '&nbsp;';
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editGuestbookRight())
@@ -281,10 +281,8 @@ else
                     $user_change = new User($g_db, $guestbook->getValue('gbo_usr_id_change'));
 
                     echo '
-                    <div class="editInformation">
-                        Zuletzt bearbeitet von '.
-                        $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
-                        ' am '. $guestbook->getValue('gbo_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '
+                    <div class="editInformation">'.
+                        $g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $guestbook->getValue('gbo_timestamp_change')). '
                     </div>';
                 }
 
@@ -292,7 +290,7 @@ else
                 // Alle Kommentare zu diesem Eintrag werden nun aus der DB geholt...
                 $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. '
                            WHERE gbc_gbo_id = "'.$guestbook->getValue('gbo_id').'"
-                           ORDER by gbc_timestamp asc';
+                           ORDER by gbc_timestamp_create asc';
                 $comment_result = $g_db->query($sql);
 
 

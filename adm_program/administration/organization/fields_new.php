@@ -101,12 +101,12 @@ else
 
 // Kopfinformationen
 $g_layout['header'] = '
-	<script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
             $("#'.$field_focus.'").focus();
-	 	}); 
-	//--></script>';
+        }); 
+    //--></script>';
 
 // Html-Kopf ausgeben
 require(THEME_SERVER_PATH. '/overall_header.php');
@@ -278,9 +278,24 @@ echo '
             </li>            
         </ul>
 
-        <hr />
+        <hr />';
 
-        <div class="formSubmit">
+        if($user_field->getValue('usf_usr_id_create') > 0)
+        {
+            // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+            echo '<div class="editInformation">';
+                $user_create = new User($g_db, $user_field->getValue('usf_usr_id_create'));
+                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $user_field->getValue('usf_timestamp_create'));
+
+                if($user_field->getValue('usf_usr_id_change') > 0)
+                {
+                    $user_change = new User($g_db, $user_field->getValue('usf_usr_id_change'));
+                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $user_field->getValue('usf_timestamp_change'));
+                }
+            echo '</div>';
+        }
+
+        echo '<div class="formSubmit">
             <button name="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
     </div>

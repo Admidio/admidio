@@ -134,29 +134,6 @@ class TableDate extends TableAccess
         return $value;
     }
     
-    // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
-    {
-        global $g_current_organization, $g_current_user;
-
-        if($this->new_record)
-        {
-            $this->setValue('dat_timestamp_create', DATETIME_NOW);
-            $this->setValue('dat_usr_id_create', $g_current_user->getValue('usr_id'));
-        }
-        else
-        {
-            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue('dat_timestamp_create')) + 900)
-            || $g_current_user->getValue('usr_id') != $this->getValue('dat_usr_id_create') )
-            {
-                $this->setValue('dat_timestamp_change', DATETIME_NOW);
-                $this->setValue('dat_usr_id_change', $g_current_user->getValue('usr_id'));
-            }
-        }
-        parent::save();
-    }
-    
     // Methode, die den Termin in der DB loescht
     public function delete()
     {

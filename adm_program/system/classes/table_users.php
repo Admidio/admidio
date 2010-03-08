@@ -23,7 +23,6 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class TableUsers extends TableAccess
 {
     public $real_password;     // Unverschluesseltes Passwort. Ist nur gefuellt, wenn gerade das Passwort gesetzt wurde
-    public $b_set_last_change; // Kennzeichen, ob User und Zeitstempel der aktuellen Aenderung gespeichert werden sollen
 
     // Konstruktor
     public function __construct(&$db, $usr_id = 0)
@@ -39,8 +38,7 @@ class TableUsers extends TableAccess
         $this->setValue('usr_actual_login', DATETIME_NOW);
         $this->setValue('usr_date_invalid', NULL);
         $this->setValue('usr_number_invalid', 0);
-        $this->b_set_last_change = false;
-        $this->save();
+        $this->save(false); // Zeitstempel nicht aktualisieren
     }
 
     // alle Klassenvariablen wieder zuruecksetzen
@@ -48,53 +46,8 @@ class TableUsers extends TableAccess
     {
         parent::clear();
 
-        $this->b_set_last_change = true;
-
         // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
         $this->setValue('usr_valid', 1);
-    }
-
-    public function setValue($field_name, $field_value)
-    {
-        // Passwortfelder sollten verschluesselt als md5-Hash gespeichert werden
-        if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
-        {
-            // Passwort verschluesselt und unverschluesselt speichern
-            $this->real_password = $field_value;
-            $field_value = md5($field_value);
-        }
-
-        return parent::setValue($field_name, $field_value);
-    }
-
-    // die Funktion speichert die Userdaten in der Datenbank,
-    // je nach Bedarf wird ein Insert oder Update gemacht
-    public function save()
-    {
-        global $g_current_user;
-        $fields_changed = $this->columnsValueChanged;
-
-        if($this->b_set_last_change)
-        {
-            if($this->new_record)
-            {
-                $this->setValue('usr_timestamp_create', DATETIME_NOW);
-                $this->setValue('usr_usr_id_create', $g_current_user->getValue('usr_id'));
-            }
-            else
-            {
-                // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-                if(time() > (strtotime($this->getValue('usr_timestamp_create')) + 900)
-                || $g_current_user->getValue('usr_id') != $this->getValue('usr_usr_id_create') )
-                {
-                    $this->setValue('usr_timestamp_change', DATETIME_NOW);
-                    $this->setValue('usr_usr_id_change', $g_current_user->getValue('usr_id'));
-                }
-            }
-        }
-
-        $this->b_set_last_change = true;
-        parent::save();
     }
 
     // Referenzen zum aktuellen Benutzer loeschen
@@ -127,8 +80,8 @@ class TableUsers extends TableAccess
                     WHERE fil_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
-        $sql    = 'UPDATE '. TBL_GUESTBOOK. ' SET gbo_usr_id = NULL
-                    WHERE gbo_usr_id = '. $this->getValue('usr_id');
+        $sql    = 'UPDATE '. TBL_GUESTBOOK. ' SET gbo_usr_id_create = NULL
+                    WHERE gbo_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
         $sql    = 'UPDATE '. TBL_GUESTBOOK. ' SET gbo_usr_id_change = NULL
@@ -199,7 +152,7 @@ class TableUsers extends TableAccess
         $sql    = 'DELETE FROM '. TBL_LISTS. ' WHERE lst_global = 0 AND lst_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
-        $sql    = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_usr_id = '. $this->getValue('usr_id');
+        $sql    = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_MEMBERS. ' WHERE mem_usr_id = '. $this->getValue('usr_id');
@@ -218,6 +171,19 @@ class TableUsers extends TableAccess
 
         $this->db->endTransaction();
         return $return;
+    }
+
+    public function setValue($field_name, $field_value)
+    {
+        // Passwortfelder sollten verschluesselt als md5-Hash gespeichert werden
+        if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
+        {
+            // Passwort verschluesselt und unverschluesselt speichern
+            $this->real_password = $field_value;
+            $field_value = md5($field_value);
+        }
+
+        return parent::setValue($field_name, $field_value);
     }
 }
 ?>

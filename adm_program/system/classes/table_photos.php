@@ -39,32 +39,7 @@ class TablePhotos extends TableAccess
         
         $this->folderPath     = new Folder();
     }
-    
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
-    public function save()
-    {
-        global $g_current_organization, $g_current_user;
-        
-        if($this->new_record)
-        {
-            $this->setValue('pho_timestamp_create', DATETIME_NOW);
-            $this->setValue('pho_usr_id_create', $g_current_user->getValue('usr_id'));
-            $this->setValue('pho_org_shortname', $g_current_organization->getValue('org_shortname'));
-        }
-        else
-        {
-            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue('pho_timestamp_create')) + 900)
-            || $g_current_user->getValue('usr_id') != $this->getValue('pho_usr_id_create') )
-            {
-                $this->setValue('pho_timestamp_change', DATETIME_NOW);
-                $this->setValue('pho_usr_id_change', $g_current_user->getValue('usr_id'));
-            }
-        }
-        parent::save();
-    }
-    
+
     // Rekursive Funktion gibt die Anzahl aller Bilder inkl. der Unteralben zurueck
     // pho_id noetig fuer rekursiven Aufruf
     public function countImages($pho_id = 0)
@@ -91,56 +66,6 @@ class TablePhotos extends TableAccess
         }
 
         return $total_images;
-    }
-
-    // Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album
-    // Rueckgabe eines Arrays mit allen noetigen Infos um den Link zu erstellen
-    public function shuffleImage($pho_id = 0)
-    {
-        $shuffle_image = array('shuffle_pho_id' => 0, 'shuffle_img_nr' => 0, 'shuffle_img_begin' => '');
-
-        // wurde keine ID uebergeben, dann versuchen das Zufallsbild aus dem aktuellen Album zu nehmen
-        if($pho_id == 0)
-        {
-            $pho_id = $this->getValue('pho_id');
-            $shuffle_image['shuffle_pho_id']    = $this->getValue('pho_id');
-            $shuffle_image['shuffle_img_begin'] = $this->getValue('pho_begin', 'Y-m-d');
-
-            if($this->getValue('pho_quantity') > 0)
-            {
-                $shuffle_image['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
-            }
-        }
-        
-        if($shuffle_image['shuffle_img_nr'] == 0)
-        {   
-            // kein Bild vorhanden, dann in einem Unteralbum suchen
-            $sql = 'SELECT *
-                      FROM '. TBL_PHOTOS. '
-                     WHERE pho_pho_id_parent = '.$pho_id.'
-                       AND pho_locked = 0
-                     ORDER BY pho_quantity DESC';
-            $result_child = $this->db->query($sql);
-            
-            while($pho_row = $this->db->fetch_array($result_child))
-            {
-                if($shuffle_image['shuffle_img_nr'] == 0)
-                {
-                    $shuffle_image['shuffle_pho_id'] = $pho_row['pho_id'];
-                    $shuffle_image['shuffle_img_begin'] = $pho_row['pho_begin'];
-
-                    if($pho_row['pho_quantity'] > 0)
-                    {
-                        $shuffle_image['shuffle_img_nr'] = mt_rand(1, $pho_row['pho_quantity']);
-                    }
-                    else
-                    {
-                        $shuffle_image = $this->shuffleImage($pho_row['pho_id']);
-                    }
-                }
-            }
-        }
-        return $shuffle_image;
     }
 
     // Legt den Ordner fuer die Veranstaltung im Dateisystem an
@@ -245,6 +170,70 @@ class TablePhotos extends TableAccess
         }
         
         return $return_code;
+    }
+    
+    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
+    // die Funktion wird innerhalb von save() aufgerufen
+    public function save()
+    {
+        global $g_current_organization;
+        
+        if($this->new_record)
+        {
+            $this->setValue('pho_org_shortname', $g_current_organization->getValue('org_shortname'));
+        }
+
+        parent::save();
+    }
+
+    // Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album
+    // Rueckgabe eines Arrays mit allen noetigen Infos um den Link zu erstellen
+    public function shuffleImage($pho_id = 0)
+    {
+        $shuffle_image = array('shuffle_pho_id' => 0, 'shuffle_img_nr' => 0, 'shuffle_img_begin' => '');
+
+        // wurde keine ID uebergeben, dann versuchen das Zufallsbild aus dem aktuellen Album zu nehmen
+        if($pho_id == 0)
+        {
+            $pho_id = $this->getValue('pho_id');
+            $shuffle_image['shuffle_pho_id']    = $this->getValue('pho_id');
+            $shuffle_image['shuffle_img_begin'] = $this->getValue('pho_begin', 'Y-m-d');
+
+            if($this->getValue('pho_quantity') > 0)
+            {
+                $shuffle_image['shuffle_img_nr'] = mt_rand(1, $this->getValue('pho_quantity'));
+            }
+        }
+        
+        if($shuffle_image['shuffle_img_nr'] == 0)
+        {   
+            // kein Bild vorhanden, dann in einem Unteralbum suchen
+            $sql = 'SELECT *
+                      FROM '. TBL_PHOTOS. '
+                     WHERE pho_pho_id_parent = '.$pho_id.'
+                       AND pho_locked = 0
+                     ORDER BY pho_quantity DESC';
+            $result_child = $this->db->query($sql);
+            
+            while($pho_row = $this->db->fetch_array($result_child))
+            {
+                if($shuffle_image['shuffle_img_nr'] == 0)
+                {
+                    $shuffle_image['shuffle_pho_id'] = $pho_row['pho_id'];
+                    $shuffle_image['shuffle_img_begin'] = $pho_row['pho_begin'];
+
+                    if($pho_row['pho_quantity'] > 0)
+                    {
+                        $shuffle_image['shuffle_img_nr'] = mt_rand(1, $pho_row['pho_quantity']);
+                    }
+                    else
+                    {
+                        $shuffle_image = $this->shuffleImage($pho_row['pho_id']);
+                    }
+                }
+            }
+        }
+        return $shuffle_image;
     }
 }
 ?>

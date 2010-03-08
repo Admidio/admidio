@@ -118,7 +118,7 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
     $ipAddress = $_SERVER['REMOTE_ADDR'];
 
     $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
-             WHERE unix_timestamp(gbo_timestamp) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
+             WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
                AND gbo_org_id = '. $g_current_organization->getValue('org_id'). '
                AND gbo_ip_address = "'. $guestbook->getValue('gbo_ip_address'). '"';
     $result = $g_db->query($sql);
@@ -264,9 +264,24 @@ echo '
             }
         echo '</ul>
 
-        <hr />
+        <hr />';
 
-        <div class="formSubmit">
+        if($guestbook->getValue('gbo_usr_id_create') > 0)
+        {
+            // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+            echo '<div class="editInformation">';
+                $user_create = new User($g_db, $guestbook->getValue('gbo_usr_id_create'));
+                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $guestbook->getValue('gbo_timestamp_create'));
+
+                if($guestbook->getValue('gbo_usr_id_change') > 0)
+                {
+                    $user_change = new User($g_db, $guestbook->getValue('gbo_usr_id_change'));
+                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $guestbook->getValue('gbo_timestamp_change'));
+                }
+            echo '</div>';
+        }
+
+        echo '<div class="formSubmit">
             <button name="speichern" type="submit" value="speichern" tabindex="6"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
         </div>
     </div>

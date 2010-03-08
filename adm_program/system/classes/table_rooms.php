@@ -30,23 +30,6 @@ class TableRooms extends TableAccess
         }
     }
     
-    // Raum mit der uebergebenen ID oder dem Raumnamen aus der Datenbank auslesen
-    public function readData($room, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        global $g_current_organization;
-
-        if(is_numeric($room))
-        {
-            $sql_where_condition .= ' room_id = '.$room;
-        }
-        else
-        {
-            $room = addslashes($room);
-            $sql_where_condition .= ' room_name LIKE "'.$room.'" ';
-        }
-        parent::readData($room, $sql_where_condition, $sql_additional_tables);
-    }
-    
     // liefert die Beschreibung je nach Type zurueck
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
@@ -78,46 +61,26 @@ class TableRooms extends TableAccess
         return $description;
     }
 
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    // die Funktion wird innerhalb von save() aufgerufen
-    public function save()
-    {
-        global $g_current_user, $g_current_session;
-        $fields_changed = $this->columnsValueChanged;
-
-
-        if($this->new_record)
-        {
-            $this->setValue('room_timestamp_create', DATETIME_NOW);
-            $this->setValue('room_usr_id_create', $g_current_user->getValue('usr_id'));
-        }
-        else
-        {
-            // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue('room_timestamp_create')) + 900)
-            || $g_current_user->getValue('usr_id') != $this->getValue('room_usr_id_create') )
-            {
-                $this->setValue('room_timestamp_change', DATETIME_NOW);
-                $this->setValue('room_usr_id_change', $g_current_user->getValue('usr_id'));
-            }
-        }
-
-        parent::save();
-
-        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && is_object($g_current_session))
-        {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
-            // eine Rechteaenderung vorgenommen wurde
-            $g_current_session->renewUserObject();
-        }
-    }
-    
     public function getRoomsArray()
     {
         return $this->room_choice;
     }
-    
-    
+
+    // Raum mit der uebergebenen ID oder dem Raumnamen aus der Datenbank auslesen
+    public function readData($room, $sql_where_condition = '', $sql_additional_tables = '')
+    {
+        global $g_current_organization;
+
+        if(is_numeric($room))
+        {
+            $sql_where_condition .= ' room_id = '.$room;
+        }
+        else
+        {
+            $room = addslashes($room);
+            $sql_where_condition .= ' room_name LIKE "'.$room.'" ';
+        }
+        parent::readData($room, $sql_where_condition, $sql_additional_tables);
+    }
 }
 ?>

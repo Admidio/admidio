@@ -101,31 +101,31 @@ $hidden    = '';
 
 if ($_GET['id'] > 0)
 {
-	// falls eine id fuer einen bestimmten Link uebergeben worden ist...
-	$condition = ' AND lnk_id = '. $_GET['id'];
+    // falls eine id fuer einen bestimmten Link uebergeben worden ist...
+    $condition = ' AND lnk_id = '. $_GET['id'];
 }
 else if (strlen($_GET['category']) > 0)
 {
-	// alle Links zu einer Kategorie anzeigen
-	$condition = ' AND cat_name   = "'. $_GET['category']. '"';
+    // alle Links zu einer Kategorie anzeigen
+    $condition = ' AND cat_name   = "'. $_GET['category']. '"';
 }
 
 if ($g_valid_login == false)
 {
-	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-	$hidden = ' AND cat_hidden = 0 ';
+    // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+    $hidden = ' AND cat_hidden = 0 ';
 }
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
 // Das wird naemlich noch fuer die Seitenanzeige benoetigt...
 // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
 $sql = 'SELECT COUNT(*) FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
-		WHERE lnk_cat_id = cat_id
-		AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-		AND cat_type = "LNK"
+        WHERE lnk_cat_id = cat_id
+        AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+        AND cat_type = "LNK"
         '.$condition.'
-		'.$hidden.'
-		ORDER BY cat_sequence, lnk_name DESC';
+        '.$hidden.'
+        ORDER BY cat_sequence, lnk_name DESC';
 $cat_result = $g_db->query($sql);
 $row = $g_db->fetch_array($cat_result);
 $numLinks = $row[0];
@@ -141,29 +141,15 @@ else
 }
 
 // Links entsprechend der Einschraenkung suchen
-$sql = 'SELECT cat.*, lnk.*,
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+$sql = 'SELECT cat.*, lnk.*
           FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
-          LEFT JOIN '. TBL_USER_DATA .' cre_surname
-            ON cre_surname.usd_usr_id = lnk_usr_id_create
-           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-            ON cre_firstname.usd_usr_id = lnk_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_surname
-            ON cha_surname.usd_usr_id = lnk_usr_id_change
-           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-            ON cha_firstname.usd_usr_id = lnk_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
-  	     WHERE lnk_cat_id = cat_id
-	       AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-		   AND cat_type = "LNK"
-		   '.$condition.'
-  		   '.$hidden.'
-		 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
-		 LIMIT '. $_GET["start"]. ', '. $weblinks_per_page;
+         WHERE lnk_cat_id = cat_id
+           AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+           AND cat_type = "LNK"
+           '.$condition.'
+           '.$hidden.'
+         ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
+         LIMIT '. $_GET["start"]. ', '. $weblinks_per_page;
 $links_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen
@@ -222,7 +208,7 @@ else
 
     // Solange die vorherige Kategorie-ID sich nicht veraendert...
     // Sonst in die neue Kategorie springen
-    while ($row = $g_db->fetch_object($links_result))
+    while ($row = $g_db->fetch_array($links_result))
     {
         // Link-Objekt initialisieren und neuen DS uebergeben
         $weblink->clear();
@@ -230,38 +216,38 @@ else
 
         if ($weblink->getValue('lnk_cat_id') != $previous_cat_id)
         {
-			$i = 0;
-			$new_category = true;
-			if ($j>0)
-			{
-				echo '</div></div><br />';
-			}
-			echo '<div class="formLayout">
-				<div class="formHead">'.$row->cat_name.'</div>
-				<div class="formBody" style="overflow: hidden;">';
+            $i = 0;
+            $new_category = true;
+            if ($j>0)
+            {
+                echo '</div></div><br />';
+            }
+            echo '<div class="formLayout">
+                <div class="formHead">'.$row['cat_name'].'</div>
+                <div class="formBody" style="overflow: hidden;">';
         }
 
         echo '<div id="lnk_'.$weblink->getValue('lnk_id').'">';
-    		if($i > 0)
-    		{
-    			echo '<hr />';
-    		}
+            if($i > 0)
+            {
+                echo '<hr />';
+            }
 
-			if($g_preferences['weblinks_redirect_seconds'] > 0)
-			{
-				echo '
-	    		<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-	    			alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
-	    		<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
-			}
-			else
-			{
-	    		echo '
-	    		<a class="iconLink" href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-	    			alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
-	    		<a href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
+            if($g_preferences['weblinks_redirect_seconds'] > 0)
+            {
+                echo '
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                    alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
+            }
+            else
+            {
+                echo '
+                <a class="iconLink" href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                    alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
+                <a href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
 
-			}
+            }
             // aendern & loeschen duerfen nur User mit den gesetzten Rechten
             if ($g_current_user->editWeblinksRight())
             {
@@ -272,30 +258,14 @@ else
                    <img	src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
             }
 
-    		// Beschreibung ausgeben, falls vorhanden
-    		if(strlen($weblink->getValue('lnk_description'))>0)
-    		{
-        		echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
-    		}
-
-            //Editimformationen für Leute mit Bearbeitungsrecht
-    		if($g_current_user->editWeblinksRight())
-    		{
-    			echo '
-    			<div class="editInformation">';
-
-    				echo 'Angelegt von '. $row->create_firstname. ' '. $row->create_surname.' am '. $weblink->getValue('lnk_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
-
-    				if($row->lnk_usr_id_change > 0)
-    				{
-    					echo ' | Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname.
-    					' am '. $weblink->getValue('lnk_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']);
-    				}
-    			echo '</div>';
-    		}
+            // Beschreibung ausgeben, falls vorhanden
+            if(strlen($weblink->getValue('lnk_description'))>0)
+            {
+                echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
+            }
         echo '</div>';
 
-		$j++;
+        $j++;
         $i++;
 
         // Jetzt wird die jtzige die vorherige Kategorie

@@ -30,7 +30,7 @@ if ($cid > 0)
                                    WHERE gbo_id     = '.$cid.'
                                      AND gbc_gbo_id = gbo_id
                                      AND gbo_org_id = '. $g_current_organization->getValue('org_id'). '
-                                   ORDER by gbc_timestamp asc';
+                                   ORDER by gbc_timestamp_create asc';
     $comment_result = $g_db->query($sql);
 }
 
@@ -69,7 +69,7 @@ if (isset($comment_result))
                 echo '
                 </div>
 
-                <div class="boxHeadRight">'. $gbComment->getValue('gbc_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']);
+                <div class="boxHeadRight">'. $gbComment->getValue('gbc_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']);
 
                 // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                 if ($g_current_user->editGuestbookRight())
@@ -94,9 +94,8 @@ if (isset($comment_result))
                     $user_change = new User($g_db, $gbComment->getValue('gbc_usr_id_change'));
 
                     echo '
-                    <div class="editInformation">
-                        Zuletzt bearbeitet von '.$user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname').
-                        ' am '. $gbComment->getValue('gbc_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '
+                    <div class="editInformation">'.
+                        $g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $gbComment->getValue('gbc_timestamp_change')). '
                     </div>';
                 }
             echo '
