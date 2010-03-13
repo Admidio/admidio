@@ -2445,10 +2445,10 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `%PREFIX%_dates` DISABLE KEYS */;
 LOCK TABLES `%PREFIX%_dates` WRITE;
-INSERT INTO `%PREFIX%_dates` VALUES  (3,10,0,concat(date_add(date(sysdate()), interval 14 day),' 16:00:00'),concat(date_add(date(sysdate()), interval 14 day),' 18:00:00'),0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen',NULL,'Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL),
+INSERT INTO `%PREFIX%_dates` VALUES  (3,12,0,concat(date_add(date(sysdate()), interval 14 day),' 16:00:00'),concat(date_add(date(sysdate()), interval 14 day),' 18:00:00'),0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen',NULL,'Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL),
  (4,10,0,concat(date_add(date(sysdate()), interval 4 day),' 19:00:00'),concat(date_add(date(sysdate()), interval 4 day),' 23:30:00'),0,'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.',NULL,NULL,'Grillfest',1,'2008-07-06 17:41:18',NULL,NULL),
  (5,10,0,concat(date_add(date(sysdate()), interval 30 day),' 00:00:00'),concat(date_add(date(sysdate()), interval 35 day),' 00:00:00'),1,'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)','Jugendherberge Esens',NULL,'Trainerlehrgang',1,'2008-07-06 17:49:13',NULL,NULL),
- (6,20,1,concat(date_add(date(sysdate()), interval 10 day),' 15:00:00'),concat(date_add(date(sysdate()), interval 10 day),' 19:00:00'),0,'Der Schwerpunkt liegt dieses Mal bei Office-Produkten.','München Marienplatz',NULL,'EDV-Kurs',1,'2010-01-06 11:25:13',NULL,NULL);
+ (6,21,1,concat(date_add(date(sysdate()), interval 10 day),' 15:00:00'),concat(date_add(date(sysdate()), interval 10 day),' 19:00:00'),0,'Der Schwerpunkt liegt dieses Mal bei Office-Produkten.','München Marienplatz',NULL,'EDV-Kurs',1,'2010-01-06 11:25:13',NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PREFIX%_dates` ENABLE KEYS */;
 
