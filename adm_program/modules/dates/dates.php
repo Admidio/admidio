@@ -166,7 +166,6 @@ echo '
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
-$hidden = '';
 $conditions = '';
 $condition_calendar = '';
 $order_by = '';
@@ -181,13 +180,13 @@ $organizations = $organizations. $g_current_organization->getValue('org_id');
 if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $hidden = ' AND cat_hidden = 0 ';
+    $conditions .= ' AND cat_hidden = 0 ';
 }
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
 if($req_id > 0)
 {
-    $conditions .= ' AND dat_id = '.$req_id.' '.$hidden;
+    $conditions .= ' AND dat_id = '.$req_id;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
@@ -202,24 +201,21 @@ else
     if(strlen($sql_datum) > 0)
     {
         $conditions .= ' AND DATE_FORMAT(dat_begin, "%Y-%m-%d")       <= "'.$sql_datum.'"
-                         AND DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$sql_datum.' 00:00:00"
-                       '.$hidden;
+                         AND DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$sql_datum.' 00:00:00"';;
         $order_by .= ' ORDER BY dat_begin ASC ';
     }
     //fuer alte Termine...
     elseif($req_mode == 'old')
     {
         $conditions .= ' AND DATE_FORMAT(dat_begin, "%Y-%m-%d") < "'.$act_date.'"
-                         AND DATE_FORMAT(dat_end, "%Y-%m-%d")   < "'.$act_date.'"
-                       '.$hidden;
+                         AND DATE_FORMAT(dat_end, "%Y-%m-%d")   < "'.$act_date.'"';
         $order_by .= ' ORDER BY dat_begin DESC ';
     }
     //... ansonsten fuer kommende Termine
     else
     {
         $conditions .= ' AND (  DATE_FORMAT(dat_begin, "%Y-%m-%d")       >= "'.$act_date.'"
-                             OR DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$act_date.' 00:00:00" )
-                       '.$hidden;
+                             OR DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$act_date.' 00:00:00" )';
         $order_by .= ' ORDER BY dat_begin ASC ';
     }
 
@@ -259,7 +255,7 @@ else
     $num_dates = 1;
 }
 
-// Anzahl Ankuendigungen pro Seite
+// Anzahl Termine pro Seite
 if($g_preferences['dates_per_page'] > 0)
 {
     $dates_per_page = $g_preferences['dates_per_page'];
@@ -269,7 +265,7 @@ else
     $dates_per_page = $num_dates;
 }
 
-// nun die Ankuendigungen auslesen, die angezeigt werden sollen
+// nun die Termine auslesen, die angezeigt werden sollen
 $sql = 'SELECT DISTINCT cat.*, dat.*, 
             cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
             cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
@@ -300,6 +296,8 @@ $dates_result = $g_db->query($sql);
 //Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
 if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->editDates())
 {
+    $topNavigation = '';
+
     //Neue Termine anlegen
     if($g_current_user->editDates())
     {
@@ -798,7 +796,7 @@ else
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$req_mode.'&headline='.$req_headline;
+$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$req_mode.'&headline='.$req_headline.'&calendar='.$req_calendar;
 echo generatePagination($base_url, $num_dates, $dates_per_page, $req_start, TRUE);
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
