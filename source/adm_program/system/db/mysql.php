@@ -81,7 +81,7 @@ class MySqlDB extends DB
     }
 
     // result : Ergebniskennung
-    // result_type : ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches 
+    // result_type : MYSQL_ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches
     //               oder MYSQL_BOTH fuer beides
     function fetch_array($result = false, $result_type = MYSQL_BOTH)
     {
@@ -179,7 +179,19 @@ class MySqlDB extends DB
     function server_info()
     {
         return mysql_get_server_info();
-    } 
+    }
+
+    // Escaped den mysql String
+    function escape_string($string)
+    {
+        return mysql_real_escape_string($string);
+    }
+
+    // Gibt den Speicher für den Result wieder frei
+    function free_result($result)
+    {
+        return mysql_free_result($result);
+    }
     
     // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
     function db_error($code = 0, $message = '')

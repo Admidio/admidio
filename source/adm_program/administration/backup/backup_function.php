@@ -92,7 +92,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 	}
 	
 	// MYSQL Version ermitteln um spaeter den Storage Engine Type richtig abzufragen
-	$mysql_server_info = mysql_get_server_info();
+	$mysql_server_info = $g_db->server_info();
     // Ab Version 
 	$TypeEngineKey = (version_compare($mysql_server_info, '4.1.2', '>=') ? 'Engine' : 'Type'); 
 
@@ -105,13 +105,13 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 	{
 		OutputInformation('statusinfo', 'Checking table <b>'.$selectedtablename.'</b>');
 		@set_time_limit(60);
-		$result = mysql_query('CHECK TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR);
-		while ($row = mysql_fetch_assoc($result)) 
+		$result = $g_db->query('CHECK TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR);
+		while ($row = $g_db->fetch_array($result))
 		{
 			@set_time_limit(60);
 			if ($row['Msg_text'] == 'OK') 
 			{
-				mysql_query('OPTIMIZE TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR);
+				$g_db->query('OPTIMIZE TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR);
 			} 
 			else 
 			{
@@ -133,8 +133,8 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 			$tablecounter = 1;
 		}
 		$SQLquery = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR.' FROM '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR;
-		$result = mysql_query($SQLquery);
-		$row = mysql_fetch_assoc($result);
+		$result = $g_db->query($SQLquery);
+		$row = $g_db->fetch_array($result);
 		$rows[$t] = $row['num'];
 		$overallrows += $rows[$t];
 		echo '<div id="rows_'.$SelectedTables[$t].'">'.$SelectedTables[$t].' ('.number_format($rows[$t]).' records)</div>';
@@ -150,15 +150,15 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 		$fieldnames     = array();
 		$structurelines = array();
-		$result = mysql_query('SHOW FIELDS FROM '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR);
-		while ($row = mysql_fetch_assoc($result)) {
+		$result = $g_db->query('SHOW FIELDS FROM '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR);
+		while ($row = $g_db->fetch_array($result)) {
 			$structureline  = BACKTICKCHAR.$row['Field'].BACKTICKCHAR;
 			$structureline .= ' '.$row['Type'];
 			$structureline .= ' '.($row['Null'] ? '' : 'NOT ').'NULL';
-			eregi('^[a-z]+', $row['Type'], $matches);
+			preg_match('/^[a-z]+/i', $row['Type'], $matches);
 			$RowTypes[$SelectedTables[$t]][$row['Field']] = $matches[0];
 			if (@$row['Default']) {
-				if (eregi('^(tiny|medium|long)?(text|blob)', $row['Type'])) {
+				if (preg_match('/^(tiny|medium|long)?(text|blob)/i', $row['Type'])) {
 					// no default values
 				} else {
 					$structureline .= ' default \''.$row['Default'].'\'';
@@ -169,17 +169,17 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 
 			$fieldnames[] = $row['Field'];
 		}
-		mysql_free_result($result);
+		$g_db->free_result($result);
 
 		$tablekeys    = array();
 		$uniquekeys   = array();
 		$fulltextkeys = array();
-		$result = mysql_query('SHOW INDEX FROM '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR);
+		$result = $g_db->query('SHOW INDEX FROM '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR);
 		$INDICES = array();
-		while ($row = mysql_fetch_assoc($result)) {
+		while ($row = $g_db->fetch_array($result)) {
 			$INDICES[$row['Key_name']][$row['Seq_in_index']] = $row;
 		}
-		mysql_free_result($result);
+		$g_db->free_result($result);
 		foreach ($INDICES as $index_name => $columndata) {
 			$structureline  = '';
 			if ($index_name == 'PRIMARY') {
@@ -209,9 +209,9 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 			$structurelines[] = $structureline;
 		}
 
-		$TableStatusResult = mysql_query('SHOW TABLE STATUS LIKE "'.mysql_escape_string($SelectedTables[$t]).'"');
-		if (!($TableStatusRow = mysql_fetch_assoc($TableStatusResult))) {
-			die('failed to execute "SHOW TABLE STATUS" on '.$tablename);
+		$TableStatusResult = $g_db->query('SHOW TABLE STATUS LIKE "'.$g_db->escape_string($SelectedTables[$t]).'"');
+		if (!($TableStatusRow = $g_db->fetch_array($TableStatusResult))) {
+			die('failed to execute "SHOW TABLE STATUS" on '.$SelectedTables[$t]);
 		}
 
 		$tablestructure  = 'CREATE TABLE IF NOT EXISTS '.BACKTICKCHAR.$SelectedTables[$t].BACKTICKCHAR.' ('.LINE_TERMINATOR;
@@ -236,20 +236,20 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 	$processedrows    = 0;
 	@set_time_limit(300);
 	for ($t = 0; $t < count($SelectedTables); $t++) {
-		$result = mysql_query('SELECT * FROM '.$SelectedTables[$t]);
-		$rows[$t] = mysql_num_rows($result);
+		$result = $g_db->query('SELECT * FROM '.$SelectedTables[$t]);
+		$rows[$t] = $g_db->num_rows($result);
 		if ($rows[$t] > 0) {
 			$tabledatadumpline = '-- dumping data for '.$SelectedTables[$t].LINE_TERMINATOR;
 			gzwrite($zp, $tabledatadumpline, strlen($tabledatadumpline));
 		}
 		unset($fieldnames);
-		for ($i = 0; $i < mysql_num_fields($result); $i++) {
-			$fieldnames[] = mysql_field_name($result, $i);
+		for ($i = 0; $i < $g_db->num_fields($result); $i++) {
+			$fieldnames[] = $g_db->field_name($result, $i);
 		}
 		
 		$currentrow       = 0;
 		$thistableinserts = '';
-		while ($row = mysql_fetch_array($result)) 
+		while ($row = $g_db->fetch_array($result))
 		{
 			unset($valuevalues);
 			foreach ($fieldnames as $key => $val) 
@@ -293,7 +293,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 						case 'double':
 						case 'decimal':
 						case 'year':
-							$valuevalues[] = mysql_escape_string($row[$key]);
+							$valuevalues[] = $g_db->escape_string($row[$key]);
 							break;
 
 						// value surrounded by quotes
@@ -310,7 +310,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 						case 'time':
 						case 'timestamp':
 						default:
-							$valuevalues[] = QUOTECHAR.mysql_escape_string($row[$key]).QUOTECHAR;
+							$valuevalues[] = QUOTECHAR.$g_db->escape_string($row[$key]).QUOTECHAR;
 							break;
 					}
 
