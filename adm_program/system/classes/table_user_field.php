@@ -24,17 +24,50 @@ class TableUserField extends TableAccess
     {
         parent::__construct($db, TBL_USER_FIELDS, 'usf', $usf_id);
     }
-
-    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($usf_id, $sql_where_condition = '', $sql_additional_tables = '')
+    
+    // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
+    // die Funktion wird innerhalb von delete() aufgerufen
+    public function delete()
     {
-        if(is_numeric($usf_id))
+        global $g_current_session;
+        
+        // Luecke in der Reihenfolge schliessen
+        $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = usf_sequence - 1 
+                 WHERE usf_cat_id   = '. $this->getValue('usf_cat_id'). '
+                   AND usf_sequence > '. $this->getValue('usf_sequence');
+        $this->db->query($sql);
+
+        // Abhaenigigkeiten loeschen
+        $sql    = 'DELETE FROM '. TBL_USER_DATA. '
+                    WHERE usd_usf_id = '. $this->getValue('usf_id');
+        $this->db->query($sql);
+
+        $sql    = 'DELETE FROM '. TBL_LIST_COLUMNS. ' 
+                    WHERE lsc_usf_id = '. $this->getValue('usf_id');
+        $this->db->query($sql);
+
+        // einlesen aller Userobjekte der angemeldeten User anstossen, 
+        // da Aenderungen in den Profilfeldern vorgenommen wurden 
+        $g_current_session->renewUserObject();
+            
+        return parent::delete();
+    }
+
+    // diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
+    // dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
+    // Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_1'
+    private function getNewNameIntern($name, $index)
+    {
+        $newNameIntern = strtoupper(str_replace(' ', '_', $name)).'_'.$index;
+        $sql = 'SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = "'.$newNameIntern.'"';
+        $this->db->query($sql);
+        
+        if($this->db->num_rows() > 0)
         {
-            $sql_additional_tables .= TBL_CATEGORIES;
-            $sql_where_condition   .= '    usf_cat_id = cat_id
-                                       AND usf_id     = '.$usf_id;
-            parent::readData($usf_id, $sql_where_condition, $sql_additional_tables);
+            $index++;
+            $newNameIntern = $this->getNewNameIntern($name, $index);
         }
+        return $newNameIntern;
     }
     
     // das Feld wird um eine Position in der Reihenfolge verschoben
@@ -63,7 +96,42 @@ class TableUserField extends TableAccess
             $this->save();
         }
     }    
-    
+
+    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
+    public function readData($usf_id, $sql_where_condition = '', $sql_additional_tables = '')
+    {
+        if(is_numeric($usf_id))
+        {
+            $sql_additional_tables .= TBL_CATEGORIES;
+            $sql_where_condition   .= '    usf_cat_id = cat_id
+                                       AND usf_id     = '.$usf_id;
+            parent::readData($usf_id, $sql_where_condition, $sql_additional_tables);
+        }
+    }
+
+    // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
+    public function save()
+    {
+        global $g_current_session;
+        $fields_changed = $this->columnsValueChanged;
+        
+        // wurde der Name veraendert, dann nach einem neuen eindeutigen internen Namen suchen
+        if($this->columnsInfos['usf_name']['changed'])
+        {
+            $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name'), 1));
+        }
+        
+        parent::save();
+        
+        if($fields_changed && is_object($g_current_session))
+        {
+            // einlesen aller Userobjekte der angemeldeten User anstossen, 
+            // da Aenderungen in den Profilfeldern vorgenommen wurden 
+            $g_current_session->renewUserObject();
+        }
+    }
+
+
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
@@ -83,49 +151,5 @@ class TableUserField extends TableAccess
         }     
         return parent::setValue($field_name, $field_value);
     }
-
-    // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
-    public function save()
-    {
-        global $g_current_session;
-        $fields_changed = $this->columnsValueChanged;
-        
-        parent::save();
-        
-        if($fields_changed && is_object($g_current_session))
-        {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, 
-            // da Aenderungen in den Profilfeldern vorgenommen wurden 
-            $g_current_session->renewUserObject();
-        }
-    }
-    
-    // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
-    // die Funktion wird innerhalb von delete() aufgerufen
-    public function delete()
-    {
-        global $g_current_session;
-        
-        // Luecke in der Reihenfolge schliessen
-        $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = usf_sequence - 1 
-                 WHERE usf_cat_id   = '. $this->getValue('usf_cat_id'). '
-                   AND usf_sequence > '. $this->getValue('usf_sequence');
-        $this->db->query($sql);
-
-        // Abhaenigigkeiten loeschen
-        $sql    = 'DELETE FROM '. TBL_USER_DATA. '
-                    WHERE usd_usf_id = '. $this->getValue('usf_id');
-        $this->db->query($sql);
-
-        $sql    = 'DELETE FROM '. TBL_LIST_COLUMNS. ' 
-                    WHERE lsc_usf_id = '. $this->getValue('usf_id');
-        $this->db->query($sql);
-
-        // einlesen aller Userobjekte der angemeldeten User anstossen, 
-        // da Aenderungen in den Profilfeldern vorgenommen wurden 
-        $g_current_session->renewUserObject();
-            
-        return parent::delete();
-    }    
 }
 ?>

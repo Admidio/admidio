@@ -97,7 +97,7 @@ if($_GET["mode"] == 1)
                 Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird der Datensatz entg&uuml;ltig aus der Datenbank
                 entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Person einzusehen.
             </p>
-            <button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"Zurück\" />&nbsp;Zurück</button>
+            <button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"".$g_l10n->get('SYS_BACK')."\" />&nbsp;".$g_l10n->get('SYS_BACK')."</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button name=\"delete\" type=\"button\" value=\"delete\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET['usr_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Benutzer löschen\" />&nbsp;Löschen</button>
             &nbsp;&nbsp;&nbsp;&nbsp;

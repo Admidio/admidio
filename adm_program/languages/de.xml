@@ -261,14 +261,27 @@
     <text id="NWU_PHR_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Anmeldungen vorhanden.</text>
 
     <!-- Phrases only in Organizationadministration -->
+    <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
+    <text id="ORG_DATATYPE" development="new" translation="todo">Datentyp</text>
+    <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="todo">Profilfeld bearbeiten</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
     <text id="ORG_PHR_FIELD_DESCRIPTION" development="new1" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
-    <text id="ORG_PHR_FIELD_DISABLED" development="new1" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
+    <text id="ORG_PHR_FIELD_DISABLED" development="new" translation="todo">Feld nur für Benutzer mit dem Recht "Alle Benutzer bearbeiten" editierbar</text>
+    <text id="ORG_PHR_FIELD_DISABLED_DESC" development="new1" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
+    <text id="ORG_PHR_FIELD_DOWN" development="new" translation="todo">Profilfeld nach unten verschieben</text>
     <text id="ORG_PHR_FIELD_EMPTY_AREA" development="new" translation="todo">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
-    <text id="ORG_PHR_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Organisation mit diesem Namen.</text>
-    <text id="ORG_PHR_FIELD_HIDDEN" development="new1" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen.</text>
-    <text id="ORG_PHR_FIELD_MANDATORY" development="new1" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
-    <text id="ORG_SYSTEM_INFO" development="new" translation="todo">Systeminfo</text>
+    <text id="ORG_PHR_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</text>
+    <text id="ORG_PHR_FIELD_HIDDEN" development="new" translation="todo">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</text>
+    <text id="ORG_PHR_FIELD_HIDDEN_DESC" development="new1" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen.</text>
+    <text id="ORG_PHR_FIELD_MANDATORY" development="new" translation="todo">Pflichtfeld, muss immer ausgefüllt werden</text>
+    <text id="ORG_PHR_FIELD_MANDATORY_DESC" development="new1" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
+    <text id="ORG_PHR_FIELD_NOT_DISABLED" development="new" translation="todo">Feld kann durch Benutzer selbst bearbeitet werden</text>
+    <text id="ORG_PHR_FIELD_NOT_HIDDEN" development="new" translation="todo">Feld für alle Benutzer sichtbar</text>
+    <text id="ORG_PHR_FIELD_NOT_MANDATORY" development="new" translation="todo">Feld muss nicht zwingend ausgefüllt werden</text>
+    <text id="ORG_PHR_FIELD_UP" development="new" translation="todo">Profilfeld nach oben verschieben</text>
+    <text id="ORG_PHR_NO_FIELD_CREATED" development="new" translation="todo">Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</text>
+    <text id="ORG_PROFILE_FIELDS" development="new" translation="todo">Profilfelder</text>
+    <text id="ORG_URL" development="new" translation="todo">URL</text>
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
@@ -359,6 +372,7 @@
     <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
     <text id="SYS_CAPTCHA_CODE" development="new" translation="todo">Bestätigungscode</text>
+    <text id="SYS_CATEGORY" development="new" translation="todo">Kategorie</text>
     <text id="SYS_CENTERED" development="new1" translation="todo">Zentriert</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new1" translation="todo">Alle Tags schließen</text>
@@ -376,6 +390,7 @@
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
+    <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
     <text id="SYS_FONT_COLOR" development="new" translation="todo">Schriftfarbe</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
@@ -395,6 +410,7 @@
     <text id="SYS_LOCKED" development="new" translation="todo">Gesperrt</text>
     <text id="SYS_LOGIN" development="new1" translation="todo">Login</text>
     <text id="SYS_LOGIN_PROBLEMS" development="new1" translation="todo">Loginprobleme</text>
+    <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
@@ -403,6 +419,7 @@
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
     <text id="SYS_NO" development="new" translation="todo">Nein</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
+    <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
     <text id="SYS_PAGE" development="new1" translation="todo">Seite</text>
     <text id="SYS_PAGE_PREVIOUS" development="new" translation="todo">Vorherige</text>
     <text id="SYS_PAGE_NEXT" development="new" translation="todo">Nächste</text>

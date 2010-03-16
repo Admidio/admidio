@@ -135,7 +135,7 @@ else
                             <dt><label for="captcha">'.$g_l10n->get('SYS_CAPTCHA_CODE').':</label></dt>
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                 <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?err_code=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
 					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?err_code=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>

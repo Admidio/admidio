@@ -279,14 +279,14 @@ if($req_mode != 'csv')
                 {
                     echo '
                     <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="Zurück" /></a>
+                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="Listenübersicht" /></a>
                     <a href="'.$g_root_path.'/adm_program/system/back.php">Listenübersicht</a>';
                 }
                 else
                 {
                     echo '
                     <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'"><img
-                    src="'. THEME_PATH. '/icons/application_form.png" alt="Zurück" /></a>
+                    src="'. THEME_PATH. '/icons/application_form.png" alt="Konfiguration Eigene Liste" /></a>
                     <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'">Konfiguration Eigene Liste</a>';
                 }
             echo '</span>
@@ -851,8 +851,8 @@ else
             <li>
                 <span class="iconTextLink">
                     <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                    src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-                    <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+                    src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
                 </span>
             </li>
         </ul>';

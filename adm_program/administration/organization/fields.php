@@ -9,8 +9,8 @@
  *
  ****************************************************************************/
  
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
@@ -22,7 +22,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['fields_request']);
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
-$g_layout['title']  = 'Profilfelder';
+$g_layout['title']  = $g_l10n->get('ORG_PROFILE_FIELDS');
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
@@ -92,21 +92,21 @@ $g_layout['header'] = '
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 echo '
-<h1 class="moduleHeadline">Profilfelder</h1>
+<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php"><img 
-            src="'. THEME_PATH. '/icons/add.png" alt="Profilfeld anlegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php">Profilfeld anlegen</a>
+            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('ORG_CREATE_PROFILE_FIELD').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php">'.$g_l10n->get('ORG_CREATE_PROFILE_FIELD').'</a>
         </span>
     </li>
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=USF"><img
-            src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=USF">Kategorien pflegen</a>
+            src="'. THEME_PATH. '/icons/application_double.png" alt="'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=USF">'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
         </span>
     </li>
 </ul>';
@@ -125,15 +125,15 @@ echo '
 <table class="tableList" cellspacing="0">
     <thead>
         <tr>
-            <th>Feld<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DESCRIPTION&amp;inline=true"><img 
+            <th>'.$g_l10n->get('SYS_FIELD').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DESCRIPTION&amp;inline=true"><img 
                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a></th>
             <th>&nbsp;</th>
-            <th>Beschreibung</th>
-            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar" title="Feld für alle Benutzer bzw. nur berechtigte Nutzer sichtbar" /></th>
-            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" title="Feld nur für berechtigte Benutzer (Recht: Alle Benutzer bearbeiten) editierbar" /></th>
-            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="Pflichtfeld, muss vom Benutzer gefüllt werden" title="Pflichtfeld, muss vom Benutzer gefüllt werden" /></th>
-            <th>Datentyp</th>
+            <th>'.$g_l10n->get('SYS_DESCRIPTION').'</th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" /></th>
+            <th>'.$g_l10n->get('ORG_DATATYPE').'</th>
             <th style="width: 40px;">&nbsp;</th>
         </tr>
     </thead>';
@@ -155,7 +155,7 @@ echo '
                     <tr>
                         <td class="tableSubHeader" colspan="8">
                             <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\')"><img 
-                            id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'.$row['cat_name'].'
+                            id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$row['cat_name'].'
                         </td>
                     </tr>
                 </tbody>
@@ -167,74 +167,74 @@ echo '
                 <td><a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'">'.$row['usf_name'].'</a></td>
                 <td style="text-align: right; width: 45px;">
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$row['usf_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="Profilfeld nach oben schieben" title="Profilfeld nach oben schieben" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_UP').'" title="'.$g_l10n->get('ORG_PHR_FIELD_UP').'" /></a>
                     <a class="iconLink" href="javascript:moveCategory(\'down\', '.$row['usf_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="Profilfeld nach unten schieben" title="Profilfeld nach unten schieben" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DOWN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_DOWN').'" /></a>
                 </td>
                 <td>'.$row['usf_description'].'</td>
                 <td>';
                     if($row['usf_hidden'] == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye_gray.png" alt="Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar" title="Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye_gray.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_HIDDEN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_HIDDEN').'" />';
                     }
                     else
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="Feld für alle Benutzer sichtbar" title="Feld für alle Benutzer sichtbar" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" />';
                     }
                 echo '</td>
                 <td>';
                     if($row['usf_disabled'] == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur durch berechtigte Benutzer bearbeitet werden (Recht: Alle Benutzer bearbeiten)." title="Feld nur für berechtigte Benutzer bearbeitenbar (Recht: Alle Benutzer bearbeiten)" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" />';
                     }
                     else
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield.png" alt="Feld kann durch Benutzer selbst bearbeitet werden." title="Feld kann durch Benutzer selbst bearbeitet werden." />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_DISABLED').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_DISABLED').'" />';
                     }
                 echo '</td>
                 <td>';
                     if($row['usf_mandatory'] == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="Pflichtfeld, muss vom Benutzer gefüllt werden" title="Pflichtfeld, muss vom Benutzer gefüllt werden" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" />';
                     }
                     else
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_gray.png" alt="Feld muss nicht zwingend vom Benutzer gefüllt werden" title="Feld muss nicht zwingend vom Benutzer gefüllt werden" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_gray.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_MANDATORY').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_MANDATORY').'" />';
                     }
                 echo '</td>
                 <td>';
                     if($row['usf_type'] == 'DATE')
                     {
-                        echo 'Datum';
+                        echo $g_l10n->get('SYS_DATE');
                     }
                     elseif($row['usf_type'] == 'EMAIL')
                     {
-                        echo 'E-Mail';
+                        echo $g_l10n->get('SYS_EMAIL');
                     }
                     elseif($row['usf_type'] == 'CHECKBOX')
                     {
-                        echo 'Ja / Nein';
+                        echo $g_l10n->get('SYS_YES').' / '.$g_l10n->get('SYS_NO');
                     }
                     elseif($row['usf_type'] == 'TEXT')
                     {
-                        echo 'Text (50)';
+                        echo $g_l10n->get('SYS_TEXT').' (50)';
                     }
                     elseif($row['usf_type'] == 'TEXT_BIG')
                     {
-                        echo 'Text (255)';
+                        echo $g_l10n->get('SYS_TEXT').' (255)';
                     }
                     elseif($row['usf_type'] == 'URL')
                     {
-                        echo 'URL';
+                        echo $g_l10n->get('ORG_URL');
                     }
                     elseif($row['usf_type'] == 'NUMERIC')
                     {
-                        echo 'Zahl';
+                        echo $g_l10n->get('SYS_NUMBER');
                     }
                 echo '</td>
                 <td style="text-align: right; width: 45px;">
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'"><img 
-                        src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
+                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                     if($row['usf_system'] == 1)
                     {
                         echo '
@@ -246,7 +246,7 @@ echo '
                     {
                         echo '
                         <a class="iconLink" href="javascript:deleteObject(\'usf\', \'row_usf_'.$row['usf_id'].'\','.$row['usf_id'].',\''.$row['usf_name'].'\')"><img 
-                            src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                     }
                 echo '</td>
             </tr>';
@@ -257,7 +257,7 @@ echo '
     {
         echo '<tr>
             <td colspan="5" style="text-align: center;">
-                <p>Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</p>
+                <p>'.$g_l10n->get('ORG_PHR_NO_FIELD_CREATED').'</p>
             </td>
         </tr>';
     }
@@ -267,8 +267,8 @@ echo '</table>
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

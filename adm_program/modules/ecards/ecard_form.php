@@ -141,44 +141,44 @@ $funcClass->getVars();
 /*********************HTML_TEIL*******************************/
 
 $javascript = '
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/ecards/ecard.js" ></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js" ></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/ecards/ecard.js" ></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js" ></script>
     <script type="text/javascript">
-	<!--
-			var ecardJS = new ecardJSClass();
-			ecardJS.max_recipients 			= '.$g_preferences['ecard_cc_recipients'].';
-			ecardJS.max_ecardTextLength		= '.$g_preferences['ecard_text_length'].';
-			ecardJS.ecardSend_Text			= \''.$g_l10n->get("ECA_GREETING_CARD_SEND").'\';
-			ecardJS.currentURL 				= \''.CURRENT_URL.'\';
-			ecardJS.errMsg_Start_Text 		= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_PHR_INPUT_INCORRECT")).'\n\n\';
-			ecardJS.nameOfSender_Text 		= \''.$g_l10n->get("ECA_NAME_OF_SENDER").'\';
-			ecardJS.emailOfSender_Text		= \''.$g_l10n->get("ECA_EMAIL_OF_SENDER").'\';
-			ecardJS.nameOfRecipient_Text	= \''.$g_l10n->get("ECA_NAME_OF_RECIPIENT", $var1="[VAR1]").'\';
-			ecardJS.emailOfRecipient_Text	= \''.$g_l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1="[VAR1]").'\';
-			ecardJS.message_Text			= \''.$g_l10n->get("ECA_THE_MESSAGE").'\';
-			ecardJS.recipient_Text			= \''.$g_l10n->get("SYS_RECIPIENT").'\';
-			ecardJS.recipientName_Text		= \''.$g_l10n->get("ECA_RECIPIENT_NAME").'\';
-			ecardJS.recipientEmail_Text		= \''.$g_l10n->get("ECA_RECIPIENT_EMAIL").'\';
-			ecardJS.errMsg_End_Text			= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_PHR_FILL_INPUTS")).'\';
-			ecardJS.ecardPreview_Text		= \''.$g_l10n->get("ECA_GREETING_CARD_PREVIEW").'\';
-			ecardJS.emailLookInvalid_Text	= \''.$g_l10n->get("ECA_EMAIL_LOOKS_INVALID").'\';
-			ecardJS.contentIsLoading_Text	= \''.$g_l10n->get("ECA_CONTENT_LOADING").'\';
-			ecardJS.ajaxExecution_ErrorText = \''.str_replace("<br />",'\n',$g_l10n->get("SYS_PHR_AJAX_REQUEST_ERROR", $var1="[ERROR]")).'\';
-			ecardJS.moreRecipients_Text		= \''.$g_l10n->get("ECA_MORE_RECIPIENTS").'\';
-			ecardJS.noMoreRecipients_Text	= \''.$g_l10n->get("ECA_NO_MORE_RECIPIENTS").'\';
-			ecardJS.blendInSettings_Text	= \''.$g_l10n->get("ECA_BLEND_IN_SETTINGS").'\';
-			ecardJS.blendOutSettings_Text	= \''.$g_l10n->get("ECA_BLEND_OUT_SETTINGS").'\';
-			ecardJS.internalRecipient_Text	= \''.$g_l10n->get("ECA_INTERNAL_RECIPIENT").'\';
-			ecardJS.messageTooLong			= \''.$g_l10n->get("ECA_PHR_MESSAGE_TOO_LONG",$var1="[MAX]").'\';
-			ecardJS.loading_Text			= \''.$g_l10n->get("SYS_LOADING").'\';
-			ecardJS.send_Text				= \''.$g_l10n->get("SYS_SEND").'\';
-			
-			$(document).ready(function() {
-				$("a[rel=\'colorboxImage\']").colorbox({photo:true});
-				ecardJS.getMenu();
-			});
+    <!--
+            var ecardJS = new ecardJSClass();
+            ecardJS.max_recipients 			= '.$g_preferences['ecard_cc_recipients'].';
+            ecardJS.max_ecardTextLength		= '.$g_preferences['ecard_text_length'].';
+            ecardJS.ecardSend_Text			= \''.$g_l10n->get("ECA_GREETING_CARD_SEND").'\';
+            ecardJS.currentURL 				= \''.CURRENT_URL.'\';
+            ecardJS.errMsg_Start_Text 		= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_PHR_INPUT_INCORRECT")).'\n\n\';
+            ecardJS.nameOfSender_Text 		= \''.$g_l10n->get("ECA_NAME_OF_SENDER").'\';
+            ecardJS.emailOfSender_Text		= \''.$g_l10n->get("ECA_EMAIL_OF_SENDER").'\';
+            ecardJS.nameOfRecipient_Text	= \''.$g_l10n->get("ECA_NAME_OF_RECIPIENT", $var1="[VAR1]").'\';
+            ecardJS.emailOfRecipient_Text	= \''.$g_l10n->get("ECA_EMAIL_OF_RECIPIENT", $var1="[VAR1]").'\';
+            ecardJS.message_Text			= \''.$g_l10n->get("ECA_THE_MESSAGE").'\';
+            ecardJS.recipient_Text			= \''.$g_l10n->get("SYS_RECIPIENT").'\';
+            ecardJS.recipientName_Text		= \''.$g_l10n->get("ECA_RECIPIENT_NAME").'\';
+            ecardJS.recipientEmail_Text		= \''.$g_l10n->get("ECA_RECIPIENT_EMAIL").'\';
+            ecardJS.errMsg_End_Text			= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_PHR_FILL_INPUTS")).'\';
+            ecardJS.ecardPreview_Text		= \''.$g_l10n->get("ECA_GREETING_CARD_PREVIEW").'\';
+            ecardJS.emailLookInvalid_Text	= \''.$g_l10n->get("ECA_EMAIL_LOOKS_INVALID").'\';
+            ecardJS.contentIsLoading_Text	= \''.$g_l10n->get("ECA_CONTENT_LOADING").'\';
+            ecardJS.ajaxExecution_ErrorText = \''.str_replace("<br />",'\n',$g_l10n->get("SYS_PHR_AJAX_REQUEST_ERROR", $var1="[ERROR]")).'\';
+            ecardJS.moreRecipients_Text		= \''.$g_l10n->get("ECA_MORE_RECIPIENTS").'\';
+            ecardJS.noMoreRecipients_Text	= \''.$g_l10n->get("ECA_NO_MORE_RECIPIENTS").'\';
+            ecardJS.blendInSettings_Text	= \''.$g_l10n->get("ECA_BLEND_IN_SETTINGS").'\';
+            ecardJS.blendOutSettings_Text	= \''.$g_l10n->get("ECA_BLEND_OUT_SETTINGS").'\';
+            ecardJS.internalRecipient_Text	= \''.$g_l10n->get("ECA_INTERNAL_RECIPIENT").'\';
+            ecardJS.messageTooLong			= \''.$g_l10n->get("ECA_PHR_MESSAGE_TOO_LONG",$var1="[MAX]").'\';
+            ecardJS.loading_Text			= \''.$g_l10n->get("SYS_LOADING").'\';
+            ecardJS.send_Text				= \''.$g_l10n->get("SYS_SEND").'\';
+            
+            $(document).ready(function() {
+                $("a[rel=\'colorboxImage\']").colorbox({photo:true});
+                ecardJS.getMenu();
+            });
     -->
-	</script>';
+    </script>';
 
 if ($g_preferences['enable_bbcode'] == 1)
 {
@@ -194,240 +194,240 @@ echo '
 <div class="formLayout">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
-		<noscript>
-			<div style="text-align: center;">
-				<div style="background-image: url(\''.THEME_PATH.'/images/error.png\');
-							background-repeat: no-repeat;
-							background-position: 5px 5px;
-							border:1px solid #ccc;
-							padding:5px;
-							background-color: #FFFFE0;
-							padding-left: 28px;
-							text-align:left;">
-				 '.$g_l10n->get("ECA_PHR_NEED_JAVASCRIPT").'
-				 </div>
-			</div>
-		</noscript>';
+        <noscript>
+            <div style="text-align: center;">
+                <div style="background-image: url(\''.THEME_PATH.'/images/error.png\');
+                            background-repeat: no-repeat;
+                            background-position: 5px 5px;
+                            border:1px solid #ccc;
+                            padding:5px;
+                            background-color: #FFFFE0;
+                            padding-left: 28px;
+                            text-align:left;">
+                 '.$g_l10n->get("ECA_PHR_NEED_JAVASCRIPT").'
+                 </div>
+            </div>
+        </noscript>';
 
 // das Bild kann in Vollgroesse ueber die Thickbox dargestellt werden
 echo '<a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'"><img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
-		 class="imageFrame" alt="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
-	  </a>';
+         class="imageFrame" alt="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
+      </a>';
 
 if ($error_msg != '')
 {
-	$g_message->show($error_msg);
+    $g_message->show($error_msg);
 }
 
 echo '<form id="ecard_form" action="javascript:ecardJS.makePreview();" method="post">
-		<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" />
-		<input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$photo_nr.'.jpg" />
-		<input type="hidden" name="submit_action" value="" />
-		<ul class="formFieldList">
-		<li>
-			<hr />
-		</li>
-		<li>
-			<dl>
-				<dt>
-					<label>'.$g_l10n->get("SYS_TO").':</label>
-					';
-					if($g_preferences['enable_ecard_cc_recipients'])
-					{
-						echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
-						<a href="javascript:ecardJS.showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$g_l10n->get("ECA_MORE_RECIPIENTS").'</a>
-						</div>';
-					}
-				   echo'
-				</dt>
-				<dd id="Menue" style="height:49px; width:370px;">';
-					if (array_key_exists("usr_id", $_GET))
-					{
-						// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-						echo '<div id="extern">
-								<input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('Vorname').' '.$user->getValue('Nachname').'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-						echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user->getValue('E-Mail').'"><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-							 </div>';
+        <input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" />
+        <input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$photo_nr.'.jpg" />
+        <input type="hidden" name="submit_action" value="" />
+        <ul class="formFieldList">
+        <li>
+            <hr />
+        </li>
+        <li>
+            <dl>
+                <dt>
+                    <label>'.$g_l10n->get("SYS_TO").':</label>
+                    ';
+                    if($g_preferences['enable_ecard_cc_recipients'])
+                    {
+                        echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
+                        <a href="javascript:ecardJS.showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$g_l10n->get("ECA_MORE_RECIPIENTS").'</a>
+                        </div>';
+                    }
+                   echo'
+                </dt>
+                <dd id="Menue" style="height:49px; width:370px;">';
+                    if (array_key_exists("usr_id", $_GET))
+                    {
+                        // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+                        echo '<div id="extern">
+                                <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('Vorname').' '.$user->getValue('Nachname').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+                        echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user->getValue('E-Mail').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                             </div>';
 
-					}
-					else
-					{
-					   echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
-							 </div>
-							 <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
-							 </div>
-							 <div id="dropdownmenu" style="display:block;">
-							 </div>
-							 <div id="extern">
-								<input type="hidden" name="ecard[email_recipient]" value="" />
-								<input type="hidden" name="ecard[name_recipient]"  value="" />
-							 </div>
-							  <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
-					}
-					echo '
-				</dd>
-			</dl>
-		</li>
-		<li>
-			<div id="moreRecipient" style="display:none;">
-			<hr />
-				<dl>
-					<dt>'.$g_l10n->get("ECA_MORE_RECIPIENTS").':</dt>
-					<dd>
-						<table summary="TableccContainer" border="0" >
-							<tr>
-								<td style="width:150px; text-align: left;">'.$g_l10n->get("SYS_NAME").'</td>
-								<td style="width:200px; padding-left:14px; text-align: left;">'.$g_l10n->get("SYS_EMAIL").'</td>
-							</tr>
-						</table>
-						<div id="ccrecipientContainer" style="width:490px; border:0px; text-align: left;"></div>
-						<table summary="TableCCRecipientSettings" border="0">
-								<tr>
-									<td style="text-align: left;"><span class="iconTextLink"><a href="javascript:ecardJS.addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get("SYS_ADD_RECIPIENTS").'" /></a><a href="javascript:ecardJS.addRecipient()">'.$g_l10n->get("SYS_ADD_RECIPIENTS").'</a></span></td>
-								</tr>
-						</table>
-					</dd>
-				</dl>
-			</div>
-		</li>
-		<li>
-			<hr />
-		</li>
-		<li>
-			<dl>
-				<dt><label>'.$g_l10n->get("SYS_SENDER").':</label></dt>
-				<dd>
-				  <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
-					if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
-					{
-					   echo $ecard["name_sender"];
-					}
-					else
-					{
-					   echo $g_current_user->getValue("Vorname")." ".$g_current_user->getValue("Nachname");
-					}
-				  echo'" />
-				</dd>
-			</dl>
-		</li>
-		 <li>
-			<dl>
-				<dt><label>'.$g_l10n->get("SYS_EMAIL").':</label></dt>
-				<dd>
-				   <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
-					if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
-					{
-					  echo $ecard["email_sender"];
-					}
-					else
-					{
-					  echo $g_current_user->getValue("E-Mail");
-					}
-					echo'" />
-				</dd>
-			</dl>
-		</li>
-		<li>
-			<hr />
-		</li>'; 
-		if ($g_preferences['enable_bbcode'] == 1)
-		{
-			printBBcodeIcons();
-		}                
-		echo '
-		<li>
-			<dl>
-				<dt>
-					<label>'.$g_l10n->get("SYS_MESSAGE").':</label>';
-					if($g_preferences['enable_ecard_text_length'])
-					{
-						echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">'.$g_l10n->get("ECA_STILL_XCHARS_AVAILABLE",$var1="&nbsp;<div id=\"counter\" style=\"border:0px; display:inline;\"><b>".$g_preferences['ecard_text_length']."</b></div>&nbsp;").'</div>';
-					}
-					echo '<div id="getmoreSettings" style="';
-					if($g_preferences['enable_ecard_text_length'])
-					{
-						echo 'padding-top:28px;';
-					}
-					else
-					{
-						echo 'padding-top:155px;';
-					}
-					echo '  height:1px;">
-						<a href="javascript:ecardJS.showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">'.$g_l10n->get("ECA_BLEND_IN_SETTINGS").'</a>
-					</div>
-				</dt>
-				<dd>
-					<textarea id="Nachricht" style="width: 350px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
-					if($g_preferences['enable_ecard_text_length'])
-					{
-					echo' onfocus="javascript:ecardJS.countMax();" onclick="javascript:ecardJS.countMax();" onchange="javascript:ecardJS.countMax();" onkeydown="javascript:ecardJS.countMax();" onkeyup="javascript:ecardJS.countMax();" onkeypress="javascript:ecardJS.countMax();"';
-					}
-					echo' >';
-					if (! empty($ecard["message"]))
-					{
-						echo ''.$ecard["message"].'';
-					}
-			   echo'</textarea>
-					<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
-			   </dd>
-			</dl>
-		</li>
-		<li>
-			<div id="moreSettings" style="display:none;">
-			<hr />
-			<dl>
-				<dt>
-					<label>'.$g_l10n->get("SYS_SETTINGS").':</label>
-				</dt>
-				<dd>';
-					$first_value_array = array();
-					echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:350px;"  border="0px">
-						<tr>
-						  <td>'.$g_l10n->get("ECA_TEMPLATE").':</td>
-						  <td>'.$g_l10n->get("SYS_FONT").':</td>
-						  <td>'.$g_l10n->get("SYS_FONT_SIZE").':</td>
-						</tr>
-						<tr>
-							<td>';
-								array_push($first_value_array,array($funcClass->getMenueSettings($templates,"ecard[template_name]",$g_preferences['ecard_template'],"120","false"),"ecard[template_name]"));
-							echo '</td>
-							<td>';
-								array_push($first_value_array,array($funcClass->getMenueSettings($fonts,"ecard[schriftart_name]",$g_preferences['ecard_text_font'],"120","true"),"ecard[schriftart_name]"));
-							echo '</td>
-							<td>';
-								array_push($first_value_array,array($funcClass->getMenueSettings($font_sizes,"ecard[schrift_size]",$g_preferences['ecard_text_size'],"50","false"),"ecard[schrift_size]"));
-							echo  '</td>
-						</tr>
-						<tr>
-						  <td>'.$g_l10n->get("SYS_FONT_COLOR").':</td>
-						  <td style="padding-left:40px;">'.$g_l10n->get("SYS_FONT_STYLE").':</td>
-						  <td></td>
-						</tr>
-						<tr>
-							<td>';
-								array_push($first_value_array,array($funcClass->getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
-							echo '</td>
-							<td colspan="2" style="padding-left:40px;">
-								<b>'.$g_l10n->get("SYS_BOLD").': </b><input name="Bold" value="bold" onclick="javascript: ecardJS.getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />
-								<i>'.$g_l10n->get("SYS_ITALIC").': </i><input name="Italic" value="italic" onclick="javascript: ecardJS.getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />
-							</td>
-						</tr>
-					</table>';
-					$funcClass->getFirstSettings($first_value_array);
-					echo '<input type="hidden" name="ecard[schrift_style_bold]" value="" />
-					<input type="hidden" name="ecard[schrift_style_italic]" value="" />
-				</dd>
-			</dl>
-			</div>
-		</li>
-	</ul>
-	<hr />
-	<div class="formSubmit">
-		<button onclick="javascript:ecardJS.makePreview();" type="button" value="'.$g_l10n->get("SYS_PREVIEW").'"><img 
-			src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get("SYS_PREVIEW").'" />&nbsp;'.$g_l10n->get("SYS_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
-		<button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button" value="'.$g_l10n->get("SYS_SEND").'"><img 
-			src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get("SYS_SEND").'" />&nbsp;'.$g_l10n->get("SYS_SEND").'</button>
-	</div>
+                    }
+                    else
+                    {
+                       echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
+                             </div>
+                             <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
+                             </div>
+                             <div id="dropdownmenu" style="display:block;">
+                             </div>
+                             <div id="extern">
+                                <input type="hidden" name="ecard[email_recipient]" value="" />
+                                <input type="hidden" name="ecard[name_recipient]"  value="" />
+                             </div>
+                              <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
+                    }
+                    echo '
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <div id="moreRecipient" style="display:none;">
+            <hr />
+                <dl>
+                    <dt>'.$g_l10n->get("ECA_MORE_RECIPIENTS").':</dt>
+                    <dd>
+                        <table summary="TableccContainer" border="0" >
+                            <tr>
+                                <td style="width:150px; text-align: left;">'.$g_l10n->get("SYS_NAME").'</td>
+                                <td style="width:200px; padding-left:14px; text-align: left;">'.$g_l10n->get("SYS_EMAIL").'</td>
+                            </tr>
+                        </table>
+                        <div id="ccrecipientContainer" style="width:490px; border:0px; text-align: left;"></div>
+                        <table summary="TableCCRecipientSettings" border="0">
+                                <tr>
+                                    <td style="text-align: left;"><span class="iconTextLink"><a href="javascript:ecardJS.addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get("SYS_ADD_RECIPIENTS").'" /></a><a href="javascript:ecardJS.addRecipient()">'.$g_l10n->get("SYS_ADD_RECIPIENTS").'</a></span></td>
+                                </tr>
+                        </table>
+                    </dd>
+                </dl>
+            </div>
+        </li>
+        <li>
+            <hr />
+        </li>
+        <li>
+            <dl>
+                <dt><label>'.$g_l10n->get("SYS_SENDER").':</label></dt>
+                <dd>
+                  <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
+                    if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
+                    {
+                       echo $ecard["name_sender"];
+                    }
+                    else
+                    {
+                       echo $g_current_user->getValue("Vorname")." ".$g_current_user->getValue("Nachname");
+                    }
+                  echo'" />
+                </dd>
+            </dl>
+        </li>
+         <li>
+            <dl>
+                <dt><label>'.$g_l10n->get("SYS_EMAIL").':</label></dt>
+                <dd>
+                   <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
+                    if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
+                    {
+                      echo $ecard["email_sender"];
+                    }
+                    else
+                    {
+                      echo $g_current_user->getValue("E-Mail");
+                    }
+                    echo'" />
+                </dd>
+            </dl>
+        </li>
+        <li>
+            <hr />
+        </li>'; 
+        if ($g_preferences['enable_bbcode'] == 1)
+        {
+            printBBcodeIcons();
+        }                
+        echo '
+        <li>
+            <dl>
+                <dt>
+                    <label>'.$g_l10n->get("SYS_MESSAGE").':</label>';
+                    if($g_preferences['enable_ecard_text_length'])
+                    {
+                        echo '<div style="width:125px; padding:5px 0px 5px 35px; background-image: url(\''.THEME_PATH.'/icons/warning.png\'); background-repeat: no-repeat;background-position: 5px 5px;border:1px solid #ccc; margin:70px 0px 28px 0px;  background-color: #FFFFE0;">'.$g_l10n->get("ECA_STILL_XCHARS_AVAILABLE",$var1="&nbsp;<div id=\"counter\" style=\"border:0px; display:inline;\"><b>".$g_preferences['ecard_text_length']."</b></div>&nbsp;").'</div>';
+                    }
+                    echo '<div id="getmoreSettings" style="';
+                    if($g_preferences['enable_ecard_text_length'])
+                    {
+                        echo 'padding-top:28px;';
+                    }
+                    else
+                    {
+                        echo 'padding-top:155px;';
+                    }
+                    echo '  height:1px;">
+                        <a href="javascript:ecardJS.showHideMoreSettings(\'moreSettings\',\'getmoreSettings\');">'.$g_l10n->get("ECA_BLEND_IN_SETTINGS").'</a>
+                    </div>
+                </dt>
+                <dd>
+                    <textarea id="Nachricht" style="width: 350px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
+                    if($g_preferences['enable_ecard_text_length'])
+                    {
+                    echo' onfocus="javascript:ecardJS.countMax();" onclick="javascript:ecardJS.countMax();" onchange="javascript:ecardJS.countMax();" onkeydown="javascript:ecardJS.countMax();" onkeyup="javascript:ecardJS.countMax();" onkeypress="javascript:ecardJS.countMax();"';
+                    }
+                    echo' >';
+                    if (! empty($ecard["message"]))
+                    {
+                        echo ''.$ecard["message"].'';
+                    }
+               echo'</textarea>
+                    <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+               </dd>
+            </dl>
+        </li>
+        <li>
+            <div id="moreSettings" style="display:none;">
+            <hr />
+            <dl>
+                <dt>
+                    <label>'.$g_l10n->get("SYS_SETTINGS").':</label>
+                </dt>
+                <dd>';
+                    $first_value_array = array();
+                    echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:350px;"  border="0px">
+                        <tr>
+                          <td>'.$g_l10n->get("ECA_TEMPLATE").':</td>
+                          <td>'.$g_l10n->get("SYS_FONT").':</td>
+                          <td>'.$g_l10n->get("SYS_FONT_SIZE").':</td>
+                        </tr>
+                        <tr>
+                            <td>';
+                                array_push($first_value_array,array($funcClass->getMenueSettings($templates,"ecard[template_name]",$g_preferences['ecard_template'],"120","false"),"ecard[template_name]"));
+                            echo '</td>
+                            <td>';
+                                array_push($first_value_array,array($funcClass->getMenueSettings($fonts,"ecard[schriftart_name]",$g_preferences['ecard_text_font'],"120","true"),"ecard[schriftart_name]"));
+                            echo '</td>
+                            <td>';
+                                array_push($first_value_array,array($funcClass->getMenueSettings($font_sizes,"ecard[schrift_size]",$g_preferences['ecard_text_size'],"50","false"),"ecard[schrift_size]"));
+                            echo  '</td>
+                        </tr>
+                        <tr>
+                          <td>'.$g_l10n->get("SYS_FONT_COLOR").':</td>
+                          <td style="padding-left:40px;">'.$g_l10n->get("SYS_FONT_STYLE").':</td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                            <td>';
+                                array_push($first_value_array,array($funcClass->getColorSettings($font_colors,"ecard[schrift_farbe]","8",$g_preferences['ecard_text_color']),"ecard[schrift_farbe]"));
+                            echo '</td>
+                            <td colspan="2" style="padding-left:40px;">
+                                <b>'.$g_l10n->get("SYS_BOLD").': </b><input name="Bold" value="bold" onclick="javascript: ecardJS.getSetting(\'ecard[schrift_style_bold]\',this.value);" type="checkbox" />
+                                <i>'.$g_l10n->get("SYS_ITALIC").': </i><input name="Italic" value="italic" onclick="javascript: ecardJS.getSetting(\'ecard[schrift_style_italic]\',this.value);" type="checkbox" />
+                            </td>
+                        </tr>
+                    </table>';
+                    $funcClass->getFirstSettings($first_value_array);
+                    echo '<input type="hidden" name="ecard[schrift_style_bold]" value="" />
+                    <input type="hidden" name="ecard[schrift_style_italic]" value="" />
+                </dd>
+            </dl>
+            </div>
+        </li>
+    </ul>
+    <hr />
+    <div class="formSubmit">
+        <button onclick="javascript:ecardJS.makePreview();" type="button" value="'.$g_l10n->get("SYS_PREVIEW").'"><img 
+            src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get("SYS_PREVIEW").'" />&nbsp;'.$g_l10n->get("SYS_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button" value="'.$g_l10n->get("SYS_SEND").'"><img 
+            src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get("SYS_SEND").'" />&nbsp;'.$g_l10n->get("SYS_SEND").'</button>
+    </div>
 </form></div></div>';
 /************************Buttons********************************/
 //Uebersicht

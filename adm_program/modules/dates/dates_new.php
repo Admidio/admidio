@@ -269,7 +269,7 @@ echo '
                     <dt><label for="dat_headline">Überschrift:</label></dt>
                     <dd>
                         <input type="text" id="dat_headline" name="dat_headline" style="width: 345px;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>';
@@ -312,7 +312,7 @@ echo '
                         </span>
                         <span style="margin-left: 10px;">
                             <input type="text" id="time_from" name="time_from" size="5" maxlength="5" value="'.$time_from.'" />
-                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </span>
                         <span style="margin-left: 15px;">
                             <input type="checkbox" id="dat_all_day" name="dat_all_day" ';
@@ -337,7 +337,7 @@ echo '
                         </span>
                         <span style="margin-left: 10px;">
                             <input type="text" id="time_to" name="time_to" size="5" maxlength="5" value="'.$time_to.'" />
-                            <span class="mandatoryFieldMarker" title="Pflichtfeld" id="timeToMandatory"';
+                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" id="timeToMandatory"';
                             if($date->getValue('dat_repeat_type') != 0)
                             {
                                 echo ' style="visibility: hidden;"';
@@ -375,7 +375,7 @@ echo '
                                 echo '>'.$row->cat_name.'</option>';
                             }
                         echo '</select>
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -528,7 +528,7 @@ echo '
                     echo '</dt>
                     <dd>
                         <textarea id="dat_description" name="dat_description" style="width: 345px;" rows="10" cols="40">'. $date->getValue('dat_description'). '</textarea>
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -562,8 +562,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zurück"/></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>

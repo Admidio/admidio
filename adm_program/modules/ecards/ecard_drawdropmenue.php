@@ -80,7 +80,7 @@ if ($g_valid_login && isset($_GET['base']) =="1")
     
     echo '</optgroup>
     </select>
-    <span class="mandatoryFieldMarker" title="Pflichtfeld" >*</span>
+    <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" >*</span>
     <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ECA_PHR_SEND_ECARD_TO_ROLE&amp;inline=true"><img 
         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ECA_PHR_SEND_ECARD_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get("SYS_HELP").'" title="" /></a>';                  
@@ -180,8 +180,8 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
 // Namen und Empfaenger geboten
 else if($g_valid_login && isset($_GET['usrid']) == "extern")
 {
-    echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:ecardJS.blendout(this.id);" onfocus="javascript:ecardJS.blendout(this.id);" onmouseout="javascript:ecardJS.blendin(this.id,1);" onkeydown="javascript:ecardJS.blendout(this.id);" onkeyup="javascript:ecardJS.blendout(this.id);" onkeypress="javascript:ecardJS.blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
-    echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:ecardJS.blendout(this.id);" onfocus="javascript:ecardJS.blendout(this.id);" onmouseout="javascript:ecardJS.blendin(this.id,2);" onkeydown="javascript:ecardJS.blendout(this.id);" onkeyup="javascript:ecardJS.blendout(this.id);" onkeypress="javascript:ecardJS.blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >" /><span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+    echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" onclick="javascript:ecardJS.blendout(this.id);" onfocus="javascript:ecardJS.blendout(this.id);" onmouseout="javascript:ecardJS.blendin(this.id,1);" onkeydown="javascript:ecardJS.blendout(this.id);" onkeyup="javascript:ecardJS.blendout(this.id);" onkeypress="javascript:ecardJS.blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_NAME").' >" /><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+    echo '<input id="email_recipient" type="text" name="ecard[email_recipient]" style="width: 330px;" onclick="javascript:ecardJS.blendout(this.id);" onfocus="javascript:ecardJS.blendout(this.id);" onmouseout="javascript:ecardJS.blendin(this.id,2);" onkeydown="javascript:ecardJS.blendout(this.id);" onkeyup="javascript:ecardJS.blendout(this.id);" onkeypress="javascript:ecardJS.blendout(this.id);" maxlength="50" value="< '.$g_l10n->get("ECA_RECIPIENT_EMAIL").' >" /><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
 }
 
 ?>
