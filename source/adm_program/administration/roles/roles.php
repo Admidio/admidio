@@ -159,7 +159,7 @@ echo '
                 <tr>
                     <td class="tableSubHeader" colspan="4">
                         <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\')"><img
-                        id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'.$role->getValue('cat_name').' '.$image_hidden.'
+                        id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name').' '.$image_hidden.'
                     </td>
                 </tr>
             </tbody>

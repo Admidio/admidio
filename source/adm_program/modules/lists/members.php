@@ -532,18 +532,18 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
                 }
 
                 // Ueberschrift fuer neuen Buchstaben
-                $block_id = "letter_$letter_string";
-                echo "<tbody id=\"head_$block_id\">
+                $block_id = 'letter_'.$letter_string;
+                echo '<tbody id="head_'.$block_id.'">
                     <tr>
-                        <td class=\"tableSubHeader\" colspan=\"6\">
-                            <a href=\"javascript:showHideBlock('$block_id')\"><img class=\"iconShowHide\"
-                            id=\"img_$block_id\" src=\"". THEME_PATH. "/icons/triangle_open.gif\" alt=\"ausblenden\" /></a>$letter_string
+                        <td class="tableSubHeader" colspan="6">
+                            <a href="javascript:showHideBlock(\''.$block_id.'\')"><img class="iconShowHide"
+                            id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$letter_string.'
                         </td>
                     </tr>
                 </tbody>
-                <tbody id=\"$block_id\">";
+                <tbody id="'.$block_id.'">';
             }
-		}
+        }
 
         //Datensatz ausgeben
         $user_text = $user['first_name'].'&nbsp;'.$user['last_name'];
@@ -657,8 +657,8 @@ if($_SESSION['navigation']->count() > 1)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';

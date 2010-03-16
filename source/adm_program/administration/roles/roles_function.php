@@ -104,8 +104,8 @@ if($_GET['mode'] == 1)
                 <li>
                     <span class="iconTextLink">
                         <a href="#" onclick="history.back()"><img
-                        src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-                        <a href="#" onclick="history.back()">Zurück</a>
+                        src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                        <a href="#" onclick="history.back()">'.$g_l10n->get('SYS_BACK').'</a>
                     </span>
                 </li>
             </ul>

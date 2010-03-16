@@ -270,13 +270,13 @@ echo '
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                                 echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 350px;" maxlength="50" value="'.$userEmail.'" />
-                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
                             elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
                             {
                                 // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
                                 echo '<select size="1" id="rol_id" name="rol_id"><option value="'.$rollenID.'" selected="selected">'.$rollenName.'</option></select>
-                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
                             else
                             {
@@ -338,7 +338,7 @@ echo '
 
                                 echo '</optgroup>
                                 </select>
-                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
 	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_SEND_MAIL_TO_ROLE&amp;inline=true"><img 
 						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_SEND_MAIL_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
 						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
@@ -362,7 +362,7 @@ echo '
                             {
                                echo '<input type="text" id="name" name="name" style="width: 200px;" maxlength="50" value="'. $form_values['name']. '" />';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                            echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
                     </dl>
                 </li>
@@ -378,7 +378,7 @@ echo '
                             {
                                echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 350px;" maxlength="50" value="'. $form_values['mailfrom']. '" />';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                            echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
                     </dl>
                 </li>
@@ -397,7 +397,7 @@ echo '
                             {
                                echo '<input type="text" id="subject" name="subject" style="width: 350px;" maxlength="50" value="'. $form_values['subject']. '" />';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                            echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
                     </dl>
                 </li>
@@ -473,7 +473,7 @@ echo '
                             <dt><label for="captcha">Bestätigungscode:</label></dt>
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                                <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
 	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
 						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
@@ -499,8 +499,8 @@ if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';

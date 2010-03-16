@@ -109,7 +109,7 @@ echo '
                         <tr>
                             <td class="tableSubHeader" colspan="4">
                                 <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\')"><img 
-                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="ausblenden" /></a>'. $field->getValue('cat_name'). '
+                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'. $field->getValue('cat_name'). '
                             </td>
                         </tr>
                     </tbody>
@@ -133,7 +133,7 @@ echo '
                         // Nachname und Vorname als Pflichtfelder kennzeichnen
                         if($field->getValue('usf_mandatory') == 1)
                         {
-                            echo '&nbsp;<span title="Pflichtfeld" style="color: #990000;">*</span>';
+                            echo '&nbsp;<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
                     echo '</td>
                 </tr>';
@@ -142,7 +142,7 @@ echo '
         </table>
 
         <div class="formSubmit">
-            <button name="back" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurück" />&nbsp;Zurück</button>
+            <button name="back" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button id="import" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="Weiter" />&nbsp;Importieren</button>
         </div>

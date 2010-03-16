@@ -128,7 +128,7 @@ echo '
                     <dt><label for="lnk_name">Linkname:</label></dt>
                     <dd>
                         <input type="text" id="lnk_name" name="lnk_name" tabindex="1" style="width: 350px;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -137,7 +137,7 @@ echo '
                     <dt><label for="lnk_url">Linkadresse:</label></dt>
                     <dd>
                         <input type="text" id="lnk_url" name="lnk_url" tabindex="2" style="width: 350px;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -169,7 +169,7 @@ echo '
                                 echo '>'.$row->cat_name.'</option>';
                             }
                         echo '</select>
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -221,8 +221,8 @@ echo '
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

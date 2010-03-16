@@ -17,9 +17,9 @@
  *
  *****************************************************************************/
  
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_user_field.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_user_field.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
@@ -75,17 +75,17 @@ if($_GET['mode'] == 1)
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
     }    
 
     if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datentyp'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('ORG_DATATYPE')));
     }    
 
     if($user_field->getValue('usf_system') == 0 && $_POST['usf_cat_id'] == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kategorie'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
     }
     
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
@@ -100,12 +100,9 @@ if($_GET['mode'] == 1)
         // Schauen, ob das Feld bereits existiert
         $sql    = 'SELECT COUNT(*) as count 
                      FROM '. TBL_USER_FIELDS. '
-                     JOIN '. TBL_CATEGORIES. '
-                       ON usf_cat_id = cat_id
-                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                          OR cat_org_id IS NULL )
-                    WHERE usf_name LIKE "'. $_POST['usf_name']. '"
-                      AND usf_id     <> '. $_GET['usf_id'];
+                    WHERE usf_name LIKE "'.$_POST['usf_name'].'"
+                      AND usf_cat_id  = '.$_POST['usf_cat_id'].'
+                      AND usf_id     <> '.$_GET['usf_id'];
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);
 

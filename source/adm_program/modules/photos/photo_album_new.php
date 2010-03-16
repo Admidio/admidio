@@ -166,7 +166,7 @@ echo '
                     <dt><label for="pho_name">Album:</label></dt>
                     <dd>
                         <input type="text" id="pho_name" name="pho_name" style="width: 300px;" maxlength="50" tabindex="1" value="'.$photo_album->getValue('pho_name').'" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>';
@@ -196,7 +196,7 @@ echo '
                         <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
                         	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
                         <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -269,8 +269,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" tabindex="8" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" tabindex="8" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
     <li>

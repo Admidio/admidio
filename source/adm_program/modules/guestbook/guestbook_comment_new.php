@@ -211,7 +211,7 @@ echo '
                         else
                         {
                             echo '<input type="text" id="gbc_name" name="gbc_name" tabindex="1" style="width: 350px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />
-                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
                     echo '</dd>
                 </dl>
@@ -239,7 +239,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 350px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="Pflichtfeld" style="color: #990000;">*</span>
+                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 350px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" style="color: #990000;">*</span>
                     </dd>
                 </dl>
             </li>';
@@ -262,7 +262,7 @@ echo '
                            <dt><label for="captcha">Bestätigungscode:</label></dt>
                            <dd>
                                <input type="text" id="captcha" name="captcha" tabindex="4" style="width: 200px;" maxlength="8" value="" />
-                               <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                               <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
 				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
@@ -301,8 +301,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

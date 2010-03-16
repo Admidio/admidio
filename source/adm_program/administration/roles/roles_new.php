@@ -253,7 +253,7 @@ echo '
                             echo ' readonly="readonly" ';
                         }
                         echo ' style="width: 320px;" maxlength="50" value="'. $role->getValue('rol_name'). '" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -293,7 +293,7 @@ echo '
                                 echo '>'.$row->cat_name.'</option>';
                             }
                         echo '</select>
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -302,7 +302,7 @@ echo '
         <div class="groupBox" id="properties_box">
             <div class="groupBoxHeadline" id="properties_head">
                 <a class="iconShowHide" href="javascript:toggleElement(\'properties_body\', \'img_properties_body\')"><img
-                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Eigenschaften
+                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Eigenschaften
             </div>
 
             <div class="groupBoxBody" id="properties_body">
@@ -434,7 +434,7 @@ echo '
         <div class="groupBox" id="justifications_box">
             <div class="groupBoxHeadline">
                 <a class="iconShowHide" href="javascript:toggleElement(\'justifications_body\',\'img_justifications_body\')"><img
-                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Berechtigungen
+                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Berechtigungen
             </div>
 
             <div class="groupBoxBody" id="justifications_body">
@@ -669,7 +669,7 @@ echo '
         <div class="groupBox" id="dates_box">
             <div class="groupBoxHeadline" id="dates_head">
                 <a class="iconShowHide" href="javascript:toggleElement(\'dates_body\',\'img_dates_body\')"><img
-                	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
+                	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
             <div class="groupBoxBody" id="dates_body">
@@ -739,7 +739,7 @@ echo '
             echo '<div class="groupBox" id="dependancies_box">
                 <div class="groupBoxHeadline" id="dependancies_head">
                     <a class="iconShowHide" href="javascript:toggleElement(\'dependancies_body\',\'img_dependancies_body\')"><img
-                    id="img_dependancies_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="Ausblenden" title="Ausblenden" /></a>Abhängigkeiten&nbsp;&nbsp;(optional)
+                    id="img_dependancies_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Abhängigkeiten&nbsp;&nbsp;(optional)
                 </div>
 
                 <div class="groupBoxBody" id="dependancies_body">
@@ -828,8 +828,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

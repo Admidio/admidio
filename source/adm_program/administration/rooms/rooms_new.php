@@ -77,7 +77,7 @@ echo '
                     <dt><label for="room_name">Name/Raumnummer:</label></dt>
                     <dd>
                         <input type="text" id="room_name" name="room_name" style="width: 345px;" maxlength="100" value="'. $room->getValue('room_name'). '" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -87,7 +87,7 @@ echo '
                     <dt><label for="room_capacity">Kapazit&auml;t:</label></dt>
                     <dd>
                         <input type="text" id="room_capacity" name="room_capacity" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_capacity'). '" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         &nbsp; Sitzpl&auml;tze
                     </dd>
                 </dl>
@@ -166,7 +166,7 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zur&uuml;ck"/></a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" title="'.$g_l10n->get('SYS_BACK').'"/></a>
             <a href="'.$g_root_path.'/adm_program/system/back.php">Zur&uuml;ck</a>
         </span>
     </li>

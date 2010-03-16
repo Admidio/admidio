@@ -92,11 +92,11 @@ if($user_field->getValue('usf_system') == 1)
 // zusaetzliche Daten fuer den Html-Kopf setzen
 if($req_usf_id > 0)
 {
-    $g_layout['title']  = 'Profilfeld bearbeiten';
+    $g_layout['title']  = $g_l10n->get('ORG_EDIT_PROFILE_FIELD');
 }
 else
 {
-    $g_layout['title']  = 'Profilfeld anlegen';
+    $g_layout['title']  = $g_l10n->get('ORG_CREATE_PROFILE_FIELD');
 }
 
 // Kopfinformationen
@@ -119,24 +119,24 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="usf_name">Name:</label></dt>
+                    <dt><label for="usf_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd><input type="text" name="usf_name" id="usf_name" '.$html_readonly.' style="width: 150px;" maxlength="30"
                         value="'. $user_field->getValue("usf_name"). '" />
-                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="usf_description">Beschreibung:</label></dt>
-                    <dd><textarea name="usf_description" id="usf_description" style="width: 330px;" rows="2" cols="40">'.
+                    <dt><label for="usf_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
+                    <dd><textarea name="usf_description" id="usf_description" style="width: 330px;" rows="4" cols="40">'.
                         $user_field->getValue('usf_description'). '</textarea>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="usf_cat_id">Kategorie:</label></dt>
+                    <dt><label for="usf_cat_id">'.$g_l10n->get('SYS_CATEGORY').':</label></dt>
                     <dd>';
                         if($user_field->getValue('usf_system') == 1)
                         {
@@ -152,7 +152,7 @@ echo '
                                 {
                                     echo ' selected="selected" ';
                                 }
-                                echo '>- Bitte wählen -</option>';
+                                echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
                             $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
                                      WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
@@ -172,16 +172,22 @@ echo '
                             }
                             echo '</select>';
                         }
-                        echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="usf_type">Datentyp:</label></dt>
+                    <dt><label for="usf_type">'.$g_l10n->get('ORG_DATATYPE').':</label></dt>
                     <dd>';
-                        $user_field_text = array('' => '- Bitte wählen -','DATE' => 'Datum','EMAIL' => 'E-Mail','CHECKBOX' => 'Ja / Nein',
-                                                 'TEXT' => 'Text (50 Zeichen)','TEXT_BIG' => 'Text (255 Zeichen)','URL' => 'URL','NUMERIC' => 'Zahl');
+                        $user_field_text = array(''         => '- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -',
+                                                 'DATE'     => $g_l10n->get('SYS_DATE'),
+                                                 'EMAIL'    => $g_l10n->get('SYS_EMAIL'),
+                                                 'CHECKBOX' => $g_l10n->get('SYS_YES').' / '.$g_l10n->get('SYS_NO'),
+                                                 'TEXT'     => $g_l10n->get('SYS_TEXT').' (50)',
+                                                 'TEXT_BIG' => $g_l10n->get('SYS_TEXT').' (255)',
+                                                 'URL'      => $g_l10n->get('ORG_URL'),
+                                                 'NUMERIC'  => $g_l10n->get('SYS_NUMBER'));
 
                         if($user_field->getValue('usf_system') == 1)
                         {
@@ -204,7 +210,7 @@ echo '
                                 }
                             echo '</select>';
                         }
-                        echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                        echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -212,7 +218,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_hidden">
-                            <img src="'. THEME_PATH. '/icons/eye.png" alt="Feld für alle Benutzer sichtbar" />
+                            <img src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" />
                         </label>
                     </dt>
                     <dd>
@@ -222,9 +228,9 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_hidden">Feld für alle Benutzer sichtbar</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN\',this)" onmouseout="ajax_hideTooltip()"
+                        <label for="usf_hidden">'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'</label>
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
@@ -233,7 +239,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_disabled">
-                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="Feld nur für berechtigte Benutzer bearbeitbar" />
+                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" />
                         </label>
                     </dt>
                     <dd>
@@ -243,9 +249,9 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_disabled">Feld nur für berechtigte Benutzer bearbeitbar</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED\',this)" onmouseout="ajax_hideTooltip()"
+                        <label for="usf_disabled">'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'</label>
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
@@ -254,7 +260,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_mandatory">
-                            <img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="Pflichtfeld, muss vom Benutzer gefüllt werden" />
+                            <img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" />
                         </label>
                     </dt>
                     <dd>
@@ -269,9 +275,9 @@ echo '
                             echo ' disabled="disabled" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_mandatory">Pflichtfeld, muss vom Benutzer gef&uuml;llt werden</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY\',this)" onmouseout="ajax_hideTooltip()"
+                        <label for="usf_mandatory">'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'</label>
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
                 </dl>
@@ -296,7 +302,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button name="speichern" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+            <button type="submit" value="save"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>
@@ -306,8 +312,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

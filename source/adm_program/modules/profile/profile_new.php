@@ -287,7 +287,7 @@ function getFieldCode($field, $user, $new_user)
     $mandatory = '';
     if($field->getValue('usf_mandatory') == 1)
     {
-        $mandatory = '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>';
+        $mandatory = '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
@@ -433,7 +433,7 @@ echo '
                                     echo ' />';
                                     if($new_user > 0)
                                     {
-                                        echo '<span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                        echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PHR_USERNAME_DESCRIPTION&amp;inline=true"><img 
                                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_USERNAME_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
                                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
@@ -449,7 +449,7 @@ echo '
                                     <dt><label for="usr_password">Passwort:</label></dt>
                                     <dd>
                                         <input type="password" id="usr_password" name="usr_password" style="width: 130px;" maxlength="20" />
-                                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION&amp;inline=true"><img 
                                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
                                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
@@ -461,7 +461,7 @@ echo '
                                     <dt><label for="password2">Passwort (Wdh):</label></dt>
                                     <dd>
                                         <input type="password" id="password2" name="password2" style="width: 130px;" maxlength="20" />
-                                        <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                     </dd>
                                 </dl>
                             </li>';
@@ -518,7 +518,7 @@ echo '
                         <dt>Bestätigungscode:</dt>
                         <dd>
                             <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                            <span class="mandatoryFieldMarker" title="Pflichtfeld">*</span>
+                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
 					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
@@ -571,8 +571,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'. $g_root_path. '/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" /></a>
-            <a href="'. $g_root_path. '/adm_program/system/back.php">Zurück</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'. $g_root_path. '/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';
