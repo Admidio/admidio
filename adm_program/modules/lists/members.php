@@ -88,22 +88,22 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
         FROM '. $tables. TBL_USERS. '
         LEFT JOIN '. TBL_USER_DATA. ' as last_name
           ON last_name.usd_usr_id = usr_id
-         AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+         AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as first_name
           ON first_name.usd_usr_id = usr_id
-         AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+         AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as birthday
           ON birthday.usd_usr_id = usr_id
-         AND birthday.usd_usf_id = '. $g_current_user->getProperty('Geburtstag', 'usf_id'). '
+         AND birthday.usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as city
           ON city.usd_usr_id = usr_id
-         AND city.usd_usf_id = '. $g_current_user->getProperty('Ort', 'usf_id'). '
+         AND city.usd_usf_id = '. $g_current_user->getProperty('CITY', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as address
           ON address.usd_usr_id = usr_id
-         AND address.usd_usf_id = '. $g_current_user->getProperty('Adresse', 'usf_id'). '
+         AND address.usd_usf_id = '. $g_current_user->getProperty('ADDRESS', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as zip_code
           ON zip_code.usd_usr_id = usr_id
-         AND zip_code.usd_usf_id = '. $g_current_user->getProperty('PLZ', 'usf_id'). '
+         AND zip_code.usd_usf_id = '. $g_current_user->getProperty('POSTCODE', 'usf_id'). '
         WHERE '. $condition. ' 
         ORDER BY last_name, first_name ';
 $result_user = $g_db->query($sql);

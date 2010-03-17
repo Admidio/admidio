@@ -55,16 +55,16 @@ $sql = 'SELECT cat.*, dat.*,
           FROM '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = dat_usr_id_create
-           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('SURNAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = dat_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = dat_usr_id_change
-           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('SURNAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = dat_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                OR (   dat_global  = 1

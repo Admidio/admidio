@@ -127,7 +127,7 @@ foreach($user->userFieldData as $field)
         // Pflichtfelder muessen gefuellt sein
         // E-Mail bei Restrierung immer !!!
         if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
-        || ($new_user == 2 && $field->getValue('usf_name') == 'E-Mail' && strlen($_POST[$post_id]) == 0))
+        || ($new_user == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
         {
             $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $field->getValue('usf_name')));
         }
@@ -171,14 +171,14 @@ foreach($user->userFieldData as $field)
             }
         }
 
-        $user->setValue($field->getValue('usf_name'), $_POST[$post_id]);
+        $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
     }
     else
     {
         // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
         if($field->getValue('usf_type') == 'CHECKBOX')
         {
-            $user->setValue($field->getValue('usf_name'), '0');
+            $user->setValue($field->getValue('usf_name_intern'), '0');
         }
         elseif($field->getValue('usf_mandatory') == 1)
         {
@@ -297,7 +297,7 @@ if($g_preferences['enable_forum_interface'] && ($login_name_changed || $new_user
     {
         $set_admin = true;
     }
-    $g_forum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('E-Mail'), $forum_old_username, $new_user, $set_admin);
+    $g_forum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), $forum_old_username, $new_user, $set_admin);
 }
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
@@ -325,14 +325,14 @@ if($new_user == 2)
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
                  RIGHT JOIN '. TBL_USER_DATA. ' email
                     ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = '. $g_current_user->getProperty('E-Mail', 'usf_id'). '
+                   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
                    AND LENGTH(email.usd_value) > 0
                   LEFT JOIN '. TBL_USER_DATA. ' first_name
                     ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+                   AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
                   LEFT JOIN '. TBL_USER_DATA. ' last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                   AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
                  WHERE rol_approve_users = 1
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
@@ -395,10 +395,10 @@ elseif($new_user == 3 || $usr_id == 0)
         {
             // Mail an den User schicken, um die Anmeldung zu bestaetigen
             $sysmail = new SystemMail($g_db);
-            $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
+            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == false)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('E-Mail')));
+                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
             }
         }
     }

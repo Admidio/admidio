@@ -118,7 +118,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
                 CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)) AS bdate
                 FROM ". TBL_USER_DATA. " bd1
                 WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-                        AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+                        AND usd_usf_id = ". $g_current_user->getProperty('BIRTHDAY', "usf_id"). ")
         UNION
             (SELECT 
                 usd_usr_id,
@@ -126,7 +126,7 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
                 CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)) AS bdate
                 FROM ". TBL_USER_DATA. " bd2
                 WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-                        AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+                        AND usd_usf_id = ". $g_current_user->getProperty('BIRTHDAY', "usf_id"). ")
         UNION
             (SELECT 
                 usd_usr_id,
@@ -134,21 +134,21 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
                 CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)) AS bdate
                 FROM ". TBL_USER_DATA. " bd3
                 WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-                        AND usd_usf_id = ". $g_current_user->getProperty("Geburtstag", "usf_id"). ")
+                        AND usd_usf_id = ". $g_current_user->getProperty('BIRTHDAY', "usf_id"). ")
          ) AS birthday
                ON birthday.usd_usr_id = usr_id
              LEFT JOIN ". TBL_USER_DATA. " as last_name
                ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+              AND last_name.usd_usf_id = ". $g_current_user->getProperty('SURNAME', "usf_id"). "
              LEFT JOIN ". TBL_USER_DATA. " as first_name
                ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+              AND first_name.usd_usf_id = ". $g_current_user->getProperty('FIRST_NAME', "usf_id"). "
              LEFT JOIN ". TBL_USER_DATA. " as email
                ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+              AND email.usd_usf_id = ". $g_current_user->getProperty('EMAIL', "usf_id"). "
              LEFT JOIN ". TBL_USER_DATA. " as gender
                ON gender.usd_usr_id = usr_id
-              AND gender.usd_usf_id = ". $g_current_user->getProperty("Geschlecht", "usf_id"). "
+              AND gender.usd_usf_id = ". $g_current_user->getProperty('GENDER', "usf_id"). "
              LEFT JOIN ". TBL_MEMBERS. "
                ON mem_usr_id = usr_id
               AND mem_begin <= '".DATE_NOW."'

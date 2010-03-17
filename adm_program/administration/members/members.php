@@ -108,16 +108,16 @@ if($req_members)
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
                  JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
                  JOIN '. TBL_USER_DATA. ' as first_name
                    ON first_name.usd_usr_id = usr_id
-                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as email
                    ON email.usd_usr_id = usr_id
-                  AND email.usd_usf_id = '. $g_current_user->getProperty('E-Mail', 'usf_id'). '
+                  AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as homepage
                    ON homepage.usd_usr_id = usr_id
-                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('Homepage', 'usf_id'). '
+                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('HOMEPAGE', 'usf_id'). '
                 WHERE usr_valid = 1
                   AND mem_usr_id = usr_id
                   AND mem_rol_id = rol_id
@@ -138,10 +138,10 @@ else
                  FROM '. TBL_USERS. '
                  JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
                  JOIN '. TBL_USER_DATA. ' as first_name
                    ON first_name.usd_usr_id = usr_id
-                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
                  LEFT JOIN '. TBL_MEMBERS. '
                    ON mem_usr_id = usr_id
                   AND mem_begin <= "'.DATE_NOW.'"
@@ -154,10 +154,10 @@ else
                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as email
                    ON email.usd_usr_id = usr_id
-                  AND email.usd_usf_id = '. $g_current_user->getProperty('E-Mail', 'usf_id'). '
+                  AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as homepage
                    ON homepage.usd_usr_id = usr_id
-                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('Homepage', 'usf_id'). '
+                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('HOMEPAGE', 'usf_id'). '
                 WHERE usr_valid = 1
                       '.$search_condition.'
                 GROUP BY usr_id
@@ -297,7 +297,7 @@ echo '
                       AND mem_begin <= "'.DATE_NOW.'"
                       AND mem_end    > "'.DATE_NOW.'"
                       AND usr_valid  = 1
-                      AND usf_name   = "Nachname"
+                      AND usf_name_intern = "SURNAME"
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
                     GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
@@ -308,7 +308,7 @@ echo '
         $sql    = 'SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count
                      FROM '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
                     WHERE usr_valid  = 1
-                      AND usf_name   = "Nachname"
+                      AND usf_name_intern = "SURNAME"
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
                     GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))

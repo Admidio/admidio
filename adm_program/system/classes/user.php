@@ -64,26 +64,26 @@ class User extends TableUsers
             if(count($this->roles_rights) == 0)
             {
                 global $g_current_organization;
-                $tmp_roles_rights  = array('rol_assign_roles' => '0', 'rol_approve_users' => '0',
-                                            'rol_announcements' => '0', 'rol_dates' => '0',
-                                            'rol_download' => '0', 'rol_edit_user' => '0',
-                                            'rol_guestbook' => '0', 'rol_guestbook_comments' => '0',
-                                            'rol_inventory' => '0',
-                                            'rol_mail_to_all' => '0',
-                                            'rol_photo' => '0', 'rol_profile' => '0',
-                                            'rol_weblinks' => '0', 'rol_all_lists_view' => '0');
+                $tmp_roles_rights  = array('rol_assign_roles'  => '0', 'rol_approve_users' => '0',
+                                           'rol_announcements' => '0', 'rol_dates' => '0',
+                                           'rol_download'      => '0', 'rol_edit_user' => '0',
+                                           'rol_guestbook'     => '0', 'rol_guestbook_comments' => '0',
+                                           'rol_inventory'     => '0',
+                                           'rol_mail_to_all'   => '0',
+                                           'rol_photo'         => '0', 'rol_profile' => '0',
+                                           'rol_weblinks'      => '0', 'rol_all_lists_view' => '0');
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
-                $sql    = 'SELECT *
-                             FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                             LEFT JOIN '. TBL_MEMBERS. '
-                               ON mem_usr_id = '. $this->getValue('usr_id'). '
-                              AND mem_rol_id = rol_id
-                              AND mem_begin <= "'.DATE_NOW.'"
-                              AND mem_end    > "'.DATE_NOW.'"
-                            WHERE rol_valid  = 1
-                              AND rol_cat_id = cat_id
-                              AND cat_org_id = '. $g_current_organization->getValue('org_id');
+                $sql = 'SELECT *
+                          FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
+                          LEFT JOIN '. TBL_MEMBERS. '
+                            ON mem_usr_id = '. $this->getValue('usr_id'). '
+                           AND mem_rol_id = rol_id
+                           AND mem_begin <= "'.DATE_NOW.'"
+                           AND mem_end    > "'.DATE_NOW.'"
+                         WHERE rol_valid  = 1
+                           AND rol_cat_id = cat_id
+                           AND cat_org_id = '. $g_current_organization->getValue('org_id');
                 $this->db->query($sql);
 
                 while($row = $this->db->fetch_array())
@@ -206,6 +206,13 @@ class User extends TableUsers
             $this->db->query($sql);
         }
     }
+    
+    // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
+    public function getListViewRights()
+    {
+        $this->checkRolesRight();
+        return $this->list_view_rights;
+    }
 
     // Methode gibt den Wert eines Profilfeldes zurueck
     // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
@@ -230,13 +237,6 @@ class User extends TableUsers
             }
         }
         return '';
-    }
-    
-    // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
-    public function getListViewRights()
-    {
-        $this->checkRolesRight();
-        return $this->list_view_rights;
     }
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
@@ -263,52 +263,52 @@ class User extends TableUsers
 
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Vorname']->getValue('usf_hidden') == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['FIRST_NAME']->getValue('usf_hidden') == 0))
         {
-            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("Nachname")). ";". utf8_decode($this->getValue("Vorname")) . ";;;\r\n";
+            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue('SURNAME')). ";". utf8_decode($this->getValue('FIRST_NAME')) . ";;;\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Nachname']->getValue('usf_hidden') == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['SURNAME']->getValue('usf_hidden') == 0))
         {
-            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue("Vorname")) . " ". utf8_decode($this->getValue("Nachname")) . "\r\n";
+            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue('FIRST_NAME')) . " ". utf8_decode($this->getValue('SURNAME')) . "\r\n";
         }
         if (strlen($this->getValue('usr_login_name')) > 0)
         {
             $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
         }
-        if (strlen($this->getValue('Telefon')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Telefon']->getValue('usf_hidden') == 0)))
+        if (strlen($this->getValue('PHONE')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['PHONE']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue("Telefon"). "\r\n";
+            $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue('PHONE'). "\r\n";
         }
-        if (strlen($this->getValue('Handy')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Handy']->getValue('usf_hidden') == 0)))
+        if (strlen($this->getValue('MOBILE')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['MOBILE']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue("Handy"). "\r\n";
+            $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue('MOBILE'). "\r\n";
         }
-        if (strlen($this->getValue('Fax')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Fax']->getValue('usf_hidden') == 0)))
+        if (strlen($this->getValue('FAX')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['FAX']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue("Fax"). "\r\n";
+            $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue('FAX'). "\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['Adresse']->getValue('usf_hidden') == 0 && $this->userFieldData['Ort']->getValue('usf_hidden') == 0
-        && $this->userFieldData['PLZ']->getValue('usf_hidden') == 0  && $this->userFieldData['Land']->getValue('usf_hidden') == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['ADDRESS']->getValue('usf_hidden') == 0 && $this->userFieldData['CITY']->getValue('usf_hidden') == 0
+        && $this->userFieldData['POSTCODE']->getValue('usf_hidden') == 0  && $this->userFieldData['COUNTRY']->getValue('usf_hidden') == 0))
         {
-            $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue("Adresse")). ";" . utf8_decode($this->getValue("Ort")). ";;" . utf8_decode($this->getValue("PLZ")). ";" . utf8_decode($this->getValue("Land")). "\r\n";
+            $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue('ADDRESS')). ";" . utf8_decode($this->getValue('CITY')). ";;" . utf8_decode($this->getValue('POSTCODE')). ";" . utf8_decode($this->getValue('COUNTRY')). "\r\n";
         }
-        if (strlen($this->getValue('Homepage')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Homepage']->getValue('usf_hidden') == 0)))
+        if (strlen($this->getValue('HOMEPAGE')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['HOMEPAGE']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "URL;HOME:" . $this->getValue("Homepage"). "\r\n";
+            $vcard .= (string) "URL;HOME:" . $this->getValue('HOMEPAGE'). "\r\n";
         }
-        if (strlen($this->getValue('Geburtstag')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geburtstag']->getValue('usf_hidden') == 0)))
+        if (strlen($this->getValue('BIRTHDAY')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['BIRTHDAY']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "BDAY:" . $this->getValue('Geburtstag', 'Ymd') . "\r\n";
+            $vcard .= (string) "BDAY:" . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
         }
-        if (strlen($this->getValue('E-Mail')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['E-Mail']->getValue('usf_hidden') == 0)))
+        if (strlen($this->getValue('EMAIL')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['EMAIL']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue("E-Mail"). "\r\n";
+            $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue('EMAIL'). "\r\n";
         }
         if (file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $g_preferences['profile_photo_storage'] == 1)
         {
@@ -321,10 +321,10 @@ class User extends TableUsers
             $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
-        if ($this->getValue('Geschlecht') > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['Geschlecht']->getValue('usf_hidden') == 0)))
+        if ($this->getValue('GENDER') > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['GENDER']->getValue('usf_hidden') == 0)))
         {
-            if($this->getValue('Geschlecht') == 1)
+            if($this->getValue('GENDER') == 1)
             {
                 $wab_gender = 2;
             }
@@ -376,11 +376,11 @@ class User extends TableUsers
 
         while($usf_row = $this->db->fetch_array($usf_result))
         {
-            if(isset($this->userFieldData[$usf_row['usf_name']]) == false)
+            if(isset($this->userFieldData[$usf_row['usf_name_intern']]) == false)
             {
-                $this->userFieldData[$usf_row['usf_name']] = new TableUserData($this->db);
+                $this->userFieldData[$usf_row['usf_name_intern']] = new TableUserData($this->db);
             }
-            $this->userFieldData[$usf_row['usf_name']]->setArray($usf_row);
+            $this->userFieldData[$usf_row['usf_name_intern']]->setArray($usf_row);
         }
     }
 
@@ -403,20 +403,20 @@ class User extends TableUsers
                 {
                 	// PHP4 liefert nur eine Kopie des Objekts, aus diesem Grund muss die Aenderung direkt auf das 
                 	// richtige Objekt verwiesen werden
-                	$this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usr_id', $this->getValue('usr_id'));
-                    $this->userFieldData[$field->getValue('usf_name')]->setValue('usd_usf_id', $field->getValue('usf_id'));
-                    $this->userFieldData[$field->getValue('usf_name')]->new_record = true;
+                	$this->userFieldData[$field->getValue('usf_name_intern')]->setValue('usd_usr_id', $this->getValue('usr_id'));
+                    $this->userFieldData[$field->getValue('usf_name_intern')]->setValue('usd_usf_id', $field->getValue('usf_id'));
+                    $this->userFieldData[$field->getValue('usf_name_intern')]->new_record = true;
                 }
 
                 // existiert schon ein Wert und dieser wird entfernt, dann auch DS loeschen
                 if($field->getValue('usd_id') > 0
                 && strlen($field->getValue('usd_value')) == 0)
                 {
-                    $this->userFieldData[$field->getValue('usf_name')]->delete();
+                    $this->userFieldData[$field->getValue('usf_name_intern')]->delete();
                 }
                 else
                 {
-                    $this->userFieldData[$field->getValue('usf_name')]->save();
+                    $this->userFieldData[$field->getValue('usf_name_intern')]->save();
                 }
             }
         }

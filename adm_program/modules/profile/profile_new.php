@@ -113,14 +113,14 @@ if(isset($_SESSION['profile_request']))
 // dabei wird der Inhalt richtig formatiert
 function getFieldCode($field, $user, $new_user)
 {
-    global $g_preferences, $g_root_path, $g_current_user;
+    global $g_preferences, $g_root_path, $g_current_user, $g_l10n;
     $value    = '';
     
     // Felder sperren, falls dies so eingestellt wurde
     $readonly = '';
     if($field->getValue('usf_disabled') == 1 && $g_current_user->editUsers() == false && $new_user == 0)
     {
-        if($field->getValue('usf_type') == 'CHECKBOX' || $field->getValue('usf_name') == 'Geschlecht')
+        if($field->getValue('usf_type') == 'CHECKBOX' || $field->getValue('usf_name_intern') == 'GENDER')
         {
             $readonly = ' disabled="disabled" ';
         }
@@ -131,7 +131,7 @@ function getFieldCode($field, $user, $new_user)
     }
 
     // Code fuer die einzelnen Felder zusammensetzen    
-    if($field->getValue('usf_name') == 'Geschlecht')
+    if($field->getValue('usf_name_intern') == 'GENDER')
     {
         $checked_female = '';
         $checked_male   = '';
@@ -149,7 +149,7 @@ function getFieldCode($field, $user, $new_user)
             <input type="radio" id="male" name="usf-'. $field->getValue('usf_id'). '" value="1" '.$checked_male.' '.$readonly.' />
             <label for="male"><img src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" /></label>';
     }
-    elseif($field->getValue('usf_name') == 'Land')
+    elseif($field->getValue('usf_name_intern') == 'COUNTRY')
     {
         //Laenderliste oeffnen
         $landlist = fopen(SERVER_PATH. '/adm_program/system/staaten.txt', 'r');
@@ -217,7 +217,7 @@ function getFieldCode($field, $user, $new_user)
         }
         if($field->getValue('usf_type') == 'DATE')
         {
-            if($field->getValue('usf_name') == 'Geburtstag')
+            if($field->getValue('usf_name_intern') == 'BIRTHDAY')
             {
                 $value = '<script type="text/javascript">
                             var calBirthday = new CalendarPopup("calendardiv");
@@ -380,7 +380,7 @@ echo '
             // E-Mail ist Ausnahme und muss immer angezeigt werden
             if($new_user == 2 
             && $g_preferences['registration_mode'] == 1 
-            && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name') == 'E-Mail'))
+            && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') == 'EMAIL'))
             {
                 $show_field = true;
             }
@@ -547,12 +547,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $user->getValue('usr_timestamp_create'));
+                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('SURNAME'), $user->getValue('usr_timestamp_create'));
 
                 if($user->getValue('usr_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $user->getValue('usr_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('SURNAME'), $user->getValue('usr_timestamp_change'));
                 }
             echo '</div>';
         }

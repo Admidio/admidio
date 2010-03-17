@@ -49,16 +49,20 @@ class TableUserField extends TableAccess
         // einlesen aller Userobjekte der angemeldeten User anstossen, 
         // da Aenderungen in den Profilfeldern vorgenommen wurden 
         $g_current_session->renewUserObject();
-            
+
         return parent::delete();
     }
 
     // diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
     // dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
-    // Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_1'
+    // Beispiel: 'Mitgliedsnummer' => 'MITGLIEDSNUMMER_2'
     private function getNewNameIntern($name, $index)
     {
-        $newNameIntern = strtoupper(str_replace(' ', '_', $name)).'_'.$index;
+        $newNameIntern = strtoupper(str_replace(' ', '_', $name));
+        if($index > 1)
+        {
+            $newNameIntern = $newNameIntern.'_'.$index;
+        }
         $sql = 'SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = "'.$newNameIntern.'"';
         $this->db->query($sql);
         

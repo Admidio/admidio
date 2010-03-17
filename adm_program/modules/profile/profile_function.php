@@ -45,7 +45,7 @@ if($_REQUEST['mode'] == 1)
     $user = new User($g_db, $_REQUEST['user_id']);
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
-    header('Content-Disposition: attachment; filename="'. $user->getValue("Vorname"). ' '. $user->getValue("Nachname"). '.vcf"');
+    header('Content-Disposition: attachment; filename="'. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'). '.vcf"');
 
     echo $user->getVCard();
 }

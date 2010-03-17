@@ -179,7 +179,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
             if(strlen($guestbook->getValue('gbo_name')) == 0)
             { 
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $guestbook->setValue('gbo_name', $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'));
+                $guestbook->setValue('gbo_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('SURNAME'));
             }
         }
         else
@@ -286,7 +286,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
             if(strlen($guestbook_comment->getValue('gbc_name')) == 0)
             {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $guestbook_comment->setValue('gbc_name', $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'));
+                $guestbook_comment->setValue('gbc_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('SURNAME'));
             }
         }
         else

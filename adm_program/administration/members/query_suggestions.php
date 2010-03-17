@@ -67,10 +67,10 @@ else
                          FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
-                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
                          LEFT JOIN '. TBL_USER_DATA. ' as first_name
                            ON first_name.usd_usr_id = usr_id
-                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
                         WHERE usr_valid = 1
                           AND mem_usr_id = usr_id
                           AND mem_rol_id = rol_id
@@ -87,10 +87,10 @@ else
                          FROM '. TBL_USERS. '
                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
-                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('Nachname', 'usf_id'). '
+                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
                          LEFT JOIN '. TBL_USER_DATA. ' as first_name
                            ON first_name.usd_usr_id = usr_id
-                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('Vorname', 'usf_id'). '
+                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
                         WHERE usr_valid = 1
                         ORDER BY last_name, first_name ';
         }

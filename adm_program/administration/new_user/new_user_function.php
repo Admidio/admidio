@@ -88,7 +88,7 @@ if($req_mode == 1 || $req_mode == 2)
     // Daten kopieren, aber nur, wenn noch keine Logindaten existieren
     if(strlen($user->getValue('usr_login_name')) == 0 && strlen($user->getValue('usr_password')) == 0)
     {
-        $user->setValue('E-Mail', $new_user->getValue('E-Mail'));
+        $user->setValue('EMAIL', $new_user->getValue('EMAIL'));
         $user->setValue('usr_login_name', $new_user->getValue('usr_login_name'));
         $user->setValue('usr_password', $new_user->getValue('usr_password'));
     }
@@ -117,14 +117,14 @@ if($req_mode == 1 || $req_mode == 3)
     {
         // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
         $sysmail = new SystemMail($g_db);
-        $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
+        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'));
         if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == true)
         {
             $g_message->show($g_l10n->get('NWU_PHR_ASSIGN_LOGIN_EMAIL'));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('E-Mail')));
+            $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
         }
     }
     else

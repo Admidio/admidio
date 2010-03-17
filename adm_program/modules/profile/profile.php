@@ -73,7 +73,7 @@ function getFieldCode($field, $user_id)
             if(strlen($field->getValue('usd_value')) > 0)
             {
                 $value = $field->getValue('usd_value', $g_preferences['system_date']);
-                if($field->getValue('usf_name') == 'Geburtstag')
+                if($field->getValue('usf_name_intern') == 'BIRTHDAY')
                 {
                     // Alter mit ausgeben
                     $birthday = new DateTimeExtended($field->getValue('usd_value'), $g_preferences['system_date'], 'date');
@@ -96,7 +96,7 @@ function getFieldCode($field, $user_id)
                 }
                 if(strlen($field->getValue('usd_value')) > 25)
                 {
-                    $value = '<a href="'. $mail_link. '" title="'. $field->getValue('usd_value').'">'. substr($field->getValue('usd_value'), 0, 25). '...</a>';
+                    $value = '<a href="'. $mail_link. '" title="'. $field->getValue('usd_value').'">'.substr($field->getValue('usd_value'), 0, 25).'...</a>';
                 }
                 else
                 {
@@ -219,7 +219,7 @@ if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
 }
 else
 {
-    $g_layout['title'] = 'Profil von '.$user->getValue('Vorname').' '.$user->getValue('Nachname');
+    $g_layout['title'] = 'Profil von '.$user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME');
 }
 $g_layout['header'] = '
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
@@ -257,17 +257,17 @@ echo '
             <div style="width: 65%; float: left;">
                 <div class="groupBox">
                     <div class="groupBoxHeadline">
-                        <div style="float: left;">'. $user->getValue('Vorname'). ' '. $user->getValue('Nachname');
+                        <div style="float: left;">'. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME');
 
                             // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-                            if($user->getValue('Geschlecht') > 0
-                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('Geschlecht', 'usf_hidden') == 0 ))
+                            if($user->getValue('GENDER') > 0
+                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('GENDER', 'usf_hidden') == 0 ))
                             {
-                                if($user->getValue('Geschlecht') == 1)
+                                if($user->getValue('GENDER') == 1)
                                 {
                                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" />';
                                 }
-                                elseif($user->getValue('Geschlecht') == 2)
+                                elseif($user->getValue('GENDER') == 2)
                                 {
                                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png" title="weiblich" alt="weiblich" />';
                                 }
@@ -276,8 +276,8 @@ echo '
                         <div style="text-align: right;">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'). '"><img
                                 src="'. THEME_PATH. '/icons/vcard.png"
-                                alt="vCard von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). ' exportieren"
-                                title="vCard von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). ' exportieren" /></a>';
+                                alt="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'). ' exportieren"
+                                title="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'). ' exportieren" /></a>';
 
                             // Nur berechtigte User duerfen das Passwort editieren
                             if($user->getValue('usr_id') == $g_current_user->getValue('usr_id') || $g_current_user->isWebmaster())
@@ -323,18 +323,18 @@ echo '
                                 if($field->getValue('cat_name') == 'Stammdaten'
                                 && (  $g_current_user->editProfile($user->getValue('usr_id')) == true || $field->getValue('usf_hidden') == 0 ))
                                 {
-                                    switch($field->getValue('usf_name'))
+                                    switch($field->getValue('usf_name_intern'))
                                     {
-                                        case 'Nachname':
-                                        case 'Vorname':
-                                        case 'Geschlecht':
+                                        case 'SURNAME':
+                                        case 'FIRST_NAME':
+                                        case 'GENDER':
                                             // diese Felder werden nicht einzeln dargestellt
                                             break;
 
-                                        case 'Adresse':
-                                        case 'PLZ':
-                                        case 'Ort':
-                                        case 'Land':
+                                        case 'ADDRESS':
+                                        case 'POSTCODE':
+                                        case 'CITY':
+                                        case 'COUNTRY':
                                             if($bAddressOutput == false)   // nur 1x bei Adresse schreiben
                                             {
                                                 $bAddressOutput = true;
@@ -345,55 +345,55 @@ echo '
                                                             $address = '';
                                                             $map_url = 'http://maps.google.com/?q=';
                                                             $route_url = 'http://maps.google.com/?f=d&amp;saddr='. 
-                                                                urlencode($g_current_user->getValue('Adresse')).
-                                                                ',%20'. urlencode($g_current_user->getValue('PLZ')).
-                                                                ',%20'. urlencode($g_current_user->getValue('Ort')).
-                                                                ',%20'. urlencode($g_current_user->getValue('Land')).
+                                                                urlencode($g_current_user->getValue('ADDRESS')).
+                                                                ',%20'. urlencode($g_current_user->getValue('POSTCODE')).
+                                                                ',%20'. urlencode($g_current_user->getValue('CITY')).
+                                                                ',%20'. urlencode($g_current_user->getValue('COUNTRY')).
                                                                 '&amp;daddr=';
 
-                                                            if(strlen($user->getValue('Adresse')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('Adresse', 'usf_hidden') == 0))
+                                                            if(strlen($user->getValue('ADDRESS')) > 0
+                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('ADDRESS', 'usf_hidden') == 0))
                                                             {
-                                                                $address   .= '<div>'.$user->getValue('Adresse'). '</div>';
-                                                                $map_url   .= urlencode($user->getValue('Adresse'));
-                                                                $route_url .= urlencode($user->getValue('Adresse'));
+                                                                $address   .= '<div>'.$user->getValue('ADDRESS'). '</div>';
+                                                                $map_url   .= urlencode($user->getValue('ADDRESS'));
+                                                                $route_url .= urlencode($user->getValue('ADDRESS'));
                                                             }
 
-                                                            if(strlen($user->getValue('PLZ')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('PLZ', 'usf_hidden') == 0))
+                                                            if(strlen($user->getValue('POSTCODE')) > 0
+                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('POSTCODE', 'usf_hidden') == 0))
                                                             {
-                                                                $address   .= '<div>'.$user->getValue('PLZ');
-                                                                $map_url   .= ',%20'. urlencode($user->getValue('PLZ'));
-                                                                $route_url .= ',%20'. urlencode($user->getValue('PLZ'));
+                                                                $address   .= '<div>'.$user->getValue('POSTCODE');
+                                                                $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
+                                                                $route_url .= ',%20'. urlencode($user->getValue('POSTCODE'));
 
 																// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
-	                                                            if(strlen($user->getValue('Ort')) == 0
-	                                                            || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $g_current_user->getProperty('Ort', 'usf_hidden') == 1))
+	                                                            if(strlen($user->getValue('CITY')) == 0
+	                                                            || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $g_current_user->getProperty('CITY', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '</div>';
 	                                                            }
                                                             }
 
-                                                            if(strlen($user->getValue('Ort')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('Ort', 'usf_hidden') == 0))
+                                                            if(strlen($user->getValue('CITY')) > 0
+                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('CITY', 'usf_hidden') == 0))
                                                             {
                                                             	// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
-	                                                            if(strlen($user->getValue('PLZ')) == 0
-	                                                            || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $g_current_user->getProperty('PLZ', 'usf_hidden') == 1))
+	                                                            if(strlen($user->getValue('POSTCODE')) == 0
+	                                                            || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $g_current_user->getProperty('POSTCODE', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '<div>';
 	                                                            }
-                                                                $address   .= ' '. $user->getValue('Ort'). '</div>';
-                                                                $map_url   .= ',%20'. urlencode($user->getValue('Ort'));
-                                                                $route_url .= ',%20'. urlencode($user->getValue('Ort'));
+                                                                $address   .= ' '. $user->getValue('CITY'). '</div>';
+                                                                $map_url   .= ',%20'. urlencode($user->getValue('CITY'));
+                                                                $route_url .= ',%20'. urlencode($user->getValue('CITY'));
                                                             }
 
-                                                            if(strlen($user->getValue('Land')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('Land', 'usf_hidden') == 0))
+                                                            if(strlen($user->getValue('COUNTRY')) > 0
+                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('COUNTRY', 'usf_hidden') == 0))
                                                             {
-                                                                $address   .= '<div>'.$user->getValue('Land'). '</div>';
-                                                                $map_url   .= ',%20'. urlencode($user->getValue('Land'));
-                                                                $route_url .= ',%20'. urlencode($user->getValue('Land'));
+                                                                $address   .= '<div>'.$user->getValue('COUNTRY'). '</div>';
+                                                                $map_url   .= ',%20'. urlencode($user->getValue('COUNTRY'));
+                                                                $route_url .= ',%20'. urlencode($user->getValue('COUNTRY'));
                                                             }
 
                                                             echo $address;
@@ -771,12 +771,12 @@ echo '
         // Infos der Benutzer, die diesen DS erstellt und geaendert haben
         echo '<div class="editInformation">';
             $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
-            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $user->getValue('usr_timestamp_create'));
+            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('SURNAME'), $user->getValue('usr_timestamp_create'));
 
             if($user->getValue('usr_usr_id_change') > 0)
             {
                 $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
-                echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $user->getValue('usr_timestamp_change'));
+                echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('SURNAME'), $user->getValue('usr_timestamp_change'));
             }
         echo '</div>    
     </div>

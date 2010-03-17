@@ -208,7 +208,7 @@ if($job==NULL)
     }
     else
     {
-        $headline = 'Profilfoto von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname'). ' bearbeiten';
+        $headline = 'Profilfoto von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'). ' bearbeiten';
     }
 
     $g_layout['title']  = $headline;
@@ -292,7 +292,7 @@ elseif($job=='upload')
     }
     else
     {
-        $headline = 'Profilfoto von '. $user->getValue('Vorname'). ' '. $user->getValue('Nachname');
+        $headline = 'Profilfoto von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME');
     }
     
     $g_layout['title'] = $headline;
