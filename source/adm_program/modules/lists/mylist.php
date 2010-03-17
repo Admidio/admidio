@@ -148,8 +148,8 @@ $g_layout['header'] = '
 
                 var selected = "";
                 // bei einer neuen Liste sind Vorname und Nachname in den ersten Spalten vorbelegt
-                if((  (fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name"] == "Nachname")
-                   || (fieldNumberIntern == 1 && arr_user_fields[counter]["usf_name"] == "Vorname"))
+                if((  (fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name_intern"] == "SURNAME")
+                   || (fieldNumberIntern == 1 && arr_user_fields[counter]["usf_name_intern"] == "FIRST_NAME"))
                 && listId == 0)
                 {
                     selected = " selected=\"selected\" ";
@@ -233,7 +233,8 @@ $g_layout['header'] = '
                     user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
                     user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
                     user_fields['. $i. ']["usf_id"]   = "usr_login_name";
-                    user_fields['. $i. ']["usf_name"] = "Benutzername";';
+                    user_fields['. $i. ']["usf_name"] = "Benutzername";
+                    user_fields['. $i. ']["usf_name_intern"] = "Benutzername";';
                     $i++;
                     
                     $g_layout['header'] .= '
@@ -241,7 +242,8 @@ $g_layout['header'] = '
                     user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
                     user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
                     user_fields['. $i. ']["usf_id"]   = "usr_photo";
-                    user_fields['. $i. ']["usf_name"] = "Foto";';
+                    user_fields['. $i. ']["usf_name"] = "Foto";
+                    user_fields['. $i. ']["usf_name_intern"] = "Foto";';
                     $i++;
                 }
                 
@@ -252,7 +254,8 @@ $g_layout['header'] = '
                     user_fields['. $i. ']["cat_id"]   = '. $field->getValue('cat_id'). ';
                     user_fields['. $i. ']["cat_name"] = "'. $field->getValue('cat_name'). '";
                     user_fields['. $i. ']["usf_id"]   = '. $field->getValue('usf_id'). ';
-                    user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";';
+                    user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
+                    user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";';
                 
                     $old_cat_id   = $field->getValue('cat_id');
                     $old_cat_name = $field->getValue('cat_name');
@@ -266,7 +269,8 @@ $g_layout['header'] = '
             user_fields['. $i. ']["cat_id"]   = -1;
             user_fields['. $i. ']["cat_name"] = "Rollendaten";
             user_fields['. $i. ']["usf_id"]   = "mem_begin";
-            user_fields['. $i. ']["usf_name"] = "Mitgliedsbeginn";';
+            user_fields['. $i. ']["usf_name"] = "Mitgliedsbeginn";
+            user_fields['. $i. ']["usf_name_intern"] = "Mitgliedsbeginn";';
             
             $i++;
             $g_layout['header'] .= '
@@ -275,6 +279,7 @@ $g_layout['header'] = '
             user_fields['. $i. ']["cat_name"] = "Rollendaten";
             user_fields['. $i. ']["usf_id"]   = "mem_end";
             user_fields['. $i. ']["usf_name"] = "Mitgliedsende";
+            user_fields['. $i. ']["usf_name_intern"] = "Mitgliedsende";
             
             return user_fields;
         }

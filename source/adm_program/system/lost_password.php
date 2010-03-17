@@ -43,7 +43,7 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               LEFT JOIN '. TBL_USER_DATA. ' as email
                 ON email.usd_usr_id = usr_id
-               AND email.usd_usf_id = '.$g_current_user->getProperty('E-Mail', 'usf_id').'
+               AND email.usd_usf_id = '.$g_current_user->getProperty('EMAIL', 'usf_id').'
                AND email.usd_value  = "'.$empfaenger_email.'"
              WHERE rol_cat_id = cat_id
                AND cat_org_id = '.$g_current_organization->getValue('org_id').'
@@ -65,12 +65,12 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
 
     // Passwort und Aktivierungs-ID erzeugen und speichern
     $neues_passwort = generatePassword();
-    $activation_id  = generateActivationId($user->getValue('E-Mail'));
+    $activation_id  = generateActivationId($user->getValue('EMAIL'));
     $user->setValue('usr_new_password', $neues_passwort);
     $user->setValue('usr_activation_code', $activation_id);
     
     $sysmail = new SystemMail($g_db);
-    $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
+    $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'));
     $sysmail->setVariable(1, $user->real_password);
     $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activation_id);
     if($sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user) == true)

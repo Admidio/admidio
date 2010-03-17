@@ -31,7 +31,7 @@ if ($g_preferences['enable_mail_module'] != 1)
 }
 
 
-if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
+if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('EMAIL')))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
@@ -73,12 +73,12 @@ if (isset($_GET['usr_id']))
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!isValidEmailAddress($user->getValue('E-Mail')))
+    if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('Vorname').' '.$user->getValue('Nachname')));
+        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME')));
     }
 
-    $userEmail = $user->getValue('E-Mail');
+    $userEmail = $user->getValue('EMAIL');
 }
 elseif (isset($_GET['rol_id']))
 {
@@ -356,7 +356,7 @@ echo '
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo '<input type="text" id="name" name="name" readonly="readonly" style="width: 200px;" maxlength="50" value="'. $g_current_user->getValue('Vorname'). ' '. $g_current_user->getValue('Nachname'). '" />';
+                               echo '<input type="text" id="name" name="name" readonly="readonly" style="width: 200px;" maxlength="50" value="'. $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('SURNAME'). '" />';
                             }
                             else
                             {
@@ -372,7 +372,7 @@ echo '
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo '<input type="text" id="mailfrom" name="mailfrom" readonly="readonly" style="width: 350px;" maxlength="50" value="'. $g_current_user->getValue('E-Mail'). '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" readonly="readonly" style="width: 350px;" maxlength="50" value="'. $g_current_user->getValue('EMAIL'). '" />';
                             }
                             else
                             {

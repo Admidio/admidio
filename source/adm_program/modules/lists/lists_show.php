@@ -367,7 +367,7 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
         $col_name = $g_current_user->getPropertyById($usf_id, 'usf_name');
 
         if($g_current_user->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
-        || $g_current_user->getPropertyById($usf_id, 'usf_name') == 'Geschlecht')
+        || $g_current_user->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
         {
             $align = 'center';
         }
@@ -504,7 +504,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     if($b_user_field == true)
                     {
                         if($g_current_user->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
-                        || $g_current_user->getPropertyById($usf_id, 'usf_name') == 'Geschlecht')
+                        || $g_current_user->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
                         {
                             $align = 'center';
                         }
@@ -549,7 +549,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 }
                             
                 // Ausgabe je nach Feldtyp aufbereiten
-                if($usf_id == $g_current_user->getProperty('Geschlecht', 'usf_id'))
+                if($usf_id == $g_current_user->getProperty('GENDER', 'usf_id'))
                 {
                     // Geschlecht anzeigen
                     if($row[$sql_column_number] == 1)
@@ -644,7 +644,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                                 if($req_mode == 'html')
                                 {
                                     if($g_preferences['enable_mail_module'] == 1 
-                                    && $g_current_user->getPropertyById($usf_id, 'usf_name') == 'E-Mail')
+                                    && $g_current_user->getPropertyById($usf_id, 'usf_name_intern') == 'EMAIL')
                                     {
                                         $content = '<a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '">'. $row[$sql_column_number]. '</a>';
                                     }

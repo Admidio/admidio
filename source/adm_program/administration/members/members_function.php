@@ -204,15 +204,15 @@ elseif($_GET["mode"] == 4)
 
         // Mail an den User mit den Loginaten schicken
         $sysmail = new SystemMail($g_db);
-        $sysmail->addRecipient($user->getValue('E-Mail'), $user->getValue('Vorname'). ' '. $user->getValue('Nachname'));
+        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'));
         $sysmail->setVariable(1, $user->real_password);
         if($sysmail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user) == true)
         {
-            $phrase = $g_l10n->get('SYS_PHR_EMAIL_SEND', $user->getValue('E-Mail'));
+            $phrase = $g_l10n->get('SYS_PHR_EMAIL_SEND', $user->getValue('EMAIL'));
         }
         else
         {
-            $phrase = $g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('E-Mail'));
+            $phrase = $g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('EMAIL'));
         }
         $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
         $g_message->show($phrase);
@@ -222,7 +222,7 @@ elseif($_GET['mode'] == 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
     $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=4');
-    $g_message->show($g_l10n->get('MEM_PHR_SEND_NEW_LOGIN', $user->getValue('Vorname'). ' '. $user->getValue('Nachname')));
+    $g_message->show($g_l10n->get('MEM_PHR_SEND_NEW_LOGIN', $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME')));
 }
 elseif($_GET['mode'] == 6)
 {
@@ -238,13 +238,13 @@ elseif($_GET['mode'] == 6)
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
         $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=3');
-        $g_message->show($g_l10n->get('MEM_PHR_USER_DELETE', $user->getValue('Vorname'). ' '. $user->getValue('Nachname'), $g_current_organization->getValue('org_longname')),$g_l10n->get('SYS_DELETE'));
+        $g_message->show($g_l10n->get('MEM_PHR_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'), $g_current_organization->getValue('org_longname')),$g_l10n->get('SYS_DELETE'));
     }
     else
     {
         // User kann nur aus dieser Orga entfernt werden
         $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=2');
-        $g_message->show($g_l10n->get('MEM_PHR_REMOVE_MEMBERSHIP', $user->getValue('Vorname'). ' '. $user->getValue('Nachname'), $g_current_organization->getValue('org_longname')),$g_l10n->get('SYS_REMOVE'));
+        $g_message->show($g_l10n->get('MEM_PHR_REMOVE_MEMBERSHIP', $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'), $g_current_organization->getValue('org_longname')),$g_l10n->get('SYS_REMOVE'));
     }
 }
 

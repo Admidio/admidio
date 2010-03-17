@@ -67,9 +67,9 @@ if (array_key_exists('usr_id', $_GET))
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!isValidEmailAddress($user->getValue('E-Mail')))
+    if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('Vorname').' '.$user->getValue('Nachname')));
+        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME')));
     }
 }
 
@@ -94,8 +94,8 @@ if(strlen($_POST['name']) == 0)
 
 //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
 if ( $g_valid_login 
-&& (  $_POST['mailfrom'] != $g_current_user->getValue("E-Mail") 
-   || $_POST['name'] != $g_current_user->getValue("Vorname"). " ". $g_current_user->getValue("Nachname")) )
+&& (  $_POST['mailfrom'] != $g_current_user->getValue('EMAIL') 
+   || $_POST['name'] != $g_current_user->getValue('FIRST_NAME'). " ". $g_current_user->getValue('SURNAME')) )
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -192,7 +192,7 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
 if (array_key_exists("usr_id", $_GET))
 {
     //den gefundenen User dem Mailobjekt hinzufuegen...
-    $email->addRecipient($user->getValue("E-Mail"), $user->getValue("Vorname"). " ". $user->getValue("Nachname"));
+    $email->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). " ". $user->getValue('SURNAME'));
 }
 else
 {
@@ -202,14 +202,14 @@ else
                 FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
                 JOIN ". TBL_USER_DATA. " as email
                   ON email.usd_usr_id = usr_id
-                 AND email.usd_usf_id = ". $g_current_user->getProperty("E-Mail", "usf_id"). "
+                 AND email.usd_usf_id = ". $g_current_user->getProperty('EMAIL', "usf_id"). "
                  AND LENGTH(email.usd_value) > 0
                 LEFT JOIN ". TBL_USER_DATA. " as last_name
                   ON last_name.usd_usr_id = usr_id
-                 AND last_name.usd_usf_id = ". $g_current_user->getProperty("Nachname", "usf_id"). "
+                 AND last_name.usd_usf_id = ". $g_current_user->getProperty('SURNAME', "usf_id"). "
                 LEFT JOIN ". TBL_USER_DATA. " as first_name
                   ON first_name.usd_usr_id = usr_id
-                 AND first_name.usd_usf_id = ". $g_current_user->getProperty("Vorname", "usf_id"). "
+                 AND first_name.usd_usf_id = ". $g_current_user->getProperty('FIRST_NAME', "usf_id"). "
                WHERE rol_id      = ". $_POST['rol_id']. "
                  AND rol_cat_id  = cat_id
                  AND cat_org_id  = ". $g_current_organization->getValue("org_id"). "

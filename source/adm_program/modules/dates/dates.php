@@ -272,16 +272,16 @@ $sql = 'SELECT DISTINCT cat.*, dat.*,
         FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
             LEFT JOIN '. TBL_USER_DATA .' cre_surname 
                 ON cre_surname.usd_usr_id = dat_usr_id_create
-            AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+            AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('SURNAME', 'usf_id').'
             LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
                 ON cre_firstname.usd_usr_id = dat_usr_id_create
-            AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+            AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
             LEFT JOIN '. TBL_USER_DATA .' cha_surname
                 ON cha_surname.usd_usr_id = dat_usr_id_change
-            AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('Nachname', 'usf_id').'
+            AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('SURNAME', 'usf_id').'
             LEFT JOIN '. TBL_USER_DATA .' cha_firstname
                 ON cha_firstname.usd_usr_id = dat_usr_id_change
-            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('Vorname', 'usf_id').'
+            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
         WHERE dat_cat_id = cat_id
             AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
             OR (   dat_global   = 1
@@ -566,21 +566,21 @@ else
                                         echo '<a href="'. $location_url. '" target="_blank" title="'.$g_l10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
                                         // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
-                                        if($g_valid_login && strlen($g_current_user->getValue("Adresse")) > 0
-                                            && (  strlen($g_current_user->getValue("PLZ"))  > 0 || strlen($g_current_user->getValue("Ort"))  > 0 ))
+                                        if($g_valid_login && strlen($g_current_user->getValue('ADDRESS')) > 0
+                                            && (  strlen($g_current_user->getValue('POSTCODE'))  > 0 || strlen($g_current_user->getValue('CITY'))  > 0 ))
                                         {
-                                            $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue('Adresse'));
-                                            if(strlen($g_current_user->getValue('PLZ'))  > 0)
+                                            $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue('ADDRESS'));
+                                            if(strlen($g_current_user->getValue('POSTCODE'))  > 0)
                                             {
-                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('PLZ'));
+                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('POSTCODE'));
                                             }
-                                            if(strlen($g_current_user->getValue('Ort'))  > 0)
+                                            if(strlen($g_current_user->getValue('CITY'))  > 0)
                                             {
-                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('Ort'));
+                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('CITY'));
                                             }
-                                            if(strlen($g_current_user->getValue('Land'))  > 0)
+                                            if(strlen($g_current_user->getValue('COUNTRY'))  > 0)
                                             {
-                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('Land'));
+                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('COUNTRY'));
                                             }
 
                                             $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));

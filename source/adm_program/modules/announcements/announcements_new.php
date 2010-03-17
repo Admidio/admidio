@@ -181,12 +181,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $announcement->getValue('ann_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('Vorname'). ' '. $user_create->getValue('Nachname'), $announcement->getValue('ann_timestamp_create'));
+                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('SURNAME'), $announcement->getValue('ann_timestamp_create'));
 
                 if($announcement->getValue('ann_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $announcement->getValue('ann_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('Vorname'). ' '. $user_change->getValue('Nachname'), $announcement->getValue('ann_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('SURNAME'), $announcement->getValue('ann_timestamp_change'));
                 }
             echo '</div>';
         }

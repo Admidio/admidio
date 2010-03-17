@@ -94,7 +94,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     $imported_fields[$field->getValue('usf_id')] = $field->getValue('usf_name');
                 }
 
-                if($field->getValue('usf_name') == 'Geschlecht')
+                if($field->getValue('usf_name_intern') == 'GENDER')
                 {
                     if($col_value_to_lower == 'm'
                     || $col_value_to_lower == 'männlich'
@@ -167,19 +167,19 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
     }
 
     // nur Benutzer anlegen, wenn Vor- und Nachname vorhanden sind
-    if(strlen($user->getValue('Nachname')) > 0 && strlen($user->getValue('Vorname')) > 0)
+    if(strlen($user->getValue('SURNAME')) > 0 && strlen($user->getValue('FIRST_NAME')) > 0)
     {
         // schauen, ob schon User mit dem Namen existieren und Daten einlesen
         $sql = 'SELECT MAX(usr_id) AS usr_id
                   FROM '. TBL_USERS. '
                   JOIN '. TBL_USER_DATA. ' last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '.  $user->getProperty('Nachname', 'usf_id'). '
-                   AND last_name.usd_value  = "'. $user->getValue('Nachname'). '"
+                   AND last_name.usd_usf_id = '.  $user->getProperty('SURNAME', 'usf_id'). '
+                   AND last_name.usd_value  = "'. $user->getValue('SURNAME'). '"
                   JOIN '. TBL_USER_DATA. ' first_name
                     ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '.  $user->getProperty('Vorname', 'usf_id'). '
-                   AND first_name.usd_value  = "'. $user->getValue('Vorname'). '"
+                   AND first_name.usd_usf_id = '.  $user->getProperty('FIRST_NAME', 'usf_id'). '
+                   AND first_name.usd_value  = "'. $user->getValue('FIRST_NAME'). '"
                  WHERE usr_valid = 1 ';
         $result = $g_db->query($sql);
         $row_duplicate_user = $g_db->fetch_array($result);

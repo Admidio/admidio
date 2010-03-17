@@ -95,7 +95,7 @@ if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }  
 
-if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('E-Mail')))
+if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('EMAIL')))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
@@ -129,9 +129,9 @@ if (isset($_GET['usr_id']))
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!isValidEmailAddress($user->getValue('E-Mail')))
+    if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('Vorname').' '.$user->getValue('Nachname')));
+        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME')));
     }
 }
 
@@ -245,8 +245,8 @@ echo '<form id="ecard_form" action="javascript:ecardJS.makePreview();" method="p
                     {
                         // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                         echo '<div id="extern">
-                                <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('Vorname').' '.$user->getValue('Nachname').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-                        echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user->getValue('E-Mail').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+                        echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                              </div>';
 
                     }
@@ -298,13 +298,13 @@ echo '<form id="ecard_form" action="javascript:ecardJS.makePreview();" method="p
                 <dt><label>'.$g_l10n->get("SYS_SENDER").':</label></dt>
                 <dd>
                   <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
-                    if (! empty($ecard["name_sender"]) && !$g_current_user->getValue("Nachname"))
+                    if (! empty($ecard["name_sender"]) && !$g_current_user->getValue('SURNAME'))
                     {
                        echo $ecard["name_sender"];
                     }
                     else
                     {
-                       echo $g_current_user->getValue("Vorname")." ".$g_current_user->getValue("Nachname");
+                       echo $g_current_user->getValue('FIRST_NAME')." ".$g_current_user->getValue('SURNAME');
                     }
                   echo'" />
                 </dd>
@@ -315,13 +315,13 @@ echo '<form id="ecard_form" action="javascript:ecardJS.makePreview();" method="p
                 <dt><label>'.$g_l10n->get("SYS_EMAIL").':</label></dt>
                 <dd>
                    <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
-                    if (! empty($ecard["email_sender"]) && !$g_current_user->getValue("E-Mail"))
+                    if (! empty($ecard["email_sender"]) && !$g_current_user->getValue('EMAIL'))
                     {
                       echo $ecard["email_sender"];
                     }
                     else
                     {
-                      echo $g_current_user->getValue("E-Mail");
+                      echo $g_current_user->getValue('EMAIL');
                     }
                     echo'" />
                 </dd>

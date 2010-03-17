@@ -133,7 +133,7 @@ if ($user_found >= 1)
             {
                 $set_admin = true;
             }
-            $g_forum->userLogin($loginname, $password, $g_current_user->getValue('E-Mail'), $set_admin);
+            $g_forum->userLogin($loginname, $password, $g_current_user->getValue('EMAIL'), $set_admin);
             $login_message = $g_forum->message;
         }
         else

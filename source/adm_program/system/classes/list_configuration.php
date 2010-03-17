@@ -220,7 +220,7 @@ class ListConfiguration extends TableLists
                     elseif($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
                     {
                         $type = 'int';
-                        if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name') == 'Geschlecht')
+                        if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
                         {
                             // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
                             $value = admStrToLower($value);
