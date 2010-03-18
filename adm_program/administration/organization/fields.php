@@ -171,7 +171,20 @@ echo '
                     <a class="iconLink" href="javascript:moveCategory(\'down\', '.$row['usf_id'].')"><img
                             src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DOWN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_DOWN').'" /></a>
                 </td>
-                <td>'.$row['usf_description'].'</td>
+                <td>';
+                    // laengere Texte kuerzen und Tooltip mit Popup anbieten
+                    if(strlen($row['usf_description']) > 30)
+                    {
+                        echo substr($row['usf_description'], 0, 30). ' 
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $row['usf_name_intern']. '&amp;inline=true"
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $row['usf_name_intern']. '\',this)" 
+                            onmouseout="ajax_hideTooltip()">[..]</a>';
+                    }
+                    else
+                    {
+                        echo $row['usf_description'];
+                    }
+                echo '</td>
                 <td>';
                     if($row['usf_hidden'] == 1)
                     {
