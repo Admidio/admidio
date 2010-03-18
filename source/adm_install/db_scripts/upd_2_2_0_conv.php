@@ -44,11 +44,11 @@ $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "CITY" WHERE usf_name
 $result_orga = $g_db->query($sql);
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "COUNTRY" WHERE usf_name = "Land" ';
 $result_orga = $g_db->query($sql);
-$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "PHONE" WHERE usf_name = "Telefon" ';
+$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "PHONE", usf_system = 0 WHERE usf_name = "Telefon" ';
 $result_orga = $g_db->query($sql);
-$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "MOBILE" WHERE usf_name = "Handy" ';
+$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "MOBILE", usf_system = 0 WHERE usf_name = "Handy" ';
 $result_orga = $g_db->query($sql);
-$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "FAX" WHERE usf_name = "Fax" ';
+$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "FAX", usf_system = 0 WHERE usf_name = "Fax" ';
 $result_orga = $g_db->query($sql);
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "GENDER" WHERE usf_name = "Geschlecht" ';
 $result_orga = $g_db->query($sql);
