@@ -36,7 +36,7 @@
     <text id="DAT_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
 
     <!-- Phrases only in Downloadsmodule -->
-    <text id="DOW_DOWNLOADS" development="new" translation="todo">Downlaods</text>
+    <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
     <text id="DOW_PHR_ADDITIONAL_FILES" development="new" translation="todo">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</text>
     <text id="DOW_PHR_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
     <text id="DOW_PHR_FILE_EXTENSION_INVALID" development="new" translation="todo">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</text>

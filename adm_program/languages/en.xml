@@ -1,148 +1,233 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
 <version id="2.2.0">
-    <!-- Phrases only in Announcementmodule -->
-    <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Announcement</text>
+<!-- Phrases only in Announcementmodule -->
+    <text id="ANN_ANNOUNCEMENT" development="edited" translation="todo">Announcement</text>
+	<text id="ANN_ANNOUNCEMENTS" development="edited" translation="todo">Ankündigungen</text>
 
     <!-- Phrases only in Datesmodule -->
-    <text id="DAT_CALENDAR" development="new" translation="todo">Calendar</text>
-    <text id="DAT_CREATE_DATE" development="new" translation="todo">Create date</text>
-    <text id="DAT_DATES" development="new" translation="todo">Dates</text>
-    <text id="DAT_EXPORT_ICAL" development="new" translation="todo">Export (iCal)</text>
-    <text id="DAT_LOCATION" development="new" translation="todo" description="Location of a date">Location</text>
-    <text id="DAT_MANAGE_CALENDARS" development="new" translation="todo">Manage calendars</text>
-    <text id="DAT_ORGANIZER" development="new" translation="todo" description="The Person">Organizer</text>
-    <text id="DAT_ORGANIZERS" development="new" translation="todo" description="The Personen">Organizers</text>
-    <text id="DAT_PARTICIPANTS" development="new" translation="todo">Participants</text>
-    <text id="DAT_PREVIOUS_DATES" development="new" translation="todo" description="Vergangene Termine">Previous %VAR1%</text>
-    <text id="DAT_SHOW_ON_MAP" development="new" translation="todo">Show on map</text>
-    <text id="DAT_SHOW_ROUTE" development="new" translation="todo">Show route</text>
+    <text id="DAT_CALENDAR" development="edited" translation="todo">Calendar</text>
+    <text id="DAT_CREATE_DATE" development="edited" translation="todo">Create date</text>
+    <text id="DAT_DATES" development="edited" translation="todo">Dates</text>
+    <text id="DAT_EXPORT_ICAL" development="edited" translation="todo">Export (iCal)</text>
+    <text id="DAT_LOCATION" development="edited" translation="todo" description="Location of a date">Location</text>
+    <text id="DAT_MANAGE_CALENDARS" development="edited" translation="todo">Manage calendars</text>
+    <text id="DAT_ORGANIZER" development="edited" translation="todo" description="The Person">Organizer</text>
+    <text id="DAT_ORGANIZERS" development="edited" translation="todo" description="The Personen">Organizers</text>
+    <text id="DAT_PARTICIPANTS" development="edited" translation="todo">Participants</text>
+    <text id="DAT_PREVIOUS_DATES" development="edited" translation="todo" description="Vergangene Termine">Previous %VAR1%</text>
+    <text id="DAT_SHOW_ON_MAP" development="edited" translation="todo">Show on map</text>
+    <text id="DAT_SHOW_ROUTE" development="edited" translation="todo">Show route</text>
 
     <!-- Phrases only in Ecardsmodule -->
-    <text id="ECA_A_ECARD_FROM" development="new" translation="todo">Eine Grußkarte von</text>
-    <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="todo">Grußkarten aktivieren</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="todo">Einstellungen einblenden</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="todo">Einstellungen ausblenden</text>
-    <text id="ECA_CONTENT_LOADING" development="new" translation="todo">Inhalt wird geladen - Bitte warten!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="todo">E-mail Adresse scheint falsch zu sein!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="todo">externer Empfänger</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="todo" description="%VAR1% wird durch eine Nummer ersetzt">E-Mail des%VAR1%Empfängers</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="todo">E-Mail des Absenders</text>
-    <text id="ECA_FIELD_ERROR" development="new" translation="todo">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.</text>
-    <text id="ECA_GREETING_CARD" development="new" translation="todo">Grußkarte</text>
-    <text id="ECA_GREETING_CARDS" development="new" translation="todo">Grußkarten</text>
-    <text id="ECA_GREETING_CARD_EDIT" development="new" translation="todo">Grußkarte bearbeiten</text>
-    <text id="ECA_GREETING_CARD_SEND" development="new" translation="todo">Grußkarte wegschicken</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="todo">Vorschau der Grußkarte:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="todo">interner Empfänger</text>
-    <text id="ECA_MAX_CC" development="new" translation="todo">Max. weitere Empfänger</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="todo">Max. Länge des Mitteilungstextes:</text>
-    <text id="ECA_MORE_RECIPIENTS" development="new" translation="todo">Weitere Empfänger</text>
-    <text id="ECA_NAME_OF_SENDER" development="new" translation="todo">Name des Absenders</text>
-    <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="todo" description="%VAR1% wird durch eine Nummer ersetzt">Name des%VAR1%Empfängers</text>
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="todo">Kein User vorhanden der eine gültige E-mail besitzt!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="todo">Keine weiteren Empfänger</text>
-    <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="todo">Neue Nachricht erhalten</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="todo">Anderer Empfänger</text>
-    <text id="ECA_PHR_ACTIVATE_GREETING_CARDS" development="new" translation="todo">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
-    <text id="ECA_PHR_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf "Abschicken".</text>
-    <text id="ECA_PHR_FONT" development="new" translation="todo">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
-    <text id="ECA_PHR_FONT_SIZE" development="new" translation="todo">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
-    <text id="ECA_PHR_FONT_COLOR" development="new" translation="todo">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
-    <text id="ECA_PHR_INPUT_INCORRECT" development="new" translation="todo">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
-    <text id="ECA_PHR_MAX_CC" development="new" translation="todo">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
-    <text id="ECA_PHR_MAX_MESSAGE_LENGTH" development="new" translation="todo">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
-    <text id="ECA_PHR_MESSAGE_TOO_LONG" development="new" translation="todo" description="%VAR1% wird durch die max. Länge ersetzt">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
-    <text id="ECA_PHR_NEED_JAVASCRIPT" development="new" translation="todo">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
-    <text id="ECA_PHR_SCALING_PREVIEW" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
-    <text id="ECA_PHR_SCALING_GREETING_CARD" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
-    <text id="ECA_PHR_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</text>
-    <text id="ECA_PHR_TEMPLATE" development="new" translation="todo">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
-    <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
-    <text id="ECA_SETTINGS_GREETING_CARDS" development="new" translation="todo">Einstellungen Grußkarten</text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe):</text>
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
-    <text id="ECA_TEMPLATE" development="new" translation="todo">Template</text>
-    <text id="ECA_THE_MESSAGE" development="new" translation="todo">Eine Nachricht</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="todo">An die gesamte Rolle</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="todo">Bitte wählen Sie eine gültige Rolle aus!</text>
-    <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger Email</text>
-    <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
-    <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="todo">Bild in voller Größe anzeigen</text>
-    <text id="ECA_YOUR_MESSAGE" development="new" translation="todo">Deine Nachricht</text>
-
+    <text id="ECA_A_ECARD_FROM" development="edited" translation="todo">Greeting card sent by</text>
+    <text id="ECA_ACTIVATE_GREETING_CARDS" development="edited" translation="todo">Activate greeting card option</text>
+    <text id="ECA_BLEND_IN_SETTINGS" development="edited" translation="todo">Show settings</text>
+    <text id="ECA_BLEND_OUT_SETTINGS" development="edited" translation="todo">Hide settings</text>
+    <text id="ECA_CONTENT_LOADING" development="edited" translation="todo">Contents is being loaded - Please wait!</text>
+    <text id="ECA_EMAIL_LOOKS_INVALID" development="edited" translation="todo">The e-mail address might be incorrect!</text>
+    <text id="ECA_EXTERNAL_RECIPIENT" development="edited" translation="todo">external recipient</text>
+    <text id="ECA_EMAIL_OF_RECIPIENT" development="edited" translation="todo" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
+    <text id="ECA_EMAIL_OF_SENDER" development="edited" translation="todo">Senders e-mail address</text>
+    <text id="ECA_FIELD_ERROR" development="edited" translation="todo">Some fields are not filled in or do not comply. Please filled them in or check them for consitency.</text>
+    <text id="ECA_GREETING_CARD" development="edited" translation="todo">Greeting card </text>
+    <text id="ECA_GREETING_CARDS" development="edited" translation="todo">Greeting cards</text>
+    <text id="ECA_GREETING_CARD_EDIT" development="edited" translation="todo">Edit greeting card</text>
+    <text id="ECA_GREETING_CARD_SEND" development="edited" translation="todo">Send greeting card</text>
+    <text id="ECA_GREETING_CARD_PREVIEW" development="edited" translation="todo">Greeting card preview:</text>
+    <text id="ECA_INTERNAL_RECIPIENT" development="edited" translation="todo">internal recipient</text>
+    <text id="ECA_MAX_CC" development="edited" translation="todo">Max. further recipients</text>
+    <text id="ECA_MAX_MESSAGE_LENGTH" development="edited" translation="todo">Maximum lenght of message:</text>
+    <text id="ECA_MORE_RECIPIENTS" development="edited" translation="todo">More recipients</text>
+    <text id="ECA_NAME_OF_SENDER" development="edited" translation="todo">Sender's name</text>
+    <text id="ECA_NAME_OF_RECIPIENT" development="edited" translation="todo" description="%VAR1% will be replaced by number">Name des%VAR1%Empfängers</text>
+    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="edited" translation="todo">No user with valid e-mail address!</text>
+    <text id="ECA_NO_MORE_RECIPIENTS" development="edited" translation="todo">No further recipients</text>
+    <text id="ECA_NEW_MESSAGE_RECEIVED" development="edited" translation="todo">New message received</text>
+    <text id="ECA_OTHER_RECIPIENT" development="edited" translation="todo">Other recipients</text>
+    <text id="ECA_PHR_ACTIVATE_GREETING_CARDS" development="edited" translation="todo">The greeting card module can be deactivated and reactivated by using these setting options. If server is not capable of sending mails, please deactivate the module. The module is accesssible for logged in users only. (predefined: yes)</text>
+    <text id="ECA_PHR_FILL_INPUTS" development="edited" translation="todo">Please fill in \nall data fields and \npress 'send'.</text>
+    <text id="ECA_PHR_FONT" development="edited" translation="todo">Font type setup. (predefined: Comic Sans MS)</text>
+    <text id="ECA_PHR_FONT_SIZE" development="edited" translation="todo">Font size setup. (predefined: 20) </text>
+    <text id="ECA_PHR_FONT_COLOR" development="edited" translation="todo">Font colour setup. (predefined: black)</text>
+    <text id="ECA_PHR_INPUT_INCORRECT" development="edited" translation="todo">Following required fields for sending \ngreeting \ncard are \nnot filled in or are incorrect:</text>
+    <text id="ECA_PHR_MAX_CC" development="edited" translation="todo">Deactivate and set up maximum number of further recipients if necessary. (predefined: 10)</text>
+    <text id="ECA_PHR_MAX_MESSAGE_LENGTH" development="edited" translation="todo">Deactivate option here and define maximum length of message if necessary. (predefined: 500)</text>
+    <text id="ECA_PHR_MESSAGE_TOO_LONG" development="edited" translation="todo" description="%VAR1% wird durch die max. Länge ersetzt">Maximum of %VAR1% characters is allowed!</text>
+    <text id="ECA_PHR_NEED_JAVASCRIPT" development="edited" translation="todo">For sending greetng cards javascript has to be enabled!\nPlease enable Javascript in order to send your greeting card!</text>
+    <text id="ECA_PHR_SCALING_PREVIEW" development="edited" translation="todo">Define width and height of image preview. (predefined: 250 x 250 pixels²)</text>
+    <text id="ECA_PHR_SCALING_GREETING_CARD" development="edited" translation="todo">Define width and height of image sent with the greeting card. (predefined: 400 x 250 pixels²) </text>
+    <text id="ECA_PHR_SUCCESSFULLY_SEND">Your greeting card has been send.</text>
+    <text id="ECA_PHR_TEMPLATE" development="edited" translation="todo">Define standard template. (predefined: standard letter) </text>
+    <text id="ECA_SEND_ERROR" development="edited" translation="todo">An error occured while sending greeting card. Please try again later.</text>
+    <text id="ECA_SETTINGS_GREETING_CARDS" development="edited" translation="todo">Greeting card setup</text>
+    <text id="ECA_SCALING_PREVIEW" development="edited" translation="todo">Image preview setup (width x height)</text>
+    <text id="ECA_SCALING_GREETING_CARD" development="edited" translation="todo">Greeting card image size setup (width x height):</text>
+    <text id="ECA_STILL_XCHARS_AVAILABLE" development="edited" translation="todo">%VAR1% characters left</text>
+    <text id="ECA_TEMPLATE" development="edited" translation="todo">Template</text>
+    <text id="ECA_THE_MESSAGE" development="edited" translation="todo">One message</text>
+    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="edited" translation="todo">To all role members</text>
+    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="edited" translation="todo">Please select a valid role type!</text>
+    <text id="ECA_RECIPIENT_EMAIL" development="edited" translation="todo">E-mail recepient</text>
+    <text id="ECA_RECIPIENT_NAME" development="edited" translation="todo">Name of recepient</text>
+    <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="edited" translation="todo">Show full size picture</text>
+    <text id="ECA_YOUR_MESSAGE" development="edited" translation="todo">Your message</text>
+   
     <!-- Phrases only in Installation -->
-    <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="todo">Add another organization</text>
-    <text id="INS_ADD_ORGANIZATION" development="new" translation="todo">Add organization</text>
-    <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Database login</text>
-    <text id="INS_DATABASE_IS_UPDATED" development="new" translation="todo">Database is updated</text>
-    <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Database will be established</text>
-    <text id="INS_INSTALL_ADMIDIO" development="new" translation="todo">Install Admidio</text>
-    <text id="INS_INSTALLATION" development="new" translation="todo">Installation</text>
-    <text id="INS_LANGUAGE" development="new" translation="todo">Language</text>
-    <text id="INS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
-    <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
-    <text id="INS_PHR_CHOOSE_LANGUAGE" development="new" translation="todo">Please choose a language</text>
-    <text id="INS_PHR_INSTALLATION_VERSION" development="new" translation="todo">Installation of version %VAR1%</text>
-    <text id="INS_PHR_UPDATE_VERSION" development="new" translation="todo">Update to version %VAR1%</text>
-    <text id="INS_UPDATE" development="new" translation="todo">Update</text>
-    <text id="INS_UPDATE_DATABASE" development="new" translation="todo">Update database</text>
+    <text id="INS_ADD_ANOTHER_ORGANIZATION" development="edited" translation="todo">Add another organization</text>
+    <text id="INS_ADD_ORGANIZATION" development="edited" translation="todo">Add organization</text>
+	<text id="INS_ADDIDIONAL_DATA" development="edited" translation="todo">Additional information</text>
+    <text id="INS_ADDRESS" development="edited" translation="todo">Address</text>
+    <text id="INS_ADDRESS_LIST" development="edited" translation="todo">Address list</text>
+    <text id="INS_AOL_INSTANT_MESSENGER" development="new1" translation="todo">AOL Instant Messenger</text>
+    <text id="INS_BIRTHDAY" development="edited" translation="todo">Birthday</text>
+    <text id="INS_BOARD" development="edited" translation="todo">Administrative board</text>
+    <text id="INS_CITY" development="edited" translation="todo">Place</text>
+    <text id="INS_CONFERENCE_ROOM" development="edited" translation="todo">Conference room</text>
+    <text id="INS_CONTACT_DETAILS" development="edited" translation="todo">Contact details</text>
+    <text id="INS_COURSES" development="edited" translation="todo">Courses</text>
+    <text id="INS_CREATE_ADMINISTRATOR" development="edited" translation="todo">creating administrator</text>
+    <text id="INS_CREATE_CONFIGURATION_FILE" development="edited" translation="todo">creating configuration file</text>
+    <text id="INS_DATA_OF_ADMINISTRATOR" development="edited" translation="todo">Administrator's details</text>
+    <text id="INS_DATABASE" development="edited" translation="todo">Database</text>
+    <text id="INS_DATABASE_LOGIN" development="edited" translation="todo">entering database information</text>
+    <text id="INS_DATABASE_IS_UPDATED" development="edited" translation="todo">Updating database</text>
+    <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="edited" translation="todo">Creating database</text>
+    <text id="INS_ENTER_LOGIN_TO_DATABASE" development="edited" translation="todo">Enter database access information</text>
+    <text id="INS_FAX" development="edited" translation="todo">Fax</text>
+    <text id="INS_FIRST_NAME" development="edited" translation="todo">First name</text>
+    <text id="INS_GENDER" development="edited" translation="todo">Gender</text>
+    <text id="INS_GOOGLE_TALK" development="new1" translation="todo">Google Talk</text>
+    <text id="INS_GROUPS" development="edited" translation="todo">Groups</text>
+    <text id="INS_ICQ" development="new1" translation="todo">ICQ</text>
+    <text id="INS_INSTALL_ADMIDIO" development="edited" translation="todo">install Admidio</text>
+    <text id="INS_INSTALLATION" development="edited" translation="todo">Installation</text>
+    <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="edited" translation="todo">Installation was successful</text>
+    <text id="INS_INTERN" development="edited" translation="todo">Intern</text>
+    <text id="INS_LANGUAGE" development="edited" translation="todo">Language</text>
+	<text id="INS_LOGIN" description="Login to database" development="edited" translation="todo">Login</text>
+    <text id="INS_LOGIN_OF_WEBMASTER" development="edited" translation="todo">Wemaster's access information</text>
+    <text id="INS_MASTER_DATA" development="edited" translation="todo">Master data</text>
+    <text id="INS_MEMBERSHIP" development="edited" translation="todo">Membership</text>
+    <text id="INS_MESSENGER" development="edited" translation="todo">Messenger</text>
+    <text id="INS_MOBILE" development="edited" translation="todo">Handy</text>
+    <text id="INS_MSN_MESSENGER" development="new1" translation="todo">MSN Messenger</text>
+    <text id="INS_MYSQL_VERSION" development="edited" translation="todo">MySQL version</text>
+    <text id="INS_NAME_OF_ORGANIZATION" development="edited" translation="todo">Organisation name</text>
+    <text id="INS_NAME_ABBREVIATION" development="edited" translation="todo">Short name</text>
+    <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="edited" translation="todo">Provided organisation name is not complete!</text>
+    <text id="INS_OVERVIEW" development="edited" translation="todo">Overview</text>
+    <text id="INS_PHONE" development="edited" translation="todo">Phone</text>    
+    <text id="INS_PHONE_LIST" development="edited" translation="todo">Phone list</text>
+    <text id="INS_PHP_VERSION" development="edited" translation="todo">PHP version</text>
+    <text id="INS_PHR_CHOOSE_LANGUAGE" development="edited" translation="todo">Choose language</text>
+    <text id="INS_PHR_CONFIGURATION_FILE_NOT_FOUND" development="edited" translation="todo">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
+    <text id="INS_PHR_DATA_OF_ADMINISTRATOR" development="edited" translation="todo">Provide here administrator's name, e-mail and access information. Log in with same user after installation.</text>
+    <text id="INS_PHR_DATABASE_DOESNOT_NEED_UPDATED" development="edited" translation="todo">Database update is not required</text>
+    <text id="INS_PHR_DATABASE_FILE_NOT_FOUND" development="edited" translation="todo">File %VAR1_BOLD% could not be found in folder %VAR2_BOLD%.</text>
+    <text id="INS_PHR_DATABASE_IS_UP_TO_DATE" development="edited" translation="todo">Admidio's database is up to date</text>
+    <text id="INS_PHR_DATABASE_LOGIN" development="edited" translation="todo">Provide your database access information here. Table prefix can be customised if needed. Customisation should not be necessary if multiple Admidio installations are using the same database.</text>
+    <text id="INS_PHR_DATABASE_NEEDS_UPDATED" development="edited" translation="todo">Database update is required</text>
+    <text id="INS_PHR_DATABASE_NO_LOGIN" development="edited" translation="todo">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
+    <text id="INS_PHR_DESCRIPTION_BOARD" development="edited" translation="todo">Administrative board of association</text>
+    <text id="INS_PHR_DESCRIPTION_CONFERENCE_ROOM" development="edited" translation="todo">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
+    <text id="INS_PHR_DESCRIPTION_MEMBER" development="edited" translation="todo">All organisation members</text>
+    <text id="INS_PHR_DESCRIPTION_WEBMASTER" development="edited" translation="todo">Group of system administrators</text>
+    <text id="INS_PHR_DOWNLOAD" development="edited" translation="todo">downloading %VAR1%</text>
+    <text id="INS_PHR_DOWNLOAD_CONFIGURATION_FILE" development="edited" translation="todo">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
+    <text id="INS_PHR_ERROR_OPEN_FILE" development="edited" translation="todo">File %VAR1_BOLD% could not be opened.</text>
+    <text id="INS_PHR_FOLDER_NOT_WRITABLE" development="edited" translation="todo">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download modul.</text>
+    <text id="INS_PHR_INSTALLATION_SUCCESSFUL" development="edited" translation="todo">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</text>
+    <text id="INS_PHR_INSTALLATION_VERSION" development="edited" translation="todo">Installation of version %VAR1%</text>
+    <text id="INS_PHR_LANGUAGE_NOT_CHOOSEN" development="edited" translation="todo">No language has beeen selected.</text>
+    <text id="INS_PHR_LOGIN_OF_WEBMASTER" development="edited" translation="todo">Provide access information of a webmaster of an existing organisation. Use his/her access information later in order to log in to new organisation.</text>
+    <text id="INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY" development="edited" translation="todo">Access information of webmaster is not complete!</text>
+    <text id="INS_PHR_LOGIN_WEBMASTER_NOT_VALID" development="edited" translation="todo">Incorrect log in. Provided access information does not exist or can not be found in previous organisations!</text>
+    <text id="INS_PHR_MYSQL_LOGIN_NOT_COMPLETELY" development="edited" translation="todo">Not all MySQL database access information has been provided!</text>
+    <text id="INS_PHR_NAME_OF_ORGANIZATION" development="edited" translation="todo">Please provide official abbreviation of the organisation's name here for use in Admidio.</text>
+    <text id="INS_PHR_NAME_OF_NEW_ORGANIZATION" development="edited" translation="todo">Please provide official abbreviations of the organisations' name here for use in Admidio.</text>
+    <text id="INS_PHR_NECESSARY_INFORMATION" development="edited" translation="todo">Please provide on the following pages essential information about the new organisation.</text>
+    <text id="INS_PHR_PASSWORDS_NOT_EQUAL" development="edited" translation="todo">Provided passwords do not match.</text>
+    <text id="INS_PHR_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="edited" translation="todo">New organisation %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
+    <text id="INS_PHR_TABLE_PREFIX_INVALID" development="edited" translation="todo">Table prefix includes invalid character!</text>
+    <text id="INS_PHR_TABLE_PREFIX_OVERRIDE_DATA" development="edited" translation="todo">Existing data stored under same prefix will be overwritten!</text>
+    <text id="INS_PHR_UPDATE_FROM_ADMIDIO_1X" development="edited" translation="todo">Until now Version 1.x of Admidio was in use. In order to migrate databes for Admidio %VAR1% successfully, please provide exact version number of previous installation.</text>
+    <text id="INS_PHR_UPDATE_TO_VERSION_SUCCESSFUL" development="edited" translation="todo">Admidio datanbase has been successfully updated to version %VAR1%.\nYou are free to log in and use Admidio again.</text>
+    <text id="INS_PHR_UPDATE_VERSION" development="edited" translation="todo">Update to version %VAR1%</text>
+    <text id="INS_PHR_WARNING_BETA_VERSION" development="edited" translation="todo">This is a beta version of Admidio.\n\nUsage can be risky due to possible instablility and data loss. Please use as test environment only!</text>
+    <text id="INS_PHR_WARNING_SAFE_MODE" development="edited" translation="todo">Save mode on server is active. This can cause later problems when using certain functions.</text>
+    <text id="INS_PHR_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="edited" translation="todo">Welcome! Create your new organisation here!</text>
+    <text id="INS_PHR_WELCOME_TO_INSTALLATION" development="edited" translation="todo">Welcome to the installation of Admidio</text>
+    <text id="INS_PHR_WELCOME_TEXT" development="edited" translation="todo">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</text>
+    <text id="INS_PHP_WRONG_MYSQL_VERSION" development="edited" translation="todo">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
+    <text id="INS_PHP_WRONG_PHP_VERSION" development="edited" translation="todo">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
+    <text id="INS_POSTCODE" development="edited" translation="todo">Postal ode</text>
+    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="edited" translation="todo">Previous Admidio version</text>
+    <text id="INS_SERVER" development="edited" translation="todo">Server</text>
+    <text id="INS_SET_ADMINISTRATOR" development="edited" translation="todo">Set administrator</text>
+    <text id="INS_SET_ORGANIZATION" development="edited" translation="todo">creating organisation</text>
+    <text id="INS_SET_UP_ORGANIZATION" development="edited" translation="todo">Configure organisation</text>
+    <text id="INS_SETUP_WAS_SUCCESSFUL" development="edited" translation="todo">Configuration successful</text>
+    <text id="INS_SKYPE" development="new1" translation="todo">Skype</text>
+    <text id="INS_SURNAME" development="edited" translation="todo">last name</text>
+    <text id="INS_TABLE_PREFIX" development="edited" translation="todo">Table prefix</text>
+    <text id="INS_TEAMS" development="edited" translation="todo">Teams</text>
+    <text id="INS_TRAINING" development="edited" translation="todo">Training</text>
+    <text id="INS_UPDATE" development="edited" translation="todo">Update</text>
+    <text id="INS_UPDATE_DATABASE" development="edited" translation="todo">Update database</text>
+    <text id="INS_UPDATING_WAS_SUCCESSFUL" development="edited" translation="todo">Update process successful</text>
+    <text id="INS_YAHOO_MESSENGER" development="new1" translation="todo">Yahoo! Messenger</text>
 
     <!-- System-Phrases for use in every module -->
-    <text id="SYS_ACTIVATED" development="new" translation="todo">activated</text>
-    <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Add recipient</text>
-    <text id="SYS_ALL" development="new" translation="todo">All</text>
-    <text id="SYS_BACK" development="new" translation="todo">Back</text>
-    <text id="SYS_BOLD" development="new" translation="todo">Bold</text>
-    <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
-    <text id="SYS_CAPTCHA_CODE" development="new" translation="todo">Bestätigungscode</text>
-    <text id="SYS_CLOSE" development="new" translation="todo">Close</text>
-    <text id="SYS_CREATE" development="new" translation="todo">Create</text>
-    <text id="SYS_DEACTIVATED" development="new" translation="todo">deactivated</text>
-    <text id="SYS_DELETE" development="new" translation="todo">Delete</text>
-    <text id="SYS_EDIT" development="new" translation="todo">Edit</text>
-    <text id="SYS_EMAIL" development="new" translation="todo">Email</text>
-    <text id="SYS_END" development="new" translation="todo" description="End of a date">End</text>
-    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - PAGE NOT FOUND!</text>
-    <text id="SYS_FONT" development="new" translation="todo">Font</text>
-    <text id="SYS_FONT_COLOR" development="new" translation="todo">Font-color</text>
-    <text id="SYS_FONT_SIZE" development="new" translation="todo">Font-size</text>
-    <text id="SYS_FONT_STYLE" development="new" translation="todo">Font-style</text>
-    <text id="SYS_HEADLINE" development="new" translation="todo">Headline</text>
-    <text id="SYS_HELP" development="new" translation="todo">Help</text>
-    <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Invalid page view</text>
-    <text id="SYS_ITALIC" development="new" translation="todo">Italic</text>
-    <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Mandatory field</text>
-    <text id="SYS_MEMBERS" development="new" translation="todo">Members</text>
-    <text id="SYS_MESSAGE" development="new" translation="todo">Message</text>
-    <text id="SYS_NAME" development="new" translation="todo">Name</text>
-    <text id="SYS_NEXT" development="new" translation="todo">Next</text>
-    <text id="SYS_NO" development="new" translation="todo">No</text>
-    <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Password forgotten</text>
-    <text id="SYS_PHR_CREATE" development="new" translation="todo">Create %VAR1%</text>
-    <text id="SYS_PHR_CREATED_BY" development="new" translation="todo">Created by %VAR1% on %VAR2%</text>
-    <text id="SYS_PHR_EDIT" development="new" translation="todo">Edit %VAR1%</text>
-    <text id="SYS_PHR_LAST_EDITED_BY" development="new" translation="todo">Last edited by %VAR1% on %VAR2%</text>
-    <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Please choose</text>
-    <text id="SYS_PREVIEW" development="new" translation="todo">Preview</text>
-	<text id="SYS_PREVIOUS" development="new" translation="todo">previous</text>
-    <text id="SYS_RECIPIENT" development="new" translation="todo">Recipient</text>
-    <text id="SYS_REMOVE" development="new" translation="todo">Remove</text>
-    <text id="SYS_SAVE" development="new" translation="todo">Save</text>
-    <text id="SYS_SEND" development="new" translation="todo">Send</text>
-    <text id="SYS_SENDER" development="new" translation="todo">Sender</text>
-    <text id="SYS_SETTINGS" development="new" translation="todo">Settings</text>
-	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} of {total}</text>
-	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">start slideshow</text>
-	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">stop slideshow</text>
-    <text id="SYS_START" development="new" translation="todo" description="Start of a date">Start</text>
-    <text id="SYS_TEXT" development="new" translation="todo">Text</text>
-    <text id="SYS_TO" development="new" translation="todo">To</text>
-    <text id="SYS_UNLIMITED" development="new" translation="todo">Unlimited</text>
-    <text id="SYS_VISIBLE" development="new" translation="todo">Visible</text>
-    <text id="SYS_WARNING" development="new" translation="todo">Warning</text>
-    <text id="SYS_WEBMASTER" development="new" translation="todo">Webmaster</text>
-    <text id="SYS_YES" development="new" translation="todo">Yes</text>
+    <text id="SYS_ACTIVATED" development="edited" translation="todo">activated</text>
+    <text id="SYS_ADD_RECIPIENTS" development="edited" translation="todo">Add recipient</text>
+    <text id="SYS_ALL" development="edited" translation="todo">All</text>
+    <text id="SYS_BACK" development="edited" translation="todo">Back</text>
+    <text id="SYS_BOLD" development="edited" translation="todo">Bold</text>
+    <text id="SYS_CAPTCHA" development="edited" translation="todo">Captcha</text>
+    <text id="SYS_CAPTCHA_CODE" development="edited" translation="todo">Bestätigungscode</text>
+    <text id="SYS_CLOSE" development="edited" translation="todo">Close</text>
+    <text id="SYS_CREATE" development="edited" translation="todo">Create</text>
+    <text id="SYS_DEACTIVATED" development="edited" translation="todo">deactivated</text>
+    <text id="SYS_DELETE" development="edited" translation="todo">Delete</text>
+    <text id="SYS_EDIT" development="edited" translation="todo">Edit</text>
+    <text id="SYS_EMAIL" development="edited" translation="todo">Email</text>
+    <text id="SYS_END" development="edited" translation="todo" description="End of a date">End</text>
+    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="edited" translation="todo">ERROR 404 - PAGE NOT FOUND!</text>
+    <text id="SYS_FONT" development="edited" translation="todo">Font</text>
+    <text id="SYS_FONT_COLOR" development="edited" translation="todo">Font-color</text>
+    <text id="SYS_FONT_SIZE" development="edited" translation="todo">Font-size</text>
+    <text id="SYS_FONT_STYLE" development="edited" translation="todo">Font-style</text>
+    <text id="SYS_HEADLINE" development="edited" translation="todo">Headline</text>
+    <text id="SYS_HELP" development="edited" translation="todo">Help</text>
+    <text id="SYS_INVALID_PAGE_VIEW" development="edited" translation="todo">Invalid page view</text>
+    <text id="SYS_ITALIC" development="edited" translation="todo">Italic</text>
+    <text id="SYS_MANDATORY_FIELD" development="edited" translation="todo">Mandatory field</text>
+    <text id="SYS_MEMBERS" development="edited" translation="todo">Members</text>
+    <text id="SYS_MESSAGE" development="edited" translation="todo">Message</text>
+    <text id="SYS_NAME" development="edited" translation="todo">Full name</text>
+    <text id="SYS_NEXT" development="edited" translation="todo">next</text>
+    <text id="SYS_NO" development="edited" translation="todo">No</text>
+    <text id="SYS_PASSWORD_FORGOTTEN" development="edited" translation="todo">Password forgotten</text>
+    <text id="SYS_PHR_CREATE" development="edited" translation="todo">Create %VAR1%</text>
+    <text id="SYS_PHR_CREATED_BY" development="edited" translation="todo">Created by %VAR1% on %VAR2%</text>
+    <text id="SYS_PHR_EDIT" development="edited" translation="todo">Edit %VAR1%</text>
+    <text id="SYS_PHR_LAST_EDITED_BY" development="edited" translation="todo">Last edited by %VAR1% on %VAR2%</text>
+    <text id="SYS_PLEASE_CHOOSE" development="edited" translation="todo">Please choose</text>
+    <text id="SYS_PREVIEW" development="edited" translation="todo">Preview</text>
+    <text id="SYS_RECIPIENT" development="edited" translation="todo">Recipient</text>
+    <text id="SYS_REMOVE" development="edited" translation="todo">Remove</text>
+    <text id="SYS_SAVE" development="edited" translation="todo">Save</text>
+    <text id="SYS_SEND" development="edited" translation="todo">Send</text>
+    <text id="SYS_SENDER" development="edited" translation="todo">Sender</text>
+    <text id="SYS_SETTINGS" development="edited" translation="todo">Settings</text>
+    <text id="SYS_START" development="edited" translation="todo" description="Start of a date">Start</text>
+    <text id="SYS_TEXT" development="edited" translation="todo">Text</text>
+    <text id="SYS_TO" development="edited" translation="todo">To</text>
+    <text id="SYS_UNLIMITED" development="edited" translation="todo">Unlimited</text>
+    <text id="SYS_VISIBLE" development="edited" translation="todo">Visible</text>
+    <text id="SYS_WARNING" development="edited" translation="todo">Warning</text>
+    <text id="SYS_WEBMASTER" development="edited" translation="todo">Webmaster</text>
+    <text id="SYS_YES" development="edited" translation="todo">Yes</text>
 </version>
 </language>
