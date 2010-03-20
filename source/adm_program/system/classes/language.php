@@ -49,6 +49,8 @@ class Language
 
             // Zeilenumbrueche in HTML setzen
             $text = str_replace('\n', '<br />', $text);
+            // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
+            $test = str_replace('\'', '&rsquo;', $text);
 
             // Variablenplatzhalter ersetzen
             if(strlen($var1) > 0)
@@ -79,6 +81,7 @@ class Language
         {
             $text = $this->getReferenceText($text_id, $var1, $var2, $var3, $var4);
         }
+        // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
         return $text;
     }
 
