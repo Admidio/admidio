@@ -31,27 +31,40 @@ class Language
     private $languageFilePath;
     private $referenceLanguage = 'de';
     
+    private $textCache; // eingelesene Texte werden in diesem Array gespeichert und spaeter nur noch aus dem Array gelesen
+    
     // es muss das Sprachkuerzel uebergeben werden (Beispiel: 'de')
     public function __construct($language)
     {
         $this->setLanguage($language);
+        $this->textCache = array();
     }
 
     // liest den Text mit der uebergebenen ID aus und gibt diese zurueck
     public function get($text_id, $var1='', $var2='', $var3='', $var4='')
     {
         $text   = '';
-        $node   = $this->l10nObject->xpath("/language/version/text[@id='".$text_id."']");
-
-        if($node != false)
+        if(isset($this->textCache[$text_id]))
         {
-            $text = $node[0];
+            // Text aus dem Cache auslesen
+            $text = $this->textCache[$text_id];
+        }
+        else
+        {
+            // Text nicht im Cache -> aus XML-Datei einlesen
+            $node   = $this->l10nObject->xpath("/language/version/text[@id='".$text_id."']");
+            if($node != false)
+            {
+                // Zeilenumbrueche in HTML setzen
+                $text = str_replace('\n', '<br />', $node[0]);
+                // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
+                $text = str_replace('\'', '&rsquo;', $text);
+                $this->textCache[$text_id] = $text;
+            }
+        }
 
-            // Zeilenumbrueche in HTML setzen
-            $text = str_replace('\n', '<br />', $text);
-            // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
-            $test = str_replace('\'', '&rsquo;', $text);
-
+        if(strlen($text) > 0)
+        {
             // Variablenplatzhalter ersetzen
             if(strlen($var1) > 0)
             {

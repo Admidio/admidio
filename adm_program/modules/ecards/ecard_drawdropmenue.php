@@ -97,7 +97,7 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
                 FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
                 LEFT JOIN ". TBL_USER_DATA. " as last_name
                     ON last_name.usd_usr_id = usr_id
-                    AND last_name.usd_usf_id = ". $g_current_user->getProperty('SURNAME', "usf_id")."
+                    AND last_name.usd_usf_id = ". $g_current_user->getProperty('LAST_NAME', "usf_id")."
                 LEFT JOIN ". TBL_USER_DATA. " as first_name
                     ON first_name.usd_usr_id = usr_id
                     AND first_name.usd_usf_id = ". $g_current_user->getProperty('FIRST_NAME', "usf_id")."
@@ -148,7 +148,7 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
                     FROM ". TBL_MEMBERS. ", ". TBL_USERS. "
                     LEFT JOIN ". TBL_USER_DATA. " as last_name
                         ON last_name.usd_usr_id = usr_id
-                        AND last_name.usd_usf_id = ". $g_current_user->getProperty('SURNAME', "usf_id")."
+                        AND last_name.usd_usf_id = ". $g_current_user->getProperty('LAST_NAME', "usf_id")."
                     LEFT JOIN ". TBL_USER_DATA. " as first_name
                         ON first_name.usd_usr_id = usr_id
                         AND first_name.usd_usf_id = ". $g_current_user->getProperty('FIRST_NAME', "usf_id")."

@@ -100,7 +100,6 @@
     <text id="ECA_PHR_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde erfolgreich versendet.</text>
     <text id="ECA_PHR_TEMPLATE" development="new" translation="todo">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
     <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
-    <text id="ECA_SETTINGS_GREETING_CARDS" development="new" translation="todo">Einstellungen Grußkarten</text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe):</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
@@ -135,7 +134,6 @@
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Administrator anlegen</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="todo">Konfigurationsdatei erzeugen</text>
     <text id="INS_DATA_OF_ADMINISTRATOR" development="new" translation="todo">Daten des Administrators</text>
-    <text id="INS_DATABASE" development="new" translation="todo">Datenbank</text>
     <text id="INS_DATABASE_IS_UPDATED" development="new" translation="todo">Datenbank wird aktualisiert</text>
     <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Datenbank Zugangsdaten</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Datenbank wird eingerichtet</text>
@@ -150,8 +148,7 @@
     <text id="INS_INSTALLATION" development="new" translation="todo">Installation</text>
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="todo">Die Installation war erfolgreich</text>
     <text id="INS_INTERN" development="new" translation="todo">Intern</text>
-    <text id="INS_LANGUAGE" development="new" translation="todo">Sprache</text>
-    <text id="INS_LOGIN" description="Login to database" development="new" translation="todo">Login</text>
+    <text id="INS_LAST_NAME" development="new" translation="todo">Nachname</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="todo">Zugangsdaten eines Webmasters</text>
     <text id="INS_MASTER_DATA" development="new" translation="todo">Stammdaten</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
@@ -160,7 +157,6 @@
     <text id="INS_MSN_MESSENGER" development="new1" translation="todo">MSN Messenger</text>
     <text id="INS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
-    <text id="INS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !</text>
     <text id="INS_OVERVIEW" development="new" translation="todo">Übersichtsseite</text>
     <text id="INS_PHONE" development="new" translation="todo">Telefon</text>    
@@ -209,13 +205,11 @@
     <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Du solltest versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
     <text id="INS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
-    <text id="INS_SERVER" development="new" translation="todo">Server</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="todo">Organisation einrichten</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="todo">Die Einrichtung war erfolgreich</text>
     <text id="INS_SKYPE" development="new1" translation="todo">Skype</text>
-    <text id="INS_SURNAME" development="new" translation="todo">Nachname</text>
     <text id="INS_TABLE_PREFIX" development="new" translation="todo">Tabellenpräfix</text>
     <text id="INS_TEAMS" development="new" translation="todo">Mannschaften</text>
     <text id="INS_TRAINING" development="new" translation="todo">Training</text>
@@ -229,6 +223,7 @@
 
     <!-- Phrases only in Listsmodule -->
     <text id="LST_LISTS" development="new" translation="todo">Listen</text>
+    <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
     <text id="LST_PHR_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
     <text id="LST_PHR_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
@@ -261,10 +256,14 @@
     <text id="NWU_PHR_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Anmeldungen vorhanden.</text>
 
     <!-- Phrases only in Organizationadministration -->
+    <text id="ORG_ACCESS_TO_MODULE" development="new" translation="todo">Zugriff auf Modul</text>
     <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
     <text id="ORG_DATATYPE" development="new" translation="todo">Datentyp</text>
     <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="todo">Profilfeld bearbeiten</text>
+    <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="todo">Anzahl Einträge pro Seite</text>
+    <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="todo">Nur für angemeldete Benutzer</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
+    <text id="ORG_PHR_ACCES_TO_MODULE_DESC" development="new" translation="todo">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</text>
     <text id="ORG_PHR_FIELD_DESCRIPTION" development="new1" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
     <text id="ORG_PHR_FIELD_DISABLED" development="new" translation="todo">Feld nur für Benutzer mit dem Recht "Alle Benutzer bearbeiten" editierbar</text>
     <text id="ORG_PHR_FIELD_DISABLED_DESC" development="new1" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
@@ -280,7 +279,10 @@
     <text id="ORG_PHR_FIELD_NOT_MANDATORY" development="new" translation="todo">Feld muss nicht zwingend ausgefüllt werden</text>
     <text id="ORG_PHR_FIELD_UP" development="new" translation="todo">Profilfeld nach oben verschieben</text>
     <text id="ORG_PHR_NO_FIELD_CREATED" development="new" translation="todo">Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</text>
+    <text id="ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
     <text id="ORG_PROFILE_FIELDS" development="new" translation="todo">Profilfelder</text>
+    <text id="ORG_SYSTEM_INFOS" development="new" translation="todo">Systeminfos</text>
+    <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
 
     <!-- Phrases only in Photomodule -->
@@ -362,7 +364,7 @@
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="todo">Abbrechen</text>
     <text id="SYS_ACTIVE" development="new" translation="todo">Aktiv</text>
-    <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiktivert</text>
+    <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiviert</text>
     <text id="SYS_ADD_EMAIL" development="new1" translation="todo">E-Mail-Adresse einfügen</text>
     <text id="SYS_ADD_IMAGE" development="new1" translation="todo">Bild einfügen</text>
     <text id="SYS_ADD_LINK" development="new1" translation="todo">Link einfügen</text>
@@ -380,6 +382,7 @@
     <text id="SYS_CONFIRM_PASSWORD" development="new" translation="todo">Passwort bestätigen</text>
     <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
+    <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
     <text id="SYS_DATE" development="new" translation="todo">Datum</text>
     <text id="SYS_DATE_TO" development="new" translation="todo">bis</text>
     <text id="SYS_DEACTIVATED" >Deaktiviert</text>
@@ -405,10 +408,11 @@
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
+    <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
     <text id="SYS_LOCK" development="new" translation="todo">Sperren</text>
     <text id="SYS_LOCKED" development="new" translation="todo">Gesperrt</text>
-    <text id="SYS_LOGIN" development="new1" translation="todo">Login</text>
+    <text id="SYS_LOGIN" development="new" translation="todo">Login</text>
     <text id="SYS_LOGIN_PROBLEMS" development="new1" translation="todo">Loginprobleme</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
@@ -416,6 +420,7 @@
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
+    <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
     <text id="SYS_NO" development="new" translation="todo">Nein</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
@@ -500,6 +505,7 @@
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="todo">Neues Passwort zusenden</text>
     <text id="SYS_SENDER" development="new" translation="todo">Absender</text>
+    <text id="SYS_SERVER" development="new" translation="todo">Server</text>
     <text id="SYS_SET_BY" development="new" translation="todo">Gesetzt durch</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
@@ -510,7 +516,7 @@
 	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">starte slideshow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">stoppe slideshow</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
-    <text id="SYS_SYSTEM_MAIL" development="new" translation="todo">Systemmail</text>
+    <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TO" development="new" translation="todo">An</text>
     <text id="SYS_UNDERLINE" development="new1" translation="todo">Unterstrichen</text>

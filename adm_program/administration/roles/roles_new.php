@@ -275,7 +275,7 @@ echo '
                                 {
                                     echo ' selected="selected" ';
                                 }
-                                echo '>- Bitte wählen -</option>';
+                                echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
                             $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
                                      WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
@@ -805,12 +805,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $role->getValue('rol_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('SURNAME'), $role->getValue('rol_timestamp_create'));
+                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $role->getValue('rol_timestamp_create'));
 
                 if($role->getValue('rol_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $role->getValue('rol_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('SURNAME'), $role->getValue('rol_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $role->getValue('rol_timestamp_change'));
                 }
             echo '</div>';
         }

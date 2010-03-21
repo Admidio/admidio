@@ -134,7 +134,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 4)
     }
     
     // anzuzeigende Rollen in Array schreiben und in Session merken
-    unset($_SESSION['role_ids']);
+    $_SESSION['role_ids'] = array();
     $role_ids[] = $_POST['rol_id'];
     $_SESSION['role_ids'] = $role_ids;
 

@@ -89,7 +89,7 @@ if($_GET['mode'] == 1)
     }
     
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
-    if($user_field->getValue('usf_name_intern') == 'SURNAME'
+    if($user_field->getValue('usf_name_intern') == 'LAST_NAME'
     || $user_field->getValue('usf_name_intern') == 'FIRST_NAME')
     {
         $_POST['usf_mandatory'] = 1;

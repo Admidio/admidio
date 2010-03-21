@@ -265,11 +265,11 @@ class User extends TableUsers
         $vcard .= (string) "VERSION:2.1\r\n";
         if($editAllUsers || ($editAllUsers == false && $this->userFieldData['FIRST_NAME']->getValue('usf_hidden') == 0))
         {
-            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue('SURNAME')). ";". utf8_decode($this->getValue('FIRST_NAME')) . ";;;\r\n";
+            $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue('LAST_NAME')). ";". utf8_decode($this->getValue('FIRST_NAME')) . ";;;\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['SURNAME']->getValue('usf_hidden') == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['LAST_NAME']->getValue('usf_hidden') == 0))
         {
-            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue('FIRST_NAME')) . " ". utf8_decode($this->getValue('SURNAME')) . "\r\n";
+            $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue('FIRST_NAME')) . " ". utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
         }
         if (strlen($this->getValue('usr_login_name')) > 0)
         {

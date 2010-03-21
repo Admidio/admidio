@@ -117,7 +117,7 @@ if($req_mode == 1 || $req_mode == 3)
     {
         // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
         $sysmail = new SystemMail($g_db);
-        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'));
+        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
         if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == true)
         {
             $g_message->show($g_l10n->get('NWU_PHR_ASSIGN_LOGIN_EMAIL'));

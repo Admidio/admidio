@@ -91,7 +91,7 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('SURNAME'),$user->getValue('FIRST_NAME'));
+$g_layout['title']  = $g_l10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('LAST_NAME'),$user->getValue('FIRST_NAME'));
 $g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
 <script type="text/javascript">
     var profileJS = new profileJSClass();

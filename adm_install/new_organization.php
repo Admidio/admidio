@@ -114,7 +114,7 @@ elseif($req_mode == 2)
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_short">'.$g_l10n->get('INS_NAME_ABBREVIATION').':</label></dt>
+                                    <dt><label for="orga_name_short">'.$g_l10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
                                     <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
                                 </dl>
                             </li>
@@ -430,7 +430,7 @@ elseif($req_mode == 6)
     $address_list->setValue('lst_name', $g_l10n->get('INS_ADDRESS_LIST'));
     $address_list->setValue('lst_global', 1);
     $address_list->setValue('lst_default', 1);
-    $address_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'), 'ASC');
+    $address_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
     $address_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
     $address_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
     $address_list->addColumn(4, $g_current_user->getProperty('ADDRESS', 'usf_id'));
@@ -441,7 +441,7 @@ elseif($req_mode == 6)
     $phone_list = new ListConfiguration($db);
     $phone_list->setValue('lst_name', $g_l10n->get('INS_PHONE_LIST'));
     $phone_list->setValue('lst_global', 1);
-    $phone_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'), 'ASC');
+    $phone_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
     $phone_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
     $phone_list->addColumn(3, $g_current_user->getProperty('PHONE', 'usf_id'));
     $phone_list->addColumn(4, $g_current_user->getProperty('MOBILE', 'usf_id'));
@@ -452,7 +452,7 @@ elseif($req_mode == 6)
     $contact_list = new ListConfiguration($db);
     $contact_list->setValue('lst_name', $g_l10n->get('INS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
-    $contact_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'), 'ASC');
+    $contact_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
     $contact_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
     $contact_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
     $contact_list->addColumn(4, $g_current_user->getProperty('ADDRESS', 'usf_id'));
@@ -466,7 +466,7 @@ elseif($req_mode == 6)
     $former_list = new ListConfiguration($db);
     $former_list->setValue('lst_name', $g_l10n->get('INS_MEMBERSHIP'));
     $former_list->setValue('lst_global', 1);
-    $former_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'));
+    $former_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'));
     $former_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'));
     $former_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
     $former_list->addColumn(4, 'mem_begin');

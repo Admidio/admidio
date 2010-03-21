@@ -332,7 +332,7 @@ if($new_user == 2)
                    AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
                   LEFT JOIN '. TBL_USER_DATA. ' last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
+                   AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
                  WHERE rol_approve_users = 1
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
@@ -395,7 +395,7 @@ elseif($new_user == 3 || $usr_id == 0)
         {
             // Mail an den User schicken, um die Anmeldung zu bestaetigen
             $sysmail = new SystemMail($g_db);
-            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'));
+            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == false)
             {
                 $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('EMAIL')));

@@ -52,7 +52,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
           FROM '. TBL_USERS. '
          RIGHT JOIN '. TBL_USER_DATA. ' as last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
+           AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
          RIGHT JOIN '. TBL_USER_DATA. ' as first_name
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
@@ -69,10 +69,10 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 1 
-           AND (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('SURNAME').'"), 1, 4)
+           AND (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('LAST_NAME').'"), 1, 4)
                   AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('FIRST_NAME'). '"), 1, 4) )
                OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('FIRST_NAME'). '"), 1, 4)
-                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('SURNAME').'"), 1, 4) ) )';
+                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('LAST_NAME').'"), 1, 4) ) )';
 $result_usr   = $g_db->query($sql);
 $member_found = $g_db->num_rows($result_usr);
 
@@ -97,7 +97,7 @@ if($member_found == 0)
         {
             // Mail an den User schicken, um die Anmeldung zu bestaetigen
             $sysmail = new SystemMail($g_db);
-            $sysmail->addRecipient($new_user->getValue('EMAIL'), $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('SURNAME'));
+            $sysmail->addRecipient($new_user->getValue('EMAIL'), $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $new_user) == false)
             {
                 $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $new_user->getValue('EMAIL')));
@@ -139,7 +139,7 @@ echo '
     <div class="formHead">Anmeldung zuordnen</div>
     <div class="formBody">
         Es wurde bereits ein Benutzer mit ähnlichem Namen wie 
-        <strong>'. $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('SURNAME'). '</strong> 
+        <strong>'. $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME'). '</strong> 
         in der Datenbank gefunden.<br />
         <div class="groupBox">
             <div class="groupBoxHeadline">Gefundene Benutzer</div>

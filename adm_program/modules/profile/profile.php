@@ -219,7 +219,7 @@ if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
 }
 else
 {
-    $g_layout['title'] = 'Profil von '.$user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME');
+    $g_layout['title'] = 'Profil von '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
 }
 $g_layout['header'] = '
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
@@ -257,7 +257,7 @@ echo '
             <div style="width: 65%; float: left;">
                 <div class="groupBox">
                     <div class="groupBoxHeadline">
-                        <div style="float: left;">'. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME');
+                        <div style="float: left;">'. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
 
                             // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
                             if($user->getValue('GENDER') > 0
@@ -276,8 +276,8 @@ echo '
                         <div style="text-align: right;">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'). '"><img
                                 src="'. THEME_PATH. '/icons/vcard.png"
-                                alt="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'). ' exportieren"
-                                title="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('SURNAME'). ' exportieren" /></a>';
+                                alt="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'). ' exportieren"
+                                title="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'). ' exportieren" /></a>';
 
                             // Nur berechtigte User duerfen das Passwort editieren
                             if($user->getValue('usr_id') == $g_current_user->getValue('usr_id') || $g_current_user->isWebmaster())
@@ -325,7 +325,7 @@ echo '
                                 {
                                     switch($field->getValue('usf_name_intern'))
                                     {
-                                        case 'SURNAME':
+                                        case 'LAST_NAME':
                                         case 'FIRST_NAME':
                                         case 'GENDER':
                                             // diese Felder werden nicht einzeln dargestellt
@@ -771,12 +771,12 @@ echo '
         // Infos der Benutzer, die diesen DS erstellt und geaendert haben
         echo '<div class="editInformation">';
             $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
-            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('SURNAME'), $user->getValue('usr_timestamp_create'));
+            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
 
             if($user->getValue('usr_usr_id_change') > 0)
             {
                 $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
-                echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('SURNAME'), $user->getValue('usr_timestamp_change'));
+                echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
             }
         echo '</div>    
     </div>

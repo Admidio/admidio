@@ -57,7 +57,7 @@ class SystemMail extends Email
         
         // jetzt alle Variablen ersetzen
         $mailSrcText = preg_replace ('/%user_first_name%/', $user->getValue('FIRST_NAME'),  $mailSrcText);
-        $mailSrcText = preg_replace ('/%user_last_name%/',  $user->getValue('SURNAME'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%user_last_name%/',  $user->getValue('LAST_NAME'), $mailSrcText);
         $mailSrcText = preg_replace ('/%user_login_name%/', $user->getValue('usr_login_name'), $mailSrcText);
         $mailSrcText = preg_replace ('/%user_email%/', $user->getValue('EMAIL'),   $mailSrcText);
         $mailSrcText = preg_replace ('/%webmaster_email%/', $g_preferences['email_administrator'],  $mailSrcText);
