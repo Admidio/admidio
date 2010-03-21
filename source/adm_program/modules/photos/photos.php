@@ -452,12 +452,12 @@ echo '<div class="photoModuleContainer">';
         echo '
         <div class="editInformation">';
             $user_create = new User($g_db, $photo_album->getValue('pho_usr_id_create'));
-            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('SURNAME'), $photo_album->getValue('pho_timestamp_create'));
+            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_create'));
                         
             if($photo_album->getValue('pho_usr_id_change') > 0)
             {
                 $user_change = new User($g_db, $photo_album->getValue('pho_usr_id_change'));
-                echo '<br />'.$g_l10n->get('SYS_PHR_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('SURNAME'), $photo_album->getValue('pho_timestamp_change'));
+                echo '<br />'.$g_l10n->get('SYS_PHR_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_change'));
             }
         echo '</div>';
     }

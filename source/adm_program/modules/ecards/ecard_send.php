@@ -94,7 +94,7 @@ if ( isValidEmailAddress($ecard['email_recipient']) && isValidEmailAddress($ecar
 					   AND LENGTH(email.usd_value) > 0
 					  LEFT JOIN '. TBL_USER_DATA. ' as last_name
 						ON last_name.usd_usr_id = usr_id
-					   AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
+					   AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
 					  LEFT JOIN '. TBL_USER_DATA. ' as first_name
 						ON first_name.usd_usr_id = usr_id
 					   AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '

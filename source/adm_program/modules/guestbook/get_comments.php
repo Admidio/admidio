@@ -95,7 +95,7 @@ if (isset($comment_result))
 
                     echo '
                     <div class="editInformation">'.
-                        $g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('SURNAME'), $gbComment->getValue('gbc_timestamp_change')). '
+                        $g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $gbComment->getValue('gbc_timestamp_change')). '
                     </div>';
                 }
             echo '

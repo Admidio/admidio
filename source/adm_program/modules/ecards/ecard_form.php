@@ -131,7 +131,7 @@ if (isset($_GET['usr_id']))
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME')));
+        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 }
 
@@ -239,7 +239,7 @@ echo '
                     {
                         // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                         echo '<div id="extern">
-                                <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+                                <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                              </div>';
 
@@ -292,13 +292,13 @@ echo '
                 <dt><label>'.$g_l10n->get("SYS_SENDER").':</label></dt>
                 <dd>
                   <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
-                    if (! empty($ecard["name_sender"]) && !$g_current_user->getValue('SURNAME'))
+                    if (! empty($ecard["name_sender"]) && !$g_current_user->getValue('LAST_NAME'))
                     {
                        echo $ecard["name_sender"];
                     }
                     else
                     {
-                       echo $g_current_user->getValue('FIRST_NAME')." ".$g_current_user->getValue('SURNAME');
+                       echo $g_current_user->getValue('FIRST_NAME')." ".$g_current_user->getValue('LAST_NAME');
                     }
                   echo'" />
                 </dd>

@@ -75,7 +75,7 @@ if (isset($_GET['usr_id']))
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('SURNAME')));
+        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 
     $userEmail = $user->getValue('EMAIL');
@@ -284,7 +284,7 @@ echo '
                                 echo '<select size="1" id="rol_id" name="rol_id">';
                                 if ($form_values['rol_id'] == "")
                                 {
-                                    echo '<option value="" selected="selected">- Bitte wählen -</option>';
+                                    echo '<option value="" selected="selected">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
                                 }
 
                                 if ($g_valid_login)
@@ -356,7 +356,7 @@ echo '
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo '<input type="text" id="name" name="name" readonly="readonly" style="width: 200px;" maxlength="50" value="'. $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('SURNAME'). '" />';
+                               echo '<input type="text" id="name" name="name" readonly="readonly" style="width: 200px;" maxlength="50" value="'. $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'). '" />';
                             }
                             else
                             {

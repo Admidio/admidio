@@ -108,7 +108,7 @@ if($req_members)
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
                  JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
+                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
                  JOIN '. TBL_USER_DATA. ' as first_name
                    ON first_name.usd_usr_id = usr_id
                   AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
@@ -138,7 +138,7 @@ else
                  FROM '. TBL_USERS. '
                  JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('SURNAME', 'usf_id'). '
+                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
                  JOIN '. TBL_USER_DATA. ' as first_name
                    ON first_name.usd_usr_id = usr_id
                   AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
@@ -297,7 +297,7 @@ echo '
                       AND mem_begin <= "'.DATE_NOW.'"
                       AND mem_end    > "'.DATE_NOW.'"
                       AND usr_valid  = 1
-                      AND usf_name_intern = "SURNAME"
+                      AND usf_name_intern = "LAST_NAME"
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
                     GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
@@ -308,7 +308,7 @@ echo '
         $sql    = 'SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count
                      FROM '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
                     WHERE usr_valid  = 1
-                      AND usf_name_intern = "SURNAME"
+                      AND usf_name_intern = "LAST_NAME"
                       AND usd_usf_id = usf_id
                       AND usd_usr_id = usr_id
                     GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))

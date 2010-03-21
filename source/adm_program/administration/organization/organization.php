@@ -62,16 +62,16 @@ $g_layout['header'] =  '
         organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
                     "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
                     "dates-module", "links-module", "systeminfo");
-        organizationJS.ecard_CCRecipients = \''.$form_values["ecard_cc_recipients"].'\';
-        organizationJS.ecard_textLength = \''.$form_values["ecard_text_length"].'\';
-        organizationJS.forum_Server = \''.$form_values["forum_srv"].'\';
-        organizationJS.forum_User = \''.$form_values["forum_usr"].'\';
-        organizationJS.forum_PW = \''.$form_values["forum_pw"].'\';
-        organizationJS.forum_DB = \''.$form_values["forum_db"].'\';
-        organizationJS.text_Server = \'Server:\';
-        organizationJS.text_User = \'User:\';
-        organizationJS.text_PW = \'Passwort:\';
-        organizationJS.text_DB = \'Datenbank:\';
+        organizationJS.ecard_CCRecipients = "'.$form_values["ecard_cc_recipients"].'";
+        organizationJS.ecard_textLength = "'.$form_values["ecard_text_length"].'";
+        organizationJS.forum_Server = "'.$form_values["forum_srv"].'";
+        organizationJS.forum_User = "'.$form_values["forum_usr"].'";
+        organizationJS.forum_PW = "'.$form_values["forum_pw"].'";
+        organizationJS.forum_DB = "'.$form_values["forum_db"].'";
+        organizationJS.text_Server = "'.$g_l10n->get('SYS_SERVER').':";
+        organizationJS.text_User = "'.$g_l10n->get('SYS_LOGIN').':";
+        organizationJS.text_PW = "'.$g_l10n->get('SYS_PASSWORD').':";
+        organizationJS.text_DB = "'.$g_l10n->get('SYS_DATABASE').':";
         $(document).ready(function()
         {
             organizationJS.init();
@@ -149,8 +149,8 @@ echo '
         </td>
         <td>
         <div id="system-mail_link" class="iconTextLink">
-            <a href="#"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$g_l10n->get('SYS_SYSTEM_MAIL').'" title="'.$g_l10n->get('SYS_SYSTEM_MAIL').'" /></a>
-            <a href="#">'.$g_l10n->get('SYS_SYSTEM_MAIL').'</a>
+            <a href="#"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$g_l10n->get('SYS_SYSTEM_MAILS').'" title="'.$g_l10n->get('SYS_SYSTEM_MAILS').'" /></a>
+            <a href="#">'.$g_l10n->get('SYS_SYSTEM_MAILS').'</a>
         </div>
         </td>
         </tr>
@@ -181,8 +181,8 @@ echo '
         </td>
         <td>
         <div id="systeminfo_link" class="iconTextLink">
-            <a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$g_l10n->get('ORG_SYSTEM_INFO').'" title="'.$g_l10n->get('ORG_SYSTEM_INFO').'" /></a>
-            <a href="#">'.$g_l10n->get('ORG_SYSTEM_INFO').'</a>
+            <a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$g_l10n->get('ORG_SYSTEM_INFOS').'" title="'.$g_l10n->get('ORG_SYSTEM_INFOS').'" /></a>
+            <a href="#">'.$g_l10n->get('ORG_SYSTEM_INFOS').'</a>
         </div>
         </td>
         </tr>
@@ -194,34 +194,34 @@ echo '
 <div class="formLayout" id="organization_form">
     <div class="formBody">
         <div class="groupBox" id="general">
-            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/options.png" alt="Allgemein" />
-                Allgemeine Einstellungen</div>
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/options.png" alt="common" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('SYS_COMMON').'</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="org_shortname">Name (Abk.):</label></dt>
+                            <dt><label for="org_shortname">'.$g_l10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
                             <dd><input type="text" id="org_shortname" name="org_shortname" readonly="readonly" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="org_longname">Name (lang):</label></dt>
+                            <dt><label for="org_longname">'.$g_l10n->get('SYS_NAME').':</label></dt>
                             <dd><input type="text" id="org_longname" name="org_longname" style="width: 200px;" maxlength="60" value="'. $form_values['org_longname']. '" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="org_homepage">Homepage:</label></dt>
+                            <dt><label for="org_homepage">'.$g_l10n->get('SYS_HOMEPAGE').':</label></dt>
                             <dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="system_language">Sprache:</label></dt>
+                            <dt><label for="system_language">'.$g_l10n->get('SYS_LANGUAGE').':</label></dt>
                             <dd>
                                 <select size="1" id="system_language" name="system_language">
-                                    <option value="">- Bitte wählen -</option>';
+                                    <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
                                     foreach($languages as $key => $value)
                                     {
                                         echo '<option value="'.$key.'" ';
@@ -240,7 +240,7 @@ echo '
                             <dt><label for="theme">Admidio-Theme:</label></dt>
                             <dd>
                                 <select size="1" id="theme" name="theme">
-                                    <option value="">- Bitte wählen -</option>';
+                                    <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
                                     $themes_path = SERVER_PATH. '/adm_themes';
                                     $dir_handle  = opendir($themes_path);
 
@@ -448,18 +448,18 @@ echo '
         // Einstellungen Registrierung
         /**************************************************************************************/
 
-        echo"
-        <div class=\"groupBox\" id=\"register\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/new_registrations.png\" alt=\"Registrierung\" />
-                Einstellungen Registrierung</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="register">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="registration" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('SYS_REGISTRATION').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"registration_mode\">Registrierung:</label></dt>
+                            <dt><label for="registration_mode">'.$g_l10n->get('SYS_REGISTRATION').':</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"registration_mode\" name=\"registration_mode\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="registration_mode" name="registration_mode">
+                                    <option value="0" ';
                                     if($form_values['registration_mode'] == 0)
                                     {
                                         echo " selected=\"selected\" ";
@@ -530,79 +530,70 @@ echo '
         //Einstellungen Ankuendigungsmodul
         /**************************************************************************************/
 
-        echo"
-        <div class=\"groupBox\" id=\"announcement-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/announcements.png\" alt=\"Ankündigungen\" />
-                Einstellungen Ankündigungsmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="announcement-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/announcements.png" alt="announcements" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('ANN_ANNOUNCEMENTS').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_announcements_module\">Ankündigungsmodul aktivieren:</label></dt>
+                            <dt><label for="enable_announcements_module">'.$g_l10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"enable_announcements_module\" name=\"enable_announcements_module\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="enable_announcements_module" name="enable_announcements_module">
+                                    <option value="0" ';
                                     if($form_values['enable_announcements_module'] == 0)
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
+                                    echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
+                                    <option value="1" ';
                                     if($form_values['enable_announcements_module'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
-                                    <option value=\"2\" ";
+                                    echo '>'.$g_l10n->get('SYS_ACTIVATED').'</option>
+                                    <option value="2" ';
                                     if($form_values['enable_announcements_module'] == 2)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Nur für registrierte Benutzer</option>
+                                    echo '>'.$g_l10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Ankündigungsmodul kann über diese Einstellung komplett deaktiviert oder nur für
-                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
-                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar. (Standard: Aktiviert)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"announcements_per_page\">Anzahl Einträge pro Seite:</label></dt>
+                            <dt><label for="announcements_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"announcements_per_page\" name=\"announcements_per_page\"
-                                     style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['announcements_per_page']. "\" />
+                                <input type="text" id="announcements_per_page" name="announcements_per_page"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['announcements_per_page']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Anzahl der Ankündigungen die auf einer Seite dargestellt werden. Gibt es mehr Ankündigungen
-                        so kann man zwischen den Ankündigungen blättern. Bei dem Wert 0 werden alle Ankündigungen
-                        aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/
         //Einstellungen Downloadmodul
         /**************************************************************************************/
 
-        echo"
-        <div class=\"groupBox\" id=\"download-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/download.png\" alt=\"Downloads\" />
-                Einstellungen Downloadmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="download-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/download.png" alt="downloads" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('DOW_DOWNLOADS').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_download_module\">Downloadmodul aktivieren:</label></dt>
+                            <dt><label for="enable_download_module">Downloadmodul aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_download_module\" name=\"enable_download_module\" ";
+                                <input type="checkbox" id="enable_download_module" name="enable_download_module" ';
                                 if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -637,51 +628,46 @@ echo '
         //Einstellungen Fotomodul
         /**************************************************************************************/
 
-        echo"
-        <div class=\"groupBox\" id=\"photo-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/photo.png\" alt=\"Fotos\" />
-                Einstellungen Fotomodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="photo-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/photo.png" alt="photos" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('PHO_PHOTOS').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_photo_module\">Fotomodul aktivieren:</label></dt>
+                            <dt><label for="enable_photo_module">'.$g_l10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"enable_photo_module\" name=\"enable_photo_module\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="enable_photo_module" name="enable_photo_module">
+                                    <option value="0" ';
                                     if($form_values['enable_photo_module'] == 0)
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
+                                    echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
+                                    <option value="1" ';
                                     if($form_values['enable_photo_module'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
-                                    <option value=\"2\" ";
+                                    echo '>'.$g_l10n->get('SYS_ACTIVATED').'</option>
+                                    <option value="2" ';
                                     if($form_values['enable_photo_module'] == 2)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Nur für registrierte Benutzer</option>
+                                    echo '>'.$g_l10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Fotomodul kann über diese Einstellung komplett deaktiviert oder nur für
-                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
-                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar.  (Standard: Aktiviert)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_show_mode\">Fotodarstellung:</label></dt>
+                            <dt><label for="photo_show_mode">Fotodarstellung:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"photo_show_mode\" name=\"photo_show_mode\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="photo_show_mode" name="photo_show_mode">
+                                    <option value="0" ';
                                     if($form_values['photo_show_mode'] == 0)
                                     {
                                         echo " selected=\"selected\" ";
@@ -778,7 +764,7 @@ echo '
                     <li class=\"smallFontSize\">
                         Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster
                         haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst.
-						Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder
+                        Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder
                         für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)
                     </li>
                     <li>
@@ -801,17 +787,17 @@ echo '
         //Einstellungen Forum
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"forum\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/forum.png\" alt=\"Forum\" />
-                Einstellungen Forum</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="forum">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/forum.png" alt="forum" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('SYS_FORUM').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_forum_interface\">Forum aktivieren:</label></dt>
+                            <dt><label for="enable_forum_interface">Forum aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_forum_interface\" name=\"enable_forum_interface\" ";
+                                <input type="checkbox" id="enable_forum_interface" name="enable_forum_interface" ';
                                 if(isset($form_values['enable_forum_interface']) && $form_values['enable_forum_interface'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -954,64 +940,55 @@ echo '
         //Einstellungen Gaestebuchmodul
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"guestbook-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/guestbook.png\" alt=\"Gästebuch\" />
-                Einstellungen Gästebuchmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="guestbook-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="guestbook" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('GBO_GUESTBOOK').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_guestbook_module\">Gästebuch aktivieren:</label></dt>
+                            <dt><label for="enable_guestbook_module">'.$g_l10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"enable_guestbook_module\" name=\"enable_guestbook_module\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="enable_guestbook_module" name="enable_guestbook_module">
+                                    <option value="0" ';
                                     if($form_values['enable_guestbook_module'] == 0)
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
+                                    echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
+                                    <option value="1" ';
                                     if($form_values['enable_guestbook_module'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
-                                    <option value=\"2\" ";
+                                    echo '>'.$g_l10n->get('SYS_ACTIVATED').'</option>
+                                    <option value="2" ';
                                     if($form_values['enable_guestbook_module'] == 2)
                                     {
-                                        echo "selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Nur für registrierte Benutzer</option>
+                                    echo '>'.$g_l10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Gästebuch kann über diese Einstellung komplett deaktiviert oder nur für
-                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
-                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar. (Standard: Aktiviert)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"guestbook_entries_per_page\">Anzahl Einträge pro Seite:</label></dt>
+                            <dt><label for="guestbook_entries_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"guestbook_entries_per_page\" name=\"guestbook_entries_per_page\"
-                                     style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['guestbook_entries_per_page']. "\" />
+                                <input type="text" id="guestbook_entries_per_page" name="guestbook_entries_per_page"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['guestbook_entries_per_page']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Anzahl der Gästebucheinträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge
-                        so kann man zwischen den Einträgen blättern. Bei dem Wert 0 werden alle Gästebucheinträge
-                        aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_guestbook_captcha\">Captcha aktivieren:</label></dt>
+                            <dt><label for="enable_guestbook_captcha">Captcha aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_guestbook_captcha\" name=\"enable_guestbook_captcha\" ";
+                                <input type="checkbox" id="enable_guestbook_captcha" name="enable_guestbook_captcha" ';
                                 if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -1082,32 +1059,28 @@ echo '
         //Einstellungen Listenmodul
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"list-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/list.png\" alt=\"Listen\" />
-                Einstellungen Listen</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="list-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/list.png" alt="lists" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('LST_LISTS').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"lists_roles_per_page\">Anzahl Rollen pro Seite:</label></dt>
+                            <dt><label for="lists_roles_per_page">'.$g_l10n->get('LST_NUMBER_OF_ROLES_PER_PAGE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_roles_per_page\" name=\"lists_roles_per_page\" style=\"width: 50px;\"
-                                    maxlength=\"4\" value=\"". $form_values['lists_roles_per_page']. "\" />
+                                <input type="text" id="lists_roles_per_page" name="lists_roles_per_page"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['lists_roles_per_page']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Anzahl der Rollen die auf einer Seite in der Listenübersicht aufgelistet werden. Gibt es mehr Rollen
-                        so kann man in der Liste blättern. Bei dem Wert 0 werden alle Rollen aufgelistet und die
-                        Blättern-Funktion deaktiviert. (Standard: 10)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"lists_members_per_page\">Anzahl Teilnehmer pro Seite:</label></dt>
+                            <dt><label for="lists_members_per_page">Anzahl Teilnehmer pro Seite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"lists_members_per_page\" name=\"lists_members_per_page\" style=\"width: 50px;\"
-                                    maxlength=\"4\" value=\"". $form_values['lists_members_per_page']. "\" />
+                                <input type="text" id="lists_members_per_page" name="lists_members_per_page" style="width: 50px;"
+                                    maxlength="4" value="'. $form_values['lists_members_per_page']. "\" />
                             </dd>
                         </dl>
                     </li>
@@ -1143,17 +1116,17 @@ echo '
         //Einstellungen Mailmodul
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"mail-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/email.png\" alt=\"E-Mails\" />
-                Einstellungen Mailmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="mail-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/email.png" alt="E-Mails" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('MAI_EMAILS').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_mail_module\">Mailmodul aktivieren:</label></dt>
+                            <dt><label for="enable_mail_module">Mailmodul aktivieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_mail_module\" name=\"enable_mail_module\" ";
+                                <input type="checkbox" id="enable_mail_module" name="enable_mail_module" ';
                                 if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -1234,8 +1207,8 @@ echo '
         $text = new TableText($g_db);
         echo '
         <div class="groupBox" id="system-mail">
-            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/system_mail.png" alt="Systemmails" />
-                Einstellungen Systemmails</div>
+            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/system_mail.png" alt="system mails" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('SYS_SYSTEM_MAILS').'</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
                     <li>
@@ -1332,7 +1305,8 @@ echo '
         /**************************************************************************************/
         echo '
         <div class="groupBox" id="ecard-module">
-            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get("ECA_GREETING_CARDS").'" /> '.$g_l10n->get("ECA_SETTINGS_GREETING_CARDS").'</div>
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/ecard.png" alt="greeting cards" /> 
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('ECA_GREETING_CARDS').'</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
                     <li>
@@ -1584,8 +1558,8 @@ echo '
 
         echo '
         <div class="groupBox" id="profile-module">
-            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/profile.png" alt="Profil" />
-                Einstellungen Profilmodul</div>
+            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/profile.png" alt="profile" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('PRO_PROFILE').'</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
                     <li>
@@ -1616,7 +1590,7 @@ echo '
                                     {
                                         echo ' selected="selected" ';
                                     }
-                                    echo '>- Bitte wählen -</option>';
+                                    echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
                                     // Datei mit Laenderliste oeffnen und alle Laender einlesen
                                     $country_list = fopen("../../system/staaten.txt", "r");
@@ -1720,7 +1694,7 @@ echo '
                             <dt><label for="profile_photo_storage">Speicherort der Profilbilder:</label></dt>
                             <dd>
                                 <select size="1" id="profile_photo_storage" name="profile_photo_storage">
-                                    <option value="">- Bitte wählen -</option>
+                                    <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>
                                     <option value="0" ';
                                             if($form_values['profile_photo_storage'] == 0)
                                             {
@@ -1764,64 +1738,55 @@ echo '
         //Einstellungen Terminmodul
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"dates-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/dates.png\" alt=\"Termine\" />
-                Einstellungen Terminmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="dates-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/dates.png" alt="dates" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('DAT_DATES').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_dates_module\">Terminmodul aktivieren:</label></dt>
+                            <dt><label for="enable_dates_module">'.$g_l10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"enable_dates_module\" name=\"enable_dates_module\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="enable_dates_module" name="enable_dates_module">
+                                    <option value="0" ';
                                     if($form_values['enable_dates_module'] == 0)
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
+                                    echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
+                                    <option value="1" ';
                                     if($form_values['enable_dates_module'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
-                                    <option value=\"2\" ";
+                                    echo '>'.$g_l10n->get('SYS_ACTIVATED').'</option>
+                                    <option value="2" ';
                                     if($form_values['enable_dates_module'] == 2)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Nur für registrierte Benutzer</option>
+                                    echo '>'.$g_l10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Terminmodul kann über diese Einstellung komplett deaktiviert oder nur für
-                        registrierte Nutzer freigegeben werden. Haben nur registrierte Nutzer Zugriff, so
-                        wird das Modul für Besucher komplett ausgeblendet. Der RSS-Feed ist allerdings
-                        für beide Gruppen dann nicht mehr aufrufbar. (Standard: Aktiviert)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"dates_per_page\">Anzahl Einträge pro Seite:</label></dt>
+                            <dt><label for="weblinks_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"dates_per_page\" name=\"dates_per_page\"
-                                     style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['dates_per_page']. "\" />
+                                <input type="text" id="weblinks_per_page" name="weblinks_per_page"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_per_page']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Anzahl der Termine die auf einer Seite dargestellt werden. Gibt es mehr Termine
-                        so kann man zwischen den Terminen blättern. Bei dem Wert 0 werden alle Termine
-                        aufgelistet und die Blättern-Funktion deaktiviert. (Stdandrad: 10)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"dates_show_map_link\">Kartenlink anzeigen:</label></dt>
+                            <dt><label for="dates_show_map_link">Kartenlink anzeigen:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"dates_show_map_link\" name=\"dates_show_map_link\" ";
+                                <input type="checkbox" id="dates_show_map_link" name="dates_show_map_link" ';
                                 if(isset($form_values['dates_show_map_link']) && $form_values['dates_show_map_link'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -1894,63 +1859,56 @@ echo '
         //Einstellungen Weblinksmodul
         /**************************************************************************************/
 
-        echo "
-        <div class=\"groupBox\" id=\"links-module\">
-            <div class=\"groupBoxHeadline\"><img src=\"". THEME_PATH. "/icons/weblinks.png\" alt=\"Weblinks\" />
-                Einstellungen Weblinkmodul</div>
-            <div class=\"groupBoxBody\">
-                <ul class=\"formFieldList\">
+        echo '
+        <div class="groupBox" id="links-module">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="Weblinks" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('LNK_WEBLINKS').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for=\"enable_weblinks_module\">Weblinkmodul aktivieren:</label></dt>
+                            <dt><label for="enable_weblinks_module">'.$g_l10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"enable_weblinks_module\" name=\"enable_weblinks_module\">
-                                    <option value=\"0\" ";
+                                <select size="1" id="enable_weblinks_module" name="enable_weblinks_module">
+                                    <option value="0" ';
                                     if($form_values['enable_weblinks_module'] == 0)
                                     {
                                         echo " selected=\"selected\" ";
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
+                                    echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
+                                    <option value="1" ';
                                     if($form_values['enable_weblinks_module'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Aktiviert</option>
-                                    <option value=\"2\" ";
+                                    echo '>'.$g_l10n->get('SYS_ACTIVATED').'</option>
+                                    <option value="2" ';
                                     if($form_values['enable_weblinks_module'] == 2)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Nur für registrierte Benutzer</option>
+                                    echo '>'.$g_l10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Weblinksmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt.
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"weblinks_per_page\">Anzahl Links pro Seite:</label></dt>
+                            <dt><label for="weblinks_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"weblinks_per_page\" name=\"weblinks_per_page\"
-                                    style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['weblinks_per_page']. "\" />
+                                <input type="text" id="weblinks_per_page" name="weblinks_per_page"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_per_page']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Anzahl der Links die auf einer Seite dargestellt werden. Gibt es mehr Links
-                        so kann man zwischen den Links blättern. Bei dem Wert 0 werden alle Links
-                        aufgelistet und die Blättern-Funktion deaktiviert.
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"weblinks_target\">Link-Target:</label></dt>
+                            <dt><label for="weblinks_target">Link-Target:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"weblinks_target\" name=\"weblinks_target\">
-                                    <option value=\"_self\"";
+                                <select size="1" id="weblinks_target" name="weblinks_target">
+                                    <option value="_self"';
                                     if($form_values['weblinks_target'] == "_self")
                                     {
                                         echo " selected=\"selected\" ";
@@ -1991,8 +1949,8 @@ echo '
 
         echo '
         <div class="groupBox" id="systeminfo">
-            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/info.png" alt="Systeminformationen" />
-                Systeminformationen
+            <div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/info.png" alt="system infos" />
+                '.$g_l10n->get('ORG_SYSTEM_INFORMATIONS').'
             </div>
             <div class="groupBoxBody">';
                 require_once('systeminfo.php');

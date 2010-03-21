@@ -148,7 +148,7 @@ $g_layout['header'] = '
 
                 var selected = "";
                 // bei einer neuen Liste sind Vorname und Nachname in den ersten Spalten vorbelegt
-                if((  (fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name_intern"] == "SURNAME")
+                if((  (fieldNumberIntern == 0 && arr_user_fields[counter]["usf_name_intern"] == "LAST_NAME")
                    || (fieldNumberIntern == 1 && arr_user_fields[counter]["usf_name_intern"] == "FIRST_NAME"))
                 && listId == 0)
                 {

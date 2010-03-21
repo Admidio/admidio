@@ -167,15 +167,15 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
     }
 
     // nur Benutzer anlegen, wenn Vor- und Nachname vorhanden sind
-    if(strlen($user->getValue('SURNAME')) > 0 && strlen($user->getValue('FIRST_NAME')) > 0)
+    if(strlen($user->getValue('LAST_NAME')) > 0 && strlen($user->getValue('FIRST_NAME')) > 0)
     {
         // schauen, ob schon User mit dem Namen existieren und Daten einlesen
         $sql = 'SELECT MAX(usr_id) AS usr_id
                   FROM '. TBL_USERS. '
                   JOIN '. TBL_USER_DATA. ' last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '.  $user->getProperty('SURNAME', 'usf_id'). '
-                   AND last_name.usd_value  = "'. $user->getValue('SURNAME'). '"
+                   AND last_name.usd_usf_id = '.  $user->getProperty('LAST_NAME', 'usf_id'). '
+                   AND last_name.usd_value  = "'. $user->getValue('LAST_NAME'). '"
                   JOIN '. TBL_USER_DATA. ' first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = '.  $user->getProperty('FIRST_NAME', 'usf_id'). '

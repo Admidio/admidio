@@ -32,7 +32,7 @@ $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity,
 $g_db->query($sql);
 
 // interner Name für System-Profilfelder belegen
-$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "SURNAME" WHERE usf_name = "Nachname" ';
+$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "LAST_NAME" WHERE usf_name = "Nachname" ';
 $result_orga = $g_db->query($sql);
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "FIRST_NAME" WHERE usf_name = "Vorname" ';
 $result_orga = $g_db->query($sql);

@@ -90,7 +90,7 @@ if($req_mode == 1)  // (Default) Sprache auswaehlen
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="system_language">'.$g_l10n->get('INS_LANGUAGE').':</label></dt>
+                                    <dt><label for="system_language">'.$g_l10n->get('SYS_LANGUAGE').':</label></dt>
                                     <dd>
                                         <select size="1" id="system_language" name="system_language">
                                             <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
@@ -160,13 +160,13 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="server">'.$g_l10n->get('INS_SERVER').':</label></dt>
+                                    <dt><label for="server">'.$g_l10n->get('SYS_SERVER').':</label></dt>
                                     <dd><input type="text" name="server" id="server" style="width: 250px;" maxlength="50" value="'. $server. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user">'.$g_l10n->get('INS_LOGIN').':</label></dt>
+                                    <dt><label for="user">'.$g_l10n->get('SYS_LOGIN').':</label></dt>
                                     <dd><input type="text" name="user" id="user" style="width: 250px;" maxlength="50" value="'. $user. '" /></dd>
                                 </dl>
                             </li>
@@ -178,7 +178,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="database">'.$g_l10n->get('INS_DATABASE').':</label></dt>
+                                    <dt><label for="database">'.$g_l10n->get('SYS_DATABASE').':</label></dt>
                                     <dd><input type="text" name="database" id="database" style="width: 250px;" maxlength="50" value="'. $database. '" /></dd>
                                 </dl>
                             </li>
@@ -268,7 +268,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_short">'.$g_l10n->get('INS_NAME_ABBREVIATION').':</label></dt>
+                                    <dt><label for="orga_name_short">'.$g_l10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
                                     <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
                                 </dl>
                             </li>
@@ -322,7 +322,7 @@ elseif($req_mode == 5)  // Daten des Administrator eingeben
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="user_last_name">'.$g_l10n->get('INS_SURNAME').':</label></dt>
+                                    <dt><label for="user_last_name">'.$g_l10n->get('INS_LAST_NAME').':</label></dt>
                                     <dd><input type="text" name="user_last_name" id="user_last_name" style="width: 250px;" maxlength="50" value="'. $user_last_name. '" /></dd>
                                 </dl>
                             </li>
@@ -489,7 +489,7 @@ elseif($req_mode == 8)
 
     // Stammdatenfelder anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_stammdaten.', "TEXT", "SURNAME",    '.$g_l10n->get('INS_SURNAME').', NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                       VALUES ('.$cat_id_stammdaten.', "TEXT", "LAST_NAME",    '.$g_l10n->get('INS_LAST_NAME').', NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "FIRST_NAME", '.$g_l10n->get('INS_FIRST_NAME').', NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "ADDRESS",    '.$g_l10n->get('INS_ADDRESS').', NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "POSTCODE",   '.$g_l10n->get('INS_POSTCODE').', NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
@@ -582,7 +582,7 @@ elseif($req_mode == 8)
 
     // User Webmaster anlegen
     $g_current_user = new User($db);
-    $g_current_user->setValue('SURNAME', $_SESSION['user_last_name']);
+    $g_current_user->setValue('LAST_NAME', $_SESSION['user_last_name']);
     $g_current_user->setValue('FIRST_NAME', $_SESSION['user_first_name']);
     $g_current_user->setValue('EMAIL', $_SESSION['user_email']);
     $g_current_user->setValue('usr_login_name', $_SESSION['user_login']);
@@ -661,7 +661,7 @@ elseif($req_mode == 8)
     $address_list->setValue('lst_name', $g_l10n->get('INS_ADDRESS_LIST'));
     $address_list->setValue('lst_global', 1);
     $address_list->setValue('lst_default', 1);
-    $address_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'), 'ASC');
+    $address_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
     $address_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
     $address_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
     $address_list->addColumn(4, $g_current_user->getProperty('ADDRESS', 'usf_id'));
@@ -672,7 +672,7 @@ elseif($req_mode == 8)
     $phone_list = new ListConfiguration($db);
     $phone_list->setValue('lst_name', $g_l10n->get('INS_PHONE_LIST'));
     $phone_list->setValue('lst_global', 1);
-    $phone_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'), 'ASC');
+    $phone_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
     $phone_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
     $phone_list->addColumn(3, $g_current_user->getProperty('PHONE', 'usf_id'));
     $phone_list->addColumn(4, $g_current_user->getProperty('MOBILE', 'usf_id'));
@@ -683,7 +683,7 @@ elseif($req_mode == 8)
     $contact_list = new ListConfiguration($db);
     $contact_list->setValue('lst_name', $g_l10n->get('INS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
-    $contact_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'), 'ASC');
+    $contact_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
     $contact_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
     $contact_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
     $contact_list->addColumn(4, $g_current_user->getProperty('ADDRESS', 'usf_id'));
@@ -697,7 +697,7 @@ elseif($req_mode == 8)
     $former_list = new ListConfiguration($db);
     $former_list->setValue('lst_name', $g_l10n->get('INS_MEMBERSHIP'));
     $former_list->setValue('lst_global', 1);
-    $former_list->addColumn(1, $g_current_user->getProperty('SURNAME', 'usf_id'));
+    $former_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'));
     $former_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'));
     $former_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
     $former_list->addColumn(4, 'mem_begin');
