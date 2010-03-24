@@ -90,7 +90,7 @@ echo '
         <th>Backupdatei</th>
         <th>Erstellungsdatum</th>
         <th>Größe</th>
-        <th style="text-align: center;">Löschen</th>
+        <th style="text-align: center;">'.$g_l10n->get('SYS_DELETE').'</th>
 	</tr>';
 
     flush();
@@ -114,7 +114,7 @@ echo '
             <td style="text-align: right;">'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' KB&nbsp;</td>
             <td style="text-align: center;">
                 <a class="iconLink" href="javascript:deleteObject(\'bck\', \'row_file_'.$key.'\',0,\''.$old_backup_file.'\')">
-                <img src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>
+                <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
             </td>
         </tr>';
 		$backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);

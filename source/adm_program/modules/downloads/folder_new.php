@@ -122,7 +122,7 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button name="anlegen" type="submit" value="anlegen">
+            <button id="btnCreate" type="submit">
             <img src="'. THEME_PATH. '/icons/folder_create.png" alt="Ordner anlegen" />
             &nbsp;Ordner anlegen</button>
         </div>

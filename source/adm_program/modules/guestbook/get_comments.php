@@ -76,9 +76,9 @@ if (isset($comment_result))
                 {
                     echo '
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$gbComment->getValue('gbc_id').'"><img 
-                        src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
+                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
                     <a class="iconLink" href="javascript:deleteObject(\'gbc\', \'gbc_'.$gbComment->getValue('gbc_id').'\','.$gbComment->getValue('gbc_id').',\''.$row->gbc_name.'\')"><img 
-                        src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                 }
 
                 echo '</div>

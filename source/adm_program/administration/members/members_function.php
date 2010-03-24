@@ -82,28 +82,28 @@ if($_GET["mode"] == 1)
     require(THEME_SERVER_PATH. "/overall_header.php");
 
     // Html des Modules ausgeben
-    echo "<br /><br /><br />
-    <div class=\"formLayout\" id=\"user_delete_message_form\" style=\"width: 400px\">
-        <div class=\"formHead\">Mitglied l&ouml;schen</div>
-        <div class=\"formBody\">
-            <p align=\"left\">
-                <img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Ehemaliger\" />
+    echo '<br /><br /><br />
+    <div class="formLayout" id="user_delete_message_form" style="width: 400px">
+        <div class="formHead">Mitglied löschen</div>
+        <div class="formBody">
+            <p align="left">
+                <img src="'.THEME_PATH.'/icons/profile.png" alt="Ehemaliger" />
                 Du kannst den Benutzer zu einem <b>Ehemaligen</b> machen. Dies hat den Vorteil, dass die Daten
-                erhalten bleiben und du sp&auml;ter immer wieder sehen kannst, welchen Rollen diese Person
+                erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person
                 zugeordnet war.
             </p>
-            <p align=\"left\">
-                <img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Benutzer l&ouml;schen\" />
-                Wenn du <b>L&ouml;schen</b> ausw&auml;hlst, wird der Datensatz entg&uuml;ltig aus der Datenbank
-                entfernt und es ist sp&auml;ter nicht mehr m&ouml;glich Daten dieser Person einzusehen.
+            <p align="left">
+                <img src="'.THEME_PATH.'/icons/delete.png" alt="Benutzer löschen" />
+                Wenn du <b>Löschen</b> auswählst, wird der Datensatz entgültig aus der Datenbank
+                entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.
             </p>
-            <button name=\"back\" type=\"button\" value=\"back\" onclick=\"history.back()\"><img src=\"". THEME_PATH. "/icons/back.png\" alt=\"".$g_l10n->get('SYS_BACK')."\" />&nbsp;".$g_l10n->get('SYS_BACK')."</button>
+            <button id="btnBack" type="button" onclick="history.back()"><img src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"delete\" type=\"button\" value=\"delete\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET['usr_id']. "&mode=3'\"><img src=\"". THEME_PATH. "/icons/delete.png\" alt=\"Benutzer löschen\" />&nbsp;Löschen</button>
+            <button id="btnDelete" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=3\'"><img src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" />&nbsp;'.$g_l10n->get('SYS_DELETE').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name=\"former\" type=\"button\" value=\"former\" onclick=\"self.location.href='$g_root_path/adm_program/administration/members/members_function.php?usr_id=". $_GET['usr_id']. "&mode=2'\"><img src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Ehemaliger\" />&nbsp;Ehemaliger</button>
+            <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$_GET['usr_id'].'&mode=2\'"><img src="'.THEME_PATH.'/icons/profile.png" alt="Ehemaliger" />&nbsp;Ehemaliger</button>
         </div>
-    </div>";
+    </div>';
 
     require(THEME_SERVER_PATH. "/overall_footer.php");
     exit();

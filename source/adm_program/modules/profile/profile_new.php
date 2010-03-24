@@ -539,7 +539,7 @@ echo '
         else
         {
             $btn_image = 'disk.png';
-            $btn_text  = 'Speichern';
+            $btn_text  = $g_l10n->get('SYS_SAVE');
         }
 
         if($new_user == 0)
@@ -559,9 +559,9 @@ echo '
 
         echo '
         <div class="formSubmit">
-            <button name="speichern" type="submit" value="speichern">
-            	<img src="'. THEME_PATH. '/icons/'. $btn_image. '" alt="'. $btn_text. '" />
-            	&nbsp;'. $btn_text. '</button>
+            <button id="btnSave" type="submit"><img 
+                src="'. THEME_PATH. '/icons/'. $btn_image. '" alt="'. $btn_text. '" />
+                &nbsp;'. $btn_text. '</button>
         </div>
     </div>
 </div>

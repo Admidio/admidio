@@ -474,10 +474,7 @@ if($num_members > 0)
                         }
                         else
                         {
-                            echo '
-                            <span class="iconLink">
-                                <img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />
-                            </span>';
+                            echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
                         }
 
                         // Link um User zu editieren
@@ -490,10 +487,7 @@ if($num_members > 0)
                         }
                         else
                         {
-                            echo '
-                            <span class="iconLink">
-                                <img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />
-                            </span>';
+                            echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
                         }
 
                         // Mitglieder entfernen
@@ -507,10 +501,7 @@ if($num_members > 0)
                         }
                         else
                         {
-                            echo '
-                            <span class="iconLink">
-                                <img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />
-                            </span>';
+                            echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
                         }
                     echo '</td>
                 </tr>';

@@ -62,7 +62,7 @@ echo '
         echo '</ul>
         
         <div class="formSubmit">
-            <button name="login" type="submit" value="login" tabindex="4"><img src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOGIN').'" />&nbsp;'.$g_l10n->get('SYS_LOGIN').'</button>
+            <button id="btnLogin" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOGIN').'" />&nbsp;'.$g_l10n->get('SYS_LOGIN').'</button>
         </div>';
         
         if($g_preferences['registration_mode'] > 0)

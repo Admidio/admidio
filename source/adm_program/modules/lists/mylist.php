@@ -639,7 +639,7 @@ echo '
         echo '<hr />
 
         <div class="formSubmit">
-            <button name="btn_show" type="button" onclick="javascript:send(\'show\');" value="anzeigen"><img 
+            <button id="btnShow" type="button" onclick="javascript:send(\'show\');"><img 
                 src="'. THEME_PATH. '/icons/list.png" alt="Liste anzeigen" />&nbsp;Liste anzeigen</button>
         </div>
     </div>

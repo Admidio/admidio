@@ -282,7 +282,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button name="speichern" type="submit" value="speichern" tabindex="6"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+            <button id="btnSave" type="submit" tabindex="6"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>

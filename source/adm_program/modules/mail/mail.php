@@ -486,7 +486,7 @@ echo '
             <hr />
 
             <div class="formSubmit">
-                <button name="abschicken" type="submit" value="abschicken"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
+                <button id="btnSend" type="submit"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
             </div>
         </div>
     </div>

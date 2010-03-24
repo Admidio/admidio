@@ -19,14 +19,14 @@
  *
  ****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_type = '';
 
 // Uebergabevariablen pruefen
-$title = 'Kategorie';
+$title = $g_l10n->get('SYS_CATEGORY');
 if (isset($_GET['title'])) 
 {
    $title = $_GET['title'];
@@ -66,7 +66,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['categories_request']);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $title.'-Verwaltung';
+$g_layout['title']  = $g_l10n->get('SYS_PHR_ADMINISTRATION', $title);
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
 
@@ -136,19 +136,19 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 $icon_login_user = '';
 if($_GET['type'] != 'USF')
 {
-	$icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$title.' nur für eingeloggte Benutzer sichtbar" title="'.$title.' nur für eingeloggte Benutzer sichtbar" />';
+    $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" />';
 }
 
 // Html des Modules ausgeben
 echo '
-<h1 class="moduleHeadline">'.$title.'-Verwaltung</h1>
+<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'"><img
-            src="'.THEME_PATH.'/icons/add.png" alt="'.$title.' anlegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$title.' anlegen</a>
+            src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_PHR_CREATE', $title).'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$g_l10n->get('SYS_PHR_CREATE', $title).'</a>
         </span>
     </li>
 </ul>
@@ -156,7 +156,7 @@ echo '
 <table class="tableList" id="tableCategories" style="width: 300px;" cellspacing="0">
     <thead>
         <tr>
-            <th>Bezeichnung</th>
+            <th>'.$g_l10n->get('SYS_TITLE').'</th>
             <th>&nbsp;</th>
             <th>'.$icon_login_user.'</th>
             <th>&nbsp;</th>
@@ -174,10 +174,10 @@ echo '
 
     while($cat_row = $g_db->fetch_array($cat_result))
     {
-        if($cat_row['cat_name'] == 'Stammdaten' && $_GET['type'] == 'USF')
+        if($cat_row['cat_system'] == 1 && $_GET['type'] == 'USF')
         {
             // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
-            echo '<tbody id="cat_stammdaten">';
+            echo '<tbody id="cat_'.$cat_row['cat_id'].'">';
         }
         elseif($cat_row['cat_org_id'] == 0 && $_GET['type'] == 'USF')
         {
@@ -205,19 +205,19 @@ echo '
         <tr id="row_'. $cat_row['cat_id']. '" class="tableMouseOver">
             <td><a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'">'. $cat_row['cat_name']. '</a></td>
             <td style="text-align: right; width: 45px;"> ';
-                if($cat_row['cat_name'] != "Stammdaten" || $_GET['type'] != "USF")
+                if($cat_row['cat_system'] == 0 || $_GET['type'] != "USF")
                 {
                     echo '
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$cat_row['cat_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$title.' nach oben schieben" title="'.$title.' nach oben schieben" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('CAT_PHR_MOVE_UP', $title).'" title="'.$g_l10n->get('CAT_PHR_MOVE_UP', $title).'" /></a>
                     <a class="iconLink" href="javascript:moveCategory(\'down\', '.$cat_row['cat_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$title.' nach unten schieben" title="'.$title.' nach unten schieben" /></a>';
+                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('CAT_PHR_MOVE_DOWN', $title).'" title="'.$g_l10n->get('CAT_PHR_MOVE_DOWN', $title).'" /></a>';
                 }
             echo '</td>
             <td>';
                 if($cat_row['cat_hidden'] == 1)
                 {
-                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$title.' nur für eingeloggte Benutzer sichtbar" title="'.$title.' nur für eingeloggte Benutzer sichtbar" />';
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" />';
                 }
                 else
                 {
@@ -226,7 +226,7 @@ echo '
             echo '</td>
             <td style="text-align: right; width: 90px;">
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'"><img
-                src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>';
+                src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
 
                 if($cat_row['cat_system'] == 1)
                 {
@@ -235,7 +235,7 @@ echo '
                 else
                 {
                     echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='. $cat_row['cat_id']. '&amp;mode=3&amp;type='.$req_type.'"><img
-                        src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                 }
             echo '</td>
         </tr>';

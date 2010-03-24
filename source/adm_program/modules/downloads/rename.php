@@ -187,9 +187,9 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button name="rename" type="submit" value="Speichern" tabindex="2">
-            <img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />
-            &nbsp;Speichern</button>
+            <button id="btnRename" type="submit" tabindex="2">
+            <img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />
+            &nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>
