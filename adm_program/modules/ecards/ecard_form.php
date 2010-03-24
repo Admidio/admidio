@@ -417,9 +417,9 @@ echo '
     </ul>
     <hr />
     <div class="formSubmit">
-        <button onclick="javascript:ecardJS.makePreview();" type="button" value="'.$g_l10n->get("SYS_PREVIEW").'"><img 
+        <button id="btnPreview" onclick="javascript:ecardJS.makePreview();" type="button"><img 
             src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get("SYS_PREVIEW").'" />&nbsp;'.$g_l10n->get("SYS_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
-        <button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button" value="'.$g_l10n->get("SYS_SEND").'"><img 
+        <button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button"><img 
             src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get("SYS_SEND").'" />&nbsp;'.$g_l10n->get("SYS_SEND").'</button>
     </div>
 </form></div></div>';

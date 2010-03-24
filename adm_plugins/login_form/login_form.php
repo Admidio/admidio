@@ -193,7 +193,7 @@ else
             <li id="plgRowLoginButton">
                 <dl>
                     <dt>
-                        <button type="submit" value="Login" tabindex="98">'.$plg_icon_code.'Login</button>
+                        <button type="submit" tabindex="98">'.$plg_icon_code.'Login</button>
                     </dt>
                     <dd>&nbsp;</dd>
                 </dl>

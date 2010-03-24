@@ -110,7 +110,7 @@ if($_GET['mode'] == 1)
 
     if(strlen($_POST['cat_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY','Name'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_NAME'));
     }
 
     // Kategorie ist immer Orga-spezifisch, ausser manuell angelegte Orga-Felder-Kategorie

@@ -243,7 +243,7 @@ echo '
     </table>
 
     <div class="formSubmit">
-        <button type="submit" value="'.$g_l10n->get('SYS_SAVE').'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+        <button id="btnSave" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
     </div>';
     if($req_inlineView == 0)
     {

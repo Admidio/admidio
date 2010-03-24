@@ -747,7 +747,7 @@ else
                                             <input type="hidden" name="dat_rol_id" value="'.$date->getValue('dat_rol_id').'" />
                                         ';
                                     }
-                                    $content_signin .= '<button name="loginDate" type="submit" value="loginDate" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" alt="login Date" />&nbsp;'.$v.'</button></form>';
+                                    $content_signin .= '<button id="btnLoginDate" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" alt="login Date" />&nbsp;'.$v.'</button></form>';
                                 }
                             }
 
@@ -783,7 +783,7 @@ else
                                     <input type="hidden" name="dat_id" value="'. $date->getValue('dat_id'). '" />
                                     <input type="hidden" name="headline" value="'.$req_headline.'" />
                                     <input type="hidden" name="login" value="0" />
-                                    <button name="logoutDate" type="submit" value="logoutDate" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
+                                    <button id="btnLogoutDate" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
                                     alt="login Date" />&nbsp;austragen</button>
                                 </form>
                             </div>';

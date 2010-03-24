@@ -24,7 +24,7 @@ require_once('../../system/classes/table_category.php');
 $req_cat_id = 0;
 
 // Uebergabevariablen pruefen
-$title = 'Kategorie';
+$title = $g_l10n->get('SYS_CATEGORY');
 if (isset($_GET['title'])) 
 {
    $title = $_GET['title'];
@@ -102,7 +102,7 @@ if(isset($_SESSION['categories_request']))
 // Kategorie 'Stammdaten' bei Profilfeldern darf nicht umbenannt werden
 $html_readonly = '';
 $field_focus   = 'cat_name';
-if($category->getValue('cat_type') == 'USF' && $category->getValue('cat_name') == 'Stammdaten')
+if($category->getValue('cat_type') == 'USF' && $category->getValue('cat_system') == 1)
 {
     $html_readonly = ' readonly="readonly" ';
     $field_focus   = 'btn_save';
@@ -111,11 +111,11 @@ if($category->getValue('cat_type') == 'USF' && $category->getValue('cat_name') =
 // Html-Kopf ausgeben
 if($req_cat_id > 0)
 {
-    $g_layout['title']  = $title.' bearbeiten';
+    $g_layout['title']  = $g_l10n->get('SYS_PHR_EDIT', $title);
 }
 else
 {
-    $g_layout['title']  = $title.' anlegen';
+    $g_layout['title']  = $g_l10n->get('SYS_PHR_CREATE', $title);
 }
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -135,7 +135,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="cat_name">Name:</label></dt>
+                    <dt><label for="cat_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd>
                         <input type="text" id="cat_name" name="cat_name" '.$html_readonly.' style="width: 150px;" maxlength="30" value="'. $category->getValue('cat_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -160,10 +160,10 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for=\"cat_org_id\">'.$title.' für alle Organisationen sichtbar</label>
+                                <label for=\"cat_org_id\">'.$g_l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
                                 <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=CAT_PHR_CATEGORY_GLOBAL&amp;inline=true"><img 
                                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=CAT_PHR_CATEGORY_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
-                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
                             </dd>
                         </dl>
                     </li>';
@@ -175,7 +175,7 @@ echo '
                 <li>
                     <dl>
                         <dt>
-                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$title.' nur für eingeloggte Benutzer sichtbar" /></label>
+                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" /></label>
                         </dt>
                         <dd>
                             <input type="checkbox" id="cat_hidden" name="cat_hidden" ';
@@ -184,7 +184,7 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                            <label for="cat_hidden">'.$title.' nur für eingeloggte Benutzer sichtbar</label>
+                            <label for="cat_hidden">'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'</label>
                         </dd>
                     </dl>
                 </li>';
@@ -194,7 +194,7 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button id="btn_save" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/disk.png" alt="Speichern" />&nbsp;Speichern</button>
+            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>

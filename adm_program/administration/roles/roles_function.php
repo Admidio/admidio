@@ -92,11 +92,11 @@ if($_GET['mode'] == 1)
                 Wenn du <b>Löschen</b> auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank
                 entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.
             </p>
-            <button name="delete" type="button" value="delete"
+            <button id="btnDelete" type="button"
                 onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=4\'"><img
-                src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" />&nbsp;Löschen</button>
+                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" />&nbsp;'.$g_l10n->get('SYS_DELETE').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button name="inactive" type="button" value="inactive"
+            <button id="btnInactive" type="button"
                 onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=3\'"><img
                 src="'. THEME_PATH. '/icons/roles_gray.png" alt="Inaktive Rolle" />&nbsp;Inaktive Rolle</button>
 

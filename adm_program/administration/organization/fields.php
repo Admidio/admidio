@@ -250,7 +250,7 @@ echo '
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                     if($row['usf_system'] == 1)
                     {
-                        echo '&nbsp;<span class="iconLink"><img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" /></span>';
+                        echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
                     }
                     else
                     {

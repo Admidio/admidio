@@ -142,9 +142,9 @@ echo '
         </table>
 
         <div class="formSubmit">
-            <button name="back" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
+            <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="import" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="Weiter" />&nbsp;Importieren</button>
+            <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="Weiter" />&nbsp;Importieren</button>
         </div>
     </div>
 </div>

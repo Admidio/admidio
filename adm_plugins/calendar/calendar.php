@@ -458,7 +458,7 @@ while($i<=$insgesamt)
         echo "$i";
     }
     echo "</td>\n";
-    if($rest == 0)
+    if($rest == 0 || $i == $insgesamt)
     {
         echo "</tr>\n";
 		$boolNewStart = true;

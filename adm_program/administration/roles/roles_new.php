@@ -816,7 +816,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button name="speichern" type="submit" value="speichern" onclick="absenden()">
+            <button id="btnSave" type="submit" onclick="absenden()">
                 <img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />
                 &nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>

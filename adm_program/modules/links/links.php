@@ -253,9 +253,9 @@ else
             {
                 echo '
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $_GET['headline']. '"><img
-                	src="'. THEME_PATH. '/icons/edit.png" alt="Bearbeiten" title="Bearbeiten" /></a>
+                	src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
                 <a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$weblink->getValue('lnk_id').'\', \''.$weblink->getValue('lnk_id').'\',\''.$weblink->getValue('lnk_name').'\')">
-                   <img	src="'. THEME_PATH. '/icons/delete.png" alt="Löschen" title="Löschen" /></a>';
+                   <img	src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
             }
 
             // Beschreibung ausgeben, falls vorhanden

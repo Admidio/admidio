@@ -144,7 +144,7 @@ else
                     </li>';
                 }
                 echo'<hr />                                 
-                <button name="abschicken" type="submit" value="'.$g_l10n->get('SYS_SEND').'"><img src="'. THEME_PATH.'/icons/email.png" alt="'.$g_l10n->get('SYS_SEND').'" />&nbsp;'.$g_l10n->get('SYS_SEND_NEW_PW').'</button>
+                <button id="btnSend" type="submit"><img src="'. THEME_PATH.'/icons/email.png" alt="'.$g_l10n->get('SYS_SEND').'" />&nbsp;'.$g_l10n->get('SYS_SEND_NEW_PW').'</button>
                 </ul>
             </form>
             </div>

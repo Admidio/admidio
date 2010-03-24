@@ -234,7 +234,7 @@ if($job==NULL)
             <hr />
 
             <div class="formSubmit">
-                <button name="upload" type="submit" value="speichern"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;Foto Hochladen</button>
+                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;Foto Hochladen</button>
             </div>
         </div>
     </div>
@@ -316,11 +316,11 @@ elseif($job=='upload')
             <hr />
             
             <div class="formSubmit">
-                <button name="cancel" type="button" value="abbrechen" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$req_usr_id.'\'">
+                <button id="btnCancel" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$req_usr_id.'\'">
                     <img src="'.THEME_PATH.'/icons/error.png" alt="Abbrechen" />
                     &nbsp;Abbrechen
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button name="update" type="button" value="update" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$req_usr_id.'\'">
+                <button id="btnUpdate" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$req_usr_id.'\'">
                     <img src="'.THEME_PATH.'/icons/database_in.png" alt="Update" />
                     &nbsp;Neues Foto übernehmen
                 </button>
