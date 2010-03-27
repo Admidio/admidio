@@ -56,7 +56,7 @@ $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "BIRTHDAY" WHERE usf_
 $result_orga = $g_db->query($sql);
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "EMAIL" WHERE usf_name = "E-Mail" ';
 $result_orga = $g_db->query($sql);
-$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "HOMEPAGE" WHERE usf_name = "Homepage" ';
+$sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "WEBSITE", usf_name = "Webseite" WHERE usf_name = "Homepage" ';
 $result_orga = $g_db->query($sql);
 
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = "AOL_INSTANT_MESSENGER" WHERE usf_name = "AIM" ';

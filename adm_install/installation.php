@@ -511,7 +511,7 @@ elseif($req_mode == 8)
                                             , ('.$cat_id_stammdaten.', "DATE", "BIRTHDAY",  "'.$g_l10n->get('INS_BIRTHDAY').'", NULL, 1, 0, 0, 10, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "NUMERIC", "GENDER", "'.$g_l10n->get('INS_GENDER').'", NULL, 1, 0, 0, 11, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "EMAIL", "EMAIL",    "'.$g_l10n->get('SYS_EMAIL').'", NULL, 1, 0, 1, 12, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "URL",  "HOMEPAGE",  "'.$g_l10n->get('SYS_HOMEPAGE').'", NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
+                                            , ('.$cat_id_stammdaten.', "URL",  "WEBSITE",   "'.$g_l10n->get('SYS_WEBSITE').'", NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);
     $usf_id_homepage = $db->insert_id();
 

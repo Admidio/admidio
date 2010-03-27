@@ -295,10 +295,10 @@ class User extends TableUsers
         {
             $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue('ADDRESS')). ";" . utf8_decode($this->getValue('CITY')). ";;" . utf8_decode($this->getValue('POSTCODE')). ";" . utf8_decode($this->getValue('COUNTRY')). "\r\n";
         }
-        if (strlen($this->getValue('HOMEPAGE')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['HOMEPAGE']->getValue('usf_hidden') == 0)))
+        if (strlen($this->getValue('WEBSITE')) > 0
+        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['WEBSITE']->getValue('usf_hidden') == 0)))
         {
-            $vcard .= (string) "URL;HOME:" . $this->getValue('HOMEPAGE'). "\r\n";
+            $vcard .= (string) "URL;HOME:" . $this->getValue('WEBSITE'). "\r\n";
         }
         if (strlen($this->getValue('BIRTHDAY')) > 0
         && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['BIRTHDAY']->getValue('usf_hidden') == 0)))

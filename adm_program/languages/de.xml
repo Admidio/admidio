@@ -260,13 +260,17 @@
 
     <!-- Phrases only in Organizationadministration -->
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="todo">Zugriff auf Modul</text>
+    <text id="ORG_ADMIDIO_THEME" development="new" translation="todo">Admidio-Theme</text>
     <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
     <text id="ORG_DATATYPE" development="new" translation="todo">Datentyp</text>
+    <text id="ORG_DATE_FORMAT" development="new" translation="todo">Datumsformat</text>
     <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="todo">Profilfeld bearbeiten</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="todo">Anzahl Einträge pro Seite</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="todo">Nur für angemeldete Benutzer</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
     <text id="ORG_PHR_ACCES_TO_MODULE_DESC" development="new" translation="todo">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</text>
+    <text id="ORG_PHR_ADMIDIO_THEME" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
+    <text id="ORG_PHR_DATE_FORMAT" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: d.m.Y)</text>
     <text id="ORG_PHR_FIELD_DESCRIPTION" development="new" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
     <text id="ORG_PHR_FIELD_DISABLED" development="new" translation="todo">Feld nur für Benutzer mit dem Recht "Alle Benutzer bearbeiten" editierbar</text>
     <text id="ORG_PHR_FIELD_DISABLED_DESC" development="new" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
@@ -281,12 +285,29 @@
     <text id="ORG_PHR_FIELD_NOT_HIDDEN" development="new" translation="todo">Feld für alle Benutzer sichtbar</text>
     <text id="ORG_PHR_FIELD_NOT_MANDATORY" development="new" translation="todo">Feld muss nicht zwingend ausgefüllt werden</text>
     <text id="ORG_PHR_FIELD_UP" development="new" translation="todo">Profilfeld nach oben verschieben</text>
+    <text id="ORG_PHR_HOMEPAGE_REGISTERED_USERS" development="new" translation="todo">Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
+    <text id="ORG_PHR_HOMEPAGE_VISITORS" development="new" translation="todo">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
     <text id="ORG_PHR_NO_FIELD_CREATED" development="new" translation="todo">Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</text>
     <text id="ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
+    <text id="ORG_PHR_TIME_FORMAT" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>
     <text id="ORG_PROFILE_FIELDS" development="new" translation="todo">Profilfelder</text>
+    <text id="ORG_REGISTERED_USERS" development="new" translation="todo">Angemeldete Benutzer</text>
     <text id="ORG_SYSTEM_INFOS" development="new" translation="todo">Systeminfos</text>
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
+    <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
+    <text id="ORG_PARENT_ORGANIZATION" development="new" translation="todo">Übergeordnete Organisation</text>
+    <text id="ORG_PHR_PARENT_ORGANIZATION" development="new" translation="todo">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</text>
+    <text id="ORG_ALLOW_BBCODE" development="new" translation="todo">BBCode zulassen</text>
+    <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="todo">RSS-Feeds aktivieren</text>
+    <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="todo">Automatisch anmelden</text>
+    <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
+    <text id="ORG_SEND_PASSWORD" development="new" translation="todo">Passwort zusenden</text>
+    <text id="ORG_PHR_ALLOW_BBCODE" development="new" translation="todo">Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) %VAR1% nutzen um den Text besser zu formatieren. (Standard: ja)</text>
+    <text id="ORG_PHR_ENABLE_RSS_FEEDS" development="new" translation="todo">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</text>
+    <text id="ORG_PHR_LOGIN_AUTOMATICALLY" development="new" translation="todo">Benutzer können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll. Bei einem weiteren Besuch der Homepage sind diese Benutzer dann automatisch angemeldet. Dies kann allerdings auch dazu führen, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde Personen Zugriff auf die Daten bekommen. (Standard: ja)</text>
+    <text id="ORG_PHR_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>
+    <text id="ORG_PHR_SEND_PASSWORD" development="new" translation="todo">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</text>
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
@@ -405,7 +426,7 @@
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>
     <text id="SYS_HELP" development="new" translation="todo">Hilfe</text>
     <text id="SYS_HIDE" development="new" translation="todo">Ausblenden</text>
-    <text id="SYS_HOMEPAGE" development="new" translation="todo">Homepage</text>
+    <text id="SYS_HOMEPAGE" development="new" translation="todo">Startseite</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
     <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad erhöhen</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
@@ -529,8 +550,10 @@
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
     <text id="SYS_VISIBLE" development="new" translation="todo">Sichtbar</text>
+    <text id="SYS_VISITORS" development="new" translation="todo">Besucher</text>
     <text id="SYS_WARNING" development="new" translation="todo">Warnung</text>
     <text id="SYS_WEBMASTER" development="new" translation="todo">Webmaster</text>
+    <text id="SYS_WEBSITE" development="new" translation="todo">Webseite</text>
     <text id="SYS_YES" development="new" translation="todo">Ja</text>
 </version>
 </language>

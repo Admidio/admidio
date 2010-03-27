@@ -117,7 +117,7 @@ if($req_members)
                   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as homepage
                    ON homepage.usd_usr_id = usr_id
-                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('HOMEPAGE', 'usf_id'). '
+                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
                 WHERE usr_valid = 1
                   AND mem_usr_id = usr_id
                   AND mem_rol_id = rol_id
@@ -157,7 +157,7 @@ else
                   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
                  LEFT JOIN '. TBL_USER_DATA. ' as homepage
                    ON homepage.usd_usr_id = usr_id
-                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('HOMEPAGE', 'usf_id'). '
+                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
                 WHERE usr_valid = 1
                       '.$search_condition.'
                 GROUP BY usr_id
