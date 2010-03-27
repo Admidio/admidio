@@ -85,10 +85,10 @@
     <text id="INS_CONFERENCE_ROOM" development="edited" translation="todo">Conference room</text>
     <text id="INS_CONTACT_DETAILS" development="edited" translation="todo">Contact details</text>
     <text id="INS_COURSES" development="edited" translation="todo">Courses</text>
-    <text id="INS_CREATE_ADMINISTRATOR" development="edited" translation="todo">creating administrator</text>
-    <text id="INS_CREATE_CONFIGURATION_FILE" development="edited" translation="todo">creating configuration file</text>
+    <text id="INS_CREATE_ADMINISTRATOR" development="edited" translation="todo">Creating administrator</text>
+    <text id="INS_CREATE_CONFIGURATION_FILE" development="edited" translation="todo">Creating configuration file</text>
     <text id="INS_DATA_OF_ADMINISTRATOR" development="edited" translation="todo">Administrator's details</text>
-    <text id="INS_DATABASE_LOGIN" development="edited" translation="todo">entering database information</text>
+    <text id="INS_DATABASE_LOGIN" development="edited" translation="todo">Entering database information</text>
     <text id="INS_DATABASE_IS_UPDATED" development="edited" translation="todo">Updating database</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="edited" translation="todo">Creating database</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="edited" translation="todo">Enter database access information</text>
@@ -129,7 +129,7 @@
     <text id="INS_PHR_DESCRIPTION_CONFERENCE_ROOM" development="edited" translation="todo">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
     <text id="INS_PHR_DESCRIPTION_MEMBER" development="edited" translation="todo">All organisation members</text>
     <text id="INS_PHR_DESCRIPTION_WEBMASTER" development="edited" translation="todo">Group of system administrators</text>
-    <text id="INS_PHR_DOWNLOAD" development="edited" translation="todo">downloading %VAR1%</text>
+    <text id="INS_PHR_DOWNLOAD" development="edited" translation="todo">Downloading %VAR1%</text>
     <text id="INS_PHR_DOWNLOAD_CONFIGURATION_FILE" development="edited" translation="todo">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
     <text id="INS_PHR_ERROR_OPEN_FILE" development="edited" translation="todo">File %VAR1_BOLD% could not be opened.</text>
     <text id="INS_PHR_FOLDER_NOT_WRITABLE" development="edited" translation="todo">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download modul.</text>
@@ -160,7 +160,7 @@
     <text id="INS_POSTCODE" development="edited" translation="todo">Postal ode</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="edited" translation="todo">Previous Admidio version</text>
     <text id="INS_SET_ADMINISTRATOR" development="edited" translation="todo">Set administrator</text>
-    <text id="INS_SET_ORGANIZATION" development="edited" translation="todo">creating organisation</text>
+    <text id="INS_SET_ORGANIZATION" development="edited" translation="todo">Creating organisation</text>
     <text id="INS_SET_UP_ORGANIZATION" development="edited" translation="todo">Configure organisation</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="edited" translation="todo">Configuration successful</text>
     <text id="INS_SKYPE" development="new1" translation="todo">Skype</text>

@@ -453,9 +453,10 @@ elseif($req_mode == 8)
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
-     // Verbindung zu Datenbank herstellen
+    // Verbindung zu Datenbank herstellen
+    require_once(SERVER_PATH. '/config.php');
     $db = new MySqlDB();
-    $connection = $db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']);
+    $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
@@ -476,6 +477,15 @@ elseif($req_mode == 8)
 
     // Default-Daten anlegen
 
+    // User Webmaster schon mal in der User-Tabelle anlegen, damit die Id genutzt werden kann
+    // weitere Daten folgen erst weiter unten, wenn die Profilfelder angelegt sind
+    $g_current_user = new TableUsers($db);
+    $g_current_user->setValue('usr_login_name', $_SESSION['user_login']);
+    $g_current_user->setValue('usr_password',   $_SESSION['user_password']);
+    $g_current_user->setValue('usr_timestamp_create', DATETIME_NOW);
+    $g_current_user->save(false); // kein angemeldeter User -> ErstelltVon kann nicht gefuellt werden
+
+
     // Orga-Uebergreifende Kategorien anlegen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
                                       VALUES (NULL, "USF", "'.$g_l10n->get('INS_MASTER_DATA').'", 0, 1, 1) ';
@@ -489,30 +499,30 @@ elseif($req_mode == 8)
 
     // Stammdatenfelder anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_stammdaten.', "TEXT", "LAST_NAME",    '.$g_l10n->get('INS_LAST_NAME').', NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "FIRST_NAME", '.$g_l10n->get('INS_FIRST_NAME').', NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "ADDRESS",    '.$g_l10n->get('INS_ADDRESS').', NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "POSTCODE",   '.$g_l10n->get('INS_POSTCODE').', NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "CITY",       '.$g_l10n->get('INS_CITY').', NULL, 1, 0, 0, 5, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "COUNTRY",    '.$g_l10n->get('SYS_COUNTRY').', NULL, 1, 0, 0, 6, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "PHONE",      '.$g_l10n->get('INS_PHONE').', NULL, 0, 0, 0, 7, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "MOBILE",     '.$g_l10n->get('INS_MOBILE').', NULL, 0, 0, 0, 8, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "FAX",        '.$g_l10n->get('INS_FAX').', NULL, 0, 0, 0, 9, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "DATE", "BIRTHDAY",   '.$g_l10n->get('INS_BIRTHDAY').', NULL, 1, 0, 0, 10, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "NUMERIC", "GENDER",  '.$g_l10n->get('INS_GENDER').', NULL, 1, 0, 0, 11, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "EMAIL", "EMAIL",     '.$g_l10n->get('SYS_EMAIL').', NULL, 1, 0, 1, 12, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "URL",  "HOMEPAGE",   '.$g_l10n->get('SYS_HOMEPAGE').', NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
+                                       VALUES ('.$cat_id_stammdaten.', "TEXT", "LAST_NAME", "'.$g_l10n->get('INS_LAST_NAME').'", NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "FIRST_NAME","'.$g_l10n->get('INS_FIRST_NAME').'", NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "ADDRESS",   "'.$g_l10n->get('INS_ADDRESS').'", NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "POSTCODE",  "'.$g_l10n->get('INS_POSTCODE').'", NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "CITY",      "'.$g_l10n->get('INS_CITY').'", NULL, 1, 0, 0, 5, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "COUNTRY",   "'.$g_l10n->get('SYS_COUNTRY').'", NULL, 1, 0, 0, 6, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "PHONE",     "'.$g_l10n->get('INS_PHONE').'", NULL, 0, 0, 0, 7, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "MOBILE",    "'.$g_l10n->get('INS_MOBILE').'", NULL, 0, 0, 0, 8, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "FAX",       "'.$g_l10n->get('INS_FAX').'", NULL, 0, 0, 0, 9, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "DATE", "BIRTHDAY",  "'.$g_l10n->get('INS_BIRTHDAY').'", NULL, 1, 0, 0, 10, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "NUMERIC", "GENDER", "'.$g_l10n->get('INS_GENDER').'", NULL, 1, 0, 0, 11, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "EMAIL", "EMAIL",    "'.$g_l10n->get('SYS_EMAIL').'", NULL, 1, 0, 1, 12, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "URL",  "HOMEPAGE",  "'.$g_l10n->get('SYS_HOMEPAGE').'", NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);
     $usf_id_homepage = $db->insert_id();
 
     // Messenger anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_messenger.', "TEXT", "AOL_INSTANT_MESSENGER", '.$g_l10n->get('INS_AOL_INSTANT_MESSENGER').', NULL, 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_messenger.', "TEXT", "GOOGLE_TALK",     '.$g_l10n->get('INS_GOOGLE_TALK').', NULL, 0, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_messenger.', "TEXT", "ICQ",             '.$g_l10n->get('INS_ICQ').', NULL, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_messenger.', "TEXT", "MSN_MESSENGER",   '.$g_l10n->get('INS_MSN_MESSENGER').', NULL, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_messenger.', "TEXT", "SKYPE",           '.$g_l10n->get('INS_SKYPE').', NULL, 0, 5, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_messenger.', "TEXT", "YAHOO_MESSENGER", '.$g_l10n->get('INS_YAHOO_MESSENGER').', NULL, 0, 6, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
+                                       VALUES ('.$cat_id_messenger.', "TEXT", "AOL_INSTANT_MESSENGER", "'.$g_l10n->get('INS_AOL_INSTANT_MESSENGER').'", NULL, 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_messenger.', "TEXT", "GOOGLE_TALK",    "'.$g_l10n->get('INS_GOOGLE_TALK').'", NULL, 0, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_messenger.', "TEXT", "ICQ",            "'.$g_l10n->get('INS_ICQ').'", NULL, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_messenger.', "TEXT", "MSN_MESSENGER",  "'.$g_l10n->get('INS_MSN_MESSENGER').'", NULL, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_messenger.', "TEXT", "SKYPE",          "'.$g_l10n->get('INS_SKYPE').'", NULL, 0, 5, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_messenger.', "TEXT", "YAHOO_MESSENGER","'.$g_l10n->get('INS_YAHOO_MESSENGER').'", NULL, 0, 6, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);
 
     // Organisationsobjekt erstellen
@@ -581,14 +591,12 @@ elseif($req_mode == 8)
     $db->query($sql);
 
     // User Webmaster anlegen
-    $g_current_user = new User($db);
+    $g_current_user = new User($db, $g_current_user->getValue('usr_id'));
     $g_current_user->setValue('LAST_NAME', $_SESSION['user_last_name']);
     $g_current_user->setValue('FIRST_NAME', $_SESSION['user_first_name']);
     $g_current_user->setValue('EMAIL', $_SESSION['user_email']);
-    $g_current_user->setValue('usr_login_name', $_SESSION['user_login']);
-    $g_current_user->setValue('usr_password', $_SESSION['user_password']);
-    $g_current_user->setValue('usr_timestamp_create', DATETIME_NOW);
-    $g_current_user->save(false); // kein angemeldeter User -> ErstelltVon kann nicht gefuellt werden
+    $g_current_user->setValue('usr_usr_id_create', $g_current_user->getValue('usr_id'));
+    $g_current_user->save(false); // Ersteller wird selber gesetzt, da User bereits angelegt worden ist
 
     //Defaultraum fuer Raummodul in der DB anlegen:
     $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
