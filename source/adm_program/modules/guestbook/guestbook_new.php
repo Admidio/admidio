@@ -107,7 +107,7 @@ if ($_GET['id'] == 0 && $g_valid_login)
 {
     $guestbook->setValue('gbo_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $g_current_user->getValue('EMAIL'));
-    $guestbook->setValue('gbo_homepage', $g_current_user->getValue('HOMEPAGE'));
+    $guestbook->setValue('gbo_homepage', $g_current_user->getValue('WEBSITE'));
 }
 
 if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)

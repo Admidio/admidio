@@ -212,7 +212,7 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="org_homepage">'.$g_l10n->get('SYS_HOMEPAGE').':</label></dt>
+                            <dt><label for="org_homepage">'.$g_l10n->get('SYS_WEBSITE').':</label></dt>
                             <dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
                         </dl>
                     </li>
@@ -237,7 +237,7 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="theme">Admidio-Theme:</label></dt>
+                            <dt><label for="theme">'.$g_l10n->get('ORG_ADMIDIO_THEME').':</label></dt>
                             <dd>
                                 <select size="1" id="theme" name="theme">
                                     <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
@@ -261,50 +261,35 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts
-                        aus dem Ordner adm_themes angezeigt. (Standard: modern)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ADMIDIO_THEME').'</li>
                     <li>
                         <dl>
-                            <dt><label for="system_date">Datumformat:</label></dt>
+                            <dt><label for="system_date">'.$g_l10n->get('ORG_DATE_FORMAT').':</label></dt>
                             <dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Das Format entspricht der PHP-Funktion <a href="http://www.php.net/date">date()</a>. (Standard: d.m.Y)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_DATE_FORMAT', '<a href="http://www.php.net/date">date()</a>').'</li>
                     <li>
                         <dl>
-                            <dt><label for="system_time">Zeitformat:</label></dt>
+                            <dt><label for="system_time">'.$g_l10n->get('ORG_TIME_FORMAT').':</label></dt>
                             <dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Das Format entspricht der PHP-Funktion <a href="http://www.php.net/date">date()</a>. (Standard: H:i)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_TIME_FORMAT', '<a href="http://www.php.net/date">date()</a>').'</li>
                     <li>
                         <dl>
-                            <dt><label for="homepage_logout">Startseite (Besucher):</label></dt>
+                            <dt><label for="homepage_logout">'.$g_l10n->get('SYS_HOMEPAGE').' ('.$g_l10n->get('SYS_VISITORS').'):</label></dt>
                             <dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden.
-                        Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
-                        (Beispiel: adm_program/index.php)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_HOMEPAGE_VISITORS').'</li>
                     <li>
                         <dl>
-                            <dt><label for="homepage_login">Startseite (angemeldete Benutzer):</label></dt>
+                            <dt><label for="homepage_login">'.$g_l10n->get('SYS_HOMEPAGE').' ('.$g_l10n->get('ORG_REGISTERED_USERS').'):</label></dt>
                             <dd><input type="text" id="homepage_login" name="homepage_login" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_login']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat.
-                        Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.<br />
-                        (Beispiel: adm_program/index.php)
-                    </li>';
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_HOMEPAGE_REGISTERED_USERS').'</li>';
 
                     //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                     if($g_current_organization->hasChildOrganizations() == false)
@@ -318,129 +303,105 @@ echo '
                         if($g_db->num_rows($result) > 0)
                         {
                             // Auswahlfeld fuer die uebergeordnete Organisation
-                            echo "
+                            echo '
                             <li>
                                 <dl>
-                                    <dt><label for=\"org_org_id_parent\">&Uuml;bergeordnete Organisation:</label></dt>
+                                    <dt><label for="org_org_id_parent">'.$g_l10n->get('ORG_PARENT_ORGANIZATION').':</label></dt>
                                     <dd>
-                                        <select size=\"1\" id=\"org_org_id_parent\" name=\"org_org_id_parent\">
-                                            <option value=\"0\" ";
+                                        <select size="1" id="org_org_id_parent" name="org_org_id_parent">
+                                            <option value="0" ';
                                             if(strlen($form_values['org_org_id_parent']) == 0)
                                             {
-                                                echo " selected=\"selected\" ";
+                                                echo ' selected="selected" ';
                                             }
-                                            echo ">keine</option>";
+                                            echo '>keine</option>';
 
                                             while($row = $g_db->fetch_object($result))
                                             {
-                                                echo "<option value=\"$row->org_id\"";
+                                                echo '<option value="'.$row->org_id.'" ';
                                                     if($form_values['org_org_id_parent'] == $row->org_id)
                                                     {
-                                                        echo " selected=\"selected\" ";
+                                                        echo ' selected="selected" ';
                                                     }
-                                                    echo ">$row->org_shortname</option>";
+                                                    echo '>'.$row->org_shortname.'</option>';
                                             }
-                                        echo "</select>
+                                        echo '</select>
                                     </dd>
                                 </dl>
                             </li>
-                            <li class=\"smallFontSize\">
-                                Hier kannst du die übergeordnete Organisation festlegen.
-                                Diese haben dann die Berechtigung Termine für die untergeordneten Organisationen anzulegen.
-                            </li>";
+                            <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_PARENT_ORGANIZATION').'</li>';
                         }
                     }
 
-                    echo "
+                    echo '
                     <li>
                         <dl>
-                            <dt><label for=\"enable_bbcode\">BBCode zulassen:</label></dt>
+                            <dt><label for="enable_bbcode">'.$g_l10n->get('ORG_ALLOW_BBCODE').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_bbcode\" name=\"enable_bbcode\" ";
+                                <input type="checkbox" id="enable_bbcode" name="enable_bbcode" ';
                                 if(isset($form_values['enable_bbcode']) && $form_values['enable_bbcode'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) BB-Code nutzen um den
-                        Text besser zu formatieren. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ALLOW_BBCODE', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_rss\">RSS-Feeds aktivieren:</label></dt>
+                            <dt><label for="enable_rss">'.$g_l10n->get('ORG_ENABLE_RSS_FEEDS').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_rss\" name=\"enable_rss\" ";
+                                <input type="checkbox" id="enable_rss" name="enable_rss" ';
                                 if(isset($form_values['enable_rss']) && $form_values['enable_rss'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen,
-                        Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen &Uuml;bersichtsseiten
-                        bereitstellen, die dann über den Browser einem Feedreader zugeordnet
-                        werden k&ouml;nnen. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ENABLE_RSS_FEEDS').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_auto_login\">Automatisch anmelden:</label></dt>
+                            <dt><label for="enable_auto_login">'.$g_l10n->get('ORG_LOGIN_AUTOMATICALLY').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_auto_login\" name=\"enable_auto_login\" ";
+                                <input type="checkbox" id="enable_auto_login" name="enable_auto_login" ';
                                 if(isset($form_values['enable_auto_login']) && $form_values['enable_auto_login'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Benutzer können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll.
-                        Bei einem weiteren Besuch der Homepage sind diese Benutzer dann automatisch angemeldet. Dies kann
-                        allerdings auch dazu führen, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde
-                        Personen Zugriff auf die Daten bekommen. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_LOGIN_AUTOMATICALLY').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"logout_minutes\">Automatischer Logout nach:</label></dt>
-                            <dd><input type=\"text\" id=\"logout_minutes\" name=\"logout_minutes\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['logout_minutes']. "\" /> Minuten</dd>
+                            <dt><label for="logout_minutes">'.$g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER').':</label></dt>
+                            <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> Minuten</dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird.
-                        Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung
-                        wird ignoriert, falls der Benutzer <b>Angemeldet bleiben</b> ausgewählt hat. (Standard: 20 Minuten)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_AUTOMATOC_LOGOUT_AFTER', $g_l10n->get('SYS_REMEMBER_ME')).'</li>
 
                      <li>
                         <dl>
-                            <dt><label for=\"enable_password_recovery\">Passwort zusenden:</label>
+                            <dt><label for="enable_password_recovery">'.$g_l10n->get('ORG_SEND_PASSWORD').':</label>
                             </dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_password_recovery\" name=\"enable_password_recovery\" ";
+                                <input type="checkbox" id="enable_password_recovery" name="enable_password_recovery" ';
                                 if(isset($form_values['enable_password_recovery']) && $form_values['enable_password_recovery'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch
-                        zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den
-                        Administrator stellen. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SEND_PASSWORD').'</li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
 
