@@ -37,6 +37,19 @@ class TableUserField extends TableAccess
                    AND usf_sequence > '. $this->getValue('usf_sequence');
         $this->db->query($sql);
 
+        // Feldreihenfolge bei gespeicherten Listen anpassen
+        $sql = 'SELECT lsc_lst_id, lsc_number FROM '. TBL_LIST_COLUMNS. ' 
+                 WHERE lsc_usf_id = '.$this->getValue('usf_id');
+        $result_lst = $this->db->query($sql);
+        
+        while($row_lst = $this->db->fetch_array($result_lst))
+        {
+            $sql = 'UPDATE '. TBL_LIST_COLUMNS. ' SET lsc_number = lsc_number - 1 
+                     WHERE lsc_lst_id = '. $row_lst['lsc_lst_id']. '
+                       AND lsc_number > '. $row_lst['lsc_number'];
+            $this->db->query($sql);
+        }
+
         // Abhaenigigkeiten loeschen
         $sql    = 'DELETE FROM '. TBL_USER_DATA. '
                     WHERE usd_usf_id = '. $this->getValue('usf_id');
