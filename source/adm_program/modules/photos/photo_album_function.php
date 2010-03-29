@@ -278,8 +278,8 @@ if(isset($_POST['submit']) && $_POST['submit'])
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">Weiter&nbsp;</a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="Weiter" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">'.$g_l10n->get('SYS_NEXT').'&nbsp;</a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>
             </span>
         </li>
     </ul>';

@@ -91,41 +91,41 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 // importiertes Feld merken
                 if(!isset($imported_fields[$field->getValue('usf_id')]))
                 {
-                    $imported_fields[$field->getValue('usf_id')] = $field->getValue('usf_name');
+                    $imported_fields[$field->getValue('usf_id')] = $field->getValue('usf_name_intern');
                 }
 
                 if($field->getValue('usf_name_intern') == 'GENDER')
                 {
                     if($col_value_to_lower == 'm'
-                    || $col_value_to_lower == 'männlich'
+                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_MALE'))
                     || $col_value_to_lower == '1')
                     {
-                        $user->setValue($field->getValue('usf_name'), '1');
+                        $user->setValue($field->getValue('usf_name_intern'), '1');
                     }
                     if($col_value_to_lower == 'w'
-                    || $col_value_to_lower == 'weiblich'
+                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_FEMALE'))
                     || $col_value_to_lower == '2')
                     {
-                        $user->setValue($field->getValue('usf_name'), '2');
+                        $user->setValue($field->getValue('usf_name_intern'), '2');
                     }
                 }
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
                     if($col_value_to_lower == 'j'
-                    || $col_value_to_lower == 'ja'
+                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_YES'))
                     || $col_value_to_lower == 'y'
                     || $col_value_to_lower == 'yes'
                     || $col_value_to_lower == '1')
                     {
-                        $user->setValue($field->getValue('usf_name'), '1');
+                        $user->setValue($field->getValue('usf_name_intern'), '1');
                     }
                     if($col_value_to_lower == 'n'
-                    || $col_value_to_lower == 'nein'
+                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_NO'))
                     || $col_value_to_lower == 'no'
                     || $col_value_to_lower  == '0'
                     || strlen($col_value) == 0)
                     {
-                        $user->setValue($field->getValue('usf_name'), '0');
+                        $user->setValue($field->getValue('usf_name_intern'), '0');
                     }
                 }
                 elseif($field->getValue('usf_type') == 'DATE')
@@ -135,7 +135,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                         $date = new DateTimeExtended($col_value, $g_preferences['system_date'], 'date');
                         if($date->valid())
                         {
-                            $user->setValue($field->getValue('usf_name'), $date->format('Y-m-d'));
+                            $user->setValue($field->getValue('usf_name_intern'), $date->format('Y-m-d'));
                         }
                     }
                 }
@@ -143,7 +143,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 {
                     if(isValidEmailAddress($col_value))
                     {
-                        $user->setValue($field->getValue('usf_name'), substr($col_value, 0, 50));
+                        $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 50));
                     }
                 }
                 elseif($field->getValue('usf_type') == 'INTEGER')
@@ -151,16 +151,16 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     // Zahl darf Punkt und Komma enthalten
                     if(is_numeric(strtr($col_value, ',.', '00')) == true)
                     {
-                        $user->setValue($field->getValue('usf_name'), $col_value);
+                        $user->setValue($field->getValue('usf_name_intern'), $col_value);
                     }
                 }
                 elseif($field->getValue('usf_type') == 'TEXT_BIG')
                 {
-                    $user->setValue($field->getValue('usf_name'), substr($col_value, 0, 255));
+                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
                 }
                 else
                 {
-                    $user->setValue($field->getValue('usf_name'), substr($col_value, 0, 50));
+                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 50));
                 }
             }
         }
@@ -200,11 +200,11 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
             || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
                 // Daten des Nutzers werden angepasst
-                foreach($imported_fields as $key => $field_name)
+                foreach($imported_fields as $key => $field_name_intern)
                 {
-                    if($duplicate_user->getValue($field_name) != $user->getValue($field_name))
+                    if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
                     {
-                        $duplicate_user->setValue($field_name, $user->getValue($field_name));
+                        $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern));
                     }
                 }
                 $user = $duplicate_user;

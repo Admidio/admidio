@@ -32,7 +32,7 @@ if(!$g_current_user->editUsers())
 
 if(strlen($_FILES['userfile']['tmp_name']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datei'));
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
 }
 else if($_FILES['userfile']['error'] == 1)
 {
@@ -41,7 +41,7 @@ else if($_FILES['userfile']['error'] == 1)
 }
 else if($_POST['rol_id'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Rolle'));
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_ROLE')));
 }
 
 // Rolle einlesen und pruefen, ob der User diese selektieren kann und dadurch nicht
@@ -58,15 +58,17 @@ $_SESSION['rol_id']           = $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $_POST['user_import_mode'];
 $_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name']);
 
-// Daten der Datei erst einmal in UTF8 konvertieren, damit es damit spaeter keine Probleme gibt
-foreach($_SESSION['file_lines'] as $key => $value)
+if($_POST['coding'] == 'ansi')
 {
-    $_SESSION['file_lines'][$key] = utf8_encode($value);
+    // Daten der Datei erst einmal in UTF8 konvertieren, damit es damit spaeter keine Probleme gibt
+    foreach($_SESSION['file_lines'] as $key => $value)
+    {
+        $_SESSION['file_lines'][$key] = utf8_encode($value);
+    }
 }
-
+    
 // CSV-Import (im Moment gibt es nur diesen, spaeter muss hier dann unterschieden werden)
-$location = 'Location: '.$g_root_path.'/adm_program/administration/members/import_csv_config.php';
-header($location);
+header('Location: '.$g_root_path.'/adm_program/administration/members/import_csv_config.php');
 exit();
 
 ?>
