@@ -242,6 +242,21 @@
     <text id="MAI_PHR_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="todo">die Rolle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
+    <text id="MEM_ANSI" development="new" translation="todo">ANSI</text>
+    <text id="MEM_ASSIGN_FIELDS" development="new" translation="todo">Felder zuordnen</text>
+    <text id="MEM_ASSIGN_ROLE" development="new" translation="todo">Rolle zuordnen</text>
+    <text id="MEM_CODING" development="new" translation="todo">Kodierung</text>
+    <text id="MEM_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
+    <text id="MEM_COMPLEMENT" development="new" translation="todo">Ergänzen</text>
+    <text id="MEM_DUPLICATE" development="new" translation="todo">Duplizieren</text>
+    <text id="MEM_EXISTING_USERS" development="new" translation="todo">Existierende Benutzer</text>
+    <text id="MEM_FILE_COLUMN" development="new" translation="todo">Dateispalte</text>
+    <text id="MEM_FORMAT" development="new" translation="todo">Format</text>
+    <text id="MEM_IMPORT" development="new" translation="todo">Importieren</text>
+    <text id="MEM_IMPORT_USERS" development="new" translation="todo">Benutzer importieren</text>
+    <text id="MEM_NOT_EDIT" development="new" translation="todo">Nicht bearbeiten</text>
+    <text id="MEM_PHR_ASSIGN_FIELDS" development="new" translation="todo">Ordne den Datenbankfeldern, wenn möglich eine Spalte aus der Datei zu.\n\nAuf der linken Seite stehen alle möglichen Datenbankfelder und auf der rechten Seite sind jeweils alle Spalten aus der ausgewählten Datei aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, können diese Felder einfach leer gelassen werden.</text>
+    <text id="MEM_PHR_FIRST_LINE_COLUMN_NAME" development="new" translation="todo">Erste Zeile beinhaltet die Spaltenbezeichnungen</text>
     <text id="MEM_PHR_IDENTIFY_USERS" development="new" translation="todo">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</text>
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" development="new" translation="todo">%VAR1% Datensätze wurden erfolgreich importiert!</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP" development="new" translation="todo">Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?</text>
@@ -250,6 +265,9 @@
     <text id="MEM_PHR_USER_DELETE" development="new" translation="todo">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_PHR_SEND_NEW_LOGIN" development="new" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="MEM_PHR_ASSIGN_ROLE_FOR_IMPORT" development="new" translation="todo">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</text>
+    <text id="MEM_PROFILE_FIELD" development="new" translation="todo">Profilfeld</text>
+    <text id="MEM_REPLACE" development="new" translation="todo">Ersetzen</text>
+    <text id="MEM_UTF8" development="new" translation="todo">UTF-8</text>
 
     <!-- Phrases only in New-User-Registration -->
     <text id="NWU_REGISTRATION" development="new" translation="todo">Anmeldung</text>
@@ -417,7 +435,9 @@
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
+    <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
+    <text id="SYS_FILE" development="new" translation="todo">Datei</text>
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
     <text id="SYS_FONT_COLOR" development="new" translation="todo">Schriftfarbe</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
@@ -439,6 +459,7 @@
     <text id="SYS_LOGIN" development="new" translation="todo">Login</text>
     <text id="SYS_LOGIN_PROBLEMS" development="new" translation="todo">Loginprobleme</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
+    <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
@@ -526,6 +547,7 @@
     <text id="SYS_REGISTRATION" development="new" translation="todo">Registrierung</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
+    <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="todo">Neues Passwort zusenden</text>

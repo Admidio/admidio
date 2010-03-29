@@ -55,38 +55,32 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Benutzer importieren';
+$g_layout['title']  = $g_l10n->get('MEM_ASSIGN_FIELDS');
 $g_layout['header'] = '
-	<script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
             $("#first_row").focus();
-	 	}); 
-	//--></script>';
+        }); 
+    //--></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo '
 <form action="'. $g_root_path. '/adm_program/administration/members/import_csv.php" method="post">
 <div class="formLayout" id="import_csv_form">
-    <div class="formHead">Felder zuordnen</div>
-    <div class="formBody">
-        <p>Ordne den Datenbankfeldern, wenn möglich eine Spalte aus der Datei zu.</p>
-        <p>Auf der linken Seite stehen alle möglichen Datenbankfelder und auf der
-        rechten Seite sind jeweils alle Spalten aus der ausgew&auml;hlten Datei
-        aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, k&ouml;nnen
-        diese Felder einfach leer gelassen werden.</p>
-
+    <div class="formHead">'.$g_layout['title'].'</div>
+    <div class="formBody"><p>'.$g_l10n->get('MEM_PHR_ASSIGN_FIELDS').'</p>
         <p style="margin-bottom: 10px;">
             <input type="checkbox" id="first_row" name="first_row" style="vertical-align: middle;" checked="checked" value="1" />&nbsp;
-            <label for="first_row">Erste Zeile beinhaltet die Spaltenbezeichnungen</label>
+            <label for="first_row">'.$g_l10n->get('MEM_PHR_FIRST_LINE_COLUMN_NAME').'</label>
         </p>
 
         <table class="tableList" style="width: 80%;" cellspacing="0">
             <thead>
                 <tr>
-                    <th>Datenbankfeld</th>
-                    <th>Dateispalte</th>
+                    <th>'.$g_l10n->get('MEM_PROFILE_FIELD').'</th>
+                    <th>'.$g_l10n->get('MEM_FILE_COLUMN').'</th>
                 </tr>
             </thead>';
 
@@ -120,7 +114,7 @@ echo '
                 echo '<tr>
                     <td><label for="usf-'. $field->getValue('usf_id'). '">'. $field->getValue('usf_name'). ':</label></td>
                     <td>
-                        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 95%;">
+                        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">
                             <option value="" selected="selected"></option>';
 
                             // Alle Spalten aus der Datei in Combobox auflisten
@@ -144,7 +138,7 @@ echo '
         <div class="formSubmit">
             <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="Weiter" />&nbsp;Importieren</button>
+            <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('MEM_IMPORT').'" />&nbsp;'.$g_l10n->get('MEM_IMPORT').'</button>
         </div>
     </div>
 </div>

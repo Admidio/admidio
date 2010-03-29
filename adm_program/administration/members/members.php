@@ -17,8 +17,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
 if (!$g_current_user->editUsers())
@@ -103,8 +103,8 @@ else
 if($req_members)
 {
     $sql    = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
-                      email.usd_value as email, homepage.usd_value as homepage,
-                      usr_login_name, usr_timestamp_change, 1 member
+                      email.usd_value as email, website.usd_value as website,
+                      usr_login_name, IFNULL(usr_timestamp_change, usr_timestamp_create) as timestamp, 1 member
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
                  JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
@@ -115,9 +115,9 @@ if($req_members)
                  LEFT JOIN '. TBL_USER_DATA. ' as email
                    ON email.usd_usr_id = usr_id
                   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as homepage
-                   ON homepage.usd_usr_id = usr_id
-                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
+                 LEFT JOIN '. TBL_USER_DATA. ' as website
+                   ON website.usd_usr_id = usr_id
+                  AND website.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
                 WHERE usr_valid = 1
                   AND mem_usr_id = usr_id
                   AND mem_rol_id = rol_id
@@ -133,8 +133,8 @@ else
 {
     // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
     $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
-                      email.usd_value as email, homepage.usd_value as homepage,
-                      usr_login_name, usr_timestamp_change, count(cat_id) member
+                      email.usd_value as email, website.usd_value as website,
+                      usr_login_name, IFNULL(usr_timestamp_change, usr_timestamp_create) as timestamp, count(cat_id) member
                  FROM '. TBL_USERS. '
                  JOIN '. TBL_USER_DATA. ' as last_name
                    ON last_name.usd_usr_id = usr_id
@@ -155,9 +155,9 @@ else
                  LEFT JOIN '. TBL_USER_DATA. ' as email
                    ON email.usd_usr_id = usr_id
                   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as homepage
-                   ON homepage.usd_usr_id = usr_id
-                  AND homepage.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
+                 LEFT JOIN '. TBL_USER_DATA. ' as website
+                   ON website.usd_usr_id = usr_id
+                  AND website.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
                 WHERE usr_valid = 1
                       '.$search_condition.'
                 GROUP BY usr_id
@@ -187,8 +187,8 @@ $g_layout['header'] = '
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/text_tooltip.js"></script>
     <script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
+        $(document).ready(function() 
+        {
             var options = {
                         script:"'.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$req_members.'&",
                         varname:"query",
@@ -196,8 +196,8 @@ $g_layout['header'] = '
                         timeout:5000
             };
             var as = new AutoSuggest("queryForm", options);
-	 	}); 
-	//--></script>';
+        }); 
+    //--></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -216,8 +216,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/members/import.php"><img
-            src="'. THEME_PATH. '/icons/database_in.png" alt="Benutzer importieren" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/members/import.php">Benutzer importieren</a>
+            src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('MEM_IMPORT_USERS').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/members/import.php">'.$g_l10n->get('MEM_IMPORT_USERS').'</a>
         </span>
     </li>';
     if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
@@ -394,7 +394,7 @@ if($num_members > 0)
         {
             if($row = $g_db->fetch_array($result_mgl))
             {
-                $timestampChange = new DateTimeExtended($row['usr_timestamp_change'], 'Y-m-d H:i:s');
+                $timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
 
                 echo '
                 <tr class="tableMouseOver">
@@ -430,11 +430,11 @@ if($num_members > 0)
                         }
                     echo '</td>
                     <td>';
-                        if(strlen($row['homepage']) > 0)
+                        if(strlen($row['website']) > 0)
                         {
                             echo '
-                            <a class="iconLink" href="'. $row['homepage']. '" target="_blank"><img
-                                src="'. THEME_PATH. '/icons/weblinks.png" alt="Homepage" title="Homepage" /></a>';
+                            <a class="iconLink" href="'. $row['website']. '" target="_blank"><img
+                                src="'. THEME_PATH. '/icons/weblinks.png" alt="'. $row['website']. '" title="'. $row['website']. '" /></a>';
                         }
                     echo '</td>
                     <td>'. $row['usr_login_name']. '</td>
