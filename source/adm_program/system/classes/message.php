@@ -100,7 +100,7 @@ class Message
         // Ueberschrift setzen, falls diese vorher nicht explizit gesetzt wurde
         if(strlen($headline) == 0)
         {
-            $headline = 'Hinweis';
+            $headline = $g_l10n->get('SYS_NOTE');
         }
 
         // Variablen angeben
@@ -109,12 +109,11 @@ class Message
             // nur pruefen, wenn vorher nicht schon auf true gesetzt wurde
             $this->inline = headers_sent();
         }
-        $g_root_path  = $GLOBALS['g_root_path'];
         
         if($this->inline == false)
         {
             // Html-Kopf ausgeben
-            $g_layout['title']    = $g_l10n->get('SYS_NOTE');
+            $g_layout['title']    = $headline;
             $g_layout['includes'] = $this->includeThemeBody;
             if ($this->timer > 0)
             {
@@ -140,9 +139,11 @@ class Message
                             if($this->showYesNoButtons == true)
                             {
                                 echo '
-                                <button id="btnYes" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
+                                <button id="btnYes" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" 
+                                    alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button id="btnNo" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" alt="'.$g_l10n->get('SYS_NO').'" />&nbsp;'.$g_l10n->get('SYS_NO').'</button>';
+                                <button id="btnNo" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" 
+                                    alt="'.$g_l10n->get('SYS_NO').'" />&nbsp;'.$g_l10n->get('SYS_NO').'</button>';
                             }
                             else
                             {

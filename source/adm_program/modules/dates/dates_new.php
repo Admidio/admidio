@@ -173,11 +173,23 @@ $g_layout['header'] = '
 
     var calPopup = new CalendarPopup("calendardiv");
     calPopup.setCssPrefix("calendar");
+    var count = 1;
+
+    
+    function addRoleSelection()
+    {
+        $.get("dates_function.php?mode=5&count="+count, function(data){
+            var html = $("#liRoles").html() + data;
+            $("#liRoles").html(html);
+        });
+        count++;
+    }
 
     $(document).ready(function() 
     {
         setAllDay();
         $("#dat_headline").focus();
+        addRoleSelection();
     }); 
     
     var loginChecked = '.$dat_rol.';
@@ -436,7 +448,7 @@ echo '
                 </li>';
             
             echo '
-            <li>
+            <li id="liRoles">';/*
                 <dl>
                     <dt>Sichtbarkeit:</dt>
                     <dd>
@@ -466,6 +478,16 @@ echo '
                         <a href="javascript:markVisibilities();">alle</a>
                         <a href="javascript:unmarkVisibilities();">keine</a>
                     </dd>
+                </dl>*/
+            echo '</li>
+            <li>
+                <dl>
+                    <dt></dt>
+                    <dd><span id="add_attachment" class="iconTextLink">
+                            <a href="javascript:addRoleSelection()"><img
+                            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_ADD_ROLE').'" /></a>
+                            <a href="javascript:addRoleSelection()">'.$g_l10n->get('DAT_ADD_ROLE').'</a>
+                        </span></dd>
                 </dl>
             </li>
             <li>

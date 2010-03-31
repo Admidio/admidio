@@ -56,6 +56,15 @@ echo '
             </li>
             <li>
                 <dl>
+                    <dt><label for="coding">'.$g_l10n->get('MEM_CODING').':</label></dt>
+                <dd><select size="1" name="coding">
+                        <option value="ansi" selected="selected">'.$g_l10n->get('MEM_ANSI').'</option>
+                        <option value="utf8">'.$g_l10n->get('MEM_UTF8').'</option>
+                    </select></dd>
+                </dl>
+            </li>
+            <li>
+                <dl>
                     <dt><label for="rol_id">'.$g_l10n->get('MEM_ASSIGN_ROLE').':</label></dt>
                     <dd>';
                         // Combobox mit allen Rollen ausgeben, die der Benutzer sehen darf
@@ -81,15 +90,6 @@ echo '
                     <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_PHR_IDENTIFY_USERS&amp;inline=true"><img 
                         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_PHR_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a></dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="coding">'.$g_l10n->get('MEM_CODING').':</label></dt>
-                <dd><select size="1" name="coding">
-                        <option value="ansi" selected="selected">'.$g_l10n->get('MEM_ANSI').'</option>
-                        <option value="utf8">'.$g_l10n->get('MEM_UTF8').'</option>
-                    </select></dd>
                 </dl>
             </li>
         </ul>

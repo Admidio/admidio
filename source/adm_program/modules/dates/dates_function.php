@@ -13,6 +13,7 @@
  * mode:   1 - Neuen Termin anlegen/aendern
  *         2 - Termin loeschen
  *         4 - Termin im iCal-Format exportieren
+ *         5 - Eintrag fuer Sichtbarkeit erzeugen
  *
  *****************************************************************************/
 
@@ -57,6 +58,11 @@ if(isset($_GET['dat_id']))
 
 if(is_numeric($_GET['mode']) == false
     || $_GET['mode'] < 1 || $_GET['mode'] > 5)
+{
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+
+if(is_numeric($_GET['count']) == false)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -267,25 +273,24 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $g_db->query($sql);
     }
 
-    if(is_array($_POST['date_visible_for']))
-    {
-        // nun alle Rollenzuordnungen wegschreiben
-        $modes = $_POST['date_visible_for'];
-        $date_role = new TableAccess($g_db, TBL_DATE_ROLE, 'dtr');
+    // nun alle Rollenzuordnungen wegschreiben
+    $roleCount = 1;
+    $date_role = new TableAccess($g_db, TBL_DATE_ROLE, 'dtr');
 
-        foreach($modes as $value)
-        {
-            $date_role->setValue('dtr_dat_id', $date->getValue('dat_id'));
-            $date_role->setValue('dtr_rol_id', $value);
-            $date_role->save();
-            $date_role->clear();
-        }
-        $date->visible_for = $modes;
+    while(isset($_POST['role_'.$roleCount]))
+    {
+        $date_role->setValue('dtr_dat_id', $date->getValue('dat_id'));
+        $date_role->setValue('dtr_rol_id', $_POST['role_'.$roleCount]);
+        $date_role->save();
+        $date_role->clear();
+
+        $roleCount++;
     }
-    else    //nichts ausgewählt
+    
+    if($roleCount == 1)    //nichts ausgewählt
     {
         $date->delete();
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DAT_VISIBLE_TO')));
     }
 
     
@@ -356,6 +361,20 @@ elseif($_GET['mode'] == 4)  // Termin im iCal-Format exportieren
     header('Content-Disposition: attachment; filename='. $date->getValue('dat_headline'). '.ics');
 
     echo $date->getIcal($_SERVER['HTTP_HOST']);
+    exit();
+}
+elseif($_GET['mode'] == 5)  // Termin im iCal-Format exportieren
+{
+    $label = '';
+    error_log('count'.$_GET['count']);
+    if($_GET['count'] == 1)
+    {
+        $label = $g_l10n->get('DAT_VISIBLE_TO').':';
+    }
+    echo '<dl>
+        <dt>'.$label.'</dt>
+        <dd>'.generateRoleSelectBox(0, 'role_'.$_GET['count']).'</dd>
+    </dl>';
     exit();
 }
 
