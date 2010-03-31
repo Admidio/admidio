@@ -15,6 +15,7 @@
     <text id="CAT_PHR_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
 
     <!-- Phrases only in Datesmodule -->
+    <text id="DAT_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="DAT_CALENDAR" development="new" translation="todo">Kalender</text>
     <text id="DAT_CREATE_DATE" development="new" translation="todo">Termine anlegen</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
@@ -37,6 +38,7 @@
     <text id="DAT_ROOM_INFORMATIONS" development="new" translation="todo">Rauminformationen</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="todo">Auf Karte zeigen</text>
     <text id="DAT_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
+    <text id="DAT_VISIBLE_TO" development="new" translation="todo">Sichtbar für</text>
 
     <!-- Phrases only in Downloadsmodule -->
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
