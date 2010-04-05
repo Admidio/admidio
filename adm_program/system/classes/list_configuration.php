@@ -301,7 +301,8 @@ class ListConfiguration extends TableLists
                        '.$sql_join.'
                  WHERE rol_id    IN ('.$sql_role_ids.')
                    AND rol_cat_id = cat_id
-                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                       OR cat_org_id IS NULL )
                    AND mem_rol_id = rol_id
                        '.$sql_member_status.'
                    AND mem_usr_id = usr_id

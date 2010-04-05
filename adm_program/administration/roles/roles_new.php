@@ -48,7 +48,8 @@ if($req_rol_id > 0)
     $role->readData($req_rol_id);
 
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
-    if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
+    if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id')
+    && $role->getValue('cat_org_id') > 0)
     {
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
@@ -60,6 +61,7 @@ if($req_rol_id > 0)
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
 }
+
 if(isset($_SESSION['roles_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
@@ -80,9 +82,11 @@ $childRoles = RoleDependency::getChildRoles($g_db,$req_rol_id);
 // Alle Rollen auflisten, die der Benutzer sehen darf
 $sql = 'SELECT *
           FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-         WHERE rol_valid  = 1
-           AND rol_cat_id = cat_id
-           AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+         WHERE rol_valid   = 1
+           AND rol_visible = 1
+           AND rol_cat_id  = cat_id
+           AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+               OR cat_org_id IS NULL )
          ORDER BY rol_name ';
 $allRoles = $g_db->query($sql);
 
@@ -104,8 +108,8 @@ $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />
     <script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
+        $(document).ready(function() 
+        {
             $("#rol_name").focus(); ';
             // Bloecke anzeigen/verstecken
             if($req_rol_id > 0)
@@ -125,7 +129,7 @@ $g_layout['header'] = '
                 }
             }
             $g_layout['header'] .= '
-	 	}); 
+        }); 
 
         // Rollenabhaengigkeiten markieren
         function hinzufuegen()
@@ -278,7 +282,8 @@ echo '
                                 echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
                             $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
-                                     WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                     WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                           OR cat_org_id IS NULL )
                                        AND cat_type   = "ROL"
                                      ORDER BY cat_sequence ASC ';
                             $result = $g_db->query($sql);

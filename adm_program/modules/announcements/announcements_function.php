@@ -65,7 +65,7 @@ if($_GET['mode'] == 1)
 {
     if(strlen($_POST['ann_headline']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_HEADLINE')));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_TITLE')));
     }
     if(strlen($_POST['ann_description']) == 0)
     {

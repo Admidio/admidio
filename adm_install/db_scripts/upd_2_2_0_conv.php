@@ -9,6 +9,8 @@
  *
  *****************************************************************************/
 
+ require_once(SERVER_PATH. '/adm_program/system/classes/table_category.php');
+
 // eine Orga-ID einlesen
 $sql = 'SELECT MIN(org_id) as org_id FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
 $result_orga = $g_db->query($sql);
@@ -81,6 +83,14 @@ $sql = 'INSERT INTO '. TBL_DATE_ROLE. ' (dtr_dat_id, dtr_rol_id)
         SELECT dat_id, NULL FROM '. TBL_DATES;
 $g_db->query($sql);
 
+// neue Kategorie fuer Terminbestaetigungen
+$category = new TableCategory($g_db);
+$category->setValue('cat_type', 'ROL');
+$category->setValue('cat_name', $g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION'));
+$category->setValue('cat_hidden', '1');
+$category->setValue('cat_system', '1');
+$category->save();
+
 // Daten pro Organisation wegschreiben
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
 $result_orga = $g_db->query($sql);
@@ -99,7 +109,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
 
     $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_usr_id_create = '. $row_webmaster['webmaster_id']. '
                                            , usf_timestamp_create = "'.DATETIME_NOW.'"';
-    $g_db->query($sql);
+    $g_db->query($sql);    
 }
 
 // Datenstruktur nach Update anpassen

@@ -14,6 +14,8 @@
  *         2 - Termin loeschen
  *         4 - Termin im iCal-Format exportieren
  *         5 - Eintrag fuer Sichtbarkeit erzeugen
+ * count:  Nummer dere Rollenauswahlbox, die angezeigt werden soll
+ * rol_id: vorselektierte Rolle der Rollenauswahlbox
  *
  *****************************************************************************/
 
@@ -44,6 +46,7 @@ if(!$g_current_user->editDates() && $_GET['mode'] != 4)
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_dat_id = 0;
+$req_rol_id = 0;
 
 // Uebergabevariablen pruefen
 
@@ -62,9 +65,17 @@ if(is_numeric($_GET['mode']) == false
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if(is_numeric($_GET['count']) == false)
+if(isset($_GET['count']) && is_numeric($_GET['count']) == false)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+if(isset($_GET['rol_id']))
+{
+    if(is_numeric($_GET['rol_id']) == false)
+    {
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
+    $req_rol_id = $_GET['rol_id'];
 }
 
 // Terminobjekt anlegen
@@ -91,11 +102,11 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     
     if(strlen($_POST['dat_headline']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Überschrift'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TITLE')));
     }
     if(strlen($_POST['dat_description']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Beschreibung'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_DESCRIPTION')));
     }
     if(strlen($_POST['date_from']) == 0)
     {
@@ -115,7 +126,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     }
     if(strlen($_POST['dat_cat_id']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kalender'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DAT_CALENDAR')));
     }
 
     if(isset($_POST['dat_all_day']))
@@ -124,12 +135,11 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $_POST['time_to']   = '00:00'; // Ganztägig ist nur logisch bei 23:59 Uhr (rn)
         $date->setValue('dat_all_day', 1);
     }
-    
-    if(!is_array($_POST['date_visible_for']))
+    if(isset($_POST['role_1']) == false || $_POST['role_1'] == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY','Sichtbarkeit'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DAT_VISIBLE_TO')));
     }
-    
+
     // das Land nur zusammen mit dem Ort abspeichern
     if(strlen($_POST['dat_location']) == 0)
     {
@@ -260,39 +270,21 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         }
     }
 
-    $return_code = $date->save();
-
-    // -----------------------------------
-    // Sichbarkeit der Rollen wegschreiben
-    // -----------------------------------
-
-    if($req_dat_id > 0)
-    {
-        // erst einmal alle bisherigen Rollenzuordnungen loeschen, damit alles neu aufgebaut werden kann
-        $sql='DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$date->getValue('dat_id');
-        $g_db->query($sql);
-    }
-
     // nun alle Rollenzuordnungen wegschreiben
     $roleCount = 1;
-    $date_role = new TableAccess($g_db, TBL_DATE_ROLE, 'dtr');
-
+    $arrRoles  = array();
     while(isset($_POST['role_'.$roleCount]))
     {
-        $date_role->setValue('dtr_dat_id', $date->getValue('dat_id'));
-        $date_role->setValue('dtr_rol_id', $_POST['role_'.$roleCount]);
-        $date_role->save();
-        $date_role->clear();
-
+        if($_POST['role_'.$roleCount] != 0)
+        {
+            $arrRoles[] = $_POST['role_'.$roleCount];
+        }
         $roleCount++;
     }
-    
-    if($roleCount == 1)    //nichts ausgewählt
-    {
-        $date->delete();
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DAT_VISIBLE_TO')));
-    }
 
+    // Termin in Datenbank speichern
+    $date->setVisibleRoles($arrRoles);
+    $return_code = $date->save();
     
     // ----------------------------------------
     // ggf. Rolle fuer Anmeldungen wegschreiben
@@ -300,11 +292,19 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
 
     if($_POST['date_login'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
     {
+        // Kategorie fuer Terminbestaetigungen einlesen
+        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' 
+                 WHERE cat_name LIKE "'.$g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'"';
+        $g_db->query($sql);
+        $row = $g_db->fetch_array();
+
         // Rolle fuer die Anmeldung anlegen
         $role = new TableRoles($g_db);
-        $role->setValue('rol_cat_id', $date->getValue('dat_cat_id'));
-        $role->setValue('rol_name', 'Terminzusage_'. $date->getValue('dat_id'));
-        $role->setValue('rol_visible', 0);
+        $role->setValue('rol_cat_id', $row['cat_id']);
+        $role->setValue('rol_name', $g_l10n->get('DAT_DATE').' '. $date->getValue('dat_begin').' - '.$date->getValue('dat_id'));
+        $role->setValue('rol_description', $date->getValue('dat_headline'));
+        $role->setValue('rol_this_list_view', '1'); // Rollenmitglieder duerfen Liste einsehen
+        $role->setValue('rol_visible', '0');
         
         // Rolle in Datenbank speichern
         $return_code2 = $role->save();
@@ -371,9 +371,15 @@ elseif($_GET['mode'] == 5)  // Termin im iCal-Format exportieren
     {
         $label = $g_l10n->get('DAT_VISIBLE_TO').':';
     }
-    echo '<dl>
+    echo '<dl id="roleID_'.$_GET['count'].'">
         <dt>'.$label.'</dt>
-        <dd>'.generateRoleSelectBox(0, 'role_'.$_GET['count']).'</dd>
+        <dd>'.generateRoleSelectBox($req_rol_id, 'role_'.$_GET['count'], 0, 1);
+            if($_GET['count'] > 1)
+            {
+                echo '<a href="javascript:removeRoleSelection(\'roleID_'.$_GET['count'].'\')"><img 
+                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('DAT_ADD_ROLE').'" /></a>';
+            }
+        echo '</dd>
     </dl>';
     exit();
 }

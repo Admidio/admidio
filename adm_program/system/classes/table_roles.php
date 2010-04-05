@@ -158,7 +158,8 @@ class TableRoles extends TableAccess
 
         $sql_additional_tables .= TBL_CATEGORIES;
         $sql_where_condition   .= ' AND rol_cat_id = cat_id
-                                    AND cat_org_id = '. $g_current_organization->getValue('org_id');
+                                    AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+                                        OR cat_org_id IS NULL ) ';
         parent::readData($role, $sql_where_condition, $sql_additional_tables);
     }
 

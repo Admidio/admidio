@@ -39,7 +39,8 @@ function hasRole($role_name, $user_id = 0)
                   AND rol_name   = "'.$role_name.'"
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = '. $g_current_organization->getValue('org_id');
+                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                      OR cat_org_id IS NULL ) ';
     $result = $g_db->query($sql);
 
     $user_found = $g_db->num_rows($result);
@@ -70,7 +71,8 @@ function isMember($user_id)
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = '. $g_current_organization->getValue('org_id');
+                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                          OR cat_org_id IS NULL ) ';
         $result = $g_db->query($sql);
 
         $row = $g_db->fetch_array($result);
@@ -103,7 +105,8 @@ function isGroupLeader($user_id, $role_id = 0)
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = '. $g_current_organization->getValue('org_id');
+                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+                          OR cat_org_id IS NULL ) ';
         if ($role_id > 0)
         {
             $sql .= '  AND mem_rol_id = '.$role_id;
@@ -244,8 +247,9 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
 //          = 1 : Alle sicheren Rollen, so dass der Benutzer sich kein "Rollenzuordnungsrecht" 
 //                dazuholen kann, wenn er es nicht schon besitzt
 //          = 2 : Alle nicht aktiven Rollen auflisten
+// visitors = 1 : weiterer Eintrag um auch Besucher auswaehlen zu koennen
 
-function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0)
+function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0, $visitors = 0)
 {
     global $g_current_user, $g_current_organization, $g_db, $g_l10n;
     
@@ -273,23 +277,35 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
     }
     
     $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-             WHERE rol_valid  = '.$active_roles.'
-               AND rol_cat_id = cat_id
-               AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+             WHERE rol_valid   = '.$active_roles.'
+               AND rol_visible = 1
+               AND rol_cat_id  = cat_id
+               AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
                    '.$condition.'
              ORDER BY cat_sequence, rol_name';
     $result_lst = $g_db->query($sql);
 
     // Selectbox mit allen selektierten Rollen zusammensetzen
-    $box_string = '
+    $act_category = '';
+    $selectBoxHtml = '
     <select size="1" id="'.$field_id.'" name="'.$field_id.'">
         <option value="0" ';
         if($default_role == 0)
         {
-            $box_string .= ' selected="selected" ';
+            $selectBoxHtml .= ' selected="selected" ';
         }
-        $box_string .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-        $act_category = '';
+        $selectBoxHtml .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+
+        if($visitors == 1)
+        {
+            $selectBoxHtml .= '<option value="-1" ';
+            if($default_role == -1)
+            {
+                $selectBoxHtml .= ' selected="selected" ';
+            }
+            $selectBoxHtml .= '>'.$g_l10n->get('SYS_ALL').' ('.$g_l10n->get('SYS_ALSO_VISITORS').')</option>';
+        }
 
         while($row = $g_db->fetch_object($result_lst))
         {
@@ -299,9 +315,9 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
                 {
                     if(strlen($act_category) > 0)
                     {
-                        $box_string .= '</optgroup>';
+                        $selectBoxHtml .= '</optgroup>';
                     }
-                    $box_string .= '<optgroup label="'.$row->cat_name.'">';
+                    $selectBoxHtml .= '<optgroup label="'.$row->cat_name.'">';
                     $act_category = $row->cat_name;
                 }
                 // wurde eine Rollen-Id uebergeben, dann Combobox mit dieser vorbelegen
@@ -310,12 +326,12 @@ function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0
                 {
                     $selected = ' selected="selected" ';
                 }
-                $box_string .= '<option '.$selected.' value="'.$row->rol_id.'">'.$row->rol_name.'</option>';
+                $selectBoxHtml .= '<option '.$selected.' value="'.$row->rol_id.'">'.$row->rol_name.'</option>';
             }
         }
-        $box_string .= '</optgroup>
+        $selectBoxHtml .= '</optgroup>
     </select>';
-    return $box_string;
+    return $selectBoxHtml;
 }
 
 // Teile dieser Funktion sind von get_backtrace aus phpBB3

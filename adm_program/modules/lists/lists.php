@@ -116,7 +116,8 @@ $sql = 'SELECT rol.*, cat.*,
            AND rol_visible = 1
                '.$rol_id_list.'
            AND rol_cat_id = cat_id 
-           AND cat_org_id = '. $g_current_organization->getValue('org_id');
+           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+               OR cat_org_id IS NULL ) ';
 if($g_valid_login == false)
 {
     $sql .= ' AND cat_hidden = 0 ';
@@ -213,9 +214,11 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
         // Combobox mit allen Kategorien anzeigen, denen auch Rollen zugeordnet sind
         $sql = 'SELECT DISTINCT cat_name 
                   FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                 WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                   AND cat_type   = "ROL" 
-                   AND rol_cat_id = cat_id 
+                 WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                       OR cat_org_id IS NULL )
+                   AND cat_type    = "ROL" 
+                   AND rol_cat_id  = cat_id
+                   AND rol_visible = 1
                        '.$rol_id_list;
         if($g_valid_login == false)
         {

@@ -99,10 +99,10 @@ if(isset($_SESSION['categories_request']))
     unset($_SESSION['categories_request']);
 }
 
-// Kategorie 'Stammdaten' bei Profilfeldern darf nicht umbenannt werden
+// Systemkategorien duerfen nicht umbenannt werden
 $html_readonly = '';
 $field_focus   = 'cat_name';
-if($category->getValue('cat_type') == 'USF' && $category->getValue('cat_system') == 1)
+if($category->getValue('cat_system') == 1)
 {
     $html_readonly = ' readonly="readonly" ';
     $field_focus   = 'btn_save';

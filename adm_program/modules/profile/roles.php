@@ -134,14 +134,15 @@ echo '
             $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, mem_usr_id, mem_leader
                          FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                          LEFT JOIN '. TBL_MEMBERS. '
-                           ON rol_id     = mem_rol_id
-                          AND mem_usr_id = '.$req_usr_id.'
-                          AND mem_begin <= "'.DATE_NOW.'"
-                          AND mem_end    > "'.DATE_NOW.'"
+                           ON rol_id      = mem_rol_id
+                          AND mem_usr_id  = '.$req_usr_id.'
+                          AND mem_begin  <= "'.DATE_NOW.'"
+                          AND mem_end     > "'.DATE_NOW.'"
                         WHERE rol_valid   = 1
                           AND rol_visible = 1
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                          AND rol_cat_id  = cat_id
+                          AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                              OR cat_org_id IS NULL )
                         ORDER BY cat_sequence, cat_id, rol_name';
         }
         else
@@ -163,7 +164,8 @@ echo '
                           AND rol_valid      = 1
                           AND rol_visible    = 1
                           AND rol_cat_id     = cat_id
-                          AND cat_org_id     = '. $g_current_organization->getValue('org_id'). '
+                          AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                              OR cat_org_id IS NULL
                         ORDER BY cat_sequence, cat_id, rol_name';
         }
         $result = $g_db->query($sql);

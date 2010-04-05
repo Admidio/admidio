@@ -360,6 +360,7 @@ if($new_user == 2)
     {
         if($_SESSION['login_rol_id'] > 0)
         {
+            $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl());
             $g_message->show($g_l10n->get('PRO_PHR_CONFIRM_REGISTRATION_DATE'));
         }
         else

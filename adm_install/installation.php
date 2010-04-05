@@ -571,16 +571,17 @@ elseif($req_mode == 8)
     $db->query($sql);
     $category_common = $db->insert_id();
 
-    $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                     VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_GROUPS').'", 0, 2)
-                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_COURSES').'", 0, 3)
-                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_TEAMS').'", 0, 4)
-                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('INS_INTERN').'", 1, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_TRAINING').'", 0, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_COURSES').'", 0, 1)
-                                          , (NULL, "USF", "'.$g_l10n->get('INS_ADDIDIONAL_DATA').'", 0, 3) ';
+    $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
+                                     VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_GROUPS').'", 0, 0, 2)
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_COURSES').'", 0, 0, 3)
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_TEAMS').'", 0, 0, 4)
+                                          , (NULL, "ROL", "'.$g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'", 1, 1, 5)
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('SYS_COMMON').'", 0, 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('INS_INTERN').'", 1, 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('SYS_COMMON').'", 0, 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_TRAINING').'", 0, 0, 1)
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_COURSES').'", 0, 0, 1)
+                                          , (NULL, "USF", "'.$g_l10n->get('INS_ADDIDIONAL_DATA').'", 0, 0, 3) ';
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
@@ -717,9 +718,7 @@ elseif($req_mode == 8)
     $db->query($sql);
     
     // Daten der Session loeschen
-    unset($_SESSION['g_current_organisation']);
-    unset($_SESSION['g_preferences']);
-    unset($_SESSION['g_current_user']);
+    session_unset();
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong><br /><br />
                 '.$g_l10n->get('INS_PHR_INSTALLATION_SUCCESSFUL');

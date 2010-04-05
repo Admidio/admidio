@@ -433,7 +433,6 @@ create table %PREFIX%_members
    mem_begin                      date                           not null,
    mem_end                        date                           not null default '9999-12-31',
    mem_leader                     tinyint(1) unsigned            not null default 0,
-   mem_from_rol_id                int(11) unsigned               null,
    primary key (mem_id),
    unique ak_rol_usr_id (mem_rol_id, mem_usr_id)
 )

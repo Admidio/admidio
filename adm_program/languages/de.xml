@@ -16,8 +16,11 @@
 
     <!-- Phrases only in Datesmodule -->
     <text id="DAT_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
+    <text id="DAT_ATTEND" development="new" translation="todo">Teilnehmen</text>
     <text id="DAT_CALENDAR" development="new" translation="todo">Kalender</text>
+    <text id="DAT_CANCEL" development="new" translation="todo">Absagen</text>
     <text id="DAT_CREATE_DATE" development="new" translation="todo">Termine anlegen</text>
+    <text id="DAT_DATE" development="new" translation="todo">Termin</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
     <text id="DAT_EXPORT_ICAL" development="new" translation="todo">Exportieren (iCal)</text>
     <text id="DAT_LOCATION" description="Location of a date" development="new" translation="todo">Ort</text>
@@ -25,9 +28,12 @@
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
     <text id="DAT_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
+    <text id="DAT_PHR_ATTEND_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% zugesagt.</text>
+    <text id="DAT_PHR_CANCEL_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% wieder abgesagt.</text>
     <text id="DAT_PHR_LOCATION_LINK" development="new" translation="todo">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</text>
-    <text id="DAT_PHR_LOGIN_POSSIBLE" development="new" translation="todo">Hier können Sie auswählen, ob eine Anmeldung zu dem von Ihnen angegebenen Termin möglich sein soll oder nicht.\nFalls Sie die Anmeldung nachträglich löschen, so werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn Sie hingegen nur die Anmeldung für neue Teilnehmer beenden möchten, so setzen Sie die derzeitige Teilnehmerzahl als Teilnahmebegrenzung.</text>
+    <text id="DAT_PHR_LOGIN_POSSIBLE" development="new" translation="todo">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmer beenden möchte, so kann man die derzeitige Teilnehmerzahl als Teilnahmebegrenzung eintragen.</text>
     <text id="DAT_PHR_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
+    <text id="DAT_PHR_REMOVE_APPLICATION" development="new" translation="todo">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</text>
     <text id="DAT_PHR_ROOM_OVERHANG" development="new" translation="todo">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</text>
     <text id="DAT_PHR_ROOM_RESERVED" development="new" translation="todo">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</text>
     <text id="DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH" development="new" translation="todo">Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.</text>
@@ -414,6 +420,7 @@
     <text id="SYS_ADD_LINK" development="new" translation="todo">Link einfügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
+    <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
     <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
@@ -424,6 +431,8 @@
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="todo">Alle Tags schließen</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
     <text id="SYS_CONFIRM_PASSWORD" development="new" translation="todo">Passwort bestätigen</text>
+    <text id="SYS_CONFIRMATION_OF_PARTICIPATION" development="new" translation="todo">Teilnahmebestätigung</text>
+    <text id="SYS_COPY" development="new" translation="todo">Kopieren</text>
     <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
     <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
@@ -458,8 +467,8 @@
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
     <text id="SYS_LOCK" development="new" translation="todo">Sperren</text>
     <text id="SYS_LOCKED" development="new" translation="todo">Gesperrt</text>
-    <text id="SYS_LOGIN" development="new" translation="todo">Login</text>
-    <text id="SYS_LOGIN_PROBLEMS" development="new" translation="todo">Loginprobleme</text>
+    <text id="SYS_LOGIN" development="new" translation="todo">Anmelden</text>
+    <text id="SYS_LOGIN_PROBLEMS" development="new" translation="todo">Anmeldeprobleme</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
@@ -567,7 +576,7 @@
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
-    <text id="SYS_TITLE" development="new" translation="todo">Bezeichnung</text>
+    <text id="SYS_TITLE" development="new" translation="todo">Titel</text>
     <text id="SYS_TO" development="new" translation="todo">An</text>
     <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
