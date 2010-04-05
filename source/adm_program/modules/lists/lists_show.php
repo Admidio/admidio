@@ -633,8 +633,11 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
     
                         case 'DATE':
                             // Datum muss noch formatiert werden
-                            $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-                            $content = $date->format($g_preferences['system_date']);
+                            if(strlen($row[$sql_column_number]) > 0)
+                            {
+                                $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+                                $content = $date->format($g_preferences['system_date']);
+                            }
                             break;
     
                         case 'EMAIL':

@@ -12,6 +12,8 @@
  * dat_id   - ID des Termins, der bearbeitet werden soll
  * headline - Ueberschrift, die ueber den Terminen steht
  *            (Default) Termine
+ * calendar - der Kalender wird vorbelegt
+ * copy : true - der uebergebene ID-Termin wird kopiert und kann neu gespeichert werden
  *
  *****************************************************************************/
 
@@ -40,6 +42,8 @@ if(!$g_current_user->editDates())
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_dat_id   = 0;
+$req_calendar = '';
+$req_copy     = false;
 
 // Uebergabevariablen pruefen
 
@@ -54,8 +58,18 @@ if(isset($_GET['dat_id']))
 
 if(!isset($_GET['headline']))
 {
-    $_GET['headline'] = 'Termine';
+    $_GET['headline'] = $g_l10n->get('DAT_DATES');
 }
+
+if(isset($_GET['calendar']))
+{
+    $req_calendar = $_GET['calendar'];
+}
+if(isset($_GET['copy']) && $_GET['copy'] == 1)
+{
+    $req_copy = true;
+}
+
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
@@ -65,6 +79,12 @@ $date = new TableDate($g_db);
 if($req_dat_id > 0)
 {
     $date->readData($req_dat_id);
+    
+    if($req_copy)
+    {
+        $date->setValue('dat_id', 0);
+        $req_dat_id = 0;
+    }
     
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false)
@@ -77,6 +97,15 @@ else
     // bei neuem Termin Datum mit aktuellen Daten vorbelegen
     $date->setValue('dat_begin', date('Y-m-d H:00:00', time()));
     $date->setValue('dat_end', date('Y-m-d H:00:00', time()+3600));
+    
+    // wurde ein Kalender uebergeben, dann diesen vorbelegen
+    if(strlen($req_calendar) > 0)
+    {
+        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name = "'.$req_calendar.'"';
+        $g_db->query($sql);
+        $row = $g_db->fetch_array();
+        $date->setValue('dat_cat_id', $row['cat_id']);
+    }
 }
 
 if(isset($_SESSION['dates_request']))
@@ -90,18 +119,22 @@ if(isset($_SESSION['dates_request']))
             $date->setValue($key, stripslashes($value));
         }
     }
-    $date->visible_for = isset($_SESSION['dates_request']['date_visible_for']) ? $_SESSION['dates_request']['date_visible_for']: array();
+
+    // ausgewaehlte Rollen vorbelegen
+    $count = 1;
+    $arrRoles = array();
+    while(isset($_SESSION['dates_request']['role_'.$count]))
+    {
+        $arrRoles[] = $_SESSION['dates_request']['role_'.$count];
+        $count++;
+    }
+    $date->setVisibleRoles($arrRoles);
     
     $date_from = $_SESSION['dates_request']['date_from'];
     $time_from = $_SESSION['dates_request']['time_from'];
     $date_to   = $_SESSION['dates_request']['date_to'];
     $time_to   = $_SESSION['dates_request']['time_to'];
     
-    // Folgende Felder auch vorbelegen wenn Formular nicht korrekt ausgefüllt wurde (rn)
-    // Da diese Felder nicht in der Datenbanktabelle vorkommen und somit in Instanz $date nicht enthalten sind, müssen sie hier gesetzt werden
-    $max_members_role = $_SESSION['dates_request']['dat_max_members_role'];
-    
-    $keep_rol_id = $_SESSION['dates_request']['keep_rol_id'];
     unset($_SESSION['dates_request']);
 }
 else
@@ -114,25 +147,18 @@ else
     $date_to = $date->getValue('dat_end', $g_preferences['system_date']);
     $time_to = $date->getValue('dat_end', $g_preferences['system_time']);
     
-    if($date->getValue('dat_rol_id') != '')
-    {
-        $keep_rol_id = 1;
-    }
+    // Sichtbar fuer alle wird per Default vorbelegt
+    $date->setVisibleRoles(array('-1'));
 }
 
 // Html-Kopf ausgeben
 if($req_dat_id > 0)
 {
-    $g_layout['title'] = $_GET['headline']. ' bearbeiten';
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $_GET['headline']);
 }
 else
 {
-    $g_layout['title'] = $_GET['headline']. ' anlegen';
-}
-$dat_rol = 0;
-if($date->getValue('dat_rol_id')!= '')
-{
-    $dat_rol=$date->getValue('dat_rol_id');
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $_GET['headline']);
 }
 
 $g_layout['header'] = '
@@ -176,29 +202,63 @@ $g_layout['header'] = '
     var count = 1;
 
     
-    function addRoleSelection()
+    function addRoleSelection(roleID)
     {
-        $.get("dates_function.php?mode=5&count="+count, function(data){
-            var html = $("#liRoles").html() + data;
-            $("#liRoles").html(html);
-        });
+        $.ajax({url: "dates_function.php?mode=5&count="+count+"&rol_id="+roleID, type: "GET", async:   false, 
+            success: function(data){
+                if(count == 1)
+                {
+                    $("#liRoles").html($("#liRoles").html() + data);
+                }
+                else
+                {
+                    number = count-1;
+                    $("#roleID_"+number).after(data);
+                }
+            }});
         count++;
+    }
+    
+    function removeRoleSelection(id)
+    {
+        $("#"+id).hide("slow");
+        $("#"+id).remove();
     }
 
     $(document).ready(function() 
     {
         setAllDay();
-        $("#dat_headline").focus();
-        addRoleSelection();
-    }); 
-    
-    var loginChecked = '.$dat_rol.';
-    //öffnet Messagefenster
-    function popupMessage()
-    {
-        if(loginChecked >0 && !document.getElementById("dat_rol_id").checked)
+        $("#dat_headline").focus();';
+        // alle Rollen anzeigen, die diesen Termin sehen duerfen
+        if(count($date->getVisibleRoles()) > 0)
         {
-            var msg_result = confirm("Wollen Sie die Anmeldung für den Termin wirklich entfernen? Hierbei würden alle bisherigen Teilnehmer gelöscht werden.");
+            foreach($date->getVisibleRoles() as $key => $roleID)
+            {
+                $g_layout['header'] .= 'addRoleSelection('.$roleID.');';
+            }
+        }
+        else
+        {
+            $g_layout['header'] .= 'addRoleSelection(0);';
+        }
+
+    if($date->getValue('dat_rol_id') > 0)
+    {
+        $dateRoleID = $date->getValue('dat_rol_id');
+    }
+    else
+    {
+        $dateRoleID = '0';
+    }
+    $g_layout['header'] .= '}); 
+
+    var dateRoleID = '.$dateRoleID.';
+    //öffnet Messagefenster
+    function submitForm()
+    {
+        if(dateRoleID > 0 && !document.getElementById("date_login").checked)
+        {
+            var msg_result = confirm("'.$g_l10n->get('DAT_PHR_REMOVE_APPLICATION').'");
             if(msg_result)
             {
                 $("#formDate").submit();
@@ -208,55 +268,6 @@ $g_layout['header'] = '
         {
             $("#formDate").submit();
         }
-    }
-    
-    function markVisibilities()
-    {
-        var visibilities = $("input[name=\'date_visible_for[]\']");
-        jQuery.each(visibilities, function(index, value) {
-            value.checked = true;
-        });
-    }
-    
-    function unmarkVisibilities()
-    {
-        var visibilities = $("input[name=\'date_visible_for[]\']");
-        jQuery.each(visibilities, function(index, value) {
-            value.checked = false;
-        });
-    }
-    
-    function toggleMaxMembers()
-    {
-        if(document.getElementById("date_login").checked)
-        {
-            $("#max_members").css("display", "");
-            var visibilities = $("input[name^=\'dat_max_members_role\']");
-            jQuery.each(visibilities, function(index, value) {
-                value.style.display = "";
-            });
-        }
-        else
-        {
-            $("#max_members").css("display", "none");
-            var visibilities = $("input[name^=\'dat_max_members_role\']");
-            jQuery.each(visibilities, function(index, value) {
-                value.style.display = "none";
-            });
-        }
-    }
-    
-    function toggleRolId()
-    {
-        if($("#dat_room_id option:selected").val() == "0")
-        {
-            document.getElementById("dat_rol_id").checked = false;
-        }
-        else
-        {
-            document.getElementById("dat_rol_id").checked = true;
-        }
-        toggleMaxMembers();
     }
 //--></script>';
 
@@ -278,7 +289,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="dat_headline">Überschrift:</label></dt>
+                    <dt><label for="dat_headline">'.$g_l10n->get('SYS_TITLE').':</label></dt>
                     <dd>
                         <input type="text" id="dat_headline" name="dat_headline" style="width: 345px;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -365,7 +376,7 @@ echo '
                     <dd>
                         <select id="dat_cat_id" name="dat_cat_id" size="1" tabindex="4">
                             <option value=" "';
-                            if($date->getValue("dat_cat_id") == 0)
+                            if($date->getValue('dat_cat_id') == 0)
                             {
                                 echo ' selected="selected" ';
                             }
@@ -435,58 +446,25 @@ echo '
             }
           
             echo'
-                <li id="max_members">
-                    <dl>
-                        <dt>Teilnehmerbegrenzung:</dt>
-                        <dd>
-                            <input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS\',this)" 
-                                onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
-                        </dd>
-                    </dl>
-                </li>';
-            
-            echo '
-            <li id="liRoles">';/*
+            <li id="max_members">
                 <dl>
-                    <dt>Sichtbarkeit:</dt>
+                    <dt>Teilnehmerbegrenzung:</dt>
                     <dd>
-                        <table>
-                            <tr>';
-                            
-                            $sql    = 'SELECT rol_id, rol_name FROM '.TBL_ROLES.' WHERE rol_visible = 1 ';
-                            $result = $db->query($sql);
-
-                            $visibility_modes = $date->getVisibilityArray();
-                            foreach($visibility_modes as $value => $label)
-                            {
-                                $identity = 'date_visible_for_'.$value;
-                                $visibility_row = '<td><input type="checkbox" name="date_visible_for[]" value="'.$value.'" id="'.$identity.'"';
-                                if($date->isVisibleFor($value))
-                                {
-                                    $visibility_row .= ' checked="checked"';
-                                }
-                                
-                                $visibility_row .= ' />&nbsp;<label for="'.$identity.'">'.$label.'</label></td>';
-                                $visibilities[] = $visibility_row;
-                            }
-                        
-                            echo  '
-                            </tr>
-                        </table>
-                        <a href="javascript:markVisibilities();">alle</a>
-                        <a href="javascript:unmarkVisibilities();">keine</a>
+                        <input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS\',this)" 
+                            onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
                     </dd>
-                </dl>*/
-            echo '</li>
+                </dl>
+            </li>
+            <li id="liRoles"></li>
             <li>
                 <dl>
                     <dt></dt>
                     <dd><span id="add_attachment" class="iconTextLink">
-                            <a href="javascript:addRoleSelection()"><img
+                            <a href="javascript:addRoleSelection(0)"><img
                             src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_ADD_ROLE').'" /></a>
-                            <a href="javascript:addRoleSelection()">'.$g_l10n->get('DAT_ADD_ROLE').'</a>
+                            <a href="javascript:addRoleSelection(0)">'.$g_l10n->get('DAT_ADD_ROLE').'</a>
                         </span></dd>
                 </dl>
             </li>
@@ -542,7 +520,7 @@ echo '
            echo '
             <li>
                 <dl>
-                    <dt><label for="dat_description">Beschreibung:</label>';
+                    <dt><label for="dat_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label>';
                         if($g_preferences['enable_bbcode'] == 1)
                         {
                             printEmoticons();
@@ -574,7 +552,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="button" onclick="javascript:popupMessage();"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+            <button id="btnSave" type="button" onclick="javascript:submitForm();"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>

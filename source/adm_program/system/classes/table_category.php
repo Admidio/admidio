@@ -24,112 +24,6 @@ class TableCategory extends TableAccess
         parent::__construct($db, TBL_CATEGORIES, 'cat', $cat_id);
     }
 
-    // die Kategorie wird um eine Position in der Reihenfolge verschoben
-    public function moveSequence($mode)
-    {
-        global $g_current_organization;
-
-        // Anzahl orgaunabhaengige ermitteln, da diese nicht mit den abhaengigen vermischt werden duerfen
-        $sql = 'SELECT COUNT(1) as count FROM '. TBL_CATEGORIES. '
-                 WHERE cat_type = "'. $this->getValue('cat_type'). '"
-                   AND cat_org_id IS NULL ';
-        $this->db->query($sql);
-        $row = $this->db->fetch_array();
-
-        // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
-        if(admStrToUpper($mode) == 'UP')
-        {
-            if($this->getValue('cat_org_id') == 0
-            || $this->getValue('cat_sequence') > $row['count']+1)
-            {
-                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
-                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
-                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                                          OR cat_org_id IS NULL )
-                           AND cat_sequence = '.$this->getValue('cat_sequence').' - 1 ';
-                $this->db->query($sql);
-                $this->setValue('cat_sequence', $this->getValue('cat_sequence')-1);
-                $this->save();
-            }
-        }
-        // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
-        elseif(admStrToUpper($mode) == 'DOWN')
-        {
-            if($this->getValue('cat_org_id') > 0
-            || $this->getValue('cat_sequence') < $row['count'])
-            {
-                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
-                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
-                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                                          OR cat_org_id IS NULL )
-                           AND cat_sequence = '.$this->getValue('cat_sequence').' + 1 ';
-                $this->db->query($sql);
-                $this->setValue('cat_sequence', $this->getValue('cat_sequence')+1);
-                $this->save();
-            }
-        }
-    }
-
-    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    public function setValue($field_name, $field_value)
-    {
-        // Kategorie 'Stammdaten' bei Profilfeldern darf nicht umbenannt werden
-        if($this->getValue('cat_type') == 'USF' && $field_name == 'cat_name' && $this->getValue('cat_name') == 'Stammdaten')
-        {
-            return false;
-        }
-
-        return parent::setValue($field_name, $field_value);
-    }
-
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
-    {
-        global $g_current_organization, $g_current_session;
-        $fields_changed = $this->columnsValueChanged;
-
-        if($this->new_record)
-        {
-            if($this->getValue('cat_org_id') > 0)
-            {
-                $org_condition = ' AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
-                                       OR cat_org_id IS NULL ) ';
-            }
-            else
-            {
-               $org_condition = ' AND cat_org_id IS NULL ';
-            }
-            // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
-            $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '
-                     WHERE cat_type = "'. $this->getValue('cat_type'). '"
-                           '.$org_condition;
-            $this->db->query($sql);
-
-            $row = $this->db->fetch_array();
-
-            $this->setValue('cat_sequence', $row['count'] + 1);
-
-            if($this->getValue('cat_org_id') == 0)
-            {
-                // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
-                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence + 1
-                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
-                           AND cat_org_id IS NOT NULL ';
-                $this->db->query($sql);
-            }
-        }
-
-        parent::save();
-
-        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && $this->getValue('cat_type') == 'USF' && is_object($g_current_session))
-        {
-            // einlesen aller Userobjekte der angemeldeten User anstossen,
-            // da Aenderungen in den Profilfeldern vorgenommen wurden
-            $g_current_session->renewUserObject();
-        }
-    }
-
     // Methode bearbeitet die Referenzen, wenn die Kategorie geloescht wird
     // Rueckgabe ist true, wenn das Loeschen erfolgreich war und false, falls es nicht durchgefuehrt werden konnte
     public function delete()
@@ -222,6 +116,112 @@ class TableCategory extends TableAccess
             // die letzte Kategorie darf nicht geloescht werden
             return false;
         }
+    }
+
+    // die Kategorie wird um eine Position in der Reihenfolge verschoben
+    public function moveSequence($mode)
+    {
+        global $g_current_organization;
+
+        // Anzahl orgaunabhaengige ermitteln, da diese nicht mit den abhaengigen vermischt werden duerfen
+        $sql = 'SELECT COUNT(1) as count FROM '. TBL_CATEGORIES. '
+                 WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                   AND cat_org_id IS NULL ';
+        $this->db->query($sql);
+        $row = $this->db->fetch_array();
+
+        // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
+        if(admStrToUpper($mode) == 'UP')
+        {
+            if($this->getValue('cat_org_id') == 0
+            || $this->getValue('cat_sequence') > $row['count']+1)
+            {
+                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
+                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                          OR cat_org_id IS NULL )
+                           AND cat_sequence = '.$this->getValue('cat_sequence').' - 1 ';
+                $this->db->query($sql);
+                $this->setValue('cat_sequence', $this->getValue('cat_sequence')-1);
+                $this->save();
+            }
+        }
+        // die Kategorie wird um eine Nummer erhoeht und wird somit in der Liste weiter nach unten geschoben
+        elseif(admStrToUpper($mode) == 'DOWN')
+        {
+            if($this->getValue('cat_org_id') > 0
+            || $this->getValue('cat_sequence') < $row['count'])
+            {
+                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
+                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                          OR cat_org_id IS NULL )
+                           AND cat_sequence = '.$this->getValue('cat_sequence').' + 1 ';
+                $this->db->query($sql);
+                $this->setValue('cat_sequence', $this->getValue('cat_sequence')+1);
+                $this->save();
+            }
+        }
+    }
+
+    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
+    public function save()
+    {
+        global $g_current_organization, $g_current_session;
+        $fields_changed = $this->columnsValueChanged;
+
+        if($this->new_record)
+        {
+            if($this->getValue('cat_org_id') > 0)
+            {
+                $org_condition = ' AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                                       OR cat_org_id IS NULL ) ';
+            }
+            else
+            {
+               $org_condition = ' AND cat_org_id IS NULL ';
+            }
+            // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
+            $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '
+                     WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                           '.$org_condition;
+            $this->db->query($sql);
+
+            $row = $this->db->fetch_array();
+
+            $this->setValue('cat_sequence', $row['count'] + 1);
+
+            if($this->getValue('cat_org_id') == 0)
+            {
+                // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
+                $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence + 1
+                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                           AND cat_org_id IS NOT NULL ';
+                $this->db->query($sql);
+            }
+        }
+
+        parent::save();
+
+        // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
+        if($fields_changed && $this->getValue('cat_type') == 'USF' && is_object($g_current_session))
+        {
+            // einlesen aller Userobjekte der angemeldeten User anstossen,
+            // da Aenderungen in den Profilfeldern vorgenommen wurden
+            $g_current_session->renewUserObject();
+        }
+    }
+
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    public function setValue($field_name, $field_value)
+    {
+        // Systemkategorien duerfen nicht umbenannt werden
+        if($field_name == 'cat_name' && $this->getValue('cat_system') == 1)
+        {
+            return false;
+        }
+
+        return parent::setValue($field_name, $field_value);
     }
 }
 ?>

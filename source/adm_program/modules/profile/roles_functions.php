@@ -22,31 +22,33 @@ function getRolesFromDatabase($g_db,$user_id,$g_current_organization)
     require_once('../../system/common.php');
     // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
     $sql = 'SELECT *
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-             WHERE mem_rol_id = rol_id
-               AND mem_begin <= "'.DATE_NOW.'"
-               AND mem_end   >= "'.DATE_NOW.'"
-               AND mem_usr_id = '.$user_id.'
-               AND rol_valid  = 1
-               AND rol_cat_id = cat_id
-               AND cat_org_id = org_id
-               AND org_id     = '. $g_current_organization->getValue('org_id'). '
-             ORDER BY org_shortname, cat_sequence, rol_name';
+              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE mem_rol_id  = rol_id
+               AND mem_begin  <= "'.DATE_NOW.'"
+               AND mem_end    >= "'.DATE_NOW.'"
+               AND mem_usr_id  = '.$user_id.'
+               AND rol_valid   = 1
+               AND rol_visible = 1
+               AND rol_cat_id  = cat_id
+               AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
+             ORDER BY cat_org_id, cat_sequence, rol_name';
     return $g_db->query($sql);
 }
 function getFormerRolesFromDatabase($g_db,$user_id,$g_current_organization)
 {
     require_once('../../system/common.php');
     $sql    = 'SELECT *
-                 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-                WHERE mem_rol_id = rol_id
-                  AND mem_end    < "'.DATE_NOW.'"
-                  AND mem_usr_id = '.$user_id.'
-                  AND rol_valid  = 1
-                  AND rol_cat_id = cat_id
-                  AND cat_org_id = org_id
-                  AND org_id     = '. $g_current_organization->getValue('org_id'). '
-                ORDER BY org_shortname, cat_sequence, rol_name';
+                 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                WHERE mem_rol_id  = rol_id
+                  AND mem_end     < "'.DATE_NOW.'"
+                  AND mem_usr_id  = '.$user_id.'
+                  AND rol_valid   = 1
+                  AND rol_visible = 1
+                  AND rol_cat_id  = cat_id
+                  AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                      OR cat_org_id IS NULL )
+                ORDER BY cat_org_id, cat_sequence, rol_name';
     return $g_db->query($sql);
 }
 function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,$directOutput,$g_l10n)

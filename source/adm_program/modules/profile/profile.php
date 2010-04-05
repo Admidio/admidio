@@ -549,18 +549,18 @@ echo '
             //Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
             foreach($authorizations as $authorization_db_name)
             {
-                $sql = 'SELECT *
-                          FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
+                $sql = 'SELECT rol_name
+                          FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES.'
                          WHERE mem_rol_id = rol_id
                            AND mem_begin <= "'.DATE_NOW.'"
                            AND mem_end    > "'.DATE_NOW.'"
                            AND mem_usr_id = '.$user->getValue('usr_id').'
                            AND rol_valid  = 1
                            AND rol_cat_id = cat_id
-                           AND cat_org_id = org_id
-                           AND org_id     = '. $g_current_organization->getValue('org_id'). '
+                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                               OR cat_org_id IS NULL )
                            AND '.$authorization_db_name.' = 1
-                         ORDER BY org_shortname, cat_sequence, rol_name';
+                         ORDER BY cat_org_id, cat_sequence, rol_name';
                 $result_role = $g_db->query($sql);
                 $berechtigungs_Herkunft[$authorization_db_name] = NULL;
 
@@ -696,19 +696,19 @@ echo '
             $visible     = "";
 
             if($count_role == 0)
-			{
-				$visible = ' style="display: none;" ';
-			}
-			else
-			{
-				echo '<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>';	
-			}
-			echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
-				  <div class="groupBoxHeadline">Ehemalige Rollenmitgliedschaften&nbsp;</div>
-					<div id="profile_former_roles_box_body" class="groupBoxBody">
-					'.getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false,$g_l10n).'
-					</div>
-				  </div>';
+            {
+                $visible = ' style="display: none;" ';
+            }
+            else
+            {
+                echo '<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>';	
+            }
+            echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
+                  <div class="groupBoxHeadline">Ehemalige Rollenmitgliedschaften&nbsp;</div>
+                    <div id="profile_former_roles_box_body" class="groupBoxBody">
+                    '.getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false,$g_l10n).'
+                    </div>
+                  </div>';
 
             
         }

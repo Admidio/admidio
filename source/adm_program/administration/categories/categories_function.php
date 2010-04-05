@@ -110,13 +110,13 @@ if($_GET['mode'] == 1)
 
     if(strlen($_POST['cat_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_NAME'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_NAME')));
     }
 
     // Kategorie ist immer Orga-spezifisch, ausser manuell angelegte Orga-Felder-Kategorie
     $check_all_orgas = false;
 
-    if($_GET['type'] == 'USF'
+    if(($_GET['type'] == 'USF' || $_GET['type'] == 'ROL')
     && (isset($_POST['cat_org_id']) || $category->getValue('cat_system') == 1 || $g_current_organization->countAllRecords() == 1))
     {
         $_POST['cat_org_id'] = NULL;

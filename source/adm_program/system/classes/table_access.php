@@ -407,6 +407,12 @@ class TableAccess
                     $field_value = addslashes($field_value);
                 }
             }
+
+            // wurde das Schluesselfeld auf 0 gesetzt, dann soll ein neuer Datensatz angelegt werden
+            if($field_name == $this->key_name && $field_value == 0)
+            {
+                $this->new_record = true;
+            }
     
             if(array_key_exists($field_name, $this->dbColumns)
             && $field_value != $this->dbColumns[$field_name])

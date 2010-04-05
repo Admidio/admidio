@@ -122,22 +122,23 @@ elseif($_GET["mode"] == 2)
     // User muss zur aktuellen Orga dazugehoeren
     // kein Suizid ermoeglichen
     if($this_orga == false
-    || $g_current_user->getValue("usr_id") == $_GET['usr_id'])
+    || $g_current_user->getValue('usr_id') == $_GET['usr_id'])
     {
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
     
     $member = new TableMembers($g_db);
 
-    $sql = "SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
-              FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. "
+    $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
+              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
              WHERE rol_valid  = 1
                AND rol_cat_id = cat_id
-               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
+               AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
                AND mem_rol_id = rol_id
-               AND mem_begin <= '".DATE_NOW."'
-               AND mem_end    > '".DATE_NOW."'
-               AND mem_usr_id = ". $_GET['usr_id'];
+               AND mem_begin <= "'.DATE_NOW.'"
+               AND mem_end    > "'.DATE_NOW.'"
+               AND mem_usr_id = '. $_GET['usr_id'];
     $result_mgl = $g_db->query($sql);
 
     while($row = $g_db->fetch_array($result_mgl))

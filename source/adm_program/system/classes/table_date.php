@@ -28,65 +28,63 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 class TableDate extends TableAccess
 {
     protected $max_members_role = array();
-    
-    // Standard für Date ist alle Rollen aktiv => 0=Gast hinzufügen
-    public $visible_for = array(0);    
     protected $bbCode;
-
-    // Array mit Keys für Sichtbarkeit der Termine
-    protected $visibility = array('0' => 'Gäste');
+    protected $visibleRoles = array();
+    protected $changeVisibleRoles;
     
     // Konstruktor
     public function __construct(&$db, $dat_id = 0)
     {
         parent::__construct($db, TBL_DATES, 'dat', $dat_id);
+    }
+
+    public function clear()
+    {
+        parent::clear();
+
+        $this->visibleRoles = array();
+        $this->changeVisibleRoles = false;
+    }
         
-        // Rollenname und ID aller Rollen mit Sichtbarkeit des Termins einlesen
-        $sql = 'SELECT rol_id, rol_name 
-                  FROM '.TBL_ROLES.' 
-                 WHERE rol_visible = 1';
-        $result = $db->query($sql);
-        while($row = $db->fetch_array($result))
-        {
-            $this->visibility[$row['rol_id']] = $row['rol_name'];
-            $this->visible_for[] = $row['rol_id'];
-        }
-    }
-
-    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($dat_id, $sql_where_condition = '', $sql_additional_tables = '')
+    // Methode, die den Termin in der DB loescht
+    public function delete()
     {
-        if(is_numeric($dat_id))
+        $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+        $result = $this->db->query($sql);
+
+        // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
+        if($this->getValue('dat_rol_id') > 0)
         {
-            $sql_additional_tables .= TBL_CATEGORIES;
-            $sql_where_condition   .= '    dat_cat_id = cat_id
-                                       AND dat_id     = '.$dat_id;
-            parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
+            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = '.$this->getValue('dat_rol_id');
+            $this->db->query($sql);
             
-            $this->visible_for = array();
-            $sql = 'SELECT DISTINCT dtr_rol_id FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id="'.$dat_id.'"';
-            $result = $this->db->query($sql);
-
-            while($row = $this->db->fetch_array($result))
-            {
-                $this->visible_for[] = intval($row['dtr_rol_id']);
-            }
+            $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = '.$this->getValue('dat_rol_id');
+            $this->db->query($sql);
         }
-    }
-
-    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    public function setValue($field_name, $field_value)
-    {
-        if($field_name == 'dat_end' && $this->getValue('dat_all_day') == 1)
-        {
-            // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
-            // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
-            list($year, $month, $day, $hour, $minute, $second) = split('[- :]', $field_value);
-            $field_value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
-        }
-        parent::setValue($field_name, $field_value);
-    }
+        
+        parent::delete();
+    }    
     
+    // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
+    public function editRight()
+    {
+        global $g_current_organization;
+        
+        // Termine der eigenen Orga darf bearbeitet werden
+        if($this->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
+        {
+            return true;
+        }
+        // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
+        elseif($this->getValue('dat_global') == true
+        && $g_current_organization->isChildOrganization($this->getValue('cat_org_id')))
+        {
+            return true;
+        }
+    
+        return false;
+    }
+
     // liefert die Beschreibung je nach Type zurueck
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
@@ -118,41 +116,6 @@ class TableDate extends TableAccess
         return $description;
     }
 
-    public function getValue($field_name, $format = '')
-    {
-        if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
-        {
-            // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
-            list($year, $month, $day, $hour, $minute, $second) = split('[- :]', $this->dbColumns['dat_end']);
-            $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
-        }
-        else
-        {
-            $value = parent::getValue($field_name, $format);
-        }
-
-        return $value;
-    }
-    
-    // Methode, die den Termin in der DB loescht
-    public function delete()
-    {
-        $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
-        $result = $this->db->query($sql);
-
-        // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
-        if($this->getValue('dat_rol_id') > 0)
-        {
-            $sql = 'DELETE FROM '.TBL_MEMBERS.' WHERE mem_rol_id = '.$this->getValue('dat_rol_id');
-            $this->db->query($sql);
-            
-            $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = '.$this->getValue('dat_rol_id');
-            $this->db->query($sql);
-        }
-        
-        parent::delete();
-    }    
-   
     // gibt einen Termin im iCal-Format zurueck
     public function getIcal($domain)
     {
@@ -187,26 +150,6 @@ class TableDate extends TableAccess
         return $ical;
     }
     
-    // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
-    public function editRight()
-    {
-        global $g_current_organization;
-        
-        // Termine der eigenen Orga darf bearbeitet werden
-        if($this->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
-        {
-            return true;
-        }
-        // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
-        elseif($this->getValue('dat_global') == true
-        && $g_current_organization->isChildOrganization($this->getValue('cat_org_id')))
-        {
-            return true;
-        }
-    
-        return false;
-    }
-    
     // gibt die Anzahl der maximalen Teilnehmer einer Rolle zurueck
     public function getMaxMembers($rol_id)
     {
@@ -219,21 +162,121 @@ class TableDate extends TableAccess
             return '';
         }
     }
-    
-    // prueft, ob der Termin fuer eine Rolle sichtbar ist
-    public function isVisibleFor($rol_id)
+
+    public function getValue($field_name, $format = '')
     {
-        return in_array($rol_id, $this->visible_for);
+        if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
+        {
+            // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
+            list($year, $month, $day, $hour, $minute, $second) = split('[- :]', $this->dbColumns['dat_end']);
+            $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
+        }
+        else
+        {
+            $value = parent::getValue($field_name, $format);
+        }
+
+        return $value;
     }
-    
-    public function getVisibilityMode($mode)
+
+    // die Methode gibt ein Array  mit den fuer den Termin sichtbaren Rollen-IDs zurueck
+    public function getVisibleRoles()
     {
-        return $this->visibility[$mode];
+        if(isset($this->visibleRoles[0]) == false)
+        {
+            // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
+            $this->readVisibleRoles();
+        }
+        return $this->visibleRoles;
     }
-    
-    public function getVisibilityArray()
+
+    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
+    public function readData($dat_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        return $this->visibility;
-    }    
+        if(is_numeric($dat_id))
+        {
+            $sql_additional_tables .= TBL_CATEGORIES;
+            $sql_where_condition   .= '    dat_cat_id = cat_id
+                                       AND dat_id     = '.$dat_id;
+            parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
+        }
+    }
+
+    // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
+    public function readVisibleRoles()
+    {
+        $this->visibleRoles = array();
+        $sql = 'SELECT dtr_rol_id FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+        $this->db->query($sql);
+        while($row = $this->db->fetch_array())
+        {
+            if($row['dtr_rol_id'] == null)
+            {
+                $this->visibleRoles[] = -1;
+            }
+            else
+            {
+                $this->visibleRoles[] = $row['dtr_rol_id'];
+            }
+        }
+    }
+
+    public function save($updateFingerPrint = true)
+    {
+        parent::save($updateFingerPrint);
+
+        if($this->changeVisibleRoles == true)
+        {
+            // Sichbarkeit der Rollen wegschreiben
+            if($this->new_record == false)
+            {
+                // erst einmal alle bisherigen Rollenzuordnungen loeschen, damit alles neu aufgebaut werden kann
+                $sql='DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+                $this->db->query($sql);
+            }
+
+            // nun alle Rollenzuordnungen wegschreiben
+            $date_role = new TableAccess($this->db, TBL_DATE_ROLE, 'dtr');
+
+            foreach($this->visibleRoles as $key => $roleID)
+            {
+                if($roleID != 0)
+                {
+                    if($roleID > 0)
+                    {
+                        $date_role->setValue('dtr_rol_id', $roleID);
+                    }
+                    $date_role->setValue('dtr_dat_id', $this->getValue('dat_id'));
+                    $date_role->save();
+                    $date_role->clear();
+                }
+            }
+        }
+
+        $this->changeVisibleRoles = false;
+    }
+
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    public function setValue($field_name, $field_value)
+    {
+        if($field_name == 'dat_end' && $this->getValue('dat_all_day') == 1)
+        {
+            // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
+            // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
+            list($year, $month, $day, $hour, $minute, $second) = split('[- :]', $field_value);
+            $field_value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
+        }
+        parent::setValue($field_name, $field_value);
+    }
+
+    // die Methode erwartet ein Array mit den fuer den Termin sichtbaren Rollen-IDs
+    public function setVisibleRoles($arrVisibleRoles)
+    {
+        if(count(array_diff($arrVisibleRoles, $this->visibleRoles)) > 0)
+        {
+            $this->changeVisibleRoles = true;
+        }
+        $this->visibleRoles = $arrVisibleRoles;
+    }
 }
 ?>

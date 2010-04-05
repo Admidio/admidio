@@ -54,7 +54,7 @@ $g_layout['title']  = 'Rollenverwaltung';
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">Rollenverwaltung</h1>';
+echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
 if($req_valid == true)
 {
@@ -130,7 +130,9 @@ echo '
                 WHERE rol_valid  = '.$req_valid.'
                   AND rol_visible = '.$req_visible.'
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                  AND cat_type   = "ROL"
+                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                      OR cat_org_id IS NULL )
                 ORDER BY cat_id ASC, rol_name ASC ';
     $rol_result = $g_db->query($sql);
 

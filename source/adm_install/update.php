@@ -255,9 +255,7 @@ elseif($req_mode == 2)
     // damit diese neu eingelesen werden muessen
     session_name('admidio_php_session_id');
     session_start();
-    unset($_SESSION['g_current_organisation']);
-    unset($_SESSION['g_preferences']);
-    unset($_SESSION['g_current_user']);
+    session_unset();
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong><br /><br />
                '.$g_l10n->get('INS_PHR_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT);

@@ -121,7 +121,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="ann_headline">'.$g_l10n->get('SYS_HEADLINE').':</label></dt>
+                    <dt><label for="ann_headline">'.$g_l10n->get('SYS_TITLE').':</label></dt>
                     <dd>
                         <input type="text" id="ann_headline" name="ann_headline" style="width: 350px;" tabindex="1" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>

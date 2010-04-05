@@ -46,7 +46,9 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
                AND email.usd_usf_id = '.$g_current_user->getProperty('EMAIL', 'usf_id').'
                AND email.usd_value  = "'.$empfaenger_email.'"
              WHERE rol_cat_id = cat_id
-               AND cat_org_id = '.$g_current_organization->getValue('org_id').'
+               AND rol_valid   = 1
+               AND (  cat_org_id = '.$g_current_organization->getValue('org_id').'
+                   OR cat_org_id IS NULL )
                AND rol_id     = mem_rol_id
                AND mem_begin <= "'.DATE_NOW.'"
                AND mem_end    > "'.DATE_NOW.'"

@@ -304,9 +304,9 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         $topNavigation .= '
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'"><img
                 src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_CREATE_DATE').'" title="'.$g_l10n->get('DAT_CREATE_DATE').'"/></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'">'.$g_l10n->get('DAT_CREATE_DATE').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'">'.$g_l10n->get('DAT_CREATE_DATE').'</a>
             </span>
         </li>';
     }
@@ -391,35 +391,6 @@ if($g_db->num_rows($dates_result) == 0)
 }
 else
 {
-    // Rollen von Benutzer holen, mit denen man sich zu den Terminen anmelden kann
-    if($g_current_user->getValue('usr_id'))
-    {
-        $user_roles_base = array();
-        $sql = 'SELECT *
-                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
-                 WHERE mem_rol_id = rol_id
-                   AND mem_begin <= "'.DATE_NOW.'"
-                   AND mem_end    > "'.DATE_NOW.'"
-                   AND mem_usr_id = "'.$g_current_user->getValue('usr_id').'"
-                   AND rol_valid  = 1
-                   AND rol_cat_id = cat_id
-                   AND cat_org_id = org_id
-                   AND org_id     = "'. $g_current_organization->getValue('org_id'). '"
-                   AND rol_id NOT IN(SELECT rol_id FROM '.TBL_ROLES.', '.TBL_DATES.' WHERE rol_id = dat_rol_id)
-                 ORDER BY rol_id, rol_name';
-        $result_role = $g_db->query($sql);
-        while($row = $g_db->fetch_array($result_role))
-        {
-            $user_roles_base[$row['rol_id']] = $row['rol_name'];
-        }
-        if(!count($user_roles_base)) $user_roles_base = array('0' => 'Gast');
-    }
-    else
-    {
-        $user_roles_base = array('0' => 'Gast');
-    }
-    
-
     $date = new TableDate($g_db);
 
     // Termine auflisten
@@ -493,6 +464,8 @@ else
                         if($date->editRight() == true)
                         {
                             echo '
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$req_headline.'"><img
+                                src="'. THEME_PATH. '/icons/application_double.png" alt="'.$g_l10n->get('SYS_COPY').'" title="'.$g_l10n->get('SYS_COPY').'" /></a>
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$req_headline.'"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                         }
@@ -709,47 +682,27 @@ else
                                 $available_signin = false;
                             }
                         }
-                        if(count($date->max_members_role))
-                        {
-                            // Teilnehmerbegrenzungen auf Rolle aufgeteilt
-                            $sql = 'SELECT mem_from_rol_id, COUNT(DISTINCT mem_usr_id) AS num FROM '.TBL_MEMBERS.'
-                                    WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'" AND mem_leader = 0 GROUP BY mem_from_rol_id';
-                            $res_num = $g_db->query($sql);
-                            while($limit = $g_db->fetch_array($res_num))
-                            {
-                                // Wenn Rollenplätze bereits voll sind, in Array aufnehmen
-                                if($limit['num'] >= $date->max_members_role[$limit['mem_from_rol_id']]) $non_available_rols[$limit['mem_from_rol_id']] = $limit['num'];
-                            }
-                        }
 
                         echo '<div style="text-align:right">';
                         if($available_signin)
                         {
-                            $content_signin = '';
-                            foreach($user_roles_base as $k => $v)
+                            $content_signin = '&nbsp;<form action=';
+                            if($g_current_user->getValue('usr_id')!=null)
                             {
-                                if(in_array($k,$date->visible_for) && !isset($non_available_rols[$k]))
-                                {
-                                    $content_signin .= '&nbsp;<form action=';
-                                    if($g_current_user->getValue('usr_id')!=null)
-                                    {
-                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php" style="float:right">
-                                            <input type="hidden" name="dat_id" value="'.$date->getValue('dat_id'). '" />
-                                            <input type="hidden" name="headline" value="'.$req_headline.'" />
-                                            <input type="hidden" name="login" value="1" />
-                                            <input type="hidden" name="from_rol_id" value="'.$k.'" />
-                                        ';
-                                    }
-                                    else
-                                    {
-                                        $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php" style="float:right">
-                                            <input type="hidden" name="new_user" value="2" />
-                                            <input type="hidden" name="dat_rol_id" value="'.$date->getValue('dat_rol_id').'" />
-                                        ';
-                                    }
-                                    $content_signin .= '<button id="btnLoginDate" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/ok.png" alt="login Date" />&nbsp;'.$v.'</button></form>';
-                                }
+                                $content_signin .= '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php" style="float:right">
+                                    <input type="hidden" name="dat_id" value="'.$date->getValue('dat_id'). '" />
+                                    <input type="hidden" name="headline" value="'.$req_headline.'" />
+                                    <input type="hidden" name="login" value="1" />';
                             }
+                            else
+                            {
+                                $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php" style="float:right">
+                                    <input type="hidden" name="new_user" value="2" />
+                                    <input type="hidden" name="dat_rol_id" value="'.$date->getValue('dat_rol_id').'" />
+                                ';
+                            }
+                            $content_signin .= '<button id="btnLoginDate" type="submit" tabindex="4"><img 
+                                src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_ATTEND').'" />&nbsp;'.$g_l10n->get('DAT_ATTEND').'</button></form>';
 
                             if($content_signin)
                             {
@@ -769,25 +722,17 @@ else
                     }
                     elseif($date->getValue('dat_rol_id')!=null && $row != null)
                     {
-                        if($user_roles_base[0])
-                        {
-                            // Gast darf sich nicht mehr abmelden, da er sonst keiner Rolle mehr angehört
-                            echo '<div style="text-align:right"><b>Sie sind als Teilnehmer für diesen Termin angemeldet.</b></div>';
-                        }
-                        else
-                        {
-                            echo '
-                            <div style="text-align:right">
-                                <form action=';
-                                echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
-                                    <input type="hidden" name="dat_id" value="'. $date->getValue('dat_id'). '" />
-                                    <input type="hidden" name="headline" value="'.$req_headline.'" />
-                                    <input type="hidden" name="login" value="0" />
-                                    <button id="btnLogoutDate" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
-                                    alt="login Date" />&nbsp;austragen</button>
-                                </form>
-                            </div>';
-                        }
+                        echo '
+                        <div style="text-align:right">
+                            <form action=';
+                            echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
+                                <input type="hidden" name="dat_id" value="'. $date->getValue('dat_id'). '" />
+                                <input type="hidden" name="headline" value="'.$req_headline.'" />
+                                <input type="hidden" name="login" value="0" />
+                                <button id="btnLogoutDate" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
+                                alt="'.$g_l10n->get('DAT_CANCEL').'" />&nbsp;'.$g_l10n->get('DAT_CANCEL').'</button>
+                            </form>
+                        </div>';
                     }
                 }
             echo '</div>

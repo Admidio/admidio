@@ -125,7 +125,8 @@ if($req_members)
                   AND mem_end    > "'.DATE_NOW.'"
                   AND rol_valid  = 1
                   AND rol_cat_id = cat_id
-                  AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                      OR cat_org_id IS NULL )
                       '.$search_condition.'
                 ORDER BY last_name.usd_value, first_name.usd_value ';
 }
@@ -151,7 +152,8 @@ else
                   AND rol_valid  = 1
                  LEFT JOIN '. TBL_CATEGORIES. '
                    ON rol_cat_id = cat_id
-                  AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                      OR cat_org_id IS NULL )
                  LEFT JOIN '. TBL_USER_DATA. ' as email
                    ON email.usd_usr_id = usr_id
                   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
@@ -291,7 +293,8 @@ echo '
                           '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
                     WHERE rol_valid  = 1
                       AND rol_cat_id = cat_id
-                      AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                          OR cat_org_id IS NULL )
                       AND mem_rol_id = rol_id
                       AND mem_usr_id = usr_id
                       AND mem_begin <= "'.DATE_NOW.'"
