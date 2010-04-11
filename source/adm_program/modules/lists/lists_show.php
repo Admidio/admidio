@@ -20,9 +20,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/list_configuration.php');
-require('../../system/classes/table_roles.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/list_configuration.php');
+require_once('../../system/classes/table_roles.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $arr_mode   = array('csv-ms', 'csv-ms-2k', 'csv-oo', 'html', 'print');
@@ -97,12 +97,6 @@ else
 if(!$g_current_user->viewRole($req_rol_id))
 {
     $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
-}
-
-//SESSION array fuer bilder initialisieren
-if($g_preferences['profile_photo_storage'] == 0)
-{
-	$_SESSION['profilphoto'] = array();
 }
 
 if($req_mode == 'csv-ms')
@@ -589,12 +583,27 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     // Benutzerfoto anzeigen
                     if($req_mode == 'html' || $req_mode == 'print')
                     {
-	                    $_SESSION['profilphoto'][$row['usr_id']] = 0;
-                    	if($g_preferences['profile_photo_storage'] == 0  && $row[$sql_column_number] != '')
-						{
-							$_SESSION['profilphoto'][$row['usr_id']]=$row[$sql_column_number];
-						}
-                        $content = '<img src="photo_show.php?usr_id='.$row['usr_id'].'" style="vertical-align: middle;" alt="Benutzerfoto" />';
+                        $imgSource = 'photo_show.php?usr_id='.$row['usr_id'];
+                        if($g_preferences['profile_photo_storage'] == 0)
+                        {
+                            if(strlen($row[$sql_column_number]) == 0)
+                            {
+                                $imgSource = THEME_PATH. '/images/no_profile_pic.png';
+                            }
+                        }
+                        else
+                        {
+                            // Profilbild aus dem Filesystem einlesen bzw. Default-Bild anzeigen
+                            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$_GET['usr_id'].'.jpg'))
+                            {
+                                $imgSource = $g_root_path.'/adm_my_files/user_profile_photos/'.$_GET['usr_id'].'.jpg';
+                            }
+                            else
+                            {
+                                $imgSource = THEME_PATH. '/images/no_profile_pic.png';
+                            }
+                        }
+                        $content = '<img src="'.$imgSource.'" style="vertical-align: middle;" alt="Benutzerfoto" />';
                     }
                     if ($req_mode == 'csv' && $row[$sql_column_number] != NULL)
                     {
@@ -633,11 +642,8 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
     
                         case 'DATE':
                             // Datum muss noch formatiert werden
-                            if(strlen($row[$sql_column_number]) > 0)
-                            {
-                                $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-                                $content = $date->format($g_preferences['system_date']);
-                            }
+                            $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+                            $content = $date->format($g_preferences['system_date']);
                             break;
     
                         case 'EMAIL':
