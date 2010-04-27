@@ -52,8 +52,6 @@ ALTER TABLE %PREFIX%_roles ADD COLUMN `rol_visible` TINYINT(1) UNSIGNED NOT NULL
 ALTER TABLE %PREFIX%_dates ADD COLUMN `dat_rol_id` INT(11) UNSIGNED;
 ALTER TABLE %PREFIX%_dates ADD COLUMN `dat_room_id` INT(11) UNSIGNED;
 ALTER TABLE %PREFIX%_dates ADD COLUMN `dat_max_members` INT(11) UNSIGNED NOT NULL;
-ALTER TABLE %PREFIX%_members ADD COLUMN `mem_from_rol_id` INT(11) UNSIGNED NULL;
-ALTER TABLE %PREFIX%_members ADD INDEX (`mem_from_rol_id`) ;
 
 -- Sichtbarkeitstabelle für Termine hinzufuegen
 
