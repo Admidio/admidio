@@ -442,7 +442,6 @@ auto_increment = 1;
 -- Index
 alter table %PREFIX%_members add index MEM_ROL_FK (mem_rol_id);
 alter table %PREFIX%_members add index MEM_USR_FK (mem_usr_id);
-alter table %PREFIX%_members add index (mem_from_rol_id);
 
 -- Constraints
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_ROL foreign key (mem_rol_id)

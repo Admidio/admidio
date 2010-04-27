@@ -390,7 +390,7 @@ class TableAccess
                        || $this->columnsInfos[$field_name]['key'] == 'MUL')
                     && $field_value == 0)
                     {
-                        if($field_name != 'mem_from_rol_id') $field_value = '';
+                        $field_value = '';
                     }
                 }
                 
