@@ -191,6 +191,7 @@ class TableAccess
     }
 
     // liest den Datensatz von $id ein
+    // die Methode gibt true zurueck, wenn ein DS gefunden wurde, andernfalls false
     // id : Schluesselwert von dem der Datensatz gelesen werden soll
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
     // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
@@ -234,8 +235,14 @@ class TableAccess
                         $this->dbColumns[$key] = $value;
                     }
                 }
+                return true;
             }
-        }       
+            else
+            {
+                $this->clear();
+            }
+        }
+        return false;
     }
     
     // die Methode speichert die Organisationsdaten in der Datenbank,

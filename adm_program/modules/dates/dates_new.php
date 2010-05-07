@@ -312,7 +312,7 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="dat_global">'. $_GET['headline']. ' für mehrere Organisationen sichtbar</label>
+                            <label for="dat_global">'.$g_l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
@@ -325,12 +325,12 @@ echo '
 
             <li>
                 <dl>
-                    <dt><label for="date_from">Beginn:</label></dt>
+                    <dt><label for="date_from">'.$g_l10n->get('SYS_START').':</label></dt>
                     <dd>
                         <span>
                             <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$date_from.'" />
                             <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-                                src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                                src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                             <span id="calendardiv" style="position: absolute; visibility: hidden; "></span>
                         </span>
                         <span style="margin-left: 10px;">
@@ -344,19 +344,19 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' onclick="setAllDay()" value="1" />
-                            <label for="dat_all_day">Ganztägig</label>
+                            <label for="dat_all_day">'.$g_l10n->get('DAT_ALL_DAY').'</label>
                         </span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="date_to">Ende:</label></dt>
+                    <dt><label for="date_to">'.$g_l10n->get('SYS_END').':</label></dt>
                     <dd>
                         <span>
                             <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$date_to.'" />
                             <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-                                src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                                src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                         </span>
                         <span style="margin-left: 10px;">
                             <input type="text" id="time_to" name="time_to" size="5" maxlength="5" value="'.$time_to.'" />
@@ -372,7 +372,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="dat_cat_id">Kalender:</label></dt>
+                    <dt><label for="dat_cat_id">'.$g_l10n->get('DAT_CALENDAR').':</label></dt>
                     <dd>
                         <select id="dat_cat_id" name="dat_cat_id" size="1" tabindex="4">
                             <option value=" "';
@@ -404,7 +404,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt>Anmeldung möglich:</dt>
+                    <dt>'.$g_l10n->get('DAT_REGISTRATION_POSSIBLE').':</dt>
                     <dd>
                         <input type="checkbox" id="date_login" name="date_login"';
                         if($date->getValue('dat_rol_id') > 0 
@@ -424,7 +424,7 @@ echo '
                 echo'
                     <li id="room">
                         <dl>
-                            <dt>Raum:</dt>
+                            <dt>'.$g_l10n->get('DAT_ROOM').':</dt>
                             <dd>
                                 <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6" onchange="toggleRolId()">';
                                 $room = new TableRooms($g_db);
@@ -448,7 +448,7 @@ echo '
             echo'
             <li id="max_members">
                 <dl>
-                    <dt>Teilnehmerbegrenzung:</dt>
+                    <dt>'.$g_l10n->get('DAT_PARTICIPANTS_LIMIT').':</dt>
                     <dd>
                         <input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PHR_MAX_MEMBERS&amp;inline=true"><img 
@@ -470,7 +470,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="dat_location">Ort:</label></dt>
+                    <dt><label for="dat_location">'.$g_l10n->get('DAT_LOCATION').':</label></dt>
                     <dd>
                         <input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
                         if($g_preferences['dates_show_map_link'])
@@ -484,9 +484,9 @@ echo '
             </li>';
             if($g_preferences['dates_show_map_link'])
             {
-                if(strlen($date->getValue("dat_country")) == 0)
+                if(strlen($date->getValue('dat_country')) == 0)
                 {
-                    $date->setValue("dat_country", $g_preferences['default_country']);
+                    $date->setValue('dat_country', $g_preferences['default_country']);
                 }
                 echo '<li>
                     <dl>
@@ -494,12 +494,12 @@ echo '
                         <dd>
                             <select size="1" id="dat_country" name="dat_country">';
                                 // Datei mit Laenderliste oeffnen und alle Laender einlesen
-                                $country_list = fopen("../../system/staaten.txt", "r");
+                                $country_list = fopen('../../system/staaten.txt', 'r');
                                 $country = trim(fgets($country_list));
                                 while (!feof($country_list))
                                 {
                                     echo '<option value="'.$country.'"';
-                                    if($country == $date->getValue("dat_country"))
+                                    if($country == $date->getValue('dat_country'))
                                     {
                                         echo ' selected="selected" ';
                                     }
@@ -517,7 +517,7 @@ echo '
             {
                printBBcodeIcons();
             }
-           echo '
+            echo '
             <li>
                 <dl>
                     <dt><label for="dat_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label>';

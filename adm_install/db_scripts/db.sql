@@ -103,10 +103,15 @@ create table %PREFIX%_categories
    cat_id                         int (11) unsigned              not null AUTO_INCREMENT,
    cat_org_id                     tinyint(4),
    cat_type                       varchar(10)                    not null,
+   cat_name_intern                varchar(110)                   not null,
    cat_name                       varchar(30)                    not null,
    cat_hidden                     tinyint(1) unsigned            not null default 0,
    cat_system                     tinyint(1) unsigned            not null default 0,
-   cat_sequence                                smallint                       not null,
+   cat_sequence                   smallint                       not null,
+   cat_usr_id_create              int(11) unsigned,
+   cat_timestamp_create           datetime                       not null,
+   cat_usr_id_change              int(11) unsigned,
+   cat_timestamp_change           datetime,
    primary key (cat_id)
 )
 engine = InnoDB
@@ -118,6 +123,10 @@ alter table %PREFIX%_categories add index CAT_ORG_FK (cat_org_id);
 -- Constraints
 alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_ORG foreign key (cat_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
+alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CREATE foreign key (cat_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_date_role                                         */
@@ -722,6 +731,10 @@ alter table %PREFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
 -- Constraints
 alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_CAT foreign key (usf_cat_id)
       references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CREATE foreign key (usf_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CHANGE foreign key (usf_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
@@ -783,7 +796,7 @@ alter table %PREFIX%_users add index USR_USR_CHANGE_FK (usr_usr_id_change);
 alter table %PREFIX%_users add index USR_ORG_REG_FK (usr_reg_org_shortname);
 
 -- Constraints
-alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_create foreign key (usr_usr_id_create)
+alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CREATE foreign key (usr_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;

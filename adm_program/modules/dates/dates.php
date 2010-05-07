@@ -25,6 +25,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_date.php');
+require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_rooms.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -400,38 +401,6 @@ else
         //$date->clear();
         //$date->setArray($row);
         $date->readData($row['dat_id']);
-        
-        // HTML-code für Teilnehmeranzeige generieren
-        $participants_html = '';
-        if(($date->getValue('dat_rol_id'))!=null)
-        {
-            if($date->getValue('dat_max_members')!=0)
-            {
-                $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
-                $result = $g_db->query($sql);
-                $row2 = $g_db->num_rows($result);
-                
-                $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
-                $result = $g_db->query($sql);
-                $row3 = $g_db->num_rows($result);
-                            
-                $participants_html = '
-                    <tr>
-                        <td>'.$g_l10n->get('DAT_PARTICIPANTS').':</td>
-                        <td>
-                            <strong>'.$row2.'</strong> (davon '.$row3.' '. ((intval($row3)==1) ? $g_l10n->get('DAT_ORGANIZER') : $g_l10n->get('DAT_ORGANIZERS')) . ')
-                        </td>
-                    </tr>';
-            }
-            else 
-            {
-                $participants_html = '
-                    <tr>
-                        <td>'.$g_l10n->get('DAT_PARTICIPANTS').':</td>
-                        <td><strong>'.$g_l10n->get('SYS_UNLIMITED').'</strong></td>
-                    </tr>';
-            }
-        }
 
         echo '
         <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
@@ -455,7 +424,7 @@ else
                         echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
                             src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('SYS_MEMBERS').'" title="'.$g_l10n->get('SYS_MEMBERS').'" /></a>';
                     }
-                    echo'  <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=4"><img
+                    echo'  <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
                     src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('DAT_EXPORT_ICAL').'" title="'.$g_l10n->get('DAT_EXPORT_ICAL').'" /></a>';
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
@@ -482,191 +451,163 @@ else
             </div>
 
             <div class="boxBody">';
-                // Uhrzeit und Ort anzeigen, falls vorhanden
-                if ($date->getValue("dat_all_day") == 0 || strlen($date->getValue("dat_location")) > 0)
+                $dateElements = array();
+                $firstElement = true;
+
+                if ($date->getValue('dat_all_day') == 0)
                 {
-                    echo '<div class="date_info_block">';
-                    $margin_left_location = "0";
-                    if ($date->getValue("dat_all_day") == 0)
+                    // Beginn in Ausgabe-Array schreiben
+                    $dateElements[] = array($g_l10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $g_preferences['system_time']). '</strong> '.$g_l10n->get('DAT_CLOCK'));
+                    // Ende in Ausgabe-Array schreiben
+                    $dateElements[] = array($g_l10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $g_preferences['system_time']). '</strong> '.$g_l10n->get('DAT_CLOCK'));
+                }
+                // Kalender in Ausgabe-Array schreiben
+                $dateElements[] = array($g_l10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
+
+                if (strlen($date->getValue('dat_location')) > 0)
+                {
+                    // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
+                    // die jeweils laenger als 3 Zeichen sind
+                    $map_info_count = 0;
+                    foreach(split('[,; ]', $date->getValue('dat_location')) as $key => $value)
                     {
-                        echo '
-                        <table style="float:left; width: 250px;">
-                            <tr>
-                                <td>'.$g_l10n->get('SYS_START').':</td>
-                                <td><strong>'. $date->getValue('dat_begin', $g_preferences['system_time']). '</strong> Uhr</td>
-                            </tr>
-                            <tr>
-                                <td>'.$g_l10n->get('SYS_END').':</td>
-                                <td><strong>'. $date->getValue('dat_end', $g_preferences['system_time']). '</strong> Uhr</td>
-                            </tr>';
-                        echo $participants_html;
-                        echo '</table>';
-                        $margin_left_location = '40';
+                        if(strlen($value) > 3)
+                        {
+                            $map_info_count++;
+                        }
                     }
 
-                    if (strlen($date->getValue('dat_location')) > 0)
+                    if($g_preferences['dates_show_map_link'] == true
+                        && $map_info_count > 1)
                     {
-                        echo '
-                        <table style="padding-left: '. $margin_left_location. 'px;">
-                            <tr>
-                                <td>'.$g_l10n->get('DAT_CALENDAR').':</td>
-                                <td><strong>'. $date->getValue('cat_name'). '</strong></td>
-                            </tr>
-                            <tr>
-                                <td>'.$g_l10n->get('DAT_LOCATION').':</td>
-                                <td>';
-                                    // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
-                                    // die jeweils laenger als 3 Zeichen sind
-                                    $map_info_count = 0;
-                                    foreach(split('[,; ]', $date->getValue('dat_location')) as $key => $value)
-                                    {
-                                        if(strlen($value) > 3)
-                                        {
-                                            $map_info_count++;
-                                        }
-                                    }
-
-                                    if($g_preferences['dates_show_map_link'] == true
-                                        && $map_info_count > 1)
-                                    {
-                                        // Google-Maps-Link fuer den Ort zusammenbauen
-                                        $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
-                                        if(strlen($date->getValue('dat_country')) > 0)
-                                        {
-                                            // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
-                                            $location_url .= ',%20'. $date->getValue('dat_country');
-                                        }
-                                        echo '<a href="'. $location_url. '" target="_blank" title="'.$g_l10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
-
-                                        // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
-                                        if($g_valid_login && strlen($g_current_user->getValue('ADDRESS')) > 0
-                                            && (  strlen($g_current_user->getValue('POSTCODE'))  > 0 || strlen($g_current_user->getValue('CITY'))  > 0 ))
-                                        {
-                                            $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue('ADDRESS'));
-                                            if(strlen($g_current_user->getValue('POSTCODE'))  > 0)
-                                            {
-                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('POSTCODE'));
-                                            }
-                                            if(strlen($g_current_user->getValue('CITY'))  > 0)
-                                            {
-                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('CITY'));
-                                            }
-                                            if(strlen($g_current_user->getValue('COUNTRY'))  > 0)
-                                            {
-                                                $route_url .= ',%20'. urlencode($g_current_user->getValue('COUNTRY'));
-                                            }
-
-                                            $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
-                                            if(strlen($date->getValue('dat_country')) > 0)
-                                            {
-                                                // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
-                                                $route_url .= ',%20'. $date->getValue('dat_country');
-                                            }
-                                            echo '
-                                                <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank">
-                                                    <img src="'. THEME_PATH. '/icons/map.png" alt="'.$g_l10n->get('DAT_SHOW_ROUTE').'" title="'.$g_l10n->get('DAT_SHOW_ROUTE').'"/></a>
-                                                </span>';
-                                        }
-                                    } 
-                                    else
-                                    {
-                                        
-                                        echo '<strong>'. $date->getValue('dat_location'). '</strong>';
-                                    }
-                                    if($date->getValue('dat_room_id')>0)
-                                    {
-                                        $room = new TableRooms($g_db);
-                                        $room->readData($date->getValue('dat_room_id'));
-                                        $room_name = $room->getValue('room_name');
-                                        echo '<strong> (<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a>)</strong>';
-                                    }
-                                    echo '
-                                </td>
-                            </tr>';
-                        
-                        if ($date->getValue('dat_all_day') != 0)
+                        // Google-Maps-Link fuer den Ort zusammenbauen
+                        $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
+                        if(strlen($date->getValue('dat_country')) > 0)
                         {
-                            echo $participants_html;
+                            // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
+                            $location_url .= ',%20'. $date->getValue('dat_country');
                         }
-                        echo' </table>';
+                        $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$g_l10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
+
+                        // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
+                        if($g_valid_login && strlen($g_current_user->getValue('ADDRESS')) > 0
+                        && (  strlen($g_current_user->getValue('POSTCODE'))  > 0 || strlen($g_current_user->getValue('CITY'))  > 0 ))
+                        {
+                            $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($g_current_user->getValue('ADDRESS'));
+                            if(strlen($g_current_user->getValue('POSTCODE'))  > 0)
+                            {
+                                $route_url .= ',%20'. urlencode($g_current_user->getValue('POSTCODE'));
+                            }
+                            if(strlen($g_current_user->getValue('CITY'))  > 0)
+                            {
+                                $route_url .= ',%20'. urlencode($g_current_user->getValue('CITY'));
+                            }
+                            if(strlen($g_current_user->getValue('COUNTRY'))  > 0)
+                            {
+                                $route_url .= ',%20'. urlencode($g_current_user->getValue('COUNTRY'));
+                            }
+
+                            $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
+                            if(strlen($date->getValue('dat_country')) > 0)
+                            {
+                                // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
+                                $route_url .= ',%20'. $date->getValue('dat_country');
+                            }
+                            $locationHtml .= '
+                                <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank">
+                                    <img src="'. THEME_PATH. '/icons/map.png" alt="'.$g_l10n->get('DAT_SHOW_ROUTE').'" title="'.$g_l10n->get('DAT_SHOW_ROUTE').'"/></a>
+                                </span>';
+                        }
+
+                        // falls eingestellt noch den entsprechenden Raum ausgeben
+                        if($date->getValue('dat_room_id') > 0)
+                        {
+                            $room = new TableRooms($g_db, $date->getValue('dat_room_id'));
+                            $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                            $locationHtml .= ' <strong>(<a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a>)</strong>';
+                        }
+                    } 
+                    else
+                    {
+                        $locationHtml = '<strong>'. $date->getValue('dat_location'). '</strong>';
+                    }
+
+                    $dateElements[] = array($g_l10n->get('DAT_LOCATION'), $locationHtml);
+                }
+                elseif($date->getValue('dat_room_id') > 0)
+                {
+                    // falls eingestellt noch den entsprechenden Raum ausgeben
+                    $room = new TableRooms($g_db, $date->getValue('dat_room_id'));
+                    $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                    $locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
+                    $dateElements[] = array($g_l10n->get('DAT_LOCATION'), $locationHtml);
+                }
+
+                // Teilnehmeranzeige in Ausgabe-Array schreiben
+                if($date->getValue('dat_rol_id') > 0)
+                {
+                    if($date->getValue('dat_max_members')!=0)
+                    {
+                        $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
+                        $result = $g_db->query($sql);
+                        $row2 = $g_db->num_rows($result);
+                        
+                        $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
+                        $result = $g_db->query($sql);
+                        $row3 = $g_db->num_rows($result);
+                                    
+                        $participantsHtml = '<strong>'.$row2.'</strong> (davon '.$row3.' '. ((intval($row3)==1) ? $g_l10n->get('DAT_ORGANIZER') : $g_l10n->get('DAT_ORGANIZERS')) . ')';
                     }
                     else 
                     {
-                        echo '<table style="padding-left: '. $margin_left_location. 'px;">
-                            <tr>
-                                <td>'.$g_l10n->get('DAT_CALENDAR').':</td>
-                                <td><strong>'. $date->getValue('cat_name'). '</strong></td>
-                            </tr>';
-                        if($date->getValue('dat_room_id')>0)
-                        {
-                            $room = new TableRooms($g_db);
-                            $room->readData($date->getValue('dat_room_id'));
-                            $room_name = $room->getValue('room_name');
-                            echo '
-                            <tr>
-                                <td>'.$g_l10n->get('DAT_LOCATION').':</td>
-                                <td>
-                                    <strong><a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a></strong>
-                                </td>
-                            </tr>';
-                            if ($date->getValue("dat_all_day") != 0)
-                            {
-                                echo $participants_html;
-                            }
-                        }
-                        echo '    </table>';
+                        $participantsHtml = '<strong>'.$g_l10n->get('SYS_UNLIMITED').'</strong>';
                     }
-                    echo '</div>';
+                    $dateElements[] = array($g_l10n->get('DAT_PARTICIPANTS'), $participantsHtml);
                 }
-                else 
-                {
-                    echo '<div class="date_info_block">';
-                    $margin_left_location = "0";
-                    echo '  <table>
-                                <tr>
-                                    <td>'.$g_l10n->get('DAT_CALENDAR').':</td>
-                                    <td><strong>'.$date->getValue('cat_name'). '</strong></td>
-                                </tr>';
-                    if($date->getValue('dat_room_id')>0)
-                    {
-                        $room = new TableRooms($g_db);
-                        $room->readData($date->getValue('dat_room_id'));
-                        $room_name = $room->getValue('room_name');
-                        echo '
-                        <tr>
-                            <td>'.$g_l10n->get('DAT_LOCATION').':</td>
-                            <td>
-                                <strong><a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true">'.$room_name.'</a></strong>
-                            </td>
-                        </tr>';
-                    }
-                    echo $participants_html;
-                    echo '</table>';
-                          
-                    echo '</div>';
-                }
-                
-                
-            
-                echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>
-                <div class="editInformation">'.
-                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
 
-                    if($date->getValue('dat_usr_id_change') > 0)
-                    {
-                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
-                    }
-                echo '</div>';
-               
-                $sql = 'SELECT * FROM '.TBL_MEMBERS.' 
-                         WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" 
-                           AND mem_usr_id="'.$g_current_user->getValue('usr_id').'"';
-                $result = $g_db->query($sql);
-                $row = $g_db->fetch_array($result);
-                
-                if($row['mem_leader'] != 1)
+                // Ausgabe der einzelnen Elemente 
+                // immer 2 nebeneinander und dann ein Zeilenwechsel
+                echo '<table style="width: 100%; border-width: 0px;">';
+                foreach($dateElements as $element)
                 {
-                    if($date->getValue('dat_rol_id')!=null && $row == null)
+                    if($firstElement)
+                    {
+                        echo '<tr>';
+                    }
+                
+                    echo '<td style="width: 15%">'.$element[0].':</td>
+                    <td style="width: 35%">'.$element[1].'</td>';
+                
+                    if($firstElement)
+                    {
+                        $firstElement = false;
+                    }
+                    else
+                    {
+                        echo '</tr>';
+                        $firstElement = true;
+                    }
+                }
+                echo '</table>';
+
+                // Beschreibung anzeigen
+                echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>';
+
+                // Link zum An- und Abmelden zu Terminen in Ausgabe-Array schreiben
+                $member = new TableMembers($g_db);
+                $foundMember = $member->readData(array('rol_id' => $date->getValue('dat_rol_id'), 'usr_id' => $g_current_user->getValue('usr_id')));
+                
+                if($member->getValue('mem_leader') != 1 && $date->getValue('dat_rol_id') > 0)
+                {
+                    if($foundMember)
+                    {
+                        $registrationHtml = '<span class="iconTextLink">
+                                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img 
+                                    src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('DAT_CANCEL').'" /></a>
+                                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">'.$g_l10n->get('DAT_CANCEL').'</a>
+                            </span>';
+                    }
+                    else
                     {
                         $available_signin = true;
                         $non_available_rols = array();
@@ -683,59 +624,41 @@ else
                             }
                         }
 
-                        echo '<div style="text-align:right">';
                         if($available_signin)
                         {
-                            $content_signin = '&nbsp;<form action=';
-                            if($g_current_user->getValue('usr_id')!=null)
+                            if($g_current_user->getValue('usr_id') > 0)
                             {
-                                $content_signin .= '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php" style="float:right">
-                                    <input type="hidden" name="dat_id" value="'.$date->getValue('dat_id'). '" />
-                                    <input type="hidden" name="headline" value="'.$req_headline.'" />
-                                    <input type="hidden" name="login" value="1" />';
+                                $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
                             }
                             else
                             {
-                                $content_signin .= '"'.$g_root_path.'/adm_program/modules/profile/profile_new.php" style="float:right">
-                                    <input type="hidden" name="new_user" value="2" />
-                                    <input type="hidden" name="dat_rol_id" value="'.$date->getValue('dat_rol_id').'" />
-                                ';
+                                $buttonURL = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2&amp;dat_rol_id='.$date->getValue('dat_rol_id');
                             }
-                            $content_signin .= '<button id="btnLoginDate" type="submit" tabindex="4"><img 
-                                src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_ATTEND').'" />&nbsp;'.$g_l10n->get('DAT_ATTEND').'</button></form>';
 
-                            if($content_signin)
-                            {
-                                echo '<b>Anmelden als:</b>'.$content_signin;
-                            }
-                            else 
-                            {
-                                echo 'Keine Anmeldung mehr möglich.';
-                            }
+                            $registrationHtml = '<span class="iconTextLink">
+                                <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_PHR_PARTICIPATE_IN_DATE').'" /></a>
+                                <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PHR_PARTICIPATE_IN_DATE').'</a>
+                            </span>';
                         }
                         else
                         {
-                            echo 'Keine Anmeldung mehr möglich.';
+                            $registrationHtml = $g_l10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                         }
-                        echo '</div>';
+                    }
 
-                    }
-                    elseif($date->getValue('dat_rol_id')!=null && $row != null)
-                    {
-                        echo '
-                        <div style="text-align:right">
-                            <form action=';
-                            echo '"'.$g_root_path.'/adm_program/modules/dates/dates_login.php">
-                                <input type="hidden" name="dat_id" value="'. $date->getValue('dat_id'). '" />
-                                <input type="hidden" name="headline" value="'.$req_headline.'" />
-                                <input type="hidden" name="login" value="0" />
-                                <button id="btnLogoutDate" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/no.png"
-                                alt="'.$g_l10n->get('DAT_CANCEL').'" />&nbsp;'.$g_l10n->get('DAT_CANCEL').'</button>
-                            </form>
-                        </div>';
-                    }
+                    echo '<div>'.$registrationHtml.'</div>';
                 }
-            echo '</div>
+
+                // Erstell-/ Änderungsdaten anzeigen
+                echo '<div class="editInformation">'.
+                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
+
+                    if($date->getValue('dat_usr_id_change') > 0)
+                    {
+                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
+                    }
+                echo '</div>
+            </div>
         </div>';
     }  // Ende While-Schleife
 }

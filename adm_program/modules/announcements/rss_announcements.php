@@ -67,7 +67,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Ankuendigungen', 'Die 10 neuesten Ankuendigungen');
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('ANN_ANNOUNCEMENTS'), 'Die 10 neuesten Ankuendigungen');
 $announcement = new TableAnnouncement($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -84,16 +84,14 @@ while ($row = $g_db->fetch_object($result))
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $announcement->getDescription('HTML').
-                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+                   '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. ' '. $row->create_surname;
-    $description = $description. ' am '. $announcement->getValue('ann_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_PHR_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $announcement->getValue('ann_timestamp_create')). '</i>';
 
     if($row->ann_usr_id_change > 0)
     {
-        $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname;
-        $description = $description. ' am '. $announcement->getValue('ann_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+        $description = $description. '<br /><i>'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $announcement->getValue('ann_timestamp_change')). '</i>';
     }
                 
     $pubDate = date('r',strtotime($announcement->getValue('ann_timestamp_create')));

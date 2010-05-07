@@ -59,25 +59,25 @@ class TableCategory extends TableAccess
             elseif($this->getValue('cat_type') == 'INV')
             {
                 //Alle Inventarpositionen auslesen, die in der Kategorie enthalten sind
-            	$sql_inventory = 'SELECT *
+                $sql_inventory = 'SELECT *
                                   FROM '. TBL_INVENTORY. '
-    							  WHERE inv_cat_id = '. $this->getValue('cat_id');
-            	$result_inventory = $this->db->query($sql_subfolders);
-    
-    	        while($row_inventory = $this->db->fetch_object($result_inventory))
-    	        {
-    	            //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
-    	            $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
-                            	WHERE rnt_inv_id = '. $row_inventory->inv_id;
-                	$this->db->query($sql);
-    	        }
-    
-    			//Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
-            	$sql    = 'DELETE FROM '. TBL_INVENTORY. '
+                                  WHERE inv_cat_id = '. $this->getValue('cat_id');
+                $result_inventory = $this->db->query($sql_subfolders);
+
+                while($row_inventory = $this->db->fetch_object($result_inventory))
+                {
+                    //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
+                    $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
+                                WHERE rnt_inv_id = '. $row_inventory->inv_id;
+                    $this->db->query($sql);
+                }
+
+                //Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
+                $sql    = 'DELETE FROM '. TBL_INVENTORY. '
                             WHERE inv_cat_id = '. $this->getValue('cat_id');
                 $this->db->query($sql);
             }
-        	elseif($this->getValue('cat_type') == 'LNK')
+            elseif($this->getValue('cat_type') == 'LNK')
             {
                 $sql    = 'DELETE FROM '. TBL_LINKS. '
                             WHERE lnk_cat_id = '. $this->getValue('cat_id');
@@ -116,6 +116,27 @@ class TableCategory extends TableAccess
             // die letzte Kategorie darf nicht geloescht werden
             return false;
         }
+    }
+
+    // diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
+    // dieser bildet sich aus dem Namen in Grossbuchstaben und der naechsten freien Nummer (index)
+    // Beispiel: 'Gruppen' => 'GRUPPEN_2'
+    private function getNewNameIntern($name, $index)
+    {
+        $newNameIntern = strtoupper(str_replace(' ', '_', $name));
+        if($index > 1)
+        {
+            $newNameIntern = $newNameIntern.'_'.$index;
+        }
+        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name_intern = "'.$newNameIntern.'"';
+        $this->db->query($sql);
+        
+        if($this->db->num_rows() > 0)
+        {
+            $index++;
+            $newNameIntern = $this->getNewNameIntern($name, $index);
+        }
+        return $newNameIntern;
     }
 
     // die Kategorie wird um eine Position in der Reihenfolge verschoben
@@ -199,6 +220,12 @@ class TableCategory extends TableAccess
                            AND cat_org_id IS NOT NULL ';
                 $this->db->query($sql);
             }
+        }
+        
+        // wurde der Name veraendert, dann nach einem neuen eindeutigen internen Namen suchen
+        if($this->columnsInfos['cat_name']['changed'])
+        {
+            $this->setValue('cat_name_intern', $this->getNewNameIntern($this->getValue('cat_name'), 1));
         }
 
         parent::save();

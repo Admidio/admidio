@@ -166,7 +166,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user">'.$g_l10n->get('SYS_LOGIN').':</label></dt>
+                                    <dt><label for="user">'.$g_l10n->get('INS_LOGIN_NAME').':</label></dt>
                                     <dd><input type="text" name="user" id="user" style="width: 250px;" maxlength="50" value="'. $user. '" /></dd>
                                 </dl>
                             </li>
@@ -487,13 +487,13 @@ elseif($req_mode == 8)
 
 
     // Orga-Uebergreifende Kategorien anlegen
-    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                      VALUES (NULL, "USF", "'.$g_l10n->get('INS_MASTER_DATA').'", 0, 1, 1) ';
+    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                      VALUES (NULL, "USF", "MASTER_DATA", "'.$g_l10n->get('INS_MASTER_DATA').'", 0, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);
     $cat_id_stammdaten = $db->insert_id();
 
-    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                      VALUES (NULL, "USF", "'.$g_l10n->get('INS_MESSENGER').'", 0, 0, 2) ';
+    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                      VALUES (NULL, "USF", "MESSENGER", "'.$g_l10n->get('INS_MESSENGER').'", 0, 0, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);
     $cat_id_messenger = $db->insert_id();
 
@@ -566,22 +566,22 @@ elseif($req_mode == 8)
     $db->query($sql);
 
     // Default-Kategorie fuer Rollen und Links eintragen
-    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                           VALUES ('. $g_current_organization->getValue('org_id'). ', "ROL", "'.$g_l10n->get('SYS_COMMON').'", 0, 1)';
+    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                           VALUES ('. $g_current_organization->getValue('org_id'). ', "ROL", "COMMON", "'.$g_l10n->get('SYS_COMMON').'", 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")';
     $db->query($sql);
     $category_common = $db->insert_id();
 
-    $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name, cat_hidden, cat_system, cat_sequence)
-                                     VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_GROUPS').'", 0, 0, 2)
-                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_COURSES').'", 0, 0, 3)
-                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "'.$g_l10n->get('INS_TEAMS').'", 0, 0, 4)
-                                          , (NULL, "ROL", "'.$g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'", 1, 1, 5)
-                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('SYS_COMMON').'", 0, 0, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "'.$g_l10n->get('INS_INTERN').'", 1, 0, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('SYS_COMMON').'", 0, 0, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_TRAINING').'", 0, 0, 1)
-                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "'.$g_l10n->get('INS_COURSES').'", 0, 0, 1)
-                                          , (NULL, "USF", "'.$g_l10n->get('INS_ADDIDIONAL_DATA').'", 0, 0, 3) ';
+    $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                     VALUES ('. $g_current_organization->getValue('org_id').', "ROL", "GROUPS",  "'.$g_l10n->get('INS_GROUPS').'", 0, 0, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "COURSES", "'.$g_l10n->get('INS_COURSES').'", 0, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , ('. $g_current_organization->getValue('org_id').', "ROL", "TEAMS",   "'.$g_l10n->get('INS_TEAMS').'", 0, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , (NULL, "ROL", "CONFIRMATION_OF_PARTICIPATION", "'.$g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'", 1, 1, 5, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "COMMON",  "'.$g_l10n->get('SYS_COMMON').'", 0, 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , ('. $g_current_organization->getValue('org_id').', "LNK", "INTERN",  "'.$g_l10n->get('INS_INTERN').'", 1, 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "COMMON",  "'.$g_l10n->get('SYS_COMMON').'", 0, 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "TRAINING","'.$g_l10n->get('INS_TRAINING').'", 0, 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , ('. $g_current_organization->getValue('org_id').', "DAT", "COURSES", "'.$g_l10n->get('INS_COURSES').'", 0, 0, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                          , (NULL, "USF", "ADDIDIONAL_DATA", "'.$g_l10n->get('INS_ADDIDIONAL_DATA').'", 0, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
@@ -724,7 +724,7 @@ elseif($req_mode == 8)
                 '.$g_l10n->get('INS_PHR_INSTALLATION_SUCCESSFUL');
     if(is_writeable("../adm_my_files") == false)
     {
-        $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$g_l10n->get('INS_PHR_FOLDER_NOT_WRITABLE', 'adm_my_files');
+        $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /> '.$g_l10n->get('INS_PHR_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
     showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'));
 }

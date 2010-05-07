@@ -182,7 +182,7 @@ else
                         {
                             echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_FOLDER_NOT_EXISTS&amp;inline=true"><img 
 				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_FOLDER_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
-				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
+				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /></a>';
                         }
 
                      echo '
@@ -239,7 +239,7 @@ else
                         if (!$nextFile['fil_exists']) {
                             echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NOT_EXISTS&amp;inline=true"><img 
 				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
-				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="Warnung" title="" /></a>';
+				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /></a>';
                         }
 
                      echo '

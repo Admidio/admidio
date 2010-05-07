@@ -9,8 +9,6 @@
  *
  *****************************************************************************/
 
- require_once(SERVER_PATH. '/adm_program/system/classes/table_category.php');
-
 // eine Orga-ID einlesen
 $sql = 'SELECT MIN(org_id) as org_id FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
 $result_orga = $g_db->query($sql);
@@ -78,18 +76,28 @@ $result_orga = $g_db->query($sql);
 $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_name_intern = UPPER(usf_name) WHERE usf_name_intern IS NULL ';
 $result_orga = $g_db->query($sql);
 
+// interner Name für System-Kategorien belegen
+$sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_name_intern = "MASTER_DATA" WHERE cat_name = "Stammdaten" ';
+$result_orga = $g_db->query($sql);
+
+// interne Name bei allen anderen Feldern fuellen
+$sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_name_intern = UPPER(cat_name) WHERE cat_name_intern IS NULL ';
+$result_orga = $g_db->query($sql);
+
 // Defaulteintraege fuer alle existierenden Termine bei der Rollenzuordnung
 $sql = 'INSERT INTO '. TBL_DATE_ROLE. ' (dtr_dat_id, dtr_rol_id)
         SELECT dat_id, NULL FROM '. TBL_DATES;
 $g_db->query($sql);
 
+// Max. Rol-Kategorien-Sequenz einlesen
+$sql = 'SELECT MAX(cat_sequence) as sequence FROM '. TBL_CATEGORIES. ' WHERE cat_type = "ROL" ';
+$result_orga = $g_db->query($sql);
+$row_cat = $g_db->fetch_array($result_orga);
+
 // neue Kategorie fuer Terminbestaetigungen
-$category = new TableCategory($g_db);
-$category->setValue('cat_type', 'ROL');
-$category->setValue('cat_name', $g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION'));
-$category->setValue('cat_hidden', '1');
-$category->setValue('cat_system', '1');
-$category->save();
+$sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                  VALUES (NULL, "ROL", "CONFIRMATION_OF_PARTICIPATION", "'.$g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'", 1, 1, '.$row_cat['sequence'].', '.$row_webmaster['webmaster_id'].',"'. DATETIME_NOW.'")';
+$g_db->query($sql);
 
 // Daten pro Organisation wegschreiben
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
@@ -110,6 +118,10 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_usr_id_create = '. $row_webmaster['webmaster_id']. '
                                            , usf_timestamp_create = "'.DATETIME_NOW.'"';
     $g_db->query($sql);    
+
+    $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_usr_id_create = '. $row_webmaster['webmaster_id']. '
+                                          , cat_timestamp_create = "'.DATETIME_NOW.'"';
+    $g_db->query($sql);    
 }
 
 // Datenstruktur nach Update anpassen
@@ -117,6 +129,12 @@ $sql = "ALTER TABLE ". TBL_USER_FIELDS. " MODIFY COLUMN usf_name_intern varchar(
 $g_db->query($sql);
 
 $sql = "ALTER TABLE ". TBL_USER_FIELDS. " MODIFY COLUMN usf_timestamp_create datetime NOT NULL ";
+$g_db->query($sql);
+
+$sql = "ALTER TABLE ". TBL_CATEGORIES. " MODIFY COLUMN cat_name_intern varchar(110) NOT NULL ";
+$g_db->query($sql);
+
+$sql = "ALTER TABLE ". TBL_CATEGORIES. " MODIFY COLUMN cat_timestamp_create datetime NOT NULL ";
 $g_db->query($sql);
 
 ?>

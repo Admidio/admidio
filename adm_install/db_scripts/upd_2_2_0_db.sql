@@ -6,10 +6,27 @@ ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_timestamp_create` datetime;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_usr_id_change` INT(11) unsigned;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_timestamp_change` datetime;
 
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CREATE foreign key (usf_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CHANGE foreign key (usf_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_description` `usf_description_old` varchar(255);
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_description` text AFTER usf_name;
 UPDATE %PREFIX%_user_fields SET usf_description = usf_description_old;
 ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_description_old;
+
+-- Tabelle Categories erweitern
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_name_intern` VARCHAR(110) AFTER cat_type;
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_usr_id_create` INT(11) unsigned;
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_timestamp_create` datetime;
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_usr_id_change` INT(11) unsigned;
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_timestamp_change` datetime;
+
+alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CREATE foreign key (cat_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 -- Gaestebuchtabellenspalten auf Standardbezeichnung umstellen
 ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_FK_GBO_USR;

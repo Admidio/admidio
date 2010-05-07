@@ -65,7 +65,7 @@ $photo_album = new TablePhotos($g_db);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Fotos', 'Die 10 neuesten Fotoalben');
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('PHO_PHOTOS'), 'Die 10 neuesten Fotoalben');
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_array($result))
@@ -107,7 +107,7 @@ while ($row = $g_db->fetch_array($result))
     //Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
     {
-        $description = $description. ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
+        $description = $g_l10n->get('SYS_PHR_DATE_TO', $description, $photo_album->getValue('pho_end', $g_preferences['system_date']));
     }
     $description = $description. '<br />Fotos von: '.$photo_album->getValue('pho_photographers');
 
@@ -129,16 +129,14 @@ while ($row = $g_db->fetch_array($result))
     }
 
     //Link zur Momepage
-    $description = $description. '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+    $description = $description. '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>Angelegt von '. $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname').
-								 ' am '. $photo_album->getValue('pho_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_PHR_CREATED_BY', $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname'), $photo_album->getValue('pho_timestamp_create')). '</i>';
 
     if($photo_album->getValue('pho_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>Zuletzt bearbeitet von '. $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname').
-									 ' am '. $photo_album->getValue('pho_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+        $description = $description. '<br /><i>'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname'), $photo_album->getValue('pho_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));

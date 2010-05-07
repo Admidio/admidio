@@ -10,7 +10,7 @@
  * Uebergaben:
  *
  * pho_id:      id des Albums dessen Bilder angezeigt werden sollen
- * photo:       Name des Bildes ohne(.jpg) spaeter -> (admidio/adm_my_files/photos/<* Gallery *>/$_GET['photo'].jpg)
+ * photo:       Name des Bildes ohne(.jpg) spaeter -> (admidio/adm_my_files/photos/<* Album *>/$_GET['photo'].jpg)
  * usr_id:      Die Benutzer id an dem die Grußkarte gesendet werden soll
  *
  *****************************************************************************/

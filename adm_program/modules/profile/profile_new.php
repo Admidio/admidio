@@ -243,7 +243,7 @@ function getFieldCode($field, $user, $new_user)
                     <input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" 
                         maxlength="'.$maxlength.'" '.$readonly.' value="'. $field->getValue('usd_value',$g_preferences['system_date']). '" '.$readonly.' />
                     <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\''.$g_preferences['system_date'].'\');"><img 
-                    	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                    	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
         else
