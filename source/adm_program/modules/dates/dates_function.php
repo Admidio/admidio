@@ -12,8 +12,10 @@
  * dat_id: ID des Termins, der angezeigt werden soll
  * mode:   1 - Neuen Termin anlegen/aendern
  *         2 - Termin loeschen
- *         4 - Termin im iCal-Format exportieren
+ *         3 - zum Termin anmelden
+ *         4 - vom Termin abmelden
  *         5 - Eintrag fuer Sichtbarkeit erzeugen
+ *         6 - Termin im iCal-Format exportieren
  * count:  Nummer dere Rollenauswahlbox, die angezeigt werden soll
  * rol_id: vorselektierte Rolle der Rollenauswahlbox
  *
@@ -32,14 +34,14 @@ if ($g_preferences['enable_dates_module'] == 0)
     $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
 }
 
-if($_GET['mode'] != 4 || $g_preferences['enable_dates_module'] == 2)
+if(($_GET['mode'] != 3 && $_GET['mode'] != 6) || $g_preferences['enable_dates_module'] == 2)
 {
-    // Alle Funktionen, ausser Exportieren, duerfen nur eingeloggte User
-    require('../../system/login_valid.php');
+    // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
+    require_once('../../system/login_valid.php');
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$g_current_user->editDates() && $_GET['mode'] != 4)
+if(!$g_current_user->editDates() && $_GET['mode'] != 3 && $_GET['mode'] != 4 && $_GET['mode'] != 6)
 {
     $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
@@ -110,19 +112,19 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     }
     if(strlen($_POST['date_from']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datum Beginn'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_START')));
     }
     if(strlen($_POST['date_to']) == 0 && $_POST['dat_repeat_type'] == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datum Ende'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_END')));
     }
     if(strlen($_POST['time_from']) == 0 && isset($_POST['dat_all_day']) == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Uhrzeit Beginn'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_START')));
     }
     if(strlen($_POST['time_to']) == 0 && isset($_POST['dat_all_day']) == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Uhrzeit Ende'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_END')));
     }
     if(strlen($_POST['dat_cat_id']) == 0)
     {
@@ -163,11 +165,11 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $startDateTime->setDateTime($_POST['date_from'], $g_preferences['system_date']);
         if($startDateTime->valid())
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Beginn', $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_START'), $g_preferences['system_date']));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit Beginn', $g_preferences['system_time']));
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_START'), $g_preferences['system_time']));
         }
     }
 
@@ -194,11 +196,11 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $endDateTime->setDateTime($_POST['date_to'], $g_preferences['system_date']);
         if($endDateTime->valid())
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Datum Ende', $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit Ende', $g_preferences['system_time']));
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_END'), $g_preferences['system_time']));
         }
     }   
     
@@ -229,11 +231,12 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     {
         if($_POST['dat_room_id'] > 0)
         {
-            $sql = 'SELECT COUNT(dat_id) AS is_reserved FROM '.TBL_DATES.' WHERE ('.
-                    '(dat_begin <= "'.$date_begin.'" AND dat_end >= "'.$date_begin.'") OR '.
-                    '(dat_begin <= "'.$date_end.'" AND dat_end >= "'.$date_end.'") OR '.
-                    '(dat_begin >= "'.$date_begin.'" AND dat_end <= "'.$date_end.'") '.
-                    ') AND dat_room_id = "'.(int)$_POST['dat_room_id'].'" AND dat_id != "'.(int)$req_dat_id.'"';
+            $sql = 'SELECT COUNT(dat_id) AS is_reserved 
+                      FROM '.TBL_DATES.' 
+                     WHERE dat_begin <= "'.$endDateTime->getDateTimeEnglish().'"
+                       AND dat_end   >= "'.$startDateTime->getDateTimeEnglish().'"
+                       AND dat_room_id = '.$_POST['dat_room_id'].' 
+                       AND dat_id     <> '.$req_dat_id;
             $result = $g_db->query($sql);
             $row = $g_db->fetch_object($result);
             if($row->is_reserved) 
@@ -355,15 +358,25 @@ elseif($_GET['mode'] == 2)  // Termin loeschen
         echo 'done';
     }
 }
-elseif($_GET['mode'] == 4)  // Termin im iCal-Format exportieren
+elseif($_GET['mode'] == 3)  // Benutzer zum Termin anmelden
 {
-    header('Content-Type: text/calendar');
-    header('Content-Disposition: attachment; filename='. $date->getValue('dat_headline'). '.ics');
+    $member = new TableMembers($g_db);
+    $member->startMembership($date->getValue('dat_rol_id'),$g_current_user->getValue('usr_id'));
 
-    echo $date->getIcal($_SERVER['HTTP_HOST']);
-    exit();
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+    $g_message->show($g_l10n->get('DAT_PHR_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
 }
-elseif($_GET['mode'] == 5)  // Termin im iCal-Format exportieren
+elseif($_GET['mode'] == 4)  // Benutzer vom Termin abmelden
+{
+    $sql = 'DELETE FROM '.TBL_MEMBERS.' 
+             WHERE mem_rol_id = "'.$date->getValue('dat_rol_id').'" 
+               AND mem_usr_id = "'.$g_current_user->getValue('usr_id').'"';
+    $g_db->query($sql);
+
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+    $g_message->show($g_l10n->get('DAT_PHR_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
+}
+elseif($_GET['mode'] == 5)  // Eintrag fuer Sichtbarkeit erzeugen
 {
     $label = '';
     error_log('count'.$_GET['count']);
@@ -381,6 +394,14 @@ elseif($_GET['mode'] == 5)  // Termin im iCal-Format exportieren
             }
         echo '</dd>
     </dl>';
+    exit();
+}
+elseif($_GET['mode'] == 6)  // Termin im iCal-Format exportieren
+{
+    header('Content-Type: text/calendar');
+    header('Content-Disposition: attachment; filename='. $date->getValue('dat_headline'). '.ics');
+
+    echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();
 }
 

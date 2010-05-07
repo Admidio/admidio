@@ -42,7 +42,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Gaestebuch', 'Die 10 neuesten Gaestebucheintraege');
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('GBO_GUESTBOOK'), 'Die 10 neuesten Gaestebucheintraege');
 $guestbook = new TableGuestbook($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -55,11 +55,11 @@ while ($row = $g_db->fetch_object($result))
     // Die Attribute fuer das Item zusammenstellen
     $title = $guestbook->getValue('gbo_name');
     $link  = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
-    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']).'</b>';
+    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp_create').'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $guestbook->getText('HTML'). 
-                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+                   '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     $pubDate = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));
 

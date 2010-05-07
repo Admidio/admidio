@@ -18,7 +18,7 @@ require_once('../../system/classes/rss.php');
 require_once('../../system/classes/table_weblink.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($g_preferences["enable_rss"] != 1)
+if ($g_preferences['enable_rss'] != 1)
 {
     $g_message->setForwardUrl($g_homepage);
     $g_message->show($g_l10n->get('SYS_PHR_RSS_DISABLED'));
@@ -58,7 +58,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Links', 'Linksammlung von '. $g_current_organization->getValue('org_longname'));
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('LNK_LINKS'), 'Linksammlung von '. $g_current_organization->getValue('org_longname'));
 $weblink = new TableWeblink($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -75,19 +75,17 @@ while ($row = $g_db->fetch_object($result))
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $weblink->getDescription('HTML'). 
-                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+                   '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. " ". $row->create_surname.
-                                 ' am '. $weblink->getValue('lnk_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_PHR_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $weblink->getValue('lnk_timestamp_create')). '</i>';
 
     if($weblink->getValue('lnk_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. " ". $row->change_surname.
-									 ' am '. $weblink->getValue('lnk_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+        $description = $description. '<br /><i>'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $weblink->getValue('lnk_timestamp_change')). '</i>';
     }
 
-    $pubDate = date("r", strtotime($weblink->getValue('lnk_timestamp_create')));
+    $pubDate = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
 
 
     // Item hinzufuegen

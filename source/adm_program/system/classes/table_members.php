@@ -34,11 +34,14 @@ class TableMembers extends TableAccess
     
 
     // liest den Datensatz mit den ids rol_id und usr_id ein
-    // ids : Array mit den Schlüsseln rol_id und usr_id
+    // die Methode gibt true zurueck, wenn ein DS gefunden wurde, andernfalls false
+    // ids : Array mit den Schlüsseln rol_id und usr_id  Bsp.: array('rol_id'=>xy, 'usr_id'=>yx)
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
     // sql_additioinal_tables : wird nicht verwendet (benötigt wegen Vererbung)
     public function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
     {
+        $returnCode = false;
+
         if(is_array($ids) && is_numeric($ids['rol_id']) && is_numeric($ids['usr_id']))
         {
             if(strlen($sql_where_condition) > 0)
@@ -47,11 +50,12 @@ class TableMembers extends TableAccess
             }
             $sql_where_condition .= '    mem_rol_id = '.$ids['rol_id'].'
                                      AND mem_usr_id = '.$ids['usr_id'];
-            parent::readData(0, $sql_where_condition);
-            
+            $returnCode = parent::readData(0, $sql_where_condition);
+
             $this->setValue('mem_rol_id', $ids['rol_id']);
             $this->setValue('mem_usr_id', $ids['usr_id']);
         }
+        return $returnCode;
     }       
 
     // Speichert die Mitgliedschaft und aktualisiert das

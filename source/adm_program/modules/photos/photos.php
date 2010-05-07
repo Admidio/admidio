@@ -176,21 +176,21 @@ if($g_current_user->editPhotoRight())
 }
 if($g_preferences['photo_show_mode']==1)
 {
-	$g_layout['header'] = $g_layout['header']. '
-			<script type="text/javascript"><!--
-				$(document).ready(function(){
-				$("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
-														   slideshowAuto:false,
-														   preloading:true,
-														   close:\''.$g_l10n->get('SYS_CLOSE').'\',
-														   slideshowStart:\''.$g_l10n->get('SYS_SLIDESHOW_START').'\',
-														   slideshowStop:\''.$g_l10n->get('SYS_SLIDESHOW_STOP').'\',
-														   current:\''.$g_l10n->get('SYS_SLIDESHOW_CURRENT').'\',
-														   previous:\''.$g_l10n->get('SYS_PREVIOUS').'\',
-														   next:\''.$g_l10n->get('SYS_NEXT').'\'});
-				});
-			-->
-			</script>';
+    $g_layout['header'] = $g_layout['header']. '
+            <script type="text/javascript"><!--
+                $(document).ready(function(){
+                $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
+                                                           slideshowAuto:false,
+                                                           preloading:true,
+                                                           close:\''.$g_l10n->get('SYS_CLOSE').'\',
+                                                           slideshowStart:\''.$g_l10n->get('SYS_SLIDESHOW_START').'\',
+                                                           slideshowStop:\''.$g_l10n->get('SYS_SLIDESHOW_STOP').'\',
+                                                           current:\''.$g_l10n->get('SYS_SLIDESHOW_CURRENT').'\',
+                                                           previous:\''.$g_l10n->get('SYS_PREVIOUS').'\',
+                                                           next:\''.$g_l10n->get('SYS_NEXT').'\'});
+                });
+            -->
+            </script>';
 }
 
 //Photomodulspezifische CSS laden
@@ -226,8 +226,8 @@ if($pho_id > 0)
 {
     //Ausgabe des Linkpfads
     echo '<div class="navigationPath">
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_PHOTO_ALBEN').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$g_l10n->get('PHO_PHOTO_GALLARYS').'</a>'.$navilink.'
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_PHOTO_ALBUMS').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$g_l10n->get('PHO_PHOTO_ALBUMS').'</a>'.$navilink.'
             &nbsp;&gt;&nbsp;'.$photo_album->getValue('pho_name').'         
         </div>';
 }
@@ -396,7 +396,7 @@ echo '<div class="photoModuleContainer">';
                                 src="'. THEME_PATH. '/icons/ecard.png" alt="'.$g_l10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$g_l10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                         }
                     }
-					//if
+
                     //schleifen abbrechen
                     if ($bild == $bilder)
                     {
@@ -408,32 +408,32 @@ echo '<div class="photoModuleContainer">';
                 $photoThumbnailTable .= '</ul></li>'; //Zeilenende
             }//for
         $photoThumbnailTable .= '</ul>';
-		
-		// Damit man mit der Colobox auch alle anderen Bilder im Album sehen kann werden hier die restilichen Links zu den Bildern "unsichtbar" ausgegeben
-		if ($g_preferences['photo_show_mode'] == 1)
-		{
-			$photoThumbnailTable_shown = false;
-			for ($i = 1; $i <= $bilder; $i++)
-			{
-				if( $i <= $thumb_seite*$thumbs_per_page && $i >= (($thumb_seite*$thumbs_per_page)-$thumbs_per_page))
-				{
-						if(!$photoThumbnailTable_shown)
-						{
-							echo $photoThumbnailTable;
-							$photoThumbnailTable_shown = true;
-						}
-				}
-				else
-				{
-					echo '<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$i.'&amp;pho_id='.$pho_id.'">&nbsp;</a>';
-				}
-			}
-		}
-		else // wenn die Fotos nicht mit der Colorbox aufgerufen werden
-		{
-			echo $photoThumbnailTable;
-		}		
-		
+        
+        // Damit man mit der Colobox auch alle anderen Bilder im Album sehen kann werden hier die restilichen Links zu den Bildern "unsichtbar" ausgegeben
+        if ($g_preferences['photo_show_mode'] == 1)
+        {
+            $photoThumbnailTable_shown = false;
+            for ($i = 1; $i <= $bilder; $i++)
+            {
+                if( $i <= $thumb_seite*$thumbs_per_page && $i >= (($thumb_seite*$thumbs_per_page)-$thumbs_per_page))
+                {
+                        if(!$photoThumbnailTable_shown)
+                        {
+                            echo $photoThumbnailTable;
+                            $photoThumbnailTable_shown = true;
+                        }
+                }
+                else
+                {
+                    echo '<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$i.'&amp;pho_id='.$pho_id.'">&nbsp;</a>';
+                }
+            }
+        }
+        else // wenn die Fotos nicht mit der Colorbox aufgerufen werden
+        {
+            echo $photoThumbnailTable;
+        }		
+        
         //Seitennavigation
         photoAlbumPageNavigation($photo_album, $thumb_seite, $thumbs_per_page);
 
@@ -445,7 +445,7 @@ echo '<div class="photoModuleContainer">';
                 echo ' '.$g_l10n->get('SYS_DATE_TO').' '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
             }
         echo '
-        	<br />'.$g_l10n->get('PHO_PHR_PHOTOS_BY').': '.$photo_album->getValue('pho_photographers').'
+        	<br />'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers').'
         </div>';
 
         // Anleger und Veraendererinfos SYS_PHR_CREATED_BY
@@ -570,7 +570,7 @@ echo '<div class="photoModuleContainer">';
                     }
                 echo '</dt>
                 <dd style="margin-left: '.($g_preferences['photo_thumbs_scale']).'px;">
-    				<ul>
+                    <ul>
                         <li>';
                         if((!file_exists($ordner) && $g_current_user->editPhotoRight()) || ($sub_photo_album->getValue('pho_locked')==1 && file_exists($ordner)))
                         {
@@ -578,16 +578,16 @@ echo '<div class="photoModuleContainer">';
                             if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                             {
                                 echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND&amp;inline=true"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_NOTE').'" title="" /></a>';
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND\',this)" onmouseout="ajax_hideTooltip()"
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /></a>';
                             }
                             
                             //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                             {
                                 echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED&amp;inline=true"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('SYS_LOCKED').'" title="" /></a>';
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED\',this)" onmouseout="ajax_hideTooltip()"
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('SYS_LOCKED').'" /></a>';
                             }
                         }
 
@@ -609,7 +609,7 @@ echo '<div class="photoModuleContainer">';
                                 echo ' '.$g_l10n->get('SYS_DATE_TO').' '.$sub_photo_album->getValue('pho_end', $g_preferences['system_date']);
                             }
                             echo '</li> 
-    						<li>'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>';
+                            <li>'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>';
 
                             //bei Moderationrecheten
                             if ($g_current_user->editPhotoRight())
@@ -618,31 +618,31 @@ echo '<div class="photoModuleContainer">';
 
                                 if(file_exists($ordner))
                                 {
-	                                echo '
-	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
-	                                    src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'" title="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'" /></a>
+                                    echo '
+                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
+                                        src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'" title="'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'" /></a>
 
-    								<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
+                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
                                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
-    	                            
+                                    
                                     if($sub_photo_album->getValue('pho_locked')==1)
-    	                            {
-    	                                echo '
-    	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=0"><img 
-    	                                    src="'. THEME_PATH. '/icons/key.png"  alt="'.$g_l10n->get('SYS_UNLOCK').'" title="'.$g_l10n->get('SYS_UNLOCK').'" /></a>';
-    	                            }
-    	                            elseif($sub_photo_album->getValue('pho_locked')==0)
-    	                            {
-    	                                echo '
-    	                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=1"><img 
-    	                                    src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOCK').'" title="'.$g_l10n->get('SYS_LOCK').'" /></a>';
-    	                            }
+                                    {
+                                        echo '
+                                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=0"><img 
+                                            src="'. THEME_PATH. '/icons/key.png"  alt="'.$g_l10n->get('SYS_UNLOCK').'" title="'.$g_l10n->get('SYS_UNLOCK').'" /></a>';
+                                    }
+                                    elseif($sub_photo_album->getValue('pho_locked')==0)
+                                    {
+                                        echo '
+                                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=1"><img 
+                                            src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOCK').'" title="'.$g_l10n->get('SYS_LOCK').'" /></a>';
+                                    }
                                 }
 
                                 echo '
                                 <a class="iconLink" href="javascript:deleteObject(\'pho\', \'pho_'.$sub_photo_album->getValue('pho_id').'\','.$sub_photo_album->getValue('pho_id').',\''.$sub_photo_album->getValue('pho_name').'\')"><img 
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PHO_ALBUM_DELETE').'" title="'.$g_l10n->get('PHO_ALBUM_DELETE').'" /></a>
-    							</li>';
+                                </li>';
                             }
                     echo '</ul>
                 </dd>

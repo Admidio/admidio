@@ -763,21 +763,21 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
+                    <li class="smallFontSize">
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />&nbsp;
                         Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0)
                         eingebunden werden. (Standard: nein)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_version\">Genutztes Forum:</label></dt>
+                            <dt><label for="forum_version">Genutztes Forum:</label></dt>
                             <dd>
-                                <select size=\"1\" id=\"forum_version\" name=\"forum_version\">
-                                    <option value=\"phpBB2\" ";
+                                <select size="1" id="forum_version" name="forum_version">
+                                    <option value="phpBB2" ';
                                     if($form_values['forum_version'] == "phpBB2")
                                     {
                                         echo " selected=\"selected\" ";
@@ -802,31 +802,31 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)<br />
                         Deaktiviert: Forum wird in einem neuen Browserfenster angezeigt.
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_width\">Forum Breite:</label></dt>
+                            <dt><label for="forum_width">Forum Breite:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"forum_width\" name=\"forum_width\" maxlength=\"4\" style=\"width: 50px;\" value=\"". $form_values['forum_width']. "\" /> Pixel
+                                <input type="text" id="forum_width" name="forum_width" maxlength="4" style="width: 50px;" value="'. $form_values['forum_width']. '" /> Pixel
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
+                    <li class="smallFontSize">
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />&nbsp;
                         Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_export_user\">Admidiobenutzer exportieren:</label></dt>
+                            <dt><label for="forum_export_user">Admidiobenutzer exportieren:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"forum_export_user\" name=\"forum_export_user\" ";
+                                <input type="checkbox" id="forum_export_user" name="forum_export_user" ';
                                 if(isset($form_values['forum_export_user']) && $form_values['forum_export_user'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -1538,7 +1538,7 @@ echo '
                     <li class="smallFontSize">
                         In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in 
                         Kategorien zusammengefasst werden.<br />
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="Warnhinweis" title="Warnhinweis" />
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />
                         Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.
                     </li>
                     <li>
@@ -1745,43 +1745,37 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="dates_show_map_link">Kartenlink anzeigen:</label></dt>
+                            <dt><label for="dates_show_map_link">'.$g_l10n->get('DAT_SHOW_MAP_LINK').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="dates_show_map_link" name="dates_show_map_link" ';
                                 if(isset($form_values['dates_show_map_link']) && $form_values['dates_show_map_link'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Wird ein Treffpunkt angegeben, so wird versucht ein Link zu Google-Maps zu erstellen,
-                        welcher den Treffpunkt anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_SHOW_MAP_LINK').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"dates_show_calendar_select\">Kalenderauswahlbox anzeigen:</label></dt>
+                            <dt><label for="dates_show_calendar_select">'.$g_l10n->get('DAT_SHOW_CALENDAR_SELECTION').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"dates_show_calendar_select\" name=\"dates_show_calendar_select\" ";
+                                <input type="checkbox" id="dates_show_calendar_select" name="dates_show_calendar_select" ';
                                 if($form_values['dates_show_calendar_select'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\"/>
+                                echo ' value="1"/>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine
-                        schnelle Suche nach einem Termin zu ermöglichen. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_SHOW_CALENDAR_SELECTION').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"dates_show_rooms\">Raum auswählbar:</label></dt>
+                            <dt><label for="dates_show_rooms">'.$g_l10n->get('DAT_ROOM_SELECTABLE').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"dates_show_rooms\" name=\"dates_show_rooms\" ";
+                                <input type="checkbox" id="dates_show_rooms" name="dates_show_rooms" ';
                                 if($form_values['dates_show_rooms'] == 1)
                                 {
                                     echo ' checked="checked" ';
@@ -1790,27 +1784,20 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl 
-                        eines Raums zu ermöglichen. (Standard: nein)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_ROOM_SELECTABLE').'</li>
                     <li>
                         <dl>
-                            <dt><label>Räume pflegen:</label></dt>
+                            <dt><label>'.$g_l10n->get('DAT_EDIT_ROOMS').':</label></dt>
                             <dd>
                                 <div class="iconTextLink">
                                     <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
-                                    src="'. THEME_PATH. '/icons/home.png" alt="Räume anlegen und bearbeiten" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">zur Raumpflege wechseln</a>
+                                    src="'. THEME_PATH. '/icons/home.png" alt="'.$g_l10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">'.$g_l10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>
                                 </div>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Hier können Räume angelegt und bearbeitet werden.<br />
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="Warnhinweis" title="Warnhinweis" />
-                        Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_EDIT_ROOMS', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />').'</li>
                 </ul>
             </div>
         </div>';

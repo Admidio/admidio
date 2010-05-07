@@ -103,6 +103,7 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="edited" translation="todo">Installation was successful</text>
     <text id="INS_INTERN" development="edited" translation="todo">Intern</text>
     <text id="INS_LAST_NAME" development="edited" translation="todo">Last name</text>
+    <text id="INS_LOGIN_NAME" development="new" translation="todo">Login name</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="edited" translation="todo">Wemaster's access information</text>
     <text id="INS_MASTER_DATA" development="edited" translation="todo">Master data</text>
     <text id="INS_MEMBERSHIP" development="edited" translation="todo">Membership</text>

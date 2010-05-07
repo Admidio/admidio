@@ -37,15 +37,15 @@ $arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_orgas as $org_id => $value)
 {
-	$organizations = $organizations. $org_id. ', ';
+    $organizations = $organizations. $org_id. ', ';
 }
 $organizations = $organizations. $g_current_organization->getValue('org_id');
 
 $hidden = '';
 if ($g_valid_login == false)
 {
-	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-	$hidden = ' AND cat_hidden = 0 ';
+    // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+    $hidden = ' AND cat_hidden = 0 ';
 }
 
 // aktuelle Termine aus DB holen die zur Orga passen
@@ -79,7 +79,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss  = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Termine', 'Die 10 naechsten Termine');
+$rss  = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('DAT_DATES'), 'Die 10 naechsten Termine');
 $date = new TableDate($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -101,41 +101,39 @@ while ($row = $g_db->fetch_array($result))
 
     if ($date->getValue('dat_all_day') == 0)
     {
-        $description = $description. ' von '. $date->getValue('dat_begin', $g_preferences['system_time']). ' Uhr bis ';
+        $description = $description. ' von '. $date->getValue('dat_begin', $g_preferences['system_time']). ' '.$g_l10n->get('SYS_CLOCK').' bis ';
         if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
         {
             $description = $description. $date->getValue('dat_end', $g_preferences['system_date']). ' ';
         }
-        $description = $description. $date->getValue('dat_end', $g_preferences['system_time']). ' Uhr';
+        $description = $description. $date->getValue('dat_end', $g_preferences['system_time']). ' '.$g_l10n->get('SYS_CLOCK');
     }
     else
     {
         if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
         {
-            $description = $description. ' bis '. $date->getValue('dat_end', $g_preferences['system_date']);
+            $description = $g_l10n->get('SYS_PHR_DATE_TO', $description, $date->getValue('dat_end', $g_preferences['system_date']));
         }
     }
 
     if ($date->getValue('dat_location') != '')
     {
-        $description = $description. '<br /><br />Treffpunkt:&nbsp;'. $date->getValue('dat_location');
+        $description = $description. '<br /><br />'.$g_l10n->get('DAT_LOCATION').':&nbsp;'. $date->getValue('dat_location');
     }
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $date->getDescription('HTML'). 
-                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+                   '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     //i-cal downloadlink
-    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=4">Termin in meinen Kalender übernehmen</a>';
+    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=4">'.$g_l10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>Angelegt von '. $row['create_firstname']. ' '. $row['create_surname'].
-     							 ' am '. $date->getValue('dat_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create')). '</i>';
 
     if($date->getValue('dat_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row['change_firstname']. ' '. $row['change_surname'].
-                                     ' am '. $date->getValue('dat_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+        $description = $description. '<br /><i>'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r',strtotime($date->getValue('dat_timestamp_create')));

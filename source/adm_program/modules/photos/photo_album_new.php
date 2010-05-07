@@ -194,7 +194,7 @@ echo '
                     <dd>
                         <input type="text" id="pho_begin" name="pho_begin" size="10" tabindex="3" maxlength="10" value="'. $photo_album->getValue('pho_begin').'" />
                         <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
-                        	src="'.THEME_PATH.'/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                        	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                         <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
@@ -206,7 +206,7 @@ echo '
                     <dd>
                         <input type="text" id="pho_end" name="pho_end" size="10" tabindex="4" maxlength="10" value="'. $photo_album->getValue('pho_end').'">
                         <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
-                        	src="'. THEME_PATH. '/icons/calendar.png" alt="Kalender anzeigen" title="Kalender anzeigen" /></a>
+                        	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
                     </dd>
                 </dl>
             </li>';

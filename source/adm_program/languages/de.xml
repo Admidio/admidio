@@ -15,35 +15,52 @@
     <text id="CAT_PHR_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
 
     <!-- Phrases only in Datesmodule -->
+    <text id="DAT_ADD_DATE_TO_CALENDAR" development="new" translation="todo">Termin in den Kalender übernehmen</text>
     <text id="DAT_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
+    <text id="DAT_ALL_DAY" development="new" translation="todo">Ganztägig</text>
     <text id="DAT_ATTEND" development="new" translation="todo">Teilnehmen</text>
     <text id="DAT_CALENDAR" development="new" translation="todo">Kalender</text>
     <text id="DAT_CANCEL" development="new" translation="todo">Absagen</text>
+    <text id="DAT_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="DAT_CREATE_DATE" development="new" translation="todo">Termine anlegen</text>
     <text id="DAT_DATE" development="new" translation="todo">Termin</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
+    <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
     <text id="DAT_EXPORT_ICAL" development="new" translation="todo">Exportieren (iCal)</text>
     <text id="DAT_LOCATION" description="Location of a date" development="new" translation="todo">Ort</text>
     <text id="DAT_MANAGE_CALENDARS" development="new" translation="todo">Kalender verwalten</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
     <text id="DAT_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
+    <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="todo">Teilnehmerbegrenzung</text>
     <text id="DAT_PHR_ATTEND_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% zugesagt.</text>
     <text id="DAT_PHR_CANCEL_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% wieder abgesagt.</text>
+    <text id="DAT_PHR_EDIT_ROOMS" development="new" translation="todo">Hier können Räume angelegt und bearbeitet werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
     <text id="DAT_PHR_LOCATION_LINK" development="new" translation="todo">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</text>
     <text id="DAT_PHR_LOGIN_POSSIBLE" development="new" translation="todo">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmer beenden möchte, so kann man die derzeitige Teilnehmerzahl als Teilnahmebegrenzung eintragen.</text>
     <text id="DAT_PHR_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
+    <text id="DAT_PHR_PARTICIPATE_IN_DATE" development="new" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_PHR_REMOVE_APPLICATION" development="new" translation="todo">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</text>
     <text id="DAT_PHR_ROOM_OVERHANG" development="new" translation="todo">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</text>
     <text id="DAT_PHR_ROOM_RESERVED" development="new" translation="todo">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</text>
+    <text id="DAT_PHR_ROOM_SELECTABLE" development="new" translation="todo">Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl eines Raums zu ermöglichen. (Standard: nein)</text>
     <text id="DAT_PHR_QUOTA_AND_MAX_MEMBERS_MUST_MATCH" development="new" translation="todo">Werden alle teilnehmenden Rollen kontingentiert, muss die Anzahl der Summe der Kontingentierungen mit der maximalen Teilnehmerzahl bzw. der Raumkapazität übereinstimmen.</text>
     <text id="DAT_PHR_QUOTA_EXCEEDED" development="new" translation="todo">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</text>
     <text id="DAT_PHR_QUOTA_FOR_ROLE" development="new" translation="todo">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</text>
     <text id="DAT_PHR_QUOTA_WITH_MAXIMUM" development="new" translation="todo">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</text>
+    <text id="DAT_PHR_SHOW_CALENDAR_SELECTION" development="new" translation="todo">Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine schnelle Suche nach einem Termin zu ermöglichen. (Standard: ja)</text>
+    <text id="DAT_PHR_SHOW_MAP_LINK" development="new" translation="todo">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</text>
     <text id="DAT_PREVIOUS_DATES" description="Vergangene Termine" development="new" translation="todo">Vergangene %VAR1%</text>
+    <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="todo">Anmeldung möglich.</text>
+    <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="todo">Keine Anmeldung mehr möglich.</text>
     <text id="DAT_ROOM_INFORMATIONS" development="new" translation="todo">Rauminformationen</text>
+    <text id="DAT_ROOM" development="new" translation="todo">Raum</text>
+    <text id="DAT_ROOM_SELECTABLE" development="new" translation="todo">Raum auswählbar</text>
+    <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="todo">Kalenderauswahlbox anzeigen</text>
+    <text id="DAT_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="todo">Auf Karte zeigen</text>
     <text id="DAT_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
+    <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="todo">Zur Raumadministration wechseln</text>
     <text id="DAT_VISIBLE_TO" development="new" translation="todo">Sichtbar für</text>
 
     <!-- Phrases only in Downloadsmodule -->
@@ -160,6 +177,7 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="todo">Die Installation war erfolgreich</text>
     <text id="INS_INTERN" development="new" translation="todo">Intern</text>
     <text id="INS_LAST_NAME" development="new" translation="todo">Nachname</text>
+    <text id="INS_LOGIN_NAME" development="new" translation="todo">Benutzername</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="todo">Zugangsdaten eines Webmasters</text>
     <text id="INS_MASTER_DATA" development="new" translation="todo">Stammdaten</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
@@ -349,7 +367,7 @@
     <text id="PHO_PHR_PHOTOGRAPHER" development="new" translation="todo">Fotos von</text>
     <text id="PHO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="todo">Fotoalben</text> 
-    <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>  
+    <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>
     <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="todo">Foto gegen den Uhrzeigersinn drehen</text>
     <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="todo">Foto im Uhrzeigersinn drehen</text>
     <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="todo">Foto als Grußkarte versenden</text>
@@ -465,6 +483,7 @@
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
+    <text id="SYS_LINK_TO" development="new" translation="todo">Link auf %VAR1%</text>
     <text id="SYS_LOCK" development="new" translation="todo">Sperren</text>
     <text id="SYS_LOCKED" development="new" translation="todo">Gesperrt</text>
     <text id="SYS_LOGIN" development="new" translation="todo">Anmelden</text>
@@ -520,6 +539,7 @@
     <text id="SYS_PHR_FORUM_LOGOUT" development="new" translation="todo">Du wurdest erfolgreich auf Admidio und im Forum abgemeldet.</text>
     <text id="SYS_PHR_FORUM_USER_DELETE" development="new" translation="todo">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
     <text id="SYS_PHR_FORUM_USER_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
+    <text id="SYS_PHR_DATE_TO" development="new" translation="todo" description="Used in date-context: 2010/01/10 to 2010/01/12">%VAR1% bis %VAR2%</text>
     <text id="SYS_PHR_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_PHR_LAST_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
     <text id="SYS_PHR_LEADER_DESCRIPTION" development="new" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
@@ -577,7 +597,7 @@
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TITLE" development="new" translation="todo">Titel</text>
-    <text id="SYS_TO" development="new" translation="todo">An</text>
+    <text id="SYS_TO" development="new" translation="todo" description="E-Mail">An</text>
     <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
