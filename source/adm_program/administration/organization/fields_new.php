@@ -120,7 +120,7 @@ echo '
             <li>
                 <dl>
                     <dt><label for="usf_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
-                    <dd><input type="text" name="usf_name" id="usf_name" '.$html_readonly.' style="width: 150px;" maxlength="30"
+                    <dd><input type="text" name="usf_name" id="usf_name" '.$html_readonly.' style="width: 345px;" maxlength="100"
                         value="'. $user_field->getValue("usf_name"). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
@@ -129,7 +129,7 @@ echo '
             <li>
                 <dl>
                     <dt><label for="usf_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
-                    <dd><textarea name="usf_description" id="usf_description" style="width: 330px;" rows="4" cols="40">'.
+                    <dd><textarea name="usf_description" id="usf_description" style="width: 345px;" rows="4" cols="40">'.
                         $user_field->getValue('usf_description'). '</textarea>
                     </dd>
                 </dl>

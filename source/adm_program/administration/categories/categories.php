@@ -153,7 +153,7 @@ echo '
     </li>
 </ul>
 
-<table class="tableList" id="tableCategories" style="width: 300px;" cellspacing="0">
+<table class="tableList" id="tableCategories" style="width: 400px;" cellspacing="0">
     <thead>
         <tr>
             <th>'.$g_l10n->get('SYS_TITLE').'</th>
