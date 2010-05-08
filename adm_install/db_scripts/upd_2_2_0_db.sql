@@ -18,6 +18,7 @@ ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_description_old;
 
 -- Tabelle Categories erweitern
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_name_intern` VARCHAR(110) AFTER cat_type;
+ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_name` `cat_name` varchar(100);
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_usr_id_create` INT(11) unsigned;
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_timestamp_create` datetime;
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_usr_id_change` INT(11) unsigned;

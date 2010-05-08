@@ -104,7 +104,7 @@ create table %PREFIX%_categories
    cat_org_id                     tinyint(4),
    cat_type                       varchar(10)                    not null,
    cat_name_intern                varchar(110)                   not null,
-   cat_name                       varchar(30)                    not null,
+   cat_name                       varchar(100)                    not null,
    cat_hidden                     tinyint(1) unsigned            not null default 0,
    cat_system                     tinyint(1) unsigned            not null default 0,
    cat_sequence                   smallint                       not null,

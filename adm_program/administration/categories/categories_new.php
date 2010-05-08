@@ -137,7 +137,7 @@ echo '
                 <dl>
                     <dt><label for="cat_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="cat_name" name="cat_name" '.$html_readonly.' style="width: 150px;" maxlength="30" value="'. $category->getValue('cat_name'). '" />
+                        <input type="text" id="cat_name" name="cat_name" '.$html_readonly.' style="width: 345px;" maxlength="100" value="'. $category->getValue('cat_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
