@@ -250,7 +250,7 @@ class User extends TableUsers
         }
         else
         {
-            return htmlspecialchars($this->getProperty($field_name, 'usd_value'), ENT_QUOTES);
+            return $this->getProperty($field_name, 'usd_value');
         }
     }
 
