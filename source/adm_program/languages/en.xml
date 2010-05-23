@@ -17,7 +17,6 @@
     <text id="DAT_PARTICIPANTS" development="edited" translation="todo">Participants</text>
     <text id="DAT_PREVIOUS_DATES" development="edited" translation="todo" description="Vergangene Termine">Previous %VAR1%</text>
     <text id="DAT_SHOW_ON_MAP" development="edited" translation="todo">Show on map</text>
-    <text id="DAT_SHOW_ROUTE" development="edited" translation="todo">Show route</text>
 
     <!-- Phrases only in Ecardsmodule -->
     <text id="ECA_A_ECARD_FROM" development="edited" translation="todo">Greeting card sent by</text>
@@ -222,6 +221,7 @@
     <text id="SYS_SERVER" development="edited" translation="todo">Server</text>
     <text id="SYS_SETTINGS" development="edited" translation="todo">Settings</text>
     <text id="SYS_START" development="edited" translation="todo" description="Start of a date">Start</text>
+	<text id="SYS_SHOW_ROUTE" development="edited" translation="todo">Show route</text>
     <text id="SYS_TEXT" development="edited" translation="todo">Text</text>
     <text id="SYS_TO" development="edited" translation="todo">To</text>
     <text id="SYS_UNLIMITED" development="edited" translation="todo">Unlimited</text>

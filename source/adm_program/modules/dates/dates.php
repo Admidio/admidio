@@ -515,7 +515,7 @@ else
                             }
                             $locationHtml .= '
                                 <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank">
-                                    <img src="'. THEME_PATH. '/icons/map.png" alt="'.$g_l10n->get('DAT_SHOW_ROUTE').'" title="'.$g_l10n->get('DAT_SHOW_ROUTE').'"/></a>
+                                    <img src="'. THEME_PATH. '/icons/map.png" alt="'.$g_l10n->get('SYS_SHOW_ROUTE').'" title="'.$g_l10n->get('SYS_SHOW_ROUTE').'"/></a>
                                 </span>';
                         }
 

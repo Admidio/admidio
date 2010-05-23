@@ -204,11 +204,11 @@ if($job==NULL)
 
     if($req_usr_id == $g_current_user->getValue('usr_id'))
     {
-        $headline = 'Mein Profilfoto bearbeiten';
+        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PICTURE');
     }
     else
     {
-        $headline = 'Profilfoto von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'). ' bearbeiten';
+        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
 
     $g_layout['title']  = $headline;
@@ -226,15 +226,15 @@ if($job==NULL)
     <div class="formLayout" id="profile_photo_upload_form">
         <div class="formHead">'.$headline.'</div>
         <div class="formBody">
-            <p>Aktuelles Foto:</p>
-            <img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="Aktuelles Foto" />
-            <p>Bitte hier ein neues Foto auswählen:</p>
-            <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="durchsuchen" /></p>
+            <p>'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').':</p>
+            <img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').'" />
+            <p>'.$g_l10n->get('PRO_PHR_SELECT_NEW_PIC_HERE').':</p>
+            <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="'.$g_l10n->get('SYS_SEARCH_AFTER').'" /></p>
 
             <hr />
 
             <div class="formSubmit">
-                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;Foto Hochladen</button>
+                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('PRO_PHR_PHOTO_UPLOAD').'</button>
             </div>
         </div>
     </div>
@@ -250,8 +250,8 @@ if($job==NULL)
         </li>
         <li>
             <span class="iconTextLink">
-                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;inline=true"><img src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
-                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;inline=true">Hilfe</a>
+                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;inline=true"><img src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" /></a>
+                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;inline=true">'.$g_l10n->get('SYS_HELP').'</a>
             </span>        
         </li>
     </ul>';    
@@ -288,11 +288,11 @@ elseif($job=='upload')
 
     if($req_usr_id == $g_current_user->getValue('usr_id'))
     {
-        $headline = 'Mein Profilfoto';
+        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PICTURE');
     }
     else
     {
-        $headline = 'Profilfoto von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
+        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
     
     $g_layout['title'] = $headline;
@@ -304,12 +304,12 @@ elseif($job=='upload')
         <div class="formBody">
             <table style="border: none; width: 100%; padding: 5px;">
                 <tr style="text-align: center;">
-                    <td>Aktuelles Foto:</td>
-                    <td>Neues Foto:</td>
+                    <td>'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').':</td>
+                    <td>'.$g_l10n->get('PRO_PHR_NEW_PICTURE').':</td>
                 </tr>
                 <tr style="text-align: center;">
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="Aktuelles Profilfoto" /></td>
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'&new_photo=1" alt="Neues Profilfoto" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').'" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'&new_photo=1" alt="'.$g_l10n->get('PRO_PHR_NEW_PICTURE').'" /></td>
                 </tr>
             </table>
 
@@ -317,12 +317,12 @@ elseif($job=='upload')
             
             <div class="formSubmit">
                 <button id="btnCancel" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$req_usr_id.'\'">
-                    <img src="'.THEME_PATH.'/icons/error.png" alt="Abbrechen" />
-                    &nbsp;Abbrechen
+                    <img src="'.THEME_PATH.'/icons/error.png" alt="'.$g_l10n->get('SYS_ABORT').'" />
+                    &nbsp;'.$g_l10n->get('SYS_ABORT').'
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button id="btnUpdate" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$req_usr_id.'\'">
-                    <img src="'.THEME_PATH.'/icons/database_in.png" alt="Update" />
-                    &nbsp;Neues Foto übernehmen
+                    <img src="'.THEME_PATH.'/icons/database_in.png" alt="'.$g_l10n->get('SYS_UPDATE').'" />
+                    &nbsp;'.$g_l10n->get('PRO_PHR_ACCEPT_NEW_PICTURE').'
                 </button>
             </div>
         </div>

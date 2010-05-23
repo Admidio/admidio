@@ -118,7 +118,7 @@ else
     /***********************************************************************/
     
     // Html-Kopf ausgeben
-    $g_layout['title']    = 'Passwort bearbeiten';
+    $g_layout['title']    = $g_l10n->get('PRO_PHR_PASSWORD_EDIT');
     $g_layout['includes'] = false;
     if ($inlineView == 0)
 	{
@@ -137,7 +137,7 @@ else
                 echo'
                     <li>
                         <dl>
-                            <dt><label for="old_password">Aktuelles Passwort:</label></dt>
+                            <dt><label for="old_password">'.$g_l10n->get('PRO_PHR_PASSWORD_CURRENT').':</label></dt>
                             <dd><input type="password" id="old_password" name="old_password" size="12" maxlength="20" />
                                 <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span></dd>
                         </dl>
@@ -147,17 +147,17 @@ else
                 echo'
                 <li>
                     <dl>
-                        <dt><label for="new_password">Neues Passwort:</label></dt>
+                        <dt><label for="new_password">'.$g_l10n->get('PRO_PHR_PASSWORD_NEW').':</label></dt>
                         <dd><input type="password" id="new_password" name="new_password" size="12" maxlength="20" />
                             <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                             <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" />
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" />
                         </dd>
                     </dl>
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="new_password2">Wiederholen:</label></dt>
+                        <dt><label for="new_password2">'.$g_l10n->get('SYS_REPEAT').':</label></dt>
                         <dd><input type="password" id="new_password2" name="new_password2" size="12" maxlength="20" />
                             <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span></dd>
                     </dl>

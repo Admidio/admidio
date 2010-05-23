@@ -144,8 +144,8 @@ function getFieldCode($field, $user_id)
                 $value = '
                 <a class="iconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
                     src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-                    alt="'.$field->getValue('usd_value').' zu '.$field->getValue('usf_name').' hinzufügen"
-                    title="'.$field->getValue('usd_value').' zu '.$field->getValue('usf_name').' hinzufügen" /></a> '.$value;
+                    alt="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
+                    title="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
             }
             $messenger = true;
         }
@@ -157,8 +157,8 @@ function getFieldCode($field, $user_id)
                 $value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
                 <a class="iconLink" href="skype:'.$field->getValue('usd_value').'?add"><img
                     src="http://mystatus.skype.com/smallicon/'.$field->getValue('usd_value').'"
-                    title="'.$field->getValue('usd_value').' zu '.$field->getValue('usf_name').' hinzufügen"
-                    alt="'.$field->getValue('usd_value').' zu '.$field->getValue('usf_name').' hinzufügen" /></a> '.$value;
+                    title="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen"
+                    alt="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen" /></a> '.$value;
             }
             $messenger = true;
         }
@@ -215,11 +215,11 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Html-Kopf ausgeben
 if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
 {
-    $g_layout['title'] = 'Mein Profil';
+    $g_layout['title'] = $g_l10n->get('PRO_MY_PROFILE');
 }
 else
 {
-    $g_layout['title'] = 'Profil von '.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+    $g_layout['title'] = $g_l10n->get('PRO_PHR_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
 }
 $g_layout['header'] = '
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
@@ -265,33 +265,33 @@ echo '
                             {
                                 if($user->getValue('GENDER') == 1)
                                 {
-                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" />';
+                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png" title="'.$g_l10n->get('SYS_MALE').'" alt="'.$g_l10n->get('SYS_MALE').'" />';
                                 }
                                 elseif($user->getValue('GENDER') == 2)
                                 {
-                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png" title="weiblich" alt="weiblich" />';
+                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png" title="'.$g_l10n->get('SYS_FEMALE').'" alt="'.$g_l10n->get('SYS_FEMALE').'" />';
                                 }
                             }
                         echo '</div>
                         <div style="text-align: right;">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'). '"><img
                                 src="'. THEME_PATH. '/icons/vcard.png"
-                                alt="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'). ' exportieren"
-                                title="vCard von '. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'). ' exportieren" /></a>';
+                                alt="'.$g_l10n->get('PRO_PHR_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'"
+                                title="'.$g_l10n->get('PRO_PHR_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'" /></a>';
 
                             // Nur berechtigte User duerfen das Passwort editieren
                             if($user->getValue('usr_id') == $g_current_user->getValue('usr_id') || $g_current_user->isWebmaster())
                             {
                                 echo'
                                 <a rel="colorboxPWContent" href="password.php?usr_id='. $user->getValue('usr_id'). '&amp;inline=1"><img
-                                    src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>';
+                                    src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" title="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
                             }
                             // Nur berechtigte User duerfen ein Profil editieren
                             if($g_current_user->editProfile($user->getValue('usr_id')) == true)
                             {
                                 echo '
                                 <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='. $user->getValue('usr_id'). '"><img
-                                    src="'. THEME_PATH. '/icons/edit.png" alt="Profildaten bearbeiten" title="Profildaten bearbeiten" /></a>';
+                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('PRO_EDIT_PROFILE').'" title="'.$g_l10n->get('PRO_EDIT_PROFILE').'" /></a>';
                             }
                         echo '</div>
                     </div>
@@ -299,7 +299,7 @@ echo '
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt>Benutzername:</dt>
+                                    <dt>'.$g_l10n->get('SYS_USERNAME').':</dt>
                                     <dd><i>';
                                     if(strlen($user->getValue('usr_login_name')) > 0)
                                     {
@@ -307,7 +307,7 @@ echo '
                                     }
                                     else
                                     {
-                                        echo 'nicht registriert';
+                                        echo $g_l10n->get('SYS_NOT_REGISTERED');
                                     }
                                     echo '&nbsp;</i></dd>
                                 </dl>
@@ -340,7 +340,7 @@ echo '
                                                 $bAddressOutput = true;
                                                 echo '<li>
                                                     <dl>
-                                                        <dt>Adresse:</dt>
+                                                        <dt>'.$g_l10n->get('PRO_ADDRESS').':</dt>
                                                         <dd>';
                                                             $address = '';
                                                             $map_url = 'http://maps.google.com/?q=';
@@ -403,14 +403,14 @@ echo '
                                                                 // Button mit Karte anzeigen
                                                                 echo '<span class="iconTextLink">
                                                                     <a href="'. $map_url. '" target="_blank"><img
-                                                                        src="'. THEME_PATH. '/icons/map.png" alt="Karte" /></a>
-                                                                    <a href="'. $map_url. '" target="_blank">Karte</a>
+                                                                        src="'. THEME_PATH. '/icons/map.png" alt="'.$g_l10n->get('SYS_MAP').'" /></a>
+                                                                    <a href="'. $map_url. '" target="_blank">'.$g_l10n->get('SYS_MAP').'</a>
                                                                 </span>';
 
                                                                 if($g_current_user->getValue('usr_id') != $user->getValue('usr_id'))
                                                                 {
                                                                     // Link fuer die Routenplanung
-                                                                    echo ' - <a href="'.$route_url.'" target="_blank">Route anzeigen</a>';
+                                                                    echo ' - <a href="'.$route_url.'" target="_blank">'.$g_l10n->get('SYS_SHOW_ROUTE').'</a>';
                                                                 }
                                                             }
                                                         echo '</dd>
@@ -442,7 +442,7 @@ echo '
                         <table width="100%" summary="Profilfoto" border="0" style="border:0px;" cellpadding="0" cellspacing="0" rules="none">
                             <tr>
                                 <td>
-                                	<img src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="Aktuelles Bild" />
+                                	<img src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').'" />
                                 </td>
                             </tr>';
                              // Nur berechtigte User duerfen das Profilfoto editieren
@@ -452,13 +452,13 @@ echo '
                                 <tr>
                                     <td align="center">
                                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
-                                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="Foto ändern" title="Foto ändern" /></a>';
+                                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$g_l10n->get('PRO_CHANGE_PROFILE_PICTURE').'" title="'.$g_l10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /></a>';
                                     //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                                     if((strlen($user->getValue('usr_photo')) > 0 && $g_preferences['profile_photo_storage'] == 0)
                                     	|| file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $g_preferences['profile_photo_storage'] == 1 )
                                     {
                                         echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id='.$user->getValue('usr_id').'"><img
-                                            src="'.THEME_PATH.'/icons/delete.png" alt="Foto löschen" title="Foto löschen" /></a>
+                                            src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>
                                         </td>';
                                     }
                                     else

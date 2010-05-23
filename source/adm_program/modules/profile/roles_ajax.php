@@ -113,7 +113,7 @@ switch($action)
         }
         else
         {
-            die($g_l10n->get('SYS_PHR_DATE_INVALID', 'Beginn', $g_preferences['system_date']));
+            die($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_START'), $g_preferences['system_date']));
         }
 
         //Falls gesetzt wird das Enddatum gecheckt
@@ -127,7 +127,7 @@ switch($action)
             }
             else
             {
-                die($g_l10n->get('SYS_PHR_DATE_INVALID', 'Ende', $g_preferences['system_date']));
+                die($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
             }
 
             // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
