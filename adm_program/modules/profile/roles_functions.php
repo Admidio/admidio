@@ -135,12 +135,12 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
             <li id="mem_rol_'.$row['rol_id'].'" style="text-align: right; visibility: hidden; display: none;">
                 <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue("usr_id").'&amp;mode=1&amp;rol_id='.$row['rol_id'].'" method="post">
                     <div>
-                        <label for="begin'.$row['rol_name'].'">Beginn:</label>
+                        <label for="begin'.$row['rol_name'].'">'.$g_l10n->get('SYS_START').':</label>
                         <input type="text" id="begin'.$row['rol_name'].'" name="rol_begin" size="10" maxlength="20" value="'.$member->getValue('mem_begin', $g_preferences['system_date']).'"/>
                         <a class="iconLink" id="anchor_begin'.$row['rol_name'].'" href="javascript:calPopup.select(document.getElementById(\'begin'.$row['rol_name'].'\'),\'anchor_begin'.$row['rol_name'].'\',\''.$g_preferences['system_date'].'\',\'begin'.$row['rol_name'].'\',\'end'.$row['rol_name'].'\');"><img 
                         src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;
 
-                        <label for="end'.$row['rol_name'].'">Ende:</label>
+                        <label for="end'.$row['rol_name'].'">'.$g_l10n->get('SYS_END').':</label>
                         <input type="text" id="end'.$row['rol_name'].'" name="rol_end" size="10" maxlength="20" value="'.$member->getValue('mem_end', $g_preferences['system_date']).'"/>
                         <a class="iconLink" id="anchor_end'.$row['rol_name'].'" href="javascript:calPopup.select(document.getElementById(\'end'.$row['rol_name'].'\'),\'anchor_end'.$row['rol_name'].'\',\''.$g_preferences['system_date'].'\',\'begin'.$row['rol_name'].'\',\'end'.$row['rol_name'].'\');"><img 
                         src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
@@ -204,9 +204,7 @@ function getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$coun
                             $formerRoleMemHTML .= ' - '.$g_l10n->get('SYS_LEADER');
                         }
                     $formerRoleMemHTML .= '</dt>
-                    <dd>
-                        vom '. $member->getValue('mem_begin', $g_preferences['system_date']). '
-                        bis '. $member->getValue('mem_end', $g_preferences['system_date']);
+                    <dd>'.$g_l10n->get('SYS_FROM_TO', $member->getValue('mem_begin', $g_preferences['system_date']), $member->getValue('mem_end', $g_preferences['system_date']));
                         if($g_current_user->isWebmaster())
                         {
                             $formerRoleMemHTML .= '

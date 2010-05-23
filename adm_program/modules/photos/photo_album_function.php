@@ -79,13 +79,12 @@ if(isset($_POST['submit']) && $_POST['submit'])
     {
         $_POST['pho_locked'] = 0;
     }
-
     //Album
     if(strlen($_POST['pho_name']) == 0)
     {
         $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Album'));
     }
-    
+	
     //Beginn
     if(strlen($_POST['pho_begin'] > 0))
     {

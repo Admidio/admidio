@@ -144,10 +144,10 @@ function getFieldCode($field, $user, $new_user)
             $checked_male = ' checked="checked" ';
         }
         $value = '<input type="radio" id="female" name="usf-'. $field->getValue('usf_id'). '" value="2" '.$checked_female.' '.$readonly.' />
-            <label for="female"><img src="'. THEME_PATH. '/icons/female.png" title="weiblich" alt="weiblich" /></label>
+            <label for="female"><img src="'. THEME_PATH. '/icons/female.png" title="'.$g_l10n->get('SYS_FEMALE').'" alt="'.$g_l10n->get('SYS_FEMALE').'" /></label>
             &nbsp;
             <input type="radio" id="male" name="usf-'. $field->getValue('usf_id'). '" value="1" '.$checked_male.' '.$readonly.' />
-            <label for="male"><img src="'. THEME_PATH. '/icons/male.png" title="männlich" alt="männlich" /></label>';
+            <label for="male"><img src="'. THEME_PATH. '/icons/male.png" title="'.$g_l10n->get('SYS_MALE').'" alt="'.$g_l10n->get('SYS_MALE').'" /></label>';
     }
     elseif($field->getValue('usf_name_intern') == 'COUNTRY')
     {
@@ -296,7 +296,7 @@ function getFieldCode($field, $user, $new_user)
     {
         $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '&amp;inline=true"><img 
             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"
-            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>';
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
@@ -313,19 +313,19 @@ function getFieldCode($field, $user, $new_user)
 // Html-Kopf ausgeben
 if($new_user == 1)
 {
-    $g_layout['title'] = 'Benutzer anlegen';
+    $g_layout['title'] = $g_l10n->get('PRO_ADD_USER');
 }
 elseif($new_user == 2)
 {
-    $g_layout['title'] = 'Registrieren';
+    $g_layout['title'] = $g_l10n->get('PRO_REGISTER');
 }
 elseif($usr_id == $g_current_user->getValue('usr_id'))
 {
-    $g_layout['title'] = 'Mein Profil bearbeiten';
+    $g_layout['title'] = $g_l10n->get('PRO_EDIT_MY_PROFILE');
 }
 else
 {
-    $g_layout['title'] = 'Profil bearbeiten';
+    $g_layout['title'] = $g_l10n->get('PRO_EDIT_PROFILE');
 }
 
 $g_layout['header'] = '
@@ -423,7 +423,7 @@ echo '
                     {
                         echo '<li>
                             <dl>
-                                <dt><label for="usr_login_name">Benutzername:</label></dt>
+                                <dt><label for="usr_login_name">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
                                 <dd>
                                     <input type="text" id="usr_login_name" name="usr_login_name" style="width: 200px;" maxlength="35" value="'. $user->getValue('usr_login_name'). '" ';
                                     if($g_current_user->isWebmaster() == false && $new_user == 0)
@@ -436,7 +436,7 @@ echo '
                                         echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PHR_USERNAME_DESCRIPTION&amp;inline=true"><img 
                                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_USERNAME_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>';
                                     }
                                 echo '</dd>
                             </dl>
@@ -446,19 +446,19 @@ echo '
                         {
                             echo '<li>
                                 <dl>
-                                    <dt><label for="usr_password">Passwort:</label></dt>
+                                    <dt><label for="usr_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
                                     <dd>
                                         <input type="password" id="usr_password" name="usr_password" style="width: 130px;" maxlength="20" />
                                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION&amp;inline=true"><img 
                                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                                     </dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="password2">Passwort (Wdh):</label></dt>
+                                    <dt><label for="password2">'.$g_l10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
                                     <dd>
                                         <input type="password" id="password2" name="password2" style="width: 130px;" maxlength="20" />
                                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -473,12 +473,12 @@ echo '
                             {
                                 echo '<li>
                                     <dl>
-                                        <dt><label>Passwort:</label></dt>
+                                        <dt><label>'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
                                                 <a rel="colorboxPWContent" href="password.php?usr_id='. $usr_id. '&amp;inline=1"><img 
-                                                	src="'. THEME_PATH. '/icons/key.png" alt="Passwort ändern" title="Passwort ändern" /></a>
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $usr_id. '&amp;inline=1">Passwort ändern</a>
+                                                	src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" title="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" /></a>
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $usr_id. '&amp;inline=1">'.$g_l10n->get('SYS_CHANGE_PASSWORD').'</a>
                                             </span>
                                         </dd>
                                     </dl>
@@ -515,13 +515,13 @@ echo '
                 </li>
                 <li>
                     <dl>
-                        <dt>Bestätigungscode:</dt>
+                        <dt>'.$g_l10n->get('PRO_CONFIRMATION_CODE').':</dt>
                         <dd>
                             <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                             <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
 					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
                         </dd>
                     </dl>
                 </li>
@@ -534,7 +534,7 @@ echo '
         {
             // Registrierung
             $btn_image = 'email.png';
-            $btn_text  = 'Abschicken';
+            $btn_text  = $g_l10n->get('SYS_SEND');
         }
         else
         {
