@@ -442,7 +442,7 @@ echo '
                         <table width="100%" summary="Profilfoto" border="0" style="border:0px;" cellpadding="0" cellspacing="0" rules="none">
                             <tr>
                                 <td>
-                                	<img src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').'" />
+                                	<img src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" />
                                 </td>
                             </tr>';
                              // Nur berechtigte User duerfen das Profilfoto editieren
@@ -510,7 +510,7 @@ echo '
                                 echo '
                                 <div style="text-align: right;">
                                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$user->getValue('usr_id').'#cat-'.$field->getValue('cat_id').'"><img
-                                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$field->getValue('cat_name').' bearbeiten" title="'.$field->getValue('cat_name').' bearbeiten" /></a>
+                                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT_VAR',$field->getValue('cat_name')).'" title="'.$g_l10n->get('SYS_EDIT_VAR',$field->getValue('cat_name')).'" /></a>
                                 </div>';
                             }
                         echo '</div>
@@ -572,7 +572,7 @@ echo '
 
             echo '<div class="groupBox" id="profile_authorizations_box">
                      <div class="groupBoxHeadline">
-                        <div style="float: left;">Berechtigungen&nbsp;</div>
+                        <div style="float: left;">'.$g_l10n->get('SYS_AUTHORIZATION').'&nbsp;</div>
                      </div>
                      <div class="groupBoxBody" onmouseout="profileJS.deleteShowInfo()">';
             //checkRolesRight($right)
@@ -642,7 +642,7 @@ echo '
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/lists.png"
                   alt="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" />';
               }
-              echo '</div><div><p id="anzeige">Gesetzt durch:</p></div>
+              echo '</div><div><p id="anzeige">'.$g_l10n->get('SYS_SET_BY').':</p></div>
               </div>';
 
             // *******************************************************************************
@@ -665,7 +665,6 @@ echo '
                             echo '
                             <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
                             <script type="text/javascript">
-                                    // Calendarobjekt fuer das Popup anlegen
                                     var calPopup = new CalendarPopup("calendardiv");
                                     calPopup.setCssPrefix("calendar");
                             </script>
@@ -704,7 +703,7 @@ echo '
                 echo '<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>';	
             }
             echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
-                  <div class="groupBoxHeadline">Ehemalige Rollenmitgliedschaften&nbsp;</div>
+                  <div class="groupBoxHeadline">'.$g_l10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'&nbsp;</div>
                     <div id="profile_former_roles_box_body" class="groupBoxBody">
                     '.getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false,$g_l10n).'
                     </div>
@@ -739,7 +738,7 @@ echo '
             if($g_db->num_rows($result_role) > 0)
             {
                 echo '<div class="groupBox" id="profile_roles_box_other_orga">
-                    <div class="groupBoxHeadline">Rollenmitgliedschaften anderer Organisationen&nbsp;</div>
+                    <div class="groupBoxHeadline">'.$g_l10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">';
                             while($row = $g_db->fetch_array($result_role))
