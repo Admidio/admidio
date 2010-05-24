@@ -204,7 +204,7 @@ if($job==NULL)
 
     if($req_usr_id == $g_current_user->getValue('usr_id'))
     {
-        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PICTURE');
+        $headline = $g_l10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
     else
     {
@@ -226,15 +226,15 @@ if($job==NULL)
     <div class="formLayout" id="profile_photo_upload_form">
         <div class="formHead">'.$headline.'</div>
         <div class="formBody">
-            <p>'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').':</p>
-            <img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').'" />
+            <p>'.$g_l10n->get('PRO_CURRENT_PICTURE').':</p>
+            <img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" />
             <p>'.$g_l10n->get('PRO_PHR_SELECT_NEW_PIC_HERE').':</p>
             <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="'.$g_l10n->get('SYS_SEARCH_AFTER').'" /></p>
 
             <hr />
 
             <div class="formSubmit">
-                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('PRO_PHR_PHOTO_UPLOAD').'</button>
+                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('PRO_UPLOAD_PHOTO').'</button>
             </div>
         </div>
     </div>
@@ -288,7 +288,7 @@ elseif($job=='upload')
 
     if($req_usr_id == $g_current_user->getValue('usr_id'))
     {
-        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PICTURE');
+        $headline = $g_l10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
     else
     {
@@ -304,12 +304,12 @@ elseif($job=='upload')
         <div class="formBody">
             <table style="border: none; width: 100%; padding: 5px;">
                 <tr style="text-align: center;">
-                    <td>'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').':</td>
-                    <td>'.$g_l10n->get('PRO_PHR_NEW_PICTURE').':</td>
+                    <td>'.$g_l10n->get('PRO_CURRENT_PICTURE').':</td>
+                    <td>'.$g_l10n->get('PRO_NEW_PICTURE').':</td>
                 </tr>
                 <tr style="text-align: center;">
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_PHR_CURRENT_PICTURE').'" /></td>
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'&new_photo=1" alt="'.$g_l10n->get('PRO_PHR_NEW_PICTURE').'" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'&new_photo=1" alt="'.$g_l10n->get('PRO_NEW_PICTURE').'" /></td>
                 </tr>
             </table>
 
@@ -322,7 +322,7 @@ elseif($job=='upload')
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button id="btnUpdate" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$req_usr_id.'\'">
                     <img src="'.THEME_PATH.'/icons/database_in.png" alt="'.$g_l10n->get('SYS_UPDATE').'" />
-                    &nbsp;'.$g_l10n->get('PRO_PHR_ACCEPT_NEW_PICTURE').'
+                    &nbsp;'.$g_l10n->get('PRO_ACCEPT_NEW_PICTURE').'
                 </button>
             </div>
         </div>

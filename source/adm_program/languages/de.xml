@@ -374,30 +374,32 @@
     <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos Hochladen</text>
 
     <!-- Phrases only in Profilemodule -->
+	<text id="PRO_ACCEPT_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto übernehmen</text>
 	<text id="PRO_ADDRESS" development="new" translation="todo">Adresse</text>
 	<text id="PRO_ADD_USER" development="new" translation="todo">Benutzer anlegen</text>
 	<text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
 	<text id="PRO_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
+	<text id="PRO_CURRENT_PASSWORD" development="new" translation="todo">Aktuelles Passwort</text>
+	<text id="PRO_CURRENT_PICTURE" development="new" translation="todo">Aktuelles Profilfoto</text>
 	<text id="PRO_EDIT_MY_PROFILE" development="new" translation="todo">Mein Profil bearbeiten</text>
+	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="todo">Mein Profilfoto bearbeiten</text>
+	<text id="PRO_EDIT_PASSWORD" development="new" translation="todo">Passwort bearbeiten</text>
 	<text id="PRO_EDIT_PROFILE" development="new" translation="todo">Profil bearbeiten</text>
 	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto löschen</text>
+	<text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften</text>
 	<text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
-	<text id="PRO_PHR_ACCEPT_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto übernehmen</text>
-	<text id="PRO_PHR_EDIT_PROFILE_PICTURE" development="new" translation="todo">Mein Profilfoto bearbeiten</text>
+	<text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
+	<text id="PRO_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
 	<text id="PRO_PHR_EDIT_PROFILE_PIC_FROM" development="new" translation="todo">Profilfoto von %VAR1% %VAR2% bearbeiten</text>
-    <text id="PRO_PHR_FIELD_NUMERIC" development="new" translation="todo">Das Feld %VAR1% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
+	<text id="PRO_PHR_EXPORT_VCARD_FROM_VAR" development="new" translation="todo">vCard von %VAR1% exportieren</text>
+	<text id="PRO_PHR_FIELD_NUMERIC" development="new" translation="todo">Das Feld %VAR1% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
     <text id="PRO_PHR_CONFIRM_REGISTRATION_SYSTEM" development="new" translation="todo">Deine Daten wurden gespeichert.\n\nDu kannst dich noch nicht einloggen.\nSobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.</text>
     <text id="PRO_PHR_CONFIRM_REGISTRATION_DATE" development="new" translation="todo">Deine Daten wurden erfolgreich gespeichert und du wurdest zum gewünschten Termin angemeldet.\n\nDu kannst dich nun einloggen.</text>
-    <text id="PRO_PHR_CURRENT_PICTURE" development="new" translation="todo">Aktuelles Profilfoto</text>
 	<text id="PRO_PHR_LOGIN_NAME_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</text>
-    <text id="PRO_PHR_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
 	<text id="PRO_PHR_NO_DEFAULT_ROLE" development="new" translation="todo">In den Organisationseinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
-    <text id="PRO_PHR_PASSWORD_EDIT" development="new" translation="todo">Passwort bearbeiten</text>
 	<text id="PRO_PHR_PASSWORD_CHANGED" development="new" translation="todo">Das Passwort wurde erfolgreich geändert.</text>
-	<text id="PRO_PHR_PASSWORD_CURRENT" development="new" translation="todo">Aktuelles Passwort</text>
     <text id="PRO_PHR_PASSWORD_DESCRIPTION" development="new" translation="todo">Das Passwort muss mindestens aus 6 Zeichen bestehen. Es sollte sowohl Zahlen,  Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</text>
     <text id="PRO_PHR_PASSWORD_LENGTH" development="new" translation="todo">Das Passwort muss aus mindestens 6 Zeichen bestehen.</text>
-    <text id="PRO_PHR_PASSWORD_NEW" development="new" translation="todo">Neues Passwort</text>
 	<text id="PRO_PHR_PASSWORD_OLD_WRONG" development="new" translation="todo">Das alte Passwort ist falsch.</text>
     <text id="PRO_PHR_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="PRO_PHR_PHOTO_DELETED" development="new" translation="todo">Das Profilfoto wurde gelöscht.</text>
@@ -406,16 +408,16 @@
     <text id="PRO_PHR_PHOTO_NOT_CHOOSEN" development="new" translation="todo">Es wurde keine Bilddatei ausgewählt.</text>
     <text id="PRO_PHR_PHOTO_RESOLUTION_TO_LARGE" development="new" translation="todo">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von %VAR1% Megapixeln.</text>
     <text id="PRO_PHR_PHOTO_SAVED" development="new" translation="todo">Das neue Profilfoto wurde erfolgreich gespeichert.</text>   
-	<text id="PRO_PHR_PHOTO_UPLOAD" development="new" translation="todo">Foto Hochladen</text>
 	<text id="PRO_PHR_PROFILE_FROM" development="new" translation="todo">Profil von %VAR1% %VAR2%</text>
 	<text id="PRO_PHR_ROLE_NOT_ASSIGNED" development="new" translation="todo">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
     <text id="PRO_PHR_SELECT_NEW_PIC_HERE" development="new" translation="todo">Bitte hier ein neues Foto auswählen</text>
 	<text id="PRO_PHR_TO_ADD" development="new" translation="todo">%VAR1% zu %VAR2% hinzufügen</text>
-	<text id="PRO_PHR_EXPORT_VCARD_FROM_VAR" development="new" translation="todo">vCard von %VAR1% exportieren</text>
 	<text id="PRO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
     <text id="PRO_PHR_USERNAME_DESCRIPTION" development="new" translation="todo">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>.</text>
     <text id="PRO_PROFILE" development="new" translation="todo">Profil</text>
 	<text id="PRO_REGISTER" development="new" translation="todo">Registrieren</text>
+	<text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="todo">Rollenmitgliedschaften anderer Organisationen</text>
+	<text id="PRO_UPLOAD_PHOTO" development="new" translation="todo">Foto hochladen</text>
 
     <!-- Phrases only in Rolesmodule -->
     <text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
@@ -460,6 +462,7 @@
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
+	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
     <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
@@ -483,6 +486,7 @@
     <text id="SYS_DELETE" development="new" translation="todo">Löschen</text>
     <text id="SYS_DESCRIPTION" development="new" translation="todo">Beschreibung</text>
     <text id="SYS_EDIT" development="new" translation="todo">Bearbeiten</text>
+	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
