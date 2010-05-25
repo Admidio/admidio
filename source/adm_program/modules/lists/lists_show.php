@@ -83,6 +83,9 @@ if(isset($_GET['show_members']) && is_numeric($_GET['show_members']))
     $show_members = $_GET['show_members'];
 }
 
+// Inhalt der Variablen explizit zuruecksetzen (einige Server behalten ansonsten alte Befüllungen vor)
+unset($role_ids);
+
 if($req_rol_id > 0)
 {
     $role_ids[] = $req_rol_id;
