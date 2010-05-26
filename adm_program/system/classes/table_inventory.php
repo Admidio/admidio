@@ -23,6 +23,23 @@ class TableInventory extends TableAccess
     }
 
 
+    // die Methode wird innerhalb von delete() aufgerufen
+    public function delete()
+    {
+        //erst einmal alle vorhanden Leihvorgaenge zu diesem Inventareintrag loeschen...
+        $sql = "DELETE FROM ". TBL_RENTAL_OVERVIEW. " WHERE rnt_inv_id = ". $this->getValue("inv_id");
+        $result = $this->db->query($sql);
+
+        return parent::delete();
+    }
+
+    //Gibt alle Inventargegenstaende, die der Benutzer sehen darf zurueck
+    public function getAllInventoryItems()
+    {
+
+
+    }
+
     //Liest den Eintrag zu einer uebergebenen inv_id aus der DB
 	public function readData($inv_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
@@ -34,7 +51,7 @@ class TableInventory extends TableAccess
             $sql_where_condition   .= '    inv_cat_id = cat_id
                                        AND inv_rol_id = rol_id
                                        AND cat_org_id = '. $g_current_organization->getValue('org_id');
-            parent::readData($inv_id, $sql_where_condition, $sql_additional_tables);
+            return parent::readData($inv_id, $sql_where_condition, $sql_additional_tables);
         }
 
         //pruefen ob das Inventarobjekt ueberhaupt ausgelesen werden darf
@@ -68,14 +85,6 @@ class TableInventory extends TableAccess
 
     }
 
-
-    //Gibt alle Inventargegenstaende, die der Benutzer sehen darf zurueck
-    public function getAllInventoryItems()
-    {
-
-
-    }
-
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
     public function save()
@@ -98,16 +107,6 @@ class TableInventory extends TableAccess
             }
         }
         parent::save();
-    }
-
-    // die Methode wird innerhalb von delete() aufgerufen
-    public function delete()
-    {
-        //erst einmal alle vorhanden Leihvorgaenge zu diesem Inventareintrag loeschen...
-        $sql = "DELETE FROM ". TBL_RENTAL_OVERVIEW. " WHERE rnt_inv_id = ". $this->getValue("inv_id");
-        $result = $this->db->query($sql);
-
-        return parent::delete();
     }
 }
 ?>

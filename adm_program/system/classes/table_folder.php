@@ -51,7 +51,7 @@ class TableFolder extends TableAccess
                                     AND fol_type   = "DOWNLOAD"
                                     AND fol_org_id = '. $g_current_organization->getValue('org_id');
         }
-        parent::readData($folder_id, $sql_where_condition, $sql_additional_tables);
+        return parent::readData($folder_id, $sql_where_condition, $sql_additional_tables);
     }
 
 

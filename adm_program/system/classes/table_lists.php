@@ -26,23 +26,16 @@ class TableLists extends TableAccess
     {
         parent::__construct($db, TBL_LISTS, 'lst', $lst_id);
     }
-    
-    // Aktuelle Liste wird zur Default-Liste der Organisation
-    public function setDefault()
-    {
-        global $g_current_organization;
-        
-        // erst die bisherige Default-Liste zuruecksetzen
-        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 0
-                 WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
-                   AND lst_default = 1 ';
-        $this->db->query($sql);
 
-        // jetzt die aktuelle Liste zur Default-Liste machen
-        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 1
-                 WHERE lst_id = '. $this->getValue('lst_id');
-        $this->db->query($sql);
-    }
+    // Liste samt Abhaengigkeiten loeschen
+    public function delete()
+    {
+        // alle Spalten der Liste loeschen
+        $sql = 'DELETE FROM '. TBL_LIST_COLUMNS. ' WHERE lsc_lst_id = '. $this->getValue('lst_id');
+        $result = $this->db->query($sql);
+        
+        return parent::delete();
+    } 
 
     public function save()
     {
@@ -69,15 +62,22 @@ class TableLists extends TableAccess
         
         parent::save();
     }
-
-    // Liste samt Abhaengigkeiten loeschen
-    public function delete()
-    {
-        // alle Spalten der Liste loeschen
-        $sql = 'DELETE FROM '. TBL_LIST_COLUMNS. ' WHERE lsc_lst_id = '. $this->getValue('lst_id');
-        $result = $this->db->query($sql);
         
-        return parent::delete();
-    } 
+    // Aktuelle Liste wird zur Default-Liste der Organisation
+    public function setDefault()
+    {
+        global $g_current_organization;
+        
+        // erst die bisherige Default-Liste zuruecksetzen
+        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 0
+                 WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
+                   AND lst_default = 1 ';
+        $this->db->query($sql);
+
+        // jetzt die aktuelle Liste zur Default-Liste machen
+        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 1
+                 WHERE lst_id = '. $this->getValue('lst_id');
+        $this->db->query($sql);
+    }
 }
 ?>

@@ -122,8 +122,9 @@ class TableUserField extends TableAccess
             $sql_additional_tables .= TBL_CATEGORIES;
             $sql_where_condition   .= '    usf_cat_id = cat_id
                                        AND usf_id     = '.$usf_id;
-            parent::readData($usf_id, $sql_where_condition, $sql_additional_tables);
+            return parent::readData($usf_id, $sql_where_condition, $sql_additional_tables);
         }
+        return false;
     }
 
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen

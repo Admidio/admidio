@@ -70,7 +70,7 @@ class TableGuestbookComment extends TableAccess
         $sql_additional_tables .= TBL_GUESTBOOK;
         $sql_where_condition   .= '    gbc_gbo_id = gbo_id 
                                    AND gbc_id     = '.$gbc_id;
-        parent::readData($gbc_id, $sql_where_condition, $sql_additional_tables);
+        return parent::readData($gbc_id, $sql_where_condition, $sql_additional_tables);
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt

@@ -36,7 +36,7 @@ class TableText extends TableAccess
                                      AND txt_org_id = '. $g_current_organization->getValue('org_id');
         }
         
-        parent::readData($name, $sql_where_condition, $sql_additional_tables);
+        return parent::readData($name, $sql_where_condition, $sql_additional_tables);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
