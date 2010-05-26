@@ -198,8 +198,9 @@ class TableDate extends TableAccess
             $sql_additional_tables .= TBL_CATEGORIES;
             $sql_where_condition   .= '    dat_cat_id = cat_id
                                        AND dat_id     = '.$dat_id;
-            parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
+            return parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
         }
+        return false;
     }
 
     // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen

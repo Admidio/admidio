@@ -36,6 +36,8 @@ class TableUserData extends TableAccess
     // sql_additioinal_tables : wird nicht verwendet (benötigt wegen Vererbung)
     public function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
     {
+        $returnCode = false;
+
         if(is_array($ids) && is_numeric($ids['usr_id']) && is_numeric($ids['usf_id']))
         {
             $tables = TBL_USER_FIELDS;
@@ -46,11 +48,12 @@ class TableUserData extends TableAccess
             $sql_where_condition .= ' AND usd_usr_id = '. $ids['usr_id']. '
                                        AND usd_usf_id = '. $ids['usf_id']. '
                                        AND usd_usf_id = usf_id ';
-            parent::readData(0, $sql_where_condition, $tables);
+            $returnCode = parent::readData(0, $sql_where_condition, $tables);
             
             $this->setValue('usd_usr_id', $ids['usr_id']);
             $this->setValue('usd_usf_id', $ids['usf_id']);
         }
+        return $returnCode;
     }
     
     // es werden nur die Daten der Tabelle adm_user_data entfernt

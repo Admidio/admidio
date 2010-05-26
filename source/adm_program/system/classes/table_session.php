@@ -42,7 +42,29 @@ class TableSession extends TableAccess
             $sql_where_condition .= ' ses_session_id = "'.$session.'" ';
         }       
         
-        parent::readData($session, $sql_where_condition, $sql_additional_tables);
+        return parent::readData($session, $sql_where_condition, $sql_additional_tables);
+    }
+
+    // diese Funktion stoesst ein Neueinlesen des Organisations-Objekts bei allen angemeldeten
+    // Usern beim naechsten Seitenaufruf an
+    public function renewOrganizationObject()
+    {
+        $sql    = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 2 ';
+        $this->db->query($sql);
+    }
+
+    // diese Funktion stoesst ein Neueinlesen des User-Objekts bei allen angemeldeten
+    // Usern beim naechsten Seitenaufruf an
+    // wird usr_id uebergeben, dann nur das Einlesen fuer diese usr_id anstossen
+    public function renewUserObject($usr_id = 0)
+    {
+        $sql_usr_id = '';
+        if($usr_id > 0)
+        {
+            $sql_usr_id = ' WHERE ses_usr_id = '. $usr_id;
+        }
+        $sql    = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 '. $sql_usr_id;
+        $this->db->query($sql);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
@@ -64,28 +86,6 @@ class TableSession extends TableAccess
         }
         parent::save();
     }  
-
-    // diese Funktion stoesst ein Neueinlesen des User-Objekts bei allen angemeldeten
-    // Usern beim naechsten Seitenaufruf an
-    // wird usr_id uebergeben, dann nur das Einlesen fuer diese usr_id anstossen
-    public function renewUserObject($usr_id = 0)
-    {
-        $sql_usr_id = '';
-        if($usr_id > 0)
-        {
-            $sql_usr_id = ' WHERE ses_usr_id = '. $usr_id;
-        }
-        $sql    = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 '. $sql_usr_id;
-        $this->db->query($sql);
-    }
-    
-    // diese Funktion stoesst ein Neueinlesen des Organisations-Objekts bei allen angemeldeten
-    // Usern beim naechsten Seitenaufruf an
-    public function renewOrganizationObject()
-    {
-        $sql    = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 2 ';
-        $this->db->query($sql);
-    }
     
     // diese Funktion loescht Datensaetze aus der Session-Tabelle die nicht mehr gebraucht werden
     public function tableCleanup($max_inactive_time)

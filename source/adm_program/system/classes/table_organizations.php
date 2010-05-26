@@ -32,7 +32,7 @@ class TableOrganizations extends TableAccess
             $sql_where_condition .= ' org_shortname LIKE "'.$organization.'" ';
         }
         
-        parent::readData($organization, $sql_where_condition, $sql_additional_tables);
+        return parent::readData($organization, $sql_where_condition, $sql_additional_tables);
     }
 }
 ?>

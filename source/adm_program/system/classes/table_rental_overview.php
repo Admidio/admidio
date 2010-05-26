@@ -27,7 +27,7 @@ class TableRentalOverview extends TableAccess
     {
         $sql_additional_tables .= TBL_INVENTORY;
         $sql_where_condition   .= ' rnt_inv_id = inv_id ';
-        parent::readData($rnt_id, $sql_where_condition, $sql_additional_tables);
+        return parent::readData($rnt_id, $sql_where_condition, $sql_additional_tables);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
