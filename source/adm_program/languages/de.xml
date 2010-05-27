@@ -12,7 +12,6 @@
     <text id="CAT_PHR_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden ?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
     <text id="CAT_PHR_MOVE_DOWN" development="new" translation="todo">%VAR1% nach unten verschieben</text>
     <text id="CAT_PHR_MOVE_UP" development="new" translation="todo">%VAR1% nach oben verschieben</text>
-    <text id="CAT_PHR_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
 
     <!-- Phrases only in Datesmodule -->
     <text id="DAT_ADD_DATE_TO_CALENDAR" development="new" translation="todo">Termin in den Kalender übernehmen</text>
@@ -420,6 +419,12 @@
 	<text id="PRO_UPLOAD_PHOTO" development="new" translation="todo">Foto hochladen</text>
 
     <!-- Phrases only in Rolesmodule -->
+    <text id="ROL_ACTIV_ROLES" development="new" translation="todo">Aktive Rollen</text>
+    <text id="ROL_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
+    <text id="ROL_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
+    <text id="ROL_ENABLE_ROLE" development="new" translation="todo">Rolle aktivieren</text>
+    <text id="ROL_INACTIV_ROLES" development="new" translation="todo">Inaktive Rollen</text>
+    <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
     <text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
     <text id="ROL_PHR_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
     <text id="ROL_PHR_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1% wirklich entfernen ?</text>
@@ -446,11 +451,22 @@
     <text id="ROL_PHR_ROLE_DELETE" development="new" translation="todo">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
     <text id="ROL_PHR_ROLE_NAME_EXISTS" development="new" translation="todo">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</text>
     <text id="ROL_PHR_ROLE_SET_MODE" development="new" translation="todo">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
+    <text id="ROL_PHR_SEND_MAIL_GUESTS" development="new" translation="todo">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</text>
+    <text id="ROL_PHR_SEND_MAIL_MEMBERS" development="new" translation="todo">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</text>
+    <text id="ROL_PHR_SEND_MAIL_ROLE" development="new" translation="todo">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.</text>
+    <text id="ROL_PHR_VIEW_LIST_MEMBERS" development="new" translation="todo">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.</text>
+    <text id="ROL_PHR_VIEW_LIST_ROLE" development="new" translation="todo">Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.</text>
+    <text id="ROL_PREF" development="new" translation="todo" description="Abbreviation for Preferences">Einst.</text>
     <text id="ROL_ROLE" development="new" translation="todo">Rolle</text>
+    <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="todo">Rollenverwaltung</text>
     <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="todo">Rollenzuordnung für "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="todo">Rolle löschen</text>
     <text id="ROL_ROLE_MEMBERSHIPS" development="new" translation="todo">Rollenmitgliedschaften</text>
     <text id="ROL_ROLE_MEMBERSHIPS_CHANGE" development="new" translation="todo">Rollenmitgliedschaften ändern</text>
+    <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="todo">Rolle unsichtbar machen</text>
+    <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="todo">Rolle sichtbar machen</text>
+    <text id="ROL_SHOW_MEMBERS" development="new" translation="todo">Mitglieder anzeigen</text>
+    <text id="ROL_VISIBLE_ROLES" development="new" translation="todo">Sichtbare Rollen</text>
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="todo">Abbrechen</text>
@@ -490,6 +506,7 @@
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
+    <text id="SYS_FEATURES" development="new" translation="todo">Funktionen</text>
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
     <text id="SYS_FILE" development="new" translation="todo">Datei</text>
@@ -598,6 +615,7 @@
     <text id="SYS_PHR_TIME_INVALID" development="new" translation="todo">Es wurde keine gültige Uhrzeit in das Feld %VAR1_BOLD% eingegeben.\n\nDie Uhrzeit muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
     <text id="SYS_PHR_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_PHR_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
+    <text id="SYS_PHR_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
     <text id="SYS_PHR_WANT_REGISTER" development="new" translation="todo">Ich möchte mich registrieren!</text>
     <text id="SYS_PHR_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>

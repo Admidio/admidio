@@ -251,7 +251,7 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
             if($g_current_user->assignRoles())
             {
                 echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-                 src="'. THEME_PATH. '/icons/options.png" alt="Kategorien pflegen" title="Kategorien pflegen" /></a>';
+                 src="'. THEME_PATH. '/icons/options.png" alt="'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
             }
             echo '</li>';
         }
@@ -260,8 +260,8 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
             echo '
             <li><span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-                    src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" title="Kategorien pflegen"/></a>
-                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">Kategorien pflegen</a>
+                    src="'. THEME_PATH. '/icons/application_double.png" alt="'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
             </span></li>';
         }    
     }

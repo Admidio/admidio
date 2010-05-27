@@ -173,8 +173,8 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
             <li>
                 <span class="iconTextLink">
                     <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">
-                        <img src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" /></a>
-                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">Kategorien pflegen</a>
+                        <img src="'. THEME_PATH. '/icons/application_double.png" alt="'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
                 </span>
             </li>
         </ul>';
