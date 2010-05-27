@@ -80,7 +80,7 @@ if($_GET['mode'] == 1)
     // Html des Modules ausgeben
     echo '
     <div class="formLayout" id="edit_announcements_form">
-        <div class="formHead">Rolle löschen</div>
+        <div class="formHead">'.$g_l10n->get('ROL_ROLE_DELETE').'</div>
         <div class="formBody">
             <p align="left">
                 <img src="'. THEME_PATH. '/icons/roles_gray.png" alt="Inaktive Rolle" />
@@ -89,7 +89,7 @@ if($_GET['mode'] == 1)
                 zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.
             </p>
             <p align="left">
-                <img src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" />
+                <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('ROL_ROLE_DELETE').'" />
                 Wenn du <b>Löschen</b> auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank
                 entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.
             </p>

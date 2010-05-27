@@ -49,7 +49,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['roles_request']);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Rollenverwaltung';
+$g_layout['title']  = $g_l10n->get('ROL_ROLE_ADMINISTRATION');
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -58,27 +58,27 @@ echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
 if($req_valid == true)
 {
-    $description_lnk = 'Inaktive Rollen';
-    $description_lst = 'Aktive Rollen';
+    $description_lnk = $g_l10n->get('ROL_INACTIV_ROLES');
+    $description_lst = $g_l10n->get('ROL_ACTIV_ROLES');
     $image           = 'roles_gray.png';
 }
 else
 {
-    $description_lnk = 'Aktive Rollen';
-    $description_lst = 'Inaktive Rollen';
+    $description_lnk = $g_l10n->get('ROL_ACTIV_ROLES');
+    $description_lst = $g_l10n->get('ROL_INACTIV_ROLES');
     $image           = 'roles.png';
 }
 
 if($req_visible == true)
 {
-    $visible_lnk    = 'Unsichtbare Rollen';
-    $visible_lst    = 'Sichtbare Rollen';
+    $visible_lnk    = $g_l10n->get('ROL_INVISIBLE_ROLES');
+    $visible_lst    = $g_l10n->get('ROL_VISIBLE_ROLES');
     $visible_image  = 'light_off.png';
 }
 else
 {
-    $visible_lnk    = 'Sichtbare Rollen';
-    $visible_lst    = 'Unsichtbare Rollen';
+    $visible_lnk    = $g_l10n->get('ROL_VISIBLE_ROLES');
+    $visible_lst    = $g_l10n->get('ROL_INVISIBLE_ROLES');
     $visible_image  = 'light_on.png';
 }
 
@@ -87,8 +87,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="Rolle anlegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">Rolle anlegen</a>
+            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('ROL_CREATE_ROLE').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">'.$g_l10n->get('ROL_CREATE_ROLE').'</a>
         </span>
     </li>
     <li>
@@ -108,8 +108,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-            src="'. THEME_PATH. '/icons/application_double.png" alt="Kategorien pflegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">Kategorien pflegen</a>
+            src="'. THEME_PATH. '/icons/application_double.png" alt="'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">'.$g_l10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
         </span>
     </li>
 </ul>
@@ -118,9 +118,9 @@ echo '
     <thead>
         <tr>
             <th>'.$description_lst.'</th>
-            <th>Berechtigungen</th>
-            <th>Einst.</th>
-            <th style="text-align: center;">Funktionen</th>
+            <th>'.$g_l10n->get('SYS_AUTHORIZATION').'</th>
+            <th>'.$g_l10n->get('ROL_PREF').'</th>
+            <th style="text-align: center;">'.$g_l10n->get('SYS_FEATURES').'</th>
         </tr>
     </thead>';
     $cat_id = '';
@@ -155,7 +155,7 @@ echo '
             if($role->getValue('cat_hidden') == 1)
             {
                 $image_hidden = '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png"
-                                 alt="Nur sichtbar für eingeloggte Benutzer" title="Nur sichtbar für eingeloggte Benutzer" />';
+                                 alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $g_l10n->get('SYS_ROLE')).'" title="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $g_l10n->get('SYS_ROLE')).'" />';
             }
             echo '<tbody>
                 <tr>
@@ -248,43 +248,43 @@ echo '
             <td>';
                 if($role->getValue("rol_this_list_view") == 1)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list_role.png\"
-                    alt=\"Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.\" title=\"Nur Mitglieder dieser Rolle können die Mitgliederliste einsehen.\" />";
+                    echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/list_role.png"
+                    alt="'.$g_l10n->get('ROL_PHR_VIEW_LIST_ROLE').'" title="'.$g_l10n->get('ROL_PHR_VIEW_LIST_ROLE').'" />';
                 }
                 if($role->getValue("rol_this_list_view") == 2)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/list_key.png\"
-                    alt=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen\" title=\"Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.\" />";
+                    echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/list_key.png"
+                    alt="'.$g_l10n->get('ROL_PHR_VIEW_LIST_MEMBERS').'" title="'.$g_l10n->get('ROL_PHR_VIEW_LIST_MEMBERS').'" />';
                 }
                 if($role->getValue("rol_mail_this_role") == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email_role.png\"
-                    alt=\"Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.\" title=\"Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.\" />";
+                    echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/email_role.png"
+                    alt="'.$g_l10n->get('ROL_PHR_SEND_MAIL_ROLE').'" title="'.$g_l10n->get('ROL_PHR_SEND_MAIL_ROLE').'" />';
                 }
                 if($role->getValue("rol_mail_this_role") == 2 && $g_preferences['enable_mail_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email_key.png\"
-                    alt=\"Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.\" title=\"Eingeloggte Benutzer k&ouml;nnen E-Mails an diese Rolle schreiben.\" />";
+                    echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/email_key.png"
+                    alt="'.$g_l10n->get('ROL_PHR_SEND_MAIL_MEMBERS').'" title="'.$g_l10n->get('ROL_PHR_SEND_MAIL_MEMBERS').'" />';
                 }
                 if($role->getValue("rol_mail_this_role") == 3 && $g_preferences['enable_mail_module'] > 0)
                 {
-                    echo "<img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/email.png\"
-                    alt=\"Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.\" title=\"Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben\" />";
+                    echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/email.png"
+                    alt="'.$g_l10n->get('ROL_PHR_SEND_MAIL_GUESTS').'" title="'.$g_l10n->get('ROL_PHR_SEND_MAIL_GUESTS').'" />';
                 }
             echo '</td>
             <td style="text-align: center;">
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$role->getValue("rol_id").'"><img
-                src="'. THEME_PATH. '/icons/list.png" alt="Mitglieder anzeigen" title="Mitglieder anzeigen" /></a>';
+                src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('ROL_SHOW_MEMBERS').'" title="'.$g_l10n->get('ROL_SHOW_MEMBERS').'" /></a>';
 
                 if($req_valid == true)
                 {
-                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/modules/lists/members.php?rol_id=".$role->getValue("rol_id")."\"><img
-                        src=\"". THEME_PATH. "/icons/add.png\" alt=\"Mitglieder zuordnen\" title=\"Mitglieder zuordnen\" /></a>";
+                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img
+                        src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('ROL_ASSIGN_MEMBERS').'" title="'.$g_l10n->get('ROL_ASSIGN_MEMBERS').'" /></a>';
                 }
                 else
                 {
-                    echo "<a class=\"iconLink\" href=\"$g_root_path/adm_program/administration/roles/roles_function.php?rol_id=".$role->getValue("rol_id")."&amp;mode=5\"><img
-                        src=\"". THEME_PATH. "/icons/roles.png\" alt=\"Rolle aktivieren\" title=\"Rolle aktivieren\" /></a>";
+                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=5"><img
+                        src="'.THEME_PATH.'/icons/roles.png" alt="'.$g_l10n->get('ROL_ENABLE_ROLE').'" title="'.$g_l10n->get('ROL_ENABLE_ROLE').'" /></a>';
                 }
 
                 if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
@@ -296,23 +296,23 @@ echo '
                     if($req_valid == true)
                     {
                         echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=1"><img
-                            src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('ROL_ROLE_DELETE').'" title="'.$g_l10n->get('ROL_ROLE_DELETE').'" /></a>';
                     }
                     else
                     {
                         echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=6"><img
-                            src="'. THEME_PATH. '/icons/delete.png" alt="Rolle löschen" title="Rolle löschen" /></a>';
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('ROL_ROLE_DELETE').'" title="'.$g_l10n->get('ROL_ROLE_DELETE').'" /></a>';
                     }
                 }
                 if($req_visible == true)
                 {
                     echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=7"><img
-                            src="'. THEME_PATH. '/icons/light_off.png" alt="Rolle unsichtbar machen" title="Rolle verstecken" /></a>';
+                            src="'. THEME_PATH. '/icons/light_off.png" alt="'.$g_l10n->get('ROL_SET_ROLE_INVISIBLE').'" title="'.$g_l10n->get('ROL_SET_ROLE_INVISIBLE').'" /></a>';
                 }
                 else
                 {
                     echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=8"><img
-                            src="'. THEME_PATH. '/icons/light_on.png" alt="Rolle sichtbar machen" title="Rolle zeigen" /></a>';
+                            src="'. THEME_PATH. '/icons/light_on.png" alt="'.$g_l10n->get('ROL_SET_ROLE_VISIBLE').'" title="'.$g_l10n->get('ROL_SET_ROLE_VISIBLE').'" /></a>';
                 }
             echo '</td>
         </tr>';

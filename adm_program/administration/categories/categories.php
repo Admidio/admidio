@@ -136,7 +136,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 $icon_login_user = '';
 if($_GET['type'] != 'USF')
 {
-    $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" />';
+    $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" />';
 }
 
 // Html des Modules ausgeben
@@ -217,7 +217,7 @@ echo '
             <td>';
                 if($cat_row['cat_hidden'] == 1)
                 {
-                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" />';
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" />';
                 }
                 else
                 {

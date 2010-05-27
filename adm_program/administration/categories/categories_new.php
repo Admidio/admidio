@@ -175,7 +175,7 @@ echo '
                 <li>
                     <dl>
                         <dt>
-                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'" /></label>
+                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" /></label>
                         </dt>
                         <dd>
                             <input type="checkbox" id="cat_hidden" name="cat_hidden" ';
@@ -184,7 +184,7 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                            <label for="cat_hidden">'.$g_l10n->get('CAT_PHR_VISIBLE_TO_USERS', $title).'</label>
+                            <label for="cat_hidden">'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'</label>
                         </dd>
                     </dl>
                 </li>';
