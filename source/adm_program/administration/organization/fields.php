@@ -127,7 +127,7 @@ echo '
         <tr>
             <th>'.$g_l10n->get('SYS_FIELD').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DESCRIPTION&amp;inline=true"><img 
                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a></th>
+                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a></th>
             <th>&nbsp;</th>
             <th>'.$g_l10n->get('SYS_DESCRIPTION').'</th>
             <th><img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" /></th>

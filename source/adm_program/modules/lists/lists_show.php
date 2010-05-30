@@ -821,7 +821,7 @@ else
                             echo'<li>
                                 <dl>
                                     <dt>Beitrag:</dt>
-                                    <dd>'. $role->getValue('rol_cost'). ' &euro;</dd>
+                                    <dd>'. $role->getValue('rol_cost'). ' '.$g_preferences['system_currency'].'</dd>
                                 </dl>
                             </li>';
                         }

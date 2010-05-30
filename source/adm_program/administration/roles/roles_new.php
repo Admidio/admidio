@@ -95,11 +95,11 @@ $childRoleObjects = array();
 // Html-Kopf ausgeben
 if($req_rol_id > 0)
 {
-    $g_layout['title'] = 'Rolle bearbeiten';
+    $g_layout['title'] = $g_l10n->get('ROL_EDIT_ROLE');
 }
 else
 {
-    $g_layout['title'] = 'Rolle anlegen';
+    $g_layout['title'] = $g_l10n->get('ROL_CREATE_ROLE');
     $role->setValue('rol_this_list_view', '1');
     $role->setValue('rol_mail_this_role', '2');
 }
@@ -177,7 +177,7 @@ $g_layout['header'] = '
             // Alle abhängigen Rollen werden für die Darstellung gesichert
             var child_roles = document.getElementById("ChildRoles");
 
-            //Wenn eine Maximale Mitgliederzahl angeben wurde, düren keine Rollenabhängigkeiten bestehem
+            //Wenn eine Maximale Mitgliederzahl angeben wurde, duerfen keine Rollenabhaengigkeiten bestehen
             if(inputValue > 0)
             {
                 // Die Box zum konfigurieren der Rollenabhängig wird ausgeblendet
@@ -191,7 +191,7 @@ $g_layout['header'] = '
                 }
                 entfernen();
 
-                alert("Achtung! Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.");
+                alert("'.$g_l10n->get('ROL_PHR_SAVE_ROLES').'");
 
             }
             else
@@ -248,7 +248,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="rol_name">Name:</label></dt>
+                    <dt><label for="rol_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd>
                         <input type="text" id="rol_name" name="rol_name" ';
                         // bei bestimmte Rollen darf der Name nicht geaendert werden
@@ -263,7 +263,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="rol_description">Beschreibung:</label></dt>
+                    <dt><label for="rol_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
                         <input type="text" id="rol_description" name="rol_description" style="width: 320px;" maxlength="255" value="'. $role->getValue('rol_description'). '" />
                     </dd>
@@ -271,7 +271,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="rol_cat_id">Kategorie:</label></dt>
+                    <dt><label for="rol_cat_id">'.$g_l10n->get('SYS_CATEGORY').':</label></dt>
                     <dd>
                         <select size="1" id="rol_cat_id" name="rol_cat_id">
                             <option value=" "';
@@ -307,7 +307,7 @@ echo '
         <div class="groupBox" id="properties_box">
             <div class="groupBoxHeadline" id="properties_head">
                 <a class="iconShowHide" href="javascript:toggleElement(\'properties_body\', \'img_properties_body\')"><img
-                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Eigenschaften
+                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_PROPERTIES').'
             </div>
 
             <div class="groupBoxBody" id="properties_body">
@@ -317,7 +317,7 @@ echo '
                         echo '
                         <li>
                             <dl>
-                                <dt><label for="rol_mail_this_role">Mails zusenden:</label></dt>
+                                <dt><label for="rol_mail_this_role">'.$g_l10n->get('ROL_SEND_MAILS').':</label></dt>
                                 <dd>
                                     <select size="1" id="rol_mail_this_role" name="rol_mail_this_role">
                                         <option value="0" ';
@@ -325,29 +325,29 @@ echo '
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>niemand</option>
+                                            echo '>'.$g_l10n->get('ROL_NOBODY').'</option>
                                         <option value="1" ';
                                             if($role->getValue('rol_mail_this_role') == 1)
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>nur Rollenmitglieder</option>
+                                            echo '>'.$g_l10n->get('ROL_ONLY_ROLE_MEMBERS').'</option>
                                         <option value="2" ';
                                             if($role->getValue('rol_mail_this_role') == 2)
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>alle angemeldeten Benutzer</option>
+                                            echo '>'.$g_l10n->get('ROL_PHR_ALL_MEMBERS').'</option>
                                         <option value="3" ';
                                             if($role->getValue('rol_mail_this_role') == 3)
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>alle Besucher der Seite</option>
+                                            echo '>'.$g_l10n->get('ROL_PHR_ALL_GUESTS').'</option>
                                     </select>
                                     <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_PHR_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
                                         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_PHR_RIGHT_MAIL_TO_ALL\',this)" onmouseout="ajax_hideTooltip()"
-                                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
+                                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>	                                
                                 </dd>
                             </dl>
                         </li>';
@@ -355,7 +355,7 @@ echo '
                     echo '
                     <li>
                         <dl>
-                            <dt><label for="rol_this_list_view">Listen ansehen:</label></dt>
+                            <dt><label for="rol_this_list_view">'.$g_l10n->get('ROL_SHOW_LISTS').':</label></dt>
                             <dd>
                                 <select size="1" id="rol_this_list_view" name="rol_this_list_view">
                                     <option value="0" ';
@@ -363,36 +363,36 @@ echo '
                                         {
                                             echo ' selected="selected" ';
                                         }
-                                        echo '>niemand</option>
+                                        echo '>'.$g_l10n->get('ROL_NOBODY').'</option>
                                     <option value="1" ';
                                         if($role->getValue('rol_this_list_view') == 1)
                                         {
                                             echo ' selected="selected" ';
                                         }
-                                        echo '>nur Rollenmitglieder</option>
+                                        echo '>'.$g_l10n->get('ROL_ONLY_ROLE_MEMBERS').'</option>
                                     <option value="2" ';
                                         if($role->getValue('rol_this_list_view') == 2)
                                         {
                                             echo ' selected="selected" ';
                                         }
-                                        echo '>alle angemeldeten Benutzer</option>
+                                        echo '>'.$g_l10n->get('ROL_PHR_ALL_MEMBERS').'</option>
                                 </select>
                                 <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_PHR_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
                                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_PHR_RIGHT_ALL_LISTS_VIEW\',this)" onmouseout="ajax_hideTooltip()"
-                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="rol_max_members">max. Teilnehmer:</label></dt>
+                            <dt><label for="rol_max_members">'.$g_l10n->get('ROL_MAX_PARTICIPANTS').':</label></dt>
                             <dd>
                                 <input type="text" id="rol_max_members" name="rol_max_members" size="3" maxlength="3" onchange="checkMaxMemberCount(this.value)" value="';
                                 if($role->getValue('rol_max_members') > 0)
                                 {
                                     echo $role->getValue('rol_max_members');
                                 }
-                                echo '" />&nbsp;(ohne Leiter)
+                                echo '" />&nbsp;('.$g_l10n->get('ROL_WITHOUT_LEADER').')
                             </dd>
                         </dl>
                     </li>';
@@ -400,15 +400,15 @@ echo '
 					echo '
                     <li>
                         <dl>
-                            <dt><label for="rol_cost">Beitrag:</label></dt>
+                            <dt><label for="rol_cost">'.$g_l10n->get('ROL_CONTRIBUTION').':</label></dt>
                             <dd>
-                                <input type="text" id="rol_cost" name="rol_cost" size="6" maxlength="6" value="'. $role->getValue('rol_cost'). '" /> &euro;
+                                <input type="text" id="rol_cost" name="rol_cost" size="6" maxlength="6" value="'. $role->getValue('rol_cost'). '" /> '.$g_preferences['system_currency'].'
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="rol_cost_period">Beitragszeitraum:</label></dt>
+                            <dt><label for="rol_cost_period">'.$g_l10n->get('ROL_CONTRIBUTION_PERIOD').':</label></dt>
                             <dd>
                                 <select size="1" id="rol_cost_period" name="rol_cost_period">';
                                     // Zunaechst den unkonfigurierten Fall
@@ -439,7 +439,7 @@ echo '
         <div class="groupBox" id="justifications_box">
             <div class="groupBoxHeadline">
                 <a class="iconShowHide" href="javascript:toggleElement(\'justifications_body\',\'img_justifications_body\')"><img
-                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Berechtigungen
+                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_AUTHORIZATION').'
             </div>
 
             <div class="groupBoxBody" id="justifications_body">
@@ -460,7 +460,7 @@ echo '
                             <label for="rol_assign_roles">'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_ASSIGN_ROLES_DESC&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_ASSIGN_ROLES_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>	                                
                         </div>
                     </li>
                     <li>
@@ -503,7 +503,7 @@ echo '
                             <label for="rol_edit_user">'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'</label>
 							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_EDIT_USER_DESC&amp;inline=true"><img 
 				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_EDIT_USER_DESC\',this)" onmouseout="ajax_hideTooltip()"
-				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>	                                
+				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>	                                
                         </div>
                     </li>';
                     if($g_preferences['enable_mail_module'] > 0)
@@ -681,12 +681,12 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="rol_start_date">Gültig von:</label></dt>
+                            <dt><label for="rol_start_date">'.$g_l10n->get('ROL_VALID_FROM').':</label></dt>
                             <dd>
                                 <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue('rol_start_date').'" />
                                 <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\''.$g_preferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                                <label for="rol_end_date">bis</label>
+                                <label for="rol_end_date">'.$g_l10n->get('SYS_DATE_TO').'</label>
                                 <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue('rol_end_date').'" />
                                 <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\''.$g_preferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
                                 	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;(Datum)
@@ -696,71 +696,68 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="rol_start_time">Uhrzeit:</label></dt>
+                            <dt><label for="rol_start_time">'.$g_l10n->get('SYS_TIME').':</label></dt>
                             <dd>
                                 <input type="text" id="rol_start_time" name="rol_start_time" size="10" maxlength="10" value="'.$role->getValue('rol_start_time', $g_preferences['system_time']).'" />
-                                <label for="rol_end_time">bis</label>
+                                <label for="rol_end_time">'.$g_l10n->get('SYS_DATE_TO').'</label>
                                 <input type="text" id="rol_end_time" name="rol_end_time" size="10" maxlength="10" value="'.$role->getValue('rol_end_time', $g_preferences['system_time']).'" />
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="rol_weekday">Wochentag:</label></dt>
+                            <dt><label for="rol_weekday">'.$g_l10n->get('ROL_WEEKDAY').':</label></dt>
                             <dd>
                                 <select size="1" id="rol_weekday" name="rol_weekday">
                                 <option value="0"';
-                                if($role->getValue("rol_weekday") == 0)
+                                if($role->getValue('rol_weekday') == 0)
                                 {
-                                    echo " selected=\"selected\"";
+                                    echo ' selected="selected" ';
                                 }
-                                echo ">&nbsp;</option>\n";
+                                echo '>&nbsp;</option>';
                                 for($i = 1; $i < 8; $i++)
                                 {
-                                    echo "<option value=\"$i\"";
-                                    if($role->getValue("rol_weekday") == $i)
+                                    echo '<option value="'.$i.'"';
+                                    if($role->getValue('rol_weekday') == $i)
                                     {
-                                        echo " selected=\"selected\"";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">". $arrDay[$i-1]. "</option>\n";
+                                    echo '>'. $arrDay[$i-1]. '</option>';
                                 }
-                                echo "</select>
+                                echo '</select>
                             </dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"rol_location\">Ort:</label></dt>
+                            <dt><label for="rol_location">'.$g_l10n->get('SYS_LOCATION').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"rol_location\" name=\"rol_location\" size=\"30\" maxlength=\"30\" value=\"". $role->getValue("rol_location"). "\" />
+                                <input type="text" id="rol_location" name="rol_location" size="30" maxlength="30" value="'.$role->getValue('rol_location').'" />
                             </dd>
                         </dl>
                     </li>
                 </ul>
             </div>
-        </div>";
+        </div>';
         if($role->getValue('rol_max_members') == 0)
         {
             echo '<div class="groupBox" id="dependancies_box">
                 <div class="groupBoxHeadline" id="dependancies_head">
                     <a class="iconShowHide" href="javascript:toggleElement(\'dependancies_body\',\'img_dependancies_body\')"><img
-                    id="img_dependancies_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Abhängigkeiten&nbsp;&nbsp;(optional)
+                    id="img_dependancies_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('ROL_DEPENDENCIES').'&nbsp;&nbsp;('.$g_l10n->get('SYS_OPTIONAL').')
                 </div>
 
                 <div class="groupBoxBody" id="dependancies_body">
                     <div style="margin-top: 6px;">';
-                        $rolename_var = 'neuen Rolle';
+                        $rolename_var = $g_l10n->get('ROL_PHR_NEW_ROLE');
                         if($role->getValue('rol_name')!='')
                         {
-                            $rolename_var = 'Rolle <b>'.$role->getValue('rol_name').'</b>';
+                            $rolename_var = $g_l10n->get('SYS_ROLE').' <b>'.$role->getValue('rol_name').'</b>';
                         }
-                        echo '
-                        <p>Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der '.$rolename_var.' sein!</p>
-                        <p>Beim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen
-                        Rolle Mitglied der '.$rolename_var.'. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften
-                        nicht aufgehoben!</p>
+                        echo '<p>'.$g_l10n->get('ROL_PHR_ROLE_DEPENDENCIES', $rolename_var).'</p>
+
                         <div style="text-align: left; float: left;">
-                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="unabhängig" title="unabhängig" />unabhängig</div>
+                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('ROL_INDEPENDENT').'" title="'.$g_l10n->get('ROL_INDEPENDENT').'" />'.$g_l10n->get('ROL_INDEPENDENT').'</div>
                             <div>
                                 <select id="AllRoles" size="8" style="width: 200px;">';
                                     while($row = $g_db->fetch_object($allRoles))
@@ -781,16 +778,16 @@ echo '
                             <ul>
                                 <li>
                                     <a class="iconLink" href="javascript:hinzufuegen()"><img
-                                     src="'. THEME_PATH. '/icons/forward.png" alt="Rolle hinzufügen" title="Rolle hinzufügen" /></a>
+                                     src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('ROL_ADD_ROLE').'" title="'.$g_l10n->get('ROL_ADD_ROLE').'" /></a>
                                 </li>
                                 <li>
                                     <a class="iconLink" href="javascript:entfernen()"><img 
-                                    src="'. THEME_PATH. '/icons/back.png" alt="Rolle entfernen" title="Rolle entfernen" /></a>
+                                    src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('ROL_REMOVE_ROLE').'" title="'.$g_l10n->get('ROL_REMOVE_ROLE').'" /></a>
                                 </li>
                             </ul>
                         </div>
                         <div>
-                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="abh&auml;ngig" title="abhängig" />abhängig</div>
+                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('ROL_DEPENDENT').'" title="'.$g_l10n->get('ROL_DEPENDENT').'" />'.$g_l10n->get('ROL_DEPENDENT').'</div>
                             <div>
                                 <select id="ChildRoles" name="ChildRoles[]" size="8" multiple="multiple" style="width: 200px;">';
                                     foreach ($childRoleObjects as $childRoleObject)

@@ -212,7 +212,7 @@ echo '</div>
     <li>
         <span class="iconTextLink">
             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;inline=true"><img 
-            	src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" /></a>
+            	src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;inline=true">Hilfe</a>
         </span>
     </li>

@@ -27,6 +27,7 @@ $orga_preferences = array(
     'system_language'               => 'de',
     'system_date'                   => 'd.m.Y',
     'system_time'                   => 'H:i',
+    'system_currency'               => '€',
 
     // Registrierung
     'registration_mode'              => '1',

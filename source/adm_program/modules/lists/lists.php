@@ -540,7 +540,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         <li>
                             <dl>
                                 <dt>Beitrag:</dt>
-                                <dd>'.$role->getValue('rol_cost').' &euro;</dd>
+                                <dd>'.$role->getValue('rol_cost').' '.$g_preferences['system_currency'].'</dd>
                             </dl>
                         </li>';
                     }

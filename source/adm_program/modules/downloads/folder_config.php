@@ -180,7 +180,7 @@ echo '
                             <label for="fol_public">Öffentlicher Zugriff ist nicht erlaubt.</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_PUBLIC_DOWNLOAD_FLAG\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>';
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
 
                             //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.
                             if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)

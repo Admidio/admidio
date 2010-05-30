@@ -278,6 +278,13 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_TIME_FORMAT', '<a href="http://www.php.net/date">date()</a>').'</li>
                     <li>
                         <dl>
+                            <dt><label for="system_time">'.$g_l10n->get('ORG_CURRENCY').':</label></dt>
+                            <dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_CURRENCY').'</li>
+                    <li>
+                        <dl>
                             <dt><label for="homepage_logout">'.$g_l10n->get('SYS_HOMEPAGE').' ('.$g_l10n->get('SYS_VISITORS').'):</label></dt>
                             <dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
                         </dl>

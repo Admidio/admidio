@@ -231,7 +231,7 @@ echo '
                         <label for="usf_hidden">'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'</label>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                     </dd>
                 </dl>
             </li>            
@@ -252,7 +252,7 @@ echo '
                         <label for="usf_disabled">'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'</label>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                     </dd>
                 </dl>
             </li>            
@@ -278,7 +278,7 @@ echo '
                         <label for="usf_mandatory">'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'</label>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe" title="" /></a>
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                     </dd>
                 </dl>
             </li>            

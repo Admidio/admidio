@@ -83,15 +83,12 @@ if($_GET['mode'] == 1)
         <div class="formHead">'.$g_l10n->get('ROL_ROLE_DELETE').'</div>
         <div class="formBody">
             <p align="left">
-                <img src="'. THEME_PATH. '/icons/roles_gray.png" alt="Inaktive Rolle" />
-                Du kannst die Rolle zu einer <b>inaktiven Rolle</b> machen. Dies hat den Vorteil, dass die Daten
-                (Mitgliederzuordnung) erhalten bleiben und du später immer wieder sehen kannst, welche Personen dieser Rolle
-                zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.
+                <img src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$g_l10n->get('ROL_INACTIV_ROLE').'" />
+                '.$g_l10n->get('ROL_PHR_INACTIV_ROLE').'
             </p>
             <p align="left">
                 <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('ROL_ROLE_DELETE').'" />
-                Wenn du <b>Löschen</b> auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank
-                entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.
+                '.$g_l10n->get('ROL_PHR_DELETE_ROLE', $g_l10n->get('SYS_DELETE')).'
             </p>
             <button id="btnDelete" type="button"
                 onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=4\'"><img
@@ -99,7 +96,7 @@ if($_GET['mode'] == 1)
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button id="btnInactive" type="button"
                 onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=3\'"><img
-                src="'. THEME_PATH. '/icons/roles_gray.png" alt="Inaktive Rolle" />&nbsp;Inaktive Rolle</button>
+                src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$g_l10n->get('ROL_INACTIV_ROLE').'" />&nbsp;'.$g_l10n->get('ROL_INACTIV_ROLE').'</button>
 
             <ul class="iconTextLinkList">
                 <li>
@@ -123,12 +120,12 @@ elseif($_GET['mode'] == 2)
     if(strlen($_POST['rol_name']) == 0)
     {
         // es sind nicht alle Felder gefuellt
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
     }
     if($_POST['rol_cat_id'] == 0)
     {
         // es sind nicht alle Felder gefuellt
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kategorie'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
     }
 
     if($role->getValue('rol_name') != $_POST['rol_name'])
@@ -206,7 +203,7 @@ elseif($_GET['mode'] == 2)
                 }
                 else
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Gültig bis', $g_preferences['system_date']));
+                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('ROL_VALID_TO'), $g_preferences['system_date']));
                 }
 
                 // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
@@ -217,12 +214,12 @@ elseif($_GET['mode'] == 2)
             }
             else
             {
-                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Gültig bis'));
+                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('ROL_VALID_TO')));
             }
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Gültig von', $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('ROL_VALID_FROM'), $g_preferences['system_date']));
         }
     }
 
@@ -238,7 +235,7 @@ elseif($_GET['mode'] == 2)
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit von', $g_preferences['system_time']));
+            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('ROL_TIME_FROM'), $g_preferences['system_time']));
         }
 
         if(strlen($_POST['rol_end_time']) > 0)
@@ -251,12 +248,12 @@ elseif($_GET['mode'] == 2)
             }
             else
             {
-                $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', 'Uhrzeit bis', $g_preferences['system_time']));
+                $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('ROL_TIME_TO'), $g_preferences['system_time']));
             }
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Uhrzeit bis'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('ROL_TIME_TO')));
         }
     }
 

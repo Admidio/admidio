@@ -252,11 +252,22 @@ elseif($req_mode == 2)
     $g_db->query($sql);                
     
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
-    // damit diese neu eingelesen werden muessen
-    session_name('admidio_php_session_id');
+    // damit diese nach dem Update neu eingelesen werden muessen
+    
+    // Cookie-Praefix ermitteln und Sonderzeichen entfernen
+    $cookie_praefix = 'ADMIDIO_'. $g_organization;
+    if($g_debug)
+    {
+        $cookie_praefix .= '_'. ADMIDIO_VERSION. '_'. BETA_VERSION;
+    }
+    $cookie_praefix = strtr($cookie_praefix, ' .,;:','_____');
+    
+    // PHP-Session starten und Variablen zuruecksetzen
+    session_name($cookie_praefix. '_PHP_ID');
     session_start();
-    session_unset();
+    unset($_SESSION['g_current_organisation'], $_SESSION['g_preferences'], $_SESSION['g_current_user']);
 
+    // Hinweis, dass Update erfolgreich war
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong><br /><br />
                '.$g_l10n->get('INS_PHR_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT);
     showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'), 2);
