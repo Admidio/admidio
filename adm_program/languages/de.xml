@@ -26,7 +26,6 @@
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
     <text id="DAT_EXPORT_ICAL" development="new" translation="todo">Exportieren (iCal)</text>
-    <text id="DAT_LOCATION" description="Location of a date" development="new" translation="todo">Ort</text>
     <text id="DAT_MANAGE_CALENDARS" development="new" translation="todo">Kalender verwalten</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
@@ -306,6 +305,7 @@
     <text id="ORG_ALLOW_BBCODE" development="new" translation="todo">BBCode zulassen</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
     <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
+    <text id="ORG_CURRENCY" development="new" translation="todo">Währung</text>
     <text id="ORG_DATATYPE" development="new" translation="todo">Datentyp</text>
     <text id="ORG_DATE_FORMAT" development="new" translation="todo">Datumsformat</text>
     <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="todo">Profilfeld bearbeiten</text>
@@ -319,6 +319,7 @@
     <text id="ORG_PHR_ADMIDIO_THEME" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
     <text id="ORG_PHR_ALLOW_BBCODE" development="new" translation="todo">Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) %VAR1% nutzen um den Text besser zu formatieren. (Standard: ja)</text>
     <text id="ORG_PHR_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>
+    <text id="ORG_PHR_CURRENCY" development="new" translation="todo">Kennzeichen der Währung, die benutzt wird. Dieses Zeichen wird hinter allen Beträgen angezeigt.</text>
     <text id="ORG_PHR_DATE_FORMAT" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: d.m.Y)</text>
     <text id="ORG_PHR_ENABLE_RSS_FEEDS" development="new" translation="todo">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</text>
     <text id="ORG_PHR_FIELD_DESCRIPTION" development="new" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
@@ -420,16 +421,33 @@
 
     <!-- Phrases only in Rolesmodule -->
     <text id="ROL_ACTIV_ROLES" development="new" translation="todo">Aktive Rollen</text>
+    <text id="ROL_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="ROL_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
+    <text id="ROL_CONTRIBUTION" development="new" translation="todo">Beitrag</text>
+    <text id="ROL_CONTRIBUTION_PERIOD" development="new" translation="todo">Beitragszeitraum</text>
     <text id="ROL_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
+    <text id="ROL_DEPENDENCIES" development="new" translation="todo">Abhängigkeiten</text>
+    <text id="ROL_DEPENDENT" development="new" translation="todo">Abhängig</text>
+    <text id="ROL_EDIT_ROLE" development="new" translation="todo">Rolle bearbeiten</text>
     <text id="ROL_ENABLE_ROLE" development="new" translation="todo">Rolle aktivieren</text>
+    <text id="ROL_INACTIV_ROLE" development="new" translation="todo">Inaktive Rolle</text>
     <text id="ROL_INACTIV_ROLES" development="new" translation="todo">Inaktive Rollen</text>
+    <text id="ROL_INDEPENDENT" development="new" translation="todo">Unabhängig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
+    <text id="ROL_MAX_PARTICIPANTS" development="new" translation="todo">max. Teilnehmer</text>
+    <text id="ROL_NOBODY" development="new" translation="todo">Niemand</text>
+    <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="todo">Nur Rollenmitglieder</text>
+    <text id="ROL_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
+    <text id="ROL_PHR_ALL_GUESTS" development="new" translation="todo">Alle Besucher der Seite</text>
+    <text id="ROL_PHR_ALL_MEMBERS" development="new" translation="todo">Alle angemeldeten Benutzer</text>
     <text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
     <text id="ROL_PHR_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
+    <text id="ROL_PHR_DELETE_ROLE" development="new" translation="todo">Wenn du %VAR1_BOLD% auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</text>
+    <text id="ROL_PHR_INACTIV_ROLE" development="new" translation="todo">Du kannst die Rolle zu einer inaktiven Rolle machen. Dies hat den Vorteil, dass die Daten (Mitgliederzuordnung) erhalten bleiben und du später immer wieder sehen kannst, welche Personen dieser Rolle zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.</text>
     <text id="ROL_PHR_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1% wirklich entfernen ?</text>
     <text id="ROL_PHR_MEMBERSHIP_DEL" development="new" translation="todo">Willst du die Mitgliedschaft bei der Rolle %VAR1% wirklich beenden ?</text>
     <text id="ROL_PHR_MEMBERSHIP_DEL_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>
+    <text id="ROL_PHR_NEW_ROLE" development="new" translation="todo">neuen Rolle</text>
     <text id="ROL_PHR_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
     <text id="ROL_PHR_RIGHT_ALL_LISTS_VIEW" development="new" translation="todo">Mitgliederlisten aller Rollen einsehen</text>
     <text id="ROL_PHR_RIGHT_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen anlegen und bearbeiten</text>
@@ -449,8 +467,10 @@
     <text id="ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC" development="new" translation="todo">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</text>
     <text id="ROL_PHR_RIGHT_WEBLINKS" development="new" translation="todo">Weblinks anlegen und bearbeiten</text>
     <text id="ROL_PHR_ROLE_DELETE" development="new" translation="todo">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
+    <text id="ROL_PHR_ROLE_DEPENDENCIES" development="new" translation="todo">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der %VAR1% sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der %VAR1%. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</text>
     <text id="ROL_PHR_ROLE_NAME_EXISTS" development="new" translation="todo">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</text>
     <text id="ROL_PHR_ROLE_SET_MODE" development="new" translation="todo">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
+    <text id="ROL_PHR_SAVE_ROLES" development="new" translation="todo">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</text>
     <text id="ROL_PHR_SEND_MAIL_GUESTS" development="new" translation="todo">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</text>
     <text id="ROL_PHR_SEND_MAIL_MEMBERS" development="new" translation="todo">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</text>
     <text id="ROL_PHR_SEND_MAIL_ROLE" development="new" translation="todo">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.</text>
@@ -463,10 +483,16 @@
     <text id="ROL_ROLE_DELETE" development="new" translation="todo">Rolle löschen</text>
     <text id="ROL_ROLE_MEMBERSHIPS" development="new" translation="todo">Rollenmitgliedschaften</text>
     <text id="ROL_ROLE_MEMBERSHIPS_CHANGE" development="new" translation="todo">Rollenmitgliedschaften ändern</text>
+    <text id="ROL_SEND_MAILS" development="new" translation="todo">E-Mails zusenden</text>
     <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="todo">Rolle unsichtbar machen</text>
     <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="todo">Rolle sichtbar machen</text>
+    <text id="ROL_SHOW_LISTS" development="new" translation="todo">Listen ansehen</text>
     <text id="ROL_SHOW_MEMBERS" development="new" translation="todo">Mitglieder anzeigen</text>
+    <text id="ROL_VALID_FROM" development="new" translation="todo" description="Date valid from">Gültig von</text>
+    <text id="ROL_VALID_TO" development="new" translation="todo" description="Date valid to">Gültig bis</text>
     <text id="ROL_VISIBLE_ROLES" development="new" translation="todo">Sichtbare Rollen</text>
+    <text id="ROL_WEEKDAY" development="new" translation="todo">Wochentag</text>
+    <text id="ROL_WITHOUT_LEADER" development="new" translation="todo">Ohne Leiter</text>
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="todo">Abbrechen</text>
@@ -528,6 +554,7 @@
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
     <text id="SYS_LINK_TO" development="new" translation="todo">Link auf %VAR1%</text>
+    <text id="SYS_LOCATION" description="Location of a date" development="new" translation="todo">Ort</text>
     <text id="SYS_LOCK" development="new" translation="todo">Sperren</text>
     <text id="SYS_LOCKED" development="new" translation="todo">Gesperrt</text>
     <text id="SYS_LOGIN" development="new" translation="todo">Anmelden</text>
@@ -546,6 +573,7 @@
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
+    <text id="SYS_OPTIONAL" development="new" translation="todo">Optional</text>
     <text id="SYS_PAGE" development="new" translation="todo">Seite</text>
     <text id="SYS_PAGE_PREVIOUS" development="new" translation="todo">Vorherige</text>
     <text id="SYS_PAGE_NEXT" development="new" translation="todo">Nächste</text>
@@ -621,6 +649,7 @@
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">voriges</text>
+    <text id="SYS_PROPERTIES" development="new" translation="todo">Eigenschaften</text>
     <text id="SYS_RECIPIENT" development="new" translation="todo">Empfänger</text>
     <text id="SYS_REGISTRATION" development="new" translation="todo">Registrierung</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>
@@ -646,6 +675,9 @@
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
+    <text id="SYS_TIME" development="new" translation="todo">Uhrzeit</text>
+    <text id="SYS_TIME_FROM" development="new" translation="todo">Uhrzeit von</text>
+    <text id="SYS_TIME_TO" development="new" translation="todo">Uhrzeit bis</text>
     <text id="SYS_TITLE" development="new" translation="todo">Titel</text>
     <text id="SYS_TO" development="new" translation="todo" description="E-Mail">An</text>
     <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
