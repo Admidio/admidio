@@ -430,68 +430,57 @@ echo '
                                     <option value="0" ';
                                     if($form_values['registration_mode'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Deaktiviert</option>
-                                    <option value=\"1\" ";
+                                    echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
+                                    <option value="1" ';
                                     if($form_values['registration_mode'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Schnelle Registrierung</option>
-                                    <option value=\"2\" ";
+                                    echo '>'.$g_l10n->get('ORG_FAST_REGISTRATION').'</option>
+                                    <option value="2" ';
                                     if($form_values['registration_mode'] == 2)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Erweiterte Registrierung</option>
+                                    echo '>'.$g_l10n->get('ORG_ADVANCED_REGISTRATION').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
-                        Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten
-                        Registrierung stehen ihm alle Felder des Profils zur Verfügung.  (Standard: Schnelle Registrierung)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_REGISTRATION_MODE').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_registration_captcha\">Captcha aktivieren:</label></dt>
+                            <dt><label for="enable_registration_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_registration_captcha\" name=\"enable_registration_captcha\" ";
+                                <input type="checkbox" id="enable_registration_captcha" name="enable_registration_captcha" ';
                                 if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
-                        dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_CAPTCHA_REGISTRATION').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_registration_admin_mail\">E-Mail-Benachrichtigung:</label></dt>
+                            <dt><label for="enable_registration_admin_mail">'.$g_l10n->get('ORG_EMAIL_ALERTS').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_registration_admin_mail\" name=\"enable_registration_admin_mail\" ";
+                                <input type="checkbox" id="enable_registration_admin_mail" name="enable_registration_admin_mail" ';
                                 if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Mitglieder aller Rollen mit der Berechtigung <strong>".$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS')."</strong> erhalten eine E-Mail,
-                        sobald sich ein neuer User im System registriert hat. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_EMAIL_ALERTS', $g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS')).'</li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/
@@ -954,7 +943,7 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="enable_guestbook_captcha">Captcha aktivieren:</label></dt>
+                            <dt><label for="enable_guestbook_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_guestbook_captcha" name="enable_guestbook_captcha" ';
                                 if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
@@ -1113,18 +1102,18 @@ echo '
                             <dt><label for=\"mail_bcc_count\">Anzahl der BCC Empfänger:</label>
                             </dt>
                             <dd>
-                                <input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. "\" />
+                                <input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. '" />
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_mail_captcha\">Captcha aktivieren:</label></dt>
+                            <dt><label for="enable_mail_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
+                                <input type="checkbox" id="enable_mail_captcha" name="enable_mail_captcha" ';
                                 if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
