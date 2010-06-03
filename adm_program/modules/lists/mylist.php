@@ -579,7 +579,7 @@ echo '
         <table class="tableList" id="mylist_fields_table" style="width: 100%;" cellspacing="0">
             <thead>
                 <tr>
-                    <th style="width: 18%;">Nr.</th>
+                    <th style="width: 18%;">'.$g_l10n->get('SYS_ABR_NO').'</th>
                     <th style="width: 37%;">Inhalt</th>
                     <th style="width: 18%;">Sortierung</th>
                     <th style="width: 27%;">Bedingung

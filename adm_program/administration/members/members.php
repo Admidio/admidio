@@ -30,7 +30,7 @@ if (!$g_current_user->editUsers())
 $restrict = '';
 $listname = '';
 $i = 0;
-$members_per_page = 20; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
+$members_per_page = 25; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_members   = 1;
@@ -182,7 +182,7 @@ $row    = $g_db->fetch_array($result);
 $count_mem_rol = $row['count'];
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Benutzerverwaltung';
+$g_layout['title']  = $g_l10n->get('MEM_USER_MANAGEMENT');
 $g_layout['header'] = '
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
@@ -205,14 +205,14 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<h1 class="moduleHeadline">Benutzerverwaltung</h1>
+<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
 <ul class="iconTextLinkList" style="margin-bottom: 0px;">
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="Benutzer anlegen" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">Benutzer anlegen</a>
+            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">'.$g_l10n->get('MEM_CREATE_USER').'</a>
         </span>
     </li>
     <li>
@@ -227,13 +227,13 @@ echo '
         // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
         if($req_members == 1)
         {
-            $link_text = 'Alle Benutzer anzeigen';
+            $link_text = $g_l10n->get('MEM_SHOW_ALL_USERS');
             $link_icon = 'group.png';
             $link_members = 0;
         }
         else
         {
-            $link_text = 'Nur Mitglieder anzeigen';
+            $link_text = $g_l10n->get('MEM_SHOW_ONLY_MEMBERS');
             $link_icon = 'profile.png';
             $link_members = 1;
         }
@@ -241,11 +241,11 @@ echo '
         $tooltip = '';
         if($req_members)
         {
-            $tooltip = 'Momentan werden nur aktive Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.';
+            $tooltip = $g_l10n->get('MEM_PHR_SHOW_MEMBERS');
         }
         else
         {
-            $tooltip = 'Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicke hier um nur aktive Mitglieder anzuzeigen. ';
+            $tooltip = $g_l10n->get('MEM_PHR_SHOW_USERS');
         }   
         
         echo '
@@ -268,7 +268,7 @@ echo '
         <form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'" method="post">
             <div>
                 <input type="text" value="'.$req_queryForm.'" name="queryForm" id="queryForm" style="width: 200px;"  />
-                <input type="submit" value="Suchen" />
+                <input type="submit" value="'.$g_l10n->get('SYS_SEARCH').'" />
             </div>
         </form>
     </li>
@@ -278,11 +278,11 @@ echo '
     // Leiste mit allen Buchstaben des Alphabets anzeigen
     if (strlen($req_letter) == 0 && !$req_queryForm)
     {
-        echo '<span class="selected">Alle</span>&nbsp;&nbsp;&nbsp;';
+        echo '<span class="selected">'.$g_l10n->get('SYS_ALL').'</span>&nbsp;&nbsp;&nbsp;';
     }
     else
     {
-        echo '<a href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'">Alle</a>&nbsp;&nbsp;&nbsp;';
+        echo '<a href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'">'.$g_l10n->get('SYS_ALL').'</a>&nbsp;&nbsp;&nbsp;';
     }
 
     // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
@@ -372,18 +372,18 @@ if($num_members > 0)
 {
     echo '<table class="tableList" cellspacing="0">
         <tr>
-            <th>Nr.</th>
+            <th>'.$g_l10n->get('SYS_ABR_NO').'</th>
             <th><img class="iconInformation"
-                src="'. THEME_PATH. '/icons/profile.png" alt="Mitglied bei '. $g_current_organization->getValue('org_longname'). '"
-                title="Mitglied bei '. $g_current_organization->getValue('org_longname'). '" /></th>
-            <th>Name</th>
+                src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'"
+                title="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'" /></th>
+            <th>'.$g_l10n->get('SYS_NAME').'</th>
             <th><img class="iconInformation"
-                src="'. THEME_PATH. '/icons/email.png" alt="E-Mail" title="E-Mail" /></th>
+                src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('SYS_EMAIL').'" title="'.$g_l10n->get('SYS_EMAIL').'" /></th>
             <th><img class="iconInformation"
-                src="'. THEME_PATH. '/icons/weblinks.png" alt="Homepage" title="Homepage" /></th>
-            <th>Benutzer</th>
-            <th>Aktualisiert am</th>
-            <th style="text-align: center;">Funktionen</th>
+                src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$g_l10n->get('SYS_WEBSITE').'" title="'.$g_l10n->get('SYS_WEBSITE').'" /></th>
+            <th>'.$g_l10n->get('SYS_USER').'</th>
+            <th>'.$g_l10n->get('MEM_UPDATED_ON').'</th>
+            <th style="text-align: center;">'.$g_l10n->get('SYS_FEATURES').'</th>
         </tr>';
         $i = 0;
 
@@ -407,8 +407,8 @@ if($num_members > 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
-                                src="'. THEME_PATH. '/icons/profile.png" alt="Mitglied bei '. $g_current_organization->getValue('org_longname'). '"
-                                title="Mitglied bei '. $g_current_organization->getValue('org_longname'). '" /></a>';
+                                src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'"
+                                title="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'" /></a>';
                         }
                         else
                         {
@@ -429,7 +429,7 @@ if($num_members > 0)
                             }
                             echo '
                             <a class="iconLink" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
-                                alt="E-Mail an '. $row['email']. ' schreiben" title="E-Mail an '. $row['email']. ' schreiben" /></a>';
+                                alt="'.$g_l10n->get('MEM_SEND_EMAIL_TO', $row['email']).'" title="'.$g_l10n->get('MEM_SEND_EMAIL_TO', $row['email']).'" /></a>';
                         }
                     echo '</td>
                     <td>';
@@ -472,8 +472,7 @@ if($num_members > 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
-                                src="'. THEME_PATH. '/icons/key.png" alt="E-Mail mit Benutzernamen und neuem Passwort zuschicken"
-                                title="E-Mail mit Benutzernamen und neuem Passwort zuschicken" /></a>';
+                                src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('MEM_PHR_SEND_USERNAME_PASSWORD').'" title='.$g_l10n->get('MEM_PHR_SEND_USERNAME_PASSWORD').'" /></a>';
                         }
                         else
                         {
@@ -486,7 +485,7 @@ if($num_members > 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="Benutzerdaten bearbeiten" title="Benutzerdaten bearbeiten" /></a>';
+                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('MEM_EDIT_USER').'" title="'.$g_l10n->get('MEM_EDIT_USER').'" /></a>';
                         }
                         else
                         {
@@ -500,7 +499,7 @@ if($num_members > 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
-                                src="'. THEME_PATH. '/icons/delete.png" alt="Benutzer entfernen" title="Benutzer entfernen" /></a>';
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('MEM_REMOVE_USER').'" title="'.$g_l10n->get('MEM_REMOVE_USER').'" /></a>';
                         }
                         else
                         {
@@ -518,7 +517,7 @@ if($num_members > 0)
 }
 else
 {
-    echo '<p>Es wurde keine Daten gefunden !</p><br />';
+    echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
 }
 
 require(THEME_SERVER_PATH. '/overall_footer.php');

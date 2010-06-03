@@ -53,7 +53,7 @@ if(isset($_GET['ann_id']))
 
 if(isset($_GET['headline']))
 {
-    $req_headline = strStripTags($_GET["headline"]);
+    $req_headline = strStripTags($_GET['headline']);
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -89,11 +89,11 @@ if(isset($_SESSION['announcements_request']))
 // Html-Kopf ausgeben
 if($req_ann_id > 0)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $g_l10n->get('ANN_ANNOUNCEMENT'));
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $req_headline);
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $g_l10n->get('ANN_ANNOUNCEMENT'));
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $req_headline);
 }
 //Script für BBCode laden
 $javascript = '';

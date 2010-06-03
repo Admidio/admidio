@@ -424,7 +424,7 @@ echo '
                 echo'
                     <li id="room">
                         <dl>
-                            <dt>'.$g_l10n->get('DAT_ROOM').':</dt>
+                            <dt>'.$g_l10n->get('SYS_ROOM').':</dt>
                             <dd>
                                 <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6" onchange="toggleRolId()">';
                                 $room = new TableRooms($g_db);

@@ -306,8 +306,8 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_CREATE_DATE').'" title="'.$g_l10n->get('DAT_CREATE_DATE').'"/></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'">'.$g_l10n->get('DAT_CREATE_DATE').'</a>
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'">'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'</a>
             </span>
         </li>';
     }

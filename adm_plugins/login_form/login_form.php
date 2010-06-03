@@ -19,17 +19,17 @@
  *****************************************************************************/
 
 // Pfad des Plugins ermitteln
-$plugin_folder_pos = strpos(__FILE__, "adm_plugins") + 11;
-$plugin_file_pos   = strpos(__FILE__, "login_form.php");
+$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$plugin_file_pos   = strpos(__FILE__, 'login_form.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
-require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(SERVER_PATH. "/adm_program/system/classes/table_roles.php");
-require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
+require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
+require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -53,13 +53,13 @@ if(isset($plg_show_icons) == false || is_numeric($plg_show_icons) == false)
     $plg_show_icons = 1;
 }
 
-if(isset($plg_link_target) && $plg_link_target != "_self")
+if(isset($plg_link_target) && $plg_link_target != '_self')
 {
     $plg_link_target = ' target="'. strip_tags($plg_link_target). '" ';
 }
 else
 {
-    $plg_link_target = "";
+    $plg_link_target = '';
 }
 
 if(isset($plg_rank) == false)
@@ -70,7 +70,7 @@ if(isset($plg_rank) == false)
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
-$plg_icon_code = "";
+$plg_icon_code = '';
 
 if($g_valid_login == 1)
 {
@@ -78,7 +78,7 @@ if($g_valid_login == 1)
     <script type="text/javascript">
         function loadPageLogout()
         {';
-            if(strlen($plg_link_target) > 0 && strpos($plg_link_target, "_") === false)
+            if(strlen($plg_link_target) > 0 && strpos($plg_link_target, '_') === false)
             {
                 echo '
                 parent.'. $plg_link_target. '.location.href = \''. $g_root_path. '/adm_program/system/logout.php\';
@@ -95,7 +95,7 @@ if($g_valid_login == 1)
     <ul class="formFieldList" id="plgLoginFormFieldList">
         <li>
             <dl>
-                <dt>Benutzer:</dt>
+                <dt>'.$g_l10n->get('SYS_MEMBER').':</dt>
                 <dd>
                     <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $g_current_user->getValue('usr_id'). '" 
                     '. $plg_link_target. ' title="Profil aufrufen">'. $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'). '</a>
@@ -104,13 +104,13 @@ if($g_valid_login == 1)
         </li>
         <li>
             <dl>
-                <dt>Aktiv seit:</dt>
-                <dd>'. $g_current_session->getValue('ses_begin', $g_preferences['system_time']). ' Uhr</dd>
+                <dt>'.$g_l10n->get('SYS_ACTIVE_SINCE').':</dt>
+                <dd>'. $g_current_session->getValue('ses_begin', $g_preferences['system_time']). ' '.$g_l10n->get('SYS_CLOCK').'</dd>
             </dl>
         </li>
         <li>
             <dl>
-                <dt>Anzahl Logins:</dt>
+                <dt>'.$g_l10n->get('SYS_NUMBER_OF_LOGINS').':</dt>
                 <dd>'. $g_current_user->getValue('usr_number_login');
     
                     // Zeigt einen Rank des Benutzers an, sofern diese in der config.php hinterlegt sind
@@ -143,17 +143,17 @@ if($g_valid_login == 1)
         {
             if($plg_show_icons)
             {
-                $plg_icon_code = '<a href="javascript:loadPageLogout()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Logout" /></a>';
+                $plg_icon_code = '<a href="javascript:loadPageLogout()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$g_l10n->get('SYS_LOGOUT').'" /></a>';
             }
             echo '<li>
                 <dl>
                     <dt class="iconTextLink">'. $plg_icon_code. '
-                        <a href="javascript:loadPageLogout()">Logout</a>
+                        <a href="javascript:loadPageLogout()">'.$g_l10n->get('SYS_LOGOUT').'</a>
                     </dt>
                 </dl>
             </li>';
         }
-    echo "</ul>";
+    echo '</ul>';
 }
 else
 {
@@ -163,13 +163,13 @@ else
         <ul class="formFieldList" id="plgLoginFormFieldList">
             <li>
                 <dl>
-                    <dt><label for="plg_usr_login_name">Benutzername:</label></dt>
+                    <dt><label for="plg_usr_login_name">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
                     <dd><input type="text" id="plg_usr_login_name" name="plg_usr_login_name" size="10" maxlength="35" tabindex="95" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="plg_usr_password">Passwort:</label></dt>
+                    <dt><label for="plg_usr_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
                     <dd><input type="password" id="plg_usr_password" name="plg_usr_password" size="10" maxlength="25" tabindex="96" /></dd>
                 </dl>
             </li>';
@@ -179,7 +179,7 @@ else
                 echo '
                 <li>
                     <dl>
-                        <dt><label for="plg_auto_login">Angemeldet bleiben:</label></dt>
+                        <dt><label for="plg_auto_login">'.$g_l10n->get('SYS_REMEMBER_ME').':</label></dt>
                         <dd><input type="checkbox" id="plg_auto_login" name="plg_auto_login" value="1" tabindex="97" /></dd>
                     </dl>
                 </li>';
@@ -187,13 +187,13 @@ else
             
             if($plg_show_icons)
             {
-                $plg_icon_code = '<img src="'. THEME_PATH. '/icons/key.png" alt="Login" />&nbsp;';
+                $plg_icon_code = '<img src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOGIN').'" />&nbsp;';
             }
             echo '
             <li id="plgRowLoginButton">
                 <dl>
                     <dt>
-                        <button type="submit" tabindex="98">'.$plg_icon_code.'Login</button>
+                        <button type="submit" tabindex="98">'.$plg_icon_code. $g_l10n->get('SYS_LOGIN').'</button>
                     </dt>
                     <dd>&nbsp;</dd>
                 </dl>
@@ -209,13 +209,13 @@ else
                             if($plg_show_icons)
                             {
                                 $plg_icon_code = '<span class="iconTextLink">
-                                    <a href="'. $g_root_path. '/adm_program/system/registration.php"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="Registrierung" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/system/registration.php" '. $plg_link_target. '>Registrieren</a>
+                                    <a href="'. $g_root_path. '/adm_program/system/registration.php"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('SYS_REGISTRATION').'" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/system/registration.php" '. $plg_link_target. '>'.$g_l10n->get('SYS_REGISTRATION').'</a>
                                 </span>';
                             }
                             else
                             {
-                                $plg_icon_code = '<a href="'. $g_root_path. '/adm_program/system/registration.php" '. $plg_link_target. '>Registrieren</a>';
+                                $plg_icon_code = '<a href="'. $g_root_path. '/adm_program/system/registration.php" '. $plg_link_target. '>'.$g_l10n->get('SYS_REGISTRATION').'</a>';
                             }
                             echo '<dt>'.$plg_icon_code.'</dt>
                                 <dd>&nbsp;</dd>';
@@ -234,30 +234,30 @@ else
                             && $g_preferences['enable_system_mails'] == 1)
                             {
                                 // neues Passwort zusenden
-                                $mail_link = "$g_root_path/adm_program/system/lost_password.php";
+                                $mail_link = $g_root_path.'/adm_program/system/lost_password.php';
                             }
                             elseif($g_preferences['enable_mail_module'] == 1 
-                            && $role_webmaster->getValue("rol_mail_this_role") == 3)
+                            && $role_webmaster->getValue('rol_mail_this_role') == 3)
                             {
                                 // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-                                $mail_link = "$g_root_path/adm_program/modules/mail/mail.php?rol_id=". $role_webmaster->getValue("rol_id"). "&amp;subject=Loginprobleme";
+                                $mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?rol_id='. $role_webmaster->getValue('rol_id'). '&amp;subject='.$g_l10n->get('SYS_LOGIN_PROBLEMS');
                             }
                             else
                             {
                                 // direkte Mail an den Webmaster ueber einen externen Mailclient
-                                $mail_link = "mailto:". $g_preferences['email_administrator']. "?subject=Loginprobleme";
+                                $mail_link = 'mailto:'. $g_preferences['email_administrator']. '?subject='.$g_l10n->get('SYS_LOGIN_PROBLEMS');
                             }
 
                             if($plg_show_icons)
                             {
                                 $plg_icon_code = '<span class="iconTextLink">
-                                    <a href="'. $mail_link. '"><img src="'. THEME_PATH. '/icons/email_key.png" alt="Loginprobleme" /></a>
-                                    <a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a>
+                                    <a href="'. $mail_link. '"><img src="'. THEME_PATH. '/icons/email_key.png" alt="'.$g_l10n->get('SYS_LOGIN_PROBLEMS').'" /></a>
+                                    <a href="'. $mail_link. '" '. $plg_link_target. '>'.$g_l10n->get('SYS_LOGIN_PROBLEMS').'</a>
                                 </span>';
                             }
                             else
                             {
-                                $plg_icon_code = '<a href="'. $mail_link. '" '. $plg_link_target. '>Loginprobleme</a>';
+                                $plg_icon_code = '<a href="'. $mail_link. '" '. $plg_link_target. '>'.$g_l10n->get('SYS_LOGIN_PROBLEMS').'</a>';
                             }
                             
                             echo '<dt>'.$plg_icon_code.'</dt>

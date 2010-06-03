@@ -21,7 +21,6 @@
     <text id="DAT_CALENDAR" development="new" translation="todo">Kalender</text>
     <text id="DAT_CANCEL" development="new" translation="todo">Absagen</text>
     <text id="DAT_CLOCK" development="new" translation="todo">Uhr</text>
-    <text id="DAT_CREATE_DATE" development="new" translation="todo">Termine anlegen</text>
     <text id="DAT_DATE" development="new" translation="todo">Termin</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
@@ -52,7 +51,6 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="todo">Anmeldung möglich.</text>
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="todo">Keine Anmeldung mehr möglich.</text>
     <text id="DAT_ROOM_INFORMATIONS" development="new" translation="todo">Rauminformationen</text>
-    <text id="DAT_ROOM" development="new" translation="todo">Raum</text>
     <text id="DAT_ROOM_SELECTABLE" development="new" translation="todo">Raum auswählbar</text>
     <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="todo">Kalenderauswahlbox anzeigen</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
@@ -268,28 +266,43 @@
     <text id="MEM_ANSI" development="new" translation="todo">ANSI</text>
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="todo">Felder zuordnen</text>
     <text id="MEM_ASSIGN_ROLE" development="new" translation="todo">Rolle zuordnen</text>
+    <text id="MEM_CREATE_USER" development="new" translation="todo">Benutzer anlegen</text>
     <text id="MEM_CODING" development="new" translation="todo">Kodierung</text>
     <text id="MEM_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
     <text id="MEM_COMPLEMENT" development="new" translation="todo">Ergänzen</text>
     <text id="MEM_DUPLICATE" development="new" translation="todo">Duplizieren</text>
+    <text id="MEM_EDIT_USER" development="new" translation="todo">Benutzer bearbeiten</text>
     <text id="MEM_EXISTING_USERS" development="new" translation="todo">Existierende Benutzer</text>
     <text id="MEM_FILE_COLUMN" development="new" translation="todo">Dateispalte</text>
     <text id="MEM_FORMAT" development="new" translation="todo">Format</text>
+    <text id="MEM_FORMER" development="new" translation="todo">Ehemaliger</text>
     <text id="MEM_IMPORT" development="new" translation="todo">Importieren</text>
     <text id="MEM_IMPORT_USERS" development="new" translation="todo">Benutzer importieren</text>
+    <text id="MEM_MEMBER_OF" development="new" translation="todo">Mitglied bei %VAR1%</text>
     <text id="MEM_NOT_EDIT" development="new" translation="todo">Nicht bearbeiten</text>
     <text id="MEM_PHR_ASSIGN_FIELDS" development="new" translation="todo">Ordne den Datenbankfeldern, wenn möglich eine Spalte aus der Datei zu.\n\nAuf der linken Seite stehen alle möglichen Datenbankfelder und auf der rechten Seite sind jeweils alle Spalten aus der ausgewählten Datei aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, können diese Felder einfach leer gelassen werden.</text>
+    <text id="MEM_PHR_ASSIGN_ROLE_FOR_IMPORT" development="new" translation="todo">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</text>
     <text id="MEM_PHR_FIRST_LINE_COLUMN_NAME" development="new" translation="todo">Erste Zeile beinhaltet die Spaltenbezeichnungen</text>
     <text id="MEM_PHR_IDENTIFY_USERS" development="new" translation="todo">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</text>
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" development="new" translation="todo">%VAR1% Datensätze wurden erfolgreich importiert!</text>
+    <text id="MEM_PHR_MAKE_FORMER" development="new" translation="todo">Du kannst den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP" development="new" translation="todo">Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP_OK" development="new" translation="todo">Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet!</text>
+    <text id="MEM_PHR_REMOVE_USER" development="new" translation="todo">Wenn du %VAR1_BOLD% auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</text>
     <text id="MEM_PHR_ROLE_SELECT_RIGHT" development="new" translation="todo">Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.\nBitte wähle eine andere Rolle aus.</text>
     <text id="MEM_PHR_USER_DELETE" development="new" translation="todo">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_PHR_SEND_NEW_LOGIN" development="new" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem Benutzernamen und einem neuen Passwort zumailen?</text>
-    <text id="MEM_PHR_ASSIGN_ROLE_FOR_IMPORT" development="new" translation="todo">Wähle bitte eine Rolle aus, der alle importierten Benutzer automatisch zugeordnet werden.\n\nDir stehen nur Rollen zur Auswahl, die du sehen darfst und keine Rollenzuordnungsberechtigung besitzen, falls du diese selber nicht besitzt.</text>
+    <text id="MEM_PHR_SEND_USERNAME_PASSWORD" development="new" translation="todo">E-Mail mit Benutzernamen und neuem Passwort zuschicken</text>
+    <text id="MEM_PHR_SHOW_MEMBERS" development="new" translation="todo">Momentan werden nur aktive Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.</text>
+    <text id="MEM_PHR_SHOW_USERS" development="new" translation="todo">Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicke hier um nur aktive Mitglieder anzuzeigen.</text>
     <text id="MEM_PROFILE_FIELD" development="new" translation="todo">Profilfeld</text>
+    <text id="MEM_REMOVE_USER" development="new" translation="todo">Benutzer entfernen</text>
     <text id="MEM_REPLACE" development="new" translation="todo">Ersetzen</text>
+    <text id="MEM_SEND_EMAIL_TO" development="new" translation="todo">Sende eine E-Mail an %VAR1%</text>
+    <text id="MEM_SHOW_ALL_USERS" development="new" translation="todo">Alle Benutzer anzeigen</text>
+    <text id="MEM_SHOW_ONLY_MEMBERS" development="new" translation="todo">Nur Mitglieder anzeigen</text>
+    <text id="MEM_UPDATED_ON" development="new" translation="todo">Aktualisiert am</text>
+    <text id="MEM_USER_MANAGEMENT" development="new" translation="todo">Benutzerverwaltung</text>
     <text id="MEM_UTF8" development="new" translation="todo">UTF-8</text>
 
     <!-- Phrases only in New-User-Registration -->
@@ -500,15 +513,24 @@
     <text id="ROL_VISIBLE_ROLES" development="new" translation="todo">Sichtbare Rollen</text>
     <text id="ROL_WEEKDAY" development="new" translation="todo">Wochentag</text>
     <text id="ROL_WITHOUT_LEADER" development="new" translation="todo">Ohne Leiter</text>
+    
+    <!-- Phrases only in Roommodule -->
+    <text id="ROO_CAPACITY" development="new" translation="todo">Kapazität</text>
+    <text id="ROO_OVERHANG" development="new" translation="todo">Überhang</text>
+    <text id="ROO_ROOM_MANAGEMENT" development="new" translation="todo">Raumverwaltung</text>
+    <text id="ROO_SEATING" development="new" translation="todo">Sitzplätze</text>
+    <text id="ROO_STANDING" development="new" translation="todo">Stehplätze</text>
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="todo">Abbrechen</text>
     <text id="SYS_ACTIVE" development="new" translation="todo">Aktiv</text>
+    <text id="SYS_ACTIVE_SINCE" development="new" translation="todo">Aktiv seit</text>
     <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiviert</text>
     <text id="SYS_ADD_EMAIL" development="new" translation="todo">E-Mail-Adresse einfügen</text>
     <text id="SYS_ADD_IMAGE" development="new" translation="todo">Bild einfügen</text>
     <text id="SYS_ADD_LINK" development="new" translation="todo">Link einfügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
+    <text id="SYS_ADMINISTRATION" development="new" translation="todo">Administration</text>
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
@@ -566,6 +588,7 @@
     <text id="SYS_LOCKED" development="new" translation="todo">Gesperrt</text>
     <text id="SYS_LOGIN" development="new" translation="todo">Anmelden</text>
     <text id="SYS_LOGIN_PROBLEMS" development="new" translation="todo">Anmeldeprobleme</text>
+    <text id="SYS_LOGOUT" development="new" translation="todo">Abmelden</text>
 	<text id="SYS_MAP" development="new" translation="todo">Karte</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
@@ -573,14 +596,18 @@
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
+    <text id="SYS_MODULES" development="new" translation="todo">Module</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
+    <text id="SYS_ABR_NO" development="new" translation="todo" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_NO" development="new" translation="todo">Nein</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
+    <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="todo">Anzahl Logins</text>
     <text id="SYS_OPTIONAL" development="new" translation="todo">Optional</text>
+    <text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
     <text id="SYS_PAGE" development="new" translation="todo">Seite</text>
     <text id="SYS_PAGE_PREVIOUS" development="new" translation="todo">Vorherige</text>
     <text id="SYS_PAGE_NEXT" development="new" translation="todo">Nächste</text>
@@ -663,8 +690,10 @@
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
 	<text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
+    <text id="SYS_ROOM" development="new" translation="todo">Raum</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
+	<text id="SYS_SEARCH" development="new" translation="todo">Suchen</text>
 	<text id="SYS_SEARCH_AFTER" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="todo">Neues Passwort zusenden</text>
     <text id="SYS_SENDER" development="new" translation="todo">Absender</text>
@@ -690,6 +719,7 @@
     <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
+    <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
 	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
     <text id="SYS_VISIBLE" development="new" translation="todo">Sichtbar</text>

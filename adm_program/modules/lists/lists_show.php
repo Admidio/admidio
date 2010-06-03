@@ -389,7 +389,7 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
             if($column_number == 1)
             {
                 // die Laufende Nummer noch davorsetzen
-                $str_csv = $str_csv. $value_quotes. 'Nr.'. $value_quotes;
+                $str_csv = $str_csv. $value_quotes. $g_l10n->get('SYS_ABR_NO'). $value_quotes;
             }
             $str_csv = $str_csv. $separator. $value_quotes. $col_name. $value_quotes;
         }
@@ -398,7 +398,7 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
             if($column_number == 1)
             {
                 // die Laufende Nummer noch davorsetzen
-                echo '<th style="text-align: '.$align.';">Nr.</th>';
+                echo '<th style="text-align: '.$align.';">'.$g_l10n->get('SYS_ABR_NO').'</th>';
             }
             echo '<th style="text-align: '.$align.';">'.$col_name.'</th>';
         }

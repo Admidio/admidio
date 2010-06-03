@@ -189,8 +189,8 @@ if($g_current_user->editAnnouncements())
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_CREATE').'</a>
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'</a>
             </span>
         </li>
     </ul>';        
