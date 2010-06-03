@@ -13,7 +13,6 @@ set foreign_key_checks = 0;
 drop table if exists %PREFIX%_announcements;
 drop table if exists %PREFIX%_auto_login;
 drop table if exists %PREFIX%_categories;
-drop table if exists %PREFIX%_date_max_members;
 drop table if exists %PREFIX%_date_role;
 drop table if exists %PREFIX%_dates;
 drop table if exists %PREFIX%_files;
@@ -55,7 +54,9 @@ create table %PREFIX%_announcements
    primary key (ann_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_announcements add index ANN_ORG_FK (ann_org_shortname);
@@ -82,7 +83,9 @@ create table %PREFIX%_auto_login
    atl_ip_address                 varchar(15)                    not null,
    primary key (atl_session_id)
 )
-engine = InnoDB;
+engine = InnoDB
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_auto_login add index ATL_USR_FK (atl_usr_id);
@@ -115,7 +118,9 @@ create table %PREFIX%_categories
    primary key (cat_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_categories add index CAT_ORG_FK (cat_org_id);
@@ -140,7 +145,9 @@ create table %PREFIX%_date_role
     primary key (dtr_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_date_role add index DTR_DAT_FK (dtr_dat_id);
@@ -177,7 +184,9 @@ create table %PREFIX%_dates
    primary key (dat_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_dates add index DAT_CAT_FK (dat_cat_id);
@@ -209,7 +218,9 @@ create table %PREFIX%_files
    primary key (fil_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_files add index FIL_FOL_FK (fil_fol_id);
@@ -230,7 +241,9 @@ create table %PREFIX%_folder_roles
    flr_rol_id                     int(11) unsigned               not null,
    primary key (flr_fol_id, flr_rol_id)
 )
-engine = InnoDB;
+engine = InnoDB
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_folder_roles add index FLR_FOL_FK (flr_fol_id);
@@ -262,7 +275,9 @@ create table %PREFIX%_folders
    primary key (fol_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_folders add index FOL_ORG_FK (fol_org_id);
@@ -296,7 +311,9 @@ create table %PREFIX%_guestbook
    primary key (gbo_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_guestbook add index GBO_ORG_FK (gbo_org_id);
@@ -329,7 +346,9 @@ create table %PREFIX%_guestbook_comments
    primary key (gbc_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_guestbook_comments add index GBC_GBO_FK (gbc_gbo_id);
@@ -361,7 +380,9 @@ create table %PREFIX%_links
    primary key (lnk_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_links add index LNK_CAT_FK (lnk_cat_id);
@@ -391,7 +412,9 @@ create table %PREFIX%_lists
    primary key (lst_id)
 )
 type = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_lists add index LST_USR_FK (lst_usr_id);
@@ -418,7 +441,9 @@ create table %PREFIX%_list_columns
    primary key (lsc_id)
 )
 type = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_list_columns add index LSC_LST_FK (lsc_lst_id);
@@ -446,7 +471,9 @@ create table %PREFIX%_members
    unique ak_rol_usr_id (mem_rol_id, mem_usr_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_members add index MEM_ROL_FK (mem_rol_id);
@@ -472,7 +499,9 @@ create table %PREFIX%_organizations
    unique ak_shortname (org_shortname)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_organizations add index ORG_ORG_PARENT_FK (org_org_id_parent);
@@ -502,7 +531,9 @@ create table %PREFIX%_photos
    primary key (pho_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_photos add index PHO_ORG_FK (pho_org_shortname);
@@ -533,7 +564,9 @@ create table %PREFIX%_preferences
    unique ak_org_id_name (prf_org_id, prf_name)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_preferences add index PRF_ORG_FK (prf_org_id);
@@ -554,7 +587,9 @@ create table %PREFIX%_role_dependencies
    rld_timestamp                  datetime                       not null,
    primary key (rld_rol_id_parent, rld_rol_id_child)
 )
-engine = InnoDB;
+engine = InnoDB
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_role_dependencies add index RLD_USR_FK (rld_usr_id);
@@ -613,7 +648,9 @@ create table %PREFIX%_roles
    primary key (rol_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_roles add index ROL_CAT_FK (rol_cat_id);
@@ -646,7 +683,9 @@ create table %PREFIX%_rooms
     primary key (room_id)                                                                       
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_sessions                                          */
@@ -666,7 +705,9 @@ create table %PREFIX%_sessions
    key ak_session (ses_session_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_sessions add index SES_USR_FK (ses_usr_id);
@@ -690,7 +731,9 @@ create table %PREFIX%_texts
    primary key (txt_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_texts add index TXT_ORG_FK (txt_org_id);
@@ -723,7 +766,9 @@ create table %PREFIX%_user_fields
    unique ak_name_intern (usf_name_intern)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
@@ -749,7 +794,9 @@ create table %PREFIX%_user_data
    unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_user_data add index USD_USF_FK (usd_usf_id);
@@ -788,7 +835,9 @@ create table %PREFIX%_users
    unique ak_usr_login_name (usr_login_name)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_users add index USR_USR_CREATE_FK (usr_usr_id_create);

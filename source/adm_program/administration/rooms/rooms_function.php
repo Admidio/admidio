@@ -56,11 +56,11 @@ if($_GET['mode'] == 1)
 
     if(strlen($_POST['room_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name/Raumnummer'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_ROOM')));
     }
     if(strlen($_POST['room_capacity']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kapazit&auml;t'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('ROO_CAPACITY')));
     }
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)

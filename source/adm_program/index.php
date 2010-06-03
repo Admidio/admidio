@@ -32,7 +32,7 @@ if($g_current_user->isWebmaster())
 $_SESSION['navigation']->clear();
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Admidio Übersicht';
+$g_layout['title']  = 'Admidio '.$g_l10n->get('SYS_OVERVIEW');
 $g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
@@ -47,8 +47,8 @@ echo '
         echo '<li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/logout.php"><img
-                src="'.THEME_PATH.'/icons/door_in.png" alt="Logout" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/logout.php">Logout</a>
+                src="'.THEME_PATH.'/icons/door_in.png" alt="'.$g_l10n->get('SYS_LOGOUT').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/logout.php">'.$g_l10n->get('SYS_LOGOUT').'</a>
             </span>
         </li>';
     }
@@ -57,8 +57,8 @@ echo '
         echo '<li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/login.php"><img
-                src="'.THEME_PATH.'/icons/key.png" alt="Login" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/login.php">Login</a>
+                src="'.THEME_PATH.'/icons/key.png" alt="'.$g_l10n->get('SYS_LOGIN').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/login.php">'.$g_l10n->get('SYS_LOGIN').'</a>
             </span>
         </li>';
 
@@ -67,8 +67,8 @@ echo '
             echo '<li>
                 <span class="iconTextLink">
                     <a href="'.$g_root_path.'/adm_program/system/registration.php"><img
-                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="Registrieren" /></a>
-                    <a href="'.$g_root_path.'/adm_program/system/registration.php">Registrieren</a>
+                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('SYS_REGISTRATION').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/system/registration.php">'.$g_l10n->get('SYS_REGISTRATION').'</a>
                 </span>
             </li>';
         }
@@ -76,7 +76,7 @@ echo '
 echo '</ul>
 
 <div class="formLayout" id="modules_list_form">
-    <div class="formHead">Module</div>
+    <div class="formHead">'.$g_l10n->get('SYS_MODULES').'</div>
     <div class="formBody">
         <ul class="formFieldList">';
             if( $g_preferences['enable_announcements_module'] == 1
@@ -277,7 +277,7 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
 {
     echo '
     <div class="formLayout" id="administration_list_form">
-        <div class="formHead">Administration</div>
+        <div class="formHead">'.$g_l10n->get('SYS_ADMINISTRATION').'</div>
         <div class="formBody">
             <ul class="formFieldList">';
                 if($g_current_user->approveUsers() && $g_preferences['registration_mode'] > 0)

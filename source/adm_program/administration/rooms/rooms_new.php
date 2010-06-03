@@ -35,7 +35,7 @@ if(isset($_GET['room_id']))
 
 if(!isset($_GET['headline']))
 {
-    $_GET['headline'] = 'Raum';
+    $_GET['headline'] = $g_l10n->get('SYS_ROOM');
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -49,11 +49,11 @@ if($req_room_id > 0)
 // Html-Kopf ausgeben
 if($req_room_id > 0)
 {
-    $g_layout['title'] = $_GET['headline']. ' bearbeiten';
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $_GET['headline']);
 }
 else
 {
-    $g_layout['title'] = $_GET['headline']. ' anlegen';
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $_GET['headline']);
 }
 
 //Script für BBCode laden
@@ -74,7 +74,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="room_name">Name/Raumnummer:</label></dt>
+                    <dt><label for="room_name">'.$g_l10n->get('SYS_ROOM').':</label></dt>
                     <dd>
                         <input type="text" id="room_name" name="room_name" style="width: 345px;" maxlength="100" value="'. $room->getValue('room_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -84,17 +84,17 @@ echo '
             <hr/>
             <li>
                 <dl>
-                    <dt><label for="room_capacity">Kapazit&auml;t:</label></dt>
+                    <dt><label for="room_capacity">'.$g_l10n->get('ROO_CAPACITY').':</label></dt>
                     <dd>
                         <input type="text" id="room_capacity" name="room_capacity" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_capacity'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        &nbsp; Sitzpl&auml;tze
+                        &nbsp; '.$g_l10n->get('ROO_SEATING').'
                     </dd>
                 </dl>
             </li>
              <li>
                 <dl>
-                    <dt><label for="room_overhang">Überhang:</label></dt>
+                    <dt><label for="room_overhang">'.$g_l10n->get('ROO_OVERHANG').':</label></dt>
                     <dd>
                         <input type="text" id="room_overhang" name="room_overhang" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_overhang'). '" />';
                         if($g_preferences['dates_show_map_link'])
@@ -103,7 +103,7 @@ echo '
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PHR_ROOM_OVERHANG\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
                         }
-                        echo ' Steh-/Sitzpl&auml;tze
+                        echo ' '.$g_l10n->get('ROO_STANDING').' / '.$g_l10n->get('ROO_SEATING').'
                     </dd>
                 </dl>
             </li><br/>';
@@ -113,26 +113,14 @@ echo '
             }
             echo'<li>
                 <dl>
-                    <dt><label for="room_description">Beschreibung:</label>';
+                    <dt><label for="room_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label>';
                         if($g_preferences['enable_bbcode'] == 1)
                         {
                             printEmoticons();
                         }
                     echo '</dt>
-                    <dd>';
-                    if($req_room_id>0)
-                    {
-                        echo '
-                        <textarea id="room_description" name="room_description" style="width: 345px;" rows="10" cols="40">'. $room->getValue('room_description'). '</textarea>';
-                    }
-                    else
-                    {
-                        $default = 
-                        'kein Beamer, kein WLAN, kein Mikrofon';
-                        echo '
-                        <textarea id="room_description" name="room_description" style="width: 345px;" rows="10" cols="40">'.$default.'</textarea>';
-                    }
-                    echo '
+                    <dd>
+                        <textarea id="room_description" name="room_description" style="width: 345px;" rows="10" cols="40">'. $room->getValue('room_description'). '</textarea>
                     </dd>
                 </dl>
             </li>
@@ -166,8 +154,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" title="'.$g_l10n->get('SYS_BACK').'"/></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zur&uuml;ck</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';  

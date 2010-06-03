@@ -19,13 +19,10 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/system_mail.php");
-require("../../system/classes/table_members.php");
-
-$err_code = ""; 
-$err_text = "";
+require('../../system/common.php');
+require('../../system/login_valid.php');
+require('../../system/classes/system_mail.php');
+require('../../system/classes/table_members.php');
 
 // nur berechtigte User duerfen Funktionen aufrufen
 if(!$g_current_user->editUsers())
@@ -35,19 +32,19 @@ if(!$g_current_user->editUsers())
 
 // Uebergabevariablen pruefen
 
-if(is_numeric($_GET["mode"]) == false
-|| $_GET["mode"] < 1 || $_GET["mode"] > 6)
+if(is_numeric($_GET['mode']) == false
+|| $_GET['mode'] < 1 || $_GET['mode'] > 6)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if(isset($_GET["usr_id"]) && is_numeric($_GET["usr_id"]) == false)
+if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // nun erst einmal allgemein pruefen, ob der User zur aktuellen Orga gehoert
-if(isMember($_GET["usr_id"]) == true)
+if(isMember($_GET['usr_id']) == true)
 {
     $this_orga = true;
 }
@@ -56,18 +53,18 @@ else
     $this_orga = false;
 }
 
-if($_GET["mode"] != 1)
+if($_GET['mode'] != 1)
 {
     // pruefen, ob der User noch in anderen Organisationen aktiv ist
-    $sql    = "SELECT rol_id
-                 FROM ". TBL_ROLES. ", ". TBL_MEMBERS. ", ". TBL_CATEGORIES. "
+    $sql    = 'SELECT rol_id
+                 FROM '. TBL_ROLES. ', '. TBL_MEMBERS. ', '. TBL_CATEGORIES. '
                 WHERE rol_valid   = 1
                   AND rol_cat_id  = cat_id
-                  AND cat_org_id <> ". $g_current_organization->getValue("org_id"). "
+                  AND cat_org_id <> '. $g_current_organization->getValue('org_id'). '
                   AND mem_rol_id  = rol_id
-                  AND mem_begin  <= '".DATE_NOW."'
-                  AND mem_end     > '".DATE_NOW."'
-                  AND mem_usr_id  = ". $_GET['usr_id'];
+                  AND mem_begin  <= "'.DATE_NOW.'"
+                  AND mem_end     > "'.DATE_NOW.'"
+                  AND mem_usr_id  = '. $_GET['usr_id'];
     $result = $g_db->query($sql);
     $other_orga = $g_db->num_rows($result);
 
@@ -75,33 +72,32 @@ if($_GET["mode"] != 1)
     $user = new User($g_db, $_GET['usr_id']);
 }
 
-if($_GET["mode"] == 1)
+if($_GET['mode'] == 1)
 {
     // Html-Kopf ausgeben
-    $g_layout['title'] = "Messagebox";
-    require(THEME_SERVER_PATH. "/overall_header.php");
+    $g_layout['title'] = $g_l10n->get('SYS_NOTE');
+    require(THEME_SERVER_PATH. '/overall_header.php');
 
     // Html des Modules ausgeben
     echo '<br /><br /><br />
     <div class="formLayout" id="user_delete_message_form" style="width: 400px">
-        <div class="formHead">Mitglied löschen</div>
+        <div class="formHead">'.$g_l10n->get('MEM_REMOVE_USER').'</div>
         <div class="formBody">
             <p align="left">
-                <img src="'.THEME_PATH.'/icons/profile.png" alt="Ehemaliger" />
-                Du kannst den Benutzer zu einem <b>Ehemaligen</b> machen. Dies hat den Vorteil, dass die Daten
-                erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person
-                zugeordnet war.
+                <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('MEM_FORMER').'" />
+                '.$g_l10n->get('MEM_PHR_MAKE_FORMER').'
             </p>
             <p align="left">
-                <img src="'.THEME_PATH.'/icons/delete.png" alt="Benutzer löschen" />
-                Wenn du <b>Löschen</b> auswählst, wird der Datensatz entgültig aus der Datenbank
-                entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.
+                <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('MEM_REMOVE_USER').'" />
+                '.$g_l10n->get('MEM_PHR_REMOVE_USER', $g_l10n->get('SYS_DELETE')).'
             </p>
             <button id="btnBack" type="button" onclick="history.back()"><img src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnDelete" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=3\'"><img src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" />&nbsp;'.$g_l10n->get('SYS_DELETE').'</button>
+            <button id="btnDelete" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $_GET['usr_id']. '&mode=3\'"><img 
+                src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" />&nbsp;'.$g_l10n->get('SYS_DELETE').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$_GET['usr_id'].'&mode=2\'"><img src="'.THEME_PATH.'/icons/profile.png" alt="Ehemaliger" />&nbsp;Ehemaliger</button>
+            <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$_GET['usr_id'].'&mode=2\'"><img 
+                src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('MEM_FORMER').'" />&nbsp;'.$g_l10n->get('MEM_FORMER').'</button>
         </div>
     </div>';
 
@@ -151,7 +147,7 @@ elseif($_GET["mode"] == 2)
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
     $g_message->show($g_l10n->get('MEM_PHR_REMOVE_MEMBERSHIP_OK', $g_current_organization->getValue('org_longname')));
 }
-elseif($_GET["mode"] == 3)
+elseif($_GET['mode'] == 3)
 {
     // User aus der Datenbank loeschen
     
@@ -164,7 +160,7 @@ elseif($_GET["mode"] == 3)
     // User darf in keiner anderen Orga aktiv sein
     // kein Suizid ermoeglichen
     if($other_orga > 0
-    || $g_current_user->getValue("usr_id") == $_GET['usr_id'])
+    || $g_current_user->getValue('usr_id') == $_GET['usr_id'])
     {
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
@@ -184,7 +180,7 @@ elseif($_GET["mode"] == 3)
     // User aus der Admidio Datenbank loeschen
     $user->delete();
 }
-elseif($_GET["mode"] == 4)
+elseif($_GET['mode'] == 4)
 {
     // nur Webmaster duerfen User neue Zugangsdaten zuschicken
     // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden

@@ -1,4 +1,29 @@
 
+-- Tabellen auf UTF8 umstellen
+ALTER TABLE %PREFIX%_announcements CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_auto_login CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_categories CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_dates CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_files CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_folder_roles CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_folders CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_guestbook CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_guestbook_comments CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_links CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_list_columns CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_lists CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_members CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_organizations CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_photos CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_preferences CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_role_dependencies CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_roles CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_sessions CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_texts CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_user_data CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_user_fields CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_users CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 -- Tabelle User_Fields erweitern
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_name_intern` VARCHAR(110) AFTER usf_type;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_usr_id_create` INT(11) unsigned;
@@ -62,7 +87,9 @@ CREATE TABLE %PREFIX%_rooms
     primary key (room_id)                                                                       
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Attribut hinzufuegen
 
@@ -81,7 +108,9 @@ create table %PREFIX%_date_role
     primary key (dtr_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_date_role add index DTR_DAT_FK (dtr_dat_id);
