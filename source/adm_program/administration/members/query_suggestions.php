@@ -33,7 +33,8 @@ else
 
 if (isset($_GET['query']) && strlen($_GET['query']) > 0)
 {
-    $query = strStripTags($_GET['query']);
+    // aus einem bisher unerfindlichen Grund wird query als Latin1 uebertragen
+    $query = strStripTags(utf8_encode($_GET['query']));
 }
 else
 {
@@ -128,7 +129,7 @@ else
     //sort($match);
     $xml .= "<results>\n".implode("\n",$match).'</results>';
 }
-header('Content-Type: text/xml');
+header('Content-Type: text/xml; charset=utf-8');
 echo $xml;
 
 ?>
