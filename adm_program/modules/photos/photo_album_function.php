@@ -101,7 +101,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Beginn'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('START')));
     }    
     
     //Ende
@@ -115,7 +115,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Ende', $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
         }
     }
     else
@@ -132,7 +132,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Photographen
     if(strlen($_POST['pho_photographers']) == 0)
     {
-        $_POST['pho_photographers'] = 'unbekannt';
+        $_POST['pho_photographers'] = $g_l10n->get('SYS_UNKNOWN');
     }
 
     // POST Variablen in das Role-Objekt schreiben
@@ -200,22 +200,22 @@ if(isset($_POST['submit']) && $_POST['submit'])
     $g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
     
     // HTML-Kopf
-    $g_layout['title'] = 'Foto-Abum-Verwaltung';
+    $g_layout['title'] = $g_l10n->get('SYS_END');
     require(THEME_SERVER_PATH. '/overall_header.php');
 
     echo'
     <div class="formLayout" id="photo_report_form">
-        <div class="formHead">Bericht</div>
+        <div class="formHead">'.$g_l10n->get('SYS_REPORT').'</div>
         <div class="formBody"> 
-            <p>Das Album wurde erfolgreich angelegt / ge&auml;ndert:</p>  
+            <p>'.$g_l10n->get('PHO_PHR_ALBUM_WRITE_SUCCESS').'</p>  
             <ul class="formFieldList">
                 <li><dl>
-                    <dt>Album:</dt>
+                    <dt>'.$g_l10n->get('SYS_REPORT').':</dt>
                     <dd>'.$photo_album->getValue('pho_name').'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>im Album:</dt>
+                    <dt>'.$g_l10n->get('PHO_PARENT_ALBUM').':</dt>
                     <dd>';
                         if($photo_album->getValue('pho_pho_id_parent') > 0)
                         {
@@ -224,42 +224,42 @@ if(isset($_POST['submit']) && $_POST['submit'])
                         }
                         else
                         {
-                            echo 'Fotogalerien(Hauptordner)';
+                            echo $g_l10n->get('PHO_PHOTO_ALBUMS');
                         }
                     echo'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>Anfangsdatum:</dt>
+                    <dt>'.$g_l10n->get('SYS_START').':</dt>
                     <dd>'.$photo_album->getValue('pho_begin', $g_preferences['system_date']).'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>Enddatum:</dt>
+                    <dt>'.$g_l10n->get('SYS_END').':</dt>
                     <dd>'.$photo_album->getValue('pho_end', $g_preferences['system_date']).'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>Fotografen:</dt>
+                    <dt>'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').':</dt>
                     <dd>'.$photo_album->getValue('pho_photographers').'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>Gesperrt:</dt>
+                    <dt>'.$g_l10n->get('SYS_LOCKED').':</dt>
                     <dd>';
                         if($photo_album->getValue('pho_locked')==1)
                         {
-                             echo 'Ja';
+                             echo $g_l10n->get('SYS_YES');
                         }
                         else
                         {
-                             echo 'Nein';
+                             echo $g_l10n->get('SYS_NO');
                         }   
                     echo'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>Anzahl Fotos:</dt>
+                    <dt>'.$g_l10n->get('PHO_PHR_NUMBER_OF_FOTOS').':</dt>
                     <dd>';
                         if($photo_album->getValue('pho_quantity')!=NULL)
                         {

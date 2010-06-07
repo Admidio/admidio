@@ -373,14 +373,19 @@
     <text id="ORG_URL" development="new" translation="todo">URL</text>
 
     <!-- Phrases only in Photomodule -->
+    <text id="PHO_ALBUM" development="new" translation="todo">Album</text>
+    <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album Anlegen</text>
+    <text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHR_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
+    <text id="PHO_PHR_ALBUM_WRITE_SUCCESS" development="new" translation="todo">Das Album wurde erfolgreich angelegt / geändert</text>
     <text id="PHO_PHR_FOLDER_NOT_FOUND" development="new" translation="todo">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</text>
     <text id="PHO_PHR_NO_ALBUM_CONTENT" development="new" translation="todo">Dieses Album enthält leider noch keine Fotos.</text>
     <text id="PHO_PHR_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_PHR_NO_FILES_SELECTED" development="new" translation="todo">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
     <text id="PHO_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
+    <text id="PHO_PHR_NUMBER_OF_FOTOS" development="new" translation="todo">Bilderanzahl</text>
     <text id="PHO_PHR_PHOTO_FORMAT_INVALID" development="new" translation="todo">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</text>
     <text id="PHO_PHR_PHOTO_FILES_TO_LARGE" development="new" translation="todo">Eine der Dateien oder alle gemeinsam übersteigen die vom Server zugelassenen Uploadgröße von %VAR1% MB.</text>
     <text id="PHO_PHR_PHOTOGRAPHER" development="new" translation="todo">Fotos von</text>
@@ -689,6 +694,7 @@
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
 	<text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
+	<text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROOM" development="new" translation="todo">Raum</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
@@ -717,6 +723,7 @@
     <text id="SYS_TITLE" development="new" translation="todo">Titel</text>
     <text id="SYS_TO" development="new" translation="todo" description="E-Mail">An</text>
     <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
+    <text id="SYS_UNKNOWN" development="new" translation="todo">Unbekannt</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
