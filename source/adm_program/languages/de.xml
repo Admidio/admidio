@@ -135,7 +135,34 @@
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="todo">Bild in voller Größe anzeigen</text>
     <text id="ECA_YOUR_MESSAGE" development="new" translation="todo">Deine Nachricht</text>
 
-
+    <!-- Phrases only for FLEX-Uploader -->
+    <!-- %0 etc are necessary placeholders filled by Flex-->
+    <text id="FUP_BROWSE" development="new" translation="todo">Durchsuchen</text>
+    <text id="FUP_ERROR" development="new" translation="todo">Fehler</text>
+    <text id="FUP_FILE" development="new" translation="todo">Datei</text>
+    <text id="FUP_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
+    <text id="FUP_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
+    <text id="FUP_PHR_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
+    <text id="FUP_PHR_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
+    <text id="FUP_PHR_FILEZIZE" development="new" translation="todo">Datei ist zu groß.</text>
+    <text id="FUP_PHR_TO_MANY_FILES" development="new" translation="todo">Sie können maximal %0 Dateien hinzufügen.</text>
+    <text id="FUP_PHR_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
+    <text id="FUP_PHR_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
+    <text id="FUP_REMOVE" development="new" translation="todo">Entfernen</text>
+    <text id="FUP_SECURITY_ERROR" development="new" translation="todo">Sicherheits Fehler</text>
+    <text id="FUP_SIZE" development="new" translation="todo">Größe</text>
+    <text id="FUP_STATUS" development="new" translation="todo">Status</text>
+    <text id="FUP_STOP" development="new" translation="todo">Stop</text>
+    <text id="FUP_TYPE" development="new" translation="todo">Typ</text>
+    <text id="FUP_UPLOAD" development="new" translation="todo">Hochladen</text>
+    <text id="FUP_WARNING" development="new" translation="todo">Warnung</text>
+	
+	<!-- buttons -->
+	<browse>Durchsuchen</browse>
+	<remove>Entfernen</remove>
+	<upload>Fotos Hochladen</upload>
+	<stop>Stop</stop>
+    
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_PHR_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
