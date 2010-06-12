@@ -734,7 +734,7 @@ else
     if($req_mode != 'print')
     {
         // Navigation mit Vor- und Zurueck-Buttons
-        $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&mode='.$req_mode.'&rol_id='.$req_rol_id;
+        $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&mode='.$req_mode.'&rol_id='.$req_rol_id.'&show_members='.$show_members;
         echo generatePagination($base_url, $num_members, $members_per_page, $req_start, TRUE);
     }
 
