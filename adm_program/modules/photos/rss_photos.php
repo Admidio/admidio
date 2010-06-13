@@ -65,7 +65,7 @@ $photo_album = new TablePhotos($g_db);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('PHO_PHOTOS'), 'Die 10 neuesten Fotoalben');
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS'), 'Die 10 neuesten Fotoalben');
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_array($result))

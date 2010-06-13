@@ -164,7 +164,7 @@ $g_layout['header'] = '';
 if($g_preferences['enable_rss'] == 1)
 {
     $g_layout['header'] =  $g_layout['header']. '
-        <link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('PHO_PHOTOS').'"
+        <link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS').'"
             href="'.$g_root_path.'/adm_program/modules/photos/rss_photos.php" />';
 };
 
@@ -602,7 +602,7 @@ echo '<div class="photoModuleContainer">';
                         }
 
                         echo '</li>
-                            <li>'.$g_l10n->get('PHO_PHOTOS').': '.$sub_photo_album->countImages().' </li>
+                            <li>'.$g_l10n->get('SYS_PHOTOS').': '.$sub_photo_album->countImages().' </li>
                             <li>'.$g_l10n->get('SYS_DATE').': '.$sub_photo_album->getValue('pho_begin', $g_preferences['system_date']);
                             if($sub_photo_album->getValue('pho_end') != $sub_photo_album->getValue('pho_begin'))
                             {

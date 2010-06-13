@@ -129,11 +129,11 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 
 if($_GET['job']=='new')
 {
-    $g_layout['title'] = 'Neues Album anlegen';
+    $g_layout['title'] = $g_l10n->get('PHO_CREATE_ALBUM');
 }
 elseif($_GET['job']=='change')
 {
-    $g_layout['title'] = 'Album bearbeiten';
+    $g_layout['title'] = $g_l10n->get('PHO_EDIT_ALBUM');
 }
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
@@ -163,7 +163,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="pho_name">Album:</label></dt>
+                    <dt><label for="pho_name">'.$g_l10n->get('PHO_ALBUM').':</label></dt>
                     <dd>
                         <input type="text" id="pho_name" name="pho_name" style="width: 300px;" maxlength="50" tabindex="1" value="'.$photo_album->getValue('pho_name').'" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -175,10 +175,10 @@ echo '
             echo'
             <li>
                 <dl>
-                    <dt><label for="pho_pho_id_parent">im Album:</label></dt>
+                    <dt><label for="pho_pho_id_parent">'.$g_l10n->get('PHO_PARENT_ALBUM').':</label></dt>
                     <dd>
                         <select size="1" id="pho_pho_id_parent" name="pho_pho_id_parent" style="max-width: 95%;" tabindex="2">
-                            <option value="0">Fotogalerien(Hauptordner)</option>';
+                            <option value="0">'.$g_l10n->get('PHO_PHOTO_ALBUMS').'</option>';
                                 // die Albenstruktur darstellen und das aktuelle Album vorauswählen
                                 subfolder($adm_photo_list['pho_id'], '', $photo_album, $pho_id);
                         echo '</select>
@@ -190,7 +190,7 @@ echo '
             echo '
             <li>
                 <dl>
-                    <dt><label for="pho_begin">Beginn:</label></dt>
+                    <dt><label for="pho_begin">'.$g_l10n->get('SYS_START').':</label></dt>
                     <dd>
                         <input type="text" id="pho_begin" name="pho_begin" size="10" tabindex="3" maxlength="10" value="'. $photo_album->getValue('pho_begin').'" />
                         <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
@@ -202,7 +202,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="pho_end">Ende:</label></dt>
+                    <dt><label for="pho_end">'.$g_l10n->get('SYS_END').':</label></dt>
                     <dd>
                         <input type="text" id="pho_end" name="pho_end" size="10" tabindex="4" maxlength="10" value="'. $photo_album->getValue('pho_end').'">
                         <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
@@ -215,7 +215,7 @@ echo '
             echo'
             <li>
                 <dl>
-                    <dt><label for="pho_photographers">Fotografen:</label></dt>
+                    <dt><label for="pho_photographers">'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').':</label></dt>
                     <dd>
                         <input type="text" id="pho_photographers" name="pho_photographers" style="width: 300px;" tabindex="5" maxlength="100" value="'.$photo_album->getValue('pho_photographers').'" />
                     </dd>
@@ -226,7 +226,7 @@ echo '
             echo'
             <li>
                 <dl>
-                    <dt><label for="pho_locked">Sperren:</label></dt>
+                    <dt><label for="pho_locked">'.$g_l10n->get('SYS_LOCK').':</label></dt>
                     <dd>';
                         echo '<input type="checkbox" id="pho_locked" name="pho_locked" tabindex="6" value="1"';
 
@@ -277,7 +277,7 @@ echo '
         <span class="iconTextLink">
             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=album_help&amp;inline=true"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
-            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=album_help&amp;inline=true">Hilfe</a>
+            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=album_help&amp;inline=true">'.$g_l10n->get('SYS_HELP').'</a>
         </span>
     </li>
 </ul>';
