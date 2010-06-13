@@ -91,7 +91,7 @@ else
 	$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
 	
 	// Html-Kopf ausgeben
-	$g_layout['title']    = 'Fotogalerien';
+	$g_layout['title']    = $g_l10n->get('PHO_PHOTO_ALBUMS');
 	
 	//wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
 	if($g_preferences['photo_show_mode']==0)
@@ -116,7 +116,7 @@ else
 	}
 	else
 	{
-		echo '<div><img class="photoOutput" src="'.$url_act_image.'" alt="Foto" /></div>';
+		echo '<div><img class="photoOutput" src="'.$url_act_image.'" alt="'.$g_l10n->get('SYS_PHOTO').'" /></div>';
 	}
 	
 	//Vor und zurück Buttons
@@ -127,8 +127,8 @@ else
 		{
 			echo'<li>
 				<span class="iconTextLink">
-					<a href="'.$url_prev_image.'"><img src="'. THEME_PATH. '/icons/back.png" alt="Vorheriges Bild" /></a>
-					<a href="'.$url_prev_image.'">Vorheriges Bild</a>
+					<a href="'.$url_prev_image.'"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('PHO_PREVIOUS_PHOTO').'" /></a>
+					<a href="'.$url_prev_image.'">'.$g_l10n->get('PHO_PREVIOUS_PHOTO').'</a>
 				</span>
 			</li>';
 		}
@@ -136,8 +136,8 @@ else
 		{
 			echo'<li>
 				<span class="iconTextLink">
-					<a href="'.$url_next_image.'">Nächstes Bild</a>
-					<a href="'.$url_next_image.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="Nächstes Bild" /></a>
+					<a href="'.$url_next_image.'">'.$g_l10n->get('PHO_NEXT_PHOTO').'</a>
+					<a href="'.$url_next_image.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('PHO_NEXT_PHOTO').'" /></a>
 				</span>
 			</li>';
 		}
@@ -150,8 +150,8 @@ else
 		echo'<ul class="iconTextLinkList">
 			<li>
 				<span class="iconTextLink">
-					<a href="javascript:parent.window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="Fenster schließen" /></a>
-					<a href="javascript:parent.window.close()">Fenster schließen</a>
+					<a href="javascript:parent.window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$g_l10n->get('SYS_CLOSE_WINDOW').'" /></a>
+					<a href="javascript:parent.window.close()">'.$g_l10n->get('SYS_CLOSE_WINDOW').'</a>
 				</span>
 			</li>
 		</ul>';
@@ -162,8 +162,8 @@ else
 		echo'<ul class="iconTextLinkList">
 			<li>
 				<span class="iconTextLink">
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="zur &Uuml;bersicht" /></a>
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">zur &Uuml;bersicht</a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'" /></a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
 				</span>
 			</li>
 		</ul>';

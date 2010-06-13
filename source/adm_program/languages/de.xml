@@ -403,8 +403,11 @@
     <text id="PHO_ALBUM" development="new" translation="todo">Album</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
+	<text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album Anlegen</text>
-    <text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
+    <text id="PHO_EDIT_ALBUM" development="new" translation="todo">Album Bearbeiten</text>
+	<text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>      
+	<text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHR_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
     <text id="PHO_PHR_ALBUM_WRITE_SUCCESS" development="new" translation="todo">Das Album wurde erfolgreich angelegt / geändert</text>
     <text id="PHO_PHR_FOLDER_NOT_FOUND" development="new" translation="todo">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</text>
@@ -422,7 +425,7 @@
     <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="todo">Foto gegen den Uhrzeigersinn drehen</text>
     <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="todo">Foto im Uhrzeigersinn drehen</text>
     <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="todo">Foto als Grußkarte versenden</text>
-    <text id="PHO_PHOTOS" development="new" translation="todo">Fotos</text>
+	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="todo">Vorheriges Foto</text>
     <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos Hochladen</text>
 
     <!-- Phrases only in Profilemodule -->
@@ -575,6 +578,7 @@
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="todo">Alle Tags schließen</text>
+	<text id="SYS_CLOSE_WINDOW" development="new" translation="todo">Fenster schließen</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
     <text id="SYS_CONFIRM_PASSWORD" development="new" translation="todo">Passwort bestätigen</text>
     <text id="SYS_CONFIRMATION_OF_PARTICIPATION" development="new" translation="todo">Teilnahmebestätigung</text>
@@ -645,6 +649,8 @@
     <text id="SYS_PAGE_NEXT" development="new" translation="todo">Nächste</text>
     <text id="SYS_PASSWORD" development="new" translation="todo">Passwort</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
+    <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>
+	<text id="SYS_PHOTOS" development="new" translation="todo">Foto</text>	
     <text id="SYS_PHR_ADMINISTRATION" development="new" translation="todo">%VAR1%-Verwaltung</text>
     <text id="SYS_PHR_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
     <text id="SYS_PHR_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
