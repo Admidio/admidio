@@ -56,7 +56,7 @@ if (array_key_exists('headline', $_GET))
 }
 else
 {
-    $_GET['headline'] = 'Gästebuch';
+    $_GET['headline'] = $g_l10n->get('GBO_GUESTBOOK');
 }
 
 
@@ -133,11 +133,11 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 // Html-Kopf ausgeben
 if ($_GET['id'] > 0)
 {
-    $g_layout['title'] = 'Gästebucheintrag bearbeiten';
+    $g_layout['title'] = $g_l10n->get('GBO_PHR_EDIT_ENTRY', $_GET['headline']);
 }
 else
 {
-    $g_layout['title'] = 'Gästebucheintrag anlegen';
+    $g_layout['title'] = $g_l10n->get('GBO_PHR_CREATE_ENTRY', $_GET['headline']);
 }
 
 //Script für BBCode laden

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse um htaccessFiles anzulegen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,7 +49,8 @@ class Htaccess
     //Schuetzt den uebergebenen Ordner
     public function protectFolder()
     {
-        if ($this->folderExists && !$this->htaccessFileExistsAlready) {
+        if ($this->folderExists && !$this->htaccessFileExistsAlready) 
+        {
             $file=fopen($this->folderPath. '/.htaccess','w+');
             fputs($file,"Order deny,allow\n");
             fputs($file,"Deny from all\n");

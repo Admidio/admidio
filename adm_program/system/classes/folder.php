@@ -14,7 +14,7 @@
  *
  * setFolder($folderWithPath = '') - Ordner mit zugehoerigem Pfad setzen
  * getFolder()           - Ordner zurueckgeben
- * createWriteableFolder($newFolder)     - den Ordner mit Schreibrechten erstellen
+ * createFolder($newFolder, $writeable)     - den Ordner ggf. mit Schreibrechten erstellen
  * copy($destinationFolder, $sourceFolder = '')
  *                       - kopiert den kompletten Ordner mit allen Unterordnern und 
  *                         Dateien in einen neuen Pfad
@@ -50,32 +50,37 @@ class Folder
     // Ordner zurueckgeben
     public function getFolder()
     {
-        return $this->folderWithPath = $folderWithPath;
+        return $this->folderWithPath;
     }
     
     // den Ordner der Klasse mit Schreibrechten erstellen
-    public function createWriteableFolder($newFolder)
+    public function createFolder($newFolder, $writeable)
     {
 		$newPath = $this->folderWithPath. '/'. $newFolder;
+		$retCode = true;
 
         // existiert der Ordner noch nicht, dann diesen anlegen
         if(file_exists($newPath) == false)
         {
-            $retCode = @mkdir($newPath, 0777);
-        }
-        // der Ordner existiert, aber die Schreibrechte noch nicht
-        if(is_writeable($newPath) == false)
-        {
-            $retCode = @chmod($newPath, 0777);
-        }
-
-        // nun pruefen, ob die Schreibrechte vorhanden sind
-        if(is_writeable($newPath))
-        {
-            return true;
+            if($writeable)
+            {
+                $retCode = @mkdir($newPath, 0777);
+            }
+            else
+            {
+                $retCode = @mkdir($newPath);
+            }
         }
 
-        return false;
+        if($writeable)
+        {
+            // der Ordner existiert, aber die Schreibrechte noch nicht
+            if(is_writeable($newPath) == false)
+            {
+                $retCode = @chmod($newPath, 0777);
+            }
+        }
+        return $retCode;
     }
     
     // kopiert den kompletten Ordner mit allen Unterordnern und Dateien in einen neuen Pfad
@@ -94,7 +99,7 @@ class Folder
 		
         // nun erst einmal den Zielordner erstellen
         $this->setFolder($newPath);
-        $b_return = $this->createWriteableFolder($newFolder);
+        $b_return = $this->createFolder($newFolder, true);
         
         if($b_return == true)
         {

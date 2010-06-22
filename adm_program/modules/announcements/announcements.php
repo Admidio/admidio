@@ -240,7 +240,7 @@ else
                         if($announcement->getValue("ann_org_shortname") == $g_organization)
                         {
                             echo '
-                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue("ann_id").'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
+                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue('ann_id').'\','.$announcement->getValue('ann_id').',\''.$announcement->getValue('ann_headline').'\')"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         }    
                     }

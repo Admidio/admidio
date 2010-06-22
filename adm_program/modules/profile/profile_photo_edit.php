@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profil bearbeiten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -17,10 +17,10 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/image.php');
-require('../../system/classes/htaccess.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/image.php');
+require_once('../../system/classes/my_files.php');
 
 //pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
@@ -58,7 +58,18 @@ if($job != 'save' && $job!='delete' && $job != 'dont_save' && $job != 'upload' &
 if($g_current_user->editProfile($req_usr_id) == false)
 {
     $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
-}                    
+}
+
+// bei Ordnerspeicherung pruefen ob der Unterordner in adm_my_files mit entsprechenden Rechten existiert
+if($g_preferences['profile_photo_storage'] == 1)
+{
+    // ggf. Ordner für Userfotos in adm_my_files anlegen
+    $myFilesProfilePhotos = new MyFiles('USER_PROFILE_PHOTOS');
+    if($myFilesProfilePhotos->checkSettings() == false)
+    {
+        $g_message->show($g_l10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+    }
+}
 
 // User auslesen
 $user = new User($g_db, $req_usr_id);
@@ -69,20 +80,7 @@ if($job=='save')
     
     if($g_preferences['profile_photo_storage'] == 1)
     {
-        // Foto im Dateisystem speichern
-
-        //ggf. Ordner für Userfotos anlegen
-        if(!file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos') && $g_preferences['profile_photo_storage'] == 1)
-        {
-            require_once('../../system/classes/folder.php');
-            $folder = new Folder(SERVER_PATH. '/adm_my_files');
-            if($folder->createWriteableFolder('user_profile_photos') == false)
-            {
-                $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $folder->getFolder(), '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
-            }
-        }
-        $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-        $protection->protectFolder();  
+        // Foto im Dateisystem speichern      
 
         //Nachsehen ob fuer den User ein Photo gespeichert war
         if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$req_usr_id.'_new.jpg'))

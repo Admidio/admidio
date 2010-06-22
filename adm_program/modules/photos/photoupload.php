@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photoupload
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -74,7 +74,7 @@ if(file_exists(SERVER_PATH. '/adm_my_files/photos/upload') == false)
 {
     require_once('../../system/classes/folder.php');
     $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
-    $folder->createWriteableFolder('upload');
+    $folder->createFolder('upload', true);
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert

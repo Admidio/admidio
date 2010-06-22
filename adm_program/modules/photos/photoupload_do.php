@@ -82,7 +82,7 @@ if(!file_exists(SERVER_PATH. '/adm_my_files/photos/upload'))
 {
     require_once('../../system/classes/folder.php');
     $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
-    $folder->createWriteableFolder('upload');
+    $folder->createFolder('upload', true);
 }
 
 //Ordnerpfad
@@ -200,7 +200,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
             {
                 require_once('../../system/classes/folder.php');
                 $folder = new Folder($ordner);
-                $folder->createWriteableFolder('thumbnails');
+                $folder->createFolder('thumbnails', true);
             }
     
             //Thumbnail speichern
