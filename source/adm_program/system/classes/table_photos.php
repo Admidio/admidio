@@ -27,17 +27,13 @@
 
 $absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
 require_once($absolute_path.'/adm_program/system/classes/table_access.php');
-require_once($absolute_path. '/adm_program/system/classes/folder.php');
+require_once($absolute_path. '/adm_program/system/classes/my_files.php');
 
 class TablePhotos extends TableAccess
 {
-    protected $folderPath;
-
     public function __construct(&$db, $photo_id = 0)
     {
         parent::__construct($db, TBL_PHOTOS, 'pho', $photo_id);
-        
-        $this->folderPath     = new Folder();
     }
 
     // Rekursive Funktion gibt die Anzahl aller Bilder inkl. der Unteralben zurueck
@@ -72,46 +68,22 @@ class TablePhotos extends TableAccess
     public function createFolder()
     {
         $error = array('code' => '0', 'text' => '');
-    
-        if(is_writeable(SERVER_PATH. '/adm_my_files'))
+
+        // Pfad in adm_my_files pruefen und ggf. anlegen
+        $myFilesPhotos = new MyFiles('PHOTOS');
+        if($myFilesPhotos->checkSettings() == false)
         {
-            if(file_exists(SERVER_PATH. '/adm_my_files/photos') == false)
-            {
-                // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
-                $this->folderPath->setFolder(SERVER_PATH. '/adm_my_files');
-                $b_return = $this->folderPath->createWriteableFolder('photos');
-
-                if($b_return == false)
-                {
-                    $error['code'] = '-2';
-                    $error['text'] = 'adm_my_files/photos';
-                }
-            }
-
-            // ist der my_files-Ordner noch nicht mit htAccess gesichert, so muss diese Datei erst angelegt werden
-            if (file_exists(SERVER_PATH. '/adm_my_files/.htaccess') == false)
-            {
-                $absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
-                require_once($absolute_path. '/adm_program/system/classes/htaccess.php');
-                $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-                $protection->protectFolder();
-            }
-
-            // nun den Ordner fuer die Veranstaltung anlegen
-            $folderName = $this->getValue('pho_begin', 'Y-m-d'). '_'. $this->getValue('pho_id');
-            $this->folderPath->setFolder(SERVER_PATH. '/adm_my_files/photos');
-            $b_return = $this->folderPath->createWriteableFolder($folderName);
-
-            if($b_return == false)
-            {
-                $error['code'] = '-3';
-                $error['text'] = 'adm_my_files/photos/'.$folderName;
-            }
+            $error['text'] = $myFilesPhotos->errorText;
+            $error['path'] = $myFilesPhotos->errorPath;
+            return $error;
         }
-        else
+        
+        // nun den Ordner fuer die Veranstaltung anlegen
+        $folderName = $this->getValue('pho_begin', 'Y-m-d'). '_'. $this->getValue('pho_id');
+        if($myFilesPhotos->createFolder($folderName, true) == false)
         {
-            $error['code'] = '-1';
-            $error['text'] = 'adm_my_files';
+            $error['text'] = 'SYS_PHR_FOLDER_NOT_CREATED';
+            $error['path'] = 'adm_my_files/photos/'.$folderName;
         }
         return $error;
     }
@@ -156,8 +128,9 @@ class TablePhotos extends TableAccess
             if(file_exists($folder))
             {
                 // nun erst rekursiv den Ordner im Dateisystem loeschen
-                $this->folderPath->setFolder($folder);
-                $return_code = $this->folderPath->delete($folder);
+                $myFilesPhotos = new MyFiles('PHOTOS');
+                $myFilesPhotos->setFolder($folder);
+                $return_code = $myFilesPhotos->delete($folder);
             }
 
             if($return_code)

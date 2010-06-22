@@ -578,47 +578,16 @@ class TableFolder extends TableAccess
     // Legt den Ordner im Dateisystem an
     public function createFolder($folderName)
     {
-        $error = array('code' => '0', 'text' => '');
-    
-        if(is_writeable(SERVER_PATH. '/adm_my_files'))
+        // nun den Ordner anlegen
+        $this->folderPath->setFolder($this->getCompletePathOfFolder());
+        $b_return = $this->folderPath->createFolder($folderName, true);
+
+        if($this->folderPath->createFolder($folderName, true) == false)
         {
-            if(file_exists(SERVER_PATH. '/adm_my_files/download') == false)
-            {
-                // Ordner fuer die Fotos existiert noch nicht -> erst anlegen
-                $this->folderPath->setFolder(SERVER_PATH. '/adm_my_files');
-                $b_return = $this->folderPath->createWriteableFolder('download');
-
-                if($b_return == false)
-                {
-                    $error['code'] = '-2';
-                    $error['text'] = 'adm_my_files/download';
-                }
-            }
-
-            // ist der my_files-Ordner noch nicht mit htAccess gesichert, so muss diese Datei erst angelegt werden
-            if (file_exists(SERVER_PATH. '/adm_my_files/.htaccess') == false)
-            {
-                $absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
-                require_once($absolute_path. '/adm_program/system/classes/htaccess.php');
-                $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-                $protection->protectFolder();
-            }
-
-            // nun den Ordner anlegen
-            $this->folderPath->setFolder($this->getCompletePathOfFolder());
-            $b_return = $this->folderPath->createWriteableFolder($folderName);
-
-            if($b_return == false)
-            {
-                $error['code'] = '-3';
-                $error['text'] = $this->getCompletePathOfFolder().'/'.$folderName;
-            }
+            $error['text'] = 'SYS_PHR_FOLDER_NOT_CREATED';
+            $error['path'] = $this->getCompletePathOfFolder().'/'.$folderName;
         }
-        else
-        {
-            $error['code'] = '-1';
-            $error['text'] = 'adm_my_files';
-        }
+
         return $error;
     }
 

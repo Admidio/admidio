@@ -2,7 +2,7 @@
 /******************************************************************************
  * Backup
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@
  *****************************************************************************/
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/htaccess.php');
+require_once('../../system/classes/my_files.php');
 require_once('backup.functions.php');
 
 
@@ -25,22 +25,14 @@ if($g_current_user->isWebmaster() == false)
     $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
-$backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
-
-//ggf. Ordner für Backups anlegen
-if(file_exists($backupabsolutepath) == false)
+// Pfad in adm_my_files pruefen und ggf. anlegen
+$myFilesBackup = new MyFiles('BACKUP');
+if($myFilesBackup->checkSettings() == false)
 {
-    require_once('../../system/classes/folder.php');
-    $folder = new Folder(SERVER_PATH. '/adm_my_files');
-    if($folder->createWriteableFolder('backup') == false)
-    {
-        $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $backupabsolutepath, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
-    }
+    $g_message->show($g_l10n->get($myFilesBackup->errorText, $myFilesBackup->errorPath, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
 }
 
-$protection = new Htaccess(SERVER_PATH. '/adm_my_files');
-$protection->protectFolder();
-
+$backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
 
 $old_backup_files = array();
 $old_backup_files_cp = array();

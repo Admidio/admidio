@@ -166,6 +166,8 @@
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_PHR_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
+    <text id="GBO_PHR_CREATE_ENTRY" development="new" translation="todo">%VAR1%-Eintrag anlegen</text>
+    <text id="GBO_PHR_EDIT_ENTRY" development="new" translation="todo">%VAR1%-Eintrag bearbeiten</text>
 
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="todo">Weitere Organisation hinzufügen</text>
@@ -404,7 +406,7 @@
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
 	<text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
-    <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album Anlegen</text>
+    <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album anlegen</text>
     <text id="PHO_EDIT_ALBUM" development="new" translation="todo">Album Bearbeiten</text>
 	<text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>      
 	<text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
@@ -676,6 +678,8 @@
     <text id="SYS_PHR_FIELDS_EMPTY" development="new" translation="todo">Es sind nicht alle Felder gefüllt worden.</text>
     <text id="SYS_PHR_FILE_NOT_EXIST" development="new" translation="todo">Die ausgewählte Datei existiert nicht auf dem Server.</text>
     <text id="SYS_PHR_FILE_TO_LARGE_SERVER" development="new" translation="todo">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1%.</text>
+    <text id="SYS_PHR_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht angelegt werden.\n\nWende dich bitte an den %VAR2%Webmaster%VAR3%, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</text>
+    <text id="SYS_PHR_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den %VAR2%Webmaster%VAR3%, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</text>
     <text id="SYS_PHR_FORUM_ACCESS_DATA" development="new" translation="todo">Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!</text>
     <text id="SYS_PHR_FORUM_DB_CONNECTION_FAILED" development="new" translation="todo">Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!</text>
     <text id="SYS_PHR_FORUM_LOGIN_ADMIN" development="new" translation="todo">Dein Administrator-Account vom Forum %VAR2% wurde auf den Admidio-Account zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
@@ -717,7 +721,6 @@
     <text id="SYS_PHR_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
     <text id="SYS_PHR_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
     <text id="SYS_PHR_WANT_REGISTER" development="new" translation="todo">Ich möchte mich registrieren!</text>
-    <text id="SYS_PHR_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\nDu musst dich an den %VAR2%Webmaster%VAR3% wenden, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) setzen kann.</text>
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">voriges</text>

@@ -18,7 +18,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/folder.php');
 require_once('../../system/classes/table_photos.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -152,13 +151,13 @@ if(isset($_POST['submit']) && $_POST['submit'])
         
         $error = $photo_album->createFolder();
         
-        if($error['code'] < 0)
+        if(strlen($error['text']) > 0)
         {
             $photo_album->delete();
             
             // der entsprechende Ordner konnte nicht angelegt werden
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $error['text'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+            $g_message->show($g_l10n->get($error['text'], $error['path'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
         
         $pho_id = $photo_album->getValue('pho_id');
@@ -181,7 +180,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
         if($b_return == false)
         {
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+            $g_message->show($g_l10n->get('SYS_PHR_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
 
         // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen

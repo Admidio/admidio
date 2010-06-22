@@ -2,7 +2,7 @@
 /******************************************************************************
  * Downloadfunktionen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,11 +21,11 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/folder.php');
-require('../../system/classes/table_folder.php');
-require('../../system/classes/table_file.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/my_files.php');
+require_once('../../system/classes/table_folder.php');
+require_once('../../system/classes/table_file.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -87,11 +87,18 @@ else
 
 $_SESSION['download_request'] = $_REQUEST;
 
+// Pfad in adm_my_files pruefen und ggf. anlegen
+$myFilesDownload = new MyFiles('DOWNLOAD');
+if($myFilesDownload->checkSettings() == false)
+{
+    $g_message->show($g_l10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+}
 
 // Dateien hochladen
 if ($req_mode == 1)
 {
-    if ($folder_id == 0) {
+    if ($folder_id == 0) 
+    {
         //FolderId ist zum hochladen erforderlich
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -273,7 +280,7 @@ elseif ($req_mode == 3)
         // Ordner erstellen
         $b_return = $targetFolder->createFolder($newFolderName);
 
-        if($b_return['code'] == 0)
+        if(strlen($b_return['text']) == 0)
         {
             //Jetzt noch den Ordner der DB hinzufuegen...
             $newFolder = new TableFolder($g_db);
@@ -294,7 +301,7 @@ elseif ($req_mode == 3)
         {
             // der entsprechende Ordner konnte nicht angelegt werden
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/downloads/downloads.php');
-            $g_message->show($g_l10n->get('SYS_PHR_WRITE_ACCESS', $error['text'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+            $g_message->show($g_l10n->get($b_return['text'], $b_return['path'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
