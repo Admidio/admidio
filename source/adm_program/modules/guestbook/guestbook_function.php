@@ -16,6 +16,7 @@
  *           4 - Kommentar zu einem Eintrag anlegen
  *           5 - Kommentar eines Gaestebucheintrages loeschen
  *           8 - Kommentar eines Gaestebucheintrages editieren
+ *           9 - Gaestebucheintrag moderieren
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Gaestebuch steht
  *           (Default) Gaestebuch
@@ -69,12 +70,12 @@ if (array_key_exists('headline', $_GET))
 }
 else
 {
-    $_GET['headline'] = 'Gästebuch';
+    $_GET['headline'] = $g_l10n->get('GBO_GUESTBOOK');
 }
 
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
-if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 5 || $_GET['mode'] == 6 || $_GET['mode'] == 7 || $_GET['mode'] == 8 )
+if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 5 || $_GET['mode'] == 8 )
 {
 
     if ($_GET['mode'] == 4)
@@ -100,7 +101,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
 
 
-    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 5 || $_GET['mode'] == 6 || $_GET['mode'] == 7 || $_GET['mode'] == 8)
+    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 5 || $_GET['mode'] == 8)
     {
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
         if(!$g_current_user->editGuestbookRight())
@@ -110,7 +111,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     }
 }
 
-if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 6)
+if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 9)
 {
     // Gaestebuchobjekt anlegen
     $guestbook = new TableGuestbook($g_db);
@@ -203,6 +204,12 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
             }
         }
         
+    	// Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
+        if ($g_preferences['enable_guestbook_moderation'] == 1 && $g_current_user->editGuestbookRight() == false)
+        {
+            $guestbook->setValue('gbo_locked', '1');
+        }
+        
         // Daten in Datenbank schreiben
         $return_code = $guestbook->save();
     
@@ -220,20 +227,28 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
         {
             unset($_SESSION['captchacode']);
         }
+        
+        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline'];
 
+        // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
+        if ($g_preferences['enable_guestbook_moderation'] == 1 && $g_current_user->editGuestbookRight() == false)
+        {
+            $g_message->setForwardUrl($url, 2000);
+            $g_message->show($g_l10n->get('GBO_PHR_ENTRY_QUEUED'));
+        }
 
-        header('Location: '.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline']);
+        header('Location: '.$url);
         exit();
     }
     else
     {
         if(strlen($guestbook->getValue('gbo_name')) > 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Text'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
         }
     }
 }
@@ -246,7 +261,14 @@ elseif($_GET['mode'] == 2)
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-
+// Moderationsfunktion
+elseif ($_GET['mode'] == 9)
+{
+    // den Gaestebucheintrag freischalten...
+    $guestbook->moderate();
+    // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo 'done';
+}
 elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
 {
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
@@ -334,11 +356,11 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     {
         if(strlen($guestbook_comment->getValue('gbc_name')) > 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Text'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_COMMENT')));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
         }
     }
 }

@@ -429,7 +429,7 @@ if($num_members > 0)
                             }
                             echo '
                             <a class="iconLink" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
-                                alt="'.$g_l10n->get('MEM_SEND_EMAIL_TO', $row['email']).'" title="'.$g_l10n->get('MEM_SEND_EMAIL_TO', $row['email']).'" /></a>';
+                                alt="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
                         }
                     echo '</td>
                     <td>';

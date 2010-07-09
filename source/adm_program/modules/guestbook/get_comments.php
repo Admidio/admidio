@@ -27,17 +27,17 @@ if (isset($_GET['cid']) && is_numeric($_GET['cid']))
 if ($cid > 0)
 {
     $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. ', '. TBL_GUESTBOOK. '
-                                   WHERE gbo_id     = '.$cid.'
-                                     AND gbc_gbo_id = gbo_id
-                                     AND gbo_org_id = '. $g_current_organization->getValue('org_id'). '
-                                   ORDER by gbc_timestamp_create asc';
+                WHERE gbo_id     = '.$cid.'
+                  AND gbc_gbo_id = gbo_id
+                  AND gbo_org_id = '. $g_current_organization->getValue('org_id'). '
+                ORDER by gbc_timestamp_create asc';
     $comment_result = $g_db->query($sql);
 }
 
 if (isset($comment_result))
 {
 
-    echo'<div id="comments_$cid" style="visibility: visible; display: block; text-align: left;">';
+    echo '<div id="comments_'.$cid.'" style="visibility: visible; display: block; text-align: left;">';
 
     //Kommentarnummer auf 1 setzen
     $commentNumber = 1;
@@ -56,16 +56,15 @@ if (isset($comment_result))
         <div class="groupBox" id="gbc_'.$gbComment->getValue('gbc_id').'" style="overflow: hidden; margin-left: 20px; margin-right: 20px;">
             <div class="groupBoxHeadline">
                 <div class="boxHeadLeft">
-                    <img src="'. THEME_PATH. '/icons/comments.png" style="vertical-align: top;" alt="Kommentar '. $commentNumber. '" />&nbsp;'.
-                    'Kommentar von '. $gbComment->getValue('gbc_name');
+                    <img src="'. THEME_PATH. '/icons/comments.png" style="vertical-align: top;" alt="'.$g_l10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name')).'" />&nbsp;'.
+                    $g_l10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'));
 
-                // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                if (isValidEmailAddress($gbComment->getValue('gbc_email')))
-                {
-                    echo '<a class="iconLink" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png" 
-                        alt="Mail an '.$gbComment->getValue('gbc_email').'" title="Mail an '.$gbComment->getValue('gbc_email').'" /></a>';
-                }
-
+                    // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
+                    if (isValidEmailAddress($gbComment->getValue('gbc_email')))
+                    {
+                        echo '<a class="iconLink" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png" 
+                            alt="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" title="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" /></a>';
+                    }
                 echo '
                 </div>
 
@@ -117,8 +116,8 @@ if (isset($comment_result))
         <div class="editInformation">
             <span class="iconTextLink">
                 <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png" 
-                alt="Kommentieren" title="Kommentieren" /></a>
-                <a href="'.$load_url.'">Einen Kommentar zu diesem Beitrag schreiben.</a>
+                alt="'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'" title="'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'" /></a>
+                <a href="'.$load_url.'">'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'</a>
             </span>
         </div>';
     }

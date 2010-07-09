@@ -184,7 +184,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="gbo_name">Name:</label></dt>
+                    <dt><label for="gbo_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd>';
                         if ($g_current_user->getValue('usr_id') > 0)
                         {
@@ -201,7 +201,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="gbo_email">Emailadresse:</label></dt>
+                    <dt><label for="gbo_email">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
                     <dd>
                         <input type="text" id="gbo_email" name="gbo_email" tabindex="2" style="width: 350px;" maxlength="50" value="'. $guestbook->getValue('gbo_email'). '" />
                     </dd>
@@ -209,7 +209,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="gbo_homepage">Homepage:</label></dt>
+                    <dt><label for="gbo_homepage">'.$g_l10n->get('SYS_WEBSITE').':</label></dt>
                     <dd>
                         <input type="text" id="gbo_homepage" name="gbo_homepage" tabindex="3" style="width: 350px;" maxlength="50" value="'. $guestbook->getValue('gbo_homepage'). '" />
                     </dd>
@@ -223,7 +223,7 @@ echo '
          echo '
             <li>
                 <dl>
-                    <dt><label for="gbo_text">Text:</label>';
+                    <dt><label for="gbo_text">'.$g_l10n->get('SYS_TEXT').':</label>';
                         //Einfügen der Smilies
                         if($g_preferences['enable_bbcode'] == 1)
                         {
@@ -251,7 +251,7 @@ echo '
                     </dl>
 
                     <dl>
-                       <dt><label for="captcha">Bestätigungscode:</label></dt>
+                       <dt><label for="captcha">'.$g_l10n->get('PRO_CONFIRMATION_CODE').':</label></dt>
                        <dd>
                            <input type="text" id="captcha" name="captcha" tabindex="5" style="width: 200px;" maxlength="8" value="" />
                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>

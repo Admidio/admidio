@@ -156,19 +156,33 @@
     <text id="FUP_TYPE" development="new" translation="todo">Typ</text>
     <text id="FUP_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="FUP_WARNING" development="new" translation="todo">Warnung</text>
-	
-	<!-- buttons -->
-	<browse>Durchsuchen</browse>
-	<remove>Entfernen</remove>
-	<upload>Fotos Hochladen</upload>
-	<stop>Stop</stop>
     
     <!-- Phrases only in Guestbookmodule -->
-    <text id="GBO_PHR_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
+    <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="todo">Zurück zum Gästebuch</text>
+    <text id="GBO_COMMENT_BY" development="new" translation="todo">Kommentar von %VAR1%</text>
+    <text id="GBO_CREATE_COMMENT" development="new" translation="todo">Kommentar anlegen</text>
+    <text id="GBO_CREATE_ENTRY" development="new" translation="todo">Eintrag anlegen</text>
+    <text id="GBO_EDIT_COMMENT" development="new" translation="todo">Kommentar bearbeiten</text>
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
+    <text id="GBO_HIDE_COMMENTS" development="new" translation="todo">Kommentare ausblenden</text>
+    <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="todo">Flooding Protection Intervall</text>
+    <text id="GBO_PHR_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
+    <text id="GBO_PHR_COMMENTS4ALL" development="new" translation="todo">Anonyme Kommentare erlauben</text>
+    <text id="GBO_PHR_COMMENTS4ALL_DESC" development="new" translation="todo">Nicht eingeloggte Benutzer können nach Aktivierung dieser Option Einträge im Gästebuch kommentieren. Die Rechtevergabe für diese Funktion über die Rollenverwaltung wird dann ignoriert. (Standard: nein)</text>
     <text id="GBO_PHR_CREATE_ENTRY" development="new" translation="todo">%VAR1%-Eintrag anlegen</text>
     <text id="GBO_PHR_EDIT_ENTRY" development="new" translation="todo">%VAR1%-Eintrag bearbeiten</text>
-
+    <text id="GBO_PHR_ENTRY_QUEUED" development="new" translation="todo">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet werden.</text>
+    <text id="GBO_PHR_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
+    <text id="GBO_PHR_FLOODING_PROTECTION_INTERVALL_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</text>
+    <text id="GBO_PHR_GUESTBOOK_MODERATION" development="new" translation="todo">Moderation aktivieren</text>
+    <text id="GBO_PHR_GUESTBOOK_MODERATION_DESC" development="new" translation="todo">Gästebucheinträge werden erst nach einer Sichtprüfung eines Administrators publiziert. Kommentare sind davon nicht betroffen (Standard: nein)</text>
+    <text id="GBO_PHR_INITIAL_COMMENTS_LOADING" development="new" translation="todo">Kommentare direkt anzeigen</text>
+    <text id="GBO_PHR_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="todo">Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und angezeigt. Im anderen Fall muss der Benutzer auf einen Link klicken um die Kommentare zu sehen. (Standard: nein)</text>
+    <text id="GBO_PHR_MODERATE_ENTRIES" development="new" translation="todo">%VAR1% Einträge moderieren</text>
+    <text id="GBO_PHR_SHOW_COMMENTS" development="new" translation="todo">Zeige %VAR1% Kommentar(e) zu diesem Eintrag</text>
+    <text id="GBO_PHR_WRITE_COMMENT" development="new" translation="todo">Schreibe einen Kommentar zu diesem Eintrag</text>
+    <text id="GBO_SHOW_COMMENTS" development="new" translation="todo">Kommentare anzeigen</text>
+    
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="todo">Weitere Organisation hinzufügen</text>
     <text id="INS_ADD_ORGANIZATION" development="new" translation="todo">Organisation hinzufügen</text>
@@ -327,7 +341,6 @@
     <text id="MEM_PROFILE_FIELD" development="new" translation="todo">Profilfeld</text>
     <text id="MEM_REMOVE_USER" development="new" translation="todo">Benutzer entfernen</text>
     <text id="MEM_REPLACE" development="new" translation="todo">Ersetzen</text>
-    <text id="MEM_SEND_EMAIL_TO" development="new" translation="todo">Sende eine E-Mail an %VAR1%</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="todo">Alle Benutzer anzeigen</text>
     <text id="MEM_SHOW_ONLY_MEMBERS" development="new" translation="todo">Nur Mitglieder anzeigen</text>
     <text id="MEM_UPDATED_ON" development="new" translation="todo">Aktualisiert am</text>
@@ -427,6 +440,7 @@
     <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="todo">Foto gegen den Uhrzeigersinn drehen</text>
     <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="todo">Foto im Uhrzeigersinn drehen</text>
     <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="todo">Foto als Grußkarte versenden</text>
+    <text id="PHO_PHOTOS" development="new" translation="todo">Fotos</text>
 	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="todo">Vorheriges Foto</text>
     <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos Hochladen</text>
 
@@ -581,6 +595,7 @@
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="todo">Alle Tags schließen</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="todo">Fenster schließen</text>
+    <text id="SYS_COMMENT" development="new" translation="todo">Kommentar</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
     <text id="SYS_CONFIRM_PASSWORD" development="new" translation="todo">Passwort bestätigen</text>
     <text id="SYS_CONFIRMATION_OF_PARTICIPATION" development="new" translation="todo">Teilnahmebestätigung</text>
@@ -634,6 +649,7 @@
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
+    <text id="SYS_MINUTES" development="new" translation="todo">Minuten</text>
     <text id="SYS_MODULES" development="new" translation="todo">Module</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
@@ -734,7 +750,9 @@
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROOM" development="new" translation="todo">Raum</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
+    <text id="SYS_SECONDS" development="new" translation="todo">Sekunden</text>
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
+    <text id="SYS_SEND_EMAIL_TO" development="new" translation="todo">Sende eine E-Mail an %VAR1%</text>
 	<text id="SYS_SEARCH" development="new" translation="todo">Suchen</text>
 	<text id="SYS_SEARCH_AFTER" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="todo">Neues Passwort zusenden</text>

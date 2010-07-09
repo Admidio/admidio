@@ -76,6 +76,7 @@ $orga_preferences = array(
     'flooding_protection_time'          => '60',
     'enable_gbook_comments4all'         => '0',
     'enable_intial_comments_loading'    => '0',
+    'enable_guestbook_moderation'       => '0',
 
     // Listen
     'lists_roles_per_page'   => '10',

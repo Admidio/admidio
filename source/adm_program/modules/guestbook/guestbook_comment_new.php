@@ -92,7 +92,7 @@ if (array_key_exists('headline', $_GET))
 }
 else
 {
-    $_GET['headline'] = 'Gästebuch';
+    $_GET['headline'] = $g_l10n->get('GBO_GUESTBOOK');
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -158,13 +158,13 @@ if (isset($_GET['id']))
 {
     $id   = $_GET['id'];
     $mode = '4';
-    $g_layout['title'] = 'Kommentar anlegen';
+    $g_layout['title'] = $g_l10n->get('GBO_CREATE_COMMENT');
 }
 else
 {
     $id   = $_GET['cid'];
     $mode = '8';
-    $g_layout['title'] = 'Kommentar bearbeiten';
+    $g_layout['title'] = $g_l10n->get('GBO_EDIT_COMMENT');
 }
 
 //Script für BBCode laden
@@ -201,7 +201,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="gbc_name">Name:</label></dt>
+                    <dt><label for="gbc_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd>';
                         if ($g_current_user->getValue('usr_id') > 0)
                         {
@@ -218,7 +218,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="gbc_email">Emailadresse:</label></dt>
+                    <dt><label for="gbc_email">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
                     <dd>
                         <input type="text" id="gbc_email" name="gbc_email" tabindex="2" style="width: 350px;" maxlength="50" value="'. $guestbook_comment->getValue('gbc_email'). '" />
                     </dd>
@@ -231,7 +231,7 @@ echo '
          echo '
             <li>
                 <dl>
-                    <dt><label for="gbc_text">Kommentar:</label>';
+                    <dt><label for="gbc_text">'.$g_l10n->get('SYS_COMMENT').':</label>';
                         //Einfügen der Smilies
                         if($g_preferences['enable_bbcode'] == 1)
                         {
@@ -259,7 +259,7 @@ echo '
                 </li>
                 <li>
                     <dl>
-                           <dt><label for="captcha">Bestätigungscode:</label></dt>
+                           <dt><label for="captcha">'.$g_l10n->get('PRO_CONFIRMATION_CODE').':</label></dt>
                            <dd>
                                <input type="text" id="captcha" name="captcha" tabindex="4" style="width: 200px;" maxlength="8" value="" />
                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
