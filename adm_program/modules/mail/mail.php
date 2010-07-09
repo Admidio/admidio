@@ -470,7 +470,7 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="captcha">Bestätigungscode:</label></dt>
+                            <dt><label for="captcha">'.$g_l10n->get('PRO_CONFIRMATION_CODE').':</label></dt>
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                                 <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>

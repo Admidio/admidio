@@ -279,7 +279,7 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="system_time">'.$g_l10n->get('ORG_CURRENCY').':</label></dt>
-                            <dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
+                            <dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_CURRENCY').'</li>
@@ -386,7 +386,7 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="logout_minutes">'.$g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER').':</label></dt>
-                            <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> Minuten</dd>
+                            <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> '.$g_l10n->get('SYS_MINUTES').'</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_AUTOMATOC_LOGOUT_AFTER', $g_l10n->get('SYS_REMEMBER_ME')).'</li>
@@ -950,66 +950,66 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
-                        Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_CAPTCHA_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_gbook_comments4all\">Anonyme Kommentare erlauben:</label></dt>
+                            <dt><label for="enable_guestbook_moderation">'.$g_l10n->get('GBO_PHR_GUESTBOOK_MODERATION').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_gbook_comments4all\" name=\"enable_gbook_comments4all\" ";
+                                <input type="checkbox" id="enable_guestbook_moderation" name="enable_guestbook_moderation" ';
+                                if(isset($form_values['enable_guestbook_moderation']) && $form_values['enable_guestbook_moderation'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_GUESTBOOK_MODERATION_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="enable_gbook_comments4all">'.$g_l10n->get('GBO_PHR_COMMENTS4ALL').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_gbook_comments4all" name="enable_gbook_comments4all" ';
                                 if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Einträge im Gästebuch kommentieren. Die Rechtevergabe
-                        für dieses Feature über die Rollenverwaltung wird dann ignoriert. (Standard: nein)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_COMMENTS4ALL_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_intial_comments_loading\">Kommentare direkt anzeigen:</label></dt>
+                            <dt><label for="enable_intial_comments_loading">'.$g_l10n->get('GBO_PHR_INITIAL_COMMENTS_LOADING').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_intial_comments_loading\" name=\"enable_intial_comments_loading\" ";
+                                <input type="checkbox" id="enable_intial_comments_loading" name="enable_intial_comments_loading" ';
                                 if(isset($form_values['enable_intial_comments_loading']) && $form_values['enable_intial_comments_loading'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und nicht ausgeblendet. (Standard: nein)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_INITIAL_COMMENTS_LOADING_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"flooding_protection_time\">Flooding Protection Intervall:</label></dt>
+                            <dt><label for="flooding_protection_time">'.$g_l10n->get('GBO_FLOODING_PROTECTION_INTERVALL').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\" /> Sekunden
+                                <input type="text" id="flooding_protection_time" name="flooding_protection_time" style="width: 50px;" 
+                                    maxlength="4" value="'. $form_values['flooding_protection_time']. '" /> '.$g_l10n->get('SYS_SECONDS').'
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft,
-                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben.
-                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander
-                        ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berprüfung
-                        nicht durchgeführt. (Standard: 60 Sekunden)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_FLOODING_PROTECTION_INTERVALL_DESC').'</li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/

@@ -112,5 +112,13 @@ class TableGuestbook extends TableAccess
         }
         parent::setValue($field_name, $field_value);
     } 
+    
+    // die Methode moderiert den Gaestebucheintrag 
+    function moderate()
+    {
+        //Eintrag freischalten...
+        $this->setValue('gbo_locked', '0');
+        $this->save();
+    }  
 }
 ?>

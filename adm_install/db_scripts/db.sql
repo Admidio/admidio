@@ -304,6 +304,7 @@ create table %PREFIX%_guestbook
    gbo_email                      varchar(50),
    gbo_homepage                   varchar(50),
    gbo_ip_address                 varchar(15)                    not null,
+   gbo_locked                     tinyint (1) unsigned           not null default 0
    gbo_usr_id_create              int(11) unsigned,
    gbo_timestamp_create           datetime                       not null,
    gbo_usr_id_change              int(11) unsigned,
