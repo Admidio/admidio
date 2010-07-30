@@ -2,7 +2,7 @@
 /******************************************************************************
  * Downloads auflisten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,14 +48,21 @@ unset($_SESSION['download_request']);
 
 //Informationen zum aktuellen Ordner aus der DB holen
 $currentFolder = new TableFolder($g_db);
-$currentFolder->getFolderForDownload($folderId);
+$returnValue   = $currentFolder->getFolderForDownload($folderId);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-if (!$currentFolder->getValue('fol_id'))
+if ($returnValue < 0)
 {
-    //Datensatz konnte nicht in DB gefunden werden
-    //oder Benutzer darf nicht zugreifen
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	if($returnValue == -2)
+	{
+		//oder Benutzer darf nicht zugreifen
+		$g_message->show($g_l10n->get('DOW_PHR_FOLDER_NO_RIGHTS'));
+	}
+	else
+	{
+		//Datensatz konnte nicht in DB gefunden werden
+		$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	}
 }
 
 $folderId = $currentFolder->getValue('fol_id');
@@ -69,7 +76,7 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Downloadbereich';
+$g_layout['title']  = $g_l10n->get('DOW_DOWNLOADS');
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
@@ -77,7 +84,7 @@ $g_layout['header'] = '
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">Downloadbereich</h1>';
+echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
 echo $navigationBar;
 
@@ -90,22 +97,22 @@ if ($g_current_user->editDownloadRight())
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$folderId.'"><img
-                src="'. THEME_PATH. '/icons/folder_create.png" alt="Ordner erstellen" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$folderId.'">Ordner anlegen</a>
+                src="'. THEME_PATH. '/icons/folder_create.png" alt="'.$g_l10n->get('DOW_CREATE_FOLDER').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$folderId.'">'.$g_l10n->get('DOW_CREATE_FOLDER').'</a>
             </span>
         </li>
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$folderId.'"><img
-                src="'. THEME_PATH. '/icons/page_white_upload.png" alt="Hochladen" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$folderId.'">Datei hochladen</a>
+                src="'. THEME_PATH. '/icons/page_white_upload.png" alt="'.$g_l10n->get('DOW_UPLOAD_FILE').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$folderId.'">'.$g_l10n->get('DOW_UPLOAD_FILE').'</a>
             </span>
         </li>
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$folderId.'"><img
-                src="'. THEME_PATH. '/icons/options.png" alt="Ordnerberechtigung setzen" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$folderId.'">Berechtigungen setzen</a>
+                src="'. THEME_PATH. '/icons/options.png" alt="'.$g_l10n->get('DOW_SET_PERMISSIONS').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$folderId.'">'.$g_l10n->get('DOW_SET_PERMISSIONS').'</a>
             </span>
         </li>
     </ul>';
@@ -326,19 +333,9 @@ if ($g_current_user->editDownloadRight())
                     </td>
                 </tr>';
             }
-
-
         }
-
-
-
-
-
-        echo '
-        </table>';
-
+        echo '</table>';
     }
-
 }
 
 require(THEME_SERVER_PATH. '/overall_footer.php');

@@ -59,6 +59,7 @@
     <text id="DAT_VISIBLE_TO" development="new" translation="todo">Sichtbar für</text>
 
     <!-- Phrases only in Downloadsmodule -->
+	<text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
     <text id="DOW_PHR_ADDITIONAL_FILES" development="new" translation="todo">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</text>
     <text id="DOW_PHR_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
@@ -74,11 +75,15 @@
     <text id="DOW_PHR_FOLDER_CREATED" development="new" translation="todo">Der Ordner %VAR1% wurde angelegt.</text>
     <text id="DOW_PHR_FOLDER_EXISTS" development="new" translation="todo">Der Ordner %VAR1% existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
     <text id="DOW_PHR_FOLDER_NAME_INVALID" development="new" translation="todo">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
+    <text id="DOW_PHR_FOLDER_NO_RIGHTS" development="new" translation="todo">Du besitzt keine Rechte den gewählten Downloadordner zu sehen.</text>
     <text id="DOW_PHR_FOLDER_NOT_EXISTS" development="new" translation="todo">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</text>
     <text id="DOW_PHR_FOLDER_RENAME" development="new" translation="todo">Der Ordner %VAR1% wurde umbenannt.</text>
     <text id="DOW_PHR_FOLDER_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
     <text id="DOW_PHR_PUBLIC_DOWNLOAD_FLAG" development="new" translation="todo">Wenn diese Option aktiviert ist, können nur eingeloggte Besucher, die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.</text>
     <text id="DOW_PHR_UPLOAD_POST_EMPTY" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1% B. überschritten!</text>
+	<text id="DOW_SET_PERMISSIONS" development="new" translation="todo">Berechtigungen setzen</text>
+	<text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
+
 
     <!-- Phrases only in Ecardsmodule -->
     <text id="ECA_A_ECARD_FROM" development="new" translation="todo">Eine Grußkarte von</text>
