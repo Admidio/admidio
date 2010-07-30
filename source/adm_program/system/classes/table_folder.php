@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_folders
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,9 +56,12 @@ class TableFolder extends TableAccess
 
 
     // Folder mit der uebergebenen ID aus der Datenbank fuer das Downloadmodul auslesen
+	// Rueckgabe: -2 = keine Rechte; -1 = Ordner existiert nicht; 1 = alles OK
     public function getFolderForDownload($folder_id)
     {
         global $g_current_organization, $g_current_user, $g_valid_login;
+		
+		$returnValue = -1;
 
         if ($folder_id > 0) 
         {
@@ -85,11 +88,13 @@ class TableFolder extends TableAccess
             if (!$g_current_user->editDownloadRight() && $this->getValue('fol_locked'))
             {
                 $this->clear();
+				$returnValue = -2;
             }
             else if (!$g_valid_login && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
+				$returnValue = -2;
             }
             else if (!$g_current_user->editDownloadRight() && !$this->getValue('fol_public'))
             {
@@ -110,10 +115,17 @@ class TableFolder extends TableAccess
                 if ($row_count == 0)
                 {
                     $this->clear();
+					$returnValue = -2;
                 }
 
+				$returnValue = 1;
             }
+			else
+			{
+				$returnValue = 1;
+			}
         }
+		return $returnValue;
     }
 
 
