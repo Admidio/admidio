@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neuen Ordner Anlegen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,9 +13,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_folder.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_folder.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -75,7 +75,7 @@ $parentFolderName = $folder->getValue('fol_name');
 
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Ordner anlegen';
+$g_layout['title']  = $g_l10n->get('DOW_CREATE_FOLDER');
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -94,15 +94,13 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt>
-                        Diesen Ordner im Ordner <b>'.$parentFolderName.'</b> anlegen.
-                    </dt>
+                    <dt>'.$g_l10n->get('DOW_PHR_CREATE_FOLDER', $parentFolderName).'</dt>
                     <dd>&nbsp;</dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="new_folder">Name:</label></dt>
+                    <dt><label for="new_folder">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd>
                         <input type="text" id="new_folder" name="new_folder" value="'.$form_values['new_folder'].'" style="width: 350px;" maxlength="255" tabindex="1" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -111,7 +109,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="new_description">Beschreibung:</label></dt>
+                    <dt><label for="new_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
                         <textarea id="new_description" name="new_description" style="width: 350px;" rows="4" cols="40" tabindex="2" >'.$form_values['new_description'].'</textarea>
                     </dd>
@@ -123,8 +121,8 @@ echo '
 
         <div class="formSubmit">
             <button id="btnCreate" type="submit">
-            <img src="'. THEME_PATH. '/icons/folder_create.png" alt="Ordner anlegen" />
-            &nbsp;Ordner anlegen</button>
+            <img src="'. THEME_PATH. '/icons/folder_create.png" alt="'.$g_l10n->get('DOW_CREATE_FOLDER').'" />
+            &nbsp;'.$g_l10n->get('DOW_CREATE_FOLDER').'</button>
         </div>
     </div>
 </div>

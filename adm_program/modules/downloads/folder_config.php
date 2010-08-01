@@ -2,7 +2,7 @@
 /******************************************************************************
  * Ordnerberechtigungen konfigurieren
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,9 +13,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_folder.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_folder.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -73,35 +73,34 @@ if ($folder->getValue('fol_fol_id_parent')) {
 
 }
 
-if ($parentRoleSet == null) {
-        //wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
-        //alle aus der DB aus lesen
-        $sql_roles = 'SELECT *
-                         FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                        WHERE rol_valid = 1
-                          AND rol_system = 0
-                          AND rol_cat_id = cat_id
-                          AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                        ORDER BY rol_name';
-        $result_roles = $g_db->query($sql_roles);
+if ($parentRoleSet == null) 
+{
+	//wenn der uebergeordnete Ordner keine Rollen gesetzt hat sind alle erlaubt
+	//alle aus der DB aus lesen
+	$sql_roles = 'SELECT *
+					 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+					WHERE rol_valid = 1
+					  AND rol_system = 0
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+					ORDER BY rol_name';
+	$result_roles = $g_db->query($sql_roles);
 
-        while($row_roles = $g_db->fetch_object($result_roles))
-        {
-            //Jede Rolle wird nun dem Array hinzugefuegt
-            $parentRoleSet[] = array(
-                                'rol_id'        => $row_roles->rol_id,
-                                'rol_name'      => $row_roles->rol_name);
-
-        }
-
-    }
+	while($row_roles = $g_db->fetch_object($result_roles))
+	{
+		//Jede Rolle wird nun dem Array hinzugefuegt
+		$parentRoleSet[] = array(
+							'rol_id'        => $row_roles->rol_id,
+							'rol_name'      => $row_roles->rol_name);
+	}
+}
 
 
 //aktuelles Rollenset des Ordners holen
 $roleSet = $folder->getRoleArrayOfFolder();
 
 // Html-Kopf ausgeben
-$g_layout['title'] = 'Ordnerberechtigungen setzen';
+$g_layout['title'] = $g_l10n->get('DOW_SET_FOLER_PERMISSIONS');
 
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -158,7 +157,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$folder_id.'">
 <div class="formLayout" id="edit_download_folder_form" >
-    <div class="formHead">Ordnerberechtigungen setzen</div>
+    <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">'.
         $navigationBar.'
         <div class="groupBox">
@@ -176,8 +175,8 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
                             echo ' value="0" onclick="toggleElement(\'rolesBox\');" />
-                            <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="Der Ordner ist &ouml;ffentlich." /></label>&nbsp;
-                            <label for="fol_public">Öffentlicher Zugriff ist nicht erlaubt.</label>
+                            <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('DOW_PHR_NO_PUBLIC_ACCESS').'" /></label>&nbsp;
+                            <label for="fol_public">'.$g_l10n->get('DOW_PHR_NO_PUBLIC_ACCESS').'</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_PUBLIC_DOWNLOAD_FLAG\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';

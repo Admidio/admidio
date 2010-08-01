@@ -23,7 +23,7 @@ echo'
 	<error_http>'.$g_l10n->get('FUP_HTTP_ERROR').'</error_http>
 		
 	<!-- warnings -->					
-	<warning>'.$g_l10n->get('FUP_WARNING').'</warning>
+	<warning>'.$g_l10n->get('SYS_WARNING').'</warning>
 	<warning_tooManyFiles>'.$g_l10n->get('FUP_PHR_TO_MANY_FILES').'</warning_tooManyFiles>
 	<warning_filesize>'.$g_l10n->get('FUP_PHR_FILEZIZE').'</warning_filesize>
 		
@@ -32,9 +32,9 @@ echo'
 	<progressTotal>'.$g_l10n->get('FUP_PHR_TOTAL_PROGRESS').'</progressTotal>
 	
 	<!-- headlines of the grid -->
-	<file>'.$g_l10n->get('FUP_FILE').'</file>
+	<file>'.$g_l10n->get('SYS_FILE').'</file>
 	<type>'.$g_l10n->get('FUP_TYPE').'</type>
-	<size>'.$g_l10n->get('FUP_SIZE').'</size>
+	<size>'.$g_l10n->get('SYS_SIZE').'</size>
 	<status>'.$g_l10n->get('FUP_STATUS').'</status>
 	
 	<!-- buttons -->
