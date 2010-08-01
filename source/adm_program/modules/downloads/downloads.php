@@ -123,15 +123,15 @@ echo '
 <table class="tableList" cellspacing="0">
     <tr>
         <th style="width: 25px;"><img class="iconInformation"
-            src="'. THEME_PATH. '/icons/download.png" alt="Ordner / Dateityp" title="Ordner / Dateityp" />
+            src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('SYS_FOLDER').' / '.$g_l10n->get('DOW_FILE_TYPE').'" title="'.$g_l10n->get('SYS_FOLDER').' / '.$g_l10n->get('DOW_FILE_TYPE').'" />
         </th>
-        <th>Name</th>
-        <th>Änderungsdatum</th>
-        <th>Größe</th>
-        <th>Counter</th>';
+        <th>'.$g_l10n->get('SYS_NAME').'</th>
+        <th>'.$g_l10n->get('SYS_DATE_MODIFIED').'</th>
+        <th>'.$g_l10n->get('SYS_SIZE').'</th>
+        <th>'.$g_l10n->get('DOW_COUNTER').'</th>';
         if ($g_current_user->editDownloadRight())
         {
-           echo '<th style="text-align: center;">Editieren</th>';
+           echo '<th style="text-align: center;">'.$g_l10n->get('SYS_FEATURES').'</th>';
         }
     echo '</tr>';
 
@@ -149,7 +149,7 @@ if (count($folderContent) == 0)
     }
 
     echo'<tr>
-       <td colspan="'.$colspan.'">Dieser Ordner ist leer</td>
+       <td colspan="'.$colspan.'">'.$g_l10n->get('DOW_PHR_FOLDER_NO_FILES').'</td>
     </tr>';
 }
 else
@@ -165,12 +165,12 @@ else
             <tr class="tableMouseOver" id="row_folder_'.$nextFolder['fol_id'].'">
                 <td>
                       <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
-                    <img src="'. THEME_PATH. '/icons/download.png" alt="Ordner" title="Ordner" /></a>
+                    <img src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('SYS_FOLDER').'" title="'.$g_l10n->get('SYS_FOLDER').'" /></a>
                 </td>
                 <td><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">'. $nextFolder['fol_name']. '</a>';
                 if($nextFolder['fol_description']!="")
                 {
-                    echo '<span class="iconLink" ><a class="textTooltip" title="'.$nextFolder['fol_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="Ordner"/></a></span>';
+                    echo '<span class="iconLink" ><a class="textTooltip" title="'.$nextFolder['fol_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$g_l10n->get('SYS_FOLDER').'"/></a></span>';
                 }
                 echo'</td>
                 <td>&nbsp;</td>
@@ -223,12 +223,12 @@ else
             <tr class="tableMouseOver" id="row_file_'.$nextFile['fil_id'].'">
                 <td>
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
-                    <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="Datei" title="Datei" /></a>
+                    <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$g_l10n->get('SYS_FILE').'" title="'.$g_l10n->get('SYS_FILE').'" /></a>
                 </td>
                 <td><a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>';
                 if($nextFile['fil_description']!="")
                 {
-                    echo '<span class="iconLink" ><a class="textTooltip" title="'.$nextFile['fil_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="Ordner"/></a></span>';
+                    echo '<span class="iconLink" ><a class="textTooltip" title="'.$nextFile['fil_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$g_l10n->get('SYS_FILE').'"/></a></span>';
                 }
                 echo'</td>
                 <td>'. $timestamp->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
@@ -271,7 +271,7 @@ if ($g_current_user->editDownloadRight())
 
         echo '
         <h3>
-            Nicht verwaltete Dateien
+            '.$g_l10n->get('DOW_UNMANAGED_FILES').'
 			<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_ADDITIONAL_FILES&amp;inline=true"><img 
                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_ADDITIONAL_FILES\',this)" onmouseout="ajax_hideTooltip()"
                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>            
@@ -280,10 +280,10 @@ if ($g_current_user->editDownloadRight())
         <table class="tableList" cellspacing="0">
             <tr>
                 <th style="width: 25px;"><img class="iconInformation"
-                    src="'. THEME_PATH. '/icons/download.png" alt="Ordner / Dateityp" title="Ordner / Dateityp" />
+                    src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('SYS_FOLDER').' / '.$g_l10n->get('DOW_FILE_TYPE').'" title="'.$g_l10n->get('SYS_FOLDER').' / '.$g_l10n->get('DOW_FILE_TYPE').'" />
                 </th>
-                <th>Name</th>
-                <th style="text-align: right;">Aktionen</th>
+                <th>'.$g_l10n->get('SYS_NAME').'</th>
+                <th style="text-align: right;">'.$g_l10n->get('SYS_FEATURES').'</th>
             </tr>';
 
 
@@ -295,11 +295,11 @@ if ($g_current_user->editDownloadRight())
 
                 echo '
                 <tr class="tableMouseOver">
-                    <td><img src="'. THEME_PATH. '/icons/download.png" alt="Ordner" title="Ordner" /></td>
+                    <td><img src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('SYS_FOLDER').'" title="'.$g_l10n->get('SYS_FOLDER').'" /></td>
                     <td>'. $nextFolder['fol_name']. '</td>
                     <td style="text-align: right;">
                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$folderId.'&amp;name='. urlencode($nextFolder['fol_name']). '">
-                        <img src="'. THEME_PATH. '/icons/database_in.png" alt="Zur Datenbank hinzufügen" title="Zur Datenbank hinzufügen" /></a>
+                        <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" title="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" /></a>
                     </td>
                 </tr>';
             }
@@ -325,11 +325,11 @@ if ($g_current_user->editDownloadRight())
 
                 echo '
                 <tr class="tableMouseOver">
-                    <td><img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="Datei" title="Datei" /></a></td>
+                    <td><img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$g_l10n->get('SYS_FILE').'" title="'.$g_l10n->get('SYS_FILE').'" /></a></td>
                     <td>'. $nextFile['fil_name']. '</td>
                     <td style="text-align: right;">
                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$folderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
-                        <img src="'. THEME_PATH. '/icons/database_in.png" alt="Zur Datenbank hinzufügen" title="Zur Datenbank hinzufügen" /></a>
+                        <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" title="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" /></a>
                     </td>
                 </tr>';
             }

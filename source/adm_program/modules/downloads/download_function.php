@@ -149,7 +149,7 @@ if ($req_mode == 1)
     {
         if($ret_code == -1)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Datei auswählen'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_CHOOSE_FILE')));
         }
         elseif($ret_code == -2)
         {
@@ -254,7 +254,7 @@ elseif ($req_mode == 3)
         {
             if ($ret_code == -1)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
+                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
             }
             elseif ($ret_code == -2)
             {
@@ -264,7 +264,7 @@ elseif ($req_mode == 3)
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
     }
 
     $newFolderDescription = $_POST['new_description'];
@@ -343,7 +343,7 @@ elseif ($req_mode == 4)
             {
                 if($ret_code == -1)
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Neuer Name'));
+                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
                 }
                 elseif($ret_code == -2)
                 {
@@ -360,7 +360,7 @@ elseif ($req_mode == 4)
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Neuer Name'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
         }
 
         $newDescription = $_POST['new_description'];
@@ -419,7 +419,7 @@ elseif ($req_mode == 4)
             {
                 if ($ret_code == -1)
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Neuer Name'));
+                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
                 }
                 elseif ($ret_code == -2)
                 {
@@ -429,7 +429,7 @@ elseif ($req_mode == 4)
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Neuer Name'));
+            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
         }
 
         $newDescription = $_POST['new_description'];
