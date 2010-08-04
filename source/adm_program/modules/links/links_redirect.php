@@ -2,7 +2,7 @@
 /******************************************************************************
  * Redirect für Links
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Matthias Roberg
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@
   *
  *****************************************************************************/
 
-require('../../system/common.php');
+require_once('../../system/common.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['weblinks_redirect_seconds'] == 0)
@@ -23,7 +23,7 @@ if ($g_preferences['weblinks_redirect_seconds'] == 0)
 elseif($g_preferences['enable_weblinks_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 }
 
 // Uebergabevariablen pruefen
@@ -44,7 +44,7 @@ if (array_key_exists('headline', $_GET))
 }
 else
 {
-    $_GET['headline'] = 'Weblinks';
+    $_GET['headline'] = $g_l10n->get('LNK_WEBLINKS');
 }
 
 // SQL-Statement zusammenbasteln
@@ -78,7 +78,7 @@ if ($url == '')
 	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-$g_layout['header'] = '<meta http-equiv="refresh" content="'. $g_preferences["weblinks_redirect_seconds"].'; url='.$url.'">';
+$g_layout['header'] = '<meta http-equiv="refresh" content="'. $g_preferences['weblinks_redirect_seconds'].'; url='.$url.'">';
 
 //Counter zählt die sekunden bis zur Weiterleitung runter
 $g_layout['header'] =$g_layout['header'].'<script type="text/javascript">
@@ -98,13 +98,13 @@ $g_layout['title'] = $_GET['headline'];
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">'. $_GET['headline']. '</h1>
+echo '<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 <div id="links_overview">
 	<div class="formLayout">
-			<div class="formHead">Redirect</div>
-			<div class="formBody" style="overflow: hidden;">Du verlässt jetzt das Webangebot von <i>'. $g_current_organization->getValue('org_longname'). '</i> und		
-			 wirst in <span id="counter">'.$g_preferences["weblinks_redirect_seconds"].'</span> Sekunden automatisch zu <b>'.$url_name.'</b> ('.$url.') weitergeleitet.<br><br>
-			 Sollte die automatische Weiterleitung nicht funktionieren, klicke bitte <a href="'.$url.'" target="_self">hier</a>!</div>
+			<div class="formHead">'.$g_l10n->get('LNK_REDIRECT').'</div>
+			<div class="formBody" style="overflow: hidden;">'.$g_l10n->get('LNK_PHR_REDIRECT', $g_current_organization->getValue('org_longname'), 
+                '<span id="counter">'.$g_preferences['weblinks_redirect_seconds'].'</span>', '<b>'.$url_name.'</b> ('.$url.')', 
+                '<a href="'.$url.'" target="_self">hier</a>').'</div>
 	</div>
 </div>';
 

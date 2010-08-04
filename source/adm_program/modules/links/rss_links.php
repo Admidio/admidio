@@ -2,7 +2,7 @@
 /******************************************************************************
  * RSS - Feed fuer Links
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -58,7 +58,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('LNK_LINKS'), 'Linksammlung von '. $g_current_organization->getValue('org_longname'));
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('LNK_LINKS'), $g_l10n->get('LNK_PHR_LINKS_FROM', $g_current_organization->getValue('org_longname')));
 $weblink = new TableWeblink($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen

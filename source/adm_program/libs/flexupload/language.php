@@ -15,31 +15,31 @@ echo'
 <?xml version="1.0" encoding="utf-8"?>
 <locale>
 	<!-- error messages -->
-	<error>'.$g_l10n->get('FUP_ERROR').'</error>
-	<io_error>'.$g_l10n->get('FUP_IO_ERROR').'</io_error>
-	<sec_error>'.$g_l10n->get('FUP_SECURITY_ERROR').'</sec_error>
-	<error_browse>'.$g_l10n->get('FUP_PHR_BROWSE_ERROR').'</error_browse>
-	<error_upload>'.$g_l10n->get('FUP_PHR_UPLOAD_ERROR').'</error_upload>
-	<error_http>'.$g_l10n->get('FUP_HTTP_ERROR').'</error_http>
+	<error>'.$g_l10n->get('SYS_ERROR').'</error>
+	<io_error>'.$g_l10n->get('SYS_IO_ERROR').'</io_error>
+	<sec_error>'.$g_l10n->get('SYS_SECURITY_ERROR').'</sec_error>
+	<error_browse>'.$g_l10n->get('SYS_PHR_BROWSE_ERROR').'</error_browse>
+	<error_upload>'.$g_l10n->get('SYS_PHR_UPLOAD_ERROR').'</error_upload>
+	<error_http>'.$g_l10n->get('SYS_HTTP_ERROR').'</error_http>
 		
 	<!-- warnings -->					
 	<warning>'.$g_l10n->get('SYS_WARNING').'</warning>
-	<warning_tooManyFiles>'.$g_l10n->get('FUP_PHR_TO_MANY_FILES').'</warning_tooManyFiles>
-	<warning_filesize>'.$g_l10n->get('FUP_PHR_FILEZIZE').'</warning_filesize>
+	<warning_tooManyFiles>'.$g_l10n->get('SYS_PHR_TO_MANY_FILES').'</warning_tooManyFiles>
+	<warning_filesize>'.$g_l10n->get('SYS_PHR_FILEZIZE').'</warning_filesize>
 		
 	<!-- labels of the progressbars -->
-	<progressFile>'.$g_l10n->get('FUP_PHR_FILE_PROGRESS').'</progressFile>
-	<progressTotal>'.$g_l10n->get('FUP_PHR_TOTAL_PROGRESS').'</progressTotal>
+	<progressFile>'.$g_l10n->get('SYS_PHR_FILE_PROGRESS').'</progressFile>
+	<progressTotal>'.$g_l10n->get('SYS_PHR_TOTAL_PROGRESS').'</progressTotal>
 	
 	<!-- headlines of the grid -->
 	<file>'.$g_l10n->get('SYS_FILE').'</file>
-	<type>'.$g_l10n->get('FUP_TYPE').'</type>
+	<type>'.$g_l10n->get('SYS_TYPE').'</type>
 	<size>'.$g_l10n->get('SYS_SIZE').'</size>
-	<status>'.$g_l10n->get('FUP_STATUS').'</status>
+	<status>'.$g_l10n->get('SYS_STATUS').'</status>
 	
 	<!-- buttons -->
-	<browse>'.$g_l10n->get('FUP_BROWSE').'</browse>
-	<remove>'.$g_l10n->get('FUP_REMOVE').'</remove>
-	<upload>'.$g_l10n->get('FUP_UPLOAD').'</upload>
-	<stop>'.$g_l10n->get('FUP_STOP').'</stop>
+	<browse>'.$g_l10n->get('SYS_BROWSE').'</browse>
+	<remove>'.$g_l10n->get('SYS_REMOVE').'</remove>
+	<upload>'.$g_l10n->get('SYS_UPLOAD').'</upload>
+	<stop>'.$g_l10n->get('SYS_STOP').'</stop>
 </locale>';

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Links
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,14 +14,12 @@
  *           2 - Link loeschen
  *           3 - Link editieren
  * url:      kann beim Loeschen mit uebergeben werden
- * headline: Ueberschrift, die ueber den Links steht
- *           (Default) Links
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_weblink.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_weblink.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_weblinks_module'] == 0)
@@ -49,22 +47,12 @@ else
     $_GET['lnk_id'] = 0;
 }
 
-
 if (array_key_exists('mode', $_GET))
 {
     if (is_numeric($_GET['mode']) == false)
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-}
-
-if (array_key_exists('headline', $_GET))
-{
-    $_GET['headline'] = strStripTags($_GET['headline']);
-}
-else
-{
-    $_GET['headline'] = 'Links';
 }
 
 // Linkobjekt anlegen
@@ -76,15 +64,15 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
 {
     if(strlen(strStripTags($_POST['lnk_name'])) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Linkname'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('LNK_LINK_NAME')));
     }
     if(strlen(strStripTags($_POST['lnk_url'])) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Linkadresse'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('LNK_LINK_ADDRESS')));
     }
     if(strlen($_POST['lnk_cat_id']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Kategorie'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
     }
    
     // POST Variablen in das Ankuendigungs-Objekt schreiben

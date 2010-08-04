@@ -587,10 +587,11 @@ class TableFolder extends TableAccess
         $this->db->query($sql_update);
     }
 
-    // Legt den Ordner im Dateisystem an
+    // Legt einen neuen Ordner im Dateisystem an
     public function createFolder($folderName)
     {
-        // nun den Ordner anlegen
+        $error = array('text' => '', 'path' => '');
+
         $this->folderPath->setFolder($this->getCompletePathOfFolder());
         $b_return = $this->folderPath->createFolder($folderName, true);
 
