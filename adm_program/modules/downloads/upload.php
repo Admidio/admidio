@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neue Datei hochladen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,9 +13,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_folder.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_folder.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -85,7 +85,7 @@ $parentFolderName = $folder->getValue('fol_name');
 
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Dateiupload';
+$g_layout['title']  = $g_l10n->get('DOW_UPLOAD_FILE');
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -99,18 +99,18 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <form action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$folder_id.'" method="post" enctype="multipart/form-data">
 <div class="formLayout" id="upload_download_form">
-    <div class="formHead">Datei hochladen</div>
+    <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt>Datei in den Ordner <b>'.$parentFolderName.'</b> hochladen</dt>
+                    <dt>'.$g_l10n->get('DOW_PHR_UPLOAD_FILE', $parentFolderName).'</dt>
                     <dd>&nbsp;</dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="userfile">Datei ausw&auml;hlen:</label></dt>
+                    <dt><label for="userfile">'.$g_l10n->get('DOW_CHOOSE_FILE').':</label></dt>
                     <dd>
                         <input type="hidden" name="MAX_FILE_SIZE" value="'.($g_preferences['max_file_upload_size'] * 1024).'" />
                         <input type="file" id="userfile" name="userfile" tabindex="1" size="30" style="width: 350px;" />
@@ -120,10 +120,10 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="new_name">Neuer Dateiname:</label></dt>
+                    <dt><label for="new_name">'.$g_l10n->get('DOW_NEW_FILE_NAME').':</label></dt>
                     <dd>
                         <input type="text" id="new_name" name="new_name" tabindex="2" value="'.$form_values['new_name'].'" style="width: 250px;" maxlength="255" />
-                        &nbsp;(optional)
+                        &nbsp;('.$g_l10n->get('SYS_OPTIONAL').')
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NAME_RULES&amp;inline=true"><img 
 			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
 			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -132,7 +132,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="new_description">Beschreibung:</label></dt>
+                    <dt><label for="new_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
                         <textarea id="new_description" name="new_description" style="width: 350px;" rows="4" cols="40" tabindex="3" >'.$form_values['new_description'].'</textarea>
                     </dd>
@@ -144,8 +144,8 @@ echo '
 
         <div class="formSubmit">
             <button id="btnUpload" type="submit" tabindex="4"><img 
-            src="'.THEME_PATH.'/icons/page_white_upload.png" alt="Hochladen" />
-            &nbsp;Hochladen</button>
+            src="'.THEME_PATH.'/icons/page_white_upload.png" alt="'.$g_l10n->get('SYS_UPLOAD').'" />
+            &nbsp;'.$g_l10n->get('SYS_UPLOAD').'</button>
         </div>
     </div>
 </div>

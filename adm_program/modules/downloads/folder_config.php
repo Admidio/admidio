@@ -200,15 +200,10 @@ echo '
                 echo ' style="display: none;" ';
             }
             echo '>
-            <div class="groupBoxHeadline">Rollenzugriffsberechtigungen</div>
-            <div class="groupBoxBody" >
-                <p>Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben dürfen.
-                   Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene
-                   Berechtigungen in Unterordnern werden überschrieben. Es stehen nur Rollen
-                   zur Verfügung die auf den übergeordneten Ordner Zugriff haben.</p>
-
+            <div class="groupBoxHeadline">'.$g_l10n->get('DOW_ROLE_ACCESS_PERMISSIONS').'</div>
+            <div class="groupBoxBody" ><p>'.$g_l10n->get('DOW_PHR_ROLE_ACCESS_PERMISSIONS').'</p>
                 <div style="text-align: left; float: left;">
-                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="Kein Zugriff" title="Kein Zugriff" />Kein Zugriff</div>
+                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('DOW_NO_ACCESS').'" title="'.$g_l10n->get('DOW_NO_ACCESS').'" />'.$g_l10n->get('DOW_NO_ACCESS').'</div>
                     <div>
                         <select id="DeniedRoles" size="8" style="width: 200px;">';
                         for($i=0; $i < count($parentRoleSet); $i++) 
@@ -229,16 +224,16 @@ echo '
                     <ul>
                         <li>
                             <a class="iconLink" href="javascript:hinzufuegen()"><img 
-                                src="'. THEME_PATH. '/icons/forward.png" alt="Rolle hinzufügen" title="Rolle hinzufügen" /></a>
+                                src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_ADD_ROLE').'" title="'.$g_l10n->get('SYS_ADD_ROLE').'" /></a>
                         </li>
                         <li>
                             <a class="iconLink" href="javascript:entfernen()"><img
-                                src="'. THEME_PATH. '/icons/back.png" alt="Rolle entfernen" title="Rolle entfernen" /></a>
+                                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_REMOVE_ROLE').'" title="'.$g_l10n->get('SYS_REMOVE_ROLE').'" /></a>
                         </li>
                     </ul>
                 </div>
                 <div>
-                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="Zugriff erlaubt" title="Zugriff erlaubt" />Zugriff erlaubt</div>
+                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DOW_ACCESS_ALLOWED').'" title="'.$g_l10n->get('DOW_ACCESS_ALLOWED').'" />'.$g_l10n->get('DOW_ACCESS_ALLOWED').'</div>
                     <div>
                         <select id="AllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">';
                         for($i=0; $i<count($roleSet); $i++) {

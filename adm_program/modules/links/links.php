@@ -2,7 +2,7 @@
 /******************************************************************************
  * Links auflisten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -67,7 +67,7 @@ if (array_key_exists('headline', $_GET))
 }
 else
 {
-    $_GET['headline'] = 'Weblinks';
+    $_GET['headline'] = $g_l10n->get('LNK_WEBLINKS');
 }
 
 // Navigation initialisieren - Modul faengt hier an.
@@ -84,14 +84,14 @@ $g_layout['header'] = '
 
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] = $g_layout['header']. '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Links"
+    $g_layout['header'] = $g_layout['header']. '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - '.$g_layout['title'].'"
         href="'. $g_root_path. '/adm_program/modules/links/rss_links.php" />';
 };
 
 require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">'. $_GET["headline"]. '</h1>
+echo '<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 <div id="links_overview">';
 
 // SQL-Statement zusammenbasteln
@@ -164,8 +164,8 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
             <li>
                 <span class="iconTextLink">
                     <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $_GET['headline']. '">
-                        <img src="'. THEME_PATH. '/icons/add.png" alt="Neu anlegen" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $_GET['headline']. '">Link anlegen</a>
+                        <img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('LNK_CREATE_LINK').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $_GET['headline']. '">'.$g_l10n->get('LNK_CREATE_LINK').'</a>
                 </span>
             </li>';
        //Kategorie pflegen
@@ -190,11 +190,11 @@ if ($g_db->num_rows($links_result) == 0)
     // Keine Links gefunden
     if ($_GET['id'] > 0)
     {
-        echo '<p>Der angeforderte Eintrag exisitiert nicht (mehr) in der Datenbank.</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>Es sind keine Einträge vorhanden.</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -237,14 +237,14 @@ else
             {
                 echo '
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                    alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
+                    alt="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
                 <a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
             }
             else
             {
                 echo '
                 <a class="iconLink" href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                    alt="Gehe zu '.$weblink->getValue('lnk_name').'" title="Gehe zu '.$weblink->getValue('lnk_name').'" /></a>
+                    alt="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
                 <a href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
 
             }
@@ -277,7 +277,7 @@ else
     // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
     if ($numLinks == 0)
     {
-        echo '<p>Es sind keine Einträge vorhanden.</p>';
+        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
     }
 
     echo '</div></div>';

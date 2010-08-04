@@ -24,8 +24,10 @@
     <text id="DAT_DATE" development="new" translation="todo">Termin</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
+    <text id="DAT_ENABLE_DOWNLOAD_MODULE" development="new" translation="todo">Downloadmodul aktivieren</text>
     <text id="DAT_EXPORT_ICAL" development="new" translation="todo">Exportieren (iCal)</text>
     <text id="DAT_MANAGE_CALENDARS" development="new" translation="todo">Kalender verwalten</text>
+    <text id="DAT_MAXIMUM_FILE_SIZE" development="new" translation="todo">Maximale Dateigröße</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
     <text id="DAT_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
@@ -33,9 +35,11 @@
     <text id="DAT_PHR_ATTEND_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% zugesagt.</text>
     <text id="DAT_PHR_CANCEL_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% wieder abgesagt.</text>
     <text id="DAT_PHR_EDIT_ROOMS" development="new" translation="todo">Hier können Räume angelegt und bearbeitet werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
+    <text id="DAT_PHR_ENABLE_DOWNLOAD_MODULE" development="new" translation="todo">Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)</text>
     <text id="DAT_PHR_LOCATION_LINK" development="new" translation="todo">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</text>
     <text id="DAT_PHR_LOGIN_POSSIBLE" development="new" translation="todo">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmer beenden möchte, so kann man die derzeitige Teilnehmerzahl als Teilnahmebegrenzung eintragen.</text>
     <text id="DAT_PHR_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
+    <text id="DAT_PHR_MAXIMUM_FILE_SIZE" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 4000KB)</text>
     <text id="DAT_PHR_PARTICIPATE_IN_DATE" development="new" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_PHR_REMOVE_APPLICATION" development="new" translation="todo">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</text>
     <text id="DAT_PHR_ROOM_OVERHANG" development="new" translation="todo">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzpätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</text>
@@ -59,13 +63,16 @@
     <text id="DAT_VISIBLE_TO" development="new" translation="todo">Sichtbar für</text>
 
     <!-- Phrases only in Downloadsmodule -->
+    <text id="DOW_ACCESS_ALLOWED" development="new" translation="todo">Zugriff erlaubt</text>
 	<text id="DOW_ADD_TO_DATABASE" development="new" translation="todo">Zur Datenbank hinzufügen</text>
 	<text id="DOW_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
 	<text id="DOW_COUNTER" development="new" translation="todo">Zähler</text>
 	<text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
 	<text id="DOW_FILE_TYPE" development="new" translation="todo">Dateityp</text>
+	<text id="DOW_NEW_FILE_NAME" development="new" translation="todo">Neuer Dateiname</text>
 	<text id="DOW_NEW_NAME" development="new" translation="todo">Neuer Name</text>
+    <text id="DOW_NO_ACCESS" development="new" translation="todo">Kein Zugriff</text>
     <text id="DOW_PHR_ADDITIONAL_FILES" development="new" translation="todo">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</text>
 	<text id="DOW_PHR_CREATE_FOLDER" development="new" translation="todo">Den neuen Ordner im Ordner %VAR1_BOLD% anlegen.</text>
     <text id="DOW_PHR_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
@@ -77,8 +84,8 @@
     <text id="DOW_PHR_FILE_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
     <text id="DOW_PHR_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% KB.</text>
     <text id="DOW_PHR_FILE_UPLOAD_ERROR" development="new" translation="todo">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
-    <text id="DOW_PHR_FILE_UPLOADED" development="new" translation="todo">Die Datei %VAR1% wurde hochgeladen</text>
-    <text id="DOW_PHR_FOLDER_CREATED" development="new" translation="todo">Der Ordner %VAR1% wurde angelegt.</text>
+    <text id="DOW_PHR_FILE_UPLOADED" development="new" translation="todo">Die Datei %VAR1_BOLD% wurde hochgeladen</text>
+    <text id="DOW_PHR_FOLDER_CREATED" development="new" translation="todo">Der Ordner %VAR1_BOLD% wurde angelegt.</text>
     <text id="DOW_PHR_FOLDER_EXISTS" development="new" translation="todo">Der Ordner %VAR1% existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
     <text id="DOW_PHR_FOLDER_NAME_INVALID" development="new" translation="todo">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
 	<text id="DOW_PHR_FOLDER_NO_FILES" development="new" translation="todo">Der Ordner enhält keine Dateien.</text>
@@ -88,11 +95,19 @@
     <text id="DOW_PHR_FOLDER_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
 	<text id="DOW_PHR_NO_PUBLIC_ACCESS" development="new" translation="todo">Öffentlicher Zugriff ist nicht erlaubt.</text>
     <text id="DOW_PHR_PUBLIC_DOWNLOAD_FLAG" development="new" translation="todo">Wenn diese Option aktiviert ist, können nur eingeloggte Besucher, die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.</text>
+    <text id="DOW_PHR_ROLE_ACCESS_PERMISSIONS" development="new" translation="todo">Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben dürfen. Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen nur Rollen zur Verfügung die auf den übergeordneten Ordner Zugriff haben.</text>
+    <text id="DOW_PHR_UPLOAD_FILE" development="new" translation="todo">Datei in den Ordner %VAR1_BOLD% hochladen</text>
     <text id="DOW_PHR_UPLOAD_POST_EMPTY" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene maximale Uploadgröße von %VAR1% B. überschritten!</text>
+    <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="todo">Rollenzugriffsberechtigungen</text>
 	<text id="DOW_SET_FOLER_PERMISSIONS" development="new" translation="todo">Ordnerberechtigungen setzen</text>
 	<text id="DOW_SET_PERMISSIONS" development="new" translation="todo">Berechtigungen setzen</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="todo">Nicht verwaltete Dateien</text>
 	<text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
+    <text id="DOW_EDIT_FILE" development="new" translation="todo">Datei bearbeiten</text>
+    <text id="DOW_EDIT_FOLDER" development="new" translation="todo">Ordner bearbeiten</text>
+    <text id="DOW_PREVIOUS_NAME" development="new" translation="todo">Bisheriger Name</text>
+    <text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
+    <text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
 
 
     <!-- Phrases only in Ecardsmodule -->
@@ -150,25 +165,6 @@
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="todo">Bild in voller Größe anzeigen</text>
     <text id="ECA_YOUR_MESSAGE" development="new" translation="todo">Deine Nachricht</text>
 
-    <!-- Phrases only for FLEX-Uploader -->
-    <!-- %0 etc are necessary placeholders filled by Flex-->
-    <text id="FUP_BROWSE" development="new" translation="todo">Durchsuchen</text>
-    <text id="FUP_ERROR" development="new" translation="todo">Fehler</text>
-    <text id="FUP_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
-    <text id="FUP_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
-    <text id="FUP_PHR_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
-    <text id="FUP_PHR_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
-    <text id="FUP_PHR_FILEZIZE" development="new" translation="todo">Datei ist zu groß.</text>
-    <text id="FUP_PHR_TO_MANY_FILES" development="new" translation="todo">Sie können maximal %0 Dateien hinzufügen.</text>
-    <text id="FUP_PHR_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
-    <text id="FUP_PHR_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
-    <text id="FUP_REMOVE" development="new" translation="todo">Entfernen</text>
-    <text id="FUP_SECURITY_ERROR" development="new" translation="todo">Sicherheits Fehler</text>
-    <text id="FUP_STATUS" development="new" translation="todo">Status</text>
-    <text id="FUP_STOP" development="new" translation="todo">Stop</text>
-    <text id="FUP_TYPE" development="new" translation="todo">Typ</text>
-    <text id="FUP_UPLOAD" development="new" translation="todo">Hochladen</text>
-    
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="todo">Zurück zum Gästebuch</text>
     <text id="GBO_COMMENT_BY" development="new" translation="todo">Kommentar von %VAR1%</text>
@@ -298,6 +294,19 @@
     <text id="INS_YAHOO_MESSENGER" development="new" translation="todo">Yahoo! Messenger</text>
 
     <!-- Phrases only in Linkmodule -->
+    <text id="LNK_CREATE_LINK" development="new" translation="todo">Link anlegen</text>
+    <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Anzeige Weiterleitung</text>
+    <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadresse</text>
+    <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
+    <text id="LNK_LINK_TARGET" development="new" translation="todo">Linkziel</text>
+    <text id="LNK_NEW_WINDOW" development="new" translation="todo">Neues Fenster</text>
+    <text id="LNK_PHR_DISPLAY_REDIRECT" development="new" translation="todo">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)</text>
+    <text id="LNK_PHR_GO_TO" development="new" translation="todo">Gehe zu %VAR1%</text>
+    <text id="LNK_PHR_LINK_TARGET" development="new" translation="todo">Hier wird angegeben, ob die ausgewählte Webseite im selben Browserfenster wie Admidio oder in einem neuen Browserfenster angezeigt werden soll.</text>
+    <text id="LNK_PHR_LINKS_FROM" development="new" translation="todo">Linksammlung von %VAR1%</text>
+    <text id="LNK_PHR_REDIRECT" development="new" translation="todo">Du verlässt jetzt das Webangebot von %VAR1_BOLD% und wirst in %VAR2% Sekunden automatisch zu %VAR3% weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte %VAR4%!</text>
+    <text id="LNK_REDIRECT" development="new" translation="todo">Weiterleitung</text>
+    <text id="LNK_SAME_WINDOW" development="new" translation="todo">Gleiches Fenster</text>
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
 
     <!-- Phrases only in Listsmodule -->
@@ -504,7 +513,6 @@
 
     <!-- Phrases only in Rolesmodule -->
     <text id="ROL_ACTIV_ROLES" development="new" translation="todo">Aktive Rollen</text>
-    <text id="ROL_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="ROL_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
     <text id="ROL_CONTRIBUTION" development="new" translation="todo">Beitrag</text>
     <text id="ROL_CONTRIBUTION_PERIOD" development="new" translation="todo">Beitragszeitraum</text>
@@ -520,7 +528,6 @@
     <text id="ROL_MAX_PARTICIPANTS" development="new" translation="todo">max. Teilnehmer</text>
     <text id="ROL_NOBODY" development="new" translation="todo">Niemand</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="todo">Nur Rollenmitglieder</text>
-    <text id="ROL_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
     <text id="ROL_PHR_ALL_GUESTS" development="new" translation="todo">Alle Besucher der Seite</text>
     <text id="ROL_PHR_ALL_MEMBERS" development="new" translation="todo">Alle angemeldeten Benutzer</text>
     <text id="ROL_PHR_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
@@ -592,6 +599,7 @@
     <text id="SYS_ADD_EMAIL" development="new" translation="todo">E-Mail-Adresse einfügen</text>
     <text id="SYS_ADD_IMAGE" development="new" translation="todo">Bild einfügen</text>
     <text id="SYS_ADD_LINK" development="new" translation="todo">Link einfügen</text>
+    <text id="SYS_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="todo">Administration</text>
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
@@ -599,6 +607,7 @@
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
     <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
+    <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
     <text id="SYS_CAPTCHA_CODE" development="new" translation="todo">Bestätigungscode</text>
     <text id="SYS_CATEGORY" development="new" translation="todo">Kategorie</text>
@@ -626,6 +635,7 @@
 	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
+    <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
     <text id="SYS_FEATURES" development="new" translation="todo">Funktionen</text>
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
@@ -642,10 +652,12 @@
     <text id="SYS_HELP" development="new" translation="todo">Hilfe</text>
     <text id="SYS_HIDE" development="new" translation="todo">Ausblenden</text>
     <text id="SYS_HOMEPAGE" development="new" translation="todo">Startseite</text>
+    <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
     <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad erhöhen</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
+    <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
@@ -759,12 +771,14 @@
     <text id="SYS_REGISTRATION" development="new" translation="todo">Registrierung</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
+    <text id="SYS_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
 	<text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
 	<text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROOM" development="new" translation="todo">Raum</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
     <text id="SYS_SECONDS" development="new" translation="todo">Sekunden</text>
+    <text id="SYS_SECURITY_ERROR" development="new" translation="todo">Sicherheits Fehler</text>
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
     <text id="SYS_SEND_EMAIL_TO" development="new" translation="todo">Sende eine E-Mail an %VAR1%</text>
 	<text id="SYS_SEARCH" development="new" translation="todo">Suchen</text>
@@ -784,6 +798,8 @@
 	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">starte slideshow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">stoppe slideshow</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
+    <text id="SYS_STATUS" development="new" translation="todo">Status</text>
+    <text id="SYS_STOP" development="new" translation="todo">Stop</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TIME" development="new" translation="todo">Uhrzeit</text>
@@ -791,6 +807,7 @@
     <text id="SYS_TIME_TO" development="new" translation="todo">Uhrzeit bis</text>
     <text id="SYS_TITLE" development="new" translation="todo">Titel</text>
     <text id="SYS_TO" development="new" translation="todo" description="E-Mail">An</text>
+    <text id="SYS_TYPE" development="new" translation="todo">Typ</text>
     <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
     <text id="SYS_UNKNOWN" development="new" translation="todo">Unbekannt</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
@@ -798,11 +815,18 @@
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
 	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
+    <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_VISIBLE" development="new" translation="todo">Sichtbar</text>
     <text id="SYS_VISITORS" development="new" translation="todo">Besucher</text>
     <text id="SYS_WARNING" development="new" translation="todo">Warnung</text>
     <text id="SYS_WEBMASTER" development="new" translation="todo">Webmaster</text>
     <text id="SYS_WEBSITE" development="new" translation="todo">Webseite</text>
     <text id="SYS_YES" development="new" translation="todo">Ja</text>
+    <text id="SYS_PHR_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
+    <text id="SYS_PHR_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
+    <text id="SYS_PHR_FILEZIZE" development="new" translation="todo">Datei ist zu groß.</text>
+    <text id="SYS_PHR_TO_MANY_FILES" development="new" translation="todo">Sie können maximal %0 Dateien hinzufügen.</text>
+    <text id="SYS_PHR_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
+    <text id="SYS_PHR_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
 </version>
 </language>

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Organisationseinstellungen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -548,37 +548,31 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="enable_download_module">Downloadmodul aktivieren:</label></dt>
+                            <dt><label for="enable_download_module">'.$g_l10n->get('DAT_ENABLE_DOWNLOAD_MODULE').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_download_module" name="enable_download_module" ';
                                 if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_ENABLE_DOWNLOAD_MODULE').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"max_file_upload_size\">Maximale Dateigr&ouml;&szlig;e:</label></dt>
+                            <dt><label for="max_file_upload_size">'.$g_l10n->get('DAT_MAXIMUM_FILE_SIZE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" style=\"width: 50px;\"
-                                    maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\" /> KB
+                                <input type="text" id="max_file_upload_size" name="max_file_upload_size" style="width: 50px;"
+                                    maxlength="10" value="'. $form_values['max_file_upload_size']. '" /> KB
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Benutzer können nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 4000KB)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_MAXIMUM_FILE_SIZE').'</li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
 
         /**************************************************************************************/
@@ -1817,7 +1811,7 @@ echo '
                                     <option value="0" ';
                                     if($form_values['enable_weblinks_module'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
                                     echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
                                     <option value="1" ';
@@ -1849,43 +1843,36 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="weblinks_target">Link-Target:</label></dt>
+                            <dt><label for="weblinks_target">'.$g_l10n->get('LNK_LINK_TARGET').':</label></dt>
                             <dd>
                                 <select size="1" id="weblinks_target" name="weblinks_target">
                                     <option value="_self"';
                                     if($form_values['weblinks_target'] == "_self")
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Gleiches Fenster</option>
-                                    <option value=\"_blank\"";
-                                    if($form_values['weblinks_target'] == "_blank")
+                                    echo '>'.$g_l10n->get('LNK_SAME_WINDOW').'</option>
+                                    <option value="_blank"';
+                                    if($form_values['weblinks_target'] == '_blank')
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Neues Fenster</option>";
-                                echo "</select>
+                                    echo '>'.$g_l10n->get('LNK_NEW_WINDOW').'</option>
+                                </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Gibt an, ob die Links im gleichen oder in einem neuen Fenster geöffnet werden.
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('LNK_PHR_LINK_TARGET').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect:</label></dt>
-                            <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
+                            <dt><label for="weblinks_redirect_seconds">'.$g_l10n->get('LNK_DISPLAY_REDIRECT').':</label></dt>
+                            <dd><input type="text" id="weblinks_redirect_seconds" name="weblinks_redirect_seconds" style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_redirect_seconds']. '" /> Sekunden</dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem
-                        Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener
-                        Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne
-                        Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('LNK_PHR_DISPLAY_REDIRECT').'</li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
         /**************************************************************************************/
         //Systeminformationen

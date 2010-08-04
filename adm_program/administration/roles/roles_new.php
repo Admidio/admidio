@@ -778,11 +778,11 @@ echo '
                             <ul>
                                 <li>
                                     <a class="iconLink" href="javascript:hinzufuegen()"><img
-                                     src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('ROL_ADD_ROLE').'" title="'.$g_l10n->get('ROL_ADD_ROLE').'" /></a>
+                                     src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_ADD_ROLE').'" title="'.$g_l10n->get('SYS_ADD_ROLE').'" /></a>
                                 </li>
                                 <li>
                                     <a class="iconLink" href="javascript:entfernen()"><img 
-                                    src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('ROL_REMOVE_ROLE').'" title="'.$g_l10n->get('ROL_REMOVE_ROLE').'" /></a>
+                                    src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_REMOVE_ROLE').'" title="'.$g_l10n->get('SYS_REMOVE_ROLE').'" /></a>
                                 </li>
                             </ul>
                         </div>

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Umbenenn einer Datei oder eines Ordners im Downloadmodul
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,10 +15,10 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_file.php');
-require('../../system/classes/table_folder.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_file.php');
+require_once('../../system/classes/table_folder.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -134,11 +134,11 @@ else {
 // Html-Kopf ausgeben
 if($file_id > 0)
 {
-    $g_layout['title']  = 'Datei bearbeiten';
+    $g_layout['title']  = $g_l10n->get('DOW_EDIT_FILE');
 }
 else
 {
-    $g_layout['title']  = 'Ordner bearbeiten';
+    $g_layout['title']  = $g_l10n->get('DOW_EDIT_FOLDER');
 }
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -158,13 +158,13 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt>Bisheriger Name:</dt>
+                    <dt>'.$g_l10n->get('DOW_PREVIOUS_NAME').':</dt>
                     <dd>'.$originalName.'&nbsp;</dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="new_name">Neuer Name:</label></dt>
+                    <dt><label for="new_name">'.$g_l10n->get('DOW_NEW_NAME').':</label></dt>
                     <dd>
                         <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 350px;" maxlength="255" tabindex="1" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -176,7 +176,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="new_description">Beschreibung:</label></dt>
+                    <dt><label for="new_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
                         <textarea id="new_description" name="new_description" style="width: 350px;" rows="5" tabindex="2" >'. $form_values['new_description']. '</textarea>
                     </dd>

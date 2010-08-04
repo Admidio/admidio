@@ -2,7 +2,7 @@
 /******************************************************************************
  * Links anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -58,7 +58,7 @@ if (array_key_exists('headline', $_GET))
 }
 else
 {
-    $_GET['headline'] = 'Links';
+    $_GET['headline'] = $g_l10n->get('LNK_WEBLINKS');
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -83,11 +83,11 @@ if(isset($_SESSION['links_request']))
 // Html-Kopf ausgeben
 if($_GET['lnk_id'] > 0)
 {
-    $g_layout['title'] = $_GET['headline']. ' bearbeiten';
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $_GET['headline']);
 }
 else
 {
-    $g_layout['title'] = $_GET['headline']. ' anlegen';
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $_GET['headline']);
 }
 
 //Script für BBCode laden
@@ -125,7 +125,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="lnk_name">Linkname:</label></dt>
+                    <dt><label for="lnk_name">'.$g_l10n->get('LNK_LINK_NAME').':</label></dt>
                     <dd>
                         <input type="text" id="lnk_name" name="lnk_name" tabindex="1" style="width: 350px;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -134,7 +134,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="lnk_url">Linkadresse:</label></dt>
+                    <dt><label for="lnk_url">'.$g_l10n->get('LNK_LINK_ADDRESS').':</label></dt>
                     <dd>
                         <input type="text" id="lnk_url" name="lnk_url" tabindex="2" style="width: 350px;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -143,7 +143,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="lnk_cat_id">Kategorie:</label></dt>
+                    <dt><label for="lnk_cat_id">'.$g_l10n->get('SYS_CATEGORY').':</label></dt>
                     <dd>
                         <select id="lnk_cat_id" name="lnk_cat_id" size="1" tabindex="3">
                             <option value=" "';
@@ -181,7 +181,7 @@ echo '
          echo '
             <li>
                 <dl>
-                    <dt><label for="lnk_description">Text:</label>';
+                    <dt><label for="lnk_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label>';
                         if($g_preferences['enable_bbcode'] == 1)
                         {
                             printEmoticons();
