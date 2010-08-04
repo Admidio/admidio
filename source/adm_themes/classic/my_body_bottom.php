@@ -3,7 +3,7 @@
      einer Admidio-Modul-Seite erscheinen soll.
 -->
 
-<?
+<?php
 // Link zur Moduluebersicht
 if(strpos($_SERVER['REQUEST_URI'], 'index.php') === false)
 {
