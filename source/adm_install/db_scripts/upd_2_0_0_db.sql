@@ -77,6 +77,8 @@ ALTER TABLE %PREFIX%_links DROP FOREIGN KEY %PREFIX%_FK_LNK_USR;
 ALTER TABLE %PREFIX%_links ADD constraint %PREFIX%_FK_LNK_USR foreign key (lnk_usr_id)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
+-- Counter bei Links einfügen
+ALTER TABLE %PREFIX%_links ADD COLUMN `lnk_counter` INTEGER(11) UNSIGNED NULL AFTER `lnk_url`;
 
 -- Kategorie-Tabelle anpassen
 ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_org_id` `cat_org_id` tinyint(4);

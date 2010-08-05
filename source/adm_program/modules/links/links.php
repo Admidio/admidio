@@ -233,36 +233,27 @@ else
                 echo '<hr />';
             }
 
-            if($g_preferences['weblinks_redirect_seconds'] > 0)
-            {
-                echo '
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                    alt="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
-            }
-            else
-            {
-                echo '
-                <a class="iconLink" href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                    alt="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
-                <a href="'.$weblink->getValue('lnk_url').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
+		// Ausgabe des Links
+		echo '
+			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+				alt="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
+			<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>
+			<span class="smallFontSize">('.$g_l10n->get('LNK_COUNTER').': '.$weblink->getValue('lnk_counter').')</span>';
+		// aendern & loeschen duerfen nur User mit den gesetzten Rechten
+		if ($g_current_user->editWeblinksRight())
+		{
+			echo '
+			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $_GET['headline']. '"><img
+				src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
+			<a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$weblink->getValue('lnk_id').'\', \''.$weblink->getValue('lnk_id').'\',\''.$weblink->getValue('lnk_name').'\')">
+			   <img	src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
+		}
 
-            }
-            // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-            if ($g_current_user->editWeblinksRight())
-            {
-                echo '
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $_GET['headline']. '"><img
-                	src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
-                <a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$weblink->getValue('lnk_id').'\', \''.$weblink->getValue('lnk_id').'\',\''.$weblink->getValue('lnk_name').'\')">
-                   <img	src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
-            }
-
-            // Beschreibung ausgeben, falls vorhanden
-            if(strlen($weblink->getValue('lnk_description'))>0)
-            {
-                echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
-            }
+		// Beschreibung ausgeben, falls vorhanden
+		if(strlen($weblink->getValue('lnk_description'))>0)
+		{
+			echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
+		}
         echo '</div>';
 
         $j++;

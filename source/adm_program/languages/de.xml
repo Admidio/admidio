@@ -294,6 +294,7 @@
     <text id="INS_YAHOO_MESSENGER" development="new" translation="todo">Yahoo! Messenger</text>
 
     <!-- Phrases only in Linkmodule -->
+	<text id="LNK_COUNTER" development="new" translation="todo">Zähler</text>
     <text id="LNK_CREATE_LINK" development="new" translation="todo">Link anlegen</text>
     <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Anzeige Weiterleitung</text>
     <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadresse</text>
@@ -434,6 +435,20 @@
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
+	
+	
+	<!-- Phrases only in Updatecheck -->
+	<text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
+	<text id="UPD_BETA_VERSION" development="new" translation="todo">Aktuelle Beta Version</text>
+	<text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</text>
+	<text id="UPD_CURRENT_VERSION" development="new" translation="todo">Installierte Version</text>
+	<text id="UPD_NEW" development="new" translation="todo">Eine neue stabile Version ist verfügbar!</text>
+	<text id="UPD_NEW_BETA" development="new" translation="todo">Eine neue Beta Version ist verfügbar!</text>
+	<text id="UPD_NEW_BOTH" development="new" translation="todo">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</text>
+	<text id="UPD_NO_NEW" development="new" translation="todo">Du benutzt eine aktuelle %VAR1%Version von Admidio!</text>
+	<text id="UPD_STABLE_VERSION" development="new" translation="todo">Aktuelle stabile Version</text>
+	<text id="UPD_TITLE" development="new" translation="todo">Update Prüfung</text>
+	
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="todo">Album</text>

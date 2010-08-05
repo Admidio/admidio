@@ -45,6 +45,7 @@ create table %PREFIX%_links
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
+   lnk_counter                    int,
    lnk_usr_id                     int(11) unsigned,
    lnk_timestamp                  datetime                       not null,
    lnk_usr_id_change              int(11) unsigned,
