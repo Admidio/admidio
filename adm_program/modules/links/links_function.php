@@ -83,6 +83,12 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
             $link->setValue($key, $value);
         }
     }
+	
+	// Link-Counter auf 0 setzen
+	if ($_GET['mode'] == 1)
+	{
+		$link->setValue('lnk_counter', '0');
+	}
     
     // Daten in Datenbank schreiben
     $return_code = $link->save();

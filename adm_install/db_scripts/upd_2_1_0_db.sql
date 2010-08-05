@@ -178,3 +178,6 @@ alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_LST foreign key
 
 alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_USF foreign key (lsc_usf_id)
       references %PREFIX%_user_fields (usf_id) on delete restrict on update restrict;
+
+-- Counter bei Links einfügen
+ALTER TABLE %PREFIX%_links ADD COLUMN `lnk_counter` INTEGER(11) UNSIGNED NULL AFTER `lnk_url`;

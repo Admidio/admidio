@@ -70,6 +70,37 @@
     <text id="ECA_RECIPIENT_NAME" development="edited" translation="todo">Name of recepient</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="edited" translation="todo">Show full size picture</text>
     <text id="ECA_YOUR_MESSAGE" development="edited" translation="todo">Your message</text>
+	
+	<!-- Phrases only in Linkmodule -->
+	<text id="LNK_COUNTER" development="new" translation="todo">Hits</text>
+    <text id="LNK_CREATE_LINK" development="new" translation="todo">Create new link</text>
+    <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Show redirect</text>
+    <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadress</text>
+    <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
+    <text id="LNK_LINK_TARGET" development="new" translation="todo">Linktarget</text>
+    <text id="LNK_NEW_WINDOW" development="new" translation="todo">New window</text>
+    <text id="LNK_PHR_DISPLAY_REDIRECT" development="new" translation="todo">By using this setting option you can activate the automatically redirection. If you choose a weblink from the linkmodule a internal Admidio site is displayed with a statement of leaving the original website. After delay you will be redirected to the real link. By setting redirect to 0 the link will be displayed direct. (predefined: 10 seconds)</text>
+    <text id="LNK_PHR_GO_TO" development="new" translation="todo">Go to %VAR1%</text>
+    <text id="LNK_PHR_LINK_TARGET" development="new" translation="todo">You can choose if the selected website will be displayed in the same window like Admidio or in a new window.</text>
+    <text id="LNK_PHR_LINKS_FROM" development="new" translation="todo">Links of %VAR1%</text>
+    <text id="LNK_PHR_REDIRECT" development="new" translation="todo">You are leaving the website of %VAR1_BOLD% and will be redirected automatically to %VAR3% in %VAR2% seconds.\n\nIf the automatically redirection is not working please click %VAR4%!</text>
+    <text id="LNK_REDIRECT" development="new" translation="todo">Redirect</text>
+    <text id="LNK_SAME_WINDOW" development="new" translation="todo">Same window</text>
+    <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
+	
+	
+	<!-- Phrases only in Updatecheck -->
+	<text id="UPD_ADMIDIO" development="new" translation="todo">Go to Admidio updatesite</text>
+	<text id="UPD_BETA_VERSION" development="new" translation="todo">Current beta version</text>
+	<text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Connection to the Admidio updatesite could not established. Please check your internetconnection or try again later. You can also check the %VAR1% website manually for an update.</text>
+	<text id="UPD_CURRENT_VERSION" development="new" translation="todo">Installed version</text>
+	<text id="UPD_NEW" development="new" translation="todo">A new stable version is available!</text>
+	<text id="UPD_NEW_BETA" development="new" translation="todo">A new beta version is available!</text>
+	<text id="UPD_NEW_BOTH" development="new" translation="todo">A new stable version and a new beta version are available!</text>
+	<text id="UPD_NO_NEW" development="new" translation="todo">You are using a current %VAR1%version of Admidio!</text>
+	<text id="UPD_STABLE_VERSION" development="new" translation="todo">Current stable Admidio version</text>
+	<text id="UPD_TITLE" development="new" translation="todo">Update check</text>
+   
    
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="edited" translation="todo">Add another organization</text>

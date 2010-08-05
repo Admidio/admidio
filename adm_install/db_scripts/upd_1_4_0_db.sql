@@ -26,6 +26,7 @@ ALTER TABLE %PREFIX%_links ADD COLUMN `lnk_cat_id` INTEGER(11) UNSIGNED NOT NULL
 alter table %PREFIX%_links add index LNK_CAT_FK (lnk_cat_id);
 
 alter table %PREFIX%_links add index LNK_USR_CHANGE_FK (lnk_usr_id_change);
+ALTER TABLE %PREFIX%_links ADD COLUMN `lnk_counter` INTEGER(11) UNSIGNED NULL AFTER `lnk_url`;
 
 alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_ORG foreign key (cat_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;

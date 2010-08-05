@@ -248,4 +248,9 @@ while($row_orga = $g_db->fetch_array($result_orga))
 	}
 	$g_db->query($sql);
 }
+
+// Bei den Links den Counter auf 0 setzen
+$sql = "UPDATE ". TBL_LINKS. " SET lnk_counter = 0 WHERE lnk_id > 0";
+$g_db->query($sql);
+
 ?>
