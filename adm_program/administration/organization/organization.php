@@ -2,7 +2,7 @@
 /******************************************************************************
  * Organisationseinstellungen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2009 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -278,13 +278,6 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_TIME_FORMAT', '<a href="http://www.php.net/date">date()</a>').'</li>
                     <li>
                         <dl>
-                            <dt><label for="system_time">'.$g_l10n->get('ORG_CURRENCY').':</label></dt>
-                            <dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_CURRENCY').'</li>
-                    <li>
-                        <dl>
                             <dt><label for="homepage_logout">'.$g_l10n->get('SYS_HOMEPAGE').' ('.$g_l10n->get('SYS_VISITORS').'):</label></dt>
                             <dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
                         </dl>
@@ -386,7 +379,7 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="logout_minutes">'.$g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER').':</label></dt>
-                            <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> '.$g_l10n->get('SYS_MINUTES').'</dd>
+                            <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> Minuten</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_AUTOMATOC_LOGOUT_AFTER', $g_l10n->get('SYS_REMEMBER_ME')).'</li>
@@ -430,57 +423,68 @@ echo '
                                     <option value="0" ';
                                     if($form_values['registration_mode'] == 0)
                                     {
-                                        echo ' selected="selected" ';
+                                        echo " selected=\"selected\" ";
                                     }
-                                    echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
-                                    <option value="1" ';
+                                    echo ">Deaktiviert</option>
+                                    <option value=\"1\" ";
                                     if($form_values['registration_mode'] == 1)
                                     {
-                                        echo ' selected="selected" ';
+                                        echo " selected=\"selected\" ";
                                     }
-                                    echo '>'.$g_l10n->get('ORG_FAST_REGISTRATION').'</option>
-                                    <option value="2" ';
+                                    echo ">Schnelle Registrierung</option>
+                                    <option value=\"2\" ";
                                     if($form_values['registration_mode'] == 2)
                                     {
-                                        echo ' selected="selected" ';
+                                        echo " selected=\"selected\" ";
                                     }
-                                    echo '>'.$g_l10n->get('ORG_ADVANCED_REGISTRATION').'</option>
+                                    echo ">Erweiterte Registrierung</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_REGISTRATION_MODE').'</li>
+                    <li class=\"smallFontSize\">
+                        Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen
+                        Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten
+                        Registrierung stehen ihm alle Felder des Profils zur Verfügung.  (Standard: Schnelle Registrierung)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="enable_registration_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
+                            <dt><label for=\"enable_registration_captcha\">Captcha aktivieren:</label></dt>
                             <dd>
-                                <input type="checkbox" id="enable_registration_captcha" name="enable_registration_captcha" ';
+                                <input type=\"checkbox\" id=\"enable_registration_captcha\" name=\"enable_registration_captcha\" ";
                                 if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
                                 {
-                                    echo ' checked="checked" ';
+                                    echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_CAPTCHA_REGISTRATION').'</li>
+                    <li class=\"smallFontSize\">
+                        Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
+                        dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="enable_registration_admin_mail">'.$g_l10n->get('ORG_EMAIL_ALERTS').':</label></dt>
+                            <dt><label for=\"enable_registration_admin_mail\">E-Mail-Benachrichtigung:</label></dt>
                             <dd>
-                                <input type="checkbox" id="enable_registration_admin_mail" name="enable_registration_admin_mail" ';
+                                <input type=\"checkbox\" id=\"enable_registration_admin_mail\" name=\"enable_registration_admin_mail\" ";
                                 if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
                                 {
-                                    echo ' checked="checked" ';
+                                    echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_EMAIL_ALERTS', $g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS')).'</li>
+                    <li class=\"smallFontSize\">
+                        Mitglieder aller Rollen mit der Berechtigung <strong>".$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS')."</strong> erhalten eine E-Mail,
+                        sobald sich ein neuer User im System registriert hat. (Standard: ja)
+                    </li>
                 </ul>
             </div>
-        </div>';
+        </div>";
 
 
         /**************************************************************************************/
@@ -548,31 +552,37 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="enable_download_module">'.$g_l10n->get('DAT_ENABLE_DOWNLOAD_MODULE').':</label></dt>
+                            <dt><label for="enable_download_module">Downloadmodul aktivieren:</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_download_module" name="enable_download_module" ';
                                 if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
                                 {
-                                    echo ' checked="checked" ';
+                                    echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_ENABLE_DOWNLOAD_MODULE').'</li>
+                    <li class=\"smallFontSize\">
+                        Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
+                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="max_file_upload_size">'.$g_l10n->get('DAT_MAXIMUM_FILE_SIZE').':</label></dt>
+                            <dt><label for=\"max_file_upload_size\">Maximale Dateigr&ouml;&szlig;e:</label></dt>
                             <dd>
-                                <input type="text" id="max_file_upload_size" name="max_file_upload_size" style="width: 50px;"
-                                    maxlength="10" value="'. $form_values['max_file_upload_size']. '" /> KB
+                                <input type=\"text\" id=\"max_file_upload_size\" name=\"max_file_upload_size\" style=\"width: 50px;\"
+                                    maxlength=\"10\" value=\"". $form_values['max_file_upload_size']. "\" /> KB
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_MAXIMUM_FILE_SIZE').'</li>
+                    <li class=\"smallFontSize\">
+                        Benutzer können nur Dateien hochladen, bei denen die Dateigr&ouml;&szlig;e kleiner als der hier
+                        angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 4000KB)
+                    </li>
                 </ul>
             </div>
-        </div>';
+        </div>";
 
 
         /**************************************************************************************/
@@ -753,21 +763,21 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />&nbsp;
+                    <li class=\"smallFontSize\">
+                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
                         Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0)
                         eingebunden werden. (Standard: nein)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="forum_version">Genutztes Forum:</label></dt>
+                            <dt><label for=\"forum_version\">Genutztes Forum:</label></dt>
                             <dd>
-                                <select size="1" id="forum_version" name="forum_version">
-                                    <option value="phpBB2" ';
+                                <select size=\"1\" id=\"forum_version\" name=\"forum_version\">
+                                    <option value=\"phpBB2\" ";
                                     if($form_values['forum_version'] == "phpBB2")
                                     {
                                         echo " selected=\"selected\" ";
@@ -792,31 +802,31 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
+                    <li class=\"smallFontSize\">
                         Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)<br />
                         Deaktiviert: Forum wird in einem neuen Browserfenster angezeigt.
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="forum_width">Forum Breite:</label></dt>
+                            <dt><label for=\"forum_width\">Forum Breite:</label></dt>
                             <dd>
-                                <input type="text" id="forum_width" name="forum_width" maxlength="4" style="width: 50px;" value="'. $form_values['forum_width']. '" /> Pixel
+                                <input type=\"text\" id=\"forum_width\" name=\"forum_width\" maxlength=\"4\" style=\"width: 50px;\" value=\"". $form_values['forum_width']. "\" /> Pixel
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />&nbsp;
+                    <li class=\"smallFontSize\">
+                        <img class=\"iconHelpLink\" src=\"".THEME_PATH."/icons/warning.png\" alt=\"Warnhinweis\" title=\"Warnhinweis\" />&nbsp;
                         Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="forum_export_user">Admidiobenutzer exportieren:</label></dt>
+                            <dt><label for=\"forum_export_user\">Admidiobenutzer exportieren:</label></dt>
                             <dd>
-                                <input type="checkbox" id="forum_export_user" name="forum_export_user" ';
+                                <input type=\"checkbox\" id=\"forum_export_user\" name=\"forum_export_user\" ";
                                 if(isset($form_values['forum_export_user']) && $form_values['forum_export_user'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -937,73 +947,73 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="enable_guestbook_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
+                            <dt><label for="enable_guestbook_captcha">Captcha aktivieren:</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_guestbook_captcha" name="enable_guestbook_captcha" ';
                                 if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_CAPTCHA_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_guestbook_moderation">'.$g_l10n->get('GBO_PHR_GUESTBOOK_MODERATION').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_guestbook_moderation" name="enable_guestbook_moderation" ';
-                                if(isset($form_values['enable_guestbook_moderation']) && $form_values['enable_guestbook_moderation'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
+                    <li class=\"smallFontSize\">
+                        Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer
+                        Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
+                        Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_GUESTBOOK_MODERATION_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="enable_gbook_comments4all">'.$g_l10n->get('GBO_PHR_COMMENTS4ALL').':</label></dt>
+                            <dt><label for=\"enable_gbook_comments4all\">Anonyme Kommentare erlauben:</label></dt>
                             <dd>
-                                <input type="checkbox" id="enable_gbook_comments4all" name="enable_gbook_comments4all" ';
+                                <input type=\"checkbox\" id=\"enable_gbook_comments4all\" name=\"enable_gbook_comments4all\" ";
                                 if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
                                 {
-                                    echo ' checked="checked" ';
+                                    echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_COMMENTS4ALL_DESC').'</li>
+                    <li class=\"smallFontSize\">
+                        Nicht eingeloggte Benutzer k&ouml;nnen, nach Aktivierung dieser Option, Einträge im Gästebuch kommentieren. Die Rechtevergabe
+                        für dieses Feature über die Rollenverwaltung wird dann ignoriert. (Standard: nein)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="enable_intial_comments_loading">'.$g_l10n->get('GBO_PHR_INITIAL_COMMENTS_LOADING').':</label></dt>
+                            <dt><label for=\"enable_intial_comments_loading\">Kommentare direkt anzeigen:</label></dt>
                             <dd>
-                                <input type="checkbox" id="enable_intial_comments_loading" name="enable_intial_comments_loading" ';
+                                <input type=\"checkbox\" id=\"enable_intial_comments_loading\" name=\"enable_intial_comments_loading\" ";
                                 if(isset($form_values['enable_intial_comments_loading']) && $form_values['enable_intial_comments_loading'] == 1)
                                 {
-                                    echo ' checked="checked" ';
+                                    echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_INITIAL_COMMENTS_LOADING_DESC').'</li>
+                    <li class=\"smallFontSize\">
+                        Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und nicht ausgeblendet. (Standard: nein)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="flooding_protection_time">'.$g_l10n->get('GBO_FLOODING_PROTECTION_INTERVALL').':</label></dt>
+                            <dt><label for=\"flooding_protection_time\">Flooding Protection Intervall:</label></dt>
                             <dd>
-                                <input type="text" id="flooding_protection_time" name="flooding_protection_time" style="width: 50px;" 
-                                    maxlength="4" value="'. $form_values['flooding_protection_time']. '" /> '.$g_l10n->get('SYS_SECONDS').'
+                                <input type=\"text\" id=\"flooding_protection_time\" name=\"flooding_protection_time\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['flooding_protection_time']. "\" /> Sekunden
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_FLOODING_PROTECTION_INTERVALL_DESC').'</li>
+                    <li class=\"smallFontSize\">
+                        Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft,
+                        ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben.
+                        Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander
+                        ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese &Uuml;berprüfung
+                        nicht durchgeführt. (Standard: 60 Sekunden)
+                    </li>
                 </ul>
             </div>
-        </div>';
+        </div>";
 
 
         /**************************************************************************************/
@@ -1096,18 +1106,18 @@ echo '
                             <dt><label for=\"mail_bcc_count\">Anzahl der BCC Empfänger:</label>
                             </dt>
                             <dd>
-                                <input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. '" />
+                                <input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. "\" />
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
+                    <li class=\"smallFontSize\">
                         Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="enable_mail_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
+                            <dt><label for=\"enable_mail_captcha\">Captcha aktivieren:</label></dt>
                             <dd>
-                                <input type="checkbox" id="enable_mail_captcha" name="enable_mail_captcha" ';
+                                <input type=\"checkbox\" id=\"enable_mail_captcha\" name=\"enable_mail_captcha\" ";
                                 if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -1162,6 +1172,14 @@ echo '
                 '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('SYS_SYSTEM_MAILS').'</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
+				    <li>
+                        <dl>
+                            <dt><label for="mail_notification">
+							<a href="organization.php#email-notification"><img src="'. THEME_PATH. '/icons/edit.png" alt="Email-Benachrichtigung konfigurieren" /></a>
+							&nbsp;<a href="organization.php#email-notification">Email-Benachrichtigung konfigurieren</a></label></dt>
+							<dd><br /></dd>
+						</dl>
+					</li>
                     <li>
                         <dl>
                             <dt><label for="enable_system_mails">Systemmails aktivieren:</label></dt>
@@ -1245,6 +1263,25 @@ echo '
                     </li>
                     <li>
                         <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                    </li>
+					<a name="email-notification"> </a>
+					<li>
+                        <dl>
+                            <dt><label>Email-Benachrichtigung aktivieren:</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_email_notification" name="enable_email_notification" ';
+                                if(isset($form_values['enable_email_notification']) && $form_values['enable_email_notification'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li  class="smallFontSize">
+                        Hier kann die Email-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. 
+						Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per Email benachrichtigen zu lassen. Es werden dabei nur neue Datenbankeinträge 
+						berücksichtig. Die Benachrichtigungs-Email wird an die Systemmailadresse <i>'.$g_preferences['email_administrator'].'</i> versendet. (standard: nein)
                     </li>
                 </ul>
             </div>
@@ -1528,7 +1565,7 @@ echo '
                     <li class="smallFontSize">
                         In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in 
                         Kategorien zusammengefasst werden.<br />
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="Warnhinweis" title="Warnhinweis" />
                         Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.
                     </li>
                     <li>
@@ -1735,37 +1772,43 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="dates_show_map_link">'.$g_l10n->get('DAT_SHOW_MAP_LINK').':</label></dt>
+                            <dt><label for="dates_show_map_link">Kartenlink anzeigen:</label></dt>
                             <dd>
                                 <input type="checkbox" id="dates_show_map_link" name="dates_show_map_link" ';
                                 if(isset($form_values['dates_show_map_link']) && $form_values['dates_show_map_link'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1" />
+                                echo " value=\"1\" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_SHOW_MAP_LINK').'</li>
+                    <li class=\"smallFontSize\">
+                        Wird ein Treffpunkt angegeben, so wird versucht ein Link zu Google-Maps zu erstellen,
+                        welcher den Treffpunkt anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="dates_show_calendar_select">'.$g_l10n->get('DAT_SHOW_CALENDAR_SELECTION').':</label></dt>
+                            <dt><label for=\"dates_show_calendar_select\">Kalenderauswahlbox anzeigen:</label></dt>
                             <dd>
-                                <input type="checkbox" id="dates_show_calendar_select" name="dates_show_calendar_select" ';
+                                <input type=\"checkbox\" id=\"dates_show_calendar_select\" name=\"dates_show_calendar_select\" ";
                                 if($form_values['dates_show_calendar_select'] == 1)
                                 {
-                                    echo ' checked="checked" ';
+                                    echo " checked=\"checked\" ";
                                 }
-                                echo ' value="1"/>
+                                echo " value=\"1\"/>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_SHOW_CALENDAR_SELECTION').'</li>
+                    <li class=\"smallFontSize\">
+                        Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine
+                        schnelle Suche nach einem Termin zu ermöglichen. (Standard: ja)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="dates_show_rooms">'.$g_l10n->get('DAT_ROOM_SELECTABLE').':</label></dt>
+                            <dt><label for=\"dates_show_rooms\">Raum auswählbar:</label></dt>
                             <dd>
-                                <input type="checkbox" id="dates_show_rooms" name="dates_show_rooms" ';
+                                <input type=\"checkbox\" id=\"dates_show_rooms\" name=\"dates_show_rooms\" ";
                                 if($form_values['dates_show_rooms'] == 1)
                                 {
                                     echo ' checked="checked" ';
@@ -1774,20 +1817,27 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_ROOM_SELECTABLE').'</li>
+                    <li class="smallFontSize">
+                        Eine Auswahlbox für die verfügbaren Räume wird angezeigt, um dem Ersteller eines Termins die Auswahl 
+                        eines Raums zu ermöglichen. (Standard: nein)
+                    </li>
                     <li>
                         <dl>
-                            <dt><label>'.$g_l10n->get('DAT_EDIT_ROOMS').':</label></dt>
+                            <dt><label>Räume pflegen:</label></dt>
                             <dd>
                                 <div class="iconTextLink">
                                     <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
-                                    src="'. THEME_PATH. '/icons/home.png" alt="'.$g_l10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">'.$g_l10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>
+                                    src="'. THEME_PATH. '/icons/home.png" alt="Räume anlegen und bearbeiten" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">zur Raumpflege wechseln</a>
                                 </div>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_EDIT_ROOMS', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />').'</li>
+                    <li class="smallFontSize">
+                        Hier können Räume angelegt und bearbeitet werden.<br />
+                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="Warnhinweis" title="Warnhinweis" />
+                        Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.
+                    </li>
                 </ul>
             </div>
         </div>';
@@ -1811,7 +1861,7 @@ echo '
                                     <option value="0" ';
                                     if($form_values['enable_weblinks_module'] == 0)
                                     {
-                                        echo ' selected="selected" ';
+                                        echo " selected=\"selected\" ";
                                     }
                                     echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
                                     <option value="1" ';
@@ -1843,36 +1893,43 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="weblinks_target">'.$g_l10n->get('LNK_LINK_TARGET').':</label></dt>
+                            <dt><label for="weblinks_target">Link-Target:</label></dt>
                             <dd>
                                 <select size="1" id="weblinks_target" name="weblinks_target">
                                     <option value="_self"';
                                     if($form_values['weblinks_target'] == "_self")
                                     {
-                                        echo ' selected="selected" ';
+                                        echo " selected=\"selected\" ";
                                     }
-                                    echo '>'.$g_l10n->get('LNK_SAME_WINDOW').'</option>
-                                    <option value="_blank"';
-                                    if($form_values['weblinks_target'] == '_blank')
+                                    echo ">Gleiches Fenster</option>
+                                    <option value=\"_blank\"";
+                                    if($form_values['weblinks_target'] == "_blank")
                                     {
-                                        echo ' selected="selected" ';
+                                        echo " selected=\"selected\" ";
                                     }
-                                    echo '>'.$g_l10n->get('LNK_NEW_WINDOW').'</option>
-                                </select>
+                                    echo ">Neues Fenster</option>";
+                                echo "</select>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('LNK_PHR_LINK_TARGET').'</li>
+                    <li class=\"smallFontSize\">
+                        Gibt an, ob die Links im gleichen oder in einem neuen Fenster geöffnet werden.
+                    </li>
                     <li>
                         <dl>
-                            <dt><label for="weblinks_redirect_seconds">'.$g_l10n->get('LNK_DISPLAY_REDIRECT').':</label></dt>
-                            <dd><input type="text" id="weblinks_redirect_seconds" name="weblinks_redirect_seconds" style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_redirect_seconds']. '" /> Sekunden</dd>
+                            <dt><label for=\"weblinks_redirect_seconds\">Anzeige Redirect:</label></dt>
+                            <dd><input type=\"text\" id=\"weblinks_redirect_seconds\" name=\"weblinks_redirect_seconds\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['weblinks_redirect_seconds']. "\" /> Sekunden</dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('LNK_PHR_DISPLAY_REDIRECT').'</li>
+                    <li class=\"smallFontSize\">
+                        Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem
+                        Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener
+                        Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne
+                        Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)
+                    </li>
                 </ul>
             </div>
-        </div>';
+        </div>";
 
         /**************************************************************************************/
         //Systeminformationen

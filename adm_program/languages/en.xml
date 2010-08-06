@@ -2,8 +2,10 @@
 <language id="en">
 <version id="2.2.0">
 <!-- Phrases only in Announcementmodule -->
-    <text id="ANN_ANNOUNCEMENT" development="edited" translation="todo">Announcement</text>
-	<text id="ANN_ANNOUNCEMENTS" development="edited" translation="todo">Ankündigungen</text>
+	<text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Announcement</text>
+    <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Announcements</text>
+	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new announcement was created</text>
+	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new announcement was created at %VAR1%\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
 
     <!-- Phrases only in Datesmodule -->
     <text id="DAT_CALENDAR" development="edited" translation="todo">Calendar</text>

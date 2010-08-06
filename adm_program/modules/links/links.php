@@ -237,8 +237,7 @@ else
 		echo '
 			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
 				alt="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
-			<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>
-			<span class="smallFontSize">('.$g_l10n->get('LNK_COUNTER').': '.$weblink->getValue('lnk_counter').')</span>';
+			<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
 		// aendern & loeschen duerfen nur User mit den gesetzten Rechten
 		if ($g_current_user->editWeblinksRight())
 		{
@@ -255,6 +254,8 @@ else
 			echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
 		}
         echo '</div>';
+		
+		echo '<div class="smallFontSize" style="text-align: right">'.$g_l10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>';
 
         $j++;
         $i++;

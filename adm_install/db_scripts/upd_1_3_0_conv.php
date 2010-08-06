@@ -115,9 +115,4 @@ $sql = "ALTER TABLE ". TBL_ORGANIZATIONS. " DROP org_font";
 $result = mysql_query($sql, $connection);
 if(!$result) showError(mysql_error());
 
-// Bei den Links den Counter auf 0 setzen
-$sql = "UPDATE ". TBL_LINKS. " SET lnk_counter = 0 WHERE lnk_id > 0";
-$result = mysql_query($sql, $connection);
-if(!$result) showError(mysql_error());
-
 ?>

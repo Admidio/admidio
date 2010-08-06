@@ -27,7 +27,6 @@ $orga_preferences = array(
     'system_language'               => 'de',
     'system_date'                   => 'd.m.Y',
     'system_time'                   => 'H:i',
-    'system_currency'               => '€',
 
     // Registrierung
     'registration_mode'              => '1',
@@ -76,7 +75,6 @@ $orga_preferences = array(
     'flooding_protection_time'          => '60',
     'enable_gbook_comments4all'         => '0',
     'enable_intial_comments_loading'    => '0',
-    'enable_guestbook_moderation'       => '0',
 
     // Listen
     'lists_roles_per_page'   => '10',
@@ -93,6 +91,7 @@ $orga_preferences = array(
     // Systemmail
     'enable_system_mails'       => '1',
     'email_administrator'           => 'webmaster@'. $_SERVER['HTTP_HOST'],
+	'enable_email_notification'		=> '0',
 
     // Grußkartenmodul
     'enable_ecard_module'           => '1',
