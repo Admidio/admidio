@@ -95,13 +95,13 @@ if($_GET['uploadmethod'] == 1)
 	$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
 
 	// Html-Kopf ausgeben
-	$g_layout['title'] = 'Fotos hochladen';
+	$g_layout['title'] = $g_l10n->get('PHO_UPLOAD_PHOTOS');
 	require(THEME_SERVER_PATH. '/overall_header.php');
 	
 	echo '
-	<h1 class="moduleHeadline">Fotogalerien - Upload</h1>
-    <p> Bitte einen Moment Geduld...<br /><br />
-        Die Fotos wurden dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> erfolgreich hinzugefügt,<br /> wenn sie hier angezeigt werden.
+	<h1 class="moduleHeadline">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</h1>
+    <p> '.$g_l10n->get('SYS_PLEASE_WAIT').'...<br /><br />
+        '.$g_l10n->get('PHO_PHR_SHOWN_ON_READY').'<strong>('.$photo_album->getValue('pho_name').')</strong>
     </p>';
 }
 
@@ -147,7 +147,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     {
         if(!is_uploaded_file($_FILES['Filedata']['tmp_name']))
         {
-            echo 'Fehler beim Dateiupload!';
+            echo $g_l10n->get('SYS_UPLOAD_ERROR');
         }
         $temp_filename = $_FILES['Filedata']['tmp_name'];
         $filename = $_FILES['Filedata']['name'];
@@ -159,7 +159,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	
     	if($_GET['uploadmethod'] == 1)
     	{
-    		echo '<br /><br />Albumfoto '.$new_quantity.':<br />';
+    		echo '<br /><br />'.$g_l10n->get('PHO_PHOTO').$new_quantity.':<br />';
     	}
     	
     	// Sonderzeichen aus Dateinamen entfernen
@@ -175,7 +175,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	$image_dimensions = $image_properties[0]*$image_properties[1];
     	if($image_dimensions > processableImageSize())
     	{
-        	echo 'Auflösung größer '.round(processableImageSize()/1000000, 2).' MPixel';
+        	echo $g_l10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(processableImageSize()/1000000, 2).' '$g_l10n->get('MEGA_PIXEL');
     	}
     	
     	//Typkontrolle
@@ -233,23 +233,23 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 	 echo '
                 	  <img class="photoOutput" 
                 	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&pic_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin').'&max_width=300&max_height=200" 
-                	  alt="Foto '.$new_quantity.'" title="Foto '.$new_quantity.'">
+                	  alt="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'" title="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'">
                 	  <br />';
                 }
                 else
                 {
-                	echo 'Foto erfolgreich gespeichert!';exit();
+                	echo g_l10n->get('PHO_PHOTO_UPLOAD_SUCCESS');exit();
                 }          
             }
             else
             {
                 $new_quantity --;
-                echo 'Das Foto konnte nicht verarbeitet werden!';
+                echo g_l10n->get('PHO_PHOTO_PROCESSING_ERROR');
             }	        
     	}
     	else
     	{
-    	   echo 'Fehler beim Dateiupload!';
+    	   echo $g_l10n->get('SYS_UPLOAD_ERROR');
     	}
     }
 }
