@@ -53,7 +53,7 @@ if(isset($_GET['ann_id']))
 
 if(isset($_GET['headline']))
 {
-    $req_headline = strStripTags($_GET['headline']);
+    $req_headline = strStripTags($_GET["headline"]);
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -89,11 +89,11 @@ if(isset($_SESSION['announcements_request']))
 // Html-Kopf ausgeben
 if($req_ann_id > 0)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $req_headline);
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $req_headline);
+    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
 //Script für BBCode laden
 $javascript = '';
@@ -121,7 +121,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="ann_headline">'.$g_l10n->get('SYS_TITLE').':</label></dt>
+                    <dt><label for="ann_headline">'.$g_l10n->get('SYS_HEADLINE').':</label></dt>
                     <dd>
                         <input type="text" id="ann_headline" name="ann_headline" style="width: 350px;" tabindex="1" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>

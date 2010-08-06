@@ -189,8 +189,8 @@ if($g_current_user->editAnnouncements())
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'</a>
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_CREATE').'</a>
             </span>
         </li>
     </ul>';        
@@ -240,7 +240,7 @@ else
                         if($announcement->getValue("ann_org_shortname") == $g_organization)
                         {
                             echo '
-                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue('ann_id').'\','.$announcement->getValue('ann_id').',\''.$announcement->getValue('ann_headline').'\')"><img 
+                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue("ann_id").'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         }    
                     }

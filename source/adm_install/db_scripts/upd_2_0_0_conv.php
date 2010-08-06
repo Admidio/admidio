@@ -271,8 +271,4 @@ $sql = "ALTER TABLE ". TBL_USERS. " DROP COLUMN `usr_last_name`,
          DROP COLUMN `usr_homepage` ";
 $g_db->query($sql);
 
-// Bei den Links den Counter auf 0 setzen
-$sql = "UPDATE ". TBL_LINKS. " SET lnk_counter = 0 WHERE lnk_id > 0";
-$g_db->query($sql);
-
 ?>

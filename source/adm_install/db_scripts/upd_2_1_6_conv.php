@@ -48,8 +48,4 @@ $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_end = "9999-12-31"
          WHERE mem_end = "" OR mem_end = "0000-00-00" ';
 $g_db->query($sql);
 
-// Bei den Links den Counter auf 0 setzen
-$sql = "UPDATE ". TBL_LINKS. " SET lnk_counter = 0 WHERE lnk_id > 0";
-$g_db->query($sql);
-
 ?>

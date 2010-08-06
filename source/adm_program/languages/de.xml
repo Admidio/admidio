@@ -4,6 +4,8 @@
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>
+	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Ankündigung wurde angelegt</text>
+	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 
     <!-- Phrases only in Category-Administration -->
     <text id="CAT_PHR_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>

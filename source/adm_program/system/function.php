@@ -457,4 +457,18 @@ function processableImageSize()
     //nach ein paar tests hat sich 2,5Fach als sichrer herausgestellt
     return $memory_limit/(3*2.5); 
 }
+
+// Funktion zur Versendung von Benachrichtigungs-Emails (bei neuen Einträgen)
+function EmailNotification($receiptian, $reference, $message, $sender_name, $sender_mail)
+{
+//Konfiguration Mail
+$empfaenger = $receiptian;
+$betreff = utf8_decode($reference);
+$nachricht = utf8_decode($message);
+$absender = utf8_decode($sender_name);
+$absendermail = $sender_mail;
+
+mail($empfaenger, $betreff, $nachricht, "From: $absender <$absendermail>");
+//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
+}
 ?>
