@@ -85,13 +85,6 @@ if($_GET['mode'] == 1)
             $announcement->setValue($key, $value);
         }
     }
-	
-	// Benachrichtigungs-Email für neue Einträge
-	if($g_preferences['enable_email_notification'] == 1 && $_GET['ann_id'] == 0)
-	{
-		$message = str_replace("<br />","\n", $g_l10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['ann_headline'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time())));
-		EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));
-	}
     
     // Daten in Datenbank schreiben
     $return_code = $announcement->save();
@@ -100,6 +93,15 @@ if($_GET['mode'] == 1)
     {
         $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
     }
+	else
+	{
+		// Benachrichtigungs-Email für neue Einträge
+		if($g_preferences['enable_email_notification'] == 1 && $_GET['ann_id'] == 0)
+		{
+			$message = str_replace("<br />","\n", $g_l10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['ann_headline'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time())));
+			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));
+		}
+	}
     
     unset($_SESSION['announcements_request']);
     $_SESSION['navigation']->deleteLastUrl();

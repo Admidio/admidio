@@ -222,7 +222,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['date_login'] = 0;
     }
-
+	
     // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist
     // ------------------------------------------------
@@ -253,6 +253,8 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
             {
                 $date->setValue('dat_max_members', $_POST['dat_max_members']);
             }
+			// Raumname für Benachrichtigung
+			$raum = $room->getValue('room_name');
         }
     }
     else
@@ -288,6 +290,48 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     // Termin in Datenbank speichern
     $date->setVisibleRoles($arrRoles);
     $return_code = $date->save();
+	
+	if($return_code == 0)
+	{	
+		// Benachrichtigungs-Email für neue Einträge
+		if($g_preferences['enable_email_notification'] == 1)
+		{
+			// Daten für Benachrichtigung zusammenstellen
+			if($_POST['date_from'] == $_POST['date_to'])
+			{$datum = $_POST['date_from'];}
+			else
+			{$datum = $_POST['date_from']. ' - '.$_POST['date_to'];}
+			
+			if(isset($_POST['dat_all_day']))
+			{$zeit = $g_l10n->get('DAT_ALL_DAY');}
+			else
+			{$zeit = $_POST['time_from']. ' - '. $_POST['time_to'];}
+			
+			$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.' 
+                 WHERE cat_id = '.$_POST['dat_cat_id'];
+			$g_db->query($sql_cal);
+			$row_cal = $g_db->fetch_array();
+			$calendar = $row_cal['cat_name'];
+			
+			if(strlen($_POST['dat_location']) > 0)
+			{$ort = $_POST['dat_location'];}
+			else
+			{$ort = 'n/a';}	
+			
+			if($_POST['dat_room_id'] == 0)
+			{$raum = 'n/a';}
+			
+			if(strlen($_POST['dat_max_members']) > 0)
+			{$teilnehmer = $_POST['dat_max_members'];}
+			else
+			{$teilnehmer = 'n/a';}
+			
+			$message_part1 = str_replace("<br />","\n", $g_l10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $g_current_organization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar));
+			$message_part2 = str_replace("<br />","\n", $g_l10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME')));
+			$message_part3 = str_replace("<br />","\n", $g_l10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date("d.m.Y H:m", time())));
+			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message_part1.$message_part2.$message_part3, $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));		
+		}
+	}
     
     // ----------------------------------------
     // ggf. Rolle fuer Anmeldungen wegschreiben

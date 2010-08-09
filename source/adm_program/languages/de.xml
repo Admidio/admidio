@@ -26,8 +26,13 @@
     <text id="DAT_DATE" development="new" translation="todo">Termin</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
+	<text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Termin wurde angelegt</text>
+	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="todo">Es wurde ein neuer Termin bei %VAR1% angelegt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
+	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nAngelegt von: %VAR4%\n</text>
+	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3" development="new" translation="todo">Angelegt am: %VAR1%</text>
     <text id="DAT_ENABLE_DOWNLOAD_MODULE" development="new" translation="todo">Downloadmodul aktivieren</text>
     <text id="DAT_EXPORT_ICAL" development="new" translation="todo">Exportieren (iCal)</text>
+	<text id="DAT_LOCATION" development="new" translation="todo">Ort</text>	
     <text id="DAT_MANAGE_CALENDARS" development="new" translation="todo">Kalender verwalten</text>
     <text id="DAT_MAXIMUM_FILE_SIZE" development="new" translation="todo">Maximale Dateigröße</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
