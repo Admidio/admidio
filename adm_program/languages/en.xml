@@ -5,12 +5,17 @@
 	<text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Announcement</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Announcements</text>
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new announcement was created</text>
-	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new announcement was created at %VAR1%\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
+	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new announcement at %VAR1% was created\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
 
     <!-- Phrases only in Datesmodule -->
-    <text id="DAT_CALENDAR" development="edited" translation="todo">Calendar</text>
+    <text id="DAT_ALL_DAY" development="new" translation="todo">Full time</text>
+	<text id="DAT_CALENDAR" development="edited" translation="todo">Calendar</text>
     <text id="DAT_CREATE_DATE" development="edited" translation="todo">Create date</text>
     <text id="DAT_DATES" development="edited" translation="todo">Dates</text>
+	<text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new date was created</text>
+	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="todo">A new date at %VAR1% was created.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalender: %VAR4%\n</text>
+	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="todo">Location: %VAR1%\nRoom: %VAR2%\nParticipants: %VAR3%\nCreated by: %VAR4%\n</text>
+	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3" development="new" translation="todo">Created at: %VAR1%</text>
     <text id="DAT_EXPORT_ICAL" development="edited" translation="todo">Export (iCal)</text>
     <text id="DAT_LOCATION" development="edited" translation="todo" description="Location of a date">Location</text>
     <text id="DAT_MANAGE_CALENDARS" development="edited" translation="todo">Manage calendars</text>
