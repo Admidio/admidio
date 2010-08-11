@@ -1,4 +1,29 @@
 
+-- Tabellen auf UTF8 umstellen
+ALTER TABLE %PREFIX%_announcements CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_auto_login CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_categories CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_dates CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_files CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_folder_roles CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_folders CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_guestbook CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_guestbook_comments CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_links CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_list_columns CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_lists CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_members CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_organizations CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_photos CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_preferences CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_role_dependencies CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_roles CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_sessions CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_texts CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_user_data CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_user_fields CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER TABLE %PREFIX%_users CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 -- Tabelle User_Fields erweitern
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_name_intern` VARCHAR(110) AFTER usf_type;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_usr_id_create` INT(11) unsigned;
@@ -6,10 +31,28 @@ ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_timestamp_create` datetime;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_usr_id_change` INT(11) unsigned;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_timestamp_change` datetime;
 
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CREATE foreign key (usf_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CHANGE foreign key (usf_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_description` `usf_description_old` varchar(255);
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_description` text AFTER usf_name;
 UPDATE %PREFIX%_user_fields SET usf_description = usf_description_old;
 ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_description_old;
+
+-- Tabelle Categories erweitern
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_name_intern` VARCHAR(110) AFTER cat_type;
+ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_name` `cat_name` varchar(100);
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_usr_id_create` INT(11) unsigned;
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_timestamp_create` datetime;
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_usr_id_change` INT(11) unsigned;
+ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_timestamp_change` datetime;
+
+alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CREATE foreign key (cat_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 -- Gaestebuchtabellenspalten auf Standardbezeichnung umstellen
 ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_FK_GBO_USR;
@@ -26,6 +69,10 @@ ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_timestamp` `gbc_times
 
 -- Feldgroessen anpasssen
 ALTER TABLE %PREFIX%_organizations MODIFY COLUMN `org_homepage` VARCHAR(60) NOT NULL;
+ALTER TABLE %PREFIX%_guestbook ADD `gbo_locked` tinyint (1) unsigned not null default 0 after gbo_ip_address;
+
+-- Counter bei Links einfügen
+ALTER TABLE %PREFIX%_links ADD COLUMN `lnk_counter` INTEGER(11) UNSIGNED NOT NULL AFTER `lnk_url` DEFAULT 0;
 
 -- Raumverwaltungstabelle hinzufuegen
 
@@ -44,7 +91,9 @@ CREATE TABLE %PREFIX%_rooms
     primary key (room_id)                                                                       
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Attribut hinzufuegen
 
@@ -52,8 +101,6 @@ ALTER TABLE %PREFIX%_roles ADD COLUMN `rol_visible` TINYINT(1) UNSIGNED NOT NULL
 ALTER TABLE %PREFIX%_dates ADD COLUMN `dat_rol_id` INT(11) UNSIGNED;
 ALTER TABLE %PREFIX%_dates ADD COLUMN `dat_room_id` INT(11) UNSIGNED;
 ALTER TABLE %PREFIX%_dates ADD COLUMN `dat_max_members` INT(11) UNSIGNED NOT NULL;
-ALTER TABLE %PREFIX%_members ADD COLUMN `mem_from_rol_id` INT(11) UNSIGNED NULL;
-ALTER TABLE %PREFIX%_members ADD INDEX (`mem_from_rol_id`) ;
 
 -- Sichtbarkeitstabelle für Termine hinzufuegen
 
@@ -65,7 +112,9 @@ create table %PREFIX%_date_role
     primary key (dtr_id)
 )
 engine = InnoDB
-auto_increment = 1;
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
 
 -- Index
 alter table %PREFIX%_date_role add index DTR_DAT_FK (dtr_dat_id);
@@ -76,6 +125,3 @@ alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_DAT foreign key (d
       references %PREFIX%_dates (dat_id) on delete restrict on update restrict;
 alter table %PREFIX%_date_role add constraint %PREFIX%_FK_DTR_ROL foreign key (dtr_rol_id)
       references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
-
--- Counter bei Links einfügen
-ALTER TABLE %PREFIX%_links ADD COLUMN `lnk_counter` INTEGER(11) UNSIGNED NULL AFTER `lnk_url`;
