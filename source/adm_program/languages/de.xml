@@ -76,6 +76,8 @@
 	<text id="DOW_COUNTER" development="new" translation="todo">Zähler</text>
 	<text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
+	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Datei wurde hochgeladen</text>
+	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Datei bei %VAR1% hochgeladen.\n\nDatei: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 	<text id="DOW_FILE_TYPE" development="new" translation="todo">Dateityp</text>
 	<text id="DOW_NEW_FILE_NAME" development="new" translation="todo">Neuer Dateiname</text>
 	<text id="DOW_NEW_NAME" development="new" translation="todo">Neuer Name</text>
@@ -178,6 +180,10 @@
     <text id="GBO_CREATE_COMMENT" development="new" translation="todo">Kommentar anlegen</text>
     <text id="GBO_CREATE_ENTRY" development="new" translation="todo">Eintrag anlegen</text>
     <text id="GBO_EDIT_COMMENT" development="new" translation="todo">Kommentar bearbeiten</text>
+	<text id="GBO_EMAIL_NOTIFICATION_GBC_TITLE" development="new" translation="todo">Ein neuer Gästebuchkommentar wurde angelegt</text>
+	<text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebuchkommentar bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Gästebucheintrag wurde angelegt</text>
+	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebucheintrag bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
     <text id="GBO_HIDE_COMMENTS" development="new" translation="todo">Kommentare ausblenden</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="todo">Flooding Protection Intervall</text>
@@ -304,6 +310,8 @@
 	<text id="LNK_COUNTER" development="new" translation="todo">Zähler</text>
     <text id="LNK_CREATE_LINK" development="new" translation="todo">Link anlegen</text>
     <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Anzeige Weiterleitung</text>
+	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Weblink wurde angelegt</text>
+	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Weblink bei %VAR1% angelegt.\n\nLink: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadresse</text>
     <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
     <text id="LNK_LINK_TARGET" development="new" translation="todo">Linkziel</text>
@@ -464,6 +472,8 @@
 	<text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album anlegen</text>
     <text id="PHO_EDIT_ALBUM" development="new" translation="todo">Album Bearbeiten</text>
+	<text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neues Fotoalbum wurde angelegt</text>
+	<text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 	<text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>      
 	<text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHR_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
@@ -661,6 +671,9 @@
     <text id="SYS_EDIT" development="new" translation="todo">Bearbeiten</text>
 	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
+	<text id="SYS_EMAIL_NOTIFICATION_ACTIVATE" development="new" translation="todo">Email-Benachrichtigung aktivieren</text>
+	<text id="SYS_EMAIL_NOTIFICATION_CONFIG" development="new" translation="todo">Email-Benachrichtigung konfigurieren</text>
+	<text id="SYS_EMAIL_NOTIFICATION_DESCRIPTION" development="new" translation="todo">Hier kann die Email-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per Email benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Benachrichtigungs-Email wird an die Systemmailadresse %VAR1% versendet. (standard: nein)</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>

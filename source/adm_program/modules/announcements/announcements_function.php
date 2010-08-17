@@ -95,11 +95,17 @@ if($_GET['mode'] == 1)
     }
 	else
 	{
-		// Benachrichtigungs-Email für neue Einträge
+		// Benachrichtigungs-Email fÃ¼r neue EintrÃ¤ge
 		if($g_preferences['enable_email_notification'] == 1 && $_GET['ann_id'] == 0)
 		{
 			$message = str_replace("<br />","\n", $g_l10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['ann_headline'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time())));
-			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));
+			$sender_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
+			if(!isValidEmailAddress($g_current_user->getValue('EMAIL')))
+			{
+				$sender_email = $g_preferences['email_administrator'];
+				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
+			}
+			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $sender_name, $sender_email);
 		}
 	}
     

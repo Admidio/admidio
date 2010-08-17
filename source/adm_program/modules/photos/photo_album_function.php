@@ -159,6 +159,15 @@ if(isset($_POST['submit']) && $_POST['submit'])
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $g_message->show($g_l10n->get($error['text'], $error['path'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
+		
+		if(strlen($error['text']) == 0)
+		{
+			// Benachrichtigungs-Email für neue Einträge
+			if($g_preferences['enable_email_notification'] == 1)
+			{
+				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['pho_name'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));
+			}	
+		}
         
         $pho_id = $photo_album->getValue('pho_id');
 

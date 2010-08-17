@@ -1175,8 +1175,8 @@ echo '
 				    <li>
                         <dl>
                             <dt><label for="mail_notification">
-							<a href="organization.php#email-notification"><img src="'. THEME_PATH. '/icons/edit.png" alt="Email-Benachrichtigung konfigurieren" /></a>
-							&nbsp;<a href="organization.php#email-notification">Email-Benachrichtigung konfigurieren</a></label></dt>
+							<a href="organization.php#email-notification"><img src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_CONFIG').'" /></a>
+							&nbsp;<a href="organization.php#email-notification">'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_CONFIG').'</a></label></dt>
 							<dd><br /></dd>
 						</dl>
 					</li>
@@ -1267,7 +1267,7 @@ echo '
 					<a name="email-notification"> </a>
 					<li>
                         <dl>
-                            <dt><label>Email-Benachrichtigung aktivieren:</label></dt>
+                            <dt><label>'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_ACTIVATE').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_email_notification" name="enable_email_notification" ';
                                 if(isset($form_values['enable_email_notification']) && $form_values['enable_email_notification'] == 1)
@@ -1279,9 +1279,7 @@ echo '
                         </dl>
                     </li>
                     <li  class="smallFontSize">
-                        Hier kann die Email-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. 
-						Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per Email benachrichtigen zu lassen. Es werden dabei nur neue Datenbankeinträge 
-						berücksichtig. Die Benachrichtigungs-Email wird an die Systemmailadresse <i>'.$g_preferences['email_administrator'].'</i> versendet. (standard: nein)
+						'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_DESCRIPTION', '<i>'.$g_preferences['email_administrator'].'</i>').'
                     </li>
                 </ul>
             </div>

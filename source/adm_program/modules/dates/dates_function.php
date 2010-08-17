@@ -329,7 +329,14 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
 			$message_part1 = str_replace("<br />","\n", $g_l10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $g_current_organization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar));
 			$message_part2 = str_replace("<br />","\n", $g_l10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME')));
 			$message_part3 = str_replace("<br />","\n", $g_l10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date("d.m.Y H:m", time())));
-			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message_part1.$message_part2.$message_part3, $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));		
+
+			$sender_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
+			if(!isValidEmailAddress($g_current_user->getValue('EMAIL')))
+			{
+				$sender_email = $g_preferences['email_administrator'];
+				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
+			}
+			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message_part1.$message_part2.$message_part3, $sender_name, $sender_email);
 		}
 	}
     

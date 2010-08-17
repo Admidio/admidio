@@ -24,6 +24,10 @@
     <text id="DAT_PARTICIPANTS" development="edited" translation="todo">Participants</text>
     <text id="DAT_PREVIOUS_DATES" development="edited" translation="todo" description="Vergangene Termine">Previous %VAR1%</text>
     <text id="DAT_SHOW_ON_MAP" development="edited" translation="todo">Show on map</text>
+	
+    <!-- Phrases only in Downloadsmodule -->
+	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new file was uploaded</text>
+	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new file was uploaded at %VAR1%\n\nFile: %VAR2%\nUploaded by: %VAR3%\nUploaded at: %VAR4%</text>
 
     <!-- Phrases only in Ecardsmodule -->
     <text id="ECA_A_ECARD_FROM" development="edited" translation="todo">Greeting card sent by</text>
@@ -78,10 +82,18 @@
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="edited" translation="todo">Show full size picture</text>
     <text id="ECA_YOUR_MESSAGE" development="edited" translation="todo">Your message</text>
 	
+	<!-- Phrases only in Guestbookmodule -->
+	<text id="GBO_EMAIL_NOTIFICATION_GBC_TITLE" development="new" translation="todo">A new guestbook comment was created</text>
+	<text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">A new guestbook comment at %VAR1% was created.\n\nText: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
+	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new guestbook entry was created</text>
+	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new guestbookentry at %VAR1% was created.\n\nText: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
+	
 	<!-- Phrases only in Linkmodule -->
 	<text id="LNK_COUNTER" development="new" translation="todo">Hits</text>
     <text id="LNK_CREATE_LINK" development="new" translation="todo">Create new link</text>
     <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Show redirect</text>
+	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new weblink was created</text>
+	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new weblink at %VAR1% was created.\n\nLinkadress: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
     <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadress</text>
     <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
     <text id="LNK_LINK_TARGET" development="new" translation="todo">Linktarget</text>
@@ -107,6 +119,11 @@
 	<text id="UPD_NO_NEW" development="new" translation="todo">You are using a current %VAR1%version of Admidio!</text>
 	<text id="UPD_STABLE_VERSION" development="new" translation="todo">Current stable Admidio version</text>
 	<text id="UPD_TITLE" development="new" translation="todo">Update check</text>
+	
+	
+    <!-- Phrases only in Photomodule -->
+	<text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new photo album was created</text>
+	<text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new photo album at %VAR1% was created.\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
    
    
     <!-- Phrases only in Installation -->
@@ -225,6 +242,9 @@
     <text id="SYS_DELETE" development="edited" translation="todo">Delete</text>
     <text id="SYS_EDIT" development="edited" translation="todo">Edit</text>
     <text id="SYS_EMAIL" development="edited" translation="todo">Email</text>
+	<text id="SYS_EMAIL_NOTIFICATION_ACTIVATE" development="new" translation="todo">Activate email notification</text>
+	<text id="SYS_EMAIL_NOTIFICATION_CONFIG" development="new" translation="todo">Configure email notification</text>
+	<text id="SYS_EMAIL_NOTIFICATION_DESCRIPTION" development="new" translation="todo">You can activate the email notification for new database entries in the modules. It works as a monitoring function for admidio. The administrator is informed by mail about new entries in the modules (only new entries are considered). The notification email will be sent to the systemmailadress %VAR1%. (predefined: no)</text>
     <text id="SYS_END" development="edited" translation="todo" description="End of a date">End</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="edited" translation="todo">ERROR 404 - PAGE NOT FOUND!</text>
     <text id="SYS_FONT" development="edited" translation="todo">Font</text>
