@@ -217,6 +217,33 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
         {
             $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
+		
+		if($return_code == 0)
+		{	
+			// Benachrichtigungs-Email für neue Einträge
+			if($g_preferences['enable_email_notification'] == 1)
+			{
+				if(!$g_valid_login)
+				{
+					$gbo_name = $_POST['gbo_name'];
+					$gbo_email = $_POST['gbo_email'];
+					$gbo_text = $_POST['gbo_text'];
+				}
+				else
+				{
+					$gbo_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
+					$gbo_email = $g_current_user->getValue('EMAIL');
+					$gbo_text = $_POST['gbo_text'];
+				}
+				$sender_name = $gbo_name;
+				if(!isValidEmailAddress($gbo_email))
+				{
+					$gbo_email = $g_preferences['email_administrator'];
+					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
+				}
+				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $gbo_text, $gbo_name, date("d.m.Y H:m", time()))), $sender_name, $gbo_email);
+			}
+		}
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_entry_request']);
@@ -338,6 +365,33 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
         {
             $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
+		
+		if($return_code == 0)
+		{	
+			// Benachrichtigungs-Email für neue Einträge
+			if($g_preferences['enable_email_notification'] == 1)
+			{
+				if(!$g_valid_login)
+				{
+					$gbc_name = $_POST['gbc_name'];
+					$gbc_email = $_POST['gbc_email'];
+					$gbc_text = $_POST['gbc_text'];
+				}
+				else
+				{
+					$gbc_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
+					$gbc_email = $g_current_user->getValue('EMAIL');
+					$gbc_text = $_POST['gbc_text'];
+				}
+				$sender_name = $gbc_name;
+				if(!isValidEmailAddress($gbc_email))
+				{
+					$gbc_email = $g_preferences['email_administrator'];
+					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
+				}
+				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $g_current_organization->getValue('org_longname'), $gbc_text, $gbc_name, date("d.m.Y H:m", time()))), $sender_name, $gbc_email);
+			}
+		}
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
         unset($_SESSION['guestbook_comment_request']);
