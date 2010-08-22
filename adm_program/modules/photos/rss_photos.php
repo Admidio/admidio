@@ -65,7 +65,7 @@ $photo_album = new TablePhotos($g_db);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS'), 'Die 10 neuesten Fotoalben');
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS'), $g_l10n->get('PHO_PHR_NEWEST_ALBUMS'));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_array($result))
@@ -95,26 +95,26 @@ while ($row = $g_db->fetch_array($result))
         //Elternveranst
         $pho_parent_id=$adm_photo_parent['pho_pho_id_parent'];
     }
-    $title = 'Fotogalerien'.$parents.' > '.$photo_album->getValue('pho_name');
+    $title = $g_l10n->get('PHO_PHOTO_ALBUMS').$parents.' > '.$photo_album->getValue('pho_name');
 
     //Link
     $link  = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
 
     //Inhalt zusammensetzen
-    $description = 'Fotogalerien'.$parents.' > '. $photo_album->getValue('pho_name');
-    $description = $description. '<br /><br /> Fotos: '.$photo_album->countImages();
-    $description = $description. '<br /> Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
+    $description = $g_l10n->get('PHO_PHOTO_ALBUMS').$parents.' > '. $photo_album->getValue('pho_name');
+    $description = $description. '<br /><br /> '.$g_l10n->get('PHO_PHOTOS').': '.$photo_album->countImages();
+    $description = $description. '<br /> '.$g_l10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
     //Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
     {
         $description = $g_l10n->get('SYS_PHR_DATE_TO', $description, $photo_album->getValue('pho_end', $g_preferences['system_date']));
     }
-    $description = $description. '<br />Fotos von: '.$photo_album->getValue('pho_photographers');
+    $description = $description. '<br />'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
 
     //die letzten fuenf Fotos sollen als Beispiel genutzt werden
     if($photo_album->getValue('pho_quantity') >0)
     {
-        $description = $description. '<br /><br />Beispielfotos:<br />';
+        $description = $description. '<br /><br />'.$g_l10n->get('SYS_PREVIEW').':<br />';
         for($bild=$photo_album->getValue('pho_quantity'); $bild>=$photo_album->getValue('pho_quantity')-4 && $bild>0; $bild--)
         {
             $bildpfad = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$bild.'.jpg';
