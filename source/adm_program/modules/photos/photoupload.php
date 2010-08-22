@@ -145,48 +145,48 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <div class="formLayout" id="photo_upload_form" style="visibility: hide; display: none;">
 	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '&amp;uploadmethod=1" enctype="multipart/form-data">
-	    <div class="formHead">Fotos hochladen</div>
+	    <div class="formHead">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</div>
 	    <div class="formBody">
 	        <p>
-	            Die Fotos werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
-	            (Beginn: '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
+	            '.$g_l10n->get('PHO_PHR_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
+	            ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
 	        </p>
 	
 	        <ul class="formFieldList">
 	            <li><dl>
-	                <dt><label for="bilddatei1">Foto 1:</label></dt>
-	                <dd><input type="file" id="bilddatei1" name="Filedata[]" value="durchsuchen" /></dd>
+	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 1:</label></dt>
+	                <dd><input type="file" id="bilddatei1" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">Foto 2:</label></dt>
-	                <dd><input type="file" id="bilddatei2" name="Filedata[]" value="durchsuchen" /></dd>
+	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 2:</label></dt>
+	                <dd><input type="file" id="bilddatei2" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">Foto 3:</label></dt>
-	                <dd><input type="file" id="bilddatei3" name="Filedata[]" value="durchsuchen" /></dd>
+	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 3:</label></dt>
+	                <dd><input type="file" id="bilddatei3" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">Foto 4:</label></dt>
-	                <dd><input type="file" id="bilddatei4" name="Filedata[]" value="durchsuchen" /></dd>
+	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 4:</label></dt>
+	                <dd><input type="file" id="bilddatei4" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">Foto 5:</label></dt>
-	                <dd><input type="file" id="bilddatei5" name="Filedata[]" value="durchsuchen" /></dd>
+	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 5:</label></dt>
+	                <dd><input type="file" id="bilddatei5" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	        </ul>
 	        <hr />
 	        <div class="formSubmit">
-	            <button id="btnUpload" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Fotos hochladen" />&nbsp;Fotos hochladen</button>
+	            <button id="btnUpload" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" />&nbsp;'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</button>
 	        </div>
 	   </div>
 	</form>
 </div>
 
 <div id="photo_upload_flash" style="visibility: hide; display: none;">
-	<h2>Fotos hochladen</h2>
+	<h2>'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</h2>
 	<p>
-        Die Fotos werden zu dem Album <strong>'.$photo_album->getValue('pho_name').'</strong> hinzugefügt.<br />
-        (Beginn: '. $photo_album->getValue('pho_begin', $g_preferences['system_date']). ')
+       '.$g_l10n->get('PHO_PHR_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
+       ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
     </p>';
 
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
@@ -204,16 +204,16 @@ echo '</div>
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'"><img 
-            src="'. THEME_PATH. '/icons/application_view_tile.png" alt="Zum Album" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'">Zum Album</a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'" title="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'"><img 
+            src="'. THEME_PATH. '/icons/application_view_tile.png" /></a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
         </span>
     </li>    
     <li>
         <span class="iconTextLink">
-            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;inline=true"><img 
+            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;inline=true" title="'.$g_l10n->get('SYS_HELP').'"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
-            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;inline=true">Hilfe</a>
+            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;inline=true">'.$g_l10n->get('SYS_HELP').'</a>
         </span>
     </li>
 </ul>';

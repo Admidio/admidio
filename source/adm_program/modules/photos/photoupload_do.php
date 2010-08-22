@@ -175,7 +175,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	$image_dimensions = $image_properties[0]*$image_properties[1];
     	if($image_dimensions > processableImageSize())
     	{
-        	echo $g_l10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(processableImageSize()/1000000, 2).' '$g_l10n->get('MEGA_PIXEL');
+        	echo $g_l10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(processableImageSize()/1000000, 2).' '.$g_l10n->get('MEGA_PIXEL');
     	}
     	
     	//Typkontrolle
@@ -238,13 +238,13 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 }
                 else
                 {
-                	echo g_l10n->get('PHO_PHOTO_UPLOAD_SUCCESS');exit();
+                	echo $g_l10n->get('PHO_PHOTO_UPLOAD_SUCCESS');exit();
                 }          
             }
             else
             {
                 $new_quantity --;
-                echo g_l10n->get('PHO_PHOTO_PROCESSING_ERROR');
+                echo $g_l10n->get('PHO_PHOTO_PROCESSING_ERROR');
             }	        
     	}
     	else
@@ -264,18 +264,18 @@ if($_GET['uploadmethod'] == 1)
 		<ul class="iconTextLinkList">
 		    <li>
 		        <span class="iconTextLink">
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'">
-		            	<img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="Übersicht" />
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('PHO_OVERVIEW').'">
+		            	<img src="'. THEME_PATH. '/icons/application_view_tile.png" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'">Übersicht</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('PHO_OVERVIEW').'">'.$g_l10n->get('PHO_OVERVIEW').'</a>
 		        </span>
 		    </li>
 		    <li>
 		        <span class="iconTextLink">
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1">
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1" title="'.$g_l10n->get('PHO_PHR_UPLOAD_MORE').'">
 		            	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Weitere Fotos hochladen" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1">Weitere Fotos hochladen</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1"  title="'.$g_l10n->get('PHO_PHR_UPLOAD_MORE').'">'.$g_l10n->get('PHO_PHR_UPLOAD_MORE').'</a>
 		        </span>
 		    </li>
 		 </ul>
