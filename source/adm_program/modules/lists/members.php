@@ -342,6 +342,37 @@ $g_layout['header'] = '
     }
     //--></script>';
 
+//Automatisches speichern
+$g_layout['header'] .='
+<script type="text/javascript">
+    //Erstmal warten bis Dokument fertig geladen ist
+    $(document).ready(function(){       
+        //beim anklicken einer Checkbox
+        $("input[type=checkbox]").live("click", function(){   
+            //Checkbox ID
+            var checkbox_id = $(this).attr("id");
+            
+            //Ladebalken
+            $("#loadindicator_" + checkbox_id).append("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' alt=\'loadindicator\'  \' />").show();
+        
+            //Datenbank schreiben
+            $.ajax({
+                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$role_id.'",
+                    type: "POST",
+                    data: $("form").serialize(),
+                    async:false,
+                    success: function(html){                    
+                       $("#loadindicator_" + checkbox_id).hide().empty();
+                        return false;
+                    }
+            });
+        });
+     });            
+</script>
+
+
+';
+        
 require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <h1>'. $g_layout['title']. '</h1>';
@@ -350,50 +381,50 @@ if(($count_valid_users != $user_anzahl || $restrict == 'u')
 &&  $g_current_user->assignRoles())
 {
     //Button Alle bzw. nur Mitglieder anzeigen
-    echo "<ul class=\"iconTextLinkList\">";
-        if($restrict=="m")
+    echo '<ul class="iconTextLinkList">';
+        if($restrict=='m')
         {
-            echo "<li>
-                <span class=\"iconTextLink\">
-                    <a href=\"members.php?rol_id=$role_id&amp;restrict=u\"><img
-                    src=\"". THEME_PATH. "/icons/group.png\" alt=\"Alle Benutzer anzeigen\" /></a>
-                    <a href=\"members.php?rol_id=$role_id&amp;restrict=u\">Alle Benutzer anzeigen</a>
+            echo '<li>
+                <span class="iconTextLink">
+                    <a href="members.php?rol_id=$role_id&amp;restrict=u"><img
+                    src="'. THEME_PATH. '/icons/group.png" alt="Alle Benutzer anzeigen" /></a>
+                    <a href="members.php?rol_id='.$role_id.'&amp;restrict=u">Alle Benutzer anzeigen</a>
                 </span>
-            </li>";
+            </li>';
         }
         else
         {
             //Nur Mitglieder anzeigen
-            echo "<li>
-                <span class=\"iconTextLink\">
-                    <a href=\"members.php?rol_id=$role_id&amp;restrict=m\"><img
-                    src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Nur Mitglieder anzeigen\" /></a>
-                    <a href=\"members.php?rol_id=$role_id&amp;restrict=m\">Nur Mitglieder anzeigen</a>
+            echo '<li>
+                <span class="iconTextLink">
+                    <a href="members.php?rol_id='.$role_id.'&amp;restrict=m"><img
+                    src="'. THEME_PATH. '/icons/profile.png" alt="Nur Mitglieder anzeigen" /></a>
+                    <a href="members.php?rol_id='.$role_id.'&amp;restrict=m">Nur Mitglieder anzeigen</a>
                 </span>
-            </li>";
+            </li>';
 
             //aktuelle Rolle in SessionID sichern
             $_SESSION['set_rol_id'] = $role_id;
             //Neuen Benutzer Anlegen
-            echo"<li>
-                <span class=\"iconTextLink\">
-                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\"><img
-                    src=\"". THEME_PATH. "/icons/add.png\" alt=\"Login\" /></a>
-                    <a href=\"$g_root_path/adm_program/modules/profile/profile_new.php?new_user=1\">Benutzer anlegen</a>
+            echo'<li>
+                <span class="iconTextLink">
+                    <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img
+                    src="'. THEME_PATH. '/icons/add.png" alt="Login" /></a>
+                    <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">Benutzer anlegen</a>
                 </span>
-            </li>";
+            </li>';
         }
-    echo "</ul>";
+    echo '</ul>';
 }
 
-echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol_id=".$role_id. "\" method=\"post\" onsubmit=\"return chkMemberCount()\">";
+echo '<form action="'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$role_id.' method="post" onsubmit="return chkMemberCount()">';
     $user = $g_db->fetch_array($result_user);
 
     //Buchstaben Navigation bei mehr als 50 personen
     if($g_db->num_rows($result_user) >= 50)
     {
         //Alle
-        echo "<div class=\"pageNavigation\"><a href=\"#\" onclick=\"showAll();\">Alle</a>&nbsp;";
+        echo '<div class="pageNavigation"><a href="#" onclick="showAll();">Alle</a>&nbsp;';
 
         for($menu_letter=35; $menu_letter<=90; $menu_letter++)
         {
@@ -401,12 +432,12 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             $menu_letter_string = chr($menu_letter);
             if(!in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
             {
-                echo "$menu_letter_string&nbsp;";
+                echo $menu_letter_string.'&nbsp;';
             }
             //Falls Nicht Link zu Anker
             if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
             {
-                echo "<a href=\"#\" onclick=\"toggleDiv('letter_$menu_letter_string');\">$menu_letter_string</a>&nbsp;";
+                echo '<a href="#" onclick="toggleDiv(\'letter_$menu_letter_string\');">'.$menu_letter_string.'</a>&nbsp;';
             }
 
             //Fuer Namen die mit Zahlen beginnen
@@ -414,17 +445,17 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             {
                 if( in_array(35, $first_letter_array))
                 {
-                    echo "<a href=\"#\" onclick=\"toggleDiv('zahl');\">$menu_letter_string</a>&nbsp;";
+                    echo '<a href="#" onclick="toggleDiv(\'zahl\');">'.$menu_letter_string.'</a>&nbsp;';
                 }
                 else
                 {
-                    echo"&#35;&nbsp;";
+                    echo '&#35;&nbsp;';
                 }
                 $menu_letter = 64;
             }
         }//for
 
-        echo "</div>";
+        echo '</div>';
 
         //Container anlegen und Ausgabe
         $letter_merker=34;
@@ -557,46 +588,45 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
             $user_text = $user_text. ' - '. $user['zip_code']. ' '. $user['city'];
         }
 
-        echo "
-        <tr class=\"tableMouseOver\">
-            <td><img class=\"iconInformation\" src=\"". THEME_PATH. "/icons/profile.png\" alt=\"Userinformationen\" title=\"$user_text\" /></td>
+        echo '
+        <tr class="tableMouseOver">
+            <td><img class="iconInformation" src="'. THEME_PATH.'/icons/profile.png" alt="Userinformationen" title="'.$user_text.'" /></td>
 
-            <td style=\"text-align: center;\">";
+            <td style="text-align: center;">';
                 //Haekchen setzen ob jemand Mitglied ist oder nicht
                 if(in_array($user['usr_id'], $role_member))
                 {
-                    echo "<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" checked=\"checked\" value=\"1\" />";
+                    echo '<input type="checkbox" onclick="unmarkLeader(this)" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" value="1" />';
                 }
                 else
                 {
-                    echo "<input type=\"checkbox\" onclick=\"unmarkLeader(this)\" id=\"member_". $user['usr_id']. "\" name=\"member_". $user['usr_id']. "\" value=\"1\" />";
-                 }
-            echo "</td>
+                    echo '<input type="checkbox" onclick="unmarkLeader(this)" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" value="1" />';
+                }
+            echo '<b id="loadindicator_member_'.$user['usr_id'].'"></b></td>
+            <td>'.$user['last_name'].'</td>
+            <td>'.$user['first_name'].'</td>
 
-            <td>". $user['last_name']."</td>
-            <td>". $user['first_name']."</td>
-
-            <td>";
+            <td>';
                 //Geburtstag nur ausgeben wenn bekannt
                 if(strlen($user['birthday']) > 0)
                 {
                     $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d', 'date');
                     echo $birthdayDate->format($g_preferences['system_date']);
                 }
-            echo "</td>
+            echo '</td>
 
-            <td style=\"text-align: center;\">";
+            <td style="text-align: center;">';
                 //Haekchen setzen ob jemand Leiter ist oder nicht
                 if(in_array($user['usr_id'], $group_leaders))
                 {
-                    echo "<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" checked=\"checked\" value=\"1\" />";
+                    echo '<input type="checkbox" onclick="markMember(this)" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" value="1" />';
                 }
                 else
                 {
-                    echo "<input type=\"checkbox\" onclick=\"markMember(this)\" id=\"leader_". $user['usr_id']. "\" name=\"leader_". $user['usr_id']. "\" value=\"1\" />";
+                    echo '<input type="checkbox" onclick="markMember(this)" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" value="1" />';
                 }
-            echo "</td>
-        </tr>";
+            echo '<b id="loadindicator_leader_'.$user['usr_id'].'"></b>
+        </tr>';
 
         //Naechsten Datensatz abrufen
         $user = $g_db->fetch_array($result_user);
@@ -646,7 +676,7 @@ echo "<form action=\"$g_root_path/adm_program/modules/lists/members_save.php?rol
     echo '</table>
 
     <div class="formSubmit">
-        <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+        <p>Die Daten werden automatisch mit setzen des Hakens gespeichert.</p>
     </div>
 </form>';
 
