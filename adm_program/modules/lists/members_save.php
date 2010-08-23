@@ -147,7 +147,5 @@ while($user= $g_db->fetch_array($result_user))
 
 }
 
-//Zurueck zur Herkunftsseite
-$g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php', 2000);
-$g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+
 
