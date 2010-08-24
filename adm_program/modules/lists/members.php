@@ -81,6 +81,25 @@ $g_layout['header'] ='
             });
         });
         
+        //Suchfeldeingabe
+        $("input[type=text]#mem_search").live("keyup", function(){
+            $("form#memlist_form").hide().empty();
+            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(html){
+                $("form#memlist_form").append(html).show();               
+                return false;
+            });
+        });
+    
+        //Enter abfangen
+        $("input[type=text]#mem_search").keydown(function(e) {
+            if(e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                return;
+            }
+        });
+        
         //beim anklicken einer Checkbox
         $("input[type=checkbox].memlist_checkbox").live("click", function(){   
             //Checkbox ID
@@ -111,7 +130,7 @@ echo '<h1>'. $g_layout['title']. '</h1>';
 echo '
 <form id="memsearch_form">
     <ul class="iconTextLinkList">
-        <li>Suche: <input type="text" name="mem_serach" id="mem_serach" /></li>
+        <li>Suche: <input type="text" name="mem_search" id="mem_search" /></li>
         <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /> Alle Benutzer anzeigen</li>
     </ul>
 </form>';
