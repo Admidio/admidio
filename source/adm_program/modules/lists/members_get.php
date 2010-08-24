@@ -59,6 +59,8 @@ if(  (!$g_current_user->assignRoles()
     $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
 }
 
+$condition = '';
+$limit = '';
 if($restrict == 'm')
 {
     //Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
@@ -79,6 +81,24 @@ elseif($restrict == 'u')
     //Falls gefordert, aufrufen alle Leute aus der Datenbank
     $condition = ' usr_valid = 1 ';
     $tables = '';
+}
+
+//Suchstring zerlegen
+if($search != '')
+{
+    $search = str_replace('%', ' ', $search);
+    $search_therms = explode(' ', $search);
+    
+    if(count($search_therms)>0)
+    {
+    	//in Condition einbinden
+	    foreach($search_therms as $search_therm)
+	    {
+	    	$condition .= ' AND ((UPPER(last_name.usd_value) LIKE "'.$search_therm.'%") OR (UPPER(first_name.usd_value) LIKE "'.$search_therm.'%")) ';
+	    }
+    }
+    //Ergebnissmenge Limitieren
+    $limit .= ' LIMIT 0, 30 ';
 }
 
 
@@ -104,88 +124,90 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
         LEFT JOIN '. TBL_USER_DATA. ' as zip_code
           ON zip_code.usd_usr_id = usr_id
          AND zip_code.usd_usf_id = '. $g_current_user->getProperty('POSTCODE', 'usf_id'). '
-        WHERE '. $condition. ' 
-        ORDER BY last_name, first_name ';
+        WHERE '. $condition. '
+        ORDER BY last_name, first_name '.$limit;
+//echo $sql;exit();
 $result_user = $g_db->query($sql);
 
-//Zaehlen wieviele Leute in der Datenbank stehen
-$user_anzahl = $g_db->num_rows($result_user);
-
-///Erfassen welche Anfansgsbuchstaben bei Nachnamen Vorkommen
-$first_letter_array = array();
-for($x=0; $user = $g_db->fetch_array($result_user); $x++)
+if($g_db->num_rows($result_user)>0)
 {
-    //Anfangsbuchstabe erfassen
-    $this_letter = ord($user['last_name']);
+	//Zaehlen wieviele Leute in der Datenbank stehen
+	$user_anzahl = $g_db->num_rows($result_user);
+	
+	///Erfassen welche Anfansgsbuchstaben bei Nachnamen Vorkommen
+	$first_letter_array = array();
+	for($x=0; $user = $g_db->fetch_array($result_user); $x++)
+	{
+	    //Anfangsbuchstabe erfassen
+	    $this_letter = ord($user['last_name']);
+	
+	    //falls Kleinbuchstaben
+	    if($this_letter>=97 && $this_letter<=122)
+	    {
+	        $this_letter = $this_letter-32;
+	    }
+	
+	    //falls zahlen
+	    if($this_letter>=48 && $this_letter<=57)
+	    {
+	        $this_letter = 35;
+	    }
+	
+	    //Umlaute zu A
+	    if($this_letter>=192 && $this_letter<=198)
+	    {
+	        $this_letter = 65;
+	    }
+	
+	    //Umlaute zu O
+	    if($this_letter>=210 && $this_letter<=214)
+	    {
+	        $this_letter = 79;
+	    }
+	
+	    //Umlaute zu U
+	    if($this_letter>=217 && $this_letter<=220)
+	    {
+	        $this_letter = 85;
+	    }
+	
+	    $first_letter_array[$x]= $this_letter;
+	}
 
-    //falls Kleinbuchstaben
-    if($this_letter>=97 && $this_letter<=122)
-    {
-        $this_letter = $this_letter-32;
-    }
+	//SQL-Abfrag zurück an Anfang setzen
+	$g_db->data_seek ($result_user, 0);
 
-    //falls zahlen
-    if($this_letter>=48 && $this_letter<=57)
-    {
-        $this_letter = 35;
-    }
-
-    //Umlaute zu A
-    if($this_letter>=192 && $this_letter<=198)
-    {
-        $this_letter = 65;
-    }
-
-    //Umlaute zu O
-    if($this_letter>=210 && $this_letter<=214)
-    {
-        $this_letter = 79;
-    }
-
-    //Umlaute zu U
-    if($this_letter>=217 && $this_letter<=220)
-    {
-        $this_letter = 85;
-    }
-
-    $first_letter_array[$x]= $this_letter;
-}
-
-//SQL-Abfrag zurück an Anfang setzen
-$g_db->data_seek ($result_user, 0);
-
-
-//Erfassen wer die Rolle bereits hat oder schon mal hatte
-$sql = 'SELECT mem_usr_id, mem_rol_id, mem_begin, mem_leader, mem_end
-          FROM '. TBL_MEMBERS. '
-         WHERE mem_rol_id = '.$role_id;
-$result_role_member = $g_db->query($sql);
-
-//Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
-//Schreiben der Leiter der Rolle in weiters arry
-$role_member   = array();
-$group_leaders = array();
-for($y=0; $member = $g_db->fetch_array($result_role_member); $y++)
-{
-    if($member['mem_begin'] <= DATE_NOW
-    && $member['mem_end']    > DATE_NOW)
-    {
-        $role_member[$y]= $member['mem_usr_id'];
-    }
-    if($member['mem_leader']==1)
-    {
-        $group_leaders[$y]= $member['mem_usr_id'];
-    }
-}
-
-// User zaehlen, die mind. einer Rolle zugeordnet sind
-$sql    = 'SELECT COUNT(*)
-             FROM '. TBL_USERS. '
-            WHERE usr_valid = 1 ';
-$result = $g_db->query($sql);
-
-$row = $g_db->fetch_array($result);
-$count_valid_users = $row[0];
+	//Erfassen wer die Rolle bereits hat oder schon mal hatte
+	$sql = 'SELECT mem_usr_id, mem_rol_id, mem_begin, mem_leader, mem_end
+	          FROM '. TBL_MEMBERS. '
+	         WHERE mem_rol_id = '.$role_id;
+	$result_role_member = $g_db->query($sql);
+	
+	//Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
+	//Schreiben der Leiter der Rolle in weiters arry
+	$role_member   = array();
+	$group_leaders = array();
+	for($y=0; $member = $g_db->fetch_array($result_role_member); $y++)
+	{
+	    if($member['mem_begin'] <= DATE_NOW
+	    && $member['mem_end']    > DATE_NOW)
+	    {
+	        $role_member[$y]= $member['mem_usr_id'];
+	    }
+	    if($member['mem_leader']==1)
+	    {
+	        $group_leaders[$y]= $member['mem_usr_id'];
+	    }
+	}
+	
+	// User zaehlen, die mind. einer Rolle zugeordnet sind
+	$sql    = 'SELECT COUNT(*)
+	             FROM '. TBL_USERS. '
+	            WHERE usr_valid = 1 ';
+	$result = $g_db->query($sql);
+	
+	$row = $g_db->fetch_array($result);
+	$count_valid_users = $row[0];
 
 
     $user = $g_db->fetch_array($result_user);
@@ -194,7 +216,7 @@ $count_valid_users = $row[0];
     if($g_db->num_rows($result_user) >= 50)
     {
         //Alle
-        echo '<div class="pageNavigation"><a href="#" onclick="showAll();">Alle</a>&nbsp;';
+        echo '<div class="pageNavigation"><a href="#" letter="">Alle</a>&nbsp;';
 
         for($menu_letter=35; $menu_letter<=90; $menu_letter++)
         {
@@ -207,7 +229,7 @@ $count_valid_users = $row[0];
             //Falls Nicht Link zu Anker
             if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
             {
-                echo '<a href="#" onclick="toggleDiv(\'letter_$menu_letter_string\');">'.$menu_letter_string.'</a>&nbsp;';
+                echo '<a href="#" letter="'.$menu_letter_string.'">'.$menu_letter_string.'</a>&nbsp;';
             }
 
             //Fuer Namen die mit Zahlen beginnen
@@ -215,7 +237,7 @@ $count_valid_users = $row[0];
             {
                 if( in_array(35, $first_letter_array))
                 {
-                    echo '<a href="#" onclick="toggleDiv(\'zahl\');">'.$menu_letter_string.'</a>&nbsp;';
+                    echo '<a href="#" letter="#">'.$menu_letter_string.'</a>&nbsp;';
                 }
                 else
                 {
@@ -346,8 +368,7 @@ $count_valid_users = $row[0];
                 echo '<tbody id="head_'.$block_id.'">
                     <tr>
                         <td class="tableSubHeader" colspan="6">
-                            <a href="javascript:showHideBlock(\''.$block_id.'\')"><img class="iconShowHide"
-                            id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$letter_string.'
+                            '.$letter_string.'
                         </td>
                     </tr>
                 </tbody>
@@ -452,6 +473,9 @@ $count_valid_users = $row[0];
         }
     }//End For
     echo '</table>';
-
-
+}
+else
+{
+	echo 'Leider keine Ergebnisse gefunden';
+}
 ?>
