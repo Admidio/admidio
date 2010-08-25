@@ -35,9 +35,9 @@ class TableMembers extends TableAccess
 
     // liest den Datensatz mit den ids rol_id und usr_id ein
     // die Methode gibt true zurueck, wenn ein DS gefunden wurde, andernfalls false
-    // ids : Array mit den Schlüsseln rol_id und usr_id  Bsp.: array('rol_id'=>xy, 'usr_id'=>yx)
+    // ids : Array mit den Schlï¿½sseln rol_id und usr_id  Bsp.: array('rol_id'=>xy, 'usr_id'=>yx)
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
-    // sql_additioinal_tables : wird nicht verwendet (benötigt wegen Vererbung)
+    // sql_additioinal_tables : wird nicht verwendet (benï¿½tigt wegen Vererbung)
     public function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
     {
         $returnCode = false;
@@ -119,6 +119,14 @@ class TableMembers extends TableAccess
             // einen Tag abziehen, damit User direkt aus der Rolle entfernt werden
             $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
             $this->setValue('mem_end', $newEndDate);
+            
+            //ggf. Leiterschaftbeenden
+            if($this->getValue('mem_leader')==1)
+            {
+            	$this->setValue('mem_leader', 0);
+            }
+            
+            //speichern
             $this->save();
         }
     }
