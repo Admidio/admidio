@@ -69,23 +69,35 @@ $g_layout['header'] ='
         //Bei Seitenaufruf Daten laden
         $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memserach_form").serialize(), function(html){
             $("form#memlist_form").append(html).show();
+            $("#list_load_animation").hide();
             return false;
         });
         
         //Checkbox alle Benutzer anzeigen
         $("input[type=checkbox]#mem_show_all").live("click", function(){
+            $("#list_load_animation").show();
             $("form#memlist_form").hide().empty();
             $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(html){
                 $("form#memlist_form").append(html).show();               
+                $("#list_load_animation").hide();
                 return false;
             });
+            //Link zum Benutzer hinzufügen anzeigen oder verstecken
+            if($(this).is(":checked")){
+                $("#add_user_link").show();
+            }
+            else{
+                $("#add_user_link").hide();
+            }
         });
         
         //Suchfeldeingabe
-        $("input[type=text]#mem_search").live("keyup", function(){
+        $("input[type=text]#mem_search").keyup(function(){
+            $("#list_load_animation").show();
             $("form#memlist_form").hide().empty();
             $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(html){
-                $("form#memlist_form").append(html).show();               
+                $("form#memlist_form").append(html).show();
+                $("#list_load_animation").hide();               
                 return false;
             });
         });
@@ -100,14 +112,56 @@ $g_layout['header'] ='
             }
         });
         
+        //Buchstabennavigation
+        $(".pageNavigationLink").live("click", function(){
+            var letter = $(this).attr("letter");            
+            //Alle anzeigen
+            if(letter == "all"){
+                $(".letterBlockBody").show();
+                $(".letterBlockHead").show();
+            }
+            else{
+	            $(".letterBlockBody[block_body_id!="+letter+"]").hide();
+	            $(".letterBlockHead[block_head_id!="+letter+"]").hide();
+	            $(".letterBlockBody[block_body_id="+letter+"]").show();
+	            $(".letterBlockHead[block_head_id="+letter+"]").show();
+	        }
+	        return false;
+        });
+        
         //beim anklicken einer Checkbox
         $("input[type=checkbox].memlist_checkbox").live("click", function(){   
             //Checkbox ID
             var checkbox_id = $(this).attr("id");
-
-            //Ladebalken
+            var userid = $(this).parent().parent().attr("user_id");
+            
+            //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
+            if($(this).attr("checkboxtype")=="leader" && $(this).attr("checked")==true){                
+                $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
+            }
+            
+            //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
+            if($(this).attr("checkboxtype")=="member" && $(this).attr("checked")==false){                
+                $("input[type=checkbox]#leader_"+userid).removeAttr("checked");
+            }';
+            
+            //Bei der Rolle Webmaster muss konrolliert werden ob noch mindestend ein User Mitglied bleibt
+            if($role->getValue('rol_name') == 'Webmaster')
+            {
+            	$g_layout['header'] .='
+            	if($("input[name^=\'member_\'].memlist_checkbox:checked").size()<1){
+                   //Checkbox wieder setzen. 
+            	   $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
+            	   //Alarm schlagen
+            	   alert("Die Rolle Webmaster muss mindestens ein Mitglied haben!");
+            	   return false;
+                }';
+            }                
+            
+            $g_layout['header'] .='                     
+            //Ladebalken an checkbox
             $("#loadindicator_" + checkbox_id).append("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' alt=\'loadindicator\'  \' />").show();
-        
+                                 
             //Datenbank schreiben
             $.ajax({
                     url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$role_id.'",
@@ -132,10 +186,18 @@ echo '
     <ul class="iconTextLinkList">
         <li>Suche: <input type="text" name="mem_search" id="mem_search" /></li>
         <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /> Alle Benutzer anzeigen</li>
+        <li>
+	        <span class="iconTextLink" id="add_user_link" style="display: none;">
+		        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img src="'. THEME_PATH. '/icons/add.png" alt="Login" /></a>
+		        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">Benutzer anlegen</a>
+	        </span>
+        </li>
     </ul>
 </form>';
 
 
+//ladebalken
+echo '<img src="'.THEME_PATH.'/images/loading_animation.gif" alt="Ladebalken" id="list_load_animation"/>';
 
 //Liste mit Namen zu abhaken
 echo '<form id="memlist_form"></form>';

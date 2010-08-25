@@ -19,7 +19,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
 
-// Uebergabevariablen pruefen
+//Uebergabevariablen pruefen
 //Role ID
 if(isset($_GET['rol_id']) && is_numeric($_GET['rol_id']) == false)
 {
@@ -216,7 +216,7 @@ if($g_db->num_rows($result_user)>0)
     if($g_db->num_rows($result_user) >= 50)
     {
         //Alle
-        echo '<div class="pageNavigation"><a href="#" letter="">Alle</a>&nbsp;';
+        echo '<div class="pageNavigation"><a href="#" letter="all" class="pageNavigationLink">Alle</a>&nbsp;';
 
         for($menu_letter=35; $menu_letter<=90; $menu_letter++)
         {
@@ -229,7 +229,7 @@ if($g_db->num_rows($result_user)>0)
             //Falls Nicht Link zu Anker
             if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
             {
-                echo '<a href="#" letter="'.$menu_letter_string.'">'.$menu_letter_string.'</a>&nbsp;';
+                echo '<a href="#" letter="'.$menu_letter_string.'" class="pageNavigationLink">'.$menu_letter_string.'</a>&nbsp;';
             }
 
             //Fuer Namen die mit Zahlen beginnen
@@ -237,7 +237,7 @@ if($g_db->num_rows($result_user)>0)
             {
                 if( in_array(35, $first_letter_array))
                 {
-                    echo '<a href="#" letter="#">'.$menu_letter_string.'</a>&nbsp;';
+                    echo '<a href="#" letter="numeric" class="pageNavigationLink">'.$menu_letter_string.'</a>&nbsp;';
                 }
                 else
                 {
@@ -286,14 +286,6 @@ if($g_db->num_rows($result_user)>0)
         }
     }
     
-    if($restrict == 'u')
-    {
-        echo' <span class="iconTextLink" >
-        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img src="'. THEME_PATH. '/icons/add.png" alt="Login" /></a>
-        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">Benutzer anlegen</a>
-        </span>';
-    }
-    
     //Tabelle anlegen
     echo '
     <table class="tableList" cellspacing="0">
@@ -330,7 +322,7 @@ if($g_db->num_rows($result_user)>0)
                 if($letter_merker == 35)
                 {
                     $letter_merker++;
-                    $letter_string = 'zahl';
+                    $letter_string = 'numeric';
                 }
 
                 //Sonst
@@ -359,20 +351,19 @@ if($g_db->num_rows($result_user)>0)
                 if($letter_merker == 34)
                 {
                     $letter_merker++;
-                    $letter_string = 'zahl';
-                    $letter_text = '&#35;';
+                    $letter_string = 'numeric';
+                    $letter_text = '#';
                 }
 
                 // Ueberschrift fuer neuen Buchstaben
-                $block_id = 'letter_'.$letter_string;
-                echo '<tbody id="head_'.$block_id.'">
+                echo '<tbody block_head_id="'.$letter_string.'" class="letterBlockHead">
                     <tr>
                         <td class="tableSubHeader" colspan="6">
-                            '.$letter_string.'
+                            '.$letter_text.'
                         </td>
                     </tr>
                 </tbody>
-                <tbody id="'.$block_id.'">';
+                <tbody block_body_id="'.$letter_string.'" class="letterBlockBody">';
             }
         }
 
@@ -388,18 +379,18 @@ if($g_db->num_rows($result_user)>0)
         }
 
         echo '
-        <tr class="tableMouseOver">
+        <tr class="tableMouseOver" user_id="'.$user['usr_id'].'">
             <td><img class="iconInformation" src="'. THEME_PATH.'/icons/profile.png" alt="Userinformationen" title="'.$user_text.'" /></td>
 
             <td style="text-align: center;">';
                 //Haekchen setzen ob jemand Mitglied ist oder nicht
                 if(in_array($user['usr_id'], $role_member))
                 {
-                    echo '<input type="checkbox" onclick="unmarkLeader(this)" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" value="1" class="memlist_checkbox" />';
+                    echo '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="member" />';
                 }
                 else
                 {
-                    echo '<input type="checkbox" onclick="unmarkLeader(this)" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" value="1" class="memlist_checkbox" />';
+                    echo '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox" checkboxtype="member"/>';
                 }
             echo '<b id="loadindicator_member_'.$user['usr_id'].'"></b></td>
             <td>'.$user['last_name'].'</td>
@@ -418,11 +409,11 @@ if($g_db->num_rows($result_user)>0)
                 //Haekchen setzen ob jemand Leiter ist oder nicht
                 if(in_array($user['usr_id'], $group_leaders))
                 {
-                    echo '<input type="checkbox" onclick="markMember(this)" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" value="1" class="memlist_checkbox" />';
+                    echo '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="leader"/>';
                 }
                 else
                 {
-                    echo '<input type="checkbox" onclick="markMember(this)" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" value="1" class="memlist_checkbox" />';
+                    echo '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox" checkboxtype="leader" />';
                 }
             echo '<b id="loadindicator_leader_'.$user['usr_id'].'"></b>
         </tr>';
@@ -472,10 +463,14 @@ if($g_db->num_rows($result_user)>0)
             //Ende Container
         }
     }//End For
-    echo '</table>';
+    echo '</table>
+    <p>Die Speicherung erfolgt automatisch mit setzen eines Hakens.</p>';
+    
+    //Hilfe nachladen
+    echo '<script type="text/javascript">$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'})</script>';
 }
 else
 {
-	echo 'Leider keine Ergebnisse gefunden';
+	echo '<p>Leider keine Ergebnisse gefunden</p>';
 }
 ?>
