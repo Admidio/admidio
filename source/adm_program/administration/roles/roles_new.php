@@ -99,7 +99,7 @@ if($req_rol_id > 0)
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('ROL_CREATE_ROLE');
+    $g_layout['title'] = $g_l10n->get('SYS_CREATE_ROLE');
     $role->setValue('rol_this_list_view', '1');
     $role->setValue('rol_mail_this_role', '2');
 }
