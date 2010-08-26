@@ -2,7 +2,7 @@
 /******************************************************************************
  * Anzeigen von Listen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -157,11 +157,11 @@ if($num_roles == 0)
 // Html-Kopf ausgeben
 if($active_role)
 {
-    $g_layout['title']  = 'Übersicht der aktiven Rollen';
+    $g_layout['title']  = $g_l10n->get('LST_PHR_ACTIVE_ROLES');
 }
 else
 {
-    $g_layout['title']  = 'Übersicht der inaktiven Rollen';
+    $g_layout['title']  = $g_l10n->get('LST_PHR_INACTIVE_ROLES');
 }
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -203,8 +203,8 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php"><img
-                    src="'.THEME_PATH.'/icons/add.png" alt="Rolle anlegen" /></a>
-                <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">Rolle anlegen</a>
+                    src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_ROLE').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">'.$g_l10n->get('SYS_CREATE_ROLE').'</a>
             </span>
         </li>';
     }
@@ -312,7 +312,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                 {
                     if($count_cat_entries == 0)
                     {
-                        echo 'Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.';
+                        echo $g_l10n->get('LST_PHR_CATEGORY_NO_LISTS');
                     }
                     echo '</div></div><br />';
                 }

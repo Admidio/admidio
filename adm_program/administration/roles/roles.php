@@ -87,8 +87,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('ROL_CREATE_ROLE').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">'.$g_l10n->get('ROL_CREATE_ROLE').'</a>
+            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_ROLE').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">'.$g_l10n->get('SYS_CREATE_ROLE').'</a>
         </span>
     </li>
     <li>

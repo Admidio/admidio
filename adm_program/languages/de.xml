@@ -328,7 +328,10 @@
     <!-- Phrases only in Listsmodule -->
     <text id="LST_LISTS" development="new" translation="todo">Listen</text>
     <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
+    <text id="LST_PHR_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
+    <text id="LST_PHR_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
     <text id="LST_PHR_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
+    <text id="LST_PHR_INACTIVE_ROLES" development="new" translation="todo">Übersicht der inaktiven Rollen</text>
     <text id="LST_PHR_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
     <text id="LST_PHR_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
@@ -557,7 +560,6 @@
     <text id="ROL_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
     <text id="ROL_CONTRIBUTION" development="new" translation="todo">Beitrag</text>
     <text id="ROL_CONTRIBUTION_PERIOD" development="new" translation="todo">Beitragszeitraum</text>
-    <text id="ROL_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="todo">Abhängigkeiten</text>
     <text id="ROL_DEPENDENT" development="new" translation="todo">Abhängig</text>
     <text id="ROL_EDIT_ROLE" development="new" translation="todo">Rolle bearbeiten</text>
@@ -664,6 +666,7 @@
     <text id="SYS_COPY" development="new" translation="todo">Kopieren</text>
     <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
+    <text id="SYS_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
     <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
     <text id="SYS_DATE" development="new" translation="todo">Datum</text>
 	<text id="SYS_DATE_MODIFIED" development="new" translation="todo">Änderungsdatum</text>
