@@ -327,12 +327,14 @@
 
     <!-- Phrases only in Listsmodule -->
     <text id="LST_LISTS" development="new" translation="todo">Listen</text>
-    <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
+    <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="todo">Mitgliederzuordnung</text>
+	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
     <text id="LST_PHR_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
     <text id="LST_PHR_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
     <text id="LST_PHR_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
     <text id="LST_PHR_INACTIVE_ROLES" development="new" translation="todo">Übersicht der inaktiven Rollen</text>
-    <text id="LST_PHR_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
+	<text id="LST_PHR_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
+	<text id="LST_PHR_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
     <text id="LST_PHR_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
 
@@ -649,7 +651,8 @@
     <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
-    <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
+    <text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
+	<text id="SYS_BOLD" development="new" translation="todo">Fett</text>
     <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
     <text id="SYS_CAPTCHA_CODE" development="new" translation="todo">Bestätigungscode</text>
@@ -688,6 +691,7 @@
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
     <text id="SYS_FILE" development="new" translation="todo">Datei</text>
+	<text id="SYS_FIRSTNAME" development="new" translation="todo">Vorname</text>
 	<text id="SYS_FROM_TO" development="new" translation="todo">vom %VAR1% bis %VAR2%</text>
 	<text id="SYS_FOLDER" development="new" translation="todo">Ordner</text>
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
@@ -702,11 +706,13 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
     <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad erhöhen</text>
-    <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
+    <text id="SYS_INFO" development="new" translation="todo">Info</text>
+	<text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
+	<text id="SYS_LASTNAME" development="new" translation="todo">Nachname</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
     <text id="SYS_LINK_TO" development="new" translation="todo">Link auf %VAR1%</text>
     <text id="SYS_LOCATION" description="Location of a date" development="new" translation="todo">Ort</text>
@@ -748,7 +754,8 @@
     <text id="SYS_PHR_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
     <text id="SYS_PHR_CAPTCHA_CODE_INVALID" development="new" translation="todo">Der Bestätigungscode wurde falsch eingegeben.</text>
     <text id="SYS_PHR_CAPTCHA_DESCRIPTION" development="new" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
-    <text id="SYS_PHR_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
+    <text id="SYS_PHR_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
+	<text id="SYS_PHR_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" development="new" translation="todo">%VAR1% anlegen</text>
     <text id="SYS_PHR_CREATED_BY" development="new" translation="todo">Angelegt von %VAR1% am %VAR2%</text>
     <text id="SYS_PHR_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Du hast keine gültige E-Mailadresse hinterlegt!\n\nTrage bitte in deinem %VAR1%Profil%VAR1% eine E-Mailadresse ein.</text>
@@ -795,7 +802,8 @@
     <text id="SYS_PHR_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_PHR_NO_ENTRY" development="new" translation="todo">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_PHR_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
-    <text id="SYS_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.</text>
+    <text id="SYS_PHR_NO_ENTRIES_FOUND" development="new" translation="todo">Es wurden keine Einträge gefunden.</text>
+	<text id="SYS_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.</text>
     <text id="SYS_PHR_PASSWORD_FORGOTTEN" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
     <text id="SYS_PHR_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn du dein Passwort vergessen hast, kann das System ein neues Passwort erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
     <text id="SYS_PHR_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
@@ -815,7 +823,8 @@
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">voriges</text>
-    <text id="SYS_PROPERTIES" development="new" translation="todo">Eigenschaften</text>
+    <text id="SYS_PROGRESSBAR" development="new" translation="todo">Ladebalken</text>
+	<text id="SYS_PROPERTIES" development="new" translation="todo">Eigenschaften</text>
     <text id="SYS_RECIPIENT" development="new" translation="todo">Empfänger</text>
     <text id="SYS_REGISTRATION" development="new" translation="todo">Registrierung</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>

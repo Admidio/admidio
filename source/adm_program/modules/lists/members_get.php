@@ -216,7 +216,7 @@ if($g_db->num_rows($result_user)>0)
     if($g_db->num_rows($result_user) >= 50)
     {
         //Alle
-        echo '<div class="pageNavigation"><a href="#" letter="all" class="pageNavigationLink">Alle</a>&nbsp;';
+        echo '<div class="pageNavigation"><a href="#" letter="all" class="pageNavigationLink">'.$g_l10n->get('SYS_ALL').'</a>&nbsp;';
 
         for($menu_letter=35; $menu_letter<=90; $menu_letter++)
         {
@@ -291,12 +291,12 @@ if($g_db->num_rows($result_user)>0)
     <table class="tableList" cellspacing="0">
         <thead>
             <tr>
-                <th>Info</th>
-                <th style="text-align: center;">Mitglied</th>
-                <th>Name</th>
-                <th>Vorname</th>
-                <th>Geburtsdatum</th>
-                <th style="text-align: center;">Leiter<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION&amp;inline=true"><img 
+                <th>'.$g_l10n->get('SYS_INFO').'</th>
+                <th style="text-align: center;">'.$g_l10n->get('SYS_MEMBER').'</th>
+                <th>'.$g_l10n->get('SYS_LASTNAME').'</th>
+                <th>'.$g_l10n->get('SYS_FIRSTNAME').'</th>
+                <th>'.$g_l10n->get('SYS_BIRTHDAY').'</th>
+                <th style="text-align: center;">'.$g_l10n->get('SYS_LEADER').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION&amp;inline=true"><img 
 	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a></th>
             </tr>
@@ -464,13 +464,13 @@ if($g_db->num_rows($result_user)>0)
         }
     }//End For
     echo '</table>
-    <p>Die Speicherung erfolgt automatisch mit setzen eines Hakens.</p>';
+    <p>'.$g_l10n->get('SYS_PHR_CHECKBOX_AUTOSAVE').'</p>';
     
     //Hilfe nachladen
     echo '<script type="text/javascript">$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'})</script>';
 }
 else
 {
-	echo '<p>Leider keine Ergebnisse gefunden</p>';
+	echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES_FOUND').'</p>';
 }
 ?>
