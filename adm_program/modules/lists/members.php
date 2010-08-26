@@ -60,7 +60,7 @@ if(  (!$g_current_user->assignRoles()
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Mitgliederzuordnung für "'. $role->getValue('rol_name'). '"';
+$g_layout['title']  = $g_l10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
 $g_layout['header'] ='
 <script type="text/javascript">
@@ -146,14 +146,14 @@ $g_layout['header'] ='
             }';
             
             //Bei der Rolle Webmaster muss konrolliert werden ob noch mindestend ein User Mitglied bleibt
-            if($role->getValue('rol_name') == 'Webmaster')
+            if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
             {
             	$g_layout['header'] .='
             	if($("input[name^=\'member_\'].memlist_checkbox:checked").size()<1){
                    //Checkbox wieder setzen. 
             	   $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
             	   //Alarm schlagen
-            	   alert("Die Rolle Webmaster muss mindestens ein Mitglied haben!");
+            	   alert("'.$g_l10n->get('LST_PHR_MUST_HAVE_WEBMASTER').'");
             	   return false;
                 }';
             }                
@@ -185,19 +185,18 @@ echo '
 <form id="memsearch_form">
     <ul class="iconTextLinkList">
         <li>Suche: <input type="text" name="mem_search" id="mem_search" /></li>
-        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /> Alle Benutzer anzeigen</li>
+        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /> '.$g_l10n->get('MEM_SHOW_ALL_USERS').'</li>
         <li>
 	        <span class="iconTextLink" id="add_user_link" style="display: none;">
-		        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img src="'. THEME_PATH. '/icons/add.png" alt="Login" /></a>
-		        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">Benutzer anlegen</a>
+		        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
+		        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">'.$g_l10n->get('MEM_CREATE_USER').'</a>
 	        </span>
         </li>
     </ul>
 </form>';
 
-
 //ladebalken
-echo '<img src="'.THEME_PATH.'/images/loading_animation.gif" alt="Ladebalken" id="list_load_animation"/>';
+echo '<img src="'.THEME_PATH.'/images/loading_animation.gif" alt="'.$g_l10n->get('SYS_PROGRESS_BAR').'" id="list_load_animation"/>';
 
 //Liste mit Namen zu abhaken
 echo '<form id="memlist_form"></form>';
