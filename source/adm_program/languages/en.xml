@@ -107,6 +107,23 @@
     <text id="LNK_SAME_WINDOW" development="new" translation="todo">Same window</text>
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
 	
+	<!-- Phrases only in Organizationadministration -->
+	<text id="ORG_CAPTCHA" development="new" translation="todo">Use this seetings for the captcha options.</text>
+	<text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Backgroundcolor</text>
+	<text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Choose the backgroundcolor (as hex) for the captcha code. (predefined: #FFEFC4)</text>
+	<text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Choose the font for the captcha code. (predefined: Theme font)</text>
+	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha code. (predefined: 20)</text>
+	<text id="ORG_CAPTCHA_SIZE" development="new" translation="todo">Choose the scaling for the captcha.</text>
+	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha signature</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha signature. (predefined: 9)</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
+	<text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Accepted signs</text>
+	<text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Type in the accepted signs for the captcha.</text>
+	<text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Scaling of the captcha (width x high)</text>
+	<text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Type of captcha</text>
+	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Calculation</text>
+	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Picture</text>
+	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">You can choose the type of captcha. The following options are for display the captcha as a picture or you set up it as a simple calculation as text. (predifined: picture)</text>
 	
 	<!-- Phrases only in Updatecheck -->
 	<text id="UPD_ADMIDIO" development="new" translation="todo">Go to Admidio updatesite</text>
@@ -234,7 +251,18 @@
     <text id="SYS_BACK" development="edited" translation="todo">Back</text>
     <text id="SYS_BOLD" development="edited" translation="todo">Bold</text>
     <text id="SYS_CAPTCHA" development="edited" translation="todo">Captcha</text>
-    <text id="SYS_CAPTCHA_CODE" development="edited" translation="todo">Bestätigungscode</text>
+	<text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
+	<text id="SYS_CAPTCHA_CALC" development="new" translation="todo">Result of the calculation</text>
+	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="todo">The result of the calculation is not correct.</text>
+	<text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="todo">The calculation is part of a captcha. A captcha is used for spam detection. The calculation is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the calculation into the form.</text>
+	<text id="SYS_CAPTCHA_CALC_PART1" development="new" translation="todo">Please calculate</text>
+	<text id="SYS_CAPTCHA_CALC_PART2" development="new" translation="todo">and add</text>
+	<text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="todo">a third of</text>
+	<text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="todo">the half of</text>
+	<text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="todo">.</text>
+	<text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="todo">The authentication code was invalid.</text>
+	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="todo">Authentication code</text>
+	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="todo">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</text>	
     <text id="SYS_CLOSE" development="edited" translation="todo">Close</text>
     <text id="SYS_CREATE" development="edited" translation="todo">Create</text>
     <text id="SYS_DATABASE" development="edited" translation="todo">Database</text>
