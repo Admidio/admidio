@@ -251,7 +251,8 @@ if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
-        $g_message->show($g_l10n->get('SYS_PHR_CAPTCHA_CODE_INVALID'));
+		if($g_preferences['captcha_type']=='pic') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+		else if($g_preferences['captcha_type']=='calc') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 

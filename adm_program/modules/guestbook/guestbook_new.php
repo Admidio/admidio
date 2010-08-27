@@ -18,6 +18,13 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook.php');
 
+// Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
+// Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
+if (!$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1 && $g_preferences['captcha_type']=='calc')
+{
+	require_once('../../system/classes/captcha.php');
+}
+
 if ($g_preferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
@@ -246,17 +253,31 @@ echo '
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '" alt="Captcha" />
+                            ';			
+				if($g_preferences['captcha_type']=='pic')
+				{
+					echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />';
+					$captcha_label = $g_l10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
+					$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
+				}
+				else if($g_preferences['captcha_type']=='calc')
+				{
+					$captcha = new Captcha();
+					$captcha->getCaptchaCalc($g_l10n->get('SYS_CAPTCHA_CALC_PART1'),$g_l10n->get('SYS_CAPTCHA_CALC_PART2'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$g_l10n->get('SYS_CAPTCHA_CALC_PART4'));
+					$captcha_label = $g_l10n->get('SYS_CAPTCHA_CALC');
+					$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
+				}
+				echo '
                         </dd>
                     </dl>
 
                     <dl>
-                       <dt><label for="captcha">'.$g_l10n->get('PRO_CONFIRMATION_CODE').':</label></dt>
+                       <dt><label for="captcha">'.$captcha_label.':</label></dt>
                        <dd>
                            <input type="text" id="captcha" name="captcha" tabindex="5" style="width: 200px;" maxlength="8" value="" />
                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                           <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION&amp;inline=true"><img 
-				               onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_CAPTCHA_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
+                           <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
+				               onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
 				               class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                        </dd>
                     </dl>

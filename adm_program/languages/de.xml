@@ -402,7 +402,23 @@
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="todo">Erweiterte Registrierung</text>
     <text id="ORG_ALLOW_BBCODE" development="new" translation="todo">BBCode zulassen</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
-    <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
+	<text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
+	<text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Hintergrundfarbe</text>
+	<text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (standard: #FFEFC4)</text>
+	<text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (standard: Theme-Schriftart)</text>
+	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (standard: 20)</text>
+	<text id="ORG_CAPTCHA_SIZE" development="new" translation="todo">Hier kann die Grösse des Captchas festgelegt werden.</text>
+	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha Untertitel</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (standard: 9)</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
+	<text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Zulässige Captcha-Zeichen</text>
+	<text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</text>
+	<text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Skalierung des Captchas (Breite x Höhe)</text>
+	<text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Captcha Art</text>
+	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Rechenaufgabe</text>
+	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Bildchen</text>
+	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (standard: Bildchen)</text>
+	<text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
     <text id="ORG_CURRENCY" development="new" translation="todo">Währung</text>
     <text id="ORG_DATATYPE" development="new" translation="todo">Datentyp</text>
     <text id="ORG_DATE_FORMAT" development="new" translation="todo">Datumsformat</text>
@@ -651,11 +667,21 @@
     <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
-    <text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
-	<text id="SYS_BOLD" development="new" translation="todo">Fett</text>
+	<text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
+    <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
     <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
-    <text id="SYS_CAPTCHA_CODE" development="new" translation="todo">Bestätigungscode</text>
+	<text id="SYS_CAPTCHA_CALC" development="new" translation="todo">Ergebnis der Rechnung</text>
+	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="todo">Das Ergbenis der Rechnung wurde falsch eingegeben.</text>
+	<text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="todo">Bei der Rechenaufgabe handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Rechenaufgabe wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage die Lösung der Rechenaufgabe in das Formularfeld ein.</text>
+	<text id="SYS_CAPTCHA_CALC_PART1" development="new" translation="todo">Bitte berechne</text>
+	<text id="SYS_CAPTCHA_CALC_PART2" development="new" translation="todo">und zähle</text>
+	<text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="todo">ein Drittel von</text>
+	<text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="todo">die Hälfte von</text>
+	<text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="todo">dazu.</text>
+	<text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="todo">Der Bestätigungscode wurde falsch eingegeben.</text>
+	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
+	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
     <text id="SYS_CATEGORY" development="new" translation="todo">Kategorie</text>
     <text id="SYS_CENTERED" development="new" translation="todo">Zentriert</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
@@ -669,7 +695,7 @@
     <text id="SYS_COPY" development="new" translation="todo">Kopieren</text>
     <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
-    <text id="SYS_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
+	<text id="SYS_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
     <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
     <text id="SYS_DATE" development="new" translation="todo">Datum</text>
 	<text id="SYS_DATE_MODIFIED" development="new" translation="todo">Änderungsdatum</text>
@@ -706,8 +732,8 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
     <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad erhöhen</text>
-    <text id="SYS_INFO" development="new" translation="todo">Info</text>
-	<text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
+	<text id="SYS_INFO" development="new" translation="todo">Info</text>
+    <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
@@ -752,10 +778,8 @@
     <text id="SYS_PHR_ADMINISTRATION" development="new" translation="todo">%VAR1%-Verwaltung</text>
     <text id="SYS_PHR_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
     <text id="SYS_PHR_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
-    <text id="SYS_PHR_CAPTCHA_CODE_INVALID" development="new" translation="todo">Der Bestätigungscode wurde falsch eingegeben.</text>
-    <text id="SYS_PHR_CAPTCHA_DESCRIPTION" development="new" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
-    <text id="SYS_PHR_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
-	<text id="SYS_PHR_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
+	<text id="SYS_PHR_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
+    <text id="SYS_PHR_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" development="new" translation="todo">%VAR1% anlegen</text>
     <text id="SYS_PHR_CREATED_BY" development="new" translation="todo">Angelegt von %VAR1% am %VAR2%</text>
     <text id="SYS_PHR_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Du hast keine gültige E-Mailadresse hinterlegt!\n\nTrage bitte in deinem %VAR1%Profil%VAR1% eine E-Mailadresse ein.</text>
@@ -802,8 +826,8 @@
     <text id="SYS_PHR_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_PHR_NO_ENTRY" development="new" translation="todo">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_PHR_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
-    <text id="SYS_PHR_NO_ENTRIES_FOUND" development="new" translation="todo">Es wurden keine Einträge gefunden.</text>
-	<text id="SYS_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.</text>
+	<text id="SYS_PHR_NO_ENTRIES_FOUND" development="new" translation="todo">Es wurden keine Einträge gefunden.</text>
+    <text id="SYS_PHR_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.</text>
     <text id="SYS_PHR_PASSWORD_FORGOTTEN" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
     <text id="SYS_PHR_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn du dein Passwort vergessen hast, kann das System ein neues Passwort erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
     <text id="SYS_PHR_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
@@ -823,8 +847,8 @@
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">voriges</text>
-    <text id="SYS_PROGRESSBAR" development="new" translation="todo">Ladebalken</text>
-	<text id="SYS_PROPERTIES" development="new" translation="todo">Eigenschaften</text>
+	<text id="SYS_PROGRESSBAR" development="new" translation="todo">Ladebalken</text>
+    <text id="SYS_PROPERTIES" development="new" translation="todo">Eigenschaften</text>
     <text id="SYS_RECIPIENT" development="new" translation="todo">Empfänger</text>
     <text id="SYS_REGISTRATION" development="new" translation="todo">Registrierung</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>

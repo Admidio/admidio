@@ -61,7 +61,7 @@ $g_layout['header'] =  '
         var organizationJS = new organizationClass();
         organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
                     "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
-                    "dates-module", "links-module", "systeminfo");
+                    "dates-module", "links-module", "systeminfo", "captcha");
         organizationJS.ecard_CCRecipients = "'.$form_values["ecard_cc_recipients"].'";
         organizationJS.ecard_textLength = "'.$form_values["ecard_text_length"].'";
         organizationJS.forum_Server = "'.$form_values["forum_srv"].'";
@@ -186,6 +186,14 @@ echo '
         </div>
         </td>
         </tr>
+		<tr>
+        <td>
+        <div id="captcha_link" class="iconTextLink">
+            <a href="#"><img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$g_l10n->get('SYS_CAPTCHA').'" title="'.$g_l10n->get('SYS_CAPTCHA').'" /></a>
+            <a href="#">'.$g_l10n->get('SYS_CAPTCHA').'</a>
+        </div>
+        </td>
+        </tr>		
         </table>
     </div>
 </div>
@@ -1928,6 +1936,137 @@ echo '
                 </ul>
             </div>
         </div>";
+		
+		
+		/**************************************************************************************/
+        //Einstellungen Captcha
+        /**************************************************************************************/
+		
+		echo '
+        <div class="groupBox" id="captcha">
+            <div class="groupBoxHeadline"><img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />
+                '.$g_l10n->get('SYS_SETTINGS').' '.$g_l10n->get('SYS_CAPTCHA').'</div>
+            <div class="groupBoxBody">
+                <ul class="formFieldList">
+                    <li class="smallFontSize">'.$g_l10n->get("ORG_CAPTCHA").'</li>
+					<li>
+                        <dl>
+                            <dt><label for="captcha_type">'.$g_l10n->get('ORG_CAPTCHA_TYPE').':</label></dt>
+                            <dd>
+                                <select size="1" id="captcha_type" name="captcha_type">
+                                    <option value="pic" ';
+                                    if($form_values['captcha_type'] == 'pic')
+                                    {
+                                        echo " selected=\"selected\" ";
+                                    }
+                                    echo '>'.$g_l10n->get('ORG_CAPTCHA_TYPE_PIC').'</option>
+                                    <option value="calc" ';
+                                    if($form_values['captcha_type'] == 'calc')
+                                    {
+                                        echo ' selected="selected" ';
+                                    }
+                                    echo '>'.$g_l10n->get('ORG_CAPTCHA_TYPE_CALC').'</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ORG_CAPTCHA_TYPE_TEXT").'
+                    </li>	
+					<li>
+                        <dl>
+                            <dt><label for="captcha_font">'.$g_l10n->get("SYS_FONT").':</label></dt>
+                            <dd>
+								<select size="1" id="captcha_fonts" name="captcha_fonts" style="width:120px;">
+								';
+								$fonts = getfilenames('../../system/fonts/');
+								array_push($fonts,"Theme");
+								asort($fonts);
+								foreach($fonts as $myfonts)
+								{
+									if($myfonts == $form_values["captcha_fonts"]){$select = ' selected';}
+									else {$select = '';}
+									echo '<option value="'.$myfonts.'"'.$select.'>'.$myfonts.'</option>
+									';
+								}
+                             echo '</select>
+							</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ORG_CAPTCHA_FONT").'
+                    </li>					
+                    <li>
+                        <dl>
+                            <dt><label for="captcha_font_size">'.$g_l10n->get("SYS_FONT_SIZE").':</label></dt>
+                            <dd>';
+                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'captcha_text_size',$form_values["captcha_text_size"],'120','false','false');
+                             echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                       '.$g_l10n->get("ORG_CAPTCHA_FONT_SIZE").'
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="captcha_background_color">'.$g_l10n->get("ORG_CAPTCHA_BACKGROUND_COLOR").':</label></dt>
+                            <dd>
+								<input type="text" id="captcha_background_color" name="captcha_background_color" style="width: 60px;" maxlength="7" value="'.$form_values["captcha_background_color"].'" />                            
+							</dd>
+                        </dl>
+                    </li>
+					<li class="smallFontSize">
+                        '.$g_l10n->get("ORG_CAPTCHA_BACKGROUND_COLOR_TEXT").'
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="captcha_width">'.$g_l10n->get("ORG_CAPTCHA_SCALING").':</label></dt>
+                            <dd><input type="text" id="captcha_width" name="captcha_width" style="width: 50px;" maxlength="4" value="'.$form_values["captcha_width"].'" />
+                                x
+                                <input type="text" id="captcha_height" name="captcha_height" style="width: 50px;" maxlength="4" value="'.$form_values["captcha_height"].'" />
+                                Pixel
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ORG_CAPTCHA_SIZE").'
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="captcha_signs">'.$g_l10n->get("ORG_CAPTCHA_SIGNS").':</label></dt>
+                            <dd>
+                                <input type="text" id="captcha_signs" name="captcha_signs" maxlength="80" size="35" value="'.$form_values['captcha_signs'].'" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ORG_CAPTCHA_SIGNS_TEXT").'
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="captcha_signature">'.$g_l10n->get("ORG_CAPTCHA_SIGNATURE").':</label></dt>
+                            <dd>
+                                <input type="text" id="captcha_signature" name="captcha_signature" maxlength="60" size="35" value="'.$form_values['captcha_signature'].'" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("ORG_CAPTCHA_SIGNATURE_TEXT").'
+                    </li>
+					<li>
+                        <dl>
+                            <dt><label for="captcha_signature_font_size">'.$g_l10n->get("SYS_FONT_SIZE").':</label></dt>
+                            <dd>';
+                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'captcha_signature_font_size',$form_values["captcha_signature_font_size"],'120','false','false');
+                             echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                       '.$g_l10n->get("ORG_CAPTCHA_SIGNATURE_FONT_SIZE").'
+                    </li>
+                </ul>
+            </div>
+        </div>';
 
         /**************************************************************************************/
         //Systeminformationen
