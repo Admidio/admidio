@@ -187,7 +187,7 @@
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
     <text id="GBO_HIDE_COMMENTS" development="new" translation="todo">Kommentare ausblenden</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="todo">Flooding Protection Intervall</text>
-    <text id="GBO_PHR_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
+    <text id="GBO_PHR_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="GBO_PHR_COMMENTS4ALL" development="new" translation="todo">Anonyme Kommentare erlauben</text>
     <text id="GBO_PHR_COMMENTS4ALL_DESC" development="new" translation="todo">Nicht eingeloggte Benutzer können nach Aktivierung dieser Option Einträge im Gästebuch kommentieren. Die Rechtevergabe für diese Funktion über die Rollenverwaltung wird dann ignoriert. (Standard: nein)</text>
     <text id="GBO_PHR_CREATE_ENTRY" development="new" translation="todo">%VAR1%-Eintrag anlegen</text>
@@ -341,6 +341,7 @@
     <!-- Phrases only in Mailmodule -->
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_PHR_ATTACHMENT_TO_LARGE" development="new" translation="todo">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
+	<text id="MAI_PHR_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_PHR_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_PHR_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
     <text id="MAI_PHR_ROLE_NO_EMAILS" development="new" translation="todo">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
@@ -407,7 +408,8 @@
 	<text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (standard: #FFEFC4)</text>
 	<text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (standard: Theme-Schriftart)</text>
 	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (standard: 20)</text>
-	<text id="ORG_CAPTCHA_SIZE" development="new" translation="todo">Hier kann die Grösse des Captchas festgelegt werden.</text>
+	<text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha-Vorschau</text>	
+	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</text>
 	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha Untertitel</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (standard: 9)</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
@@ -436,7 +438,7 @@
     <text id="ORG_PHR_ADMIDIO_THEME" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
     <text id="ORG_PHR_ALLOW_BBCODE" development="new" translation="todo">Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) %VAR1% nutzen um den Text besser zu formatieren. (Standard: ja)</text>
     <text id="ORG_PHR_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>
-    <text id="ORG_PHR_CAPTCHA_REGISTRATION" development="new" translation="todo">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
+    <text id="ORG_PHR_CAPTCHA_REGISTRATION" development="new" translation="todo">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="ORG_PHR_CURRENCY" development="new" translation="todo">Kennzeichen der Währung, die benutzt wird. Dieses Zeichen wird hinter allen Beträgen angezeigt.</text>
     <text id="ORG_PHR_DATE_FORMAT" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: d.m.Y)</text>
     <text id="ORG_PHR_EMAIL_ALERTS" development="new" translation="todo">Mitglieder aller Rollen mit der Berechtigung %VAR1_BOLD% erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</text>
