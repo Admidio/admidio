@@ -129,5 +129,16 @@ $orga_preferences = array(
     'weblinks_per_page' 		=> '0',
 	'weblinks_redirect_seconds'	=> '10',
 	'weblinks_target'			=> '_blank'
+	
+	// Captcha
+    'captcha_background_color'	=> '#FFEFC4',
+    'captcha_text_size' 		=> '20',
+	'captcha_fonts'				=> 'Theme',
+	'captcha_width'				=> '250'
+    'captcha_height'			=> '60',
+    'captcha_signs' 			=> '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
+	'captcha_signature'			=> 'POWERED  BY   A D M I D I O . O R G',
+	'captcha_signature_font_size' => '9'
+	'captcha_type'				=> 'pic'	
  );
 ?>

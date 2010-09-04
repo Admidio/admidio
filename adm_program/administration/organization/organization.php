@@ -464,20 +464,18 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen,
-                        dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
+                    <li class="smallFontSize">
+						'.$g_l10n->get("ORG_PHR_CAPTCHA_REGISTRATION").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_registration_admin_mail\">E-Mail-Benachrichtigung:</label></dt>
+                            <dt><label for="enable_registration_admin_mail">E-Mail-Benachrichtigung:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_registration_admin_mail\" name=\"enable_registration_admin_mail\" ";
+                                <input type="checkbox" id="enable_registration_admin_mail" name="enable_registration_admin_mail" ';
                                 if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -962,20 +960,18 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Für nicht eingeloggte Benutzer wird im Gästebuchformular bei aktiviertem Captcha ein alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor dem Absenden des Formularinhalts korrekt eingeben.
-                        Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get("GBO_PHR_CAPTCHA_DESC").'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"enable_gbook_comments4all\">Anonyme Kommentare erlauben:</label></dt>
+                            <dt><label for="enable_gbook_comments4all">Anonyme Kommentare erlauben:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"enable_gbook_comments4all\" name=\"enable_gbook_comments4all\" ";
+                                <input type="checkbox" id="enable_gbook_comments4all" name="enable_gbook_comments4all" ';
                                 if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
                                 {
                                     echo " checked=\"checked\" ";
@@ -1130,27 +1126,25 @@ echo '
                                 {
                                     echo " checked=\"checked\" ";
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
-                        dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
+                    <li class="smallFontSize">
+                        '.$g_l10n->get('MAI_PHR_CAPTCHA_DESC').'
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"max_email_attachment_size\">Maximale Dateigröße für Anhänge:</label></dt>
+                            <dt><label for="max_email_attachment_size">Maximale Dateigröße für Anhänge:</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\" /> KB
+                                <input type="text" id="max_email_attachment_size" name="max_email_attachment_size" style="width: 50px;" maxlength="6" value="'. $form_values['max_email_attachment_size']. '" /> KB
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
+                    <li class="smallFontSize">
                         Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier
                         angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)
-                    </li>";
+                    </li>';
                     echo'
                     <li>
                         <dl>
@@ -1972,8 +1966,11 @@ echo '
                     </li>
                     <li class="smallFontSize">
                         '.$g_l10n->get("ORG_CAPTCHA_TYPE_TEXT").'
-                    </li>	
-					<li>
+                    </li>
+					';
+		if($g_preferences['captcha_type'] == 'pic')
+		{
+			echo '	<li>
                         <dl>
                             <dt><label for="captcha_font">'.$g_l10n->get("SYS_FONT").':</label></dt>
                             <dd>
@@ -2063,6 +2060,27 @@ echo '
                     </li>
                     <li class="smallFontSize">
                        '.$g_l10n->get("ORG_CAPTCHA_SIGNATURE_FONT_SIZE").'
+                    </li>';
+		}
+					
+		if($g_preferences['captcha_type']=='pic')
+		{
+			$captcha_parameter = '&type=pic';
+		}
+		else
+		{
+			$captcha_parameter = '';
+		}
+		
+					echo '
+					<li>
+                        <dl>
+                            <dt><label for="captcha_prewiew"><a rel="colorboxHelp" href="captcha_preview.php?inline=true'.$captcha_parameter.'">'.$g_l10n->get("ORG_CAPTCHA_PREVIEW").'</a></label></dt>
+                            <dd>&nbsp;</dd>
+                        </dl>
+                    </li>
+					<li class="smallFontSize">
+                       '.$g_l10n->get("ORG_CAPTCHA_PREVIEW_TEXT").'
                     </li>
                 </ul>
             </div>

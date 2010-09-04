@@ -87,6 +87,7 @@
 	<text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">A new guestbook comment at %VAR1% was created.\n\nText: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
 	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new guestbook entry was created</text>
 	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new guestbookentry at %VAR1% was created.\n\nText: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
+	<text id="GBO_PHR_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
 	
 	<!-- Phrases only in Linkmodule -->
 	<text id="LNK_COUNTER" development="new" translation="todo">Hits</text>
@@ -107,16 +108,21 @@
     <text id="LNK_SAME_WINDOW" development="new" translation="todo">Same window</text>
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
 	
+	<!-- Phrases only in Mailmodule -->
+	<text id="MAI_PHR_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
+	
 	<!-- Phrases only in Organizationadministration -->
 	<text id="ORG_CAPTCHA" development="new" translation="todo">Use this seetings for the captcha options.</text>
 	<text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Backgroundcolor</text>
 	<text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Choose the backgroundcolor (as hex) for the captcha code. (predefined: #FFEFC4)</text>
 	<text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Choose the font for the captcha code. (predefined: Theme font)</text>
 	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha code. (predefined: 20)</text>
+	<text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha preview</text>
+	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">You can get a preview of the captcha. Please note that only saved values are considered!</text>
 	<text id="ORG_CAPTCHA_SIZE" development="new" translation="todo">Choose the scaling for the captcha.</text>
 	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha signature</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha signature. (predefined: 9)</text>
-	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Type in your preferred signature for the captcha. The standard font from the current theme will be used.</text>
 	<text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Accepted signs</text>
 	<text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Type in the accepted signs for the captcha.</text>
 	<text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Scaling of the captcha (width x high)</text>
@@ -124,6 +130,7 @@
 	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Calculation</text>
 	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Picture</text>
 	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">You can choose the type of captcha. The following options are for display the captcha as a picture or you set up it as a simple calculation as text. (predifined: picture)</text>
+	<text id="ORG_PHR_CAPTCHA_REGISTRATION" development="new" translation="todo">If this option is activated new users will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
 	
 	<!-- Phrases only in Updatecheck -->
 	<text id="UPD_ADMIDIO" development="new" translation="todo">Go to Admidio updatesite</text>
