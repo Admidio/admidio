@@ -9,14 +9,14 @@
  *
  *****************************************************************************/
  
-require_once(SERVER_PATH. "/adm_program/system/db/db.php");
+require_once(SERVER_PATH. '/adm_program/system/db/db.php');
  
 class MySqlDB extends DB
 {
     // Verbindung zur Datenbank aufbauen    
     function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
     {
-        $this->layer    = "mysql";
+        $this->layer    = 'mysql';
         $this->server   = $sql_server;
         $this->user     = $sql_user;
         $this->password = $sql_password;
@@ -35,8 +35,11 @@ class MySqlDB extends DB
                 if (version_compare($this->version, '4.1.3', '>='))
                 {
                     $this->utf8 = true;
-                    @mysql_query("SET NAMES 'utf8'", $this->connect_id);
+                    @mysql_query('SET NAMES "utf8"', $this->connect_id);
                 }
+                
+                // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
+                @mysql_query('SET SQL_BIG_SELECTS=1', $this->connect_id);
 
                 return $this->connect_id;
             }
@@ -46,7 +49,7 @@ class MySqlDB extends DB
     
     // setzt die urspruengliche DB wieder auf aktiv
     // alternativ kann auch eine andere DB uebergeben werden
-    function setCurrentDB($database = "")
+    function setCurrentDB($database = '')
     {
         if(strlen($database) == 0)
         {
@@ -98,7 +101,7 @@ class MySqlDB extends DB
             foreach($values as $key => $value)
             {
                 // Blob-Felder duerfen nicht encodiert werden !!!
-                if($key != "ses_blob" || $key != "usr_photo")
+                if($key != 'ses_blob' || $key != 'usr_photo')
                 {
                     $values[$key] = utf8_encode($value);
                 }
@@ -125,7 +128,7 @@ class MySqlDB extends DB
                 foreach($values as $key => $value)
                 {
                     // Blob-Felder duerfen nicht encodiert werden !!!
-                    if($key != "ses_blob" || $key != "usr_photo")
+                    if($key != 'ses_blob' || $key != 'usr_photo')
                     {
                         $object->{$key} = utf8_encode($value);
                     }
