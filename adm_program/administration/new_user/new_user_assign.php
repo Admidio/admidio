@@ -2,7 +2,7 @@
 /******************************************************************************
  * Zeigt eine Liste mit moeglichen Zuordnungen an
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -82,7 +82,7 @@ if($member_found == 0)
     if($g_current_user->editUsers())
     {
         // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-        header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$new_user->getValue('usr_id').'&new_user=3');
+        header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=3&user_id='.$new_user->getValue('usr_id'));
         exit();
     }
     else
@@ -107,7 +107,7 @@ if($member_found == 0)
         if($g_current_user->assignRoles())
         {
             // neuer User -> Rollen zuordnen
-            header('Location: roles.php?user_id='. $new_user->getValue('usr_id'). '&new_user=1');
+            header('Location: roles.php?new_user=1&user_id='. $new_user->getValue('usr_id'));
             exit();
         }
         else
@@ -130,19 +130,18 @@ if($member_found == 0)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title'] = 'Neuen Benutzer zuordnen';
+$g_layout['title'] = $g_l10n->get('NWU_ASSIGN_REGISTRATION');
 require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
 <div class="formLayout" id="assign_users_form" style="width: 400px;">
-    <div class="formHead">Anmeldung zuordnen</div>
+    <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">
-        Es wurde bereits ein Benutzer mit ähnlichem Namen wie 
-        <strong>'. $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME'). '</strong> 
-        in der Datenbank gefunden.<br />
+        '.$g_l10n->get('SYS_PHR_SIMILAR_USERS_FOUND', $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME')).'<br />
+
         <div class="groupBox">
-            <div class="groupBoxHeadline">Gefundene Benutzer</div>
+            <div class="groupBoxHeadline">'.$g_l10n->get('SYS_USERS_FOUND').'</div>
             <div class="groupBoxBody">';
                 // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
                 $i = 0;
@@ -180,28 +179,27 @@ echo '
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
-                                echo '<br />Dieser Benutzer besitzt schon ein gültiges Login.';
+                                echo '<br />'.$g_l10n->get('NWU_PHR_USER_VALID_LOGIN');
                                 if($g_preferences['enable_system_mails'] == 1)
                                 {
-                                    echo '<br />Möchtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?<br />
+                                    echo '<br />'.$g_l10n->get('NWU_PHR_REMINDER_SEND_LOGIN').'<br />
 
                                     <span class="iconTextLink">
                                         <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
-                                        src="'. THEME_PATH. '/icons/key.png" alt="E-Mail mit Benutzernamen und neuem Passwort zuschicken" /></a>
-                                        <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=6">Zugangsdaten zuschicken</a>
+                                        src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('NWU_SEND_LOGIN').'" /></a>
+                                        <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=6">'.$g_l10n->get('NWU_SEND_LOGIN').'</a>
                                     </span>';
                                 }
                             }
                             else
                             {
                                 // Logindaten sind NICHT vorhanden -> diese nun zuordnen
-                                echo '<br />Dieser Benutzer besitzt noch kein Login.<br />
-                                    Möchtest du ihm die Daten dieser Registrierung zuordnen ?<br />
+                                echo '<br />'.$g_l10n->get('NWU_PHR_USER_NO_VALID_LOGIN').'<br />
 
                                 <span class="iconTextLink">
                                     <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
-                                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="Zugangsdaten zuordnen" /></a>
-                                    <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=1">Zugangsdaten zuordnen</a>
+                                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('NWU_ASSIGN_LOGIN').'" /></a>
+                                    <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=1">'.$g_l10n->get('NWU_ASSIGN_LOGIN').'</a>
                                 </span>';
                             }
                         }
@@ -213,25 +211,23 @@ echo '
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden
-                                echo '<br />Dieser Benutzer ist noch kein Mitglied der Organisation '.$g_organization.', 
-                                besitzt aber bereits Logindaten.<br />
+                                echo '<br />'.$g_l10n->get('NWU_PHR_NO_MEMBERSHIP', $g_organization).'<br />
 
                                 <span class="iconTextLink">
                                     <a href="'.$link.'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
-                                        alt="Mitgliedschaft zuweisen" /></a>
-                                    <a href="'.$link.'">Mitgliedschaft zuweisen</a>
+                                        alt="'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP').'" /></a>
+                                    <a href="'.$link.'">'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP').'</a>
                                 </span>';
                             }               
                             else
                             {
                                 // KEINE Logindaten vorhanden
-                                echo '<br />Dieser Benutzer ist noch kein Mitglied der Organisation '.$g_organization.' und 
-                                besitzt auch keine Logindaten.<br />
+                                echo '<br />'.$g_l10n->get('NWU_PHR_NO_MEMBERSHIP_NO_LOGIN', $g_organization).'<br />
                                 
                                 <span class="iconTextLink">
                                     <a href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
-                                        alt="Rollen und Logindaten diesem Benutzer zuordnen" /></a>
-                                    <a href="'.$link.'">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</a>
+                                        alt="'.$g_l10n->get('NWU_PHR_ASSIGN_MEMBERSHIP').'" /></a>
+                                    <a href="'.$link.'">'.$g_l10n->get('NWU_PHR_ASSIGN_MEMBERSHIP').'</a>
                                 </span>';
                             }               
                         }
@@ -242,16 +238,15 @@ echo '
         </div>
 
         <div class="groupBox">
-            <div class="groupBoxHeadline">Neuen Benutzer anlegen</div>
+            <div class="groupBoxHeadline">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</div>
             <div class="groupBoxBody">
                 <div style="margin-left: 20px;">
-                    Falls der neue Benutzer nicht bei den oben aufgelisteten Benutzern dabei ist, 
-                    kannst du auch einen neuen Benutzer anlegen.<br />
+                    '. $g_l10n->get('SYS_PHR_CREATE_NOT_FOUND_USER'). '<br />
                     
                     <span class="iconTextLink">
                         <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&amp;new_user=3"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="Neuen Benutzer anlegen" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&amp;new_user=3">Benutzer anlegen</a>
+                        src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_NEW_USER').'" /></a>
+                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&amp;new_user=3">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</a>
                     </span>
                 </div>
             </div>

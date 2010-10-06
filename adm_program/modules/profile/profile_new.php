@@ -14,6 +14,8 @@
  *            1 - Dialog um neue Benutzer hinzuzufuegen.
  *            2 - Dialog um Registrierung entgegenzunehmen
  *            3 - Registrierung zuordnen/akzeptieren
+ * lastname  : Der Nachname kann uebergeben und bei neuen Benutzern vorbelegt werden
+ * firstname : Der Vorname kann uebergeben und bei neuen Benutzern vorbelegt werden
  *
  *****************************************************************************/
 
@@ -29,6 +31,8 @@ if($g_valid_login == false)
 
 $new_user = 0;
 $usr_id   = 0;
+$req_lastname  = '';
+$req_firstname = '';
 
 if(array_key_exists('dat_rol_id', $_GET) && is_numeric($_GET['dat_rol_id']))
 {
@@ -38,6 +42,16 @@ if(array_key_exists('dat_rol_id', $_GET) && is_numeric($_GET['dat_rol_id']))
 if(array_key_exists('new_user', $_GET) && is_numeric($_GET['new_user']))
 {
     $new_user = $_GET['new_user'];
+}
+
+if(array_key_exists('lastname', $_GET))
+{
+    $req_lastname = $_GET['lastname'];
+}
+
+if(array_key_exists('firstname', $_GET))
+{
+    $req_firstname = $_GET['firstname'];
 }
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
@@ -57,6 +71,9 @@ if(isset($_GET['user_id']) && ($new_user == 0 || $new_user == 3))
     $usr_id  = $_GET['user_id'];
 }
 
+// User auslesen
+$user = new User($g_db, $usr_id);
+
 // pruefen, ob Modul aufgerufen werden darf
 switch($new_user)
 {
@@ -74,6 +91,10 @@ switch($new_user)
         {
             $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
         }
+        
+        // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
+        $user->setValue('LAST_NAME', $req_lastname);
+        $user->setValue('FIRST_NAME', $req_firstname);
         break;
 
     case 2:
@@ -85,10 +106,6 @@ switch($new_user)
         }
         break;
 }
-
-// User auslesen
-$user = new User($g_db, $usr_id);
-
 
 $b_history = false;     // History-Funktion bereits aktiviert ja/nein
 $_SESSION['navigation']->addUrl(CURRENT_URL);
