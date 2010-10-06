@@ -183,7 +183,7 @@ $count_mem_rol = $row['count'];
 
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('MEM_USER_MANAGEMENT');
-$g_layout['header'] = '
+$g_layout['header'] = ' 
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.Ajax.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.DOM.js"></script>
     <script type="text/javascript" src="../../libs/bsn.autosuggest/bsn.AutoSuggest.js"></script>
@@ -191,6 +191,8 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
+            $("a[rel=\'lnkNewUser\']").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+            
             var options = {
                         script:"'.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$req_members.'&",
                         varname:"query",
@@ -210,9 +212,9 @@ echo '
 <ul class="iconTextLinkList" style="margin-bottom: 0px;">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1"><img
+            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
             src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1">'.$g_l10n->get('MEM_CREATE_USER').'</a>
+            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$g_l10n->get('MEM_CREATE_USER').'</a>
         </span>
     </li>
     <li>

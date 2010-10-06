@@ -12,7 +12,7 @@
  * user_id     - Funktionen der uebergebenen user_id aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
- * inline:   0 - wird als eigene Seite angezeigt
+ * inline:   0 - (Default) wird als eigene Seite angezeigt
  *           1 - nur "body" HTML Code (z.B. für colorbox)
  *
  *****************************************************************************/

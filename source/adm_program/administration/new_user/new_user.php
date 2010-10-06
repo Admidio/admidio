@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neue User auflisten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -67,10 +67,10 @@ echo '
 
 <table class="tableList" cellspacing="0">
     <tr>
-        <th colspan="2">Name</th>
-        <th>Benutzername</th>
-        <th>E-Mail</th>
-        <th style="text-align: center;">Funktionen</th>
+        <th colspan="2">'.$g_l10n->get('SYS_NAME').'</th>
+        <th>'.$g_l10n->get('SYS_USERNAME').'</th>
+        <th>'.$g_l10n->get('SYS_EMAIL').'</th>
+        <th style="text-align: center;">'.$g_l10n->get('SYS_FEATURES').'</th>
     </tr>';
 
     while($row = $g_db->fetch_array($usr_result))
@@ -81,7 +81,7 @@ echo '
         <tr class="tableMouseOver" id="row_user_'.$row['usr_id'].'">
             <td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a></td>
             <td><img class="iconInformation" src="'. THEME_PATH. '/icons/calendar_time.png"
-                    alt="Registriert am '. $datetimeCreate. '" title="Registriert am '. $datetimeCreate. '" /></td>
+                    alt="'.$g_l10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" title="'.$g_l10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" /></td>
             <td>'.$row['usr_login_name'].'</td>
             <td>';
                 if($g_preferences['enable_mail_module'] == 1)
@@ -95,9 +95,9 @@ echo '
             echo '</td>
             <td style="text-align: center;">
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
-                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="Anmeldung zuordnen" title="Anmeldung zuordnen" /></a>
+                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
                 <a class="iconLink" href="javascript:deleteObject(\'new_user\', \'row_user_'.$row['usr_id'].'\','.$row['usr_id'].',\''.$row['first_name'].' '.$row['last_name'].'\')"><img 
-                    src="'. THEME_PATH. '/icons/delete.png" alt="Anmeldung löschen" title="Anmeldung löschen" /></a>
+                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('NWU_DELETE_REGISTRATION').'" title="'.$g_l10n->get('NWU_DELETE_REGISTRATION').'" /></a>
             </td>
         </tr>';
     }

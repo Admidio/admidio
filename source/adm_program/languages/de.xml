@@ -352,6 +352,7 @@
     <text id="MEM_ANSI" development="new" translation="todo">ANSI</text>
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="todo">Felder zuordnen</text>
     <text id="MEM_ASSIGN_ROLE" development="new" translation="todo">Rolle zuordnen</text>
+    <text id="MEM_ASSIGN_ROLES" development="new" translation="todo">Rollen zuordnen</text>
     <text id="MEM_CREATE_USER" development="new" translation="todo">Benutzer anlegen</text>
     <text id="MEM_CODING" development="new" translation="todo">Kodierung</text>
     <text id="MEM_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
@@ -372,6 +373,7 @@
     <text id="MEM_PHR_IDENTIFY_USERS" development="new" translation="todo">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</text>
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" development="new" translation="todo">%VAR1% Datensätze wurden erfolgreich importiert!</text>
     <text id="MEM_PHR_MAKE_FORMER" development="new" translation="todo">Du kannst den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</text>
+    <text id="MEM_PHR_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%.</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP" development="new" translation="todo">Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP_OK" development="new" translation="todo">Die Mitgliedschaft des Benutzers bei %VAR1% wurde erfolgreich beendet!</text>
     <text id="MEM_PHR_REMOVE_USER" development="new" translation="todo">Wenn du %VAR1_BOLD% auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</text>
@@ -391,11 +393,23 @@
     <text id="MEM_UTF8" development="new" translation="todo">UTF-8</text>
 
     <!-- Phrases only in New-User-Registration -->
+    <text id="NWU_ASSIGN_LOGIN" development="new" translation="todo">Zugangsdaten zuordnen</text>
+    <text id="NWU_ASSIGN_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft zuweisen</text>
+    <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="todo">Anmeldung zuordnen</text>
+    <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Anmeldung löschen</text>
     <text id="NWU_REGISTRATION" development="new" translation="todo">Anmeldung</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen</text>
     <text id="NWU_PHR_ASSIGN_LOGIN" development="new" translation="todo">Die Logindaten wurden erfolgreich zugeordnet.</text>
     <text id="NWU_PHR_ASSIGN_LOGIN_EMAIL" development="new" translation="todo">Die Logindaten wurden erfolgreich zugeordnet und der Benutzer ist darüber per E-Mail benachrichtigt worden.</text>
+    <text id="NWU_PHR_ASSIGN_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</text>
+    <text id="NWU_PHR_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%, besitzt aber bereits Logindaten.</text>
+    <text id="NWU_PHR_NO_MEMBERSHIP_NO_LOGIN" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1% und besitzt auch keine Logindaten.</text>
     <text id="NWU_PHR_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Anmeldungen vorhanden.</text>
+    <text id="NWU_PHR_REMINDER_SEND_LOGIN" development="new" translation="todo">Möchtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?</text>
+    <text id="NWU_PHR_USER_NO_VALID_LOGIN" development="new" translation="todo">Dieser Benutzer besitzt noch kein Login.\nMöchtest du ihm die Daten dieser Registrierung zuordnen ?</text>
+    <text id="NWU_PHR_USER_VALID_LOGIN" development="new" translation="todo">Dieser Benutzer besitzt schon ein gültiges Login.</text>
+    <text id="NWU_REGISTERED_ON" development="new" translation="todo">Registriert am %VAR1%</text>
+    <text id="NWU_SEND_LOGIN" development="new" translation="todo">Zugangsdaten zuschicken</text>
 
     <!-- Phrases only in Organizationadministration -->
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="todo">Zugriff auf Modul</text>
@@ -697,6 +711,7 @@
     <text id="SYS_COPY" development="new" translation="todo">Kopieren</text>
     <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
+	<text id="SYS_CREATE_NEW_USER" development="new" translation="todo">Neuen Benutzer anlegen</text>
 	<text id="SYS_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
     <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
     <text id="SYS_DATE" development="new" translation="todo">Datum</text>
@@ -783,6 +798,7 @@
 	<text id="SYS_PHR_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
     <text id="SYS_PHR_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_PHR_CREATE" development="new" translation="todo">%VAR1% anlegen</text>
+    <text id="SYS_PHR_CREATE_NOT_FOUND_USER" development="new" translation="todo">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, kannst du diesen neu anlegen.</text>
     <text id="SYS_PHR_CREATED_BY" development="new" translation="todo">Angelegt von %VAR1% am %VAR2%</text>
     <text id="SYS_PHR_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Du hast keine gültige E-Mailadresse hinterlegt!\n\nTrage bitte in deinem %VAR1%Profil%VAR1% eine E-Mailadresse ein.</text>
     <text id="SYS_PHR_DATABASE_ERROR" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
@@ -840,6 +856,7 @@
     <text id="SYS_PHR_RSS_DISABLED" development="new" translation="todo">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_PHR_SAVE" development="new" translation="todo">Die Daten wurden gespeichert.</text>
     <text id="SYS_PHR_SERVER_NO_UPLOAD" development="new" translation="todo">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
+    <text id="SYS_PHR_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>
     <text id="SYS_PHR_TIME_INVALID" development="new" translation="todo">Es wurde keine gültige Uhrzeit in das Feld %VAR1_BOLD% eingegeben.\n\nDie Uhrzeit muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
     <text id="SYS_PHR_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_PHR_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
@@ -898,6 +915,7 @@
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
+    <text id="SYS_USERS_FOUND" development="new" translation="todo">Gefundene Benutzer</text>
 	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Fehler beim Upload</text>
