@@ -279,7 +279,7 @@ echo '
                 if($req_valid == true)
                 {
                     echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img
-                        src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('ROL_ASSIGN_MEMBERS').'" title="'.$g_l10n->get('ROL_ASSIGN_MEMBERS').'" /></a>';
+                        src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
                 }
                 else
                 {

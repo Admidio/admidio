@@ -27,6 +27,7 @@ $orga_preferences = array(
     'system_language'               => 'de',
     'system_date'                   => 'd.m.Y',
     'system_time'                   => 'H:i',
+    'system_currency'               => '€',
 
     // Registrierung
     'registration_mode'              => '1',
@@ -128,17 +129,17 @@ $orga_preferences = array(
     'enable_weblinks_module'    => '1',
     'weblinks_per_page' 		=> '0',
 	'weblinks_redirect_seconds'	=> '10',
-	'weblinks_target'			=> '_blank'
+	'weblinks_target'			=> '_blank',
 	
 	// Captcha
     'captcha_background_color'	=> '#FFEFC4',
     'captcha_text_size' 		=> '20',
 	'captcha_fonts'				=> 'Theme',
-	'captcha_width'				=> '250'
+	'captcha_width'				=> '250',
     'captcha_height'			=> '60',
     'captcha_signs' 			=> '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
 	'captcha_signature'			=> 'POWERED  BY   A D M I D I O . O R G',
-	'captcha_signature_font_size' => '9'
+	'captcha_signature_font_size' => '9',
 	'captcha_type'				=> 'pic'	
  );
 ?>
