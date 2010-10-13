@@ -229,14 +229,14 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
 
         if($g_db->num_rows($result) > 1)
         {
-            echo '<li>Kategorie:&nbsp;&nbsp;
+            echo '<li>'.$g_l10n->get('SYS_CATEGORY').':&nbsp;&nbsp;
             <select size="1" id="category" onchange="showCategory()">
                 <option value="Alle" ';
                 if(strlen($_GET['category']) == 0)
                 {
                     echo ' selected="selected" ';
                 }
-                echo '>Alle</option>';
+                echo '>'.$g_l10n->get('SYS_ALL').'</option>';
 
                 while($row = $g_db->fetch_object($result))
                 {
@@ -338,7 +338,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         if($g_preferences['lists_hide_overview_details']==1)
                         {
                             echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
-                                <img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="Einblenden" title="Einblenden" /></a>'; 
+                                <img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="'.$g_l10n->get('SYS_FADE_IN').'" title="'.$g_l10n->get('SYS_FADE_IN').'" /></a>'; 
                         }
                         else
                         {
@@ -361,7 +361,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$role->getValue('rol_id').'"><img
-                                src="'. THEME_PATH. '/icons/email.png"  alt="E-Mail an Mitglieder" title="E-Mail an Mitglieder" /></a>';
+                                src="'. THEME_PATH. '/icons/email.png"  alt="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>';
                         }
                         
                         if($g_current_user->assignRoles() 
@@ -376,7 +376,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                     // nur Moderatoren duerfen Rollen editieren
                                     echo '
                                     <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
-                                        src="'.THEME_PATH.'/icons/edit.png" alt="Einstellungen" title="Einstellungen" /></a>';
+                                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$g_l10n->get('SYS_SETTINGS').'" title="'.$g_l10n->get('SYS_SETTINGS').'" /></a>';
                                 }
         
                                 // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
@@ -384,7 +384,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                 {
                                     echo '
                                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
-                                        src="'.THEME_PATH.'/icons/add.png" alt="Mitglieder zuordnen" title="Mitglieder zuordnen" /></a>';
+                                        src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
                                 }
                             }
                         }
@@ -395,7 +395,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         {
                             echo '
                             <select size="1" name="list'.$i.'" onchange="showList(this, '. $role->getValue('rol_id'). ')">
-                                <option value="" selected="selected">Liste anzeigen ...</option>';
+                                <option value="" selected="selected">'.$g_l10n->get('LST_SHOW_LISTS').' ...</option>';
                                 
                                 // alle globalen Listenkonfigurationen auflisten
                                 $g_db->data_seek($result_config, 0);
@@ -407,7 +407,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                     {
                                         if($row['lst_global'] == 0)
                                         {
-                                            echo '<optgroup label="Deine Listen">';
+                                            echo '<optgroup label="'.$g_l10n->get('LST_YOUR_LISTS').'">';
                                         }
                                         else
                                         {
@@ -415,7 +415,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                             {
                                                 echo '</optgroup>';
                                             }
-                                            echo '<optgroup label="Allgemeine Listen">';
+                                            echo '<optgroup label="'.$g_l10n->get('LST_GENERAL_LISTS').'">';
                                         }
                                         $list_global_flag = $row['lst_global'];
                                     }
@@ -425,7 +425,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                 // Link zu den eigenen Listen setzen
                                 echo '</optgroup>
                                 <optgroup label="Konfiguration">
-                                    <option value="mylist">Eigene Liste ...</option>
+                                    <option value="mylist">'.$g_l10n->get('LST_CREATE_OWN_LIST').'</option>
                                 </optgroup>
                             </select>';
                         }
@@ -447,7 +447,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         echo '
                         <li>
                             <dl>
-                                <dt>Beschreibung:</dt>
+                                <dt>'.$g_l10n->get('SYS_DESCRIPTION').':</dt>
                                 <dd>'.$role->getValue('rol_description').'</dd>
                             </dl>
                         </li>';
@@ -527,7 +527,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         echo '
                         <li>
                             <dl>
-                                <dt>Leiter:</dt>
+                                <dt>'.$g_l10n->get('SYS_LEADER').':</dt>
                                 <dd>'.$row_lst['num_leader'].'</dd>
                             </dl>
                         </li>';
@@ -539,7 +539,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         echo '
                         <li>
                             <dl>
-                                <dt>Beitrag:</dt>
+                                <dt>'.$g_l10n->get('SYS_CONTRIBUTION').':</dt>
                                 <dd>'.$role->getValue('rol_cost').' '.$g_preferences['system_currency'].'</dd>
                             </dl>
                         </li>';
@@ -550,7 +550,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                     {
                         echo'<li>
                             <dl>
-                                <dt>Beitragszeitraum:</dt>
+                                <dt>'.$g_l10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
                                 <dd>'.TableRoles::getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
                             </dl>
                         </li>';
@@ -569,7 +569,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
 
 if($count_cat_entries == 0)
 {
-    echo 'Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.';
+    echo $g_l10n->get('LST_PHR_CATEGORY_NO_LISTS');
 }
 echo '</div></div>';
 
