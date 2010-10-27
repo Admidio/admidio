@@ -424,7 +424,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                 
                                 // Link zu den eigenen Listen setzen
                                 echo '</optgroup>
-                                <optgroup label="Konfiguration">
+                                <optgroup label="'.$g_l10n->get('LST_CONFIGURATION').'">
                                     <option value="mylist">'.$g_l10n->get('LST_CREATE_OWN_LIST').'</option>
                                 </optgroup>
                             </select>';
@@ -458,8 +458,8 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         echo '
                         <li>
                             <dl>
-                                <dt>Zeitraum:</dt>
-                                <dd>'. $role->getValue('rol_start_date', $g_preferences['system_date']). ' bis '. $role->getValue('rol_end_date', $g_preferences['system_date']). '</dd>
+                                <dt>'.$g_l10n->get('LST_PERIOD').':</dt>
+                                <dd>'.$g_l10n->get('SYS_PHR_DATE_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
                             </dl>
                         </li>';
                     }
@@ -469,15 +469,15 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         echo '
                         <li>
                             <dl>
-                                <dt>Gruppenstunde:</dt>
+                                <dt>'.$g_l10n->get('DAT_DATE').':</dt>
                                 <dd>'; 
                                     if($role->getValue('rol_weekday') > 0)
                                     {
-                                        echo $arrDay[$role->getValue('rol_weekday')-1];
+                                        echo $arrDay[$role->getValue('rol_weekday')-1].' ';
                                     }
                                     if(strlen($role->getValue('rol_start_time')) > 0)
                                     {
-                                        echo ' von '. $role->getValue('rol_start_time', $g_preferences['system_time']). ' bis '. $role->getValue('rol_end_time', $g_preferences['system_time']);
+                                        echo $g_l10n->get('LST_PHR_FROM_TO', $role->getValue('rol_start_time', $g_preferences['system_time']), $role->getValue('rol_end_time', $g_preferences['system_time']));
                                     }
                                 echo '</dd>
                             </dl>
@@ -489,7 +489,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         echo '
                         <li>
                             <dl>
-                                <dt>Treffpunkt:</dt>
+                                <dt>'.$g_l10n->get('SYS_LOCATION').':</dt>
                                 <dd>'.$role->getValue('rol_location').'</dd>
                             </dl>
                         </li>';
@@ -498,22 +498,22 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                     echo '
                     <li>
                         <dl>
-                            <dt>Teilnehmer:</dt>
+                            <dt>'.$g_l10n->get('SYS_PARTICIPANTS').':</dt>
                             <dd>'.$row_lst['num_members'];
                                 if($role->getValue('rol_max_members') > 0)
                                 {
-                                    echo ' von max. '. $role->getValue('rol_max_members');
+                                    echo $g_l10n->get('LST_PHR_MAX', $role->getValue('rol_max_members'));
                                 }
                                 if($active_role && $row_lst['num_former'] > 0)
                                 {
                                     // Anzahl Ehemaliger anzeigen
                                     if($row_lst['num_former'] == 1)
                                     {
-                                        $text_former = 'Ehemaliger';
+                                        $text_former = $g_l10n->get('SYS_FORMER');
                                     }
                                     else
                                     {
-                                        $text_former = 'Ehemalige';
+                                        $text_former = $g_l10n->get('SYS_FORMER_PL');
                                     }
                                     echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row_lst['num_former'].' '.$text_former.'</a>) ';
                                 }

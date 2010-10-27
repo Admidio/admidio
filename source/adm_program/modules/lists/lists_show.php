@@ -2,7 +2,7 @@
 /******************************************************************************
  * Listen anzeigen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -127,11 +127,11 @@ else
 }
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
-$arr_col_name = array('usr_login_name' => 'Benutzername',
-                      'usr_photo'      => 'Foto',
-                      'mem_begin'      => 'Beginn',
-                      'mem_end'        => 'Ende',
-                      'mem_leader'     => 'Leiter'
+$arr_col_name = array('usr_login_name' => $g_l10n->get('SYS_USERNAME'),
+                      'usr_photo'      => $g_l10n->get('PHO_PHOTO'),
+                      'mem_begin'      => $g_l10n->get('SYS_START'),
+                      'mem_end'        => $g_l10n->get('SYS_END'),
+                      'mem_leader'     => $g_l10n->get('SYS_LEADER')
                       );
 
 if($req_mode == 'html')
@@ -200,7 +200,7 @@ if($req_mode != 'csv')
             
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
-            <title>'. $g_current_organization->getValue("org_longname"). ' - Liste - '. $role->getValue("rol_name"). '</title>
+            <title>'. $g_current_organization->getValue('org_longname'). ' - Liste - '. $role->getValue('rol_name'). '</title>
             
             <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
             <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
@@ -219,7 +219,7 @@ if($req_mode != 'csv')
     }
     else
     {
-        $g_layout['title']    = 'Liste - '. $role->getValue('rol_name');
+        $g_layout['title']    = $g_l10n->get('LST_LIST').' - '. $role->getValue('rol_name');
         $g_layout['includes'] = false;
         $g_layout['header']   = '
             <style type="text/css">
@@ -244,15 +244,15 @@ if($req_mode != 'csv')
 
     if($show_members == 0)
     {
-    	$member_status = 'Aktive Mitglieder';
+    	$member_status = $g_l10n->get('LST_ACTIVE_MEMBERS');
     }
     elseif($show_members == 1)
     {
-    	$member_status = 'Ehemalige Mitglieder';
+    	$member_status = $g_l10n->get('LST_FORMER_MEMBERS');
     }
     elseif($show_members == 2)
     {
-    	$member_status = 'Aktive und ehemalige Mitglieder';
+    	$member_status = $g_l10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
     echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>
@@ -276,15 +276,15 @@ if($req_mode != 'csv')
                 {
                     echo '
                     <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="Listenübersicht" /></a>
-                    <a href="'.$g_root_path.'/adm_program/system/back.php">Listenübersicht</a>';
+                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="'.$g_l10n->get('LST_LIST_VIEW').'" title="'.$g_l10n->get('LST_LIST_VIEW').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('LST_LIST_VIEW').'</a>';
                 }
                 else
                 {
                     echo '
                     <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'"><img
-                    src="'. THEME_PATH. '/icons/application_form.png" alt="Konfiguration Eigene Liste" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'">Konfiguration Eigene Liste</a>';
+                    src="'. THEME_PATH. '/icons/application_form.png" alt="'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'" title="'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'">'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'</a>';
                 }
             echo '</span>
             </li>';
@@ -295,8 +295,8 @@ if($req_mode != 'csv')
                 echo '<li>
                     <span class="iconTextLink">
                         <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$req_rol_id.'"><img
-                        src="'. THEME_PATH. '/icons/email.png" alt="E-Mail an Mitglieder"  title="E-Mail an Mitglieder" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$req_rol_id.'">E-Mail an Mitglieder</a>
+                        src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'"  title="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>
+                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$req_rol_id.'">'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'</a>
                     </span>
                 </li>';
             }
@@ -314,8 +314,8 @@ if($req_mode != 'csv')
                     <li>
                         <span class="iconTextLink">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
-                                src="'. THEME_PATH. '/icons/add.png" alt="Mitglieder zuordnen" title="Mitglieder zuordnen" /></a>
-                            <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">Mitglieder zuordnen</a>
+                                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'n" /></a>
+                            <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'</a>
                         </span>
                     </li>';
                 }
@@ -324,18 +324,18 @@ if($req_mode != 'csv')
             echo '<li>
                 <span class="iconTextLink">
                     <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&amp;mode=print&amp;rol_id='.$req_rol_id.'\', \'_blank\')"><img
-                    src="'. THEME_PATH. '/icons/print.png" alt="Druckvorschau" /></a>
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&amp;mode=print&amp;rol_id='.$req_rol_id.'\', \'_blank\')">Druckvorschau</a>
+                    src="'. THEME_PATH. '/icons/print.png" alt="'.$g_l10n->get('LST_PRINT_PREVIEW').'" title="'.$g_l10n->get('LST_PRINT_PREVIEW').'" /></a>
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&amp;mode=print&amp;rol_id='.$req_rol_id.'\', \'_blank\')">'.$g_l10n->get('LST_PRINT_PREVIEW').'</a>
                 </span>
             </li>
             <li>
                 <span class="iconTextLink">
-                    <img src="'. THEME_PATH. '/icons/database_out.png" alt="Exportieren" />
+                    <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('LST_EXPORT_TO').'" />
                     <select size="1" name="export_mode" onchange="exportList(this)">
-                        <option value="" selected="selected">Exportieren nach ...</option>
-                        <option value="csv-ms">Microsoft Excel</option>
-                        <option value="csv-ms-2k">Microsoft Excel 97/2000</option>
-                        <option value="csv-oo">CSV-Datei (OpenOffice)</option>
+                        <option value="" selected="selected">'.$g_l10n->get('LST_EXPORT_TO').' ...</option>
+                        <option value="csv-ms">'.$g_l10n->get('LST_MICROSOFT_EXCEL').'</option>
+                        <option value="csv-ms-2k">'.$g_l10n->get('LST_MICROSOFT_EXCEL_2K').'</option>
+                        <option value="csv-oo">'.$g_l10n->get('LST_CSV_FILE').'</option>
                     </select>
                 </span>
             </li>   
@@ -444,11 +444,11 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
             {
                 if($row['mem_leader'] == 1)
                 {
-                    $title = 'Leiter';
+                    $title = $g_l10n->get('SYS_LEADER');
                 }
                 else
                 {
-                    $title = 'Teilnehmer';
+                    $title = $g_l10n->get('SYS_PARTICIPANTS');
                 }
                 echo '<tr>
                     <td class="'.$class_sub_header.'" colspan="'. ($list->countColumns() + 1). '">
@@ -553,24 +553,24 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     {
                         if($req_mode == 'csv' || $req_mode == 'print')
                         {
-                            $content = 'männlich';
+                            $content = $g_l10n->get('SYS_MALE');
                         }
                         else
                         {
                             $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png"
-                                        title="männlich" alt="männlich" />';
+                                        title="'.$g_l10n->get('SYS_MALE').'" alt="'.$g_l10n->get('SYS_MALE').'" />';
                         }
                     }
                     elseif($row[$sql_column_number] == 2)
                     {
                         if($req_mode == 'csv' || $req_mode == 'print')
                         {
-                            $content = 'weiblich';
+                            $content = $g_l10n->get('SYS_FEMALE');
                         }
                         else
                         {
                             $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png"
-                                        alt="weiblich" alt="weiblich" />';
+                                        alt="'.$g_l10n->get('SYS_FEMALE').'" alt="'.$g_l10n->get('SYS_FEMALE').'" />';
                         }
                     }
                     else
@@ -606,11 +606,11 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                                 $imgSource = THEME_PATH. '/images/no_profile_pic.png';
                             }
                         }
-                        $content = '<img src="'.$imgSource.'" style="vertical-align: middle;" alt="Benutzerfoto" />';
+                        $content = '<img src="'.$imgSource.'" style="vertical-align: middle;" alt="'.$g_l10n->get('LST_USER_PHOTO').'" />';
                     }
                     if ($req_mode == 'csv' && $row[$sql_column_number] != NULL)
                     {
-                        $content = 'Profilfoto Online';
+                        $content = $g_l10n->get('LST_USER_PHOTO');
                     }
                 }
                 else
@@ -623,7 +623,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             {
                                 if($req_mode == 'csv')
                                 {
-                                    $content = 'ja';
+                                    $content = $g_l10n->get('SYS_YES');
                                 }
                                 else
                                 {
@@ -634,7 +634,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             {
                                 if($req_mode == 'csv')
                                 {
-                                    $content = 'nein';
+                                    $content = $g_l10n->get('SYS_NO');
                                 }
                                 else
                                 {
@@ -756,7 +756,7 @@ else
                         //Kategorie
                         echo '
                         <dl>
-                            <dt>Kategorie:</dt>
+                            <dt>'.$g_l10n->get('SYS_CATEGORY').':</dt>
                             <dd>'.$role->getValue('cat_name').'</dd>
                         </dl>
                     </li>';
@@ -766,7 +766,7 @@ else
                         {
                             echo'<li>
                                 <dl>
-                                    <dt>Beschreibung:</dt>
+                                    <dt>'.$g_l10n->get('SYS_DESCRIPTION').':</dt>
                                     <dd>'.$role->getValue('rol_description').'</dd>
                                 </dl>
                             </li>';
@@ -777,8 +777,8 @@ else
                         {
                             echo'<li>
                                 <dl>
-                                    <dt>Zeitraum:</dt>
-                                    <dd>'. $role->getValue('rol_start_date', $g_preferences['system_date']). ' bis '. $role->getValue('rol_end_date', $g_preferences['system_date']). '</dd>
+                                    <dt>'.$g_l10n->get('LST_PERIOD').':</dt>
+                                    <dd>'.$g_l10n->get('SYS_PHR_DATE_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
                                 </dl>
                             </li>';
                         }
@@ -786,20 +786,20 @@ else
                         //Termin
                         if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                         {
-                            echo'<li>
+                            echo '<li>
                                 <dl>
-                                    <dt>Termin: </dt>
+                                    <dt>'.$g_l10n->get('DAT_DATE').': </dt>
                                     <dd>'; 
                                         if($role->getValue('rol_weekday') > 0)
                                         {
-                                            echo $arrDay[$role->getValue('rol_weekday')-1];
+                                            echo $arrDay[$role->getValue('rol_weekday')-1].' ';
                                         }
                                         if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
-                                            echo ' von '. $role->getValue('rol_start_time', $g_preferences['system_time']). ' bis '. $role->getValue('rol_end_time', $g_preferences['system_time']);
+                                            echo $g_l10n->get('LST_PHR_FROM_TO', $role->getValue('rol_start_time', $g_preferences['system_time']), $role->getValue('rol_end_time', $g_preferences['system_time']));
                                         }
 
-                                    echo'</dd>
+                                    echo '</dd>
                                 </dl>
                             </li>';
                         }
@@ -807,9 +807,9 @@ else
                         //Treffpunkt
                         if(strlen($role->getValue('rol_location')) > 0)
                         {
-                            echo'<li>
+                            echo '<li>
                                 <dl>
-                                    <dt>Treffpunkt:</dt>
+                                    <dt>'.$g_l10n->get('SYS_LOCATION').':</dt>
                                     <dd>'.$role->getValue('rol_location').'</dd>
                                 </dl>
                             </li>';
@@ -818,20 +818,20 @@ else
                         //Beitrag
                         if(strlen($role->getValue('rol_cost')) > 0)
                         {
-                            echo'<li>
+                            echo '<li>
                                 <dl>
-                                    <dt>Beitrag:</dt>
+                                    <dt>'.$g_l10n->get('SYS_CONTRIBUTION').':</dt>
                                     <dd>'. $role->getValue('rol_cost'). ' '.$g_preferences['system_currency'].'</dd>
                                 </dl>
                             </li>';
                         }
-						
+
 						//Beitragszeitraum
                         if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                         {
-                            echo'<li>
+                            echo '<li>
                                 <dl>
-                                    <dt>Beitragszeitraum:</dt>
+                                    <dt>'.$g_l10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
                                     <dd>'.$role->getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
                                 </dl>
                             </li>';
@@ -842,7 +842,7 @@ else
                         {
                             echo'<li>
                                 <dl>
-                                    <dt>Max. Teilnehmer:</dt>
+                                    <dt>'.$g_l10n->get('SYS_MAX_PARTICIPANTS').':</dt>
                                     <dd>'. $role->getValue('rol_max_members'). '</dd>
                                 </dl>
                             </li>';

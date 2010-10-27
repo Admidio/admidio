@@ -37,7 +37,6 @@
     <text id="DAT_MAXIMUM_FILE_SIZE" development="new" translation="todo">Maximale Dateigröße</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
-    <text id="DAT_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="todo">Teilnehmerbegrenzung</text>
     <text id="DAT_PHR_ATTEND_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% zugesagt.</text>
     <text id="DAT_PHR_CANCEL_DATE" development="new" translation="todo">Du hast deine Teilnahme für den Termin %VAR1_BOLD% am %VAR2% wieder abgesagt.</text>
@@ -238,7 +237,6 @@
     <text id="INS_LAST_NAME" development="new" translation="todo">Nachname</text>
     <text id="INS_LOGIN_NAME" development="new" translation="todo">Benutzername</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="todo">Zugangsdaten eines Webmasters</text>
-    <text id="INS_MASTER_DATA" development="new" translation="todo">Stammdaten</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
@@ -326,22 +324,43 @@
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
 
     <!-- Phrases only in Listsmodule -->
+    <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="todo">Aktive und ehemalige Mitglieder</text>
+    <text id="LST_ACTIVE_MEMBERS" development="new" translation="todo">Aktive Mitglieder</text>
+    <text id="LST_CONFIGURATION" development="new" translation="todo">Konfiguration</text>
     <text id="LST_CREATE_OWN_LIST" development="new" translation="todo">Eigene Liste erstellen</text>
+    <text id="LST_CSV_FILE" development="new" translation="todo">CSV-Datei</text>
     <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="todo">E-Mail an Mitglieder</text>
+    <text id="LST_EXPORT_TO" development="new" translation="todo">Exportieren nach</text>
+    <text id="LST_FORMER_MEMBERS" development="new" translation="todo">Ehemalige Mitglieder</text>
     <text id="LST_GENERAL_LISTS" development="new" translation="todo">Allgemeine Listen</text>
+    <text id="LST_KONFIGURATION_OWN_LIST" development="new" translation="todo">Konfiguration eigene Liste</text>
+    <text id="LST_LIST" development="new" translation="todo">Liste</text>
     <text id="LST_LISTS" development="new" translation="todo">Listen</text>
+    <text id="LST_LIST_VIEW" development="new" translation="todo">Listenübersicht</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="todo">Mitgliederzuordnung</text>
+    <text id="LST_MEMBERSHIP_END" development="new" translation="todo">Mitgliedschaftsende</text>
+    <text id="LST_MEMBERSHIP_START" development="new" translation="todo">Mitgliedschaftsbeginn</text>
+    <text id="LST_MICROSOFT_EXCEL" development="new" translation="todo">Microsoft Excel</text>
+    <text id="LST_MICROSOFT_EXCEL_2K" development="new" translation="todo">Microsoft Excel 97/2000</text>
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
+    <text id="LST_OWN_LIST" development="new" translation="todo">Eigene Liste</text>
+    <text id="LST_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="LST_PHR_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
     <text id="LST_PHR_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
     <text id="LST_PHR_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
+    <text id="LST_PHR_FROM_TO" development="new" translation="todo">von %VAR1% bis %VAR2%</text>
     <text id="LST_PHR_INACTIVE_ROLES" development="new" translation="todo">Übersicht der inaktiven Rollen</text>
+    <text id="LST_PHR_MAX" development="new" translation="todo">von max. %VAR2%</text>
 	<text id="LST_PHR_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
+    <text id="LST_PHR_NO_MORE_COLUMN" development="new" translation="todo">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</text>
 	<text id="LST_PHR_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
     <text id="LST_PHR_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
+    <text id="LST_PRINT_PREVIEW" development="new" translation="todo">Druckvorschau</text>
+    <text id="LST_ROLE_INFORMATION" development="new" translation="todo">Rolleninformationen</text>
     <text id="LST_SHOW_LISTS" development="new" translation="todo">Listen anzeigen</text>
     <text id="LST_YOUR_LISTS" development="new" translation="todo">Deine Listen</text>
+    <text id="LST_USER_PHOTO" development="new" translation="todo">Benutzerfoto</text>
 
     <!-- Phrases only in Mailmodule -->
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
@@ -367,7 +386,6 @@
     <text id="MEM_EXISTING_USERS" development="new" translation="todo">Existierende Benutzer</text>
     <text id="MEM_FILE_COLUMN" development="new" translation="todo">Dateispalte</text>
     <text id="MEM_FORMAT" development="new" translation="todo">Format</text>
-    <text id="MEM_FORMER" development="new" translation="todo">Ehemaliger</text>
     <text id="MEM_IMPORT" development="new" translation="todo">Importieren</text>
     <text id="MEM_IMPORT_USERS" development="new" translation="todo">Benutzer importieren</text>
     <text id="MEM_MEMBER_OF" development="new" translation="todo">Mitglied bei %VAR1%</text>
@@ -604,7 +622,6 @@
     <text id="ROL_INACTIV_ROLES" development="new" translation="todo">Inaktive Rollen</text>
     <text id="ROL_INDEPENDENT" development="new" translation="todo">Unabhängig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
-    <text id="ROL_MAX_PARTICIPANTS" development="new" translation="todo">max. Teilnehmer</text>
     <text id="ROL_NOBODY" development="new" translation="todo">Niemand</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="todo">Nur Rollenmitglieder</text>
     <text id="ROL_PHR_ALL_GUESTS" development="new" translation="todo">Alle Besucher der Seite</text>
@@ -743,6 +760,8 @@
 	<text id="SYS_FIRSTNAME" development="new" translation="todo">Vorname</text>
 	<text id="SYS_FROM_TO" development="new" translation="todo">vom %VAR1% bis %VAR2%</text>
 	<text id="SYS_FOLDER" development="new" translation="todo">Ordner</text>
+    <text id="SYS_FORMER" development="new" translation="todo">Ehemaliger</text>
+    <text id="SYS_FORMER_PL" development="new" translation="todo">Ehemalige</text>
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
     <text id="SYS_FONT_COLOR" development="new" translation="todo">Schriftfarbe</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
@@ -774,6 +793,8 @@
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
+    <text id="SYS_MASTER_DATA" development="new" translation="todo">Stammdaten</text>
+    <text id="SYS_MAX_PARTICIPANTS" development="new" translation="todo">Max. Teilnehmer</text>
     <text id="SYS_MEGA_PIXEL" development="new" translation="todo">Mega Pixel</text>
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
@@ -794,6 +815,7 @@
     <text id="SYS_PAGE" development="new" translation="todo">Seite</text>
     <text id="SYS_PAGE_PREVIOUS" development="new" translation="todo">Vorherige</text>
     <text id="SYS_PAGE_NEXT" development="new" translation="todo">Nächste</text>
+    <text id="SYS_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
     <text id="SYS_PASSWORD" development="new" translation="todo">Passwort</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>

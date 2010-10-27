@@ -488,7 +488,7 @@ elseif($req_mode == 8)
 
     // Orga-Uebergreifende Kategorien anlegen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                      VALUES (NULL, "USF", "MASTER_DATA", "'.$g_l10n->get('INS_MASTER_DATA').'", 0, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
+                                      VALUES (NULL, "USF", "MASTER_DATA", "'.$g_l10n->get('SYS_MASTER_DATA').'", 0, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);
     $cat_id_stammdaten = $db->insert_id();
 

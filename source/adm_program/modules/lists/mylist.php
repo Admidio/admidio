@@ -104,7 +104,7 @@ elseif($req_lst_id > 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = 'Eigene Liste - Einstellungen';
+$g_layout['title']  = $g_l10n->get('LST_OWN_LIST').' - '.$g_l10n->get('SYS_CONFIGURATION');
 $g_layout['header'] = '
     <script type="text/javascript">
         var listId             = '.$req_lst_id.';
@@ -118,7 +118,7 @@ $g_layout['header'] = '
             // MySQL erlaubt nur 61 gejointe Tabellen
             if(fieldNumberIntern >= 57)
             {
-                alert("Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.");
+                alert("'.$g_l10n->get('LST_PHR_NO_MORE_COLUMN').'");
                 return;
             }
             
@@ -225,16 +225,16 @@ $g_layout['header'] = '
             foreach($g_current_user->userFieldData as $field)
             {    
                 // bei den Stammdaten noch Foto und Loginname anhaengen
-                if($old_cat_name == 'Stammdaten'
-                && $field->getValue('cat_name') != 'Stammdaten')
+                if($old_cat_name == $g_l10n->get('SYS_MASTER_DATA')
+                && $field->getValue('cat_name') != $g_l10n->get('SYS_MASTER_DATA'))
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
                     user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
                     user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
                     user_fields['. $i. ']["usf_id"]   = "usr_login_name";
-                    user_fields['. $i. ']["usf_name"] = "Benutzername";
-                    user_fields['. $i. ']["usf_name_intern"] = "Benutzername";';
+                    user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('SYS_USERNAME').'";
+                    user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('SYS_USERNAME').'";';
                     $i++;
                     
                     $g_layout['header'] .= '
@@ -242,8 +242,8 @@ $g_layout['header'] = '
                     user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
                     user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
                     user_fields['. $i. ']["usf_id"]   = "usr_photo";
-                    user_fields['. $i. ']["usf_name"] = "Foto";
-                    user_fields['. $i. ']["usf_name_intern"] = "Foto";';
+                    user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('PHO_PHOTO').'";
+                    user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('PHO_PHOTO').'";';
                     $i++;
                 }
                 
@@ -267,19 +267,19 @@ $g_layout['header'] = '
             $g_layout['header'] .= '
             user_fields['. $i. '] = new Object();
             user_fields['. $i. ']["cat_id"]   = -1;
-            user_fields['. $i. ']["cat_name"] = "Rollendaten";
+            user_fields['. $i. ']["cat_name"] = "'.$g_l10n->get('LST_ROLE_INFORMATION').'";
             user_fields['. $i. ']["usf_id"]   = "mem_begin";
-            user_fields['. $i. ']["usf_name"] = "Mitgliedsbeginn";
-            user_fields['. $i. ']["usf_name_intern"] = "Mitgliedsbeginn";';
+            user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('LST_MEMBERSHIP_START').'";
+            user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('LST_MEMBERSHIP_START').'";';
             
             $i++;
             $g_layout['header'] .= '
             user_fields['. $i. '] = new Object();
             user_fields['. $i. ']["cat_id"]   = -1;
-            user_fields['. $i. ']["cat_name"] = "Rollendaten";
+            user_fields['. $i. ']["cat_name"] = "'.$g_l10n->get('LST_ROLE_INFORMATION').'";
             user_fields['. $i. ']["usf_id"]   = "mem_end";
-            user_fields['. $i. ']["usf_name"] = "Mitgliedsende";
-            user_fields['. $i. ']["usf_name_intern"] = "Mitgliedsende";
+            user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('LST_MEMBERSHIP_END').'";
+            user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('LST_MEMBERSHIP_END').'";
             
             return user_fields;
         }
