@@ -385,7 +385,7 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="rol_max_members">'.$g_l10n->get('ROL_MAX_PARTICIPANTS').':</label></dt>
+                            <dt><label for="rol_max_members">'.$g_l10n->get('SYS_MAX_PARTICIPANTS').':</label></dt>
                             <dd>
                                 <input type="text" id="rol_max_members" name="rol_max_members" size="3" maxlength="3" onchange="checkMaxMemberCount(this.value)" value="';
                                 if($role->getValue('rol_max_members') > 0)
@@ -400,7 +400,7 @@ echo '
 					echo '
                     <li>
                         <dl>
-                            <dt><label for="rol_cost">'.$g_l10n->get('ROL_CONTRIBUTION').':</label></dt>
+                            <dt><label for="rol_cost">'.$g_l10n->get('SYS_CONTRIBUTION').':</label></dt>
                             <dd>
                                 <input type="text" id="rol_cost" name="rol_cost" size="6" maxlength="6" value="'. $role->getValue('rol_cost'). '" /> '.$g_preferences['system_currency'].'
                             </dd>
@@ -408,7 +408,7 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="rol_cost_period">'.$g_l10n->get('ROL_CONTRIBUTION_PERIOD').':</label></dt>
+                            <dt><label for="rol_cost_period">'.$g_l10n->get('SYS_CONTRIBUTION_PERIOD').':</label></dt>
                             <dd>
                                 <select size="1" id="rol_cost_period" name="rol_cost_period">';
                                     // Zunaechst den unkonfigurierten Fall

@@ -84,7 +84,7 @@ if($_GET['mode'] == 1)
         <div class="formHead">'.$g_l10n->get('MEM_REMOVE_USER').'</div>
         <div class="formBody">
             <p align="left">
-                <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('MEM_FORMER').'" />
+                <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('SYS_FORMER').'" />
                 '.$g_l10n->get('MEM_PHR_MAKE_FORMER').'
             </p>
             <p align="left">
@@ -97,7 +97,7 @@ if($_GET['mode'] == 1)
                 src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" />&nbsp;'.$g_l10n->get('SYS_DELETE').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$_GET['usr_id'].'&mode=2\'"><img 
-                src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('MEM_FORMER').'" />&nbsp;'.$g_l10n->get('MEM_FORMER').'</button>
+                src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('SYS_FORMER').'" />&nbsp;'.$g_l10n->get('SYS_FORMER').'</button>
         </div>
     </div>';
 

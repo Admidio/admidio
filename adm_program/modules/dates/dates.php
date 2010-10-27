@@ -562,7 +562,7 @@ else
                     {
                         $participantsHtml = '<strong>'.$g_l10n->get('SYS_UNLIMITED').'</strong>';
                     }
-                    $dateElements[] = array($g_l10n->get('DAT_PARTICIPANTS'), $participantsHtml);
+                    $dateElements[] = array($g_l10n->get('SYS_PARTICIPANTS'), $participantsHtml);
                 }
 
                 // Ausgabe der einzelnen Elemente 
