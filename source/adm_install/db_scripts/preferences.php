@@ -28,6 +28,7 @@ $orga_preferences = array(
     'system_date'                   => 'd.m.Y',
     'system_time'                   => 'H:i',
     'system_currency'               => '€',
+    'system_search_similar'         => '1',
 
     // Registrierung
     'registration_mode'              => '1',

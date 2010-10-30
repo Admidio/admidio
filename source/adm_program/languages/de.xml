@@ -395,6 +395,7 @@
     <text id="MEM_PHR_FIRST_LINE_COLUMN_NAME" development="new" translation="todo">Erste Zeile beinhaltet die Spaltenbezeichnungen</text>
     <text id="MEM_PHR_IDENTIFY_USERS" development="new" translation="todo">Existierende Benutzer werden anhand von Vornamen und Nachnamen erkannt.</text>
     <text id="MEM_PHR_IMPORT_SUCCESSFUL" development="new" translation="todo">%VAR1% Datensätze wurden erfolgreich importiert!</text>
+    <text id="MEM_PHR_INPUT_FIRSTNAME_LASTNAME" development="new" translation="todo">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</text>
     <text id="MEM_PHR_MAKE_FORMER" development="new" translation="todo">Du kannst den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</text>
     <text id="MEM_PHR_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%.</text>
     <text id="MEM_PHR_REMOVE_MEMBERSHIP" development="new" translation="todo">Willst du die Mitgliedschaft des Benutzers %VAR1% bei %VAR2% beenden?</text>
@@ -501,13 +502,17 @@
     <text id="ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
     <text id="ORG_PHR_PARENT_ORGANIZATION" development="new" translation="todo">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</text>
     <text id="ORG_PHR_REGISTRATION_MODE" development="new" translation="todo">Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten Registrierung stehen ihm alle Felder des Profils zur Verfügung.  (Standard: Schnelle Registrierung)</text>
+    <text id="ORG_PHR_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="todo">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Standard: ja)</text>
     <text id="ORG_PHR_SEND_PASSWORD" development="new" translation="todo">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</text>
+    <text id="ORG_PHR_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systemnachrichten benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
     <text id="ORG_PHR_TIME_FORMAT" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>
     <text id="ORG_PROFILE_FIELDS" development="new" translation="todo">Profilfelder</text>
     <text id="ORG_REGISTERED_USERS" development="new" translation="todo">Angemeldete Benutzer</text>
+    <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="todo">Ähnliche Namen finden</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="todo">Passwort zusenden</text>
     <text id="ORG_SYSTEM_INFOS" development="new" translation="todo">Systeminfos</text>
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
+    <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="todo">Systemmailadresse</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
 	

@@ -2,16 +2,16 @@
 /******************************************************************************
  * Organisationseinstellungen speichern
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2010 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_text.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_text.php');
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
@@ -27,12 +27,12 @@ $_SESSION['organization_request'] = $_REQUEST;
 
 if(strlen($_POST['org_longname']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Name (lang)', 'Allgemein'));
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('SYS_NAME'), $g_l10n->get('SYS_COMMON')));
 }
 
 if(strlen($_POST['email_administrator']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Systemmailadresse', 'Systemmails'));
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $g_l10n->get('SYS_SYSTEM_MAILS')));
 }
 else
 {
@@ -44,17 +44,17 @@ else
 
 if(strlen($_POST['theme']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Admidio-Theme', 'Allgemein'));
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('ORG_ADMIDIO_THEME'), $g_l10n->get('SYS_COMMON')));
 }
 
 if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Automatischer Logout', 'Allgemein'));
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $g_l10n->get('SYS_COMMON')));
 }
 
 if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', 'Anzeige Redirect', 'Weblinks'));
+    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('LNK_DISPLAY_REDIRECT'), $g_l10n->get('LNK_WEBLINKS')));
 }
 
 // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
@@ -90,6 +90,7 @@ $checkboxes = array('dates_show_map_link'
                    ,'profile_show_extern_roles'
                    ,'lists_hide_overview_details'
                    ,'dates_show_calendar_select'
+                   ,'system_search_similar'
                    );
 
 foreach($checkboxes as $key => $value)
