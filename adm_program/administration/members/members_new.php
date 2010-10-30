@@ -41,8 +41,7 @@ function send()
     <div class="formHead">'. $g_l10n->get('MEM_CREATE_USER'). '</div>
     <div class="formBody">
         <ul class="formFieldList">
-            <li>Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer
-                mit ähnlichem Namen bereits in der Datenbank existiert.</li>
+            <li>'.$g_l10n->get('MEM_PHR_INPUT_FIRSTNAME_LASTNAME').'</li>
             <li>
                 <dl>
                     <dt><label for="lastname">'.$g_l10n->get('SYS_LASTNAME').':</label></dt>

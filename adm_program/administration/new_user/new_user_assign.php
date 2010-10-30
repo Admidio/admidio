@@ -44,6 +44,24 @@ else
 // neuen User erst einmal als Objekt erzeugen
 $new_user = new User($g_db, $req_new_user_id);
 
+// sollen Benutzer mit aehnlichen Namen gefunden werden ?
+if($g_preferences['system_search_similar'] == 1)
+{
+    $sql_similar_name = 
+    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('LAST_NAME').'"), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('FIRST_NAME').'"), 1, 4) )
+     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('FIRST_NAME').'"), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('LAST_NAME').'"), 1, 4) ) )';
+}
+else
+{
+    $sql_similar_name = 
+    '(  (   last_name.usd_value  LIKE "'. $new_user->getValue('LAST_NAME').'"
+        AND first_name.usd_value LIKE "'. $new_user->getValue('FIRST_NAME').'")
+     OR (   last_name.usd_value  LIKE "'. $new_user->getValue('FIRST_NAME').'"
+        AND first_name.usd_value LIKE "'. $new_user->getValue('LAST_NAME').'") )';
+}
+
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
 $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name, 
                first_name.usd_value as first_name, address.usd_value as address,
@@ -69,10 +87,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 1 
-           AND (  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('LAST_NAME').'"), 1, 4)
-                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('FIRST_NAME'). '"), 1, 4) )
-               OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('FIRST_NAME'). '"), 1, 4)
-                  AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $new_user->getValue('LAST_NAME').'"), 1, 4) ) )';
+           AND '.$sql_similar_name;
 $result_usr   = $g_db->query($sql);
 $member_found = $g_db->num_rows($result_usr);
 

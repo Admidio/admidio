@@ -17,9 +17,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/system_mail.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/system_mail.php');
 
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)

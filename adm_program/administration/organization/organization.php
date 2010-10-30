@@ -398,8 +398,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_AUTOMATOC_LOGOUT_AFTER', $g_l10n->get('SYS_REMEMBER_ME')).'</li>
-
-                     <li>
+                    <li>
                         <dl>
                             <dt><label for="enable_password_recovery">'.$g_l10n->get('ORG_SEND_PASSWORD').':</label>
                             </dt>
@@ -414,6 +413,21 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SEND_PASSWORD').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_search_similar">'.$g_l10n->get('ORG_SEARCH_SIMILAR_NAMES').':</label>
+                            </dt>
+                            <dd>
+                                <input type="checkbox" id="system_search_similar" name="system_search_similar" ';
+                                if(isset($form_values['system_search_similar']) && $form_values['system_search_similar'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SEARCH_SIMILAR_NAMES_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -1192,14 +1206,11 @@ echo '
                     </li>                  
                     <li>
                         <dl>
-                            <dt><label for="email_administrator">Systemmailadresse:</label></dt>
+                            <dt><label for="email_administrator">'.$g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS').':</label></dt>
                             <dd><input type="text" id="email_administrator" name="email_administrator" style="width: 200px;" maxlength="50" value="'. $form_values['email_administrator'].'" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Hier sollte die E-Mail-Adresse eines Administrators stehen. Diese wird als Absenderadresse
-                        für Systemnachrichten benutzt, z.B. bei der Registierungsbestätigung. (Standard: webmaster@'. $_SERVER['HTTP_HOST'].')
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                     <li>
                         <dl>
                             <dt><label>Systemmail-Texte:</label></dt>
