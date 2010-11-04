@@ -19,9 +19,9 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/list_configuration.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/list_configuration.php');
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
 $req_lst_id = 0;
@@ -104,7 +104,7 @@ elseif($req_lst_id > 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('LST_OWN_LIST').' - '.$g_l10n->get('SYS_CONFIGURATION');
+$g_layout['title']  = $g_l10n->get('LST_MY_LIST').' - '.$g_l10n->get('SYS_CONFIGURATION');
 $g_layout['header'] = '
     <script type="text/javascript">
         var listId             = '.$req_lst_id.';
@@ -191,8 +191,8 @@ $g_layout['header'] = '
             var newCellOrder = newTableRow.insertCell(-1);
             newCellOrder.innerHTML = "<select size=\"1\" id=\"sort" + fieldNumberShow + "\" name=\"sort" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>" +
-                    "<option value=\"ASC\" " + selectAsc + ">A bis Z</option>" +
-                    "<option value=\"DESC\" " + selectDesc + ">Z bis A</option>" +
+                    "<option value=\"ASC\" " + selectAsc + ">'.$g_l10n->get('LST_A_TO_Z').'</option>" +
+                    "<option value=\"DESC\" " + selectDesc + ">'.$g_l10n->get('LST_Z_TO_A').'</option>" +
                 "</select>";
             
             // neue Spalte fuer Bedingungen
@@ -366,7 +366,7 @@ $g_layout['header'] = '
 
                 case "save_as":
                     var listName = "";
-                    listName = prompt("Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden ?");
+                    listName = prompt("'.$g_l10n->get('LST_PHR_CONFIGURATION_SAVE').'");
                     if(listName != null)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
@@ -375,7 +375,7 @@ $g_layout['header'] = '
                     break;
 
                 case "delete":
-                    var msg_result = confirm("Willst du die aktuelle Listenkonfiguration wirklich löschen ?");
+                    var msg_result = confirm("'.$g_l10n->get('LST_PHR_CONFIGURATION_DELETE').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=3";
@@ -384,7 +384,7 @@ $g_layout['header'] = '
                     break;
 
                 case "system":
-                    var msg_result = confirm("Willst du die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen ?");
+                    var msg_result = confirm("'.$g_l10n->get('LST_PHR_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=4";
@@ -393,7 +393,7 @@ $g_layout['header'] = '
                     break;
 
                 case "default":
-                    var msg_result = confirm("Willst du die aktuelle Listenkonfiguration zur neuen Standardkonfiguration dieser Organisation machen ?");
+                    var msg_result = confirm("'.$g_l10n->get('LST_PHR_CONFIGURATION_DEFAULT').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=5";
@@ -409,10 +409,10 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <form id="form_mylist" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
 <div class="formLayout" id="mylist_form">
-    <div class="formHead">Eigene Liste</div>
+    <div class="formHead">'.$g_l10n->get('LST_MY_LIST').'</div>
     <div class="formBody">
-        <p><b>1.</b> Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen ?</p>
-        <p><b>Listenkonfiguration :</b>&nbsp;&nbsp;
+        <p><b>1.</b> '.$g_l10n->get('LST_PHR_CHANGE_LIST').'</p>
+        <p><b>'.$g_l10n->get('LST_CONFIGURATION_LIST').' :</b>&nbsp;&nbsp;
         <select size="1" id="lists_config" name="lists_config" onchange="loadList()">
             <option ';
                 if($req_lst_id == 0)
@@ -423,7 +423,7 @@ echo '
                 {
                     $selected = '';
                 }
-            echo $selected.' value="0">Neue Konfiguration erstellen</option>';
+            echo $selected.' value="0">'.$g_l10n->get('LST_CREATE_NEW_CONFIGURATION').'</option>';
 
             // alle relevanten Konfigurationen fuer den User suchen
             $sql = 'SELECT * FROM '. TBL_LISTS. '
@@ -470,15 +470,15 @@ echo '
                             }
                             if($tableList->getValue('lst_global') == 0 && strlen($tableList->getValue('lst_name')) == 0)
                             {
-                                echo '<optgroup label="Deine letzten Konfigurationen">';
+                                echo '<optgroup label="'.$g_l10n->get('LST_YOUR_LAST_CONFIGURATION').'">';
                             }
                             elseif($tableList->getValue('lst_global') == 0 && strlen($tableList->getValue('lst_name')) > 0)
                             {
-                                echo '<optgroup label="Deine Konfigurationen">';
+                                echo '<optgroup label="'.$g_l10n->get('LST_YOUR_CONFIGURATION').'">';
                             }
                             else
                             {
-                                echo '<optgroup label="Vorgegebene Konfigurationen">';
+                                echo '<optgroup label="'.$g_l10n->get('LST_DEFAULT_CONFIGURATION').'">';
                             }
                             $tableList_global_flag = $tableList->getValue('lst_global');
                             $tableList_name_flag   = $tableList->getValue('lst_name');
@@ -517,7 +517,7 @@ echo '
         {
             echo '
             <a class="iconLink" href="javascript:send(\'save\');"><img
-                src="'. THEME_PATH. '/icons/disk.png" alt="Konfiguration speichern" title="Konfiguration speichern" /></a>';
+                src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('LST_SAVE_CONFIGURATION').'" title="'.$g_l10n->get('LST_SAVE_CONFIGURATION').'" /></a>';
         }
 
         if($g_current_user->isWebmaster()
@@ -527,12 +527,12 @@ echo '
         	if(strlen($list->getValue('lst_name')) > 0)
         	{
         		$icon = 'disk_copy.png';
-        		$icon_text = 'Konfiguration unter anderem Namen speichern';
+        		$icon_text = $g_l10n->get('LST_PHR_SAVE_CONFIGURATION');
         	}
         	else
         	{
         		$icon = 'disk.png';
-        		$icon_text = 'Konfiguration speichern';
+        		$icon_text = $g_l10n->get('LST_SAVE_CONFIGURATION');
         	}
             echo '
             <a class="iconLink" href="javascript:send(\'save_as\');"><img
@@ -545,7 +545,7 @@ echo '
         {
             echo '
             <a class="iconLink" href="javascript:send(\'delete\');"><img
-                src="'. THEME_PATH. '/icons/delete.png" alt="Konfiguration löschen" title="Konfiguration löschen" /></a>';
+                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('LST_DELETE_CONFIGURATION').'" title="'.$g_l10n->get('LST_DELETE_CONFIGURATION').'" /></a>';
         }
 
         // eine gespeicherte Konfiguration kann vom Webmaster zur Systemkonfiguration gemacht werden
@@ -553,7 +553,7 @@ echo '
         {
             echo '
             <a class="iconLink" href="javascript:send(\'system\');"><img
-                src="'. THEME_PATH. '/icons/list_global.png" alt="Konfiguration allen Benutzern zur Verfügung stellen" title="Konfiguration allen Benutzern zur Verfügung stellen" /></a>';
+                src="'. THEME_PATH. '/icons/list_global.png" alt="'.$g_l10n->get('LST_PHR_CONFIGURATION_ALL_USERS').'" title="'.$g_l10n->get('LST_PHR_CONFIGURATION_ALL_USERS').'" /></a>';
         }
         
         // eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
@@ -561,7 +561,7 @@ echo '
         {
             echo '
             <a class="iconLink" href="javascript:send(\'default\');"><img
-                src="'. THEME_PATH. '/icons/star.png" alt="Konfiguration wird zur neuen Standardkonfiguration" title="Konfiguration wird zur neuen Standardkonfiguration" /></a>';
+                src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('LST_PHR_DEFAULT_CONFIGURATION').'" title="'.$g_l10n->get('LST_PHR_DEFAULT_CONFIGURATION').'" /></a>';
         }
         
         // Hinweistext fuer Webmaster
@@ -574,17 +574,17 @@ echo '
         }
         echo '</p>
         
-        <p><b>2.</b> Bestimme die Spalten, die in der Liste angezeigt werden sollen:</p>
+        <p><b>2.</b> '.$g_l10n->get('LST_PHR_SET_COLUMNS').':</p>
 
         <table class="tableList" id="mylist_fields_table" style="width: 100%;" cellspacing="0">
             <thead>
                 <tr>
                     <th style="width: 18%;">'.$g_l10n->get('SYS_ABR_NO').'</th>
-                    <th style="width: 37%;">Inhalt</th>
-                    <th style="width: 18%;">Sortierung</th>
-                    <th style="width: 27%;">Bedingung
+                    <th style="width: 37%;">'.$g_l10n->get('SYS_CONTENT').'</th>
+                    <th style="width: 18%;">'.$g_l10n->get('SYS_ORDER').'</th>
+                    <th style="width: 27%;">'.$g_l10n->get('SYS_CONDITION').'
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Hilfe anzeigen" title="Hilfe anzeigen" /></a>
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_SHOW_HELP').'" title="'.$g_l10n->get('SYS_SHOW_HELP').'" /></a>
                     </th>
                 </tr>
             </thead>
@@ -599,8 +599,8 @@ echo '
                     <td colspan="4">
                         <span class="iconTextLink">
                             <a href="javascript:addColumn()"><img
-                            src="'. THEME_PATH. '/icons/add.png" alt="Weitere Spalte hinzufügen" /></a>
-                            <a href="javascript:addColumn()">Weitere Spalte hinzufügen</a>
+                            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('LST_ADD_ANOTHER_COLUMN').'" /></a>
+                            <a href="javascript:addColumn()">'.$g_l10n->get('LST_ADD_ANOTHER_COLUMN').'</a>
                         </span>
                     </td>
                 </tr>
@@ -609,8 +609,8 @@ echo '
         
         <br />
         
-        <b>3.</b> Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest:
-        <p><b>Rolle :</b>&nbsp;&nbsp;';
+        <b>3.</b> '.$g_l10n->get('LST_PHR_CHOOSE_ROLE').':
+        <p><b>'.$g_l10n->get('SYS_ROLE').' :</b>&nbsp;&nbsp;';
 
         // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen
         $role_select_box_mode = 0;
@@ -630,9 +630,9 @@ echo '
             $selected[$show_members] = ' selected="selected" ';
             echo '&nbsp;&nbsp;&nbsp;
             <select size="1" id="show_members" name="show_members">
-                <option '.$selected[0].' value="0">Aktive Mitglieder</option>
-                <option '.$selected[1].' value="1">Ehemalige Mitglieder</option>
-                <option '.$selected[2].' value="2">Aktive und Ehemalige</option>
+                <option '.$selected[0].' value="0">'.$g_l10n->get('LST_ACTIVE_MEMBERS').'</option>
+                <option '.$selected[1].' value="1">'.$g_l10n->get('LST_FORMER_MEMBERS').'</option>
+                <option '.$selected[2].' value="2">'.$g_l10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
             </select>';
         }
         
@@ -640,7 +640,7 @@ echo '
 
         <div class="formSubmit">
             <button id="btnShow" type="button" onclick="javascript:send(\'show\');"><img 
-                src="'. THEME_PATH. '/icons/list.png" alt="Liste anzeigen" />&nbsp;Liste anzeigen</button>
+                src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('LST_SHOW_LIST').'" />&nbsp;'.$g_l10n->get('LST_SHOW_LIST').'</button>
         </div>
     </div>
 </div>

@@ -1050,24 +1050,19 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="lists_members_per_page">Anzahl Teilnehmer pro Seite:</label></dt>
+                            <dt><label for="lists_members_per_page">'.$g_l10n->get('LST_PHR_MEMBERS_PER_PAGE').':</label></dt>
                             <dd>
                                 <input type="text" id="lists_members_per_page" name="lists_members_per_page" style="width: 50px;"
-                                    maxlength="4" value="'. $form_values['lists_members_per_page']. "\" />
+                                    maxlength="4" value="'. $form_values['lists_members_per_page']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden.
-                        Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste blättern.
-                        Die Druckvorschau und der Export sind von diesem Wert nicht betroffen.
-                        Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 20)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('LST_PHR_MEMBERS_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"lists_hide_overview_details\">Details in Übersicht einklappen:</label></dt>
+                            <dt><label for="lists_hide_overview_details">'.$g_l10n->get('LST_PHR_HIDE_DETAILS').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"lists_hide_overview_details\" name=\"lists_hide_overview_details\" ";
+                                <input type="checkbox" id="lists_hide_overview_details" name="lists_hide_overview_details" ';
                                 if(isset($form_values['lists_hide_overview_details']) && $form_values['lists_hide_overview_details'] == 1)
                                 {
                                     echo ' checked="checked" ';
@@ -1076,10 +1071,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch
-                        lassen sich die Details weiterhin anzeigen. (Standard: nein)
-                    </li>                 
+                    <li class="smallFontSize">'.$g_l10n->get('LST_PHR_HIDE_DETAILS_DESC').'</li>                 
                 </ul>
             </div>
         </div>';
@@ -1186,7 +1178,7 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="enable_system_mails">Systemmails aktivieren:</label></dt>
+                            <dt><label for="enable_system_mails">'.$g_l10n->get('ORG_ACTIVATE_SYSTEM_MAILS').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_system_mails" name="enable_system_mails" ';
                                 if(isset($form_values['enable_system_mails']) && $form_values['enable_system_mails'] == 1)
@@ -1197,13 +1189,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Hier können die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen,
-                        wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen
-                        werden als Systemmail verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden.
-                        Es sei denn der Server unterstützt keinen Mailversand.
-                        Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)
-                    </li>                  
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACTIVATE_SYSTEM_MAILS_DESC').'</li>                  
                     <li>
                         <dl>
                             <dt><label for="email_administrator">'.$g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS').':</label></dt>
@@ -1213,57 +1199,53 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                     <li>
                         <dl>
-                            <dt><label>Systemmail-Texte:</label></dt>
+                            <dt><label>'.$g_l10n->get('ORG_SYSTEM_MAIL_TEXTS').':</label></dt>
                             <dd><br /></dd>
                         </dl>
                     </li>
-                    <li  class="smallFontSize">
-                        Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und
-                        werden durch die Zeichenfolge <strong>#Betreff#</strong> und <strong>#Inhalt#</strong> identifiziert. Danach folgt dann
-                        der jeweilige Inhalt für diesen Bereich.<br /><br />
-                        In jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden:<br />
-                        <strong>%user_first_name%</strong> - Vorname des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%user_last_name%</strong> - Nachname des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%user_login_name%</strong> - Benutzername des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%user_email%</strong> - E-Mail des Benutzers aus dem jeweiligen Mailkontext<br />
-                        <strong>%webmaster_email%</strong> - Systememailadresse der Organisation<br />
-                        <strong>%organization_short_name%</strong> - Kurzbezeichnung der Organisation<br />
-                        <strong>%organization_long_name%</strong> - Name der Organisation<br />
-                        <strong>%organization_homepage%</strong> - URL der Webseite der Organisation<br /><br />
+                    <li  class="smallFontSize">'.$g_l10n->get('ORG_PHR_SYSTEM_MAIL_TEXTS_DESC').':<br />
+                        <strong>%user_first_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_FIRST_NAME').'<br />
+                        <strong>%user_last_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_LAST_NAME').'<br />
+                        <strong>%user_login_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_USERNAME').'<br />
+                        <strong>%user_email%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_EMAIL').'<br />
+                        <strong>%webmaster_email%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_EMAIL_ORGANIZATION').'<br />
+                        <strong>%organization_short_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
+                        <strong>%organization_long_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_NAME_ORGANIZATION').'<br />
+                        <strong>%organization_homepage%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_URL_ORGANIZATION').'<br /><br />
                     </li>';
 
                     $text->readData("SYSMAIL_REGISTRATION_USER");
                     echo '<li>
-                        Bestätigung der Anmeldung nach der manuellen Freigabe:<br />
-                        <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                        '.$g_l10n->get('ORG_PHR_CONFIRM_REGISTRATION').':<br />
+                        <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
                     $text->readData("SYSMAIL_REGISTRATION_WEBMASTER");
                     echo '<li>
-                        <br />Benachrichtung des Webmasters nach einer Registrierung:<br />
-                        <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                        <br />'.$g_l10n->get('ORG_PHR_NOTIFY_WEBMASTER').':<br />
+                        <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
                     $text->readData("SYSMAIL_NEW_PASSWORD");
                     echo '<li>
-                        <br />Neues Passwort zuschicken:<br />
+                        <br />'.$g_l10n->get('ORG_SEND_NEW_PASSWORD').':<br />
                     </li>
                     <li class="smallFontSize">
-                        Zusätzliche Variablen:<br />
-                        <strong>%variable1%</strong> - Neues Passwort des Benutzers<br />
+                        '.$g_l10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
+                        <strong>%variable1%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_NEW_PASSWORD').'<br />
                     </li>
                     <li>
-                        <textarea id="SYSMAIL_NEW_PASSWORD" name="SYSMAIL_NEW_PASSWORD" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                        <textarea id="SYSMAIL_NEW_PASSWORD" name="SYSMAIL_NEW_PASSWORD" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
                     $text->readData("SYSMAIL_ACTIVATION_LINK");
                     echo '<li>
-                        <br />Neues Passwort mit Aktivierungslink:<br />
+                        <br />'.$g_l10n->get('ORG_PHR_NEW_PASSWORD_ACTIVATION_LINK').':<br />
                     </li>
                     <li class="smallFontSize">
-                        Zusätzliche Variablen:<br />
-                        <strong>%variable1%</strong> - Neues Passwort des Benutzers<br />
-                        <strong>%variable2%</strong> - Aktivierungslink für das neue Passwort<br />
+                        '.$g_l10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
+                        <strong>%variable1%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_NEW_PASSWORD').'<br />
+                        <strong>%variable2%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_ACTIVATION_LINK').'<br />
                     </li>
                     <li>
-                        <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue("txt_text").'</textarea>
+                        <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>
 					<a name="email-notification"> </a>
 					<li>

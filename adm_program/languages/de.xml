@@ -324,11 +324,17 @@
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
 
     <!-- Phrases only in Listsmodule -->
+    <text id="LST_A_TO_Z" development="new" translation="todo">A bis Z</text>
     <text id="LST_ACTIVE_FORMER_MEMBERS" development="new" translation="todo">Aktive und ehemalige Mitglieder</text>
     <text id="LST_ACTIVE_MEMBERS" development="new" translation="todo">Aktive Mitglieder</text>
+    <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="todo">Weitere Spalte hinzufügen</text>
     <text id="LST_CONFIGURATION" development="new" translation="todo">Konfiguration</text>
+    <text id="LST_CONFIGURATION_LIST" development="new" translation="todo">Listenkonfiguration</text>
+    <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="todo">Neue Konfiguration erstellen</text>
     <text id="LST_CREATE_OWN_LIST" development="new" translation="todo">Eigene Liste erstellen</text>
     <text id="LST_CSV_FILE" development="new" translation="todo">CSV-Datei</text>
+    <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="todo">Vorgegebene Konfigurationen</text>
+    <text id="LST_DELETE_CONFIGURATION" development="new" translation="todo">Konfiguration löschen</text>
     <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="todo">E-Mail an Mitglieder</text>
     <text id="LST_EXPORT_TO" development="new" translation="todo">Exportieren nach</text>
     <text id="LST_FORMER_MEMBERS" development="new" translation="todo">Ehemalige Mitglieder</text>
@@ -342,25 +348,44 @@
     <text id="LST_MEMBERSHIP_START" development="new" translation="todo">Mitgliedschaftsbeginn</text>
     <text id="LST_MICROSOFT_EXCEL" development="new" translation="todo">Microsoft Excel</text>
     <text id="LST_MICROSOFT_EXCEL_2K" development="new" translation="todo">Microsoft Excel 97/2000</text>
+    <text id="LST_MY_LIST" development="new" translation="todo">Eigene Liste</text>
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
-    <text id="LST_OWN_LIST" development="new" translation="todo">Eigene Liste</text>
     <text id="LST_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="LST_PHR_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
     <text id="LST_PHR_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
+    <text id="LST_PHR_CHANGE_LIST" development="new" translation="todo">Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen ?</text>
+    <text id="LST_PHR_CONFIGURATION_ALL_USERS" development="new" translation="todo">Konfiguration allen Benutzern zur Verfügung stellen</text>
+    <text id="LST_PHR_CONFIGURATION_DEFAULT" development="new" translation="todo">Willst du die aktuelle Listenkonfiguration zur neuen Standardkonfiguration dieser Organisation machen ?</text>
+    <text id="LST_PHR_CONFIGURATION_DELETE" development="new" translation="todo">Willst du die aktuelle Listenkonfiguration wirklich löschen ?</text>
+    <text id="LST_PHR_CONFIGURATION_SAVE" development="new" translation="todo">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden ?</text>
+    <text id="LST_PHR_CHOOSE_ROLE" development="new" translation="todo">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest</text>
+    <text id="LST_PHR_DEFAULT_CONFIGURATION" development="new" translation="todo">Konfiguration wird zur neuen Standardkonfiguration</text>
     <text id="LST_PHR_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>
     <text id="LST_PHR_FROM_TO" development="new" translation="todo">von %VAR1% bis %VAR2%</text>
+    <text id="LST_PHR_HIDE_DETAILS" development="new" translation="todo">Details in Übersicht einklappen</text>
+    <text id="LST_PHR_HIDE_DETAILS_DESC" development="new" translation="todo">Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen. (Standard: nein)</text>
     <text id="LST_PHR_INACTIVE_ROLES" development="new" translation="todo">Übersicht der inaktiven Rollen</text>
     <text id="LST_PHR_MAX" development="new" translation="todo">von max. %VAR2%</text>
+    <text id="LST_PHR_MEMBERS_PER_PAGE" development="new" translation="todo">Anzahl Teilnehmer pro Seite</text>
+    <text id="LST_PHR_MEMBERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste blättern. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 20)</text>
 	<text id="LST_PHR_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
     <text id="LST_PHR_NO_MORE_COLUMN" development="new" translation="todo">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</text>
 	<text id="LST_PHR_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_PHR_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
     <text id="LST_PHR_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
+    <text id="LST_PHR_SAVE_CONFIGURATION" development="new" translation="todo">Konfiguration unter anderem Namen speichern</text>
+    <text id="LST_PHR_SET_COLUMNS" development="new" translation="todo">Bestimme die Spalten, die in der Liste angezeigt werden sollen</text>
+    <text id="LST_PHR_WANT_CONFIGURATION_FOR_ALL_USERS" development="new" translation="todo">Willst du die aktuelle Listenkonfiguration allen Benutzern zur Verfügung stellen ?</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="todo">Druckvorschau</text>
     <text id="LST_ROLE_INFORMATION" development="new" translation="todo">Rolleninformationen</text>
+    <text id="LST_SAVE_CONFIGURATION" development="new" translation="todo">Konfiguration speichern</text>
+    <text id="LST_SHOW_LIST" development="new" translation="todo">Liste anzeigen</text>
     <text id="LST_SHOW_LISTS" development="new" translation="todo">Listen anzeigen</text>
+    <text id="LST_YOUR_CONFIGURATION" development="new" translation="todo">Deine Konfigurationen</text>
+    <text id="LST_YOUR_LAST_CONFIGURATION" development="new" translation="todo">Deine letzten Konfigurationen</text>
     <text id="LST_YOUR_LISTS" development="new" translation="todo">Deine Listen</text>
     <text id="LST_USER_PHOTO" development="new" translation="todo">Benutzerfoto</text>
+    <text id="LST_Z_TO_A" development="new" translation="todo">Z bis A</text>
 
     <!-- Phrases only in Mailmodule -->
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
@@ -437,6 +462,8 @@
 
     <!-- Phrases only in Organizationadministration -->
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="todo">Zugriff auf Modul</text>
+    <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="todo">Systemmails aktivieren</text>
+    <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="todo">Zusätzliche Variablen</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="todo">Admidio-Theme</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="todo">Erweiterte Registrierung</text>
     <text id="ORG_ALLOW_BBCODE" development="new" translation="todo">BBCode zulassen</text>
@@ -473,10 +500,12 @@
     <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="todo">Übergeordnete Organisation</text>
     <text id="ORG_PHR_ACCES_TO_MODULE_DESC" development="new" translation="todo">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</text>
+    <text id="ORG_PHR_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="todo">Hier können die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen, wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systemmail verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)</text>
     <text id="ORG_PHR_ADMIDIO_THEME" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
     <text id="ORG_PHR_ALLOW_BBCODE" development="new" translation="todo">Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) %VAR1% nutzen um den Text besser zu formatieren. (Standard: ja)</text>
     <text id="ORG_PHR_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>
     <text id="ORG_PHR_CAPTCHA_REGISTRATION" development="new" translation="todo">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
+    <text id="ORG_PHR_CONFIRM_REGISTRATION" development="new" translation="todo">Bestätigung der Anmeldung nach der manuellen Freigabe</text>
     <text id="ORG_PHR_CURRENCY" development="new" translation="todo">Kennzeichen der Währung, die benutzt wird. Dieses Zeichen wird hinter allen Beträgen angezeigt.</text>
     <text id="ORG_PHR_DATE_FORMAT" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: d.m.Y)</text>
     <text id="ORG_PHR_EMAIL_ALERTS" development="new" translation="todo">Mitglieder aller Rollen mit der Berechtigung %VAR1_BOLD% erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</text>
@@ -498,21 +527,36 @@
     <text id="ORG_PHR_HOMEPAGE_REGISTERED_USERS" development="new" translation="todo">Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
     <text id="ORG_PHR_HOMEPAGE_VISITORS" development="new" translation="todo">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
     <text id="ORG_PHR_LOGIN_AUTOMATICALLY" development="new" translation="todo">Benutzer können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll. Bei einem weiteren Besuch der Homepage sind diese Benutzer dann automatisch angemeldet. Dies kann allerdings auch dazu führen, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde Personen Zugriff auf die Daten bekommen. (Standard: ja)</text>
+    <text id="ORG_PHR_NEW_PASSWORD_ACTIVATION_LINK" development="new" translation="todo">Neues Passwort mit Aktivierungslink</text>
     <text id="ORG_PHR_NO_FIELD_CREATED" development="new" translation="todo">Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</text>
+    <text id="ORG_PHR_NOTIFY_WEBMASTER" development="new" translation="todo">Benachrichtung des Webmasters nach einer Registrierung</text>
     <text id="ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
     <text id="ORG_PHR_PARENT_ORGANIZATION" development="new" translation="todo">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</text>
     <text id="ORG_PHR_REGISTRATION_MODE" development="new" translation="todo">Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten Registrierung stehen ihm alle Felder des Profils zur Verfügung.  (Standard: Schnelle Registrierung)</text>
     <text id="ORG_PHR_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="todo">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Standard: ja)</text>
     <text id="ORG_PHR_SEND_PASSWORD" development="new" translation="todo">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</text>
     <text id="ORG_PHR_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systemnachrichten benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
+    <text id="ORG_PHR_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="todo">Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #Betreff# und #Inhalt# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
     <text id="ORG_PHR_TIME_FORMAT" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>
+    <text id="ORG_PHR_VARIABLE_ACTIVATION_LINK" development="new" translation="todo">Aktivierungslink für das neue Passwort</text>
+    <text id="ORG_PHR_VARIABLE_EMAIL" development="new" translation="todo">E-Mail des Benutzers aus dem jeweiligen Mailkontext</text>
+    <text id="ORG_PHR_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="todo">Systememailadresse der Organisation</text>
+    <text id="ORG_PHR_VARIABLE_FIRST_NAME" development="new" translation="todo">Vorname des Benutzers aus dem jeweiligen Mailkontext</text>
+    <text id="ORG_PHR_VARIABLE_LAST_NAME" development="new" translation="todo">Nachname des Benutzers aus dem jeweiligen Mailkontext</text>
+    <text id="ORG_PHR_VARIABLE_NAME_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
+    <text id="ORG_PHR_VARIABLE_NEW_PASSWORD" development="new" translation="todo">Neues Passwort des Benutzers</text>
+    <text id="ORG_PHR_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="todo">Kurzbezeichnung der Organisation</text>
+    <text id="ORG_PHR_VARIABLE_URL_ORGANIZATION" development="new" translation="todo">URL der Webseite der Organisation</text>
+    <text id="ORG_PHR_VARIABLE_USERNAME" development="new" translation="todo">Benutzername des Benutzers aus dem jeweiligen Mailkontext</text>
     <text id="ORG_PROFILE_FIELDS" development="new" translation="todo">Profilfelder</text>
     <text id="ORG_REGISTERED_USERS" development="new" translation="todo">Angemeldete Benutzer</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="todo">Ähnliche Namen finden</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="todo">Passwort zusenden</text>
+    <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="todo">Neues Passwort zuschicken</text>
     <text id="ORG_SYSTEM_INFOS" development="new" translation="todo">Systeminfos</text>
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="todo">Systemmailadresse</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="todo">Systemmail-Texte</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
 	
@@ -731,8 +775,10 @@
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="todo">Fenster schließen</text>
     <text id="SYS_COMMENT" development="new" translation="todo">Kommentar</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
+    <text id="SYS_CONDITION" development="new" translation="todo">Bedingung</text>
     <text id="SYS_CONFIRM_PASSWORD" development="new" translation="todo">Passwort bestätigen</text>
     <text id="SYS_CONFIRMATION_OF_PARTICIPATION" development="new" translation="todo">Teilnahmebestätigung</text>
+    <text id="SYS_CONTENT" development="new" translation="todo">Inhalt</text>
     <text id="SYS_CONTRIBUTION" development="new" translation="todo">Beitrag</text>
     <text id="SYS_CONTRIBUTION_PERIOD" development="new" translation="todo">Beitragszeitraum</text>
     <text id="SYS_COPY" development="new" translation="todo">Kopieren</text>
@@ -816,6 +862,7 @@
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
     <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="todo">Anzahl Logins</text>
     <text id="SYS_OPTIONAL" development="new" translation="todo">Optional</text>
+    <text id="SYS_ORDER" development="new" translation="todo">Reihenfolge</text>
     <text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
     <text id="SYS_PAGE" development="new" translation="todo">Seite</text>
     <text id="SYS_PAGE_PREVIOUS" development="new" translation="todo">Vorherige</text>
