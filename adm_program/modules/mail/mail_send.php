@@ -13,9 +13,9 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/classes/email.php");
-require("../../system/classes/table_roles.php");
+require_once('../../system/common.php');
+require_once('../../system/classes/email.php');
+require_once('../../system/classes/table_roles.php');
 
 if ($g_preferences['enable_mail_module'] != 1)
 {
@@ -89,7 +89,7 @@ $role = new TableRoles($g_db);
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if(strlen($_POST['name']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Name'));
+    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
 }
 
 //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
@@ -149,7 +149,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Betreff'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('MAI_SUBJECT')));
     }
 }
 else
@@ -257,21 +257,18 @@ if (isset($_POST['kopie']) && $_POST['kopie'] == true)
 }
 
 //Den Text fuer die Mail aufbereiten
-$mail_body = $_POST['name']. " hat ";
 if ($role->getValue("rol_id") > 0)
 {
-    $mail_body = $mail_body. 'an die Rolle "'.$role->getValue("rol_name").'"';
+    $mail_body = $g_l10n->get('MAI_PHR_EMAIL_SEND_TO_ROLE', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
 }
 else
 {
-    $mail_body = $mail_body. 'Dir';
+    $mail_body = $g_l10n->get('MAI_PHR_EMAIL_SEND_TO_USER', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
 }
-$mail_body = $mail_body. " von ". $g_current_organization->getValue("org_homepage"). " folgende E-Mail geschickt:\n";
-$mail_body = $mail_body. "Eine Antwort kannst Du an ". $_POST['mailfrom']. " schicken.";
 
 if (!$g_valid_login)
 {
-    $mail_body = $mail_body. "\n(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)";
+    $mail_body = $mail_body. "\n".$g_l10n->get('MAI_PHR_SENDER_NOT_LOGGED_IN');
 }
 $mail_body = $mail_body. "\n\n\n". $_POST['body'];
 

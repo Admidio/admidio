@@ -95,7 +95,7 @@ elseif (isset($_GET['rol_id']))
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-	    
+
     if ($g_valid_login)
     {
         $sql    = 'SELECT rol_mail_this_role, rol_name, rol_id 
@@ -109,7 +109,7 @@ elseif (isset($_GET['rol_id']))
         $sql    = 'SELECT rol_mail_this_role, rol_name, rol_id
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                     WHERE rol_id = '. $_GET['rol_id']. '
-					  AND rol_cat_id = cat_id
+                      AND rol_cat_id = cat_id
                       AND cat_org_id = '. $g_current_organization->getValue('org_id');
     }
     $result = $g_db->query($sql);
@@ -129,18 +129,18 @@ elseif (isset($_GET['rolle']) && isset($_GET['cat']))
     // auf diese zugreifen darf
     if ($g_valid_login)
     {
-        $sql    = 'SELECT rol_mail_this_role, rol_id
-                    FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
-                   WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
+        $sql = 'SELECT rol_mail_this_role, rol_id
+                  FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
+                 WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
                    AND UPPER(cat_name)   = UPPER("'. $_GET['cat']. '")';
     }
     else
     {
-        $sql    = 'SELECT rol_mail_this_role, rol_id
-                    FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
-                   WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
+        $sql = 'SELECT rol_mail_this_role, rol_id
+                  FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
+                 WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
                    AND rol_mail_this_role = 3
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
@@ -228,7 +228,7 @@ if (strlen($_GET['subject']) > 0)
 }
 else
 {
-    $g_layout['title'] = 'E-Mail verschicken';
+    $g_layout['title'] = $g_l10n->get('MAI_SEND_EMAIL');
 }
 
 $g_layout['header'] =  '
@@ -271,7 +271,7 @@ echo '
             <ul class="formFieldList">
                 <li>
                     <dl>
-                        <dt><label for="rol_id">an:</label></dt>
+                        <dt><label for="rol_id">'.$g_l10n->get('SYS_TO').':</label></dt>
                         <dd>';
                             if (array_key_exists('usr_id', $_GET))
                             {
@@ -359,7 +359,7 @@ echo '
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="name">Name:</label></dt>
+                        <dt><label for="name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
@@ -375,7 +375,7 @@ echo '
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="mailfrom">E-Mail:</label></dt>
+                        <dt><label for="mailfrom">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
@@ -394,7 +394,7 @@ echo '
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="subject">Betreff:</label></dt>
+                        <dt><label for="subject">'.$g_l10n->get('MAI_SUBJECT').':</label></dt>
                         <dd>';
                             if (strlen($_GET['subject']) > 0)
                             {
@@ -410,7 +410,7 @@ echo '
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="body">Nachricht:</label></dt>
+                        <dt><label for="body">'.$g_l10n->get('MAI_MESSAGE').':</label></dt>
                         <dd>';
                             if (strlen($form_values['body']) > 0)
                             {
@@ -436,11 +436,11 @@ echo '
                                 <input type="hidden" name="MAX_FILE_SIZE" value="' . ($g_preferences['max_email_attachment_size'] * 1024) . '" />
                                 <span id="add_attachment" class="iconTextLink">
                                     <a href="javascript:addAttachment()"><img
-                                    src="'. THEME_PATH. '/icons/add.png" alt="Anhang hinzufügen" /></a>
-                                    <a href="javascript:addAttachment()">Anhang hinzufügen</a>
-		                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
-							            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
-							            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
+                                    <a href="javascript:addAttachment()">'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'</a>
+                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
+                                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                                 </span>
                             </dd>
                         </dl>
@@ -457,7 +457,7 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            echo ' /> <label for="kopie">Kopie der E-Mail an mich senden</label>
+                            echo ' /> <label for="kopie">'.$g_l10n->get('MAI_PHR_SEND_COPY').'</label>
                         </dd>
                     </dl>
                 </li>';
@@ -470,22 +470,21 @@ echo '
                     <li>
                         <dl>
                             <dt>&nbsp;</dt>
-                            <dd>
-							';
-					if($g_preferences['captcha_type']=='pic')
-					{
-						echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />';
-						$captcha_label = $g_l10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-						$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
-					}
-					else if($g_preferences['captcha_type']=='calc')
-					{
-						$captcha = new Captcha();
-						$captcha->getCaptchaCalc($g_l10n->get('SYS_CAPTCHA_CALC_PART1'),$g_l10n->get('SYS_CAPTCHA_CALC_PART2'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$g_l10n->get('SYS_CAPTCHA_CALC_PART4'));
-						$captcha_label = $g_l10n->get('SYS_CAPTCHA_CALC');
-						$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
-					}
-					echo '
+                            <dd>';
+                                if($g_preferences['captcha_type']=='pic')
+                                {
+                                    echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />';
+                                    $captcha_label = $g_l10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
+                                    $captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
+                                }
+                                else if($g_preferences['captcha_type']=='calc')
+                                {
+                                    $captcha = new Captcha();
+                                    $captcha->getCaptchaCalc($g_l10n->get('SYS_CAPTCHA_CALC_PART1'),$g_l10n->get('SYS_CAPTCHA_CALC_PART2'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$g_l10n->get('SYS_CAPTCHA_CALC_PART4'));
+                                    $captcha_label = $g_l10n->get('SYS_CAPTCHA_CALC');
+                                    $captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
+                                }
+                            echo '
                             </dd>
                         </dl>
                     </li>
@@ -507,7 +506,7 @@ echo '
             <hr />
 
             <div class="formSubmit">
-                <button id="btnSend" type="submit"><img src="'. THEME_PATH. '/icons/email.png" alt="Abschicken" />&nbsp;Abschicken</button>
+                <button id="btnSend" type="submit"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('SYS_SEND').'" />&nbsp;'.$g_l10n->get('SYS_SEND').'</button>
             </div>
         </div>
     </div>

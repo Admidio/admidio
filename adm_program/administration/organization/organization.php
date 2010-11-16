@@ -1089,34 +1089,28 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="enable_mail_module">Mailmodul aktivieren:</label></dt>
+                            <dt><label for="enable_mail_module">'.$g_l10n->get('MAI_ACTIVATE_EMAIL_MODULE').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_mail_module" name="enable_mail_module" ';
                                 if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das Mailmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr
-                        aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen
-                        Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_ACTIVATE_EMAIL_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"mail_bcc_count\">Anzahl der BCC Empfänger:</label>
+                            <dt><label for="mail_bcc_count">'.$g_l10n->get('MAI_PHR_COUNT_BCC').':</label>
                             </dt>
                             <dd>
-                                <input type=\"text\" id=\"mail_bcc_count\" name=\"mail_bcc_count\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['mail_bcc_count']. '" />
+                                <input type="text" id="mail_bcc_count" name="mail_bcc_count" style="width: 50px;" maxlength="6" value="'. $form_values['mail_bcc_count']. '" />
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_COUNT_BCC_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_mail_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
@@ -1124,42 +1118,29 @@ echo '
                                 <input type="checkbox" id="enable_mail_captcha" name="enable_mail_captcha" ';
                                 if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer
-                        Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen,
-                        dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_SHOW_CAPTCHA_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"max_email_attachment_size\">Maximale Dateigröße für Anhänge:</label></dt>
+                            <dt><label for="max_email_attachment_size">'.$g_l10n->get('MAI_PHR_ATTACHMENT_SIZE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"max_email_attachment_size\" name=\"max_email_attachment_size\" style=\"width: 50px;\" maxlength=\"6\" value=\"". $form_values['max_email_attachment_size']. "\" /> KB
+                                <input type="text" id="max_email_attachment_size" name="max_email_attachment_size" style="width: 50px;" maxlength="6" value="'.$form_values['max_email_attachment_size'].'" /> KB
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier
-                        angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)
-                    </li>";
-                    echo'
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_ATTACHMENT_SIZE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="mail_sendmail_address">Absender Mailadresse:</label></dt>
+                            <dt><label for="mail_sendmail_address">'.$g_l10n->get('MAI_SENDER_EMAIL').':</label></dt>
                             <dd><input type="text" id="mail_sendmail_address" name="mail_sendmail_address" style="width: 200px;" maxlength="50" value="'. $form_values['mail_sendmail_address'].'" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. 
-                        In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt 
-                        werden, (z.B. mailversand@'.$_SERVER['HTTP_HOST'].'). 
-                        Bleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: <i>leer</i>)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                 </ul>
             </div>
         </div>';

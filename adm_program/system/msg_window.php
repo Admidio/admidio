@@ -295,7 +295,7 @@ switch ($req_message_id)
         if(strlen($req_message_var1) > 0)
         {
             $msg_var1 = $g_l10n->get($req_message_var1);
-            if(strlen($msg_text) == 0)
+            if(strlen($msg_var1) == 0)
             {
                 $msg_var1 = $req_message_var1;
             }
