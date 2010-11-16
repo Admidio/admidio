@@ -388,14 +388,31 @@
     <text id="LST_Z_TO_A" development="new" translation="todo">Z bis A</text>
 
     <!-- Phrases only in Mailmodule -->
+    <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="todo">Mailmodul aktivieren</text>
+    <text id="MAI_ADD_ATTACHEMENT" development="new" translation="todo">Anhang hinzufügen</text>
+    <text id="MAI_PHR_ATTACHMENT_SIZE" development="new" translation="todo">Maximale Dateigröße für Anhänge</text>
+    <text id="MAI_PHR_ATTACHMENT_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)</text>
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
+    <text id="MAI_MESSAGE" development="new" translation="todo">Nachricht</text>
+    <text id="MAI_PHR_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="todo">Das Mailmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)</text>
     <text id="MAI_PHR_ATTACHMENT_TO_LARGE" development="new" translation="todo">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
 	<text id="MAI_PHR_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_PHR_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
+    <text id="MAI_PHR_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
+    <text id="MAI_PHR_COUNT_BCC_DESC" development="new" translation="todo">Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)</text>
+    <text id="MAI_PHR_EMAIL_SEND_TO_ROLE" development="new" translation="todo">%VAR1% hat an die Rolle %VAR4% von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
+    <text id="MAI_PHR_EMAIL_SEND_TO_USER" development="new" translation="todo">%VAR1% hat Dir von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
     <text id="MAI_PHR_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
     <text id="MAI_PHR_ROLE_NO_EMAILS" development="new" translation="todo">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
+    <text id="MAI_PHR_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
     <text id="MAI_PHR_SEND_MAIL_TO_ROLE" development="new" translation="todo">Deine E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nWenn du eingeloggt bist stehen dir weitere Rollen zur Verfügung, an die du E-Mails schreiben kannst.</text>
+    <text id="MAI_PHR_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="todo">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@%VAR1%).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</text>
+    <text id="MAI_PHR_SENDER_NOT_LOGGED_IN" development="new" translation="todo">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</text>
+    <text id="MAI_PHR_SHOW_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_PHR_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="todo">die Rolle %VAR1_BOLD%</text>
+    <text id="MAI_SEND_EMAIL" development="new" translation="todo">E-Mail verschicken</text>
+    <text id="MAI_SENDER_EMAIL" development="new" translation="todo">Absender Mailadresse</text>
+    <text id="MAI_SUBJECT" development="new" translation="todo">Betreff</text>
 
     <!-- Phrases only in Membersadministration -->
     <text id="MEM_ANSI" development="new" translation="todo">ANSI</text>
@@ -655,7 +672,7 @@
     <text id="PRO_PHR_SELECT_NEW_PIC_HERE" development="new" translation="todo">Bitte hier ein neues Foto auswählen</text>
 	<text id="PRO_PHR_TO_ADD" development="new" translation="todo">%VAR1% zu %VAR2% hinzufügen</text>
 	<text id="PRO_PHR_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
-    <text id="PRO_PHR_USERNAME_DESCRIPTION" development="new" translation="todo">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel <i>Andi78</i> oder <i>StefanT</i>.</text>
+    <text id="PRO_PHR_USERNAME_DESCRIPTION" development="new" translation="todo">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</text>
     <text id="PRO_PROFILE" development="new" translation="todo">Profil</text>
 	<text id="PRO_REGISTER" development="new" translation="todo">Registrieren</text>
 	<text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="todo">Rollenmitgliedschaften anderer Organisationen</text>
