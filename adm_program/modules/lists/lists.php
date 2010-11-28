@@ -502,7 +502,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                             <dd>'.$row_lst['num_members'];
                                 if($role->getValue('rol_max_members') > 0)
                                 {
-                                    echo $g_l10n->get('LST_PHR_MAX', $role->getValue('rol_max_members'));
+                                    echo '&nbsp;'.$g_l10n->get('LST_PHR_MAX', $role->getValue('rol_max_members'));
                                 }
                                 if($active_role && $row_lst['num_former'] > 0)
                                 {

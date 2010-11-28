@@ -365,7 +365,7 @@
     <text id="LST_PHR_HIDE_DETAILS" development="new" translation="todo">Details in Übersicht einklappen</text>
     <text id="LST_PHR_HIDE_DETAILS_DESC" development="new" translation="todo">Bei Aktivierung dieser Option werden die Details in der Listenübersicht standardmäßig eingeklappt. Auf Wunsch lassen sich die Details weiterhin anzeigen. (Standard: nein)</text>
     <text id="LST_PHR_INACTIVE_ROLES" development="new" translation="todo">Übersicht der inaktiven Rollen</text>
-    <text id="LST_PHR_MAX" development="new" translation="todo">von max. %VAR2%</text>
+    <text id="LST_PHR_MAX" development="new" translation="todo">von max. %VAR1%</text>
     <text id="LST_PHR_MEMBERS_PER_PAGE" development="new" translation="todo">Anzahl Teilnehmer pro Seite</text>
     <text id="LST_PHR_MEMBERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste blättern. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 20)</text>
 	<text id="LST_PHR_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
