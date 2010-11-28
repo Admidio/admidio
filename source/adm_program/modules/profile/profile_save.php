@@ -96,7 +96,7 @@ if($new_user == 2)
 {
     if(strlen($_POST['usr_login_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Benutzername'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
     }
 
     // Passwort sollte laenger als 6 Zeichen sein
@@ -113,7 +113,7 @@ if($new_user == 2)
 
     if(strlen($_POST['usr_password']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Passwort'));
+        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
     }
 }
 
@@ -171,6 +171,7 @@ foreach($user->userFieldData as $field)
             }
         }
 
+        // Wert aus Feld in das User-Klassenobjekt schreiben
         $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
     }
     else
