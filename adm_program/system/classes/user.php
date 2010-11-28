@@ -449,17 +449,15 @@ class User extends TableUsers
             || $this->getProperty($field_name, 'usf_disabled') == 0
             || ($g_current_user->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
             {
-                $update_field = true;
-            }
-
-            // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
-            // oder im eigenen Profil
-            if((  $this->getProperty($field_name, 'usf_hidden') == 1
-               && $g_current_user->editUsers() == true)
-            || $this->getProperty($field_name, 'usf_hidden') == 0
-            || $g_current_user->getValue('usr_id') == $this->getValue('usr_id'))
-            {
-                $update_field = true;
+                // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
+                // oder im eigenen Profil
+                if((  $this->getProperty($field_name, 'usf_hidden') == 1
+                   && $g_current_user->editUsers() == true)
+                || $this->getProperty($field_name, 'usf_hidden') == 0
+                || $g_current_user->getValue('usr_id') == $this->getValue('usr_id'))
+                {
+                    $update_field = true;
+                }
             }
 
             // nur Updaten, wenn sich auch der Wert geaendert hat
