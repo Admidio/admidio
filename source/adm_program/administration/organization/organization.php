@@ -30,6 +30,7 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 $languages = array('de' => 'deutsch', 'en' => 'english');
+$html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />';
 
 if(isset($_SESSION['organization_request']))
 {
@@ -542,7 +543,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="announcements_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -634,127 +635,100 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="photo_show_mode">Fotodarstellung:</label></dt>
+                            <dt><label for="photo_show_mode">'.$g_l10n->get('ORG_DISPLAY_PHOTOS').':</label></dt>
                             <dd>
                                 <select size="1" id="photo_show_mode" name="photo_show_mode">
                                     <option value="0" ';
                                     if($form_values['photo_show_mode'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Popupfenster</option>
-                                    <option value=\"1\" ";
+                                    echo '>'.$g_l10n->get('ORG_POPUP_WINDOW').'</option>
+                                    <option value="1" ';
                                     if($form_values['photo_show_mode'] == 1)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">ColorBox</option>
-                                    <option value=\"2\" ";
+                                    echo '>'.$g_l10n->get('ORG_COLORBOX').'</option>
+                                    <option value="2" ';
                                     if($form_values['photo_show_mode'] == 2)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">Gleiches Fenster</option>
+                                    echo '>'.$g_l10n->get('ORG_SAME_WINDOW').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen.
-                        Dies kann über ein Popup-Fenster, über eine Javascript-Animation (ColorBox) oder auf
-                        dergleichen Seite in HTML erfolgen. (Standard: ColorBox)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_DISPLAY_PHOTOS_DESC').'</li>
                      <li>
                         <dl>
-                            <dt><label for=\"photo_upload_mode\">Multiupload:</label></dt>
+                            <dt><label for="photo_upload_mode">'.$g_l10n->get('ORG_MULTIUPLOAD').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"photo_upload_mode\" name=\"photo_upload_mode\" ";
+                                <input type="checkbox" id="photo_upload_mode" name="photo_upload_mode" ';
                                 if(isset($form_values['photo_upload_mode']) && $form_values['photo_upload_mode'] == 1)
                                 {
                                     echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen.
-                        Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht
-                        aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt.
-                        (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_MULTIUPLOAD_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_thumbs_row\">Thumbnails pro Seite (Spalten x Zeilen):</label></dt>
+                            <dt><label for="photo_thumbs_row">'.$g_l10n->get('ORG_PHR_THUMBNAILS_PER_PAGE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_column\" name=\"photo_thumbs_column\" style=\"width: 50px;\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_column']. "\" /> x
-                                <input type=\"text\" id=\"photo_thumbs_row\" name=\"photo_thumbs_row\" style=\"width: 50px;\" maxlength=\"2\" value=\"". $form_values['photo_thumbs_row']. "\" />
+                                <input type="text" id="photo_thumbs_column" name="photo_thumbs_column" style="width: 50px;" maxlength="2" value="'. $form_values['photo_thumbs_column']. '" /> x
+                                <input type="text" id="photo_thumbs_row" name="photo_thumbs_row" style="width: 50px;" maxlength="2" value="'. $form_values['photo_thumbs_row']. '" />
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 3 x 5)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_THUMBNAILS_PER_PAGE_DESC').'</li>
 
                     <li>
                         <dl>
-                            <dt><label for=\"photo_thumbs_scale\">Skalierung Thumbnails:</label></dt>
+                            <dt><label for="photo_thumbs_scale">'.$g_l10n->get('ORG_SCALE_THUMBNAILS').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_thumbs_scale\" name=\"photo_thumbs_scale\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_thumbs_scale']. "\" /> Pixel
+                                <input type="text" id="photo_thumbs_scale" name="photo_thumbs_scale" style="width: 50px;" maxlength="4" value="'. $form_values['photo_thumbs_scale']. '" /> '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige
-                        skaliert werden soll. Vorsicht: Werden die Thumbnails zu breit, passen weniger nebeneinander.
-                        Ggf. weniger Thumbnailspalten einstellen. (Standard: 160Pixel)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SCALE_THUMBNAILS_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_save_scale\">Skalierung beim Hochladen:</label></dt>
+                            <dt><label for="photo_save_scale">'.$g_l10n->get('ORG_SCALE_AT_UPLOAD').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_save_scale\" name=\"photo_save_scale\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_save_scale']. "\" /> Pixel
+                                <input type="text" id="photo_save_scale" name="photo_save_scale" style="width: 50px;" maxlength="4" value="'. $form_values['photo_save_scale']. '" /> '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Beim Hochladen werden alle Fotos neu skaliert. Der eingegebene Pixelwert
-                        ist der Parameter für die längere Seite des Fotos, egal ob das Foto im Hoch-
-                        oder Querformat übergeben wurde. Die andere Seite wird im Verhältnis berechnet. (Standard: 640 Pixel)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SCALE_AT_UPLOAD_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_show_width\">Max. Bildanzeigegröße (Breite x Höhe):</label></dt>
+                            <dt><label for="photo_show_width">'.$g_l10n->get('ORG_PHR_MAX_PHOTO_SIZE').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_show_width\" name=\"photo_show_width\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_show_width']. "\" /> x
-                                <input type=\"text\" id=\"photo_show_height\" name=\"photo_show_height\" style=\"width: 50px;\" maxlength=\"4\" value=\"". $form_values['photo_show_height']. "\" /> Pixel
+                                <input type="text" id="photo_show_width" name="photo_show_width" style="width: 50px;" maxlength="4" value="'. $form_values['photo_show_width']. '" /> x
+                                <input type="text" id="photo_show_height" name="photo_show_height" style="width: 50px;" maxlength="4" value="'. $form_values['photo_show_height']. '" /> '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster
-                        haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst.
-                        Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder
-                        für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_MAX_PHOTO_SIZE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"photo_image_text\">Bildtext einblenden:</label></dt>
+                            <dt><label for="photo_image_text">'.$g_l10n->get('ORG_SHOW_CAPTION').':</label></dt>
                             <dd>
-                                <input type=\"text\" id=\"photo_image_text\" name=\"photo_image_text\" maxlength=\"60\" value=\"".$form_values['photo_image_text']. "\" />
+                                <input type="text" id="photo_image_text" name="photo_image_text" maxlength="60" value="'.$form_values['photo_image_text']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet.
-                        (Standard: &#169; ".$g_current_organization->getValue("org_homepage").")
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SHOW_CAPTION_DESC' ,$g_current_organization->getValue('org_homepage')).'</li>
                 </ul>
             </div>
-        </div>";
+        </div>';
 
         /**************************************************************************************/
         //Einstellungen Forum
@@ -768,124 +742,107 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="enable_forum_interface">Forum aktivieren:</label></dt>
+                            <dt><label for="enable_forum_interface">'.$g_l10n->get('ORG_ACTIVATE_FORUM').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_forum_interface" name="enable_forum_interface" ';
                                 if(isset($form_values['enable_forum_interface']) && $form_values['enable_forum_interface'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />&nbsp;
-                        Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0)
-                        eingebunden werden. (Standard: nein)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACTIVATE_FORUM_DESC', $html_icon_warning).'</li>
                     <li>
                         <dl>
-                            <dt><label for="forum_version">Genutztes Forum:</label></dt>
+                            <dt><label for="forum_version">'.$g_l10n->get('ORG_USED_FORUM').':</label></dt>
                             <dd>
                                 <select size="1" id="forum_version" name="forum_version">
                                     <option value="phpBB2" ';
-                                    if($form_values['forum_version'] == "phpBB2")
+                                    if($form_values['forum_version'] == 'phpBB2')
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
-                                    echo ">phpBB2</option>
+                                    echo '>phpBB2</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Welches Forum soll genutzt werden?<br/>
-                        <table summary=\"Forum_Auflistung\" border=\"0\">
-                            <tr><td>1) \"phpbb2\"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_USED_FORUM').'<br/>
+                        <table summary="Forum_Auflistung" border="0">
+                            <tr><td>1) "phpbb2"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
                         </table>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for=\"forum_link_intern\">Forum Link Intern aktivieren:</label></dt>
+                            <dt><label for="forum_link_intern">'.$g_l10n->get('ORG_ACTIVATE_FORUM_LINK_INTERN').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"forum_link_intern\" name=\"forum_link_intern\" ";
+                                <input type="checkbox" id="forum_link_intern" name="forum_link_intern" ';
                                 if(isset($form_values['forum_link_intern']) && $form_values['forum_link_intern'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)<br />
-                        Deaktiviert: Forum wird in einem neuen Browserfenster angezeigt.
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACTIVATE_FORUM_LINK_INTERN').'</li>
                     <li>
                         <dl>
-                            <dt><label for="forum_width">Forum Breite:</label></dt>
+                            <dt><label for="forum_width">'.$g_l10n->get('ORG_FORUM_WIDTH').':</label></dt>
                             <dd>
-                                <input type="text" id="forum_width" name="forum_width" maxlength="4" style="width: 50px;" value="'. $form_values['forum_width']. '" /> Pixel
+                                <input type="text" id="forum_width" name="forum_width" maxlength="4" style="width: 50px;" value="'. $form_values['forum_width']. '" /> '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />&nbsp;
-                        Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_FORUM_WIDTH_DESC', $html_icon_warning).'</li>
                     <li>
                         <dl>
-                            <dt><label for="forum_export_user">Admidiobenutzer exportieren:</label></dt>
+                            <dt><label for="forum_export_user">'.$g_l10n->get('ORG_EXPORT_ADMIDIO_USER').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="forum_export_user" name="forum_export_user" ';
                                 if(isset($form_values['forum_export_user']) && $form_values['forum_export_user'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo " value=\"1\" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class=\"smallFontSize\">
-                        Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standard: ja)
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for=\"forum_set_admin\">Webmasterstatus ins Forum exportieren:</label></dt>
-                            <dd>
-                                <input type=\"checkbox\" id=\"forum_set_admin\" name=\"forum_set_admin\" ";
-                                if(isset($form_values['forum_set_admin']) && $form_values['forum_set_admin'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_EXPORT_ADMIDIO_USER_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="forum_praefix">Forum Tabellen praefix:</label></dt>
+                            <dt><label for="forum_set_admin">'.$g_l10n->get('ORG_PHR_EXPORT_WEBMASTER_STATUS').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="forum_set_admin" name="forum_set_admin" ';
+                                if(isset($form_values['forum_set_admin']) && $form_values['forum_set_admin'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_EXPORT_WEBMASTER_STATUS_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="forum_praefix">'.$g_l10n->get('ORG_FORUM_TABLE_PREFIX').':</label></dt>
                             <dd>
                                 <input type="text" id="forum_praefix" name="forum_praefix" style="width: 50px;" value="'. $form_values['forum_praefix']. '" />
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Hier wird das Präfix der Tabellen des phpBB-Forums angegeben. (Beispiel: phpbb)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_FORUM_TABLE_PREFIX_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><strong>Zugangsdaten zur Datenbank des Forums</strong></dt>
+                            <dt><strong>'.$g_l10n->get('ORG_PHR_ACCESS_FORUM_DATABASE').'</strong></dt>
                             <dd>&nbsp;</dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="forum_sqldata_from_admidio">Zugangsdaten von Admidio verwenden:</label></dt>
+                            <dt><label for="forum_sqldata_from_admidio">'.$g_l10n->get('ORG_PHR_ACCESS_DATA_ADMIDIO').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="forum_sqldata_from_admidio" name="forum_sqldata_from_admidio" onclick="javascript:organizationJS.drawForumAccessDataTable();" ';
                                 if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
@@ -896,15 +853,9 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und
-                        die Zugangsdaten müssen nicht mehr eingegeben werden. (Standard: nein)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_DATA_ADMIDIO_DESC').'</li>
                     <li id="forum_access_data"></li>
-                    <li id="forum_access_data_text" class="smallFontSize">
-                        Läuft das Forum auf einer anderen Datenbank als Admidio, so müssen die Zugangsdaten zu dieser
-                        Datenbank angegeben werden.
-                    </li>
+                    <li id="forum_access_data_text" class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_FORUM_DATABASE_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -946,7 +897,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="guestbook_entries_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -1281,7 +1232,7 @@ echo '
                             <dd><input type="text" id="ecard_view_width" name="ecard_view_width" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_view_width"].'" />
                                 x
                                 <input type="text" id="ecard_view_height" name="ecard_view_height" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_view_height"].'" />
-                                Pixel
+                                '.$g_l10n->get('ORG_PIXEL').'
                             </dd>
                         </dl>
                     </li>
@@ -1294,7 +1245,7 @@ echo '
                             <dd><input type="text" id="ecard_card_picture_width" name="ecard_card_picture_width" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_card_picture_width"].'" />
                                 x
                                 <input type="text" id="ecard_card_picture_height" name="ecard_card_picture_height" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_card_picture_height"].'" />
-                                Pixel
+                                '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
@@ -1721,7 +1672,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="weblinks_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -1739,7 +1690,7 @@ echo '
                                 <input type="checkbox" id="dates_show_map_link" name="dates_show_map_link" ';
                                 if(isset($form_values['dates_show_map_link']) && $form_values['dates_show_map_link'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
                             </dd>
@@ -1829,7 +1780,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCES_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="weblinks_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -1893,7 +1844,7 @@ echo '
                                     <option value="pic" ';
                                     if($form_values['captcha_type'] == 'pic')
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
                                     echo '>'.$g_l10n->get('ORG_CAPTCHA_TYPE_PIC').'</option>
                                     <option value="calc" ';
@@ -1963,7 +1914,7 @@ echo '
                             <dd><input type="text" id="captcha_width" name="captcha_width" style="width: 50px;" maxlength="4" value="'.$form_values["captcha_width"].'" />
                                 x
                                 <input type="text" id="captcha_height" name="captcha_height" style="width: 50px;" maxlength="4" value="'.$form_values["captcha_height"].'" />
-                                Pixel
+                                '.$g_l10n->get('ORG_PIXEL').'
                             </dd>
                         </dl>
                     </li>
@@ -2022,7 +1973,7 @@ echo '
                         </dl>
                     </li>
 					<li class="smallFontSize">
-                       '.$g_l10n->get("ORG_CAPTCHA_PREVIEW_TEXT").'
+                       '.$g_l10n->get('ORG_CAPTCHA_PREVIEW_TEXT').'
                     </li>
                 </ul>
             </div>
