@@ -2,7 +2,7 @@
 /******************************************************************************
  * Organisationseinstellungen speichern
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,7 +16,7 @@ require_once('../../system/classes/table_text.php');
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $_SESSION['organization_request'] = $_REQUEST;
@@ -27,34 +27,34 @@ $_SESSION['organization_request'] = $_REQUEST;
 
 if(strlen($_POST['org_longname']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('SYS_NAME'), $g_l10n->get('SYS_COMMON')));
+    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('SYS_NAME'), $g_l10n->get('SYS_COMMON')));
 }
 
 if(strlen($_POST['email_administrator']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $g_l10n->get('SYS_SYSTEM_MAILS')));
+    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $g_l10n->get('SYS_SYSTEM_MAILS')));
 }
 else
 {
     if(!isValidEmailAddress($_POST['email_administrator']))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_INVALID'));
+        $g_message->show($g_l10n->get('SYS_EMAIL_INVALID'));
     }
 }
 
 if(strlen($_POST['theme']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('ORG_ADMIDIO_THEME'), $g_l10n->get('SYS_COMMON')));
+    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('ORG_ADMIDIO_THEME'), $g_l10n->get('SYS_COMMON')));
 }
 
 if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $g_l10n->get('SYS_COMMON')));
+    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $g_l10n->get('SYS_COMMON')));
 }
 
 if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
 {
-    $g_message->show($g_l10n->get('ORG_PHR_FIELD_EMPTY_AREA', $g_l10n->get('LNK_DISPLAY_REDIRECT'), $g_l10n->get('LNK_WEBLINKS')));
+    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('LNK_DISPLAY_REDIRECT'), $g_l10n->get('LNK_WEBLINKS')));
 }
 
 // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
@@ -106,7 +106,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 {
     if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FORUM_ACCESS_DATA'));
+        $g_message->show($g_l10n->get('SYS_FORUM_ACCESS_DATA'));
     }
     else
     {
@@ -128,7 +128,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
         }
         if($connect_id == false)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FORUM_DB_CONNECTION_FAILED'));
+            $g_message->show($g_l10n->get('SYS_FORUM_DB_CONNECTION_FAILED'));
         }
     }
 }
@@ -177,7 +177,7 @@ $ret_code = $g_current_organization->save();
 if($ret_code != 0)
 {
     $g_current_organization->clear();
-    $g_message->show($g_l10n->get('SYS_PHR_DATABASE_ERROR', $ret_code));
+    $g_message->show($g_l10n->get('SYS_DATABASE_ERROR', $ret_code));
 }
 
 $g_current_organization->setPreferences($g_preferences);
@@ -189,5 +189,5 @@ $g_current_session->renewOrganizationObject();
 
 // zur Ausgangsseite zurueck
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+$g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 ?>

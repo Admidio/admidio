@@ -2,7 +2,7 @@
 /******************************************************************************
  * Roles Ajax
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -42,7 +42,7 @@ else
 //Testen ob Recht besteht Profil einzusehn
 if(!$g_current_user->viewProfile($a_user_id))
 {
-    die($g_l1n0->get('SYS_PHR_NO_RIGHTS'));
+    die($g_l1n0->get('SYS_NO_RIGHTS'));
 }
 
 if(isset($_GET['action']))
@@ -87,7 +87,7 @@ switch($action)
     case 2: // save Date changes
         if(!$g_current_user->assignRoles())
         {
-            die($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            die($g_l10n->get('SYS_NO_RIGHTS'));
         }
         // Uebergabevariablen pruefen
         if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
@@ -113,7 +113,7 @@ switch($action)
         }
         else
         {
-            die($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_START'), $g_preferences['system_date']));
+            die($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('SYS_START'), $g_preferences['system_date']));
         }
 
         //Falls gesetzt wird das Enddatum gecheckt
@@ -127,13 +127,13 @@ switch($action)
             }
             else
             {
-                die($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
+                die($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
             }
 
             // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
             if ($startDate->getTimestamp() > $endDate->getTimestamp()) 
             {
-                die($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
+                die($g_l10n->get('SYS_DATE_END_BEFORE_BEGIN'));
             }
         }
         else 
@@ -143,7 +143,7 @@ switch($action)
         
         $mem->save();
 
-        echo $g_l10n->get('SYS_PHR_SAVE')."<SAVED/>";;
+        echo $g_l10n->get('SYS_SAVE_DATA')."<SAVED/>";;
     break;
 }
 ?>

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photogalerien
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,7 +21,7 @@ require_once('../../system/common.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_photo_module'] == 2)
 {

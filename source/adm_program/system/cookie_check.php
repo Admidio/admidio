@@ -2,7 +2,7 @@
 /******************************************************************************
  * Prueft, ob Cookies angelegt werden koennen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +20,7 @@ if(isset($_COOKIE[$cookie_praefix. '_ID']) == false)
 {
     unset($_SESSION['login_forward_url']);
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_PHR_COOKIE_NOT_SET', $g_current_organization->getValue('org_homepage')));
+    $g_message->show($g_l10n->get('SYS_COOKIE_NOT_SET', $g_current_organization->getValue('org_homepage')));
 }
 else
 {
@@ -43,7 +43,7 @@ else
         $g_message->addVariableContent($g_forum->sitename);
     }
 
-    if($message_code != 'SYS_PHR_LOGIN_SUCCESSFUL' && $message_code != 'SYS_PHR_FORUM_LOGIN_SUCCESSFUL')
+    if($message_code != 'SYS_LOGIN_SUCCESSFUL' && $message_code != 'SYS_FORUM_LOGIN_SUCCESSFUL')
     {
         // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
         $show_time = 0;

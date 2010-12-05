@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Links
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,13 +25,13 @@ require_once('../../system/classes/table_weblink.php');
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editWeblinksRight())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -64,15 +64,15 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
 {
     if(strlen(strStripTags($_POST['lnk_name'])) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('LNK_LINK_NAME')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('LNK_LINK_NAME')));
     }
     if(strlen(strStripTags($_POST['lnk_url'])) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('LNK_LINK_ADDRESS')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('LNK_LINK_ADDRESS')));
     }
     if(strlen($_POST['lnk_cat_id']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
     }
    
     // POST Variablen in das Ankuendigungs-Objekt schreiben
@@ -95,7 +95,7 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 	
 	if($return == 0 && $_GET['mode'] == 1)

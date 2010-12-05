@@ -2,7 +2,7 @@
 /******************************************************************************
  * Organisationseinstellungen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,13 +16,13 @@ require_once('../../system/classes/table_text.php');
 // nur Webmaster duerfen Organisationen bearbeiten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
 if($g_debug == 0 && file_exists('../../../adm_install'))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_INSTALL_FOLDER_EXIST'));
+    $g_message->show($g_l10n->get('SYS_INSTALL_FOLDER_EXIST'));
 }
 
 // Navigation faengt hier im Modul an
@@ -270,42 +270,42 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ADMIDIO_THEME').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ADMIDIO_THEME_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="system_date">'.$g_l10n->get('ORG_DATE_FORMAT').':</label></dt>
                             <dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_DATE_FORMAT', '<a href="http://www.php.net/date">date()</a>').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
                     <li>
                         <dl>
                             <dt><label for="system_time">'.$g_l10n->get('ORG_TIME_FORMAT').':</label></dt>
                             <dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_TIME_FORMAT', '<a href="http://www.php.net/date">date()</a>').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
                     <li>
                         <dl>
                             <dt><label for="system_time">'.$g_l10n->get('ORG_CURRENCY').':</label></dt>
                             <dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_CURRENCY').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_CURRENCY_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="homepage_logout">'.$g_l10n->get('SYS_HOMEPAGE').' ('.$g_l10n->get('SYS_VISITORS').'):</label></dt>
                             <dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_HOMEPAGE_VISITORS').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_HOMEPAGE_VISITORS').'</li>
                     <li>
                         <dl>
                             <dt><label for="homepage_login">'.$g_l10n->get('SYS_HOMEPAGE').' ('.$g_l10n->get('ORG_REGISTERED_USERS').'):</label></dt>
                             <dd><input type="text" id="homepage_login" name="homepage_login" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_login']. '" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_HOMEPAGE_REGISTERED_USERS').'</li>';
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_HOMEPAGE_REGISTERED_USERS').'</li>';
 
                     //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                     if($g_current_organization->hasChildOrganizations() == false)
@@ -345,7 +345,7 @@ echo '
                                     </dd>
                                 </dl>
                             </li>
-                            <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_PARENT_ORGANIZATION').'</li>';
+                            <li class="smallFontSize">'.$g_l10n->get('ORG_PARENT_ORGANIZATION_DESC').'</li>';
                         }
                     }
 
@@ -363,7 +363,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ALLOW_BBCODE', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ALLOW_BBCODE_DESC', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_rss">'.$g_l10n->get('ORG_ENABLE_RSS_FEEDS').':</label></dt>
@@ -377,7 +377,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ENABLE_RSS_FEEDS').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ENABLE_RSS_FEEDS_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_auto_login">'.$g_l10n->get('ORG_LOGIN_AUTOMATICALLY').':</label></dt>
@@ -391,14 +391,14 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_LOGIN_AUTOMATICALLY').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_LOGIN_AUTOMATICALLY_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="logout_minutes">'.$g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER').':</label></dt>
                             <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> '.$g_l10n->get('SYS_MINUTES').'</dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_AUTOMATOC_LOGOUT_AFTER', $g_l10n->get('SYS_REMEMBER_ME')).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', $g_l10n->get('SYS_REMEMBER_ME')).'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_password_recovery">'.$g_l10n->get('ORG_SEND_PASSWORD').':</label>
@@ -413,7 +413,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SEND_PASSWORD').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_SEND_PASSWORD_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="system_search_similar">'.$g_l10n->get('ORG_SEARCH_SIMILAR_NAMES').':</label>
@@ -428,7 +428,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SEARCH_SIMILAR_NAMES_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_SEARCH_SIMILAR_NAMES_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -472,7 +472,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_REGISTRATION_MODE').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_REGISTRATION_MODE').'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_registration_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
@@ -486,7 +486,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_CAPTCHA_REGISTRATION').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_CAPTCHA_REGISTRATION').'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_registration_admin_mail">'.$g_l10n->get('ORG_EMAIL_ALERTS').':</label></dt>
@@ -500,7 +500,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_EMAIL_ALERTS', $g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS')).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_EMAIL_ALERTS', $g_l10n->get('ROL_RIGHT_APPROVE_USERS')).'</li>
                 </ul>
             </div>
         </div>';
@@ -543,7 +543,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="announcements_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -553,7 +553,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -571,7 +571,7 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label for="enable_download_module">'.$g_l10n->get('DAT_ENABLE_DOWNLOAD_MODULE').':</label></dt>
+                            <dt><label for="enable_download_module">'.$g_l10n->get('DOW_ENABLE_DOWNLOAD_MODULE').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_download_module" name="enable_download_module" ';
                                 if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
@@ -582,17 +582,17 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_ENABLE_DOWNLOAD_MODULE').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('DOW_ENABLE_DOWNLOAD_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="max_file_upload_size">'.$g_l10n->get('DAT_MAXIMUM_FILE_SIZE').':</label></dt>
+                            <dt><label for="max_file_upload_size">'.$g_l10n->get('DOW_MAXIMUM_FILE_SIZE').':</label></dt>
                             <dd>
                                 <input type="text" id="max_file_upload_size" name="max_file_upload_size" style="width: 50px;"
                                     maxlength="10" value="'. $form_values['max_file_upload_size']. '" /> KB
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_MAXIMUM_FILE_SIZE').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('DOW_MAXIMUM_FILE_SIZE_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -635,10 +635,10 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="photo_show_mode">'.$g_l10n->get('ORG_DISPLAY_PHOTOS').':</label></dt>
+                            <dt><label for="photo_show_mode">'.$g_l10n->get('PHO_DISPLAY_PHOTOS').':</label></dt>
                             <dd>
                                 <select size="1" id="photo_show_mode" name="photo_show_mode">
                                     <option value="0" ';
@@ -646,27 +646,27 @@ echo '
                                     {
                                         echo ' selected="selected" ';
                                     }
-                                    echo '>'.$g_l10n->get('ORG_POPUP_WINDOW').'</option>
+                                    echo '>'.$g_l10n->get('PHO_POPUP_WINDOW').'</option>
                                     <option value="1" ';
                                     if($form_values['photo_show_mode'] == 1)
                                     {
                                         echo ' selected="selected" ';
                                     }
-                                    echo '>'.$g_l10n->get('ORG_COLORBOX').'</option>
+                                    echo '>'.$g_l10n->get('PHO_COLORBOX').'</option>
                                     <option value="2" ';
                                     if($form_values['photo_show_mode'] == 2)
                                     {
                                         echo ' selected="selected" ';
                                     }
-                                    echo '>'.$g_l10n->get('ORG_SAME_WINDOW').'</option>
+                                    echo '>'.$g_l10n->get('PHO_SAME_WINDOW').'</option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_DISPLAY_PHOTOS_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('PHO_DISPLAY_PHOTOS_DESC').'</li>
                      <li>
                         <dl>
-                            <dt><label for="photo_upload_mode">'.$g_l10n->get('ORG_MULTIUPLOAD').':</label></dt>
+                            <dt><label for="photo_upload_mode">'.$g_l10n->get('PHO_MULTIUPLOAD').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="photo_upload_mode" name="photo_upload_mode" ';
                                 if(isset($form_values['photo_upload_mode']) && $form_values['photo_upload_mode'] == 1)
@@ -677,55 +677,55 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_MULTIUPLOAD_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('PHO_MULTIUPLOAD_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="photo_thumbs_row">'.$g_l10n->get('ORG_PHR_THUMBNAILS_PER_PAGE').':</label></dt>
+                            <dt><label for="photo_thumbs_row">'.$g_l10n->get('PHO_THUMBNAILS_PER_PAGE').':</label></dt>
                             <dd>
                                 <input type="text" id="photo_thumbs_column" name="photo_thumbs_column" style="width: 50px;" maxlength="2" value="'. $form_values['photo_thumbs_column']. '" /> x
                                 <input type="text" id="photo_thumbs_row" name="photo_thumbs_row" style="width: 50px;" maxlength="2" value="'. $form_values['photo_thumbs_row']. '" />
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_THUMBNAILS_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('PHO_THUMBNAILS_PER_PAGE_DESC').'</li>
 
                     <li>
                         <dl>
-                            <dt><label for="photo_thumbs_scale">'.$g_l10n->get('ORG_SCALE_THUMBNAILS').':</label></dt>
+                            <dt><label for="photo_thumbs_scale">'.$g_l10n->get('PHO_SCALE_THUMBNAILS').':</label></dt>
                             <dd>
                                 <input type="text" id="photo_thumbs_scale" name="photo_thumbs_scale" style="width: 50px;" maxlength="4" value="'. $form_values['photo_thumbs_scale']. '" /> '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SCALE_THUMBNAILS_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('PHO_SCALE_THUMBNAILS_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="photo_save_scale">'.$g_l10n->get('ORG_SCALE_AT_UPLOAD').':</label></dt>
+                            <dt><label for="photo_save_scale">'.$g_l10n->get('PHO_SCALE_AT_UPLOAD').':</label></dt>
                             <dd>
                                 <input type="text" id="photo_save_scale" name="photo_save_scale" style="width: 50px;" maxlength="4" value="'. $form_values['photo_save_scale']. '" /> '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SCALE_AT_UPLOAD_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('PHO_SCALE_AT_UPLOAD_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="photo_show_width">'.$g_l10n->get('ORG_PHR_MAX_PHOTO_SIZE').':</label></dt>
+                            <dt><label for="photo_show_width">'.$g_l10n->get('PHO_MAX_PHOTO_SIZE').':</label></dt>
                             <dd>
                                 <input type="text" id="photo_show_width" name="photo_show_width" style="width: 50px;" maxlength="4" value="'. $form_values['photo_show_width']. '" /> x
                                 <input type="text" id="photo_show_height" name="photo_show_height" style="width: 50px;" maxlength="4" value="'. $form_values['photo_show_height']. '" /> '.$g_l10n->get('ORG_PIXEL').'
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_MAX_PHOTO_SIZE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('PHO_MAX_PHOTO_SIZE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="photo_image_text">'.$g_l10n->get('ORG_SHOW_CAPTION').':</label></dt>
+                            <dt><label for="photo_image_text">'.$g_l10n->get('PHO_SHOW_CAPTION').':</label></dt>
                             <dd>
                                 <input type="text" id="photo_image_text" name="photo_image_text" maxlength="60" value="'.$form_values['photo_image_text']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SHOW_CAPTION_DESC' ,$g_current_organization->getValue('org_homepage')).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('PHO_SHOW_CAPTION_DESC' ,$g_current_organization->getValue('org_homepage')).'</li>
                 </ul>
             </div>
         </div>';
@@ -753,7 +753,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACTIVATE_FORUM_DESC', $html_icon_warning).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACTIVATE_FORUM_DESC', $html_icon_warning).'</li>
                     <li>
                         <dl>
                             <dt><label for="forum_version">'.$g_l10n->get('ORG_USED_FORUM').':</label></dt>
@@ -769,7 +769,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_USED_FORUM').'<br/>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_WHICH_FORUM_USED').'<br/>
                         <table summary="Forum_Auflistung" border="0">
                             <tr><td>1) "phpbb2"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
                         </table>
@@ -787,7 +787,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACTIVATE_FORUM_LINK_INTERN').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACTIVATE_FORUM_LINK_INTERN_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="forum_width">'.$g_l10n->get('ORG_FORUM_WIDTH').':</label></dt>
@@ -796,7 +796,7 @@ echo '
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_FORUM_WIDTH_DESC', $html_icon_warning).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_FORUM_WIDTH_DESC', $html_icon_warning).'</li>
                     <li>
                         <dl>
                             <dt><label for="forum_export_user">'.$g_l10n->get('ORG_EXPORT_ADMIDIO_USER').':</label></dt>
@@ -810,10 +810,10 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_EXPORT_ADMIDIO_USER_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_EXPORT_ADMIDIO_USER_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="forum_set_admin">'.$g_l10n->get('ORG_PHR_EXPORT_WEBMASTER_STATUS').':</label></dt>
+                            <dt><label for="forum_set_admin">'.$g_l10n->get('ORG_EXPORT_WEBMASTER_STATUS').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="forum_set_admin" name="forum_set_admin" ';
                                 if(isset($form_values['forum_set_admin']) && $form_values['forum_set_admin'] == 1)
@@ -824,7 +824,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_EXPORT_WEBMASTER_STATUS_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_EXPORT_WEBMASTER_STATUS_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="forum_praefix">'.$g_l10n->get('ORG_FORUM_TABLE_PREFIX').':</label></dt>
@@ -833,16 +833,16 @@ echo '
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_FORUM_TABLE_PREFIX_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_FORUM_TABLE_PREFIX_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><strong>'.$g_l10n->get('ORG_PHR_ACCESS_FORUM_DATABASE').'</strong></dt>
+                            <dt><strong>'.$g_l10n->get('ORG_ACCESS_FORUM_DATABASE').'</strong></dt>
                             <dd>&nbsp;</dd>
                         </dl>
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="forum_sqldata_from_admidio">'.$g_l10n->get('ORG_PHR_ACCESS_DATA_ADMIDIO').':</label></dt>
+                            <dt><label for="forum_sqldata_from_admidio">'.$g_l10n->get('ORG_ACCESS_DATA_ADMIDIO').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="forum_sqldata_from_admidio" name="forum_sqldata_from_admidio" onclick="javascript:organizationJS.drawForumAccessDataTable();" ';
                                 if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
@@ -853,9 +853,9 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_DATA_ADMIDIO_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_DATA_ADMIDIO_DESC').'</li>
                     <li id="forum_access_data"></li>
-                    <li id="forum_access_data_text" class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_FORUM_DATABASE_DESC').'</li>
+                    <li id="forum_access_data_text" class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_FORUM_DATABASE_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -897,7 +897,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="guestbook_entries_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -907,7 +907,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_guestbook_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
@@ -921,10 +921,10 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_CAPTCHA_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_CAPTCHA_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="enable_guestbook_moderation">'.$g_l10n->get('GBO_PHR_GUESTBOOK_MODERATION').':</label></dt>
+                            <dt><label for="enable_guestbook_moderation">'.$g_l10n->get('GBO_GUESTBOOK_MODERATION').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_guestbook_moderation" name="enable_guestbook_moderation" ';
                                 if(isset($form_values['enable_guestbook_moderation']) && $form_values['enable_guestbook_moderation'] == 1)
@@ -935,10 +935,10 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_GUESTBOOK_MODERATION_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_GUESTBOOK_MODERATION_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="enable_gbook_comments4all">'.$g_l10n->get('GBO_PHR_COMMENTS4ALL').':</label></dt>
+                            <dt><label for="enable_gbook_comments4all">'.$g_l10n->get('GBO_COMMENTS4ALL').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_gbook_comments4all" name="enable_gbook_comments4all" ';
                                 if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
@@ -949,10 +949,10 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_COMMENTS4ALL_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_COMMENTS4ALL_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="enable_intial_comments_loading">'.$g_l10n->get('GBO_PHR_INITIAL_COMMENTS_LOADING').':</label></dt>
+                            <dt><label for="enable_intial_comments_loading">'.$g_l10n->get('GBO_INITIAL_COMMENTS_LOADING').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_intial_comments_loading" name="enable_intial_comments_loading" ';
                                 if(isset($form_values['enable_intial_comments_loading']) && $form_values['enable_intial_comments_loading'] == 1)
@@ -963,7 +963,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_INITIAL_COMMENTS_LOADING_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_INITIAL_COMMENTS_LOADING_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="flooding_protection_time">'.$g_l10n->get('GBO_FLOODING_PROTECTION_INTERVALL').':</label></dt>
@@ -973,7 +973,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('GBO_PHR_FLOODING_PROTECTION_INTERVALL_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('GBO_FLOODING_PROTECTION_INTERVALL_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -998,20 +998,20 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="lists_members_per_page">'.$g_l10n->get('LST_PHR_MEMBERS_PER_PAGE').':</label></dt>
+                            <dt><label for="lists_members_per_page">'.$g_l10n->get('LST_MEMBERS_PER_PAGE').':</label></dt>
                             <dd>
                                 <input type="text" id="lists_members_per_page" name="lists_members_per_page" style="width: 50px;"
                                     maxlength="4" value="'. $form_values['lists_members_per_page']. '" />
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('LST_PHR_MEMBERS_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('LST_MEMBERS_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="lists_hide_overview_details">'.$g_l10n->get('LST_PHR_HIDE_DETAILS').':</label></dt>
+                            <dt><label for="lists_hide_overview_details">'.$g_l10n->get('LST_HIDE_DETAILS').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="lists_hide_overview_details" name="lists_hide_overview_details" ';
                                 if(isset($form_values['lists_hide_overview_details']) && $form_values['lists_hide_overview_details'] == 1)
@@ -1022,7 +1022,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('LST_PHR_HIDE_DETAILS_DESC').'</li>                 
+                    <li class="smallFontSize">'.$g_l10n->get('LST_HIDE_DETAILS_DESC').'</li>                 
                 </ul>
             </div>
         </div>';
@@ -1051,17 +1051,17 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_ACTIVATE_EMAIL_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_ACTIVATE_EMAIL_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="mail_bcc_count">'.$g_l10n->get('MAI_PHR_COUNT_BCC').':</label>
+                            <dt><label for="mail_bcc_count">'.$g_l10n->get('MAI_COUNT_BCC').':</label>
                             </dt>
                             <dd>
                                 <input type="text" id="mail_bcc_count" name="mail_bcc_count" style="width: 50px;" maxlength="6" value="'. $form_values['mail_bcc_count']. '" />
                              </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_COUNT_BCC_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_COUNT_BCC_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="enable_mail_captcha">'.$g_l10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
@@ -1075,23 +1075,23 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_SHOW_CAPTCHA_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_SHOW_CAPTCHA_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="max_email_attachment_size">'.$g_l10n->get('MAI_PHR_ATTACHMENT_SIZE').':</label></dt>
+                            <dt><label for="max_email_attachment_size">'.$g_l10n->get('MAI_ATTACHMENT_SIZE').':</label></dt>
                             <dd>
                                 <input type="text" id="max_email_attachment_size" name="max_email_attachment_size" style="width: 50px;" maxlength="6" value="'.$form_values['max_email_attachment_size'].'" /> KB
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_ATTACHMENT_SIZE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_ATTACHMENT_SIZE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="mail_sendmail_address">'.$g_l10n->get('MAI_SENDER_EMAIL').':</label></dt>
                             <dd><input type="text" id="mail_sendmail_address" name="mail_sendmail_address" style="width: 200px;" maxlength="50" value="'. $form_values['mail_sendmail_address'].'" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('MAI_PHR_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                 </ul>
             </div>
         </div>';
@@ -1121,39 +1121,39 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACTIVATE_SYSTEM_MAILS_DESC').'</li>                  
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACTIVATE_SYSTEM_MAILS_DESC').'</li>                  
                     <li>
                         <dl>
                             <dt><label for="email_administrator">'.$g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS').':</label></dt>
                             <dd><input type="text" id="email_administrator" name="email_administrator" style="width: 200px;" maxlength="50" value="'. $form_values['email_administrator'].'" /></dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                     <li>
                         <dl>
                             <dt><label>'.$g_l10n->get('ORG_SYSTEM_MAIL_TEXTS').':</label></dt>
                             <dd><br /></dd>
                         </dl>
                     </li>
-                    <li  class="smallFontSize">'.$g_l10n->get('ORG_PHR_SYSTEM_MAIL_TEXTS_DESC').':<br />
-                        <strong>%user_first_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_FIRST_NAME').'<br />
-                        <strong>%user_last_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_LAST_NAME').'<br />
-                        <strong>%user_login_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_USERNAME').'<br />
-                        <strong>%user_email%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_EMAIL').'<br />
-                        <strong>%webmaster_email%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_EMAIL_ORGANIZATION').'<br />
-                        <strong>%organization_short_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
-                        <strong>%organization_long_name%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_NAME_ORGANIZATION').'<br />
-                        <strong>%organization_homepage%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_URL_ORGANIZATION').'<br /><br />
+                    <li  class="smallFontSize">'.$g_l10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':<br />
+                        <strong>%user_first_name%</strong> - '.$g_l10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
+                        <strong>%user_last_name%</strong> - '.$g_l10n->get('ORG_VARIABLE_LAST_NAME').'<br />
+                        <strong>%user_login_name%</strong> - '.$g_l10n->get('ORG_VARIABLE_USERNAME').'<br />
+                        <strong>%user_email%</strong> - '.$g_l10n->get('ORG_VARIABLE_EMAIL').'<br />
+                        <strong>%webmaster_email%</strong> - '.$g_l10n->get('ORG_VARIABLE_EMAIL_ORGANIZATION').'<br />
+                        <strong>%organization_short_name%</strong> - '.$g_l10n->get('ORG_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
+                        <strong>%organization_long_name%</strong> - '.$g_l10n->get('ORG_VARIABLE_NAME_ORGANIZATION').'<br />
+                        <strong>%organization_homepage%</strong> - '.$g_l10n->get('ORG_VARIABLE_URL_ORGANIZATION').'<br /><br />
                     </li>';
 
                     $text->readData("SYSMAIL_REGISTRATION_USER");
                     echo '<li>
-                        '.$g_l10n->get('ORG_PHR_CONFIRM_REGISTRATION').':<br />
+                        '.$g_l10n->get('ORG_CONFIRM_REGISTRATION').':<br />
                         <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
                     $text->readData("SYSMAIL_REGISTRATION_WEBMASTER");
                     echo '<li>
-                        <br />'.$g_l10n->get('ORG_PHR_NOTIFY_WEBMASTER').':<br />
+                        <br />'.$g_l10n->get('ORG_NOTIFY_WEBMASTER').':<br />
                         <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
                     $text->readData("SYSMAIL_NEW_PASSWORD");
@@ -1162,19 +1162,19 @@ echo '
                     </li>
                     <li class="smallFontSize">
                         '.$g_l10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
-                        <strong>%variable1%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_NEW_PASSWORD').'<br />
+                        <strong>%variable1%</strong> - '.$g_l10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
                     </li>
                     <li>
                         <textarea id="SYSMAIL_NEW_PASSWORD" name="SYSMAIL_NEW_PASSWORD" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
                     $text->readData("SYSMAIL_ACTIVATION_LINK");
                     echo '<li>
-                        <br />'.$g_l10n->get('ORG_PHR_NEW_PASSWORD_ACTIVATION_LINK').':<br />
+                        <br />'.$g_l10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK').':<br />
                     </li>
                     <li class="smallFontSize">
                         '.$g_l10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
-                        <strong>%variable1%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_NEW_PASSWORD').'<br />
-                        <strong>%variable2%</strong> - '.$g_l10n->get('ORG_PHR_VARIABLE_ACTIVATION_LINK').'<br />
+                        <strong>%variable1%</strong> - '.$g_l10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
+                        <strong>%variable2%</strong> - '.$g_l10n->get('ORG_VARIABLE_ACTIVATION_LINK').'<br />
                     </li>
                     <li>
                         <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
@@ -1224,7 +1224,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-						'.$g_l10n->get("ECA_PHR_ACTIVATE_GREETING_CARDS").'
+						'.$g_l10n->get("ECA_ACTIVATE_GREETING_CARDS_DESC").'
                     </li>
                     <li>
                         <dl>
@@ -1237,7 +1237,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_PHR_SCALING_PREVIEW").'
+                        '.$g_l10n->get("ECA_SCALING_PREVIEW_DESC").'
                     </li>
                     <li>
                         <dl>
@@ -1250,7 +1250,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                       '.$g_l10n->get("ECA_PHR_SCALING_GREETING_CARD").'
+                       '.$g_l10n->get("ECA_SCALING_GREETING_CARD_DESC").'
                     </li>
                     <li>
                         <dl>
@@ -1281,7 +1281,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_PHR_MAX_CC").'
+                        '.$g_l10n->get("ECA_MAX_CC_DESC").'
                     </li>
                     <li>
                         <dl>
@@ -1311,7 +1311,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_PHR_MAX_MESSAGE_LENGTH").'
+                        '.$g_l10n->get("ECA_MAX_MESSAGE_LENGTH_DESC").'
                     </li>
                     <li>
                         <dl>
@@ -1322,7 +1322,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_PHR_TEMPLATE").'
+                        '.$g_l10n->get("ECA_TEMPLATE_DESC").'
                     </li>
                     <li>
                         <dl>
@@ -1333,7 +1333,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_PHR_FONT").'
+                        '.$g_l10n->get("ECA_FONT").'
                     </li>
                     <li>
                         <dl>
@@ -1344,7 +1344,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                       '.$g_l10n->get("ECA_PHR_FONT_SIZE").'
+                       '.$g_l10n->get("ECA_FONT_SIZE").'
                     </li>
                     <li>
                         <dl>
@@ -1355,7 +1355,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$g_l10n->get("ECA_PHR_FONT_COLOR").'
+                        '.$g_l10n->get("ECA_FONT_COLOR").'
                     </li>
 
                 </ul>
@@ -1465,25 +1465,20 @@ echo '
                 <ul class="formFieldList">
                     <li>
                         <dl>
-                            <dt><label>Profilfelder pflegen:</label></dt>
+                            <dt><label>'.$g_l10n->get('PRO_MAINTAIN_PROFILE_FIELDS').':</label></dt>
                             <dd>
                                 <div class="iconTextLink">
                                     <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
-                                    src="'. THEME_PATH. '/icons/application_form.png" alt="Organisationsspezifische Profilfelder pflegen" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">zur Profilfeldpflege wechseln</a>
+                                    src="'. THEME_PATH. '/icons/application_form.png" alt="'.$g_l10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">'.$g_l10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>
                                 </div>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in 
-                        Kategorien zusammengefasst werden.<br />
-                        <img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />
-                        Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />').'</li>
                     <li>
                         <dl>
-                            <dt><label for="default_country">Standard-Land:</label></dt>
+                            <dt><label for="default_country">'.$g_l10n->get('PRO_DEFAULT_COUNTRY').':</label></dt>
                             <dd>
                                 <select size="1" id="default_country" name="default_country">
                                     <option value=""';
@@ -1507,92 +1502,77 @@ echo '
                                         $country = trim(fgets($country_list));
                                     }
                                     fclose($country_list);
-                                echo "</select>
+                                echo '</select>
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Das ausgewählte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und
-                        erleichtert die Eingabe. (Standard: Deutschland)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('PRO_DEFAULT_COUNTRY_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"profile_show_map_link\">Kartenlink anzeigen:</label></dt>
+                            <dt><label for="profile_show_map_link">'.$g_l10n->get('PRO_SHOW_MAP_LINK').'Kartenlink anzeigen:</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"profile_show_map_link\" name=\"profile_show_map_link\" ";
+                                <input type="checkbox" id="profile_show_map_link" name="profile_show_map_link" ';
                                 if(isset($form_values['profile_show_map_link']) && $form_values['profile_show_map_link'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Sobald genügend Adressinformationen vorhanden sind, wird ein Link zu Google-Maps erstellt,
-                        welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('PRO_SHOW_MAP_LINK_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"profile_show_roles\">Rollenmitgliedschaften anzeigen:</label></dt>
+                            <dt><label for="profile_show_roles">'.$g_l10n->get('PRO_SHOW_ROLE_MEMBERSHIP').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"profile_show_roles\" name=\"profile_show_roles\" ";
+                                <input type="checkbox" id="profile_show_roles" name="profile_show_roles" ';
                                 if(isset($form_values['profile_show_roles']) && $form_values['profile_show_roles'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>ist</b>.
-                        Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('PRO_SHOW_ROLE_MEMBERSHIP_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for=\"profile_show_former_roles\">Ehemalige Rollenmitgliedschaften anzeigen:</label></dt>
+                            <dt><label for="profile_show_former_roles">'.$g_l10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP').':</label></dt>
                             <dd>
-                                <input type=\"checkbox\" id=\"profile_show_former_roles\" name=\"profile_show_former_roles\" ";
+                                <input type="checkbox" id="profile_show_former_roles" name="profile_show_former_roles" ';
                                 if(isset($form_values['profile_show_former_roles']) && $form_values['profile_show_former_roles'] == 1)
                                 {
-                                    echo " checked=\"checked\" ";
+                                    echo ' checked="checked" ';
                                 }
-                                echo " value=\"1\" />
+                                echo ' value="1" />
                             </dd>
                         </dl>
                     </li>
-                    <li class=\"smallFontSize\">
-                        Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied <b>war</b>.
-                        Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)
-                    </li>";
+                    <li class="smallFontSize">'.$g_l10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC').'</li>';
 
-                    if($g_current_organization->getValue("org_org_id_parent") > 0
+                    if($g_current_organization->getValue('org_org_id_parent') > 0
                     || $g_current_organization->hasChildOrganizations() )
                     {
-                        echo "
+                        echo '
                         <li>
                             <dl>
-                                <dt><label for=\"profile_show_extern_roles\">Rollen anderer Organisationen anzeigen:</label></dt>
+                                <dt><label for="profile_show_extern_roles">'.$g_l10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS').':</label></dt>
                                 <dd>
-                                    <input type=\"checkbox\" id=\"profile_show_extern_roles\" name=\"profile_show_extern_roles\" ";
+                                    <input type="checkbox" id="profile_show_extern_roles" name="profile_show_extern_roles" ';
                                     if(isset($form_values['profile_show_extern_roles']) && $form_values['profile_show_extern_roles'] == 1)
                                     {
-                                        echo " checked=\"checked\" ";
+                                        echo ' checked="checked" ';
                                     }
-                                    echo " value=\"1\" />
+                                    echo ' value="1" />
                                 </dd>
                             </dl>
                         </li>
-                        <li class=\"smallFontSize\">
-                            Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten
-                            mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)
-                        </li>";
+                        <li class="smallFontSize">'.$g_l10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC').'</li>';
                     }
                     echo '
                     <li>
                         <dl>
-                            <dt><label for="profile_photo_storage">Speicherort der Profilbilder:</label></dt>
+                            <dt><label for="profile_photo_storage">'.$g_l10n->get('PRO_LOCATION_PROFILE_PICTURES').':</label></dt>
                             <dd>
                                 <select size="1" id="profile_photo_storage" name="profile_photo_storage">
                                     <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>
@@ -1601,35 +1581,29 @@ echo '
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>Datenbank
+                                            echo '>'.$g_l10n->get('SYS_DATABASE').'
                                     </option>
                                     <option value="1" ';
                                             if($form_values['profile_photo_storage'] == 1)
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>Ordner
+                                            echo '>'.$g_l10n->get('SYS_FOLDER').'
                                     </option>
                                 </select>
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden.
-                        Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)
-                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('PRO_LOCATION_PROFILE_PICTURES_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="profile_default_role">Standardrolle:</label></dt>
+                            <dt><label for="profile_default_role">'.$g_l10n->get('PRO_DEFAULT_ROLE').':</label></dt>
                             <dd>
                                 '.generateRoleSelectBox($g_preferences['profile_default_role'], 'profile_default_role').'
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">
-                        Diese Rolle wird neuen Benutzern automatisch zugeordnet, falls der Ersteller des neuen Benutzers keine Rechte hat,
-                        Rollen zu zuordnen.
-                    </li>                       
+                    <li class="smallFontSize">'.$g_l10n->get('PRO_DEFAULT_ROLE_DESC').'</li>                       
                 </ul>
             </div>
         </div>';
@@ -1653,7 +1627,7 @@ echo '
                                     <option value="0" ';
                                     if($form_values['enable_dates_module'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
                                     echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
                                     <option value="1" ';
@@ -1672,7 +1646,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="weblinks_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -1682,7 +1656,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="dates_show_map_link">'.$g_l10n->get('DAT_SHOW_MAP_LINK').':</label></dt>
@@ -1696,7 +1670,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_SHOW_MAP_LINK').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_SHOW_MAP_LINK_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="dates_show_calendar_select">'.$g_l10n->get('DAT_SHOW_CALENDAR_SELECTION').':</label></dt>
@@ -1710,7 +1684,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_SHOW_CALENDAR_SELECTION').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_SHOW_CALENDAR_SELECTION_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="dates_show_rooms">'.$g_l10n->get('DAT_ROOM_SELECTABLE').':</label></dt>
@@ -1724,7 +1698,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_ROOM_SELECTABLE').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_ROOM_SELECTABLE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label>'.$g_l10n->get('DAT_EDIT_ROOMS').':</label></dt>
@@ -1737,7 +1711,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('DAT_PHR_EDIT_ROOMS', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('DAT_EDIT_ROOMS_DESC', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />').'</li>
                 </ul>
             </div>
         </div>';
@@ -1780,7 +1754,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_ACCESS_TO_MODULE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="weblinks_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -1790,7 +1764,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_PHR_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="weblinks_target">'.$g_l10n->get('LNK_LINK_TARGET').':</label></dt>
@@ -1812,14 +1786,14 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('LNK_PHR_LINK_TARGET').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('LNK_LINK_TARGET_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="weblinks_redirect_seconds">'.$g_l10n->get('LNK_DISPLAY_REDIRECT').':</label></dt>
                             <dd><input type="text" id="weblinks_redirect_seconds" name="weblinks_redirect_seconds" style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_redirect_seconds']. '" /> Sekunden</dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('LNK_PHR_DISPLAY_REDIRECT').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('LNK_DISPLAY_REDIRECT_DESC').'</li>
                 </ul>
             </div>
         </div>';
@@ -1972,9 +1946,7 @@ echo '
                             <dd>&nbsp;</dd>
                         </dl>
                     </li>
-					<li class="smallFontSize">
-                       '.$g_l10n->get('ORG_CAPTCHA_PREVIEW_TEXT').'
-                    </li>
+					<li class="smallFontSize">'.$g_l10n->get('ORG_CAPTCHA_PREVIEW_TEXT').'</li>
                 </ul>
             </div>
         </div>';

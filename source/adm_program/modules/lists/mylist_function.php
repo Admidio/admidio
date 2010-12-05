@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer die eigene Liste
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,14 +48,14 @@ if (array_key_exists('mode', $_GET))
 // Mindestens ein Feld sollte zugeordnet sein
 if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Feld 1'));
+    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', 'Feld 1'));
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($_GET['mode'] == 2
 && (isset($_POST['rol_id']) == false || $_POST['rol_id'] == 0 || is_numeric($_POST['rol_id']) == false))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Rolle'));
+    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', 'Rolle'));
 }
 
 if(isset($_POST['show_members']) == false)
@@ -82,13 +82,13 @@ if($_GET['mode'] != 2)
     // globale Listen duerfen nur von Webmastern editiert werden
     if($list->getValue('lst_global') == 1 && $g_current_user->isWebmaster() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     elseif($list->getValue('lst_usr_id') != $g_current_user->getValue('usr_id')
     && $list->getValue('lst_global') == 0
     && $list->getValue('lst_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 

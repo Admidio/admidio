@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neue User auflisten
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,13 +15,13 @@ require("../../system/login_valid.php");
 // nur Webmaster dürfen User bestätigen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // Navigation faengt hier im Modul an
@@ -50,7 +50,7 @@ $member_found = $g_db->num_rows($usr_result);
 if ($member_found == 0)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('NWU_PHR_NO_REGISTRATIONS'), $g_l10n->get('NWU_REGISTRATION'));
+    $g_message->show($g_l10n->get('NWU_NO_REGISTRATIONS'), $g_l10n->get('NWU_REGISTRATION'));
 }
 
 // Html-Kopf ausgeben

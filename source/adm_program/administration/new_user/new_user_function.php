@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neuen User zuordnen - Funktionen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,13 +24,13 @@ require_once('../../system/classes/system_mail.php');
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
 {
-   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+   $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -120,16 +120,16 @@ if($req_mode == 1 || $req_mode == 3)
         $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
         if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == true)
         {
-            $g_message->show($g_l10n->get('NWU_PHR_ASSIGN_LOGIN_EMAIL'));
+            $g_message->show($g_l10n->get('NWU_ASSIGN_LOGIN_EMAIL'));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
+            $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
         }
     }
     else
     {
-        $g_message->show($g_l10n->get('NWU_PHR_ASSIGN_LOGIN'));
+        $g_message->show($g_l10n->get('NWU_ASSIGN_LOGIN_SUCCESSFUL'));
     }
 }
 elseif($req_mode == 4)

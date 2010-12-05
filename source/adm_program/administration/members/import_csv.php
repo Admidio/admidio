@@ -2,7 +2,7 @@
 /******************************************************************************
  * User werden aus einer CSV-Datei importiert
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,7 +27,7 @@ define('USER_IMPORT_COMPLETE', '4');
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Pflichtfelder prüfen
@@ -37,7 +37,7 @@ foreach($g_current_user->userFieldData as $field)
     if($field->getValue('usf_mandatory') == 1
     && strlen($_POST['usf-'. $field->getValue('usf_id')]) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $field->getValue('usf_name')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
     }
 }
 
@@ -240,5 +240,5 @@ $_SESSION['file_lines']       = '';
 $_SESSION['value_separator']  = '';
 
 $g_message->setForwardUrl($g_root_path.'/adm_program/administration/members/members.php');
-$g_message->show($g_l10n->get('MEM_PHR_IMPORT_SUCCESSFUL', $count_import));
+$g_message->show($g_l10n->get('MEM_IMPORT_SUCCESSFUL', $count_import));
 ?>

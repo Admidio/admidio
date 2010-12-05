@@ -2,7 +2,7 @@
 /******************************************************************************
  * Redirect für Links
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Matthias Roberg
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,7 +18,7 @@ require_once('../../system/classes/table_weblink.php');
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 if($g_preferences['enable_weblinks_module'] == 2)
 {
@@ -112,7 +112,7 @@ if ($g_preferences['weblinks_redirect_seconds'] > 0)
 	<div id="links_overview">
 	<div class="formLayout">
 			<div class="formHead">'.$g_l10n->get('LNK_REDIRECT').'</div>
-			<div class="formBody" style="overflow: hidden;">'.$g_l10n->get('LNK_PHR_REDIRECT', $g_current_organization->getValue('org_longname'), 
+			<div class="formBody" style="overflow: hidden;">'.$g_l10n->get('LNK_REDIRECT_DESC', $g_current_organization->getValue('org_longname'), 
                 '<span id="counter">'.$g_preferences['weblinks_redirect_seconds'].'</span>', '<b>'.$url_name.'</b> ('.$url.')', 
                 '<a href="'.$url.'" target="_self">hier</a>').'</div>
 			</div>

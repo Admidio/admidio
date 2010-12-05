@@ -2,7 +2,7 @@
 /******************************************************************************
  * Download Script
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ require('../../system/login_valid.php');
 // nur Webmaster duerfen ein Backup runterladen
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
@@ -56,7 +56,7 @@ $completePath = $backupabsolutepath.$filename;
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FILE_NOT_EXIST'));
+    $g_message->show($g_l10n->get('SYS_FILE_NOT_EXIST'));
 }
 
 //Dateigroese ermitteln

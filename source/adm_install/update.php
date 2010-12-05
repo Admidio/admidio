@@ -2,7 +2,7 @@
 /******************************************************************************
  * Update der Admidio-Datenbank auf eine neue Version
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -90,8 +90,8 @@ if($req_mode == 1)
         // bei einem Update von Admidio 1.x muss die spezielle Version noch erfragt werden,
         // da in Admidio 1.x die Version noch nicht in der DB gepflegt wurde
         $message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />
-                    <strong>'.$g_l10n->get('INS_PHR_DATABASE_NEEDS_UPDATED').'</strong><br /><br />
-                    '.$g_l10n->get('INS_PHR_UPDATE_FROM_ADMIDIO_1X', ADMIDIO_VERSION).'<br /><br />
+                    <strong>'.$g_l10n->get('INS_DATABASE_NEEDS_UPDATED').'</strong><br /><br />
+                    '.$g_l10n->get('INS_UPDATE_FROM_ADMIDIO_1X', ADMIDIO_VERSION).'<br /><br />
                     '.$g_l10n->get('INS_PREVIOUS_ADMIDIO_VERSION').':&nbsp;
                     <select id="old_version" name="old_version" size="1">
                         <option value="0" selected="selected">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>
@@ -103,20 +103,20 @@ if($req_mode == 1)
     elseif(version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0 || $g_preferences['db_version_beta'] != BETA_VERSION)
     {
         $message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />
-                    <strong>'.$g_l10n->get('INS_PHR_DATABASE_NEEDS_UPDATED').'</strong>';
+                    <strong>'.$g_l10n->get('INS_DATABASE_NEEDS_UPDATED').'</strong>';
     }
     else
     {
         $message = '<img style="vertical-align: top;" src="layout/ok.png" /> 
-                    <strong>'.$g_l10n->get('INS_PHR_DATABASE_DOESNOT_NEED_UPDATED').'</strong><br /><br />
-                    '.$g_l10n->get('INS_PHR_DATABASE_IS_UP_TO_DATE');
+                    <strong>'.$g_l10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</strong><br /><br />
+                    '.$g_l10n->get('INS_DATABASE_IS_UP_TO_DATE');
         showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'), 2);
     }
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
     {
-        $message .= '<br /><br />'.$g_l10n->get('INS_PHR_WARNING_BETA_VERSION');
+        $message .= '<br /><br />'.$g_l10n->get('INS_WARNING_BETA_VERSION');
     }
     showPage($message, 'update.php?mode=2', 'database_in.png', $g_l10n->get('INS_UPDATE_DATABASE'), 2);
 }
@@ -130,7 +130,7 @@ elseif($req_mode == 2)
         || strlen($_POST['old_version']) > 5
         || $_POST['old_version'] == 0)
         {
-            showPage($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'INS_PREVIOUS_ADMIDIO_VERSION'), 'update.php', 'back.png', $g_l10n->get('SYS_BACK'), 2);
+            showPage($g_l10n->get('SYS_FIELD_EMPTY', 'INS_PREVIOUS_ADMIDIO_VERSION'), 'update.php', 'back.png', $g_l10n->get('SYS_BACK'), 2);
         }
         $old_version = $_POST['old_version'];
     }
@@ -188,7 +188,7 @@ elseif($req_mode == 2)
             {
                 // SQL-Script abarbeiten
                 $file    = fopen($sql_file, 'r')
-                           or showPage($g_l10n->get('INS_PHR_ERROR_OPEN_FILE', $sql_file), 'update.php', 'back.png', $g_l10n->get('SYS_BACK'));
+                           or showPage($g_l10n->get('INS_ERROR_OPEN_FILE', $sql_file), 'update.php', 'back.png', $g_l10n->get('SYS_BACK'));
                 $content = fread($file, filesize($sql_file));
                 $sql_arr = explode(';', $content);
                 fclose($file);
@@ -269,7 +269,7 @@ elseif($req_mode == 2)
 
     // Hinweis, dass Update erfolgreich war
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong><br /><br />
-               '.$g_l10n->get('INS_PHR_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT);
+               '.$g_l10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT);
     showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'), 2);
 }
 

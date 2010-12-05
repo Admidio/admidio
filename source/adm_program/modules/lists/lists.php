@@ -2,7 +2,7 @@
 /******************************************************************************
  * Anzeigen von Listen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -140,11 +140,11 @@ if($num_roles == 0)
         // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
         if($active_role == 0)
         {
-            $g_message->show($g_l10n->get('LST_PHR_NO_ROLES_REMOVED'));
+            $g_message->show($g_l10n->get('LST_NO_ROLES_REMOVED'));
         }
         else
         {
-            $g_message->show($g_l10n->get('LST_PHR_NO_RIGHTS_VIEW_LIST'));
+            $g_message->show($g_l10n->get('LST_NO_RIGHTS_VIEW_LIST'));
         }
     }
     else
@@ -157,11 +157,11 @@ if($num_roles == 0)
 // Html-Kopf ausgeben
 if($active_role)
 {
-    $g_layout['title']  = $g_l10n->get('LST_PHR_ACTIVE_ROLES');
+    $g_layout['title']  = $g_l10n->get('LST_ACTIVE_ROLES');
 }
 else
 {
-    $g_layout['title']  = $g_l10n->get('LST_PHR_INACTIVE_ROLES');
+    $g_layout['title']  = $g_l10n->get('LST_INACTIVE_ROLES');
 }
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -312,7 +312,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                 {
                     if($count_cat_entries == 0)
                     {
-                        echo $g_l10n->get('LST_PHR_CATEGORY_NO_LISTS');
+                        echo $g_l10n->get('LST_CATEGORY_NO_LISTS');
                     }
                     echo '</div></div><br />';
                 }
@@ -459,7 +459,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         <li>
                             <dl>
                                 <dt>'.$g_l10n->get('LST_PERIOD').':</dt>
-                                <dd>'.$g_l10n->get('SYS_PHR_DATE_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
+                                <dd>'.$g_l10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
                             </dl>
                         </li>';
                     }
@@ -477,7 +477,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                     }
                                     if(strlen($role->getValue('rol_start_time')) > 0)
                                     {
-                                        echo $g_l10n->get('LST_PHR_FROM_TO', $role->getValue('rol_start_time', $g_preferences['system_time']), $role->getValue('rol_end_time', $g_preferences['system_time']));
+                                        echo $g_l10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $g_preferences['system_time']), $role->getValue('rol_end_time', $g_preferences['system_time']));
                                     }
                                 echo '</dd>
                             </dl>
@@ -502,7 +502,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                             <dd>'.$row_lst['num_members'];
                                 if($role->getValue('rol_max_members') > 0)
                                 {
-                                    echo '&nbsp;'.$g_l10n->get('LST_PHR_MAX', $role->getValue('rol_max_members'));
+                                    echo '&nbsp;'.$g_l10n->get('LST_MAX', $role->getValue('rol_max_members'));
                                 }
                                 if($active_role && $row_lst['num_former'] > 0)
                                 {
@@ -569,7 +569,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
 
 if($count_cat_entries == 0)
 {
-    echo $g_l10n->get('LST_PHR_CATEGORY_NO_LISTS');
+    echo $g_l10n->get('LST_CATEGORY_NO_LISTS');
 }
 echo '</div></div>';
 

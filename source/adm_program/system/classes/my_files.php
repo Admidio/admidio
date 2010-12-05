@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse zum Verwalten des AdmMyFiles-Ordners
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -52,7 +52,7 @@ class MyFiles extends Folder
                         // Ordner adm_my_files anlegen
                         if(@mkdir(SERVER_PATH. '/adm_my_files', 0777) == false)
                         {
-                            $this->errorText = 'SYS_PHR_FOLDER_NOT_CREATED';
+                            $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                             $this->errorPath = SERVER_PATH. '/adm_my_files';
                             return 0;
                         }
@@ -63,7 +63,7 @@ class MyFiles extends Folder
                         // Schreibrechte fuer adm_my_files setzen
                         if(@chmod(SERVER_PATH. '/adm_my_files', 0777) == false)
                         {
-                            $this->errorText = 'SYS_PHR_FOLDER_WRITE_ACCESS';
+                            $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                             $this->errorPath = SERVER_PATH. '/adm_my_files';
                             return 0;
                         }
@@ -82,7 +82,7 @@ class MyFiles extends Folder
                 }
                 else
                 {
-                    $this->errorText = 'SYS_PHR_FOLDER_NOT_CREATED';
+                    $this->errorText = 'SYS_FOLDER_NOT_CREATED';
                     $this->errorPath = $this->modulePath;
                     return 0;
                 }
@@ -93,7 +93,7 @@ class MyFiles extends Folder
                 // Schreibrechte fuer Module-Ordner setzen
                 if(@chmod($this->folderWithPath, 0777) == false)
                 {
-                    $this->errorText = 'SYS_PHR_FOLDER_WRITE_ACCESS';
+                    $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
                     $this->errorPath = $this->modulePath;
                     return 0;
                 }

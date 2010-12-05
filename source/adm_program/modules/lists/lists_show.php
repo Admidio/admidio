@@ -2,7 +2,7 @@
 /******************************************************************************
  * Listen anzeigen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,7 +56,7 @@ else
 
 	if(is_numeric($req_lst_id) == false || $req_lst_id == 0)
 	{
-	   $g_message->show($g_l10n->get('LST_PHR_DEFAULT_LIST_NOT_SET_UP'));
+	   $g_message->show($g_l10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
 	}
 }
 
@@ -99,7 +99,7 @@ else
 //Testen ob Recht zur Listeneinsicht besteht
 if(!$g_current_user->viewRole($req_rol_id))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 if($req_mode == 'csv-ms')
@@ -172,7 +172,7 @@ $num_members = $g_db->num_rows($result_list);
 if($num_members == 0)
 {
     // Es sind keine Daten vorhanden !
-    $g_message->show($g_l10n->get('LST_PHR_NO_USER_FOUND'));
+    $g_message->show($g_l10n->get('LST_NO_USER_FOUND'));
 }
 
 if($num_members < $req_start)
@@ -196,7 +196,7 @@ if($req_mode != 'csv')
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
         <head>
-            <!-- (c) 2004 - 2009 The Admidio Team - http://www.admidio.org -->
+            <!-- (c) 2004 - 2011 The Admidio Team - http://www.admidio.org -->
             
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
@@ -778,7 +778,7 @@ else
                             echo'<li>
                                 <dl>
                                     <dt>'.$g_l10n->get('LST_PERIOD').':</dt>
-                                    <dd>'.$g_l10n->get('SYS_PHR_DATE_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
+                                    <dd>'.$g_l10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
                                 </dl>
                             </li>';
                         }
@@ -796,7 +796,7 @@ else
                                         }
                                         if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
-                                            echo $g_l10n->get('LST_PHR_FROM_TO', $role->getValue('rol_start_time', $g_preferences['system_time']), $role->getValue('rol_end_time', $g_preferences['system_time']));
+                                            echo $g_l10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $g_preferences['system_time']), $role->getValue('rol_end_time', $g_preferences['system_time']));
                                         }
 
                                     echo '</dd>

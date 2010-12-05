@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer das Gaestebuch
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ require('../../system/classes/table_guestbook_comment.php');
 if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
@@ -88,7 +88,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
             if (!$g_current_user->commentGuestbookRight())
             {
-                $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+                $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
             }
         }
 
@@ -106,7 +106,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
         if(!$g_current_user->editGuestbookRight())
         {
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
     }
 }
@@ -123,7 +123,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mod
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
         {
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
     }
 }
@@ -139,7 +139,7 @@ else
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook_comment->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
         {
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
     }
 }
@@ -200,7 +200,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show($g_l10n->get('GBO_PHR_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
+                    $g_message->show($g_l10n->get('GBO_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
                 }
             }
         }
@@ -216,7 +216,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     
         if($return_code < 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
 		
 		if($return_code == 0)
@@ -262,7 +262,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
         if ($g_preferences['enable_guestbook_moderation'] == 1 && $g_current_user->editGuestbookRight() == false)
         {
             $g_message->setForwardUrl($url, 2000);
-            $g_message->show($g_l10n->get('GBO_PHR_ENTRY_QUEUED'));
+            $g_message->show($g_l10n->get('GBO_ENTRY_QUEUED'));
         }
 
         header('Location: '.$url);
@@ -272,11 +272,11 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     {
         if(strlen($guestbook->getValue('gbo_name')) > 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
         }
     }
 }
@@ -355,7 +355,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show($g_l10n->get('GBO_PHR_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
+                    $g_message->show($g_l10n->get('GBO_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
                 }
             }
         }
@@ -365,7 +365,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     
         if($return_code < 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
 		
 		if($return_code == 0)
@@ -412,11 +412,11 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     {
         if(strlen($guestbook_comment->getValue('gbc_name')) > 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_COMMENT')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_COMMENT')));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
         }
     }
 }

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_folders
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -597,7 +597,7 @@ class TableFolder extends TableAccess
 
         if($this->folderPath->createFolder($folderName, true) == false)
         {
-            $error['text'] = 'SYS_PHR_FOLDER_NOT_CREATED';
+            $error['text'] = 'SYS_FOLDER_NOT_CREATED';
             $error['path'] = $this->getCompletePathOfFolder().'/'.$folderName;
         }
 

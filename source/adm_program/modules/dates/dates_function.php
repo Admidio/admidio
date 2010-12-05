@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Termine
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,7 +31,7 @@ require_once('../../system/classes/table_rooms.php');
 if ($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 if(($_GET['mode'] != 3 && $_GET['mode'] != 6) || $g_preferences['enable_dates_module'] == 2)
@@ -43,7 +43,7 @@ if(($_GET['mode'] != 3 && $_GET['mode'] != 6) || $g_preferences['enable_dates_mo
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if(!$g_current_user->editDates() && $_GET['mode'] != 3 && $_GET['mode'] != 4 && $_GET['mode'] != 6)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -90,7 +90,7 @@ if($req_dat_id > 0)
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false )
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -104,31 +104,31 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     
     if(strlen($_POST['dat_headline']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TITLE')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TITLE')));
     }
     if(strlen($_POST['dat_description']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_DESCRIPTION')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_DESCRIPTION')));
     }
     if(strlen($_POST['date_from']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_START')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_START')));
     }
     if(strlen($_POST['date_to']) == 0 && $_POST['dat_repeat_type'] == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_END')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_END')));
     }
     if(strlen($_POST['time_from']) == 0 && isset($_POST['dat_all_day']) == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_START')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_START')));
     }
     if(strlen($_POST['time_to']) == 0 && isset($_POST['dat_all_day']) == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_END')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_END')));
     }
     if(strlen($_POST['dat_cat_id']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DAT_CALENDAR')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('DAT_CALENDAR')));
     }
 
     if(isset($_POST['dat_all_day']))
@@ -139,7 +139,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     }
     if(isset($_POST['role_1']) == false || $_POST['role_1'] == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DAT_VISIBLE_TO')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('DAT_VISIBLE_TO')));
     }
 
     // das Land nur zusammen mit dem Ort abspeichern
@@ -165,11 +165,11 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $startDateTime->setDateTime($_POST['date_from'], $g_preferences['system_date']);
         if($startDateTime->valid())
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_START'), $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('SYS_START'), $g_preferences['system_date']));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_START'), $g_preferences['system_time']));
+            $g_message->show($g_l10n->get('SYS_TIME_INVALID', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_START'), $g_preferences['system_time']));
         }
     }
 
@@ -196,18 +196,18 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         $endDateTime->setDateTime($_POST['date_to'], $g_preferences['system_date']);
         if($endDateTime->valid())
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_END'), $g_preferences['system_time']));
+            $g_message->show($g_l10n->get('SYS_TIME_INVALID', $g_l10n->get('SYS_TIME').' '.$g_l10n->get('SYS_END'), $g_preferences['system_time']));
         }
     }   
     
     // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
     if($startDateTime->getTimestamp() > $endDateTime->getTimestamp())
     {
-        $g_message->show($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
+        $g_message->show($g_l10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
 
     if(isset($_POST['dat_global']) == false)
@@ -241,7 +241,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
             $row = $g_db->fetch_object($result);
             if($row->is_reserved) 
             {
-                $g_message->show($g_l10n->get('DAT_PHR_ROOM_RESERVED'));
+                $g_message->show($g_l10n->get('DAT_ROOM_RESERVED'));
             }
             
             $date->setValue('dat_room_id',$_POST['dat_room_id']);
@@ -365,7 +365,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         if($return_code < 0 || $return_code2 < 0)
         {
             $date->delete();
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
         
         // dat_rol_id anpassen (Referenz zwischen date und role)
@@ -374,7 +374,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
         if($return_code < 0)
         {
             $role->delete();
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
         
         //Termin-Ersteller als Member und Leader eintragen
@@ -415,7 +415,7 @@ elseif($_GET['mode'] == 3)  // Benutzer zum Termin anmelden
     $member->startMembership($date->getValue('dat_rol_id'),$g_current_user->getValue('usr_id'));
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show($g_l10n->get('DAT_PHR_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
+    $g_message->show($g_l10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
 }
 elseif($_GET['mode'] == 4)  // Benutzer vom Termin abmelden
 {
@@ -425,7 +425,7 @@ elseif($_GET['mode'] == 4)  // Benutzer vom Termin abmelden
     $g_db->query($sql);
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show($g_l10n->get('DAT_PHR_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
+    $g_message->show($g_l10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
 }
 elseif($_GET['mode'] == 5)  // Eintrag fuer Sichtbarkeit erzeugen
 {

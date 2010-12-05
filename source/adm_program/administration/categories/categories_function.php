@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Kategorien
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,19 +48,19 @@ if(isset($_GET['type']))
     }
     if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'DAT' && $g_current_user->editUsers() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 else
@@ -90,7 +90,7 @@ if($req_cat_id > 0)
     if($category->getValue('cat_org_id') >  0
     && $category->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 else
@@ -110,7 +110,7 @@ if($_GET['mode'] == 1)
 
     if(strlen($_POST['cat_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_NAME')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY',$g_l10n->get('SYS_NAME')));
     }
 
     // Kategorie ist immer Orga-spezifisch, ausser manuell angelegte Orga-Felder-Kategorie
@@ -147,7 +147,7 @@ if($_GET['mode'] == 1)
 
         if($row['count'] > 0)
         {
-            $g_message->show($g_l10n->get('CAT_PHR_CATEGORY_EXIST'));
+            $g_message->show($g_l10n->get('CAT_CATEGORY_EXIST'));
         }
     }
 
@@ -172,7 +172,7 @@ if($_GET['mode'] == 1)
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
@@ -204,7 +204,7 @@ if($_GET['mode'] == 1)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    $err_code = 'SYS_PHR_SAVE';
+    $err_code = 'SYS_SAVE_DATA';
 }
 elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
 {
@@ -223,19 +223,19 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
 
         if($ret_code)
         {
-            $err_code = 'SYS_PHR_DELETE';
+            $err_code = 'SYS_DELETE_DATA';
         }
         else
         {
             // Kategorie konnte nicht geloescht werden, da evtl. die letzte Kategorie fuer diesen Typ
-            $err_code = 'CAT_PHR_CATEGORY_NOT_DELETE';
+            $err_code = 'CAT_CATEGORY_NOT_DELETE';
         }
     }
     elseif($_GET['mode'] == 3)
     {
         // Frage, ob Kategorie geloescht werden soll
         $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$req_cat_id.'&mode=2&type='. $_GET['type']);
-        $g_message->show($g_l10n->get('CAT_PHR_DELETE_CATEGORY', $category->getValue('cat_name')), $g_l10n->get('SYS_DELETE'));
+        $g_message->show($g_l10n->get('CAT_DELETE_CATEGORY', $category->getValue('cat_name')), $g_l10n->get('SYS_DELETE'));
     }
 }
 elseif($_GET['mode'] == 4)

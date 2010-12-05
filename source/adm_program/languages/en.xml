@@ -32,6 +32,7 @@
     <!-- Phrases only in Ecardsmodule -->
     <text id="ECA_A_ECARD_FROM" development="edited" translation="todo">Greeting card sent by</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS" development="edited" translation="todo">Activate greeting card option</text>
+    <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="edited" translation="todo">The greeting card module can be deactivated and reactivated by using these setting options. If server is not capable of sending mails, please deactivate the module. The module is accesssible for logged in users only. (predefined: yes)</text>
     <text id="ECA_BLEND_IN_SETTINGS" development="edited" translation="todo">Show settings</text>
     <text id="ECA_BLEND_OUT_SETTINGS" development="edited" translation="todo">Hide settings</text>
     <text id="ECA_CONTENT_LOADING" development="edited" translation="todo">Contents is being loaded - Please wait!</text>
@@ -40,35 +41,37 @@
     <text id="ECA_EMAIL_OF_RECIPIENT" development="edited" translation="todo" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
     <text id="ECA_EMAIL_OF_SENDER" development="edited" translation="todo">Senders e-mail address</text>
     <text id="ECA_FIELD_ERROR" development="edited" translation="todo">Some fields are not filled in or do not comply. Please filled them in or check them for consitency.</text>
+    <text id="ECA_FILL_INPUTS" development="edited" translation="todo">Please fill in \nall data fields and \npress 'send'.</text>
+    <text id="ECA_FONT" development="edited" translation="todo">Font type setup. (predefined: Comic Sans MS)</text>
+    <text id="ECA_FONT_SIZE" development="edited" translation="todo">Font size setup. (predefined: 20) </text>
+    <text id="ECA_FONT_COLOR" development="edited" translation="todo">Font colour setup. (predefined: black)</text>
     <text id="ECA_GREETING_CARD" development="edited" translation="todo">Greeting card </text>
     <text id="ECA_GREETING_CARDS" development="edited" translation="todo">Greeting cards</text>
     <text id="ECA_GREETING_CARD_EDIT" development="edited" translation="todo">Edit greeting card</text>
     <text id="ECA_GREETING_CARD_SEND" development="edited" translation="todo">Send greeting card</text>
     <text id="ECA_GREETING_CARD_PREVIEW" development="edited" translation="todo">Greeting card preview:</text>
+    <text id="ECA_INPUT_INCORRECT" development="edited" translation="todo">Following required fields for sending \ngreeting \ncard are \nnot filled in or are incorrect:</text>
     <text id="ECA_INTERNAL_RECIPIENT" development="edited" translation="todo">internal recipient</text>
     <text id="ECA_MAX_CC" development="edited" translation="todo">Max. further recipients</text>
+    <text id="ECA_MAX_CC_DESC" development="edited" translation="todo">Deactivate and set up maximum number of further recipients if necessary. (predefined: 10)</text>
     <text id="ECA_MAX_MESSAGE_LENGTH" development="edited" translation="todo">Maximum lenght of message:</text>
+    <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="edited" translation="todo">Deactivate option here and define maximum length of message if necessary. (predefined: 500)</text>
+    <text id="ECA_MESSAGE_TOO_LONG" development="edited" translation="todo" description="%VAR1% wird durch die max. Länge ersetzt">Maximum of %VAR1% characters is allowed!</text>
     <text id="ECA_MORE_RECIPIENTS" development="edited" translation="todo">More recipients</text>
     <text id="ECA_NAME_OF_SENDER" development="edited" translation="todo">Sender's name</text>
     <text id="ECA_NAME_OF_RECIPIENT" development="edited" translation="todo" description="%VAR1% will be replaced by number">Name des%VAR1%Empfängers</text>
+    <text id="ECA_NEED_JAVASCRIPT" development="edited" translation="todo">For sending greetng cards javascript has to be enabled!\nPlease enable Javascript in order to send your greeting card!</text>
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="edited" translation="todo">No user with valid e-mail address!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="edited" translation="todo">No further recipients</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="edited" translation="todo">New message received</text>
     <text id="ECA_OTHER_RECIPIENT" development="edited" translation="todo">Other recipients</text>
-    <text id="ECA_PHR_ACTIVATE_GREETING_CARDS" development="edited" translation="todo">The greeting card module can be deactivated and reactivated by using these setting options. If server is not capable of sending mails, please deactivate the module. The module is accesssible for logged in users only. (predefined: yes)</text>
-    <text id="ECA_PHR_FILL_INPUTS" development="edited" translation="todo">Please fill in \nall data fields and \npress 'send'.</text>
-    <text id="ECA_PHR_FONT" development="edited" translation="todo">Font type setup. (predefined: Comic Sans MS)</text>
-    <text id="ECA_PHR_FONT_SIZE" development="edited" translation="todo">Font size setup. (predefined: 20) </text>
-    <text id="ECA_PHR_FONT_COLOR" development="edited" translation="todo">Font colour setup. (predefined: black)</text>
-    <text id="ECA_PHR_INPUT_INCORRECT" development="edited" translation="todo">Following required fields for sending \ngreeting \ncard are \nnot filled in or are incorrect:</text>
-    <text id="ECA_PHR_MAX_CC" development="edited" translation="todo">Deactivate and set up maximum number of further recipients if necessary. (predefined: 10)</text>
-    <text id="ECA_PHR_MAX_MESSAGE_LENGTH" development="edited" translation="todo">Deactivate option here and define maximum length of message if necessary. (predefined: 500)</text>
-    <text id="ECA_PHR_MESSAGE_TOO_LONG" development="edited" translation="todo" description="%VAR1% wird durch die max. Länge ersetzt">Maximum of %VAR1% characters is allowed!</text>
-    <text id="ECA_PHR_NEED_JAVASCRIPT" development="edited" translation="todo">For sending greetng cards javascript has to be enabled!\nPlease enable Javascript in order to send your greeting card!</text>
-    <text id="ECA_PHR_SCALING_PREVIEW" development="edited" translation="todo">Define width and height of image preview. (predefined: 250 x 250 pixels²)</text>
-    <text id="ECA_PHR_SCALING_GREETING_CARD" development="edited" translation="todo">Define width and height of image sent with the greeting card. (predefined: 400 x 250 pixels²) </text>
-    <text id="ECA_PHR_SUCCESSFULLY_SEND">Your greeting card has been send.</text>
-    <text id="ECA_PHR_TEMPLATE" development="edited" translation="todo">Define standard template. (predefined: standard letter) </text>
+    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="edited" translation="todo">Please select a valid role type!</text>
+    <text id="ECA_RECIPIENT_EMAIL" development="edited" translation="todo">E-mail recepient</text>
+    <text id="ECA_RECIPIENT_NAME" development="edited" translation="todo">Name of recepient</text>
+    <text id="ECA_SCALING_PREVIEW" development="edited" translation="todo">Define width and height of image preview. (predefined: 250 x 250 pixels²)</text>
+    <text id="ECA_SCALING_GREETING_CARD" development="edited" translation="todo">Define width and height of image sent with the greeting card. (predefined: 400 x 250 pixels²) </text>
+    <text id="ECA_SUCCESSFULLY_SEND">Your greeting card has been send.</text>
+    <text id="ECA_TEMPLATE" development="edited" translation="todo">Define standard template. (predefined: standard letter) </text>
     <text id="ECA_SEND_ERROR" development="edited" translation="todo">An error occured while sending greeting card. Please try again later.</text>
     <text id="ECA_SCALING_PREVIEW" development="edited" translation="todo">Image preview setup (width x height)</text>
     <text id="ECA_SCALING_GREETING_CARD" development="edited" translation="todo">Greeting card image size setup (width x height):</text>
@@ -76,103 +79,85 @@
     <text id="ECA_TEMPLATE" development="edited" translation="todo">Template</text>
     <text id="ECA_THE_MESSAGE" development="edited" translation="todo">One message</text>
     <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="edited" translation="todo">To all role members</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="edited" translation="todo">Please select a valid role type!</text>
-    <text id="ECA_RECIPIENT_EMAIL" development="edited" translation="todo">E-mail recepient</text>
-    <text id="ECA_RECIPIENT_NAME" development="edited" translation="todo">Name of recepient</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="edited" translation="todo">Show full size picture</text>
     <text id="ECA_YOUR_MESSAGE" development="edited" translation="todo">Your message</text>
 	
 	<!-- Phrases only in Guestbookmodule -->
+	<text id="GBO_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
 	<text id="GBO_EMAIL_NOTIFICATION_GBC_TITLE" development="new" translation="todo">A new guestbook comment was created</text>
 	<text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">A new guestbook comment at %VAR1% was created.\n\nText: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
 	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new guestbook entry was created</text>
 	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new guestbookentry at %VAR1% was created.\n\nText: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
-	<text id="GBO_PHR_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
    
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="edited" translation="todo">Add another organization</text>
     <text id="INS_ADD_ORGANIZATION" development="edited" translation="todo">Add organization</text>
 	<text id="INS_ADDIDIONAL_DATA" development="edited" translation="todo">Additional information</text>
-    <text id="INS_ADDRESS" development="edited" translation="todo">Address</text>
     <text id="INS_ADDRESS_LIST" development="edited" translation="todo">Address list</text>
     <text id="INS_AOL_INSTANT_MESSENGER" development="new1" translation="todo">AOL Instant Messenger</text>
     <text id="INS_BIRTHDAY" development="edited" translation="todo">Birthday</text>
     <text id="INS_BOARD" development="edited" translation="todo">Administrative board</text>
+    <text id="INS_CHOOSE_LANGUAGE" development="edited" translation="todo">Choose language</text>
     <text id="INS_CITY" development="edited" translation="todo">Place</text>
     <text id="INS_CONFERENCE_ROOM" development="edited" translation="todo">Conference room</text>
+    <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="edited" translation="todo">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
     <text id="INS_CONTACT_DETAILS" development="edited" translation="todo">Contact details</text>
     <text id="INS_COURSES" development="edited" translation="todo">Courses</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="edited" translation="todo">Creating administrator</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="edited" translation="todo">Creating configuration file</text>
     <text id="INS_DATA_OF_ADMINISTRATOR" development="edited" translation="todo">Administrator's details</text>
-    <text id="INS_DATABASE_LOGIN" development="edited" translation="todo">Entering database information</text>
+    <text id="INS_DATA_OF_ADMINISTRATOR_DESC" development="edited" translation="todo">Provide here administrator's name, e-mail and access information. Log in with same user after installation.</text>
+    <text id="INS_DATABASE_DOESNOT_NEED_UPDATED" development="edited" translation="todo">Database update is not required</text>
+    <text id="INS_DATABASE_FILE_NOT_FOUND" development="edited" translation="todo">File %VAR1_BOLD% could not be found in folder %VAR2_BOLD%.</text>
+    <text id="INS_DATABASE_IS_UP_TO_DATE" development="edited" translation="todo">Admidio's database is up to date</text>
     <text id="INS_DATABASE_IS_UPDATED" development="edited" translation="todo">Updating database</text>
+    <text id="INS_DATABASE_LOGIN" development="edited" translation="todo">Entering database information</text>
+    <text id="INS_DATABASE_LOGIN_DESC" development="edited" translation="todo">Provide your database access information here. Table prefix can be customised if needed. Customisation should not be necessary if multiple Admidio installations are using the same database.</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED" development="edited" translation="todo">Database update is required</text>
+    <text id="INS_DATABASE_NO_LOGIN" development="edited" translation="todo">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="edited" translation="todo">Creating database</text>
+    <text id="INS_DESCRIPTION_BOARD" development="edited" translation="todo">Administrative board of association</text>
+    <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="edited" translation="todo">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
+    <text id="INS_DESCRIPTION_MEMBER" development="edited" translation="todo">All organisation members</text>
+    <text id="INS_DESCRIPTION_WEBMASTER" development="edited" translation="todo">Group of system administrators</text>
+    <text id="INS_DOWNLOAD" development="edited" translation="todo">Downloading %VAR1%</text>
+    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="edited" translation="todo">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="edited" translation="todo">Enter database access information</text>
+    <text id="INS_ERROR_OPEN_FILE" development="edited" translation="todo">File %VAR1_BOLD% could not be opened.</text>
     <text id="INS_FAX" development="edited" translation="todo">Fax</text>
-    <text id="INS_FIRST_NAME" development="edited" translation="todo">First name</text>
+    <text id="INS_FOLDER_NOT_WRITABLE" development="edited" translation="todo">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download modul.</text>
     <text id="INS_GENDER" development="edited" translation="todo">Gender</text>
     <text id="INS_GOOGLE_TALK" development="new1" translation="todo">Google Talk</text>
     <text id="INS_GROUPS" development="edited" translation="todo">Groups</text>
     <text id="INS_ICQ" development="new1" translation="todo">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="edited" translation="todo">Install Admidio</text>
     <text id="INS_INSTALLATION" development="edited" translation="todo">Installation</text>
+    <text id="INS_INSTALLATION_SUCCESSFUL" development="edited" translation="todo">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</text>
+    <text id="INS_INSTALLATION_VERSION" development="edited" translation="todo">Installation of version %VAR1%</text>
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="edited" translation="todo">Installation was successful</text>
     <text id="INS_INTERN" development="edited" translation="todo">Intern</text>
-    <text id="INS_LAST_NAME" development="edited" translation="todo">Last name</text>
-    <text id="INS_LOGIN_NAME" development="new" translation="todo">Login name</text>
+    <text id="INS_LANGUAGE_NOT_CHOOSEN" development="edited" translation="todo">No language has beeen selected.</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="edited" translation="todo">Wemaster's access information</text>
+    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="edited" translation="todo">Provide access information of a webmaster of an existing organisation. Use his/her access information later in order to log in to new organisation.</text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="edited" translation="todo">Access information of webmaster is not complete!</text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="edited" translation="todo">Incorrect log in. Provided access information does not exist or can not be found in previous organisations!</text>
     <text id="INS_MASTER_DATA" development="edited" translation="todo">Master data</text>
     <text id="INS_MEMBERSHIP" development="edited" translation="todo">Membership</text>
     <text id="INS_MESSENGER" development="edited" translation="todo">Messenger</text>
     <text id="INS_MOBILE" development="edited" translation="todo">Handy</text>
     <text id="INS_MSN_MESSENGER" development="new1" translation="todo">MSN Messenger</text>
+    <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="edited" translation="todo">Not all MySQL database access information has been provided!</text>
     <text id="INS_MYSQL_VERSION" development="edited" translation="todo">MySQL version</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="edited" translation="todo">Organisation name</text>
+    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="edited" translation="todo">Please provide official abbreviation of the organisation's name here for use in Admidio.</text>
+    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="edited" translation="todo">Please provide official abbreviations of the organisations' name here for use in Admidio.</text>
+    <text id="INS_NECESSARY_INFORMATION" development="edited" translation="todo">Please provide on the following pages essential information about the new organisation.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="edited" translation="todo">Provided organisation name is not complete!</text>
     <text id="INS_OVERVIEW" development="edited" translation="todo">Overview</text>
+    <text id="INS_PASSWORDS_NOT_EQUAL" development="edited" translation="todo">Provided passwords do not match.</text>
     <text id="INS_PHONE" development="edited" translation="todo">Phone</text>    
     <text id="INS_PHONE_LIST" development="edited" translation="todo">Phone list</text>
     <text id="INS_PHP_VERSION" development="edited" translation="todo">PHP version</text>
-    <text id="INS_PHR_CHOOSE_LANGUAGE" development="edited" translation="todo">Choose language</text>
-    <text id="INS_PHR_CONFIGURATION_FILE_NOT_FOUND" development="edited" translation="todo">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
-    <text id="INS_PHR_DATA_OF_ADMINISTRATOR" development="edited" translation="todo">Provide here administrator's name, e-mail and access information. Log in with same user after installation.</text>
-    <text id="INS_PHR_DATABASE_DOESNOT_NEED_UPDATED" development="edited" translation="todo">Database update is not required</text>
-    <text id="INS_PHR_DATABASE_FILE_NOT_FOUND" development="edited" translation="todo">File %VAR1_BOLD% could not be found in folder %VAR2_BOLD%.</text>
-    <text id="INS_PHR_DATABASE_IS_UP_TO_DATE" development="edited" translation="todo">Admidio's database is up to date</text>
-    <text id="INS_PHR_DATABASE_LOGIN" development="edited" translation="todo">Provide your database access information here. Table prefix can be customised if needed. Customisation should not be necessary if multiple Admidio installations are using the same database.</text>
-    <text id="INS_PHR_DATABASE_NEEDS_UPDATED" development="edited" translation="todo">Database update is required</text>
-    <text id="INS_PHR_DATABASE_NO_LOGIN" development="edited" translation="todo">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
-    <text id="INS_PHR_DESCRIPTION_BOARD" development="edited" translation="todo">Administrative board of association</text>
-    <text id="INS_PHR_DESCRIPTION_CONFERENCE_ROOM" development="edited" translation="todo">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
-    <text id="INS_PHR_DESCRIPTION_MEMBER" development="edited" translation="todo">All organisation members</text>
-    <text id="INS_PHR_DESCRIPTION_WEBMASTER" development="edited" translation="todo">Group of system administrators</text>
-    <text id="INS_PHR_DOWNLOAD" development="edited" translation="todo">Downloading %VAR1%</text>
-    <text id="INS_PHR_DOWNLOAD_CONFIGURATION_FILE" development="edited" translation="todo">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
-    <text id="INS_PHR_ERROR_OPEN_FILE" development="edited" translation="todo">File %VAR1_BOLD% could not be opened.</text>
-    <text id="INS_PHR_FOLDER_NOT_WRITABLE" development="edited" translation="todo">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download modul.</text>
-    <text id="INS_PHR_INSTALLATION_SUCCESSFUL" development="edited" translation="todo">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</text>
-    <text id="INS_PHR_INSTALLATION_VERSION" development="edited" translation="todo">Installation of version %VAR1%</text>
-    <text id="INS_PHR_LANGUAGE_NOT_CHOOSEN" development="edited" translation="todo">No language has beeen selected.</text>
-    <text id="INS_PHR_LOGIN_OF_WEBMASTER" development="edited" translation="todo">Provide access information of a webmaster of an existing organisation. Use his/her access information later in order to log in to new organisation.</text>
-    <text id="INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY" development="edited" translation="todo">Access information of webmaster is not complete!</text>
-    <text id="INS_PHR_LOGIN_WEBMASTER_NOT_VALID" development="edited" translation="todo">Incorrect log in. Provided access information does not exist or can not be found in previous organisations!</text>
-    <text id="INS_PHR_MYSQL_LOGIN_NOT_COMPLETELY" development="edited" translation="todo">Not all MySQL database access information has been provided!</text>
-    <text id="INS_PHR_NAME_OF_ORGANIZATION" development="edited" translation="todo">Please provide official abbreviation of the organisation's name here for use in Admidio.</text>
-    <text id="INS_PHR_NAME_OF_NEW_ORGANIZATION" development="edited" translation="todo">Please provide official abbreviations of the organisations' name here for use in Admidio.</text>
-    <text id="INS_PHR_NECESSARY_INFORMATION" development="edited" translation="todo">Please provide on the following pages essential information about the new organisation.</text>
-    <text id="INS_PHR_PASSWORDS_NOT_EQUAL" development="edited" translation="todo">Provided passwords do not match.</text>
-    <text id="INS_PHR_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="edited" translation="todo">New organisation %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
-    <text id="INS_PHR_TABLE_PREFIX_INVALID" development="edited" translation="todo">Table prefix includes invalid character!</text>
-    <text id="INS_PHR_TABLE_PREFIX_OVERRIDE_DATA" development="edited" translation="todo">Existing data stored under same prefix will be overwritten!</text>
-    <text id="INS_PHR_UPDATE_FROM_ADMIDIO_1X" development="edited" translation="todo">Until now Version 1.x of Admidio was in use. In order to migrate databes for Admidio %VAR1% successfully, please provide exact version number of previous installation.</text>
-    <text id="INS_PHR_UPDATE_TO_VERSION_SUCCESSFUL" development="edited" translation="todo">Admidio datanbase has been successfully updated to version %VAR1%.\nYou are free to log in and use Admidio again.</text>
-    <text id="INS_PHR_UPDATE_VERSION" development="edited" translation="todo">Update to version %VAR1%</text>
-    <text id="INS_PHR_WARNING_BETA_VERSION" development="edited" translation="todo">This is a beta version of Admidio.\n\nUsage can be risky due to possible instablility and data loss. Please use as test environment only!</text>
-    <text id="INS_PHR_WARNING_SAFE_MODE" development="edited" translation="todo">Save mode on server is active. This can cause later problems when using certain functions.</text>
-    <text id="INS_PHR_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="edited" translation="todo">Welcome! Create your new organisation here!</text>
-    <text id="INS_PHR_WELCOME_TO_INSTALLATION" development="edited" translation="todo">Welcome to the installation of Admidio</text>
-    <text id="INS_PHR_WELCOME_TEXT" development="edited" translation="todo">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</text>
     <text id="INS_PHP_WRONG_MYSQL_VERSION" development="edited" translation="todo">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
     <text id="INS_PHP_WRONG_PHP_VERSION" development="edited" translation="todo">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
     <text id="INS_POSTCODE" development="edited" translation="todo">Postal ode</text>
@@ -180,37 +165,48 @@
     <text id="INS_SET_ADMINISTRATOR" development="edited" translation="todo">Set administrator</text>
     <text id="INS_SET_ORGANIZATION" development="edited" translation="todo">Creating organisation</text>
     <text id="INS_SET_UP_ORGANIZATION" development="edited" translation="todo">Configure organisation</text>
+    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="edited" translation="todo">New organisation %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="edited" translation="todo">Configuration successful</text>
     <text id="INS_SKYPE" development="new1" translation="todo">Skype</text>
     <text id="INS_TABLE_PREFIX" development="edited" translation="todo">Table prefix</text>
+    <text id="INS_TABLE_PREFIX_INVALID" development="edited" translation="todo">Table prefix includes invalid character!</text>
+    <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="edited" translation="todo">Existing data stored under same prefix will be overwritten!</text>
     <text id="INS_TEAMS" development="edited" translation="todo">Teams</text>
     <text id="INS_TRAINING" development="edited" translation="todo">Training</text>
     <text id="INS_UPDATE" development="edited" translation="todo">Update</text>
     <text id="INS_UPDATE_DATABASE" development="edited" translation="todo">Update database</text>
+    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="edited" translation="todo">Until now Version 1.x of Admidio was in use. In order to migrate databes for Admidio %VAR1% successfully, please provide exact version number of previous installation.</text>
+    <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="edited" translation="todo">Admidio datanbase has been successfully updated to version %VAR1%.\nYou are free to log in and use Admidio again.</text>
+    <text id="INS_UPDATE_VERSION" development="edited" translation="todo">Update to version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="edited" translation="todo">Update process successful</text>
+    <text id="INS_WARNING_BETA_VERSION" development="edited" translation="todo">This is a beta version of Admidio.\n\nUsage can be risky due to possible instablility and data loss. Please use as test environment only!</text>
+    <text id="INS_WARNING_SAFE_MODE" development="edited" translation="todo">Save mode on server is active. This can cause later problems when using certain functions.</text>
+    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="edited" translation="todo">Welcome! Create your new organisation here!</text>
+    <text id="INS_WELCOME_TO_INSTALLATION" development="edited" translation="todo">Welcome to the installation of Admidio</text>
+    <text id="INS_WELCOME_TEXT" development="edited" translation="todo">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</text>
     <text id="INS_YAHOO_MESSENGER" development="new1" translation="todo">Yahoo! Messenger</text>
 	
 	<!-- Phrases only in Linkmodule -->
 	<text id="LNK_COUNTER" development="new" translation="todo">Hits</text>
     <text id="LNK_CREATE_LINK" development="new" translation="todo">Create new link</text>
     <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Show redirect</text>
+    <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">By using this setting option you can activate the automatically redirection. If you choose a weblink from the linkmodule a internal Admidio site is displayed with a statement of leaving the original website. After delay you will be redirected to the real link. By setting redirect to 0 the link will be displayed direct. (predefined: 10 seconds)</text>
 	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new weblink was created</text>
 	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new weblink at %VAR1% was created.\n\nLinkadress: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
+    <text id="LNK_GO_TO" development="new" translation="todo">Go to %VAR1%</text>
     <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadress</text>
     <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
     <text id="LNK_LINK_TARGET" development="new" translation="todo">Linktarget</text>
+    <text id="LNK_LINK_TARGET_DESC" development="new" translation="todo">You can choose if the selected website will be displayed in the same window like Admidio or in a new window.</text>
+    <text id="LNK_LINKS_FROM" development="new" translation="todo">Links of %VAR1%</text>
     <text id="LNK_NEW_WINDOW" development="new" translation="todo">New window</text>
-    <text id="LNK_PHR_DISPLAY_REDIRECT" development="new" translation="todo">By using this setting option you can activate the automatically redirection. If you choose a weblink from the linkmodule a internal Admidio site is displayed with a statement of leaving the original website. After delay you will be redirected to the real link. By setting redirect to 0 the link will be displayed direct. (predefined: 10 seconds)</text>
-    <text id="LNK_PHR_GO_TO" development="new" translation="todo">Go to %VAR1%</text>
-    <text id="LNK_PHR_LINK_TARGET" development="new" translation="todo">You can choose if the selected website will be displayed in the same window like Admidio or in a new window.</text>
-    <text id="LNK_PHR_LINKS_FROM" development="new" translation="todo">Links of %VAR1%</text>
-    <text id="LNK_PHR_REDIRECT" development="new" translation="todo">You are leaving the website of %VAR1_BOLD% and will be redirected automatically to %VAR3% in %VAR2% seconds.\n\nIf the automatically redirection is not working please click %VAR4%!</text>
     <text id="LNK_REDIRECT" development="new" translation="todo">Redirect</text>
+    <text id="LNK_REDIRECT_DESC" development="new" translation="todo">You are leaving the website of %VAR1_BOLD% and will be redirected automatically to %VAR3% in %VAR2% seconds.\n\nIf the automatically redirection is not working please click %VAR4%!</text>
     <text id="LNK_SAME_WINDOW" development="new" translation="todo">Same window</text>
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
     
 	<!-- Phrases only in Mailmodule -->
-	<text id="MAI_PHR_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
+	<text id="MAI_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
 	
 	<!-- Phrases only in Organizationadministration -->
 	<text id="ORG_CAPTCHA" development="new" translation="todo">Use this seetings for the captcha options.</text>
@@ -220,6 +216,7 @@
 	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha code. (predefined: 20)</text>
 	<text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha preview</text>
 	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">You can get a preview of the captcha. Please note that only saved values are considered!</text>
+	<text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="todo">If this option is activated new users will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
 	<text id="ORG_CAPTCHA_SIZE" development="new" translation="todo">Choose the scaling for the captcha.</text>
 	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha signature</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha signature. (predefined: 9)</text>
@@ -231,7 +228,6 @@
 	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Calculation</text>
 	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Picture</text>
 	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">You can choose the type of captcha. The following options are for display the captcha as a picture or you set up it as a simple calculation as text. (predifined: picture)</text>
-	<text id="ORG_PHR_CAPTCHA_REGISTRATION" development="new" translation="todo">If this option is activated new users will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
 	
 	<!-- Phrases only in Updatecheck -->
 	<text id="UPD_ADMIDIO" development="new" translation="todo">Go to Admidio updatesite</text>
@@ -270,10 +266,13 @@
 	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="todo">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</text>	
     <text id="SYS_CLOSE" development="edited" translation="todo">Close</text>
     <text id="SYS_CREATE" development="edited" translation="todo">Create</text>
+    <text id="SYS_CREATE_VAR" development="edited" translation="todo">Create %VAR1%</text>
+    <text id="SYS_CREATED_BY" development="edited" translation="todo">Created by %VAR1% on %VAR2%</text>
     <text id="SYS_DATABASE" development="edited" translation="todo">Database</text>
     <text id="SYS_DEACTIVATED" development="edited" translation="todo">Deactivated</text>
     <text id="SYS_DELETE" development="edited" translation="todo">Delete</text>
     <text id="SYS_EDIT" development="edited" translation="todo">Edit</text>
+    <text id="SYS_EDIT_VAR" development="edited" translation="todo">Edit %VAR1%</text>
     <text id="SYS_EMAIL" development="edited" translation="todo">Email</text>
 	<text id="SYS_EMAIL_NOTIFICATION_ACTIVATE" development="new" translation="todo">Activate email notification</text>
 	<text id="SYS_EMAIL_NOTIFICATION_CONFIG" development="new" translation="todo">Configure email notification</text>
@@ -288,6 +287,7 @@
     <text id="SYS_HELP" development="edited" translation="todo">Help</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="edited" translation="todo">Invalid page view</text>
     <text id="SYS_ITALIC" development="edited" translation="todo">Italic</text>
+    <text id="SYS_LAST_EDITED_BY" development="edited" translation="todo">Last edited by %VAR1% on %VAR2%</text>
     <text id="SYS_LANGUAGE" development="edited" translation="todo">Language</text>
     <text id="SYS_LOGIN" development="edited" translation="todo">Login</text>
     <text id="SYS_MANDATORY_FIELD" development="edited" translation="todo">Mandatory field</text>
@@ -298,10 +298,6 @@
     <text id="SYS_NEXT" development="edited" translation="todo">Next</text>
     <text id="SYS_NO" development="edited" translation="todo">No</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="edited" translation="todo">Password forgotten</text>
-    <text id="SYS_PHR_CREATE" development="edited" translation="todo">Create %VAR1%</text>
-    <text id="SYS_PHR_CREATED_BY" development="edited" translation="todo">Created by %VAR1% on %VAR2%</text>
-    <text id="SYS_PHR_EDIT" development="edited" translation="todo">Edit %VAR1%</text>
-    <text id="SYS_PHR_LAST_EDITED_BY" development="edited" translation="todo">Last edited by %VAR1% on %VAR2%</text>
     <text id="SYS_PLEASE_CHOOSE" development="edited" translation="todo">Please choose</text>
     <text id="SYS_PREVIEW" development="edited" translation="todo">Preview</text>
     <text id="SYS_RECIPIENT" development="edited" translation="todo">Recipient</text>

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photoalben
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,7 @@ require_once('../../system/classes/image.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_photo_module'] == 2)
 {
@@ -138,7 +138,7 @@ if($locked=='1' || $locked=='0')
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$g_current_user->editPhotoRight())
     {
-        $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
     }
     
     $photo_album->setValue('pho_locked', $locked);
@@ -445,19 +445,19 @@ echo '<div class="photoModuleContainer">';
                 echo ' '.$g_l10n->get('SYS_DATE_TO').' '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
             }
         echo '
-        	<br />'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers').'
+        	<br />'.$g_l10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers').'
         </div>';
 
-        // Anleger und Veraendererinfos SYS_PHR_CREATED_BY
+        // Anleger und Veraendererinfos SYS_CREATED_BY
         echo '
         <div class="editInformation">';
             $user_create = new User($g_db, $photo_album->getValue('pho_usr_id_create'));
-            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_create'));
+            echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_create'));
                         
             if($photo_album->getValue('pho_usr_id_change') > 0)
             {
                 $user_change = new User($g_db, $photo_album->getValue('pho_usr_id_change'));
-                echo '<br />'.$g_l10n->get('SYS_PHR_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_change'));
+                echo '<br />'.$g_l10n->get('SYS_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_change'));
             }
         echo '</div>';
     }
@@ -577,16 +577,16 @@ echo '<div class="photoModuleContainer">';
                             //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
                             if(!file_exists($ordner) && $g_current_user->editPhotoRight())
                             {
-                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_FOLDER_NOT_FOUND\',this)" onmouseout="ajax_hideTooltip()"
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_FOLDER_NOT_FOUND&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_FOLDER_NOT_FOUND\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /></a>';
                             }
                             
                             //Hinweis fur Leute mit Photorechten: Album ist gesperrt
                             if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
                             {
-                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_PHR_ALBUM_NOT_APPROVED\',this)" onmouseout="ajax_hideTooltip()"
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_NOT_APPROVED&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_ALBUM_NOT_APPROVED\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('SYS_LOCKED').'" /></a>';
                             }
                         }
@@ -609,7 +609,7 @@ echo '<div class="photoModuleContainer">';
                                 echo ' '.$g_l10n->get('SYS_DATE_TO').' '.$sub_photo_album->getValue('pho_end', $g_preferences['system_date']);
                             }
                             echo '</li> 
-                            <li>'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>';
+                            <li>'.$g_l10n->get('PHO_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>';
 
                             //bei Moderationrecheten
                             if ($g_current_user->editPhotoRight())
@@ -662,7 +662,7 @@ echo '<div class="photoModuleContainer">';
     //Falls das Album weder Fotos noch Unterordner enthaelt
     if(($photo_album->getValue('pho_quantity')=='0' || strlen($photo_album->getValue('pho_quantity')) == 0) && $albums<1)  // alle vorhandenen Albumen werden ignoriert
     {
-        echo $g_l10n->get('PHO_PHR_NO_ALBUM_CONTENT');
+        echo $g_l10n->get('PHO_NO_ALBUM_CONTENT');
     }
     
     if($g_db->num_rows($result_list) > 2)

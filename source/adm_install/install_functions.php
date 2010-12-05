@@ -2,7 +2,7 @@
 /******************************************************************************
  * Gemeinsame Funktionen fuer Update und Installation
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,12 +16,12 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
     
     if($mode == 1)
     {
-        $headline = $g_l10n->get('INS_PHR_INSTALLATION_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
+        $headline = $g_l10n->get('INS_INSTALLATION_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
         $title    = $g_l10n->get('INS_INSTALLATION');
     }
     elseif($mode == 2)
     {
-        $headline = $g_l10n->get('INS_PHR_UPDATE_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
+        $headline = $g_l10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
         $title    = $g_l10n->get('INS_UPDATE');
     }
     elseif($mode == 3)
@@ -35,7 +35,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
     <head>
-        <!-- (c) 2004 - 2009 The Admidio Team - http://www.admidio.org -->
+        <!-- (c) 2004 - 2011 The Admidio Team - http://www.admidio.org -->
         
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="author"   content="Admidio Team" />

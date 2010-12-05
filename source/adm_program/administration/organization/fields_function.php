@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Profilfelder
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,7 @@ require_once('../../system/classes/table_user_field.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -59,7 +59,7 @@ if($_GET['usf_id'] > 0)
     if($user_field->getValue('cat_org_id') >  0
     && $user_field->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -75,17 +75,17 @@ if($_GET['mode'] == 1)
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
     if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
     }    
 
     if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('ORG_DATATYPE')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('ORG_DATATYPE')));
     }    
 
     if($user_field->getValue('usf_system') == 0 && $_POST['usf_cat_id'] == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
     }
     
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
@@ -108,7 +108,7 @@ if($_GET['mode'] == 1)
 
         if($row['count'] > 0)
         {
-            $g_message->show($g_l10n->get('ORG_PHR_FIELD_EXIST'));
+            $g_message->show($g_l10n->get('ORG_FIELD_EXIST'));
         }      
     }
 
@@ -151,13 +151,13 @@ if($_GET['mode'] == 1)
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }    
 
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
-    $err_code = 'SYS_PHR_SAVE';
+    $err_code = 'SYS_SAVE_DATA';
 }
 elseif($_GET['mode'] == 2)
 {

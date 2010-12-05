@@ -2,7 +2,7 @@
    /******************************************************************************
  * Profilphotoausgabe 
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -43,7 +43,7 @@ if(isset($_GET['new_photo']) && $_GET['new_photo'] == 1)
 //Testen ob Recht besteht Profil einzusehn
 if(!$g_current_user->viewProfile($req_usr_id))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 //Foto aus adm_my_files

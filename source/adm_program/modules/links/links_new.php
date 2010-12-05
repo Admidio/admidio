@@ -2,7 +2,7 @@
 /******************************************************************************
  * Links anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,14 +29,14 @@ if ($g_preferences['enable_bbcode'] == 1)
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 
 // Ist ueberhaupt das Recht vorhanden?
 if (!$g_current_user->editWeblinksRight())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -83,11 +83,11 @@ if(isset($_SESSION['links_request']))
 // Html-Kopf ausgeben
 if($_GET['lnk_id'] > 0)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $_GET['headline']);
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $_GET['headline']);
 }
 
 //Script für BBCode laden
@@ -201,12 +201,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $link->getValue('lnk_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $link->getValue('lnk_timestamp_create'));
+                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $link->getValue('lnk_timestamp_create'));
 
                 if($link->getValue('lnk_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $link->getValue('lnk_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $link->getValue('lnk_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $link->getValue('lnk_timestamp_change'));
                 }
             echo '</div>';
         }

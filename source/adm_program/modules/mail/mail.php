@@ -2,7 +2,7 @@
 /******************************************************************************
  * E-Mails verschicken
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,7 +34,7 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1 && $g_preferen
 if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 
@@ -42,7 +42,7 @@ if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('EMAIL')))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $g_message->show($g_l10n->get('SYS_PHR_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    $g_message->show($g_l10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
 
 
@@ -76,13 +76,13 @@ if (isset($_GET['usr_id']))
        && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_ID_NOT_FOUND'));
+        $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 
     $userEmail = $user->getValue('EMAIL');
@@ -346,8 +346,8 @@ echo '
                                 echo '</optgroup>
                                 </select>
                                 <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_SEND_MAIL_TO_ROLE&amp;inline=true"><img 
-						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_SEND_MAIL_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
+	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_SEND_MAIL_TO_ROLE&amp;inline=true"><img 
+						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_SEND_MAIL_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
 						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
                             }
                         echo'
@@ -438,8 +438,8 @@ echo '
                                     <a href="javascript:addAttachment()"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
                                     <a href="javascript:addAttachment()">'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'</a>
-                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
-                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_PHR_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
+                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                                 </span>
                             </dd>
@@ -457,7 +457,7 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            echo ' /> <label for="kopie">'.$g_l10n->get('MAI_PHR_SEND_COPY').'</label>
+                            echo ' /> <label for="kopie">'.$g_l10n->get('MAI_SEND_COPY').'</label>
                         </dd>
                     </dl>
                 </li>';

@@ -3,7 +3,7 @@
  * Script beinhaltet allgemeine Daten / Variablen, die fuer alle anderen
  * Scripte notwendig sind
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -176,7 +176,7 @@ if(isset($g_preferences['db_version']) == false
 || version_compare($g_preferences['db_version_beta'], BETA_VERSION) != 0)
 {
     unset($_SESSION['g_current_organization']);
-    $g_message->show($g_l10n->get('SYS_PHR_DATABASE_INVALID', $g_preferences['db_version'], ADMIDIO_VERSION, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+    $g_message->show($g_l10n->get('SYS_DATABASE_INVALID', $g_preferences['db_version'], ADMIDIO_VERSION, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
 }
 
 /*********************************************************************************

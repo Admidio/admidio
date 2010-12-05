@@ -2,7 +2,7 @@
 /******************************************************************************
  * Funktionen des Benutzers speichern
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,7 +38,7 @@ if(  (!$g_current_user->assignRoles()
    && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
 || $role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
 {
-   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+   $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Verarbeitung der Daten
@@ -80,7 +80,7 @@ if($role->getValue('rol_max_members') != NULL)
     }
     if($counter > $role->getValue('rol_max_members'))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
+        $g_message->show($g_l10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
     }
 
     //Dateizeiger zurueck zum Anfang

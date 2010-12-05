@@ -2,7 +2,7 @@
 /******************************************************************************
  * Zeigt eine Liste mit moeglichen Zuordnungen an
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +20,7 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
 if (!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // sollen Benutzer mit aehnlichen Namen gefunden werden ?
@@ -88,7 +88,7 @@ echo '
 <div class="formLayout" id="assign_users_form" style="width: 400px;">
     <div class="formHead">'.$g_l10n->get('MEM_CREATE_USER').'</div>
     <div class="formBody">
-        '.$g_l10n->get('SYS_PHR_SIMILAR_USERS_FOUND', $_GET['firstname']. ' '. $_GET['lastname']).'<br />
+        '.$g_l10n->get('SYS_SIMILAR_USERS_FOUND', $_GET['firstname']. ' '. $_GET['lastname']).'<br />
 
         <div class="groupBox">
             <div class="groupBoxHeadline">'. $g_l10n->get('SYS_USERS_FOUND'). '</div>
@@ -129,7 +129,7 @@ echo '
                             $link = $g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$row['usr_id'];
 
                             // KEINE Logindaten vorhanden
-                            echo '<br />'.$g_l10n->get('MEM_PHR_NO_MEMBERSHIP', $g_organization).'<br />
+                            echo '<br />'.$g_l10n->get('MEM_NO_MEMBERSHIP', $g_organization).'<br />
                             
                             <span class="iconTextLink">
                                 <a href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('MEM_ASSIGN_ROLES').'" /></a>
@@ -146,7 +146,7 @@ echo '
             <div class="groupBoxHeadline">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</div>
             <div class="groupBoxBody">
                 <div style="margin-left: 20px;">
-                    '. $g_l10n->get('SYS_PHR_CREATE_NOT_FOUND_USER'). '<br />
+                    '. $g_l10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
                     
                     <span class="iconTextLink">
                         <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname'].'"><img

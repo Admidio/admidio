@@ -2,7 +2,7 @@
 /******************************************************************************
  * Backup
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -36,7 +36,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // nur Webmaster duerfen ein Backup starten
 if($g_current_user->isWebmaster() == false)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $g_layout['title'] = 'Datenbank Backup';

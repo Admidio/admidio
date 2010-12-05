@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profil/Registrierung wird angelegt bzw. gespeichert
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -54,7 +54,7 @@ switch($new_user)
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
         if($g_current_user->editProfile($usr_id) == false)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
         break;
 
@@ -62,7 +62,7 @@ switch($new_user)
         // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
         if($g_current_user->editUsers() == false)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
         break;
 
@@ -71,7 +71,7 @@ switch($new_user)
         // Registrierung deaktiviert, also auch diesen Modus sperren
         if($g_preferences['registration_mode'] == 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+            $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
         }
         break;
 }
@@ -96,24 +96,24 @@ if($new_user == 2)
 {
     if(strlen($_POST['usr_login_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
     }
 
     // Passwort sollte laenger als 6 Zeichen sein
     if(strlen($_POST['usr_password']) < 6)
     {
-        $g_message->show($g_l10n->get('PRO_PHR_PASSWORD_LENGTH'));
+        $g_message->show($g_l10n->get('PRO_PASSWORD_LENGTH'));
     }
 
     // beide Passwortfelder muessen identisch sein
     if ($_POST['usr_password'] != $_POST['password2'])
     {
-        $g_message->show($g_l10n->get('PRO_PHR_PASSWORDS_NOT_EQUAL'));
+        $g_message->show($g_l10n->get('PRO_PASSWORDS_NOT_EQUAL'));
     }
 
     if(strlen($_POST['usr_password']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
     }
 }
 
@@ -129,7 +129,7 @@ foreach($user->userFieldData as $field)
         if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
         || ($new_user == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $field->getValue('usf_name')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
         }
         
         if(strlen($_POST[$post_id]) > 0)
@@ -149,7 +149,7 @@ foreach($user->userFieldData as $field)
                 $date = new DateTimeExtended($_POST[$post_id], $g_preferences['system_date'], 'date');
                 if($date->valid() == false)
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
+                    $g_message->show($g_l10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
                 }
                 $_POST[$post_id] = $date->format('Y-m-d');
             }
@@ -158,7 +158,7 @@ foreach($user->userFieldData as $field)
                 // Pruefung auf gueltige E-Mail-Adresse
                 if(!isValidEmailAddress($_POST[$post_id]))
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_EMAIL_INVALID'));
+                    $g_message->show($g_l10n->get('SYS_EMAIL_INVALID'));
                 }        
             }
             elseif($field->getValue('usf_type') == 'NUMERIC')
@@ -166,7 +166,7 @@ foreach($user->userFieldData as $field)
                 // Zahl muss numerisch sein
                 if(is_numeric(strtr($_POST[$post_id], ',.', '00')) == false)
                 {
-                    $g_message->show($g_l10n->get('PRO_PHR_FIELD_NUMERIC', $field->getValue('usf_name')));
+                    $g_message->show($g_l10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
                 }
             }
         }
@@ -183,7 +183,7 @@ foreach($user->userFieldData as $field)
         }
         elseif($field->getValue('usf_mandatory') == 1)
         {
-    		$g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $field->getValue('usf_name')));
+    		$g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
         }
     }
 }
@@ -209,7 +209,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
 
                 if(strcmp($row['usr_id'], $usr_id) != 0)
                 {
-                    $g_message->show($g_l10n->get('PRO_PHR_LOGIN_NAME_EXIST'));
+                    $g_message->show($g_l10n->get('PRO_LOGIN_NAME_EXIST'));
                 }
             }
 
@@ -220,7 +220,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
                 // pruefen, ob der Benutzername bereits im Forum vergeben ist
                 if($g_forum->userExists($_POST['usr_login_name']))
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_FORUM_USER_EXIST'));
+                    $g_message->show($g_l10n->get('SYS_FORUM_USER_EXIST'));
                 }
                 
                 // bisherigen Loginnamen merken, damit dieser spaeter im Forum geaendert werden kann
@@ -352,7 +352,7 @@ if($new_user == 2)
 
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $user) == false)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $row['email']));
+                $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $row['email']));
             }
         }
     }
@@ -362,11 +362,11 @@ if($new_user == 2)
         if($_SESSION['login_rol_id'] > 0)
         {
             $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl());
-            $g_message->show($g_l10n->get('PRO_PHR_CONFIRM_REGISTRATION_DATE'));
+            $g_message->show($g_l10n->get('PRO_CONFIRM_REGISTRATION_DATE'));
         }
         else
         {
-            $g_message->show($g_l10n->get('PRO_PHR_CONFIRM_REGISTRATION_SYSTEM'));
+            $g_message->show($g_l10n->get('PRO_CONFIRM_REGISTRATION_SYSTEM'));
         }
 
         unset($_SESSION['login_rol_id']);
@@ -375,7 +375,7 @@ if($new_user == 2)
     {
         // nach Registrierungmeldung auf die Startseite verweisen
         $g_message->setForwardUrl($g_homepage);
-        $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+        $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
     }
 }
 elseif($new_user == 3 || $usr_id == 0)
@@ -400,7 +400,7 @@ elseif($new_user == 3 || $usr_id == 0)
             $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == false)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
+                $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
             }
         }
     }
@@ -417,26 +417,26 @@ elseif($new_user == 3 || $usr_id == 0)
         // wird der neue User der Default-Rolle zugeordnet
         if($g_preferences['profile_default_role'] == 0)
         {
-            $g_message->show($g_l10n->get('PRO_PHR_NO_DEFAULT_ROLE'));
+            $g_message->show($g_l10n->get('PRO_NO_DEFAULT_ROLE'));
         }
         $member = new TableMembers($g_db);
         $member->startMembership($g_preferences['profile_default_role'], $user->getValue('usr_id'));
         
         $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-        $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+        $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
     }
 }
 elseif($new_user == 0 && $user->getValue('usr_valid') == 0)
 {
     // neue Registrierung bearbeitet
     $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-    $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 }
 else
 {
     // zur Profilseite zurueckkehren    
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-    $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 }
 ?>
 

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Kategorien anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -39,19 +39,19 @@ if(isset($_GET['type']))
     }
     if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'DAT' && $g_current_user->editUsers() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 else
@@ -81,7 +81,7 @@ if($req_cat_id > 0)
     if($category->getValue('cat_org_id') >  0
     && $category->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -111,11 +111,11 @@ if($category->getValue('cat_system') == 1)
 // Html-Kopf ausgeben
 if($req_cat_id > 0)
 {
-    $g_layout['title']  = $g_l10n->get('SYS_PHR_EDIT', $title);
+    $g_layout['title']  = $g_l10n->get('SYS_EDIT_VAR', $title);
 }
 else
 {
-    $g_layout['title']  = $g_l10n->get('SYS_PHR_CREATE', $title);
+    $g_layout['title']  = $g_l10n->get('SYS_CREATE_VAR', $title);
 }
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -160,9 +160,9 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for=\"cat_org_id\">'.$g_l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=CAT_PHR_CATEGORY_GLOBAL&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=CAT_PHR_CATEGORY_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
+                                <label for=\"cat_org_id\">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=CAT_CATEGORY_GLOBAL&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=CAT_CATEGORY_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
                             </dd>
                         </dl>
@@ -175,7 +175,7 @@ echo '
                 <li>
                     <dl>
                         <dt>
-                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" /></label>
+                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" /></label>
                         </dt>
                         <dd>
                             <input type="checkbox" id="cat_hidden" name="cat_hidden" ';
@@ -184,7 +184,7 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                            <label for="cat_hidden">'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'</label>
+                            <label for="cat_hidden">'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'</label>
                         </dd>
                     </dl>
                 </li>';
@@ -198,12 +198,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $category->getValue('cat_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $category->getValue('cat_timestamp_create'));
+                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $category->getValue('cat_timestamp_create'));
 
                 if($category->getValue('cat_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $category->getValue('cat_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $category->getValue('cat_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $category->getValue('cat_timestamp_change'));
                 }
             echo '</div>';
         }

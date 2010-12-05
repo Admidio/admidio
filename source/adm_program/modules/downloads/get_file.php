@@ -2,7 +2,7 @@
 /******************************************************************************
  * Download Script
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +20,7 @@ require('../../system/classes/table_file.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 //pruefen ob eine brauchbare File_ID uebergeben wurde
@@ -59,7 +59,7 @@ $completePath = $file->getCompletePathOfFile();
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FILE_NOT_EXIST'));
+    $g_message->show($g_l10n->get('SYS_FILE_NOT_EXIST'));
 }
 
 //Downloadcounter inkrementieren

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photogalerien
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,13 +24,13 @@ require_once('../../system/classes/table_photos.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -61,7 +61,7 @@ if($_GET['job'] != 'new')
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $g_organization)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -81,7 +81,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Album
     if(strlen($_POST['pho_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', 'Album'));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', 'Album'));
     }
 	
     //Beginn
@@ -95,12 +95,12 @@ if(isset($_POST['submit']) && $_POST['submit'])
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', 'Beginn', $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_DATE_INVALID', 'Beginn', $g_preferences['system_date']));
         }
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('START')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('START')));
     }    
     
     //Ende
@@ -114,7 +114,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
         }
     }
     else
@@ -125,7 +125,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     //Anfang muss vor oder gleich Ende sein
     if(strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
     {
-        $g_message->show($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
+        $g_message->show($g_l10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
 
     //Photographen
@@ -189,7 +189,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
         if($b_return == false)
         {
             $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $g_message->show($g_l10n->get('SYS_PHR_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+            $g_message->show($g_l10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
         }
 
         // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen
@@ -215,7 +215,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     <div class="formLayout" id="photo_report_form">
         <div class="formHead">'.$g_l10n->get('SYS_REPORT').'</div>
         <div class="formBody"> 
-            <p>'.$g_l10n->get('PHO_PHR_ALBUM_WRITE_SUCCESS').'</p>  
+            <p>'.$g_l10n->get('PHO_ALBUM_WRITE_SUCCESS').'</p>  
             <ul class="formFieldList">
                 <li><dl>
                     <dt>'.$g_l10n->get('SYS_REPORT').':</dt>
@@ -248,7 +248,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').':</dt>
+                    <dt>'.$g_l10n->get('PHO_PHOTOGRAPHER').':</dt>
                     <dd>'.$photo_album->getValue('pho_photographers').'</dd>
                 </dl></li>
 
@@ -267,7 +267,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('PHO_PHR_NUMBER_OF_FOTOS').':</dt>
+                    <dt>'.$g_l10n->get('PHO_NUMBER_OF_FOTOS').':</dt>
                     <dd>';
                         if($photo_album->getValue('pho_quantity')!=NULL)
                         {

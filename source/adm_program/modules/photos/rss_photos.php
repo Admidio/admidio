@@ -2,7 +2,7 @@
 /******************************************************************************
  * RSS - Feed fuer Photos
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,14 +22,14 @@ require_once('../../system/classes/table_photos.php');
 if ($g_preferences['enable_rss'] != 1)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_PHR_RSS_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_RSS_DISABLED'));
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_photo_module'] == 2)
 {
@@ -65,7 +65,7 @@ $photo_album = new TablePhotos($g_db);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS'), $g_l10n->get('PHO_PHR_NEWEST_ALBUMS'));
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS'), $g_l10n->get('PHO_NEWEST_ALBUMS'));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_array($result))
@@ -107,9 +107,9 @@ while ($row = $g_db->fetch_array($result))
     //Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
     {
-        $description = $g_l10n->get('SYS_PHR_DATE_TO', $description, $photo_album->getValue('pho_end', $g_preferences['system_date']));
+        $description = $g_l10n->get('SYS_DATE_FROM_TO', $description, $photo_album->getValue('pho_end', $g_preferences['system_date']));
     }
-    $description = $description. '<br />'.$g_l10n->get('PHO_PHR_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
+    $description = $description. '<br />'.$g_l10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
 
     //die letzten fuenf Fotos sollen als Beispiel genutzt werden
     if($photo_album->getValue('pho_quantity') >0)
@@ -132,11 +132,11 @@ while ($row = $g_db->fetch_array($result))
     $description = $description. '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_PHR_CREATED_BY', $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname'), $photo_album->getValue('pho_timestamp_create')). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname'), $photo_album->getValue('pho_timestamp_create')). '</i>';
 
     if($photo_album->getValue('pho_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname'), $photo_album->getValue('pho_timestamp_change')). '</i>';
+        $description = $description. '<br /><i>'.$g_l10n->get('SYS_LAST_EDITED_BY', $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname'), $photo_album->getValue('pho_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));

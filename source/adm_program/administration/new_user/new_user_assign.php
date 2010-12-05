@@ -2,7 +2,7 @@
 /******************************************************************************
  * Zeigt eine Liste mit moeglichen Zuordnungen an
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,13 +20,13 @@ require_once('../../system/classes/table_members.php');
 // nur Webmaster duerfen User zuordnen, ansonsten Seite verlassen
 if($g_current_user->approveUsers() == false)
 {
-   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+   $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
 if($g_preferences['registration_mode'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // Uebergabevariablen pruefen und initialisieren
@@ -115,7 +115,7 @@ if($member_found == 0)
             $sysmail->addRecipient($new_user->getValue('EMAIL'), $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $new_user) == false)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $new_user->getValue('EMAIL')));
+                $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $new_user->getValue('EMAIL')));
             }
         }
 
@@ -131,13 +131,13 @@ if($member_found == 0)
             // wird der neue User der Default-Rolle zugeordnet
             if($g_preferences['profile_default_role'] == 0)
             {
-                $g_message->show($g_l10n->get('PRO_PHR_NO_DEFAULT_ROLE'));
+                $g_message->show($g_l10n->get('PRO_NO_DEFAULT_ROLE'));
             }
             $member = new TableMembers($g_db);
             $member->startMembership($g_preferences['profile_default_role'], $new_user->getValue('usr_id'));
             
             $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-            $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+            $g_message->show($g_l10n->get('SYS_SAVE'));
         }
     }
 }
@@ -153,7 +153,7 @@ echo '
 <div class="formLayout" id="assign_users_form" style="width: 400px;">
     <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">
-        '.$g_l10n->get('SYS_PHR_SIMILAR_USERS_FOUND', $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME')).'<br />
+        '.$g_l10n->get('SYS_SIMILAR_USERS_FOUND', $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME')).'<br />
 
         <div class="groupBox">
             <div class="groupBoxHeadline">'.$g_l10n->get('SYS_USERS_FOUND').'</div>
@@ -194,10 +194,10 @@ echo '
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden -> Logindaten neu zuschicken                    
-                                echo '<br />'.$g_l10n->get('NWU_PHR_USER_VALID_LOGIN');
+                                echo '<br />'.$g_l10n->get('NWU_USER_VALID_LOGIN');
                                 if($g_preferences['enable_system_mails'] == 1)
                                 {
-                                    echo '<br />'.$g_l10n->get('NWU_PHR_REMINDER_SEND_LOGIN').'<br />
+                                    echo '<br />'.$g_l10n->get('NWU_REMINDER_SEND_LOGIN').'<br />
 
                                     <span class="iconTextLink">
                                         <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
@@ -209,7 +209,7 @@ echo '
                             else
                             {
                                 // Logindaten sind NICHT vorhanden -> diese nun zuordnen
-                                echo '<br />'.$g_l10n->get('NWU_PHR_USER_NO_VALID_LOGIN').'<br />
+                                echo '<br />'.$g_l10n->get('NWU_USER_NO_VALID_LOGIN').'<br />
 
                                 <span class="iconTextLink">
                                     <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user_function.php?new_user_id='.$req_new_user_id.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
@@ -226,23 +226,23 @@ echo '
                             if(strlen($row->usr_login_name) > 0)
                             {
                                 // Logindaten sind bereits vorhanden
-                                echo '<br />'.$g_l10n->get('NWU_PHR_NO_MEMBERSHIP', $g_organization).'<br />
+                                echo '<br />'.$g_l10n->get('NWU_NO_MEMBERSHIP', $g_organization).'<br />
 
                                 <span class="iconTextLink">
                                     <a href="'.$link.'"><img src="'.THEME_PATH.'/icons/new_registrations.png" 
-                                        alt="'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP').'" /></a>
-                                    <a href="'.$link.'">'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP').'</a>
+                                        alt="'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'" /></a>
+                                    <a href="'.$link.'">'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP_AND_LOGIN').'</a>
                                 </span>';
                             }               
                             else
                             {
                                 // KEINE Logindaten vorhanden
-                                echo '<br />'.$g_l10n->get('NWU_PHR_NO_MEMBERSHIP_NO_LOGIN', $g_organization).'<br />
+                                echo '<br />'.$g_l10n->get('NWU_NO_MEMBERSHIP_NO_LOGIN', $g_organization).'<br />
                                 
                                 <span class="iconTextLink">
                                     <a href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
-                                        alt="'.$g_l10n->get('NWU_PHR_ASSIGN_MEMBERSHIP').'" /></a>
-                                    <a href="'.$link.'">'.$g_l10n->get('NWU_PHR_ASSIGN_MEMBERSHIP').'</a>
+                                        alt="'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP').'" /></a>
+                                    <a href="'.$link.'">'.$g_l10n->get('NWU_ASSIGN_MEMBERSHIP').'</a>
                                 </span>';
                             }               
                         }
@@ -256,7 +256,7 @@ echo '
             <div class="groupBoxHeadline">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</div>
             <div class="groupBoxBody">
                 <div style="margin-left: 20px;">
-                    '. $g_l10n->get('SYS_PHR_CREATE_NOT_FOUND_USER'). '<br />
+                    '. $g_l10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
                     
                     <span class="iconTextLink">
                         <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$req_new_user_id.'&amp;new_user=3"><img

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photoupload
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -35,13 +35,13 @@ require_once('../../system/classes/image.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
 }
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
@@ -74,7 +74,7 @@ if($photo_album->getValue('pho_org_shortname') != $g_organization)
 
 if (empty($_POST) && $_GET['uploadmethod'] == 1)
 {
-    $g_message->show($g_l10n->get('PHO_PHR_NO_FILES_OR_TO_LARGE', ini_get(post_max_size)));
+    $g_message->show($g_l10n->get('PHO_NO_FILES_OR_TO_LARGE', ini_get(post_max_size)));
 }
 
 //bei Bedarf Uploadodner erzeugen
@@ -101,7 +101,7 @@ if($_GET['uploadmethod'] == 1)
 	echo '
 	<h1 class="moduleHeadline">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</h1>
     <p> '.$g_l10n->get('SYS_PLEASE_WAIT').'...<br /><br />
-        '.$g_l10n->get('PHO_PHR_SHOWN_ON_READY').'<strong>('.$photo_album->getValue('pho_name').')</strong>
+        '.$g_l10n->get('PHO_SHOWN_ON_READY').'<strong>('.$photo_album->getValue('pho_name').')</strong>
     </p>';
 }
 
@@ -120,7 +120,7 @@ if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
             //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
             if($_FILES['Filedata']['error'][$x]==1)
             {
-                $g_message->show($g_l10n->get('PHO_PHR_PHOTO_FILES_TO_LARGE', maxUploadSize()));
+                $g_message->show($g_l10n->get('PHO_PHOTO_FILES_TO_LARGE', maxUploadSize()));
                 $x = 5;
             }
         }
@@ -128,7 +128,7 @@ if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
     //Kontrolle ob Fotos ausgewaehlt wurden
     if($counter==0)
     {
-        $g_message->show($g_l10n->get('PHO_PHR_NO_FILES_SELECTED'));
+        $g_message->show($g_l10n->get('PHO_NO_FILES_SELECTED'));
     }
     // Fotos wurden erfolgreich hochgeladen -> Upload-Seite aus der Navi-Klasse entfernen
     $_SESSION['navigation']->deleteLastUrl();
@@ -181,7 +181,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	//Typkontrolle
         elseif($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
         {
-            $g_message->show($g_l10n->get('PHO_PHR_PHOTO_FORMAT_INVALID'));
+            $g_message->show($g_l10n->get('PHO_PHOTO_FORMAT_INVALID'));
         }
     	
     	//Bild in Tempordner verschieben und weiterverarbeiten
@@ -272,10 +272,10 @@ if($_GET['uploadmethod'] == 1)
 		    </li>
 		    <li>
 		        <span class="iconTextLink">
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1" title="'.$g_l10n->get('PHO_PHR_UPLOAD_MORE').'">
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1" title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">
 		            	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Weitere Fotos hochladen" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1"  title="'.$g_l10n->get('PHO_PHR_UPLOAD_MORE').'">'.$g_l10n->get('PHO_PHR_UPLOAD_MORE').'</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1"  title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">'.$g_l10n->get('PHO_UPLOAD_MORE').'</a>
 		        </span>
 		    </li>
 		 </ul>

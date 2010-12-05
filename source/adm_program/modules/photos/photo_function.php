@@ -2,7 +2,7 @@
    /******************************************************************************
  * Photofunktionen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,13 +29,13 @@ if(isset($_GET['job']))
     if ($g_preferences['enable_photo_module'] == 0)
     {
         // das Modul ist deaktiviert
-        $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+        $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
     }
 
     // erst pruefen, ob der User Fotoberarbeitungsrechte hat
     if(!$g_current_user->editPhotoRight())
     {
-        $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
     }
 
     //URL auf Navigationstack ablegen
@@ -174,7 +174,7 @@ elseif($_GET['job'] == 'delete_request')
 {
     // Nachfrage ob geloescht werden soll
    $g_message->setForwardYesNo($g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&bild='. $_GET['bild'].'&job=do_delete');
-   $g_message->show($g_l10n->get('PHO_PHR_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
+   $g_message->show($g_l10n->get('PHO_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
 }
 elseif($_GET['job'] == 'do_delete')
 {

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Uebersicht und Pflege aller organisationsspezifischen Profilfelder
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -15,7 +15,7 @@ require('../../system/classes/table_rooms.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $g_layout['header'] = '
@@ -34,8 +34,8 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '<h1 class="moduleHeadline">'.$g_l10n->get('ROO_ROOM_MANAGEMENT').'</h1>
 <span class="iconTextLink">
     <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'"><img 
-        src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'" /></a>
-    <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'</a>
+        src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'" /></a>
+    <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'</a>
 </span>
 <br/>';
 
@@ -63,11 +63,11 @@ if($g_db->num_rows($rooms_result) == 0)
     // Keine Räume gefunden
     if($req_id > 0)
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -124,11 +124,11 @@ else
                             .$room->getDescription('HTML').'</div>';
                     }
                     echo '<div class="editInformation">'.
-                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create'));
+                    $g_l10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create'));
 
                     if($room->getValue('room_usr_id_change') > 0)
                     {
-                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $room->getValue('room_timestamp_change'));
+                        echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $room->getValue('room_timestamp_change'));
                     }
                 echo '</div>
                 </div>

@@ -3,7 +3,7 @@
  * Meldet den User bei Admidio an, wenn sich dieser einloggen darf
  * Cookies setzen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,12 +48,12 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
 
 if(strlen($loginname) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
+    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
 }
 
 if(strlen($password) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
+    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
 }
 $password = md5($password);
 
@@ -86,7 +86,7 @@ if ($user_found >= 1)
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
         if(time() - strtotime($g_current_session->getValue('ses_timestamp', 'Y-m-d H:i:s')) < 900)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_LOGIN_FAILED'));
+            $g_message->show($g_l10n->get('SYS_LOGIN_FAILED'));
         }
     }
 
@@ -139,13 +139,13 @@ if ($user_found >= 1)
         else
         {
             // User gibt es im Forum nicht, also eine reine Admidio-Anmeldung.
-            $login_message = 'SYS_PHR_LOGIN_SUCCESSFUL';
+            $login_message = 'SYS_LOGIN_SUCCESSFUL';
         }
 
         // bei einer Beta-Version noch einen Hinweis ausgeben !
         if(BETA_VERSION > 0 && $g_debug == false)
         {
-            $login_message = 'SYS_PHR_BETA_VERSION';
+            $login_message = 'SYS_BETA_VERSION';
         }
 
         // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
@@ -178,11 +178,11 @@ if ($user_found >= 1)
 
         if($g_current_user->getValue('usr_number_invalid') >= 3)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_LOGIN_FAILED'));
+            $g_message->show($g_l10n->get('SYS_LOGIN_FAILED'));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_PASSWORD_UNKNOWN'));
+            $g_message->show($g_l10n->get('SYS_PASSWORD_UNKNOWN'));
         }
     }
 }
@@ -198,11 +198,11 @@ else
 
     if($g_db->num_rows($result) == 1)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_LOGIN_NOT_ACTIVATED'));
+        $g_message->show($g_l10n->get('SYS_LOGIN_NOT_ACTIVATED'));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_LOGIN_UNKNOWN'));
+        $g_message->show($g_l10n->get('SYS_LOGIN_UNKNOWN'));
     }
 }
 

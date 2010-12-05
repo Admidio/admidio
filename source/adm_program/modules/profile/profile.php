@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profil anzeigen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,7 +38,7 @@ else
 //Testen ob Recht besteht Profil einzusehn
 if(!$g_current_user->viewProfile($a_user_id))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
@@ -144,8 +144,8 @@ function getFieldCode($field, $user_id)
                 $value = '
                 <a class="iconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
                     src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-                    alt="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
-                    title="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
+                    alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
+                    title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
             }
             $messenger = true;
         }
@@ -157,8 +157,8 @@ function getFieldCode($field, $user_id)
                 $value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
                 <a class="iconLink" href="skype:'.$field->getValue('usd_value').'?add"><img
                     src="http://mystatus.skype.com/smallicon/'.$field->getValue('usd_value').'"
-                    title="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen"
-                    alt="'.$g_l10n->get('PRO_PHR_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen" /></a> '.$value;
+                    title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen"
+                    alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen" /></a> '.$value;
             }
             $messenger = true;
         }
@@ -219,7 +219,7 @@ if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('PRO_PHR_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+    $g_layout['title'] = $g_l10n->get('PRO_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
 }
 $g_layout['header'] = '
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
@@ -229,11 +229,11 @@ $g_layout['header'] = '
     <script type="text/javascript">
     <!--
         var profileJS = new profileJSClass();
-            profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL',"[rol_name]").'\';
-            profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
-            profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_PHR_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
-            profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_PHR_MEMBERSHIP_DEL_ERROR').'\';
-            profileJS.changeRoleDates_ErrorText = \''.$g_l10n->get('ROL_PHR_CHANGE_ROLE_DATES_ERROR').'\';
+            profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_MEMBERSHIP_DEL',"[rol_name]").'\';
+            profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_MEMBERSHIP_DEL_ERROR').'\';
+            profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
+            profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_MEMBERSHIP_DEL_ERROR').'\';
+            profileJS.changeRoleDates_ErrorText = \''.$g_l10n->get('ROL_CHANGE_ROLE_DATES_ERROR').'\';
             profileJS.setBy_Text				= \''.$g_l10n->get('SYS_SET_BY').'\';
             profileJS.usr_id = '.$user->getValue('usr_id').';
 			$(document).ready(function() {
@@ -276,8 +276,8 @@ echo '
                         <div style="text-align: right;">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'). '"><img
                                 src="'. THEME_PATH. '/icons/vcard.png"
-                                alt="'.$g_l10n->get('PRO_PHR_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'"
-                                title="'.$g_l10n->get('PRO_PHR_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'" /></a>';
+                                alt="'.$g_l10n->get('PRO_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'"
+                                title="'.$g_l10n->get('PRO_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'" /></a>';
 
                             // Nur berechtigte User duerfen das Passwort editieren
                             if($user->getValue('usr_id') == $g_current_user->getValue('usr_id') || $g_current_user->isWebmaster())
@@ -340,7 +340,7 @@ echo '
                                                 $bAddressOutput = true;
                                                 echo '<li>
                                                     <dl>
-                                                        <dt>'.$g_l10n->get('PRO_ADDRESS').':</dt>
+                                                        <dt>'.$g_l10n->get('SYS_ADDRESS').':</dt>
                                                         <dd>';
                                                             $address = '';
                                                             $map_url = 'http://maps.google.com/?q=';
@@ -579,68 +579,68 @@ echo '
               if($user->checkRolesRight('rol_assign_roles') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />';
               }
               if($user->checkRolesRight('rol_approve_users') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_approve_users'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/new_registrations.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'" />';
               }
               if($user->checkRolesRight('rol_edit_user') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/group.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'" />';
               }
 
               if($user->checkRolesRight('rol_mail_to_all') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/email.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />';
               }
               if($user->checkRolesRight('rol_profile') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_profile'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/profile.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_PROFILE').'" title="'.$g_l10n->get('ROL_RIGHT_PROFILE').'" />';
               }
               if($user->checkRolesRight('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_announcements'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/announcements.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />';
               }
               if($user->checkRolesRight('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_dates'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/dates.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_DATES').'" title="'.$g_l10n->get('ROL_RIGHT_DATES').'" />';
               }
               if($user->checkRolesRight('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_photo'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/photo.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_PHOTO').'" title="'.$g_l10n->get('ROL_RIGHT_PHOTO').'" />';
               }
               if($user->checkRolesRight('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_download'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/download.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'" />';
               }
               if($user->checkRolesRight('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/guestbook.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'" />';
               }
               if($user->checkRolesRight('rol_guestbook_comments') == 1 && $g_preferences['enable_guestbook_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/comments.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
               }
               if($user->checkRolesRight('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'" />';
               }
               if($user->checkRolesRight('rol_all_lists_view') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/lists.png"
-                  alt="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" />';
+                  alt="'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />';
               }
               echo '</div><div><p id="anzeige">'.$g_l10n->get('SYS_SET_BY').':</p></div>
               </div>';
@@ -770,12 +770,12 @@ echo '
         // Infos der Benutzer, die diesen DS erstellt und geaendert haben
         echo '<div class="editInformation">';
             $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
-            echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
+            echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
 
             if($user->getValue('usr_usr_id_change') > 0)
             {
                 $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
-                echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
+                echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
             }
         echo '</div>    
     </div>
