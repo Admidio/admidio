@@ -382,20 +382,22 @@ echo '
                             }
                             echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
-                            $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
+                            $sql = 'SELECT cat_id, cat_name 
+                                      FROM '. TBL_CATEGORIES. '
                                      WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
                                        AND cat_type   = "DAT"
                                      ORDER BY cat_sequence ASC ';
                             $result = $g_db->query($sql);
 
-                            while($row = $g_db->fetch_object($result))
+                            while($row = $g_db->fetch_array($result))
                             {
-                                echo '<option value="'.$row->cat_id.'"';
-                                    if($date->getValue("dat_cat_id") == $row->cat_id)
+                                echo '<option value="'.$row['cat_id'].'"';
+                                error_log('kategorie:'.$date->getValue('dat_cat_id').'::'.$row['cat_id']);
+                                    if($date->getValue('dat_cat_id') == $row['cat_id'])
                                     {
                                         echo ' selected="selected" ';
                                     }
-                                echo '>'.$row->cat_name.'</option>';
+                                echo '>'.$row['cat_name'].'</option>';
                             }
                         echo '</select>
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
@@ -426,19 +428,28 @@ echo '
                         <dl>
                             <dt>'.$g_l10n->get('SYS_ROOM').':</dt>
                             <dd>
-                                <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6" onchange="toggleRolId()">';
-                                $room = new TableRooms($g_db);
-                                $room_choice = $room->getRoomsArray();
-                                foreach($room_choice as $key => $value)
-                                {
-                                    $selected = '';
-                                    if($key == $date->getValue('dat_room_id'))
+                                <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6" onchange="toggleRolId()">
+                                    <option value="0"';
+                                    if($date->getValue('dat_room_id') == 0)
                                     {
-                                        $selected = ' selected="selected"';
+                                        echo ' selected="selected" ';
                                     }
-                                    
-                                    echo '<option value="'.$key.'"'.$selected.'>'.$value['name'].' ('.$value['capacity'].'+'.$value['overhang'].')</option>';
-                                }
+                                    echo '>'.$g_l10n->get('SYS_NONE').'</option>';
+        
+                                    $sql = 'SELECT room_id, room_name, room_capacity, room_overhang 
+                                              FROM '.TBL_ROOMS.'
+                                             ORDER BY room_name';
+                                    $result = $g_db->query($sql);
+        
+                                    while($row = $g_db->fetch_array($result))
+                                    {
+                                        echo '<option value="'.$row['room_id'].'"';
+                                            if($date->getValue('dat_room_id') == $row['room_id'])
+                                            {
+                                                echo ' selected="selected" ';
+                                            }
+                                        echo '>'.$row['room_name'].' ('.$row['room_capacity'].'+'.$row['room_overhang'].')</option>';
+                                    }
                                 echo '</select>
                             </dd>
                         </dl>

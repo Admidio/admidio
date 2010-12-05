@@ -66,49 +66,47 @@ if($inlineView)
 switch ($req_message_id)
 {
     case 'bbcode':
-        echo 'Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks)
-              können mit verschiedenen Tags (BBCode) formatiert werden. Dafür müssen die
-              hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.<br /><br />
+        echo $g_l10n->get('SYS_PHR_BBCODE_DESC').'<br /><br />
               <table class="tableList" style="width: auto;" cellspacing="0">
                  <tr>
-                    <th style="width: 155px;">Beispiel</th>
-                    <th>BBCode</th>
+                    <th style="width: 155px;">'.$g_l10n->get('SYS_EXAMPLE').'</th>
+                    <th>'.$g_l10n->get('SYS_BBCODE').'</th>
                  </tr>
                  <tr>
-                    <td>Text <b>fett</b> darstellen</td>
-                    <td>Text <b>[b]</b>fett<b>[/b]</b> darstellen</td>
+                    <td>'.$g_l10n->get('SYS_BOLD_TEXT_REPRESENT', '<b>', '</b>').'</td>
+                    <td>'.$g_l10n->get('SYS_BOLD_TEXT_REPRESENT', '<b>[b]</b>', '<b>[/b]</b>').'</td>
                  </tr>
                  <tr>
-                    <td>Text <u>unterstreichen</u></td>
-                    <td>Text <b>[u]</b>unterstreichen<b>[/u]</b></td>
+                    <td>'.$g_l10n->get('SYS_UNDERLINE_TEXT', '<u>', '</u>').'</td>
+                    <td>'.$g_l10n->get('SYS_UNDERLINE_TEXT', '<b>[u]</b>', '<b>[/u]</b>').'</td>
                  </tr>
                  <tr>
-                    <td>Text <i>kursiv</i> darstellen</td>
-                    <td>Text <b>[i]</b>kursiv<b>[/i]</b> darstellen</td>
+                    <td>'.$g_l10n->get('SYS_TEXT_ITALIC', '<i>', '</i>').'</td>
+                    <td>'.$g_l10n->get('SYS_TEXT_ITALIC', '<b>[i]</b>', '<b>[/i]</b>').'</td>
                  </tr>
                  <tr>
-                    <td>Text <span style="font-size: 14pt;">groß</span> darstellen</td>
-                    <td>Text <b>[big]</b>groß<b>[/big]</b> darstellen</td>
+                    <td>'.$g_l10n->get('SYS_REPRESENT_LARGE_TEXT', '<span style="font-size: 14pt;">', '</span>').'</td>
+                    <td>'.$g_l10n->get('SYS_REPRESENT_LARGE_TEXT', '<b>[big]</b>', '<b>[/big]</b>').'</td>
                  </tr>
                  <tr>
-                    <td>Text <span style="font-size: 8pt;">klein</span> darstellen</td>
-                    <td>Text <b>[small]</b>klein<b>[/small]</b> darstellen</td>
+                    <td>'.$g_l10n->get('SYS_REPRESENT_SMALL_TEXT', '<span style="font-size: 8pt;">', '</span>').'</td>
+                    <td>'.$g_l10n->get('SYS_REPRESENT_SMALL_TEXT', '<b>[small]</b>', '<b>[/small]</b>').'</td>
                  </tr>
                  <tr>
-                    <td style="text-align: center;">Text zentriert darstellen</td>
-                    <td><b>[center]</b>Text zentriert darstellen<b>[/center]</b></td>
+                    <td style="text-align: center;">'.$g_l10n->get('SYS_CENTERED_TEXT_REPRESENT').'</td>
+                    <td><b>[center]</b>'.$g_l10n->get('SYS_CENTERED_TEXT_REPRESENT').'<b>[/center]</b></td>
                  </tr>
                  <tr>
-                    <td>Einen <a href="http://www.admidio.org">Link</a> setzen</td>
-                    <td>Einen <b>[url=</b>http://www.admidio.org<b>]</b>Link<b>[/url]</b> setzen</td>
+                    <td>'.$g_l10n->get('SYS_SET_LINK', '<a href="http://www.admidio.org">', '</a>').'</td>
+                    <td>'.$g_l10n->get('SYS_SET_LINK', '<b>[url=</b>http://www.admidio.org<b>]</b>', '<b>[/url]</b>').'</td>
                  </tr>
                  <tr>
-                    <td>Eine <a href="mailto:webmaster@admidio.org">Mailadresse</a> angeben</td>
-                    <td>Eine <b>[email=</b>webmaster@admidio.org<b>]</b> Mailadresse<b>[/email]</b> angeben</td>
+                    <td>'.$g_l10n->get('SYS_SPECIFY_EMAIL_ADDRESS', '<a href="mailto:webmaster@admidio.org">', '</a>').'</td>
+                    <td>'.$g_l10n->get('SYS_SPECIFY_EMAIL_ADDRESS', '<b>[email=</b>webmaster@admidio.org<b>]</b>', '<b>[/email]</b>').'</td>
                  </tr>
                  <tr>
-                    <td>Ein Bild <img src="'.THEME_PATH.'/images/admidio_logo_20.png" alt="logo" /> anzeigen</td>
-                    <td>Ein Bild <b>[img]</b>http://www.admidio.org/bild.jpg<b>[/img]</b> anzeigen</td>
+                    <td>'.$g_l10n->get('SYS_SHOW_IMAGE', '<img src="'.THEME_PATH.'/images/admidio_logo_20.png" alt="logo" />').'</td>
+                    <td>'.$g_l10n->get('SYS_SHOW_IMAGE', '<b>[img]</b>http://www.admidio.org/bild.jpg<b>[/img]</b>').'</td>
                  </tr>
               </table>';
         break;
@@ -135,19 +133,19 @@ switch ($req_message_id)
             echo '
             <table>
                 <tr>
-                    <td><strong>Raumname:</strong></td>
+                    <td><strong>'.$g_l10n->get('SYS_ROOM').':</strong></td>
                     <td>'.$room->getValue('room_name').'</td>
                 </tr>
                 <tr>
-                    <td><strong>Kapazität:</strong></td>
+                    <td><strong>'.$g_l10n->get('ROO_CAPACITY').':</strong></td>
                     <td>'.$room->getValue('room_capacity').'</td>
                 </tr>
                 <tr>
-                    <td><strong>Überhang:</strong></td>
+                    <td><strong>'.$g_l10n->get('ROO_OVERHANG').':</strong></td>
                     <td>'.$room->getValue('room_overhang').'</td>
                 </tr>
                 <tr>
-                    <td><strong>Raumbeschreibung:</strong></td>
+                    <td><strong>'.$g_l10n->get('SYS_DESCRIPTION').':</strong></td>
                     <td>'.$room->getDescription('HTML').'</td>
                 </tr>
             </table>';

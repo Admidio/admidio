@@ -88,67 +88,6 @@
 	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new guestbook entry was created</text>
 	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new guestbookentry at %VAR1% was created.\n\nText: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
 	<text id="GBO_PHR_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
-	
-	<!-- Phrases only in Linkmodule -->
-	<text id="LNK_COUNTER" development="new" translation="todo">Hits</text>
-    <text id="LNK_CREATE_LINK" development="new" translation="todo">Create new link</text>
-    <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Show redirect</text>
-	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new weblink was created</text>
-	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new weblink at %VAR1% was created.\n\nLinkadress: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
-    <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadress</text>
-    <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
-    <text id="LNK_LINK_TARGET" development="new" translation="todo">Linktarget</text>
-    <text id="LNK_NEW_WINDOW" development="new" translation="todo">New window</text>
-    <text id="LNK_PHR_DISPLAY_REDIRECT" development="new" translation="todo">By using this setting option you can activate the automatically redirection. If you choose a weblink from the linkmodule a internal Admidio site is displayed with a statement of leaving the original website. After delay you will be redirected to the real link. By setting redirect to 0 the link will be displayed direct. (predefined: 10 seconds)</text>
-    <text id="LNK_PHR_GO_TO" development="new" translation="todo">Go to %VAR1%</text>
-    <text id="LNK_PHR_LINK_TARGET" development="new" translation="todo">You can choose if the selected website will be displayed in the same window like Admidio or in a new window.</text>
-    <text id="LNK_PHR_LINKS_FROM" development="new" translation="todo">Links of %VAR1%</text>
-    <text id="LNK_PHR_REDIRECT" development="new" translation="todo">You are leaving the website of %VAR1_BOLD% and will be redirected automatically to %VAR3% in %VAR2% seconds.\n\nIf the automatically redirection is not working please click %VAR4%!</text>
-    <text id="LNK_REDIRECT" development="new" translation="todo">Redirect</text>
-    <text id="LNK_SAME_WINDOW" development="new" translation="todo">Same window</text>
-    <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
-	
-	<!-- Phrases only in Mailmodule -->
-	<text id="MAI_PHR_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
-	
-	<!-- Phrases only in Organizationadministration -->
-	<text id="ORG_CAPTCHA" development="new" translation="todo">Use this seetings for the captcha options.</text>
-	<text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Backgroundcolor</text>
-	<text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Choose the backgroundcolor (as hex) for the captcha code. (predefined: #FFEFC4)</text>
-	<text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Choose the font for the captcha code. (predefined: Theme font)</text>
-	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha code. (predefined: 20)</text>
-	<text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha preview</text>
-	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">You can get a preview of the captcha. Please note that only saved values are considered!</text>
-	<text id="ORG_CAPTCHA_SIZE" development="new" translation="todo">Choose the scaling for the captcha.</text>
-	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha signature</text>
-	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha signature. (predefined: 9)</text>
-	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Type in your preferred signature for the captcha. The standard font from the current theme will be used.</text>
-	<text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Accepted signs</text>
-	<text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Type in the accepted signs for the captcha.</text>
-	<text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Scaling of the captcha (width x high)</text>
-	<text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Type of captcha</text>
-	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Calculation</text>
-	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Picture</text>
-	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">You can choose the type of captcha. The following options are for display the captcha as a picture or you set up it as a simple calculation as text. (predifined: picture)</text>
-	<text id="ORG_PHR_CAPTCHA_REGISTRATION" development="new" translation="todo">If this option is activated new users will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
-	
-	<!-- Phrases only in Updatecheck -->
-	<text id="UPD_ADMIDIO" development="new" translation="todo">Go to Admidio updatesite</text>
-	<text id="UPD_BETA_VERSION" development="new" translation="todo">Current beta version</text>
-	<text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Connection to the Admidio updatesite could not established. Please check your internetconnection or try again later. You can also check the %VAR1% website manually for an update.</text>
-	<text id="UPD_CURRENT_VERSION" development="new" translation="todo">Installed version</text>
-	<text id="UPD_NEW" development="new" translation="todo">A new stable version is available!</text>
-	<text id="UPD_NEW_BETA" development="new" translation="todo">A new beta version is available!</text>
-	<text id="UPD_NEW_BOTH" development="new" translation="todo">A new stable version and a new beta version are available!</text>
-	<text id="UPD_NO_NEW" development="new" translation="todo">You are using a current %VAR1%version of Admidio!</text>
-	<text id="UPD_STABLE_VERSION" development="new" translation="todo">Current stable Admidio version</text>
-	<text id="UPD_TITLE" development="new" translation="todo">Update check</text>
-	
-	
-    <!-- Phrases only in Photomodule -->
-	<text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new photo album was created</text>
-	<text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new photo album at %VAR1% was created.\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
-   
    
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="edited" translation="todo">Add another organization</text>
@@ -250,6 +189,65 @@
     <text id="INS_UPDATE_DATABASE" development="edited" translation="todo">Update database</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="edited" translation="todo">Update process successful</text>
     <text id="INS_YAHOO_MESSENGER" development="new1" translation="todo">Yahoo! Messenger</text>
+	
+	<!-- Phrases only in Linkmodule -->
+	<text id="LNK_COUNTER" development="new" translation="todo">Hits</text>
+    <text id="LNK_CREATE_LINK" development="new" translation="todo">Create new link</text>
+    <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Show redirect</text>
+	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new weblink was created</text>
+	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new weblink at %VAR1% was created.\n\nLinkadress: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
+    <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadress</text>
+    <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
+    <text id="LNK_LINK_TARGET" development="new" translation="todo">Linktarget</text>
+    <text id="LNK_NEW_WINDOW" development="new" translation="todo">New window</text>
+    <text id="LNK_PHR_DISPLAY_REDIRECT" development="new" translation="todo">By using this setting option you can activate the automatically redirection. If you choose a weblink from the linkmodule a internal Admidio site is displayed with a statement of leaving the original website. After delay you will be redirected to the real link. By setting redirect to 0 the link will be displayed direct. (predefined: 10 seconds)</text>
+    <text id="LNK_PHR_GO_TO" development="new" translation="todo">Go to %VAR1%</text>
+    <text id="LNK_PHR_LINK_TARGET" development="new" translation="todo">You can choose if the selected website will be displayed in the same window like Admidio or in a new window.</text>
+    <text id="LNK_PHR_LINKS_FROM" development="new" translation="todo">Links of %VAR1%</text>
+    <text id="LNK_PHR_REDIRECT" development="new" translation="todo">You are leaving the website of %VAR1_BOLD% and will be redirected automatically to %VAR3% in %VAR2% seconds.\n\nIf the automatically redirection is not working please click %VAR4%!</text>
+    <text id="LNK_REDIRECT" development="new" translation="todo">Redirect</text>
+    <text id="LNK_SAME_WINDOW" development="new" translation="todo">Same window</text>
+    <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
+    
+	<!-- Phrases only in Mailmodule -->
+	<text id="MAI_PHR_CAPTCHA_DESC" development="new" translation="todo">If this option is activated users that are not logged in will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
+	
+	<!-- Phrases only in Organizationadministration -->
+	<text id="ORG_CAPTCHA" development="new" translation="todo">Use this seetings for the captcha options.</text>
+	<text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Backgroundcolor</text>
+	<text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Choose the backgroundcolor (as hex) for the captcha code. (predefined: #FFEFC4)</text>
+	<text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Choose the font for the captcha code. (predefined: Theme font)</text>
+	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha code. (predefined: 20)</text>
+	<text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha preview</text>
+	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">You can get a preview of the captcha. Please note that only saved values are considered!</text>
+	<text id="ORG_CAPTCHA_SIZE" development="new" translation="todo">Choose the scaling for the captcha.</text>
+	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha signature</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Choose the font size for the captcha signature. (predefined: 9)</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Type in your preferred signature for the captcha. The standard font from the current theme will be used.</text>
+	<text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Accepted signs</text>
+	<text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Type in the accepted signs for the captcha.</text>
+	<text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Scaling of the captcha (width x high)</text>
+	<text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Type of captcha</text>
+	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Calculation</text>
+	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Picture</text>
+	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">You can choose the type of captcha. The following options are for display the captcha as a picture or you set up it as a simple calculation as text. (predifined: picture)</text>
+	<text id="ORG_PHR_CAPTCHA_REGISTRATION" development="new" translation="todo">If this option is activated new users will get a picture with a captcha code or a simple calculation. It's neccesary to fill in the correct code or result to save the entry. The captcha is part of antispam solution in Admidio. (predefined: yes)</text>
+	
+	<!-- Phrases only in Updatecheck -->
+	<text id="UPD_ADMIDIO" development="new" translation="todo">Go to Admidio updatesite</text>
+	<text id="UPD_BETA_VERSION" development="new" translation="todo">Current beta version</text>
+	<text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Connection to the Admidio updatesite could not established. Please check your internetconnection or try again later. You can also check the %VAR1% website manually for an update.</text>
+	<text id="UPD_CURRENT_VERSION" development="new" translation="todo">Installed version</text>
+	<text id="UPD_NEW" development="new" translation="todo">A new stable version is available!</text>
+	<text id="UPD_NEW_BETA" development="new" translation="todo">A new beta version is available!</text>
+	<text id="UPD_NEW_BOTH" development="new" translation="todo">A new stable version and a new beta version are available!</text>
+	<text id="UPD_NO_NEW" development="new" translation="todo">You are using a current %VAR1%version of Admidio!</text>
+	<text id="UPD_STABLE_VERSION" development="new" translation="todo">Current stable Admidio version</text>
+	<text id="UPD_TITLE" development="new" translation="todo">Update check</text>
+	
+    <!-- Phrases only in Photomodule -->
+	<text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">A new photo album was created</text>
+	<text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">A new photo album at %VAR1% was created.\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ACTIVATED" development="edited" translation="todo">Activated</text>

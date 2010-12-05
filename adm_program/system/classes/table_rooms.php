@@ -12,22 +12,11 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 class TableRooms extends TableAccess
 {
 	protected $bbCode;
-    protected $room_choice = array(
-                0 => '---'
-    ); //beihnaltet alle in der DB gespeicherten Räume
     
     // Konstruktor
     public function __construct(&$db, $room = '')
     {
         parent::__construct($db, TBL_ROOMS, 'room', $room);
-        
-        //room_choice befüllen
-        $sql = 'SELECT room_id, room_name, room_capacity, room_overhang FROM '.TBL_ROOMS.'';
-        $result = $this->db->query($sql);
-        while($row = $this->db->fetch_array($result))
-        {
-            $this->room_choice[$row['room_id']] = array('name' => $row['room_name'], 'capacity' => $row['room_capacity'], 'overhang' => $row['room_overhang']);
-        }
     }
     
     // liefert die Beschreibung je nach Type zurueck
@@ -59,11 +48,6 @@ class TableRooms extends TableAccess
             $description = nl2br($this->getValue('room_description'));
         }
         return $description;
-    }
-
-    public function getRoomsArray()
-    {
-        return $this->room_choice;
     }
 
     // Raum mit der uebergebenen ID oder dem Raumnamen aus der Datenbank auslesen
