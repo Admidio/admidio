@@ -2,7 +2,7 @@
 /******************************************************************************
  * Anlegen neuer Mitglieder
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
 if (!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 echo '
@@ -31,7 +31,7 @@ function send()
     }
     else
     {
-        alert("'.$g_l10n->get('SYS_PHR_FIELDS_EMPTY').'");
+        alert("'.$g_l10n->get('SYS_FIELDS_EMPTY').'");
     }
 }
 //--></script>
@@ -41,7 +41,7 @@ function send()
     <div class="formHead">'. $g_l10n->get('MEM_CREATE_USER'). '</div>
     <div class="formBody">
         <ul class="formFieldList">
-            <li>'.$g_l10n->get('MEM_PHR_INPUT_FIRSTNAME_LASTNAME').'</li>
+            <li>'.$g_l10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</li>
             <li>
                 <dl>
                     <dt><label for="lastname">'.$g_l10n->get('SYS_LASTNAME').':</label></dt>

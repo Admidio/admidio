@@ -2,7 +2,7 @@
 /******************************************************************************
  * RSS - Feed fuer Links
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,14 +21,14 @@ require_once('../../system/classes/table_weblink.php');
 if ($g_preferences['enable_rss'] != 1)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_PHR_RSS_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_RSS_DISABLED'));
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if ($g_preferences['enable_weblinks_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // alle Links aus der DB fischen...
@@ -58,7 +58,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('LNK_LINKS'), $g_l10n->get('LNK_PHR_LINKS_FROM', $g_current_organization->getValue('org_longname')));
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('LNK_LINKS'), $g_l10n->get('LNK_LINKS_FROM', $g_current_organization->getValue('org_longname')));
 $weblink = new TableWeblink($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -78,11 +78,11 @@ while ($row = $g_db->fetch_object($result))
                    '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_PHR_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $weblink->getValue('lnk_timestamp_create')). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $weblink->getValue('lnk_timestamp_create')). '</i>';
 
     if($weblink->getValue('lnk_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $weblink->getValue('lnk_timestamp_change')). '</i>';
+        $description = $description. '<br /><i>'.$g_l10n->get('SYS_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $weblink->getValue('lnk_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Script mit HTML-Code fuer ein Feld der Eigenen-Liste-Konfiguration
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen Querysuggestions empfangen
 if (!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 if (isset($_GET['members']) && is_numeric($_GET['members']))

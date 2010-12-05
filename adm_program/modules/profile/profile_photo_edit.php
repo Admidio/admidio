@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profil bearbeiten
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@ require_once('../../system/classes/my_files.php');
 //pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
+    $g_message->show($g_l10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -57,7 +57,7 @@ if($job != 'save' && $job!='delete' && $job != 'dont_save' && $job != 'upload' &
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if($g_current_user->editProfile($req_usr_id) == false)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // bei Ordnerspeicherung pruefen ob der Unterordner in adm_my_files mit entsprechenden Rechten existiert
@@ -114,7 +114,7 @@ if($job=='save')
     // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show($g_l10n->get('PRO_PHR_PHOTO_SAVED'));
+    $g_message->show($g_l10n->get('PRO_PHOTO_SAVED'));
 }    
 elseif($job=='dont_save')
 {
@@ -135,13 +135,13 @@ elseif($job=='dont_save')
     }
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show($g_l10n->get('SYS_PHR_PROCESS_CANCELED'));
+    $g_message->show($g_l10n->get('SYS_PROCESS_CANCELED'));
 }
 elseif($job=='msg_delete')
 {
     /*********************** Nachfrage Foto loeschen *************************************/
     $g_message->setForwardYesNo($g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$req_usr_id.'&job=delete');
-    $g_message->show($g_l10n->get('PRO_PHR_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
+    $g_message->show($g_l10n->get('PRO_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
 }
 elseif($job=='delete')
 {
@@ -161,7 +161,7 @@ elseif($job=='delete')
         
     // zur Ausgangsseite zurueck
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show($g_l10n->get('PRO_PHR_PHOTO_DELETED'));
+    $g_message->show($g_l10n->get('PRO_PHOTO_DELETED'));
 }
 
 /*********************** Kontrollmechanismen *********************************/
@@ -170,27 +170,27 @@ elseif( isset($_POST['upload']))
     //Dateigroesse
     if ($_FILES['foto_upload_file']['error']==1)
     {
-        $g_message->show($g_l10n->get('PRO_PHR_PHOTO_FILE_TO_LARGE', round(maxUploadSize()/pow(1024, 2))));
+        $g_message->show($g_l10n->get('PRO_PHOTO_FILE_TO_LARGE', round(maxUploadSize()/pow(1024, 2))));
     }
 
     //Kontrolle ob Fotos ausgewaehlt wurden
     if(file_exists($_FILES['foto_upload_file']['tmp_name']) == false)
     {
-        $g_message->show($g_l10n->get('PRO_PHR_PHOTO_NOT_CHOOSEN'));
+        $g_message->show($g_l10n->get('PRO_PHOTO_NOT_CHOOSEN'));
     }
 
     //Dateiendung
     $image_properties = getimagesize($_FILES['foto_upload_file']['tmp_name']);
     if ($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
     {
-        $g_message->show($g_l10n->get('PRO_PHR_PHOTO_INVALID_FORMAT'));
+        $g_message->show($g_l10n->get('PRO_PHOTO_INVALID_FORMAT'));
     }
 
     //Auflösungskontrolle
     $image_dimensions = $image_properties[0]*$image_properties[1];
     if($image_dimensions > processableImageSize())
     {
-    	$g_message->show($g_l10n->get('PRO_PHR_PHOTO_RESOLUTION_TO_LARGE', round(processableImageSize()/1000000, 2)));
+    	$g_message->show($g_l10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(processableImageSize()/1000000, 2)));
     }
 }//Kontrollmechanismen
 
@@ -206,7 +206,7 @@ if($job==NULL)
     }
     else
     {
-        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+        $headline = $g_l10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
 
     $g_layout['title']  = $headline;
@@ -226,13 +226,13 @@ if($job==NULL)
         <div class="formBody">
             <p>'.$g_l10n->get('PRO_CURRENT_PICTURE').':</p>
             <img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" />
-            <p>'.$g_l10n->get('PRO_PHR_SELECT_NEW_PIC_HERE').':</p>
+            <p>'.$g_l10n->get('PRO_SELECT_NEW_PIC_HERE').':</p>
             <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="'.$g_l10n->get('SYS_SEARCH_AFTER').'" /></p>
 
             <hr />
 
             <div class="formSubmit">
-                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('PRO_UPLOAD_PHOTO').'</button>
+                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$g_l10n->get('PRO_UPLOAD_PHOTO').'" />&nbsp;'.$g_l10n->get('PRO_UPLOAD_PHOTO').'</button>
             </div>
         </div>
     </div>
@@ -290,7 +290,7 @@ elseif($job=='upload')
     }
     else
     {
-        $headline = $g_l10n->get('PRO_PHR_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+        $headline = $g_l10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
     
     $g_layout['title'] = $headline;

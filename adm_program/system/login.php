@@ -2,7 +2,7 @@
 /******************************************************************************
  * Loginseite
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -68,7 +68,7 @@ echo '
         if($g_preferences['registration_mode'] > 0)
         {
             echo '<div class="smallFontSize" style="margin-top: 5px;">
-                <a href="'.$g_root_path.'/adm_program/system/registration.php">'.$g_l10n->get('SYS_PHR_WANT_REGISTER').'</a>
+                <a href="'.$g_root_path.'/adm_program/system/registration.php">'.$g_l10n->get('SYS_WANT_REGISTER').'</a>
             </div>';
         }
 
@@ -92,7 +92,7 @@ echo '
         }
 
         echo '<div class="smallFontSize" style="margin-top: 5px;">
-            <a href="'.$mail_link.'">'.$g_l10n->get('SYS_PHR_PASSWORD_FORGOTTEN').'</a>
+            <a href="'.$mail_link.'">'.$g_l10n->get('SYS_FORGOT_MY_PASSWORD').'</a>
         </div>
         <div class="smallFontSize" style="margin-top: 20px;">
             Powered by <a href="http://www.admidio.org">Admidio</a>

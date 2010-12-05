@@ -2,7 +2,7 @@
 /******************************************************************************
  * Einrichtung einer weiteren Organisation
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -87,8 +87,8 @@ if($req_mode == 1)
 {
     // Willkommen zur Installation
     session_destroy();
-    $message = '<strong>'.$g_l10n->get('INS_PHR_WELCOME_INSTALLATION_NEW_ORGANIZATION').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_NECESSARY_INFORMATION');
+    $message = '<strong>'.$g_l10n->get('INS_WELCOME_INSTALLATION_NEW_ORGANIZATION').'</strong><br /><br />
+                '.$g_l10n->get('INS_NECESSARY_INFORMATION');
     showPage($message, 'new_organization.php?mode=2', 'forward.png', $g_l10n->get('INS_SET_ORGANIZATION'), 3);
 }
 elseif($req_mode == 2)
@@ -106,7 +106,7 @@ elseif($req_mode == 2)
     }
 
     $message = '<strong>'.$g_l10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_NAME_OF_NEW_ORGANIZATION').'
+                '.$g_l10n->get('INS_NAME_OF_NEW_ORGANIZATION').'
 
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$g_l10n->get('INS_NAME_OF_ORGANIZATION').'</div>
@@ -157,7 +157,7 @@ elseif($req_mode == 3)
         $user_login = '';
     }
     $message = '<strong>'.$g_l10n->get('INS_SET_ADMINISTRATOR').'</strong><br /><br />
-               '.$g_l10n->get('INS_PHR_LOGIN_OF_WEBMASTER').'
+               '.$g_l10n->get('INS_LOGIN_OF_WEBMASTER_DESC').'
 
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$g_l10n->get('INS_LOGIN_OF_WEBMASTER').'</div>
@@ -194,7 +194,7 @@ elseif($req_mode == 4)
         if(strlen($_SESSION['user_login']) == 0
         || strlen($_POST['user_password']) == 0 )
         {
-            showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
+            showPage($g_l10n->get('INS_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
         }
 
         // Verbindung zu Datenbank herstellen
@@ -220,7 +220,7 @@ elseif($req_mode == 4)
 
         if($user_found != 1)
         {
-            showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_VALID'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
+            showPage($g_l10n->get('INS_LOGIN_WEBMASTER_NOT_VALID'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
         }
         else
         {
@@ -229,12 +229,12 @@ elseif($req_mode == 4)
     }
 
     $message = '<strong>'.$g_l10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_default.php').'<br /><br />
+                '.$g_l10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_default.php').'<br /><br />
 
                 <span class="iconTextLink">
                     <a href="new_organization.php?mode=5"><img
-                    src="layout/page_white_download.png" alt="'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'" /></a>
-                    <a href="new_organization.php?mode=5">'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'</a>
+                    src="layout/page_white_download.png" alt="'.$g_l10n->get('INS_DOWNLOAD', 'config.php').'" /></a>
+                    <a href="new_organization.php?mode=5">'.$g_l10n->get('INS_DOWNLOAD', 'config.php').'</a>
                 </span>
                 <br />';
     showPage($message, 'new_organization.php?mode=6', 'database_in.png', $g_l10n->get('INS_SET_UP_ORGANIZATION'), 3);
@@ -243,7 +243,7 @@ elseif($req_mode == 5)
 {
 	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
 	{
-        showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
+        showPage($g_l10n->get('INS_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
    	}
 
     // MySQL-Zugangsdaten in config.php schreiben
@@ -285,12 +285,12 @@ elseif($req_mode == 6)
 
 	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
 	{
-        showPage($g_l10n->get('INS_PHR_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
+        showPage($g_l10n->get('INS_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'), 3);
    	}
 
     if(file_exists('../config.php') == false)
     {
-        showPage($g_l10n->get('INS_PHR_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'new_organization.php?mode=4', 'back.png', $g_l10n->get('SYS_BACK'), 3);
+        showPage($g_l10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'new_organization.php?mode=4', 'back.png', $g_l10n->get('SYS_BACK'), 3);
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
@@ -371,7 +371,7 @@ elseif($req_mode == 6)
     $role_webmaster = new TableRoles($db);
     $role_webmaster->setValue('rol_cat_id', $category_common);
     $role_webmaster->setValue('rol_name', $g_l10n->get('SYS_WEBMASTER'));
-    $role_webmaster->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_WEBMASTER'));
+    $role_webmaster->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_WEBMASTER'));
     $role_webmaster->setValue('rol_assign_roles', 1);
     $role_webmaster->setValue('rol_approve_users', 1);
     $role_webmaster->setValue('rol_announcements', 1);
@@ -393,7 +393,7 @@ elseif($req_mode == 6)
     $role_member = new TableRoles($db);
     $role_member->setValue('rol_cat_id', $category_common);
     $role_member->setValue('rol_name', $g_l10n->get('SYS_MEMBER'));
-    $role_member->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_MEMBER'));
+    $role_member->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_MEMBER'));
     $role_member->setValue('rol_mail_this_role', 2);
     $role_member->setValue('rol_profile', 1);
     $role_member->setValue('rol_this_list_view', 1);
@@ -403,7 +403,7 @@ elseif($req_mode == 6)
     $role_management = new TableRoles($db);
     $role_management->setValue('rol_cat_id', $category_common);
     $role_management->setValue('rol_name', $g_l10n->get('INS_BOARD'));
-    $role_management->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_BOARD'));
+    $role_management->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_BOARD'));
     $role_management->setValue('rol_announcements', 1);
     $role_management->setValue('rol_dates', 1);
     $role_management->setValue('rol_weblinks', 1);
@@ -479,10 +479,10 @@ elseif($req_mode == 6)
     session_unset();
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_SETUP_WAS_SUCCESSFUL').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_SETUP_NEW_ORGANIZATION_SUCCESSFUL', $_SESSION['orga_name_long']);
+                '.$g_l10n->get('INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL', $_SESSION['orga_name_long']);
     if(is_writeable('../adm_my_files') == false)
     {
-        $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$g_l10n->get('INS_PHR_FOLDER_NOT_WRITABLE', 'adm_my_files');
+        $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$g_l10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
     showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'));
 }

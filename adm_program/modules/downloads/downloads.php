@@ -2,7 +2,7 @@
 /******************************************************************************
  * Downloads auflisten
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,7 @@ require_once('../../system/file_extension_icons.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // Uebergabevariablen pruefen
@@ -56,7 +56,7 @@ if ($returnValue < 0)
 	if($returnValue == -2)
 	{
 		//oder Benutzer darf nicht zugreifen
-		$g_message->show($g_l10n->get('DOW_PHR_FOLDER_NO_RIGHTS'));
+		$g_message->show($g_l10n->get('DOW_FOLDER_NO_RIGHTS'));
 	}
 	else
 	{
@@ -149,7 +149,7 @@ if (count($folderContent) == 0)
     }
 
     echo'<tr>
-       <td colspan="'.$colspan.'">'.$g_l10n->get('DOW_PHR_FOLDER_NO_FILES').'</td>
+       <td colspan="'.$colspan.'">'.$g_l10n->get('DOW_FOLDER_NO_FILES').'</td>
     </tr>';
 }
 else
@@ -187,8 +187,8 @@ else
                         <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         if (!$nextFolder['fol_exists'])
                         {
-                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_FOLDER_NOT_EXISTS&amp;inline=true"><img 
-				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_FOLDER_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
+                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS&amp;inline=true"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
 				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /></a>';
                         }
 
@@ -244,8 +244,8 @@ else
                         <a class="iconLink" href="javascript:deleteObject(\'fil\', \'row_file_'.$nextFile['fil_id'].'\','.$nextFile['fil_id'].',\''.$nextFile['fil_name'].'\')">
                         <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         if (!$nextFile['fil_exists']) {
-                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NOT_EXISTS&amp;inline=true"><img 
-				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
+                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS&amp;inline=true"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
 				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /></a>';
                         }
 
@@ -272,8 +272,8 @@ if ($g_current_user->editDownloadRight())
         echo '
         <h3>
             '.$g_l10n->get('DOW_UNMANAGED_FILES').'
-			<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_ADDITIONAL_FILES&amp;inline=true"><img 
-                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_ADDITIONAL_FILES\',this)" onmouseout="ajax_hideTooltip()"
+			<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"><img 
+                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES\',this)" onmouseout="ajax_hideTooltip()"
                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>            
         </h3>
 

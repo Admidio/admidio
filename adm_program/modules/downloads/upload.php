@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neue Datei hochladen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,7 +21,7 @@ require_once('../../system/classes/table_folder.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 //maximaler Fileupload fuer das Downloadmodul muss groesser 0 sein
@@ -33,13 +33,13 @@ if ($g_preferences['max_file_upload_size'] == 0) {
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
+    $g_message->show($g_l10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
 // Uebergabevariablen pruefen
@@ -104,7 +104,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt>'.$g_l10n->get('DOW_PHR_UPLOAD_FILE', $parentFolderName).'</dt>
+                    <dt>'.$g_l10n->get('DOW_UPLOAD_FILE_TO_FOLDER', $parentFolderName).'</dt>
                     <dd>&nbsp;</dd>
                 </dl>
             </li>
@@ -124,8 +124,8 @@ echo '
                     <dd>
                         <input type="text" id="new_name" name="new_name" tabindex="2" value="'.$form_values['new_name'].'" style="width: 250px;" maxlength="255" />
                         &nbsp;('.$g_l10n->get('SYS_OPTIONAL').')
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NAME_RULES&amp;inline=true"><img 
-			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES&amp;inline=true"><img 
+			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
 			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                     </dd>
                 </dl>

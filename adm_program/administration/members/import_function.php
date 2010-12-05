@@ -2,7 +2,7 @@
 /******************************************************************************
  * Spalten einer CSV-Datei werden Datenbankfeldern zugeordnet
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,21 +27,21 @@ if(isset($_POST['user_import_mode']) == false || is_numeric($_POST['user_import_
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 if(strlen($_FILES['userfile']['tmp_name']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
+    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
 }
 else if($_FILES['userfile']['error'] == 1)
 {
     //Dateigroesse ueberpruefen Servereinstellungen
-    $g_message->show($g_l10n->get('SYS_PHR_FILE_TO_LARGE_SERVER', $g_preferences['max_file_upload_size']));
+    $g_message->show($g_l10n->get('SYS_FILE_TO_LARGE_SERVER', $g_preferences['max_file_upload_size']));
 }
 else if($_POST['rol_id'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_ROLE')));
+    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_ROLE')));
 }
 
 // Rolle einlesen und pruefen, ob der User diese selektieren kann und dadurch nicht
@@ -51,7 +51,7 @@ $role = new TableRoles($g_db, $_POST['rol_id']);
 if($g_current_user->viewRole($role->getValue('rol_id')) == false
 || ($g_current_user->assignRoles() == false && $role->getValue('rol_assign_roles') == false))
 {
-    $g_message->show($g_l10n->get('MEM_PHR_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
+    $g_message->show($g_l10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
 }
 
 $_SESSION['rol_id']           = $role->getValue('rol_id');

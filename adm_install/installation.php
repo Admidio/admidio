@@ -2,7 +2,7 @@
 /******************************************************************************
  * Installation und Einrichtung der Admidio-Datenbank und der Config-Datei
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -85,7 +85,7 @@ if($req_mode == 1)  // (Default) Sprache auswaehlen
     $languages = array('de' => 'deutsch', 'en' => 'english');
 
     $message = '<div class="groupBox">
-                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_PHR_CHOOSE_LANGUAGE').'</div>
+                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_CHOOSE_LANGUAGE').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
@@ -113,7 +113,7 @@ elseif($req_mode == 2)  // Willkommen zur Installation
     // Pruefen ob Sprache uebergeben wurde
     if(isset($_POST['system_language']) == false || strlen($_POST['system_language']) == 0)
     {
-        showPage($g_l10n->get('INS_PHR_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', 'back.png', $g_l10n->get('SYS_BACK'));
+        showPage($g_l10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', 'back.png', $g_l10n->get('SYS_BACK'));
     }
     else
     {
@@ -121,17 +121,17 @@ elseif($req_mode == 2)  // Willkommen zur Installation
         $g_l10n->setLanguage($_SESSION['language']);
     }
     
-    $message = '<strong>'.$g_l10n->get('INS_PHR_WELCOME_TO_INSTALLATION').'</strong><br /><br />'.$g_l10n->get('INS_PHR_WELCOME_TEXT');
+    $message = '<strong>'.$g_l10n->get('INS_WELCOME_TO_INSTALLATION').'</strong><br /><br />'.$g_l10n->get('INS_WELCOME_TEXT');
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
     {
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_PHR_WARNING_BETA_VERSION');
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_WARNING_BETA_VERSION');
     }
 
     if(ini_get('safe_mode') == 1)
     {    
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_PHR_WARNING_SAFE_MODE');
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_WARNING_SAFE_MODE');
     }
     showPage($message, 'installation.php?mode=3', 'forward.png', $g_l10n->get('INS_DATABASE_LOGIN'));
 }
@@ -153,7 +153,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
         $prefix  = 'adm';
     }
 
-    $message = '<strong>'.$g_l10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</strong><br /><br />'.$g_l10n->get('INS_PHR_DATABASE_LOGIN').'
+    $message = '<strong>'.$g_l10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</strong><br /><br />'.$g_l10n->get('INS_DATABASE_LOGIN_DESC').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$g_l10n->get('INS_DATABASE_LOGIN').'</div>
                     <div class="groupBoxBody">
@@ -192,7 +192,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                     </div>
                 </div>
                 <br />
-                <img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_PHR_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
+                <img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
     showPage($message, 'installation.php?mode=4', 'forward.png', $g_l10n->get('INS_SET_ORGANIZATION'));
 }
 elseif($req_mode == 4)  // Organisationsnamen eingeben
@@ -216,7 +216,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
 
             if($anz != strlen($_POST['prefix']))
             {
-                showPage($g_l10n->get('INS_PHR_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
+                showPage($g_l10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
             }
         }
 
@@ -231,14 +231,14 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         || strlen($_SESSION['user'])     == 0
         || strlen($_SESSION['database']) == 0 )
         {
-            showPage($g_l10n->get('INS_PHR_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($g_l10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
         }
 
         // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
         $db = new MySqlDB();
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
-            showPage($g_l10n->get('INS_PHR_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($g_l10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
         }
 
         //Datenbank- und PHP-Version prüfen
@@ -261,7 +261,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
     }
 
     $message = $message.'<strong>'.$g_l10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_NAME_OF_ORGANIZATION').'
+                '.$g_l10n->get('INS_NAME_OF_ORGANIZATION_DESC').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$g_l10n->get('INS_NAME_OF_ORGANIZATION').'</div>
                     <div class="groupBoxBody">
@@ -315,20 +315,20 @@ elseif($req_mode == 5)  // Daten des Administrator eingeben
         $user_login      = '';
     }
     $message = '<strong>'.$g_l10n->get('INS_CREATE_ADMINISTRATOR').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_DATA_OF_ADMINISTRATOR').'
+                '.$g_l10n->get('INS_DATA_OF_ADMINISTRATOR_DESC').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$g_l10n->get('INS_DATA_OF_ADMINISTRATOR').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="user_last_name">'.$g_l10n->get('INS_LAST_NAME').':</label></dt>
+                                    <dt><label for="user_last_name">'.$g_l10n->get('SYS_LASTNAME').':</label></dt>
                                     <dd><input type="text" name="user_last_name" id="user_last_name" style="width: 250px;" maxlength="50" value="'. $user_last_name. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_first_name">'.$g_l10n->get('INS_FIRST_NAME').':</label></dt>
+                                    <dt><label for="user_first_name">'.$g_l10n->get('SYS_FIRSTNAME').':</label></dt>
                                     <dd><input type="text" name="user_first_name" id="user_first_name" style="width: 250px;" maxlength="50" value="'. $user_first_name. '" /></dd>
                                 </dl>
                             </li>
@@ -385,22 +385,22 @@ elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
 
         if(!isValidEmailAddress($_SESSION['user_email']))
         {
-            showPage($g_l10n->get('SYS_PHR_EMAIL_INVALID'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($g_l10n->get('SYS_EMAIL_INVALID'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }
 
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
         {
-            showPage($g_l10n->get('INS_PHR_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($g_l10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }
     }
 
     $message = '<strong>'.$g_l10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_default.php').'<br /><br />
+                '.$g_l10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_default.php').'<br /><br />
 
                 <span class="iconTextLink">
                     <a href="installation.php?mode=7"><img
-                    src="layout/page_white_download.png" alt="'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'" /></a>
-                    <a href="installation.php?mode=7">'.$g_l10n->get('INS_PHR_DOWNLOAD', 'config.php').'</a>
+                    src="layout/page_white_download.png" alt="'.$g_l10n->get('INS_DOWNLOAD', 'config.php').'" /></a>
+                    <a href="installation.php?mode=7">'.$g_l10n->get('INS_DOWNLOAD', 'config.php').'</a>
                 </span>
                 <br />';
     showPage($message, 'installation.php?mode=8', 'database_in.png', $g_l10n->get('INS_INSTALL_ADMIDIO'));
@@ -446,7 +446,7 @@ elseif($req_mode == 8)
 
     if(file_exists('../config.php') == false)
     {
-        showPage($g_l10n->get('INS_PHR_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
+        showPage($g_l10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
@@ -460,7 +460,7 @@ elseif($req_mode == 8)
 
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
-                or showPage($g_l10n->get('INS_PHR_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_install/db_scripts'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
+                or showPage($g_l10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_install/db_scripts'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
     $content  = fread($file, filesize($filename));
     $sql_arr  = explode(';', $content);
     fclose($file);
@@ -499,9 +499,9 @@ elseif($req_mode == 8)
 
     // Stammdatenfelder anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_stammdaten.', "TEXT", "LAST_NAME", "'.$g_l10n->get('INS_LAST_NAME').'", NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "FIRST_NAME","'.$g_l10n->get('INS_FIRST_NAME').'", NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "ADDRESS",   "'.$g_l10n->get('INS_ADDRESS').'", NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                       VALUES ('.$cat_id_stammdaten.', "TEXT", "LAST_NAME", "'.$g_l10n->get('SYS_LASTNAME').'", NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "FIRST_NAME","'.$g_l10n->get('SYS_FIRSTNAME').'", NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "ADDRESS",   "'.$g_l10n->get('SYS_ADDRESS').'", NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "POSTCODE",  "'.$g_l10n->get('INS_POSTCODE').'", NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "CITY",      "'.$g_l10n->get('INS_CITY').'", NULL, 1, 0, 0, 5, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "COUNTRY",   "'.$g_l10n->get('SYS_COUNTRY').'", NULL, 1, 0, 0, 6, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
@@ -601,7 +601,7 @@ elseif($req_mode == 8)
 
     //Defaultraum fuer Raummodul in der DB anlegen:
     $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
-                                    VALUES ("'.$g_l10n->get('INS_CONFERENCE_ROOM').'", "'.$g_l10n->get('INS_PHR_DESCRIPTION_CONFERENCE_ROOM').'", 
+                                    VALUES ("'.$g_l10n->get('INS_CONFERENCE_ROOM').'", "'.$g_l10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'", 
                                             15, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")';
     $db->query($sql);
 
@@ -611,7 +611,7 @@ elseif($req_mode == 8)
     $role_webmaster = new TableRoles($db);
     $role_webmaster->setValue('rol_cat_id', $category_common);
     $role_webmaster->setValue('rol_name', $g_l10n->get('SYS_WEBMASTER'));
-    $role_webmaster->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_WEBMASTER'));
+    $role_webmaster->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_WEBMASTER'));
     $role_webmaster->setValue('rol_assign_roles', 1);
     $role_webmaster->setValue('rol_approve_users', 1);
     $role_webmaster->setValue('rol_announcements', 1);
@@ -633,7 +633,7 @@ elseif($req_mode == 8)
     $role_member = new TableRoles($db);
     $role_member->setValue('rol_cat_id', $category_common);
     $role_member->setValue('rol_name', $g_l10n->get('SYS_MEMBER'));
-    $role_member->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_MEMBER'));
+    $role_member->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_MEMBER'));
     $role_member->setValue('rol_mail_this_role', 2);
     $role_member->setValue('rol_profile', 1);
     $role_member->setValue('rol_this_list_view', 1);
@@ -643,7 +643,7 @@ elseif($req_mode == 8)
     $role_management = new TableRoles($db);
     $role_management->setValue('rol_cat_id', $category_common);
     $role_management->setValue('rol_name', $g_l10n->get('INS_BOARD'));
-    $role_management->setValue('rol_description', $g_l10n->get('INS_PHR_DESCRIPTION_BOARD'));
+    $role_management->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_BOARD'));
     $role_management->setValue('rol_announcements', 1);
     $role_management->setValue('rol_dates', 1);
     $role_management->setValue('rol_weblinks', 1);
@@ -721,10 +721,10 @@ elseif($req_mode == 8)
     session_unset();
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong><br /><br />
-                '.$g_l10n->get('INS_PHR_INSTALLATION_SUCCESSFUL');
+                '.$g_l10n->get('INS_INSTALLATION_SUCCESSFUL');
     if(is_writeable("../adm_my_files") == false)
     {
-        $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /> '.$g_l10n->get('INS_PHR_FOLDER_NOT_WRITABLE', 'adm_my_files');
+        $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /> '.$g_l10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
     showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'));
 }

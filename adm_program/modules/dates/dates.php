@@ -2,7 +2,7 @@
 /******************************************************************************
  * Termine auflisten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -32,7 +32,7 @@ require_once('../../system/classes/table_rooms.php');
 if($g_preferences['enable_dates_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_dates_module'] == 2)
 {
@@ -306,8 +306,8 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'">'.$g_l10n->get('SYS_PHR_CREATE', $req_headline).'</a>
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'">'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'</a>
             </span>
         </li>';
     }
@@ -383,11 +383,11 @@ if($g_db->num_rows($dates_result) == 0)
     // Keine Termine gefunden
     if($req_id > 0)
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -636,8 +636,8 @@ else
                             }
 
                             $registrationHtml = '<span class="iconTextLink">
-                                <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_PHR_PARTICIPATE_IN_DATE').'" /></a>
-                                <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PHR_PARTICIPATE_IN_DATE').'</a>
+                                <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'" /></a>
+                                <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'</a>
                             </span>';
                         }
                         else
@@ -651,11 +651,11 @@ else
 
                 // Erstell-/ Änderungsdaten anzeigen
                 echo '<div class="editInformation">'.
-                    $g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
+                    $g_l10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
 
                     if($date->getValue('dat_usr_id_change') > 0)
                     {
-                        echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
+                        echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
                     }
                 echo '</div>
             </div>

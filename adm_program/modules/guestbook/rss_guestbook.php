@@ -2,7 +2,7 @@
 /******************************************************************************
  * RSS - Feed fuer das Gaestebuch
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,14 +21,14 @@ require_once('../../system/classes/table_guestbook.php');
 if ($g_preferences['enable_rss'] != 1)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_PHR_RSS_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_RSS_DISABLED'));
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // die 10 letzten Eintraege aus der DB fischen...

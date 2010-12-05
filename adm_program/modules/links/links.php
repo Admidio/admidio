@@ -2,7 +2,7 @@
 /******************************************************************************
  * Links auflisten
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Daniel Dieckelmann
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,7 @@ require_once('../../system/classes/table_weblink.php');
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_weblinks_module'] == 2)
 {
@@ -190,11 +190,11 @@ if ($g_db->num_rows($links_result) == 0)
     // Keine Links gefunden
     if ($_GET['id'] > 0)
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -236,7 +236,7 @@ else
 		// Ausgabe des Links
 		echo '
 			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-				alt="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_PHR_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
+				alt="'.$g_l10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$g_l10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
 			<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $g_preferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
 		// aendern & loeschen duerfen nur User mit den gesetzten Rechten
 		if ($g_current_user->editWeblinksRight())
@@ -269,7 +269,7 @@ else
     // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
     if ($numLinks == 0)
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES').'</p>';
     }
 
     echo '</div></div>';

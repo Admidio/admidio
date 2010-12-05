@@ -2,7 +2,7 @@
 /******************************************************************************
  * Passwort vergessen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer 
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -26,7 +26,7 @@ getVars();
 // Systemmails und Passwort zusenden muessen aktiviert sein
 if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password_recovery'] != 1)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
@@ -42,7 +42,7 @@ if (! empty($abschicken) && !$g_valid_login && $g_preferences['enable_mail_captc
 if($g_valid_login)
 {
     $g_message->setForwardUrl($g_root_path.'/adm_program/', 2000);
-    $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_AREADY_LOGGED_ID'));   
+    $g_message->show($g_l10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));   
 }
 
 if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
@@ -68,7 +68,7 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
     
     if(strlen($row['usr_id']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_EMAIL_ERROR',$empfaenger_email));    
+        $g_message->show($g_l10n->get('SYS_LOSTPW_EMAIL_ERROR',$empfaenger_email));    
     }
 
     $user = new User($g_db, $row['usr_id']);
@@ -88,11 +88,11 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
         $user->save();
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/login.php');
-        $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_SEND',$empfaenger_email));
+        $g_message->show($g_l10n->get('SYS_LOSTPW_SEND',$empfaenger_email));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_LOSTPW_SEND_ERROR',$empfaenger_email)); 
+        $g_message->show($g_l10n->get('SYS_LOSTPW_SEND_ERROR',$empfaenger_email)); 
     }
 }
 else
@@ -112,7 +112,7 @@ else
                 <ul class="formFieldList">
                     <li>
                         <div>
-                          '.$g_l10n->get('SYS_PHR_PASSWORD_FORGOTTEN_DESCRIPTION').'
+                          '.$g_l10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'
                         </div>
                     </li>
                     <li>&nbsp;</li>

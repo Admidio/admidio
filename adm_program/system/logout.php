@@ -3,7 +3,7 @@
  * User aus Admidio ausloggen
  * Cookies loeschen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -35,13 +35,13 @@ unset($_SESSION['g_current_user']);
 // da der Inhalt noch auf der eingeloggten Seite steht, hier umsetzen
 $g_homepage = $g_root_path. '/'. $g_preferences['homepage_logout'];
 
-$message_code = 'SYS_PHR_LOGOUT_SUCCESSFUL';
+$message_code = 'SYS_LOGOUT_SUCCESSFUL';
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
 if($g_preferences['enable_forum_interface'] && $g_forum->session_valid)
 {
     $g_forum->userLogoff();
-    $message_code = 'SYS_PHR_FORUM_LOGOUT';
+    $message_code = 'SYS_FORUM_LOGOUT';
 }
 
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite

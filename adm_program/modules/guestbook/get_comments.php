@@ -2,7 +2,7 @@
 /******************************************************************************
  * Script mit HTML-Code fuer die Kommentare eines Gaestebucheintrages
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -94,7 +94,7 @@ if (isset($comment_result))
 
                     echo '
                     <div class="editInformation">'.
-                        $g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $gbComment->getValue('gbc_timestamp_change')). '
+                        $g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $gbComment->getValue('gbc_timestamp_change')). '
                     </div>';
                 }
             echo '
@@ -116,8 +116,8 @@ if (isset($comment_result))
         <div class="editInformation">
             <span class="iconTextLink">
                 <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png" 
-                alt="'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'" title="'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'" /></a>
-                <a href="'.$load_url.'">'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'</a>
+                alt="'.$g_l10n->get('GBO_WRITE_COMMENT').'" title="'.$g_l10n->get('GBO_WRITE_COMMENT').'" /></a>
+                <a href="'.$load_url.'">'.$g_l10n->get('GBO_WRITE_COMMENT').'</a>
             </span>
         </div>';
     }

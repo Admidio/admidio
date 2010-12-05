@@ -2,7 +2,7 @@
 /******************************************************************************
  * Ankuendigungen anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,12 +28,12 @@ if ($g_preferences['enable_bbcode'] == 1)
 if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 if(!$g_current_user->editAnnouncements())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -68,7 +68,7 @@ if($req_ann_id > 0)
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -89,11 +89,11 @@ if(isset($_SESSION['announcements_request']))
 // Html-Kopf ausgeben
 if($req_ann_id > 0)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_EDIT', $g_l10n->get('ANN_ANNOUNCEMENT'));
+    $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('SYS_PHR_CREATE', $g_l10n->get('ANN_ANNOUNCEMENT'));
+    $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
 //Script für BBCode laden
 $javascript = '';
@@ -164,9 +164,9 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="ann_global">'.$g_l10n->get('SYS_PHR_ENTRY_MULTI_ORGA').'</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
+                            <label for="ann_global">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
                         </dd>
                     </dl>
@@ -181,12 +181,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $announcement->getValue('ann_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_create'));
+                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_create'));
 
                 if($announcement->getValue('ann_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $announcement->getValue('ann_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_change'));
                 }
             echo '</div>';
         }

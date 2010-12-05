@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photoalben
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,18 +18,18 @@ echo'
 	<error>'.$g_l10n->get('SYS_ERROR').'</error>
 	<io_error>'.$g_l10n->get('SYS_IO_ERROR').'</io_error>
 	<sec_error>'.$g_l10n->get('SYS_SECURITY_ERROR').'</sec_error>
-	<error_browse>'.$g_l10n->get('SYS_PHR_BROWSE_ERROR').'</error_browse>
-	<error_upload>'.$g_l10n->get('SYS_PHR_UPLOAD_ERROR').'</error_upload>
+	<error_browse>'.$g_l10n->get('SYS_BROWSE_ERROR').'</error_browse>
+	<error_upload>'.$g_l10n->get('SYS_UPLOAD_ERROR').'</error_upload>
 	<error_http>'.$g_l10n->get('SYS_HTTP_ERROR').'</error_http>
 		
 	<!-- warnings -->					
 	<warning>'.$g_l10n->get('SYS_WARNING').'</warning>
-	<warning_tooManyFiles>'.$g_l10n->get('SYS_PHR_TO_MANY_FILES').'</warning_tooManyFiles>
-	<warning_filesize>'.$g_l10n->get('SYS_PHR_FILEZIZE').'</warning_filesize>
+	<warning_tooManyFiles>'.$g_l10n->get('SYS_TO_MANY_FILES').'</warning_tooManyFiles>
+	<warning_filesize>'.$g_l10n->get('SYS_FILEZIZE').'</warning_filesize>
 		
 	<!-- labels of the progressbars -->
-	<progressFile>'.$g_l10n->get('SYS_PHR_FILE_PROGRESS').'</progressFile>
-	<progressTotal>'.$g_l10n->get('SYS_PHR_TOTAL_PROGRESS').'</progressTotal>
+	<progressFile>'.$g_l10n->get('SYS_FILE_PROGRESS').'</progressFile>
+	<progressTotal>'.$g_l10n->get('SYS_TOTAL_PROGRESS').'</progressTotal>
 	
 	<!-- headlines of the grid -->
 	<file>'.$g_l10n->get('SYS_FILE').'</file>

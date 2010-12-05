@@ -2,7 +2,7 @@
 /******************************************************************************
  * Funktionen zum Verwalten der Rollenmitgliedschaft im Profil
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -156,7 +156,7 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
     $roleMemHTML .= '<span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
     if($count_show_roles == 0)
     {
-        $roleMemHTML .= $g_l10n->get('ROL_PHR_NO_MEMBER_RESP_ROLE_VISIBLE',$g_current_organization->getValue('org_longname'));
+        $roleMemHTML .= $g_l10n->get('ROL_NO_MEMBER_RESP_ROLE_VISIBLE',$g_current_organization->getValue('org_longname'));
     }
             
     $roleMemHTML .= '</ul>';
@@ -219,7 +219,7 @@ function getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$coun
     }
     if($count_show_roles == 0 && $count_role > 0)
     {
-        $formerRoleMemHTML .= $g_l10n->get('ROL_PHR_CANT_SHOW_FORMER_ROLES');
+        $formerRoleMemHTML .= $g_l10n->get('ROL_CANT_SHOW_FORMER_ROLES');
     }
     $formerRoleMemHTML .= '</ul>
     <script type="text/javascript">if(profileJS){profileJS.formerRoleCount="'.$count_role.'";}</script>';

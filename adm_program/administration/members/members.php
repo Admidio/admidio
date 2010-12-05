@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verwaltung der aller Mitglieder in der Datenbank
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,7 +23,7 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
 if (!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // lokale Variablen initialisieren
@@ -243,11 +243,11 @@ echo '
         $tooltip = '';
         if($req_members)
         {
-            $tooltip = $g_l10n->get('MEM_PHR_SHOW_MEMBERS');
+            $tooltip = $g_l10n->get('MEM_SHOW_MEMBERS');
         }
         else
         {
-            $tooltip = $g_l10n->get('MEM_PHR_SHOW_USERS');
+            $tooltip = $g_l10n->get('MEM_SHOW_USERS');
         }   
         
         echo '
@@ -474,7 +474,7 @@ if($num_members > 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
-                                src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('MEM_PHR_SEND_USERNAME_PASSWORD').'" title='.$g_l10n->get('MEM_PHR_SEND_USERNAME_PASSWORD').'" /></a>';
+                                src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" title='.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
                         }
                         else
                         {
@@ -519,7 +519,7 @@ if($num_members > 0)
 }
 else
 {
-    echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
+    echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES').'</p>';
 }
 
 require(THEME_SERVER_PATH. '/overall_footer.php');

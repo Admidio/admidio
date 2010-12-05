@@ -2,7 +2,7 @@
 /******************************************************************************
  * Mitglieder einer Rolle zuordnen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,7 +56,7 @@ if(  (!$g_current_user->assignRoles()
    && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
 || $role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $condition = '';
@@ -296,8 +296,8 @@ if($g_db->num_rows($result_user)>0)
                 <th>'.$g_l10n->get('SYS_LASTNAME').'</th>
                 <th>'.$g_l10n->get('SYS_FIRSTNAME').'</th>
                 <th>'.$g_l10n->get('SYS_BIRTHDAY').'</th>
-                <th style="text-align: center;">'.$g_l10n->get('SYS_LEADER').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION&amp;inline=true"><img 
-	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_PHR_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
+                <th style="text-align: center;">'.$g_l10n->get('SYS_LEADER').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION&amp;inline=true"><img 
+	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
 	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a></th>
             </tr>
         </thead>';
@@ -464,13 +464,13 @@ if($g_db->num_rows($result_user)>0)
         }
     }//End For
     echo '</table>
-    <p>'.$g_l10n->get('SYS_PHR_CHECKBOX_AUTOSAVE').'</p>';
+    <p>'.$g_l10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>';
     
     //Hilfe nachladen
     echo '<script type="text/javascript">$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'})</script>';
 }
 else
 {
-	echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES_FOUND').'</p>';
+	echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES_FOUND').'</p>';
 }
 ?>

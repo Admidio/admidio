@@ -2,7 +2,7 @@
 /******************************************************************************
  * Downloadfunktionen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,13 +31,13 @@ require_once('../../system/classes/table_file.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -116,7 +116,7 @@ if ($req_mode == 1)
 
     if (empty($_POST))
     {
-        $g_message->show($g_l10n->get('DOW_PHR_UPLOAD_POST_EMPTY',ini_get('upload_max_filesize')));
+        $g_message->show($g_l10n->get('DOW_UPLOAD_POST_EMPTY',ini_get('upload_max_filesize')));
     }
 
     $local_file = $_FILES['userfile']['name'];
@@ -124,13 +124,13 @@ if ($req_mode == 1)
     //Dateigroesse ueberpruefen Servereinstellungen
     if ($_FILES['userfile']['error']==1)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FILE_TO_LARGE_SERVER',ini_get('upload_max_filesize')));
+        $g_message->show($g_l10n->get('SYS_FILE_TO_LARGE_SERVER',ini_get('upload_max_filesize')));
     }
 
     //Dateigroesse ueberpruefen Administratoreinstellungen
     if ($_FILES['userfile']['size']>($g_preferences['max_file_upload_size'])*1024)
     {
-        $g_message->show($g_l10n->get('DOW_PHR_FILE_TO_LARGE', $g_preferences['max_file_upload_size']));
+        $g_message->show($g_l10n->get('DOW_FILE_TO_LARGE', $g_preferences['max_file_upload_size']));
     }
 
     // Dateinamen ermitteln
@@ -149,21 +149,21 @@ if ($req_mode == 1)
     {
         if($ret_code == -1)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_CHOOSE_FILE')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('DOW_CHOOSE_FILE')));
         }
         elseif($ret_code == -2)
         {
-            $g_message->show($g_l10n->get('DOW_PHR_FILE_NAME_INVALID'));
+            $g_message->show($g_l10n->get('DOW_FILE_NAME_INVALID'));
         }
         elseif($ret_code == -3)
         {
-            $g_message->show($g_l10n->get('DOW_PHR_FILE_EXTENSION_INVALID'));
+            $g_message->show($g_l10n->get('DOW_FILE_EXTENSION_INVALID'));
         }
     }
 
     if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$file_name))
     {
-        $g_message->show($g_l10n->get('DOW_PHR_FILE_EXIST', $newFile));
+        $g_message->show($g_l10n->get('DOW_FILE_EXIST', $newFile));
     }
 
     $file_description = $_POST['new_description'];
@@ -193,11 +193,11 @@ if ($req_mode == 1)
 		}
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-        $g_message->show($g_l10n->get('DOW_PHR_FILE_UPLOADED', $file_name));
+        $g_message->show($g_l10n->get('DOW_FILE_UPLOADED', $file_name));
     }
     else
     {
-        $g_message->show($g_l10n->get('DOW_PHR_FILE_UPLOAD_ERROR',$file_name));
+        $g_message->show($g_l10n->get('DOW_FILE_UPLOAD_ERROR',$file_name));
     }
 }
 
@@ -266,17 +266,17 @@ elseif ($req_mode == 3)
         {
             if ($ret_code == -1)
             {
-                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
+                $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
             }
             elseif ($ret_code == -2)
             {
-                $g_message->show($g_l10n->get('DOW_PHR_FOLDER_NAME_INVALID'));
+                $g_message->show($g_l10n->get('DOW_FOLDER_NAME_INVALID'));
             }
         }
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
     }
 
     $newFolderDescription = $_POST['new_description'];
@@ -285,7 +285,7 @@ elseif ($req_mode == 3)
     //Test ob der Ordner schon existiert im Filesystem
     if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName)) 
     {
-        $g_message->show($g_l10n->get('DOW_PHR_FOLDER_EXISTS', $newFolder));
+        $g_message->show($g_l10n->get('DOW_FOLDER_EXISTS', $newFolder));
     }
     else
     {
@@ -317,7 +317,7 @@ elseif ($req_mode == 3)
         }
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-        $g_message->show($g_l10n->get('DOW_PHR_FOLDER_CREATED', $newFolderName));
+        $g_message->show($g_l10n->get('DOW_FOLDER_CREATED', $newFolderName));
     }
 }
 
@@ -355,15 +355,15 @@ elseif ($req_mode == 4)
             {
                 if($ret_code == -1)
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
+                    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
                 }
                 elseif($ret_code == -2)
                 {
-                    $g_message->show($g_l10n->get('DOW_PHR_FILE_NAME_INVALID'));
+                    $g_message->show($g_l10n->get('DOW_FILE_NAME_INVALID'));
                 }
                 elseif($ret_code == -3)
                 {
-                    $g_message->show($g_l10n->get('DOW_PHR_FILE_EXTENSION_INVALID'));
+                    $g_message->show($g_l10n->get('DOW_FILE_EXTENSION_INVALID'));
                 }
             }
             else {
@@ -372,7 +372,7 @@ elseif ($req_mode == 4)
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
         }
 
         $newDescription = $_POST['new_description'];
@@ -381,7 +381,7 @@ elseif ($req_mode == 4)
         if ($newFile != $file->getValue('fil_name')
          && file_exists(SERVER_PATH. $file->getValue('fol_path'). '/'. $file->getValue('fol_name'). '/'.$newFile))
         {
-            $g_message->show($g_l10n->get('DOW_PHR_FILE_EXIST', $newFile));
+            $g_message->show($g_l10n->get('DOW_FILE_EXIST', $newFile));
         }
         else
         {
@@ -395,11 +395,11 @@ elseif ($req_mode == 4)
                 $file->save();
 
                 $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                $g_message->show($g_l10n->get('DOW_PHR_FILE_RENAME',$oldName));
+                $g_message->show($g_l10n->get('DOW_FILE_RENAME',$oldName));
             }
             else {
                 $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                $g_message->show($g_l10n->get('DOW_PHR_FILE_RENAME_ERROR',$oldName));
+                $g_message->show($g_l10n->get('DOW_FILE_RENAME_ERROR',$oldName));
             }
         }
 
@@ -431,17 +431,17 @@ elseif ($req_mode == 4)
             {
                 if ($ret_code == -1)
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
+                    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
                 }
                 elseif ($ret_code == -2)
                 {
-                    $g_message->show($g_l10n->get('DOW_PHR_FOLDER_NAME_INVALID'));
+                    $g_message->show($g_l10n->get('DOW_FOLDER_NAME_INVALID'));
                 }
             }
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('DOW_NEW_NAME')));
         }
 
         $newDescription = $_POST['new_description'];
@@ -450,7 +450,7 @@ elseif ($req_mode == 4)
         if ($newFolder != $folder->getValue('fol_name')
          && file_exists(SERVER_PATH. $folder->getValue('fol_path'). '/'.$newFolder))
         {
-            $g_message->show($g_l10n->get('DOW_PHR_FOLDER_EXISTS', $newFolder));
+            $g_message->show($g_l10n->get('DOW_FOLDER_EXISTS', $newFolder));
         }
         else
         {
@@ -463,11 +463,11 @@ elseif ($req_mode == 4)
                 $folder->rename($newFolder, $folder->getValue('fol_path'));
 
                 $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                $g_message->show($g_l10n->get('DOW_PHR_FOLDER_RENAME',$oldName));
+                $g_message->show($g_l10n->get('DOW_FOLDER_RENAME',$oldName));
             }
             else {
                 $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-                $g_message->show($g_l10n->get('DOW_PHR_FOLDER_RENAME_ERROR',$oldName));
+                $g_message->show($g_l10n->get('DOW_FOLDER_RENAME_ERROR',$oldName));
             }
         }
 
@@ -522,11 +522,11 @@ elseif ($req_mode == 6)
         {
             if($ret_code == -2)
             {
-                $g_message->show($g_l10n->get('DOW_PHR_FILE_NAME_INVALID'));
+                $g_message->show($g_l10n->get('DOW_FILE_NAME_INVALID'));
             }
             elseif($ret_code == -3)
             {
-                $g_message->show($g_l10n->get('DOW_PHR_FILE_EXTENSION_INVALID'));
+                $g_message->show($g_l10n->get('DOW_FILE_EXTENSION_INVALID'));
             }
         }
     }
@@ -648,7 +648,7 @@ elseif ($req_mode == 7)
     $targetFolder->save();
 
     $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-    $g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 }
 
 

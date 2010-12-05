@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer das Forum phpBB Version 2.0.x
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Thomas Thoss
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -256,12 +256,12 @@ class PhpBB2
                 // Export der Admido Daten ins Forum und einen Forum Account erstellen
                 $this->userInsert($login_name, 1, $password_crypt, $email);
 
-                $this->message = 'SYS_PHR_FORUM_LOGIN_NEW';
+                $this->message = 'SYS_FORUM_LOGIN_NEW';
                 $this->session_valid = TRUE;        
             }
             else
             {
-                $this->message = 'SYS_PHR_LOGIN_SUCCESSFUL';
+                $this->message = 'SYS_LOGIN_SUCCESSFUL';
                 $this->session_valid = FALSE;
             }
         }
@@ -276,7 +276,7 @@ class PhpBB2
         {
             if($this->setAdmin($login_name))
             {
-                $this->message = 'SYS_PHR_FORUM_LOGIN_ADMIN';
+                $this->message = 'SYS_FORUM_LOGIN_ADMIN';
             }
         }
         
@@ -289,7 +289,7 @@ class PhpBB2
             if(!($this->checkPassword($password_crypt, $this->password, $this->userid)))
             {
                 // Password wurde zurueck gesetzt, Meldung vorbereiten
-                $this->message = 'SYS_PHR_FORUM_LOGIN_PASSWORD';
+                $this->message = 'SYS_FORUM_LOGIN_PASSWORD';
             }
 
             // Session anlegen
@@ -298,7 +298,7 @@ class PhpBB2
             if($this->message == '')
             {
                 // Im Forum und in Admidio angemeldet, Meldung vorbereiten
-                $this->message = 'SYS_PHR_FORUM_LOGIN_SUCCESSFUL';
+                $this->message = 'SYS_FORUM_LOGIN_SUCCESSFUL';
             }
         }
     }

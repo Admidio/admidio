@@ -2,7 +2,7 @@
 /******************************************************************************
  * Grußkarte Form
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,7 +34,7 @@ $template                   = THEME_SERVER_PATH. '/ecard_templates/';
 if ($g_preferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 // pruefen ob User eingeloggt ist
 if(!$g_valid_login)
@@ -99,7 +99,7 @@ if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('EMAIL')))
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $g_message->show($g_l10n->get('SYS_PHR_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    $g_message->show($g_l10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
 
 if (isset($_GET['usr_id']))
@@ -125,13 +125,13 @@ if (isset($_GET['usr_id']))
        && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_ID_NOT_FOUND'));
+        $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 }
 
@@ -150,7 +150,7 @@ $javascript = '
             ecardJS.max_ecardTextLength		= '.$g_preferences['ecard_text_length'].';
             ecardJS.ecardSend_Text			= \''.$g_l10n->get("ECA_GREETING_CARD_SEND").'\';
             ecardJS.currentURL 				= \''.CURRENT_URL.'\';
-            ecardJS.errMsg_Start_Text 		= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_PHR_INPUT_INCORRECT")).'\n\n\';
+            ecardJS.errMsg_Start_Text 		= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_INPUT_INCORRECT")).'\n\n\';
             ecardJS.nameOfSender_Text 		= \''.$g_l10n->get("ECA_NAME_OF_SENDER").'\';
             ecardJS.emailOfSender_Text		= \''.$g_l10n->get("ECA_EMAIL_OF_SENDER").'\';
             ecardJS.nameOfRecipient_Text	= \''.$g_l10n->get("ECA_NAME_OF_RECIPIENT", $var1="[VAR1]").'\';
@@ -159,17 +159,17 @@ $javascript = '
             ecardJS.recipient_Text			= \''.$g_l10n->get("SYS_RECIPIENT").'\';
             ecardJS.recipientName_Text		= \''.$g_l10n->get("ECA_RECIPIENT_NAME").'\';
             ecardJS.recipientEmail_Text		= \''.$g_l10n->get("ECA_RECIPIENT_EMAIL").'\';
-            ecardJS.errMsg_End_Text			= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_PHR_FILL_INPUTS")).'\';
+            ecardJS.errMsg_End_Text			= \''.str_replace("<br />",'\n',$g_l10n->get("ECA_FILL_INPUTS")).'\';
             ecardJS.ecardPreview_Text		= \''.$g_l10n->get("ECA_GREETING_CARD_PREVIEW").'\';
             ecardJS.emailLookInvalid_Text	= \''.$g_l10n->get("ECA_EMAIL_LOOKS_INVALID").'\';
             ecardJS.contentIsLoading_Text	= \''.$g_l10n->get("ECA_CONTENT_LOADING").'\';
-            ecardJS.ajaxExecution_ErrorText = \''.str_replace("<br />",'\n',$g_l10n->get("SYS_PHR_AJAX_REQUEST_ERROR", $var1="[ERROR]")).'\';
+            ecardJS.ajaxExecution_ErrorText = \''.str_replace("<br />",'\n',$g_l10n->get("SYS_AJAX_REQUEST_ERROR", $var1="[ERROR]")).'\';
             ecardJS.moreRecipients_Text		= \''.$g_l10n->get("ECA_MORE_RECIPIENTS").'\';
             ecardJS.noMoreRecipients_Text	= \''.$g_l10n->get("ECA_NO_MORE_RECIPIENTS").'\';
             ecardJS.blendInSettings_Text	= \''.$g_l10n->get("ECA_BLEND_IN_SETTINGS").'\';
             ecardJS.blendOutSettings_Text	= \''.$g_l10n->get("ECA_BLEND_OUT_SETTINGS").'\';
             ecardJS.internalRecipient_Text	= \''.$g_l10n->get("ECA_INTERNAL_RECIPIENT").'\';
-            ecardJS.messageTooLong			= \''.$g_l10n->get("ECA_PHR_MESSAGE_TOO_LONG",$var1="[MAX]").'\';
+            ecardJS.messageTooLong			= \''.$g_l10n->get("ECA_MESSAGE_TOO_LONG",$var1="[MAX]").'\';
             ecardJS.loading_Text			= \''.$g_l10n->get("SYS_LOADING").'\';
             ecardJS.send_Text				= \''.$g_l10n->get("SYS_SEND").'\';
             
@@ -204,7 +204,7 @@ echo '
                             background-color: #FFFFE0;
                             padding-left: 28px;
                             text-align:left;">
-                 '.$g_l10n->get("ECA_PHR_NEED_JAVASCRIPT").'
+                 '.$g_l10n->get("ECA_NEED_JAVASCRIPT").'
                  </div>
             </div>
         </noscript>

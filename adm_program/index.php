@@ -2,7 +2,7 @@
 /******************************************************************************
  * Liste aller Module und Administrationsseiten von Admidio
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,7 @@ if($g_current_user->isWebmaster())
     // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
     if($g_debug == 0 && file_exists('../adm_install'))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_INSTALL_FOLDER_EXIST'));
+        $g_message->show($g_l10n->get('SYS_INSTALL_FOLDER_EXIST'));
     }
 }
 

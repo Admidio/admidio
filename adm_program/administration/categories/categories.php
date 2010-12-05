@@ -2,7 +2,7 @@
 /******************************************************************************
  * Uebersicht und Pflege aller Kategorien
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,19 +41,19 @@ if(isset($_GET['type']))
     }
     if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     if($_GET['type'] == 'DAT' && $g_current_user->editdates() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     $req_type = $_GET['type'];
 }
@@ -66,7 +66,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['categories_request']);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('SYS_PHR_ADMINISTRATION', $title);
+$g_layout['title']  = $g_l10n->get('SYS_ADMINISTRATION_VAR', $title);
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
 
@@ -136,7 +136,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 $icon_login_user = '';
 if($_GET['type'] != 'USF')
 {
-    $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" />';
+    $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" />';
 }
 
 // Html des Modules ausgeben
@@ -147,8 +147,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'"><img
-            src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_PHR_CREATE', $title).'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$g_l10n->get('SYS_PHR_CREATE', $title).'</a>
+            src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $title).'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$g_l10n->get('SYS_CREATE_VAR', $title).'</a>
         </span>
     </li>
 </ul>
@@ -209,15 +209,15 @@ echo '
                 {
                     echo '
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$cat_row['cat_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('CAT_PHR_MOVE_UP', $title).'" title="'.$g_l10n->get('CAT_PHR_MOVE_UP', $title).'" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('CAT_MOVE_UP', $title).'" title="'.$g_l10n->get('CAT_MOVE_UP', $title).'" /></a>
                     <a class="iconLink" href="javascript:moveCategory(\'down\', '.$cat_row['cat_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('CAT_PHR_MOVE_DOWN', $title).'" title="'.$g_l10n->get('CAT_PHR_MOVE_DOWN', $title).'" /></a>';
+                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('CAT_MOVE_DOWN', $title).'" title="'.$g_l10n->get('CAT_MOVE_DOWN', $title).'" /></a>';
                 }
             echo '</td>
             <td>';
                 if($cat_row['cat_hidden'] == 1)
                 {
-                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $title).'" />';
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" />';
                 }
                 else
                 {

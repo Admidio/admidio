@@ -2,7 +2,7 @@
 /******************************************************************************
  * RSS - Feed fuer Termine
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,14 +21,14 @@ require_once('../../system/classes/table_date.php');
 if ($g_preferences['enable_rss'] != 1)
 {
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_PHR_RSS_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_RSS_DISABLED'));
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_dates_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
@@ -112,7 +112,7 @@ while ($row = $g_db->fetch_array($result))
     {
         if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
         {
-            $description = $g_l10n->get('SYS_PHR_DATE_TO', $description, $date->getValue('dat_end', $g_preferences['system_date']));
+            $description = $g_l10n->get('SYS_DATE_FROM_TO', $description, $date->getValue('dat_end', $g_preferences['system_date']));
         }
     }
 
@@ -129,11 +129,11 @@ while ($row = $g_db->fetch_array($result))
     $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=4">'.$g_l10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_PHR_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create')). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create')). '</i>';
 
     if($date->getValue('dat_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')). '</i>';
+        $description = $description. '<br /><i>'.$g_l10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r',strtotime($date->getValue('dat_timestamp_create')));

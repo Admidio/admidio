@@ -2,7 +2,7 @@
 /******************************************************************************
  * Gaestebucheintraege auflisten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@ require_once('../../system/classes/table_guestbook.php');
 if ($g_preferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
@@ -257,8 +257,8 @@ if($_GET['moderation'] == 0 && $g_current_user->editGuestbookRight() && $g_prefe
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $_GET['headline']. '"><img
-                src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('GBO_PHR_MODERATE_ENTRIES', $row['count_locked']).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $_GET['headline']. '">'.$g_l10n->get('GBO_PHR_MODERATE_ENTRIES', $row['count_locked']).'</a>
+                src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('GBO_MODERATE_ENTRIES', $row['count_locked']).'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $_GET['headline']. '">'.$g_l10n->get('GBO_MODERATE_ENTRIES', $row['count_locked']).'</a>
             </span>
         </li>';    
     }
@@ -271,11 +271,11 @@ if ($g_db->num_rows($guestbook_result) == 0)
     // Keine Gaestebucheintraege gefunden
     if ($_GET['id'] > 0)
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRY').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
     else
     {
-        echo '<p>'.$g_l10n->get('SYS_PHR_NO_ENTRIES').'</p>';
+        echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES').'</p>';
     }
 }
 else
@@ -357,7 +357,7 @@ else
 
                     echo '
                     <div class="editInformation">'.
-                        $g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $guestbook->getValue('gbo_timestamp_change')). '
+                        $g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $guestbook->getValue('gbo_timestamp_change')). '
                     </div>';
                 }
 
@@ -403,7 +403,7 @@ else
                             <span class="iconTextLink">
                                 <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')"><img src="'. THEME_PATH. '/icons/comments.png"
                                 alt="'.$g_l10n->get('GBO_SHOW_COMMENTS').'" title="'.$g_l10n->get('GBO_SHOW_COMMENTS').'" /></a>
-                                <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')">'.$g_l10n->get('GBO_PHR_SHOW_COMMENTS', $g_db->num_rows($comment_result)).'</a>
+                                <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')">'.$g_l10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $g_db->num_rows($comment_result)).'</a>
                             </span>
                             <div id="comments_'. $guestbook->getValue('gbo_id'). '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
                         </div>';
@@ -425,8 +425,8 @@ else
                         <div class="editInformation">
                             <span class="iconTextLink">
                                 <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png"
-                                alt="'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'" title="'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'" /></a>
-                                <a href="'.$load_url.'">'.$g_l10n->get('GBO_PHR_WRITE_COMMENT').'</a>
+                                alt="'.$g_l10n->get('GBO_WRITE_COMMENT').'" title="'.$g_l10n->get('GBO_WRITE_COMMENT').'" /></a>
+                                <a href="'.$load_url.'">'.$g_l10n->get('GBO_WRITE_COMMENT').'</a>
                             </span>
                         </div>';
                     }

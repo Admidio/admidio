@@ -2,7 +2,7 @@
 /******************************************************************************
  * Import-Assistent fuer Benutzerdaten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,13 +15,13 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 //pruefen ob in den aktuellen Servereinstellungen ueberhaupt file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
+    $g_message->show($g_l10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
 // Html-Kopf ausgeben
@@ -72,8 +72,8 @@ echo '
                         echo generateRoleSelectBox(0,'',1);
 
                         echo '&nbsp;
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_PHR_ASSIGN_ROLE_FOR_IMPORT&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_PHR_ASSIGN_ROLE_FOR_IMPORT\',this)" onmouseout="ajax_hideTooltip()"
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_ASSIGN_ROLE_FOR_IMPORT&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_ASSIGN_ROLE_FOR_IMPORT\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
                     </dd>
                 </dl>
@@ -87,8 +87,8 @@ echo '
                         <option value="3">'.$g_l10n->get('MEM_REPLACE').'</option>
                         <option value="4">'.$g_l10n->get('MEM_COMPLEMENT').'</option>
                     </select>&nbsp;
-                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_PHR_IDENTIFY_USERS&amp;inline=true"><img 
-                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_PHR_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
+                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS&amp;inline=true"><img 
+                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a></dd>
                 </dl>
             </li>

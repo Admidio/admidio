@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Rollen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,7 +29,7 @@ require_once('../../system/classes/role_dependency.php');
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -48,7 +48,7 @@ if(isset($_GET['rol_id']))
 {
     if(is_numeric($_GET['rol_id']) == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
     $req_rol_id = $_GET['rol_id'];
 }
@@ -64,7 +64,7 @@ if($req_rol_id > 0)
     if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id')
     && $role->getValue('cat_org_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -84,11 +84,11 @@ if($_GET['mode'] == 1)
         <div class="formBody">
             <p align="left">
                 <img src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$g_l10n->get('ROL_INACTIV_ROLE').'" />
-                '.$g_l10n->get('ROL_PHR_INACTIV_ROLE').'
+                '.$g_l10n->get('ROL_INACTIV_ROLE_DESC').'
             </p>
             <p align="left">
                 <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('ROL_ROLE_DELETE').'" />
-                '.$g_l10n->get('ROL_PHR_DELETE_ROLE', $g_l10n->get('SYS_DELETE')).'
+                '.$g_l10n->get('ROL_DELETE_ROLE', $g_l10n->get('SYS_DELETE')).'
             </p>
             <button id="btnDelete" type="button"
                 onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='. $_GET['rol_id']. '&mode=4\'"><img
@@ -120,12 +120,12 @@ elseif($_GET['mode'] == 2)
     if(strlen($_POST['rol_name']) == 0)
     {
         // es sind nicht alle Felder gefuellt
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
     }
     if($_POST['rol_cat_id'] == 0)
     {
         // es sind nicht alle Felder gefuellt
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_CATEGORY')));
     }
 
     if($role->getValue('rol_name') != $_POST['rol_name'])
@@ -144,7 +144,7 @@ elseif($_GET['mode'] == 2)
 
         if($row['count'] > 0)
         {
-            $g_message->show($g_l10n->get('ROL_PHR_ROLE_NAME_EXISTS'));
+            $g_message->show($g_l10n->get('ROL_ROLE_NAME_EXISTS'));
         }
     }
 
@@ -203,23 +203,23 @@ elseif($_GET['mode'] == 2)
                 }
                 else
                 {
-                    $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('ROL_VALID_TO'), $g_preferences['system_date']));
+                    $g_message->show($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('ROL_VALID_TO'), $g_preferences['system_date']));
                 }
 
                 // Enddatum muss groesser oder gleich dem Startdatum sein (timestamp dann umgekehrt kleiner)
     			if ($startDate->getTimestamp() > $endDate->getTimestamp()) 
     			{
-    				$g_message->show($g_l10n->get('SYS_PHR_DATE_END_BEFORE_BEGIN'));
+    				$g_message->show($g_l10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     			}
             }
             else
             {
-                $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('ROL_VALID_TO')));
+                $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('ROL_VALID_TO')));
             }
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_DATE_INVALID', $g_l10n->get('ROL_VALID_FROM'), $g_preferences['system_date']));
+            $g_message->show($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('ROL_VALID_FROM'), $g_preferences['system_date']));
         }
     }
 
@@ -235,7 +235,7 @@ elseif($_GET['mode'] == 2)
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('ROL_TIME_FROM'), $g_preferences['system_time']));
+            $g_message->show($g_l10n->get('SYS_TIME_INVALID', $g_l10n->get('ROL_TIME_FROM'), $g_preferences['system_time']));
         }
 
         if(strlen($_POST['rol_end_time']) > 0)
@@ -248,12 +248,12 @@ elseif($_GET['mode'] == 2)
             }
             else
             {
-                $g_message->show($g_l10n->get('SYS_PHR_TIME_INVALID', $g_l10n->get('ROL_TIME_TO'), $g_preferences['system_time']));
+                $g_message->show($g_l10n->get('SYS_TIME_INVALID', $g_l10n->get('ROL_TIME_TO'), $g_preferences['system_time']));
             }
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('ROL_TIME_TO')));
+            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('ROL_TIME_TO')));
         }
     }
 
@@ -267,7 +267,7 @@ elseif($_GET['mode'] == 2)
 
         if($num_free_places == 0)
         {
-            $g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
+            $g_message->show($g_l10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
         }
     }
 
@@ -285,7 +285,7 @@ elseif($_GET['mode'] == 2)
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
     // holt die Role ID des letzten Insert Statements
@@ -347,7 +347,7 @@ elseif($_GET['mode'] == 2)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
-    $msg_code = 'SYS_PHR_SAVE';
+    $msg_code = 'SYS_SAVE';
 }
 elseif($_GET['mode'] == 3)
 {
@@ -356,10 +356,10 @@ elseif($_GET['mode'] == 3)
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
-    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INACTIVE')));
+    $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INACTIVE')));
 }
 elseif($_GET['mode'] == 4)
 {
@@ -368,10 +368,10 @@ elseif($_GET['mode'] == 4)
 
     if($return_code == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
-    $msg_code = 'SYS_PHR_DELETE';
+    $msg_code = 'SYS_DELETE_DATA';
 }
 elseif($_GET['mode'] == 5)
 {
@@ -380,16 +380,16 @@ elseif($_GET['mode'] == 5)
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
-    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_ACTIVE')));
+    $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_ACTIVE')));
 }
 elseif($_GET['mode'] == 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
     $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$req_rol_id.'&amp;mode=4');
-    $g_message->show($g_l10n->get('ROL_PHR_ROLE_DELETE', $role->getValue('rol_name')));
+    $g_message->show($g_l10n->get('ROL_ROLE_DELETE_DESC', $role->getValue('rol_name')));
 }
 elseif($_GET['mode'] == 7)
 {
@@ -397,7 +397,7 @@ elseif($_GET['mode'] == 7)
     $role->save();
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INVISIBLE')));
+    $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INVISIBLE')));
 }
 elseif($_GET['mode'] == 8)
 {
@@ -405,7 +405,7 @@ elseif($_GET['mode'] == 8)
     $role->save();
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-    $g_message->show($g_l10n->get('ROL_PHR_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_VISIBLE')));
+    $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_VISIBLE')));
 }
 
 $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);

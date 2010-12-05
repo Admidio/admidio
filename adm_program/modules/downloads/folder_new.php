@@ -2,7 +2,7 @@
 /******************************************************************************
  * Neuen Ordner Anlegen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,13 +21,13 @@ require_once('../../system/classes/table_folder.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -94,7 +94,7 @@ echo '
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt>'.$g_l10n->get('DOW_PHR_CREATE_FOLDER', $parentFolderName).'</dt>
+                    <dt>'.$g_l10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName).'</dt>
                     <dd>&nbsp;</dd>
                 </dl>
             </li>

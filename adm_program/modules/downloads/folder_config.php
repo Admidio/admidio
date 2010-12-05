@@ -2,7 +2,7 @@
 /******************************************************************************
  * Ordnerberechtigungen konfigurieren
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,13 +21,13 @@ require_once('../../system/classes/table_folder.php');
 if ($g_preferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
 if (!$g_current_user->editDownloadRight())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -175,10 +175,10 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
                             echo ' value="0" onclick="toggleElement(\'rolesBox\');" />
-                            <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('DOW_PHR_NO_PUBLIC_ACCESS').'" /></label>&nbsp;
-                            <label for="fol_public">'.$g_l10n->get('DOW_PHR_NO_PUBLIC_ACCESS').'</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PHR_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PHR_PUBLIC_DOWNLOAD_FLAG\',this)" onmouseout="ajax_hideTooltip()"
+                            <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('DOW_NO_PUBLIC_ACCESS').'" /></label>&nbsp;
+                            <label for="fol_public">'.$g_l10n->get('DOW_NO_PUBLIC_ACCESS').'</label>
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
 
                             //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.
@@ -200,8 +200,8 @@ echo '
                 echo ' style="display: none;" ';
             }
             echo '>
-            <div class="groupBoxHeadline">'.$g_l10n->get('DOW_ROLE_ACCESS_PERMISSIONS').'</div>
-            <div class="groupBoxBody" ><p>'.$g_l10n->get('DOW_PHR_ROLE_ACCESS_PERMISSIONS').'</p>
+            <div class="groupBoxHeadline">'.$g_l10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC').'</div>
+            <div class="groupBoxBody" ><p>'.$g_l10n->get('DOW_ROLE_ACCESS_PERMISSIONS').'</p>
                 <div style="text-align: left; float: left;">
                     <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('DOW_NO_ACCESS').'" title="'.$g_l10n->get('DOW_NO_ACCESS').'" />'.$g_l10n->get('DOW_NO_ACCESS').'</div>
                     <div>

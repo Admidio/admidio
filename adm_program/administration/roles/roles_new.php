@@ -2,7 +2,7 @@
 /******************************************************************************
  * Rollen anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,7 +21,7 @@ require_once('../../system/classes/role_dependency.php');
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -51,14 +51,14 @@ if($req_rol_id > 0)
     if($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id')
     && $role->getValue('cat_org_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
     // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
     if($role->getValue('rol_name')    == $g_l10n->get('SYS_WEBMASTER')
     && $g_current_user->isWebmaster() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -191,7 +191,7 @@ $g_layout['header'] = '
                 }
                 entfernen();
 
-                alert("'.$g_l10n->get('ROL_PHR_SAVE_ROLES').'");
+                alert("'.$g_l10n->get('ROL_SAVE_ROLES').'");
 
             }
             else
@@ -337,16 +337,16 @@ echo '
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>'.$g_l10n->get('ROL_PHR_ALL_MEMBERS').'</option>
+                                            echo '>'.$g_l10n->get('ROL_ALL_MEMBERS').'</option>
                                         <option value="3" ';
                                             if($role->getValue('rol_mail_this_role') == 3)
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>'.$g_l10n->get('ROL_PHR_ALL_GUESTS').'</option>
+                                            echo '>'.$g_l10n->get('ROL_ALL_GUESTS').'</option>
                                     </select>
-                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_PHR_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
-                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_PHR_RIGHT_MAIL_TO_ALL\',this)" onmouseout="ajax_hideTooltip()"
+                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_RIGHT_MAIL_TO_ALL\',this)" onmouseout="ajax_hideTooltip()"
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>	                                
                                 </dd>
                             </dl>
@@ -375,10 +375,10 @@ echo '
                                         {
                                             echo ' selected="selected" ';
                                         }
-                                        echo '>'.$g_l10n->get('ROL_PHR_ALL_MEMBERS').'</option>
+                                        echo '>'.$g_l10n->get('ROL_ALL_MEMBERS').'</option>
                                 </select>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_PHR_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_PHR_RIGHT_ALL_LISTS_VIEW\',this)" onmouseout="ajax_hideTooltip()"
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_RIGHT_ALL_LISTS_VIEW\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                             </dd>
                         </dl>
@@ -456,10 +456,10 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
                             echo ' onchange="markRoleRight(\'rol_assign_roles\', \'rol_all_lists_view\', true)" value="1" />
-                            <label for="rol_assign_roles"><img src="'. THEME_PATH. '/icons/roles.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" /></label>&nbsp;
-                            <label for="rol_assign_roles">'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_ASSIGN_ROLES_DESC&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_ASSIGN_ROLES_DESC\',this)" onmouseout="ajax_hideTooltip()"
+                            <label for="rol_assign_roles"><img src="'. THEME_PATH. '/icons/roles.png" alt="'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'" /></label>&nbsp;
+                            <label for="rol_assign_roles">'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'</label>
+                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_ASSIGN_ROLES_DESC&amp;inline=true"><img 
+                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_RIGHT_ASSIGN_ROLES_DESC\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>	                                
                         </div>
                     </li>
@@ -475,8 +475,8 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
                             echo ' onchange="markRoleRight(\'rol_all_lists_view\', \'rol_assign_roles\', false)" value="1" />
-                            <label for="rol_all_lists_view"><img src="'. THEME_PATH. '/icons/lists.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" /></label>&nbsp;
-                            <label for="rol_all_lists_view">'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'</label>
+                            <label for="rol_all_lists_view"><img src="'. THEME_PATH. '/icons/lists.png" alt="'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" /></label>&nbsp;
+                            <label for="rol_all_lists_view">'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'</label>
                         </div>
                     </li>
                     <li>
@@ -487,8 +487,8 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="rol_approve_users"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" /></label>&nbsp;
-                            <label for="rol_approve_users">'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'</label>
+                            <label for="rol_approve_users"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'" /></label>&nbsp;
+                            <label for="rol_approve_users">'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'</label>
                         </div>
                     </li>
                     <li>
@@ -499,10 +499,10 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="rol_edit_user"><img src="'. THEME_PATH. '/icons/group.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" /></label>&nbsp;
-                            <label for="rol_edit_user">'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'</label>
-							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_EDIT_USER_DESC&amp;inline=true"><img 
-				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_PHR_RIGHT_EDIT_USER_DESC\',this)" onmouseout="ajax_hideTooltip()"
+                            <label for="rol_edit_user"><img src="'. THEME_PATH. '/icons/group.png" alt="'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'" /></label>&nbsp;
+                            <label for="rol_edit_user">'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'</label>
+							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_EDIT_USER_DESC&amp;inline=true"><img 
+				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_RIGHT_EDIT_USER_DESC\',this)" onmouseout="ajax_hideTooltip()"
 				                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>	                                
                         </div>
                     </li>';
@@ -517,8 +517,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_mail_to_all"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" /></label>&nbsp;
-                                <label for="rol_mail_to_all">'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'</label>
+                                <label for="rol_mail_to_all"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'" /></label>&nbsp;
+                                <label for="rol_mail_to_all">'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'</label>
                             </div>
                         </li>';
                     }
@@ -531,8 +531,8 @@ echo '
                                 echo ' checked="checked" ';
                             }
                             echo ' value="1" />
-                            <label for="rol_profile"><img src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" /></label>&nbsp;
-                            <label for="rol_profile">'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'</label>
+                            <label for="rol_profile"><img src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('ROL_RIGHT_PROFILE').'" /></label>&nbsp;
+                            <label for="rol_profile">'.$g_l10n->get('ROL_RIGHT_PROFILE').'</label>
                         </div>
                     </li>';
 
@@ -547,8 +547,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_announcements"><img src="'. THEME_PATH. '/icons/announcements.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" /></label>&nbsp;
-                                <label for="rol_announcements">'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'</label>
+                                <label for="rol_announcements"><img src="'. THEME_PATH. '/icons/announcements.png" alt="'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" /></label>&nbsp;
+                                <label for="rol_announcements">'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'</label>
                             </div>
                         </li>';
                     }
@@ -563,8 +563,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_dates"><img src="'. THEME_PATH. '/icons/dates.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" /></label>&nbsp;
-                                <label for="rol_dates">'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'</label>
+                                <label for="rol_dates"><img src="'. THEME_PATH. '/icons/dates.png" alt="'.$g_l10n->get('ROL_RIGHT_DATES').'" /></label>&nbsp;
+                                <label for="rol_dates">'.$g_l10n->get('ROL_RIGHT_DATES').'</label>
                             </div>
                         </li>';
                     }
@@ -579,8 +579,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_photo"><img src="'. THEME_PATH. '/icons/photo.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" /></label>&nbsp;
-                                <label for="rol_photo">'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'</label>
+                                <label for="rol_photo"><img src="'. THEME_PATH. '/icons/photo.png" alt="'.$g_l10n->get('ROL_RIGHT_PHOTO').'" /></label>&nbsp;
+                                <label for="rol_photo">'.$g_l10n->get('ROL_RIGHT_PHOTO').'</label>
                             </div>
                         </li>';
                     }
@@ -595,8 +595,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_download"><img src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" /></label>&nbsp;
-                                <label for="rol_download">'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'</label>
+                                <label for="rol_download"><img src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'" /></label>&nbsp;
+                                <label for="rol_download">'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'</label>
                             </div>
                         </li>';
                     }
@@ -611,8 +611,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_guestbook"><img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" /></label>&nbsp;
-                                <label for="rol_guestbook">'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'</label>
+                                <label for="rol_guestbook"><img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'" /></label>&nbsp;
+                                <label for="rol_guestbook">'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'</label>
                             </div>
                         </li>';
                         // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
@@ -627,8 +627,8 @@ echo '
                                         echo ' checked="checked" ';
                                     }
                                     echo ' value="1" />
-                                    <label for="rol_guestbook_comments"><img src="'. THEME_PATH. '/icons/comments.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" /></label>&nbsp;
-                                    <label for="rol_guestbook_comments">'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'</label>
+                                    <label for="rol_guestbook_comments"><img src="'. THEME_PATH. '/icons/comments.png" alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" /></label>&nbsp;
+                                    <label for="rol_guestbook_comments">'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'</label>
                                 </div>
                             </li>';
                         }
@@ -644,8 +644,8 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for="rol_weblinks"><img src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" /></label>&nbsp;
-                                <label for="rol_weblinks">'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'</label>
+                                <label for="rol_weblinks"><img src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'" /></label>&nbsp;
+                                <label for="rol_weblinks">'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'</label>
                             </div>
                         </li>';
                     }
@@ -749,12 +749,12 @@ echo '
 
                 <div class="groupBoxBody" id="dependancies_body">
                     <div style="margin-top: 6px;">';
-                        $rolename_var = $g_l10n->get('ROL_PHR_NEW_ROLE');
+                        $rolename_var = $g_l10n->get('ROL_NEW_ROLE');
                         if($role->getValue('rol_name')!='')
                         {
                             $rolename_var = $g_l10n->get('SYS_ROLE').' <b>'.$role->getValue('rol_name').'</b>';
                         }
-                        echo '<p>'.$g_l10n->get('ROL_PHR_ROLE_DEPENDENCIES', $rolename_var).'</p>
+                        echo '<p>'.$g_l10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>
 
                         <div style="text-align: left; float: left;">
                             <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('ROL_INDEPENDENT').'" title="'.$g_l10n->get('ROL_INDEPENDENT').'" />'.$g_l10n->get('ROL_INDEPENDENT').'</div>
@@ -807,12 +807,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $role->getValue('rol_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $role->getValue('rol_timestamp_create'));
+                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $role->getValue('rol_timestamp_create'));
 
                 if($role->getValue('rol_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $role->getValue('rol_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $role->getValue('rol_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $role->getValue('rol_timestamp_change'));
                 }
             echo '</div>';
         }

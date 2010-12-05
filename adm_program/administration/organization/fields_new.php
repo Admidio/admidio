@@ -2,7 +2,7 @@
 /******************************************************************************
  * Profilfelder anlegen und bearbeiten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +20,7 @@ require_once('../../system/classes/table_user_field.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -50,7 +50,7 @@ if($req_usf_id > 0)
     if($user_field->getValue('cat_org_id') >  0
     && $user_field->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -218,7 +218,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_hidden">
-                            <img src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" />
+                            <img src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" />
                         </label>
                     </dt>
                     <dd>
@@ -228,9 +228,9 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_hidden">'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_HIDDEN_DESC\',this)" onmouseout="ajax_hideTooltip()"
+                        <label for="usf_hidden">'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'</label>
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                     </dd>
                 </dl>
@@ -239,7 +239,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_disabled">
-                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" />
+                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED').'" />
                         </label>
                     </dt>
                     <dd>
@@ -249,9 +249,9 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_disabled">'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
+                        <label for="usf_disabled">'.$g_l10n->get('ORG_FIELD_DISABLED').'</label>
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                     </dd>
                 </dl>
@@ -260,7 +260,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_mandatory">
-                            <img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" />
+                            <img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" />
                         </label>
                     </dt>
                     <dd>
@@ -275,9 +275,9 @@ echo '
                             echo ' disabled="disabled" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_mandatory">'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_MANDATORY_DESC\',this)" onmouseout="ajax_hideTooltip()"
+                        <label for="usf_mandatory">'.$g_l10n->get('ORG_FIELD_MANDATORY').'</label>
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                     </dd>
                 </dl>
@@ -291,12 +291,12 @@ echo '
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
                 $user_create = new User($g_db, $user_field->getValue('usf_usr_id_create'));
-                echo $g_l10n->get('SYS_PHR_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_create'));
+                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_create'));
 
                 if($user_field->getValue('usf_usr_id_change') > 0)
                 {
                     $user_change = new User($g_db, $user_field->getValue('usf_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_PHR_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_change'));
+                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_change'));
                 }
             echo '</div>';
         }

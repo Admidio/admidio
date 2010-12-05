@@ -2,7 +2,7 @@
 /******************************************************************************
  * Spalten einer CSV-Datei werden Datenbankfeldern zugeordnet
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,12 +15,12 @@ require('../../system/login_valid.php');
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 if(count($_SESSION['file_lines']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FILE_NOT_EXIST'));
+    $g_message->show($g_l10n->get('SYS_FILE_NOT_EXIST'));
 }
 
 // feststellen, welches Trennzeichen in der Datei verwendet wurde
@@ -70,10 +70,10 @@ echo '
 <form action="'. $g_root_path. '/adm_program/administration/members/import_csv.php" method="post">
 <div class="formLayout" id="import_csv_form">
     <div class="formHead">'.$g_layout['title'].'</div>
-    <div class="formBody"><p>'.$g_l10n->get('MEM_PHR_ASSIGN_FIELDS').'</p>
+    <div class="formBody"><p>'.$g_l10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>
         <p style="margin-bottom: 10px;">
             <input type="checkbox" id="first_row" name="first_row" style="vertical-align: middle;" checked="checked" value="1" />&nbsp;
-            <label for="first_row">'.$g_l10n->get('MEM_PHR_FIRST_LINE_COLUMN_NAME').'</label>
+            <label for="first_row">'.$g_l10n->get('MEM_FIRST_LINE_COLUMN_NAME').'</label>
         </p>
 
         <table class="tableList" style="width: 80%;" cellspacing="0">

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Funktionen des Benutzers speichern
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -26,7 +26,7 @@ require("../../system/classes/role_dependency.php");
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")))
 {
-   $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+   $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -79,11 +79,11 @@ if($roleCount == 0)
 {
 	if($req_inlineView == 0)
 	{
-		die($g_message->show($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED')));
+		die($g_message->show($g_l10n->get('PRO_ROLE_NOT_ASSIGNED')));
 	}
 	else
 	{
-		die($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED'));
+		die($g_l10n->get('PRO_ROLE_NOT_ASSIGNED'));
 	}
 }
 
@@ -166,11 +166,11 @@ while($row = $g_db->fetch_array($result_rol))
             {
 				if($req_inlineView == 0)
 				{
-                	$g_message->show($g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $row['rol_name']));
+                	$g_message->show($g_l10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
 				}
 				else
 				{
-					echo $g_l10n->get('SYS_PHR_ROLE_MAX_MEMBERS', $row['rol_name']);
+					echo $g_l10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']);
 				}
             }
         }
@@ -254,11 +254,11 @@ if($req_new_user == 1 && $count_assigned == 0)
     // Neuem User wurden keine Rollen zugewiesen
 	if($req_inlineView == 0)
 	{
-    	$g_message->show($g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED'));
+    	$g_message->show($g_l10n->get('PRO_ROLE_NOT_ASSIGNED'));
 	}
 	else
 	{
-		echo $g_l10n->get('PRO_PHR_ROLE_NOT_ASSIGNED');
+		echo $g_l10n->get('PRO_ROLE_NOT_ASSIGNED');
 	}
 }
 
@@ -271,9 +271,9 @@ if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
 if($req_inlineView == 0)
 {
 	$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-	$g_message->show($g_l10n->get('SYS_PHR_SAVE'));
+	$g_message->show($g_l10n->get('SYS_SAVE'));
 }
 else
 {
-	echo $g_l10n->get('SYS_PHR_SAVE')."<SAVED/>";
+	echo $g_l10n->get('SYS_SAVE')."<SAVED/>";
 }

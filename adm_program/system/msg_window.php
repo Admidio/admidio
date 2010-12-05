@@ -2,7 +2,7 @@
 /******************************************************************************
  * Popup-Fenster mit Informationen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -66,7 +66,7 @@ if($inlineView)
 switch ($req_message_id)
 {
     case 'bbcode':
-        echo $g_l10n->get('SYS_PHR_BBCODE_DESC').'<br /><br />
+        echo $g_l10n->get('SYS_BBCODE_DESC').'<br /><br />
               <table class="tableList" style="width: auto;" cellspacing="0">
                  <tr>
                     <th style="width: 155px;">'.$g_l10n->get('SYS_EXAMPLE').'</th>
@@ -111,14 +111,14 @@ switch ($req_message_id)
               </table>';
         break;
 
-    case 'CAT_PHR_CATEGORY_GLOBAL':
+    case 'CAT_CATEGORY_GLOBAL':
         // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
         $organizations = '- '.$g_current_organization->getValue('org_longname').',<br />- ';
         $organizations .= implode(',<br />- ', $g_current_organization->getReferenceOrganizations(true, true, true));
         echo $g_l10n->get(strtoupper($req_message_id), $organizations);
         break;
 
-    case 'SYS_PHR_DATA_GLOBAL':
+    case 'SYS_DATA_GLOBAL':
         // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
         $organizations = '- '.$g_current_organization->getValue('org_longname').',<br />- ';
         $organizations .= implode(',<br />- ', $g_current_organization->getReferenceOrganizations(true, true, true));

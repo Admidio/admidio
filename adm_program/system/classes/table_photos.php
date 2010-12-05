@@ -2,7 +2,7 @@
 /******************************************************************************
  * Klasse fuer Datenbanktabelle adm_photos
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -82,7 +82,7 @@ class TablePhotos extends TableAccess
         $folderName = $this->getValue('pho_begin', 'Y-m-d'). '_'. $this->getValue('pho_id');
         if($myFilesPhotos->createFolder($folderName, true) == false)
         {
-            $error['text'] = 'SYS_PHR_FOLDER_NOT_CREATED';
+            $error['text'] = 'SYS_FOLDER_NOT_CREATED';
             $error['path'] = 'adm_my_files/photos/'.$folderName;
         }
         return $error;

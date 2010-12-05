@@ -2,7 +2,7 @@
 /******************************************************************************
  * Photoupload
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,13 +25,13 @@ require_once('../../libs/flexupload/class.flexupload.inc.php');
 if ($g_preferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
 if(!$g_current_user->editPhotoRight())
 {
-    $g_message->show($g_l10n->get('PHO_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -51,7 +51,7 @@ if(!isset($_GET['mode']) || $_GET['mode'] < 1 || $_GET['mode'] > 2)
 $ini = ini_get('file_uploads');
 if($ini!=1)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_SERVER_NO_UPLOAD'));
+    $g_message->show($g_l10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
 //URL auf Navigationstack ablegen
@@ -148,7 +148,7 @@ echo '
 	    <div class="formHead">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</div>
 	    <div class="formBody">
 	        <p>
-	            '.$g_l10n->get('PHO_PHR_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
+	            '.$g_l10n->get('PHO_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
 	            ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
 	        </p>
 	
@@ -185,7 +185,7 @@ echo '
 <div id="photo_upload_flash" style="visibility: hide; display: none;">
 	<h2>'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</h2>
 	<p>
-       '.$g_l10n->get('PHO_PHR_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
+       '.$g_l10n->get('PHO_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
        ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
     </p>';
 

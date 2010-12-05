@@ -2,7 +2,7 @@
 /******************************************************************************
  * Passwort neu vergeben
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,7 +23,7 @@ require_once('../../system/login_valid.php');
 if($g_current_user->isWebmaster() == false && $g_current_user->getValue('usr_id') != $_GET['usr_id'])
 {
     $g_message->setExcludeThemeBody();
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -80,26 +80,26 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
                     }
 
                     $g_message->setForwardUrl('javascript:self.parent.tb_remove()');
-                    $phrase = $g_l10n->get('PRO_PHR_PASSWORD_CHANGED')."<SAVED/>";
+                    $phrase = $g_l10n->get('PRO_PASSWORD_CHANGED')."<SAVED/>";
                 }
                 else
                 {
-                    $phrase = $g_l10n->get('PRO_PHR_PASSWORD_OLD_WRONG');
+                    $phrase = $g_l10n->get('PRO_PASSWORD_OLD_WRONG');
                 }
             }
             else
             {
-                $phrase = $g_l10n->get('PRO_PHR_PASSWORDS_NOT_EQUAL');
+                $phrase = $g_l10n->get('PRO_PASSWORDS_NOT_EQUAL');
             }
         }
         else
         {
-            $phrase = $g_l10n->get('PRO_PHR_PASSWORD_LENGTH');
+            $phrase = $g_l10n->get('PRO_PASSWORD_LENGTH');
         }
     }
     else
     {
-        $phrase = $g_l10n->get('SYS_PHR_FIELDS_EMPTY');
+        $phrase = $g_l10n->get('SYS_FIELDS_EMPTY');
     }
 	if ($inlineView == 0)
 	{
@@ -150,7 +150,7 @@ else
                         <dt><label for="new_password">'.$g_l10n->get('PRO_NEW_PASSWORD').':</label></dt>
                         <dd><input type="password" id="new_password" name="new_password" size="12" maxlength="20" />
                             <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                            <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PHR_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
+                            <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
                                 class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" />
                         </dd>
                     </dl>

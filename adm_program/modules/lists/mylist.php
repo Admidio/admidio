@@ -2,7 +2,7 @@
 /******************************************************************************
  * Eigene Listen erstellen
  *
- * Copyright    : (c) 2004 - 2010 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -118,7 +118,7 @@ $g_layout['header'] = '
             // MySQL erlaubt nur 61 gejointe Tabellen
             if(fieldNumberIntern >= 57)
             {
-                alert("'.$g_l10n->get('LST_PHR_NO_MORE_COLUMN').'");
+                alert("'.$g_l10n->get('LST_NO_MORE_COLUMN').'");
                 return;
             }
             
@@ -366,7 +366,7 @@ $g_layout['header'] = '
 
                 case "save_as":
                     var listName = "";
-                    listName = prompt("'.$g_l10n->get('LST_PHR_CONFIGURATION_SAVE').'");
+                    listName = prompt("'.$g_l10n->get('LST_CONFIGURATION_SAVE').'");
                     if(listName != null)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
@@ -375,7 +375,7 @@ $g_layout['header'] = '
                     break;
 
                 case "delete":
-                    var msg_result = confirm("'.$g_l10n->get('LST_PHR_CONFIGURATION_DELETE').'");
+                    var msg_result = confirm("'.$g_l10n->get('LST_CONFIGURATION_DELETE').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=3";
@@ -384,7 +384,7 @@ $g_layout['header'] = '
                     break;
 
                 case "system":
-                    var msg_result = confirm("'.$g_l10n->get('LST_PHR_WANT_CONFIGURATION_FOR_ALL_USERS').'");
+                    var msg_result = confirm("'.$g_l10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=4";
@@ -393,7 +393,7 @@ $g_layout['header'] = '
                     break;
 
                 case "default":
-                    var msg_result = confirm("'.$g_l10n->get('LST_PHR_CONFIGURATION_DEFAULT').'");
+                    var msg_result = confirm("'.$g_l10n->get('LST_CONFIGURATION_DEFAULT').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$req_lst_id.'&mode=5";
@@ -411,7 +411,7 @@ echo '
 <div class="formLayout" id="mylist_form">
     <div class="formHead">'.$g_l10n->get('LST_MY_LIST').'</div>
     <div class="formBody">
-        <p><b>1.</b> '.$g_l10n->get('LST_PHR_CHANGE_LIST').'</p>
+        <p><b>1.</b> '.$g_l10n->get('LST_CHANGE_LIST').'</p>
         <p><b>'.$g_l10n->get('LST_CONFIGURATION_LIST').' :</b>&nbsp;&nbsp;
         <select size="1" id="lists_config" name="lists_config" onchange="loadList()">
             <option ';
@@ -527,7 +527,7 @@ echo '
         	if(strlen($list->getValue('lst_name')) > 0)
         	{
         		$icon = 'disk_copy.png';
-        		$icon_text = $g_l10n->get('LST_PHR_SAVE_CONFIGURATION');
+        		$icon_text = $g_l10n->get('LST_SAVE_CONFIGURATION_OTHER_NAME');
         	}
         	else
         	{
@@ -553,7 +553,7 @@ echo '
         {
             echo '
             <a class="iconLink" href="javascript:send(\'system\');"><img
-                src="'. THEME_PATH. '/icons/list_global.png" alt="'.$g_l10n->get('LST_PHR_CONFIGURATION_ALL_USERS').'" title="'.$g_l10n->get('LST_PHR_CONFIGURATION_ALL_USERS').'" /></a>';
+                src="'. THEME_PATH. '/icons/list_global.png" alt="'.$g_l10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$g_l10n->get('LST_CONFIGURATION_ALL_USERS').'" /></a>';
         }
         
         // eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
@@ -561,7 +561,7 @@ echo '
         {
             echo '
             <a class="iconLink" href="javascript:send(\'default\');"><img
-                src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('LST_PHR_DEFAULT_CONFIGURATION').'" title="'.$g_l10n->get('LST_PHR_DEFAULT_CONFIGURATION').'" /></a>';
+                src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$g_l10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" /></a>';
         }
         
         // Hinweistext fuer Webmaster
@@ -574,7 +574,7 @@ echo '
         }
         echo '</p>
         
-        <p><b>2.</b> '.$g_l10n->get('LST_PHR_SET_COLUMNS').':</p>
+        <p><b>2.</b> '.$g_l10n->get('LST_SET_COLUMNS').':</p>
 
         <table class="tableList" id="mylist_fields_table" style="width: 100%;" cellspacing="0">
             <thead>
@@ -609,7 +609,7 @@ echo '
         
         <br />
         
-        <b>3.</b> '.$g_l10n->get('LST_PHR_CHOOSE_ROLE').':
+        <b>3.</b> '.$g_l10n->get('LST_CHOOSE_ROLE').':
         <p><b>'.$g_l10n->get('SYS_ROLE').' :</b>&nbsp;&nbsp;';
 
         // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen

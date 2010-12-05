@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Ankuendigungen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -23,13 +23,13 @@ require('../../system/classes/table_announcement.php');
 if ($g_preferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
 // pruefen, ob der User auch die entsprechenden Rechte hat
 if(!$g_current_user->editAnnouncements())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Uebergabevariablen pruefen
@@ -55,7 +55,7 @@ if($_GET['ann_id'] > 0)
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -65,11 +65,11 @@ if($_GET['mode'] == 1)
 {
     if(strlen($_POST['ann_headline']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_HEADLINE')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY',$g_l10n->get('SYS_HEADLINE')));
     }
     if(strlen($_POST['ann_description']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY',$g_l10n->get('SYS_TEXT')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY',$g_l10n->get('SYS_TEXT')));
     }
 
     if(isset($_POST['ann_global']) == false)
@@ -91,7 +91,7 @@ if($_GET['mode'] == 1)
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 	else
 	{

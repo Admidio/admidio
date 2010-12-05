@@ -2,7 +2,7 @@
 /******************************************************************************
  * Verschiedene Funktionen fuer Rollen
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,7 +20,7 @@ require_once('../../system/classes/table_roles.php');
 if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show($g_l10n->get('SYS_PHR_MODULE_DISABLED'));
+    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 } 
 
 // Der Inhalt des Formulars wird nun in der Session gespeichert...
@@ -63,13 +63,13 @@ if (array_key_exists('usr_id', $_GET))
        && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_ID_NOT_FOUND'));
+        $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!isValidEmailAddress($user->getValue('EMAIL')))
     {
-        $g_message->show($g_l10n->get('SYS_PHR_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 }
 
@@ -89,7 +89,7 @@ $role = new TableRoles($g_db);
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if(strlen($_POST['name']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
+    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
 }
 
 //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
@@ -121,7 +121,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                 //Pruefen ob ein Fehler beim Upload vorliegt
                 if (($_FILES['userfile']['error'][$act_attachment_nr] != 0) &&  ($_FILES['userfile']['error'][$act_attachment_nr] != 4))
                 {
-                    $g_message->show($g_l10n->get('MAI_PHR_ATTACHMENT_TO_LARGE'));
+                    $g_message->show($g_l10n->get('MAI_ATTACHMENT_TO_LARGE'));
                 }
                 //Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
                 if ($_FILES['userfile']['error'][$act_attachment_nr] == 0)
@@ -130,7 +130,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                     $attachment_size = $attachment_size + $_FILES['userfile']['size'][$act_attachment_nr];
                     if($attachment_size > $email->getMaxAttachementSize("b"))
                     {
-                        $g_message->show($g_l10n->get('MAI_PHR_ATTACHMENT_TO_LARGE'));
+                        $g_message->show($g_l10n->get('MAI_ATTACHMENT_TO_LARGE'));
                     }
                     
                     if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) > 0)
@@ -149,19 +149,19 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_FIELD_EMPTY', $g_l10n->get('MAI_SUBJECT')));
+        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('MAI_SUBJECT')));
     }
 }
 else
 {
-    $g_message->show($g_l10n->get('SYS_PHR_EMAIL_INVALID'));
+    $g_message->show($g_l10n->get('SYS_EMAIL_INVALID'));
 }
 
 if (array_key_exists('rol_id', $_POST))
 {    
     if (strlen($_POST['rol_id']) == 0)
     {
-        $g_message->show($g_l10n->get('MAI_PHR_CHOOSE_ROLE'));
+        $g_message->show($g_l10n->get('MAI_CHOOSE_ROLE'));
     }
     
     $role->readData($_POST['rol_id']);
@@ -239,7 +239,7 @@ else
     {
         // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
         // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
-        $g_message->show($g_l10n->get('MAI_PHR_ROLE_NO_EMAILS'));
+        $g_message->show($g_l10n->get('MAI_ROLE_NO_EMAILS'));
     }
 
 }
@@ -259,16 +259,16 @@ if (isset($_POST['kopie']) && $_POST['kopie'] == true)
 //Den Text fuer die Mail aufbereiten
 if ($role->getValue("rol_id") > 0)
 {
-    $mail_body = $g_l10n->get('MAI_PHR_EMAIL_SEND_TO_ROLE', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
+    $mail_body = $g_l10n->get('MAI_EMAIL_SEND_TO_ROLE', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
 }
 else
 {
-    $mail_body = $g_l10n->get('MAI_PHR_EMAIL_SEND_TO_USER', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
+    $mail_body = $g_l10n->get('MAI_EMAIL_SEND_TO_USER', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
 }
 
 if (!$g_valid_login)
 {
-    $mail_body = $mail_body. "\n".$g_l10n->get('MAI_PHR_SENDER_NOT_LOGGED_IN');
+    $mail_body = $mail_body. "\n".$g_l10n->get('MAI_SENDER_NOT_LOGGED_IN');
 }
 $mail_body = $mail_body. "\n\n\n". $_POST['body'];
 
@@ -305,22 +305,22 @@ if ($email->sendEmail())
     
     if ($role->getValue('rol_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_SEND', $g_l10n->get('MAI_PHR_TO_ROLE', $role->getValue('rol_name'))));
+        $g_message->show($g_l10n->get('SYS_EMAIL_SEND', $g_l10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_SEND', $_POST['mailto']));
+        $g_message->show($g_l10n->get('SYS_EMAIL_SEND', $_POST['mailto']));
     }
 }
 else
 {
     if ($role->getValue('rol_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $g_l10n->get('MAI_PHR_TO_ROLE', $role->getValue('rol_name'))));
+        $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $g_l10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_PHR_EMAIL_NOT_SEND', $_POST['mailto']));
+        $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto']));
     }
 }
 

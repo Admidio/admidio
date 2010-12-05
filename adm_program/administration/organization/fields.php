@@ -2,7 +2,7 @@
 /******************************************************************************
  * Uebersicht und Pflege aller organisationsspezifischen Profilfelder
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@ require_once('../../system/login_valid.php');
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -125,14 +125,14 @@ echo '
 <table class="tableList" cellspacing="0">
     <thead>
         <tr>
-            <th>'.$g_l10n->get('SYS_FIELD').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DESCRIPTION&amp;inline=true"><img 
-                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_PHR_FIELD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
+            <th>'.$g_l10n->get('SYS_FIELD').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DESCRIPTION&amp;inline=true"><img 
+                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a></th>
             <th>&nbsp;</th>
             <th>'.$g_l10n->get('SYS_DESCRIPTION').'</th>
-            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" /></th>
-            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" /></th>
-            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_FIELD_DISABLED').'" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" /></th>
             <th>'.$g_l10n->get('ORG_DATATYPE').'</th>
             <th style="width: 40px;">&nbsp;</th>
         </tr>
@@ -167,9 +167,9 @@ echo '
                 <td><a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'">'.$row['usf_name'].'</a></td>
                 <td style="text-align: right; width: 45px;">
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$row['usf_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_UP').'" title="'.$g_l10n->get('ORG_PHR_FIELD_UP').'" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('ORG_FIELD_UP').'" title="'.$g_l10n->get('ORG_FIELD_UP').'" /></a>
                     <a class="iconLink" href="javascript:moveCategory(\'down\', '.$row['usf_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DOWN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_DOWN').'" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('ORG_FIELD_DOWN').'" title="'.$g_l10n->get('ORG_FIELD_DOWN').'" /></a>
                 </td>
                 <td>';
                     // laengere Texte kuerzen und Tooltip mit Popup anbieten
@@ -188,31 +188,31 @@ echo '
                 <td>';
                     if($row['usf_hidden'] == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye_gray.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_HIDDEN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_HIDDEN').'" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye_gray.png" alt="'.$g_l10n->get('ORG_FIELD_HIDDEN').'" title="'.$g_l10n->get('ORG_FIELD_HIDDEN').'" />';
                     }
                     else
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_HIDDEN').'" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" />';
                     }
                 echo '</td>
                 <td>';
                     if($row['usf_disabled'] == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_PHR_FIELD_DISABLED').'" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_FIELD_DISABLED').'" />';
                     }
                     else
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_DISABLED').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_DISABLED').'" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield.png" alt="'.$g_l10n->get('ORG_FIELD_NOT_DISABLED').'" title="'.$g_l10n->get('ORG_FIELD_NOT_DISABLED').'" />';
                     }
                 echo '</td>
                 <td>';
                     if($row['usf_mandatory'] == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_PHR_FIELD_MANDATORY').'" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" />';
                     }
                     else
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_gray.png" alt="'.$g_l10n->get('ORG_PHR_FIELD_NOT_MANDATORY').'" title="'.$g_l10n->get('ORG_PHR_FIELD_NOT_MANDATORY').'" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_gray.png" alt="'.$g_l10n->get('ORG_FIELD_NOT_MANDATORY').'" title="'.$g_l10n->get('ORG_FIELD_NOT_MANDATORY').'" />';
                     }
                 echo '</td>
                 <td>';
@@ -267,7 +267,7 @@ echo '
     {
         echo '<tr>
             <td colspan="5" style="text-align: center;">
-                <p>'.$g_l10n->get('ORG_PHR_NO_FIELD_CREATED').'</p>
+                <p>'.$g_l10n->get('ORG_NO_FIELD_CREATED').'</p>
             </td>
         </tr>';
     }

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Grußkarte Form Bearbeitung
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Roland Eischer
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -30,7 +30,7 @@ $msg_send_error             = $g_l10n->get('ECA_SEND_ERROR');
 if ($g_preferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $error_msg = $g_l10n->get('SYS_PHR_MODULE_DISABLED');
+    $error_msg = $g_l10n->get('SYS_MODULE_DISABLED');
 }
 // pruefen ob User eingeloggt ist
 if(!$g_valid_login)
@@ -187,11 +187,11 @@ echo'
 				<span style="font-size:16px; font-weight:bold">';
 				if($error_msg == '')
 				{
-					echo $g_l10n->get("ECA_PHR_SUCCESSFULLY_SEND");
+					echo $g_l10n->get("ECA_SUCCESSFULLY_SEND");
 				}
 				else
 				{
-					echo $g_l10n->get("ECA_PHR_NOT_SUCCESSFULLY_SEND");
+					echo $g_l10n->get("ECA_NOT_SUCCESSFULLY_SEND");
 				}
 				echo'</span>
 			</dv>

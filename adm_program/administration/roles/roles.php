@@ -2,7 +2,7 @@
 /******************************************************************************
  * Rollen mit Berechtigungen auflisten
  *
- * Copyright    : (c) 2004 - 2009 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,7 +21,7 @@
 // nur Moderatoren duerfen Rollen erfassen & verwalten
 if(!$g_current_user->assignRoles())
 {
-    $g_message->show($g_l10n->get('SYS_PHR_NO_RIGHTS'));
+    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 if(isset($_GET['inactive']) && $_GET['inactive'] == 1)
@@ -155,7 +155,7 @@ echo '
             if($role->getValue('cat_hidden') == 1)
             {
                 $image_hidden = '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png"
-                                 alt="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $g_l10n->get('SYS_ROLE')).'" title="'.$g_l10n->get('SYS_PHR_VISIBLE_TO_USERS', $g_l10n->get('SYS_ROLE')).'" />';
+                                 alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $g_l10n->get('SYS_ROLE')).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $g_l10n->get('SYS_ROLE')).'" />';
             }
             echo '<tbody>
                 <tr>
@@ -176,63 +176,63 @@ echo '
                 if($role->getValue('rol_assign_roles') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/roles.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ASSIGN_ROLES').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />';
                 }
                 if($role->getValue('rol_approve_users') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/new_registrations.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_APPROVE_USERS').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'" />';
                 }
                 if($role->getValue('rol_edit_user') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/group.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_EDIT_USER').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'" />';
                 }
                 if($role->getValue('rol_mail_to_all') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/email.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_MAIL_TO_ALL').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />';
                 }
                 if($role->getValue('rol_profile') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/profile.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_PROFILE').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_PROFILE').'" title="'.$g_l10n->get('ROL_RIGHT_PROFILE').'" />';
                 }
                 if($role->getValue('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/announcements.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ANNOUNCEMENTS').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />';
                 }
                 if($role->getValue('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/dates.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_DATES').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_DATES').'" title="'.$g_l10n->get('ROL_RIGHT_DATES').'" />';
                 }
                 if($role->getValue('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/photo.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_PHOTO').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_PHOTO').'" title="'.$g_l10n->get('ROL_RIGHT_PHOTO').'" />';
                 }
                 if($role->getValue('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_DOWNLOAD').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'" />';
                 }
                 if($role->getValue('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/guestbook.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'" />';
                 }
                 // falls anonyme Gaestebuchkommentare erfassen werden duerfen, braucht man das Recht pro Rolle nicht mehr zu vergeben
                 if($role->getValue('rol_guestbook_comments') == 1  && $g_preferences['enable_guestbook_module'] > 0 && $g_preferences['enable_gbook_comments4all'] == false)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/comments.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_GUESTBOOK_COMMENTS').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
                 }
                 if($role->getValue('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/weblinks.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_WEBLINKS').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'" />';
                 }
                 /*if($role->getValue("rol_inventory") == 1 && $g_preferences['enable_inventory_module'] > 0)
                 {
@@ -242,34 +242,34 @@ echo '
                 if($role->getValue('rol_all_lists_view') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/lists.png"
-                    alt="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" title="'.$g_l10n->get('ROL_PHR_RIGHT_ALL_LISTS_VIEW').'" />';
+                    alt="'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />';
                 }
             echo '</td>
             <td>';
                 if($role->getValue("rol_this_list_view") == 1)
                 {
                     echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/list_role.png"
-                    alt="'.$g_l10n->get('ROL_PHR_VIEW_LIST_ROLE').'" title="'.$g_l10n->get('ROL_PHR_VIEW_LIST_ROLE').'" />';
+                    alt="'.$g_l10n->get('ROL_VIEW_LIST_ROLE').'" title="'.$g_l10n->get('ROL_VIEW_LIST_ROLE').'" />';
                 }
                 if($role->getValue("rol_this_list_view") == 2)
                 {
                     echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/list_key.png"
-                    alt="'.$g_l10n->get('ROL_PHR_VIEW_LIST_MEMBERS').'" title="'.$g_l10n->get('ROL_PHR_VIEW_LIST_MEMBERS').'" />';
+                    alt="'.$g_l10n->get('ROL_VIEW_LIST_MEMBERS').'" title="'.$g_l10n->get('ROL_VIEW_LIST_MEMBERS').'" />';
                 }
                 if($role->getValue("rol_mail_this_role") == 1 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/email_role.png"
-                    alt="'.$g_l10n->get('ROL_PHR_SEND_MAIL_ROLE').'" title="'.$g_l10n->get('ROL_PHR_SEND_MAIL_ROLE').'" />';
+                    alt="'.$g_l10n->get('ROL_SEND_MAIL_ROLE').'" title="'.$g_l10n->get('ROL_SEND_MAIL_ROLE').'" />';
                 }
                 if($role->getValue("rol_mail_this_role") == 2 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/email_key.png"
-                    alt="'.$g_l10n->get('ROL_PHR_SEND_MAIL_MEMBERS').'" title="'.$g_l10n->get('ROL_PHR_SEND_MAIL_MEMBERS').'" />';
+                    alt="'.$g_l10n->get('ROL_SEND_MAIL_MEMBERS').'" title="'.$g_l10n->get('ROL_SEND_MAIL_MEMBERS').'" />';
                 }
                 if($role->getValue("rol_mail_this_role") == 3 && $g_preferences['enable_mail_module'] > 0)
                 {
                     echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/email.png"
-                    alt="'.$g_l10n->get('ROL_PHR_SEND_MAIL_GUESTS').'" title="'.$g_l10n->get('ROL_PHR_SEND_MAIL_GUESTS').'" />';
+                    alt="'.$g_l10n->get('ROL_SEND_MAIL_GUESTS').'" title="'.$g_l10n->get('ROL_SEND_MAIL_GUESTS').'" />';
                 }
             echo '</td>
             <td style="text-align: center;">
