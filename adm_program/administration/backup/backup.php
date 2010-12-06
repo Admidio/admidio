@@ -57,20 +57,20 @@ if ($handle = opendir($backupabsolutepath))
 // Sortiert die Backupfiles nach Dateiname / Datum
 sort($old_backup_files);
 
-$g_layout['title']  = 'Datenbank Backup';
+$g_layout['title']  = $g_l10n->get('BAC_DATABASE_BACKUP');
 $g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
-echo '<h1 class="moduleHeadline">Datenbank Backup</h1>
+echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/backup/backup_function.php"><img
-            src="'. THEME_PATH. '/icons/database_save.png" alt="Backup starten" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_function.php">Backup starten</a>
+            src="'. THEME_PATH. '/icons/database_save.png" alt="'.$g_l10n->get('BAC_START_BACKUP').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_function.php">'.$g_l10n->get('BAC_START_BACKUP').'</a>
         </span>
     </li>
 </ul>';
@@ -79,9 +79,9 @@ echo '<h1 class="moduleHeadline">Datenbank Backup</h1>
 echo '
 <table class="tableList" cellspacing="0">
     <tr>
-        <th>Backupdatei</th>
-        <th>Erstellungsdatum</th>
-        <th>Größe</th>
+        <th>'.$g_l10n->get('BAC_BACKUP_FILE').'</th>
+        <th>'.$g_l10n->get('BAC_CREATION_DATE').'</th>
+        <th>'.$g_l10n->get('SYS_SIZE').'</th>
         <th style="text-align: center;">'.$g_l10n->get('SYS_DELETE').'</th>
 	</tr>';
 
@@ -89,7 +89,7 @@ echo '
 	
 	if(count($old_backup_files) == 0)
 	{
-		echo'<tr><td colspan="4">Keine Backupdatei vorhanden!</td></tr>';
+		echo'<tr><td colspan="4">'.$g_l10n->get('BAC_NO_BACKUP_FILE_EXISTS').'</td></tr>';
 	}
 	
 	$backup_size_sum = 0;
@@ -100,9 +100,9 @@ echo '
         <tr class="tableMouseOver" id="row_file_'.$key.'">
             <td>
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='. $old_backup_file. '">
-                <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="Datei" title="Datei" /></a>
+                <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'.$g_l10n->get('SYS_FILE').'" title="'.$g_l10n->get('SYS_FILE').'" /></a>
                 <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='. $old_backup_file. '">'. $old_backup_file. '</a></td>
-            <td>'. date ("d.m.Y H:i:s", filemtime($backupabsolutepath.$old_backup_file)). '</td>
+            <td>'. date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)). '</td>
             <td style="text-align: right;">'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' KB&nbsp;</td>
             <td style="text-align: center;">
                 <a class="iconLink" href="javascript:deleteObject(\'bck\', \'row_file_'.$key.'\',0,\''.$old_backup_file.'\')">
@@ -113,7 +113,7 @@ echo '
     }
 echo '<tr>
 		<th>&nbsp</th>
-		<th>Summe</th>
+		<th>'.$g_l10n->get('BAC_SUM').'</th>
 		<th style="text-align: right;">'. $backup_size_sum .' KB&nbsp</th>
 		<th>&nbsp</th>
 </tr>

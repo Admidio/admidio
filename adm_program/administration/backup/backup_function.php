@@ -39,11 +39,11 @@ if($g_current_user->isWebmaster() == false)
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-$g_layout['title'] = 'Datenbank Backup';
+$g_layout['title'] = $g_l10n->get('BAC_DATABASE_BACKUP');
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
-echo '<h1 class="moduleHeadline">Datenbank Backup</h1>';
+echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
 
 error_reporting(E_ALL);
@@ -55,8 +55,8 @@ OutputInformation('', '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php"><img
-            src="'. THEME_PATH. '/icons/error.png" alt="Abbrechen" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">Abbrechen</a>
+            src="'. THEME_PATH. '/icons/error.png" alt="'.$g_l10n->get('SYS_ABORT').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">'.$g_l10n->get('SYS_ABORT').'</a>
         </span>
     </li>
 </ul>');
@@ -72,9 +72,9 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 {
 
 	$fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION. BETA_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
-	$fileheaderline .= '-- Backup vom '.date('d.m.Y').' um '.date('G:i:s').LINE_TERMINATOR.LINE_TERMINATOR;
-	$fileheaderline .= '-- Database: '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
-	$fileheaderline .= '-- User: '.$g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME').LINE_TERMINATOR.LINE_TERMINATOR;
+	$fileheaderline .= '-- '.$g_l10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
+	$fileheaderline .= '-- '.$g_l10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
+	$fileheaderline .= '-- '.$g_l10n->get('SYS_USER').': '.$g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME').LINE_TERMINATOR.LINE_TERMINATOR;
 	gzwrite($zp, $fileheaderline, strlen($fileheaderline));
 	
 	//Ignore Foreignkeys during Import
@@ -341,7 +341,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 				OutputInformation('rows_'.$SelectedTables[$t], '<b>'.$SelectedTables[$t].' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</b>');
 				$elapsedtime = getmicrotime() - $datastarttime;
 				$percentprocessed = ($processedrows + $currentrow) / $overallrows;
-				$overallprogress = '<p>Gesamtfortschritt:</p><p>'.number_format($processedrows + $currentrow).' / '.number_format($overallrows).' ('.number_format($percentprocessed * 100, 1).'% fertig) ['.FormattedTimeRemaining($elapsedtime).' verstrichen';
+				$overallprogress = '<p>'.$g_l10n->get('BAC_OVERALL_PROGRESS').':</p><p>'.number_format($processedrows + $currentrow).' / '.number_format($overallrows).' ('.$g_l10n->get('BAC_COMPLETED_VAR', number_format($percentprocessed * 100, 1)).') ['.$g_l10n->get('BAC_PASSED_VAR', FormattedTimeRemaining($elapsedtime));
 				if (($percentprocessed > 0) && ($percentprocessed < 1)) 
 				{
 					$overallprogress .= ', '.FormattedTimeRemaining(abs($elapsedtime - ($elapsedtime / $percentprocessed))).' übrig';
@@ -351,7 +351,7 @@ if ($zp = @gzopen($newfullfilename, 'wb6'))
 			}
 
 		}
-		OutputInformation('rows_'.$SelectedTables[$t], $SelectedTables[$t].' ('.number_format($rows[$t]).' Datensätze, [100%])');
+		OutputInformation('rows_'.$SelectedTables[$t], $SelectedTables[$t].' ('.$g_l10n->get('BAC_RECORDS_VAR', number_format($rows[$t])).', [100%])');
 		$processedrows += $rows[$t];
 		if($currentrow > 0)
 		{
@@ -386,17 +386,17 @@ else
 }
 
 
-echo '<p>Backup fertiggestellt in '.FormattedTimeRemaining(getmicrotime() - $starttime, 2).'.</p>
+echo '<p>'.$g_l10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</p>
 
-<p>Backupdatei: <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+<p>'.$g_l10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</p>
 
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="Zurück" title="Zurück zur Backupseite"/></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">Zurück zur Backupseite</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('BAC_BACK_TO_BACKUP_PAGE').'" title="'.$g_l10n->get('BAC_BACK_TO_BACKUP_PAGE').'"/></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('BAC_BACK_TO_BACKUP_PAGE').'</a>
         </span>
     </li>
 </ul>';
