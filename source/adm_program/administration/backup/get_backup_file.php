@@ -13,8 +13,8 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur Webmaster duerfen ein Backup runterladen
 if($g_current_user->isWebmaster() == false)
@@ -25,13 +25,21 @@ if($g_current_user->isWebmaster() == false)
 $backupabsolutepath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
 $filename = '';
 
-//pruefen ob eine Dateiname übergeben wurde
+//pruefen ob ein Dateiname übergeben wurde
 if (array_key_exists('filename', $_GET))
 {
-    if (is_string($_GET['filename']) == false)
+    $returnCode = isValidFileName($_GET['filename']);
+    
+    if($returnCode < 0)
     {
-        //FileId ist nicht string
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        if($returnCode == -2)
+        {
+            $g_message->show($g_l10n->get('BAC_FILE_NAME_INVALID'));
+        }
+        else
+        {
+            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        }
     }
 	
 	$filename = $_GET['filename'];	
@@ -39,14 +47,8 @@ if (array_key_exists('filename', $_GET))
 }
 else
 {
-    // ohne File gehts auch nicht weiter
+    // ohne Dateiname gehts auch nicht weiter
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-//Pruefung, ob nur gute Dateinamen uebergeben werden
-if( -2 == isValidFileName($filename) )
-{
-	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //kompletten Pfad der Datei holen

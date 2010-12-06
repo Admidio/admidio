@@ -14,25 +14,30 @@
  *
  *****************************************************************************/
 
-if (!function_exists('getmicrotime')) {
+if (!function_exists('getmicrotime')) 
+{
 	function getmicrotime() {
 		list($usec, $sec) = explode(' ', microtime());
 		return ((float) $usec + (float) $sec);
 	}
 }
 
-function FormattedTimeRemaining($seconds, $precision=1) {
+function FormattedTimeRemaining($seconds, $precision=1) 
+{
+    global $g_l10n;
+
 	if ($seconds > 86400) {
-		return number_format($seconds / 86400, $precision).' Tagen';
+		return $g_l10n->get('BAC_DAYS_VAR', number_format($seconds / 86400, $precision));
 	} elseif ($seconds > 3600) {
-		return number_format($seconds / 3600, $precision).' Stunden';
+		return $g_l10n->get('BAC_HOURS_VAR', number_format($seconds / 3600, $precision));
 	} elseif ($seconds > 60) {
-		return number_format($seconds / 60, $precision).' Minuten';
+		return $g_l10n->get('BAC_MINUTES_VAR', number_format($seconds / 60, $precision));
 	}
-	return number_format($seconds, $precision).' Sekunden';
+	return $g_l10n->get('BAC_SECONDS_VAR', number_format($seconds, $precision));
 }
 
-function FileSizeNiceDisplay($filesize, $precision=2) {
+function FileSizeNiceDisplay($filesize, $precision=2) 
+{
 	if ($filesize < 1000) {
 		$sizeunit  = 'bytes';
 		$precision = 0;
@@ -51,7 +56,8 @@ function FileSizeNiceDisplay($filesize, $precision=2) {
 	return number_format($filesize, $precision).' '.$sizeunit;
 }
 
-function OutputInformation($id, $dhtml, $text='') {
+function OutputInformation($id, $dhtml, $text='') 
+{
 		if (!is_null($dhtml)) {
 			if ($id) {
 				echo '<script type="text/javascript"><!--

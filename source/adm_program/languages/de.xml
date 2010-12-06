@@ -6,6 +6,26 @@
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Ankündigung wurde angelegt</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+	
+	<!-- Phrases only in Announcementmodule -->
+    <text id="BAC_BACK_TO_BACKUP_PAGE" development="new" translation="todo">Zurück zur Backupseite</text>
+    <text id="BAC_BACKUP_COMPLETED" development="new" translation="todo">Backup fertiggestellt in %VAR1%</text>
+    <text id="BAC_BACKUP_FILE" development="new" translation="todo">Backupdatei</text>
+    <text id="BAC_BACKUP_FROM" development="new" translation="todo">Backup vom %VAR1% um %VAR2%</text>
+    <text id="BAC_COMPLETED_VAR" development="new" translation="todo">%VAR1%% fertig</text>
+    <text id="BAC_CREATION_DATE" development="new" translation="todo">Erstellungsdatum</text>
+    <text id="BAC_DATABASE_BACKUP" development="new" translation="todo">Datenbank-Backup</text>
+    <text id="BAC_DAYS_VAR" development="new" translation="todo">%VAR1% Tagen</text>
+    <text id="BAC_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!</text>
+    <text id="BAC_HOURS_VAR" development="new" translation="todo">%VAR1% Stunden</text>
+    <text id="BAC_MINUTES_VAR" development="new" translation="todo">%VAR1% Minuten</text>
+    <text id="BAC_NO_BACKUP_FILE_EXISTS" development="new" translation="todo">Keine Backupdatei vorhanden!</text>
+    <text id="BAC_OVERALL_PROGRESS" development="new" translation="todo">Gesamtfortschritt</text>
+    <text id="BAC_RECORDS_VAR" development="new" translation="todo">%VAR1% Datensätze</text>
+    <text id="BAC_PASSED_VAR" development="new" translation="todo">%VAR1% verstrichen</text>
+    <text id="BAC_START_BACKUP" development="new" translation="todo">Backup starten</text>
+    <text id="BAC_SUM" development="new" translation="todo">Summe</text>
+    <text id="BAC_SECONDS_VAR" development="new" translation="todo">%VAR1% Sekunden</text>
 
     <!-- Phrases only in Category-Administration -->
     <text id="CAT_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>
