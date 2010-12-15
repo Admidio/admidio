@@ -126,7 +126,6 @@
     <text id="INS_ERROR_OPEN_FILE" development="edited" translation="todo">File %VAR1_BOLD% could not be opened.</text>
     <text id="INS_FAX" development="edited" translation="todo">Fax</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="edited" translation="todo">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download modul.</text>
-    <text id="INS_GENDER" development="edited" translation="todo">Gender</text>
     <text id="INS_GOOGLE_TALK" development="new1" translation="todo">Google Talk</text>
     <text id="INS_GROUPS" development="edited" translation="todo">Groups</text>
     <text id="INS_ICQ" development="new1" translation="todo">ICQ</text>
@@ -155,7 +154,6 @@
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="edited" translation="todo">Provided organisation name is not complete!</text>
     <text id="INS_OVERVIEW" development="edited" translation="todo">Overview</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="edited" translation="todo">Provided passwords do not match.</text>
-    <text id="INS_PHONE" development="edited" translation="todo">Phone</text>    
     <text id="INS_PHONE_LIST" development="edited" translation="todo">Phone list</text>
     <text id="INS_PHP_VERSION" development="edited" translation="todo">PHP version</text>
     <text id="INS_PHP_WRONG_MYSQL_VERSION" development="edited" translation="todo">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
@@ -283,6 +281,7 @@
     <text id="SYS_FONT_COLOR" development="edited" translation="todo">Font-color</text>
     <text id="SYS_FONT_SIZE" development="edited" translation="todo">Font-size</text>
     <text id="SYS_FONT_STYLE" development="edited" translation="todo">Font-style</text>
+    <text id="SYS_GENDER" development="edited" translation="todo">Gender</text>
     <text id="SYS_HEADLINE" development="edited" translation="todo">Headline</text>
     <text id="SYS_HELP" development="edited" translation="todo">Help</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="edited" translation="todo">Invalid page view</text>
@@ -298,6 +297,7 @@
     <text id="SYS_NEXT" development="edited" translation="todo">Next</text>
     <text id="SYS_NO" development="edited" translation="todo">No</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="edited" translation="todo">Password forgotten</text>
+    <text id="SYS_PHONE" development="edited" translation="todo">Phone</text>    
     <text id="SYS_PLEASE_CHOOSE" development="edited" translation="todo">Please choose</text>
     <text id="SYS_PREVIEW" development="edited" translation="todo">Preview</text>
     <text id="SYS_RECIPIENT" development="edited" translation="todo">Recipient</text>
