@@ -686,6 +686,7 @@
     <!-- Phrases only in Profilemodule -->
 	<text id="PRO_ACCEPT_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto übernehmen</text>
 	<text id="PRO_ADD_USER" development="new" translation="todo">Benutzer anlegen</text>
+	<text id="PRO_CHANGE_DATE" development="new" translation="todo">Datum ändern</text>
 	<text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
     <text id="PRO_CONFIRM_REGISTRATION_SYSTEM" development="new" translation="todo">Deine Daten wurden gespeichert.\n\nDu kannst dich noch nicht einloggen.\nSobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.</text>
     <text id="PRO_CONFIRM_REGISTRATION_DATE" development="new" translation="todo">Deine Daten wurden erfolgreich gespeichert und du wurdest zum gewünschten Termin angemeldet.\n\nDu kannst dich nun einloggen.</text>
@@ -835,6 +836,7 @@
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="todo">Alle</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
+    <text id="SYS_APPROVE_ENTRY" development="new" translation="todo">Willst du den Eintrag %VAR1_BOLD% freischalten ?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
@@ -897,6 +899,7 @@
     <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad veringern</text>
     <text id="SYS_DELETE" development="new" translation="todo">Löschen</text>
     <text id="SYS_DELETE_DATA" development="new" translation="todo">Die Daten wurden gelöscht.</text>
+    <text id="SYS_DELETE_ENTRY" development="new" translation="todo">Willst du den Eintrag %VAR1_BOLD% löschen ?</text>
     <text id="SYS_DESCRIPTION" development="new" translation="todo">Beschreibung</text>
     <text id="SYS_EDIT" development="new" translation="todo">Bearbeiten</text>
 	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
@@ -912,6 +915,7 @@
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
+    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDer Eintrag konnte nicht gelöscht werden.</text>
     <text id="SYS_EXAMPLE" development="new" translation="todo">Beispiel</text>
     <text id="SYS_FADE_IN" development="new" translation="todo">Einblenden</text>
     <text id="SYS_FEATURES" development="new" translation="todo">Funktionen</text>

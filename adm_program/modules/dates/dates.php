@@ -138,13 +138,10 @@ if($req_mode == 'old')
 {
     $g_layout['title'] = $g_l10n->get('DAT_PREVIOUS_DATES', ' '.$g_layout['title']);
 }
-$g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
 
 if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] == 1)
 {
-    $g_layout['header'] .=  '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Termine"
+    $g_layout['header'] =  '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Termine"
         href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php" />';
 };
 
@@ -153,6 +150,11 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 // Html des Modules ausgeben
 echo ' 
 <script type="text/javascript"><!--
+    $(document).ready(function() 
+    {
+        $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+    }); 
+
     function showCalendar()
     {
         var calendar = "";
@@ -443,7 +445,8 @@ else
                         if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
                         {
                             echo '
-                            <a class="iconLink" href="#" onclick="deleteObject(\'dat\', \'dat_'.$date->getValue('dat_id').'\','.$date->getValue('dat_id').',\''.$date->getValue('dat_headline').'\')"><img
+                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
+                                $date->getValue('dat_id').'&amp;database_id='.$date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $g_preferences['system_date']).' '.$date->getValue('dat_headline')).'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         }
                     }
@@ -523,7 +526,7 @@ else
                         if($date->getValue('dat_room_id') > 0)
                         {
                             $room = new TableRooms($g_db, $date->getValue('dat_room_id'));
-                            $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                            $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
                             $locationHtml .= ' <strong>(<a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a>)</strong>';
                         }
                     } 
@@ -538,7 +541,7 @@ else
                 {
                     // falls eingestellt noch den entsprechenden Raum ausgeben
                     $room = new TableRooms($g_db, $date->getValue('dat_room_id'));
-                    $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title='.$g_l10n->get('DAT_ROOM_INFORMATIONS').'&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                    $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
                     $locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
                     $dateElements[] = array($g_l10n->get('DAT_LOCATION'), $locationHtml);
                 }

@@ -68,8 +68,6 @@ unset($_SESSION['categories_request']);
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('SYS_ADMINISTRATION_VAR', $title);
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-
     <script type="text/javascript"><!--
         function moveCategory(direction, catID)
         {
@@ -125,8 +123,7 @@ $g_layout['header'] = '
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/categories/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + direction, true);
-                resObject.send(null);
+                $.get(gRootPath + "/adm_program/administration/categories/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + direction);
             }
         }
     //--></script>';

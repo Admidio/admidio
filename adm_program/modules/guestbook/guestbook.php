@@ -105,29 +105,22 @@ if($g_preferences['enable_rss'] == 1)
 };
 
 $g_layout['header'] = $g_layout['header']. '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/moderate.js"></script>
-
     <script type="text/javascript">
-        var gbookId = 0;
+        $(document).ready(function() 
+        {
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+        }); 
 
         function getComments(commentId)
         {
-            gbookId = commentId;
-            resObject.open("get", "'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + gbookId, true);
-            resObject.onreadystatechange = handleResponse;
-            resObject.send(null);
-        }
-
-        function handleResponse()
-        {
-            if (resObject.readyState == 4)
-            {
-                var objectId = "commentSection_" + gbookId;
-                document.getElementById(objectId).innerHTML = resObject.responseText;
-                toggleComments(gbookId);
-            }
+            // RequestObjekt abschicken und Kommentar laden
+            $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId, 
+            function(data) {
+                var objectId = "commentSection_" + commentId;
+                document.getElementById(objectId).innerHTML = data;
+                $("a[rel=\'lnkDeleteComment\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+                toggleComments(commentId);
+            });            
         }
 
         function toggleComments(commentId)
@@ -320,7 +313,8 @@ else
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $_GET['headline']. '"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
-                            <a class="iconLink" href="javascript:deleteObject(\'gbo\', \'gbo_'.$guestbook->getValue('gbo_id').'\','.$guestbook->getValue('gbo_id').',\''.$guestbook->getValue('gbo_name').'\')"><img
+                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
+                                $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                     }
 
@@ -336,14 +330,18 @@ else
                     <ul class="iconTextLinkList">
                         <li>
                             <span class="iconTextLink">
-                                <a href="javascript:moderateObject(\'gbo\', \'gbo_'.$guestbook->getValue('gbo_id').'\','.$guestbook->getValue('gbo_id').',\''.$guestbook->getValue('gbo_name').'\')"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_UNLOCK').'" /></a>
-                                <a href="javascript:moderateObject(\'gbo\', \'gbo_'.$guestbook->getValue('gbo_id').'\','.$guestbook->getValue('gbo_id').',\''.$guestbook->getValue('gbo_name').'\')">'.$g_l10n->get('SYS_UNLOCK').'</a>
+                                <a rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('SYS_UNLOCK').'" /></a>
+                                <a rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'">'.$g_l10n->get('SYS_UNLOCK').'</a>
                             </span>
                         </li>
                         <li>
                             <span class="iconTextLink">
-                                <a href="javascript:deleteObject(\'gbo\', \'gbo_'.$guestbook->getValue('gbo_id').'\','.$guestbook->getValue('gbo_id').',\''.$guestbook->getValue('gbo_name').'\')"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('SYS_REMOVE').'" /></a>
-                                <a href="javascript:deleteObject(\'gbo\', \'gbo_'.$guestbook->getValue('gbo_id').'\','.$guestbook->getValue('gbo_id').',\''.$guestbook->getValue('gbo_name').'\')">'.$g_l10n->get('SYS_REMOVE').'</a>
+                                <a rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('SYS_REMOVE').'" /></a>
+                                <a rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'">'.$g_l10n->get('SYS_REMOVE').'</a>
                             </span>
                         </li>
                     </ul>';

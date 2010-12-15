@@ -79,8 +79,12 @@ unset($_SESSION['links_request']);
 // Html-Kopf ausgeben
 $g_layout['title']  = $_GET['headline'];
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+        }); 
+    //--></script>';
 
 if($g_preferences['enable_rss'] == 1)
 {
@@ -244,8 +248,9 @@ else
 			echo '
 			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $_GET['headline']. '"><img
 				src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
-			<a class="iconLink" href="javascript:deleteObject(\'lnk\', \'lnk_'.$weblink->getValue('lnk_id').'\', \''.$weblink->getValue('lnk_id').'\',\''.$weblink->getValue('lnk_name').'\')">
-			   <img	src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
+            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
+                $weblink->getValue('lnk_id').'&amp;database_id='.$weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'"><img 
+                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
 		}
 
 		// Beschreibung ausgeben, falls vorhanden
@@ -253,9 +258,9 @@ else
 		{
 			echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
 		}
-        echo '</div>';
 		
-		echo '<div class="smallFontSize" style="text-align: right">'.$g_l10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>';
+		echo '<div class="smallFontSize" style="text-align: right">'.$g_l10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>
+		</div>';
 
         $j++;
         $i++;

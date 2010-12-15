@@ -8,9 +8,9 @@
  *
  ****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_rooms.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_rooms.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
@@ -19,8 +19,12 @@ if (!$g_current_user->isWebmaster())
 }
 
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>'; 
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+        }); 
+    //--></script>'; 
 
 
 unset($_SESSION['rooms_request']);
@@ -98,7 +102,8 @@ else
                             
                         //Löschen
                         echo '
-                        <a class="iconLink" href="javascript:deleteObject(\'room\', \'room_'.$room->getValue('room_id').'\','.$room->getValue('room_id').',\''.$room->getValue('room_name').'\')"><img 
+                        <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
+                            $room->getValue('room_id').'&amp;database_id='.$room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                     }
           echo '</div>

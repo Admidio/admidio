@@ -84,8 +84,12 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Html-Kopf ausgeben
 $g_layout['title']  = $req_headline;
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+        }); 
+    //--></script>';
 
 if($g_preferences['enable_rss'] == 1)
 {
@@ -240,7 +244,8 @@ else
                         if($announcement->getValue("ann_org_shortname") == $g_organization)
                         {
                             echo '
-                            <a class="iconLink" href="javascript:deleteObject(\'ann\', \'ann_'.$announcement->getValue("ann_id").'\','.$announcement->getValue("ann_id").',\''.$announcement->getValue("ann_headline").'\')"><img 
+                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                                $announcement->getValue('ann_id').'&amp;database_id='.$announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         }    
                     }

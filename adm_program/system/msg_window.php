@@ -18,7 +18,7 @@ require_once('classes/table_rooms.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $req_message_id    = '';
-$req_message_title = '';
+$req_message_title = 'SYS_NOTE';
 $req_message_var1  = '';
 $inlineView        = false;
 
@@ -38,17 +38,13 @@ if(isset($_GET['message_title']))
 {
     $req_message_title = strStripTags($_GET['message_title']);
 }
-else
-{
-    $req_message_title = $g_l10n->get('SYS_NOTE');
-}
 
 if(isset($_GET['message_var1']))
 {
     $req_message_var1 = strStripTags($_GET['message_var1']);
 }
 
-if (isset($_GET["inline"]) && $_GET["inline"] == true)
+if (isset($_GET['inline']) && $_GET['inline'] == true)
 {
     $inlineView = true;
 }
@@ -59,7 +55,7 @@ if($inlineView)
     // Html des Modules ausgeben
     echo '
     <div class="formLayout" id="message_window">
-            <div class="formHead">'.$req_message_title.'</div>
+            <div class="formHead">'.$g_l10n->get($req_message_title).'</div>
             <div class="formBody">';
 }
 

@@ -171,14 +171,19 @@ if($g_preferences['enable_rss'] == 1)
 if($g_current_user->editPhotoRight())
 {
     $g_layout['header'] = $g_layout['header']. '
-        <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-        <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
+        <script type="text/javascript"><!--
+            $(document).ready(function() 
+            {
+                $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+            }); 
+        //--></script>';
 }
+
 if($g_preferences['photo_show_mode']==1)
 {
     $g_layout['header'] = $g_layout['header']. '
-            <script type="text/javascript"><!--
-                $(document).ready(function(){
+        <script type="text/javascript"><!--
+            $(document).ready(function(){
                 $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
                                                            slideshowAuto:false,
                                                            preloading:true,
@@ -188,9 +193,8 @@ if($g_preferences['photo_show_mode']==1)
                                                            current:\''.$g_l10n->get('SYS_SLIDESHOW_CURRENT').'\',
                                                            previous:\''.$g_l10n->get('SYS_PREVIOUS').'\',
                                                            next:\''.$g_l10n->get('SYS_NEXT').'\'});
-                });
-            -->
-            </script>';
+            });
+        --></script>';
 }
 
 //Photomodulspezifische CSS laden
@@ -640,8 +644,9 @@ echo '<div class="photoModuleContainer">';
                                 }
 
                                 echo '
-                                <a class="iconLink" href="javascript:deleteObject(\'pho\', \'pho_'.$sub_photo_album->getValue('pho_id').'\','.$sub_photo_album->getValue('pho_id').',\''.$sub_photo_album->getValue('pho_name').'\')"><img 
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PHO_ALBUM_DELETE').'" title="'.$g_l10n->get('PHO_ALBUM_DELETE').'" /></a>
+                                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=pho_'.
+                                    $sub_photo_album->getValue('pho_id').'&amp;database_id='.$sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'"><img 
+                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
                                 </li>';
                             }
                     echo '</ul>
