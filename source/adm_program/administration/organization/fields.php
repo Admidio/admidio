@@ -24,10 +24,12 @@ unset($_SESSION['fields_request']);
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $g_layout['title']  = $g_l10n->get('ORG_PROFILE_FIELDS');
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>
-    
     <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+        }); 
+
         function moveCategory(direction, usfID)
         {
             var actRow = document.getElementById("row_usf_" + usfID);
@@ -82,8 +84,7 @@ $g_layout['header'] = '
             if(secondSequence > 0)
             {
                 // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-                resObject.open("GET", gRootPath + "/adm_program/administration/organization/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction, true);
-                resObject.send(null);
+                $.get(gRootPath + "/adm_program/administration/organization/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
             }
         }
     //--></script>';
@@ -255,7 +256,8 @@ echo '
                     else
                     {
                         echo '
-                        <a class="iconLink" href="javascript:deleteObject(\'usf\', \'row_usf_'.$row['usf_id'].'\','.$row['usf_id'].',\''.$row['usf_name'].'\')"><img 
+                        <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=usf&amp;element_id=row_usf_'.
+                            $row['usf_id'].'&amp;database_id='.$row['usf_id'].'&amp;name='.urlencode($row['usf_name']).'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                     }
                 echo '</td>

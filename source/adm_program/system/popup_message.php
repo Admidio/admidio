@@ -1,0 +1,166 @@
+<?php
+/******************************************************************************
+ * Anlegen neuer Mitglieder
+ *
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Markus Fassbender
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * type        - Modulkuerzel in dem ein Eintrag geloescht werden soll
+ * element_id  - ID des HTML-Elements, welches nach dem Loeschen entfernt werden soll
+ * database_id - ID des Eintrags in der Datenbanktabelle
+ * name        - Name des Elements, der im Hinweis angezeigt wird
+ *
+ *****************************************************************************/
+
+require_once('common.php');
+require_once('login_valid.php');
+
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_type        = '';
+$req_element_id  = 0;
+$req_database_id = 0;
+$req_name        = '';
+$icon = 'error_big.png';
+$text = 'SYS_DELETE_ENTRY';
+
+// Uebergabevariablen pruefen
+
+if(isset($_GET['type']) && strlen($_GET['type']) > 0)
+{
+    $req_type = strStripTags($_GET['type']);
+}
+else
+{
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+
+if(isset($_GET['element_id']) && strlen($_GET['element_id']) > 0)
+{
+    $req_element_id = strStripTags($_GET['element_id']);
+}
+else
+{
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+
+if(isset($_GET['database_id']))
+{
+    $req_database_id = strStripTags($_GET['database_id']);
+}
+else
+{
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+
+if(isset($_GET['name']))
+{
+    $req_name = strStripTags($_GET['name']);
+}
+else
+{
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+
+// URL zusammensetzen
+switch ($req_type)
+{
+    case 'ann':
+        $url = 'announcements_function.php?mode=2&ann_id='.$req_database_id;
+        break;
+    case 'bac':
+        $url = 'backup_file_function.php?job=delete&file_id='.$req_database_id;
+        break;
+    case 'dat':
+        $url = 'dates_function.php?mode=2&dat_id='.$req_database_id;
+        break;
+    case 'fil':
+        $url = 'download_function.php?mode=2&file_id='.$req_database_id;
+        break;
+    case 'fol':
+        $url = 'download_function.php?mode=5&folder_id='.$req_database_id;
+        break;
+    case 'gbo':
+        $url = 'guestbook_function.php?mode=2&id='.$req_database_id;
+        break;
+    case 'gbc':
+        $url = 'guestbook_function.php?mode=5&id='.$req_database_id;
+        break;
+    case 'lnk':
+        $url = 'links_function.php?mode=2&lnk_id='.$req_database_id;
+        break;
+    case 'gbo_mod':
+        $url = 'guestbook_function.php?mode=9&id='.$req_database_id;
+        $icon = 'information_big.png';
+        $text = 'SYS_APPROVE_ENTRY';
+        break;    
+    case 'nwu':
+        $url = 'new_user_function.php?mode=4&new_user_id='.$req_database_id;
+        break;
+    case 'pho':
+        $url = 'photo_album_function.php?job=delete&pho_id='.$req_database_id;
+        break;
+    case 'room':
+        $url = 'rooms_function.php?mode=2&room_id='.$req_database_id;
+        break;
+    case 'usf':
+        $url = 'fields_function.php?mode=2&usf_id='.$req_database_id;
+        break;
+    default:
+        $url = '';
+        break;
+}
+
+if(strlen($url) == 0)
+{
+    $g_message->setExcludeThemeBody();
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+
+echo '
+<script type="text/javascript"><!--
+var entryDeleted;
+
+function deleteEntry()
+{
+    entryDeleted = document.getElementById("'.$req_element_id.'");
+
+    // RequestObjekt abschicken und Eintrag loeschen
+    $.get("'.$url.'", function(data) {
+        if(data == "done")
+        {
+            $.colorbox.close();
+            $(entryDeleted).fadeOut("slow");
+        }
+        else
+        {
+            $("#msgText").html("'.$g_l10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'");
+        }
+    });
+}
+//--></script>
+
+<form id="frmMembersCreateUser" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
+<div class="formLayout">
+    <div class="formHead">'. $g_l10n->get('SYS_NOTE'). '</div>
+    <div class="formBody">
+        <div style="float: left; width: 75px; margin: 20px 0px 20px 0px;">
+            <br /><img src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /><br />
+        </div>
+        <div id="msgText" style="margin: 20px 0px 20px 0px;"><br />'.$g_l10n->get($text, $req_name).'<br /><br /></div>
+
+        <div class="formSubmit">
+            <button id="btnYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+                alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="btnNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
+                alt="'.$g_l10n->get('SYS_NO').'" />&nbsp;'.$g_l10n->get('SYS_NO').'</button>
+        </div>
+    </div>
+</form>';
+?>

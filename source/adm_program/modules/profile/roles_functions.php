@@ -121,7 +121,7 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
                             if ($row['rol_name'] != $g_l10n->get('SYS_WEBMASTER'))
                             {
                                 $roleMemHTML .= '<a class="iconLink" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$row['rol_id'].')"><img
-                                    src="'.THEME_PATH.'/icons/edit.png" alt="Datum ändern" title="Datum ändern" /></a>';
+                                    src="'.THEME_PATH.'/icons/edit.png" alt="'.$g_l10n->get('PRO_CHANGE_DATE').'" title="'.$g_l10n->get('PRO_CHANGE_DATE').'" /></a>';
                             }
                             else
                             {

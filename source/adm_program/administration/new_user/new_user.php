@@ -56,8 +56,12 @@ if ($member_found == 0)
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('NWU_NEW_REGISTRATIONS');
 $g_layout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/ajax.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/delete.js"></script>';
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\', onComplete:function(){$("#btnNo").focus();}});
+        }); 
+    //--></script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
 
@@ -96,8 +100,9 @@ echo '
             <td style="text-align: center;">
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
                     src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
-                <a class="iconLink" href="javascript:deleteObject(\'new_user\', \'row_user_'.$row['usr_id'].'\','.$row['usr_id'].',\''.$row['first_name'].' '.$row['last_name'].'\')"><img 
-                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('NWU_DELETE_REGISTRATION').'" title="'.$g_l10n->get('NWU_DELETE_REGISTRATION').'" /></a>
+                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
+                    $row['usr_id'].'&amp;database_id='.$row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'"><img 
+                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
             </td>
         </tr>';
     }
