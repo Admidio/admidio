@@ -155,56 +155,53 @@ switch ($req_message_id)
 	// Eigene Listen
 
     case 'mylist_condition':
-        echo 'Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben.
-              Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen
-              eingeschränkt.<br /><br />
-              Beispiele:<br /><br />
+        echo $g_l10n->get('LST_MYLIST_CONDITION_DESC').'<br /><br />
+              '.$g_l10n->get('SYS_EXAMPLES').':<br /><br />
               <table class="tableList" style="width: 100%;" cellspacing="0">
                  <tr>
-                    <th style="width: 75px;">Feld</th>
-                    <th style="width: 110px;">Bedingung</th>
-                    <th>Erklärung</th>
+                    <th style="width: 75px;">'.$g_l10n->get('SYS_FIELD').'</th>
+                    <th style="width: 110px;">'.$g_l10n->get('SYS_CONDITION').'</th>
+                    <th>'.$g_l10n->get('SYS_DESCRIPTION').'</th>
                  </tr>
                  <tr>
-                    <td>Nachname</td>
-                    <td><b>Schmitz</b></td>
-                    <td>Sucht alle Benutzer mit dem Nachnamen Schmitz</td>
+                    <td>'.$g_l10n->get('SYS_LASTNAME').'</td>
+                    <td><b>'.$g_l10n->get('LST_SEARCH_LASTNAME_EXAMPLE').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_LASTNAME_DESC').'</td>
                  </tr>
                  <tr>
-                    <td>Nachname</td>
-                    <td><b>Mei*</b></td>
-                    <td>Sucht alle Benutzer deren Namen mit Mei anfängt</td>
+                    <td>'.$g_l10n->get('SYS_LASTNAME').'</td>
+                    <td><b>'.$g_l10n->get('LST_SEARCH_LASTNAME_BEGINS_EXAMPLE').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_LASTNAME_BEGINS_DESC').'</td>
                  </tr>
                  <tr>
-                    <td>Geburtstag</td>
-                    <td><b>&gt; 01.03.1986</b></td>
-                    <td>Sucht alle Benutzer, die nach dem 01.03.1986 geboren wurden</td>
+                    <td>'.$g_l10n->get('SYS_BIRTHDAY').'</td>
+                    <td><b>&gt; '.$g_l10n->get('LST_SEARCH_DATE_EXAMPLE').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_DATE_DESC').'</td>
                  </tr>
                  <tr>
-                    <td>Geburtstag</td>
-                    <td><b>&gt; 18j</b></td>
-                    <td>Sucht alle Benutzer, die älter als 18 Jahre sind</td>
+                    <td>'.$g_l10n->get('SYS_BIRTHDAY').'</td>
+                    <td><b>&gt; '.$g_l10n->get('LST_SEARCH_AGE_EXAMPLE').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_AGE_DESC').'</td>
                  </tr>
                  <tr>
-                    <td>Geschlecht</td>
-                    <td><b>M/W/U</b></td>
-                    <td>Sucht nach Männlich, Weiblich, Unbekannt</td>
+                    <td>'.$g_l10n->get('SYS_GENDER').'</td>
+                    <td><b>'.$g_l10n->get('LST_SEARCH_GENDER_EXAMPLE').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_GENDER_DESC').'</td>
                  </tr>
                  <tr>
-                    <td>Ort</td>
-                    <td><b>Köln oder Bonn</b></td>
-                    <td>Sucht alle Benutzer, die aus Köln oder Bonn kommen</td>
+                    <td>'.$g_l10n->get('SYS_LOCATION').'</td>
+                    <td><b>'.$g_l10n->get('LST_SEARCH_LOCATION_EXAMPLE').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_LOCATION_DESC').'</td>
                  </tr>
                  <tr>
-                    <td>Telefon</td>
-                    <td><b>*241*&nbsp;&nbsp;*54</b></td>
-                    <td>Sucht alle Benutzer, deren Telefonnummer 241 enthält und
-                       mit 54 endet</td>
+                    <td>'.$g_l10n->get('SYS_PHONE').'</td>
+                    <td><b>'.$g_l10n->get('LST_SEARCH_TELEFON_EXAMPLE').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_TELEFON_DESC').'</td>
                  </tr>
                  <tr>
-                    <td>Ja/Nein Feld</td>
-                    <td><b>Ja</b></td>
-                    <td>Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</td>
+                    <td>'.$g_l10n->get('LST_SEARCH_YES_NO_FIELD').'</td>
+                    <td><b>'.$g_l10n->get('SYS_YES').'</b></td>
+                    <td>'.$g_l10n->get('LST_SEARCH_YES_NO_FIELD_DESC').'</td>
                  </tr>
               </table>';
         break;

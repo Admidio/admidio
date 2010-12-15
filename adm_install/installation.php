@@ -505,11 +505,11 @@ elseif($req_mode == 8)
                                             , ('.$cat_id_stammdaten.', "TEXT", "POSTCODE",  "'.$g_l10n->get('INS_POSTCODE').'", NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "CITY",      "'.$g_l10n->get('INS_CITY').'", NULL, 1, 0, 0, 5, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "COUNTRY",   "'.$g_l10n->get('SYS_COUNTRY').'", NULL, 1, 0, 0, 6, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "TEXT", "PHONE",     "'.$g_l10n->get('INS_PHONE').'", NULL, 0, 0, 0, 7, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "TEXT", "PHONE",     "'.$g_l10n->get('SYS_PHONE').'", NULL, 0, 0, 0, 7, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "MOBILE",    "'.$g_l10n->get('INS_MOBILE').'", NULL, 0, 0, 0, 8, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "TEXT", "FAX",       "'.$g_l10n->get('INS_FAX').'", NULL, 0, 0, 0, 9, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "DATE", "BIRTHDAY",  "'.$g_l10n->get('INS_BIRTHDAY').'", NULL, 1, 0, 0, 10, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
-                                            , ('.$cat_id_stammdaten.', "NUMERIC", "GENDER", "'.$g_l10n->get('INS_GENDER').'", NULL, 1, 0, 0, 11, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
+                                            , ('.$cat_id_stammdaten.', "NUMERIC", "GENDER", "'.$g_l10n->get('SYS_GENDER').'", NULL, 1, 0, 0, 11, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "EMAIL", "EMAIL",    "'.$g_l10n->get('SYS_EMAIL').'", NULL, 1, 0, 1, 12, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'")
                                             , ('.$cat_id_stammdaten.', "URL",  "WEBSITE",   "'.$g_l10n->get('SYS_WEBSITE').'", NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',"'. DATETIME_NOW.'") ';
     $db->query($sql);

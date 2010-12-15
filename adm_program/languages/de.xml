@@ -260,7 +260,6 @@
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="todo">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</text>
     <text id="INS_FAX" development="new" translation="todo">Fax</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="todo">Der Ordner %VAR1_BOLD% besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</text>
-    <text id="INS_GENDER" development="new" translation="todo">Geschlecht</text>
     <text id="INS_GOOGLE_TALK" development="new" translation="todo">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="todo">Gruppen</text>
     <text id="INS_ICQ" development="new" translation="todo">ICQ</text>
@@ -289,7 +288,6 @@
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !</text>
     <text id="INS_OVERVIEW" development="new" translation="todo">Übersichtsseite</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
-    <text id="INS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu deiner Datenbank ist.</text>
@@ -382,6 +380,7 @@
     <text id="LST_MICROSOFT_EXCEL_2K" development="new" translation="todo">Microsoft Excel 97/2000</text>
 	<text id="LST_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
     <text id="LST_MY_LIST" development="new" translation="todo">Eigene Liste</text>
+    <text id="LST_MYLIST_CONDITION_DESC" development="new" translation="todo">Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen eingeschränkt.</text>
     <text id="LST_NO_MORE_COLUMN" development="new" translation="todo">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</text>
 	<text id="LST_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
@@ -393,6 +392,22 @@
     <text id="LST_ROLE_INFORMATION" development="new" translation="todo">Rolleninformationen</text>
     <text id="LST_SAVE_CONFIGURATION" development="new" translation="todo">Konfiguration speichern</text>
     <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="todo">Konfiguration unter anderem Namen speichern</text>
+    <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="todo">18j</text>
+    <text id="LST_SEARCH_AGE_DESC" development="new" translation="todo">Sucht alle Benutzer, die älter als 18 Jahre sind</text>
+    <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="todo">01.03.1986</text>
+    <text id="LST_SEARCH_DATE_DESC" development="new" translation="todo">Sucht alle Benutzer, die nach dem 01.03.1986 geboren wurden</text>
+    <text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="todo">M/W/U</text>
+    <text id="LST_SEARCH_GENDER_DESC" development="new" translation="todo">Sucht nach Männlich, Weiblich, Unbekannt</text>
+    <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="todo">Mei*</text>
+    <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="todo">Sucht alle Benutzer deren Namen mit Mei anfängt</text>
+    <text id="LST_SEARCH_LASTNAME_EXAMPLE" development="new" translation="todo">Schmitz</text>
+    <text id="LST_SEARCH_LASTNAME_DESC" development="new" translation="todo">Sucht alle Benutzer mit dem Nachnamen Schmitz</text>
+    <text id="LST_SEARCH_LOCATION_EXAMPLE" development="new" translation="todo">Köln oder Bonn</text>
+    <text id="LST_SEARCH_LOCATION_DESC" development="new" translation="todo">Sucht alle Benutzer, die aus Köln oder Bonn kommen</text>
+    <text id="LST_SEARCH_TELEFON_EXAMPLE" development="new" translation="todo">*241* *54</text>
+    <text id="LST_SEARCH_TELEFON_DESC" development="new" translation="todo">Sucht alle Benutzer, deren Telefonnummer 241 enthält und mit 54 endet</text>
+    <text id="LST_SEARCH_YES_NO_FIELD" development="new" translation="todo">Ja/Nein Feld</text>
+    <text id="LST_SEARCH_YES_NO_FIELD_DESC" development="new" translation="todo">Sucht alle Benutzer bei denen ein Häckchen gesetzt wurde</text>
     <text id="LST_SET_COLUMNS" development="new" translation="todo">Bestimme die Spalten, die in der Liste angezeigt werden sollen</text>
     <text id="LST_SHOW_LIST" development="new" translation="todo">Liste anzeigen</text>
     <text id="LST_SHOW_LISTS" development="new" translation="todo">Listen anzeigen</text>
@@ -917,6 +932,7 @@
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
     <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDer Eintrag konnte nicht gelöscht werden.</text>
     <text id="SYS_EXAMPLE" development="new" translation="todo">Beispiel</text>
+    <text id="SYS_EXAMPLES" development="new" translation="todo">Beispiele</text>
     <text id="SYS_FADE_IN" development="new" translation="todo">Einblenden</text>
     <text id="SYS_FEATURES" development="new" translation="todo">Funktionen</text>
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
@@ -948,6 +964,7 @@
     <text id="SYS_FORUM_LOGOUT" development="new" translation="todo">Du wurdest erfolgreich auf Admidio und im Forum abgemeldet.</text>
     <text id="SYS_FORUM_USER_DELETE" development="new" translation="todo">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
     <text id="SYS_FORUM_USER_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
+    <text id="SYS_GENDER" development="new" translation="todo">Geschlecht</text>
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>
     <text id="SYS_HELP" development="new" translation="todo">Hilfe</text>
     <text id="SYS_HIDE" development="new" translation="todo">Ausblenden</text>
@@ -1020,6 +1037,7 @@
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
     <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn du dein Passwort vergessen hast, kann das System ein neues Passwort erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
+    <text id="SYS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>
 	<text id="SYS_PHOTOS" development="new" translation="todo">Fotos</text>	
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
