@@ -478,7 +478,7 @@ echo '
                             }
                             else
                             {
-                                echo '<optgroup label="'.$g_l10n->get('LST_DEFAULT_CONFIGURATION').'">';
+                                echo '<optgroup label="'.$g_l10n->get('LST_PRESET_CONFIGURATION').'">';
                             }
                             $tableList_global_flag = $tableList->getValue('lst_global');
                             $tableList_name_flag   = $tableList->getValue('lst_name');
