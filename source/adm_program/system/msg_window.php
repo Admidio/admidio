@@ -207,74 +207,45 @@ switch ($req_message_id)
         break;
 
     case 'mylist_config_webmaster':
-        echo '<h3>Vorgegebene Konfigurationen</h3>
-            Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen.
-            Konfiguriere die entsprechende Spalten und Bedingungen und speicher diese unter dem gewünschten Namen. 
-            Wähle nun die neu erstellte Liste aus und klick auf dieses Symbol: 
-            <img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />
-            <h3>Standardkonfigurationen</h3>
-            Eine vorgegebene Konfiguration kannst du zur Standardkonfiguration machen. Wähle dazu die entsprechende 
-            vorgegebene Konfiguration aus und klick auf folgendes Symbol: 
-            <img src="'. THEME_PATH. '/icons/star.png" alt="star" />. Die gewählte Konfiguration wird nun
-            an allen Stellen angezeigt, bei denen der Anwender eine Rollenliste angezeigt bekommt, ohne
-            vorher die Möglichkeit zu haben, eine Konfiguration auszuwählen.';
+        echo '<h3>'.$g_l10n->get('LST_PRESET_CONFIGURATION').'</h3>
+            '.$g_l10n->get('LST_PRESET_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />').'
+            <h3>'.$g_l10n->get('LST_DEFAULT_CONFIGURATION').'</h3>
+            '.$g_l10n->get('LST_DEFAULT_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/star.png" alt="star" />');
         break;
 
     //Fotomodulhifen
 
    case 'photo_up_help':
-        echo '<h3>Was ist zu tun?</h3>
-            <ul>
-                <li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</li>
-                <li>Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</li>
-                <li>Dann auf &bdquo;Fotos hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+        echo '<ul>
+                <li>'.$g_l10n->get('PHO_UPLOAD_HELP_1', $g_l10n->get('SYS_BROWSE')).'</li>
+                <li>'.$g_l10n->get('PHO_UPLOAD_HELP_2').'</li>
+                <li>'.$g_l10n->get('PHO_UPLOAD_HELP_3', $g_l10n->get('PHO_UPLOAD_PHOTOS')).'</li>
             </ul>  
-            <h3>Einschränkungen:</h3>
+            <h3>'.$g_l10n->get('SYS_RESTRICTIONS').':</h3>
             <ul>
-                <li>Die Fotos müssen im Format JPG oder PNG gespeichert sein.</li>
-                <li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
-                <li>Die hochgeladenen Dateien dürfen nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
-                <li>
-                    Die Fotos werden automatisch auf eine Auflösung von '.$g_preferences['photo_save_scale'].' Pixel der
-                    längeren Seite skaliert (andere Seite im Verhältnis) bevor sie gespeichert werden.
-                </li>
-                <li>Der Name der Dateien spielt keine Rolle, da sie automatisch mit fortlaufender Nummer benannt werden.</li>
-                <li>
-                    Da auch bei schnellen Internetanbindungen das Hochladen von größeren Dateien einige
-                    Zeit in Anspruch nehmen kann, empfehlen wir zunächst alle hoch zu ladenden Fotos in einen
-                    Sammelordner zu kopieren und diese dann mit einer Fotobearbeitungssoftware auf '.$g_preferences['photo_save_scale'].' Pixel
-                    (längere Seite) zu skalieren. Die JPG-Qualität sollte beim Abspeichern auf mindestens 90%
-                    (also geringe Komprimierung) gestellt werden.
-                </li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_1').'</li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_2', round(processableImageSize()/1000000, 2)).'</li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_3', round(maxUploadSize()/pow(1024, 2), 2)).'</li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_4', $g_preferences['photo_save_scale']).'</li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_5').'</li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_6', $g_preferences['photo_save_scale']).'</li>
             </ul>
             ';
-        break;
-
-    case 'album_help':
-        echo '<h3>Was ist zu tun?</h3>
-            Alle offenen Felder ausfüllen. Die Felder Album und Beginn sind Pflichtfelder. Ggf. auswählen
-            welches Album das Neue untergeordnet werden soll, z.B. &bdquo;Tag 3&ldquo; in 
-            &bdquo;Turnier 2010&ldquo; (solche Unterteilungen sind empfehlenswert bei vielen Fotos).
-            Die Felder Ende und Fotografen sind optional. Nur freigegebene Alben sind für 
-            Homepagebesucher sichtbar. Möchte man z.B. erst alle Fotos hochladen
-            oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.
-            Danach auf Speichern klicken.';
         break;
 
     //Profil
 
     case 'profile_photo_up_help':
-        echo '<h3>Was ist zu tun?</h3>
-            <ul>
-                <li>Auf den &bdquo;Durchsuchen&ldquo; Button klicken und die gewünschte Fotodatei von der Festplatte auswählen.</li>
-                <li>Danach auf &bdquo;Foto hochladen&ldquo; klicken und ein wenig Geduld haben.</li>
+        echo '<ul>
+                <li>'.$g_l10n->get('PRO_UPLOAD_HELP_1', $g_l10n->get('SYS_BROWSE')).'</li>
+                <li>'.$g_l10n->get('PRO_UPLOAD_HELP_2', $g_l10n->get('PRO_UPLOAD_PHOTO')).'</li>
             </ul>
-            <h3>Einschränkungen:</h3>
+            <h3>'.$g_l10n->get('SYS_RESTRICTIONS').':</h3>
             <ul>
-                <li>Du solltest selbst auf dem Foto zu sehen sein.</li>
-                <li>Das Foto muss im Format JPG oder PNG gespeichert sein.</li>
-                <li>Der Server kann Fotos mit einer maximalen Auflösung von '.round(processableImageSize()/1000000, 2).' MegaPixeln verarbeiten.</li>
-                <li>Die hochgeladene Datei darf nicht größer als '.round(maxUploadSize()/pow(1024, 2), 2).'MB sein.</li>
+                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_1').'</li>
+                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_2').'</li>
+                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_3', round(processableImageSize()/1000000, 2)).'</li>
+                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_4', round(maxUploadSize()/pow(1024, 2), 2)).'</li>
             </ul>
             ';
         break;
