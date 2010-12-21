@@ -88,17 +88,22 @@ switch ($req_type)
     case 'gbo':
         $url = 'guestbook_function.php?mode=2&id='.$req_database_id;
         break;
-    case 'gbc':
-        $url = 'guestbook_function.php?mode=5&id='.$req_database_id;
-        break;
-    case 'lnk':
-        $url = 'links_function.php?mode=2&lnk_id='.$req_database_id;
-        break;
     case 'gbo_mod':
         $url = 'guestbook_function.php?mode=9&id='.$req_database_id;
         $icon = 'information_big.png';
         $text = 'SYS_APPROVE_ENTRY';
         break;    
+    case 'gbc':
+        $url = 'guestbook_function.php?mode=5&id='.$req_database_id;
+        break;
+    case 'gbc_mod':
+        $url = 'guestbook_function.php?mode=10&id='.$req_database_id;
+        $icon = 'information_big.png';
+        $text = 'SYS_APPROVE_ENTRY';
+        break;    
+    case 'lnk':
+        $url = 'links_function.php?mode=2&lnk_id='.$req_database_id;
+        break;
     case 'nwu':
         $url = 'new_user_function.php?mode=4&new_user_id='.$req_database_id;
         break;

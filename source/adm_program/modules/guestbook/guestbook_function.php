@@ -17,15 +17,16 @@
  *           5 - Kommentar eines Gaestebucheintrages loeschen
  *           8 - Kommentar eines Gaestebucheintrages editieren
  *           9 - Gaestebucheintrag moderieren
+ *           10 - Gaestebuchkommentar moderieren
  * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Gaestebuch steht
  *           (Default) Gaestebuch
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/table_guestbook.php');
-require('../../system/classes/table_guestbook_comment.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_guestbook.php');
+require_once('../../system/classes/table_guestbook_comment.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -36,7 +37,7 @@ if ($g_preferences['enable_guestbook_module'] == 0)
 elseif($g_preferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 }
 
 
@@ -83,7 +84,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
         if ($g_preferences['enable_gbook_comments4all'] == 0)
         {
-            require('../../system/login_valid.php');
+            require_once('../../system/login_valid.php');
 
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
             if (!$g_current_user->commentGuestbookRight())
@@ -96,7 +97,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     else
     {
         // Der User muss fuer die anderen Modes auf jeden Fall eingeloggt sein
-        require('../../system/login_valid.php');
+        require_once('../../system/login_valid.php');
     }
 
 
@@ -206,7 +207,8 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
         }
         
     	// Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if ($g_preferences['enable_guestbook_moderation'] == 1 && $g_current_user->editGuestbookRight() == false)
+        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
+        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
         {
             $guestbook->setValue('gbo_locked', '1');
         }
@@ -259,9 +261,10 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline'];
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if ($g_preferences['enable_guestbook_moderation'] == 1 && $g_current_user->editGuestbookRight() == false)
+        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
+        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
         {
-            $g_message->setForwardUrl($url, 2000);
+            $g_message->setForwardUrl($url);
             $g_message->show($g_l10n->get('GBO_ENTRY_QUEUED'));
         }
 
@@ -289,11 +292,26 @@ elseif($_GET['mode'] == 2)
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
+elseif ($_GET['mode'] == 5)
+{
+    //Gaestebuchkommentar loeschen...
+    $guestbook_comment->delete();
+
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo 'done';
+}
 // Moderationsfunktion
 elseif ($_GET['mode'] == 9)
 {
     // den Gaestebucheintrag freischalten...
     $guestbook->moderate();
+    // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo 'done';
+}
+elseif ($_GET['mode'] == 10)
+{
+    // den Gaestebucheintrag freischalten...
+    $guestbook_comment->moderate();
     // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
@@ -360,6 +378,13 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
             }
         }
         
+    	// Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
+        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
+        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
+        {
+            $guestbook_comment->setValue('gbc_locked', '1');
+        }
+        
         // Daten in Datenbank schreiben
         $return_code = $guestbook_comment->save();
     
@@ -405,7 +430,17 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
             unset($_SESSION['captchacode']);
         }
 
-        header('Location: '.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $_GET['headline']);
+        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $_GET['headline'];
+
+        // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
+        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
+        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
+        {
+            $g_message->setForwardUrl($url);
+            $g_message->show($g_l10n->get('GBO_ENTRY_QUEUED'));
+        }
+
+        header('Location: '.$url);
         exit();
     }
     else
@@ -420,16 +455,6 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
         }
     }
 }
-
-elseif ($_GET['mode'] == 5)
-{
-    //Gaestebuchkommentar loeschen...
-    $guestbook_comment->delete();
-
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-    echo 'done';
-}
-
 else
 {
     // Falls der Mode unbekannt ist, ist natürlich auch Ende...

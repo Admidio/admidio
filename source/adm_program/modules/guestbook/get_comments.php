@@ -9,7 +9,9 @@
  *
  * Uebergaben:
  *
- * cid: Hiermit wird die ID des Gaestebucheintrages uebergeben
+ * cid        : Hiermit wird die ID des Gaestebucheintrages uebergeben
+ * moderation : 0 (Default) - Gaestebuchansicht
+ *              1 - Moderationsmodus, Beitraege koennen freigegeben werden 
  *
  *****************************************************************************/
 
@@ -26,10 +28,23 @@ if (isset($_GET['cid']) && is_numeric($_GET['cid']))
 
 if ($cid > 0)
 {
+    $conditions = '';
+
+    // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
+    if($g_preferences['enable_guestbook_moderation'] > 0 && $_GET['moderation'] == 1)
+    {
+        $conditions .= ' AND gbc_locked = 1 ';
+    }
+    else
+    {
+        $conditions .= ' AND gbc_locked = 0 ';
+    }
+
     $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. ', '. TBL_GUESTBOOK. '
                 WHERE gbo_id     = '.$cid.'
                   AND gbc_gbo_id = gbo_id
-                  AND gbo_org_id = '. $g_current_organization->getValue('org_id'). '
+                  AND gbo_org_id = '. $g_current_organization->getValue('org_id').
+                      $conditions.'
                 ORDER by gbc_timestamp_create asc';
     $comment_result = $g_db->query($sql);
 }
@@ -76,7 +91,7 @@ if (isset($comment_result))
                     echo '
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$gbComment->getValue('gbc_id').'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
-                    <a class="iconLink" rel="lnkDeleteComment" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.
+                    <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.
                         $gbComment->getValue('gbc_id').'&amp;database_id='.$gbComment->getValue('gbc_id').'&amp;name='.urlencode($g_l10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'))).'"><img 
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                 }
@@ -86,6 +101,30 @@ if (isset($comment_result))
 
             <div class="groupBoxBody">'.
                 $gbComment->getText('HTML');
+
+                // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
+                if($_GET['moderation'] == 1)
+                {
+                    echo '
+                    <ul class="iconTextLinkList">
+                        <li>
+                            <span class="iconTextLink">
+                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('SYS_UNLOCK').'" /></a>
+                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'">'.$g_l10n->get('SYS_UNLOCK').'</a>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="iconTextLink">
+                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('SYS_REMOVE').'" /></a>
+                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'">'.$g_l10n->get('SYS_REMOVE').'</a>
+                            </span>
+                        </li>
+                    </ul>';
+                }
 
                 // Falls der Kommentar editiert worden ist, wird dies angezeigt
                 if($gbComment->getValue('gbc_usr_id_change') > 0)
@@ -109,7 +148,8 @@ if (isset($comment_result))
 
     }
 
-    if ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1)
+    if (($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1)
+    && $_GET['moderation'] == 0)
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$cid.'';

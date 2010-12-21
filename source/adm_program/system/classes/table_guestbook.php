@@ -73,6 +73,14 @@ class TableGuestbook extends TableAccess
         }
         return $description;
     }
+    
+    // die Methode moderiert den Gaestebucheintrag 
+    function moderate()
+    {
+        //Eintrag freischalten...
+        $this->setValue('gbo_locked', '0');
+        $this->save();
+    }  
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
     public function save()
@@ -112,13 +120,5 @@ class TableGuestbook extends TableAccess
         }
         parent::setValue($field_name, $field_value);
     } 
-    
-    // die Methode moderiert den Gaestebucheintrag 
-    function moderate()
-    {
-        //Eintrag freischalten...
-        $this->setValue('gbo_locked', '0');
-        $this->save();
-    }  
 }
 ?>

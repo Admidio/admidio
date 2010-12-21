@@ -524,7 +524,7 @@ echo '
                                     <option value="0" ';
                                     if($form_values['enable_announcements_module'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
                                     echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
                                     <option value="1" ';
@@ -616,7 +616,7 @@ echo '
                                     <option value="0" ';
                                     if($form_values['enable_photo_module'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
                                     echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
                                     <option value="1" ';
@@ -878,7 +878,7 @@ echo '
                                     <option value="0" ';
                                     if($form_values['enable_guestbook_module'] == 0)
                                     {
-                                        echo " selected=\"selected\" ";
+                                        echo ' selected="selected" ';
                                     }
                                     echo '>'.$g_l10n->get('SYS_DEACTIVATED').'</option>
                                     <option value="1" ';
@@ -926,12 +926,26 @@ echo '
                         <dl>
                             <dt><label for="enable_guestbook_moderation">'.$g_l10n->get('GBO_GUESTBOOK_MODERATION').':</label></dt>
                             <dd>
-                                <input type="checkbox" id="enable_guestbook_moderation" name="enable_guestbook_moderation" ';
-                                if(isset($form_values['enable_guestbook_moderation']) && $form_values['enable_guestbook_moderation'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
+                                <select size="1" id="enable_guestbook_moderation" name="enable_guestbook_moderation">
+                                    <option value="0" ';
+                                    if($form_values['enable_guestbook_moderation'] == 0)
+                                    {
+                                        echo ' selected="selected" ';
+                                    }
+                                    echo '>'.$g_l10n->get('SYS_NOBODY').'</option>
+                                    <option value="1" ';
+                                    if($form_values['enable_guestbook_moderation'] == 1)
+                                    {
+                                        echo ' selected="selected" ';
+                                    }
+                                    echo '>'.$g_l10n->get('GBO_ONLY_VISITORS').'</option>
+                                    <option value="2" ';
+                                    if($form_values['enable_guestbook_moderation'] == 2)
+                                    {
+                                        echo ' selected="selected" ';
+                                    }
+                                    echo '>'.$g_l10n->get('SYS_ALL').'</option>
+                                </select>
                             </dd>
                         </dl>
                     </li>
