@@ -325,7 +325,7 @@ echo '
                                             {
                                                 echo ' selected="selected" ';
                                             }
-                                            echo '>'.$g_l10n->get('ROL_NOBODY').'</option>
+                                            echo '>'.$g_l10n->get('SYS_NOBODY').'</option>
                                         <option value="1" ';
                                             if($role->getValue('rol_mail_this_role') == 1)
                                             {
@@ -363,7 +363,7 @@ echo '
                                         {
                                             echo ' selected="selected" ';
                                         }
-                                        echo '>'.$g_l10n->get('ROL_NOBODY').'</option>
+                                        echo '>'.$g_l10n->get('SYS_NOBODY').'</option>
                                     <option value="1" ';
                                         if($role->getValue('rol_this_list_view') == 1)
                                         {

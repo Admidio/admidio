@@ -70,6 +70,7 @@ ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_timestamp` `gbc_times
 -- Feldgroessen anpasssen
 ALTER TABLE %PREFIX%_organizations MODIFY COLUMN `org_homepage` VARCHAR(60) NOT NULL;
 ALTER TABLE %PREFIX%_guestbook ADD `gbo_locked` tinyint (1) unsigned not null default 0 after gbo_ip_address;
+ALTER TABLE %PREFIX%_guestbook_comments ADD `gbc_locked` tinyint (1) unsigned not null default 0 after gbc_ip_address;
 
 -- Counter bei Links einfügen
 ALTER TABLE %PREFIX%_links ADD COLUMN `lnk_counter` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `lnk_url`;

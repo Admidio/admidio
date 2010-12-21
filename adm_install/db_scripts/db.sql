@@ -340,6 +340,7 @@ create table %PREFIX%_guestbook_comments
    gbc_text                       text                           not null,
    gbc_email                      varchar(50),
    gbc_ip_address                 varchar(15)                    not null,
+   gbc_locked                     tinyint (1) unsigned           not null default 0,
    gbc_usr_id_create              int(11) unsigned,
    gbc_timestamp_create           datetime                       not null,
    gbc_usr_id_change              int(11) unsigned,

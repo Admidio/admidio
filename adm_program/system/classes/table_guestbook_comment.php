@@ -63,6 +63,14 @@ class TableGuestbookComment extends TableAccess
         }
         return $description;
     }
+    
+    // die Methode moderiert den Gaestebucheintrag 
+    function moderate()
+    {
+        //Eintrag freischalten...
+        $this->setValue('gbc_locked', '0');
+        $this->save();
+    }  
 
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
     public function readData($gbc_id, $sql_where_condition = '', $sql_additional_tables = '')

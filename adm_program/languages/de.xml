@@ -207,13 +207,10 @@
 	<text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebuchkommentar bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Gästebucheintrag wurde angelegt</text>
 	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebucheintrag bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
-    <text id="GBO_ENTRY_QUEUED" development="new" translation="todo">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet werden.</text>
     <text id="GBO_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="todo">Flooding Protection Intervall</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</text>
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
-    <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="todo">Moderation aktivieren</text>
-    <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="todo">Gästebucheinträge werden erst nach einer Sichtprüfung eines Administrators publiziert. Kommentare sind davon nicht betroffen (Standard: nein)</text>
     <text id="GBO_HIDE_COMMENTS" development="new" translation="todo">Kommentare ausblenden</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="todo">Kommentare direkt anzeigen</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="todo">Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und angezeigt. Im anderen Fall muss der Benutzer auf einen Link klicken um die Kommentare zu sehen. (Standard: nein)</text>
@@ -800,7 +797,6 @@
     <text id="ROL_MEMBERSHIP_DEL_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>
     <text id="ROL_NEW_ROLE" development="new" translation="todo">neuen Rolle</text>
     <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
-    <text id="ROL_NOBODY" development="new" translation="todo">Niemand</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="todo">Nur Rollenmitglieder</text>
     <text id="ROL_PREF" development="new" translation="todo" description="Abbreviation for Preferences">Einst.</text>
     <text id="ROL_RIGHT_ALL_LISTS_VIEW" development="new" translation="todo">Mitgliederlisten aller Rollen einsehen</text>
@@ -1150,5 +1146,15 @@
     <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Sie können maximal %0 Dateien hinzufügen.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
+    
+    <text id="GBO_ENTRY_QUEUED" development="new" translation="todo">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</text>
+    <text id="GBO_MODERATE_VAR" development="new" translation="todo">%VAR1% moderieren</text>
+    <text id="GBO_ONLY_VISITORS" development="new" translation="todo">Nur Besucher</text>
+    <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="todo">Moderation aktivieren für</text>
+    <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="todo">Gästebucheinträge werden erst nach einer Sichtprüfung eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Besuchern, auch bei angemeldeten Benutzern oder bei niemandem durchgeführt werden soll.  (Standard: Niemand)</text>
+    <text id="SYS_NOBODY" development="new" translation="todo">Niemand</text>
+
+
+
 </version>
 </language>
