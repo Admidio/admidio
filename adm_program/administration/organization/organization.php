@@ -29,7 +29,18 @@ if($g_debug == 0 && file_exists('../../../adm_install'))
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-$languages = array('de' => 'deutsch', 'en' => 'english');
+// verfuegbare Sprachen aus XML-Datei einlesen und in Array schreiben
+$languages = array();
+$data = implode('', file('../../languages/languages.xml'));
+$p = xml_parser_create();
+xml_parse_into_struct($p, $data, $vals, $index);
+xml_parser_free($p);
+
+for($i = 0; $i < count($index['ISOCODE']); $i++)
+{
+    $languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
+}
+
 $html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />';
 
 if(isset($_SESSION['organization_request']))
@@ -1145,6 +1156,20 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                     <li>
                         <dl>
+                            <dt><label>'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_ACTIVATE').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_email_notification" name="enable_email_notification" ';
+                                if(isset($form_values['enable_email_notification']) && $form_values['enable_email_notification'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_DESCRIPTION', '<i>'.$g_preferences['email_administrator'].'</i>').'</li>
+                    <li>
+                        <dl>
                             <dt><label>'.$g_l10n->get('ORG_SYSTEM_MAIL_TEXTS').':</label></dt>
                             <dd><br /></dd>
                         </dl>
@@ -1192,23 +1217,6 @@ echo '
                     </li>
                     <li>
                         <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
-                    </li>
-					<a name="email-notification"> </a>
-					<li>
-                        <dl>
-                            <dt><label>'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_ACTIVATE').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_email_notification" name="enable_email_notification" ';
-                                if(isset($form_values['enable_email_notification']) && $form_values['enable_email_notification'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li  class="smallFontSize">
-						'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_DESCRIPTION', '<i>'.$g_preferences['email_administrator'].'</i>').'
                     </li>
                 </ul>
             </div>

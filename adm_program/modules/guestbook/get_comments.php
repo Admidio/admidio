@@ -51,11 +51,8 @@ if ($cid > 0)
 
 if (isset($comment_result))
 {
-
     echo '<div id="comments_'.$cid.'" style="visibility: visible; display: block; text-align: left;">';
 
-    //Kommentarnummer auf 1 setzen
-    $commentNumber = 1;
     $gbComment = new TableGuestbookComment($g_db);
 
     // Jetzt nur noch die Kommentare auflisten
@@ -142,10 +139,6 @@ if (isset($comment_result))
         </div>
 
         <br />';
-
-        // Kommentarnummer um 1 erhoehen
-        $commentNumber = $commentNumber + 1;
-
     }
 
     if (($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1)
@@ -153,8 +146,9 @@ if (isset($comment_result))
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
         $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$cid.'';
+
         echo '
-        <div class="editInformation">
+        <div class="commentLink">
             <span class="iconTextLink">
                 <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png" 
                 alt="'.$g_l10n->get('GBO_WRITE_COMMENT').'" title="'.$g_l10n->get('GBO_WRITE_COMMENT').'" /></a>

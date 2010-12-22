@@ -230,9 +230,7 @@ $g_layout['header'] = '
     <!--
         var profileJS = new profileJSClass();
             profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_MEMBERSHIP_DEL',"[rol_name]").'\';
-            profileJS.deleteRole_ErrorText 		= \''.$g_l10n->get('ROL_MEMBERSHIP_DEL_ERROR').'\';
             profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
-            profileJS.deleteFRole_ErrorText		= \''.$g_l10n->get('ROL_MEMBERSHIP_DEL_ERROR').'\';
             profileJS.changeRoleDates_ErrorText = \''.$g_l10n->get('ROL_CHANGE_ROLE_DATES_ERROR').'\';
             profileJS.setBy_Text				= \''.$g_l10n->get('SYS_SET_BY').'\';
             profileJS.usr_id = '.$user->getValue('usr_id').';

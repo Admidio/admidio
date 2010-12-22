@@ -13,9 +13,7 @@ function profileJSClass()
 	this.formerRoleCount 			= 0;
 	this.usr_id 					= 0;
 	this.deleteRole_ConfirmText		= "";
-	this.deleteRole_ErrorText		= "";
 	this.deleteFRole_ConfirmText 	= "";
-	this.deleteFRole_ErrorText 		= "";
 	this.changeRoleDates_ErrorText	= "";
 	this.setBy_Text					= "";
 	this.errorID					= 0;
@@ -25,6 +23,7 @@ function profileJSClass()
 		$("a[rel='colorboxContent']").colorbox({rel:'nofollow'});
 		$("a[rel='colorboxRoles']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
 		$("a[rel='colorboxPWContent']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
+        $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow', height: '280px',onComplete:function(){$("#btnNo").focus();}});
 	}
 	this.reloadRoleMemberships = function()
 	{
@@ -34,6 +33,7 @@ function profileJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_roles_box_body").html(responseText);
+                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow', height: '280px',onComplete:function(){$("#btnNo").focus();}});
 			}
 		});
 	}
@@ -45,65 +45,11 @@ function profileJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_former_roles_box_body").html(responseText);
+                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow', height: '280px',onComplete:function(){$("#btnNo").focus();}});
 			}
 		});
 	}
 	
-	this.deleteRole = function(rol_id, rol_name)
-	{
-		var msg_result = confirm(this.deleteRole_ConfirmText.replace(/\[rol_name\]/gi,rol_name));
-		if(msg_result)
-		{
-			// Listenelement mit Unterelemten einfuegen
-			$('#profile_former_roles_box').fadeIn('slow');
-	
-			$.ajax({
-				type: "POST",
-				url: gRootPath + "/adm_program/modules/profile/profile_function.php",
-				data: "mode=2&user_id=" + this.usr_id + "&rol_id=" + rol_id,
-				dataType: "html",
-				success: function(responseText, statusText){
-					$("#role_" + rol_id).fadeOut("slow");
-					if(profileJS)
-					{
-						profileJS.formerRoleCount++;
-						profileJS.reloadFormerRoleMemberships();
-					}
-				},
-				error: function (xhr, ajaxOptions, thrownError){
-					alert(this.deleteRole_ErrorText);
-				}
-			});
-		}
-	}
-	
-	this.deleteFormerRole = function(rol_id, rol_name) 
-	{
-		var msg_result = confirm(this.deleteFRole_ConfirmText.replace(/\[rol_name\]/gi,rol_name));
-		if(msg_result)
-		{
-			$.ajax({
-				type: "POST",
-				url: gRootPath + "/adm_program/modules/profile/profile_function.php",
-				data: "mode=3&user_id=" + this.usr_id + "&rol_id=" + rol_id,
-				dataType: "html",
-				success: function(responseText, statusText){
-					$("#former_role_" + rol_id).fadeOut("slow");
-					if(profileJS)
-					{
-						profileJS.formerRoleCount--;
-						if(profileJS.formerRoleCount == 0)
-						{
-							$("#profile_former_roles_box").fadeOut("slow");
-						}
-					}
-				},
-				error: function (xhr, ajaxOptions, thrownError){
-					alert(this.deleteFRole_ErrorText);
-				}
-			});
-		}
-	}
 	this.markLeader = function(element)
 	{
 		if(element.checked == true)

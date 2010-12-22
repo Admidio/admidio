@@ -639,7 +639,7 @@ else
                             }
 
                             $registrationHtml = '<span class="iconTextLink">
-                                <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'" /></a>
+                                <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'" /></a>
                                 <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'</a>
                             </span>';
                         }

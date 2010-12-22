@@ -452,7 +452,7 @@ else
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                     $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
                     echo '
-                    <div class="editInformation">
+                    <div class="commentLink">
                         <span class="iconTextLink">
                             <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png"
                             alt="'.$g_l10n->get('GBO_WRITE_COMMENT').'" title="'.$g_l10n->get('GBO_WRITE_COMMENT').'" /></a>

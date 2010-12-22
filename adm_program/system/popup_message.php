@@ -10,6 +10,7 @@
  * type        - Modulkuerzel in dem ein Eintrag geloescht werden soll
  * element_id  - ID des HTML-Elements, welches nach dem Loeschen entfernt werden soll
  * database_id - ID des Eintrags in der Datenbanktabelle
+ * database_id_2 - weitere ID um ggf. den Eintrag aus der DB besser zu finden
  * name        - Name des Elements, der im Hinweis angezeigt wird
  *
  *****************************************************************************/
@@ -18,12 +19,14 @@ require_once('common.php');
 require_once('login_valid.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_type        = '';
-$req_element_id  = 0;
-$req_database_id = 0;
-$req_name        = '';
+$req_type          = '';
+$req_element_id    = 0;
+$req_database_id   = 0;
+$req_database_id_2 = 0;
+$req_name          = '';
 $icon = 'error_big.png';
 $text = 'SYS_DELETE_ENTRY';
+$callbackSuccess   = '';
 
 // Uebergabevariablen pruefen
 
@@ -55,6 +58,11 @@ else
 {
     $g_message->setExcludeThemeBody();
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+}
+
+if(isset($_GET['database_id_2']))
+{
+    $req_database_id_2 = strStripTags($_GET['database_id_2']);
 }
 
 if(isset($_GET['name']))
@@ -110,6 +118,24 @@ switch ($req_type)
     case 'pho':
         $url = 'photo_album_function.php?job=delete&pho_id='.$req_database_id;
         break;
+    case 'pro_role':
+        $url = 'profile_function.php?mode=2&user_id='.$req_database_id_2.'&rol_id='.$req_database_id;
+        $callbackSuccess = 'if(profileJS) {
+						profileJS.formerRoleCount++;
+						profileJS.reloadFormerRoleMemberships();
+					};';
+        $text = 'ROL_MEMBERSHIP_DEL';
+        break;
+    case 'pro_former':
+        $url = 'profile_function.php?mode=3&user_id='.$req_database_id_2.'&rol_id='.$req_database_id;
+        $callbackSuccess = 'if(profileJS) {
+						profileJS.formerRoleCount--;
+						if(profileJS.formerRoleCount == 0) {
+							$("#profile_former_roles_box").fadeOut("slow");
+						}
+					};';
+        $text = 'ROL_LINK_MEMBERSHIP_DEL';
+        break;
     case 'room':
         $url = 'rooms_function.php?mode=2&room_id='.$req_database_id;
         break;
@@ -146,6 +172,7 @@ function deleteEntry()
         {
             $("#msgText").html("'.$g_l10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'");
         }
+        '.$callbackSuccess.'
     });
 }
 //--></script>
@@ -157,7 +184,7 @@ function deleteEntry()
         <div style="float: left; width: 75px; margin: 20px 0px 20px 0px;">
             <br /><img src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /><br />
         </div>
-        <div id="msgText" style="margin: 20px 0px 20px 0px;"><br />'.$g_l10n->get($text, $req_name).'<br /><br /></div>
+        <div id="msgText" style="margin: 20px 0px 20px 0px;"><br />'.$g_l10n->get($text, $req_name).'</div>
 
         <div class="formSubmit">
             <button id="btnYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 

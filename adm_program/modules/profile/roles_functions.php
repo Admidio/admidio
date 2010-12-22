@@ -109,8 +109,9 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
                             if (($row['rol_name'] == $g_l10n->get('SYS_WEBMASTER') && $g_current_user->getValue('usr_id') != $user->getValue('usr_id')) || ($row['rol_name'] != $g_l10n->get('SYS_WEBMASTER')))
                             {
                                 $roleMemHTML .= '
-                                <a class="iconLink" href="javascript:profileJS.deleteRole('.$row['rol_id'].', \''.$row['rol_name'].'\')"><img
-                                    src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('ROL_ROLE_DELETE').'" title="'.$g_l10n->get('ROL_ROLE_DELETE').'" /></a>';
+                                <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_role&amp;element_id=role_'.
+                                    $row['rol_id']. '&amp;database_id='.$row['rol_id'].'&amp;database_id_2='.$user->getValue('usr_id').'&amp;name='.urlencode($row['rol_name']).'"><img
+                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$g_l10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                             }
                             else
                             {
@@ -133,7 +134,7 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
                 </dl>
             </li>
             <li id="mem_rol_'.$row['rol_id'].'" style="text-align: right; visibility: hidden; display: none;">
-                <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue("usr_id").'&amp;mode=1&amp;rol_id='.$row['rol_id'].'" method="post">
+                <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue('usr_id').'&amp;mode=1&amp;rol_id='.$row['rol_id'].'" method="post">
                     <div>
                         <label for="begin'.$row['rol_name'].'">'.$g_l10n->get('SYS_START').':</label>
                         <input type="text" id="begin'.$row['rol_name'].'" name="rol_begin" size="10" maxlength="20" value="'.$member->getValue('mem_begin', $g_preferences['system_date']).'"/>
@@ -208,8 +209,9 @@ function getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$coun
                         if($g_current_user->isWebmaster())
                         {
                             $formerRoleMemHTML .= '
-                            <a class="iconLink" href="javascript:profileJS.deleteFormerRole('. $row['rol_id']. ', \''. $row['rol_name']. '\')"><img
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('ROL_ROLE_DELETE').'" title="'.$g_l10n->get('ROL_ROLE_DELETE').'" /></a>';
+                            <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_former&amp;element_id=former_role_'.
+                                $row['rol_id']. '&amp;database_id='.$row['rol_id'].'&amp;database_id_2='.$user->getValue('usr_id').'&amp;name='.urlencode($row['rol_name']).'"><img
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$g_l10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                         }
                     $formerRoleMemHTML .= '</dd>
                 </dl>
