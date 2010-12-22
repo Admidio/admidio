@@ -82,7 +82,18 @@ $message = '';
 if($req_mode == 1)  // (Default) Sprache auswaehlen
 {
     session_destroy();
-    $languages = array('de' => 'deutsch', 'en' => 'english');
+
+    // verfuegbare Sprachen aus XML-Datei einlesen und in Array schreiben
+    $languages = array();
+    $data = implode('', file('../adm_program/languages/languages.xml'));
+    $p = xml_parser_create();
+    xml_parse_into_struct($p, $data, $vals, $index);
+    xml_parser_free($p);
+
+    for($i = 0; $i < count($index['ISOCODE']); $i++)
+    {
+        $languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
+    }
 
     $message = '<div class="groupBox">
                     <div class="groupBoxHeadline">'.$g_l10n->get('INS_CHOOSE_LANGUAGE').'</div>
