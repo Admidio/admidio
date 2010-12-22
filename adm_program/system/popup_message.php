@@ -181,12 +181,14 @@ function deleteEntry()
 <div class="formLayout">
     <div class="formHead">'. $g_l10n->get('SYS_NOTE'). '</div>
     <div class="formBody">
-        <div style="float: left; width: 75px; margin: 20px 0px 20px 0px;">
-            <br /><img src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /><br />
+        <div style="display: block;">
+            <div style="float: left; width: 75px; min-height: 60px;">
+                <br /><img src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" />
+            </div>
+            <div id="msgText" style="min-height: 60px;"><br />'.$g_l10n->get($text, $req_name).'</div>
         </div>
-        <div id="msgText" style="margin: 20px 0px 20px 0px;"><br />'.$g_l10n->get($text, $req_name).'</div>
 
-        <div class="formSubmit">
+        <div class="formSubmit" style="display: block; margin: 20px 0px 20px 0px;">
             <button id="btnYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
                 alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
