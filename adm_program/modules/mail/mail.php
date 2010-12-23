@@ -96,26 +96,16 @@ elseif (isset($_GET['rol_id']))
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    if ($g_valid_login)
-    {
-        $sql    = 'SELECT rol_mail_this_role, rol_name, rol_id 
-                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                    WHERE rol_id = '. $_GET['rol_id']. '
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = '. $g_current_organization->getValue('org_id');
-    }
-    else
-    {
-        $sql    = 'SELECT rol_mail_this_role, rol_name, rol_id
-                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                    WHERE rol_id = '. $_GET['rol_id']. '
-                      AND rol_cat_id = cat_id
-                      AND cat_org_id = '. $g_current_organization->getValue('org_id');
-    }
+    $sql    = 'SELECT rol_mail_this_role, rol_name, rol_id 
+                 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                WHERE rol_id = '. $_GET['rol_id']. '
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = '. $g_current_organization->getValue('org_id');
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
 
-    if ((!$g_valid_login && $row[0] != 3))
+    if(($g_valid_login == false && $row['rol_mail_this_role'] != 3)
+    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false))
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -127,32 +117,19 @@ elseif (isset($_GET['rolle']) && isset($_GET['cat']))
 {
     // Falls eine rolle und eine category uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf
-    if ($g_valid_login)
-    {
-        $sql = 'SELECT rol_mail_this_role, rol_id
-                  FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
-                 WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
-                   AND rol_cat_id        = cat_id
-                   AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
-                   AND UPPER(cat_name)   = UPPER("'. $_GET['cat']. '")';
-    }
-    else
-    {
-        $sql = 'SELECT rol_mail_this_role, rol_id
-                  FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
-                 WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
-                   AND rol_mail_this_role = 3
-                   AND rol_cat_id        = cat_id
-                   AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
-                   AND UPPER(cat_name)   = UPPER("'. $_GET['cat']. '")';
-    }
+    $sql = 'SELECT rol_mail_this_role, rol_id
+              FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
+             WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
+               AND rol_cat_id        = cat_id
+               AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
+               AND UPPER(cat_name)   = UPPER("'. $_GET['cat']. '")';
     $result = $g_db->query($sql);
     $row = $g_db->fetch_array($result);
 
     // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
     // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
-    if (($g_valid_login == false && $row['rol_mail_this_role'] != 3)
-    ||  ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false))
+    if(($g_valid_login == false && $row['rol_mail_this_role'] != 3)
+    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false))
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -237,14 +214,14 @@ $g_layout['header'] =  '
     // neue Zeile mit Button zum Hinzufuegen von Dateipfaden einblenden
     function addAttachment()
     {
-        lnk_attachment = document.getElementById("add_attachment");            
         new_attachment = document.createElement("input");
-        new_attachment.type = "file";
-        new_attachment.name = "userfile[]";
-        new_attachment.size = "35";
-        $(new_attachment).css("display", "none");
+        $(new_attachment).attr("type", "file");
+        $(new_attachment).attr("name", "userfile[]");
+        $(new_attachment).attr("size", "35");
+        $(new_attachment).css("display", "block");
         $(new_attachment).css("width", "350px");
-        document.getElementById("attachments").insertBefore(new_attachment, lnk_attachment);
+        $(new_attachment).hide();
+        $("#add_attachment").before(new_attachment);
         $(new_attachment).show("slow");
     }
 
@@ -434,7 +411,7 @@ echo '
                             <dt><label for="add_attachment">Anhang:</label></dt>
                             <dd id="attachments">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="' . ($g_preferences['max_email_attachment_size'] * 1024) . '" />
-                                <span id="add_attachment" class="iconTextLink">
+                                <span id="add_attachment" class="iconTextLink" style="display: block;">
                                     <a href="javascript:addAttachment()"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
                                     <a href="javascript:addAttachment()">'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'</a>

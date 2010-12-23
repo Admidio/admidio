@@ -11,7 +11,7 @@
  *
  *****************************************************************************/
 
-include("common.php");
+include('common.php');
 
 // die letzte Url aus dem Stack loeschen, da dies die aktuelle Seite ist
 $_SESSION['navigation']->deleteLastUrl();
@@ -24,6 +24,6 @@ if(strlen($next_url) == 0)
 {
     $next_url = $g_homepage;
 }
-header("Location: ".$next_url);
+header('Location: '.$next_url);
  
 ?>
