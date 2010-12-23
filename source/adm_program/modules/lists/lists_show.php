@@ -274,10 +274,19 @@ if($req_mode != 'csv')
                 // Navigationspunkt zum uebergeordneten Punkt dieser Liste
                 if(strpos($_SESSION['navigation']->getPreviousUrl(), 'mylist') === false)
                 {
+                    // wenn nicht aus Listenuebersicht aufgerufen, dann wird hier die Listenuebersicht ohne Parameter aufgerufen
+                    if(strpos($_SESSION['navigation']->getPreviousUrl(), 'lists.php') === false)
+                    {
+                        $url = $g_root_path.'/adm_program/modules/lists/lists.php';
+                    }
+                    else
+                    {
+                        $url = $g_root_path.'/adm_program/system/back.php';
+                    }
                     echo '
-                    <a href="'.$g_root_path.'/adm_program/system/back.php"><img
+                    <a href="'.$url.'"><img
                     src="'. THEME_PATH. '/icons/application_view_list.png" alt="'.$g_l10n->get('LST_LIST_VIEW').'" title="'.$g_l10n->get('LST_LIST_VIEW').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('LST_LIST_VIEW').'</a>';
+                    <a href="'.$url.'">'.$g_l10n->get('LST_LIST_VIEW').'</a>';
                 }
                 else
                 {

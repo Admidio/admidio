@@ -19,10 +19,10 @@
 $g_tbl_praefix = 'adm';
 
 // Daten für die MySQL-Datenbank-Verbindung
-$g_adm_srv = 'URL_zu_deinem_MySQL-Server';      // Server
-$g_adm_usr = 'Benutzername';        // Benutzer
-$g_adm_pw  = 'Passwort';    // Passwort
-$g_adm_db  = 'Datenbankname';    // Datenbank
+$g_adm_srv = 'URL_zu_deinem_MySQL-Server'; // Server
+$g_adm_usr = 'Benutzername';               // Benutzer
+$g_adm_pw  = 'Passwort';                   // Passwort
+$g_adm_db  = 'Datenbankname';              // Datenbank
 
 // Root-Pfad für das System auf dem es installiert ist
 // Der Pfad muss bis zu dem Verzeichnis, in dem die admidio.html-Datei liegt, angegeben werden !!!
@@ -33,6 +33,6 @@ $g_root_path = 'http://www.deine-homepage.de/admidio';
 // Diese muss der Eingabe auf der Installationsseite entsprechen !!!
 // Beispiel: 'ADMIDIO'
 // Maximal 10 Zeichen !!!
-$g_organization = 'Mein-Kuerzel'; 
+$g_organization = 'Kuerzel'; 
 
 ?>

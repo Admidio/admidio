@@ -94,7 +94,7 @@ Teile von Admidio stehen unter der Creative Commons Lizenz. Dies sind die
 Icons der Tango-Bibliothek (Creative Commons Attribution Share-Alike license),
 die Icons der Silk-Bibliothek (Creative Commons Attribution 2.5 License).
 
-Das JavaScript Thickbox steht unter der MIT-Lizenz.
+Das JavaScript ColorBox steht unter der MIT-Lizenz.
 
  6. Copyright
 -------------------------------------------------------------------------
@@ -125,9 +125,9 @@ jQuery
     http://www.jquery.com
 	JavaScript-Library
 
-Cody Lindley
-    http://jquery.com/demo/thickbox
-    Thickbox
+Jack Moore
+    http://colorpowered.com/colorbox
+    ColorBox
 
 Mirko Schaal
     http://www.splinelab.de/flexupload
