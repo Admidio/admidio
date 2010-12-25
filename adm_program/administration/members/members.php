@@ -265,7 +265,7 @@ echo '</ul>';
 
 //Hier gibt es jetzt noch die Suchbox...
 echo '
-<ul class="iconTextLinkList" style="margin-top: 0px; margin-bottom: 0px;">
+<ul id="search_members" class="iconTextLinkList">
     <li>
         <form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'" method="post">
             <div>
