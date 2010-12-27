@@ -355,7 +355,7 @@ echo '
                     echo '
                     <li>
                         <dl>
-                            <dt><label for="rol_this_list_view">'.$g_l10n->get('ROL_SHOW_LISTS').':</label></dt>
+                            <dt><label for="rol_this_list_view">'.$g_l10n->get('ROL_SEE_ROLE_MEMBERSHIP').':</label></dt>
                             <dd>
                                 <select size="1" id="rol_this_list_view" name="rol_this_list_view">
                                     <option value="0" ';

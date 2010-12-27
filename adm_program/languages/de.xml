@@ -829,7 +829,6 @@
     <text id="ROL_SEND_MAILS" development="new" translation="todo">E-Mails zusenden</text>
     <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="todo">Rolle unsichtbar machen</text>
     <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="todo">Rolle sichtbar machen</text>
-    <text id="ROL_SHOW_LISTS" development="new" translation="todo">Listen ansehen</text>
     <text id="ROL_SHOW_MEMBERS" development="new" translation="todo">Mitglieder anzeigen</text>
     <text id="ROL_VALID_FROM" development="new" translation="todo" description="Date valid from">Gültig von</text>
     <text id="ROL_VALID_TO" development="new" translation="todo" description="Date valid to">Gültig bis</text>
@@ -1154,6 +1153,8 @@
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen ?</text>
     <text id="ROL_MEMBERSHIP_DEL" development="new" translation="todo">Willst du die Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich beenden ?</text>
     <!--<text id="ROL_MEMBERSHIP_DEL_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>-->
+    <!--<text id="ROL_SHOW_LISTS" development="new" translation="todo">Rollenmitgliedschaft sehen</text>-->
+    <text id="ROL_SEE_ROLE_MEMBERSHIP" development="new" translation="todo">Rollenmitgliedschaft sehen</text>
 
 
 </version>
