@@ -165,26 +165,8 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
-// Gucken wieviele Gaestebucheintraege insgesamt vorliegen...
-// Das ist wichtig für die Seitengenerierung...
-$sql    = 'SELECT COUNT(*) AS count FROM '.TBL_GUESTBOOK.'
-           WHERE gbo_org_id = '.$g_current_organization->getValue('org_id');
-$result = $g_db->query($sql);
-$row = $g_db->fetch_array($result);
-$num_guestbook = $row['count'];
-
-// Anzahl Gaestebucheintraege pro Seite
-if($g_preferences['guestbook_entries_per_page'] > 0)
-{
-    $guestbook_entries_per_page = $g_preferences['guestbook_entries_per_page'];
-}
-else
-{
-    $guestbook_entries_per_page = $num_guestbook;
-}
-
 // ------------------------------------------------------
-// SQL-Statement zur Anzeige der Eintraege zusammensetzen
+// SQL-Statements zur Anzeige der Eintraege zusammensetzen
 // ------------------------------------------------------
 $conditions = '';
 
@@ -209,12 +191,32 @@ if ($g_preferences['enable_guestbook_moderation'] > 0)
     }
 }
 
-$sql    = 'SELECT *
-             FROM '. TBL_GUESTBOOK. ' gbo
-            WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
-                  '.$conditions.'
-            ORDER BY gbo_timestamp_create DESC
-            LIMIT '. $_GET['start']. ', '. $guestbook_entries_per_page;
+// Maximale Anzahl an Gaestebucheintraegen ermitteln, die angezeigt werden sollen
+$sql = 'SELECT COUNT(*) AS count 
+          FROM '.TBL_GUESTBOOK.'
+         WHERE gbo_org_id = '.$g_current_organization->getValue('org_id').
+               $conditions;
+$result = $g_db->query($sql);
+$row = $g_db->fetch_array($result);
+$num_guestbook = $row['count'];
+
+// Anzahl Gaestebucheintraege pro Seite
+if($g_preferences['guestbook_entries_per_page'] > 0)
+{
+    $guestbook_entries_per_page = $g_preferences['guestbook_entries_per_page'];
+}
+else
+{
+    $guestbook_entries_per_page = $num_guestbook;
+}
+
+// Alle Gaestebucheintraege fuer die aktuelle Seite ermitteln
+$sql = 'SELECT *
+          FROM '. TBL_GUESTBOOK. ' gbo
+         WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
+               '.$conditions.'
+         ORDER BY gbo_timestamp_create DESC
+         LIMIT '. $_GET['start']. ', '. $guestbook_entries_per_page;
 $guestbook_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen
