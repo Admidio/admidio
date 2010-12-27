@@ -98,73 +98,65 @@ else
     $search_condition = ' AND last_name.usd_value LIKE "'.$req_letter.'%" ';
 }
 
-// alle Mitglieder zur Auswahl selektieren
-// unbestaetigte User werden dabei nicht angezeigt
+$member_condition = '';
+
 if($req_members)
 {
-    $sql    = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
-                      email.usd_value as email, website.usd_value as website,
-                      usr_login_name, IFNULL(usr_timestamp_change, usr_timestamp_create) as timestamp, 1 member
-                 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
-                 JOIN '. TBL_USER_DATA. ' as last_name
-                   ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
-                 JOIN '. TBL_USER_DATA. ' as first_name
-                   ON first_name.usd_usr_id = usr_id
-                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as email
-                   ON email.usd_usr_id = usr_id
-                  AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as website
-                   ON website.usd_usr_id = usr_id
-                  AND website.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
-                WHERE usr_valid = 1
-                  AND mem_usr_id = usr_id
-                  AND mem_rol_id = rol_id
-                  AND mem_begin <= "'.DATE_NOW.'"
-                  AND mem_end    > "'.DATE_NOW.'"
-                  AND rol_valid  = 1
-                  AND rol_cat_id = cat_id
-                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                      OR cat_org_id IS NULL )
-                      '.$search_condition.'
-                ORDER BY last_name.usd_value, first_name.usd_value ';
+    $member_condition = ' AND EXISTS 
+        (SELECT 1
+           FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+          WHERE mem_usr_id = usr_id
+            AND mem_rol_id = rol_id
+            AND mem_begin <= "'.DATE_NOW.'"
+            AND mem_end    > "'.DATE_NOW.'"
+            AND rol_valid  = 1
+            AND rol_cat_id = cat_id
+            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                OR cat_org_id IS NULL )) ';
 }
-else
-{
-    // alle DB-User auslesen und Anzahl der zugeordneten Orga-Rollen ermitteln
-    $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
-                      email.usd_value as email, website.usd_value as website,
-                      usr_login_name, IFNULL(usr_timestamp_change, usr_timestamp_create) as timestamp, count(cat_id) member
-                 FROM '. TBL_USERS. '
-                 JOIN '. TBL_USER_DATA. ' as last_name
-                   ON last_name.usd_usr_id = usr_id
-                  AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
-                 JOIN '. TBL_USER_DATA. ' as first_name
-                   ON first_name.usd_usr_id = usr_id
-                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
-                 LEFT JOIN '. TBL_MEMBERS. '
-                   ON mem_usr_id = usr_id
-                  AND mem_begin <= "'.DATE_NOW.'"
-                  AND mem_end    > "'.DATE_NOW.'"
-                 LEFT JOIN '. TBL_ROLES. '
-                   ON mem_rol_id = rol_id
-                  AND rol_valid  = 1
-                 LEFT JOIN '. TBL_CATEGORIES. '
-                   ON rol_cat_id = cat_id
-                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                      OR cat_org_id IS NULL )
-                 LEFT JOIN '. TBL_USER_DATA. ' as email
-                   ON email.usd_usr_id = usr_id
-                  AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
-                 LEFT JOIN '. TBL_USER_DATA. ' as website
-                   ON website.usd_usr_id = usr_id
-                  AND website.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
-                WHERE usr_valid = 1
-                      '.$search_condition.'
-                GROUP BY usr_id
-                ORDER BY last_name.usd_value, first_name.usd_value ';
-}
+
+// alle Mitglieder zur Auswahl selektieren
+// unbestaetigte User werden dabei nicht angezeigt
+$sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
+                  email.usd_value as email, website.usd_value as website,
+                  usr_login_name, IFNULL(usr_timestamp_change, usr_timestamp_create) as timestamp,
+                  (SELECT count(*)
+                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
+                    WHERE rol_valid   = 1
+                      AND rol_cat_id  = cat_id
+                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                          OR cat_org_id IS NULL )
+                      AND mem_rol_id  = rol_id
+                      AND mem_begin  <= "'.DATE_NOW.'"
+                      AND mem_end     > "'.DATE_NOW.'"
+                      AND mem_usr_id  = usr_id) as member_this_orga,
+                  (SELECT count(*)
+                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
+                    WHERE rol_valid   = 1
+                      AND rol_cat_id  = cat_id
+                      AND cat_org_id <> '. $g_current_organization->getValue('org_id'). '
+                      AND mem_rol_id  = rol_id
+                      AND mem_begin  <= "'.DATE_NOW.'"
+                      AND mem_end     > "'.DATE_NOW.'"
+                      AND mem_usr_id  = usr_id) as member_other_orga
+             FROM '. TBL_USERS. '
+             JOIN '. TBL_USER_DATA. ' as last_name
+               ON last_name.usd_usr_id = usr_id
+              AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+             JOIN '. TBL_USER_DATA. ' as first_name
+               ON first_name.usd_usr_id = usr_id
+              AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+             LEFT JOIN '. TBL_USER_DATA. ' as email
+               ON email.usd_usr_id = usr_id
+              AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
+             LEFT JOIN '. TBL_USER_DATA. ' as website
+               ON website.usd_usr_id = usr_id
+              AND website.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
+            WHERE usr_valid = 1
+                  '.$member_condition.
+                    $search_condition.'
+            GROUP BY usr_id
+            ORDER BY last_name.usd_value, first_name.usd_value ';
 $result_mgl  = $g_db->query($sql);
 $num_members = $g_db->num_rows($result_mgl);
 
@@ -405,7 +397,7 @@ if($num_members > 0)
                 <tr class="tableMouseOver">
                     <td>'. ($req_start + $i + 1). '</td>
                     <td>';
-                        if($row['member'] > 0)
+                        if($row['member_this_orga'] > 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
@@ -445,27 +437,9 @@ if($num_members > 0)
                     <td>'. $row['usr_login_name']. '</td>
                     <td>'. $timestampChange->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
                     <td style="text-align: center;">';
-                        // pruefen, ob der User noch in anderen Organisationen aktiv ist
-                        $sql    = 'SELECT *
-                                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
-                                    WHERE rol_valid   = 1
-                                      AND rol_cat_id  = cat_id
-                                      AND cat_org_id <> '. $g_current_organization->getValue('org_id'). '
-                                      AND mem_rol_id  = rol_id
-                                      AND mem_begin  <= "'.DATE_NOW.'"
-                                      AND mem_end     > "'.DATE_NOW.'"
-                                      AND mem_usr_id  = '. $row['usr_id'];
-                        $result = $g_db->query($sql);
-                        $b_other_orga = false;
-
-                        if($g_db->num_rows($result) > 0)
-                        {
-                            $b_other_orga = true;
-                        }
-
                         // Link um E-Mail mit neuem Passwort zu zuschicken
                         // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                        if($row['member'] > 0
+                        if($row['member_this_orga'] > 0
                         && $g_current_user->isWebmaster()
                         && strlen($row['usr_login_name']) > 0
                         && strlen($row['email']) > 0
@@ -483,7 +457,7 @@ if($num_members > 0)
 
                         // Link um User zu editieren
                         // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
-                        if($row['member'] > 0 || $b_other_orga == false)
+                        if($row['member_this_orga'] > 0 || $row['member_other_orga'] == 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
@@ -495,8 +469,8 @@ if($num_members > 0)
                         }
 
                         // Mitglieder entfernen
-                        if( (($b_other_orga == false && $g_current_user->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
-                          || $row['member'] > 0)                                        // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
+                        if( (($row['member_other_orga'] == 0 && $g_current_user->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
+                          || $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
                         && $row['usr_id'] != $g_current_user->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
                         {
                             echo '
