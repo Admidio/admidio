@@ -484,7 +484,7 @@ elseif($req_mode == 6)
     {
         $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$g_l10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
-    showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'));
+    showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'));
 }
 
 ?>

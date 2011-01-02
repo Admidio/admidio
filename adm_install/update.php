@@ -81,7 +81,7 @@ if($req_mode == 1)
     //Datenbank- und PHP-Version prüfen
     if(checkVersions($g_db, $message) == false)
     {
-        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'), 2);
+        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'), 2);
     }
 
     // pruefen, ob ein Update ueberhaupt notwendig ist
@@ -110,7 +110,7 @@ if($req_mode == 1)
         $message = '<img style="vertical-align: top;" src="layout/ok.png" /> 
                     <strong>'.$g_l10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</strong><br /><br />
                     '.$g_l10n->get('INS_DATABASE_IS_UP_TO_DATE');
-        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'), 2);
+        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'), 2);
     }
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
@@ -270,7 +270,7 @@ elseif($req_mode == 2)
     // Hinweis, dass Update erfolgreich war
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong><br /><br />
                '.$g_l10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT);
-    showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'), 2);
+    showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'), 2);
 }
 
 ?>

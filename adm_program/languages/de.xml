@@ -282,7 +282,6 @@
     <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="todo">Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die du nun hinzufügen möchtest.</text>
     <text id="INS_NECESSARY_INFORMATION" development="new" translation="todo">Auf den nächsten Seiten musst du einige notwendige Informationen der neuen Organisation eingeben.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !</text>
-    <text id="INS_OVERVIEW" development="new" translation="todo">Übersichtsseite</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
@@ -666,7 +665,6 @@
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="todo">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
     <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="todo">Bilderanzahl</text>
-	<text id="PHO_OVERVIEW" development="new" translation="todo">Übersicht</text>      
 	<text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="todo">Fotoalben</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>
@@ -1155,6 +1153,18 @@
     <!--<text id="ROL_MEMBERSHIP_DEL_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>-->
     <!--<text id="ROL_SHOW_LISTS" development="new" translation="todo">Rollenmitgliedschaft sehen</text>-->
     <text id="ROL_SEE_ROLE_MEMBERSHIP" development="new" translation="todo">Rollenmitgliedschaft sehen</text>
+    <text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Hier können Ankündigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</text>
+    <text id="DOW_DOWNLOADS_DESC" development="new" translation="todo">Benutzer können Dateien aus bestimmten Verzeichnissen herunterladen.</text>
+    <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</text>
+    <text id="PHO_PHOTOS_DESC" development="new" translation="todo">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen können.</text>
+    <text id="LST_LISTS_DESC" development="new" translation="todo">Hier können Besucher ihre Grüße und Anmerkungen eintragen.</text>
+    <text id="GBO_GUESTBOOK_DESC" development="new" translation="todo">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</text>
+    <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Profil anschauen und bearbeiten.</text>
+    <text id="DAT_DATES_DESC" development="new" translation="todo">Hier können Termine angeschaut, erstellt und bearbeitet werden.</text>
+    <text id="LNK_WEBLINKS_DESC" development="new" translation="todo">Hier können Links zu interessanten Webseiten abgelegt werden.</text>
+  	<!--<text id="PHO_OVERVIEW" development="new" translation="todo">Übersicht</text>-->
+  	<text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
+    <!--<text id="INS_OVERVIEW" development="new" translation="todo">Übersichtsseite</text>-->
 
 
 </version>

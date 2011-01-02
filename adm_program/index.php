@@ -87,11 +87,11 @@ echo '</ul>
                     <dl>
                         <dt>
                             <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php"><img
-                            src="'.THEME_PATH.'/icons/announcements_big.png" alt="Ankündigungen" title="Ankündigungen" /></a>
+                            src="'.THEME_PATH.'/icons/announcements_big.png" alt="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php">Ankündigungen</a></span><br />
-                            <span class="smallFontSize">Hier können Ankündigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</span>
+                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php">'.$g_l10n->get('ANN_ANNOUNCEMENTS').'</a></span><br />
+                            <span class="smallFontSize">'.$g_l10n->get('ANN_ANNOUNCEMENTS_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -104,11 +104,11 @@ echo '</ul>
                     <dl>
                         <dt>
                             <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php"><img
-                            src="'.THEME_PATH.'/icons/download_big.png" alt="Downloads" title="Downloads" /></a>
+                            src="'.THEME_PATH.'/icons/download_big.png" alt="'.$g_l10n->get('DOW_DOWNLOADS').'" title="'.$g_l10n->get('DOW_DOWNLOADS').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php">Downloads</a></span><br />
-                            <span class="smallFontSize">Benutzer können Dateien aus bestimmten Verzeichnissen herunterladen.</span>
+                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php">'.$g_l10n->get('DOW_DOWNLOADS').'</a></span><br />
+                            <span class="smallFontSize">'.$g_l10n->get('DOW_DOWNLOADS_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -121,11 +121,11 @@ echo '</ul>
                     <dl>
                         <dt>
                             <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php"><img
-                            src="'.THEME_PATH.'/icons/email_big.png" alt="E-Mail" title="E-Mail" /></a>
+                            src="'.THEME_PATH.'/icons/email_big.png" alt="'.$g_l10n->get('SYS_EMAIL').'" title="'.$g_l10n->get('SYS_EMAIL').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/mail/mail.php">E-Mail</a></span><br />
-                            <span class="smallFontSize">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</span>
+                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/mail/mail.php">'.$g_l10n->get('SYS_EMAIL').'</a></span><br />
+                            <span class="smallFontSize">'.$g_l10n->get('MAI_EMAIL_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -139,11 +139,11 @@ echo '</ul>
                     <dl>
                         <dt>
                             <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img
-                            src="'.THEME_PATH.'/icons/photo_big.png" alt="Fotos" title="Fotos" /></a>
+                            src="'.THEME_PATH.'/icons/photo_big.png" alt="'.$g_l10n->get('PHO_PHOTOS').'" title="'.$g_l10n->get('PHO_PHOTOS').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">Fotos</a></span><br />
-                            <span class="smallFontSize">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen k&ouml;nnen.</span>
+                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$g_l10n->get('PHO_PHOTOS').'</a></span><br />
+                            <span class="smallFontSize">'.$g_l10n->get('MAI_EMAIL_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -157,11 +157,11 @@ echo '</ul>
                     <dl>
                         <dt>
                             <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php"><img
-                            src="'.THEME_PATH.'/icons/guestbook_big.png" alt="Gästebuch" title="Gästebuch" /></a>
+                            src="'.THEME_PATH.'/icons/guestbook_big.png" alt="'.$g_l10n->get('GBO_GUESTBOOK').'" title="'.$g_l10n->get('GBO_GUESTBOOK').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php">Gästebuch</a></span><br />
-                            <span class="smallFontSize">Hier können Besucher ihre Grüße und Anmerkungen eintragen.</span>
+                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php">'.$g_l10n->get('GBO_GUESTBOOK').'</a></span><br />
+                            <span class="smallFontSize">'.$g_l10n->get('GBO_GUESTBOOK_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -172,13 +172,13 @@ echo '</ul>
                 <dl>
                     <dt>
                         <a href="'.$g_root_path.'/adm_program/modules/lists/lists.php"><img
-                        src="'.THEME_PATH.'/icons/lists_big.png" alt="Listen" title="Listen" /></a>
+                        src="'.THEME_PATH.'/icons/lists_big.png" alt="'.$g_l10n->get('LST_LISTS').'" title="'.$g_l10n->get('LST_LISTS').'" /></a>
                     </dt>
                     <dd>
-                        <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/lists/lists.php">Listen</a></span>&nbsp;&nbsp;
-                        &#91; <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php">Eigene Liste</a>&nbsp;|
-                        <a href="'.$g_root_path.'/adm_program/modules/lists/lists.php?active_role=0">Inaktive Rollen</a> &#93;<br />
-                        <span class="smallFontSize">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</span>
+                        <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/lists/lists.php">'.$g_l10n->get('LST_LISTS').'</a></span>&nbsp;&nbsp;
+                        &#91; <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php">'.$g_l10n->get('LST_MY_LIST').'</a>&nbsp;|
+                        <a href="'.$g_root_path.'/adm_program/modules/lists/lists.php?active_role=0">'.$g_l10n->get('ROL_INACTIV_ROLE').'</a> &#93;<br />
+                        <span class="smallFontSize">'.$g_l10n->get('LST_LISTS_DESC').'</span>
                     </dd>
                 </dl>
             </li>';
@@ -188,17 +188,17 @@ echo '</ul>
                 <dl>
                     <dt>
                         <a href="'.$g_root_path.'/adm_program/modules/profile/profile.php"><img
-                        src="'.THEME_PATH.'/icons/profile_big.png" alt="Mein Profil" title="Mein Profil" /></a>
+                        src="'.THEME_PATH.'/icons/profile_big.png" alt="'.$g_l10n->get('PRO_MY_PROFILE').'" title="'.$g_l10n->get('PRO_MY_PROFILE').'" /></a>
                     </dt>
                     <dd>
-                        <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">Mein Profil</a></span>';
+                        <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">'.$g_l10n->get('PRO_MY_PROFILE').'</a></span>';
                         if($g_valid_login)
                         {
                             echo '&nbsp;&nbsp;
-                            &#91; <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$g_current_user->getValue('usr_id').'">Profil bearbeiten</a> &#93;';
+                            &#91; <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$g_current_user->getValue('usr_id').'">'.$g_l10n->get('PRO_EDIT_MY_PROFILE').'</a> &#93;';
                         }
                         echo '<br />
-                        <span class="smallFontSize">Das eigene Profil anschauen und bearbeiten.</span>
+                        <span class="smallFontSize">'.$g_l10n->get('PRO_MY_PROFILE_DESC').'</span>
                     </dd>
                 </dl>
             </li>';
@@ -212,12 +212,12 @@ echo '</ul>
                     <dl>
                         <dt>
                             <a href="'.$g_root_path.'/adm_program/modules/dates/dates.php"><img
-                            src="'.THEME_PATH.'/icons/dates_big.png" alt="Termine" title="Termine" /></a>
+                            src="'.THEME_PATH.'/icons/dates_big.png" alt="'.$g_l10n->get('DAT_DATES').'" title="'.$g_l10n->get('DAT_DATES').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php">Termine</a></span>&nbsp;&nbsp;
-                            &#91; <a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?mode=old">Vergangene Termine</a> &#93;<br />
-                            <span class="smallFontSize">Hier k&ouml;nnen Termine angeschaut, erstellt und bearbeitet werden.</span>
+                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php">'.$g_l10n->get('DAT_DATES').'</a></span>&nbsp;&nbsp;
+                            &#91; <a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?mode=old">'.$g_l10n->get('DAT_PREVIOUS_DATES', $g_l10n->get('DAT_DATES')).'</a> &#93;<br />
+                            <span class="smallFontSize">'.$g_l10n->get('DAT_DATES_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -232,11 +232,11 @@ echo '</ul>
                     <dl>
                         <dt>
                             <a href="'.$g_root_path.'/adm_program/modules/links/links.php"><img
-                            src="'.THEME_PATH.'/icons/weblinks_big.png" alt="Weblinks" title="Weblinks" /></a>
+                            src="'.THEME_PATH.'/icons/weblinks_big.png" alt="'.$g_l10n->get('LNK_WEBLINKS').'" title="'.$g_l10n->get('LNK_WEBLINKS').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/links/links.php">Weblinks</a></span><br />
-                            <span class="smallFontSize">Hier können Links zu interessanten Webseiten abgelegt werden.</span>
+                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/links/links.php">'.$g_l10n->get('LNK_WEBLINKS').'</a></span><br />
+                            <span class="smallFontSize">'.$g_l10n->get('LNK_WEBLINKS_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -259,10 +259,10 @@ echo '</ul>
                 <li>
                     <dl>
                         <dt>
-                            <a href="'. $g_forum->url. '"><img src="'. THEME_PATH. '/icons/forum_big.png" alt="Forum" title="Forum" /></a>
+                            <a href="'. $g_forum->url. '"><img src="'. THEME_PATH. '/icons/forum_big.png" alt="'.$g_l10n->get('SYS_FORUM').'" title="'.$g_l10n->get('SYS_FORUM').'" /></a>
                         </dt>
                         <dd>
-                            <span class="veryBigFontSize"><a href="'. $g_forum->url. '">Forum</a></span><br />
+                            <span class="veryBigFontSize"><a href="'. $g_forum->url. '">'.$g_l10n->get('SYS_FORUM').'</a></span><br />
                             <span class="smallFontSize">'.$forumstext.'</span>
                         </dd>
                     </dl>

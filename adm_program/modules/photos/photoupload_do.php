@@ -264,10 +264,10 @@ if($_GET['uploadmethod'] == 1)
 		<ul class="iconTextLinkList">
 		    <li>
 		        <span class="iconTextLink">
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('PHO_OVERVIEW').'">
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('SYS_OVERVIEW').'">
 		            	<img src="'. THEME_PATH. '/icons/application_view_tile.png" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('PHO_OVERVIEW').'">'.$g_l10n->get('PHO_OVERVIEW').'</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('SYS_OVERVIEW').'">'.$g_l10n->get('SYS_OVERVIEW').'</a>
 		        </span>
 		    </li>
 		    <li>

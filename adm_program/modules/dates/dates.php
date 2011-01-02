@@ -229,25 +229,30 @@ if($req_id == 0)
     // Bedingungen fuer die Rollenfreigabe hinzufuegen
     if($g_current_user->getValue('usr_id') > 0)
     {
-        $login_sql = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$g_current_user->getValue('usr_id').') )';
+        $login_sql = '
+        AND (  dtr_rol_id IS NULL 
+            OR dtr_rol_id IN (SELECT mem_rol_id 
+                                FROM '.TBL_MEMBERS.' mem2
+                               WHERE mem2.mem_usr_id = '.$g_current_user->getValue('usr_id').'
+                                 AND mem2.mem_begin  <= dat_begin
+                                 AND mem2.mem_end    >= dat_end) ) ';
     }
     else
     {
-        $login_sql = 'AND dtr_rol_id IS NULL';
+        $login_sql = ' AND dtr_rol_id IS NULL ';
     }
     
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
     $sql = 'SELECT COUNT(DISTINCT dat_id) as count
-            FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
-            WHERE dat_cat_id = cat_id
-                AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                    OR (   dat_global   = 1
-                        AND cat_org_id IN ("'.$organizations.'") 
-                    )
-                )
-                AND dat_id = dtr_dat_id
-                '.$login_sql.'
-                '.$conditions. $condition_calendar;
+              FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
+             WHERE dat_cat_id = cat_id
+               AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                   OR (   dat_global   = 1
+                      AND cat_org_id IN ("'.$organizations.'") 
+                      )
+                   )
+               AND dat_id = dtr_dat_id
+                   '.$login_sql. $conditions. $condition_calendar;
 
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
@@ -269,30 +274,33 @@ else
 }
 
 // nun die Termine auslesen, die angezeigt werden sollen
-$sql = 'SELECT DISTINCT cat.*, dat.*, 
-            cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-            cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-        FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
-            LEFT JOIN '. TBL_USER_DATA .' cre_surname 
-                ON cre_surname.usd_usr_id = dat_usr_id_create
-            AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
-            LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
-                ON cre_firstname.usd_usr_id = dat_usr_id_create
-            AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
-            LEFT JOIN '. TBL_USER_DATA .' cha_surname
-                ON cha_surname.usd_usr_id = dat_usr_id_change
-            AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
-            LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-                ON cha_firstname.usd_usr_id = dat_usr_id_change
-            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
-        WHERE dat_cat_id = cat_id
-            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-            OR (   dat_global   = 1
-            AND cat_org_id IN ('.$organizations.') ))
-            AND dat_id = dtr_dat_id
-            '.$login_sql.'
-            '.$conditions. $condition_calendar. $order_by. '
-        LIMIT '.$req_start.', '.$dates_per_page;
+$sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role,
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
+               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+          FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
+          LEFT JOIN '. TBL_USER_DATA .' cre_surname 
+            ON cre_surname.usd_usr_id = dat_usr_id_create
+           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
+            ON cre_firstname.usd_usr_id = dat_usr_id_create
+           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_surname
+            ON cha_surname.usd_usr_id = dat_usr_id_change
+           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
+            ON cha_firstname.usd_usr_id = dat_usr_id_change
+           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+          LEFT JOIN '. TBL_MEMBERS. ' mem
+            ON mem.mem_usr_id = '.$g_current_user->getValue('usr_id').'
+           AND mem.mem_rol_id = dat_rol_id
+         WHERE dat_cat_id = cat_id
+           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+               OR (   dat_global   = 1
+                  AND cat_org_id IN ('.$organizations.') ))
+           AND dat_id = dtr_dat_id
+               '.$login_sql.'
+               '.$conditions. $condition_calendar. $order_by. '
+         LIMIT '.$req_start.', '.$dates_per_page;
 $dates_result = $g_db->query($sql);
 
 
@@ -417,11 +425,7 @@ else
                     echo ' ' . $date->getValue('dat_headline'). '
                 </div>
                 <div class="boxHeadRight">';
-                    $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id="'.$g_current_user->getValue('usr_id').'" AND mem_rol_id = "'.$date->getValue('dat_rol_id').'" AND mem_leader=1';
-                    $result = $g_db->query($sql);
-                    $row2 = $g_db->num_rows($result);
-                    
-                    if($row2>0) 
+                    if($row['member_date_role'] > 0) 
                     {
                         echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
                             src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('SYS_MEMBERS').'" title="'.$g_l10n->get('SYS_MEMBERS').'" /></a>';
@@ -551,15 +555,13 @@ else
                 {
                     if($date->getValue('dat_max_members')!=0)
                     {
-                        $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
+                        $sql = 'SELECT DISTINCT mem_usr_id 
+                                  FROM '.TBL_MEMBERS.' 
+                                 WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
                         $result = $g_db->query($sql);
-                        $row2 = $g_db->num_rows($result);
-                        
-                        $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.' WHERE mem_rol_id ="'.$date->getValue('dat_rol_id').'" AND mem_leader = 1';
-                        $result = $g_db->query($sql);
-                        $row3 = $g_db->num_rows($result);
+                        $row_count = $g_db->num_rows($result);
                                     
-                        $participantsHtml = '<strong>'.$row2.'</strong> (davon '.$row3.' '. ((intval($row3)==1) ? $g_l10n->get('DAT_ORGANIZER') : $g_l10n->get('DAT_ORGANIZERS')) . ')';
+                        $participantsHtml = '<strong>'.$row_count.'</strong>';
                     }
                     else 
                     {
@@ -596,60 +598,63 @@ else
                 // Beschreibung anzeigen
                 echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>';
 
-                // Link zum An- und Abmelden zu Terminen in Ausgabe-Array schreiben
-                $member = new TableMembers($g_db);
-                $foundMember = $member->readData(array('rol_id' => $date->getValue('dat_rol_id'), 'usr_id' => $g_current_user->getValue('usr_id')));
-                
-                if($member->getValue('mem_leader') != 1 && $date->getValue('dat_rol_id') > 0)
+                if($date->getValue('dat_rol_id') > 0)
                 {
-                    if($foundMember)
+                    // Link zum An- und Abmelden zu Terminen in Ausgabe-Array schreiben
+                    $member = new TableMembers($g_db);
+                    $foundMember = $member->readData(array('rol_id' => $date->getValue('dat_rol_id'), 'usr_id' => $g_current_user->getValue('usr_id')));
+                    
+                    if($member->getValue('mem_leader') != 1 && $date->getValue('dat_rol_id') > 0)
                     {
-                        $registrationHtml = '<span class="iconTextLink">
-                                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img 
-                                    src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('DAT_CANCEL').'" /></a>
-                                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">'.$g_l10n->get('DAT_CANCEL').'</a>
-                            </span>';
-                    }
-                    else
-                    {
-                        $available_signin = true;
-                        $non_available_rols = array();
-                        if($date->getValue('dat_max_members'))
+                        if($foundMember)
                         {
-                            // Teilnehmerbegrenzung allgemein
-                            $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
-                                    WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'" AND mem_leader = 0';
-                            $res_num = $g_db->query($sql);
-                            $row_num = $g_db->num_rows($res_num);
-                            if($row_num >= $date->getValue('dat_max_members'))
-                            {
-                                $available_signin = false;
-                            }
-                        }
-
-                        if($available_signin)
-                        {
-                            if($g_current_user->getValue('usr_id') > 0)
-                            {
-                                $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
-                            }
-                            else
-                            {
-                                $buttonURL = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2&amp;dat_rol_id='.$date->getValue('dat_rol_id');
-                            }
-
                             $registrationHtml = '<span class="iconTextLink">
-                                <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'" /></a>
-                                <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'</a>
-                            </span>';
+                                    <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img 
+                                        src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('DAT_CANCEL').'" /></a>
+                                    <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">'.$g_l10n->get('DAT_CANCEL').'</a>
+                                </span>';
                         }
                         else
                         {
-                            $registrationHtml = $g_l10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
-                        }
-                    }
+                            $available_signin = true;
+                            $non_available_rols = array();
+                            if($date->getValue('dat_max_members'))
+                            {
+                                // Teilnehmerbegrenzung allgemein
+                                $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
+                                        WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'" AND mem_leader = 0';
+                                $res_num = $g_db->query($sql);
+                                $row_num = $g_db->num_rows($res_num);
+                                if($row_num >= $date->getValue('dat_max_members'))
+                                {
+                                    $available_signin = false;
+                                }
+                            }
 
-                    echo '<div>'.$registrationHtml.'</div>';
+                            if($available_signin)
+                            {
+                                if($g_current_user->getValue('usr_id') > 0)
+                                {
+                                    $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
+                                }
+                                else
+                                {
+                                    $buttonURL = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2&amp;dat_rol_id='.$date->getValue('dat_rol_id');
+                                }
+
+                                $registrationHtml = '<span class="iconTextLink">
+                                    <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'" /></a>
+                                    <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'</a>
+                                </span>';
+                            }
+                            else
+                            {
+                                $registrationHtml = $g_l10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                            }
+                        }
+
+                        echo '<div>'.$registrationHtml.'</div>';
+                    }
                 }
 
                 // Erstell-/ Änderungsdaten anzeigen
