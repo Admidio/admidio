@@ -4,6 +4,7 @@
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>
+    <text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Hier können Ankündigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</text>
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Ankündigung wurde angelegt</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 	
@@ -15,6 +16,7 @@
     <text id="BAC_COMPLETED_VAR" development="new" translation="todo">%VAR1%% fertig</text>
     <text id="BAC_CREATION_DATE" development="new" translation="todo">Erstellungsdatum</text>
     <text id="BAC_DATABASE_BACKUP" development="new" translation="todo">Datenbank-Backup</text>
+    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Ein Backup der Admidio Tabellen in der Datenbank kann hier erstellt werden.</text>
     <text id="BAC_DAYS_VAR" development="new" translation="todo">%VAR1% Tagen</text>
     <text id="BAC_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!</text>
     <text id="BAC_HOURS_VAR" development="new" translation="todo">%VAR1% Stunden</text>
@@ -47,6 +49,7 @@
     <text id="DAT_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="DAT_DATE" development="new" translation="todo">Termin</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
+    <text id="DAT_DATES_DESC" development="new" translation="todo">Hier können Termine angeschaut, erstellt und bearbeitet werden.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
     <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="todo">Hier können Räume angelegt und bearbeitet werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
 	<text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Termin wurde angelegt</text>
@@ -93,6 +96,7 @@
 	<text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
 	<text id="DOW_CREATE_FOLDER_DESC" development="new" translation="todo">Den neuen Ordner im Ordner %VAR1_BOLD% anlegen.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
+    <text id="DOW_DOWNLOADS_DESC" development="new" translation="todo">Benutzer können Dateien aus bestimmten Verzeichnissen herunterladen.</text>
 	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Datei wurde hochgeladen</text>
 	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Datei bei %VAR1% hochgeladen.\n\nDatei: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="DOW_ENABLE_DOWNLOAD_MODULE" development="new" translation="todo">Downloadmodul aktivieren</text>
@@ -157,7 +161,7 @@
     <text id="ECA_GREETING_CARDS" development="new" translation="todo">Grußkarten</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="todo">Grußkarte bearbeiten</text>
     <text id="ECA_GREETING_CARD_SEND" development="new" translation="todo">Grußkarte abschicken</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="todo">Vorschau der Grußkarte:</text>
+    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="todo">Vorschau der Grußkarte</text>
     <text id="ECA_INPUT_INCORRECT" development="new" translation="todo">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
     <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="todo">interner Empfänger</text>
     <text id="ECA_MAX_CC" development="new" translation="todo">Max. weitere Empfänger</text>
@@ -180,7 +184,7 @@
     <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe):</text>
+    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe)</text>
     <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="todo">Deine Grußkarte wird an ein Mitglied der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt hat.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
@@ -207,16 +211,23 @@
 	<text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebuchkommentar bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Gästebucheintrag wurde angelegt</text>
 	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebucheintrag bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+    <text id="GBO_ENTRY_QUEUED" development="new" translation="todo">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</text>
     <text id="GBO_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="todo">Flooding Protection Intervall</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</text>
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
+    <text id="GBO_GUESTBOOK_DESC" development="new" translation="todo">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</text>
+    <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="todo">Moderation aktivieren für</text>
+    <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="todo">Gästebucheinträge werden erst nach einer Sichtprüfung eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Besuchern, auch bei angemeldeten Benutzern oder bei niemandem durchgeführt werden soll.  (Standard: Niemand)</text>
     <text id="GBO_HIDE_COMMENTS" development="new" translation="todo">Kommentare ausblenden</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="todo">Kommentare direkt anzeigen</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="todo">Wenn diese Option aktiviert ist, werden beim Aufruf der Gästebuchseite die Kommentare direkt geladen und angezeigt. Im anderen Fall muss der Benutzer auf einen Link klicken um die Kommentare zu sehen. (Standard: nein)</text>
     <text id="GBO_MODERATE_ENTRIES" development="new" translation="todo">%VAR1% Einträge moderieren</text>
+    <text id="GBO_MODERATE_VAR" development="new" translation="todo">%VAR1% moderieren</text>
+    <text id="GBO_ONLY_VISITORS" development="new" translation="todo">Nur Besucher</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="todo">Kommentare anzeigen</text>
     <text id="GBO_SHOW_COMMENTS_ON_ENTRY" development="new" translation="todo">Zeige %VAR1% Kommentar(e) zu diesem Eintrag</text>
+    <text id="GBO_WRITE_COMMENT" development="new" translation="todo">Kommentar schreiben</text>
     
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="todo">Weitere Organisation hinzufügen</text>
@@ -331,6 +342,7 @@
     <text id="LNK_REDIRECT_DESC" development="new" translation="todo">Du verlässt jetzt das Webangebot von %VAR1_BOLD% und wirst in %VAR2% Sekunden automatisch zu %VAR3% weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte %VAR4%!</text>
     <text id="LNK_SAME_WINDOW" development="new" translation="todo">Gleiches Fenster</text>
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
+    <text id="LNK_WEBLINKS_DESC" development="new" translation="todo">Hier können Links zu interessanten Webseiten abgelegt werden.</text>
 
     <!-- Phrases only in Listsmodule -->
     <text id="LST_A_TO_Z" development="new" translation="todo">A bis Z</text>
@@ -365,6 +377,7 @@
     <text id="LST_KONFIGURATION_OWN_LIST" development="new" translation="todo">Konfiguration eigene Liste</text>
     <text id="LST_LIST" development="new" translation="todo">Liste</text>
     <text id="LST_LISTS" development="new" translation="todo">Listen</text>
+    <text id="LST_LISTS_DESC" development="new" translation="todo">Hier können Besucher ihre Grüße und Anmerkungen eintragen.</text>
     <text id="LST_LIST_VIEW" development="new" translation="todo">Listenübersicht</text>
     <text id="LST_MAX" development="new" translation="todo">von max. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="todo">Anzahl Teilnehmer pro Seite</text>
@@ -429,6 +442,7 @@
     <text id="MAI_COUNT_BCC_DESC" development="new" translation="todo">Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="todo">%VAR1% hat an die Rolle %VAR4% von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="todo">%VAR1% hat Dir von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
+    <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</text>
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
     <text id="MAI_MESSAGE" development="new" translation="todo">Nachricht</text>
@@ -485,6 +499,7 @@
     <text id="MEM_UPDATED_ON" development="new" translation="todo">Aktualisiert am</text>
     <text id="MEM_USER_DELETE" development="new" translation="todo">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="todo">Benutzerverwaltung</text>
+    <text id="MEM_USER_MANAGEMENT_DESC" development="new" translation="todo">Mitglieder (Benutzer) können entfernt und neue Mitglieder (Benutzer) können in der Datenbank anlegt werden.</text>
     <text id="MEM_UTF8" development="new" translation="todo">UTF-8</text>
 
     <!-- Phrases only in New-User-Registration -->
@@ -496,6 +511,8 @@
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="todo">Anmeldung zuordnen</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Anmeldung löschen</text>
     <text id="NWU_REGISTRATION" development="new" translation="todo">Anmeldung</text>
+    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen verwalten.</text>
+    <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="todo">Besucher, die sich auf der Homepage registriert haben, können hier freigeschaltet oder abgelehnt werden.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%, besitzt aber bereits Logindaten.</text>
     <text id="NWU_NO_MEMBERSHIP_NO_LOGIN" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1% und besitzt auch keine Logindaten.</text>
@@ -592,6 +609,7 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="todo">Nur für angemeldete Benutzer</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
+    <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="todo">Einstellungen für die Organisation, spezifische Profilfelder und Rollenkategorien können hier bearbeitet werden.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="todo">Übergeordnete Organisation</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="todo">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</text>
     <text id="ORG_PIXEL" development="new" translation="todo">Pixel</text>
@@ -679,6 +697,7 @@
     <text id="PHO_PHOTO" development="new" translation="todo">Foto</text>
     <text id="PHO_PHOTOGRAPHER" development="new" translation="todo">Fotos von</text>
     <text id="PHO_PHOTOS" development="new" translation="todo">Fotos</text>
+    <text id="PHO_PHOTOS_DESC" development="new" translation="todo">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen können.</text>
     <text id="PHO_POPUP_WINDOW" development="new" translation="todo">Popup-Fenster</text>
 	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="todo">Vorheriges Foto</text>
 	<text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="todo">Auflösung größer als</text>
@@ -708,6 +727,7 @@
     <!-- Phrases only in Profilemodule -->
 	<text id="PRO_ACCEPT_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto übernehmen</text>
 	<text id="PRO_ADD_USER" development="new" translation="todo">Benutzer anlegen</text>
+    <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft beenden</text>
 	<text id="PRO_CHANGE_DATE" development="new" translation="todo">Datum ändern</text>
 	<text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
     <text id="PRO_CONFIRM_REGISTRATION_SYSTEM" development="new" translation="todo">Deine Daten wurden gespeichert.\n\nDu kannst dich noch nicht einloggen.\nSobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.</text>
@@ -734,6 +754,7 @@
 	<text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">Profilfelder pflegen</text>
 	<text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
 	<text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
+    <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Profil anschauen und bearbeiten.</text>
 	<text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
 	<text id="PRO_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
 	<text id="PRO_NO_DEFAULT_ROLE" development="new" translation="todo">In den Organisationseinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
@@ -789,6 +810,8 @@
     <text id="ROL_INACTIV_ROLES" development="new" translation="todo">Inaktive Rollen</text>
     <text id="ROL_INDEPENDENT" development="new" translation="todo">Unabhängig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
+    <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen ?</text>
+    <text id="ROL_MEMBERSHIP_DEL" development="new" translation="todo">Willst du die Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich beenden ?</text>
     <text id="ROL_NEW_ROLE" development="new" translation="todo">neuen Rolle</text>
     <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="todo">Nur Rollenmitglieder</text>
@@ -812,6 +835,7 @@
     <text id="ROL_RIGHT_WEBLINKS" development="new" translation="todo">Weblinks anlegen und bearbeiten</text>
     <text id="ROL_ROLE" development="new" translation="todo">Rolle</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="todo">Rollenverwaltung</text>
+    <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="todo">Rollen (Gruppen / Kurse / Abteilungen) können hier erstellt oder bearbeitet, sowie deren Rechtebereich definiert werden.</text>
     <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="todo">Rollenzuordnung für "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="todo">Rolle löschen</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="todo">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
@@ -821,6 +845,7 @@
     <text id="ROL_ROLE_NAME_EXISTS" development="new" translation="todo">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</text>
     <text id="ROL_ROLE_SET_MODE" development="new" translation="todo">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
     <text id="ROL_SAVE_ROLES" development="new" translation="todo">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</text>
+    <text id="ROL_SEE_ROLE_MEMBERSHIP" development="new" translation="todo">Rollenmitgliedschaft sehen</text>
     <text id="ROL_SEND_MAIL_GUESTS" development="new" translation="todo">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</text>
     <text id="ROL_SEND_MAIL_MEMBERS" development="new" translation="todo">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</text>
     <text id="ROL_SEND_MAIL_ROLE" development="new" translation="todo">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.</text>
@@ -854,6 +879,8 @@
     <text id="SYS_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
 	<text id="SYS_ADDRESS" development="new" translation="todo">Adresse</text>
+    <text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="todo">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</text>
+    <text id="SYS_ADMIDIO_TEAM" development="new" translation="todo">Admidio Team</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="todo">Administration</text>
     <text id="SYS_ADMINISTRATION_VAR" development="new" translation="todo">%VAR1%-Verwaltung</text>
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
@@ -863,6 +890,7 @@
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
+    <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="todo">Zurück zur Modulübersicht</text>
     <text id="SYS_BBCODE" development="new" translation="todo">BBCode</text>
     <text id="SYS_BBCODE_DESC" development="new" translation="todo">Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks) können mit verschiedenen Tags (BBCode) formatiert werden. Dafür müssen die hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
@@ -963,6 +991,8 @@
     <text id="SYS_FONT_STYLE" development="new" translation="todo">Schrifttyp</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
     <text id="SYS_FORUM" development="new" translation="todo">Forum</text>
+    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="todo">Sie sind als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und haben %VAR3_BOLD% neue Nachrichten.</text>
+    <text id="SYS_FORUM_DESC" development="new" translation="todo">Der virtuelle Treffpunkt zum Austausch von Gedanken und Erfahrungen.</text>
     <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="todo">Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!</text>
     <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="todo">Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!</text>
     <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="todo">Dein Administrator-Account vom Forum %VAR2% wurde auf den Admidio-Account zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
@@ -1029,6 +1059,7 @@
     <text id="SYS_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
 	<text id="SYS_NO_ENTRIES_FOUND" development="new" translation="todo">Es wurden keine Einträge gefunden.</text>
     <text id="SYS_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.</text>
+    <text id="SYS_NOBODY" development="new" translation="todo">Niemand</text>
     <text id="SYS_NONE" development="new" translation="todo">Keiner</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
@@ -1058,6 +1089,7 @@
     <text id="SYS_PWACT_PW_SAVED" development="new" translation="todo">Das neue Passwort wurde nun übernommen!</text>
     <text id="SYS_PWACT_CODE_INVALID" development="new" translation="todo">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</text>
     <text id="SYS_RECIPIENT" development="new" translation="todo">Empfänger</text>
+    <text id="SYS_REGISTERED_AS" development="new" translation="todo">Angemeldet als</text>
     <text id="SYS_REGISTRATION" development="new" translation="todo">Registrierung</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
@@ -1139,33 +1171,5 @@
     <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Sie können maximal %0 Dateien hinzufügen.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
-    
-    <text id="GBO_ENTRY_QUEUED" development="new" translation="todo">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</text>
-    <text id="GBO_MODERATE_VAR" development="new" translation="todo">%VAR1% moderieren</text>
-    <text id="GBO_ONLY_VISITORS" development="new" translation="todo">Nur Besucher</text>
-    <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="todo">Moderation aktivieren für</text>
-    <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="todo">Gästebucheinträge werden erst nach einer Sichtprüfung eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Besuchern, auch bei angemeldeten Benutzern oder bei niemandem durchgeführt werden soll.  (Standard: Niemand)</text>
-    <text id="GBO_WRITE_COMMENT" development="new" translation="todo">Kommentar schreiben</text>
-    <text id="SYS_NOBODY" development="new" translation="todo">Niemand</text>
-    <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft beenden</text>
-    <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen ?</text>
-    <text id="ROL_MEMBERSHIP_DEL" development="new" translation="todo">Willst du die Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich beenden ?</text>
-    <!--<text id="ROL_MEMBERSHIP_DEL_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Rollenzuordnung konnte nicht entfernt werden.</text>-->
-    <!--<text id="ROL_SHOW_LISTS" development="new" translation="todo">Rollenmitgliedschaft sehen</text>-->
-    <text id="ROL_SEE_ROLE_MEMBERSHIP" development="new" translation="todo">Rollenmitgliedschaft sehen</text>
-    <text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Hier können Ankündigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</text>
-    <text id="DOW_DOWNLOADS_DESC" development="new" translation="todo">Benutzer können Dateien aus bestimmten Verzeichnissen herunterladen.</text>
-    <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</text>
-    <text id="PHO_PHOTOS_DESC" development="new" translation="todo">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen können.</text>
-    <text id="LST_LISTS_DESC" development="new" translation="todo">Hier können Besucher ihre Grüße und Anmerkungen eintragen.</text>
-    <text id="GBO_GUESTBOOK_DESC" development="new" translation="todo">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Profil anschauen und bearbeiten.</text>
-    <text id="DAT_DATES_DESC" development="new" translation="todo">Hier können Termine angeschaut, erstellt und bearbeitet werden.</text>
-    <text id="LNK_WEBLINKS_DESC" development="new" translation="todo">Hier können Links zu interessanten Webseiten abgelegt werden.</text>
-  	<!--<text id="PHO_OVERVIEW" development="new" translation="todo">Übersicht</text>-->
-  	<text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
-    <!--<text id="INS_OVERVIEW" development="new" translation="todo">Übersichtsseite</text>-->
-
-
 </version>
 </language>

@@ -8,7 +8,7 @@
 if(strpos($_SERVER['REQUEST_URI'], 'index.php') === false)
 {
     echo '<div style="text-align: center; margin-top: 5px;">
-        <a href="'.$g_homepage.'">Zurück zur Modulübersicht</a>
+        <a href="'.$g_homepage.'">'.$g_l10n->get('SYS_BACK_TO_MODULE_OVERVIEW').'</a>
     </div>';
 }
 ?>
@@ -18,7 +18,6 @@ if(strpos($_SERVER['REQUEST_URI'], 'index.php') === false)
 <div style="text-align: center; margin: 15px;">
     <a href="http://www.admidio.org" target="_blank"><img 
         src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="vertical-align: middle; border-width: 0px;" 
-        alt="Die Online-Mitgliederverwaltung für Vereine, Gruppen und Organisationen"
-        title="Die Online-Mitgliederverwaltung für Vereine, Gruppen und Organisationen" /></a>
-    <span style="font-size: 9pt; vertical-align: bottom;">&nbsp;&nbsp;&copy; 2004 - 2011&nbsp;&nbsp;Admidio Team</span>
+        alt="<?php echo $g_l10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" title="<?php echo $g_l10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" /></a>
+    <span style="font-size: 9pt; vertical-align: bottom;">&nbsp;&nbsp;&copy; 2004 - 2011&nbsp;&nbsp;<?php echo $g_l10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </div>

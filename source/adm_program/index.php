@@ -143,7 +143,7 @@ echo '</ul>
                         </dt>
                         <dd>
                             <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$g_l10n->get('PHO_PHOTOS').'</a></span><br />
-                            <span class="smallFontSize">'.$g_l10n->get('MAI_EMAIL_DESC').'</span>
+                            <span class="smallFontSize">'.$g_l10n->get('PHO_PHOTOS_DESC').'</span>
                         </dd>
                     </dl>
                 </li>';
@@ -248,12 +248,11 @@ echo '</ul>
             {
                 if($g_forum->session_valid)
                 {
-                    $forumstext = 'Sie sind als <b>'.$g_forum->user.'</b> im Forum <b>'.$g_forum->sitename.'</b> angemeldet '.
-                                  $g_forum->getUserPM($g_current_user->getValue('usr_login_name'));
+                    $forumstext = $g_l10n->get('SYS_FORUM_LOGIN_DESC', $g_forum->user, $g_forum->sitename, $g_forum->getUserPM($g_current_user->getValue('usr_login_name')));
                 }
                 else
                 {
-                    $forumstext = 'Der virtuelle Treffpunkt zum Austausch von Gedanken und Erfahrungen.';
+                    $forumstext = $g_l10n->get('SYS_FORUM_DESC');
                 }
                 echo '
                 <li>
@@ -287,11 +286,11 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user.php"><img
-                                src="'.THEME_PATH.'/icons/new_registrations_big.png" alt="Web-Anmeldungen" title="Web-Anmeldungen" /></a>
+                                src="'.THEME_PATH.'/icons/new_registrations_big.png" alt="'.$g_l10n->get('NWU_MANAGE_NEW_REGISTRATIONS').'" title="'.$g_l10n->get('NWU_MANAGE_NEW_REGISTRATIONS').'" /></a>
                             </dt>
                             <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/new_user/new_user.php">Neue Web-Anmeldungen verwalten</a></span><br />
-                                <span class="smallFontSize">Besucher, die sich auf der Homepage registriert haben, können hier freigeschaltet oder abgelehnt werden.</span>
+                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/new_user/new_user.php">'.$g_l10n->get('NWU_MANAGE_NEW_REGISTRATIONS').'</a></span><br />
+                                <span class="smallFontSize">'.$g_l10n->get('NWU_MANAGE_NEW_REGISTRATIONS_DESC').'</span>
                             </dd>
                         </dl>
                     </li>';
@@ -304,11 +303,11 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href="'.$g_root_path.'/adm_program/administration/members/members.php"><img
-                                src="'.THEME_PATH.'/icons/user_administration_big.png" alt="Benutzerverwaltung" title="Benutzerverwaltung" /></a>
+                                src="'.THEME_PATH.'/icons/user_administration_big.png" alt="'.$g_l10n->get('MEM_USER_MANAGEMENT').'" title="'.$g_l10n->get('MEM_USER_MANAGEMENT').'" /></a>
                             </dt>
                             <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/members/members.php">Benutzerverwaltung</a></span><br />
-                                <span class="smallFontSize">Mitglieder (Benutzer) können entfernt und neue Mitglieder (Benutzer) können in der Datenbank anlegt werden.</span>
+                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/members/members.php">'.$g_l10n->get('MEM_USER_MANAGEMENT').'</a></span><br />
+                                <span class="smallFontSize">'.$g_l10n->get('MEM_USER_MANAGEMENT_DESC').'</span>
                             </dd>
                         </dl>
                     </li>';
@@ -321,12 +320,11 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php"><img
-                                src="'.THEME_PATH.'/icons/roles_big.png" alt="Rollenverwaltung" title="Rollenverwaltung" /></a>
+                                src="'.THEME_PATH.'/icons/roles_big.png" alt="'.$g_l10n->get('ROL_ROLE_ADMINISTRATION').'" title="'.$g_l10n->get('ROL_ROLE_ADMINISTRATION').'" /></a>
                             </dt>
                             <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/roles/roles.php">Rollenverwaltung</a></span><br />
-                                <span class="smallFontSize">Rollen (Gruppen / Kurse / Abteilungen) können hier erstellt oder bearbeitet, sowie deren
-                                     Rechtebereich definiert werden.</span>
+                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/roles/roles.php">'.$g_l10n->get('ROL_ROLE_ADMINISTRATION').'</a></span><br />
+                                <span class="smallFontSize">'.$g_l10n->get('ROL_ROLE_ADMINISTRATION_DESC').'</span>
                             </dd>
                         </dl>
                     </li>';
@@ -339,11 +337,11 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php"><img
-                                src="'.THEME_PATH.'/icons/backup_big.png" alt="Datenbank Backup" title="Datenbank Backup" /></a>
+                                src="'.THEME_PATH.'/icons/backup_big.png" alt="'.$g_l10n->get('BAC_DATABASE_BACKUP').'" title="'.$g_l10n->get('BAC_DATABASE_BACKUP').'" /></a>
                             </dt>
                             <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">Datenbank Backup</a></span><br />
-                                <span class="smallFontSize">Ein Backup der Admidio Tabellen in der Datenbank kann hier erstellt werden.</span>
+                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">'.$g_l10n->get('BAC_DATABASE_BACKUP').'</a></span><br />
+                                <span class="smallFontSize">'.$g_l10n->get('BAC_DATABASE_BACKUP_DESC').'</span>
                             </dd>
                         </dl>
                     </li>';
@@ -356,11 +354,11 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
                         <dl>
                             <dt>
                                 <a href="'.$g_root_path.'/adm_program/administration/organization/organization.php"><img
-                                src="'. THEME_PATH. '/icons/options_big.png" alt="Organisationseinstellungen" title="Organisationseinstellungen" /></a>
+                                src="'. THEME_PATH. '/icons/options_big.png" alt="'.$g_l10n->get('ORG_ORGANIZATION_PROPERTIES').'" title="'.$g_l10n->get('ORG_ORGANIZATION_PROPERTIES').'" /></a>
                             </dt>
                             <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/organization/organization.php">Organisationseinstellungen</a></span><br />
-                                <span class="smallFontSize">Einstellungen für die Organisation, spezifische Profilfelder und Rollenkategorien können hier bearbeitet werden.</span>
+                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/organization/organization.php">'.$g_l10n->get('ORG_ORGANIZATION_PROPERTIES').'</a></span><br />
+                                <span class="smallFontSize">'.$g_l10n->get('ORG_ORGANIZATION_PROPERTIES_DESC').'</span>
                             </dd>
                         </dl>
                     </li>';
