@@ -44,6 +44,7 @@ if(!$g_current_user->editDates())
 $req_dat_id   = 0;
 $req_calendar = '';
 $req_copy     = false;
+$date_login   = 0;
 
 // Uebergabevariablen pruefen
 
@@ -130,10 +131,11 @@ if(isset($_SESSION['dates_request']))
     }
     $date->setVisibleRoles($arrRoles);
     
-    $date_from = $_SESSION['dates_request']['date_from'];
-    $time_from = $_SESSION['dates_request']['time_from'];
-    $date_to   = $_SESSION['dates_request']['date_to'];
-    $time_to   = $_SESSION['dates_request']['time_to'];
+    $date_from  = $_SESSION['dates_request']['date_from'];
+    $time_from  = $_SESSION['dates_request']['time_from'];
+    $date_to    = $_SESSION['dates_request']['date_to'];
+    $time_to    = $_SESSION['dates_request']['time_to'];
+    $date_login = $_SESSION['dates_request']['date_login'];
     
     unset($_SESSION['dates_request']);
 }
@@ -147,8 +149,15 @@ else
     $date_to = $date->getValue('dat_end', $g_preferences['system_date']);
     $time_to = $date->getValue('dat_end', $g_preferences['system_time']);
     
-    // Sichtbar fuer alle wird per Default vorbelegt
-    $date->setVisibleRoles(array('-1'));
+    if($req_dat_id == 0)
+    {
+        // Sichtbar fuer alle wird per Default vorbelegt
+        $date->setVisibleRoles(array('-1'));
+    }
+    else
+    {
+        $date->getVisibleRoles();
+    }
 }
 
 // Html-Kopf ausgeben
@@ -230,26 +239,19 @@ $g_layout['header'] = '
         setAllDay();
         $("#dat_headline").focus();';
         // alle Rollen anzeigen, die diesen Termin sehen duerfen
-        if(count($date->getVisibleRoles()) > 0)
+        foreach($date->getVisibleRoles() as $key => $roleID)
         {
-            foreach($date->getVisibleRoles() as $key => $roleID)
-            {
-                $g_layout['header'] .= 'addRoleSelection('.$roleID.');';
-            }
+            $g_layout['header'] .= 'addRoleSelection('.$roleID.');';
+        }
+
+        if($date->getValue('dat_rol_id') > 0)
+        {
+            $dateRoleID = $date->getValue('dat_rol_id');
         }
         else
         {
-            $g_layout['header'] .= 'addRoleSelection(0);';
+            $dateRoleID = '0';
         }
-
-    if($date->getValue('dat_rol_id') > 0)
-    {
-        $dateRoleID = $date->getValue('dat_rol_id');
-    }
-    else
-    {
-        $dateRoleID = '0';
-    }
     $g_layout['header'] .= '}); 
 
     var dateRoleID = '.$dateRoleID.';
@@ -392,11 +394,10 @@ echo '
                             while($row = $g_db->fetch_array($result))
                             {
                                 echo '<option value="'.$row['cat_id'].'"';
-                                error_log('kategorie:'.$date->getValue('dat_cat_id').'::'.$row['cat_id']);
-                                    if($date->getValue('dat_cat_id') == $row['cat_id'])
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
+                                if($date->getValue('dat_cat_id') == $row['cat_id'])
+                                {
+                                    echo ' selected="selected" ';
+                                }
                                 echo '>'.$row['cat_name'].'</option>';
                             }
                         echo '</select>
@@ -409,8 +410,7 @@ echo '
                     <dt>'.$g_l10n->get('DAT_REGISTRATION_POSSIBLE').':</dt>
                     <dd>
                         <input type="checkbox" id="date_login" name="date_login"';
-                        if($date->getValue('dat_rol_id') > 0 
-                        || (isset($_SESSION['dates_request']['date_login']) && $_SESSION['dates_request']['date_login'] == 1))
+                        if($date->getValue('dat_rol_id') > 0 || $date_login == 1)
                         {
                             echo ' checked="checked" ';
                         }

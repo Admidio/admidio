@@ -182,10 +182,24 @@ class TableDate extends TableAccess
     // die Methode gibt ein Array  mit den fuer den Termin sichtbaren Rollen-IDs zurueck
     public function getVisibleRoles()
     {
-        if(isset($this->visibleRoles[0]) == false)
+        if(count($this->visibleRoles) == 0)
         {
             // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
-            $this->readVisibleRoles();
+            $this->visibleRoles = array();
+            $sql = 'SELECT dtr_rol_id FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
+            $this->db->query($sql);
+
+            while($row = $this->db->fetch_array())
+            {
+                if($row['dtr_rol_id'] == null)
+                {
+                    $this->visibleRoles[] = -1;
+                }
+                else
+                {
+                    $this->visibleRoles[] = $row['dtr_rol_id'];
+                }
+            }
         }
         return $this->visibleRoles;
     }
@@ -201,25 +215,6 @@ class TableDate extends TableAccess
             return parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
         }
         return false;
-    }
-
-    // alle Rollen-IDs einlesen, die diesen Termin sehen duerfen
-    public function readVisibleRoles()
-    {
-        $this->visibleRoles = array();
-        $sql = 'SELECT dtr_rol_id FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
-        $this->db->query($sql);
-        while($row = $this->db->fetch_array())
-        {
-            if($row['dtr_rol_id'] == null)
-            {
-                $this->visibleRoles[] = -1;
-            }
-            else
-            {
-                $this->visibleRoles[] = $row['dtr_rol_id'];
-            }
-        }
     }
 
     public function save($updateFingerPrint = true)

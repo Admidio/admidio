@@ -12,41 +12,39 @@
             <?php
             if($g_valid_login)
             {
-                echo "<h3>Angemeldet als</h3>";
+                echo '<h3>Angemeldet als</h3>';
             }
             else
             {
-                echo "<h3>Anmelden</h3>";
+                echo '<h3>'.$g_l10n->get('SYS_LOGIN').'</h3>';
             }
-            include(SERVER_PATH. "/adm_plugins/login_form/login_form.php");
-            echo '<br/>';
-            include(SERVER_PATH. "/adm_plugins/calendar/calendar.php");
+            include(SERVER_PATH. '/adm_plugins/login_form/login_form.php');
             echo '<br/>
             <h3>Module</h3>
             <span class="menu" style="margin-bottom: 10px;"><a href="'. $g_root_path. '/adm_program/index.php"><img
-                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/home.png" alt="Übersicht" title="Übersicht" /></a>
-                <a href="'. $g_root_path. '/adm_program/index.php">Übersicht</a></span>';
+                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/home.png" alt="'.$g_l10n->get('SYS_OVERVIEW').'" title="'.$g_l10n->get('SYS_OVERVIEW').'" /></a>
+                <a href="'. $g_root_path. '/adm_program/index.php">'.$g_l10n->get('SYS_OVERVIEW').'</a></span>';
             if( $g_preferences['enable_announcements_module'] == 1
             || ($g_preferences['enable_announcements_module'] == 2 && $g_valid_login))
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/announcements.png" alt="Ankündigungen" title="Ankündigungen" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php">Ankündigungen</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/announcements.png" alt="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php">'.$g_l10n->get('ANN_ANNOUNCEMENTS').'</a></span>';
             }
             if($g_preferences['enable_download_module'] == 1)
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/downloads/downloads.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/download.png" alt="Downloads" title="Downloads" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/downloads/downloads.php">Downloads</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('DOW_DOWNLOADS').'" title="'.$g_l10n->get('DOW_DOWNLOADS').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/downloads/downloads.php">'.$g_l10n->get('DOW_DOWNLOADS').'</a></span>';
             }
             if($g_preferences['enable_mail_module'] == 1)
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/mail/mail.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/email.png" alt="E-Mail" title="E-Mail" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/mail/mail.php">E-Mail</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('SYS_EMAIL').'" title="'.$g_l10n->get('SYS_EMAIL').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/mail/mail.php">'.$g_l10n->get('SYS_EMAIL').'</a></span>';
             }
             if($g_preferences['enable_photo_module'] == 1 
             || ($g_preferences['enable_photo_module'] == 2 && $g_valid_login))

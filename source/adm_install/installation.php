@@ -737,7 +737,7 @@ elseif($req_mode == 8)
     {
         $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /> '.$g_l10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
-    showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('INS_OVERVIEW'));
+    showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'));
 }
 
 ?>
