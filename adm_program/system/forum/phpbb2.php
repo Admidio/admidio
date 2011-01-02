@@ -345,23 +345,8 @@ class PhpBB2
         $row    = $this->forum_db->fetch_array($result);
 
         $this->neuePM = $row[0];
-        $neuePM_Text  = '';
-
-        // Wenn neue Nachrichten vorliegen, einen ansprechenden Text generieren
-        if ($this->neuePM == 0)
-        {
-            $neuePM_Text = ' und haben <b>keine</b> neue Nachrichten.';
-        }
-        elseif ($this->neuePM == 1)
-        {
-            $neuePM_Text = ' und haben <b>1</b> neue Nachricht.';
-        }
-        else
-        {
-            $neuePM_Text = ' und haben <b>'.$this->neuePM.'</b> neue Nachrichten.';
-        }
         
-        return $neuePM_Text;
+        return $this->neuePM;
     }
 
 
@@ -484,33 +469,33 @@ class PhpBB2
         $row    = $this->forum_db->fetch_array($result);
         $new_user_id = $row[0] + 1;
 
-        $sql    = "INSERT INTO ". $this->praefix. "_users
+        $sql    = 'INSERT INTO '. $this->praefix. '_users
                   (user_id, user_active, username, user_password, user_regdate, user_timezone,
                   user_style, user_lang, user_viewemail, user_attachsig, user_allowhtml,
                   user_dateformat, user_email, user_notify, user_notify_pm, user_popup_pm, user_avatar)
                   VALUES 
-                  ($new_user_id, $forum_useraktiv, '$forum_username', '$forum_password', ". time(). ", 1.00,
-                  2, 'german', 0, 1, 0, 'd.m.Y, H:i', '$forum_email', 0, 1, 1, '') ";
+                  ('.$new_user_id.', '.$forum_useraktiv.', "'.$forum_username.'", "'.$forum_password.'", '. time(). ', 1.00,
+                  2, "german", 0, 1, 0, "d.m.Y, H:i", "'.$forum_email.'", 0, 1, 1, "") ';
         $result = $this->forum_db->query($sql);
 
         // Jetzt noch eine neue private Group anlegen
-        $sql    = "SELECT MAX(group_id) as anzahl 
-                   FROM ". $this->praefix. "_groups";
+        $sql    = 'SELECT MAX(group_id) as anzahl 
+                   FROM '. $this->praefix. '_groups';
         $result = $this->forum_db->query($sql);
         $row    = $this->forum_db->fetch_array($result);
         $new_group_id = $row[0] + 1;
 
-        $sql    = "INSERT INTO ". $this->praefix. "_groups
+        $sql    = 'INSERT INTO '. $this->praefix. '_groups
                   (group_id, group_type, group_name, group_description, group_moderator, group_single_user)
                   VALUES 
-                  ($new_group_id, 1, '', 'Personal User', 0, 1) ";
+                  ('.$new_group_id.', 1, "", "Personal User", 0, 1) ';
         $result = $this->forum_db->query($sql);
 
         // und den neuen User dieser Gruppe zuordenen
-        $sql    = "INSERT INTO ". $this->praefix. "_user_group
+        $sql    = 'INSERT INTO '. $this->praefix. '_user_group
                   (group_id, user_id, user_pending)
                   VALUES 
-                  ($new_group_id, $new_user_id, 0) ";
+                  ('.$new_group_id.', '.$new_user_id.', 0) ';
         $result = $this->forum_db->query($sql);
     }
 
@@ -521,7 +506,7 @@ class PhpBB2
         if(strlen($forum_username) > 0)
         {
             // User_ID des Users holen
-            $sql    = "SELECT user_id FROM ". $this->praefix. "_users WHERE username LIKE '$forum_username' ";
+            $sql    = 'SELECT user_id FROM '. $this->praefix. '_users WHERE username LIKE "'.$forum_username.'" ';
             $result = $this->forum_db->query($sql);
             $row    = $this->forum_db->fetch_array($result);
             $forum_userid = $row[0];
@@ -529,37 +514,37 @@ class PhpBB2
             if($forum_userid > 0)
             {
                 // Gruppen ID des Users holen
-                $sql    = "SELECT g.group_id 
-                            FROM ". $this->praefix. "_user_group ug, ". $this->praefix. "_groups g  
-                            WHERE ug.user_id = ". $forum_userid ."
-                                AND g.group_id = ug.group_id 
-                                AND g.group_single_user = 1";
+                $sql    = 'SELECT g.group_id 
+                             FROM '. $this->praefix. '_user_group ug, '. $this->praefix. '_groups g  
+                            WHERE ug.user_id = '. $forum_userid .'
+                              AND g.group_id = ug.group_id 
+                              AND g.group_single_user = 1';
                 $result = $this->forum_db->query($sql);
                 $row    = $this->forum_db->fetch_array($result);
                 $forum_group = $row[0];
     
                 // Alle Post des Users mit Gast Username versehen
-                $sql = "UPDATE ". $this->praefix. "_posts
-                        SET poster_id = -1, post_username = '" . $forum_username . "' 
-                        WHERE poster_id = $forum_userid";
+                $sql = 'UPDATE '. $this->praefix. '_posts
+                        SET poster_id = -1, post_username = "'.$forum_username.'" 
+                        WHERE poster_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // Alle Topics des User auf geloescht setzten
-                $sql = "UPDATE ". $this->praefix. "_topics
+                $sql = 'UPDATE '. $this->praefix. '_topics
                             SET topic_poster = -1 
-                            WHERE topic_poster = $forum_userid";
+                            WHERE topic_poster = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // Alle Votes des Users auf geloescht setzten
-                $sql = "UPDATE ". $this->praefix. "_vote_voters
+                $sql = 'UPDATE '. $this->praefix. '_vote_voters
                         SET vote_user_id = -1
-                        WHERE vote_user_id = $forum_userid";
+                        WHERE vote_user_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // GroupID der der Group holen, in denen der User Mod Rechte hat
-                $sql = "SELECT group_id
-                        FROM ". $this->praefix. "_groups
-                        WHERE group_moderator = $forum_userid";
+                $sql = 'SELECT group_id
+                        FROM '. $this->praefix. '_groups
+                        WHERE group_moderator = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 $group_moderator[] = 0;
@@ -573,50 +558,50 @@ class PhpBB2
                 {
                     $update_moderator_id = implode(', ', $group_moderator);
     
-                    $sql = "UPDATE ". $this->praefix. "_groups
+                    $sql = 'UPDATE '. $this->praefix. '_groups
                         SET group_moderator = 2
-                        WHERE group_moderator IN ($update_moderator_id)";
+                        WHERE group_moderator IN ('.$update_moderator_id.')';
                         $result = $this->forum_db->query($sql);
                 }
     
                 // User im Forum loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_users 
-                        WHERE user_id = $forum_userid ";
+                $sql = 'DELETE FROM '. $this->praefix. '_users 
+                        WHERE user_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // User aus den Gruppen loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_user_group 
-                        WHERE user_id = $forum_userid ";
+                $sql = 'DELETE FROM '. $this->praefix. '_user_group 
+                        WHERE user_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // Single User Group loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_groups
-                        WHERE group_id =  $forum_group ";
+                $sql = 'DELETE FROM '. $this->praefix. '_groups
+                        WHERE group_id = '.$forum_group;
                 $result = $this->forum_db->query($sql);
     
                 // User aus der Auth Tabelle loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_auth_access
-                        WHERE group_id = $forum_group ";
+                $sql = 'DELETE FROM '. $this->praefix. '_auth_access
+                        WHERE group_id = '.$forum_group;
                 $result = $this->forum_db->query($sql);
     
                 // User aus den zu beobachteten Topics Tabelle loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_topics_watch
-                        WHERE user_id = $forum_userid ";
+                $sql = 'DELETE FROM '. $this->praefix. '_topics_watch
+                        WHERE user_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // User aus der Banlist Tabelle loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_banlist
-                        WHERE ban_userid = $forum_userid ";
+                $sql = 'DELETE FROM '. $this->praefix. '_banlist
+                        WHERE ban_userid = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // Session des Users loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_sessions
-                        WHERE session_user_id = $forum_userid ";
+                $sql = 'DELETE FROM '. $this->praefix. '_sessions
+                        WHERE session_user_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
                 // Session_Keys des User loeschen
-                $sql = "DELETE FROM ". $this->praefix. "_sessions_keys
-                        WHERE user_id = $forum_userid ";
+                $sql = 'DELETE FROM '. $this->praefix. '_sessions_keys
+                        WHERE user_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
                 
                 return true;

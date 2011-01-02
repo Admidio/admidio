@@ -12,7 +12,7 @@
             <?php
             if($g_valid_login)
             {
-                echo '<h3>Angemeldet als</h3>';
+                echo '<h3>'.$g_l10n->get('SYS_REGISTERED_AS').'</h3>';
             }
             else
             {
@@ -51,51 +51,51 @@
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/photos/photos.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/photo.png" alt="Fotos" title="Fotos" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/photos/photos.php">Fotos</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/photo.png" alt="'.$g_l10n->get('PHO_PHOTOS').'" title="'.$g_l10n->get('PHO_PHOTOS').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/photos/photos.php">'.$g_l10n->get('PHO_PHOTOS').'</a></span>';
             }
             if( $g_preferences['enable_guestbook_module'] == 1
             || ($g_preferences['enable_guestbook_module'] == 2 && $g_valid_login))            
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/guestbook/guestbook.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/guestbook.png" alt="Gästebuch" title="Gästebuch" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/guestbook/guestbook.php">Gästebuch</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$g_l10n->get('GBO_GUESTBOOK').'" title="'.$g_l10n->get('GBO_GUESTBOOK').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/guestbook/guestbook.php">'.$g_l10n->get('GBO_GUESTBOOK').'</a></span>';
             }
 
             echo '
             <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/lists/lists.php"><img
-                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/lists.png" alt="Listen" title="Listen" /></a>
-                <a href="'. $g_root_path. '/adm_program/modules/lists/lists.php">Listen</a></span>
+                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/lists.png" alt="'.$g_l10n->get('LST_LISTS').'" title="'.$g_l10n->get('LST_LISTS').'" /></a>
+                <a href="'. $g_root_path. '/adm_program/modules/lists/lists.php">'.$g_l10n->get('LST_LISTS').'</a></span>
             <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/lists/mylist.php"><img
-                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/mylist.png" alt="Eigene Listen" title="Eigene Listen" /></a>
-                <a href="'. $g_root_path. '/adm_program/modules/lists/mylist.php">Eigene Listen</a></span>
+                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/mylist.png" alt="'.$g_l10n->get('LST_MY_LIST').'" title="'.$g_l10n->get('LST_MY_LIST').'" /></a>
+                <a href="'. $g_root_path. '/adm_program/modules/lists/mylist.php">'.$g_l10n->get('LST_MY_LIST').'</a></span>
             <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/profile/profile.php"><img
-                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/profile.png" alt="Mein Profil" title="Mein Profil" /></a>
-                <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php">Mein Profil</a></span>';
+                style="vertical-align: middle;" src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('PRO_MY_PROFILE').'" title="'.$g_l10n->get('PRO_MY_PROFILE').'" /></a>
+                <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php">'.$g_l10n->get('PRO_MY_PROFILE').'</a></span>';
 
             if( $g_preferences['enable_dates_module'] == 1
             || ($g_preferences['enable_dates_module'] == 2 && $g_valid_login))                    
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/dates/dates.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/dates.png" alt="Termine" title="Termine" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/dates/dates.php">Termine</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/dates.png" alt="'.$g_l10n->get('DAT_DATES').'" title="'.$g_l10n->get('DAT_DATES').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/dates/dates.php">'.$g_l10n->get('DAT_DATES').'</a></span>';
             }
             if( $g_preferences['enable_weblinks_module'] == 1
             || ($g_preferences['enable_weblinks_module'] == 2 && $g_valid_login))            
             {
                 echo '
                 <span class="menu"><a href="'. $g_root_path. '/adm_program/modules/links/links.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/weblinks.png" alt="Weblinks" title="Weblinks" /></a>
-                    <a href="'. $g_root_path. '/adm_program/modules/links/links.php">Weblinks</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$g_l10n->get('LNK_WEBLINKS').'" title="'.$g_l10n->get('LNK_WEBLINKS').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/modules/links/links.php">'.$g_l10n->get('LNK_WEBLINKS').'</a></span>';
             }
             
             if($g_preferences['enable_forum_interface'])
             {
                 echo '<span class="menu"><a href="'. $g_forum->url. '"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/forum.png" alt="Forum" title="Forum" /></a>
-                    <a href="'. $g_forum->url. '">Forum</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/forum.png" alt="'.$g_l10n->get('SYS_FORUM').'" title="'.$g_l10n->get('SYS_FORUM').'" /></a>
+                    <a href="'. $g_forum->url. '">'.$g_l10n->get('SYS_FORUM').'</a></span>';
             }
 
             if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUsers())
@@ -104,32 +104,32 @@
                 if($g_current_user->approveUsers() && $g_preferences['registration_mode'] > 0)
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/new_registrations.png" alt="Neue Anmeldungen" title="Neue Anmeldungen" /></a>
-                    <a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php">Neue Anmeldungen</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('NWU_NEW_REGISTRATIONS').'" title="'.$g_l10n->get('NWU_NEW_REGISTRATIONS').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php">'.$g_l10n->get('NWU_NEW_REGISTRATIONS').'</a></span>';
                 }
                 if($g_current_user->editUsers())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/members/members.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/user_administration.png" alt="Benutzerverwaltung" title="Benutzerverwaltung" /></a>
-                    <a href="'. $g_root_path. '/adm_program/administration/members/members.php">Benutzerverwaltung</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/user_administration.png" alt="'.$g_l10n->get('MEM_USER_MANAGEMENT').'" title="'.$g_l10n->get('MEM_USER_MANAGEMENT').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/administration/members/members.php">'.$g_l10n->get('MEM_USER_MANAGEMENT').'</a></span>';
                 }
                 if($g_current_user->assignRoles())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/roles/roles.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/roles.png" alt="Rollenverwaltung" title="Rollenverwaltung" /></a>
-                    <a href="'. $g_root_path. '/adm_program/administration/roles/roles.php">Rollenverwaltung</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/roles.png" alt="'.$g_l10n->get('ROL_ROLE_ADMINISTRATION').'" title="'.$g_l10n->get('ROL_ROLE_ADMINISTRATION').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/administration/roles/roles.php">'.$g_l10n->get('ROL_ROLE_ADMINISTRATION').'</a></span>';
                 }
                 if($g_current_user->isWebmaster())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/backup/backup.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/backup.png" alt="Datenbank Backup" title="Datenbank Backup" /></a>
-                    <a href="'. $g_root_path. '/adm_program/administration/backup/backup.php">Datenbank Backup</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/backup.png" alt="'.$g_l10n->get('BAC_DATABASE_BACKUP').'" title="'.$g_l10n->get('BAC_DATABASE_BACKUP').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/administration/backup/backup.php">'.$g_l10n->get('BAC_DATABASE_BACKUP').'</a></span>';
                 }
                 if($g_current_user->isWebmaster())
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/organization/organization.php"><img
-                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/options.png" alt="Organisationseinstellungen" title="Organisationseinstellungen" /></a>
-                    <a href="'. $g_root_path. '/adm_program/administration/organization/organization.php">Organisationseinstellungen</a></span>';
+                    style="vertical-align: middle;" src="'. THEME_PATH. '/icons/options.png" alt="'.$g_l10n->get('ORG_ORGANIZATION_PROPERTIES').'" title="'.$g_l10n->get('ORG_ORGANIZATION_PROPERTIES').'" /></a>
+                    <a href="'. $g_root_path. '/adm_program/administration/organization/organization.php">'.$g_l10n->get('ORG_ORGANIZATION_PROPERTIES').'</a></span>';
                 }
 
             }
@@ -145,7 +145,6 @@
 <p>
     <a href="http://www.admidio.org"><img
     src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
-     alt="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen"
-     title="Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen" /></a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2011&nbsp;&nbsp;Admidio Team</span>
+     alt="<?php echo $g_l10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" title="<?php echo $g_l10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" /></a>
+    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2011&nbsp;&nbsp;<?php echo $g_l10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </p>

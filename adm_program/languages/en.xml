@@ -152,7 +152,6 @@
     <text id="INS_NAME_OF_NEW_ORGANIZATION" development="edited" translation="todo">Please provide official abbreviations of the organisations' name here for use in Admidio.</text>
     <text id="INS_NECESSARY_INFORMATION" development="edited" translation="todo">Please provide on the following pages essential information about the new organisation.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="edited" translation="todo">Provided organisation name is not complete!</text>
-    <text id="INS_OVERVIEW" development="edited" translation="todo">Overview</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="edited" translation="todo">Provided passwords do not match.</text>
     <text id="INS_PHONE_LIST" development="edited" translation="todo">Phone list</text>
     <text id="INS_PHP_VERSION" development="edited" translation="todo">PHP version</text>
