@@ -4,7 +4,7 @@
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>
-    <text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Hier können Ankündigungen (News / Aktuelles) angeschaut, erstellt und bearbeitet werden.</text>
+    <text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</text>
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Ankündigung wurde angelegt</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 	
@@ -16,7 +16,7 @@
     <text id="BAC_COMPLETED_VAR" development="new" translation="todo">%VAR1%% fertig</text>
     <text id="BAC_CREATION_DATE" development="new" translation="todo">Erstellungsdatum</text>
     <text id="BAC_DATABASE_BACKUP" development="new" translation="todo">Datenbank-Backup</text>
-    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Ein Backup der Admidio Tabellen in der Datenbank kann hier erstellt werden.</text>
+    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</text>
     <text id="BAC_DAYS_VAR" development="new" translation="todo">%VAR1% Tagen</text>
     <text id="BAC_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!</text>
     <text id="BAC_HOURS_VAR" development="new" translation="todo">%VAR1% Stunden</text>
@@ -49,7 +49,7 @@
     <text id="DAT_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="DAT_DATE" development="new" translation="todo">Termin</text>
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
-    <text id="DAT_DATES_DESC" development="new" translation="todo">Hier können Termine angeschaut, erstellt und bearbeitet werden.</text>
+    <text id="DAT_DATES_DESC" development="new" translation="todo">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
     <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="todo">Hier können Räume angelegt und bearbeitet werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
 	<text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Termin wurde angelegt</text>
@@ -96,7 +96,7 @@
 	<text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
 	<text id="DOW_CREATE_FOLDER_DESC" development="new" translation="todo">Den neuen Ordner im Ordner %VAR1_BOLD% anlegen.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
-    <text id="DOW_DOWNLOADS_DESC" development="new" translation="todo">Benutzer können Dateien aus bestimmten Verzeichnissen herunterladen.</text>
+    <text id="DOW_DOWNLOADS_DESC" development="new" translation="todo">Unterschiedliche Daten und Dateien können hier zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</text>
 	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Datei wurde hochgeladen</text>
 	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Datei bei %VAR1% hochgeladen.\n\nDatei: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="DOW_ENABLE_DOWNLOAD_MODULE" development="new" translation="todo">Downloadmodul aktivieren</text>
@@ -216,7 +216,7 @@
     <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="todo">Flooding Protection Intervall</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird bei Einträgen im Gästebuch überprüft, ob sie innerhalb des eingestellten Intervalls bereits einen Eintrag getätigt haben. Damit soll verhindert werden, dass Benutzer in zu kurzen Zeitabständen hintereinander ungewünschte Einträge erzeugen. Ist das Intervall auf 0 gesetzt wird diese Überprüfung nicht durchgeführt. (Standard: 60 Sekunden)</text>
     <text id="GBO_GUESTBOOK" development="new" translation="todo">Gästebuch</text>
-    <text id="GBO_GUESTBOOK_DESC" development="new" translation="todo">Verschiedene Benutzerlisten der Rollen (Gruppen / Kurse / Abteilungen) anzeigen.</text>
+    <text id="GBO_GUESTBOOK_DESC" development="new" translation="todo">Besucher und Mitglieder können hier ihre Grüße und Anmerkungen hinterlassen, sowie andere Einträge kommentieren.</text>
     <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="todo">Moderation aktivieren für</text>
     <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="todo">Gästebucheinträge werden erst nach einer Sichtprüfung eines Administrators publiziert. Hier kann eingestellt werden, ob die Prüfung nur bei Besuchern, auch bei angemeldeten Benutzern oder bei niemandem durchgeführt werden soll.  (Standard: Niemand)</text>
     <text id="GBO_HIDE_COMMENTS" development="new" translation="todo">Kommentare ausblenden</text>
@@ -342,7 +342,7 @@
     <text id="LNK_REDIRECT_DESC" development="new" translation="todo">Du verlässt jetzt das Webangebot von %VAR1_BOLD% und wirst in %VAR2% Sekunden automatisch zu %VAR3% weitergeleitet.\n\nSollte die automatische Weiterleitung nicht funktionieren, klicke bitte %VAR4%!</text>
     <text id="LNK_SAME_WINDOW" development="new" translation="todo">Gleiches Fenster</text>
     <text id="LNK_WEBLINKS" development="new" translation="todo">Weblinks</text>
-    <text id="LNK_WEBLINKS_DESC" development="new" translation="todo">Hier können Links zu interessanten Webseiten abgelegt werden.</text>
+    <text id="LNK_WEBLINKS_DESC" development="new" translation="todo">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</text>
 
     <!-- Phrases only in Listsmodule -->
     <text id="LST_A_TO_Z" development="new" translation="todo">A bis Z</text>
@@ -377,7 +377,7 @@
     <text id="LST_KONFIGURATION_OWN_LIST" development="new" translation="todo">Konfiguration eigene Liste</text>
     <text id="LST_LIST" development="new" translation="todo">Liste</text>
     <text id="LST_LISTS" development="new" translation="todo">Listen</text>
-    <text id="LST_LISTS_DESC" development="new" translation="todo">Hier können Besucher ihre Grüße und Anmerkungen eintragen.</text>
+    <text id="LST_LISTS_DESC" development="new" translation="todo">Unterschiedliche Listen zu einzelnen Rollen können hier angezeigt werden. Außerdem können von den Benutzern individuelle Listen erstellt und gespeichert werden.</text>
     <text id="LST_LIST_VIEW" development="new" translation="todo">Listenübersicht</text>
     <text id="LST_MAX" development="new" translation="todo">von max. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="todo">Anzahl Teilnehmer pro Seite</text>
@@ -442,7 +442,7 @@
     <text id="MAI_COUNT_BCC_DESC" development="new" translation="todo">Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="todo">%VAR1% hat an die Rolle %VAR4% von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="todo">%VAR1% hat Dir von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
-    <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails an Rollen (Gruppen / Kurse / Abteilungen) schreiben.</text>
+    <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
     <text id="MAI_MESSAGE" development="new" translation="todo">Nachricht</text>
@@ -499,7 +499,7 @@
     <text id="MEM_UPDATED_ON" development="new" translation="todo">Aktualisiert am</text>
     <text id="MEM_USER_DELETE" development="new" translation="todo">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="todo">Benutzerverwaltung</text>
-    <text id="MEM_USER_MANAGEMENT_DESC" development="new" translation="todo">Mitglieder (Benutzer) können entfernt und neue Mitglieder (Benutzer) können in der Datenbank anlegt werden.</text>
+    <text id="MEM_USER_MANAGEMENT_DESC" development="new" translation="todo">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</text>
     <text id="MEM_UTF8" development="new" translation="todo">UTF-8</text>
 
     <!-- Phrases only in New-User-Registration -->
@@ -512,7 +512,7 @@
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Anmeldung löschen</text>
     <text id="NWU_REGISTRATION" development="new" translation="todo">Anmeldung</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen verwalten.</text>
-    <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="todo">Besucher, die sich auf der Homepage registriert haben, können hier freigeschaltet oder abgelehnt werden.</text>
+    <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="todo">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%, besitzt aber bereits Logindaten.</text>
     <text id="NWU_NO_MEMBERSHIP_NO_LOGIN" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1% und besitzt auch keine Logindaten.</text>
@@ -609,7 +609,7 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="todo">Nur für angemeldete Benutzer</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
-    <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="todo">Einstellungen für die Organisation, spezifische Profilfelder und Rollenkategorien können hier bearbeitet werden.</text>
+    <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="todo">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="todo">Übergeordnete Organisation</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="todo">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</text>
     <text id="ORG_PIXEL" development="new" translation="todo">Pixel</text>
@@ -697,7 +697,7 @@
     <text id="PHO_PHOTO" development="new" translation="todo">Foto</text>
     <text id="PHO_PHOTOGRAPHER" development="new" translation="todo">Fotos von</text>
     <text id="PHO_PHOTOS" development="new" translation="todo">Fotos</text>
-    <text id="PHO_PHOTOS_DESC" development="new" translation="todo">Eine Fotoverwaltung bei der berechtigte Benutzer online Fotos hochladen können.</text>
+    <text id="PHO_PHOTOS_DESC" development="new" translation="todo">Fotos zu Veranstaltungen können hochgeladen und betrachtet werden. Die Fotos werden in Alben zusammengefasst, welche wiederum beliebig verschachtelt werden können.</text>
     <text id="PHO_POPUP_WINDOW" development="new" translation="todo">Popup-Fenster</text>
 	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="todo">Vorheriges Foto</text>
 	<text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="todo">Auflösung größer als</text>
@@ -754,7 +754,7 @@
 	<text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">Profilfelder pflegen</text>
 	<text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
 	<text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
-    <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Profil anschauen und bearbeiten.</text>
+    <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Benutzerprofil kann hier angeschaut und bearbeitet werden.</text>
 	<text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
 	<text id="PRO_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
 	<text id="PRO_NO_DEFAULT_ROLE" development="new" translation="todo">In den Organisationseinstellungen wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
@@ -835,7 +835,7 @@
     <text id="ROL_RIGHT_WEBLINKS" development="new" translation="todo">Weblinks anlegen und bearbeiten</text>
     <text id="ROL_ROLE" development="new" translation="todo">Rolle</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="todo">Rollenverwaltung</text>
-    <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="todo">Rollen (Gruppen / Kurse / Abteilungen) können hier erstellt oder bearbeitet, sowie deren Rechtebereich definiert werden.</text>
+    <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="todo">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</text>
     <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="todo">Rollenzuordnung für "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="todo">Rolle löschen</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="todo">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
