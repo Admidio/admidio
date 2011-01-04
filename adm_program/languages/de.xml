@@ -1082,7 +1082,7 @@
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
-    <text id="SYS_PREVIOUS" development="new" translation="todo">voriges</text>
+    <text id="SYS_PREVIOUS" development="new" translation="todo">Voriges</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="todo">Der Vorgang wurde abgebrochen.</text>
 	<text id="SYS_PROGRESSBAR" development="new" translation="todo">Ladebalken</text>
     <text id="SYS_PROPERTIES" development="new" translation="todo">Eigenschaften</text>
@@ -1127,8 +1127,8 @@
     <text id="SYS_SINCE_TO" development="new" translation="todo">seit %VAR1% bis %VAR2%</text>
 	<text id="SYS_SIZE" development="new" translation="todo">Größe</text>
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
-	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">starte slideshow</text>
-	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">stoppe slideshow</text>
+	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">Starte Diashow</text>
+	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Stoppe Diashow</text>
     <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="todo">Eine %VAR1%Mailadresse%VAR2% angeben</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
