@@ -82,7 +82,7 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\',onComplete:function(){$("#btnNo").focus();}});
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
         }); 
     //--></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
