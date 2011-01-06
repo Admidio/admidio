@@ -210,10 +210,9 @@ $g_layout['header'] = '
     calPopup.setCssPrefix("calendar");
     var count = 1;
 
-    
     function addRoleSelection(roleID)
     {
-        $.ajax({url: "dates_function.php?mode=5&count="+count+"&rol_id="+roleID, type: "GET", async:   false, 
+        $.ajax({url: "dates_function.php?mode=5&count="+count+"&rol_id="+roleID, type: "GET", async: false, 
             success: function(data){
                 if(count == 1)
                 {
@@ -414,7 +413,7 @@ echo '
                         {
                             echo ' checked="checked" ';
                         }
-                        echo ' onclick="toggleMaxMembers()" value="1" />
+                        echo ' value="1" />
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE\',this)" 
                             onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -577,12 +576,7 @@ echo '
             <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
         </span>
     </li>
-</ul>
-
-<script type="text/javascript">
-    toggleMaxMembers();
-</script>
-';
+</ul>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>
