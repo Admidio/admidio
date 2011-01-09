@@ -466,6 +466,15 @@ elseif($req_mode == 8)
 
     // Verbindung zu Datenbank herstellen
     require_once(SERVER_PATH. '/config.php');
+    if($g_tbl_praefix != $_SESSION['prefix']
+    || $g_adm_srv     != $_SESSION['server']
+    || $g_adm_usr     != $_SESSION['user']
+    || $g_adm_pw      != $_SESSION['password']
+    || $g_adm_db      != $_SESSION['database']
+    || $g_organization!= $_SESSION['orga_name_short'])
+    {
+        showPage($g_l10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
+    }
     $db = new MySqlDB();
     $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
@@ -732,12 +741,13 @@ elseif($req_mode == 8)
     session_unset();
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong><br /><br />
-                '.$g_l10n->get('INS_INSTALLATION_SUCCESSFUL');
+               '.$g_l10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />
+               '.$g_l10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
     if(is_writeable("../adm_my_files") == false)
     {
         $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /> '.$g_l10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
-    showPage($message, '../adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'));
+    showPage($message, 'http://www.admidio.org/index.php?page=donate', 'money.png', $g_l10n->get('SYS_DONATE'));
 }
 
 ?>

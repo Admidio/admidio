@@ -272,7 +272,7 @@
     <text id="INS_ICQ" development="new" translation="todo">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="new" translation="todo">Admidio installieren</text>
     <text id="INS_INSTALLATION" development="new" translation="todo">Installation</text>
-    <text id="INS_INSTALLATION_SUCCESSFUL" development="new" translation="todo">Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet. Du kannst nun mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</text>
+    <text id="INS_INSTALLATION_SUCCESSFUL" development="new" translation="todo">Die Admidio-Datenbank ist nun installiert und die Konfigurationsdatei eingerichtet. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</text>
     <text id="INS_INSTALLATION_VERSION" development="new" translation="todo">Installation der Version %VAR1%</text>
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="todo">Die Installation war erfolgreich</text>
     <text id="INS_INTERN" development="new" translation="todo">Intern</text>
@@ -1171,5 +1171,10 @@
     <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Sie können maximal %0 Dateien hinzufügen.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
+    
+    <text id="SYS_DONATE" development="new" translation="todo">Spenden</text>
+    <text id="SYS_LATER" development="new" translation="todo">Später</text>
+    <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn du die weitere Entwicklung von Admidio mit einer Spende unterstützen würdest!</text>
+    <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
 </version>
 </language>
