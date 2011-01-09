@@ -269,8 +269,9 @@ elseif($req_mode == 2)
 
     // Hinweis, dass Update erfolgreich war
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong><br /><br />
-               '.$g_l10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT);
-    showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'), 2);
+               '.$g_l10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT).'<br /><br />
+               '.$g_l10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
+    showPage($message, 'http://www.admidio.org/index.php?page=donate', 'money.png', $g_l10n->get('SYS_DONATE'), 2);
 }
 
 ?>

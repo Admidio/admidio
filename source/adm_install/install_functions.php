@@ -46,12 +46,6 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
         <link rel="shortcut icon" type="image/x-icon" href="layout/favicon.png" />
         <link rel="stylesheet" type="text/css" href="layout/install.css" />
         <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
-
-        <!--[if lt IE 7]>
-        <script type="text/javascript"><!--
-            window.attachEvent("onload", correctPNG);
-        --></script>
-        <![endif]-->
         
         <script><!--
             imgLoader = new Image();
@@ -92,8 +86,13 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
                     '</p>
     
                     <div class="formSubmit">
-                        <button type="button" id="next_page" name="next_page" onclick="startUpdate()" value="'.$icon_text.'"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>
-                    </div>            
+                        <button type="button" id="next_page" name="next_page" onclick="startUpdate()" value="'.$icon_text.'"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>';
+                        if($icon == 'money.png')
+                        {
+                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" onclick="self.location.href=\'../adm_program/index.php\'" value="'.$g_l10n->get('SYS_LATER').'"><img id="btn_icon" src="layout/application_view_list.png" alt="'. $g_l10n->get('SYS_LATER'). '" />&nbsp;'. $g_l10n->get('SYS_LATER'). '</button>';
+                        }
+                    echo '</div>
                 </div>
             </div>
         </div>

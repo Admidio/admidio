@@ -205,12 +205,6 @@ if($req_mode != 'csv')
             <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
             <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
 
-            <!--[if lt IE 7]>
-            <script type="text/javascript"><!--
-                window.attachEvent("onload", correctPNG);
-            --></script>
-            <![endif]-->
-
             <style type="text/css">
                 @page { size:landscape; }
             </style>
