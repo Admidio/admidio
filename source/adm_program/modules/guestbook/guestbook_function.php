@@ -400,15 +400,13 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
 			{
 				if(!$g_valid_login)
 				{
-					$gbc_name = $_POST['gbc_name'];
-					$gbc_email = $_POST['gbc_email'];
-					$gbc_text = $_POST['gbc_text'];
+					$gbc_name  = $guestbook_comment->getValue('gbc_name');
+					$gbc_email = $guestbook_comment->getValue('gbc_email');
 				}
 				else
 				{
 					$gbc_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
 					$gbc_email = $g_current_user->getValue('EMAIL');
-					$gbc_text = $_POST['gbc_text'];
 				}
 				$sender_name = $gbc_name;
 				if(!isValidEmailAddress($gbc_email))
@@ -416,7 +414,9 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
 					$gbc_email = $g_preferences['email_administrator'];
 					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 				}
-				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $g_current_organization->getValue('org_longname'), $gbc_text, $gbc_name, date("d.m.Y H:m", time()))), $sender_name, $gbc_email);
+				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), 
+				    str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $g_current_organization->getValue('org_longname'), 
+				    $guestbook_comment->getValue('gbc_text'), $gbc_name, date("d.m.Y H:m", time()))), $sender_name, $gbc_email);
 			}
 		}
 

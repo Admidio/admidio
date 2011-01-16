@@ -156,9 +156,10 @@ foreach($user->userFieldData as $field)
             elseif($field->getValue('usf_type') == 'EMAIL')
             {
                 // Pruefung auf gueltige E-Mail-Adresse
+                $_POST[$post_id] = admStrToLower($_POST[$post_id]);
                 if(!isValidEmailAddress($_POST[$post_id]))
                 {
-                    $g_message->show($g_l10n->get('SYS_EMAIL_INVALID'));
+                    $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
                 }        
             }
             elseif($field->getValue('usf_type') == 'NUMERIC')

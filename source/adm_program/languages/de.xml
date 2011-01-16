@@ -956,7 +956,6 @@
 	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
     <text id="SYS_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
-    <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse ist nicht gültig.</text>
     <text id="SYS_EMAIL_SEND" development="new" translation="todo">Die E-Mail wurde an %VAR1_BOLD% versendet.</text>
     <text id="SYS_EMAIL_NOT_SEND" development="new" translation="todo">Die E-Mail konnte nicht an %VAR1_BOLD% gesendet werden.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="todo">Eintrag für mehrere Organisationen sichtbar</text>
@@ -1176,5 +1175,6 @@
     <text id="SYS_LATER" development="new" translation="todo">Später</text>
     <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn du die weitere Entwicklung von Admidio mit einer Spende unterstützen würdest!</text>
     <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
+    <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
 </version>
 </language>
