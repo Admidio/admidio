@@ -420,14 +420,18 @@ class TableAccess
             {
                 $this->new_record = true;
             }
-    
-            if(array_key_exists($field_name, $this->dbColumns)
-            && $field_value != $this->dbColumns[$field_name])
+
+            if(array_key_exists($field_name, $this->dbColumns))
             {
-                $this->dbColumns[$field_name] = $field_value;
-                $this->columnsValueChanged      = true;
-                $this->columnsInfos[$field_name]['changed'] = true;
                 $return_code = true;
+
+                // nur wenn der Wert sich geaendert hat, dann auch als geaendert markieren                
+                if($field_value != $this->dbColumns[$field_name])
+                {
+                    $this->dbColumns[$field_name] = $field_value;
+                    $this->columnsValueChanged    = true;
+                    $this->columnsInfos[$field_name]['changed'] = true;
+                }
             }
         }
         return $return_code;

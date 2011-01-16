@@ -24,9 +24,12 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableUserData extends TableAccess
 {
+    protected $noValueCheck;    // = true, dann werden bei setValue die Werte nicht auf Gueltigkeit geprueft
+    
     // Konstruktor
     public function __construct(&$db)
     {
+        $this->noValueCheck = false;
         parent::__construct($db, TBL_USER_DATA, 'usd');
     }
     
@@ -53,6 +56,7 @@ class TableUserData extends TableAccess
             $this->setValue('usd_usr_id', $ids['usr_id']);
             $this->setValue('usd_usf_id', $ids['usf_id']);
         }
+        $this->noValueCheck = false;
         return $returnCode;
     }
     
@@ -80,10 +84,62 @@ class TableUserData extends TableAccess
         if($this->dbColumns['usf_type'] == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
         {
             $dateArray = preg_split('/[- :]/', $value);
-            $timestamp = mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
+            $timestamp = @mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
             $value = date($format, $timestamp);
         }
         return $value;
     }
+
+    // bei setValue werden die Werte nicht auf Gueltigkeit geprueft
+    public function noValueCheck()
+    {
+        $this->noValueCheck = true;
+    }
+
+    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    public function setValue($field_name, $field_value)
+    {
+        global $g_preferences;
+
+        if(strlen($field_value) > 0 && $this->noValueCheck != true)
+        {
+            if($this->dbColumns['usf_type'] == 'CHECKBOX')
+            {
+                // Checkbox darf nur 1 oder 0 haben
+                if($field_value != 0 && $field_value != 1)
+                {
+                    return false;
+                }
+            }
+            elseif($this->dbColumns['usf_type'] == 'DATE')
+            {
+                // Datum muss gueltig sein und formatiert werden
+                $date = new DateTimeExtended($field_value, $g_preferences['system_date'], 'date');
+                if($date->valid() == false)
+                {
+                    return false;
+                }
+                $field_value = $date->format('Y-m-d');
+            }
+            elseif($this->dbColumns['usf_type'] == 'EMAIL')
+            {
+                // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
+                $field_value = admStrToLower($field_value);
+                if (!isValidEmailAddress($field_value))
+                {
+                    return false;
+                }
+            }
+            elseif($this->dbColumns['usf_type'] == 'NUMERIC')
+            {
+                // Zahl muss numerisch sein
+                if(is_numeric(strtr($field_value, ',.', '00')) == false)
+                {
+                    return false;
+                }
+            }
+        }
+        return parent::setValue($field_name, $field_value);
+    } 
 }
 ?>

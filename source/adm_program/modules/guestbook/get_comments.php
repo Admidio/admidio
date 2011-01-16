@@ -72,7 +72,7 @@ if (isset($comment_result))
                     $g_l10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'));
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                    if (isValidEmailAddress($gbComment->getValue('gbc_email')))
+                    if(strlen($gbComment->getValue('gbc_email')) > 0)
                     {
                         echo '<a class="iconLink" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png" 
                             alt="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" title="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" /></a>';

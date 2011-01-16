@@ -228,15 +228,15 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
 			{
 				if(!$g_valid_login)
 				{
-					$gbo_name = $_POST['gbo_name'];
+					$gbo_name  = $_POST['gbo_name'];
 					$gbo_email = $_POST['gbo_email'];
-					$gbo_text = $_POST['gbo_text'];
+					$gbo_text  = $_POST['gbo_text'];
 				}
 				else
 				{
-					$gbo_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
+					$gbo_name  = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
 					$gbo_email = $g_current_user->getValue('EMAIL');
-					$gbo_text = $_POST['gbo_text'];
+					$gbo_text  = $_POST['gbo_text'];
 				}
 				$sender_name = $gbo_name;
 				if(!isValidEmailAddress($gbo_email))
@@ -405,11 +405,11 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
 				}
 				else
 				{
-					$gbc_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
+					$gbc_name  = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
 					$gbc_email = $g_current_user->getValue('EMAIL');
 				}
 				$sender_name = $gbc_name;
-				if(!isValidEmailAddress($gbc_email))
+				if(strlen($gbc_email) == 0)
 				{
 					$gbc_email = $g_preferences['email_administrator'];
 					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');

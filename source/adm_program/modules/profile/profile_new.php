@@ -114,16 +114,17 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 if(isset($_SESSION['profile_request']))
 {
     $form_values = strStripSlashesDeep($_SESSION['profile_request']);
-    
+    $user->noValueCheck();
+
     foreach($user->userFieldData as $field)
     {
         $field_name = 'usf-'. $field->getValue('usf_id');
         if(isset($form_values[$field_name]))
         {
-            $user->setValue($field->getValue('usf_name'), $form_values[$field_name]);
+            $user->setValue($field->getValue('usf_name_intern'), $form_values[$field_name]);
         }
     }
-    
+
     if(isset($form_values['usr_login_name']))
     {
         $user->setValue('usr_login_name', $form_values['usr_login_name']);

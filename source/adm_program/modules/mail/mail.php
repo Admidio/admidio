@@ -38,9 +38,9 @@ if ($g_preferences['enable_mail_module'] != 1)
 }
 
 
-if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('EMAIL')))
+if ($g_valid_login && strlen($g_current_user->getValue('EMAIL')) == 0)
 {
-    // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
+    // der eingeloggte Benutzer hat in seinem Profil keine Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
     $g_message->show($g_l10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
@@ -79,8 +79,8 @@ if (isset($_GET['usr_id']))
         $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
-    // besitzt der User eine gueltige E-Mail-Adresse
-    if (!isValidEmailAddress($user->getValue('EMAIL')))
+    // besitzt der User eine E-Mail-Adresse
+    if(strlen($user->getValue('EMAIL')) == 0)
     {
         $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }

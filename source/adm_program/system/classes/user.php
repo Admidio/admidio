@@ -350,6 +350,15 @@ class User extends TableUsers
 
         $this->readUserData();
     }
+    
+    // bei setValue werden die Werte nicht auf Gueltigkeit geprueft
+    public function noValueCheck()
+    {
+        foreach($this->userFieldData as $field)
+        {
+            $field->noValueCheck();
+        }
+    }
 
     // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
     public function readUserData()
@@ -435,7 +444,7 @@ class User extends TableUsers
     public function setValue($field_name, $field_value)
     {
         global $g_current_user;
-        $return_code  = false;
+        $return_code  = true;
         $update_field = false;
 
         if(strpos($field_name, 'usr_') !== 0)

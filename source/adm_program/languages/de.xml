@@ -746,7 +746,6 @@
 	<text id="PRO_EDIT_PROFILE" development="new" translation="todo">Profil bearbeiten</text>
 	<text id="PRO_EDIT_PROFILE_PIC_FROM" development="new" translation="todo">Profilfoto von %VAR1% %VAR2% bearbeiten</text>
 	<text id="PRO_EXPORT_VCARD_FROM_VAR" development="new" translation="todo">vCard von %VAR1% exportieren</text>
-	<text id="PRO_FIELD_NUMERIC" development="new" translation="todo">Das Feld %VAR1% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
 	<text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften</text>
 	<text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="todo">Speicherort der Profilbilder</text>
 	<text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</text>
@@ -1176,5 +1175,6 @@
     <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn du die weitere Entwicklung von Admidio mit einer Spende unterstützen würdest!</text>
     <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
+  	<text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
 </version>
 </language>
