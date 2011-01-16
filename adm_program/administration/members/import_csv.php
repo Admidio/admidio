@@ -141,6 +141,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 }
                 elseif($field->getValue('usf_type') == 'EMAIL')
                 {
+                    $col_value = admStrToLower($col_value);
                     if(isValidEmailAddress($col_value))
                     {
                         $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 50));

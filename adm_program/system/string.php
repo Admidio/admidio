@@ -144,12 +144,12 @@ function isValidEmailAddress($emailAddress)
     if(strlen(trim($emailAddress)) > 0)
     {
         // nur gueltige Zeichen zulassen
-        $anz = strspn($emailAddress, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@.-_+');
+        $anz = strspn($emailAddress, 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß@.-_+');
 
         if($anz == strlen($emailAddress))
         {
             // Aufbau der E-Mail-Adresse pruefen
-            return preg_match("/^[^@]+@[^@]+\.[^@]{2,}$/", trim($emailAddress));
+            return preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($emailAddress));
         }
         else
         {
@@ -175,13 +175,13 @@ function isValidFileName($file_name, $check_ext = false)
     if(strlen(trim($file_name)) > 0)
     {
         // Dateiname darf nur folgende Zeichen beinhalten (ggf. ergaenzen)
-        $anz = strspn($file_name, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789äéèöüßÄÉÈÖÜ$&!?.-_+ ');
+        $anz = strspn($file_name, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüßÄÉÈÖÜ$&!?.-_+ ');
 
         if($anz == strlen($file_name))
         {
             if(strlen($file_name) == strlen(strip_tags($file_name))
-            && strpos($file_name, "..") === false
-            && strpos($file_name, ":/") === false)
+            && strpos($file_name, '..') === false
+            && strpos($file_name, ':/') === false)
             {
                 if (substr($file_name, 0, 1) == '.') {
                     return -2;

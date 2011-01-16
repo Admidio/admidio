@@ -40,6 +40,8 @@ if(!$g_valid_login)
 
 // ruf die Funktion auf die alle Post und Get Variablen parsed
 $funcClass->getVars();
+$ecard['email_recipient'] = admStrToLower($ecard['email_recipient']);
+$ecard['email_sender']    = admStrToLower($ecard['email_sender']);
 $ecard_send = false;
 // Wenn versucht wird die Grußkarte zu versenden werden die notwendigen FElder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
 

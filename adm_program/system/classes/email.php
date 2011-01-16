@@ -103,6 +103,7 @@ public function __construct()
 public function setSender($address, $name='')
 {
     global $g_preferences;
+    $address = admStrToLower($address);
     
     if (isValidEmailAddress($address))
     {
@@ -156,6 +157,7 @@ public function setSubject($subject)
 // Funktion um Hauptempfaenger hinzuzufuegen
 public function addRecipient($address, $name='')
 {
+    $address = admStrToLower($address);
     if (isValidEmailAddress($address))
     {
         if (!isset($this->headerOptions['To']))
@@ -175,6 +177,7 @@ public function addRecipient($address, $name='')
 // Funktion um Ccs hinzuzufuegen
 public function addCopy($address, $name='')
 {
+    $address = admStrToLower($address);
     if (isValidEmailAddress($address))
     {
         if (!isset($this->headerOptions['Cc']))
@@ -194,6 +197,7 @@ public function addCopy($address, $name='')
 // Funktion um Bccs hinzuzufuegen
 public function addBlindCopy($address, $name='')
 {
+    $address = admStrToLower($address);
     if (isValidEmailAddress($address))
     {
         $this->bccArray[] = $name. " <". $address. ">";

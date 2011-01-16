@@ -394,9 +394,10 @@ elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
             showPage($g_l10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }
 
+        $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
         if(!isValidEmailAddress($_SESSION['user_email']))
         {
-            showPage($g_l10n->get('SYS_EMAIL_INVALID'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }
 
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])

@@ -102,6 +102,7 @@ class TableGuestbookComment extends TableAccess
         {
             if($field_name == 'gbc_email')
             {
+                $field_value = admStrToLower($field_value);
                 if (!isValidEmailAddress($field_value))
                 {
                     // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
