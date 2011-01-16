@@ -105,8 +105,8 @@ class TableGuestbookComment extends TableAccess
                 $field_value = admStrToLower($field_value);
                 if (!isValidEmailAddress($field_value))
                 {
-                    // falls die Email ein ungueltiges Format aufweist wird sie einfach auf null gesetzt
-                    $field_value = '';
+                    // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
+                    return false;
                 }
             }
         }

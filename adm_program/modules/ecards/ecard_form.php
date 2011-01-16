@@ -95,7 +95,7 @@ if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }  
 
-if ($g_valid_login && !isValidEmailAddress($g_current_user->getValue('EMAIL')))
+if ($g_valid_login && strlen($g_current_user->getValue('EMAIL')) == 0)
 {
     // der eingeloggte Benutzer hat in seinem Profil keine gueltige Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...

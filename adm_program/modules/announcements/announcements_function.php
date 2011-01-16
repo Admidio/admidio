@@ -100,7 +100,7 @@ if($_GET['mode'] == 1)
 		{
 			$message = str_replace("<br />","\n", $g_l10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['ann_headline'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time())));
 			$sender_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
-			if(!isValidEmailAddress($g_current_user->getValue('EMAIL')))
+			if(strlen($g_current_user->getValue('EMAIL')) == 0)
 			{
 				$sender_email = $g_preferences['email_administrator'];
 				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');

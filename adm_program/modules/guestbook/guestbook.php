@@ -317,7 +317,7 @@ else
                     }
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                    if (isValidEmailAddress($guestbook->getValue('gbo_email')))
+                    if (strlen($guestbook->getValue('gbo_email')) > 0)
                     {
                         echo '
                         <a class="iconLink" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"

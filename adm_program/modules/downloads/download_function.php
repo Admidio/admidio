@@ -184,7 +184,7 @@ if ($req_mode == 1)
 		if($g_preferences['enable_email_notification'] == 1)
 		{
 			$sender_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
-			if(!isValidEmailAddress($g_current_user->getValue('EMAIL')))
+			if(strlen($g_current_user->getValue('EMAIL')) == 0)
 			{
 				$sender_email = $g_preferences['email_administrator'];
 				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');

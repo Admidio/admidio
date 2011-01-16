@@ -131,49 +131,30 @@ foreach($user->userFieldData as $field)
         {
             $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
         }
+
+        // Wert aus Feld in das User-Klassenobjekt schreiben
+        $returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
         
-        if(strlen($_POST[$post_id]) > 0)
+        // Ausgabe der Fehlermeldung je nach Datentyp
+        if($returnCode == false)
         {
-            // Pruefungen fuer die entsprechenden Datentypen
             if($field->getValue('usf_type') == 'CHECKBOX')
             {
-                // Checkbox darf nur 1 oder 0 haben
-                if($_POST[$post_id] != 0 && $_POST[$post_id] != 1)
-                {
-                    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-                }
+                $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
             }
             elseif($field->getValue('usf_type') == 'DATE')
             {
-                // Datum muss gueltig sein und formatiert werden
-                $date = new DateTimeExtended($_POST[$post_id], $g_preferences['system_date'], 'date');
-                if($date->valid() == false)
-                {
-                    $g_message->show($g_l10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
-                }
-                $_POST[$post_id] = $date->format('Y-m-d');
+                $g_message->show($g_l10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
             }
             elseif($field->getValue('usf_type') == 'EMAIL')
             {
-                // Pruefung auf gueltige E-Mail-Adresse
-                $_POST[$post_id] = admStrToLower($_POST[$post_id]);
-                if(!isValidEmailAddress($_POST[$post_id]))
-                {
-                    $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
-                }        
+                $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
             }
             elseif($field->getValue('usf_type') == 'NUMERIC')
             {
-                // Zahl muss numerisch sein
-                if(is_numeric(strtr($_POST[$post_id], ',.', '00')) == false)
-                {
-                    $g_message->show($g_l10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
-                }
+                $g_message->show($g_l10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
             }
         }
-
-        // Wert aus Feld in das User-Klassenobjekt schreiben
-        $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
     }
     else
     {
