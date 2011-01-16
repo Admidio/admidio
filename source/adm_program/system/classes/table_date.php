@@ -168,7 +168,7 @@ class TableDate extends TableAccess
         if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
-            list($year, $month, $day, $hour, $minute, $second) = preg_split('[- :]', $this->dbColumns['dat_end']);
+            list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
             $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
         }
         else
@@ -259,7 +259,7 @@ class TableDate extends TableAccess
         {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
-            list($year, $month, $day, $hour, $minute, $second) = preg_split('[- :]', $field_value);
+            list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $field_value);
             $field_value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
         }
         parent::setValue($field_name, $field_value);

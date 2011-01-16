@@ -476,7 +476,7 @@ else
                     // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
                     // die jeweils laenger als 3 Zeichen sind
                     $map_info_count = 0;
-                    foreach(preg_split('[,; ]', $date->getValue('dat_location')) as $key => $value)
+                    foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
                     {
                         if(strlen($value) > 3)
                         {
