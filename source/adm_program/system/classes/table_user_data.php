@@ -79,7 +79,7 @@ class TableUserData extends TableAccess
         // ist das Feld ein Datumsfeld, dann das Datum formatieren
         if($this->dbColumns['usf_type'] == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
         {
-            $dateArray = split("[- :]", $value);
+            $dateArray = preg_split("[- :]", $value);
             $timestamp = mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
             $value = date($format, $timestamp);
         }
