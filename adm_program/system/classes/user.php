@@ -473,15 +473,6 @@ class User extends TableUsers
             if($update_field == true
             && $field_value  != $this->userFieldData[$field_name]->getValue('usd_value'))
             {
-                // Homepage noch mit http vorbelegen
-                if($this->getProperty($field_name, 'usf_type') == 'URL')
-                {
-                    if(strpos(admStrToLower($field_value), 'http://')  === false
-                    && strpos(admStrToLower($field_value), 'https://') === false )
-                    {
-                        $field_value = 'http://'. $field_value;
-                    }
-                }
                 $return_code = $this->userFieldData[$field_name]->setValue('usd_value', $field_value);
             }
         }

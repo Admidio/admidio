@@ -64,23 +64,22 @@ $limit = '';
 if($restrict == 'm')
 {
     //Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
-    $condition = '
-            usr_id   = mem_usr_id
-        AND mem_rol_id = rol_id
-        AND mem_begin <= "'.DATE_NOW.'"
-        AND mem_end    > "'.DATE_NOW.'"
-        AND rol_valid  = 1
-        AND usr_valid  = 1
-        AND rol_cat_id = cat_id
-        AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
-            OR cat_org_id IS NULL ) ';
-    $tables = TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', ';
+    $member_condition = ' EXISTS 
+        (SELECT 1
+           FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+          WHERE mem_usr_id = usr_id
+            AND mem_rol_id = rol_id
+            AND mem_begin <= "'.DATE_NOW.'"
+            AND mem_end    > "'.DATE_NOW.'"
+            AND rol_valid  = 1
+            AND rol_cat_id = cat_id
+            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                OR cat_org_id IS NULL )) ';
 }
 elseif($restrict == 'u')
 {
     //Falls gefordert, aufrufen alle Leute aus der Datenbank
-    $condition = ' usr_valid = 1 ';
-    $tables = '';
+    $member_condition = ' usr_valid = 1 ';
 }
 
 //Suchstring zerlegen
@@ -94,7 +93,7 @@ if($search != '')
     	//in Condition einbinden
 	    foreach($search_therms as $search_therm)
 	    {
-	    	$condition .= ' AND ((UPPER(last_name.usd_value) LIKE "'.$search_therm.'%") OR (UPPER(first_name.usd_value) LIKE "'.$search_therm.'%")) ';
+	    	$member_condition .= ' AND ((UPPER(last_name.usd_value) LIKE "'.$search_therm.'%") OR (UPPER(first_name.usd_value) LIKE "'.$search_therm.'%")) ';
 	    }
     }
     //Ergebnissmenge Limitieren
@@ -104,8 +103,35 @@ if($search != '')
 
  // SQL-Statement zusammensetzen
 $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
-               city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code
-        FROM '. $tables. TBL_USERS. '
+               city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
+                  (SELECT count(*)
+                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
+                    WHERE rol_valid   = 1
+                      AND rol_cat_id  = cat_id
+                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                          OR cat_org_id IS NULL )
+                      AND mem_rol_id  = rol_id
+                      AND mem_begin  <= "'.DATE_NOW.'"
+                      AND mem_end     > "'.DATE_NOW.'"
+                      AND mem_usr_id  = usr_id) as member_this_orga,
+                  (SELECT count(*)
+                     FROM '. TBL_ROLES. ', '. TBL_MEMBERS. '
+                    WHERE rol_valid   = 1
+                      AND rol_id      = '.$role_id.'
+                      AND mem_rol_id  = rol_id
+                      AND mem_begin  <= "'.DATE_NOW.'"
+                      AND mem_end     > "'.DATE_NOW.'"
+                      AND mem_usr_id  = usr_id) as member_this_role,
+                  (SELECT count(*)
+                     FROM '. TBL_ROLES. ', '. TBL_MEMBERS. '
+                    WHERE rol_valid   = 1
+                      AND rol_id      = '.$role_id.'
+                      AND mem_rol_id  = rol_id
+                      AND mem_leader  = 1
+                      AND mem_begin  <= "'.DATE_NOW.'"
+                      AND mem_end     > "'.DATE_NOW.'"
+                      AND mem_usr_id  = usr_id) as leader_this_role
+        FROM '. TBL_USERS. '
         LEFT JOIN '. TBL_USER_DATA. ' as last_name
           ON last_name.usd_usr_id = usr_id
          AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
@@ -124,7 +150,10 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
         LEFT JOIN '. TBL_USER_DATA. ' as zip_code
           ON zip_code.usd_usr_id = usr_id
          AND zip_code.usd_usf_id = '. $g_current_user->getProperty('POSTCODE', 'usf_id'). '
-        WHERE '. $condition. '
+        LEFT JOIN '. TBL_USER_DATA. ' as country
+          ON country.usd_usr_id = usr_id
+         AND country.usd_usf_id = '. $g_current_user->getProperty('COUNTRY', 'usf_id'). '
+        WHERE '. $member_condition. '
         ORDER BY last_name, first_name '.$limit;
 //echo $sql;exit();
 $result_user = $g_db->query($sql);
@@ -176,39 +205,6 @@ if($g_db->num_rows($result_user)>0)
 
 	//SQL-Abfrag zurück an Anfang setzen
 	$g_db->data_seek ($result_user, 0);
-
-	//Erfassen wer die Rolle bereits hat oder schon mal hatte
-	$sql = 'SELECT mem_usr_id, mem_rol_id, mem_begin, mem_leader, mem_end
-	          FROM '. TBL_MEMBERS. '
-	         WHERE mem_rol_id = '.$role_id;
-	$result_role_member = $g_db->query($sql);
-	
-	//Schreiben der User-IDs die die Rolle bereits haben oder hatten in Array
-	//Schreiben der Leiter der Rolle in weiters arry
-	$role_member   = array();
-	$group_leaders = array();
-	for($y=0; $member = $g_db->fetch_array($result_role_member); $y++)
-	{
-	    if($member['mem_begin'] <= DATE_NOW
-	    && $member['mem_end']    > DATE_NOW)
-	    {
-	        $role_member[$y]= $member['mem_usr_id'];
-	    }
-	    if($member['mem_leader']==1)
-	    {
-	        $group_leaders[$y]= $member['mem_usr_id'];
-	    }
-	}
-	
-	// User zaehlen, die mind. einer Rolle zugeordnet sind
-	$sql    = 'SELECT COUNT(*)
-	             FROM '. TBL_USERS. '
-	            WHERE usr_valid = 1 ';
-	$result = $g_db->query($sql);
-	
-	$row = $g_db->fetch_array($result);
-	$count_valid_users = $row[0];
-
 
     $user = $g_db->fetch_array($result_user);
 
@@ -291,10 +287,14 @@ if($g_db->num_rows($result_user)>0)
     <table class="tableList" cellspacing="0">
         <thead>
             <tr>
-                <th>'.$g_l10n->get('SYS_INFO').'</th>
+                <th><img class="iconInformation"
+                    src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname')).'"
+                    title="'.$g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname')).'" /></th>
                 <th style="text-align: center;">'.$g_l10n->get('SYS_MEMBER').'</th>
                 <th>'.$g_l10n->get('SYS_LASTNAME').'</th>
                 <th>'.$g_l10n->get('SYS_FIRSTNAME').'</th>
+                <th><img class="iconInformation" src="'. THEME_PATH. '/icons/map.png" 
+                    alt="'.$g_l10n->get('SYS_ADDRESS').'" title="'.$g_l10n->get('SYS_ADDRESS').'" /></th>
                 <th>'.$g_l10n->get('SYS_BIRTHDAY').'</th>
                 <th style="text-align: center;">'.$g_l10n->get('SYS_LEADER').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION&amp;inline=true"><img 
 	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
@@ -358,7 +358,7 @@ if($g_db->num_rows($result_user)>0)
                 // Ueberschrift fuer neuen Buchstaben
                 echo '<tbody block_head_id="'.$letter_string.'" class="letterBlockHead">
                     <tr>
-                        <td class="tableSubHeader" colspan="6">
+                        <td class="tableSubHeader" colspan="7">
                             '.$letter_text.'
                         </td>
                     </tr>
@@ -368,23 +368,39 @@ if($g_db->num_rows($result_user)>0)
         }
 
         //Datensatz ausgeben
-        $user_text = $user['first_name'].'&nbsp;'.$user['last_name'];
+        $user_text = '';
         if(strlen($user['address']) > 0)
         {
-            $user_text = $user_text. ' - '. $user['address'];
+            $user_text = $user['address'];
         }
         if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
         {
             $user_text = $user_text. ' - '. $user['zip_code']. ' '. $user['city'];
         }
+        if(strlen($user['country']) > 0)
+        {
+            $user_text = $user_text. ' - '. $user['country'];
+        }
+
+        // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
+        if($user['member_this_orga'] > 0)
+        {
+            $icon = 'profile.png';
+            $iconText = $g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
+        }
+        else
+        {
+            $icon = 'no_profile.png';
+            $iconText = $g_l10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
+        }
 
         echo '
         <tr class="tableMouseOver" user_id="'.$user['usr_id'].'">
-            <td><img class="iconInformation" src="'. THEME_PATH.'/icons/profile.png" alt="Userinformationen" title="'.$user_text.'" /></td>
+            <td><img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></td>
 
             <td style="text-align: center;">';
                 //Haekchen setzen ob jemand Mitglied ist oder nicht
-                if(in_array($user['usr_id'], $role_member))
+                if($user['member_this_role'])
                 {
                     echo '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="member" />';
                 }
@@ -395,7 +411,16 @@ if($g_db->num_rows($result_user)>0)
             echo '<b id="loadindicator_member_'.$user['usr_id'].'"></b></td>
             <td>'.$user['last_name'].'</td>
             <td>'.$user['first_name'].'</td>
-
+            <td>';
+                if(strlen($user_text) > 0)
+                {
+                    echo '<img class="iconInformation" src="'. THEME_PATH.'/icons/map.png" alt="'.$user_text.'" title="'.$user_text.'" />';
+                }
+                else
+                {
+                    echo '&nbsp';
+                }
+            echo '</td>
             <td>';
                 //Geburtstag nur ausgeben wenn bekannt
                 if(strlen($user['birthday']) > 0)
@@ -407,7 +432,7 @@ if($g_db->num_rows($result_user)>0)
 
             <td style="text-align: center;">';
                 //Haekchen setzen ob jemand Leiter ist oder nicht
-                if(in_array($user['usr_id'], $group_leaders))
+                if($user['leader_this_role'])
                 {
                     echo '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="leader"/>';
                 }
