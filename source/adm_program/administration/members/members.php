@@ -191,7 +191,20 @@ $g_layout['header'] = '
                         minchars:1,
                         timeout:5000
             };
-            var as = new AutoSuggest("queryForm", options);
+            var as = new AutoSuggest("queryForm", options);         
+            
+            //Checkbox alle Benutzer anzeigen
+            $("input[type=checkbox]#mem_show_all").live("click", function(){
+                window.location.href = $("#mem_show_all").attr("link");
+            });
+            
+            //Link zum Benutzer hinzufügen anzeigen oder verstecken
+            if($("input[type=checkbox]#mem_show_all").is(":checked")){
+                $("#add_user_links").show();
+            }
+            else{
+                $("#add_user_links").hide();
+            }
         }); 
     //--></script>';
 
@@ -201,7 +214,7 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
-<ul class="iconTextLinkList" style="margin-bottom: 0px;">
+<ul class="iconTextLinkList" style="margin-bottom: 0px;" id="add_user_links">
     <li>
         <span class="iconTextLink">
             <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
@@ -221,54 +234,34 @@ echo '
         // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
         if($req_members == 1)
         {
-            $link_text = $g_l10n->get('MEM_SHOW_ALL_USERS');
-            $link_icon = 'group.png';
             $link_members = 0;
+            $show_all_checked = '';
+            
         }
         else
         {
-            $link_text = $g_l10n->get('MEM_SHOW_ONLY_MEMBERS');
-            $link_icon = 'profile.png';
             $link_members = 1;
+            $show_all_checked = 'checked';
         }
-        //Tolltip
-        $tooltip = '';
-        if($req_members)
-        {
-            $tooltip = $g_l10n->get('MEM_SHOW_MEMBERS');
-        }
-        else
-        {
-            $tooltip = $g_l10n->get('MEM_SHOW_USERS');
-        }   
-        
-        echo '
-        <li>
-            <span class="iconTextLink">
-                <a class="textTooltip" href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" 
-                title="'.$tooltip.'"><img
-                src="'. THEME_PATH. '/icons/'.$link_icon.'" alt="'.$link_text.'" /></a>
-                <a class="textTooltip" href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'"
-                 title="'.$tooltip.'">'.$link_text.'</a>
-            </span>
-        </li>';
     }
 echo '</ul>';
 
 //Hier gibt es jetzt noch die Suchbox...
 echo '
-<ul id="search_members" class="iconTextLinkList">
-    <li>
-        <form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'" method="post">
-            <div>
-                <input type="text" value="'.$req_queryForm.'" name="queryForm" id="queryForm" style="width: 200px;"  />
-                <input type="submit" value="'.$g_l10n->get('SYS_SEARCH').'" />
-            </div>
-        </form>
-    </li>
-</ul>
+<form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'" method="post">
+    <ul id="search_members" class="iconTextLinkList">
+        <li>
+            <input type="text" value="'.$req_queryForm.'" name="queryForm" id="queryForm" style="width: 200px;"  />
+            <input type="submit" value="'.$g_l10n->get('SYS_SEARCH').'" />
+        </li>
+        <li>    
+            <input type="checkbox" name="mem_show_all" id="mem_show_all" link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" 
+                    title="'.$g_l10n->get('MEM_SHOW_USERS').'" '.$show_all_checked.'/> '.$g_l10n->get('MEM_SHOW_ALL_USERS').'
+        </li>
+    </ul>
+</form>
 
-<div class="pageNavigation" style="margin-top: 0px;">';
+<div class="pageNavigation">';
     // Leiste mit allen Buchstaben des Alphabets anzeigen
     if (strlen($req_letter) == 0 && !$req_queryForm)
     {
