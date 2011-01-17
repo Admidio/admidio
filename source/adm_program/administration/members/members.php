@@ -360,8 +360,8 @@ if($num_members > 0)
         <tr>
             <th>'.$g_l10n->get('SYS_ABR_NO').'</th>
             <th><img class="iconInformation"
-                src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'"
-                title="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'" /></th>
+                src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname')).'"
+                title="'.$g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname')).'" /></th>
             <th>'.$g_l10n->get('SYS_NAME').'</th>
             <th><img class="iconInformation"
                 src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('SYS_EMAIL').'" title="'.$g_l10n->get('SYS_EMAIL').'" /></th>
@@ -385,22 +385,24 @@ if($num_members > 0)
             {
                 $timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
 
+                // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
+                if($row['member_this_orga'] > 0)
+                {
+                    $icon = 'profile.png';
+                    $iconText = $g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
+                }
+                else
+                {
+                    $icon = 'no_profile.png';
+                    $iconText = $g_l10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
+                }
+
                 echo '
                 <tr class="tableMouseOver">
                     <td>'. ($req_start + $i + 1). '</td>
-                    <td>';
-                        if($row['member_this_orga'] > 0)
-                        {
-                            echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
-                                src="'. THEME_PATH. '/icons/profile.png" alt="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'"
-                                title="'.$g_l10n->get('MEM_MEMBER_OF', $g_current_organization->getValue('org_longname')).'" /></a>';
-                        }
-                        else
-                        {
-                            echo '&nbsp;';
-                        }
-                    echo '</td>
+                    <td><a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
+                                src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>
+                    </td>
                     <td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a></td>
                     <td>';
                         if(strlen($row['email']) > 0)

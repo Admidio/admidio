@@ -480,7 +480,6 @@
     <text id="MEM_IMPORT_USERS" development="new" translation="todo">Benutzer importieren</text>
     <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="todo">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</text>
     <text id="MEM_MAKE_FORMER" development="new" translation="todo">Du kannst den Benutzer zu einem Ehemaligen machen. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, welchen Rollen diese Person zugeordnet war.</text>
-    <text id="MEM_MEMBER_OF" development="new" translation="todo">Mitglied bei %VAR1%</text>
     <text id="MEM_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%.</text>
     <text id="MEM_NOT_EDIT" development="new" translation="todo">Nicht bearbeiten</text>
     <text id="MEM_PROFILE_FIELD" development="new" translation="todo">Profilfeld</text>
@@ -1176,5 +1175,7 @@
     <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
   	<text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
+  	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="todo">Kein Mitglied der Organisation %VAR1%</text>
+    <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="todo" description="MEM_MEMBER_OF">Mitglied der Organisation %VAR1%</text>
 </version>
 </language>

@@ -101,7 +101,7 @@ class TableUserData extends TableAccess
     {
         global $g_preferences;
 
-        if(strlen($field_value) > 0 && $this->noValueCheck != true)
+        if($field_name == 'usd_value' && strlen($field_value) > 0 && $this->noValueCheck != true)
         {
             if($this->dbColumns['usf_type'] == 'CHECKBOX')
             {
@@ -138,6 +138,16 @@ class TableUserData extends TableAccess
                     return false;
                 }
             }
+            elseif($this->dbColumns['usf_type'] == 'URL')
+            {
+                // Homepage noch mit http vorbelegen
+                if(strpos(admStrToLower($field_value), 'http://')  === false
+                && strpos(admStrToLower($field_value), 'https://') === false )
+                {
+                    $field_value = 'http://'. $field_value;
+                }
+            }
+
         }
         return parent::setValue($field_name, $field_value);
     } 
