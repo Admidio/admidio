@@ -198,13 +198,6 @@ $g_layout['header'] = '
                 window.location.href = $("#mem_show_all").attr("link");
             });
             
-            //Link zum Benutzer hinzufügen anzeigen oder verstecken
-            if($("input[type=checkbox]#mem_show_all").is(":checked")){
-                $("#add_user_links").show();
-            }
-            else{
-                $("#add_user_links").hide();
-            }
         }); 
     //--></script>';
 
@@ -212,39 +205,45 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
+<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
-<ul class="iconTextLinkList" style="margin-bottom: 0px;" id="add_user_links">
-    <li>
-        <span class="iconTextLink">
-            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
-            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$g_l10n->get('MEM_CREATE_USER').'</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/members/import.php"><img
-            src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('MEM_IMPORT_USERS').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/members/import.php">'.$g_l10n->get('MEM_IMPORT_USERS').'</a>
-        </span>
-    </li>';
-    if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
+if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
+{
+    // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+    if($req_members == 1)
     {
-        // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-        if($req_members == 1)
-        {
-            $link_members = 0;
-            $show_all_checked = '';
-            
-        }
-        else
-        {
-            $link_members = 1;
-            $show_all_checked = 'checked';
-        }
+        $link_members = 0;
+        $show_all_checked = '';
+        
     }
-echo '</ul>';
+    else
+    {
+        $link_members = 1;
+        $show_all_checked = 'checked';
+    }
+}
+
+if($req_members == 0)
+{
+    echo'
+        <ul class="iconTextLinkList" style="margin-bottom: 0px;">
+        <li>
+            <span class="iconTextLink">
+                <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
+                <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$g_l10n->get('MEM_CREATE_USER').'</a>
+            </span>
+        </li>
+        <li>
+            <span class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/administration/members/import.php"><img
+                src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('MEM_IMPORT_USERS').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/administration/members/import.php">'.$g_l10n->get('MEM_IMPORT_USERS').'</a>
+            </span>
+        </li>';
+        
+    echo '</ul>';
+}
 
 //Hier gibt es jetzt noch die Suchbox...
 echo '
@@ -255,8 +254,8 @@ echo '
             <input type="submit" value="'.$g_l10n->get('SYS_SEARCH').'" />
         </li>
         <li>    
-            <input type="checkbox" name="mem_show_all" id="mem_show_all" link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" 
-                    title="'.$g_l10n->get('MEM_SHOW_USERS').'" '.$show_all_checked.'/> '.$g_l10n->get('MEM_SHOW_ALL_USERS').'
+            <input type="checkbox" name="mem_show_all" id="mem_show_all" 
+                link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" title="'.$g_l10n->get('MEM_SHOW_USERS').'" '.$show_all_checked.'/><label for="mem_show_all">'.$g_l10n->get('MEM_SHOW_ALL_USERS').'</lable>
         </li>
     </ul>
 </form>
