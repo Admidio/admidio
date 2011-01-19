@@ -17,14 +17,14 @@
  *
  *****************************************************************************/
 
-require("../../system/common.php");
-require("../../system/login_valid.php");
-require("../../system/classes/table_members.php");
-require("../../system/classes/role_dependency.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_members.php');
+require_once('../../system/classes/role_dependency.php');
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue("usr_id")))
+if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('usr_id')))
 {
    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
@@ -43,18 +43,18 @@ if(isset($_GET['inline']))
     }
     $req_inlineView = $_GET['inline'];
 }
-if(isset($_GET["user_id"]))
+if(isset($_GET['user_id']))
 {
-    if(is_numeric($_GET["user_id"]) == false)
+    if(is_numeric($_GET['user_id']) == false)
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-    $req_usr_id = $_GET["user_id"];
+    $req_usr_id = $_GET['user_id'];
 }
 
-if(isset($_GET["new_user"]))
+if(isset($_GET['new_user']))
 {
-    if(is_numeric($_GET["new_user"]) == false)
+    if(is_numeric($_GET['new_user']) == false)
     {
 		if($req_inlineView == 0)
 		{
@@ -65,13 +65,13 @@ if(isset($_GET["new_user"]))
 			echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
 		}
     }
-    $req_new_user = $_GET["new_user"];
+    $req_new_user = $_GET['new_user'];
 }
 
 $roleCount = 0;
 foreach($_POST as $key=>$value)
 {
-	if(preg_match("/^(role-)[0-9]{0,1}$/i",$key))
+	if(preg_match('/^(role-)[0-9]{0,1}$/i',$key))
 		$roleCount++;
 }
 
@@ -271,9 +271,9 @@ if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
 if($req_inlineView == 0)
 {
 	$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-	$g_message->show($g_l10n->get('SYS_SAVE'));
+	$g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 }
 else
 {
-	echo $g_l10n->get('SYS_SAVE')."<SAVED/>";
+	echo $g_l10n->get('SYS_SAVE_DATA').'<SAVED/>';
 }

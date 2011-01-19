@@ -104,33 +104,17 @@ if($search != '')
  // SQL-Statement zusammensetzen
 $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
                city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
+               mem_usr_id as member_this_role, mem_leader as leader_this_role,
                   (SELECT count(*)
-                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
-                    WHERE rol_valid   = 1
-                      AND rol_cat_id  = cat_id
-                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                          OR cat_org_id IS NULL )
-                      AND mem_rol_id  = rol_id
-                      AND mem_begin  <= "'.DATE_NOW.'"
-                      AND mem_end     > "'.DATE_NOW.'"
-                      AND mem_usr_id  = usr_id) as member_this_orga,
-                  (SELECT count(*)
-                     FROM '. TBL_ROLES. ', '. TBL_MEMBERS. '
-                    WHERE rol_valid   = 1
-                      AND rol_id      = '.$role_id.'
-                      AND mem_rol_id  = rol_id
-                      AND mem_begin  <= "'.DATE_NOW.'"
-                      AND mem_end     > "'.DATE_NOW.'"
-                      AND mem_usr_id  = usr_id) as member_this_role,
-                  (SELECT count(*)
-                     FROM '. TBL_ROLES. ', '. TBL_MEMBERS. '
-                    WHERE rol_valid   = 1
-                      AND rol_id      = '.$role_id.'
-                      AND mem_rol_id  = rol_id
-                      AND mem_leader  = 1
-                      AND mem_begin  <= "'.DATE_NOW.'"
-                      AND mem_end     > "'.DATE_NOW.'"
-                      AND mem_usr_id  = usr_id) as leader_this_role
+                     FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
+                    WHERE rol2.rol_valid   = 1
+                      AND rol2.rol_cat_id  = cat2.cat_id
+                      AND (  cat2.cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                          OR cat2.cat_org_id IS NULL )
+                      AND mem2.mem_rol_id  = rol2.rol_id
+                      AND mem2.mem_begin  <= "'.DATE_NOW.'"
+                      AND mem2.mem_end     > "'.DATE_NOW.'"
+                      AND mem2.mem_usr_id  = usr_id) as member_this_orga
         FROM '. TBL_USERS. '
         LEFT JOIN '. TBL_USER_DATA. ' as last_name
           ON last_name.usd_usr_id = usr_id
@@ -153,6 +137,14 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
         LEFT JOIN '. TBL_USER_DATA. ' as country
           ON country.usd_usr_id = usr_id
          AND country.usd_usf_id = '. $g_current_user->getProperty('COUNTRY', 'usf_id'). '
+        LEFT JOIN '. TBL_ROLES. ' rol
+          ON rol.rol_valid   = 1
+         AND rol.rol_id      = '.$role_id.'
+        LEFT JOIN '. TBL_MEMBERS. ' mem
+          ON mem.mem_rol_id  = rol.rol_id
+         AND mem.mem_begin  <= "'.DATE_NOW.'"
+         AND mem.mem_end     > "'.DATE_NOW.'"
+         AND mem.mem_usr_id  = usr_id
         WHERE '. $member_condition. '
         ORDER BY last_name, first_name '.$limit;
 //echo $sql;exit();
@@ -168,14 +160,8 @@ if($g_db->num_rows($result_user)>0)
 	for($x=0; $user = $g_db->fetch_array($result_user); $x++)
 	{
 	    //Anfangsbuchstabe erfassen
-	    $this_letter = ord($user['last_name']);
-	
-	    //falls Kleinbuchstaben
-	    if($this_letter>=97 && $this_letter<=122)
-	    {
-	        $this_letter = $this_letter-32;
-	    }
-	
+	    $this_letter = ord(admStrToUpper($user['last_name']));
+
 	    //falls zahlen
 	    if($this_letter>=48 && $this_letter<=57)
 	    {
@@ -199,9 +185,11 @@ if($g_db->num_rows($result_user)>0)
 	    {
 	        $this_letter = 85;
 	    }
+
 	
 	    $first_letter_array[$x]= $this_letter;
 	}
+	error_log(print_r($first_letter_array, true));
 
 	//SQL-Abfrag zurück an Anfang setzen
 	$g_db->data_seek ($result_user, 0);
@@ -249,13 +237,7 @@ if($g_db->num_rows($result_user)>0)
         $letter_merker=34;
 
         //Anfangsbuchstabe erfassen
-        $this_letter = ord($user['last_name']);
-
-        //falls Kleinbuchstaben
-        if($this_letter>=97 && $this_letter<=122)
-        {
-            $this_letter = $this_letter-32;
-        }
+        $this_letter = ord(admStrToUpper($user['last_name']));
 
         //falls zahlen
         if($this_letter>=48 && $this_letter<=57)
@@ -449,13 +431,7 @@ if($g_db->num_rows($result_user)>0)
 		if($g_db->num_rows($result_user) >= 50)
 		{	
             //Anfangsbuchstabe erfassen
-            $this_letter = ord($user['last_name']);
-
-            //falls Kleinbuchstaben
-            if($this_letter>=97 && $this_letter<=122)
-            {
-                $this_letter = $this_letter-32;
-            }
+            $this_letter = ord(admStrToUpper($user['last_name']));
 
             //falls zahlen
             if($this_letter>=48 && $this_letter<=57)
