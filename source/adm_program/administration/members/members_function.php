@@ -19,10 +19,10 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/system_mail.php');
-require('../../system/classes/table_members.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/system_mail.php');
+require_once('../../system/classes/table_members.php');
 
 // nur berechtigte User duerfen Funktionen aufrufen
 if(!$g_current_user->editUsers())
@@ -81,7 +81,7 @@ if($_GET['mode'] == 1)
     // Html des Modules ausgeben
     echo '<br /><br /><br />
     <div class="formLayout" id="user_delete_message_form" style="width: 400px">
-        <div class="formHead">'.$g_l10n->get('MEM_REMOVE_USER_DESC').'</div>
+        <div class="formHead">'.$g_l10n->get('MEM_REMOVE_USER').'</div>
         <div class="formBody">
             <p align="left">
                 <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('SYS_FORMER').'" />
