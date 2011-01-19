@@ -271,70 +271,31 @@ echo '
         echo '<a href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'">'.$g_l10n->get('SYS_ALL').'</a>&nbsp;&nbsp;&nbsp;';
     }
 
-    // Alle Anfangsbuchstaben der Nachnamen ermitteln, die bisher in der DB gespeichert sind
-    if($req_members == 1)
-    {
-        $sql    = 'SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count
-                     FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ',
-                          '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
-                    WHERE rol_valid  = 1
-                      AND rol_cat_id = cat_id
-                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                          OR cat_org_id IS NULL )
-                      AND mem_rol_id = rol_id
-                      AND mem_usr_id = usr_id
-                      AND mem_begin <= "'.DATE_NOW.'"
-                      AND mem_end    > "'.DATE_NOW.'"
-                      AND usr_valid  = 1
-                      AND usf_name_intern = "LAST_NAME"
-                      AND usd_usf_id = usf_id
-                      AND usd_usr_id = usr_id
-                    GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
-                    ORDER BY usd_value ';
-    }
-    else
-    {
-        $sql    = 'SELECT UPPER(SUBSTRING(usd_value, 1, 1)) as letter, COUNT(1) as count
-                     FROM '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
-                    WHERE usr_valid  = 1
-                      AND usf_name_intern = "LAST_NAME"
-                      AND usd_usf_id = usf_id
-                      AND usd_usr_id = usr_id
-                    GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
-                    ORDER BY usd_value ';
-    }
-    $result      = $g_db->query($sql);
-    $letter_row  = $g_db->fetch_array($result);
-    $letter_menu = 'A';
-
-    // kleine Vorschleife die alle Sonderzeichen (Zahlen) vor dem A durchgeht
-    // (diese werden nicht im Buchstabenmenue angezeigt)
-    while(ord($letter_row['letter']) < ord('A'))
-    {
-        $letter_row = $g_db->fetch_array($result);
-    }
-
     // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
+    $letter_menu = 'A';
+    
     for($i = 0; $i < 26;$i++)
     {
-        // pruefen, ob es Mitglieder zum Buchstaben gibt, unter Beruecksichtigung deutscher Sonderzeichen
-        if( $letter_menu == $letter_row['letter']
-        || ($letter_menu == 'A' && $letter_row[0] == 'Ä')
-        || ($letter_menu == 'O' && $letter_row[0] == 'Ö')
-        || ($letter_menu == 'U' && $letter_row[0] == 'Ü') )
-        {
-            $letter_found = true;
-        }
-        else
-        {
-            $letter_found = false;
-        }
+        // pruefen, ob es Mitglieder zum Buchstaben gibt
+        // dieses SQL muss fuer jeden Buchstaben ausgefuehrt werden, ansonsten werden Sonderzeichen nicht immer richtig eingeordnet
+        $sql = 'SELECT COUNT(1) as count
+                  FROM '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
+                 WHERE usr_valid  = 1
+                   AND usf_name_intern = "LAST_NAME"
+                   AND usd_usf_id = usf_id
+                   AND usd_usr_id = usr_id
+                   AND usd_value LIKE "'.$letter_menu.'%"
+                       '.$member_condition.'
+                 GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
+                 ORDER BY usd_value ';
+        $result      = $g_db->query($sql);
+        $letter_row  = $g_db->fetch_array($result);
 
         if($letter_menu == substr($req_letter, 0, 1))
         {
             echo '<span class="selected">'.$letter_menu.'</span>';
         }
-        elseif($letter_found == true)
+        elseif($letter_row['count'] > 0)
         {
             echo '<a href="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$req_members.'&amp;letter='.$letter_menu.'" title="'. $letter_row['count']. ' Benutzer gefunden">'.$letter_menu.'</a>';
         }
@@ -345,11 +306,6 @@ echo '
 
         echo '&nbsp;&nbsp;';
 
-        // naechsten Buchstaben anwaehlen
-        if($letter_found == true)
-        {
-            $letter_row = $g_db->fetch_array($result);
-        }
         $letter_menu = strNextLetter($letter_menu);
     }
 echo '</div>';
