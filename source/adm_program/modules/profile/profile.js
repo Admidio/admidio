@@ -23,7 +23,7 @@ function profileJSClass()
 		$("a[rel='colorboxContent']").colorbox({rel:'nofollow'});
 		$("a[rel='colorboxRoles']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
 		$("a[rel='colorboxPWContent']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
-        $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#btnNo").focus();}});
+        $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',scrolling:false,onComplete:function(){$("#btnNo").focus();}});
 	}
 	this.reloadRoleMemberships = function()
 	{
