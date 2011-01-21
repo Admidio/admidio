@@ -13,7 +13,7 @@
     <text id="BAC_BACKUP_COMPLETED" development="new" translation="todo">Backup fertiggestellt in %VAR1%</text>
     <text id="BAC_BACKUP_FILE" development="new" translation="todo">Backupdatei</text>
     <text id="BAC_BACKUP_FROM" development="new" translation="todo">Backup vom %VAR1% um %VAR2%</text>
-    <text id="BAC_COMPLETED_VAR" development="new" translation="todo">%VAR1%% fertig</text>
+    <text id="BAC_COMPLETED_VAR" development="new" translation="todo">%VAR1% fertig</text>
     <text id="BAC_CREATION_DATE" development="new" translation="todo">Erstellungsdatum</text>
     <text id="BAC_DATABASE_BACKUP" development="new" translation="todo">Datenbank-Backup</text>
     <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</text>
@@ -32,7 +32,7 @@
     <!-- Phrases only in Category-Administration -->
     <text id="CAT_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="todo">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n%VAR1_BOLD%\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</text>
-    <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="todo">Sie können nicht alle Kategorien eines Moduls löschen.\nErstellen Sie vorher eine neue Kategorie für dieses Modul.</text>
+    <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="todo">Du kannst nicht alle Kategorien eines Moduls löschen.\nErstelle vorher eine neue Kategorie für dieses Modul.</text>
     <text id="CAT_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden ?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="todo">%VAR1% nach unten verschieben</text>
     <text id="CAT_MOVE_UP" development="new" translation="todo">%VAR1% nach oben verschieben</text>
@@ -178,7 +178,7 @@
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="todo">Keine weiteren Empfänger</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde leider nicht erfolgreich versendet!</text>
     <text id="ECA_OTHER_RECIPIENT" development="new" translation="todo">Anderer Empfänger</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="todo">Bitte wählen Sie eine gültige Rolle aus!</text>
+    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="todo">Bitte wähle eine gültige Rolle aus!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger Email</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
     <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
@@ -186,7 +186,7 @@
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe)</text>
     <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="todo">Deine Grußkarte wird an ein Mitglied der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt hat.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
+    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="todo">Deine Grußkarte wird an die Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde erfolgreich versendet.</text>
     <text id="ECA_TEMPLATE" development="new" translation="todo">Template</text>
@@ -303,7 +303,7 @@
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="todo">Organisation einrichten</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="todo">Die neue Organisation %VAR1_BOLD% wurde eingerichtet und die Konfigurationsdatei erstellt. Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.</text>
+    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="todo">Die neue Organisation %VAR1_BOLD% wurde eingerichtet und die Konfigurationsdatei erstellt. Du kannst nun mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="todo">Die Einrichtung war erfolgreich</text>
     <text id="INS_SKYPE" development="new" translation="todo">Skype</text>
     <text id="INS_TABLE_PREFIX" development="new" translation="todo">Tabellenpräfix</text>
@@ -351,11 +351,11 @@
     <text id="LST_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="todo">Weitere Spalte hinzufügen</text>
     <text id="LST_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
-    <text id="LST_CHANGE_LIST" development="new" translation="todo">Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen ?</text>
-    <text id="LST_CHOOSE_ROLE" development="new" translation="todo">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest</text>
+    <text id="LST_CHANGE_LIST" development="new" translation="todo">Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen?</text>
+    <text id="LST_CHOOSE_ROLE" development="new" translation="todo">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest.</text>
     <text id="LST_CONFIGURATION" development="new" translation="todo">Konfiguration</text>
     <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="todo">Konfiguration allen Benutzern zur Verfügung stellen</text>
-    <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="todo">Willst du die aktuelle Listenkonfiguration zur neuen Standardkonfiguration dieser Organisation machen ?</text>
+    <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="todo">Willst du die aktuelle Listenkonfiguration zur neuen Standardkonfiguration dieser Organisation machen?</text>
     <text id="LST_CONFIGURATION_DELETE" development="new" translation="todo">Willst du die aktuelle Listenkonfiguration wirklich löschen ?</text>
     <text id="LST_CONFIGURATION_LIST" development="new" translation="todo">Listenkonfiguration</text>
     <text id="LST_CONFIGURATION_SAVE" development="new" translation="todo">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden ?</text>
@@ -517,9 +517,9 @@
     <text id="NWU_NO_MEMBERSHIP_NO_LOGIN" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1% und besitzt auch keine Logindaten.</text>
     <text id="NWU_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Anmeldungen vorhanden.</text>
     <text id="NWU_REGISTERED_ON" development="new" translation="todo">Registriert am %VAR1%</text>
-    <text id="NWU_REMINDER_SEND_LOGIN" development="new" translation="todo">Möchtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken ?</text>
+    <text id="NWU_REMINDER_SEND_LOGIN" development="new" translation="todo">Möchtest du ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken?</text>
     <text id="NWU_SEND_LOGIN" development="new" translation="todo">Zugangsdaten zuschicken</text>
-    <text id="NWU_USER_NO_VALID_LOGIN" development="new" translation="todo">Dieser Benutzer besitzt noch kein Login.\nMöchtest du ihm die Daten dieser Registrierung zuordnen ?</text>
+    <text id="NWU_USER_NO_VALID_LOGIN" development="new" translation="todo">Dieser Benutzer besitzt noch kein Login.\nMöchtest du ihm die Daten dieser Registrierung zuordnen?</text>
     <text id="NWU_USER_VALID_LOGIN" development="new" translation="todo">Dieser Benutzer besitzt schon ein gültiges Login.</text>
 
     <!-- Phrases only in Organizationadministration -->
@@ -924,7 +924,7 @@
     <text id="SYS_CONTENT" development="new" translation="todo">Inhalt</text>
     <text id="SYS_CONTRIBUTION" development="new" translation="todo">Beitrag</text>
     <text id="SYS_CONTRIBUTION_PERIOD" development="new" translation="todo">Beitragszeitraum</text>
-    <text id="SYS_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du in deinem Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
+    <text id="SYS_COOKIE_NOT_SET" development="new" translation="todo">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von %VAR1_BOLD% akzeptiert.</text>
     <text id="SYS_COPY" development="new" translation="todo">Kopieren</text>
     <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
@@ -988,7 +988,7 @@
     <text id="SYS_FONT_STYLE" development="new" translation="todo">Schrifttyp</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
     <text id="SYS_FORUM" development="new" translation="todo">Forum</text>
-    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="todo">Sie sind als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und haben %VAR3_BOLD% neue Nachrichten.</text>
+    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="todo">Du bist als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und hast %VAR3_BOLD% neue Nachrichten.</text>
     <text id="SYS_FORUM_DESC" development="new" translation="todo">Der virtuelle Treffpunkt zum Austausch von Gedanken und Erfahrungen.</text>
     <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="todo">Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!</text>
     <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="todo">Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!</text>
@@ -1030,10 +1030,10 @@
     <text id="SYS_LOGIN_UNKNOWN" development="new" translation="todo">Der angegebene Benutzername existiert nicht.</text>
     <text id="SYS_LOGOUT" development="new" translation="todo">Abmelden</text>
     <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="todo">Du wurdest erfolgreich abgemeldet.</text>
-    <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="todo">Du bist am System angemeldet folglich kennst du ja dein Passwort!</text>
+    <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="todo">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="todo">Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden erden!</text>
     <text id="SYS_LOSTPW_SEND" development="new" translation="todo">Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!</text>
-    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
+    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!\nBitte versuche es später erneut!</text>
 	<text id="SYS_MAP" development="new" translation="todo">Karte</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
@@ -1055,7 +1055,7 @@
     <text id="SYS_NO_ENTRY" development="new" translation="todo">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
 	<text id="SYS_NO_ENTRIES_FOUND" development="new" translation="todo">Es wurden keine Einträge gefunden.</text>
-    <text id="SYS_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.</text>
+    <text id="SYS_NO_RIGHTS" development="new" translation="todo">Du hast kein Recht, diese Aktion auszuführen.</text>
     <text id="SYS_NOBODY" development="new" translation="todo">Niemand</text>
     <text id="SYS_NONE" development="new" translation="todo">Keiner</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
@@ -1072,7 +1072,7 @@
     <text id="SYS_PASSWORD" development="new" translation="todo">Passwort</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
     <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn du dein Passwort vergessen hast, kann das System ein neues Passwort erstellen und an deine E-Mail Adresse senden.\nGib dazu deine E-Mail-Adresse in das untenstehende Formular ein und klicke auf die Schaltfläche "Neues Passwort zusenden".</text>
-    <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüf bitte dein Passwort und gib dieses dann erneut ein.</text>
+    <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</text>
     <text id="SYS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>
 	<text id="SYS_PHOTOS" development="new" translation="todo">Fotos</text>	
@@ -1165,7 +1165,7 @@
     <text id="SYS_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
     <text id="SYS_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
     <text id="SYS_FILEZIZE" development="new" translation="todo">Datei ist zu groß.</text>
-    <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Sie können maximal %0 Dateien hinzufügen.</text>
+    <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Du kannst maximal %0 Dateien hinzufügen.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
     
