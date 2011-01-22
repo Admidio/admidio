@@ -111,7 +111,7 @@ class Language
     // es wird die Sprache gesetzt und damit auch die entsprechende Sprachdatei eingelesen
     public function setLanguage($language)
     {
-        if(strlen($language) == 2 && $language != $this->language)
+        if($language != $this->language)
         {
             $this->language = $language;
             $this->languageFilePath = SERVER_PATH. '/adm_program/languages/'.$language.'.xml';
