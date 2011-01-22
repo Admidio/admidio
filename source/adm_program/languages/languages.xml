@@ -2,7 +2,11 @@
 <languagelist>
 <language>
     <isocode>de</isocode>
-    <name>deutsch</name>
+    <name>deutsch (du)</name>
+</language>
+<language>
+    <isocode>de_sie</isocode>
+    <name>deutsch (Sie)</name>
 </language>
 <language>
     <isocode>en</isocode>
