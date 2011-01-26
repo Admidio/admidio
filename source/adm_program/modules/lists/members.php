@@ -134,14 +134,16 @@ $g_layout['header'] ='
             //Checkbox ID
             var checkbox_id = $(this).attr("id");
             var userid = $(this).parent().parent().attr("user_id");
+            var checkboxtype = $(this).attr("checkboxtype");
+            var checked = $(this).attr("checked");
             
             //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
-            if($(this).attr("checkboxtype")=="leader" && $(this).attr("checked")==true){                
+            if(checkboxtype=="leader" && checked==true){                
                 $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
             }
             
             //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
-            if($(this).attr("checkboxtype")=="member" && $(this).attr("checked")==false){                
+            if(checkboxtype=="member" && checked==false){                
                 $("input[type=checkbox]#leader_"+userid).removeAttr("checked");
             }';
             
@@ -170,7 +172,28 @@ $g_layout['header'] ='
                     async:false,
                     success: function(html){                    
                        $("#loadindicator_" + checkbox_id).hide().empty();
-                        return false;
+                       
+                       //Fehler Maximale Mitrgliederzahl überschritten
+                       if(html=="max_mem_reached")
+                       {
+                            //Bei Leiter Checkbox deaktiviert, muss Member und Leiter wieder gesetzt werden                            
+                            if(checkboxtype=="leader" && checked==false){                
+                                $("input[type=checkbox]#leader_"+userid).attr("checked", "checked");
+                            }
+                            else{
+                                $("input[type=checkbox]#member_"+userid).removeAttr("checked");
+                            }                           
+                           alert("'.$g_l10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')).'");
+                       }
+                       if(html=="SYS_NO_RIGHTS")
+                       {
+                           alert("'.$g_l10n->get('SYS_NO_RIGHTS').'");
+                       }
+                       if(html=="SYS_INVALID_PAGE_VIEW")
+                       {
+                           alert("'.$g_l10n->get('SYS_INVALID_PAGE_VIEW').'");
+                       }                       
+                       return false;
                     }
             });
         });
