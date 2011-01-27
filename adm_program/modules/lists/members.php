@@ -5,7 +5,7 @@
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Module-Owner : Jochen Erkens
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.result
  *
  * Uebergaben:
  *
@@ -59,7 +59,7 @@ if(  (!$g_current_user->assignRoles()
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Html-Kopf ausgeben
+// result-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
 $g_layout['header'] ='
@@ -67,8 +67,8 @@ $g_layout['header'] ='
     //Erstmal warten bis Dokument fertig geladen ist
     $(document).ready(function(){       
         //Bei Seitenaufruf Daten laden
-        $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memserach_form").serialize(), function(html){
-            $("form#memlist_form").append(html).show();
+        $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memserach_form").serialize(), function(result){
+            $("form#memlist_form").append(result).show();
             $("#list_load_animation").hide();
             return false;
         });
@@ -77,8 +77,8 @@ $g_layout['header'] ='
         $("input[type=checkbox]#mem_show_all").live("click", function(){
             $("#list_load_animation").show();
             $("form#memlist_form").hide().empty();
-            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(html){
-                $("form#memlist_form").append(html).show();               
+            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(result){
+                $("form#memlist_form").append(result).show();               
                 $("#list_load_animation").hide();
                 return false;
             });
@@ -95,8 +95,8 @@ $g_layout['header'] ='
         $("input[type=text]#mem_search").keyup(function(){
             $("#list_load_animation").show();
             $("form#memlist_form").hide().empty();
-            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(html){
-                $("form#memlist_form").append(html).show();
+            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(result){
+                $("form#memlist_form").append(result).show();
                 $("#list_load_animation").hide();               
                 return false;
             });
@@ -130,21 +130,26 @@ $g_layout['header'] ='
         });
         
         //beim anklicken einer Checkbox
-        $("input[type=checkbox].memlist_checkbox").live("click", function(){   
+        $("input[type=checkbox].memlist_checkbox").live("click", function(){
+                 
             //Checkbox ID
+            var checkboxtype = $(this).attr("checkboxtype");            
             var checkbox_id = $(this).attr("id");
             var userid = $(this).parent().parent().attr("user_id");
-            var checkboxtype = $(this).attr("checkboxtype");
-            var checked = $(this).attr("checked");
-            
+
+            var member_checked = $("input[type=checkbox]#member_"+userid).attr("checked");
+            var leader_checked = $("input[type=checkbox]#leader_"+userid).attr("checked");
+              
             //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
-            if(checkboxtype=="leader" && checked==true){                
+            if(checkboxtype=="leader" && leader_checked){                
                 $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
+                member_checked = true;
             }
             
             //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
-            if(checkboxtype=="member" && checked==false){                
+            if(checkboxtype=="member" && member_checked==false){                
                 $("input[type=checkbox]#leader_"+userid).removeAttr("checked");
+                leader_checked = false;
             }';
             
             //Bei der Rolle Webmaster muss konrolliert werden ob noch mindestend ein User Mitglied bleibt
@@ -166,18 +171,18 @@ $g_layout['header'] ='
                                  
             //Datenbank schreiben
             $.ajax({
-                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$role_id.'",
+                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$role_id.'&uid="+userid,
                     type: "POST",
-                    data: $("form#memlist_form").serialize(),
-                    async:false,
-                    success: function(html){                    
+                    data: "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
+                    async: false,
+                    success: function(result){                    
                        $("#loadindicator_" + checkbox_id).hide().empty();
-                       
+
                        //Fehler Maximale Mitrgliederzahl überschritten
-                       if(html=="max_mem_reached")
+                       if(result=="max_mem_reached")
                        {
                             //Bei Leiter Checkbox deaktiviert, muss Member und Leiter wieder gesetzt werden                            
-                            if(checkboxtype=="leader" && checked==false){                
+                            if(checkboxtype=="leader" && $("input[type=checkbox]#leader_"+userid).attr("checked")==false){                
                                 $("input[type=checkbox]#leader_"+userid).attr("checked", "checked");
                             }
                             else{
@@ -185,14 +190,16 @@ $g_layout['header'] ='
                             }                           
                            alert("'.$g_l10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')).'");
                        }
-                       if(html=="SYS_NO_RIGHTS")
+                       if(result=="SYS_NO_RIGHTS")
                        {
                            alert("'.$g_l10n->get('SYS_NO_RIGHTS').'");
                        }
-                       if(html=="SYS_INVALID_PAGE_VIEW")
+                       if(result=="SYS_INVALID_PAGE_VIEW")
                        {
                            alert("'.$g_l10n->get('SYS_INVALID_PAGE_VIEW').'");
-                       }                       
+                       }
+                       if(result=="success")
+                       {}                    
                        return false;
                     }
             });
