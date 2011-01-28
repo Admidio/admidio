@@ -45,7 +45,7 @@ if(!$g_current_user->viewProfile($a_user_id))
 // dabei wird der Inhalt richtig formatiert
 function getFieldCode($field, $user_id)
 {
-    global $g_preferences, $g_root_path, $g_current_user;
+    global $g_preferences, $g_root_path, $g_current_user, $g_l10n;
     $html      = '';
     $value     = '';
     $msg_image = '';
@@ -157,8 +157,8 @@ function getFieldCode($field, $user_id)
                 $value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
                 <a class="iconLink" href="skype:'.$field->getValue('usd_value').'?add"><img
                     src="http://mystatus.skype.com/smallicon/'.$field->getValue('usd_value').'"
-                    title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen"
-                    alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).' hinzufügen" /></a> '.$value;
+                    title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
+                    alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
             }
             $messenger = true;
         }
