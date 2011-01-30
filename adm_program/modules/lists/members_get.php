@@ -9,10 +9,11 @@
  *
  * Uebergaben:
  *
- * rol_id   : Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
- * restrict : Begrenzte Userzahl:
+ * rol_id       : Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
+ * mem_show_all : Begrenzte Userzahl:
  *            m - (Default) nur Mitglieder
  *            u - alle in der Datenbank gespeicherten user
+ * mem_search   : Suchstring nach dem Mitglieder angezeigt werden sollen
  *
  *****************************************************************************/
 require_once('../../system/common.php');
@@ -147,121 +148,50 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
          AND mem.mem_usr_id  = usr_id
         WHERE '. $member_condition. '
         ORDER BY last_name, first_name '.$limit;
-//echo $sql;exit();
 $result_user = $g_db->query($sql);
 
 if($g_db->num_rows($result_user)>0)
 {
-	//Zaehlen wieviele Leute in der Datenbank stehen
-	$user_anzahl = $g_db->num_rows($result_user);
-	
-	///Erfassen welche Anfansgsbuchstaben bei Nachnamen Vorkommen
-	$first_letter_array = array();
-	for($x=0; $user = $g_db->fetch_array($result_user); $x++)
-	{
-	    //Anfangsbuchstabe erfassen
-	    $this_letter = ord(admStrToUpper($user['last_name']));
-
-	    //falls zahlen
-	    if($this_letter>=48 && $this_letter<=57)
-	    {
-	        $this_letter = 35;
-	    }
-	
-	    //Umlaute zu A
-	    if($this_letter>=192 && $this_letter<=198)
-	    {
-	        $this_letter = 65;
-	    }
-	
-	    //Umlaute zu O
-	    if($this_letter>=210 && $this_letter<=214)
-	    {
-	        $this_letter = 79;
-	    }
-	
-	    //Umlaute zu U
-	    if($this_letter>=217 && $this_letter<=220)
-	    {
-	        $this_letter = 85;
-	    }
-
-	
-	    $first_letter_array[$x]= $this_letter;
-	}
-	error_log(print_r($first_letter_array, true));
-
-	//SQL-Abfrag zurück an Anfang setzen
-	$g_db->data_seek ($result_user, 0);
-
-    $user = $g_db->fetch_array($result_user);
-
     //Buchstaben Navigation bei mehr als 50 personen
     if($g_db->num_rows($result_user) >= 50)
     {
-        //Alle
-        echo '<div class="pageNavigation"><a href="#" letter="all" class="pageNavigationLink">'.$g_l10n->get('SYS_ALL').'</a>&nbsp;';
+        echo '<div class="pageNavigation">
+            <a href="#" letter="all" class="pageNavigationLink">'.$g_l10n->get('SYS_ALL').'</a>&nbsp;&nbsp;';
+        
+            // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
+            $letter_menu = 'A';
+            
+            for($i = 0; $i < 26;$i++)
+            {
+                // pruefen, ob es Mitglieder zum Buchstaben gibt
+                // dieses SQL muss fuer jeden Buchstaben ausgefuehrt werden, ansonsten werden Sonderzeichen nicht immer richtig eingeordnet
+                $sql = 'SELECT COUNT(1) as count
+                          FROM '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
+                         WHERE usr_valid  = 1
+                           AND usf_name_intern = "LAST_NAME"
+                           AND usd_usf_id = usf_id
+                           AND usd_usr_id = usr_id
+                           AND usd_value LIKE "'.$letter_menu.'%"
+                           AND '.$member_condition.'
+                         GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
+                         ORDER BY usd_value ';
+                $result      = $g_db->query($sql);
+                $letter_row  = $g_db->fetch_array($result);
 
-        for($menu_letter=35; $menu_letter<=90; $menu_letter++)
-        {
-            //Falls Aktueller Anfangsbuchstabe, Nur Buchstabe ausgeben
-            $menu_letter_string = chr($menu_letter);
-            if(!in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
-            {
-                echo $menu_letter_string.'&nbsp;';
-            }
-            //Falls Nicht Link zu Anker
-            if(in_array($menu_letter, $first_letter_array) && $menu_letter>=65 && $menu_letter<=90)
-            {
-                echo '<a href="#" letter="'.$menu_letter_string.'" class="pageNavigationLink">'.$menu_letter_string.'</a>&nbsp;';
-            }
-
-            //Fuer Namen die mit Zahlen beginnen
-            if($menu_letter == 35)
-            {
-                if( in_array(35, $first_letter_array))
+                if($letter_row['count'] > 0)
                 {
-                    echo '<a href="#" letter="numeric" class="pageNavigationLink">'.$menu_letter_string.'</a>&nbsp;';
+                    echo '<a href="#" letter="'.$letter_menu.'" class="pageNavigationLink">'.$letter_menu.'</a>';
                 }
                 else
                 {
-                    echo '&#35;&nbsp;';
+                    echo $letter_menu;
                 }
-                $menu_letter = 64;
+        
+                echo '&nbsp;&nbsp;';
+        
+                $letter_menu = strNextLetter($letter_menu);
             }
-        }//for
-
-        echo '</div>';
-
-        //Container anlegen und Ausgabe
-        $letter_merker=34;
-
-        //Anfangsbuchstabe erfassen
-        $this_letter = ord(admStrToUpper($user['last_name']));
-
-        //falls zahlen
-        if($this_letter>=48 && $this_letter<=57)
-        {
-            $this_letter = 35;
-        }
-
-        //Umlaute zu A
-        if($this_letter>=192 && $this_letter<=198)
-        {
-            $this_letter = 65;
-        }
-
-        //Umlaute zu O
-        if($this_letter>=210 && $this_letter<=214)
-        {
-            $this_letter = 79;
-        }
-
-        //Umlaute zu U
-        if($this_letter>=217 && $this_letter<=220)
-        {
-            $this_letter = 85;
-        }
+        echo '</div>';    
     }
     
     //Tabelle anlegen
@@ -283,69 +213,53 @@ if($g_db->num_rows($result_user)>0)
 	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a></th>
             </tr>
         </thead>';
+        
+    $letter_merker = '';
+    $this_letter   = '';
+    
+    function convSpecialChar($specialChar)
+    {
+        $convTable = array('Ä' => 'A', 'É' => 'E', 'È' => 'E', 'Ö' => 'O', 'Ü' => 'U');
+        
+        if(array_key_exists($specialChar, $convTable))
+        {
+            return admstrtoupper($convTable[$specialChar]);
+        }
+        return $specialChar;
+    }
 
     //Zeilen ausgeben
-    for($x=1; $x<=$g_db->num_rows($result_user); $x++)
+    while($user = $g_db->fetch_array($result_user))
     {
     	if($g_db->num_rows($result_user) >= 50)
     	{
-            //Sprung zu Buchstaben
-            if($this_letter!=$letter_merker && $letter_merker==35)
+            // Buchstaben auslesen
+            $this_letter = admstrtoupper(substr($user['last_name'], 0, 1));
+            
+            if(ord($this_letter) < 65 || ord($this_letter) > 90)
             {
-                $letter_merker=64;
+                $this_letter = convSpecialChar(substr($user['last_name'], 0, 2));
             }
-
-            //Nach erstem benoetigtem Container suchen, solange leere ausgeben
-            while($this_letter != $letter_merker
-            && !in_array($letter_merker+1, $first_letter_array)
-            && $letter_merker < 91)
+            
+            if($this_letter != $letter_merker)
             {
-                //Falls Zahl
-                if($letter_merker == 35)
+                if(mb_strlen($letter_merker) > 0)
                 {
-                    $letter_merker++;
-                    $letter_string = 'numeric';
-                }
-
-                //Sonst
-                else
-                {
-                    $letter_merker++;
-                    //Buchstabe fuer ID
-                    $letter_string = chr($letter_merker);
-                }
-            }//Ende while
-
-            //Falls neuer Anfangsbuchstabe Container ausgeben
-            $letter_text = '';
-            if($this_letter!=$letter_merker && $letter_merker)
-            {
-                //Falls normaler Buchstabe
-                if($letter_merker >=64 && $letter_merker <=90)
-                {
-                    $letter_merker++;
-                    //Buchstabe fuer ID
-                    $letter_string = chr($letter_merker);
-                    $letter_text = $letter_string;
-                }
-
-                //Falls Zahl
-                if($letter_merker == 34)
-                {
-                    $letter_merker++;
-                    $letter_string = 'numeric';
-                    $letter_text = '#';
+                    echo '</tbody>';
                 }
 
                 // Ueberschrift fuer neuen Buchstaben
-                echo '<tbody block_head_id="'.$letter_string.'" class="letterBlockHead">
+                echo '<tbody block_head_id="'.$this_letter.'" class="letterBlockHead">
                     <tr>
                         <td class="tableSubHeader" colspan="7">
-                            '.$letter_text.'
+                            '.$this_letter.'
                         </td>
                     </tr>
                 </tbody>
-                <tbody block_body_id="'.$letter_string.'" class="letterBlockBody">';
+                <tbody block_body_id="'.$this_letter.'" class="letterBlockBody">';
+
+                // aktuellen Buchstaben merken
+                $letter_merker = $this_letter;
             }
         }
 
@@ -424,46 +338,8 @@ if($g_db->num_rows($result_user)>0)
                 }
             echo '<b id="loadindicator_leader_'.$user['usr_id'].'"></b>
         </tr>';
+    }//End While
 
-        //Naechsten Datensatz abrufen
-        $user = $g_db->fetch_array($result_user);
-
-		if($g_db->num_rows($result_user) >= 50)
-		{	
-            //Anfangsbuchstabe erfassen
-            $this_letter = ord(admStrToUpper($user['last_name']));
-
-            //falls zahlen
-            if($this_letter>=48 && $this_letter<=57)
-            {
-                $this_letter = 35;
-            }
-
-            //Umlaute zu A
-            if($this_letter>=192 && $this_letter<=198)
-            {
-                $this_letter = 65;
-            }
-
-            //Umlaute zu O
-            if($this_letter>=210 && $this_letter<=214)
-            {
-                $this_letter = 79;
-            }
-
-            //Umlaute zu U
-            if($this_letter>=217 && $this_letter<=220)
-            {
-                $this_letter = 85;
-            }
-
-            if($this_letter != $letter_merker || $g_db->num_rows($result_user)+1==$x)
-            {
-                echo '</tbody>';
-            }
-            //Ende Container
-        }
-    }//End For
     echo '</table>
     <p>'.$g_l10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>';
     
