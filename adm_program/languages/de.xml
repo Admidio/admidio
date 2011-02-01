@@ -246,6 +246,7 @@
     <text id="INS_COURSES" development="new" translation="todo">Kurse</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Administrator anlegen</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="todo">Konfigurationsdatei erzeugen</text>
+    <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
     <text id="INS_DATA_OF_ADMINISTRATOR" development="new" translation="todo">Daten des Administrators</text>
     <text id="INS_DATA_OF_ADMINISTRATOR_DESC" development="new" translation="todo">Gib in diesem Formular Name, E-Mail und die Zugangsdaten des Administrators an. Mit diesem Benutzer kannst du dich nach der Installation bei Admidio anmelden.</text>
     <text id="INS_DATABASE_DOESNOT_NEED_UPDATED" development="new" translation="todo">Eine Aktualisierung der Datenbank ist nicht erforderlich</text>
@@ -306,6 +307,7 @@
     <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="todo">Die neue Organisation %VAR1_BOLD% wurde eingerichtet und die Konfigurationsdatei erstellt. Du kannst nun mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="todo">Die Einrichtung war erfolgreich</text>
     <text id="INS_SKYPE" development="new" translation="todo">Skype</text>
+    <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn du die weitere Entwicklung von Admidio mit einer Spende unterstützen würdest!</text>
     <text id="INS_TABLE_PREFIX" development="new" translation="todo">Tabellenpräfix</text>
     <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="todo">Das Tabellenpräfix enthält ungültige Zeichen !</text>
     <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="todo">Bereits vorhandene Daten unter diesem Tabellenpräfix werden überschrieben !</text>
@@ -745,6 +747,7 @@
 	<text id="PRO_EDIT_PROFILE" development="new" translation="todo">Profil bearbeiten</text>
 	<text id="PRO_EDIT_PROFILE_PIC_FROM" development="new" translation="todo">Profilfoto von %VAR1% %VAR2% bearbeiten</text>
 	<text id="PRO_EXPORT_VCARD_FROM_VAR" development="new" translation="todo">vCard von %VAR1% exportieren</text>
+  	<text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
 	<text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften</text>
 	<text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="todo">Speicherort der Profilbilder</text>
 	<text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</text>
@@ -950,10 +953,12 @@
     <text id="SYS_DELETE_DATA" development="new" translation="todo">Die Daten wurden gelöscht.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="todo">Willst du den Eintrag %VAR1_BOLD% löschen ?</text>
     <text id="SYS_DESCRIPTION" development="new" translation="todo">Beschreibung</text>
+    <text id="SYS_DONATE" development="new" translation="todo">Spenden</text>
     <text id="SYS_EDIT" development="new" translation="todo">Bearbeiten</text>
 	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
     <text id="SYS_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
+    <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
     <text id="SYS_EMAIL_SEND" development="new" translation="todo">Die E-Mail wurde an %VAR1_BOLD% versendet.</text>
     <text id="SYS_EMAIL_NOT_SEND" development="new" translation="todo">Die E-Mail konnte nicht an %VAR1_BOLD% gesendet werden.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="todo">Eintrag für mehrere Organisationen sichtbar</text>
@@ -1016,6 +1021,7 @@
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="todo">Nachname</text>
+    <text id="SYS_LATER" development="new" translation="todo">Später</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
     <text id="SYS_LEADER_DESCRIPTION" development="new" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
     <text id="SYS_LINK_TO" development="new" translation="todo">Link auf %VAR1%</text>
@@ -1042,6 +1048,7 @@
     <text id="SYS_MAX_PARTICIPANTS" development="new" translation="todo">Max. Teilnehmer</text>
     <text id="SYS_MEGA_PIXEL" development="new" translation="todo">Mega Pixel</text>
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
+    <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="todo" description="MEM_MEMBER_OF">Mitglied der Organisation %VAR1%</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_MINUTES" development="new" translation="todo">Minuten</text>
@@ -1059,6 +1066,7 @@
     <text id="SYS_NOBODY" development="new" translation="todo">Niemand</text>
     <text id="SYS_NONE" development="new" translation="todo">Keiner</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
+  	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="todo">Kein Mitglied der Organisation %VAR1%</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
     <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="todo">Anzahl Logins</text>
@@ -1168,14 +1176,5 @@
     <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Du kannst maximal %0 Dateien hinzufügen.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
-    
-    <text id="SYS_DONATE" development="new" translation="todo">Spenden</text>
-    <text id="SYS_LATER" development="new" translation="todo">Später</text>
-    <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn du die weitere Entwicklung von Admidio mit einer Spende unterstützen würdest!</text>
-    <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
-    <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
-  	<text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
-  	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="todo">Kein Mitglied der Organisation %VAR1%</text>
-    <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="todo" description="MEM_MEMBER_OF">Mitglied der Organisation %VAR1%</text>
-</version>
+    </version>
 </language>
