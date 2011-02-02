@@ -176,8 +176,7 @@ if($g_current_user->editPhotoRight())
             {
                 $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
             }); 
-        //--></script>
-        <script type="text/javascript">
+
             //Bild drehen
             function imgrotate(img, direction)
             {                    
@@ -187,19 +186,7 @@ if($g_current_user->editPhotoRight())
                     return false;
                 });
             }
-
-            //Bild löschen
-            function imgdelete(img)
-            {
-                if(confirm("'.$g_l10n->get('PHO_WANT_DELETE_PHOTO').'"))
-                {                    
-                    $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$pho_id.', bild: img, job: "do_delete"}, function(data){
-                        window.location.reload()
-                        return false;
-                    });
-                }
-            }
-        </script>';
+        //--</script>';
 }
 
 if($g_preferences['photo_show_mode']==1)
@@ -372,9 +359,10 @@ echo '<div class="photoModuleContainer">';
                 $photoThumbnailTable .= '<li><ul class="photoThumbnailColumn">';
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
-                     $photoThumbnailTable .= '<li id="imgli_id_'.$bild.'">';
                     //Errechnug welches Bild ausgegeben wird
                     $bild = ($thumb_seite*$thumbs_per_page)-$thumbs_per_page+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
+                    $photoThumbnailTable .= '<li id="imgli_id_'.$bild.'">';
+
                     if ($bild <= $bilder)
                     {
                         //Popup-Mode
@@ -412,8 +400,10 @@ echo '<div class="photoModuleContainer">';
                                 src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
                             <a class="iconLink" href="#" onclick="return imgrotate('.$bild.', \'right\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
-                            <a class="iconLink" href="#" onclick="return imgdelete('.$bild.')""><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PHO_PHOTO_DELETE').'" title="'.$g_l10n->get('PHO_PHOTO_DELETE').'" /></a>';
+                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=imgli_id_'.
+                                $bild.'&amp;database_id='.$bild.'&amp;database_id_2='.$pho_id.'&amp;name='.urlencode($g_l10n->get('PHO_PHOTO')).'"><img 
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
+
                         }
                         if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
                         {
@@ -666,7 +656,7 @@ echo '<div class="photoModuleContainer">';
                                 }
 
                                 echo '
-                                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=pho_'.
+                                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
                                     $sub_photo_album->getValue('pho_id').'&amp;database_id='.$sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'"><img 
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
                                 </li>';

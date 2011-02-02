@@ -180,7 +180,7 @@ elseif($_GET['job'] == 'do_delete')
 
     $_SESSION['photo_album'] =& $photo_album;
     
-    // zur Ausgangsseite zurueck
-    $_SESSION['navigation']->deleteLastUrl();
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo 'done';
 }
 ?>
