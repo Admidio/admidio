@@ -165,16 +165,6 @@ if($_GET['job'] == 'rotate')
         $image->rotate($_GET['direction']);
         $image->delete();
     }    
-    
-    // zur Ausgangsseite zurueck
-    header('Location: '.$g_root_path.'/adm_program/system/back.php');
-    exit();
-}
-elseif($_GET['job'] == 'delete_request')
-{
-    // Nachfrage ob geloescht werden soll
-   $g_message->setForwardYesNo($g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&bild='. $_GET['bild'].'&job=do_delete');
-   $g_message->show($g_l10n->get('PHO_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
 }
 elseif($_GET['job'] == 'do_delete')
 {
@@ -192,7 +182,5 @@ elseif($_GET['job'] == 'do_delete')
     
     // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
-    header('Location: '.$g_root_path.'/adm_program/system/back.php');
-    exit();
 }
 ?>
