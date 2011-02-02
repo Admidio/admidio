@@ -165,14 +165,6 @@ if($num_members < $req_start)
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-// User zaehlen, die mind. einer Rolle zugeordnet sind
-$sql    = 'SELECT COUNT(*) as count
-             FROM '. TBL_USERS. '
-            WHERE usr_valid = 1 ';
-$result = $g_db->query($sql);
-$row    = $g_db->fetch_array($result);
-$count_mem_rol = $row['count'];
-
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('MEM_USER_MANAGEMENT');
 $g_layout['header'] = ' 
@@ -207,20 +199,17 @@ require(THEME_SERVER_PATH. '/overall_header.php');
 echo '
 <h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 
-if($count_mem_rol != $g_db->num_rows($result_mgl) || $req_members == false)
+// Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+if($req_members == 1)
 {
-    // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-    if($req_members == 1)
-    {
-        $link_members = 0;
-        $show_all_checked = '';
-        
-    }
-    else
-    {
-        $link_members = 1;
-        $show_all_checked = 'checked';
-    }
+    $link_members = 0;
+    $show_all_checked = '';
+    
+}
+else
+{
+    $link_members = 1;
+    $show_all_checked = 'checked';
 }
 
 if($req_members == 0)
