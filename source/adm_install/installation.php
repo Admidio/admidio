@@ -612,14 +612,6 @@ elseif($req_mode == 8)
                                             0,1,"'.DATETIME_NOW.'")';
     $db->query($sql);
 
-    // User Webmaster anlegen
-    $g_current_user = new User($db, $g_current_user->getValue('usr_id'));
-    $g_current_user->setValue('LAST_NAME', $_SESSION['user_last_name']);
-    $g_current_user->setValue('FIRST_NAME', $_SESSION['user_first_name']);
-    $g_current_user->setValue('EMAIL', $_SESSION['user_email']);
-    $g_current_user->setValue('usr_usr_id_create', $g_current_user->getValue('usr_id'));
-    $g_current_user->save(false); // Ersteller wird selber gesetzt, da User bereits angelegt worden ist
-
     //Defaultraum fuer Raummodul in der DB anlegen:
     $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
                                     VALUES ("'.$g_l10n->get('INS_CONFERENCE_ROOM').'", "'.$g_l10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'", 
@@ -685,6 +677,14 @@ elseif($req_mode == 8)
     $member = new TableMembers($db);
     $member->startMembership($role_webmaster->getValue('rol_id'), $g_current_user->getValue('usr_id'));
     $member->startMembership($role_member->getValue('rol_id'), $g_current_user->getValue('usr_id'));
+    
+    // User Webmaster erst jetzt anlegen, da dieser die Rollenrechte bereits haben muss
+    $g_current_user = new User($db, $g_current_user->getValue('usr_id'));
+    $g_current_user->setValue('LAST_NAME', $_SESSION['user_last_name']);
+    $g_current_user->setValue('FIRST_NAME', $_SESSION['user_first_name']);
+    $g_current_user->setValue('EMAIL', $_SESSION['user_email']);
+    $g_current_user->setValue('usr_usr_id_create', $g_current_user->getValue('usr_id'));
+    $g_current_user->save(false); // Ersteller wird selber gesetzt, da User bereits angelegt worden ist
 
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($db);
