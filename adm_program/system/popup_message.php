@@ -116,6 +116,9 @@ switch ($req_type)
         $url = 'new_user_function.php?mode=4&new_user_id='.$req_database_id;
         break;
     case 'pho':
+        $url = 'photo_function.php?job=do_delete&pho_id='.$req_database_id_2.'&bild='.$req_database_id;
+        break;
+    case 'pho_album':
         $url = 'photo_album_function.php?job=delete&pho_id='.$req_database_id;
         break;
     case 'pro_role':
@@ -152,7 +155,7 @@ if(strlen($url) == 0)
     $g_message->setExcludeThemeBody();
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
-
+error_log($url);
 echo '
 <script type="text/javascript"><!--
 var entryDeleted;
