@@ -176,7 +176,30 @@ if($g_current_user->editPhotoRight())
             {
                 $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
             }); 
-        //--></script>';
+        //--></script>
+        <script type="text/javascript">
+            //Bild drehen
+            function imgrotate(img, direction)
+            {                    
+                $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$pho_id.', bild: img, job: "rotate", direction: direction}, function(data){
+                    //Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten                    
+                    $("#img_"+img).attr("src", "photo_show.php?pho_id='.$pho_id.'&pic_nr="+img+"&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&thumb=true&rand="+Math.random());
+                    return false;
+                });
+            }
+
+            //Bild löschen
+            function imgdelete(img)
+            {
+                if(confirm("'.$g_l10n->get('PHO_WANT_DELETE_PHOTO').'"))
+                {                    
+                    $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$pho_id.', bild: img, job: "do_delete"}, function(data){
+                        window.location.reload()
+                        return false;
+                    });
+                }
+            }
+        </script>';
 }
 
 if($g_preferences['photo_show_mode']==1)
@@ -349,7 +372,7 @@ echo '<div class="photoModuleContainer">';
                 $photoThumbnailTable .= '<li><ul class="photoThumbnailColumn">';
                 for($spalte=1;$spalte<=$g_preferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
-                     $photoThumbnailTable .= '<li>';
+                     $photoThumbnailTable .= '<li id="imgli_id_'.$bild.'">';
                     //Errechnug welches Bild ausgegeben wird
                     $bild = ($thumb_seite*$thumbs_per_page)-$thumbs_per_page+($zeile*$g_preferences['photo_thumbs_column'])-$g_preferences['photo_thumbs_row']+$spalte+$difference;
                     if ($bild <= $bilder)
@@ -358,7 +381,7 @@ echo '<div class="photoModuleContainer">';
                         if ($g_preferences['photo_show_mode'] == 0)
                         {
                             $photoThumbnailTable .= '<div>
-                                <img onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
+                                <img id="img_'.$bild.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
                                     src="photo_show.php?pho_id='.$pho_id.'&pic_nr='.$bild.'&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&thumb=true" alt="'.$bild.'" style="cursor: pointer"/>
                             </div>';
                         }
@@ -368,7 +391,7 @@ echo '<div class="photoModuleContainer">';
                         {
                             $photoThumbnailTable .= '<div>
                                 <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'">
-                                	<img class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" alt="'.$bild.'" /></a>
+                                	<img id="img_'.$bild.'" class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" alt="'.$bild.'" /></a>
                             </div>';
                         }
 
@@ -376,7 +399,7 @@ echo '<div class="photoModuleContainer">';
                         else if ($g_preferences['photo_show_mode'] == 2)
                         {
                             $photoThumbnailTable .= '<div>
-                                <img onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\'" 
+                                <img id="img_'.$bild.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\'" 
                                     src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" style="cursor: pointer"/>
                             </div>';
                         }   
@@ -385,12 +408,11 @@ echo '<div class="photoModuleContainer">';
                         if($g_current_user->editPhotoRight())
                         {
                            $photoThumbnailTable .= '
-                            <a class="iconLink" 
-                            href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=rotate&amp;direction=left"><img 
+                            <a class="iconLink" href="#" onclick="return imgrotate('.$bild.', \'left\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=rotate&amp;direction=right"><img 
+                            <a class="iconLink" href="#" onclick="return imgrotate('.$bild.', \'right\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_function.php?pho_id='.$pho_id.'&amp;bild='.$bild.'&amp;job=delete_request"><img 
+                            <a class="iconLink" href="#" onclick="return imgdelete('.$bild.')""><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('PHO_PHOTO_DELETE').'" title="'.$g_l10n->get('PHO_PHOTO_DELETE').'" /></a>';
                         }
                         if($g_valid_login == true && $g_preferences['enable_ecard_module'] == 1)
