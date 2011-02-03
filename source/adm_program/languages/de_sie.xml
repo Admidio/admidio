@@ -33,7 +33,7 @@
     <text id="CAT_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="todo">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n%VAR1_BOLD%\n\n Möchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</text>
     <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="todo">Sie können nicht alle Kategorien eines Moduls löschen.\nErstellen Sie vorher eine neue Kategorie für dieses Modul.</text>
-    <text id="CAT_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden ?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
+    <text id="CAT_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="todo">%VAR1% nach unten verschieben</text>
     <text id="CAT_MOVE_UP" development="new" translation="todo">%VAR1% nach oben verschieben</text>
 
@@ -234,14 +234,14 @@
     <text id="INS_ADD_ORGANIZATION" development="new" translation="todo">Organisation hinzufügen</text>
     <text id="INS_ADDIDIONAL_DATA" development="new" translation="todo">Zusätzliche Daten</text>
     <text id="INS_ADDRESS_LIST" development="new" translation="todo">Adressliste</text>
-    <text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Daten für den Administrator eingegeben worden !</text>
+    <text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Daten für den Administrator eingegeben worden!</text>
     <text id="INS_AOL_INSTANT_MESSENGER" development="new" translation="todo">AOL Instant Messenger</text>
     <text id="INS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
     <text id="INS_BOARD" development="new" translation="todo">Vorstand</text>
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="todo">Bitte wählen Sie eine Sprache aus</text>
     <text id="INS_CITY" development="new" translation="todo">Ort</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
-    <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis !\n\nLaden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.</text>
+    <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLaden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.</text>
     <text id="INS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
     <text id="INS_COURSES" development="new" translation="todo">Kurse</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Administrator anlegen</text>
@@ -255,7 +255,7 @@
     <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Datenbank Zugangsdaten</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="todo">Eine Aktualisierung der Datenbank ist erforderlich</text>
-    <text id="INS_DATABASE_NO_LOGIN" development="new" translation="todo">Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden !\n\nKorrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie, ob die Datenbank online ist.</text>
+    <text id="INS_DATABASE_NO_LOGIN" development="new" translation="todo">Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden!\n\nKorrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie, ob die Datenbank online ist.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Datenbank wird eingerichtet</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="todo">Vorstand des Vereins</text>
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="todo">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</text>
@@ -279,20 +279,20 @@
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="todo">Es wurde keine Sprache ausgewählt.</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="todo">Zugangsdaten eines Webmasters</text>
     <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="todo">Geben Sie in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein. Dieser wird der neue Administrator der neuen Organisation mit dem Sie sich direkt an der Organisation anmelden können.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="todo">Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden !</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation !</text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="todo">Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden!</text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation!</text>
     <text id="INS_LOGIN_NAME" development="new" translation="todo">Benutzername</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
     <text id="INS_MSN_MESSENGER" development="new" translation="todo">MSN Messenger</text>
     <text id="INS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
-    <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden !</text>
+    <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die Sie Admidio nutzen möchten.</text>
     <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="todo">Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die Sie nun hinzufügen möchten.</text>
     <text id="INS_NECESSARY_INFORMATION" development="new" translation="todo">Auf den nächsten Seiten müssen Sie einige notwendige Informationen der neuen Organisation eingeben.</text>
-    <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben !</text>
+    <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
@@ -307,8 +307,8 @@
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="todo">Die Einrichtung war erfolgreich</text>
     <text id="INS_SKYPE" development="new" translation="todo">Skype</text>
     <text id="INS_TABLE_PREFIX" development="new" translation="todo">Tabellenpräfix</text>
-    <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="todo">Das Tabellenpräfix enthält ungültige Zeichen !</text>
-    <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="todo">Bereits vorhandene Daten unter diesem Tabellenpräfix werden überschrieben !</text>
+    <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="todo">Das Tabellenpräfix enthält ungültige Zeichen!</text>
+    <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="todo">Bereits vorhandene Daten unter diesem Tabellenpräfix werden überschrieben!</text>
     <text id="INS_TEAMS" development="new" translation="todo">Mannschaften</text>
     <text id="INS_TRAINING" development="new" translation="todo">Training</text>
     <text id="INS_UPDATE" development="new" translation="todo">Update</text>
@@ -317,7 +317,7 @@
     <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="todo">Die Admidio-Datenbank ist jetzt auf die Version %VAR1% aktualisiert worden.\nSie können nun wieder mit Admidio arbeiten.</text>
     <text id="INS_UPDATE_VERSION" development="new" translation="todo">Update auf Version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="todo">Die Aktualisierung war erfolgreich</text>
-    <text id="INS_WARNING_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
+    <text id="INS_WARNING_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
     <text id="INS_WARNING_SAFE_MODE" development="new" translation="todo">Auf Ihrem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</text>
     <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="todo">Willkommen zur Einrichtung einer weiteren Organisation</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="todo">Willkommen zur Installation von Admidio</text>
@@ -602,7 +602,7 @@
     <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="todo">Automatisch anmelden</text>
     <text id="ORG_LOGIN_AUTOMATICALLY_DESC" development="new" translation="todo">Benutzer können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll. Bei einem weiteren Besuch der Homepage sind diese Benutzer dann automatisch angemeldet. Dies kann allerdings auch dazu führen, dass Benutzer diese Option unbedacht einsetzen und so evtl. fremde Personen Zugriff auf die Daten bekommen. (Standard: ja)</text>
     <text id="ORG_NEW_PASSWORD_ACTIVATION_LINK" development="new" translation="todo">Neues Passwort mit Aktivierungslink</text>
-    <text id="ORG_NO_FIELD_CREATED" development="new" translation="todo">Es wurden noch keine organisationsspezifischen Profilfelder angelegt !</text>
+    <text id="ORG_NO_FIELD_CREATED" development="new" translation="todo">Es wurden noch keine organisationsspezifischen Profilfelder angelegt!</text>
     <text id="ORG_NOTIFY_WEBMASTER" development="new" translation="todo">Benachrichtung des Webmasters nach einer Registrierung</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="todo">Anzahl Einträge pro Seite</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
@@ -797,7 +797,7 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="todo">Alle Besucher der Seite</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="todo">Alle angemeldeten Benutzer</text>
     <text id="ROL_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
-    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
+    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="todo">Wenn Sie %VAR1_BOLD% auswählen, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="todo">Abhängigkeiten</text>
     <text id="ROL_DEPENDENT" development="new" translation="todo">Abhängig</text>
@@ -808,8 +808,8 @@
     <text id="ROL_INACTIV_ROLES" development="new" translation="todo">Inaktive Rollen</text>
     <text id="ROL_INDEPENDENT" development="new" translation="todo">Unabhängig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
-    <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Wollen Sie den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen ?</text>
-    <text id="ROL_MEMBERSHIP_DEL" development="new" translation="todo">Wollen Sie die Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich beenden ?</text>
+    <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Wollen Sie den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen?</text>
+    <text id="ROL_MEMBERSHIP_DEL" development="new" translation="todo">Wollen Sie die Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich beenden?</text>
     <text id="ROL_NEW_ROLE" development="new" translation="todo">neuen Rolle</text>
     <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="todo">Nur Rollenmitglieder</text>
@@ -891,7 +891,7 @@
     <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="todo">Zurück zur Modulübersicht</text>
     <text id="SYS_BBCODE" development="new" translation="todo">BBCode</text>
     <text id="SYS_BBCODE_DESC" development="new" translation="todo">Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks) können mit verschiedenen Tags (BBCode) formatiert werden. Dafür müssen die hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.</text>
-    <text id="SYS_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden !</text>
+    <text id="SYS_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
 	<text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
     <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
     <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="todo">Text %VAR1%fett%VAR2% darstellen</text>
@@ -948,7 +948,7 @@
     <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad veringern</text>
     <text id="SYS_DELETE" development="new" translation="todo">Löschen</text>
     <text id="SYS_DELETE_DATA" development="new" translation="todo">Die Daten wurden gelöscht.</text>
-    <text id="SYS_DELETE_ENTRY" development="new" translation="todo">Wollen Sie den Eintrag %VAR1_BOLD% löschen ?</text>
+    <text id="SYS_DELETE_ENTRY" development="new" translation="todo">Wollen Sie den Eintrag %VAR1_BOLD% löschen?</text>
     <text id="SYS_DESCRIPTION" development="new" translation="todo">Beschreibung</text>
     <text id="SYS_EDIT" development="new" translation="todo">Bearbeiten</text>
 	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
@@ -963,7 +963,7 @@
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
-    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="todo">Es ist ein Fehler aufgetreten !\n\nDer Eintrag konnte nicht gelöscht werden.</text>
+    <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDer Eintrag konnte nicht gelöscht werden.</text>
     <text id="SYS_EXAMPLE" development="new" translation="todo">Beispiel</text>
     <text id="SYS_EXAMPLES" development="new" translation="todo">Beispiele</text>
     <text id="SYS_FADE_IN" development="new" translation="todo">Einblenden</text>
