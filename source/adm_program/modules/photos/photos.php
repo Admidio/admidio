@@ -176,7 +176,8 @@ if($g_current_user->editPhotoRight())
             {
                 $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
             }); 
-
+        //--></script>
+        <script type="text/javascript"><!--
             //Bild drehen
             function imgrotate(img, direction)
             {                    
@@ -186,7 +187,7 @@ if($g_current_user->editPhotoRight())
                     return false;
                 });
             }
-        //--</script>';
+        //--></script>';
 }
 
 if($g_preferences['photo_show_mode']==1)
