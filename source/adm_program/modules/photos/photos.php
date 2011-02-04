@@ -398,9 +398,9 @@ echo '<div class="photoModuleContainer">';
                         if($g_current_user->editPhotoRight())
                         {
                            $photoThumbnailTable .= '
-                            <a class="iconLink" href="#" onclick="return imgrotate('.$bild.', \'left\')"><img 
+                            <a class="iconLink"  href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'left\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
-                            <a class="iconLink" href="#" onclick="return imgrotate('.$bild.', \'right\')"><img 
+                            <a class="iconLink" href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'right\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$g_l10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
                             <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=imgli_id_'.
                                 $bild.'&amp;database_id='.$bild.'&amp;database_id_2='.$pho_id.'&amp;name='.urlencode($g_l10n->get('PHO_PHOTO')).'"><img 
