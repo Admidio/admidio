@@ -298,6 +298,7 @@ echo '<div class="photoModuleContainer">';
         function photoAlbumPageNavigation($photo_album, $act_thumb_page, $thumbs_per_page)
         {
             global $g_root_path;
+            global $g_l10n;
             $max_thumb_page = 0;
             
             //Ausrechnen der Seitenzahl
