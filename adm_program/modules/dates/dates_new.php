@@ -135,7 +135,14 @@ if(isset($_SESSION['dates_request']))
     $time_from  = $_SESSION['dates_request']['time_from'];
     $date_to    = $_SESSION['dates_request']['date_to'];
     $time_to    = $_SESSION['dates_request']['time_to'];
-    $date_login = $_SESSION['dates_request']['date_login'];
+    if(array_key_exists('date_login', $_SESSION['dates_request']))
+    {
+        $date_login = $_SESSION['dates_request']['date_login'];
+    }
+    else
+    {
+        $date_login = 0;
+    }
     
     unset($_SESSION['dates_request']);
 }
