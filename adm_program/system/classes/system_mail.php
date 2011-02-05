@@ -38,7 +38,7 @@ class SystemMail extends Email
     public function __construct(&$db)
     {
         $this->textObject = new TableText($db);
-        $this->Email();
+        parent::__construct();
     }
     
     // diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt

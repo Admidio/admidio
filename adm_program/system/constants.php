@@ -16,7 +16,7 @@ if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
 
 // Admidio-Versionsnummern und Flags bitte nicht aendern !!!
 define('ADMIDIO_VERSION', '2.2.0');
-define('BETA_VERSION', '1');
+define('BETA_VERSION', '2');
 
 if(BETA_VERSION > 0)
 {
