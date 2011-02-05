@@ -236,6 +236,7 @@ $g_layout['header'] = '
             profileJS.usr_id = '.$user->getValue('usr_id').';
 			$(document).ready(function() {
 				profileJS.init();
+				$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
 			});
     //-->
     </script>';
@@ -440,7 +441,7 @@ echo '
                         <table width="100%" summary="Profilfoto" border="0" style="border:0px;" cellpadding="0" cellspacing="0" rules="none">
                             <tr>
                                 <td>
-                                	<img src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" />
+                                	<img id="profile_picture" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" />
                                 </td>
                             </tr>';
                              // Nur berechtigte User duerfen das Profilfoto editieren
@@ -455,15 +456,12 @@ echo '
                                     if((strlen($user->getValue('usr_photo')) > 0 && $g_preferences['profile_photo_storage'] == 0)
                                     	|| file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $g_preferences['profile_photo_storage'] == 1 )
                                     {
-                                        echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=msg_delete&amp;usr_id='.$user->getValue('usr_id').'"><img
-                                            src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>
-                                        </td>';
+                                        echo '<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
+                                            '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
+                                            alt="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>';
                                     }
-                                    else
-                                    {
-                                        echo'</td>';
-                                    }
-                                echo '</tr>';
+                                echo '</td>
+                                </tr>';
                             }
                         echo '</table>
                     </div>

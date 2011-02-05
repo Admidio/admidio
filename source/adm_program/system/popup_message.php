@@ -69,11 +69,6 @@ if(isset($_GET['name']))
 {
     $req_name = strStripTags($_GET['name']);
 }
-else
-{
-    $g_message->setExcludeThemeBody();
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
 
 // URL zusammensetzen
 switch ($req_type)
@@ -116,10 +111,19 @@ switch ($req_type)
         $url = 'new_user_function.php?mode=4&new_user_id='.$req_database_id;
         break;
     case 'pho':
-        $url = 'photo_function.php?job=do_delete&pho_id='.$req_database_id_2.'&bild='.$req_database_id;
+        $url  = 'photo_function.php?job=do_delete&pho_id='.$req_database_id_2.'&bild='.$req_database_id;
+        $text = 'PHO_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
         $url = 'photo_album_function.php?job=delete&pho_id='.$req_database_id;
+        break;
+    case 'pro_pho':
+        $url = 'profile_photo_edit.php?job=delete&usr_id='.$req_database_id;
+        $callbackSuccess = '
+           var img_src = $("#profile_picture").attr("src");
+           var timestamp = new Date().getTime();
+           $("#profile_picture").attr("src",img_src+"&"+timestamp);';
+        $text = 'PRO_WANT_DELETE_PHOTO';
         break;
     case 'pro_role':
         $url = 'profile_function.php?mode=2&user_id='.$req_database_id_2.'&rol_id='.$req_database_id;
