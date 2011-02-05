@@ -13,7 +13,7 @@
  * job - save :   Welcher Teil des Skriptes soll ausgeführt werden
  *     - dont_save :
  *     - upload :
- *     - msg_delete : Nachfrage, ob Profilfoto wirklich geloescht werden soll
+ *     - delete : das Profilfoto wird geloescht
  *
  *****************************************************************************/
 
@@ -49,7 +49,7 @@ if(isset($_GET['job']))
     $job = $_GET['job'];
 }
 
-if($job != 'save' && $job!='delete' && $job != 'dont_save' && $job != 'upload' && $job != 'msg_delete' && $job != NULL)
+if($job != 'save' && $job!='delete' && $job != 'dont_save' && $job != 'upload' && $job != NULL)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -113,8 +113,8 @@ if($job=='save')
     
     // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
-    $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show($g_l10n->get('PRO_PHOTO_SAVED'));
+    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id);
+    exit();
 }    
 elseif($job=='dont_save')
 {
@@ -137,12 +137,6 @@ elseif($job=='dont_save')
     $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
     $g_message->show($g_l10n->get('SYS_PROCESS_CANCELED'));
 }
-elseif($job=='msg_delete')
-{
-    /*********************** Nachfrage Foto loeschen *************************************/
-    $g_message->setForwardYesNo($g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$req_usr_id.'&job=delete');
-    $g_message->show($g_l10n->get('PRO_WANT_DELETE_PHOTO'), $g_l10n->get('SYS_DELETE'));
-}
 elseif($job=='delete')
 {
     /***************************** Foto loeschen *************************************/
@@ -158,10 +152,10 @@ elseif($job=='delete')
         $user->save();
         $g_current_session->renewUserObject($req_usr_id);
     }
-        
-    // zur Ausgangsseite zurueck
-    $g_message->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$req_usr_id, 2000);
-    $g_message->show($g_l10n->get('PRO_PHOTO_DELETED'));
+
+    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+    echo 'done';
+    exit();
 }
 
 /*********************** Kontrollmechanismen *********************************/
