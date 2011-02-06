@@ -183,7 +183,7 @@ function ecardJSClass()
 		$("#" + this.ecardformid + " input[name=submit_action]").attr("value","preview");
 		$("#" + this.ecardformid).attr("action","ecard_preview.php");
 		$.fn.colorbox({href:"ecard_preview.php",width:"70%",height:"70%",iframe:true,onComplete:function(){
-								$("#" + ecardJS.ecardformid).attr("target",$("#cboxIframe").attr("name"));
+								$("#" + ecardJS.ecardformid).attr("target",$("#cboxLoadedContent iframe").attr("name"));
 								$("#" + ecardJS.ecardformid).submit();}});
 	}
 	this.sendEcard = function()
