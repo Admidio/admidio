@@ -46,7 +46,7 @@ echo '<h1 class="moduleHeadline">'.$g_l10n->get('ROO_ROOM_MANAGEMENT').'</h1>
 $sql = 'SELECT room.*, 
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-          FROM adm_rooms room
+          FROM '.TBL_ROOMS.' room
           LEFT JOIN '. TBL_USER_DATA .' cre_surname 
             ON cre_surname.usd_usr_id = room_usr_id_create
            AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
