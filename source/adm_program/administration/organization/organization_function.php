@@ -37,7 +37,7 @@ if(strlen($_POST['email_administrator']) == 0)
 else
 {
     $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
-    if(!isValidEmailAddress($_POST['email_administrator']))
+    if(!strValidCharacters($_POST['email_administrator'], 'email'))
     {
         $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
     }
@@ -46,7 +46,7 @@ else
 if(strlen($_POST['mail_sendmail_address']) > 0)
 {
     $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
-    if(!isValidEmailAddress($_POST['mail_sendmail_address']))
+    if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
     {
         $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('MAI_SENDER_EMAIL')));
     }

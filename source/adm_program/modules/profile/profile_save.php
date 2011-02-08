@@ -154,6 +154,10 @@ foreach($user->userFieldData as $field)
             {
                 $g_message->show($g_l10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
             }
+            elseif($field->getValue('usf_type') == 'URL')
+            {
+                $g_message->show($g_l10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+            }
         }
     }
     else
@@ -215,7 +219,10 @@ if($g_current_user->isWebmaster() || $new_user > 0)
         }
 
         $login_name_changed = true;
-        $user->setValue('usr_login_name', $_POST['usr_login_name']);
+        if(!$user->setValue('usr_login_name', $_POST['usr_login_name']))
+		{
+			$g_message->show($g_l10n->get('SYS_FIELD_INVALID_CHAR', $g_l10n->get('SYS_USERNAME')));
+		}
     }    
 }
 

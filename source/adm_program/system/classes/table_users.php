@@ -182,6 +182,14 @@ class TableUsers extends TableAccess
             $this->real_password = $field_value;
             $field_value = md5($field_value);
         }
+		elseif($field_name == 'usr_login_name')
+		{
+			// Benutzername soll keine Sonderzeichen beinhalten
+			if (!strValidCharacters($field_value, 'noSpecialChar'))
+			{
+				return false;
+			}
+		}
 
         return parent::setValue($field_name, $field_value);
     }

@@ -112,7 +112,7 @@ class TableGuestbook extends TableAccess
             elseif($field_name == 'gbo_email')
             {
                 $field_value = admStrToLower($field_value);
-                if (!isValidEmailAddress($field_value))
+                if (!strValidCharacters($field_value, 'email'))
                 {
                     // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
                     return false;
