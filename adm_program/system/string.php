@@ -9,11 +9,11 @@
  *
  *****************************************************************************/
 
- // da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
- // stehen, wird hier eine Fallunterscheidung gemacht
- // WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
- function admStrToLower($string)
- {
+// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
+// stehen, wird hier eine Fallunterscheidung gemacht
+// WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
+function admStrToLower($string)
+{
     if(function_exists('mb_strtolower'))
     {
         return mb_strtolower($string, 'UTF-8');
@@ -22,13 +22,13 @@
     {
         return strtolower($string);
     }
- }
+}
  
- // da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
- // stehen, wird hier eine Fallunterscheidung gemacht
- // WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
- function admStrToUpper($string)
- {
+// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
+// stehen, wird hier eine Fallunterscheidung gemacht
+// WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
+function admStrToUpper($string)
+{
     if(function_exists('mb_strtolower'))
     {
         return mb_strtoupper($string, 'UTF-8');
@@ -37,15 +37,15 @@
     {
         return strtoupper($string);
     }
- }
+}
  
 // entfernt Html-, PHP-Codes und Spaces am Anfang und Ende
 // eines Strings oder aller Elemente eines Arrays
-function strStripTags($srcString, $checkChar = 0)
+function strStripTags($srcString)
 {
     if(is_array($srcString))
     {
-        // Jedes Funktion fuer jedes Arrayelement aufrufen
+        // Funktion fuer jedes Arrayelement aufrufen
         $srcString = array_map('strStripTags', $srcString);
     }
     else
@@ -54,15 +54,6 @@ function strStripTags($srcString, $checkChar = 0)
         $srcString = trim($srcString);
         // HTML und PHP Tags entfernen
         $srcString = strip_tags($srcString);
-
-        if($checkChar)
-        {
-            $anz = strspn($srcString, 'abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789.-_+ ');
-            if($anz != strlen($srcString))
-            {
-                $srcString = '';
-            }
-        }
     }
 
     return $srcString;
@@ -137,29 +128,42 @@ function strNextLetter($letter, $mode = 0)
     return chr($ascii);
 }
 
-// Tests if an email address is valid
-function isValidEmailAddress($emailAddress)
+// prueft den uebergebenen String auf gueltige Zeichen
+// checkType kann folgende Werte haben: 'email' 'file' 'noSpecialChar' 'url' 
+function strValidCharacters($string, $checkType)
 {
-    // If the email address was not empty
-    if(strlen(trim($emailAddress)) > 0)
-    {
+    if(strlen(trim($string)) > 0)
+	{
+		switch($checkType)
+		{
+			case 'email':
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß.-_@';
+				break;
+			case 'file':
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß$&!?.-_+ ';
+				break;
+			case 'noSpecialChar':
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789.-_+';
+				break;
+			case 'url':
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß.-_:/';
+				break;
+		}
+		
         // nur gueltige Zeichen zulassen
-        $anz = strspn($emailAddress, 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß@.-_+');
+        $countValidChars = strspn(admStrToLower($string), $validChars);
 
-        if($anz == strlen($emailAddress))
+        if($countValidChars == strlen($string))
         {
-            // Aufbau der E-Mail-Adresse pruefen
-            return preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($emailAddress));
+			if($checkType == 'email')
+			{
+				// Aufbau der E-Mail-Adresse pruefen
+				return preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($string));
+			}
+			return true;
         }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
+	}
+	return false;
 }
 
 // prueft, ob der Dateiname gueltig ist
@@ -168,53 +172,38 @@ function isValidEmailAddress($emailAddress)
 //          -1 : kein Dateinamen uebergeben
 //          -2 : ungueltige Zeichen
 //          -3 : keine gueltige Dateiextension
-
 function isValidFileName($file_name, $check_ext = false)
 {
     // If the filename was not empty
     if(strlen(trim($file_name)) > 0)
     {
-        // Dateiname darf nur folgende Zeichen beinhalten (ggf. ergaenzen)
-        $anz = strspn($file_name, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüßÄÉÈÖÜ$&!?.-_+ ');
+        // Dateiname darf nur gueltige Zeichen beinhalten
+        if(strValidCharacters($file_name, 'file')
+		&& strpos($file_name, '..') === false
+		&& substr($file_name, 0, 1) != '.')
+		{
+			if($check_ext)
+			{
+				// auf gueltige Endungen pruefen
+				$arr_invalid_ext = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
+										 'js', 'vbs', 'asp', 'cgi', 'ssi');
+				$file_ext  = substr($file_name, strrpos($file_name, '.')+1);
 
-        if($anz == strlen($file_name))
-        {
-            if(strlen($file_name) == strlen(strip_tags($file_name))
-            && strpos($file_name, '..') === false
-            && strpos($file_name, ':/') === false)
-            {
-                if (substr($file_name, 0, 1) == '.') {
-                    return -2;
-                }
-
-
-                if($check_ext)
-                {
-                    // auf gueltige Endungen pruefen
-                    $arr_invalid_ext = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
-                                             'js', 'vbs', 'asp', 'cgi', 'ssi');
-                    $file_ext  = substr($file_name, strrpos($file_name, '.')+1);
-
-                    if(in_array(strtolower($file_ext), $arr_invalid_ext))
-                    {
-                        return -3;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-                return 0;
-            }
-            else
-            {
-                return -2;
-            }
-        }
-        else
-        {
-            return -2;
-        }
+				if(in_array(strtolower($file_ext), $arr_invalid_ext))
+				{
+					return -3;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+			return 0;
+		}
+		else
+		{
+			return -2;
+		}
     }
     else
     {

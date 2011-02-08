@@ -67,7 +67,7 @@ if (array_key_exists('usr_id', $_GET))
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
-    if (!isValidEmailAddress($user->getValue('EMAIL')))
+    if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
     {
         $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }

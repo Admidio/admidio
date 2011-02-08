@@ -976,6 +976,7 @@
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
     <text id="SYS_FIELD_EMPTY" development="new" translation="todo">Das Feld %VAR1_BOLD% ist nicht gefüllt.</text>
+    <text id="SYS_FIELD_INVALID_CHAR" development="new_mfa" translation="todo">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+ .</text>
     <text id="SYS_FIELDS_EMPTY" development="new" translation="todo">Es sind nicht alle Felder gefüllt worden.</text>
     <text id="SYS_FILE" development="new" translation="todo">Datei</text>
     <text id="SYS_FILE_NOT_EXIST" development="new" translation="todo">Die ausgewählte Datei existiert nicht auf dem Server.</text>
@@ -1153,14 +1154,15 @@
     <text id="SYS_UNKNOWN" development="new" translation="todo">Unbekannt</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
+	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
+    <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
+    <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Fehler beim Upload</text>
+    <text id="SYS_URL_INVALID_CHAR" development="new_mfa" translation="todo">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/ .</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
     <text id="SYS_USERS_FOUND" development="new" translation="todo">Gefundene Benutzer</text>
-	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
-    <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
-    <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Fehler beim Upload</text>
     <text id="SYS_VISIBLE" development="new" translation="todo">Sichtbar</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
     <text id="SYS_VISITORS" development="new" translation="todo">Besucher</text>

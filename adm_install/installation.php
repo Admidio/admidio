@@ -395,7 +395,7 @@ elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
         }
 
         $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
-        if(!isValidEmailAddress($_SESSION['user_email']))
+        if(!strValidCharacters($_SESSION['user_email'], 'email'))
         {
             showPage($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
         }

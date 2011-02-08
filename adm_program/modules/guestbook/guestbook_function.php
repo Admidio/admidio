@@ -239,7 +239,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
 					$gbo_text  = $_POST['gbo_text'];
 				}
 				$sender_name = $gbo_name;
-				if(!isValidEmailAddress($gbo_email))
+				if(!strValidCharacters($gbo_email, 'email'))
 				{
 					$gbo_email = $g_preferences['email_administrator'];
 					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');

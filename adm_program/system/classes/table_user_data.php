@@ -124,8 +124,7 @@ class TableUserData extends TableAccess
             elseif($this->dbColumns['usf_type'] == 'EMAIL')
             {
                 // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
-                $field_value = admStrToLower($field_value);
-                if (!isValidEmailAddress($field_value))
+                if (!strValidCharacters($field_value, 'email'))
                 {
                     return false;
                 }
@@ -140,6 +139,11 @@ class TableUserData extends TableAccess
             }
             elseif($this->dbColumns['usf_type'] == 'URL')
             {
+                // Homepage darf nur gueltige Zeichen enthalten
+                if (!strValidCharacters($field_value, 'url'))
+                {
+                    return false;
+                }
                 // Homepage noch mit http vorbelegen
                 if(strpos(admStrToLower($field_value), 'http://')  === false
                 && strpos(admStrToLower($field_value), 'https://') === false )

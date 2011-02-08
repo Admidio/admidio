@@ -105,7 +105,7 @@ public function setSender($address, $name='')
     global $g_preferences;
     $address = admStrToLower($address);
     
-    if (isValidEmailAddress($address))
+    if (strValidCharacters($address, 'email'))
     {
         //Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
         if($g_preferences['mail_sendmail_address'] != '' && $address != $g_preferences['email_administrator'])
@@ -158,7 +158,7 @@ public function setSubject($subject)
 public function addRecipient($address, $name='')
 {
     $address = admStrToLower($address);
-    if (isValidEmailAddress($address))
+    if (strValidCharacters($address, 'email'))
     {
         if (!isset($this->headerOptions['To']))
         {
@@ -178,7 +178,7 @@ public function addRecipient($address, $name='')
 public function addCopy($address, $name='')
 {
     $address = admStrToLower($address);
-    if (isValidEmailAddress($address))
+    if (strValidCharacters($address, 'email'))
     {
         if (!isset($this->headerOptions['Cc']))
         {
@@ -198,7 +198,7 @@ public function addCopy($address, $name='')
 public function addBlindCopy($address, $name='')
 {
     $address = admStrToLower($address);
-    if (isValidEmailAddress($address))
+    if (strValidCharacters($address, 'email'))
     {
         $this->bccArray[] = $name. " <". $address. ">";
         $this->addresses = $this->addresses. $name. " <". $address. ">\n";
