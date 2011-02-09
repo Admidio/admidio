@@ -193,10 +193,6 @@ function isValidFileName($file_name, $check_ext = false)
 				{
 					return -3;
 				}
-				else
-				{
-					return 0;
-				}
 			}
 			return 0;
 		}

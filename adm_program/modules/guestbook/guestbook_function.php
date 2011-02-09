@@ -169,7 +169,18 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     {
         if(strpos($key, 'gbo_') === 0)
         {
-            $guestbook->setValue($key, $value);
+            if(!$guestbook->setValue($key, $value))
+			{
+				// Daten wurden nicht uebernommen, Hinweis ausgeben
+				if($key == 'gbo_email')
+				{
+					$g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')));
+				}
+				elseif($key == 'gbo_homepage')
+				{
+					$g_message->show($g_l10n->get('SYS_URL_INVALID_CHAR', $g_l10n->get('SYS_WEBSITE')));
+				}
+			}
         }
     }
 
@@ -337,7 +348,14 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
     {
         if(strpos($key, 'gbc_') === 0)
         {
-            $guestbook_comment->setValue($key, $value);
+            if(!$guestbook_comment->setValue($key, $value))
+			{
+				// Daten wurden nicht uebernommen, Hinweis ausgeben
+				if($key == 'gbc_email')
+				{
+					$g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')));
+				}
+			}
         }
     }
     

@@ -124,6 +124,7 @@ class TableUserData extends TableAccess
             elseif($this->dbColumns['usf_type'] == 'EMAIL')
             {
                 // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
+                $field_value = admStrToLower($field_value);
                 if (!strValidCharacters($field_value, 'email'))
                 {
                     return false;
