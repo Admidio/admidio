@@ -110,7 +110,7 @@ class TableGuestbookComment extends TableAccess
                 }
             }
         }
-        parent::setValue($field_name, $field_value);
+        return parent::setValue($field_name, $field_value);
     } 
 }
 ?>

@@ -101,15 +101,7 @@ class TableGuestbook extends TableAccess
     {
         if(strlen($field_value) > 0)
         {
-            if($field_name == 'gbo_homepage')
-            {
-                // Die Webadresse wird jetzt, falls sie nicht mit http:// oder https:// beginnt, entsprechend aufbereitet
-                if (substr($field_value, 0, 7) != 'http://' && substr($field_value, 0, 8) != 'https://' )
-                {
-                    $field_value = 'http://'. $field_value;
-                }
-            }
-            elseif($field_name == 'gbo_email')
+            if($field_name == 'gbo_email')
             {
                 $field_value = admStrToLower($field_value);
                 if (!strValidCharacters($field_value, 'email'))
@@ -118,8 +110,22 @@ class TableGuestbook extends TableAccess
                     return false;
                 }
             }
+            elseif($field_name == 'gbo_homepage')
+            {
+                // Homepage darf nur gueltige Zeichen enthalten
+                if (!strValidCharacters($field_value, 'url'))
+                {
+                    return false;
+                }
+                // Homepage noch mit http vorbelegen
+                if(strpos(admStrToLower($field_value), 'http://')  === false
+                && strpos(admStrToLower($field_value), 'https://') === false )
+                {
+                    $field_value = 'http://'. $field_value;
+                }
+            }
         }
-        parent::setValue($field_name, $field_value);
+        return parent::setValue($field_name, $field_value);
     } 
 }
 ?>
