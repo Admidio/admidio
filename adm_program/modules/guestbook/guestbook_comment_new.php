@@ -121,14 +121,8 @@ if(isset($_GET['cid']) && $_GET['cid'] > 0)
 if(isset($_SESSION['guestbook_comment_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['guestbook_comment_request'] as $key => $value)
-    {
-        if(strpos($key, 'gbc_') == 0)
-        {
-            $guestbook_comment->setValue($key, stripslashes($value));
-        }
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$guestbook_comment->setArray($_SESSION['guestbook_comment_request']);
     unset($_SESSION['guestbook_comment_request']);
 }
 

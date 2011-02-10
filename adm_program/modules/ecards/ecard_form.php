@@ -66,8 +66,6 @@ if ($pho_id == NULL)
     $_SESSION['navigation']->clear();
 }
 
-unset($_SESSION['photo_album_request']);
-
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 

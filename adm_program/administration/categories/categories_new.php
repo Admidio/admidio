@@ -88,14 +88,8 @@ if($req_cat_id > 0)
 if(isset($_SESSION['categories_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['categories_request'] as $key => $value)
-    {
-        if(strpos($key, 'cat_') == 0)
-        {
-            $category->setValue($key, stripslashes($value));
-        }
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$category->setArray($_SESSION['categories_request']);
     unset($_SESSION['categories_request']);
 }
 

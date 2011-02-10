@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Uebersicht und Pflege aller organisationsspezifischen Profilfelder
+ * Raeume anlegen und bearbeiten
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,9 +8,9 @@
  *
  ****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_rooms.php'); 
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_rooms.php'); 
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
@@ -44,6 +44,14 @@ $room = new TableRooms($g_db);
 if($req_room_id > 0)
 {
     $room->readData($req_room_id);
+}
+
+if(isset($_SESSION['rooms_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$room->setArray($_SESSION['rooms_request']);
+    unset($_SESSION['rooms_request']);
 }
 
 // Html-Kopf ausgeben
