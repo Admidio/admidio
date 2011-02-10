@@ -112,14 +112,8 @@ else
 if(isset($_SESSION['dates_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['dates_request'] as $key => $value)
-    {
-        if(strpos($key, 'dat_') == 0)
-        {
-            $date->setValue($key, stripslashes($value));
-        }
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$date->setArray($_SESSION['dates_request']);
 
     // ausgewaehlte Rollen vorbelegen
     $count = 1;

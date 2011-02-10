@@ -53,7 +53,7 @@ if(isset($_GET['ann_id']))
 
 if(isset($_GET['headline']))
 {
-    $req_headline = strStripTags($_GET["headline"]);
+    $req_headline = strStripTags($_GET['headline']);
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -75,14 +75,8 @@ if($req_ann_id > 0)
 if(isset($_SESSION['announcements_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['announcements_request'] as $key => $value)
-    {
-        if(strpos($key, 'ann_') == 0)
-        {
-            $announcement->setValue($key, stripslashes($value));
-        }
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$announcement->setArray($_SESSION['announcements_request']);
     unset($_SESSION['announcements_request']);
 }
 

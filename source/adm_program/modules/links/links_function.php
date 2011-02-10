@@ -80,7 +80,14 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
     {
         if(strpos($key, 'lnk_') === 0)
         {
-            $link->setValue($key, $value);
+            if(!$link->setValue($key, $value))
+			{
+				// Daten wurden nicht uebernommen, Hinweis ausgeben
+				if($key == 'lnk_url')
+				{
+					$g_message->show($g_l10n->get('SYS_URL_INVALID_CHAR', $g_l10n->get('SYS_WEBSITE')));
+				}
+			}
         }
     }
 	
@@ -98,7 +105,7 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
         $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 	
-	if($return == 0 && $_GET['mode'] == 1)
+	if($return_code == 0 && $_GET['mode'] == 1)
 	{
 		// Benachrichtigungs-Email für neue Einträge
 		if($g_preferences['enable_email_notification'] == 1)

@@ -107,7 +107,6 @@ switch($new_user)
         break;
 }
 
-$b_history = false;     // History-Funktion bereits aktiviert ja/nein
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
@@ -131,7 +130,6 @@ if(isset($_SESSION['profile_request']))
     }
     
     unset($_SESSION['profile_request']);
-    $b_history = true;
 }
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder

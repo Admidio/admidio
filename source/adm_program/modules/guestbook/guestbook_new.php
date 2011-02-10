@@ -94,20 +94,6 @@ if($_GET['id'] > 0)
     }
 }
 
-if(isset($_SESSION['guestbook_entry_request']))
-{
-    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['guestbook_entry_request'] as $key => $value)
-    {
-        if(strpos($key, 'gbo_') == 0)
-        {
-            $guestbook->setValue($key, stripslashes($value));
-        }
-    }
-    unset($_SESSION['guestbook_entry_request']);
-}
-
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
 // Name, Emailadresse und Homepage vorbelegt werden...
 if ($_GET['id'] == 0 && $g_valid_login)
@@ -115,6 +101,14 @@ if ($_GET['id'] == 0 && $g_valid_login)
     $guestbook->setValue('gbo_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $g_current_user->getValue('EMAIL'));
     $guestbook->setValue('gbo_homepage', $g_current_user->getValue('WEBSITE'));
+}
+
+if(isset($_SESSION['guestbook_entry_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$guestbook->setArray($_SESSION['guestbook_entry_request']);
+    unset($_SESSION['guestbook_entry_request']);
 }
 
 if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)

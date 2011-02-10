@@ -66,14 +66,8 @@ if ($_GET['job'] == 'change')
 if(isset($_SESSION['photo_album_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['photo_album_request'] as $key => $value)
-    {
-        if(strpos($key, 'pho_') == 0)
-        {
-            $photo_album->setValue($key, stripslashes($value));
-        }
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$photo_album->setArray($_SESSION['photo_album_request');
     unset($_SESSION['photo_album_request']);
 }
 

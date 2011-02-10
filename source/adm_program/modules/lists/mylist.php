@@ -70,7 +70,6 @@ if($req_rol_id == 0)
 }
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-$b_history = false;     // History-Funktion bereits aktiviert ja/nein
 $default_column_rows = 6;    // Anzahl der Spalten, die beim Aufruf angezeigt werden
 
 // Listenobjekt anlegen
@@ -95,8 +94,6 @@ if(isset($_SESSION['mylist_request']))
             $i = -1;
         }
     }
-    
-    $b_history = true;
 }
 elseif($req_lst_id > 0)
 {

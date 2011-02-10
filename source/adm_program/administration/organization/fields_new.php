@@ -56,28 +56,19 @@ if($req_usf_id > 0)
 
 if(isset($_SESSION['fields_request']))
 {
+	// hidden muss 0 sein, wenn ein Haeckchen gesetzt wird
+	if($_SESSION['fields_request']['usf_hidden'] == 1)
+	{
+		$_SESSION['fields_request']['usf_hidden'] = 0;
+	}
+	else
+	{
+		$_SESSION['fields_request']['usf_hidden'] = 1;
+	}
+
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['fields_request'] as $key => $value)
-    {
-        // hidden muss 0 sein, wenn ein Haeckchen gesetzt wird
-        if($key == 'usf_hidden')
-        {
-            if($value == 1)
-            {
-                $value = 0;
-            }
-            else
-            {
-                $value = 1;
-            }
-        }
-        
-        if(strpos($key, 'usf_') == 0)
-        {
-            $user_field->setValue($key, stripslashes($value));
-        }        
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$user_field->setArray($_SESSION['fields_request']);
     unset($_SESSION['fields_request']);
 }
 

@@ -65,14 +65,8 @@ if($req_rol_id > 0)
 if(isset($_SESSION['roles_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['roles_request'] as $key => $value)
-    {
-        if(strpos($key, 'rol_') == 0)
-        {
-            $role->setValue($key, stripslashes($value));
-        }
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$role->setArray($_SESSION['roles_request']);
     unset($_SESSION['roles_request']);
 }
 

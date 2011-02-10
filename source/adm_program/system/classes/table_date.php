@@ -262,7 +262,7 @@ class TableDate extends TableAccess
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $field_value);
             $field_value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
         }
-        parent::setValue($field_name, $field_value);
+        return parent::setValue($field_name, $field_value);
     }
 
     // die Methode erwartet ein Array mit den fuer den Termin sichtbaren Rollen-IDs

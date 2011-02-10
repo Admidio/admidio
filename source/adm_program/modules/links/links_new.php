@@ -69,14 +69,8 @@ $link = new TableWeblink($g_db, $_GET['lnk_id']);
 if(isset($_SESSION['links_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
-    // nun die vorher eingegebenen Inhalte auslesen
-    foreach($_SESSION['links_request'] as $key => $value)
-    {
-        if(strpos($key, 'lnk_') == 0)
-        {
-            $link->setValue($key, stripslashes($value));
-        }
-    }
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+	$link->setArray($_SESSION['links_request']);
     unset($_SESSION['links_request']);
 }
 
