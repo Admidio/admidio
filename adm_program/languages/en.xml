@@ -4,17 +4,19 @@
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Announcement</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="edited">Announcements</text>
+	<text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</text>
+	
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new announcement was created</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new announcement at %VAR1% was created\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
-
-	<!-- Phrases only in Announcementmodule -->
+	
     <text id="BAC_BACK_TO_BACKUP_PAGE" development="new" translation="edited">Back to main page</text>
     <text id="BAC_BACKUP_COMPLETED" development="new" translation="edited">Backup created in %VAR1%</text>
     <text id="BAC_BACKUP_FILE" development="new" translation="edited">Backup file</text>
     <text id="BAC_BACKUP_FROM" development="new" translation="edited">Backup created on %VAR1% at %VAR2%</text>
-    <text id="BAC_COMPLETED_VAR" development="new" translation="edited">%VAR1%% created</text>
+    <text id="BAC_COMPLETED_VAR" development="new" translation="edited">%VAR1% created</text>
     <text id="BAC_CREATION_DATE" development="new" translation="edited">Created on</text>
     <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Database-Backup</text>
+    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</text>
     <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% Days</text>
     <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Filename includes invalid character!</text>
     <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% hours</text>
@@ -35,7 +37,7 @@
     <text id="CAT_MOVE_DOWN" development="new" translation="edited">Moving down %VAR1%</text>
     <text id="CAT_MOVE_UP" development="new" translation="edited">Moving up %VAR1%</text>
 
-    <!-- Phrases only in Datesmodule -->
+    <!-- Phrases only in Datesmodule - 49 items -->
     <text id="DAT_ADD_DATE_TO_CALENDAR" development="new" translation="edited">Add event to calendar</text>
     <text id="DAT_ADD_ROLE" development="new" translation="edited">Add role</text>
     <text id="DAT_ALL_DAY" development="new" translation="edited">Full time</text>
@@ -48,6 +50,7 @@
 	<text id="DAT_CREATE_DATE" development="edited" translation="edited">Create date</text>
     <text id="DAT_DATE" development="new" translation="edited">Event</text>
     <text id="DAT_DATES" development="edited" translation="edited">Events</text>
+	<text id="DAT_DATES_DESC" development="edited" translation="edited">You are able to create and edite events here. Users can register for this events.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="edited">Edit rooms</text>
     <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="edited">Creating and editing rooms.\n%VAR1% All unsaved organisation preferences will be lost.</text>
 	<text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new date was created</text>
@@ -86,7 +89,7 @@
     <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="edited">Open room administration</text>
     <text id="DAT_VISIBLE_TO" development="new" translation="edited">Visible for</text>
 
-    <!-- Phrases only in Downloadsmodule -->
+    <!-- Phrases only in Downloadsmodule - 50 items -->
     <text id="DOW_ACCESS_ALLOWED" development="new" translation="edited">Access granted</text>
 	<text id="DOW_ADD_TO_DATABASE" development="new" translation="edited">Add to database</text>
     <text id="DOW_ADDITIONAL_FILES" development="new" translation="edited">This list intends to provide an overview of files and folders not imported into the database yet. Add them here. Access rights will be copied from selected folder.</text>
@@ -95,6 +98,7 @@
 	<text id="DOW_CREATE_FOLDER" development="new" translation="edited">Create folder</text>
 	<text id="DOW_CREATE_FOLDER_DESC" development="new" translation="edited">Create folder in %VAR1_BOLD%.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="edited">Downloads</text>
+	<text id="DOW_DOWNLOADS_DESC" development="new" translation="edited">Different data files and file types can be made available for download. This downloads can be categorised in folders with different access permission levels.</text>
 	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new file was uploaded</text>
 	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new file was uploaded at %VAR1%\n\nFile: %VAR2%\nUploaded by: %VAR3%\nUploaded at: %VAR4%</text>
     <text id="DOW_ENABLE_DOWNLOAD_MODULE" development="new" translation="edited">Activating download modul</text>
@@ -159,7 +163,7 @@
     <text id="ECA_GREETING_CARDS" development="edited" translation="edited">Greeting card</text>
     <text id="ECA_GREETING_CARD_EDIT" development="edited" translation="edited">Edit greeting card</text>
     <text id="ECA_GREETING_CARD_SEND" development="edited" translation="edited">Send greeting card</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="edited" translation="edited">Greeting card preview:</text>
+    <text id="ECA_GREETING_CARD_PREVIEW" development="edited" translation="edited">Greeting card preview</text>
     <text id="ECA_INPUT_INCORRECT" development="edited" translation="edited">Following required fields for sending \ngreeting \ncard are \nnot filled in or are incorrect:</text>
     <text id="ECA_INTERNAL_RECIPIENT" development="edited" translation="edited">internal recipient</text>
     <text id="ECA_MAX_CC" development="edited" translation="edited">Max. additional recipients</text>
@@ -186,7 +190,7 @@
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Set size of preview picture. (default: 250 x 250 Pixel²)</text>
     <text id="ECA_SEND_ERROR" development="edited" translation="edited">An error occured while sending the greeting card. Please try again later.</text>    
 	
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Your greeting card will be sent to a member of the selected role if member provided e-mail adress.\n\nSelect member of a role or entire role by using the role options.</text>
+    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Your greeting card will be sent to members of the selected role if members provided e-mail address.\n\nSelect a member of a role or entire role.</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="edited" translation="edited">%VAR1% characters left</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card was send.</text>
     <text id="ECA_TEMPLATE" development="edited" translation="edited">Standard template. (default: standard letter) </text>
@@ -216,15 +220,18 @@
     <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="edited">Flooding Protection Intervall</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL_DESC" development="new" translation="edited">Entries of unregistered users will be checked. To many entries within the give time intervall are not allowed. This option allows to take control over unwanted entries. When intervall is set to 0, no check will be done. (default: 60 seconds)</text>
     <text id="GBO_GUESTBOOK" development="new" translation="edited">Guestbook</text>
-    <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="edited">Moderation activated</text>
-    <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="edited">Guestbook entries will be displayed after moderation. Comments will appear right away (default: no)</text>
+	<text id="GBO_GUESTBOOK_DESC" development="new" translation="edited">Guests and users are able to leave greatings and comments, and can annotate other's entries.</text>
+    <text id="GBO_GUESTBOOK_MODERATION" development="new" translation="edited">Moderation activated for</text>
+    <text id="GBO_GUESTBOOK_MODERATION_DESC" development="new" translation="edited">Guestbook entries will be displayed after moderation. Define if moderation should be performed in case of guests or for logged in users only, or nobody's comments should be checked in advance. (default: no)</text>
     <text id="GBO_HIDE_COMMENTS" development="new" translation="edited">Hide comments</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING" development="new" translation="edited">Display comments right away</text>
     <text id="GBO_INITIAL_COMMENTS_LOADING_DESC" development="new" translation="edited">When this option is active and a guestbook page is being loaded, comments on this page will be loaded right away. Otherwise user has to click a hyperlink in order to reveal comments. (default: no)</text>
     <text id="GBO_MODERATE_ENTRIES" development="new" translation="edited">Moderating %VAR1% entries</text>
+    <text id="GBO_MODERATE_VARS" development="new" translation="edited">Moderating %VAR1%</text>
+	<text id="GBO_ONLY_VISITORS" development="new" translation="edited">Visitors only</text>
     <text id="GBO_SHOW_COMMENTS" development="new" translation="edited">Display comments</text>
     <text id="GBO_SHOW_COMMENTS_ON_ENTRY" development="new" translation="edited">Display %VAR1% comment(s) of this guest book entry</text>
-    <text id="GBO_WRITE_COMMENT" development="new" translation="edited">Leave comment for this entry</text>
+    <text id="GBO_WRITE_COMMENT" development="new" translation="edited">Leave comment</text>
     
     <!-- Phrases only in Installation -->
     <text id="INS_ADD_ANOTHER_ORGANIZATION" development="edited" translation="edited">Add another organization</text>
@@ -243,6 +250,7 @@
     <text id="INS_COURSES" development="edited" translation="edited">Courses</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="edited" translation="edited">Creating administrator</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="edited" translation="edited">Creating configuration file</text>
+	<text id="INS_DATA_DO_NOT_MATCH" development="edited" translation="edited">Data from %VAR1_BOLD% does not comply with information provided in installation wizzard.\n\nCheck config.php and all other information.</text>
     <text id="INS_DATA_OF_ADMINISTRATOR" development="edited" translation="edited">Administrator's details</text>
     <text id="INS_DATA_OF_ADMINISTRATOR_DESC" development="edited" translation="edited">Provide here administrator's name, e-mail and access information. Log in with same user after installation.</text>
     <text id="INS_DATABASE_DOESNOT_NEED_UPDATED" development="edited" translation="edited">Database update is not required</text>
@@ -306,6 +314,8 @@
     <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="edited" translation="edited">New organisation %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="edited" translation="edited">Configuration successful</text>
     <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
+	<text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We would appreciate a lot if you could support the development of Admidio with your donation!
+</text>
     <text id="INS_TABLE_PREFIX" development="edited" translation="edited">Table prefix</text>
     <text id="INS_TABLE_PREFIX_INVALID" development="edited" translation="edited">Table prefix includes invalid character!</text>
     <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="edited" translation="edited">Existing data stored under same prefix will be overwritten!</text>
@@ -342,6 +352,7 @@
     <text id="LNK_REDIRECT_DESC" development="new" translation="edited">You are leaving the website of %VAR1_BOLD% and will be redirected automatically to %VAR3% in %VAR2% seconds.\n\nIf the automatically redirection is not working please click %VAR4%!</text>
     <text id="LNK_SAME_WINDOW" development="new" translation="edited">Same window</text>
     <text id="LNK_WEBLINKS" development="new" translation="edited">Web links</text>
+	<text id="LNK_WEBLINKS_DESC" development="new" translation="edited">Create and organise by categories interesting hyperlinks here.</text>
 
     <!-- Phrases only in Listsmodule -->
     <text id="LST_A_TO_Z" development="new" translation="edited">A to Z</text>
@@ -351,7 +362,7 @@
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Add column</text>
     <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">No enabled lists available.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="edited">Would you like to load and change default configuration or to create new configuration?</text>
-    <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choose role for selected list</text>
+    <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choose role for selected list.</text>
     <text id="LST_CONFIGURATION" development="new" translation="edited">Configuration</text>
     <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="edited">Permission to use configuration for all members</text>
     <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="edited">Would you like to mark selected configuration as default configuration for this organisation?</text>
@@ -376,6 +387,7 @@
     <text id="LST_KONFIGURATION_OWN_LIST" development="new" translation="edited">Configuration of own listings</text>
     <text id="LST_LIST" development="new" translation="edited">List</text>
     <text id="LST_LISTS" development="new" translation="edited">Lists</text>
+	<text id="LST_LISTS_DESC" development="new" translation="edited">Role specific list can be displayed here. Furthermore users are able to generate and save own lists, too.</text>
     <text id="LST_LIST_VIEW" development="new" translation="edited">List overview</text>
     <text id="LST_MAX" development="new" translation="edited">of maximum. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="edited">Members displayed per page</text>
@@ -440,6 +452,7 @@
     <text id="MAI_COUNT_BCC_DESC" development="new" translation="edited">Define here how many BCC recipients per mail can be added. (default: 50)</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% has sent to role %VAR4% of %VAR2% following message:\nPlease reply to %VAR3%.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% has sent you from %VAR2% following message:\nPlease reply to %VAR3%.</text>
+	 <text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails can be sent to different roles like groups, courses or departments.</text>
     <text id="MAI_EMAILS" development="new" translation="edited">E-mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Unlimited number of recipients can be added. Total size of all attachments together must not exceed %VAR1% MB.</text>
     <text id="MAI_MESSAGE" development="new" translation="edited">Message</text>
@@ -477,7 +490,6 @@
     <text id="MEM_IMPORT_USERS" development="new" translation="edited">Import user(s)</text>
     <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</text>
     <text id="MEM_MAKE_FORMER" development="new" translation="edited">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</text>
-    <text id="MEM_MEMBER_OF" development="new" translation="edited">Member of %VAR1%</text>
     <text id="MEM_NO_MEMBERSHIP" development="new" translation="edited">This user is not a member of organisation %VAR1% yet.</text>
     <text id="MEM_NOT_EDIT" development="new" translation="edited">Do not edit</text>
     <text id="MEM_PROFILE_FIELD" development="new" translation="edited">Profile field</text>
@@ -496,6 +508,7 @@
     <text id="MEM_UPDATED_ON" development="new" translation="edited">Updated on</text>
     <text id="MEM_USER_DELETE" development="new" translation="edited">Would you like to delete %VAR1_BOLD%?\n\nUser is going to be physically deleted in the database which makes later access impossible.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="edited">User management</text>
+	<text id="MEM_USER_MANAGEMENT_DESC" development="new" translation="edited">Display and organise all active and former members here. New users can be imported or created.</text>
     <text id="MEM_UTF8" development="new" translation="edited">UTF-8</text>
 
     <!-- Phrases only in New-User-Registration -->
@@ -507,6 +520,8 @@
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Assigning registration</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Deleting registration</text>
     <text id="NWU_REGISTRATION" development="new" translation="edited">Registration</text>
+	<text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Managing new registrations</text>
+    <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">New registrations of visitors can be listed, approved or refused here.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">New registrations</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="edited">User is not a member of organisation %VAR1% but has already login information assigned.</text>
     <text id="NWU_NO_MEMBERSHIP_NO_LOGIN" development="new" translation="edited">User is not a member of organisation %VAR1% and has no login information registered.</text>
@@ -606,6 +621,7 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Define number of items displayed on a page. Pagination is provided if number of items exceeds defined value. Print preview and export functionality are not affected. If value is 0, all items will be listed and pagination is deactivated. (default: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">For logged in users only</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="edited">Organisation preferences</text>
+	<text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Manage general organisation preferences or module preferences here.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Parent organisation</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="edited">Define parent organisation here. Parent organisations are able to creat events and announcements for example which will be displayed in selected (child) organisation.</text>
     <text id="ORG_PIXEL" development="new" translation="edited">Pixel</text>
@@ -678,7 +694,6 @@
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">No photos to add have been selected.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="edited">You have no permissions to perform this action.\n\nOnly logged in users with photo management permissions are enabled to manage photos.</text>
     <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="edited">Number of photos</text>
-	<text id="PHO_OVERVIEW" development="new" translation="edited">Overview</text>      
 	<text id="PHO_PARENT_ALBUM" development="new" translation="edited">Parent album</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="edited">Photo albums</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="edited">delete photo</text>
@@ -693,6 +708,7 @@
     <text id="PHO_PHOTO" development="new" translation="edited">Photo</text>
     <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Photos of</text>
     <text id="PHO_PHOTOS" development="new" translation="edited">Photos</text>
+    <text id="PHO_PHOTOS_DESC" development="new" translation="edited">Pictures of events can be uploaded and displayed. Pictures can be organised in albums which can be interlinked.</text>
     <text id="PHO_POPUP_WINDOW" development="new" translation="edited">popup window</text>
 	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">previous picture</text>
 	<text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Resolution greater than</text>
@@ -722,11 +738,12 @@
     <!-- Phrases only in Profilemodule -->
 	<text id="PRO_ACCEPT_NEW_PICTURE" development="new" translation="edited">Confirm new profile picture</text>
 	<text id="PRO_ADD_USER" development="new" translation="edited">Add user</text>
+	<text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Cancel membership</text>
 	<text id="PRO_CHANGE_DATE" development="new" translation="edited">Change date</text>
 	<text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="edited">Change profile picture</text>
     <text id="PRO_CONFIRM_REGISTRATION_SYSTEM" development="new" translation="edited">Your information has been saved.\n\nYou are not able to login yet.\nAfter confirmation of your registration you will be informed by an e-mail.</text>
     <text id="PRO_CONFIRM_REGISTRATION_DATE" development="new" translation="edited">Provided information and your event registration has been successfully saved.\n\nYour are now free to log off.</text>
-	<text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Confirmation code</text>
+	<text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
 	<text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Current password</text>
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Current profile picture</text>
 	<text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Default country</text>
@@ -740,7 +757,7 @@
 	<text id="PRO_EDIT_PROFILE" development="new" translation="edited">Edit profile</text>
 	<text id="PRO_EDIT_PROFILE_PIC_FROM" development="new" translation="edited">Edit profile picture of %VAR1% %VAR2%</text>
 	<text id="PRO_EXPORT_VCARD_FROM_VAR" development="new" translation="edited">Export vCard of %VAR1%</text>
-	<text id="PRO_FIELD_NUMERIC" development="new" translation="edited">In field %VAR1% are allowed numbers only.\nPlease update your entry.</text>
+	<text id="PRO_FIELD_NUMERIC" development="new" translation="edited">In field %VAR1_BOLD% are allowed numbers only.\nPlease update your entry.</text>
 	<text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="edited">Former role memberships</text>
 	<text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="edited">Storage location of profile pictures</text>
 	<text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="edited">Please define where to store profile picture (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</text>
@@ -748,6 +765,7 @@
 	<text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Manage profile fields</text>
 	<text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="edited">You can create and edit profile fields which can be merged in categories.\n%VAR1% All unsaved organisation preferences will be lost.</text>
 	<text id="PRO_MY_PROFILE" development="new" translation="edited">My profile</text>
+    <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Own profile can be displayed and edited here.</text>
 	<text id="PRO_NEW_PASSWORD" development="new" translation="edited">New password</text>
 	<text id="PRO_NEW_PICTURE" development="new" translation="edited">New profile picture</text>
 	<text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">No default role has been defined in organisation preferences. Please contact webmaster for help.</text>
@@ -803,12 +821,10 @@
     <text id="ROL_INACTIV_ROLES" development="new" translation="edited">Inactive roles</text>
     <text id="ROL_INDEPENDENT" development="new" translation="edited">Independent</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="edited">Invisible roles</text>
-    <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to move back role %VAR1% to current roles?</text>
-    <text id="ROL_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to end membership in role %VAR1%?</text>
-    <text id="ROL_MEMBERSHIP_DEL_ERROR" development="new" translation="edited">An error occured!\n\nRole assingment oould not be deleted.</text>
+    <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to move back role %VAR1_BOLD% to current roles?</text>
+    <text id="ROL_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to end membership in role %VAR1_BOLD%?</text>
     <text id="ROL_NEW_ROLE" development="new" translation="edited">new role</text>
     <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="edited">This person is not a member of organisation %VAR1_BOLD% or nor roles are visible.</text>
-    <text id="ROL_NOBODY" development="new" translation="edited">Nobody</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="edited">Role members only</text>
     <text id="ROL_PREF" development="new" translation="edited" description="Abbreviation for Preferences">Pref.</text>
     <text id="ROL_RIGHT_ALL_LISTS_VIEW" development="new" translation="edited">Display all membership lists of all roles</text>
@@ -830,6 +846,7 @@
     <text id="ROL_RIGHT_WEBLINKS" development="new" translation="edited">Creating and editing web links</text>
     <text id="ROL_ROLE" development="new" translation="edited">Role</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="edited">Role administration</text>
+    <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="edited">Roles based on certain groups, courses and departments can be managed here. Role permissions can be defined here, too.</text>
     <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="edited">Role assignment for "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="edited">Deleting role</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="edited">Woud you like to delete role %VAR1% ?\n\nAll memberships are going to be deleted as well.</text>
@@ -839,13 +856,13 @@
     <text id="ROL_ROLE_NAME_EXISTS" development="new" translation="edited">Role with same name already exists in this category.</text>
     <text id="ROL_ROLE_SET_MODE" development="new" translation="edited">Role %VAR1_BOLD% has been changed to %VAR2_BOLD%.</text>
     <text id="ROL_SAVE_ROLES" development="new" translation="edited">Saving this settings might cause lose of role configured dependecies.</text>
+    <text id="ROL_SEE_ROLE_MEMBERSHIP" development="new" translation="edited">Display role memberships</text>
     <text id="ROL_SEND_MAIL_GUESTS" development="new" translation="edited">All guests are allowed to send e-mails to current role.</text>
     <text id="ROL_SEND_MAIL_MEMBERS" development="new" translation="edited">Logged in users are allowed to send e-mails to current role.</text>
     <text id="ROL_SEND_MAIL_ROLE" development="new" translation="edited">Role members of this role only are allowed to send e-mails to current role.</text>
     <text id="ROL_SEND_MAILS" development="new" translation="edited">Send e-mails</text>
     <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="edited">Make role invisible</text>
     <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="edited">Make role visible</text>
-    <text id="ROL_SHOW_LISTS" development="new" translation="edited">Show list</text>
     <text id="ROL_SHOW_MEMBERS" development="new" translation="edited">Show members</text>
     <text id="ROL_VALID_FROM" development="new" translation="edited" description="Date valid from">Valid starting from</text>
     <text id="ROL_VALID_TO" development="new" translation="edited" description="Date valid to">Valid until</text>
@@ -873,6 +890,8 @@
     <text id="SYS_ADD_ROLE" development="new" translation="edited">Add Role</text>
     <text id="SYS_ADD_RECIPIENTS" development="edited" translation="edited">Add recipient</text>
 	<text id="SYS_ADDRESS" development="new" translation="edited">Address</text>
+	<text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">The Online Management System for Associations, Groups and Organisations</text>
+	<text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
     <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administration</text>
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax request error.\nError Details: %VAR1%</text>
@@ -882,6 +901,7 @@
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Assigning members</text>
 	<text id="SYS_AUTHORIZATION" development="new" translation="edited">Authorisation</text>
     <text id="SYS_BACK" development="edited" translation="edited">Back</text>
+	<text id="SYS_BACK_TO_MODULE_OVERVIEW" development="edited" translation="edited">Back to module overview</text>
     <text id="SYS_BBCODE" development="new" translation="edited">BBCode</text>
     <text id="SYS_BBCODE_DESC" development="new" translation="edited">Description texts of certain modules (announcements, appointments, guestbook and weblinks) can be formated by tags (BBCode). Therefor you will have to use the listed tags within the text.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="edited">You are using a BETA version of Admidio.\n\nStability issues and data loss might occur. Please use this version for testing purposes only!</text>
@@ -899,7 +919,7 @@
 	<text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="edited">the half of</text>
 	<text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="edited">.</text>
 	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">The result of the calculation is not correct.</text>
-	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Confirmation code</text>
+	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
 	<text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="edited">The authentication code was invalid.</text>
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Authentication code</text>
 		<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</text>	
@@ -946,12 +966,12 @@
     <text id="SYS_DELETE_DATA" development="new" translation="edited">Data has been deleted.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="edited">Would you like to delete entry %VAR1_BOLD%?</text>
     <text id="SYS_DESCRIPTION" development="new" translation="edited">Description</text>
-
+    <text id="SYS_DONATE" development="new" translation="edited">Donate</text>
     <text id="SYS_EDIT" development="edited" translation="edited">Edit</text>
     <text id="SYS_EDIT_VAR" development="edited" translation="edited">Edit %VAR1%</text>
     <text id="SYS_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
     <text id="SYS_EMAIL" development="edited" translation="edited">E-mail</text>
-    <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail addresse invalid.</text>
+    <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail addresse in field %VAR1_BOLD% includes invalid characters or is incomplete.</text>
     <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail has been sent to %VAR1_BOLD%.</text>
     <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">E-Mmail to %VAR1_BOLD% could not be sent.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entry visible for multiple orgnaisations</text>
@@ -987,6 +1007,8 @@
     <text id="SYS_FONT_STYLE" development="edited" translation="edited">Font-style</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">I forgot my password!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
+	<text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">You are logged as %VAR1_BOLD% in forum system %VAR2_BOLD%. You have %VAR3_BOLD% new messages.</text>
+    <text id="SYS_FORUM_DESC" development="new" translation="edited">A virtual place to exchange ideas and experiences.</text>
     <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="edited">Fields with access information of the forum have either not been filled in or have not been filled in correctly!</text>
     <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="edited">Connection error to forum database! Check please access information!</text>
     <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="edited">Your administrator login information of forum %VAR2% has been synchronised with Admidio user account.\nPlease use at next login your Admidio user name and passwort.\n\nYou successfully singed in to the forum %VAR2% as user %VAR1%.</text>
@@ -1017,6 +1039,7 @@
     <text id="SYS_LANGUAGE" development="edited" translation="edited">Language</text>
     <text id="SYS_LAST_EDITED_BY" development="edited" translation="edited">Last edited by %VAR1% on %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="edited">Surname</text>
+	<text id="SYS_LATER" development="new" translation="edited">Later</text>
     <text id="SYS_LEADER" development="new" translation="edited">Leader</text>
     <text id="SYS_LEADER_DESCRIPTION" development="new" translation="edited">Apart from being separatly viewed in lists, leaders own encreased autorisation compared to regular users.\n\nDespite their role permissions, leaders are always able to view member lists, to remove from or to add members to a role.</text>
     <text id="SYS_LINK_TO" development="new" translation="edited">Link to %VAR1%</text>
@@ -1031,10 +1054,10 @@
     <text id="SYS_LOGIN_UNKNOWN" development="new" translation="edited">User name does not exist.</text>
     <text id="SYS_LOGOUT" development="new" translation="edited">Sign out</text>
     <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="edited">Signing out was successful.</text>
-    <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="edited">You already signed in. You must have therefore the correct password!</text>
+    <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="edited">You already signed in. Therefore you must already have the correct password!</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="edited">E-mail address %VAR1% could not be found in the system!</text>
     <text id="SYS_LOSTPW_SEND" development="new" translation="edited">New password has been sent to e-mail address %VAR1%!</text>
-    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">An error occured when sending the e-mail to e-mail address %VAR1%!\nPlease try again later!</text>
+    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">An error occured when sending the e-mail to recipients %VAR1%!\nPlease try again later!</text>
 
 	<text id="SYS_MAP" development="new" translation="edited">Map</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="edited">Manage categories</text>
@@ -1044,6 +1067,7 @@
     <text id="SYS_MAX_PARTICIPANTS" development="new" translation="edited">Max. participants</text>
     <text id="SYS_MEGA_PIXEL" development="new" translation="edited">Megapixels</text>
     <text id="SYS_MEMBER" development="new" translation="edited">Member</text>
+    <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="edited">Member of organisation %VAR1%</text>
  	<text id="SYS_MEMBERS" development="edited" translation="edited">Members</text>
     <text id="SYS_MESSAGE" development="edited" translation="edited">Message</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minutes</text>
@@ -1057,9 +1081,11 @@
     <text id="SYS_NO_ENTRY" development="new" translation="edited">Requested entry does not exist in the database.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="edited">No entries available.</text>
 	<text id="SYS_NO_ENTRIES_FOUND" development="new" translation="edited">No entries found.</text>
-    <text id="SYS_NO_RIGHTS" development="new" translation="edited">You do not have the required permissions to perform this action.</text>
+    <text id="SYS_NO_RIGHTS" development="new" translation="edited">You do not have the required permission to perform this action.</text>
+    <text id="SYS_NOBODY" development="new" translation="edited">Nobody</text>
     <text id="SYS_NONE" development="new" translation="edited">None</text>
     <text id="SYS_NOTE" development="new" translation="edited">Note</text>
+	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="edited">You are not a member of organisation %VAR1%</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="edited">not registered</text>
     <text id="SYS_NUMBER" development="new" translation="edited">Number</text>
     <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="edited">Number of logins</text>
@@ -1073,21 +1099,21 @@
     <text id="SYS_PASSWORD" development="new" translation="edited">Password</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="edited" translation="edited">Password forgotten</text>
     <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">In case of a forgotten password, the system is able to generate a new password and to send it to your e-mail address.\nPlease fill in your e-mail address in the field below and press "Send new password".</text>
-    <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Login faild due to incorrect password.\n\nPlease check your password and try again.</text>
+    <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Login failed due to incorrect password.\n\nPlease check your password and try again.</text>
     <text id="SYS_PHONE" development="edited" translation="edited">Phone</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Photo</text>
 	<text id="SYS_PHOTOS" development="new" translation="edited">Photos</text>	
     <text id="SYS_PLEASE_CHOOSE" development="edited" translation="edited">select option</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Please wait</text>
     <text id="SYS_PREVIEW" development="edited" translation="edited">Preview</text>
-    <text id="SYS_PREVIOUS" development="new" translation="edited">previous</text>
+    <text id="SYS_PREVIOUS" development="new" translation="edited">Previous</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Process canceled.</text>
 	<text id="SYS_PROGRESSBAR" development="new" translation="edited">Progress bar</text>
     <text id="SYS_PROPERTIES" development="new" translation="edited">Properties</text>
     <text id="SYS_PWACT_PW_SAVED" development="new" translation="edited">New password saved!</text>
     <text id="SYS_PWACT_CODE_INVALID" development="new" translation="edited">Either new password has already been activated or activation code is incorrect!</text>
-
     <text id="SYS_RECIPIENT" development="edited" translation="edited">Recipient</text>
+    <text id="SYS_REGISTERED_AS" development="new" translation="edited">Logged in as</text>
     <text id="SYS_REGISTRATION" development="new" translation="edited">Registration</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="edited">Stay signed in</text>
     <text id="SYS_REMOVE" development="edited" translation="edited">Remove</text>
@@ -1126,8 +1152,8 @@
     <text id="SYS_SINCE_TO" development="new" translation="edited">from %VAR1% to %VAR2%</text>
 	<text id="SYS_SIZE" development="new" translation="edited">Size</text>
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} of {total}</text>
-	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">beginn slideshow</text>
-	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">stop slideshow</text>
+	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Beginn slideshow</text>
+	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">End slideshow</text>
     <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="edited">Specify %VAR1%e-mail address%VAR2%</text>
     <text id="SYS_START" development="edited" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
