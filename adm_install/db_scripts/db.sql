@@ -690,6 +690,14 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
+alter table %PREFIX%_rooms add index ROOM_USR_CREATE_FK (room_usr_id_create);
+alter table %PREFIX%_rooms add index ROOM_USR_CHANGE_FK (room_usr_id_change);
+
+alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CREATE foreign key (room_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CHANGE foreign key (room_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
 /*==============================================================*/
 /* Table: adm_sessions                                          */
 /*==============================================================*/
