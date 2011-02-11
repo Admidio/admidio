@@ -212,27 +212,25 @@ else
     $show_all_checked = 'checked';
 }
 
-if($req_members == 0)
-{
-    echo'
-        <ul class="iconTextLinkList" style="margin-bottom: 0px;">
-        <li>
-            <span class="iconTextLink">
-                <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
-                <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$g_l10n->get('MEM_CREATE_USER').'</a>
-            </span>
-        </li>
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/administration/members/import.php"><img
-                src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('MEM_IMPORT_USERS').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/administration/members/import.php">'.$g_l10n->get('MEM_IMPORT_USERS').'</a>
-            </span>
-        </li>';
-        
-    echo '</ul>';
-}
+
+echo'
+    <ul class="iconTextLinkList" style="margin-bottom: 0px;">
+    <li>
+        <span class="iconTextLink">
+            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
+            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
+            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$g_l10n->get('MEM_CREATE_USER').'</a>
+        </span>
+    </li>
+    <li>
+        <span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/members/import.php"><img
+            src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('MEM_IMPORT_USERS').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/members/import.php">'.$g_l10n->get('MEM_IMPORT_USERS').'</a>
+        </span>
+    </li>';
+    
+echo '</ul>';
 
 //Hier gibt es jetzt noch die Suchbox...
 echo '
