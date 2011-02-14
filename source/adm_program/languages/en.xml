@@ -4,7 +4,7 @@
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Announcement</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="edited">Announcements</text>
-	<text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</text>
+	<text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="edited">Dipslay or edit announcements, news and other information.</text>
 	
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new announcement was created</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new announcement at %VAR1% was created\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
@@ -16,7 +16,7 @@
     <text id="BAC_COMPLETED_VAR" development="new" translation="edited">%VAR1% created</text>
     <text id="BAC_CREATION_DATE" development="new" translation="edited">Created on</text>
     <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Database-Backup</text>
-    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Datenbanksicherungen der Admidio-Tabellen können hier erstellt und heruntergeladen werden.</text>
+    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Create and download database backups of Admidio tabels.</text>
     <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% Days</text>
     <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Filename includes invalid character!</text>
     <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% hours</text>
@@ -43,32 +43,32 @@
     <text id="DAT_ALL_DAY" development="new" translation="edited">Full time</text>
     <text id="DAT_ATTEND" development="new" translation="edited">Participate</text>
     <text id="DAT_ATTEND_DATE" development="new" translation="edited">You confirmed your participation at %VAR1_BOLD% on %VAR2%.</text>
-    <text id="DAT_CALENDAR" development="edited" translation="edited">Calendar</text>
+    <text id="DAT_CALENDAR" development="new" translation="edited">Calendar</text>
     <text id="DAT_CANCEL" development="new" translation="edited">Cancel</text>
     <text id="DAT_CANCEL_DATE" development="new" translation="edited">You canceled your participation at %VAR1_BOLD% on %VAR2%.</text>
     <text id="DAT_CLOCK" development="new" translation="edited">o'clock</text>
-	<text id="DAT_CREATE_DATE" development="edited" translation="edited">Create date</text>
+	<text id="DAT_CREATE_DATE" development="new" translation="edited">Create date</text>
     <text id="DAT_DATE" development="new" translation="edited">Event</text>
-    <text id="DAT_DATES" development="edited" translation="edited">Events</text>
-	<text id="DAT_DATES_DESC" development="edited" translation="edited">You are able to create and edite events here. Users can register for this events.</text>
+    <text id="DAT_DATES" development="new" translation="edited">Events</text>
+	<text id="DAT_DATES_DESC" development="new" translation="edited">You are able to create and edite events here. Users can register for this events.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="edited">Edit rooms</text>
     <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="edited">Creating and editing rooms.\n%VAR1% All unsaved organisation preferences will be lost.</text>
 	<text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new date was created</text>
 	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="edited">A new date at %VAR1% was created.\n\nTitle: %VAR2%\nDate: %VAR3%\nCalender: %VAR4%\n</text>
 	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="edited">Location: %VAR1%\nRoom: %VAR2%\nParticipants: %VAR3%\nCreated by: %VAR4%\n</text>
 	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3" development="new" translation="edited">Created at: %VAR1%</text>
-   	<text id="DAT_EXPORT_ICAL" development="edited" translation="edited">Export (iCal)</text>    	
-	<text id="DAT_LOCATION" development="edited" translation="edited" description="Location of a date">Location</text>
+   	<text id="DAT_EXPORT_ICAL" development="new" translation="edited">Export (iCal)</text>    	
+	<text id="DAT_LOCATION" development="new" translation="edited" description="Location of a date">Location</text>
     <text id="DAT_LOCATION_LINK" development="new" translation="edited">If enough information regarding loacation provided (street, city, location), Google Maps is able to calculate route to location.</text>
     <text id="DAT_LOGIN_POSSIBLE" development="new" translation="edited">Do you want to enable event registration?\nIf event is deleted, all registered participatns will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</text>
-   	<text id="DAT_MANAGE_CALENDARS" development="edited" translation="edited">Manage calendars</text>
+   	<text id="DAT_MANAGE_CALENDARS" development="new" translation="edited">Manage calendars</text>
     <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Reduce number of participants for this event. Please leave field empty for unlimited participants.</text>
-    <text id="DAT_ORGANIZER" development="edited" translation="edited" description="The Person">Organiser</text>
-    <text id="DAT_ORGANIZERS" development="edited" translation="edited" description="The Persons">Organisers</text>
+    <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organiser</text>
+    <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organisers</text>
     <text id="DAT_PARTICIPATE_IN_DATE" development="new" translation="edited">Participation confirmation</text>
-	<text id="DAT_PARTICIPANTS" development="edited" translation="edited">Participants</text>
+	<text id="DAT_PARTICIPANTS" development="new" translation="edited">Participants</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Limited number of participiants</text>
-   	<text id="DAT_PREVIOUS_DATES" development="edited" translation="edited" description="Past events">Previous %VAR1%</text>
+   	<text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Previous %VAR1%</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="edited">Registration enabled</text>
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">Registration is closed.</text>
     <text id="DAT_REMOVE_APPLICATION" development="new" translation="edited">Would you like to remove this event? All participants will be removed.</text>
@@ -85,7 +85,7 @@
     <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="new" translation="edited">Selection box for each calendar is displayed in order to ensuring for visitors quick search of events. (defaultyes)</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="edited">Display link to map</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="edited">When location is set, Google Maps is used to display location and route from own location. (defaultyes)</text>
-    <text id="DAT_SHOW_ON_MAP" development="edited" translation="edited">Show on map</text>
+    <text id="DAT_SHOW_ON_MAP" development="new" translation="edited">Show on map</text>
     <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="edited">Open room administration</text>
     <text id="DAT_VISIBLE_TO" development="new" translation="edited">Visible for</text>
 
@@ -144,61 +144,61 @@
 
 
     <!-- Phrases only in Ecardsmodule -->
-	<text id="ECA_A_ECARD_FROM" development="edited" translation="edited">Greeting card sent by</text>
-	<text id="ECA_ACTIVATE_GREETING_CARDS" development="edited" translation="edited">Activating greeting card module</text>
-    <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="edited" translation="edited">The greeting card module can be deactivated and reactivated by using these options. If server is not capable of sending mails, please deactivate the module. The module is accessible for logged in users only. (default: yes)</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="edited" translation="edited">Show preferences</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="edited" translation="edited">Hide preferences</text>
-    <text id="ECA_CONTENT_LOADING" development="edited" translation="edited">Loading content - Please wait!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="edited" translation="edited">The e-mail address might be incorrect!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="edited" translation="edited">external recipient</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" development="edited" translation="edited" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="edited" translation="edited">Senders e-mail address</text>
-    <text id="ECA_FIELD_ERROR" development="edited" translation="edited">Some fields are not filled in or do not comply. Please filled them in or check them for consitency.</text>
-    <text id="ECA_FILL_INPUTS" development="edited" translation="edited">Please fill in \nall data fields and \npress 'send'.</text>
-    <text id="ECA_FONT" development="edited" translation="edited">Font type preferences. (default: Comic Sans MS)</text>
-    <text id="ECA_FONT_SIZE" development="edited" translation="edited">Font size preference. (default: 20) </text>
-    <text id="ECA_FONT_COLOR" development="edited" translation="edited">Font colour preference. (default: black)</text>
-    <text id="ECA_GREETING_CARD" development="edited" translation="edited">Greeting card </text>
-    <text id="ECA_GREETING_CARDS" development="edited" translation="edited">Greeting card</text>
-    <text id="ECA_GREETING_CARD_EDIT" development="edited" translation="edited">Edit greeting card</text>
-    <text id="ECA_GREETING_CARD_SEND" development="edited" translation="edited">Send greeting card</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="edited" translation="edited">Greeting card preview</text>
-    <text id="ECA_INPUT_INCORRECT" development="edited" translation="edited">Following required fields for sending \ngreeting \ncard are \nnot filled in or are incorrect:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="edited" translation="edited">internal recipient</text>
-    <text id="ECA_MAX_CC" development="edited" translation="edited">Max. additional recipients</text>
-    <text id="ECA_MAX_CC_DESC" development="edited" translation="edited">Deactivate and set maximum number of additional recipients if necessary. (default: 10)</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH" development="edited" translation="edited">Max. number of characters in a message</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="edited" translation="edited">Deactivate option here and define maximum length of message if necessary. (default: 500 characters)</text>
-	<text id="ECA_MESSAGE_TOO_LONG" development="edited" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Maximum of %VAR1% characters is allowed!</text>
-	<text id="ECA_MORE_RECIPIENTS" development="edited" translation="edited">More recipients</text>
-	<text id="ECA_NAME_OF_SENDER" development="edited" translation="edited">Sender's name</text> 
-    <text id="ECA_NAME_OF_RECIPIENT" development="edited" translation="edited" description="%VAR1% will be replaced by number">Name of recipient: %VAR1%</text>
-    <text id="ECA_NEED_JAVASCRIPT" development="edited" translation="edited">For sending greeting cards, javascript has to be enabled!\nPlease enable Javascript in order to send your greeting card!</text>
-    <text id="ECA_NEW_MESSAGE_RECEIVED" development="edited" translation="edited">New message received</text>    
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="edited" translation="edited">No user with valid e-mail address!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="edited" translation="edited">No further recipients</text>
+	<text id="ECA_A_ECARD_FROM" development="new" translation="edited">Greeting card sent by</text>
+	<text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Activating greeting card module</text>
+    <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">The greeting card module can be deactivated and reactivated by using these options. If server is not capable of sending mails, please deactivate the module. The module is accessible for logged in users only. (default: yes)</text>
+    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="edited">Show preferences</text>
+    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="edited">Hide preferences</text>
+    <text id="ECA_CONTENT_LOADING" development="new" translation="edited">Loading content - Please wait!</text>
+    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="edited">The e-mail address might be incorrect!</text>
+    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="edited">external recipient</text>
+    <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
+    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Senders e-mail address</text>
+    <text id="ECA_FIELD_ERROR" development="new" translation="edited">Some fields are not filled in or do not comply. Please filled them in or check them for consitency.</text>
+    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in \nall data fields and \npress 'send'.</text>
+    <text id="ECA_FONT" development="new" translation="edited">Font type preferences. (default: Comic Sans MS)</text>
+    <text id="ECA_FONT_SIZE" development="new" translation="edited">Font size preference. (default: 20) </text>
+    <text id="ECA_FONT_COLOR" development="new" translation="edited">Font colour preference. (default: black)</text>
+    <text id="ECA_GREETING_CARD" development="new" translation="edited">Greeting card </text>
+    <text id="ECA_GREETING_CARDS" development="new" translation="edited">Greeting card</text>
+    <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Edit greeting card</text>
+    <text id="ECA_GREETING_CARD_SEND" development="new" translation="edited">Send greeting card</text>
+    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="edited">Greeting card preview</text>
+    <text id="ECA_INPUT_INCORRECT" development="new" translation="edited">Following required fields for sending \ngreeting \ncard are \nnot filled in or are incorrect:</text>
+    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">internal recipient</text>
+    <text id="ECA_MAX_CC" development="new" translation="edited">Max. additional recipients</text>
+    <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deactivate and set maximum number of additional recipients if necessary. (default: 10)</text>
+    <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Max. number of characters in a message</text>
+    <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Deactivate option here and define maximum length of message if necessary. (default: 500 characters)</text>
+	<text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Maximum of %VAR1% characters is allowed!</text>
+	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">More recipients</text>
+	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Sender's name</text> 
+    <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">Name of recipient: %VAR1%</text>
+    <text id="ECA_NEED_JAVASCRIPT" development="new" translation="edited">For sending greeting cards, javascript has to be enabled!\nPlease enable Javascript in order to send your greeting card!</text>
+    <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">New message received</text>    
+    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">No user with valid e-mail address!</text>
+    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">No further recipients</text>
 	
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="edited">Your greating card could not be sent!</text>
-	<text id="ECA_OTHER_RECIPIENT" development="edited" translation="edited">Other recipients</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="edited" translation="edited">Please select a valid role type!</text>
-    <text id="ECA_RECIPIENT_EMAIL" development="edited" translation="edited">E-mail recepient</text>
-    <text id="ECA_RECIPIENT_NAME" development="edited" translation="edited">Name of recepient</text>    
+	<text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Other recipients</text>
+    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="edited">Please select a valid role type!</text>
+    <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail recepient</text>
+    <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Name of recepient</text>    
 	
-    <text id="ECA_SCALING_GREETING_CARD" development="edited" translation="edited">Greeting card image size preference (width x height)</text>
-    <text id="ECA_SCALING_PREVIEW" development="edited" translation="edited">Image preview preference (width x height)</text>
+    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Greeting card image size preference (width x height)</text>
+    <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Image preview preference (width x height)</text>
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Set size of preview picture. (default: 250 x 250 Pixel²)</text>
-    <text id="ECA_SEND_ERROR" development="edited" translation="edited">An error occured while sending the greeting card. Please try again later.</text>    
+    <text id="ECA_SEND_ERROR" development="new" translation="edited">An error occured while sending the greeting card. Please try again later.</text>    
 	
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Your greeting card will be sent to members of the selected role if members provided e-mail address.\n\nSelect a member of a role or entire role.</text>
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="edited" translation="edited">%VAR1% characters left</text>
+    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% characters left</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card was send.</text>
-    <text id="ECA_TEMPLATE" development="edited" translation="edited">Standard template. (default: standard letter) </text>
+    <text id="ECA_TEMPLATE" development="new" translation="edited">Standard template. (default: standard letter) </text>
     <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Define standard template. (pred.: standard letter) </text>
-    <text id="ECA_THE_MESSAGE" development="edited" translation="edited">One message</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="edited" translation="edited">To all role members</text>
-    <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="edited" translation="edited">Show full size picture</text>
-    <text id="ECA_YOUR_MESSAGE" development="edited" translation="edited">Your message</text>
+    <text id="ECA_THE_MESSAGE" development="new" translation="edited">One message</text>
+    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="edited">To all role members</text>
+    <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Show full size picture</text>
+    <text id="ECA_YOUR_MESSAGE" development="new" translation="edited">Your message</text>
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="edited">Back to guestbook</text>
@@ -234,104 +234,104 @@
     <text id="GBO_WRITE_COMMENT" development="new" translation="edited">Leave comment</text>
     
     <!-- Phrases only in Installation -->
-    <text id="INS_ADD_ANOTHER_ORGANIZATION" development="edited" translation="edited">Add another organization</text>
-    <text id="INS_ADD_ORGANIZATION" development="edited" translation="edited">Add organization</text>
-	<text id="INS_ADDIDIONAL_DATA" development="edited" translation="edited">Additional information</text>
-    <text id="INS_ADDRESS_LIST" development="edited" translation="edited">Address list</text>
+    <text id="INS_ADD_ANOTHER_ORGANIZATION" development="new" translation="edited">Add another organization</text>
+    <text id="INS_ADD_ORGANIZATION" development="new" translation="edited">Add organization</text>
+	<text id="INS_ADDIDIONAL_DATA" development="new" translation="edited">Additional information</text>
+    <text id="INS_ADDRESS_LIST" development="new" translation="edited">Address list</text>
 	<text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="edited">Administrator's information is incomplete!</text>
 	<text id="INS_AOL_INSTANT_MESSENGER" development="new1" translation="edited">AOL Instant Messenger</text>
-    <text id="INS_BIRTHDAY" development="edited" translation="edited">Birthday</text>
-    <text id="INS_BOARD" development="edited" translation="edited">Administrative board</text>
-    <text id="INS_CHOOSE_LANGUAGE" development="edited" translation="edited">Choose language</text>
-    <text id="INS_CITY" development="edited" translation="edited">Place</text>
-    <text id="INS_CONFERENCE_ROOM" development="edited" translation="edited">Conference room</text>
-    <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="edited" translation="edited">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
-    <text id="INS_CONTACT_DETAILS" development="edited" translation="edited">Contact details</text>
-    <text id="INS_COURSES" development="edited" translation="edited">Courses</text>
-    <text id="INS_CREATE_ADMINISTRATOR" development="edited" translation="edited">Creating administrator</text>
-    <text id="INS_CREATE_CONFIGURATION_FILE" development="edited" translation="edited">Creating configuration file</text>
-	<text id="INS_DATA_DO_NOT_MATCH" development="edited" translation="edited">Data from %VAR1_BOLD% does not comply with information provided in installation wizzard.\n\nCheck config.php and all other information.</text>
-    <text id="INS_DATA_OF_ADMINISTRATOR" development="edited" translation="edited">Administrator's details</text>
-    <text id="INS_DATA_OF_ADMINISTRATOR_DESC" development="edited" translation="edited">Provide here administrator's name, e-mail and access information. Log in with same user after installation.</text>
-    <text id="INS_DATABASE_DOESNOT_NEED_UPDATED" development="edited" translation="edited">Database update is not required</text>
-    <text id="INS_DATABASE_FILE_NOT_FOUND" development="edited" translation="edited">File %VAR1_BOLD% could not be found in folder %VAR2_BOLD%.</text>
-    <text id="INS_DATABASE_IS_UP_TO_DATE" development="edited" translation="edited">Admidio's database is up to date</text>
-    <text id="INS_DATABASE_IS_UPDATED" development="edited" translation="edited">Updating database</text>
-    <text id="INS_DATABASE_LOGIN" development="edited" translation="edited">Entering database information</text>
-    <text id="INS_DATABASE_LOGIN_DESC" development="edited" translation="edited">Provide your database access information here. Table prefix can be customised if needed. Customisation should not be necessary if multiple Admidio installations are using the same database.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="edited" translation="edited">Database update is required</text>
-    <text id="INS_DATABASE_NO_LOGIN" development="edited" translation="edited">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
-    <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="edited" translation="edited">Creating database</text>
-    <text id="INS_DESCRIPTION_BOARD" development="edited" translation="edited">Administrative board of association</text>
-    <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="edited" translation="edited">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
-    <text id="INS_DESCRIPTION_MEMBER" development="edited" translation="edited">All organisation members</text>
-    <text id="INS_DESCRIPTION_WEBMASTER" development="edited" translation="edited">Group of system administrators</text>
-    <text id="INS_DOWNLOAD" development="edited" translation="edited">Downloading %VAR1%</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="edited" translation="edited">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
-    <text id="INS_ENTER_LOGIN_TO_DATABASE" development="edited" translation="edited">Enter database access information</text>
-    <text id="INS_ERROR_OPEN_FILE" development="edited" translation="edited">File %VAR1_BOLD% could not be opened.</text>
-    <text id="INS_FAX" development="edited" translation="edited">Fax</text>
-    <text id="INS_FOLDER_NOT_WRITABLE" development="edited" translation="edited">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download modul.</text>
+    <text id="INS_BIRTHDAY" development="new" translation="edited">Birthday</text>
+    <text id="INS_BOARD" development="new" translation="edited">Administrative board</text>
+    <text id="INS_CHOOSE_LANGUAGE" development="new" translation="edited">Choose language</text>
+    <text id="INS_CITY" development="new" translation="edited">Place</text>
+    <text id="INS_CONFERENCE_ROOM" development="new" translation="edited">Conference room</text>
+    <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="edited">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
+    <text id="INS_CONTACT_DETAILS" development="new" translation="edited">Contact details</text>
+    <text id="INS_COURSES" development="new" translation="edited">Courses</text>
+    <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="edited">Creating administrator</text>
+    <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="edited">Creating configuration file</text>
+	<text id="INS_DATA_DO_NOT_MATCH" development="new" translation="edited">Data from %VAR1_BOLD% does not comply with information provided in installation wizzard.\n\nCheck config.php and all other information.</text>
+    <text id="INS_DATA_OF_ADMINISTRATOR" development="new" translation="edited">Administrator's details</text>
+    <text id="INS_DATA_OF_ADMINISTRATOR_DESC" development="new" translation="edited">Provide here administrator's name, e-mail and access information. Log in with same user after installation.</text>
+    <text id="INS_DATABASE_DOESNOT_NEED_UPDATED" development="new" translation="edited">Database update is not required</text>
+    <text id="INS_DATABASE_FILE_NOT_FOUND" development="new" translation="edited">File %VAR1_BOLD% could not be found in folder %VAR2_BOLD%.</text>
+    <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Admidio's database is up to date</text>
+    <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
+    <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Entering database information</text>
+    <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Provide your database access information here. Table prefix can be customised if needed. Customisation should not be necessary if multiple Admidio installations are using the same database.</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="edited">Database update is required</text>
+    <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
+    <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Creating database</text>
+    <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Administrative board of association</text>
+    <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
+    <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">All organisation members</text>
+    <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Group of system administrators</text>
+    <text id="INS_DOWNLOAD" development="new" translation="edited">Downloading %VAR1%</text>
+    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
+    <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Enter database access information</text>
+    <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">File %VAR1_BOLD% could not be opened.</text>
+    <text id="INS_FAX" development="new" translation="edited">Fax</text>
+    <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download modul.</text>
     <text id="INS_GOOGLE_TALK" development="new1" translation="edited">Google Talk</text>
-    <text id="INS_GROUPS" development="edited" translation="edited">Groups</text>
+    <text id="INS_GROUPS" development="new" translation="edited">Groups</text>
     <text id="INS_ICQ" development="new1" translation="edited">ICQ</text>
-    <text id="INS_INSTALL_ADMIDIO" development="edited" translation="edited">Install Admidio</text>
-    <text id="INS_INSTALLATION" development="edited" translation="edited">Installation</text>
-    <text id="INS_INSTALLATION_SUCCESSFUL" development="edited" translation="edited">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</text>
-    <text id="INS_INSTALLATION_VERSION" development="edited" translation="edited">Installation of version %VAR1%</text>
-    <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="edited" translation="edited">Installation was successful</text>
-    <text id="INS_INTERN" development="edited" translation="edited">Intern</text>
-    <text id="INS_LANGUAGE_NOT_CHOOSEN" development="edited" translation="edited">No language has beeen selected.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="edited" translation="edited">Wemaster's access information</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="edited" translation="edited">Provide access information of a webmaster of an existing organisation. Use his/her access information later in order to log in to new organisation.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="edited" translation="edited">Access information of webmaster is not complete!</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="edited" translation="edited">Incorrect log in. Provided access information does not exist or can not be found in previous organisations!</text> 
+    <text id="INS_INSTALL_ADMIDIO" development="new" translation="edited">Install Admidio</text>
+    <text id="INS_INSTALLATION" development="new" translation="edited">Installation</text>
+    <text id="INS_INSTALLATION_SUCCESSFUL" development="new" translation="edited">Admidio database installation and configuration is complete, system is ready for use. Please log in now by using access information of the system administrator.</text>
+    <text id="INS_INSTALLATION_VERSION" development="new" translation="edited">Installation of version %VAR1%</text>
+    <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="edited">Installation was successful</text>
+    <text id="INS_INTERN" development="new" translation="edited">Intern</text>
+    <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="edited">No language has beeen selected.</text>
+    <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="edited">Wemaster's access information</text>
+    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Provide access information of a webmaster of an existing organisation. Use his/her access information later in order to log in to new organisation.</text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Access information of webmaster is not complete!</text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Incorrect log in. Provided access information does not exist or can not be found in previous organisations!</text> 
 
-	<text id="INS_MASTER_DATA" development="edited" translation="edited">Master data</text>
-    <text id="INS_MEMBERSHIP" development="edited" translation="edited">Membership</text>
-    <text id="INS_MESSENGER" development="edited" translation="edited">Messenger</text>
-    <text id="INS_MOBILE" development="edited" translation="edited">Handy</text>
+	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
+    <text id="INS_MEMBERSHIP" development="new" translation="edited">Membership</text>
+    <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
+    <text id="INS_MOBILE" development="new" translation="edited">Handy</text>
     <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
-    <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="edited" translation="edited">Not all MySQL database access information has been provided!</text>
-    <text id="INS_MYSQL_VERSION" development="edited" translation="edited">MySQL version</text>
-    <text id="INS_NAME_OF_ORGANIZATION" development="edited" translation="edited">Organisation name</text>
-    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="edited" translation="edited">Please provide official abbreviation of the organisation's name here for use in Admidio.</text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="edited" translation="edited">Please provide official abbreviations of the organisations' name here for use in Admidio.</text>
-    <text id="INS_NECESSARY_INFORMATION" development="edited" translation="edited">Please provide on the following pages essential information about the new organisation.</text>
-    <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="edited" translation="edited">Provided organisation name is not complete!</text>
-    <text id="INS_OVERVIEW" development="edited" translation="edited">Overview</text>
-    <text id="INS_PASSWORDS_NOT_EQUAL" development="edited" translation="edited">Provided passwords do not match.</text>
-    <text id="INS_PHONE_LIST" development="edited" translation="edited">Phone list</text>
-    <text id="INS_PHP_VERSION" development="edited" translation="edited">PHP version</text>
-    <text id="INS_PHP_WRONG_MYSQL_VERSION" development="edited" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
-    <text id="INS_PHP_WRONG_PHP_VERSION" development="edited" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
-    <text id="INS_POSTCODE" development="edited" translation="edited">Postal ode</text>
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="edited" translation="edited">Previous Admidio version</text>
+    <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Not all MySQL database access information has been provided!</text>
+    <text id="INS_MYSQL_VERSION" development="new" translation="edited">MySQL version</text>
+    <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organisation name</text>
+    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Please provide official abbreviation of the organisation's name here for use in Admidio.</text>
+    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Please provide official abbreviations of the organisations' name here for use in Admidio.</text>
+    <text id="INS_NECESSARY_INFORMATION" development="new" translation="edited">Please provide on the following pages essential information about the new organisation.</text>
+    <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="edited">Provided organisation name is not complete!</text>
+    <text id="INS_OVERVIEW" development="new" translation="edited">Overview</text>
+    <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Provided passwords do not match.</text>
+    <text id="INS_PHONE_LIST" development="new" translation="edited">Phone list</text>
+    <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
+    <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
+    <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
+    <text id="INS_POSTCODE" development="new" translation="edited">Postal ode</text>
+    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
 	
-    <text id="INS_SET_ADMINISTRATOR" development="edited" translation="edited">Set administrator</text>
-    <text id="INS_SET_ORGANIZATION" development="edited" translation="edited">Creating organisation</text>
-    <text id="INS_SET_UP_ORGANIZATION" development="edited" translation="edited">Configure organisation</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="edited" translation="edited">New organisation %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
-    <text id="INS_SETUP_WAS_SUCCESSFUL" development="edited" translation="edited">Configuration successful</text>
+    <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Set administrator</text>
+    <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Creating organisation</text>
+    <text id="INS_SET_UP_ORGANIZATION" development="new" translation="edited">Configure organisation</text>
+    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="edited">New organisation %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
+    <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="edited">Configuration successful</text>
     <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
 	<text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We would appreciate a lot if you could support the development of Admidio with your donation!
 </text>
-    <text id="INS_TABLE_PREFIX" development="edited" translation="edited">Table prefix</text>
-    <text id="INS_TABLE_PREFIX_INVALID" development="edited" translation="edited">Table prefix includes invalid character!</text>
-    <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="edited" translation="edited">Existing data stored under same prefix will be overwritten!</text>
-    <text id="INS_TEAMS" development="edited" translation="edited">Teams</text>
-    <text id="INS_TRAINING" development="edited" translation="edited">Training</text>
-    <text id="INS_UPDATE" development="edited" translation="edited">Update</text>
-    <text id="INS_UPDATE_DATABASE" development="edited" translation="edited">Update database</text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="edited" translation="edited">Until now Version 1.x of Admidio was in use. In order to migrate databes for Admidio %VAR1% successfully, please provide exact version number of previous installation.</text>
-    <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="edited" translation="edited">Admidio datanbase has been successfully updated to version %VAR1%.\nYou are free to log in and use Admidio again.</text>
-    <text id="INS_UPDATE_VERSION" development="edited" translation="edited">Update to version %VAR1%</text>
-    <text id="INS_UPDATING_WAS_SUCCESSFUL" development="edited" translation="edited">Update process successful</text>
-    <text id="INS_WARNING_BETA_VERSION" development="edited" translation="edited">This is a beta version of Admidio.\n\nUsage can be risky due to possible instablility and data loss. Please use as test environment only!</text>
-    <text id="INS_WARNING_SAFE_MODE" development="edited" translation="edited">Save mode on server is active. This can cause later problems when using certain functions.</text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="edited" translation="edited">Welcome! Create your new organisation here!</text>
-    <text id="INS_WELCOME_TO_INSTALLATION" development="edited" translation="edited">Welcome to the installation of Admidio</text>
-    <text id="INS_WELCOME_TEXT" development="edited" translation="edited">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</text>
+    <text id="INS_TABLE_PREFIX" development="new" translation="edited">Table prefix</text>
+    <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="edited">Table prefix includes invalid character!</text>
+    <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="edited">Existing data stored under same prefix will be overwritten!</text>
+    <text id="INS_TEAMS" development="new" translation="edited">Teams</text>
+    <text id="INS_TRAINING" development="new" translation="edited">Training</text>
+    <text id="INS_UPDATE" development="new" translation="edited">Update</text>
+    <text id="INS_UPDATE_DATABASE" development="new" translation="edited">Update database</text>
+    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="new" translation="edited">Until now Version 1.x of Admidio was in use. In order to migrate databes for Admidio %VAR1% successfully, please provide exact version number of previous installation.</text>
+    <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="edited">Admidio datanbase has been successfully updated to version %VAR1%.\nYou are free to log in and use Admidio again.</text>
+    <text id="INS_UPDATE_VERSION" development="new" translation="edited">Update to version %VAR1%</text>
+    <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="edited">Update process successful</text>
+    <text id="INS_WARNING_BETA_VERSION" development="new" translation="edited">This is a beta version of Admidio.\n\nUsage can be risky due to possible instablility and data loss. Please use as test environment only!</text>
+    <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Save mode on server is active. This can cause later problems when using certain functions.</text>
+    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="edited">Welcome! Create your new organisation here!</text>
+    <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="edited">Welcome to the installation of Admidio</text>
+    <text id="INS_WELCOME_TEXT" development="new" translation="edited">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</text>
     <text id="INS_YAHOO_MESSENGER" development="new1" translation="edited">Yahoo! Messenger</text>
 
     <!-- Phrases only in Linkmodule -->
@@ -352,7 +352,7 @@
     <text id="LNK_REDIRECT_DESC" development="new" translation="edited">You are leaving the website of %VAR1_BOLD% and will be redirected automatically to %VAR3% in %VAR2% seconds.\n\nIf the automatically redirection is not working please click %VAR4%!</text>
     <text id="LNK_SAME_WINDOW" development="new" translation="edited">Same window</text>
     <text id="LNK_WEBLINKS" development="new" translation="edited">Web links</text>
-	<text id="LNK_WEBLINKS_DESC" development="new" translation="edited">Create and organise by categories interesting hyperlinks here.</text>
+	<text id="LNK_WEBLINKS_DESC" development="new" translation="edited">Create and organise by categories interesting hyperlinks.</text>
 
     <!-- Phrases only in Listsmodule -->
     <text id="LST_A_TO_Z" development="new" translation="edited">A to Z</text>
@@ -883,30 +883,30 @@
     <text id="SYS_ABORT" development="new" translation="edited">Cancel</text>
     <text id="SYS_ACTIVE" development="new" translation="edited">Active</text>
     <text id="SYS_ACTIVE_SINCE" development="new" translation="edited">Active since</text>
-    <text id="SYS_ACTIVATED" development="edited" translation="edited">Active</text>
+    <text id="SYS_ACTIVATED" development="new" translation="edited">Active</text>
     <text id="SYS_ADD_EMAIL" development="new" translation="edited">Add e-mail address</text>
     <text id="SYS_ADD_IMAGE" development="new" translation="edited">Add picture</text>
     <text id="SYS_ADD_LINK" development="new" translation="edited">Add hyperlink</text>
     <text id="SYS_ADD_ROLE" development="new" translation="edited">Add Role</text>
-    <text id="SYS_ADD_RECIPIENTS" development="edited" translation="edited">Add recipient</text>
+    <text id="SYS_ADD_RECIPIENTS" development="new" translation="edited">Add recipient</text>
 	<text id="SYS_ADDRESS" development="new" translation="edited">Address</text>
 	<text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">The Online Management System for Associations, Groups and Organisations</text>
 	<text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
     <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administration</text>
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax request error.\nError Details: %VAR1%</text>
-    <text id="SYS_ALL" development="edited" translation="edited">All</text>
+    <text id="SYS_ALL" development="new" translation="edited">All</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">also Visitors</text>
     <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Would you like to approve entry %VAR1_BOLD%?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="edited">Assigning members</text>
 	<text id="SYS_AUTHORIZATION" development="new" translation="edited">Authorisation</text>
-    <text id="SYS_BACK" development="edited" translation="edited">Back</text>
-	<text id="SYS_BACK_TO_MODULE_OVERVIEW" development="edited" translation="edited">Back to module overview</text>
+    <text id="SYS_BACK" development="new" translation="edited">Back</text>
+	<text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Back to module overview</text>
     <text id="SYS_BBCODE" development="new" translation="edited">BBCode</text>
     <text id="SYS_BBCODE_DESC" development="new" translation="edited">Description texts of certain modules (announcements, appointments, guestbook and weblinks) can be formated by tags (BBCode). Therefor you will have to use the listed tags within the text.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="edited">You are using a BETA version of Admidio.\n\nStability issues and data loss might occur. Please use this version for testing purposes only!</text>
 	<text id="SYS_BIRTHDAY" development="new" translation="edited">Birthday</text>
-    <text id="SYS_BOLD" development="edited" translation="edited">Bold</text>
+    <text id="SYS_BOLD" development="new" translation="edited">Bold</text>
     <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="edited">Display text %VAR1%bold%VAR2%</text>
     <text id="SYS_BROWSE" development="new" translation="edited">Browse</text>
     <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
@@ -928,7 +928,7 @@
     <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="edited">Display text centered</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Change password</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox status is saved automatically after marking.</text>
-    <text id="SYS_CLOSE" development="edited" translation="edited">Close</text>
+    <text id="SYS_CLOSE" development="new" translation="edited">Close</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="edited">Close all tags</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="edited">Close window</text>
     <text id="SYS_COMMENT" development="new" translation="edited">Comment</text>
@@ -942,15 +942,15 @@
     <text id="SYS_COOKIE_NOT_SET" development="new" translation="edited">Log-in error! Your browser does not accept cookies!\n\nFor successful log-in, please, set your browser to accept cookies from %VAR1_BOLD%.</text>
     <text id="SYS_COPY" development="new" translation="edited">Copy</text>
     <text id="SYS_COUNTRY" development="new" translation="edited">Country</text>
-    <text id="SYS_CREATE" development="edited" translation="edited">Create</text>
-    <text id="SYS_CREATE_VAR" development="edited" translation="edited">Create %VAR1%</text>
+    <text id="SYS_CREATE" development="new" translation="edited">Create</text>
+    <text id="SYS_CREATE_VAR" development="new" translation="edited">Create %VAR1%</text>
 	<text id="SYS_CREATE_NEW_USER" development="new" translation="edited">Add new user</text>
     <text id="SYS_CREATE_NOT_FOUND_USER" development="new" translation="edited">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, kannst du diesen neu anlegen.</text>
 	<text id="SYS_CREATE_ROLE" development="new" translation="edited">Create role</text>
-    <text id="SYS_CREATED_BY" development="edited" translation="edited">Created by %VAR1% on %VAR2%</text>
+    <text id="SYS_CREATED_BY" development="new" translation="edited">Created by %VAR1% on %VAR2%</text>
     <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">No valid e-mail address has been provided!\n\nPlease provide an e-mail address  in your %VAR1%profile%VAR1%.</text>
 
-    <text id="SYS_DATABASE" development="edited" translation="edited">Database</text>
+    <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
     <text id="SYS_DATABASE_ERROR" development="new" translation="edited">An error occured while accessing the database:\n\n%VAR1%</text>
     <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">Database version %VAR1% does not comply with Admidio scripts %VAR2%.\n\nPlease contact the %VAR3%webmaster%VAR4% of the site.</text>
     <text id="SYS_DATE" development="new" translation="edited">Date</text>
@@ -960,17 +960,17 @@
     <text id="SYS_DATE_INVALID" development="new" translation="edited">Invalid date in field %VAR1_BOLD%.\n\nDate has to comply with this formatting: %VAR2_BOLD%.</text>
 	<text id="SYS_DATE_MODIFIED" development="new" translation="edited">Date of modification</text>
     <text id="SYS_DATE_TO" development="new" translation="edited">to</text>
-    <text id="SYS_DEACTIVATED" development="edited" translation="edited">Inactive</text>
+    <text id="SYS_DEACTIVATED" development="new" translation="edited">Inactive</text>
     <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="edited">Reduce font size</text>
-    <text id="SYS_DELETE" development="edited" translation="edited">Delete</text>
+    <text id="SYS_DELETE" development="new" translation="edited">Delete</text>
     <text id="SYS_DELETE_DATA" development="new" translation="edited">Data has been deleted.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="edited">Would you like to delete entry %VAR1_BOLD%?</text>
     <text id="SYS_DESCRIPTION" development="new" translation="edited">Description</text>
     <text id="SYS_DONATE" development="new" translation="edited">Donate</text>
-    <text id="SYS_EDIT" development="edited" translation="edited">Edit</text>
-    <text id="SYS_EDIT_VAR" development="edited" translation="edited">Edit %VAR1%</text>
+    <text id="SYS_EDIT" development="new" translation="edited">Edit</text>
+    <text id="SYS_EDIT_VAR" development="new" translation="edited">Edit %VAR1%</text>
     <text id="SYS_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
-    <text id="SYS_EMAIL" development="edited" translation="edited">E-mail</text>
+    <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail addresse in field %VAR1_BOLD% includes invalid characters or is incomplete.</text>
     <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail has been sent to %VAR1_BOLD%.</text>
     <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">E-Mmail to %VAR1_BOLD% could not be sent.</text>
@@ -978,9 +978,9 @@
 	<text id="SYS_EMAIL_NOTIFICATION_ACTIVATE" development="new" translation="edited">Activating e-mail notification</text>
 	<text id="SYS_EMAIL_NOTIFICATION_CONFIG" development="new" translation="edited">Configure e-mail notification</text>
 	<text id="SYS_EMAIL_NOTIFICATION_DESCRIPTION" development="new" translation="edited">You can activate email notification for new database entries in this modules. The administrator is informed by mail about new entries in the modules (only in case of new entries). The notification e-mail will be sent to the system mail address %VAR1%. (default: no)</text>
-    <text id="SYS_END" development="edited" translation="edited" description="End of a date">End</text>
+    <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
     <text id="SYS_ERROR" development="new" translation="edited">Error</text>
-    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="edited" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>
+    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>
     <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">An error occured!\n\nEntry could not be deleted.</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Examples</text>
@@ -1001,10 +1001,10 @@
     <text id="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="edited">Folder %VAR1_BOLD% cannot be created including write permissions.\n\nPlease ask %VAR2%eebmaster%VAR3% for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</text>
     <text id="SYS_FORMER" development="new" translation="edited">Former</text>
     <text id="SYS_FORMER_PL" development="new" translation="edited">Former</text>
-    <text id="SYS_FONT" development="edited" translation="edited">Font</text>
-  	<text id="SYS_FONT_COLOR" development="edited" translation="edited">Font-color</text>
-    <text id="SYS_FONT_SIZE" development="edited" translation="edited">Font-size</text>
-    <text id="SYS_FONT_STYLE" development="edited" translation="edited">Font-style</text>
+    <text id="SYS_FONT" development="new" translation="edited">Font</text>
+  	<text id="SYS_FONT_COLOR" development="new" translation="edited">Font-color</text>
+    <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-size</text>
+    <text id="SYS_FONT_STYLE" development="new" translation="edited">Font-style</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">I forgot my password!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
 	<text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">You are logged as %VAR1_BOLD% in forum system %VAR2_BOLD%. You have %VAR3_BOLD% new messages.</text>
@@ -1019,10 +1019,10 @@
     <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Selected user name has been deleted in the forum and Admidio.</text>
     <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Selected user name already exists in the forum.\n\nPlease select another name.</text>
    
-       <text id="SYS_GENDER" development="edited" translation="edited">Gender</text>
+       <text id="SYS_GENDER" development="new" translation="edited">Gender</text>
 
-	<text id="SYS_HEADLINE" development="edited" translation="edited">Headline</text>
-    <text id="SYS_HELP" development="edited" translation="edited">Help</text>
+	<text id="SYS_HEADLINE" development="new" translation="edited">Headline</text>
+    <text id="SYS_HELP" development="new" translation="edited">Help</text>
 	<text id="SYS_HIDE" development="new" translation="edited">Hide</text>
     <text id="SYS_HOMEPAGE" development="new" translation="edited">Homepage</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP error (%1)</text>
@@ -1031,13 +1031,13 @@
     <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="edited">Increase font size</text>
 	<text id="SYS_INFO" development="new" translation="edited">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installation directory 'adm_install' still exists on the server. Due to security reasons it has to deleted!</text>
-    <text id="SYS_INVALID_PAGE_VIEW" development="edited" translation="edited">Invalid page view</text>
+    <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Invalid page view</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O error</text>
-    <text id="SYS_ITALIC" development="edited" translation="edited">Italic</text>
+    <text id="SYS_ITALIC" development="new" translation="edited">Italic</text>
 
-    <text id="SYS_LANGUAGE" development="edited" translation="edited">Language</text>
-    <text id="SYS_LAST_EDITED_BY" development="edited" translation="edited">Last edited by %VAR1% on %VAR2%</text>
+    <text id="SYS_LANGUAGE" development="new" translation="edited">Language</text>
+    <text id="SYS_LAST_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="edited">Surname</text>
 	<text id="SYS_LATER" development="new" translation="edited">Later</text>
     <text id="SYS_LEADER" development="new" translation="edited">Leader</text>
@@ -1046,7 +1046,7 @@
     <text id="SYS_LOCATION" description="Location of a date" development="new" translation="edited">City</text>
     <text id="SYS_LOCK" development="new" translation="edited">Lock</text>
     <text id="SYS_LOCKED" development="new" translation="edited">Locked</text>
-    <text id="SYS_LOGIN" development="edited" translation="edited">Sign in</text>
+    <text id="SYS_LOGIN" development="new" translation="edited">Sign in</text>
     <text id="SYS_LOGIN_FAILED" development="new" translation="edited">You made several attempts to sign in within a short period of time by using an incorrect password.\nDue to security reasons your account remains inaccessable for the next 15 minutes.</text>
     <text id="SYS_LOGIN_NOT_ACTIVATED" development="new" translation="edited">Your account has not been activated yet.\n\nYou will be informed as soon as access is possible.</text>
     <text id="SYS_LOGIN_PROBLEMS" development="new" translation="edited">Login problems</text>
@@ -1062,22 +1062,22 @@
 	<text id="SYS_MAP" development="new" translation="edited">Map</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="edited">Manage categories</text>
     <text id="SYS_MALE" development="new" translation="edited">Male</text>
-    <text id="SYS_MANDATORY_FIELD" development="edited" translation="edited">Mandatory field</text>
+    <text id="SYS_MANDATORY_FIELD" development="new" translation="edited">Mandatory field</text>
     <text id="SYS_MASTER_DATA" development="new" translation="edited">Basic information</text>
     <text id="SYS_MAX_PARTICIPANTS" development="new" translation="edited">Max. participants</text>
     <text id="SYS_MEGA_PIXEL" development="new" translation="edited">Megapixels</text>
     <text id="SYS_MEMBER" development="new" translation="edited">Member</text>
     <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="edited">Member of organisation %VAR1%</text>
- 	<text id="SYS_MEMBERS" development="edited" translation="edited">Members</text>
-    <text id="SYS_MESSAGE" development="edited" translation="edited">Message</text>
+ 	<text id="SYS_MEMBERS" development="new" translation="edited">Members</text>
+    <text id="SYS_MESSAGE" development="new" translation="edited">Message</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minutes</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">This module is disabled.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Modules</text>
-    <text id="SYS_NAME" development="edited" translation="edited">Name</text>
-    <text id="SYS_NAME_ABBREVIATION" development="edited" translation="edited">Short name</text>
-    <text id="SYS_NEXT" development="edited" translation="edited">Next</text>
+    <text id="SYS_NAME" development="new" translation="edited">Name</text>
+    <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Short name</text>
+    <text id="SYS_NEXT" development="new" translation="edited">Next</text>
     <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">No.</text>
-    <text id="SYS_NO" development="edited" translation="edited">No</text>
+    <text id="SYS_NO" development="new" translation="edited">No</text>
     <text id="SYS_NO_ENTRY" development="new" translation="edited">Requested entry does not exist in the database.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="edited">No entries available.</text>
 	<text id="SYS_NO_ENTRIES_FOUND" development="new" translation="edited">No entries found.</text>
@@ -1089,7 +1089,6 @@
 	<text id="SYS_NOT_REGISTERED" development="new" translation="edited">not registered</text>
     <text id="SYS_NUMBER" development="new" translation="edited">Number</text>
     <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="edited">Number of logins</text>
-	<text id="SYS_OK" development="new" translation="todo">OK</text>
     <text id="SYS_OPTIONAL" development="new" translation="edited">Optional</text>
     <text id="SYS_ORDER" development="new" translation="edited">Order</text>
     <text id="SYS_OVERVIEW" development="new" translation="edited">Overview</text>
@@ -1098,26 +1097,26 @@
     <text id="SYS_PAGE_NEXT" development="new" translation="edited">Next</text>
     <text id="SYS_PARTICIPANTS" development="new" translation="edited">Members</text>
     <text id="SYS_PASSWORD" development="new" translation="edited">Password</text>
-    <text id="SYS_PASSWORD_FORGOTTEN" development="edited" translation="edited">Password forgotten</text>
+    <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="edited">Password forgotten</text>
     <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="edited">In case of a forgotten password, the system is able to generate a new password and to send it to your e-mail address.\nPlease fill in your e-mail address in the field below and press "Send new password".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Login failed due to incorrect password.\n\nPlease check your password and try again.</text>
-    <text id="SYS_PHONE" development="edited" translation="edited">Phone</text>    
+    <text id="SYS_PHONE" development="new" translation="edited">Phone</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Photo</text>
 	<text id="SYS_PHOTOS" development="new" translation="edited">Photos</text>	
-    <text id="SYS_PLEASE_CHOOSE" development="edited" translation="edited">select option</text>
+    <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">select option</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Please wait</text>
-    <text id="SYS_PREVIEW" development="edited" translation="edited">Preview</text>
+    <text id="SYS_PREVIEW" development="new" translation="edited">Preview</text>
     <text id="SYS_PREVIOUS" development="new" translation="edited">Previous</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Process canceled.</text>
 	<text id="SYS_PROGRESSBAR" development="new" translation="edited">Progress bar</text>
     <text id="SYS_PROPERTIES" development="new" translation="edited">Properties</text>
     <text id="SYS_PWACT_PW_SAVED" development="new" translation="edited">New password saved!</text>
     <text id="SYS_PWACT_CODE_INVALID" development="new" translation="edited">Either new password has already been activated or activation code is incorrect!</text>
-    <text id="SYS_RECIPIENT" development="edited" translation="edited">Recipient</text>
+    <text id="SYS_RECIPIENT" development="new" translation="edited">Recipient</text>
     <text id="SYS_REGISTERED_AS" development="new" translation="edited">Logged in as</text>
     <text id="SYS_REGISTRATION" development="new" translation="edited">Registration</text>
     <text id="SYS_REMEMBER_ME" development="new" translation="edited">Stay signed in</text>
-    <text id="SYS_REMOVE" development="edited" translation="edited">Remove</text>
+    <text id="SYS_REMOVE" development="new" translation="edited">Remove</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Remove role</text>
 	<text id="SYS_REPEAT" development="new" translation="edited">Repeat</text>
 	<text id="SYS_REPORT" development="new" translation="edited">Report</text>
@@ -1129,25 +1128,25 @@
     <text id="SYS_ROOM" development="new" translation="edited">Room</text>
     <text id="SYS_RSS_DISABLED" development="new" translation="edited">RSS feature disabled by the system administrator.</text>
 
-    <text id="SYS_SAVE" development="edited" translation="edited">Save</text>
+    <text id="SYS_SAVE" development="new" translation="edited">Save</text>
     <text id="SYS_SAVE_DATA" development="new" translation="edited">Data has been saved.</text>
     <text id="SYS_SECONDS" development="new" translation="edited">Seconds</text>
     <text id="SYS_SECURITY_ERROR" development="new" translation="edited">Security error</text>
-    <text id="SYS_SEND" development="edited" translation="edited">Send</text>
+    <text id="SYS_SEND" development="new" translation="edited">Send</text>
     <text id="SYS_SEND_EMAIL_TO" development="new" translation="edited">Send e-mail to %VAR1%</text>
 	<text id="SYS_SEARCH" development="new" translation="edited">Search</text>
 	<text id="SYS_SEARCH_AFTER" development="new" translation="edited">Browes</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="edited">Send new password</text>
-    <text id="SYS_SENDER" development="edited" translation="edited">Sender</text>
-    <text id="SYS_SERVER" development="edited" translation="edited">Server</text>
+    <text id="SYS_SENDER" development="new" translation="edited">Sender</text>
+    <text id="SYS_SERVER" development="new" translation="edited">Server</text>
     <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="edited">Server settings do not allow files uploads.</text>
     <text id="SYS_SET_BY" development="new" translation="edited">Set by</text>
     <text id="SYS_SET_LINK" development="new" translation="edited">Set %VAR1%ink%VAR2% </text>
-    <text id="SYS_SETTINGS" development="edited" translation="edited">Preferences:</text>
+    <text id="SYS_SETTINGS" development="new" translation="edited">Preferences:</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Display calendar</text>
     <text id="SYS_SHOW_HELP" development="new" translation="edited">Display help</text>
     <text id="SYS_SHOW_IMAGE" development="new" translation="edited">Display picture %VAR1%</text>
-	<text id="SYS_SHOW_ROUTE" development="edited" translation="edited">Show route</text>
+	<text id="SYS_SHOW_ROUTE" development="new" translation="edited">Show route</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">At least one user with similar name (%VAR1_BOLD% ) was found in the database.</text>
     <text id="SYS_SINCE" development="new" translation="edited">since %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="edited">from %VAR1% to %VAR2%</text>
@@ -1156,23 +1155,23 @@
 	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Beginn slideshow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">End slideshow</text>
     <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="edited">Specify %VAR1%e-mail address%VAR2%</text>
-    <text id="SYS_START" development="edited" translation="edited" description="Start of a date">Start</text>
+    <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System message</text>
-    <text id="SYS_TEXT" development="edited" translation="edited">Text</text>
+    <text id="SYS_TEXT" development="new" translation="edited">Text</text>
     <text id="SYS_TEXT_ITALIC" development="new" translation="edited">Display text in %VAR1%italic%VAR2%</text>
     <text id="SYS_TIME" development="new" translation="edited">Time</text>
     <text id="SYS_TIME_FROM" development="new" translation="edited">Time from</text>
     <text id="SYS_TIME_INVALID" development="new" translation="edited">Time error in field %VAR1_BOLD%.\n\nFormat time value according to this: %VAR2_BOLD%.</text>
     <text id="SYS_TIME_TO" development="new" translation="edited">Time toUhrzeit bis</text>
     <text id="SYS_TITLE" development="new" translation="edited">Titel</text>
-    <text id="SYS_TO" development="edited" translation="edited">To</text>
+    <text id="SYS_TO" development="new" translation="edited">To</text>
     <text id="SYS_TYPE" development="new" translation="edited">Type</text>
     <text id="SYS_UNDERLINE" development="new" translation="edited">Underline</text>
     <text id="SYS_UNDERLINE_TEXT" development="new" translation="edited">%VAR1%underline%VAR2% text</text>
     <text id="SYS_UNKNOWN" development="new" translation="edited">unidentified</text>
-    <text id="SYS_UNLIMITED" development="edited" translation="edited">Unlimited</text>
+    <text id="SYS_UNLIMITED" development="new" translation="edited">Unlimited</text>
     <text id="SYS_UNLOCK" development="new" translation="edited">Unlock</text>
     <text id="SYS_USER" development="new" translation="edited">User</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">No user could be found with this ID!</text>
@@ -1182,16 +1181,15 @@
 	<text id="SYS_UPDATE" development="new" translation="edited">Update</text>
     <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Upload error</text>
-	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Filename must not be named "submit".</text>
-    <text id="SYS_VISIBLE" development="edited" translation="edited">Visible</text>
+    <text id="SYS_VISIBLE" development="new" translation="edited">Visible</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="edited">%VAR1% only visible for logged in users.</text>
     <text id="SYS_VISITORS" development="new" translation="edited">Guests</text>
     <text id="SYS_WANT_REGISTER" development="new" translation="edited">I want to register!</text>
-    <text id="SYS_WARNING" development="edited" translation="edited">Warning</text>
-    <text id="SYS_WEBMASTER" development="edited" translation="edited">Webmaster</text>
+    <text id="SYS_WARNING" development="new" translation="edited">Warning</text>
+    <text id="SYS_WEBMASTER" development="new" translation="edited">Webmaster</text>
     <text id="SYS_WEBSITE" development="new" translation="edited">Website</text>
     <text id="SYS_WHAT_TO_DO" development="new" translation="edited">What to do?</text>
-    <text id="SYS_YES" development="edited" translation="edited">Yes</text>
+    <text id="SYS_YES" development="new" translation="edited">Yes</text>
     <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Files searching could not be performed.</text>
     <text id="SYS_FILE_PROGRESS" development="new" translation="edited">%0 of %1 transfered</text>
     <text id="SYS_FILEZIZE" development="new" translation="edited">File size is to large.</text>
