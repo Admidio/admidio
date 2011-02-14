@@ -188,7 +188,7 @@ $g_layout['header'] ='
                             else{
                                 $("input[type=checkbox]#member_"+userid).removeAttr("checked");
                             }                           
-						   jQueryAlert("LST_MUST_HAVE_WEBMASTER", "'.$role->getValue('rol_name').'");
+						   jQueryAlert("SYS_ROLE_MAX_MEMBERS", "'.$role->getValue('rol_name').'");
                        }
                        if(result=="SYS_NO_RIGHTS")
                        {
