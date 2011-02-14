@@ -1089,6 +1089,7 @@
 	<text id="SYS_NOT_REGISTERED" development="new" translation="edited">not registered</text>
     <text id="SYS_NUMBER" development="new" translation="edited">Number</text>
     <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="edited">Number of logins</text>
+	<text id="SYS_OK" development="new" translation="todo">OK</text>
     <text id="SYS_OPTIONAL" development="new" translation="edited">Optional</text>
     <text id="SYS_ORDER" development="new" translation="edited">Order</text>
     <text id="SYS_OVERVIEW" development="new" translation="edited">Overview</text>
@@ -1181,6 +1182,7 @@
 	<text id="SYS_UPDATE" development="new" translation="edited">Update</text>
     <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Upload error</text>
+	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Filename must not be named "submit".</text>
     <text id="SYS_VISIBLE" development="edited" translation="edited">Visible</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="edited">%VAR1% only visible for logged in users.</text>
     <text id="SYS_VISITORS" development="new" translation="edited">Guests</text>

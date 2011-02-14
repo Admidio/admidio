@@ -140,7 +140,8 @@ $.fn.ajaxSubmit = function(options) {
 		var form = $form[0];
 
 		if ($(':input[name=submit]', form).length) {
-			alert('Error: Form elements must not be named "submit".');
+			jQueryAlert("SYS_UPLOAD_NAME_ERROR");
+			
 			return;
 		}
 

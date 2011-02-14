@@ -185,7 +185,7 @@ $g_layout['header'] = '
                 }
                 entfernen();
 
-                alert("'.$g_l10n->get('ROL_SAVE_ROLES').'");
+				jQueryAlert("ROL_SAVE_ROLES");
 
             }
             else

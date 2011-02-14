@@ -1071,6 +1071,7 @@
 	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
     <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="todo">Anzahl Logins</text>
+	<text id="SYS_OK" development="new" translation="todo">OK</text>
     <text id="SYS_OPTIONAL" development="new" translation="todo">Optional</text>
     <text id="SYS_ORDER" development="new" translation="todo">Reihenfolge</text>
     <text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
@@ -1157,6 +1158,7 @@
 	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Fehler beim Upload</text>
+	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" sein!</text>
     <text id="SYS_URL_INVALID_CHAR" development="new_mfa" translation="todo">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/ .</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>

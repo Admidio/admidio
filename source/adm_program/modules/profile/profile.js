@@ -113,6 +113,7 @@ function profileJSClass()
 				},
 				error: function (xhr, ajaxOptions, thrownError){
 					alert(this.changeRoleDates_ErrorText);
+					jQueryAlert("ROL_CHANGE_ROLE_DATES_ERROR");
 				}
 			});
 	}

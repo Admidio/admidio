@@ -122,7 +122,7 @@ function ecardJSClass()
 		if (error)
 		{
 			error_message += "\n\n" + this.errMsg_End_Text;
-			alert(error_message);
+			jQueryAlert("ECA_FILL_INPUTS");
 			return false;  // Formular wird nicht abgeschickt.
 		}
 		else
@@ -277,7 +277,8 @@ function ecardJSClass()
 					funcSuccess();
 			},
 			error: function (xhr, ajaxOptions, thrownError){
-				alert(ecardJS.ajaxExecution_ErrorText.replace('[ERROR]',"\n\tResponse text: "+xhr.responseText+"\n\tAjax options: "+ajaxOptions+"\n\tTrown error: "+thrownError));
+				jQueryAlert("SYS_AJAX_REQUEST_ERROR", "\n\tResponse text: "+xhr.responseText+"\n\tAjax options: "+ajaxOptions+"\n\tTrown error: "+thrownError);
+				
 			}
 		});
 	}
@@ -463,7 +464,7 @@ function ecardJSClass()
 		}
 		if (wert < 0)
 		{
-			alert( this.messageTooLong.replace("[MAX]",this.max_ecardTextLength) );
+			jQueryAlert("ECA_MESSAGE_TOO_LONG", this.max_ecardTextLength);
 			wert = 0;
 			$("#" + this.ecardformid + " textarea[name='ecard[message]']").val($("#" + this.ecardformid + " textarea[name='ecard[message]']").val().substring(0,this.max_ecardTextLength));
 			$("#" + this.counterDiv_id).html('<b>' + wert + '<\/b>');
