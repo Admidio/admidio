@@ -160,7 +160,7 @@ $g_layout['header'] ='
                    //Checkbox wieder setzen. 
             	   $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
             	   //Alarm schlagen
-            	   alert("'.$g_l10n->get('LST_MUST_HAVE_WEBMASTER').'");
+				   jQueryAlert("LST_MUST_HAVE_WEBMASTER");
             	   return false;
                 }';
             }                
@@ -178,7 +178,7 @@ $g_layout['header'] ='
                     success: function(result){                    
                        $("#loadindicator_" + checkbox_id).hide().empty();
 
-                       //Fehler Maximale Mitrgliederzahl überschritten
+                       //Fehler Maximale Mitgliederzahl überschritten
                        if(result=="max_mem_reached")
                        {
                             //Bei Leiter Checkbox deaktiviert, muss Member und Leiter wieder gesetzt werden                            
@@ -188,15 +188,15 @@ $g_layout['header'] ='
                             else{
                                 $("input[type=checkbox]#member_"+userid).removeAttr("checked");
                             }                           
-                           alert("'.$g_l10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')).'");
+						   jQueryAlert("LST_MUST_HAVE_WEBMASTER", "'.$role->getValue('rol_name').'");
                        }
                        if(result=="SYS_NO_RIGHTS")
                        {
-                           alert("'.$g_l10n->get('SYS_NO_RIGHTS').'");
+						   jQueryAlert("SYS_NO_RIGHTS");
                        }
                        if(result=="SYS_INVALID_PAGE_VIEW")
                        {
-                           alert("'.$g_l10n->get('SYS_INVALID_PAGE_VIEW').'");
+						   jQueryAlert("SYS_INVALID_PAGE_VIEW");
                        }
                        if(result=="success")
                        {}                    

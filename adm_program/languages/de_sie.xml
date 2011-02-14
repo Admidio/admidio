@@ -1062,6 +1062,7 @@
 	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
     <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="todo">Anzahl Logins</text>
+	<text id="SYS_OK" development="new" translation="todo">OK</text>
     <text id="SYS_OPTIONAL" development="new" translation="todo">Optional</text>
     <text id="SYS_ORDER" development="new" translation="todo">Reihenfolge</text>
     <text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
@@ -1153,6 +1154,7 @@
 	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Fehler beim Upload</text>
+	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" sein!</text>
     <text id="SYS_VISIBLE" development="new" translation="todo">Sichtbar</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
     <text id="SYS_VISITORS" development="new" translation="todo">Besucher</text>

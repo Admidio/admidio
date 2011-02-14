@@ -31,7 +31,7 @@ function send()
     }
     else
     {
-        alert("'.$g_l10n->get('SYS_FIELDS_EMPTY').'");
+		jQueryAlert("SYS_FIELDS_EMPTY");
     }
 }
 //--></script>
