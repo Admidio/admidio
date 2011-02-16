@@ -167,7 +167,8 @@ echo '
                         echo '<hr />';
                     }
                     echo '<div style="margin-left: 20px;">
-                        <i>'.$row->first_name.' '.$row->last_name.'</i><br />';
+                        <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'">'.
+                            $row->first_name.' '.$row->last_name.'</a><br />';
                         if(strlen($row->address) > 0)
                         {
                             echo $row->address.'<br />';
