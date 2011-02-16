@@ -66,12 +66,12 @@ function jQueryAlert(messageID, messageVAR1, messageVAR2, widthID, heightID)
 	
 	if (typeof(messageVAR1) != "undefined")
 	{
-		urlparameter = urlparameter + "&message_var1" + messageVAR1;
+		urlparameter = urlparameter + "&message_var1=" + messageVAR1;
 	}
 	
 	if (typeof(messageVAR2) != "undefined")
 	{
-		urlparameter = urlparameter + "&message_var2" + messageVAR2;
+		urlparameter = urlparameter + "&message_var2=" + messageVAR2;
 	}
 	
 	if (typeof(widthID) == "undefined")
