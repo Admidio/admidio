@@ -30,15 +30,17 @@ if(isset($_GET['message_var2']) && strlen($_GET['message_var2']) > 0)
 	$display_message = $g_l10n->get($alert_message, $message_var1, $message_var1);
 }
 
-
-// Ausgabe der Meldung
-echo '<div class="formBody">'.$display_message.'</div>';
-
 // Html des Modules ausgeben
-echo '
-<div style="position: relative; top: 5px">
-	<button id="btnDelete" type="button"
-		onclick="parent.$.colorbox.close()"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('SYS_OK').'" />&nbsp;'.$g_l10n->get('SYS_OK').'</button>
-</div>';
+echo '<link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
+';
+
+echo '<div style="margin-top: 30px;" id="message_window">
+        <div class="formHead">'.$g_l10n->get('SYS_NOTE').'</div>
+		<div class="formBody">'.$display_message.'</div>
+        <div style="text-align: left">
+           <button id="btnDelete" type="button"
+              onclick="parent.$.colorbox.close()"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('SYS_OK').'" />&nbsp;'.$g_l10n->get('SYS_OK').'</button>
+        </div>
+    <div>';
 
 ?>
