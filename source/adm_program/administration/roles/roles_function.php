@@ -347,7 +347,7 @@ elseif($_GET['mode'] == 2)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
-    $msg_code = 'SYS_SAVE';
+    $msg_code = 'SYS_SAVE_DATA';
 }
 elseif($_GET['mode'] == 3)
 {
