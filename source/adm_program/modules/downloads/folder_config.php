@@ -174,7 +174,7 @@ echo '
                             {
                                 echo ' disabled="disabled" ';
                             }
-                            echo ' value="0" onclick="toggleElement(\'rolesBox\');" />
+                            echo ' value="0" onclick="showHideBlock(\'rolesBox\', \'\', \'\');" />
                             <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('DOW_NO_PUBLIC_ACCESS').'" /></label>&nbsp;
                             <label for="fol_public">'.$g_l10n->get('DOW_NO_PUBLIC_ACCESS').'</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 

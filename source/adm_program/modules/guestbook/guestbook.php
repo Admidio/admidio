@@ -140,7 +140,7 @@ $g_layout['header'] = $g_layout['header']. '
             {
                 toggleDiv("commentsInvisible_" + commentId);
                 toggleDiv("commentsVisible_" + commentId);
-                toggleElement("commentSection_" + commentId, "");
+                showHideBlock("commentSection_" + commentId, "", "");
             }
         }
 

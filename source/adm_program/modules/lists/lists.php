@@ -337,13 +337,13 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         //Dreieck zum ein und ausblenden der Details
                         if($g_preferences['lists_hide_overview_details']==1)
                         {
-                            echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
-                                <img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="'.$g_l10n->get('SYS_FADE_IN').'" title="'.$g_l10n->get('SYS_FADE_IN').'" /></a>'; 
+                            echo '<a class="iconLink" href="javascript:showHideBlock(\'role_details_'.$role->getValue('rol_id').'\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')">
+                                <img id="img_role_details_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="'.$g_l10n->get('SYS_FADE_IN').'" title="'.$g_l10n->get('SYS_FADE_IN').'" /></a>'; 
                         }
                         else
                         {
-                            echo '<a class="iconLink" href="javascript:toggleElement(\'role_details_'.$role->getValue('rol_id').'\', \'triangle_'.$role->getValue('rol_id').'\')">
-                                <img id="triangle_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>';
+                            echo '<a class="iconLink" href="javascript:showHideBlock(\'role_details_'.$role->getValue('rol_id').'\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')">
+                                <img id="img_role_details_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>';
                         }
     
                         // Link nur anzeigen, wenn Rolle auch Mitglieder hat
