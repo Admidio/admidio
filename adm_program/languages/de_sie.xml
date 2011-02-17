@@ -493,7 +493,6 @@
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="todo">E-Mail mit Benutzernamen und neuem Passwort zuschicken</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="todo">Alle Benutzer anzeigen</text>
     <text id="MEM_SHOW_MEMBERS" development="new" translation="todo">Momentan werden nur aktive Mitglieder angezeigt. Klicken Sie hier um alle Benutzer aus der Datenbank anzuzeigen.</text>
-    <text id="MEM_SHOW_ONLY_MEMBERS" development="new" translation="todo">Nur Mitglieder anzeigen</text>
     <text id="MEM_SHOW_USERS" development="new" translation="todo">Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicken Sie hier um nur aktive Mitglieder anzuzeigen.</text>
     <text id="MEM_UPDATED_ON" development="new" translation="todo">Aktualisiert am</text>
     <text id="MEM_USER_DELETE" development="new" translation="todo">Wollen Sie %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>

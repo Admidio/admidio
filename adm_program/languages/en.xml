@@ -503,7 +503,6 @@
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Send e-mail with user name and password.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Display all users</text>
     <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Only active members are displayed. Click here to see all members registered in the database.</text>
-    <text id="MEM_SHOW_ONLY_MEMBERS" development="new" translation="edited">Display active users only</text>
     <text id="MEM_SHOW_USERS" development="new" translation="edited">All members are displayed. Click here to see only active members registered in the database.</text>
     <text id="MEM_UPDATED_ON" development="new" translation="edited">Updated on</text>
     <text id="MEM_USER_DELETE" development="new" translation="edited">Would you like to delete %VAR1_BOLD%?\n\nUser is going to be physically deleted in the database which makes later access impossible.</text>
