@@ -39,7 +39,7 @@ function toggleElement(elementID, iconID)
 // dafuer aber auch auf <table>-Element anwendbar
 function showHideBlock(elementID)
 {
-	var imageID = 'img_' + elementID;
+	var iconID = 'img_' + elementID;
     
     if($("#" + elementID).css("display") == "none")
     {
