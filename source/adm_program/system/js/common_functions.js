@@ -76,11 +76,11 @@ function jQueryAlert(messageID, messageVAR1, messageVAR2, widthID, heightID)
 	
 	if (typeof(widthID) == "undefined")
 	{
-		var widthID = 350;
+		var widthID = 500;
 	}
 	if (typeof(heightID) == "undefined")
 	{
-		var heightID = 175;
+		var heightID = 250;
 	}
 
 	jQuery().colorbox({href: gRootPath + "/adm_program/system/jquery_alert.php?alert_message=" + urlparameter, open:true, iframe:true, width:widthID, height:heightID});	
