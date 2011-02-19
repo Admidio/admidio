@@ -112,8 +112,8 @@ $g_layout['header'] = '
         // Scripts fuer Rollenbox
         function hinzufuegen()
         {
-            var allowed_roles = document.getElementById("AllowedRoles");
-            var denied_roles  = document.getElementById("DeniedRoles");
+            var allowed_roles = document.getElementById("admAllowedRoles");
+            var denied_roles  = document.getElementById("admDeniedRoles");
 
             if (denied_roles.selectedIndex >= 0) {
                 NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
@@ -124,8 +124,8 @@ $g_layout['header'] = '
 
         function entfernen()
         {
-            var allowed_roles = document.getElementById("AllowedRoles");
-            var denied_roles  = document.getElementById("DeniedRoles");
+            var allowed_roles = document.getElementById("admAllowedRoles");
+            var denied_roles  = document.getElementById("admDeniedRoles");
 
             if (allowed_roles.selectedIndex >= 0)
             {
@@ -137,7 +137,7 @@ $g_layout['header'] = '
 
         function absenden()
         {
-            var allowed_roles = document.getElementById("AllowedRoles");
+            var allowed_roles = document.getElementById("admAllowedRoles");
 
             allowed_roles.multiple = true;
 
@@ -146,7 +146,7 @@ $g_layout['header'] = '
                 allowed_roles.options[i].selected = true;
             }
 
-            form.submit();
+            $("#admFormFolderRights").submit();
         }
     //--></script>';
 
@@ -155,7 +155,7 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 
 // Html des Modules ausgeben
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$folder_id.'">
+<form id="admFormFolderRights" method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$folder_id.'">
 <div class="formLayout" id="edit_download_folder_form" >
     <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">'.
@@ -174,7 +174,7 @@ echo '
                             {
                                 echo ' disabled="disabled" ';
                             }
-                            echo ' value="0" onclick="showHideBlock(\'rolesBox\', \'\', \'\');" />
+                            echo ' value="0" onclick="showHideBlock(\'admRolesBox\', \'\', \'\');" />
                             <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="'.$g_l10n->get('DOW_NO_PUBLIC_ACCESS').'" /></label>&nbsp;
                             <label for="fol_public">'.$g_l10n->get('DOW_NO_PUBLIC_ACCESS').'</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 
@@ -194,7 +194,7 @@ echo '
             </div>
         </div>
 
-        <div class="groupBox" id="rolesBox" ';
+        <div class="groupBox" id="admRolesBox" ';
             if($folder->getValue('fol_public') == 1)
             {
                 echo ' style="display: none;" ';
@@ -205,7 +205,7 @@ echo '
                 <div style="text-align: left; float: left;">
                     <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$g_l10n->get('DOW_NO_ACCESS').'" title="'.$g_l10n->get('DOW_NO_ACCESS').'" />'.$g_l10n->get('DOW_NO_ACCESS').'</div>
                     <div>
-                        <select id="DeniedRoles" size="8" style="width: 200px;">';
+                        <select id="admDeniedRoles" size="8" style="width: 200px;">';
                         for($i=0; $i < count($parentRoleSet); $i++) 
                         {
                             $nextRole = $parentRoleSet[$i];
@@ -235,7 +235,7 @@ echo '
                 <div>
                     <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DOW_ACCESS_ALLOWED').'" title="'.$g_l10n->get('DOW_ACCESS_ALLOWED').'" />'.$g_l10n->get('DOW_ACCESS_ALLOWED').'</div>
                     <div>
-                        <select id="AllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">';
+                        <select id="admAllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">';
                         for($i=0; $i<count($roleSet); $i++) {
 
                             $nextRole = $roleSet[$i];

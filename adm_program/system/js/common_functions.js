@@ -10,9 +10,11 @@
  *****************************************************************************/
 
 // das uebergebene Element wird optisch schick ein- und ausgeblendet
+// soll ein Pfeil-Icon veraendert werden, muss dies die ID des Elements
+// mit dem Suffix 'Image' besitzen. Der Text des Icons wird mit uebergeben
 function showHideBlock(elementID, textFadeIn, textHide)
 {
-	var iconID = 'img_' + elementID;
+	var iconID = elementID + 'Image';
     
     if($("#" + elementID).css("display") == "none")
     {

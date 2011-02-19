@@ -337,14 +337,16 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         //Dreieck zum ein und ausblenden der Details
                         if($g_preferences['lists_hide_overview_details']==1)
                         {
-                            echo '<a class="iconLink" href="javascript:showHideBlock(\'role_details_'.$role->getValue('rol_id').'\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')">
-                                <img id="img_role_details_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_close.gif" alt="'.$g_l10n->get('SYS_FADE_IN').'" title="'.$g_l10n->get('SYS_FADE_IN').'" /></a>'; 
+                            $icon = THEME_PATH. '/icons/triangle_close.gif';
+                            $iconText = $g_l10n->get('SYS_FADE_IN');
                         }
                         else
                         {
-                            echo '<a class="iconLink" href="javascript:showHideBlock(\'role_details_'.$role->getValue('rol_id').'\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')">
-                                <img id="img_role_details_'.$role->getValue('rol_id').'"  src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>';
+                            $icon = THEME_PATH. '/icons/triangle_open.gif';
+                            $iconText = $g_l10n->get('SYS_HIDE');
                         }
+                        echo '<a class="iconLink" href="javascript:showHideBlock(\'admRoleDetails'.$role->getValue('rol_id').'\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')">
+                            <img id="admRoleDetails'.$role->getValue('rol_id').'Image"  src="'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
     
                         // Link nur anzeigen, wenn Rolle auch Mitglieder hat
                         if($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0)
@@ -436,7 +438,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                     echo '</div>
                 </div>
                 
-                <ul id="role_details_'.$role->getValue('rol_id').'" ';
+                <ul id="admRoleDetails'.$role->getValue('rol_id').'" ';
                     if($g_preferences['lists_hide_overview_details']==1)
                     {
                         echo ' style="display: none;" '; 
