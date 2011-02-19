@@ -174,7 +174,7 @@ if($g_current_user->editPhotoRight())
         <script type="text/javascript"><!--
             $(document).ready(function() 
             {
-                $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+                $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
             }); 
         //--></script>
         <script type="text/javascript"><!--
@@ -659,7 +659,7 @@ echo '<div class="photoModuleContainer">';
 
                                 echo '
                                 <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
-                                    $sub_photo_album->getValue('pho_id').'&amp;database_id='.$sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'"><img 
+                                    $sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'&amp;database_id='.$sub_photo_album->getValue('pho_id').'"><img 
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
                                 </li>';
                             }

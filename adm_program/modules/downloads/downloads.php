@@ -82,7 +82,7 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
 require(THEME_SERVER_PATH. "/overall_header.php");
@@ -188,7 +188,7 @@ else
                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
                         <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
                         <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fol&amp;element_id=row_folder_'.
-                            $nextFolder['fol_id'].'&amp;database_id='.$nextFolder['fol_id'].'&amp;name='.urlencode($nextFolder['fol_name']).'"><img 
+                            $nextFolder['fol_id'].'&amp;name='.urlencode($nextFolder['fol_name']).'&amp;database_id='.$nextFolder['fol_id'].'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         if (!$nextFolder['fol_exists'])
                         {
@@ -238,7 +238,7 @@ else
                 echo'</td>
                 <td>'. $timestamp->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
                 <td>'. $nextFile['fil_size']. ' KB&nbsp;</td>
-                <td>'. $nextFile['fil_counter'];
+                <td>'. $nextFile['fil_counter'].urlencode($nextFile['fil_name']);
                 if ($g_current_user->editDownloadRight())
                 {
                     //Hier noch die Links zum Aendern und Loeschen
@@ -247,7 +247,7 @@ else
                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '">
                         <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
                         <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fil&amp;element_id=row_file_'.
-                            $nextFile['fil_id'].'&amp;database_id='.$nextFile['fil_id'].'&amp;name='.urlencode($nextFile['fil_name']).'"><img 
+                            $nextFile['fil_id'].'&amp;name='.urlencode($nextFile['fil_name']).'&amp;database_id='.$nextFile['fil_id'].'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         if (!$nextFile['fil_exists']) {
                             echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS&amp;inline=true"><img 

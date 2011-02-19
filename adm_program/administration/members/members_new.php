@@ -26,8 +26,8 @@ function send()
     firstname = document.getElementById("firstname").value;
     if(lastname.length > 0 && firstname.length > 0)
     {
-        document.getElementById("frmMembersCreateUser").action  = gRootPath + "/adm_program/administration/members/members_assign.php?lastname=" + lastname + "&firstname=" + firstname;
-        document.getElementById("frmMembersCreateUser").submit();
+        document.getElementById("admFormMembersCreateUser").action  = gRootPath + "/adm_program/administration/members/members_assign.php?lastname=" + lastname + "&firstname=" + firstname;
+        document.getElementById("admFormMembersCreateUser").submit();
     }
     else
     {
@@ -36,7 +36,7 @@ function send()
 }
 //--></script>
 
-<form id="frmMembersCreateUser" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
+<form id="admFormMembersCreateUser" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
 <div class="formLayout">
     <div class="formHead">'. $g_l10n->get('MEM_CREATE_USER'). '</div>
     <div class="formBody">

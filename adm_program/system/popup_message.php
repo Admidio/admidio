@@ -159,7 +159,7 @@ if(strlen($url) == 0)
     $g_message->setExcludeThemeBody();
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
-error_log($url);
+
 echo '
 <script type="text/javascript"><!--
 var entryDeleted;
@@ -177,14 +177,14 @@ function deleteEntry()
         }
         else
         {
-            $("#msgText").html("'.$g_l10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'");
+            $("#admMessageText").html("'.$g_l10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'");
         }
         '.$callbackSuccess.'
     });
 }
 //--></script>
 
-<form id="frmMembersCreateUser" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
+<form id="admFormPopupMessage" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
 <div class="formLayout">
     <div class="formHead">'. $g_l10n->get('SYS_NOTE'). '</div>
     <div class="formBody">
@@ -192,14 +192,14 @@ function deleteEntry()
             <div style="float: left; width: 75px; min-height: 60px;">
                 <br /><img src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" />
             </div>
-            <div id="msgText" style="min-height: 60px;"><br />'.$g_l10n->get($text, $req_name).'</div>
+            <div id="admMessageText" style="min-height: 60px;"><br />'.$g_l10n->get($text, $req_name).'</div>
         </div>
 
         <div class="formSubmit" style="display: block; margin: 20px 0px 20px 0px;">
-            <button id="btnYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+            <button id="admButtonYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
                 alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
+            <button id="admButtonNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
                 alt="'.$g_l10n->get('SYS_NO').'" />&nbsp;'.$g_l10n->get('SYS_NO').'</button>
         </div>
     </div>

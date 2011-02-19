@@ -115,7 +115,7 @@ $g_layout['header'] = $g_layout['header']. '
     <script type="text/javascript">
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+            $("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
 
         function getComments(commentId)
@@ -125,7 +125,7 @@ $g_layout['header'] = $g_layout['header']. '
             function(data) {
                 var objectId = "admCommentSection_" + commentId;
                 document.getElementById(objectId).innerHTML = data;
-                $("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+                $("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
                 toggleComments(commentId);
             });            
         }
