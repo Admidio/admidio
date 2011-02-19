@@ -139,10 +139,10 @@ class Message
                             if($this->showYesNoButtons == true)
                             {
                                 echo '
-                                <button id="btnYes" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" 
+                                <button id="admButtonYes" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" 
                                     alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button id="btnNo" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" 
+                                <button id="admButtonNo" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/error.png" 
                                     alt="'.$g_l10n->get('SYS_NO').'" />&nbsp;'.$g_l10n->get('SYS_NO').'</button>';
                             }
                             else

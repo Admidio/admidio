@@ -152,7 +152,7 @@ echo '
 <script type="text/javascript"><!--
     $(document).ready(function() 
     {
-        $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+        $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
     }); 
 
     function showCalendar()
@@ -450,7 +450,7 @@ else
                         {
                             echo '
                             <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
-                                $date->getValue('dat_id').'&amp;database_id='.$date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $g_preferences['system_date']).' '.$date->getValue('dat_headline')).'"><img 
+                                $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $g_preferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                         }
                     }

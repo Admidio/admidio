@@ -59,7 +59,7 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\', onComplete:function(){$("#btnNo").focus();}});
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\', onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
 
@@ -101,7 +101,7 @@ echo '
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
                     src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
                 <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
-                    $row['usr_id'].'&amp;database_id='.$row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'"><img 
+                    $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img 
                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
             </td>
         </tr>';

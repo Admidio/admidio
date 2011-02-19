@@ -236,7 +236,7 @@ $g_layout['header'] = '
             profileJS.usr_id = '.$user->getValue('usr_id').';
 			$(document).ready(function() {
 				profileJS.init();
-				$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+				$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
 			});
     //-->
     </script>';

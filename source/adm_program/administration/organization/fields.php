@@ -27,7 +27,7 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
 
         function moveCategory(direction, usfID)
@@ -257,7 +257,7 @@ echo '
                     {
                         echo '
                         <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=usf&amp;element_id=row_usf_'.
-                            $row['usf_id'].'&amp;database_id='.$row['usf_id'].'&amp;name='.urlencode($row['usf_name']).'"><img 
+                            $row['usf_id'].'&amp;name='.urlencode($row['usf_name']).'&amp;database_id='.$row['usf_id'].'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                     }
                 echo '</td>

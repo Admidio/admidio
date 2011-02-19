@@ -62,7 +62,7 @@ $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
+            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
 
@@ -110,7 +110,7 @@ echo '
             <td style="text-align: right;">'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' KB&nbsp;</td>
             <td style="text-align: center;">
                 <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
-                    $key.'&amp;database_id='.$old_backup_file.'&amp;name='.urlencode($old_backup_file).'"><img 
+                    $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img 
                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
             </td>
         </tr>';
