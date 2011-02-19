@@ -115,11 +115,11 @@ $g_layout['header'] = '
                 && $role->getValue('rol_weekday') == 0
                 && strlen($role->getValue('rol_location')) == 0)
                 {
-                    $g_layout['header'] .= 'showHideBlock("dates_body", "'.$g_l10n->get('SYS_FADE_IN').'", "'.$g_l10n->get('SYS_HIDE').'"); ';
+                    $g_layout['header'] .= 'showHideBlock("admDatesBody", "'.$g_l10n->get('SYS_FADE_IN').'", "'.$g_l10n->get('SYS_HIDE').'"); ';
                 }
                 if(count($childRoles) == 0)
                 {
-                    $g_layout['header'] .= 'showHideBlock("dependancies_body", "'.$g_l10n->get('SYS_FADE_IN').'", "'.$g_l10n->get('SYS_HIDE').'"); ';
+                    $g_layout['header'] .= 'showHideBlock("admDependanciesBody", "'.$g_l10n->get('SYS_FADE_IN').'", "'.$g_l10n->get('SYS_HIDE').'"); ';
                 }
             }
             $g_layout['header'] .= '
@@ -298,13 +298,13 @@ echo '
             </li>
         </ul>
 
-        <div class="groupBox" id="properties_box">
-            <div class="groupBoxHeadline" id="properties_head">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'properties_body\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-                id="img_properties_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_PROPERTIES').'
+        <div class="groupBox" id="admPropertiesBox">
+            <div class="groupBoxHeadline" id="admPropertiesHead">
+                <a class="iconShowHide" href="javascript:showHideBlock(\'admPropertiesBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+                id="admPropertiesBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_PROPERTIES').'
             </div>
 
-            <div class="groupBoxBody" id="properties_body">
+            <div class="groupBoxBody" id="admPropertiesBody">
                 <ul class="formFieldList">';
                     if($g_preferences['enable_mail_module'])
                     {
@@ -430,13 +430,13 @@ echo '
             </div>
         </div>
 
-        <div class="groupBox" id="justifications_box">
+        <div class="groupBox" id="admJustificationsBox">
             <div class="groupBoxHeadline">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'justifications_body\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-                id="img_justifications_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_AUTHORIZATION').'
+                <a class="iconShowHide" href="javascript:showHideBlock(\'admJustificationsBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+                id="admJustificationsBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_AUTHORIZATION').'
             </div>
 
-            <div class="groupBoxBody" id="justifications_body">
+            <div class="groupBoxBody" id="admJustificationsBody">
                 <ul class="formFieldList">
                     <li>
                         <div>
@@ -665,13 +665,13 @@ echo '
             </div>
         </div>
 
-        <div class="groupBox" id="dates_box">
-            <div class="groupBoxHeadline" id="dates_head">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'dates_body\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-                	id="img_dates_body" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
+        <div class="groupBox" id="admDatesBox">
+            <div class="groupBoxHeadline" id="admDatesHead">
+                <a class="iconShowHide" href="javascript:showHideBlock(\'admDatesBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+                	id="admDatesBodyImage" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
             </div>
 
-            <div class="groupBoxBody" id="dates_body">
+            <div class="groupBoxBody" id="admDatesBody">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -735,13 +735,13 @@ echo '
         </div>';
         if($role->getValue('rol_max_members') == 0)
         {
-            echo '<div class="groupBox" id="dependancies_box">
-                <div class="groupBoxHeadline" id="dependancies_head">
-                    <a class="iconShowHide" href="javascript:showHideBlock(\'dependancies_body\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-                    id="img_dependancies_body" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('ROL_DEPENDENCIES').'&nbsp;&nbsp;('.$g_l10n->get('SYS_OPTIONAL').')
+            echo '<div class="groupBox" id="admDependanciesBox">
+                <div class="groupBoxHeadline" id="admDependanciesHead">
+                    <a class="iconShowHide" href="javascript:showHideBlock(\'admDependanciesBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+                    id="admDependanciesBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('ROL_DEPENDENCIES').'&nbsp;&nbsp;('.$g_l10n->get('SYS_OPTIONAL').')
                 </div>
 
-                <div class="groupBoxBody" id="dependancies_body">
+                <div class="groupBoxBody" id="admDependanciesBody">
                     <div style="margin-top: 6px;">';
                         $rolename_var = $g_l10n->get('ROL_NEW_ROLE');
                         if($role->getValue('rol_name')!='')

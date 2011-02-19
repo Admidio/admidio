@@ -98,12 +98,12 @@ echo '
                     {
                         echo '</tbody>';
                     }
-                    $block_id = 'cat_'. $field->getValue('cat_id');
+                    $block_id = 'admCategory'. $field->getValue('cat_id');
                     echo '<tbody>
                         <tr>
                             <td class="tableSubHeader" colspan="4">
                                 <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img 
-                                id="img_'. $block_id. '" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'. $field->getValue('cat_name'). '
+                                id="'. $block_id. 'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'. $field->getValue('cat_name'). '
                             </td>
                         </tr>
                     </tbody>

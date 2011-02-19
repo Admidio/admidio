@@ -151,7 +151,7 @@ echo '
                 echo '</tbody>';
             }
             $image_hidden = '';
-            $block_id     = 'cat_'.$role->getValue('cat_id');
+            $block_id     = 'admCategory'.$role->getValue('cat_id');
             if($role->getValue('cat_hidden') == 1)
             {
                 $image_hidden = '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png"
@@ -161,7 +161,7 @@ echo '
                 <tr>
                     <td class="tableSubHeader" colspan="4">
                         <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-                        id="img_'.$block_id.'" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name').' '.$image_hidden.'
+                        id="'.$block_id.'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name').' '.$image_hidden.'
                     </td>
                 </tr>
             </tbody>

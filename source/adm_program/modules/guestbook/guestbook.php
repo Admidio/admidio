@@ -123,7 +123,7 @@ $g_layout['header'] = $g_layout['header']. '
             // RequestObjekt abschicken und Kommentar laden
             $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$_GET['moderation'].', 
             function(data) {
-                var objectId = "commentSection_" + commentId;
+                var objectId = "admCommentSection_" + commentId;
                 document.getElementById(objectId).innerHTML = data;
                 $("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#btnNo").focus();}});
                 toggleComments(commentId);
@@ -132,15 +132,15 @@ $g_layout['header'] = $g_layout['header']. '
 
         function toggleComments(commentId)
         {
-            if (document.getElementById("commentSection_" + commentId).innerHTML.length == 0)
+            if (document.getElementById("admCommentSection_" + commentId).innerHTML.length == 0)
             {
                 getComments(commentId);
             }
             else
             {
-                toggleDiv("commentsInvisible_" + commentId);
-                toggleDiv("commentsVisible_" + commentId);
-                showHideBlock("commentSection_" + commentId, "", "");
+                toggleDiv("admCommentsInvisible_" + commentId);
+                toggleDiv("admCommentsVisible_" + commentId);
+                showHideBlock("admCommentSection_" + commentId, "", "");
             }
         }
 
@@ -419,7 +419,7 @@ else
                     }
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo '
-                    <div id="commentsVisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
+                    <div id="admCommentsVisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
                         <span class="iconTextLink">
                             <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')"><img src="'. THEME_PATH. '/icons/comments.png"
                             alt="'.$g_l10n->get('GBO_HIDE_COMMENTS').'" title="'.$g_l10n->get('GBO_HIDE_COMMENTS').'" /></a>
@@ -429,7 +429,7 @@ else
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                     echo '
-                    <div id="commentsInvisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
+                    <div id="admCommentsInvisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
                         <span class="iconTextLink">
                             <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')"><img src="'. THEME_PATH. '/icons/comments.png"
                             alt="'.$g_l10n->get('GBO_SHOW_COMMENTS').'" title="'.$g_l10n->get('GBO_SHOW_COMMENTS').'" /></a>
@@ -439,7 +439,7 @@ else
                     </div>';
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
-                    echo '<div id="commentSection_'. $guestbook->getValue('gbo_id'). '" class="commentBox" style="display: '. $display_others. ';">';
+                    echo '<div id="admCommentSection_'. $guestbook->getValue('gbo_id'). '" class="commentBox" style="display: '. $display_others. ';">';
                         if($g_preferences['enable_intial_comments_loading'] == 1 || $_GET['moderation'] == 1)
                         {
                             include('get_comments.php');
