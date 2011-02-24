@@ -1,11 +1,15 @@
 <?php
 /******************************************************************************
+ * Klasse fuer den Zugriff auf die Datenbanktabelle adm_rooms
+ *
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu, um ein neues Raumobjekt in der Datenbanktabelle
  * adm_rooms zu erstellen. 
  *
-       
-*****************************************************************************/ 
+ *****************************************************************************/ 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 

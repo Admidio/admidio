@@ -1,3 +1,12 @@
+/******************************************************************************
+ * Javascript-Klasse zur Darstellung der Organisationseinstellungen
+ *
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+
 function organizationClass()
 {
 	// Dieses Array enthaelt alle IDs, die in den Orga-Einstellungen auftauchen
