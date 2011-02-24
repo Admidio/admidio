@@ -1,10 +1,9 @@
 <?php
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_folders
+ * Klasse fuer den Zugriff auf die Datenbanktabelle adm_folders
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Elmar Meuthen
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
