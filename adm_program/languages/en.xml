@@ -46,7 +46,6 @@
     <text id="DAT_CALENDAR" development="new" translation="edited">Calendar</text>
     <text id="DAT_CANCEL" development="new" translation="edited">Cancel</text>
     <text id="DAT_CANCEL_DATE" development="new" translation="edited">You canceled your participation at %VAR1_BOLD% on %VAR2%.</text>
-    <text id="DAT_CLOCK" development="new" translation="edited">o'clock</text>
 	<text id="DAT_CREATE_DATE" development="new" translation="edited">Create date</text>
     <text id="DAT_DATE" development="new" translation="edited">Event</text>
     <text id="DAT_DATES" development="new" translation="edited">Events</text>
@@ -881,7 +880,6 @@
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="edited">Cancel</text>
     <text id="SYS_ACTIVE" development="new" translation="edited">Active</text>
-    <text id="SYS_ACTIVE_SINCE" development="new" translation="edited">Active since</text>
     <text id="SYS_ACTIVATED" development="new" translation="edited">Active</text>
     <text id="SYS_ADD_EMAIL" development="new" translation="edited">Add e-mail address</text>
     <text id="SYS_ADD_IMAGE" development="new" translation="edited">Add picture</text>
@@ -927,6 +925,7 @@
     <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="edited">Display text centered</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Change password</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox status is saved automatically after marking.</text>
+    <text id="SYS_CLOCK" development="new" translation="edited">o'clock</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Close</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="edited">Close all tags</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="edited">Close window</text>
@@ -1087,7 +1086,6 @@
 	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="edited">You are not a member of organisation %VAR1%</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="edited">not registered</text>
     <text id="SYS_NUMBER" development="new" translation="edited">Number</text>
-    <text id="SYS_NUMBER_OF_LOGINS" development="new" translation="edited">Number of logins</text>
     <text id="SYS_OPTIONAL" development="new" translation="edited">Optional</text>
     <text id="SYS_ORDER" development="new" translation="edited">Order</text>
     <text id="SYS_OVERVIEW" development="new" translation="edited">Overview</text>

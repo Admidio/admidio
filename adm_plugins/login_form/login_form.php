@@ -2,14 +2,14 @@
 /******************************************************************************
  * Login Form
  *
- * Version 1.3.0
+ * Version 1.4.0
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
  * werden an der Stelle der Felder nun nützliche Informationen des Benutzers
  * angezeigt.
  *
- * Kompatible ab Admidio-Versions 2.1.0
+ * Kompatible ab Admidio-Versions 2.2.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -69,6 +69,9 @@ if(isset($plg_rank) == false)
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
+// Sprachdatei des Plugins einbinden
+$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+
 $plg_icon_code = '';
 
 if($g_valid_login == 1)
@@ -103,13 +106,13 @@ if($g_valid_login == 1)
         </li>
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_ACTIVE_SINCE').':</dt>
+                <dt>'.$g_l10n->get('PLG_LOGIN_ACTIVE_SINCE').':</dt>
                 <dd>'. $g_current_session->getValue('ses_begin', $g_preferences['system_time']). ' '.$g_l10n->get('SYS_CLOCK').'</dd>
             </dl>
         </li>
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_NUMBER_OF_LOGINS').':</dt>
+                <dt>'.$g_l10n->get('PLG_LOGIN_NUMBER_OF_LOGINS').':</dt>
                 <dd>'. $g_current_user->getValue('usr_number_login');
     
                     // Zeigt einen Rank des Benutzers an, sofern diese in der config.php hinterlegt sind
@@ -123,14 +126,14 @@ if($g_valid_login == 1)
                             $count_rank = key($plg_rank);
                             if($count_rank < $g_current_user->getValue('usr_number_login'))
                             {
-                                $rank = strip_tags($value);
+                                $rank = $g_l10n->get($value);
                             }
                             $value = next($plg_rank);
                         }
 
                         if(strlen($rank) > 0)
                         {
-                            echo '&nbsp;'.$rank;
+                            echo '&nbsp;('.$rank.')';
                         }
                     }
                 echo '</dd>
