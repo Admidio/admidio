@@ -12,8 +12,13 @@
  *
  * Folgende Funktionen stehen zur Verfuegung:
  *
+ * addLanguagePath($path)
+ *         - gibt einen weiteren Ordner an, der Sprachdateien enthaelt
+ *         - aus diesem Ordner wird versucht die eingestellte Default-Sprachdatei zu oeffnen
  * get($text_id, $var1='', $var2='', $var3='', $var4='')
  *         - liest den Text mit der uebergebenen ID aus und gibt diese zurueck
+ *         - zuerst wird die Default-Sprachdatei ueberprueft, danach alle weiteren
+ *         - angehaengten Sprachordner, dann die Referenzsprache
  * getReferenceText($text_id, $var1='', $var2='', $var3='', $var4='')
  *         - liefert den Text der ID aus der eingestellten Referenzsprache zurueck
  * setLanguage($language)
@@ -23,23 +28,46 @@
 
 class Language
 {
-    private $l10nObject;
-    private $referenceL10nObject;
+    private $l10nObject;					// das XML-Objekt dieser Klasse
+    private $referenceL10nObject;			// XML-Objekt der Referenzsprache
+	private $otherL10nObjects = array();	// Array ueber alle zusaetzlichen Sprachpfade der Plugins
+	private $defaultL10nObject = false;		// dies ist das Sprachobjekt zur Standard-Sprachdatei von Admidio
     
-    private $language;
-    private $languageFilePath;
-    private $referenceLanguage = 'de';
+    private $language;						// Sprache dieser Klasse
+    private $languageFilePath;				// Pfad der Sprachdatei aus dieser Klasse
+    private $referenceLanguage = 'de';		// die Referenzsprache, aus der Texte zurueckgegeben werden, wenn sie in der Defaultsprache nicht vorhanden sind
     
-    private $textCache; // eingelesene Texte werden in diesem Array gespeichert und spaeter nur noch aus dem Array gelesen
+    private $textCache; 					// eingelesene Texte werden in diesem Array gespeichert und spaeter nur noch aus dem Array gelesen
     
     // es muss das Sprachkuerzel uebergeben werden (Beispiel: 'de')
-    public function __construct($language)
+	// optional kann noch ein Pfad angegeben werden, in dem sich weitere Sprachdateien befinden, 
+	// auf die zugegriffen werden soll (per Default wird Admidio-Standard-Sprachdatei eingelesen)
+    public function __construct($language, $path = '')
     {
+		if(strlen($path) == 0)
+		{
+			$this->languageFilePath = SERVER_PATH. '/adm_program/languages';
+			$this->defaultL10nObject = true;
+		}
+		else
+		{
+			$this->languageFilePath = $path;
+		}
         $this->setLanguage($language);
         $this->textCache = array();
+		error_log($language.'::'.$this->languageFilePath);
     }
 
+	// gibt einen weiteren Ordner an, der Sprachdateien enthaelt
+	// aus diesem Ordner wird versucht die eingestellte Default-Sprachdatei zu oeffnen
+	public function addLanguagePath($path)
+	{
+		$this->otherL10nObjects[] = new Language($this->language, $path);
+	}
+	
     // liest den Text mit der uebergebenen ID aus und gibt diese zurueck
+	// zuerst wird die Default-Sprachdatei ueberprueft, danach alle weiteren
+	// angehaengten Sprachordner, dann die Referenzsprache
     public function get($text_id, $var1='', $var2='', $var3='', $var4='')
     {
         $text   = '';
@@ -50,16 +78,36 @@ class Language
         }
         else
         {
-            // Text nicht im Cache -> aus XML-Datei einlesen
-            $node   = $this->l10nObject->xpath("/language/version/text[@id='".$text_id."']");
-            if($node != false)
-            {
-                // Zeilenumbrueche in HTML setzen
-                $text = str_replace('\n', '<br />', $node[0]);
-                // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
-                $text = str_replace('\'', '&rsquo;', $text);
-                $this->textCache[$text_id] = $text;
-            }
+			if(is_object($this->l10nObject))
+			{
+				// Text nicht im Cache -> aus XML-Datei einlesen
+				$node   = $this->l10nObject->xpath("/language/version/text[@id='".$text_id."']");
+				if($node != false)
+				{
+					// Zeilenumbrueche in HTML setzen
+					$text = str_replace('\n', '<br />', $node[0]);
+					// Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
+					$text = str_replace('\'', '&rsquo;', $text);
+					$this->textCache[$text_id] = $text;
+				}
+				else
+				{
+					// in der ersten Sprachdatei wurde nichts gefunden, dann weitere Sprachdateien durchgehen
+					foreach($this->otherL10nObjects as $key => $object)
+					{
+						if(strlen($text) == 0)
+						{
+							$text = $object->get($text_id, $var1, $var2, $var3, $var4);
+						}
+					}
+					
+					// wurde kein Text gefunden, dann dies ausgeben
+					if($this->defaultL10nObject && strlen($text) == 0)
+					{
+						$text = '#undefined text#';
+					}
+				}
+			}
         }
 
         if(strlen($text) > 0)
@@ -102,7 +150,7 @@ class Language
     {
         if(is_object($this->referenceL10nObject) == false)
         {
-            $this->referenceL10nObject = new Language($this->referenceLanguage);
+            $this->referenceL10nObject = new Language($this->referenceLanguage, $this->languageFilePath);
         }
         return $this->referenceL10nObject->get($text_id, $var1, $var2, $var3, $var4);
     }
@@ -113,8 +161,11 @@ class Language
         if($language != $this->language)
         {
             $this->language = $language;
-            $this->languageFilePath = SERVER_PATH. '/adm_program/languages/'.$language.'.xml';
-            $this->l10nObject = new SimpleXMLElement($this->languageFilePath, 0, true);
+            $languageFile = $this->languageFilePath.'/'.$language.'.xml';
+			if(file_exists($languageFile))
+			{
+				$this->l10nObject = new SimpleXMLElement($languageFile, 0, true);
+			}
         }
     }
 }

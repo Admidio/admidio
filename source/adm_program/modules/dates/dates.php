@@ -463,9 +463,9 @@ else
                 if ($date->getValue('dat_all_day') == 0)
                 {
                     // Beginn in Ausgabe-Array schreiben
-                    $dateElements[] = array($g_l10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $g_preferences['system_time']). '</strong> '.$g_l10n->get('DAT_CLOCK'));
+                    $dateElements[] = array($g_l10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $g_preferences['system_time']). '</strong> '.$g_l10n->get('SYS_CLOCK'));
                     // Ende in Ausgabe-Array schreiben
-                    $dateElements[] = array($g_l10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $g_preferences['system_time']). '</strong> '.$g_l10n->get('DAT_CLOCK'));
+                    $dateElements[] = array($g_l10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $g_preferences['system_time']). '</strong> '.$g_l10n->get('SYS_CLOCK'));
                 }
                 // Kalender in Ausgabe-Array schreiben
                 $dateElements[] = array($g_l10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
