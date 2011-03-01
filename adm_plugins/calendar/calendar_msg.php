@@ -2,14 +2,14 @@
 /******************************************************************************
  * Sidebar-Kalender
  * Ausgabe der Termine und Geburtstage für Ajax Tooltip
- * Version 1.5.0
+ * Version 1.6.3
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatible ab Admidio-Versions 2.1.0
+ * Kompatibel ab Admidio-Versions 2.2.0
  *
- * Copyright    : (c) 2007-2009 Matthias Roberg & mpunkt
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
@@ -18,19 +18,22 @@
 header('Content-Type: text/html; charset=UTF-8');
 
 // Pfad des Plugins ermitteln
-$plugin_folder_pos = strpos(__FILE__, "adm_plugins") + 11;
-$plugin_file_pos   = strpos(__FILE__, "calendar_msg.php");
+$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$plugin_file_pos   = strpos(__FILE__, 'calendar_msg.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
-require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
+require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
+require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+
+// Sprachdatei des Plugins einbinden
+$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // Werte definieren
-$geburtstage = "";
+$geburtstage = '';
 $termine_uebergabe = 0;
 $geburtstag_uebergabe = 0;
 
@@ -81,13 +84,13 @@ if($plg_geb_aktiv == 1)
             $alter = $_GET['gebalter'. $i];
             if($plg_geb_icon == 1)
             {
-                $icon = "<img src=\"$g_root_path/adm_plugins/$plugin_folder/cake.png\" border=\"0\"> ";
+                $icon = '<img src="'.$g_root_path.'/adm_plugins/'.$plugin_folder.'/cake.png" border="0"> ';
             }
             else
             {
-                $icon = "";
+                $icon = '';
             }
-            $geburtstage = $geburtstage. $icon. "$gebname ($alter)<br>";
+            $geburtstage = $geburtstage. $icon. $gebname. '('.$alter.')<br>';
         }
     }
 }
@@ -95,38 +98,38 @@ if($plg_geb_aktiv == 1)
 // Ausgabe formatieren
 if($termine_uebergabe == 1)
 {
-    echo "<div id=\"plgCalendarMSG\" align=\"left\"><b>$titel</b><br>";
+    echo '<div id="plgCalendarMSG" align="left"><b>'.$titel.'</b><br>';
     if($ganztags == 1)
     {
-        if($ort == "")
+        if($ort == '')
         {
-            echo "<i>(ganzt&auml;giger Termin)</i></div>";
+            echo '<i>'.$g_l10n->get('PLG_CALENDAR_FULLTIME').'</i></div>';
         }
         else
         {
-            echo "$ort <i>(ganzt&auml;giger Termin)</i></div>";
+            echo $ort. ' <i>'.$g_l10n->get('PLG_CALENDAR_FULLTIME').'</i></div>';
         }
     }
     else
     {
-        if($ort == "")
+        if($ort == '')
         {
-            echo "$uhr Uhr</div>";
+            echo $uhr. $g_l10n->get('PLG_CALENDAR_CLOCK').' </div>';
         }
         else
         {
-            echo "$uhr Uhr, $ort</div>";
+            echo $uhr. ' '.$g_l10n->get('PLG_CALENDAR_CLOCK').', '.$ort.'</div>';
         }
     }
     if($weitere >> 0)
     {
-        echo "<div class=\"plgCalendarMSG\" align=\"right\"><i>(... weitere)</i></div>";
+        echo '<div class="plgCalendarMSG" align="right"><i>'.$g_l10n->get('PLG_CALENDAR_MORE').'</i></div>';
     }
 }
 
 if($geburtstag_uebergabe == 1)
 {
-    echo "<div class=\"plgCalendarMSG\" align=\"left\">$geburtstage</div>";
+    echo '<div class="plgCalendarMSG" align="left">'.$geburtstage.'</div>';
 }
 
 ?>

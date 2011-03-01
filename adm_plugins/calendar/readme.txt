@@ -64,6 +64,6 @@ Es ist nicht gestattet den Copyrighthinweis im Quellcode zu entfernen.
 Für weitere Informationen sollten Sie die gpl-de.html durchlesen.
 
 -------------------------------------------------------------------------
-		      (C) Matthias Roberg & mpunkt, 2007 - 2009
+		    Copyright (c) 2004 - 2011 The Admidio Team
            Admidio is a open source user management software
 -------------------------------------------------------------------------
