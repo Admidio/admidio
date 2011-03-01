@@ -2,19 +2,25 @@
 /******************************************************************************
  * Sidebar-Kalender
  *
- * Version 1.5.1
+ * Version 1.6.3
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatible ab Admidio-Versions 2.1.0
+ * Kompatibel ab Admidio-Versions 2.2.0
  * Übergaben: date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
  *            ajax_change (ist gesetzt bei Monatswechsel per Ajax)
  *
- * Copyright    : (c) 2007-2009 Matthias Roberg & mpunkt
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
+ 
+if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
+{
+    // Header kodieren
+    header('Content-Type: text/html; charset=UTF-8');
+}
 
 // Pfad des Plugins ermitteln
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
@@ -28,20 +34,18 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
-if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
-{
-    // Header kodieren
-    header('Content-Type: text/html; charset=UTF-8');
-}
-
 // Auf gesetzte Standardwerte aus config.php überprüfen und notfalls setzen
 if(isset($plg_ajaxbox) == false)
 {
     $plg_ajaxbox = 1;
 }
-if(isset($plg_link_target) == false)
+if(isset($plg_link_target_termin) == false)
 {
-    $plg_link_target = "_self";
+    $plg_link_target_termin = '_self';
+}
+if(isset($plg_link_target_geb) == false)
+{
+    $plg_link_target_geb = '_self';
 }
 if(isset($plg_ter_aktiv) == false)
 {
@@ -65,12 +69,60 @@ if(isset($plg_geb_icon) == false)
 }
 if(isset($plg_kal_cat) == false)
 {
-    $plg_kal_cat =  array('all');
+    $plg_kal_cat = array('all');
 }
+if(isset($plg_kal_cat_show) == false)
+{
+    $plg_kal_cat_show = 1;
+}
+
+// Prüfen ob the Link-URL gesetzt wurde oder leer ist
+// wenn leer, dann Standardpfad zum Admidio-Modul
+
+if(isset($plg_link_url) == false || ($plg_link_url) =='')
+{
+$plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
+}
+
+// ///////////////////////////////////////////////////// //
+// Prüfen ob the CSS Link-Klassen gesetzt wurden         //
+// ///////////////////////////////////////////////////// //
+
+if(isset($plg_link_class_geb) == false || ($plg_link_class_geb) =='')
+	{
+		$plg_link_class_geb = 'geb';
+	}
+if(isset($plg_link_class_date) == false || ($plg_link_class_date) =='')
+	{
+		$plg_link_class_date = 'date';
+	}
+if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
+	{
+		$plg_link_class_date = 'merge';
+	}
+
+// /////////////////////////////////////////////////////// //
+// Prüfen, ob die Rollenbedingung gesetzt wurde            //
+// /////////////////////////////////////////////////////// //
+if(isset($plg_rolle_sql) == 'all' || ($plg_rolle_sql) == '')
+	{
+		$rol_sql = 'is not null';
+	}
+	else
+	{
+		$rol_sql = 'in '.$plg_rolle_sql;
+	}
+
+// Sprachdatei des Plugins einbinden
+$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+	
+// Nun noch einige Variablen initialisieren
+
+$geb_link = '';
+$plg_link = '';
 
 // Date ID auslesen oder aktuellen Monat und Jahr erzeugen
 $heute = 0;
-
 if(array_key_exists('date_id', $_GET))
 {
     if(is_numeric($_GET['date_id']) == false)
@@ -84,9 +136,9 @@ if(array_key_exists('date_id', $_GET))
         $jahr = substr($date_id,2,4);
         $_SESSION['plugin_calendar_last_month'] = $monat.$jahr;
 
-        if($monat == date("m") AND $jahr == date("Y"))
+        if($monat == date('m') AND $jahr == date('Y'))
         {
-            $heute = date("d");
+            $heute = date('d');
         }
     }
 }
@@ -95,17 +147,17 @@ elseif(isset($_SESSION['plugin_calendar_last_month']))
     // Zuletzt gewählten Monat anzeigen
     $monat = substr($_SESSION['plugin_calendar_last_month'],0,2);
     $jahr = substr($_SESSION['plugin_calendar_last_month'],2,4);
-    if($monat == date("m") AND $jahr == date("Y"))
+    if($monat == date('m') AND $jahr == date('Y'))
     {
-        $heute = date("d");
+        $heute = date('d');
     }
 }
 else
 {
     // Aktuellen Monat anzeigen
-    $monat = date("m");
-    $jahr = date("Y");
-    $heute = date("d");
+    $monat = date('m');
+    $jahr = date('Y');
+    $heute = date('d');
 }
 $sql_dat = $jahr. "-". $monat;
 
@@ -115,20 +167,33 @@ $g_db->setCurrentDB();
 // Abfrage der Termine
 if($plg_ter_aktiv == 1)
 {
-    // Ermitteln, welche Kalender angezeigt werden sollen
-    if(in_array("all",$plg_kal_cat))
+    // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
+    $plg_organizations = '';
+    $plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
+    
+    foreach($plg_arr_orgas as $key => $value)
     {
-        // ALLE EINTRÄGE
-        $sql_syntax = "AND dat_global = 0 ";
+    	$plg_organizations = $plg_organizations. $key. ', ';
+    }
+    $plg_organizations = $plg_organizations. $g_current_organization->getValue('org_id');
+	
+    // Ermitteln, welche Kalender angezeigt werden sollen
+    if(in_array('all',$plg_kal_cat))
+    {
+		// alle Kalender anzeigen
+        $sql_syntax = ' AND (cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                         OR (   dat_global  = 1
+                            AND cat_org_id IN ('.$plg_organizations.') ) ) ';
     }
     else
     {
-        $sql_syntax = "AND cat_type = 'DAT' AND (";
+        // nur bestimmte Kalender anzeigen
+        $sql_syntax = ' AND cat_type = "DAT" AND ( ';
         for($i=0;$i<count($plg_kal_cat);$i++)
         {
-            $sql_syntax = $sql_syntax. "cat_name = '".$plg_kal_cat[$i]."' OR ";
+            $sql_syntax = $sql_syntax. 'cat_name = "'.$plg_kal_cat[$i].'" OR ';
         }
-        $sql_syntax = substr($sql_syntax,0,-4). ") AND cat_id = dat_cat_id ";
+        $sql_syntax = substr($sql_syntax,0,-4). ') ';
     }
     
     // Dummy-Zähler für Schleifen definieren
@@ -203,7 +268,7 @@ if($plg_geb_aktiv == 1)
     {
         $birthdayDate   = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
         $geb_day[$geb]  = $birthdayDate->format('d');
-        $geb_year[$geb] = $birthdayDate->format('y');
+        $geb_year[$geb] = $birthdayDate->format('Y');
         $alter[$geb]    = $jahr-$geb_year[$geb];
         $geb_name[$geb] = $row['first_name']. ' '. $row['last_name'];
         $geb++;
@@ -213,60 +278,63 @@ if($plg_geb_aktiv == 1)
 // Kalender erstellen
 $erster = date('w', mktime(0,0,0,$monat,1,$jahr));
 $insgesamt = date('t', mktime(0,0,0,$monat,1,$jahr));
-$monate = array("Januar","Februar","M&auml;rz","April","Mai","Juni","Juli","August", "September","Oktober","November","Dezember");
+$monate = explode(',',$g_l10n->get('PLG_CALENDAR_MONTH'));
 if($erster == 0)
 {
     $erster = 7;
 }
-echo "<div id=\"plgCalendarContent\">\n";
-echo "<table border=\"0\" id=\"plgCalendarTable\">\n";
-echo "<tr>\n";
-if($plg_ajax_change == 1)
-{
-    echo "<th align=\"center\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
-        type: 'GET',
-        url: '".$g_root_path."/adm_plugins/calendar/calendar.php',
-        cache: false,
-        data: 'ajax_change&amp;date_id=".date('mY',mktime(0,0,0,$monat-1,1,$jahr))."',
-        success: function(html){
-            $('#plgCalendarContent').replaceWith(html);
+echo '<div id="plgCalendarContent">
+<table border="0" id="plgCalendarTable">
+    <tr>';
+        if($plg_ajax_change == 1)
+        {
+            echo "<th align=\"center\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
+                type: 'GET',
+                url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
+                cache: false,
+                data: 'ajax_change&amp;date_id=".date('mY',mktime(0,0,0,$monat-1,1,$jahr))."',
+                success: function(html){
+                    $('#plgCalendarContent').replaceWith(html);
+                }
+            }); return false;\">&laquo;</a></th>";
+            echo '<th colspan="5" align="center" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
+            echo "<th align=\"center\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
+                type: 'GET',
+                url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
+                cache: false,
+                data: 'ajax_change&amp;date_id=".date('mY',mktime(0,0,0,$monat+1,1,$jahr))."',
+                success: function(html){
+                    $('#plgCalendarContent').replaceWith(html);
+                }
+            }); return false;\">&raquo;</a></th>";
         }
-    }); return false;\">&laquo;</a></th>";
-    echo "<th colspan=\"5\" align=\"center\" class=\"plgCalendarHeader\">".$monate[$monat-1]." ".$jahr."</th>";
-    echo "<th align=\"center\" class=\"plgCalendarHeader\"><a href=\"#\" onclick=\"$.ajax({
-        type: 'GET',
-        url: '".$g_root_path."/adm_plugins/calendar/calendar.php',
-        cache: false,
-        data: 'ajax_change&amp;date_id=".date('mY',mktime(0,0,0,$monat+1,1,$jahr))."',
-        success: function(html){
-            $('#plgCalendarContent').replaceWith(html);
+        else
+        {
+            echo '<th colspan="7" align="center" class="plgCalendarHeader">'.$monate[$monat-1].' '.$jahr.'</th>';
         }
-    }); return false;\">&raquo;</a></th>";
-}
-else
-{
-    echo "<th colspan=\"7\" align=\"center\" class=\"plgCalendarHeader\">".$monate[$monat-1]." ".$jahr."</th>";
-}
-echo "</tr>\n";
-echo "<tr>\n<td class=\"plgCalendarWeekday\"><b>Mo</b></td><td class=\"plgCalendarWeekday\"><b>Di</b></td>";
-echo "<td class=\"plgCalendarWeekday\"><b>Mi</b></td><td class=\"plgCalendarWeekday\"><b>Do</b></td>";
-echo "<td class=\"plgCalendarWeekday\"><b>Fr</b></td><td class=\"plgCalendarWeekdaySaturday\"><b>Sa</b></td>";
-echo "<td class=\"plgCalendarWeekdaySunday\"><b>So</b></td></tr>\n";
-echo "<tr>\n";
+    echo '</tr>
+    <tr>
+        <td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_MONDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_WEDNESDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_THURSDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_FRIDAY_SHORT').'</b></td><td class="plgCalendarWeekdaySaturday"><b>'.$g_l10n->get('PLG_CALENDAR_SATURDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekdaySunday"><b>'.$g_l10n->get('PLG_CALENDAR_SUNDAY_SHORT').'</b></td>
+    </tr>
+    <tr>';
+
 $i = 1;
 while($i<$erster)
 {
-    echo "<td>&nbsp;</td>";
+    echo '<td>&nbsp;</td>';
     $i++;
 }
 $i = 1;
 $boolNewStart = false;
 while($i<=$insgesamt)
 {
-    $ter_link = "";
-    $ter_title = "";
-    $geb_link = "";
-    $geb_title = "";
+    $ter_link  = '';
+    $ter_title = '';
+    $geb_link  = '';
+    $geb_title = '';
     // Terminanzeige generieren
     if($plg_ter_aktiv == 1)
     {
@@ -293,25 +361,25 @@ while($i<=$insgesamt)
                         $ter_aktuell = $termin_tag[$j];
                         if($plg_ajaxbox == 1)
                         {
-                            $ter_link = "titel=$termin_titel[$j]&uhr=$termin_uhr[$j]&ort=$termin_ort[$j]";
+                            $ter_link = 'titel='.$termin_titel[$j].'&uhr='.$termin_uhr[$j].'&ort='.$termin_ort[$j];
                             if($termin_ganztags[$j] == 1)
                             {
-                                $ter_link = $ter_link. "&ganztags=1";
+                                $ter_link = $ter_link. '&ganztags=1';
                             }
                         }
                         else
                         {
-                            if($termin_ort[$j] != "")
+                            if($termin_ort[$j] != '')
                             {
-                                $termin_ort[$j] = ", ". $termin_ort[$j];
+                                $termin_ort[$j] = ', '. $termin_ort[$j];
                             }
                             if($termin_ganztags[$j] == 1)
                             {
-                                $ter_title = "$termin_titel[$j]$termin_ort[$j], ganzt&auml;gig";
+                                $ter_title = $termin_titel[$j].$termin_ort[$j].', ganzt&auml;gig';
                             }
                             else
                             {
-                                $ter_title = "$termin_titel[$j], $termin_uhr[$j] Uhr$termin_ort[$j]";
+                                $ter_title = $termin_titel[$j].', '.$termin_uhr[$j].' Uhr'.$termin_ort[$j];
                             }
                         }
                     }
@@ -320,24 +388,27 @@ while($i<=$insgesamt)
             }
             if($ter_anzahl >> 0)
             {
+				// Link_Target auf Termin-Vorgabe einstellen 
+				$plg_link_target = $plg_link_target_termin;
+				
                 if($i <= 9)
                 {
-                    $plg_link = "$g_root_path/adm_program/modules/dates/dates.php?date=$jahr$monat". "0". $i;
+                    $plg_link = $plg_link_url.'?date='.$jahr.$monat.'0'. $i;
                 }
                 else
                 {
-                    $plg_link = "$g_root_path/adm_program/modules/dates/dates.php?date=$jahr$monat$i";
+                    $plg_link = $plg_link_url.'?date='.$jahr.$monat.$i;
                 }
             }
             if($ter_anzahl >> 1)
             {
                 if($plg_ajaxbox == 1)
                 {
-                    $ter_link = $ter_link. "&weitere=1";
+                    $ter_link = $ter_link. '&weitere=1';
                 }
                 else
                 {
-                    $ter_title = $ter_title. " (... weitere)";
+                    $ter_title = $ter_title. $g_l10n->get('PLG_CALENDAR_MORE');
                 }
             }
         }
@@ -369,117 +440,168 @@ while($i<=$insgesamt)
                     {
                         if($geb_anzahl >> 0)
                         {
-                            $geb_link = $geb_link. "&";
+                            $geb_link = $geb_link. '&';
                         }
                         $geb_anzahl++;
-                        $geb_link = $geb_link. "gebname$geb_anzahl=$geb_name[$k]&gebalter$geb_anzahl=$alter[$k]";
+                        $geb_link = $geb_link. 'gebname'.$geb_anzahl.'='.$geb_name[$k].'&gebalter'.$geb_anzahl.'='.$alter[$k];
                     }
                     else
                     {
                         if($geb_anzahl >> 0)
                         {
-                            $geb_title = $geb_title. ", ";
+                            $geb_title = $geb_title. ', ';
                         }
                         $geb_anzahl++;
-                        $geb_title = $geb_title. "$geb_name[$k] ($alter[$k])";
+                        $geb_title = $geb_title. $geb_name[$k]. '('.$alter[$k].')';
                     }
                 }
             }
             if($plg_ajaxbox == 1)
             {
-                $geb_link = "gebanzahl=$geb_anzahl&". $geb_link;
+                $geb_link = 'gebanzahl='.$geb_anzahl.'&'.$geb_link;
             }
         }
     }
+	
+	// Hier erfolgt nun die Bestimmung der Linkklasse
+// Dabei werden 3 Linkklassen verwendet: 
+// geb (Geburtstage), date (Termine) und merge (gleichzeitig Geburtstage und Termine
+
+// Zuerst Vorbelegung der Wochentagsklassen
+$plg_link_class_saturday = 'plgCalendarSaturday';
+$plg_link_class_sunday = 'plgCalendarSunday';
+$plg_link_class_weekday = 'plgCalendarDay';
+
+if($i != $ter_aktuell && $i == $geb_aktuell) // Geburstag aber kein Termin
+	{
+		$plg_link_class = 'geb';
+		$plg_link_class_saturday = 'plgCalendarBirthSaturday';
+		$plg_link_class_sunday = 'plgCalendarBirthSunday';
+		$plg_link_class_weekday = 'plgCalendarBirthDay';
+
+	}
+
+if($i == $ter_aktuell && $i!= $geb_aktuell) // Termin aber kein Geburtstag
+	{
+		$plg_link_class = 'date';
+		$plg_link_class_saturday = 'plgCalendarDateSaturday';
+		$plg_link_class_sunday = 'plgCalendarDateSunday';
+		$plg_link_class_weekday = 'plgCalendarDateDay';
+		
+	}
+if($i == $ter_aktuell && $i == $geb_aktuell) // Termin und Geburtstag
+	{
+		$plg_link_class = 'merge';
+		$plg_link_class_saturday = 'plgCalendarMergeSaturday';
+		$plg_link_class_sunday = 'plgCalendarMergeSunday';
+		$plg_link_class_weekday = 'plgCalendarMergeDay';
+	
+	}
+// Ende der Linklassenbestimmung
+	
     if ($boolNewStart)
 	{
-		echo "<tr>\n";
+		echo '<tr>
+		';
 		$boolNewStart = false;
 	}
     $rest = ($i+$erster-1)%7;
     if($i == $heute)
     {
-        echo "<td align=\"center\" class=\"plgCalendarToday\">";
+        echo '<td align="center" class="plgCalendarToday">';
     }
     else if($rest == 6)
     {
-        echo "<td align=\"center\" class=\"plgCalendarSaturday\">";
+		// CSS aus der Linkklassenbestimmung verwenden
+		echo '<td align="center" class="'.$plg_link_class_saturday.'">';
     }
     else if($rest == 0)
     {
-        echo "<td align=\"center\" class=\"plgCalendarSunday\">";
+		// CSS aus der Linkklassenbestimmung verwenden
+		echo '<td align="center" class="'.$plg_link_class_sunday.'">';
     }
     else
     {
-        echo "<td align=\"center\" class=\"plgCalendarDay\">";
+		echo '<td align="center" class="'.$plg_link_class_weekday.'">';
     }
         
     if($i == $heute OR $i == $ter_aktuell OR $i == $geb_aktuell)
     {
-        if($i != $ter_aktuell && $i == $geb_aktuell)
+        if($i != $ter_aktuell && $i == $geb_aktuell) 
         {
-            $plg_link = "#";
+			// Link-URL bei Geburtstag durch # abschalten
+            $plg_link = '#';
+			// Link_Target für Geburtstagvorgabe einstellen
+			$plg_link_target = $plg_link_target_geb;
         }
+		
         if($i == $ter_aktuell || $i == $geb_aktuell)
         {
             if($plg_ajaxbox == 1)
             {
-                if($ter_link != "" && $geb_link != "")
+                if($ter_link != '' && $geb_link != '')
                 {
-                    $geb_link = "&". $geb_link;
-                }
-                //echo $ter_link. $geb_link;
-                echo "<a href=\"$plg_link\" target=\"$plg_link_target\" onmouseover=\"ajax_showTooltip(event,'".htmlspecialchars(addcslashes("$g_root_path/adm_plugins/$plugin_folder/calendar_msg.php?$ter_link$geb_link", "'"))."',this)\" onmouseout=\"ajax_hideTooltip()\">$i</a>";
+                    $geb_link = '&'. $geb_link;
+				}
+				
+                // plg_link_class bestimmt das Erscheinungsbild des jeweiligen Links
+                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" target="'.$plg_link_target.'" 
+                    onmouseover="ajax_showTooltip(event,\''.htmlspecialchars(addcslashes($g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar_msg.php?'.$ter_link.$geb_link, "'")).'\',this)" 
+                    onmouseout="ajax_hideTooltip()">'.$i.'</a>';
             }
             else
             {
-                if($ter_title != "" && $geb_title != "")
+                if($ter_title != '' && $geb_title != '')
                 {
-                    $geb_title = ", ". $geb_title;
+                    $geb_title = ', '. $geb_title;
                 }
-                echo "<a href=\"$plg_link\" title=\"$ter_title$geb_title\" href=\"$plg_link\" target=\"$plg_link_target\">$i</a>";
+				
+                echo '<a class="'.$plg_link_class.'" href="'.$plg_link.'" title="'.$ter_title.$geb_title.'" 
+                    href="'.$plg_link.'" target="'.$plg_link_target.'">'.$i.'</a>';
             }
-        }
+		}
         else if($i == $heute)
         {
-            echo "<span class=\"plgCalendarToday\">$i</span>";
+            echo '<span class="plgCalendarToday">'.$i.'</span>';
         }
     }
     else if($rest == 6)
     {
-        echo "<span class=\"plgCalendarSaturday\">$i</span>";
+        echo '<span class="plgCalendarSaturday">'.$i.'</span>';
     }
     else if($rest == 0)
     {
-        echo "<span class=\"plgCalendarSunday\">$i</span>";
+        echo '<span class="plgCalendarSunday">'.$i.'</span>';
     }
     else
     {
-        echo "$i";
+        echo $i;
     }
-    echo "</td>\n";
+    echo '</td>';
     if($rest == 0 || $i == $insgesamt)
     {
-        echo "</tr>\n";
+        echo '</tr>
+		';
 		$boolNewStart = true;
     }
     $i++;
     $ter_anzahl = 0;
     $geb_anzahl = 0;
 }
-echo "</table>\n";
+echo '</table>
+';
 if($monat.$jahr != date('mY'))
 {
     echo "<div id=\"plgCalendarReset\"><a href=\"#\" onclick=\"$.ajax({
             type: 'GET',
-            url: '".$g_root_path."/adm_plugins/calendar/calendar.php',
+            url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
             cache: false,
             data: 'ajax_change&amp;date_id=".date('mY')."',
             success: function(html){
                 $('#plgCalendarContent').replaceWith(html);
             }
-        }); return false;\">Aktueller Monat</a></div>";
+        }); return false;\">".$g_l10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
-echo "</div>\n";
+echo '</div>';
 
 ?>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="de">
+	<version id="2.2.0">
+	    <text id="PLG_CALENDAR_MONTH" development="new" translation="todo">January,February,March,April,May,June,July,August,September,October,November,December</text>
+		<text id="PLG_CALENDAR_MONDAY_SHORT" development="new" translation="todo">Mo</text>
+		<text id="PLG_CALENDAR_TUESDAY_SHORT" development="new" translation="todo">Tu</text>
+		<text id="PLG_CALENDAR_WEDNESDAY_SHORT" development="new" translation="todo">We</text>
+		<text id="PLG_CALENDAR_THURSDAY_SHORT" development="new" translation="todo">Th</text>
+		<text id="PLG_CALENDAR_FRIDAY_SHORT" development="new" translation="todo">Fr</text>
+		<text id="PLG_CALENDAR_SATURDAY_SHORT" development="new" translation="todo">Sa</text>
+		<text id="PLG_CALENDAR_SUNDAY_SHORT" development="new" translation="todo">Su</text>
+		<text id="PLG_CALENDAR_MORE" development="new" translation="todo"> (... more)</text>
+		<text id="PLG_CALENDAR_CURRENT_MONTH" development="new" translation="todo">Current month</text>
+		<text id="PLG_CALENDAR_FULLTIME" development="new" translation="todo">(full-time event)</text>
+		<text id="PLG_CALENDAR_CLOCK" development="new" translation="todo">o'clock</text>
+	</version>
+</language>
