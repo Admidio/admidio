@@ -19,11 +19,11 @@
 /* ********************************************************** */
 
 #plgBirthdayNameHighlight { 
-    color:              #FFFF00;
+    color:              #53a351;
 }
 
 #plgBirthdayDateHighlight { 
-    color:              #FFFF00;
+    color:              #53a351;
 }
 
 /* ********************************************************** */
@@ -31,11 +31,11 @@
 /* ********************************************************** */
 
 #plgBirthdayNameHighlightAgo { 
-    color:              #FF6600;
+    color:              #d84d1e;
 }
 
 #plgBirthdayDateHighlightAgo { 
-    color:              #FF6600;
+    color:              #d84d1e;
 }
 
 /* ********************************************************** */
@@ -43,11 +43,11 @@
 /* ********************************************************** */
 
 #plgBirthdayNameHighlightFuture { 
-    color:              #99FF00;
+    color:              #5475ff;
 }
 
 #plgBirthdayDateHighlightFuture { 
-    color:              #99FF00;
+    color:              #5475ff;
 }
 
 #plgBirthdayNameList li { 

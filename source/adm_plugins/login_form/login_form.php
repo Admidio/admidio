@@ -28,10 +28,11 @@ if(!defined('PLUGIN_PATH'))
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
-require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
 $g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+
+require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -73,6 +74,19 @@ if(isset($plg_rank) == false)
 $g_db->setCurrentDB();
 
 $plg_icon_code = '';
+
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
+<div class="admPluginHeader">';
+    if($g_valid_login)
+    {
+        echo '<h3>'.$g_l10n->get('SYS_REGISTERED_AS').'</h3>';
+    }
+    else
+    {
+        echo '<h3>'.$g_l10n->get('SYS_LOGIN').'</h3>';
+    }
+echo '</div>
+<div class="admPluginBody">';
 
 if($g_valid_login == 1)
 {
@@ -271,5 +285,7 @@ else
         echo '</ul>
     </form>';   
 }
+
+echo '</div></div>';
 
 ?>

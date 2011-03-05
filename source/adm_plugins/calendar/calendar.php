@@ -16,12 +16,6 @@
  *
  *****************************************************************************/
  
-if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
-{
-    // Header kodieren
-    header('Content-Type: text/html; charset=UTF-8');
-}
-
 // Pfad des Plugins ermitteln
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'calendar.php');
@@ -33,6 +27,12 @@ if(!defined('PLUGIN_PATH'))
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+
+if(isset($_GET['ajax_change']) && $plg_ajax_change == 1)
+{
+    // Header kodieren
+    header('Content-Type: text/html; charset=UTF-8');
+}
 
 // Auf gesetzte Standardwerte aus config.php überprüfen und notfalls setzen
 if(isset($plg_ajaxbox) == false)
@@ -81,7 +81,7 @@ if(isset($plg_kal_cat_show) == false)
 
 if(isset($plg_link_url) == false || ($plg_link_url) =='')
 {
-$plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
+    $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
 
 // ///////////////////////////////////////////////////// //
@@ -89,29 +89,29 @@ $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 // ///////////////////////////////////////////////////// //
 
 if(isset($plg_link_class_geb) == false || ($plg_link_class_geb) =='')
-	{
-		$plg_link_class_geb = 'geb';
-	}
+{
+	$plg_link_class_geb = 'geb';
+}
 if(isset($plg_link_class_date) == false || ($plg_link_class_date) =='')
-	{
-		$plg_link_class_date = 'date';
-	}
+{
+	$plg_link_class_date = 'date';
+}
 if(isset($plg_link_class_merge) == false || ($plg_link_class_merge) =='')
-	{
-		$plg_link_class_date = 'merge';
-	}
+{
+	$plg_link_class_date = 'merge';
+}
 
 // /////////////////////////////////////////////////////// //
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 // /////////////////////////////////////////////////////// //
 if(isset($plg_rolle_sql) == 'all' || ($plg_rolle_sql) == '')
-	{
-		$rol_sql = 'is not null';
-	}
-	else
-	{
-		$rol_sql = 'in '.$plg_rolle_sql;
-	}
+{
+	$rol_sql = 'is not null';
+}
+else
+{
+	$rol_sql = 'in '.$plg_rolle_sql;
+}
 
 // Sprachdatei des Plugins einbinden
 $g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
@@ -283,7 +283,10 @@ if($erster == 0)
 {
     $erster = 7;
 }
-echo '<div id="plgCalendarContent">
+echo '<div id="plgCalendarContent" class="admPluginContent">
+<div class="admPluginHeader"><h3>'.$g_l10n->get('DAT_CALENDAR').'</h3></div>
+<div class="admPluginBody">
+
 <table border="0" id="plgCalendarTable">
     <tr>';
         if($plg_ajax_change == 1)
@@ -602,6 +605,6 @@ if($monat.$jahr != date('mY'))
             }
         }); return false;\">".$g_l10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
-echo '</div>';
+echo '</div></div>';
 
 ?>

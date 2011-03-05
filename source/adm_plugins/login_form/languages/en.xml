@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de">
+<language id="en">
 	<version id="1.4.0">
 	    <text id="PLG_LOGIN_ACTIVE_SINCE" development="new" translation="edited">Active since</text>
 		<text id="PLG_LOGIN_NEW_ONLINE_MEMBER" development="new" translation="todo">New online member</text>
