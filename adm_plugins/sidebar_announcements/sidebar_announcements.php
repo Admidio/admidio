@@ -2,12 +2,12 @@
 /******************************************************************************
  * Sidebar Announcements
  *
- * Version 1.2.0
+ * Version 1.3.0
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatible ab Admidio-Versions 2.1.0
+ * Kompatible ab Admidio-Versions 2.2.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -16,17 +16,17 @@
  *****************************************************************************/
 
 // Pfad des Plugins ermitteln
-$plugin_folder_pos = strpos(__FILE__, "adm_plugins") + 11;
-$plugin_file_pos   = strpos(__FILE__, "sidebar_announcements.php");
+$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$plugin_file_pos   = strpos(__FILE__, 'sidebar_announcements.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
-require_once(PLUGIN_PATH. "/../adm_program/system/common.php");
-require_once(PLUGIN_PATH. "/../adm_program/system/classes/table_announcement.php");
-require_once(PLUGIN_PATH. "/$plugin_folder/config.php");
+require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
+require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_announcement.php');
+require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -45,7 +45,7 @@ if(isset($plg_link_class))
 }
 else
 {
-    $plg_link_class = "";
+    $plg_link_class = '';
 }
 
 if(isset($plg_link_target))
@@ -54,7 +54,7 @@ if(isset($plg_link_target))
 }
 else
 {
-    $plg_link_target = "_self";
+    $plg_link_target = '_self';
 }
 
 if(isset($plg_headline))
@@ -63,7 +63,7 @@ if(isset($plg_headline))
 }
 else
 {
-    $plg_headline = "Ank&uuml;ndigungen";
+    $plg_headline = $g_l10n->get('ANN_ANNOUNCEMENTS');
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
@@ -75,17 +75,17 @@ $plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($plg_arr_orgas as $key => $value)
 {
-	$plg_organizations = $plg_organizations. "'$value', ";
+	$plg_organizations = $plg_organizations. '"'.$value.'", ';
 }
-$plg_organizations = $plg_organizations. "'". $g_current_organization->getValue("org_shortname"). "'";
+$plg_organizations = $plg_organizations. '"'. $g_current_organization->getValue('org_shortname'). '"';
 
 // nun alle relevanten Ankuendigungen finden
-$sql    = "SELECT * FROM ". TBL_ANNOUNCEMENTS. "
-			WHERE (  ann_org_shortname = '". $g_current_organization->getValue("org_shortname"). "'
+$sql    = 'SELECT * FROM '. TBL_ANNOUNCEMENTS. '
+			WHERE (  ann_org_shortname = "'. $g_current_organization->getValue('org_shortname').'"
 				  OR (   ann_global   = 1
-					 AND ann_org_shortname IN ($plg_organizations) ))
+					 AND ann_org_shortname IN ('.$plg_organizations.') ))
 			ORDER BY ann_timestamp_create DESC
-			LIMIT $plg_announcements_count";
+			LIMIT '.$plg_announcements_count;
 $plg_result = $g_db->query($sql);
 $plg_announcement = new TableAnnouncement($g_db);
 
@@ -106,7 +106,7 @@ if($g_db->num_rows($plg_result) > 0)
             unset($plg_words);
         
             // Woerter unterbrechen, wenn sie zu lang sind
-            $plg_words = explode(" ", $plg_announcement->getValue("ann_headline"));
+            $plg_words = explode(" ", $plg_announcement->getValue('ann_headline'));
             
             foreach($plg_words as $plg_key => $plg_value)
             {
@@ -124,17 +124,17 @@ if($g_db->num_rows($plg_result) > 0)
         }
         else
         {
-            echo $plg_announcement->getValue("ann_headline")."</a><br />";
+            echo $plg_announcement->getValue('ann_headline').'</a><br />';
         }
          
         echo '(&nbsp;'. $plg_announcement->getValue('ann_timestamp_create', $g_preferences['system_date']). '&nbsp;)<hr />';
     }
     
-    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">Alle '.$plg_headline.'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$g_l10n->get('SYS_ALL').' '.$plg_headline.'</a>';
 }
 else
 {
-    echo 'Es wurden noch keine '.$plg_headline.' erfasst.';
+    echo $g_l10n->get('SYS_NO_ENTRIES');
 }
 
 echo '</div>';

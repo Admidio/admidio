@@ -2,12 +2,12 @@
 /******************************************************************************
  * Random Photo
  *
- * Version 1.3.0
+ * Version 1.4.0
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
  * und verlinkt neben dem Bild das dazugehörige Album
  *
- * Kompatible ab Admidio-Versions 2.1.0
+ * Kompatible ab Admidio-Versions 2.2.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -59,7 +59,7 @@ if(isset($plg_headline))
 }
 else
 {
-    $plg_headline = 'Fotos';
+    $plg_headline = $g_l10n->get('PHO_PHOTOS');
 }
 
 if(!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width))
@@ -175,7 +175,7 @@ else
 //Ausgabe
 $pho_id = $album->getValue('pho_id');
 echo '<a class="$plg_link_class" href="'. $g_root_path. '/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'. $plg_link_target. '">
-<img style="vertical-align: middle; cursor: pointer;" src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$picnr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'"  border="0" alt="Zufallsbild" />
+<img style="vertical-align: middle; cursor: pointer;" src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$picnr.'&amp;pho_begin='.$album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$plg_photos_max_width.'&amp;max_height='.$plg_photos_max_height.'"  border="0" alt="Photo" />
 </a>';
 
 //Link zum Album

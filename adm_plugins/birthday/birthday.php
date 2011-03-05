@@ -2,12 +2,12 @@
 /******************************************************************************
  * Birthday
  *
- * Version 1.5.2
+ * Version 1.6.0
  *
  * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
  * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
  *
- * Kompatible ab Admidio-Versions 2.1.0
+ * Kompatible ab Admidio-Versions 2.2.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -26,6 +26,9 @@ if(!defined('PLUGIN_PATH'))
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+
+// Sprachdatei des Plugins einbinden
+$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -74,19 +77,19 @@ if(isset($plg_show_future) == false || is_numeric($plg_show_names_extern) == fal
 }
 
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
-if(isset($plg_rolle_sql) == false || ($plg_rolle_sql) =="")
+if(isset($plg_rolle_sql) == false || ($plg_rolle_sql) == '')
 {
-    $rol_sql = "is not null";
+    $rol_sql = 'is not null';
 }
 else
 {
-    $rol_sql = "in ".$plg_rolle_sql;
+    $rol_sql = 'in '.$plg_rolle_sql;
 }
 
 // Prüfen, ob die Sotierbedingung gesetzt wurde            //
-if(isset($plg_sort_sql) == false || ($plg_sort_sql) =="")
+if(isset($plg_sort_sql) == false || ($plg_sort_sql) == '')
 {
-    $sort_sql = "desc";
+    $sort_sql = 'desc';
 }
 else
 {
@@ -181,7 +184,7 @@ if($anz_geb > 0)
                 // Anzeigeart des Namens beruecksichtigen
                 if($plg_show_names == 2)        // Nachname, Vorname
                 {
-                    $plg_show_name = $row['last_name']. ", ". $row['first_name'];
+                    $plg_show_name = $row['last_name']. ', '. $row['first_name'];
                 }
                 elseif($plg_show_names == 3)    // Vorname
                 {
@@ -193,7 +196,7 @@ if($anz_geb > 0)
                 }
                 else                            // Vorname Nachname
                 {
-                    $plg_show_name = $row['first_name']. " ". $row['last_name'];
+                    $plg_show_name = $row['first_name']. ' '. $row['last_name'];
                 }
 
                 // Namen mit Alter und Mail-Link anzeigen
@@ -203,15 +206,15 @@ if($anz_geb > 0)
                     if($g_valid_login)
                     {
                         $plg_show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
-                            target="'. $plg_link_target. '" title="Profil aufrufen">'. $plg_show_name. '</a>
+                            target="'. $plg_link_target. '" title="'.$g_l10n->get('SYS_SHOW_PROFILE').'">'. $plg_show_name. '</a>
                             <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
-                            src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden" /></a>';
+                            src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
                     }
                     else
                     {
                         $plg_show_name = $plg_show_name. 
                             '<a class="iconLink" href="mailto:'. $row['email']. '"><img 
-                            src="'. THEME_PATH. '/icons/email.png" alt="E-Mail senden" title="E-Mail senden" /></a>';
+                            src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
                     }
                 }
                 else

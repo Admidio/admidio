@@ -167,7 +167,7 @@ echo '
                     }
                     echo '<div style="margin-left: 20px;">
 						<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'"><img 
-                             src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('PRO_PROFILE').'" /></a>
+                             src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('SYS_SHOW_PROFILE').'" /></a>
                         <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row->usr_id.'">'.
                             $row->first_name.' '.$row->last_name.'</a><br />';
                         if(strlen($row->address) > 0)
