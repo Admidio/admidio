@@ -29,7 +29,10 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
- 
+
+// Sprachdatei des Plugins einbinden
+$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
 if(isset($plg_show_register_link) == false || is_numeric($plg_show_register_link) == false)
@@ -69,9 +72,6 @@ if(isset($plg_rank) == false)
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
-// Sprachdatei des Plugins einbinden
-$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
-
 $plg_icon_code = '';
 
 if($g_valid_login == 1)
@@ -100,7 +100,7 @@ if($g_valid_login == 1)
                 <dt>'.$g_l10n->get('SYS_MEMBER').':</dt>
                 <dd>
                     <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $g_current_user->getValue('usr_id'). '" 
-                    '. $plg_link_target. ' title="Profil aufrufen">'. $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'). '</a>
+                    '. $plg_link_target. ' title="'.$g_l10n->get('SYS_SHOW_PROFILE').'">'. $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'). '</a>
                 </dd>
             </dl>
         </li>
@@ -126,7 +126,7 @@ if($g_valid_login == 1)
                             $count_rank = key($plg_rank);
                             if($count_rank < $g_current_user->getValue('usr_number_login'))
                             {
-                                $rank = $g_l10n->get($value);
+                                $rank = $value;
                             }
                             $value = next($plg_rank);
                         }

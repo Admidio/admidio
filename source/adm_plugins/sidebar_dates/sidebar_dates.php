@@ -2,12 +2,12 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.2.3
+ * Version 1.3.0
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatible ab Admidio-Versions 2.1.0
+ * Kompatible ab Admidio-Versions 2.2.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -27,6 +27,9 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_date.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
+
+// Sprachdatei des Plugins einbinden
+$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -67,7 +70,7 @@ else
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if(isset($plg_link_url) == false || ($plg_link_url) =="")
 {
-$plg_link_url = $g_root_path."/adm_program/modules/dates/dates.php";
+$plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
@@ -165,16 +168,16 @@ if($g_db->num_rows($plg_result) > 0)
         }
         else
         {
-            echo $plg_date->getValue("dat_headline"). '</a><hr />';
+            echo $plg_date->getValue('dat_headline'). '</a><hr />';
         }
     }
 
     // WEiterleitung über $plg_link_url ohne weiteren Übergabeparameter
-    echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">Alle Termine</a>';
+    echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$g_l10n->get('PLG_DATES_ALL_EVENTS').'</a>';
 }
 else
 {
-    echo 'Es sind keine Termine vorhanden.';
+    echo $g_l10n->get('SYS_NO_ENTRIES');
 }
 
 echo '</div>';

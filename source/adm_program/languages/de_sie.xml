@@ -447,7 +447,7 @@
     <text id="MAI_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von Ihnen ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
     <text id="MAI_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
-    <text id="MAI_SEND_EMAIL" development="new" translation="todo">E-Mail verschicken</text>
+    <text id="MAI_SEND_EMAIL" development="new" translation="todo">E-Mail senden</text>
     <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="todo">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen zur Verfügung, an die Sie E-Mails schreiben können.</text>
     <text id="MAI_SENDER_EMAIL" development="new" translation="todo">Absender Mailadresse</text>
     <text id="MAI_SENDER_EMAIL_ADDRESS_DESC" development="new" translation="todo">Manche Provider erlauben die Nutzung unbekannter Mailadressen als Absender nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle Mails aus dem Mailmodul verschickt werden, (z.B. mailversand@%VAR1%).\nBleibt das Feld leer wird die Adresse des Absenders genutzt. (Standard: leer)</text>
@@ -1116,6 +1116,7 @@
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
     <text id="SYS_SHOW_HELP" development="new" translation="todo">Hilfe anzeigen</text>
     <text id="SYS_SHOW_IMAGE" development="new" translation="todo">Ein Bild %VAR1% anzeigen</text>
+	<text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>
     <text id="SYS_SINCE" development="new" translation="todo">seit %VAR1%</text>

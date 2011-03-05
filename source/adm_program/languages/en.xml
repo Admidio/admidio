@@ -1139,10 +1139,11 @@
     <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="edited">Server settings do not allow files uploads.</text>
     <text id="SYS_SET_BY" development="new" translation="edited">Set by</text>
     <text id="SYS_SET_LINK" development="new" translation="edited">Set %VAR1%ink%VAR2% </text>
-    <text id="SYS_SETTINGS" development="new" translation="edited">Preferences:</text>
+    <text id="SYS_SETTINGS" development="new" translation="edited">Preferences</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Display calendar</text>
     <text id="SYS_SHOW_HELP" development="new" translation="edited">Display help</text>
     <text id="SYS_SHOW_IMAGE" development="new" translation="edited">Display picture %VAR1%</text>
+	<text id="SYS_SHOW_PROFILE" development="new" translation="todo">Show profile</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="edited">Show route</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">At least one user with similar name (%VAR1_BOLD% ) was found in the database.</text>
     <text id="SYS_SINCE" development="new" translation="edited">since %VAR1%</text>
