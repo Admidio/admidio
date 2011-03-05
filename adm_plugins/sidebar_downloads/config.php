@@ -1,0 +1,19 @@
+﻿<?php
+/******************************************************************************
+ * Konfigurationsdatei fuer Admidio-Plugin sidebar_downloads 
+ *
+ * Copyright    : (c) 2004 - 2008 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Module-Owner : Marc Stehli
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
+
+// Anzahl der Downloads, die angezeigt werden sollen (Default = 10)
+$plg_downloads_count = 10;
+
+// Name einer CSS-Klasse fuer Links
+// Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
+$plg_link_class_downl = '';
+
+?>
