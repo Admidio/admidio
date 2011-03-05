@@ -87,7 +87,9 @@ if(!isset($plg_photos_show_link))
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
-echo '<div id="plugin_'. $plugin_folder. '">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
+<div class="admPluginHeader"><h3>'.$g_l10n->get('SYS_PHOTOS').'</h3></div>
+<div class="admPluginBody">';
 
 // Fotoalben Aufrufen
 // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten 
@@ -184,6 +186,6 @@ if($plg_photos_show_link)
     echo'<br /><a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'" target="'.$plg_link_target.'">'.$link_text.'</a>';
 }
 
-echo '</div>';
+echo '</div></div>';
 
 ?>

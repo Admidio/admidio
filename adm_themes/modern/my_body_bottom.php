@@ -10,15 +10,8 @@
         <div id="top_border_img_small"></div>
         <div id="sidebar" class="content">
             <?php
-            if($g_valid_login)
-            {
-                echo '<h3>'.$g_l10n->get('SYS_REGISTERED_AS').'</h3>';
-            }
-            else
-            {
-                echo '<h3>'.$g_l10n->get('SYS_LOGIN').'</h3>';
-            }
             include(SERVER_PATH. '/adm_plugins/login_form/login_form.php');
+
             echo '<br/>
             <h3>Module</h3>
             <span class="menu" style="margin-bottom: 10px;"><a href="'. $g_root_path. '/adm_program/index.php"><img

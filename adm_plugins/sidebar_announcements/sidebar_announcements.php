@@ -89,7 +89,9 @@ $sql    = 'SELECT * FROM '. TBL_ANNOUNCEMENTS. '
 $plg_result = $g_db->query($sql);
 $plg_announcement = new TableAnnouncement($g_db);
 
-echo '<div id="plugin_'. $plugin_folder. '">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
+<div class="admPluginHeader"><h3>'.$g_l10n->get('ANN_ANNOUNCEMENTS').'</h3></div>
+<div class="admPluginBody">';
 
 if($g_db->num_rows($plg_result) > 0)
 {
@@ -137,6 +139,6 @@ else
     echo $g_l10n->get('SYS_NO_ENTRIES');
 }
 
-echo '</div>';
+echo '</div></div>';
 
 ?>

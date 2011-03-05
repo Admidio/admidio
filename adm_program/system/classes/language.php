@@ -55,7 +55,6 @@ class Language
 		}
         $this->setLanguage($language);
         $this->textCache = array();
-		error_log($language.'::'.$this->languageFilePath);
     }
 
 	// gibt einen weiteren Ordner an, der Sprachdateien enthaelt

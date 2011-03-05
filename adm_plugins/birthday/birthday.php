@@ -169,7 +169,9 @@ $result = $g_db->query($sql);
 
 $anz_geb = $g_db->num_rows($result);
 
-echo '<div id="plugin_'. $plugin_folder. '">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
+<div class="admPluginHeader"><h3>'.$g_l10n->get('SYS_BIRTHDAY').'</h3></div>
+<div class="admPluginBody">';
 
 if($anz_geb > 0)
 {
@@ -179,8 +181,6 @@ if($anz_geb > 0)
 	    echo '<ul id="plgBirthdayNameList">';
             while($row = $g_db->fetch_array($result))
             {
-                $plg_age = $row['age']; 
-
                 // Anzeigeart des Namens beruecksichtigen
                 if($plg_show_names == 2)        // Nachname, Vorname
                 {
@@ -221,23 +221,15 @@ if($anz_geb > 0)
                 {
                     // Soll der Name auch für nicht angemeldete Benutzer angezeigt werden, dann ab festgelegtem Alter statt Vorname die Anrede verwenden.
                     if($g_valid_login == false
-                    && $plg_show_alter_anrede <= $plg_age)
+                    && $plg_show_alter_anrede <= $row['age'])
                     {
                         if (($row->gender) > 1)
                         {
-                            $plg_show_name = 'Frau '.$row->last_name;
+                            $plg_show_name = $g_l10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row->last_name);
                         }
                         else
                         {
-                            // Eine kleine Feinheit zur Textanpassung bei den Herren ;-)
-                            if ($plg_show_zeitraum > 0)
-                            {
-                                $plg_show_name = 'Herrn '.$row->last_name;
-                            }
-                            else
-                            {
-                                $plg_show_name = 'Herr '.$row->last_name;
-                            }
+                            $plg_show_name = $g_l10n->get('PLG_BIRTHDAY_MAN_VAR', $row->last_name);
                         }
                     }
                 }
@@ -249,52 +241,44 @@ if($anz_geb > 0)
                     if($row['days_to_bdate'] == 0)
                     {
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
-                        echo '<li><span id="plgBirthdayNameHighlight">'.$plg_show_name.'</span> wird <span id="plgBirthdayDateHighlight"> heute </span>'.$plg_age.'</li>';
+                        echo '<li><span id="plgBirthdayNameHighlight">'.$g_l10n->get('PLG_BIRTHDAY_TODAY', $plg_show_name, $row['age']).'</span></li>';
                     }
                     else
                     {
-                        $birthayDate = new DateTimeExtended($row['bdate'], 'Y-m-d', 'date');
-                        $plg_date = $birthayDate->format($g_preferences['system_date']);
-                        $plg_age  = $row['age'];
-                        $plg_dtb  = $row['days_to_bdate'];
-                        $plg_tage = '';
-                        $plg_alter_text = '';
+                        $birthayDate = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
+                        $plgDays = ' ';
+                        $plgCssClass = '';
 
-                        if ($plg_dtb < 0) 
+                        if ($row['days_to_bdate'] < 0) 
                         {
-                            if($plg_dtb == -1)
+                            $plgCssClass = 'plgBirthdayNameHighlightAgo';
+                            if($row['days_to_bdate'] == -1)
                             {
-                                $plg_alter_text = 'wurde gestern';
+                                $birthdayText = 'PLG_BIRTHDAY_YESTERDAY';
                             }
                             else
                             {
-                                $plg_alter_text = 'wurde';
-                                $plg_tage = 'vor '. -$plg_dtb. ' Tagen';
+                                $birthdayText = 'PLG_BIRTHDAY_PAST';
+                                $plgDays = -$row['days_to_bdate'];
                             }
                         } 
-                        elseif ($plg_dtb > 0) 
+                        elseif ($row['days_to_bdate'] > 0) 
                         {
-                            if($plg_dtb == 1)
+                            $plgCssClass = 'plgBirthdayNameHighlightFuture';
+                            if($row['days_to_bdate'] == 1)
                             {
-                                $plg_alter_text = 'wird morgen';
+                                $birthdayText = 'PLG_BIRTHDAY_TOMORROW';
                             }
                             else
                             {
-                                $plg_alter_text = 'wird';
-                                $plg_tage = 'in '. $plg_dtb. ' Tagen';
+                                $birthdayText = 'PLG_BIRTHDAY_FUTURE';
+                                $plgDays = $row['days_to_bdate'];
                             }
                         }
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
-                        if($plg_dtb < -0)
-                        {
-                            // liegt der Geburtstag in der Vergangenheit, dann CSS HighlightAGO verwenden
-                            echo '<li><span id="plgBirthdayNameHighlightAgo">'.$plg_show_name.'</span> '.$plg_alter_text.' <span id="plgBirthdayNameHighlightAgo">'.$plg_age.' Jahre</span> '.$plg_tage.', am <span id="plgBirthdayDateHighlightAgo">'.$plg_date.'</span><br/></li>';
-                        }
-                        if ($plg_dtb > 0)
-                        {
-                            // liegt der Geburtstag in der Zukunft, dann CSS HighlightFUTURE verwenden
-                            echo '<li><span id="plgBirthdayNameHighlightFuture">'.$plg_show_name.'</span> '.$plg_alter_text.' <span id="plgBirthdayNameHighlightFuture">'.$plg_age.' Jahre</span> '.$plg_tage.', am <span id="plgBirthdayDateHighlightFuture">'.$plg_date.'</span><br/></li>';
-                        }	
+                        echo '<li><span id="'.$plgCssClass.'">'.
+                            $g_l10n->get($birthdayText, $plg_show_name, $plgDays, $row['age'], $birthayDate->format($g_preferences['system_date'])).
+                        '</span></li>';
                     }
                 }		
             }
@@ -304,11 +288,11 @@ if($anz_geb > 0)
     {
         if($anz_geb == 1)
         {
-            echo '<p>Heute hat ein Benutzer Geburtstag !</p>';
+            echo '<p>'.$g_l10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
         }
         else
         {
-            echo '<p>Heute haben '.$anz_geb.' Benutzer Geburtstag !</p>';
+            echo '<p>'.$g_l10n->get('PLG_BIRTHDAY_MORE_USERS', $anz_geb).'</p>';
         }
     }
 }
@@ -317,10 +301,10 @@ else
     // Bei entsprechend gesetzter Konfiguration wird auch im Fall, dass keiner Geburtstag hat, eine Meldung ausgegeben.
     if($plg_show_hinweis_keiner == 0)
     {
-        echo '<p>Heute hat keiner Geburtstag.</p>';
+        echo '<p>'.$g_l10n->get('PLG_BIRTHDAY_NO_USER').'</p>';
     }
 }
 
-echo '</div>';
+echo '</div></div>';
 
 ?>
