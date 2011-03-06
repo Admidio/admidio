@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar-Kalender
  *
- * Version 1.6.3
+ * Version 1.7.0
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann

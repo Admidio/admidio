@@ -236,8 +236,8 @@ else
                 }
                 echo'</td>
                 <td>'. $timestamp->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
-                <td>'. $nextFile['fil_size']. ' KB&nbsp;</td>
-                <td>'. $nextFile['fil_counter'].urlencode($nextFile['fil_name']);
+                <td>'. $nextFile['fil_size']. ' kB&nbsp;</td>
+                <td>'. $nextFile['fil_counter'].'</td>';
                 if ($g_current_user->editDownloadRight())
                 {
                     //Hier noch die Links zum Aendern und Loeschen

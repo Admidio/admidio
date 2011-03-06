@@ -124,7 +124,7 @@ foreach($user->userFieldData as $field)
     if(isset($_POST[$post_id])) 
     {
         // Pflichtfelder muessen gefuellt sein
-        // E-Mail bei Restrierung immer !!!
+        // E-Mail bei Registrierung immer !!!
         if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
         || ($new_user == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
         {
@@ -199,7 +199,7 @@ if($g_current_user->isWebmaster() || $new_user > 0)
             }
 
             // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
-            // Benutzernamenswechesel und diese Dinge
+            // Benutzernamenswechsel und diese Dinge
             if($g_preferences['enable_forum_interface'])
             {
                 // pruefen, ob der Benutzername bereits im Forum vergeben ist
