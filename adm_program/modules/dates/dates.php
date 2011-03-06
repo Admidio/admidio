@@ -632,14 +632,7 @@ else
 
                             if($available_signin)
                             {
-                                if($g_current_user->getValue('usr_id') > 0)
-                                {
-                                    $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
-                                }
-                                else
-                                {
-                                    $buttonURL = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=2&amp;dat_rol_id='.$date->getValue('dat_rol_id');
-                                }
+                                $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
 
                                 $registrationHtml = '<span class="iconTextLink">
                                     <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'" /></a>

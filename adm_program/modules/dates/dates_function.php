@@ -33,7 +33,7 @@ if ($g_preferences['enable_dates_module'] == 0)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-if(($_GET['mode'] != 3 && $_GET['mode'] != 6) || $g_preferences['enable_dates_module'] == 2)
+if($_GET['mode'] != 6 || $g_preferences['enable_dates_module'] == 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require_once('../../system/login_valid.php');

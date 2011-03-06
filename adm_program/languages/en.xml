@@ -739,8 +739,6 @@
 	<text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="edited">Cancel membership</text>
 	<text id="PRO_CHANGE_DATE" development="new" translation="edited">Change date</text>
 	<text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="edited">Change profile picture</text>
-    <text id="PRO_CONFIRM_REGISTRATION_SYSTEM" development="new" translation="edited">Your information has been saved.\n\nYou are not able to login yet.\nAfter confirmation of your registration you will be informed by an e-mail.</text>
-    <text id="PRO_CONFIRM_REGISTRATION_DATE" development="new" translation="edited">Provided information and your event registration has been successfully saved.\n\nYour are now free to log off.</text>
 	<text id="PRO_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
 	<text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Current password</text>
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Current profile picture</text>

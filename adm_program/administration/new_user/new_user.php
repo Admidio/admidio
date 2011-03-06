@@ -28,21 +28,21 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Neue Mitglieder der Gruppierung selektieren
-$sql    = "SELECT usr_id, usr_login_name, usr_timestamp_create, last_name.usd_value as last_name,
+$sql    = 'SELECT usr_id, usr_login_name, usr_timestamp_create, last_name.usd_value as last_name,
                   first_name.usd_value as first_name, email.usd_value as email
-             FROM ". TBL_USERS. " 
-             LEFT JOIN ". TBL_USER_DATA. " as last_name
+             FROM '. TBL_USERS. ' 
+             LEFT JOIN '. TBL_USER_DATA. ' as last_name
                ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = ". $g_current_user->getProperty('LAST_NAME', "usf_id"). "
-             LEFT JOIN ". TBL_USER_DATA. " as first_name
+              AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+             LEFT JOIN '. TBL_USER_DATA. ' as first_name
                ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = ". $g_current_user->getProperty('FIRST_NAME', "usf_id"). "
-             LEFT JOIN ". TBL_USER_DATA. " as email
+              AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+             LEFT JOIN '. TBL_USER_DATA. ' as email
                ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = ". $g_current_user->getProperty('EMAIL', "usf_id"). "
+              AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
             WHERE usr_valid = 0
-              AND usr_reg_org_shortname = '$g_organization' 
-            ORDER BY last_name, first_name ";
+              AND usr_reg_org_shortname = "'.$g_organization.'" 
+            ORDER BY last_name, first_name ';
 $usr_result   = $g_db->query($sql);
 $member_found = $g_db->num_rows($usr_result);
 

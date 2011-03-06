@@ -266,17 +266,6 @@ if($user->getValue('usr_id') == 0)
 // Aenderungen speichern
 $ret_code = $user->save();
 
-//Falls Registrierung nur fuer Terminanmeldung 
-if(isset($_SESSION['login_rol_id']) && $_SESSION['login_rol_id'] > 0)
-{
-    $members = new TableMembers($g_db);
-    $members->setValue('mem_rol_id', $_SESSION['login_rol_id']);
-    $members->setValue('mem_usr_id', $user->getValue('usr_id'));
-    $members->save();
-    //User sofort freischalten
-    $user->setValue('usr_valid',1);
-    $user->save();
-}
 // wurde der Loginname vergeben oder geaendert, so muss ein Forumaccount gepflegt werden
 // bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
 if($g_preferences['enable_forum_interface'] && ($login_name_changed || $new_user == 3))
@@ -344,27 +333,10 @@ if($new_user == 2)
             }
         }
     }
-        
-    if(isset($_SESSION['login_rol_id']))
-    {
-        if($_SESSION['login_rol_id'] > 0)
-        {
-            $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl());
-            $g_message->show($g_l10n->get('PRO_CONFIRM_REGISTRATION_DATE'));
-        }
-        else
-        {
-            $g_message->show($g_l10n->get('PRO_CONFIRM_REGISTRATION_SYSTEM'));
-        }
 
-        unset($_SESSION['login_rol_id']);
-    }
-    else
-    {
-        // nach Registrierungmeldung auf die Startseite verweisen
-        $g_message->setForwardUrl($g_homepage);
-        $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
-    }
+    // nach Registrierungmeldung auf die Startseite verweisen
+    $g_message->setForwardUrl($g_homepage);
+    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 }
 elseif($new_user == 3 || $usr_id == 0)
 {
