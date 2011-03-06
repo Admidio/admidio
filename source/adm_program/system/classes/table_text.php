@@ -22,6 +22,19 @@ class TableText extends TableAccess
     {
         parent::__construct($db, TBL_TEXTS, 'txt', $name);
     }
+    
+    // bei Textfeldern sollen Anfuehrungszeichen erhalten bleiben
+    public function getValue($field_name, $format = '')
+    {
+        if($field_name == 'txt_text')
+        {
+            return $this->dbColumns['txt_text'];
+        }
+        else
+        {
+            return parent::getValue($field_name, $format);
+        }
+    }
 
     // Text mit dem uebergebenen Text-Id oder Namen aus der Datenbank auslesen
     public function readData($name, $sql_where_condition = '', $sql_additional_tables = '')
