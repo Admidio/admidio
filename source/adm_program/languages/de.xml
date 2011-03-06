@@ -729,8 +729,6 @@
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft beenden</text>
 	<text id="PRO_CHANGE_DATE" development="new" translation="todo">Datum ändern</text>
 	<text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
-    <text id="PRO_CONFIRM_REGISTRATION_SYSTEM" development="new" translation="todo">Deine Daten wurden gespeichert.\n\nDu kannst dich noch nicht einloggen.\nSobald deine Anmeldung bestätigt wurde, erhältst du eine Benachrichtigung per E-Mail.</text>
-    <text id="PRO_CONFIRM_REGISTRATION_DATE" development="new" translation="todo">Deine Daten wurden erfolgreich gespeichert und du wurdest zum gewünschten Termin angemeldet.\n\nDu kannst dich nun einloggen.</text>
 	<text id="PRO_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
 	<text id="PRO_CURRENT_PASSWORD" development="new" translation="todo">Aktuelles Passwort</text>
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="todo">Aktuelles Profilfoto</text>

@@ -33,11 +33,6 @@ $usr_id   = 0;
 $req_lastname  = '';
 $req_firstname = '';
 
-if(array_key_exists('dat_rol_id', $_GET) && is_numeric($_GET['dat_rol_id']))
-{
-    $_SESSION['login_rol_id'] = $_GET['dat_rol_id']; //Rollen_ID
-}
-
 if(array_key_exists('new_user', $_GET) && is_numeric($_GET['new_user']))
 {
     $new_user = $_GET['new_user'];
@@ -338,7 +333,7 @@ if($new_user == 1)
 }
 elseif($new_user == 2)
 {
-    $g_layout['title'] = $g_l10n->get('PRO_REGISTER');
+    $g_layout['title'] = $g_l10n->get('SYS_REGISTRATION');
 }
 elseif($usr_id == $g_current_user->getValue('usr_id'))
 {
