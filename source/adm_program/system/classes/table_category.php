@@ -185,7 +185,7 @@ class TableCategory extends TableAccess
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_organization, $g_current_session;
         $fields_changed = $this->columnsValueChanged;
@@ -227,7 +227,7 @@ class TableCategory extends TableAccess
             $this->setValue('cat_name_intern', $this->getNewNameIntern($this->getValue('cat_name'), 1));
         }
 
-        parent::save();
+        parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && $this->getValue('cat_type') == 'USF' && is_object($g_current_session))

@@ -146,7 +146,7 @@ class TablePhotos extends TableAccess
     
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_organization;
         
@@ -155,7 +155,7 @@ class TablePhotos extends TableAccess
             $this->setValue('pho_org_shortname', $g_current_organization->getValue('org_shortname'));
         }
 
-        parent::save();
+        parent::save($updateFingerPrint);
     }
 
     // Rekursive Funktion zum Auswaehlen eines Beispielbildes aus einem moeglichst hohen Album

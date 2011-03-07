@@ -36,7 +36,7 @@ class TableLists extends TableAccess
         return parent::delete();
     } 
 
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_organization, $g_current_user;
         
@@ -59,7 +59,7 @@ class TableLists extends TableAccess
             $this->setValue('lst_global', 0);
         }
         
-        parent::save();
+        parent::save($updateFingerPrint);
     }
         
     // Aktuelle Liste wird zur Default-Liste der Organisation

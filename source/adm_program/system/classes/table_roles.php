@@ -164,12 +164,12 @@ class TableRoles extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_session;
         $fields_changed = $this->columnsValueChanged;
  
-        parent::save();
+        parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && is_object($g_current_session))

@@ -31,7 +31,7 @@ class TableRentalOverview extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_user;
 
@@ -50,7 +50,7 @@ class TableRentalOverview extends TableAccess
                 $this->setValue("rnt_usr_id_change", $g_current_user->getValue("usr_id"));
             }
         }
-        parent::save();
+        parent::save($updateFingerPrint);
     }
 }
 ?>

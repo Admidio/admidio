@@ -53,7 +53,7 @@ class TableText extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         if($this->new_record)
         {
@@ -61,7 +61,7 @@ class TableText extends TableAccess
             global $g_current_organization;
             $this->setValue('txt_org_id', $g_current_organization->getValue('org_id'));
         }
-        parent::save();
+        parent::save($updateFingerPrint);
     }    
 }
 ?>

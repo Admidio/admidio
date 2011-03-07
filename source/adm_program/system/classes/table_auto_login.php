@@ -28,7 +28,7 @@ class TableAutoLogin extends TableAccess
     }    
 
     // interne Methode, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         if($this->new_record)
         {
@@ -47,7 +47,7 @@ class TableAutoLogin extends TableAccess
             $this->setValue('atl_last_login', DATETIME_NOW);
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
         }
-        parent::save();
+        parent::save($updateFingerPrint);
     }  
     
     // diese Methode loescht Datensaetze aus der AutoLogin-Tabelle die nicht mehr gebraucht werden

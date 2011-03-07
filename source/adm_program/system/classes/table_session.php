@@ -67,7 +67,7 @@ class TableSession extends TableAccess
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         if($this->new_record)
         {
@@ -83,7 +83,7 @@ class TableSession extends TableAccess
             // Update
             $this->setValue('ses_timestamp', DATETIME_NOW);
         }
-        parent::save();
+        parent::save($updateFingerPrint);
     }  
     
     // diese Funktion loescht Datensaetze aus der Session-Tabelle die nicht mehr gebraucht werden

@@ -127,7 +127,7 @@ class TableUserField extends TableAccess
     }
 
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_session;
         $fields_changed = $this->columnsValueChanged;
@@ -138,7 +138,7 @@ class TableUserField extends TableAccess
             $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name'), 1));
         }
         
-        parent::save();
+        parent::save($updateFingerPrint);
         
         if($fields_changed && is_object($g_current_session))
         {

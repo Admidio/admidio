@@ -85,7 +85,7 @@ class TableAnnouncement extends TableAccess
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_organization;
         
@@ -94,7 +94,7 @@ class TableAnnouncement extends TableAccess
             $this->setValue('ann_org_shortname', $g_current_organization->getValue('org_shortname'));
         }
 
-        parent::save();
+        parent::save($updateFingerPrint);
     }
 }
 ?>

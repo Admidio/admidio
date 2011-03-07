@@ -323,9 +323,9 @@ class ListConfiguration extends TableLists
         parent::clear();
     }
 
-    public function save()
+    public function save($updateFingerPrint = true)
     {
-        parent::save();
+        parent::save($updateFingerPrint);
         
         // jetzt noch die einzelnen Spalten sichern
         foreach($this->columns as $number => $list_column)
@@ -334,7 +334,7 @@ class ListConfiguration extends TableLists
             {
                 $list_column->setValue('lsc_lst_id', $this->getValue('lst_id'));
             }
-            $list_column->save();
+            $list_column->save($updateFingerPrint);
         }
     }
     
