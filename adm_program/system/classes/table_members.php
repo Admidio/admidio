@@ -58,12 +58,12 @@ class TableMembers extends TableAccess
     }       
 
     // Speichert die Mitgliedschaft und aktualisiert das
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_session;
         $fields_changed = $this->columnsValueChanged;
         
-        parent::save();
+        parent::save($updateFingerPrint);
         
         if($fields_changed && is_object($g_current_session))
         {

@@ -81,7 +81,7 @@ class TableGuestbookComment extends TableAccess
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_organization;
         
@@ -91,7 +91,7 @@ class TableGuestbookComment extends TableAccess
             $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
         }
 
-        parent::save();
+        parent::save($updateFingerPrint);
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor

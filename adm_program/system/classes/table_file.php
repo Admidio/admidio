@@ -122,7 +122,7 @@ class TableFile extends TableAccess
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_organization, $g_current_user;
 
@@ -131,7 +131,7 @@ class TableFile extends TableAccess
             $this->setValue('fil_timestamp', DATETIME_NOW);
             $this->setValue('fil_usr_id', $g_current_user->getValue('usr_id'));
         }
-        parent::save();
+        parent::save($updateFingerPrint);
     }
 }
 ?>

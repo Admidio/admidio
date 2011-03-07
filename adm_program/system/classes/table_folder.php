@@ -708,7 +708,7 @@ class TableFolder extends TableAccess
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    public function save()
+    public function save($updateFingerPrint = true)
     {
         global $g_current_organization, $g_current_user;
 
@@ -718,7 +718,7 @@ class TableFolder extends TableAccess
             $this->setValue('fol_usr_id', $g_current_user->getValue('usr_id'));
             $this->setValue('fol_org_id', $g_current_organization->getValue('org_id'));
         }
-        parent::save();
+        parent::save($updateFingerPrint);
     }
 }
 ?>
