@@ -216,13 +216,14 @@ $g_layout['header'] = '
             // Mehrdimensionales Array fuer alle anzuzeigenden Spalten mit den noetigen Daten erstellen
             $i = 1;
             $old_cat_name = '';
+            $old_cat_name_intern = '';
             $old_cat_id   = 0;
 
             foreach($g_current_user->userFieldData as $field)
             {    
                 // bei den Stammdaten noch Foto und Loginname anhaengen
-                if($old_cat_name == $g_l10n->get('SYS_MASTER_DATA')
-                && $field->getValue('cat_name') != $g_l10n->get('SYS_MASTER_DATA'))
+                if($old_cat_name_intern == 'MASTER_DATA'
+                && $field->getValue('cat_name_intern') != 'MASTER_DATA')
                 {
                     $g_layout['header'] .= '
                     user_fields['. $i. '] = new Object();
@@ -255,6 +256,7 @@ $g_layout['header'] = '
                 
                     $old_cat_id   = $field->getValue('cat_id');
                     $old_cat_name = $field->getValue('cat_name');
+                    $old_cat_name_intern = $field->getValue('cat_name_intern');
                     $i++;
                 }
             }       

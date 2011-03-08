@@ -289,7 +289,7 @@
 	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Membership</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
-    <text id="INS_MOBILE" development="new" translation="edited">Handy</text>
+    <text id="INS_MOBILE" development="new" translation="edited">Mobile</text>
     <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Not all MySQL database access information has been provided!</text>
     <text id="INS_MYSQL_VERSION" development="new" translation="edited">MySQL version</text>
@@ -304,7 +304,7 @@
     <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
     <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
     <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
-    <text id="INS_POSTCODE" development="new" translation="edited">Postal ode</text>
+    <text id="INS_POSTCODE" development="new" translation="edited">Postal code</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
 	
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Set administrator</text>
@@ -787,7 +787,7 @@
     <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="edited">Please select new photo here</text>
 	<text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="edited">Display former role memberships</text>
 	<text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">A box will be shown with all roles of the user in the current organisation. Membership start and end date will be displayed. (default: yes)</text>
-	<text id="PRO_SHOW_MAP_LINK" development="new" translation="edited">Map link</text>
+	<text id="PRO_SHOW_MAP_LINK" development="new" translation="edited">Show map link</text>
 	<text id="PRO_SHOW_MAP_LINK_DESC" development="new" translation="edited">When address information is complete, a link to Google Maps is being created in order to show location map and route from own location to user's location. (default: yes)</text>
 	<text id="PRO_SHOW_ROLE_MEMBERSHIP" development="new" translation="edited">Show role memberships</text>
 	<text id="PRO_SHOW_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">A box will be shown with all roles of the user in the current organisation. Permissions and registration date will be displayed. (default: yes)</text>
@@ -1026,7 +1026,7 @@
     <text id="SYS_INACTIVE" development="new" translation="edited">Inactive</text>
     <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="edited">Increase font size</text>
 	<text id="SYS_INFO" development="new" translation="edited">Info</text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installation directory 'adm_install' still exists on the server. Due to security reasons it has to deleted!</text>
+    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installation directory 'adm_install' still exists on the server. Due to security reasons it has to be deleted!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Invalid page view</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O error</text>

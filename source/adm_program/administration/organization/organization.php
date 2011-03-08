@@ -1530,7 +1530,7 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('PRO_DEFAULT_COUNTRY_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="profile_show_map_link">'.$g_l10n->get('PRO_SHOW_MAP_LINK').'Kartenlink anzeigen:</label></dt>
+                            <dt><label for="profile_show_map_link">'.$g_l10n->get('PRO_SHOW_MAP_LINK').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="profile_show_map_link" name="profile_show_map_link" ';
                                 if(isset($form_values['profile_show_map_link']) && $form_values['profile_show_map_link'] == 1)

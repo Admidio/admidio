@@ -52,6 +52,7 @@ class Language
 		else
 		{
 			$this->languageFilePath = $path;
+			$this->defaultL10nObject = false;
 		}
         $this->setLanguage($language);
         $this->textCache = array();
@@ -99,12 +100,6 @@ class Language
 							$text = $object->get($text_id, $var1, $var2, $var3, $var4);
 						}
 					}
-					
-					// wurde kein Text gefunden, dann dies ausgeben
-					if($this->defaultL10nObject && strlen($text) == 0)
-					{
-						$text = '#undefined text#';
-					}
 				}
 			}
         }
@@ -139,6 +134,12 @@ class Language
         elseif($this->referenceLanguage != $this->language)
         {
             $text = $this->getReferenceText($text_id, $var1, $var2, $var3, $var4);
+					
+			// wurde kein Text gefunden, dann dies ausgeben
+			if($this->defaultL10nObject == true && strlen($text) == 0)
+			{
+				$text = '#undefined text#';
+			}
         }
         // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
         return $text;
@@ -161,6 +162,7 @@ class Language
         {
             $this->language = $language;
             $languageFile = $this->languageFilePath.'/'.$language.'.xml';
+            error_log($languageFile);
 			if(file_exists($languageFile))
 			{
 				$this->l10nObject = new SimpleXMLElement($languageFile, 0, true);

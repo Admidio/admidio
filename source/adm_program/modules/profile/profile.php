@@ -128,7 +128,7 @@ function getFieldCode($field, $user_id)
             break;
     }
 
-    if($field->getValue('cat_name') != 'Stammdaten')
+    if($field->getValue('cat_name_intern') != 'MASTER_DATA')
     {
         // Icons der Messenger anzeigen
         if($field->getValue('usf_name') == 'ICQ')
@@ -318,7 +318,7 @@ echo '
                             foreach($user->userFieldData as $field)
                             {
                                 // nur Felder der Stammdaten anzeigen
-                                if($field->getValue('cat_name') == 'Stammdaten'
+                                if($field->getValue('cat_name_intern') == 'MASTER_DATA'
                                 && (  $g_current_user->editProfile($user->getValue('usr_id')) == true || $field->getValue('usf_hidden') == 0 ))
                                 {
                                     switch($field->getValue('usf_name_intern'))
@@ -479,7 +479,7 @@ echo '
         {
             // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
             // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
-            if($field->getValue('cat_name') != 'Stammdaten'
+            if($field->getValue('cat_name_intern') != 'MASTER_DATA'
             && (  $g_current_user->editProfile($user->getValue('usr_id')) == true
                || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $field->getValue('usf_hidden') == 0 )))
             {
