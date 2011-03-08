@@ -13,7 +13,7 @@
             include(SERVER_PATH. '/adm_plugins/login_form/login_form.php');
 
             echo '<br/>
-            <h3>Module</h3>
+            <h3>'.$g_l10n->get('SYS_MODULES').'</h3>
             <span class="menu" style="margin-bottom: 10px;"><a href="'. $g_root_path. '/adm_program/index.php"><img
                 style="vertical-align: middle;" src="'. THEME_PATH. '/icons/home.png" alt="'.$g_l10n->get('SYS_OVERVIEW').'" title="'.$g_l10n->get('SYS_OVERVIEW').'" /></a>
                 <a href="'. $g_root_path. '/adm_program/index.php">'.$g_l10n->get('SYS_OVERVIEW').'</a></span>';
@@ -93,7 +93,7 @@
 
             if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_current_user->approveUsers() || $g_current_user->editUsers())
             {
-                echo '<h3>Administration</h3>';
+                echo '<h3>'.$g_l10n->get('SYS_ADMINISTRATION').'</h3>';
                 if($g_current_user->approveUsers() && $g_preferences['registration_mode'] > 0)
                 {
                     echo '<span class="menu"><a href="'. $g_root_path. '/adm_program/administration/new_user/new_user.php"><img

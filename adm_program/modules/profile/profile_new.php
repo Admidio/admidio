@@ -432,7 +432,7 @@ echo '
                     <div class="groupBoxBody">
                         <ul class="formFieldList">';
                         
-                if($field->getValue('cat_name') == 'Stammdaten')
+                if($field->getValue('cat_name_intern') == 'MASTER_DATA')
                 {
                     // bei den Stammdaten erst einmal Benutzername und Passwort anzeigen
                     if($usr_id > 0 || $new_user == 2)

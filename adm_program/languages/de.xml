@@ -281,7 +281,6 @@
     <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="todo">Gib in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein. Dieser wird der neue Administrator der neuen Organisation mit dem du dich direkt an der Organisation anmelden kannst.</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="todo">Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden!</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation!</text>
-    <text id="INS_LOGIN_NAME" development="new" translation="todo">Benutzername</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
