@@ -886,6 +886,7 @@
 	<text id="SYS_ADDRESS" development="new" translation="edited">Address</text>
 	<text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">The Online Management System for Associations, Groups and Organisations</text>
 	<text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
+	<text id="SYS_ADMIDIO_VERSION" development="new" translation="todo">Admidio version</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
     <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administration</text>
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax request error.\nError Details: %VAR1%</text>
@@ -916,11 +917,12 @@
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
 	<text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="edited">The authentication code was invalid.</text>
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Authentication code</text>
-		<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</text>	
+	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</text>	
     <text id="SYS_CATEGORY" development="new" translation="edited">Category</text>
     <text id="SYS_CENTERED" development="new" translation="edited">Centered</text>
     <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="edited">Display text centered</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Change password</text>
+	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">check for update</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox status is saved automatically after marking.</text>
     <text id="SYS_CLOCK" development="new" translation="edited">o'clock</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Close</text>
@@ -944,7 +946,6 @@
 	<text id="SYS_CREATE_ROLE" development="new" translation="edited">Create role</text>
     <text id="SYS_CREATED_BY" development="new" translation="edited">Created by %VAR1% on %VAR2%</text>
     <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">No valid e-mail address has been provided!\n\nPlease provide an e-mail address  in your %VAR1%profile%VAR1%.</text>
-
     <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
     <text id="SYS_DATABASE_ERROR" development="new" translation="edited">An error occured while accessing the database:\n\n%VAR1%</text>
     <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">Database version %VAR1% does not comply with Admidio scripts %VAR2%.\n\nPlease contact the %VAR3%webmaster%VAR4% of the site.</text>
@@ -956,6 +957,7 @@
 	<text id="SYS_DATE_MODIFIED" development="new" translation="edited">Date of modification</text>
     <text id="SYS_DATE_TO" development="new" translation="edited">to</text>
     <text id="SYS_DEACTIVATED" development="new" translation="edited">Inactive</text>
+    <text id="SYS_DEBUG_MODUS" development="new" translation="todo">debug modus</text>
     <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="edited">Reduce font size</text>
     <text id="SYS_DELETE" development="new" translation="edited">Delete</text>
     <text id="SYS_DELETE_DATA" development="new" translation="edited">Data has been deleted.</text>
@@ -979,7 +981,6 @@
     <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">An error occured!\n\nEntry could not be deleted.</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Examples</text>
-
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade in</text>
     <text id="SYS_FEATURES" development="new" translation="edited">Features</text>
     <text id="SYS_FEMALE" development="new" translation="edited">Female</text>
@@ -989,6 +990,7 @@
     <text id="SYS_FILE" development="new" translation="edited">File</text>
     <text id="SYS_FILE_NOT_EXIST" development="new" translation="edited">Selected file does not exist on the server.</text>
     <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Size of uploaded file exceeds server defined maximum file size of %VAR1%.</text>
+    <text id="SYS_FILE_UPLOADS" development="new" translation="todo">file uploads</text>
 	<text id="SYS_FIRSTNAME" development="new" translation="edited">First name</text>
 	<text id="SYS_FROM_TO" development="new" translation="edited">from %VAR1% to %VAR2%</text>
 	<text id="SYS_FOLDER" development="new" translation="edited">Folder</text>
@@ -1012,16 +1014,13 @@
     <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="edited">You successfully signed in to Admidio and to forum %VAR2% as user %VAR1_BOLD%.</text>
     <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">You successfully signed out from Admidio and the forum system..</text>
     <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Selected user name has been deleted in the forum and Admidio.</text>
-    <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Selected user name already exists in the forum.\n\nPlease select another name.</text>
-   
-       <text id="SYS_GENDER" development="new" translation="edited">Gender</text>
-
+    <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Selected user name already exists in the forum.\n\nPlease select another name.</text>  
+    <text id="SYS_GENDER" development="new" translation="edited">Gender</text>
 	<text id="SYS_HEADLINE" development="new" translation="edited">Headline</text>
     <text id="SYS_HELP" development="new" translation="edited">Help</text>
 	<text id="SYS_HIDE" development="new" translation="edited">Hide</text>
     <text id="SYS_HOMEPAGE" development="new" translation="edited">Homepage</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP error (%1)</text>
-
     <text id="SYS_INACTIVE" development="new" translation="edited">Inactive</text>
     <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="edited">Increase font size</text>
 	<text id="SYS_INFO" development="new" translation="edited">Info</text>
@@ -1030,7 +1029,6 @@
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O error</text>
     <text id="SYS_ITALIC" development="new" translation="edited">Italic</text>
-
     <text id="SYS_LANGUAGE" development="new" translation="edited">Language</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="edited">Surname</text>
@@ -1053,21 +1051,24 @@
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="edited">E-mail address %VAR1% could not be found in the system!</text>
     <text id="SYS_LOSTPW_SEND" development="new" translation="edited">New password has been sent to e-mail address %VAR1%!</text>
     <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">An error occured when sending the e-mail to recipients %VAR1%!\nPlease try again later!</text>
-
 	<text id="SYS_MAP" development="new" translation="edited">Map</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="edited">Manage categories</text>
     <text id="SYS_MALE" development="new" translation="edited">Male</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="edited">Mandatory field</text>
     <text id="SYS_MASTER_DATA" development="new" translation="edited">Basic information</text>
     <text id="SYS_MAX_PARTICIPANTS" development="new" translation="edited">Max. participants</text>
+    <text id="SYS_MAX_PROCESSABLE_IMAGE_SIZE" development="new" translation="todo">max. processable image size</text>
     <text id="SYS_MEGA_PIXEL" development="new" translation="edited">Megapixels</text>
     <text id="SYS_MEMBER" development="new" translation="edited">Member</text>
     <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="edited">Member of organisation %VAR1%</text>
  	<text id="SYS_MEMBERS" development="new" translation="edited">Members</text>
+ 	<text id="SYS_MEMORY_LIMIT" development="new" translation="todo">memory limit</text>
     <text id="SYS_MESSAGE" development="new" translation="edited">Message</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minutes</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">This module is disabled.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Modules</text>
+    <text id="SYS_MYSQL_VERSION" development="new" translation="todo">MySQL version</text>
+    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="todo">Admidio requires 4.1 or higher</text>
     <text id="SYS_NAME" development="new" translation="edited">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Short name</text>
     <text id="SYS_NEXT" development="new" translation="edited">Next</text>
@@ -1082,7 +1083,11 @@
     <text id="SYS_NOTE" development="new" translation="edited">Note</text>
 	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="edited">You are not a member of organisation %VAR1%</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="edited">not registered</text>
+	<text id="SYS_NOT_SET" development="new" translation="todo">not set</text>
     <text id="SYS_NUMBER" development="new" translation="edited">Number</text>
+    <text id="SYS_OFF" development="new" translation="todo">off</text>
+    <text id="SYS_OK" development="new" translation="todo">OK</text>
+    <text id="SYS_ON" development="new" translation="todo">on</text>
     <text id="SYS_OPTIONAL" development="new" translation="edited">Optional</text>
     <text id="SYS_ORDER" development="new" translation="edited">Order</text>
     <text id="SYS_OVERVIEW" development="new" translation="edited">Overview</text>
@@ -1096,9 +1101,13 @@
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="edited">Login failed due to incorrect password.\n\nPlease check your password and try again.</text>
     <text id="SYS_PHONE" development="new" translation="edited">Phone</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Photo</text>
-	<text id="SYS_PHOTOS" development="new" translation="edited">Photos</text>	
+	<text id="SYS_PHOTOS" development="new" translation="edited">Photos</text>
+	<text id="SYS_PHP_INFO" development="new" translation="todo">all PHP settings</text>
+	<text id="SYS_PHP_VERSION" development="new" translation="todo">PHP version</text>
+	<text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="todo">Admidio requires 5.2 or higher</text>   	
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">select option</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Please wait</text>
+    <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST size</text>
     <text id="SYS_PREVIEW" development="new" translation="edited">Preview</text>
     <text id="SYS_PREVIOUS" development="new" translation="edited">Previous</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Process canceled.</text>
@@ -1121,7 +1130,8 @@
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Saving not possible. Maximum number of role members in role %VAR1_BOLD% would exceed predefined limit.</text>
     <text id="SYS_ROOM" development="new" translation="edited">Room</text>
     <text id="SYS_RSS_DISABLED" development="new" translation="edited">RSS feature disabled by the system administrator.</text>
-
+    <text id="SYS_SAFE_MODE" development="new" translation="todo">Safe Mode</text>
+    <text id="SYS_SAFE_MODE_PROBLEM" development="new" translation="todo">problematic at file uploads</text>
     <text id="SYS_SAVE" development="new" translation="edited">Save</text>
     <text id="SYS_SAVE_DATA" development="new" translation="edited">Data has been saved.</text>
     <text id="SYS_SECONDS" development="new" translation="edited">Seconds</text>
@@ -1176,6 +1186,7 @@
 	<text id="SYS_UPDATE" development="new" translation="edited">Update</text>
     <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Upload error</text>
+    <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. upload filesize</text>
     <text id="SYS_VISIBLE" development="new" translation="edited">Visible</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="edited">%VAR1% only visible for logged in users.</text>
     <text id="SYS_VISITORS" development="new" translation="edited">Guests</text>

@@ -42,9 +42,9 @@ if($req_mode == 1)
     <ul class="formFieldList">
         <li>
             <dl>
-                <dt>Admidio-Version:</dt>
+                <dt>'.$g_l10n->get('SYS_ADMIDIO_VERSION').':</dt>
                 <dd>'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'&nbsp;
-                    <a rel="colorboxHelp" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;inline=true">auf Update prüfen</a>
+                    <a rel="colorboxHelp" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;inline=true" title="'.$g_l10n->get('SYS_CHECK_FOR_UPDATE').'">'.$g_l10n->get('SYS_CHECK_FOR_UPDATE').'</a>
                 </dd>
             </dl>
         </li>';
@@ -53,10 +53,10 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>PHP Version:</dt><dd><span class="';
-                if(substr(phpversion(), 0, 3)< 4.3)
+                <dt>'.$g_l10n->get('SYS_PHP_VERSION').':</dt><dd><span class="';
+                if(substr(phpversion(), 0, 3)< 5.2)
                 {
-                    echo 'systeminfoBad">'.phpversion().'</span> &rarr; Admidio benötigt 4.3 oder höher';
+                    echo 'systeminfoBad">'.phpversion().'</span> &rarr; '.$g_l10n->get('SYS_PHP_VERSION_REQUIRED');
                 }
                 else
                 {
@@ -71,10 +71,10 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>MySQL Server Version:</dt><dd><span class="';
+                <dt>'.$g_l10n->get('SYS_MYSQL_VERSION').':</dt><dd><span class="';
                 if(substr($g_db->server_info(), 0, 3)< 4.1)
                 {
-                    echo 'systeminfoBad">'.$g_db->server_info().'</span> &rarr; Admidio benötigt 4.1 oder höher';
+                    echo 'systeminfoBad">'.$g_db->server_info().'</span> &rarr; '.$g_l10n->get('SYS_MYSQL_VERSION_REQUIRED');
                 }
                 else
                 {
@@ -89,14 +89,14 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>Safe Mode:</dt><dd>';
+                <dt>'.$g_l10n->get('SYS_SAFE_MODE').':</dt><dd>';
                 if(ini_get('safe_mode') == 1)
                 {
-                    echo '<span class="systeminfoBad">On</span> &rarr; problematisch bei Dateiuploads';
+                    echo '<span class="systeminfoBad">'.$g_l10n->get('SYS_ON').'</span> &rarr; '.$g_l10n->get('SYS_SAFE_MODE_PROBLEM');
                 }
                 else
                 {
-                    echo '<span class="systeminfoGood">Off</span>';
+                    echo '<span class="systeminfoGood">'.$g_l10n->get('SYS_OFF').'</span>';
                 }
                 echo '</dd>
             </dl>
@@ -106,14 +106,14 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>Max. POST-Größe:</dt><dd>';
+                <dt>'.$g_l10n->get('SYS_POST_MAX_SIZE').':</dt><dd>';
                 if(ini_get('post_max_size')!='')
                 {
                     echo ini_get('post_max_size');
                 }
                 else
                 {
-                    echo 'nicht gesetzt';
+                    echo $g_l10n->get('SYS_NOT_SET');
                 }
                 echo '</dd>
             </dl>
@@ -123,14 +123,14 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>Arbeitsspeicher:</dt><dd>';
+                <dt>'.$g_l10n->get('SYS_MEMORY_LIMIT').':</dt><dd>';
                 if(ini_get('memory_limit')!='')
                 {
                     echo ini_get('memory_limit');
                 }
                 else
                 {
-                    echo 'nicht gesetzt';
+                    echo $g_l10n->get('SYS_NOT_SET');
                 }
                 echo '</dd>
             </dl>
@@ -140,14 +140,14 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>Dateiuploads:</dt><dd>';
+                <dt>'.$g_l10n->get('SYS_FILE_UPLOADS').':</dt><dd>';
                 if(ini_get('file_uploads') == 1)
                 {
-                    echo 'On';
+                    echo $g_l10n->get('SYS_ON');
                 }
                 else
                 {
-                    echo 'Off';
+                    echo $g_l10n->get('SYS_OFF');
                 }
                 echo '</dd>
             </dl>
@@ -157,14 +157,14 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>Max. Upload-Größe:</dt><dd>';
+                <dt>'.$g_l10n->get('SYS_UPLOAD_MAX_FILESIZE').':</dt><dd>';
                 if(ini_get('upload_max_filesize')!='')
                 {
                     echo ini_get('upload_max_filesize');
                 }
                 else
                 {
-                    echo 'nicht gesetzt';
+                    echo $g_l10n->get('SYS_NOT_SET');
                 }
                 echo '</dd>
             </dl>
@@ -174,7 +174,7 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>Max. bearbeitbare Bildgröße:</dt><dd>'.round((processableImageSize()/1000000), 2).' MegaPixel</dd>
+                <dt>'.$g_l10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE').':</dt><dd>'.round((processableImageSize()/1000000), 2).' '.$g_l10n->get('SYS_MEGA_PIXEL').'</dd>
             </dl>
         </li>';
                 
@@ -182,7 +182,7 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>alle PHP-Informationen:</dt><dd><a href="systeminfo.php?mode=2" target="_blank">phpinfo()</a></dd>
+                <dt>'.$g_l10n->get('SYS_PHP_INFO').':</dt><dd><a href="systeminfo.php?mode=2" target="_blank">phpinfo()</a></dd>
                 
             </dl>
         </li>';
@@ -193,17 +193,16 @@ if($req_mode == 1)
             echo'
             <li>
                 <dl>';           
-                    echo' <dt>Debugmodus:</dt><dd>';
+                    echo' <dt>'.$g_l10n->get('SYS_DEBUG_MODUS').':</dt><dd>';
                     if($g_debug == 1)
                     {
-                        echo 'On';
+                        echo $g_l10n->get('SYS_ON');
                     }
                     else
                     {
-                        echo 'Off';
+                        echo $g_l10n->get('SYS_OFF');
                     }
-                    echo'</dd>
-                
+                    echo'</dd>                
                 </dl>
             </li>';
         }  
