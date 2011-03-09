@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * mode   : Ausgabeart   (html, print, csv-ms, csv-ms-2k, csv-oo)
+ * mode   : Ausgabeart   (html, print, csv-ms, csv-oo)
  * lst_id : ID der Listenkonfiguration, die angezeigt werden soll
  *          Wird keine ID uebergeben, wird die Default-Konfiguration angezeigt
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
@@ -24,7 +24,7 @@ require_once('../../system/classes/list_configuration.php');
 require_once('../../system/classes/table_roles.php');
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$arr_mode   = array('csv-ms', 'csv-ms-2k', 'csv-oo', 'html', 'print');
+$arr_mode   = array('csv-ms', 'csv-oo', 'html', 'print');
 $req_rol_id = 0;
 $req_lst_id = 0;
 $req_start  = 0;
@@ -103,13 +103,7 @@ if(!$g_current_user->viewRole($req_rol_id))
 
 if($req_mode == 'csv-ms')
 {
-    $separator    = "\t"; // Microsoft XP und neuer braucht ein Semicolon
-    $value_quotes = '"';
-    $req_mode     = 'csv';
-}
-else if($req_mode == 'csv-ms-2k')
-{
-    $separator    = ','; // Microsoft 2000 und aelter braucht ein Komma
+    $separator    = ";"; // Microsoft Excel 2007 und neuer braucht ein Semicolon
     $value_quotes = '"';
     $req_mode     = 'csv';
 }
@@ -336,7 +330,6 @@ if($req_mode != 'csv')
                     <select size="1" name="export_mode" onchange="exportList(this)">
                         <option value="" selected="selected">'.$g_l10n->get('LST_EXPORT_TO').' ...</option>
                         <option value="csv-ms">'.$g_l10n->get('LST_MICROSOFT_EXCEL').'</option>
-                        <option value="csv-ms-2k">'.$g_l10n->get('LST_MICROSOFT_EXCEL_2K').'</option>
                         <option value="csv-oo">'.$g_l10n->get('LST_CSV_FILE').'</option>
                     </select>
                 </span>
@@ -646,9 +639,12 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             break;
     
                         case 'DATE':
-                            // Datum muss noch formatiert werden
-                            $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-                            $content = $date->format($g_preferences['system_date']);
+							if(strlen($row[$sql_column_number]) > 0)
+							{
+								// Datum muss noch formatiert werden
+								$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+								$content = $date->format($g_preferences['system_date']);
+							}
                             break;
     
                         case 'EMAIL':

@@ -171,7 +171,7 @@ if (array_key_exists('rol_id', $_POST))
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 	// Falls der User nicht eingeloggt ist, muss der Wert 3 sein
-    if ($g_valid_login == false && $role->getValue("rol_mail_this_role") != 3)
+    if ($g_valid_login == false && $role->getValue('rol_mail_this_role') != 3)
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -189,40 +189,42 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
 }
 
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
-if (array_key_exists("usr_id", $_GET))
+if (array_key_exists('usr_id', $_GET))
 {
     //den gefundenen User dem Mailobjekt hinzufuegen...
-    $email->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). " ". $user->getValue('LAST_NAME'));
+    $email->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
 }
 else
 {
     // Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen (ausser dem Sender selber)
-    $sql   = "SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
+    $sql   = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
                      email.usd_value as email, rol_name
-                FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. ", ". TBL_MEMBERS. ", ". TBL_USERS. "
-                JOIN ". TBL_USER_DATA. " as email
+                FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+                JOIN '. TBL_USER_DATA. ' as email
                   ON email.usd_usr_id = usr_id
-                 AND email.usd_usf_id = ". $g_current_user->getProperty('EMAIL', "usf_id"). "
                  AND LENGTH(email.usd_value) > 0
-                LEFT JOIN ". TBL_USER_DATA. " as last_name
+				JOIN adm_user_fields as field
+				  ON field.usf_id = email.usd_usf_id
+				 AND field.usf_type = "EMAIL"
+                LEFT JOIN '. TBL_USER_DATA. ' as last_name
                   ON last_name.usd_usr_id = usr_id
-                 AND last_name.usd_usf_id = ". $g_current_user->getProperty('LAST_NAME', "usf_id"). "
-                LEFT JOIN ". TBL_USER_DATA. " as first_name
+                 AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+                LEFT JOIN '. TBL_USER_DATA. ' as first_name
                   ON first_name.usd_usr_id = usr_id
-                 AND first_name.usd_usf_id = ". $g_current_user->getProperty('FIRST_NAME', "usf_id"). "
-               WHERE rol_id      = ". $_POST['rol_id']. "
+                 AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+               WHERE rol_id      = '. $_POST['rol_id']. '
                  AND rol_cat_id  = cat_id
-                 AND cat_org_id  = ". $g_current_organization->getValue("org_id"). "
+                 AND cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                  AND mem_rol_id  = rol_id
-                 AND mem_begin  <= '".DATE_NOW."'
-                 AND mem_end     > '".DATE_NOW."'
+                 AND mem_begin  <= "'.DATE_NOW.'"
+                 AND mem_end     > "'.DATE_NOW.'"
                  AND mem_usr_id  = usr_id
-                 AND usr_valid   = 1 ";
+                 AND usr_valid   = 1 ';
 	// Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
 	//damit er die Mail nicht an sich selber schickt.
 	if ($g_valid_login)
 	{
-		$sql =$sql. " AND usr_id     <> ". $g_current_user->getValue("usr_id");
+		$sql =$sql. ' AND usr_id <> '. $g_current_user->getValue('usr_id');
     } 
     $result = $g_db->query($sql);
 
@@ -231,7 +233,7 @@ else
         // alle Mitglieder als BCC an die Mail haengen
         while ($row = $g_db->fetch_object($result))
         {
-            $email->addBlindCopy($row->email, "$row->first_name $row->last_name");              
+            $email->addBlindCopy($row->email, $row->first_name.' '.$row->last_name);
         }
     }
     else
@@ -256,7 +258,7 @@ if (isset($_POST['kopie']) && $_POST['kopie'] == true)
 }
 
 //Den Text fuer die Mail aufbereiten
-if ($role->getValue("rol_id") > 0)
+if ($role->getValue('rol_id') > 0)
 {
     $mail_body = $g_l10n->get('MAI_EMAIL_SEND_TO_ROLE', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
 }
