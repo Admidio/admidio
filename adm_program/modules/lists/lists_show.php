@@ -29,6 +29,7 @@ $req_rol_id = 0;
 $req_lst_id = 0;
 $req_start  = 0;
 $show_members = 0;
+$charset    = '';
 
 // Uebergabevariablen pruefen
 
@@ -106,12 +107,14 @@ if($req_mode == 'csv-ms')
     $separator    = ";"; // Microsoft Excel 2007 und neuer braucht ein Semicolon
     $value_quotes = '"';
     $req_mode     = 'csv';
+	$charset      = 'iso-8859-1';
 }
 else if($req_mode == 'csv-oo')
 {
-    $separator    = ',';    // fuer CSV-Dateien
+    $separator    = ',';   // fuer CSV-Dateien
     $value_quotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
     $req_mode     = 'csv';
+	$charset      = 'utf-8';
 }
 else
 {
@@ -329,8 +332,8 @@ if($req_mode != 'csv')
                     <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('LST_EXPORT_TO').'" />
                     <select size="1" name="export_mode" onchange="exportList(this)">
                         <option value="" selected="selected">'.$g_l10n->get('LST_EXPORT_TO').' ...</option>
-                        <option value="csv-ms">'.$g_l10n->get('LST_MICROSOFT_EXCEL').'</option>
-                        <option value="csv-oo">'.$g_l10n->get('LST_CSV_FILE').'</option>
+                        <option value="csv-ms">'.$g_l10n->get('LST_MICROSOFT_EXCEL').' (ISO-8859-1)</option>
+                        <option value="csv-oo">'.$g_l10n->get('LST_CSV_FILE').' (UTF-8)</option>
                     </select>
                 </span>
             </li>   
@@ -720,10 +723,16 @@ if($req_mode == 'csv')
 {
     // nun die erstellte CSV-Datei an den User schicken
     $filename = $g_organization. '-'. str_replace(' ', '_', str_replace('.', '', $role->getValue('rol_name'))). '.csv';
-    header('Content-Type: text/comma-separated-values; charset=utf-8');
+    header('Content-Type: text/comma-separated-values; charset='.$charset);
     header('Content-Disposition: attachment; filename="'.$filename.'"');
-    //echo utf8_decode($str_csv);
-    echo $str_csv;
+	if($charset == 'iso-8859-1')
+	{
+		echo utf8_decode($str_csv);
+	}
+	else
+	{
+		echo $str_csv;
+	}
 }
 else
 {
