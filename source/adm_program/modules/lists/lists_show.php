@@ -332,8 +332,8 @@ if($req_mode != 'csv')
                     <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('LST_EXPORT_TO').'" />
                     <select size="1" name="export_mode" onchange="exportList(this)">
                         <option value="" selected="selected">'.$g_l10n->get('LST_EXPORT_TO').' ...</option>
-                        <option value="csv-ms">'.$g_l10n->get('LST_MICROSOFT_EXCEL').' (ISO-8859-1)</option>
-                        <option value="csv-oo">'.$g_l10n->get('LST_CSV_FILE').' (UTF-8)</option>
+                        <option value="csv-ms">'.$g_l10n->get('LST_MICROSOFT_EXCEL').' ('.$g_l10n->get('SYS_ISO_8859_1').')</option>
+                        <option value="csv-oo">'.$g_l10n->get('LST_CSV_FILE').' ('.$g_l10n->get('SYS_UTF8').')</option>
                     </select>
                 </span>
             </li>   
@@ -799,7 +799,7 @@ else
                                     <dd>'; 
                                         if($role->getValue('rol_weekday') > 0)
                                         {
-                                            echo $arrDay[$role->getValue('rol_weekday')-1].' ';
+                                            echo $role->getWeekdayDesc($role->getValue('rol_weekday')).' ';
                                         }
                                         if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
@@ -839,7 +839,7 @@ else
                             echo '<li>
                                 <dl>
                                     <dt>'.$g_l10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
-                                    <dd>'.$role->getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
+                                    <dd>'.$role->getCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
                                 </dl>
                             </li>';
                         }

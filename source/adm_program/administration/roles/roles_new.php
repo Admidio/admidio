@@ -412,13 +412,14 @@ echo '
                                     }
                                     echo '>--</option>';
                                     // Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
-                                    foreach ($role->getCostPeriode() as $role_cost_period) {
+                                    foreach ($role->getCostPeriode() as $role_cost_period) 
+                                    {
                                         echo '<option value="'.$role_cost_period.'" ';
                                         if($role->getValue('rol_cost_period') == $role_cost_period)
                                         {
                                             echo 'selected="selected"';
                                         }
-                                        echo '>'.TableRoles::getRolCostPeriodDesc($role_cost_period).'</option>';
+                                        echo '>'.TableRoles::getCostPeriodDesc($role_cost_period).'</option>';
                                     }
                                     echo '
                                 </select>
@@ -642,24 +643,6 @@ echo '
                             </div>
                         </li>';
                     }
-                    /*
-                    if($g_preferences['enable_inventory_module'] > 0)
-                    {
-                        echo '
-                        <li>
-                            <div>
-                                <input type="checkbox" id="rol_inventory" name="rol_inventory" ';
-                                if($role->getValue('rol_inventory') == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                                <label for="rol_inventory"><img src="'. THEME_PATH. '/icons/weblinks.png" alt="Inventar verwalten" /></label>&nbsp;
-                                <label for="rol_inventory">Inventar verwalten</label>
-                            </div>
-                        </li>';
-               
-                    }*/
                 echo '</ul>
             </div>
         </div>
@@ -667,7 +650,7 @@ echo '
         <div class="groupBox" id="admDatesBox">
             <div class="groupBoxHeadline" id="admDatesHead">
                 <a class="iconShowHide" href="javascript:showHideBlock(\'admDatesBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-                	id="admDatesBodyImage" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>Termine / Treffen&nbsp;&nbsp;(optional)
+                	id="admDatesBodyImage" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('DAT_DATES').' / '.$g_l10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$g_l10n->get('SYS_OPTIONAL').')
             </div>
 
             <div class="groupBoxBody" id="admDatesBody">
@@ -707,15 +690,17 @@ echo '
                                 {
                                     echo ' selected="selected" ';
                                 }
-                                echo '>&nbsp;</option>';
-                                for($i = 1; $i < 8; $i++)
+                                echo '>--</option>';
+                                
+                                // Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
+                                foreach ($role->getWeekdays() as $role_weekday) 
                                 {
-                                    echo '<option value="'.$i.'"';
-                                    if($role->getValue('rol_weekday') == $i)
+                                    echo '<option value="'.$role_weekday.'" ';
+                                    if($role->getValue('rol_weekday') == $role_weekday)
                                     {
-                                        echo ' selected="selected" ';
+                                        echo 'selected="selected"';
                                     }
-                                    echo '>'. $arrDay[$i-1]. '</option>';
+                                    echo '>'.TableRoles::getWeekdayDesc($role_weekday).'</option>';
                                 }
                                 echo '</select>
                             </dd>

@@ -28,6 +28,7 @@ class TableRoles extends TableAccess
     // Alle konfigurierbare Werte für die Bezahlzeitraeume
     // Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
     protected $role_cost_periods = array(-1,1,2,4,12);
+    protected $role_weekdays = array(1,2,3,4,5,6,7);
 
     // Konstruktor
     public function __construct(&$db, $role = '')
@@ -77,27 +78,7 @@ class TableRoles extends TableAccess
             $sql    = 'DELETE FROM '. TBL_MEMBERS. '
                         WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
-            /*
-            //Auch die Inventarpositionen zur Rolle muessen geloescht werden
-            //Alle Inventarpositionen auslesen, die von der Rolle angelegt wurden
-            $sql_inventory = 'SELECT *
-                              FROM '. TBL_INVENTORY. '
-                              WHERE inv_rol_id = '. $this->getValue('rol_id');
-            $result_inventory = $this->db->query($sql_subfolders);
 
-            while($row_inventory = $this->db->fetch_object($result_inventory))
-            {
-                //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
-                $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
-                            WHERE rnt_inv_id = '. $row_inventory->inv_id;
-                $this->db->query($sql);
-            }
-
-            //Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
-            $sql    = 'DELETE FROM '. TBL_INVENTORY. '
-                        WHERE inv_rol_id = '. $this->getValue('rol_id');
-            $this->db->query($sql);
-            */
             return parent::delete();
         }
         else
@@ -112,27 +93,73 @@ class TableRoles extends TableAccess
     }
 
     // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
-    public static function getRolCostPeriodDesc($my_rol_cost_period)
+    public static function getCostPeriodDesc($my_rol_cost_period)
     {
+        global $g_l10n;
+    
         if($my_rol_cost_period == -1)
         {
-            return 'einmalig';
+            return $g_l10n->get('ROL_UNIQUELY');
         }
         elseif($my_rol_cost_period == 1)
         {
-            return 'jährlich';
+            return $g_l10n->get('ROL_ANNUALLY');
         }
         elseif($my_rol_cost_period == 2)
         {
-            return 'halbjährlich';
+            return $g_l10n->get('ROL_SEMIYEARLY');
         }
         elseif($my_rol_cost_period == 4)
         {
-            return 'vierteljährlich';
+            return $g_l10n->get('ROL_QUARTERLY');
         }
         elseif($my_rol_cost_period == 12)
         {
-            return 'monatlich';
+            return $g_l10n->get('ROL_MONTHLY');
+        }
+        else
+        {
+            return '--';
+        }
+    }
+    
+    public function getWeekdays()
+    {
+        return $this->role_weekdays;
+    }
+
+    // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
+    public static function getWeekdayDesc($weekday)
+    {
+        global $g_l10n;
+    
+        if($weekday == 1)
+        {
+            return $g_l10n->get('SYS_MONDAY');
+        }
+        elseif($weekday == 2)
+        {
+            return $g_l10n->get('SYS_TUESDAY');
+        }
+        elseif($weekday == 3)
+        {
+            return $g_l10n->get('SYS_WEDNESDAY');
+        }
+        elseif($weekday == 4)
+        {
+            return $g_l10n->get('SYS_THURSDAY');
+        }
+        elseif($weekday == 5)
+        {
+            return $g_l10n->get('SYS_FRIDAY');
+        }
+        elseif($weekday == 6)
+        {
+            return $g_l10n->get('SYS_SATURDAY');
+        }
+        elseif($weekday == 7)
+        {
+            return $g_l10n->get('SYS_SUNDAY');
         }
         else
         {

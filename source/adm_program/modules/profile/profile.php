@@ -76,7 +76,7 @@ function getFieldCode($field, $user_id)
                 {
                     // Alter mit ausgeben
                     $birthday = new DateTimeExtended($value, $g_preferences['system_date'], 'date');
-                    $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' Jahre)';
+                    $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$g_l10n->get('PRO_YEARS').')';
                 }
             }
             break;

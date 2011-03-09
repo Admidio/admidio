@@ -33,7 +33,7 @@
     <text id="CAT_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="todo">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n%VAR1_BOLD%\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</text>
     <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="todo">Du kannst nicht alle Kategorien eines Moduls löschen.\nErstelle vorher eine neue Kategorie für dieses Modul.</text>
-    <text id="CAT_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine, Inventargegenstände), gelöscht.</text>
+    <text id="CAT_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine), gelöscht.</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="todo">%VAR1% nach unten verschieben</text>
     <text id="CAT_MOVE_UP" development="new" translation="todo">%VAR1% nach oben verschieben</text>
 
@@ -412,8 +412,8 @@
     <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="todo">Sucht alle Benutzer deren Namen mit Mei anfängt</text>
     <text id="LST_SEARCH_LASTNAME_EXAMPLE" development="new" translation="todo">Schmitz</text>
     <text id="LST_SEARCH_LASTNAME_DESC" development="new" translation="todo">Sucht alle Benutzer mit dem Nachnamen Schmitz</text>
-    <text id="LST_SEARCH_LOCATION_EXAMPLE" development="new" translation="todo">Köln oder Bonn</text>
-    <text id="LST_SEARCH_LOCATION_DESC" development="new" translation="todo">Sucht alle Benutzer, die aus Köln oder Bonn kommen</text>
+    <text id="LST_SEARCH_LOCATION_EXAMPLE" development="new" translation="todo">Köln oder Berlin</text>
+    <text id="LST_SEARCH_LOCATION_DESC" development="new" translation="todo">Sucht alle Benutzer, die aus Köln oder Berlin kommen</text>
     <text id="LST_SEARCH_TELEFON_EXAMPLE" development="new" translation="todo">*241* *54</text>
     <text id="LST_SEARCH_TELEFON_DESC" development="new" translation="todo">Sucht alle Benutzer, deren Telefonnummer 241 enthält und mit 54 endet</text>
     <text id="LST_SEARCH_YES_NO_FIELD" development="new" translation="todo">Ja/Nein Feld</text>
@@ -457,7 +457,6 @@
     <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="todo">die Rolle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
-    <text id="MEM_ANSI" development="new" translation="todo">ANSI</text>
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="todo">Felder zuordnen</text>
     <text id="MEM_ASSIGN_FIELDS_DESC" development="new" translation="todo">Ordne den Datenbankfeldern, wenn möglich eine Spalte aus der Datei zu.\n\nAuf der linken Seite stehen alle möglichen Datenbankfelder und auf der rechten Seite sind jeweils alle Spalten aus der ausgewählten Datei aufgelistet. Falls nicht alle Datenbankfelder in der Datei vorhanden sind, können diese Felder einfach leer gelassen werden.</text>
     <text id="MEM_ASSIGN_ROLE" development="new" translation="todo">Rolle zuordnen</text>
@@ -497,7 +496,6 @@
     <text id="MEM_USER_DELETE" development="new" translation="todo">Willst du %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="todo">Benutzerverwaltung</text>
     <text id="MEM_USER_MANAGEMENT_DESC" development="new" translation="todo">Alle aktiven und ehemaligen Benutzer können hier eingesehen und verwaltet werden. Neue Benutzer können angelegt oder importiert werden.</text>
-    <text id="MEM_UTF8" development="new" translation="todo">UTF-8</text>
 
     <!-- Phrases only in New-User-Registration -->
     <text id="NWU_ASSIGN_LOGIN" development="new" translation="todo">Zugangsdaten zuordnen</text>
@@ -788,11 +786,13 @@
 	<text id="PRO_UPLOAD_PHOTO" development="new" translation="todo">Foto hochladen</text>
     <text id="PRO_USERNAME_DESCRIPTION" development="new" translation="todo">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</text>
 	<text id="PRO_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
+	<text id="PRO_YEARS" development="new" translation="todo">Jahre</text>
 
     <!-- Phrases only in Rolesmodule -->
     <text id="ROL_ACTIV_ROLES" development="new" translation="todo">Aktive Rollen</text>
     <text id="ROL_ALL_GUESTS" development="new" translation="todo">Alle Besucher der Seite</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="todo">Alle angemeldeten Benutzer</text>
+    <text id="ROL_ANNUALLY" development="new" translation="todo">Jährlich</text>
     <text id="ROL_CANT_SHOW_FORMER_ROLES" development="new" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
     <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="todo">Wenn du %VAR1_BOLD% auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</text>
@@ -806,11 +806,14 @@
     <text id="ROL_INDEPENDENT" development="new" translation="todo">Unabhängig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen?</text>
+    <text id="ROL_MEETINGS" development="new" translation="todo">Treffen</text>
     <text id="ROL_MEMBERSHIP_DEL" development="new" translation="todo">Willst du die Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich beenden?</text>
-    <text id="ROL_NEW_ROLE" development="new" translation="todo">neuen Rolle</text>
+    <text id="ROL_MONTHLY" development="new" translation="todo">Monatlich</text>
+    <text id="ROL_NEW_ROLE" development="new" translation="todo">Neue Rolle</text>
     <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="todo">Nur Rollenmitglieder</text>
     <text id="ROL_PREF" development="new" translation="todo" description="Abbreviation for Preferences">Einst.</text>
+    <text id="ROL_QUARTERLY" development="new" translation="todo">Vierteljährlich</text>
     <text id="ROL_RIGHT_ALL_LISTS_VIEW" development="new" translation="todo">Mitgliederlisten aller Rollen einsehen</text>
     <text id="ROL_RIGHT_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen anlegen und bearbeiten</text>
     <text id="ROL_RIGHT_APPROVE_USERS" development="new" translation="todo">Registrierungen verwalten und zuordnen</text>
@@ -841,6 +844,7 @@
     <text id="ROL_ROLE_SET_MODE" development="new" translation="todo">Die Rolle %VAR1_BOLD% wurde auf %VAR2_BOLD% gesetzt.</text>
     <text id="ROL_SAVE_ROLES" development="new" translation="todo">Beim Speichern dieser Einstellungen gehen eventuell konfigurierte Rollenabhängigkeiten verloren.</text>
     <text id="ROL_SEE_ROLE_MEMBERSHIP" development="new" translation="todo">Rollenmitgliedschaft sehen</text>
+    <text id="ROL_SEMIYEARLY" development="new" translation="todo">Halbjährlich</text>
     <text id="ROL_SEND_MAIL_GUESTS" development="new" translation="todo">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</text>
     <text id="ROL_SEND_MAIL_MEMBERS" development="new" translation="todo">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</text>
     <text id="ROL_SEND_MAIL_ROLE" development="new" translation="todo">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.</text>
@@ -848,6 +852,7 @@
     <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="todo">Rolle unsichtbar machen</text>
     <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="todo">Rolle sichtbar machen</text>
     <text id="ROL_SHOW_MEMBERS" development="new" translation="todo">Mitglieder anzeigen</text>
+    <text id="ROL_UNIQUELY" development="new" translation="todo">Einmalig</text>
     <text id="ROL_VALID_FROM" development="new" translation="todo" description="Date valid from">Gültig von</text>
     <text id="ROL_VALID_TO" development="new" translation="todo" description="Date valid to">Gültig bis</text>
     <text id="ROL_VIEW_LIST_MEMBERS" development="new" translation="todo">Angemeldete Benutzer können die Mitgliederliste der Rolle einsehen.</text>
@@ -893,6 +898,7 @@
     <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
     <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="todo">Text %VAR1%fett%VAR2% darstellen</text>
     <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
+    <text id="SYS_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
 	<text id="SYS_CAPTCHA_CALC" development="new" translation="todo">Ergebnis der Rechnung</text>
 	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="todo">Das Ergbenis der Rechnung wurde falsch eingegeben.</text>
@@ -977,6 +983,8 @@
     <text id="SYS_FIELDS_EMPTY" development="new" translation="todo">Es sind nicht alle Felder gefüllt worden.</text>
     <text id="SYS_FILE" development="new" translation="todo">Datei</text>
     <text id="SYS_FILE_NOT_EXIST" development="new" translation="todo">Die ausgewählte Datei existiert nicht auf dem Server.</text>
+    <text id="SYS_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
+    <text id="SYS_FILE_TO_LARGE" development="new" translation="todo">Datei ist zu groß.</text>
     <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="todo">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1%.</text>
 	<text id="SYS_FILE_UPLOADS" development="new" translation="todo">Dateiuploads</text>
 	<text id="SYS_FIRSTNAME" development="new" translation="todo">Vorname</text>
@@ -1003,6 +1011,7 @@
     <text id="SYS_FORUM_LOGOUT" development="new" translation="todo">Du wurdest erfolgreich auf Admidio und im Forum abgemeldet.</text>
     <text id="SYS_FORUM_USER_DELETE" development="new" translation="todo">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
     <text id="SYS_FORUM_USER_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
+    <text id="SYS_FRIDAY" development="new" translation="todo">Freitag</text>
     <text id="SYS_GENDER" development="new" translation="todo">Geschlecht</text>
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>
     <text id="SYS_HELP" development="new" translation="todo">Hilfe</text>
@@ -1016,6 +1025,7 @@
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
+    <text id="SYS_ISO_8859_1" development="new" translation="todo">ISO-8859-1</text>
     <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
@@ -1055,6 +1065,7 @@
     <text id="SYS_MINUTES" development="new" translation="todo">Minuten</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_MODULES" development="new" translation="todo">Module</text>
+    <text id="SYS_MONDAY" development="new" translation="todo">Montag</text>
     <text id="SYS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
     <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt 4.1 oder höher</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
@@ -1120,6 +1131,7 @@
     <text id="SYS_RSS_DISABLED" development="new" translation="todo">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_SAFE_MODE" development="new" translation="todo">Safe Mode</text>
     <text id="SYS_SAFE_MODE_PROBLEM" development="new" translation="todo">problematisch bei Dateiuploads</text>
+    <text id="SYS_SATURDAY" development="new" translation="todo">Samstag</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
     <text id="SYS_SAVE_DATA" development="new" translation="todo">Die Daten wurden gespeichert.</text>
     <text id="SYS_SECONDS" development="new" translation="todo">Sekunden</text>
@@ -1151,15 +1163,20 @@
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>
+    <text id="SYS_SUNDAY" development="new" translation="todo">Sonntag</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TEXT_ITALIC" development="new" translation="todo">Text %VAR1%kursiv%VAR2% darstellen</text>
+    <text id="SYS_THURSDAY" development="new" translation="todo">Donnerstag</text>
     <text id="SYS_TIME" development="new" translation="todo">Uhrzeit</text>
     <text id="SYS_TIME_FROM" development="new" translation="todo">Uhrzeit von</text>
     <text id="SYS_TIME_INVALID" development="new" translation="todo">Es wurde keine gültige Uhrzeit in das Feld %VAR1_BOLD% eingegeben.\n\nDie Uhrzeit muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
     <text id="SYS_TIME_TO" development="new" translation="todo">Uhrzeit bis</text>
     <text id="SYS_TITLE" development="new" translation="todo">Titel</text>
     <text id="SYS_TO" development="new" translation="todo" description="E-Mail">An</text>
+    <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Du kannst maximal %0 Dateien hinzufügen.</text>
+    <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
+    <text id="SYS_TUESDAY" development="new" translation="todo">Dienstag</text>
     <text id="SYS_TYPE" development="new" translation="todo">Typ</text>
     <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
     <text id="SYS_UNDERLINE_TEXT" development="new" translation="todo">Text %VAR1%unterstreichen%VAR2%</text>
@@ -1168,7 +1185,7 @@
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
 	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
-    <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Fehler beim Upload</text>
+    <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Die Datei(en) konnten nicht hochgeladen werden.</text>
 	<text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
 	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" sein!</text>
     <text id="SYS_URL_INVALID_CHAR" development="new_mfa" translation="todo">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/ .</text>
@@ -1177,6 +1194,7 @@
     <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
     <text id="SYS_USERS_FOUND" development="new" translation="todo">Gefundene Benutzer</text>
+    <text id="SYS_UTF8" development="new" translation="todo">UTF-8</text>
     <text id="SYS_VISIBLE" development="new" translation="todo">Sichtbar</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="todo">%VAR1% nur für eingeloggte Benutzer sichtbar</text>
     <text id="SYS_VISITORS" development="new" translation="todo">Besucher</text>
@@ -1184,13 +1202,8 @@
     <text id="SYS_WARNING" development="new" translation="todo">Warnung</text>
     <text id="SYS_WEBMASTER" development="new" translation="todo">Webmaster</text>
     <text id="SYS_WEBSITE" development="new" translation="todo">Webseite</text>
+    <text id="SYS_WEDNESDAY" development="new" translation="todo">Mittwoch</text>
     <text id="SYS_WHAT_TO_DO" development="new" translation="todo">Was ist zu tun?</text>
     <text id="SYS_YES" development="new" translation="todo">Ja</text>
-    <text id="SYS_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
-    <text id="SYS_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
-    <text id="SYS_FILEZIZE" development="new" translation="todo">Datei ist zu groß.</text>
-    <text id="SYS_TO_MANY_FILES" development="new" translation="todo">Du kannst maximal %0 Dateien hinzufügen.</text>
-    <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
-    <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Dateien konnten nicht hochgeladen werden.</text>
     </version>
 </language>
