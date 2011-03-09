@@ -875,6 +875,7 @@
 	<text id="SYS_ADDRESS" development="new" translation="todo">Adresse</text>
     <text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="todo">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</text>
     <text id="SYS_ADMIDIO_TEAM" development="new" translation="todo">Admidio Team</text>
+    <text id="SYS_ADMIDIO_VERSION" development="new" translation="todo">Admidio-Version</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="todo">Administration</text>
     <text id="SYS_ADMINISTRATION_VAR" development="new" translation="todo">%VAR1%-Verwaltung</text>
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Ajax Anfrage aufgetreten.\nError Details: %VAR1%</text>
@@ -908,6 +909,7 @@
     <text id="SYS_CENTERED" development="new" translation="todo">Zentriert</text>
     <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="todo">Text zentriert darstellen</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
+	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">nach Update suchen</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
     <text id="SYS_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
@@ -942,6 +944,7 @@
 	<text id="SYS_DATE_MODIFIED" development="new" translation="todo">Änderungsdatum</text>
     <text id="SYS_DATE_TO" development="new" translation="todo">bis</text>
     <text id="SYS_DEACTIVATED" >Deaktiviert</text>
+    <text id="SYS_DEBUG_MODUS" development="new" translation="todo">Debugmodus</text>
     <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad veringern</text>
     <text id="SYS_DELETE" development="new" translation="todo">Löschen</text>
     <text id="SYS_DELETE_DATA" development="new" translation="todo">Die Daten wurden gelöscht.</text>
@@ -975,6 +978,7 @@
     <text id="SYS_FILE" development="new" translation="todo">Datei</text>
     <text id="SYS_FILE_NOT_EXIST" development="new" translation="todo">Die ausgewählte Datei existiert nicht auf dem Server.</text>
     <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="todo">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1%.</text>
+	<text id="SYS_FILE_UPLOADS" development="new" translation="todo">Dateiuploads</text>
 	<text id="SYS_FIRSTNAME" development="new" translation="todo">Vorname</text>
 	<text id="SYS_FROM_TO" development="new" translation="todo">vom %VAR1% bis %VAR2%</text>
 	<text id="SYS_FOLDER" development="new" translation="todo">Ordner</text>
@@ -1041,14 +1045,18 @@
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
     <text id="SYS_MASTER_DATA" development="new" translation="todo">Stammdaten</text>
     <text id="SYS_MAX_PARTICIPANTS" development="new" translation="todo">Max. Teilnehmer</text>
+    <text id="SYS_MAX_PROCESSABLE_IMAGE_SIZE" development="new" translation="todo">max. bearbeitbare Bildgröße</text>
     <text id="SYS_MEGA_PIXEL" development="new" translation="todo">Mega Pixel</text>
     <text id="SYS_MEMBER" development="new" translation="todo">Mitglied</text>
     <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="todo" description="MEM_MEMBER_OF">Mitglied der Organisation %VAR1%</text>
     <text id="SYS_MEMBERS" development="new" translation="todo">Mitglieder</text>
+    <text id="SYS_MEMORY_LIMIT" development="new" translation="todo">Arbeitsspeicher</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_MINUTES" development="new" translation="todo">Minuten</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_MODULES" development="new" translation="todo">Module</text>
+    <text id="SYS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
+    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt 4.1 oder höher</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
@@ -1063,8 +1071,11 @@
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
   	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="todo">Kein Mitglied der Organisation %VAR1%</text>
 	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
+	<text id="SYS_NOT_SET" development="new" translation="todo">nicht gesetzt</text>
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
+	<text id="SYS_OFF" development="new" translation="todo">aus</text>
 	<text id="SYS_OK" development="new" translation="todo">OK</text>
+	<text id="SYS_ON" development="new" translation="todo">an</text>
     <text id="SYS_OPTIONAL" development="new" translation="todo">Optional</text>
     <text id="SYS_ORDER" development="new" translation="todo">Reihenfolge</text>
     <text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
@@ -1078,9 +1089,13 @@
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</text>
     <text id="SYS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>
-	<text id="SYS_PHOTOS" development="new" translation="todo">Fotos</text>	
+	<text id="SYS_PHOTOS" development="new" translation="todo">Fotos</text>
+	<text id="SYS_PHP_INFO" development="new" translation="todo">alle PHP-Einstellungen</text>
+	<text id="SYS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
+	<text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt 5.2 oder höher</text>    	
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
+    <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST-Größe</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">Voriges</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="todo">Der Vorgang wurde abgebrochen.</text>
@@ -1103,6 +1118,8 @@
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="todo">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
     <text id="SYS_ROOM" development="new" translation="todo">Raum</text>
     <text id="SYS_RSS_DISABLED" development="new" translation="todo">Die RSS-Funktion wurde vom Webmaster deaktiviert.</text>
+    <text id="SYS_SAFE_MODE" development="new" translation="todo">Safe Mode</text>
+    <text id="SYS_SAFE_MODE_PROBLEM" development="new" translation="todo">problematisch bei Dateiuploads</text>
     <text id="SYS_SAVE" development="new" translation="todo">Speichern</text>
     <text id="SYS_SAVE_DATA" development="new" translation="todo">Die Daten wurden gespeichert.</text>
     <text id="SYS_SECONDS" development="new" translation="todo">Sekunden</text>
@@ -1152,6 +1169,7 @@
 	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Fehler beim Upload</text>
+	<text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
 	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" sein!</text>
     <text id="SYS_URL_INVALID_CHAR" development="new_mfa" translation="todo">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/ .</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
