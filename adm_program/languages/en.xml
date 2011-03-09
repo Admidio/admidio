@@ -395,7 +395,6 @@
     <text id="LST_MEMBERSHIP_END" development="new" translation="edited">End of membership</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="edited">Start of membership</text>
     <text id="LST_MICROSOFT_EXCEL" development="new" translation="edited">Microsoft Excel</text>
-    <text id="LST_MICROSOFT_EXCEL_2K" development="new" translation="edited">Microsoft Excel 97/2000</text>
 	<text id="LST_MUST_HAVE_WEBMASTER" development="new" translation="edited">Role type 'webmaster' must have at least one member assigned!</text>
     <text id="LST_MY_LIST" development="new" translation="edited">Own list</text>
     <text id="LST_MYLIST_CONDITION_DESC" development="new" translation="edited">Define requirenments of all fields used in your new list configuration. Requirenments of selected role will be limited by your own requirenments.</text>

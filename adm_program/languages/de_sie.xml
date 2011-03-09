@@ -384,7 +384,6 @@
     <text id="LST_MEMBERSHIP_END" development="new" translation="todo">Mitgliedschaftsende</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="todo">Mitgliedschaftsbeginn</text>
     <text id="LST_MICROSOFT_EXCEL" development="new" translation="todo">Microsoft Excel</text>
-    <text id="LST_MICROSOFT_EXCEL_2K" development="new" translation="todo">Microsoft Excel 97/2000</text>
 	<text id="LST_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
     <text id="LST_MY_LIST" development="new" translation="todo">Eigene Liste</text>
     <text id="LST_MYLIST_CONDITION_DESC" development="new" translation="todo">Hier können Sie Bedingungen zu jedem Feld in Ihrer neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach Ihren Bedingungen eingeschränkt.</text>

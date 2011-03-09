@@ -1811,7 +1811,7 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="weblinks_redirect_seconds">'.$g_l10n->get('LNK_DISPLAY_REDIRECT').':</label></dt>
-                            <dd><input type="text" id="weblinks_redirect_seconds" name="weblinks_redirect_seconds" style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_redirect_seconds']. '" /> Sekunden</dd>
+                            <dd><input type="text" id="weblinks_redirect_seconds" name="weblinks_redirect_seconds" style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_redirect_seconds']. '" /> '.$g_l10n->get('SYS_SECONDS').'</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('LNK_DISPLAY_REDIRECT_DESC').'</li>
