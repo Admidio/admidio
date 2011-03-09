@@ -474,7 +474,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                                 <dd>'; 
                                     if($role->getValue('rol_weekday') > 0)
                                     {
-                                        echo $arrDay[$role->getValue('rol_weekday')-1].' ';
+                                        echo TableRoles::getWeekdayDesc($role->getValue('rol_weekday')).' ';
                                     }
                                     if(strlen($role->getValue('rol_start_time')) > 0)
                                     {
@@ -552,7 +552,7 @@ for($i = 0; $i < $roles_per_page && $i + $_GET['start'] < $num_roles; $i++)
                         echo'<li>
                             <dl>
                                 <dt>'.$g_l10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
-                                <dd>'.TableRoles::getRolCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
+                                <dd>'.TableRoles::getCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
                             </dl>
                         </li>';
                     }

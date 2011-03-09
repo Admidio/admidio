@@ -57,8 +57,8 @@ echo '
                 <dl>
                     <dt><label for="coding">'.$g_l10n->get('MEM_CODING').':</label></dt>
                 <dd><select size="1" name="coding">
-                        <option value="ansi" selected="selected">'.$g_l10n->get('MEM_ANSI').'</option>
-                        <option value="utf8">'.$g_l10n->get('MEM_UTF8').'</option>
+                        <option value="iso-8859-1" selected="selected">'.$g_l10n->get('SYS_ISO_8859_1').'</option>
+                        <option value="utf-8">'.$g_l10n->get('SYS_UTF8').'</option>
                     </select></dd>
                 </dl>
             </li>

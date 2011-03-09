@@ -57,7 +57,7 @@ $_SESSION['rol_id']           = $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $_POST['user_import_mode'];
 $_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name']);
 
-if($_POST['coding'] == 'ansi')
+if($_POST['coding'] == 'iso-8859-1')
 {
     // Daten der Datei erst einmal in UTF8 konvertieren, damit es damit spaeter keine Probleme gibt
     foreach($_SESSION['file_lines'] as $key => $value)

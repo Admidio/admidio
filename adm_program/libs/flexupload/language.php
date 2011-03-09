@@ -24,7 +24,7 @@ echo'
 	<!-- warnings -->					
 	<warning>'.$g_l10n->get('SYS_WARNING').'</warning>
 	<warning_tooManyFiles>'.$g_l10n->get('SYS_TO_MANY_FILES').'</warning_tooManyFiles>
-	<warning_filesize>'.$g_l10n->get('SYS_FILEZIZE').'</warning_filesize>
+	<warning_filesize>'.$g_l10n->get('SYS_FILE_TO_LARGE').'</warning_filesize>
 		
 	<!-- labels of the progressbars -->
 	<progressFile>'.$g_l10n->get('SYS_FILE_PROGRESS').'</progressFile>
