@@ -142,6 +142,20 @@ while($row_orga = $g_db->fetch_array($result_orga))
     $g_db->query($sql);    
 }
 
+// englische Bezeichnung der Bereiche in Systememails einbauen
+$sql = 'SELECT * FROM '. TBL_TEXTS. ' ORDER BY txt_id DESC';
+$result_texts = $g_db->query($sql);
+
+while($row_texts = $g_db->fetch_array($result_texts))
+{
+    $row_texts['txt_text'] = preg_replace ('/#Betreff#/', '#subject#',  $row_texts['txt_text']);
+    $row_texts['txt_text'] = preg_replace ('/#Inhalt#/', '#content#',  $row_texts['txt_text']);
+
+    $sql = 'UPDATE '. TBL_TEXTS. ' SET txt_text = "'.addslashes($row_texts['txt_text']). '"
+             WHERE txt_id = '.$row_texts['txt_id'];
+    $g_db->query($sql);    
+}
+
 // Datenstruktur nach Update anpassen
 $sql = "ALTER TABLE ". TBL_USER_FIELDS. " MODIFY COLUMN usf_name_intern varchar(110) NOT NULL ";
 $g_db->query($sql);

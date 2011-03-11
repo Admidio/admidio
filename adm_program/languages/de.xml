@@ -1164,6 +1164,10 @@
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>
     <text id="SYS_SUNDAY" development="new" translation="todo">Sonntag</text>
+    <text id="SYS_SYSMAIL_ACTIVATION_LINK" development="new" translation="todo">#subject# Dein angefordertes Passwort\n#content# Hallo %user_first_name%,\n\ndu hast ein neues Passwort angefordert!\n\nHier sind deine Daten:\nBenutzername: %user_login_name%\nPasswort: %variable1%\n\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\n\n%variable2%\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</text>
+    <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="todo">#subject# Logindaten für %organization_homepage%\n#content# Hallo %user_first_name%,\n\ndu erhälst deine Logindaten für %organization_homepage% .\nBenutzername: %user_login_name%\nPasswort: %variable1%\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</text>
+    <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="todo">#subject# Anmeldung bei %organization_long_name%\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : %user_login_name%\nund dem Passwort auf der Homepage einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .\n\nViele Grüße\nDie Webmaster</text>
+    <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# Neue Registrierung bei %organization_long_name%\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\n\nNachname: %user_last_name%\nVorname:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDiese Nachricht wurde automatisch erzeugt.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_TEXT_ITALIC" development="new" translation="todo">Text %VAR1%kursiv%VAR2% darstellen</text>
@@ -1205,5 +1209,5 @@
     <text id="SYS_WEDNESDAY" development="new" translation="todo">Mittwoch</text>
     <text id="SYS_WHAT_TO_DO" development="new" translation="todo">Was ist zu tun?</text>
     <text id="SYS_YES" development="new" translation="todo">Ja</text>
-    </version>
+</version>
 </language>

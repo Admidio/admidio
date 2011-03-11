@@ -265,7 +265,7 @@
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">All organization members</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Group of system administrators</text>
-    <text id="INS_DOWNLOAD" development="new" translation="edited">Downloading %VAR1%</text>
+    <text id="INS_DOWNLOAD" development="new" translation="edited">Download %VAR1%</text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Enter database access information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">File %VAR1_BOLD% could not be opened.</text>
@@ -1177,6 +1177,10 @@
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
     <text id="SYS_SUNDAY" development="new" translation="todo">Sunday</text>
+    <text id="SYS_SYSMAIL_ACTIVATION_LINK" development="new" translation="todo">#subject# Your requested password for %organization_short_name% website\n#content# Hello %user_first_name%,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: %user_login_name%\nPassword: %variable1%\n\nTo activate your password, please follow this link:\n\n%variable2%\n\nThe password was generated automatically,\ntherefore you should log in on %organization_homepage% to change it under "My profile".\n\nGreetings,\nWebmaster</text>
+    <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="todo">#subject# Login details for %organization_short_name% website\n#content# Hello %user_first_name%,\n\nyour new login details for the %organization_long_name% website:\nUsername: %user_login_name%\nPassword: %variable1%\n\nThe password was generated automatically,\ntherefore you should log in on %organization_homepage% to change it under "My profile".\n\nCheers,\nWebmaster</text>
+    <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="todo">#subject# Registration on %organization_short_name% website approved\n#content# Hello %user_first_name%,\n\nyour registration on %organization_homepage% is approved.\n\nNow you may log in with your username: %user_login_name%\nand your password.\n\nIf you have any questions, please don't hesitate to contact the webmaster via email to %webmaster_email% .\n\nCheers,\nWebmaster</text>
+    <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# New registration on %organization_short_name% website\n#content# A new user registered himself on %organization_homepage%.\n\nSurname: %user_last_name%\nFirst Name:  %user_first_name%\nE-Mail:   %user_email%\n\n\nThis mail was generated automatically.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System message</text>
     <text id="SYS_TEXT" development="new" translation="edited">Text</text>
     <text id="SYS_TEXT_ITALIC" development="new" translation="edited">Display text in %VAR1%italic%VAR2%</text>
