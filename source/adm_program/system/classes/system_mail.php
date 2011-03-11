@@ -71,18 +71,18 @@ class SystemMail extends Email
         }
         
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
-        if(strpos($mailSrcText, '#Betreff#') !== false)
+        if(strpos($mailSrcText, '#subject#') !== false)
         {
-            $this->mailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#Betreff#') + 9, strpos($mailSrcText, '#Inhalt#') - 9));
+            $this->mailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
         }
         else
         {
             $this->mailHeader = 'Systemmail von '. $g_current_organization->getValue('org_homepage');
         }
         
-        if(strpos($mailSrcText, '#Inhalt#') !== false)
+        if(strpos($mailSrcText, '#content#') !== false)
         {
-            $this->mailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#Inhalt#') + 8));
+            $this->mailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 8));
         }
         else
         {

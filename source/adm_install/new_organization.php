@@ -323,11 +323,17 @@ elseif($req_mode == 6)
     $g_current_organization->setPreferences($orga_preferences, false);
 
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
-    include('db_scripts/systemmails_texts.php');
+    $systemmails_texts = array('SYSMAIL_REGISTRATION_USER' => $g_l10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+                               'SYSMAIL_REGISTRATION_WEBMASTER' => $g_l10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+                               'SYSMAIL_NEW_PASSWORD' => $g_l10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
+                               'SYSMAIL_ACTIVATION_LINK' => $g_l10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
     $text = new TableText($db);
 
     foreach($systemmails_texts as $key => $value)
     {
+        // <br /> muessen zu normalen Zeilenumbruechen umgewandelt werden
+        $value = eregi_replace('<br[[:space:]]*/?[[:space:]]*>',chr(13).chr(10),$value);
+
         $text->clear();
         $text->setValue('txt_name', $key);
         $text->setValue('txt_text', $value);
