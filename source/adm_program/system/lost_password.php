@@ -20,8 +20,6 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1 && $g_preferen
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-getVars();
-
 // Systemmails und Passwort zusenden muessen aktiviert sein
 if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password_recovery'] != 1)
 {
@@ -30,7 +28,7 @@ if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
-if (! empty($abschicken) && !$g_valid_login && $g_preferences['enable_mail_captcha'] == 1 && !empty($captcha))
+if (! empty($_POST['btnSend']) && !$g_valid_login && $g_preferences['enable_mail_captcha'] == 1 && !empty($_POST['captcha']))
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
@@ -44,14 +42,14 @@ if($g_valid_login)
     $g_message->show($g_l10n->get('SYS_LOSTPW_AREADY_LOGGED_ID'));   
 }
 
-if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
+if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
 {
     $sql = 'SELECT MAX(usr_id) as usr_id
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               LEFT JOIN '. TBL_USER_DATA. ' as email
                 ON email.usd_usr_id = usr_id
                AND email.usd_usf_id = '.$g_current_user->getProperty('EMAIL', 'usf_id').'
-               AND email.usd_value  = "'.$empfaenger_email.'"
+               AND email.usd_value  = "'.$_POST['recipient_email'].'"
              WHERE rol_cat_id = cat_id
                AND rol_valid   = 1
                AND (  cat_org_id = '.$g_current_organization->getValue('org_id').'
@@ -61,21 +59,21 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
                AND mem_end    > "'.DATE_NOW.'"
                AND mem_usr_id = usr_id
                AND usr_valid  = 1
-               AND email.usd_value = "'.$empfaenger_email.'"';   
+               AND email.usd_value = "'.$_POST['recipient_email'].'"';   
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
     
     if(strlen($row['usr_id']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_LOSTPW_EMAIL_ERROR',$empfaenger_email));    
+        $g_message->show($g_l10n->get('SYS_LOSTPW_EMAIL_ERROR',$_POST['recipient_email']));    
     }
 
     $user = new User($g_db, $row['usr_id']);
 
     // Passwort und Aktivierungs-ID erzeugen und speichern
-    $neues_passwort = generatePassword();
-    $activation_id  = generateActivationId($user->getValue('EMAIL'));
-    $user->setValue('usr_new_password', $neues_passwort);
+    $new_password  = generatePassword();
+    $activation_id = generateActivationId($user->getValue('EMAIL'));
+    $user->setValue('usr_new_password', $new_password);
     $user->setValue('usr_activation_code', $activation_id);
     
     $sysmail = new SystemMail($g_db);
@@ -87,11 +85,11 @@ if(! empty($abschicken) && ! empty($empfaenger_email) && !empty($captcha))
         $user->save();
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/login.php');
-        $g_message->show($g_l10n->get('SYS_LOSTPW_SEND',$empfaenger_email));
+        $g_message->show($g_l10n->get('SYS_LOSTPW_SEND',$_POST['recipient_email']));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_LOSTPW_SEND_ERROR',$empfaenger_email)); 
+        $g_message->show($g_l10n->get('SYS_LOSTPW_SEND_ERROR',$_POST['recipient_email'])); 
     }
 }
 else
@@ -121,7 +119,7 @@ else
                                 <label>'.$g_l10n->get('SYS_EMAIL').':</label>
                             </dt>
                             <dd>
-                                <input type="text" name="empfaenger_email" style="width: 300px;" maxlength="50" />
+                                <input type="text" name="recipient_email" style="width: 300px;" maxlength="50" />
                             </dd>
                         </dl>
                     </li>';
@@ -186,17 +184,6 @@ else
 }
 
 //************************* Funktionen/Unterprogramme ***********/
-
-// Diese Funktion holt alle Variablen ab und speichert sie in einem array
-function getVars() 
-{
-  global $_POST;
-  foreach ($_POST as $key => $value) 
-  {
-    global $$key;
-    $$key = $value;
-  }
-}
 
 function generatePassword()
 {
