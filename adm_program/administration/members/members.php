@@ -241,7 +241,7 @@ echo '
         </li>
         <li>    
             <input type="checkbox" name="mem_show_all" id="mem_show_all" 
-                link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" title="'.$g_l10n->get('MEM_SHOW_USERS').'" '.$show_all_checked.'/><label for="mem_show_all">'.$g_l10n->get('MEM_SHOW_ALL_USERS').'</lable>
+                link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$req_letter.'&amp;queryForm='.$req_queryForm.'" title="'.$g_l10n->get('MEM_SHOW_USERS').'" '.$show_all_checked.'/><label for="mem_show_all">'.$g_l10n->get('MEM_SHOW_ALL_USERS').'</label>
         </li>
     </ul>
 </form>
@@ -384,7 +384,7 @@ if($num_members > 0)
                         {
                             echo '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
-                                src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" title='.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
+                                src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
                         }
                         else
                         {
