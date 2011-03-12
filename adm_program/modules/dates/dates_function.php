@@ -347,7 +347,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     {
         // Kategorie fuer Terminbestaetigungen einlesen
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' 
-                 WHERE cat_name LIKE "'.$g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'"';
+                 WHERE cat_name_intern LIKE "CONFIRMATION_OF_PARTICIPATION"';
         $g_db->query($sql);
         $row = $g_db->fetch_array();
 

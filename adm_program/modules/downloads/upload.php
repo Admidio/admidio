@@ -112,7 +112,7 @@ echo '
                     <dt><label for="userfile">'.$g_l10n->get('DOW_CHOOSE_FILE').':</label></dt>
                     <dd>
                         <input type="hidden" name="MAX_FILE_SIZE" value="'.($g_preferences['max_file_upload_size'] * 1024).'" />
-                        <input type="file" id="userfile" name="userfile" tabindex="1" size="30" style="width: 350px;" />
+                        <input type="file" id="userfile" name="userfile" tabindex="1" size="30" style="width: 345px;" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -133,7 +133,7 @@ echo '
                 <dl>
                     <dt><label for="new_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
-                        <textarea id="new_description" name="new_description" style="width: 350px;" rows="4" cols="40" tabindex="3" >'.$form_values['new_description'].'</textarea>
+                        <textarea id="new_description" name="new_description" style="width: 345px;" rows="4" cols="40" tabindex="3" >'.$form_values['new_description'].'</textarea>
                     </dd>
                 </dl>
             </li>

@@ -237,7 +237,7 @@ echo '
                         // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                         echo '<div id="extern">
                                 <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-                        echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 350px;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 345px;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                              </div>';
 
                     }
@@ -305,7 +305,7 @@ echo '
             <dl>
                 <dt><label>'.$g_l10n->get("SYS_EMAIL").':</label></dt>
                 <dd>
-                   <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 350px;"  value="';
+                   <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 345px;"  value="';
                     if (! empty($ecard["email_sender"]) && !$g_current_user->getValue('EMAIL'))
                     {
                       echo $ecard["email_sender"];
@@ -348,7 +348,7 @@ echo '
                     </div>
                 </dt>
                 <dd>
-                    <textarea id="Nachricht" style="width: 350px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
+                    <textarea id="Nachricht" style="width: 345px; height: 180px; overflow:auto; font:'.$g_preferences['ecard_text_size'].'px '.$g_preferences['ecard_text_font'].'; color:'.$g_preferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
                     if($g_preferences['enable_ecard_text_length'])
                     {
                     echo' onfocus="javascript:ecardJS.countMax();" onclick="javascript:ecardJS.countMax();" onchange="javascript:ecardJS.countMax();" onkeydown="javascript:ecardJS.countMax();" onkeyup="javascript:ecardJS.countMax();" onkeypress="javascript:ecardJS.countMax();"';
