@@ -252,7 +252,7 @@ echo '
                             if (array_key_exists('usr_id', $_GET))
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                                echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 350px;" maxlength="50" value="'.$userEmail.'" />
+                                echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 345px;" maxlength="50" value="'.$userEmail.'" />
                                 <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
                             elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
@@ -355,11 +355,11 @@ echo '
                         <dd>';
                             if ($g_current_user->getValue("usr_id") > 0)
                             {
-                               echo '<input type="text" id="mailfrom" name="mailfrom" readonly="readonly" style="width: 350px;" maxlength="50" value="'. $g_current_user->getValue('EMAIL'). '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" readonly="readonly" style="width: 345px;" maxlength="50" value="'. $g_current_user->getValue('EMAIL'). '" />';
                             }
                             else
                             {
-                               echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 350px;" maxlength="50" value="'. $form_values['mailfrom']. '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 345px;" maxlength="50" value="'. $form_values['mailfrom']. '" />';
                             }
                             echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
@@ -374,11 +374,11 @@ echo '
                         <dd>';
                             if (strlen($_GET['subject']) > 0)
                             {
-                               echo '<input type="text" readonly="readonly" id="subject" name="subject" style="width: 350px;" maxlength="50" value="'. $_GET['subject']. '" />';
+                               echo '<input type="text" readonly="readonly" id="subject" name="subject" style="width: 345px;" maxlength="50" value="'. $_GET['subject']. '" />';
                             }
                             else
                             {
-                               echo '<input type="text" id="subject" name="subject" style="width: 350px;" maxlength="50" value="'. $form_values['subject']. '" />';
+                               echo '<input type="text" id="subject" name="subject" style="width: 345px;" maxlength="50" value="'. $form_values['subject']. '" />';
                             }
                             echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
@@ -390,11 +390,11 @@ echo '
                         <dd>';
                             if (strlen($form_values['body']) > 0)
                             {
-                               echo '<textarea id="body" name="body" style="width: 350px;" rows="10" cols="45">'. $form_values['body']. '</textarea>';
+                               echo '<textarea id="body" name="body" style="width: 345px;" rows="10" cols="45">'. $form_values['body']. '</textarea>';
                             }
                             else
                             {
-                               echo '<textarea id="body" name="body" style="width: 350px;" rows="10" cols="45">'. $_GET['body']. '</textarea>';
+                               echo '<textarea id="body" name="body" style="width: 345px;" rows="10" cols="45">'. $_GET['body']. '</textarea>';
                             }
                         echo '</dd>
                     </dl>

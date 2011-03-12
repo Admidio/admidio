@@ -206,11 +206,11 @@ echo '
                         if ($g_current_user->getValue('usr_id') > 0)
                         {
                             // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo '<input readonly="readonly" type="text" id="gbc_name" name="gbc_name" tabindex="1" style="width: 350px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />';
+                            echo '<input readonly="readonly" type="text" id="gbc_name" name="gbc_name" tabindex="1" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />';
                         }
                         else
                         {
-                            echo '<input type="text" id="gbc_name" name="gbc_name" tabindex="1" style="width: 350px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />
+                            echo '<input type="text" id="gbc_name" name="gbc_name" tabindex="1" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />
                             <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
                     echo '</dd>
@@ -220,7 +220,7 @@ echo '
                 <dl>
                     <dt><label for="gbc_email">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
                     <dd>
-                        <input type="text" id="gbc_email" name="gbc_email" tabindex="2" style="width: 350px;" maxlength="50" value="'. $guestbook_comment->getValue('gbc_email'). '" />
+                        <input type="text" id="gbc_email" name="gbc_email" tabindex="2" style="width: 345px;" maxlength="50" value="'. $guestbook_comment->getValue('gbc_email'). '" />
                     </dd>
                 </dl>
             </li>';
@@ -239,7 +239,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 350px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" style="color: #990000;">*</span>
+                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 345px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" style="color: #990000;">*</span>
                     </dd>
                 </dl>
             </li>';

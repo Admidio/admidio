@@ -120,7 +120,7 @@ echo '
                 <dl>
                     <dt><label for="lnk_name">'.$g_l10n->get('LNK_LINK_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="lnk_name" name="lnk_name" tabindex="1" style="width: 350px;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
+                        <input type="text" id="lnk_name" name="lnk_name" tabindex="1" style="width: 345px;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -129,7 +129,7 @@ echo '
                 <dl>
                     <dt><label for="lnk_url">'.$g_l10n->get('LNK_LINK_ADDRESS').':</label></dt>
                     <dd>
-                        <input type="text" id="lnk_url" name="lnk_url" tabindex="2" style="width: 350px;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
+                        <input type="text" id="lnk_url" name="lnk_url" tabindex="2" style="width: 345px;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -181,7 +181,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="lnk_description" name="lnk_description" tabindex="4" style="width: 350px;" rows="10" cols="40">'. $link->getValue('lnk_description'). '</textarea>
+                        <textarea id="lnk_description" name="lnk_description" tabindex="4" style="width: 345px;" rows="10" cols="40">'. $link->getValue('lnk_description'). '</textarea>
                     </dd>
                 </dl>
             </li>
