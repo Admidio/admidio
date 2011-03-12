@@ -39,7 +39,7 @@ if( (!$g_current_user->assignRoles()
      && !isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')))
      || (  !$g_current_user->isWebmaster()
      && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
-    || $role->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
+    || ($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
 {
    echo 'SYS_NO_RIGHTS';exit(); 
 }
