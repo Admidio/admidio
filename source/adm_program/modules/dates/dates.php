@@ -24,7 +24,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_date.php');
-require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_rooms.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -423,14 +422,9 @@ else
                     }
                     echo ' ' . $date->getValue('dat_headline'). '
                 </div>
-                <div class="boxHeadRight">';
-                    if($row['member_date_role'] > 0) 
-                    {
-                        echo ' <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
-                            src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('SYS_MEMBERS').'" title="'.$g_l10n->get('SYS_MEMBERS').'" /></a>';
-                    }
-                    echo'  <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
-                    src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('DAT_EXPORT_ICAL').'" title="'.$g_l10n->get('DAT_EXPORT_ICAL').'" /></a>';
+                <div class="boxHeadRight">
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
+                        src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('DAT_EXPORT_ICAL').'" title="'.$g_l10n->get('DAT_EXPORT_ICAL').'" /></a>';
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($g_current_user->editDates())
@@ -600,12 +594,10 @@ else
                 if($date->getValue('dat_rol_id') > 0)
                 {
                     // Link zum An- und Abmelden zu Terminen in Ausgabe-Array schreiben
-                    $member = new TableMembers($g_db);
-                    $foundMember = $member->readData(array('rol_id' => $date->getValue('dat_rol_id'), 'usr_id' => $g_current_user->getValue('usr_id')));
                     
-                    if($member->getValue('mem_leader') != 1 && $date->getValue('dat_rol_id') > 0)
+                    if($date->getValue('dat_rol_id') > 0)
                     {
-                        if($foundMember)
+                        if($row['member_date_role'] > 0)
                         {
                             $registrationHtml = '<span class="iconTextLink">
                                     <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img 
@@ -643,6 +635,16 @@ else
                             {
                                 $registrationHtml = $g_l10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                             }
+                        }
+                        
+                        if($g_valid_login)
+                        {
+                            $registrationHtml .= '&nbsp;
+                            <span class="iconTextLink">
+                                <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
+                                    src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>
+                                 <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'">'.$g_l10n->get('DAT_SHOW_PARTICIPANTS').'</a>
+                            </span>';
                         }
 
                         echo '<div>'.$registrationHtml.'</div>';

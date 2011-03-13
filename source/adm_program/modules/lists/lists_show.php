@@ -96,8 +96,16 @@ else
     $req_rol_id = $role_ids[0];
 }
 
+// Rollenobjekt erzeugen
+$role = new TableRoles($g_db, $req_rol_id);
+// falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
+if($role->getValue('rol_valid') == 0)
+{
+    $show_members = 1;
+}
+
 //Testen ob Recht zur Listeneinsicht besteht
-if(!$g_current_user->viewRole($req_rol_id))
+if($role->viewRole() == false)
 {
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
@@ -146,14 +154,6 @@ else if($req_mode == 'print')
 $main_sql  = '';   // enthaelt das Haupt-Sql-Statement fuer die Liste
 $str_csv   = '';   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
-
-// Rollenobjekt erzeugen
-$role = new TableRoles($g_db, $req_rol_id);
-// falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
-if($role->getValue('rol_valid') == 0)
-{
-    $show_members = 1;
-}
 
 // Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
 $list = new ListConfiguration($g_db, $req_lst_id);

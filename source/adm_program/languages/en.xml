@@ -85,6 +85,7 @@
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="edited">Display link to map</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="edited">When location is set, Google Maps is used to display location and route from own location. (default: yes)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="edited">Show on map</text>
+    <text id="DAT_SHOW_PARTICIPANTS" development="new" translation="todo">Show participants</text>
     <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="edited">Open room administration</text>
     <text id="DAT_VISIBLE_TO" development="new" translation="edited">Visible for</text>
 
