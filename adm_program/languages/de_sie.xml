@@ -83,6 +83,7 @@
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="todo">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="todo">Auf Karte zeigen</text>
+    <text id="DAT_SHOW_PARTICIPANTS" development="new" translation="todo">Teilnehmer anzeigen</text>
     <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="todo">Zur Raumadministration wechseln</text>
     <text id="DAT_VISIBLE_TO" development="new" translation="todo">Sichtbar für</text>
 
@@ -621,7 +622,7 @@
     <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="todo">Systemmailadresse</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systemnachrichten benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="todo">Systemmail-Texte</text>
-    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="todo">Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #Betreff# und #Inhalt# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="todo">Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>

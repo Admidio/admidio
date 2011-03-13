@@ -14,10 +14,13 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * setInactive()          - setzt die Rolle auf inaktiv
- * setActive()            - setzt die Rolle wieder auf aktiv
  * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
- *                          dies ist interessant, wenn rol_max_members gesetzt wurde
+ *                    dies ist interessant, wenn rol_max_members gesetzt wurde
+ * setInactive()    - setzt die Rolle auf inaktiv
+ * setActive()      - setzt die Rolle wieder auf aktiv
+ * viewRole()       - diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter 
+ *                    und prueft auch Rollen zu Terminen (hier muss man nicht Mitglied der Rolle
+ *                    sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
  *
  *****************************************************************************/
 
@@ -257,6 +260,42 @@ class TableRoles extends TableAccess
             return 0;
         }
         return -1;
+    }
+    
+    // diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter 
+    // und prueft auch Rollen zu Terminen (hier muss man nicht Mitglied der Rolle
+    // sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
+    public function viewRole()
+    {
+        global $g_current_user, $g_valid_login;
+        
+        if($g_valid_login == true)
+        {
+            if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
+            {
+                // pruefen, ob der Benutzer Mitglied einer Rolle ist, die den Termin sehen darf
+                $sql = 'SELECT dtr_rol_id
+                          FROM '.TBL_DATE_ROLE.', '.TBL_DATES.'
+                         WHERE dat_rol_id = '.$this->getValue('rol_id').'
+                           AND dtr_dat_id = dat_id
+                           AND (  dtr_rol_id IS NULL
+                               OR EXISTS (SELECT 1
+                                            FROM '.TBL_MEMBERS.'
+                                           WHERE mem_rol_id = dtr_rol_id
+                                             AND mem_usr_id = '.$g_current_user->getValue('usr_id').'))';
+                $this->db->query($sql);
+                
+                if($this->db->num_rows() > 0)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return $g_current_user->viewRole($this->getValue('rol_id'));
+            }
+        }
+        return false;
     }
 }
 ?>
