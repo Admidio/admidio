@@ -19,6 +19,13 @@
  *         - liest den Text mit der uebergebenen ID aus und gibt diese zurueck
  *         - zuerst wird die Default-Sprachdatei ueberprueft, danach alle weiteren
  *         - angehaengten Sprachordner, dann die Referenzsprache
+ * getCountries() 
+ *         - liefert ein Array mit allen Laendern und Laendercodes zurueck
+ *         - Beispiel: array('DEU' => 'Deutschland' ...)
+ * getLanguages()
+ *         - liefert ein Array mit allen Sprachen und Sprachcodes zurueck, 
+ *         - fuer die Admidio-Uebersetzungen zur Verfuegung stehen
+ *         - Beispiel: array('DE' => 'deutsch' ...)
  * getReferenceText($text_id, $var1='', $var2='', $var3='', $var4='')
  *         - liefert den Text der ID aus der eingestellten Referenzsprache zurueck
  * setLanguage($language)
@@ -38,6 +45,9 @@ class Language
     private $referenceLanguage = 'de';		// die Referenzsprache, aus der Texte zurueckgegeben werden, wenn sie in der Defaultsprache nicht vorhanden sind
     
     private $textCache; 					// eingelesene Texte werden in diesem Array gespeichert und spaeter nur noch aus dem Array gelesen
+	
+	private $countries = array();			// Array mit allen Laendern und deren Laendercodes
+	private $languages = array();			// Array mit allen Sprachen und deren Sprachcodes
     
     // es muss das Sprachkuerzel uebergeben werden (Beispiel: 'de')
 	// optional kann noch ein Pfad angegeben werden, in dem sich weitere Sprachdateien befinden, 
@@ -144,6 +154,58 @@ class Language
         // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
         return $text;
     }
+
+	// liefert ein Array mit allen Laendern und Laendercodes zurueck
+	// Beispiel: array('DEU' => 'Deutschland' ...)
+	public function getCountries()
+	{
+		if(count($this->countries) == 0)
+		{
+			if(file_exists(SERVER_PATH.'/adm_program/languages/countries_'.$this->language.'.xml'))
+			{
+				$file = SERVER_PATH.'/adm_program/languages/countries_'.$this->language.'.xml';
+			}
+			elseif(file_exists(SERVER_PATH.'/adm_program/languages/countries_'.$this->referenceLanguage.'.xml'))
+			{
+				$file = SERVER_PATH.'/adm_program/languages/countries_'.$this->referenceLanguage.'.xml';
+			}
+			else
+			{
+				return array();
+			}
+
+			$data = implode('', file($file));
+			$p = xml_parser_create();
+			xml_parse_into_struct($p, $data, $vals, $index);
+			xml_parser_free($p);
+
+			for($i = 0; $i < count($index['ISOCODE']); $i++)
+			{
+				$this->countries[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
+			}
+		}
+		return $this->countries;
+	}
+
+	// liefert ein Array mit allen Sprachen und Sprachcodes zurueck, 
+	// fuer die Admidio-Uebersetzungen zur Verfuegung stehen
+	// Beispiel: array('DE' => 'deutsch' ...)
+	public function getLanguages()
+	{
+		if(count($this->languages) == 0)
+		{
+			$data = implode('', file(SERVER_PATH.'/adm_program/languages/languages.xml'));
+			$p = xml_parser_create();
+			xml_parse_into_struct($p, $data, $vals, $index);
+			xml_parser_free($p);
+
+			for($i = 0; $i < count($index['ISOCODE']); $i++)
+			{
+				$this->languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
+			}
+		}
+		return $this->languages;
+	}
 
     // liefert den Text der ID aus der eingestellten Referenzsprache zurueck
     public function getReferenceText($text_id, $var1='', $var2='', $var3='', $var4='')
