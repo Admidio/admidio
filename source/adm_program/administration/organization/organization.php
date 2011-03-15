@@ -28,18 +28,6 @@ if($g_debug == 0 && file_exists('../../../adm_install'))
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// verfuegbare Sprachen aus XML-Datei einlesen und in Array schreiben
-$languages = array();
-$data = implode('', file('../../languages/languages.xml'));
-$p = xml_parser_create();
-xml_parse_into_struct($p, $data, $vals, $index);
-xml_parser_free($p);
-
-for($i = 0; $i < count($index['ISOCODE']); $i++)
-{
-    $languages[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
-}
-
 $html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />';
 
 if(isset($_SESSION['organization_request']))
@@ -241,7 +229,7 @@ echo '
                             <dd>
                                 <select size="1" id="system_language" name="system_language">
                                     <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-                                    foreach($languages as $key => $value)
+                                    foreach($g_l10n->getLanguages() as $key => $value)
                                     {
                                         echo '<option value="'.$key.'" ';
                                         if($key == $form_values['system_language'])
@@ -1502,27 +1490,16 @@ echo '
                             <dt><label for="default_country">'.$g_l10n->get('PRO_DEFAULT_COUNTRY').':</label></dt>
                             <dd>
                                 <select size="1" id="default_country" name="default_country">
-                                    <option value=""';
-                                    if(strlen($form_values['default_country']) == 0)
+                                    <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+                                    foreach($g_l10n->getCountries() as $key => $value)
                                     {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-
-                                    // Datei mit Laenderliste oeffnen und alle Laender einlesen
-                                    $country_list = fopen("../../system/staaten.txt", "r");
-                                    $country = trim(fgets($country_list));
-                                    while (!feof($country_list))
-                                    {
-                                        echo '<option value="'.$country.'"';
-                                        if($country == $form_values['default_country'])
+                                        echo '<option value="'.$key.'" ';
+                                        if($key == $form_values['default_country'])
                                         {
                                             echo ' selected="selected" ';
                                         }
-                                        echo '>'.$country.'</option>';
-                                        $country = trim(fgets($country_list));
+                                        echo '>'.$value.'</option>';
                                     }
-                                    fclose($country_list);
                                 echo '</select>
                             </dd>
                         </dl>

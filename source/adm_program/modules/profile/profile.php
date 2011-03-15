@@ -128,62 +128,59 @@ function getFieldCode($field, $user_id)
             break;
     }
 
-    if($field->getValue('cat_name_intern') != 'MASTER_DATA')
-    {
-        // Icons der Messenger anzeigen
-        if($field->getValue('usf_name') == 'ICQ')
-        {
-            if(strlen($field->getValue('usd_value')) > 0)
-            {
-                // Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-                preg_match_all('/\d+/', $field->getValue('usd_value'), $matches);
-                $icq_number = implode("", reset($matches));
+	// Icons der Messenger anzeigen
+	if($field->getValue('usf_name_intern') == 'ICQ')
+	{
+		if(strlen($field->getValue('usd_value')) > 0)
+		{
+			// Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
+			preg_match_all('/\d+/', $field->getValue('usd_value'), $matches);
+			$icq_number = implode("", reset($matches));
 
-                // ICQ Onlinestatus anzeigen
-                $value = '
-                <a class="iconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
-                    src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-                    alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
-                    title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
-            }
-            $messenger = true;
-        }
-        elseif($field->getValue('usf_name') == 'Skype')
-        {
-            if(strlen($field->getValue('usd_value')) > 0)
-            {
-                // Skype Onlinestatus anzeigen
-                $value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
-                <a class="iconLink" href="skype:'.$field->getValue('usd_value').'?add"><img
-                    src="http://mystatus.skype.com/smallicon/'.$field->getValue('usd_value').'"
-                    title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
-                    alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
-            }
-            $messenger = true;
-        }
-        elseif($field->getValue('usf_name') == 'AIM')
-        {
-            $msg_image = 'aim.png';
-        }
-        elseif($field->getValue('usf_name') == 'Google Talk')
-        {
-            $msg_image = 'google.gif';
-        }
-        elseif($field->getValue('usf_name') == 'MSN')
-        {
-            $msg_image = 'msn.png';
-        }
-        elseif($field->getValue('usf_name') == 'Yahoo')
-        {
-            $msg_image = 'yahoo.png';
-        }
-        if(strlen($msg_image) > 0)
-        {
-            $value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;"
-                alt="'. $field->getValue('usf_name'). '" title="'. $field->getValue('usf_name'). '" />&nbsp;&nbsp;'. $value;
-            $messenger = true;
-        }
-    }
+			// ICQ Onlinestatus anzeigen
+			$value = '
+			<a class="iconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
+				src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
+				alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
+				title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
+		}
+		$messenger = true;
+	}
+	elseif($field->getValue('usf_name_intern') == 'SKYPE')
+	{
+		if(strlen($field->getValue('usd_value')) > 0)
+		{
+			// Skype Onlinestatus anzeigen
+			$value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
+			<a class="iconLink" href="skype:'.$field->getValue('usd_value').'?add"><img
+				src="http://mystatus.skype.com/smallicon/'.$field->getValue('usd_value').'"
+				title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
+				alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
+		}
+		$messenger = true;
+	}
+	elseif($field->getValue('usf_name_intern') == 'AOL_INSTANT_MESSENGER')
+	{
+		$msg_image = 'aim.png';
+	}
+	elseif($field->getValue('usf_name_intern') == 'GOOGLE_TALK')
+	{
+		$msg_image = 'google.gif';
+	}
+	elseif($field->getValue('usf_name_intern') == 'MSN_MESSENGER')
+	{
+		$msg_image = 'msn.png';
+	}
+	elseif($field->getValue('usf_name_intern') == 'YAHOO_MESSENGER')
+	{
+		$msg_image = 'yahoo.png';
+	}
+	if(strlen($msg_image) > 0)
+	{
+		$value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;"
+			alt="'. $field->getValue('usf_name'). '" title="'. $field->getValue('usf_name'). '" />&nbsp;&nbsp;'. $value;
+		$messenger = true;
+	}
 
     // Feld anzeigen, außer bei Messenger, wenn dieser keine Daten enthält
     if($messenger == false
@@ -336,7 +333,7 @@ echo '
                                             if($bAddressOutput == false)   // nur 1x bei Adresse schreiben
                                             {
                                                 $bAddressOutput = true;
-                                                echo '<li>
+												echo '<li>
                                                     <dl>
                                                         <dt>'.$g_l10n->get('SYS_ADDRESS').':</dt>
                                                         <dd>';
@@ -389,9 +386,11 @@ echo '
                                                             if(strlen($user->getValue('COUNTRY')) > 0
                                                             && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('COUNTRY', 'usf_hidden') == 0))
                                                             {
-                                                                $address   .= '<div>'.$user->getValue('COUNTRY'). '</div>';
-                                                                $map_url   .= ',%20'. urlencode($user->getValue('COUNTRY'));
-                                                                $route_url .= ',%20'. urlencode($user->getValue('COUNTRY'));
+																$countries = $g_l10n->getCountries();
+																$country = $countries[$user->getValue('COUNTRY')];
+                                                                $address   .= '<div>'.$country. '</div>';
+                                                                $map_url   .= ',%20'. urlencode($country);
+                                                                $route_url .= ',%20'. urlencode($country);
                                                             }
 
                                                             echo $address;

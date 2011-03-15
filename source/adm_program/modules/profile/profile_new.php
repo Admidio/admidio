@@ -168,38 +168,36 @@ function getFieldCode($field, $user, $new_user)
     elseif($field->getValue('usf_name_intern') == 'COUNTRY')
     {
         //Laenderliste oeffnen
-        $landlist = fopen(SERVER_PATH. '/adm_program/system/staaten.txt', 'r');
+		$countries = $g_l10n->getCountries();
         $value = '
-        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '">
-            <option value="" ';
+		<select size="1" id="default_country" name="default_country">
+			<option value="" ';
                 if(strlen($g_preferences['default_country']) == 0
                 && strlen($field->getValue('usd_value')) == 0)
                 {
                     $value = $value. ' selected="selected" ';
                 }
-            $value = $value. '></option>';
+			$value = $value. '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
             if(strlen($g_preferences['default_country']) > 0)
             {
-                $value = $value. '<option value="'. $g_preferences['default_country']. '">'. $g_preferences['default_country']. '</option>
+                $value = $value. ' <option value="">--------------------------------</option>
+				<option value="'. $g_preferences['default_country']. '">'. $countries[$g_preferences['default_country']]. '</option>
                 <option value="">--------------------------------</option>';
             }
-
-            $land = trim(fgets($landlist));
-            while (!feof($landlist))
-            {
-                $value = $value. '<option value="'.$land.'"';
-                     if($new_user > 0 && $land == $g_preferences['default_country'])
-                     {
-                        $value = $value. ' selected="selected" ';
-                     }
-                     if(!$new_user > 0 && $land == $field->getValue('usd_value'))
-                     {
-                        $value = $value. ' selected="selected" ';
-                     }
-                $value = $value. '>'.$land.'</option>';
-                $land = trim(fgets($landlist));
-            }
-        $value = $value. '</select>';
+			foreach($g_l10n->getCountries() as $key => $country_name)
+			{
+				$value = $value. '<option value="'.$key.'" ';
+				if($new_user > 0 && $key == $g_preferences['default_country'])
+				{
+					$value = $value. ' selected="selected" ';
+				}
+				if(!$new_user > 0 && $key == $field->getValue('usd_value'))
+				{
+					$value = $value. ' selected="selected" ';
+				}
+				$value = $value. '>'.$country_name.'</option>';
+			}
+		$value = $value. '</select>';
     }
     elseif($field->getValue('usf_type') == 'CHECKBOX')
     {
