@@ -41,6 +41,7 @@
     <text id="DAT_ADD_DATE_TO_CALENDAR" development="new" translation="todo">Termin in den Kalender übernehmen</text>
     <text id="DAT_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="DAT_ALL_DAY" development="new" translation="todo">Ganztägig</text>
+    <text id="DAT_ASSIGN_PARTICIPANTS" development="new" translation="todo">Teilnehmer zuordnen</text>
     <text id="DAT_ATTEND" development="new" translation="todo">Teilnehmen</text>
     <text id="DAT_ATTEND_DATE" development="new" translation="todo">Sie haben Ihre Teilnahme für den Termin %VAR1_BOLD% am %VAR2% zugesagt.</text>
     <text id="DAT_CALENDAR" development="new" translation="todo">Kalender</text>
@@ -63,7 +64,8 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
-    <text id="DAT_PARTICIPATE_IN_DATE" development="new" translation="todo">An diesem Termin teilnehmen</text>
+    <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="todo">Am Termin teilnehmen</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Sie nehmen an diesem Termin als Gruppenleiter teil und können weitere teilnehmende Personen hinzufügen.</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="todo">Teilnehmerbegrenzung</text>
     <text id="DAT_PREVIOUS_DATES" description="Vergangene Termine" development="new" translation="todo">Vergangene %VAR1%</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="todo">Anmeldung möglich.</text>

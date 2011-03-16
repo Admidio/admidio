@@ -44,6 +44,7 @@ $req_dat_id   = 0;
 $req_calendar = '';
 $req_copy     = false;
 $date_login   = 0;
+$date_assign_yourself = 0;
 
 // Uebergabevariablen pruefen
 
@@ -136,6 +137,14 @@ if(isset($_SESSION['dates_request']))
     {
         $date_login = 0;
     }
+    if(array_key_exists('date_assign_yourself', $_SESSION['dates_request']))
+    {
+        $date_assign_yourself = $_SESSION['dates_request']['date_assign_yourself'];
+    }
+    else
+    {
+        $date_assign_yourself = 0;
+    }
     
     unset($_SESSION['dates_request']);
 }
@@ -178,21 +187,32 @@ $g_layout['header'] = '
     // Funktion blendet Zeitfelder ein/aus
     function setAllDay()
     {
-        if(document.getElementById("dat_all_day").checked == true)
+		if ($("#dat_all_day:checked").val() !== undefined)
         {
-            document.getElementById("time_from").style.visibility = "hidden";
-            document.getElementById("time_from").style.display    = "none";
-            document.getElementById("time_to").style.visibility = "hidden";
-            document.getElementById("time_to").style.display    = "none";
+			$("#time_from").hide();
+			$("#time_to").hide();
         }
         else
         {
-            document.getElementById("time_from").style.visibility = "visible";
-            document.getElementById("time_from").style.display    = "";
-            document.getElementById("time_to").style.visibility = "visible";
-            document.getElementById("time_to").style.display    = "";
+			$("#time_from").show("slow");
+			$("#time_to").show("slow");
         }
     }
+	
+	
+	function setDateParticipation()
+	{
+		if ($("#date_login:checked").val() !== undefined)
+		{
+			$("#admAssignYourself").show("slow");
+			$("#admMaxMembers").show("slow");
+		}
+		else
+		{
+			$("#admAssignYourself").hide();
+			$("#admMaxMembers").hide();
+		}
+	}
 
     // Funktion belegt das Datum-bis entsprechend dem Datum-Von
     function setDateTo()
@@ -236,7 +256,12 @@ $g_layout['header'] = '
     $(document).ready(function() 
     {
         setAllDay();
-        $("#dat_headline").focus();';
+		setDateParticipation();
+        $("#dat_headline").focus();
+		
+		$("#date_login").bind("click", function() {setDateParticipation();});
+		$("#dat_all_day").bind("click", function() {setAllDay();});';
+
         // alle Rollen anzeigen, die diesen Termin sehen duerfen
         foreach($date->getVisibleRoles() as $key => $roleID)
         {
@@ -344,7 +369,7 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            echo ' onclick="setAllDay()" value="1" />
+                            echo ' value="1" />
                             <label for="dat_all_day">'.$g_l10n->get('DAT_ALL_DAY').'</label>
                         </span>
                     </dd>
@@ -456,7 +481,23 @@ echo '
             }
           
             echo'
-            <li id="max_members">
+            <li id="admAssignYourself">
+                <dl>
+                    <dt>'.$g_l10n->get('DAT_PARTICIPATE_AT_DATE').':</dt>
+                    <dd>
+                        <input type="checkbox" id="date_assign_yourself" name="date_assign_yourself"';
+                        if($date->getValue('dat_rol_id') > 0 || $date_assign_yourself == 1)
+                        {
+                            echo ' checked="checked" ';
+                        }
+                        echo ' value="1" />
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC\',this)" 
+                            onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+                    </dd>
+                </dl>
+            </li>
+            <li id="admMaxMembers">
                 <dl>
                     <dt>'.$g_l10n->get('DAT_PARTICIPANTS_LIMIT').':</dt>
                     <dd>
@@ -502,22 +543,18 @@ echo '
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <select size="1" id="dat_country" name="dat_country">';
-                                // Datei mit Laenderliste oeffnen und alle Laender einlesen
-                                $country_list = fopen('../../system/staaten.txt', 'r');
-                                $country = trim(fgets($country_list));
-                                while (!feof($country_list))
-                                {
-                                    echo '<option value="'.$country.'"';
-                                    if($country == $date->getValue('dat_country'))
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$country.'</option>';
-                                    $country = trim(fgets($country_list));
-                                }
-                                fclose($country_list);
-                            echo '</select>
+							<select size="1" id="dat_country" name="dat_country">
+								<option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+								foreach($g_l10n->getCountries() as $key => $value)
+								{
+									echo '<option value="'.$key.'" ';
+									if($key == $date->getValue('dat_country'))
+									{
+										echo ' selected="selected" ';
+									}
+									echo '>'.$value.'</option>';
+								}
+							echo '</select>
                         </dd>
                     </dl>
                 </li>';

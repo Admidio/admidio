@@ -376,9 +376,12 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
             $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
         
-        //Termin-Ersteller als Member und Leader eintragen
-        $member = new TableMembers($g_db);
-        $member->startMembership($role->getValue('rol_id'), $_SESSION['g_current_user']->getValue('usr_id'), 1);
+		if(isset($_POST['date_assign_yourself']) && $_POST['date_assign_yourself'] == 1)
+		{
+			//Termin-Ersteller als Member und Leader eintragen
+			$member = new TableMembers($g_db);
+			$member->startMembership($role->getValue('rol_id'), $_SESSION['g_current_user']->getValue('usr_id'), 1);
+		}
     }
     elseif($_POST['date_login'] == 0 && $date->getValue('dat_rol_id') > 0)
     {

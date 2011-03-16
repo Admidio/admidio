@@ -272,7 +272,7 @@ else
 }
 
 // nun die Termine auslesen, die angezeigt werden sollen
-$sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role,
+$sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
           FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
@@ -485,7 +485,8 @@ else
                         if(strlen($date->getValue('dat_country')) > 0)
                         {
                             // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
-                            $location_url .= ',%20'. $date->getValue('dat_country');
+							$countries = $g_l10n->getCountries();
+                            $location_url .= ',%20'. $countries[$date->getValue('dat_country')];
                         }
                         $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$g_l10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
@@ -627,8 +628,8 @@ else
                                 $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
 
                                 $registrationHtml = '<span class="iconTextLink">
-                                    <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'" /></a>
-                                    <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PARTICIPATE_IN_DATE').'</a>
+                                    <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$g_l10n->get('DAT_PARTICIPATE_AT_DATE').'" /></a>
+                                    <a href="'.$buttonURL.'">'.$g_l10n->get('DAT_PARTICIPATE_AT_DATE').'</a>
                                 </span>';
                             }
                             else
@@ -637,6 +638,7 @@ else
                             }
                         }
                         
+						// Link mit Teilnehmerliste anzeigen
                         if($g_valid_login)
                         {
                             $registrationHtml .= '&nbsp;
@@ -644,6 +646,17 @@ else
                                 <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
                                     src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>
                                  <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'">'.$g_l10n->get('DAT_SHOW_PARTICIPANTS').'</a>
+                            </span>';
+                        }
+
+						// Link mit Zuordnung neuer Teilnehmer
+                        if($row['mem_leader'] == 1)
+                        {
+                            $registrationHtml .= '&nbsp;
+                            <span class="iconTextLink">
+                                <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'"><img 
+                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>
+                                 <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'">'.$g_l10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>
                             </span>';
                         }
 

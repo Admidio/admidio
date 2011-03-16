@@ -53,4 +53,22 @@ while($row_countries = $g_db->fetch_array($result_countries))
 	} 
 }
 
+// Laenderbezeichnung durch ISOCODES ersetzen, damit die Laender sprachabhaengig angezeigt werden
+$sql = 'SELECT distinct dat_country, dat_id FROM '.TBL_DATES.'
+		 WHERE length(dat_country) > 0 ';
+$result_countries = $g_db->query($sql);
+
+while($row_countries = $g_db->fetch_array($result_countries))
+{
+	foreach($g_l10n->getCountries() as $key => $value)
+	{
+		if($row_countries['dat_country'] == $value)
+		{
+			$sql = 'UPDATE '.TBL_DATES.' SET dat_country = "'.$key.'" 
+					 WHERE dat_id = '.$row_countries['dat_id'];
+			$g_db->query($sql);
+		}
+	} 
+}
+
 ?>
