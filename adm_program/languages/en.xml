@@ -41,6 +41,7 @@
     <text id="DAT_ADD_DATE_TO_CALENDAR" development="new" translation="edited">Add event to calendar</text>
     <text id="DAT_ADD_ROLE" development="new" translation="edited">Add role</text>
     <text id="DAT_ALL_DAY" development="new" translation="edited">Full time</text>
+    <text id="DAT_ASSIGN_PARTICIPANTS" development="new" translation="todo">Teilnehmer zuordnen</text>
     <text id="DAT_ATTEND" development="new" translation="edited">Participate</text>
     <text id="DAT_ATTEND_DATE" development="new" translation="edited">You confirmed your participation at %VAR1_BOLD% on %VAR2%.</text>
     <text id="DAT_CALENDAR" development="new" translation="edited">Calendar</text>
@@ -64,7 +65,8 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Reduce number of participants for this event. Please leave field empty for unlimited participants.</text>
     <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organizer</text>
     <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organizers</text>
-    <text id="DAT_PARTICIPATE_IN_DATE" development="new" translation="edited">Participation confirmation</text>
+    <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="edited">Participation confirmation</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">You take part at this event as a leader and can add other participating persons.</text>
 	<text id="DAT_PARTICIPANTS" development="new" translation="edited">Participants</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Limited number of participants</text>
    	<text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Previous %VAR1%</text>
