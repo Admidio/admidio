@@ -98,11 +98,6 @@ else
 
 // Rollenobjekt erzeugen
 $role = new TableRoles($g_db, $req_rol_id);
-// falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
-if($role->getValue('rol_valid') == 0)
-{
-    $show_members = 1;
-}
 
 //Testen ob Recht zur Listeneinsicht besteht
 if($role->viewRole() == false)
@@ -112,7 +107,7 @@ if($role->viewRole() == false)
 
 if($req_mode == 'csv-ms')
 {
-    $separator    = ";"; // Microsoft Excel 2007 und neuer braucht ein Semicolon
+    $separator    = ';'; // Microsoft Excel 2007 und neuer braucht ein Semicolon
     $value_quotes = '"';
     $req_mode     = 'csv';
 	$charset      = 'iso-8859-1';

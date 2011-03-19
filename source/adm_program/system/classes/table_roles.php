@@ -216,12 +216,8 @@ class TableRoles extends TableAccess
         global $g_current_session;
 
         // die Systemrollem sind immer aktiv
-        if($this->getValue('rol_system') == true)
+        if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_MEMBERS. ' SET mem_end   = "9999-12-31"
-                        WHERE mem_rol_id = '. $this->getValue('rol_id');
-            $this->db->query($sql);
-
             $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 1
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
@@ -241,14 +237,8 @@ class TableRoles extends TableAccess
         global $g_current_session;
 
         // die Systemrollem sind immer aktiv
-        if($this->getValue('rol_system') == true)
+        if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_MEMBERS. ' SET mem_end   = "'.DATE_NOW.'"
-                        WHERE mem_rol_id = '. $this->getValue('rol_id'). '
-                          AND mem_begin <= "'.DATE_NOW.'"
-                          AND mem_end    > "'.DATE_NOW.'" ';
-            $this->db->query($sql);
-
             $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 0
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
