@@ -340,7 +340,7 @@
 	<text id="LNK_COUNTER" development="new" translation="edited">Hits</text>
     <text id="LNK_CREATE_LINK" development="new" translation="edited">Create new link</text>
     <text id="LNK_DISPLAY_REDIRECT" development="new" translation="edited">Show redirect</text>
-    <text id="LNK_DISPLAY_REDIRECT" development="new" translation="edited">By using this setting option you can activate the automatically redirection. If you choose a weblink from the linkmodule a internal Admidio site is displayed with a statement of leaving the original website. After delay you will be redirected to the real link. By setting redirect to 0 the link will be displayed direct. (default: 10 seconds)</text>
+    <text id="LNK_DISPLAY_REDIRECT_DESC" development="new" translation="todo">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</text>
 	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new weblink was created</text>
 	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new weblink at %VAR1% was created.\n\nLinkadress: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
     <text id="LNK_GO_TO" development="new" translation="edited">Go to %VAR1%</text>
@@ -488,7 +488,7 @@
     <text id="MEM_IMPORT" development="new" translation="edited">Import</text>
     <text id="MEM_IMPORT_SUCCESSFUL" development="new" translation="edited">Importing of %VAR1% data record(s) successful!</text>
     <text id="MEM_IMPORT_USERS" development="new" translation="edited">Import user(s)</text>
-    <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Gib bitte den Vor- und Nachnamen des neuen Benutzers ein. Bevor der Benutzer angelegt wird, wird geprüft, ob ein Benutzer mit ähnlichem Namen bereits in der Datenbank existiert.</text>
+    <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Please provide first name and surname of the new user. A database check will be performed if same user with same or similar name already exists.</text>
     <text id="MEM_MAKE_FORMER" development="new" translation="edited">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</text>
     <text id="MEM_NO_MEMBERSHIP" development="new" translation="edited">This user is not a member of organization %VAR1% yet.</text>
     <text id="MEM_NOT_EDIT" development="new" translation="edited">Do not edit</text>
@@ -952,7 +952,7 @@
     <text id="SYS_CREATE" development="new" translation="edited">Create</text>
     <text id="SYS_CREATE_VAR" development="new" translation="edited">Create %VAR1%</text>
 	<text id="SYS_CREATE_NEW_USER" development="new" translation="edited">Add new user</text>
-    <text id="SYS_CREATE_NOT_FOUND_USER" development="new" translation="edited">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, kannst du diesen neu anlegen.</text>
+    <text id="SYS_CREATE_NOT_FOUND_USER" development="new" translation="edited">You will be able to create the new user If user is not listed among found users.</text>
 	<text id="SYS_CREATE_ROLE" development="new" translation="edited">Create role</text>
     <text id="SYS_CREATED_BY" development="new" translation="edited">Created by %VAR1% on %VAR2%</text>
     <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">No valid e-mail address has been provided!\n\nPlease provide an e-mail address  in your %VAR1%profile%VAR1%.</text>

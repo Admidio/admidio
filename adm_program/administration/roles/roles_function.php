@@ -68,7 +68,6 @@ if($req_rol_id > 0)
 }
 
 $_SESSION['roles_request'] = $_REQUEST;
-$msg_code = '';
 
 if($_GET['mode'] == 1)
 {
@@ -346,7 +345,8 @@ elseif($_GET['mode'] == 2)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
-    $msg_code = 'SYS_SAVE_DATA';
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 }
 elseif($_GET['mode'] == 3)
 {
@@ -358,6 +358,7 @@ elseif($_GET['mode'] == 3)
         $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_INACTIVE')));
 }
 elseif($_GET['mode'] == 4)
@@ -370,7 +371,8 @@ elseif($_GET['mode'] == 4)
         $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
-    $msg_code = 'SYS_DELETE_DATA';
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $g_message->show($g_l10n->get('SYS_DELETE_DATA'));
 }
 elseif($_GET['mode'] == 5)
 {
@@ -382,6 +384,7 @@ elseif($_GET['mode'] == 5)
         $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_ACTIVE')));
 }
 elseif($_GET['mode'] == 6)
@@ -406,7 +409,4 @@ elseif($_GET['mode'] == 8)
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
     $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_VISIBLE')));
 }
-
-$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($g_l10n->get($msg_code));
 ?>
