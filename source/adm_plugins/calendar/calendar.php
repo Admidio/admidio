@@ -224,7 +224,7 @@ if($plg_ter_aktiv == 1)
         $startDate = new DateTimeExtended($row['dat_begin'], 'Y-m-d H:i:s');
         $termin_id[$ter]       = $row['dat_id'];
         $termin_tag[$ter]      = $startDate->format('d');
-        $termin_uhr[$ter]      = $startDate->format('h:i');
+        $termin_uhr[$ter]      = $startDate->format($g_preferences['system_time']);
         $termin_ganztags[$ter] = $row['dat_all_day'];
         $termin_ort[$ter]      = $row['dat_location'];
         $termin_titel[$ter]    = $row['dat_headline'];
@@ -378,11 +378,11 @@ while($i<=$insgesamt)
                             }
                             if($termin_ganztags[$j] == 1)
                             {
-                                $ter_title = $termin_titel[$j].$termin_ort[$j].', ganzt&auml;gig';
+                                $ter_title = $termin_titel[$j].$termin_ort[$j].', '.$g_l10n->get('DAT_ALL_DAY');
                             }
                             else
                             {
-                                $ter_title = $termin_titel[$j].', '.$termin_uhr[$j].' Uhr'.$termin_ort[$j];
+                                $ter_title = $termin_titel[$j].', '.$termin_uhr[$j].' '.$g_l10n->get('SYS_CLOCK').$termin_ort[$j];
                             }
                         }
                     }
@@ -455,7 +455,7 @@ while($i<=$insgesamt)
                             $geb_title = $geb_title. ', ';
                         }
                         $geb_anzahl++;
-                        $geb_title = $geb_title. $geb_name[$k]. '('.$alter[$k].')';
+                        $geb_title = $geb_title. $geb_name[$k]. ' ('.$alter[$k].')';
                     }
                 }
             }

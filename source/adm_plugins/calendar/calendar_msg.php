@@ -114,11 +114,11 @@ if($termine_uebergabe == 1)
     {
         if($ort == '')
         {
-            echo $uhr. $g_l10n->get('PLG_CALENDAR_CLOCK').' </div>';
+            echo $uhr.' '.$g_l10n->get('SYS_CLOCK').' </div>';
         }
         else
         {
-            echo $uhr. ' '.$g_l10n->get('PLG_CALENDAR_CLOCK').', '.$ort.'</div>';
+            echo $uhr.' '.$g_l10n->get('SYS_CLOCK').', '.$ort.'</div>';
         }
     }
     if($weitere >> 0)
