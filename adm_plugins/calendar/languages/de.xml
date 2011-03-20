@@ -12,6 +12,5 @@
 		<text id="PLG_CALENDAR_MORE" development="new" translation="todo"> (... weitere)</text>
 		<text id="PLG_CALENDAR_CURRENT_MONTH" development="new" translation="todo">Aktueller Monat</text>
 		<text id="PLG_CALENDAR_FULLTIME" development="new" translation="todo">(ganztägiger Termin)</text>
-		<text id="PLG_CALENDAR_CLOCK" development="new" translation="todo">Uhr</text>
 	</version>
 </language>
