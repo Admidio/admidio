@@ -71,7 +71,7 @@ class TableRoles extends TableAccess
         $g_current_session->renewUserObject();
 
         // die Systemrollem duerfen nicht geloescht werden
-        if($this->getValue('rol_system') == true)
+        if($this->getValue('rol_system') == false)
         {
             $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
                         WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
