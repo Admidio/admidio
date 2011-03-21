@@ -83,7 +83,7 @@ if ($user_found >= 1)
     if($g_current_user->getValue('usr_number_invalid') >= 3)
     {
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-        if(time() - strtotime($g_current_session->getValue('ses_timestamp', 'Y-m-d H:i:s')) < 900)
+        if(time() - strtotime($g_current_user->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 900)
         {
             $g_message->show($g_l10n->get('SYS_LOGIN_FAILED'));
         }
