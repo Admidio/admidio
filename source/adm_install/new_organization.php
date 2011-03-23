@@ -228,7 +228,7 @@ elseif($req_mode == 4)
     }
 
     $message = '<strong>'.$g_l10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
-                '.$g_l10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_default.php').'<br /><br />
+                '.$g_l10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_example.php').'<br /><br />
 
                 <span class="iconTextLink">
                     <a href="new_organization.php?mode=5"><img

@@ -99,8 +99,6 @@ else
     $category->setValue('cat_type', $_GET['type']);
 }
 
-$err_code = '';
-
 if($_GET['mode'] == 1)
 {
     // Kategorie anlegen oder updaten
@@ -112,29 +110,27 @@ if($_GET['mode'] == 1)
         $g_message->show($g_l10n->get('SYS_FIELD_EMPTY',$g_l10n->get('SYS_NAME')));
     }
 
-    // Kategorie ist immer Orga-spezifisch, ausser manuell angelegte Orga-Felder-Kategorie
-    $check_all_orgas = false;
-
-    if(($_GET['type'] == 'USF' || $_GET['type'] == 'ROL')
-    && (isset($_POST['cat_org_id']) || $category->getValue('cat_system') == 1 || $g_current_organization->countAllRecords() == 1))
+    $search_orga = '';
+    
+    // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
+    // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
+    if(($_GET['type'] == 'USF' && (  isset($_POST['show_in_several_organizations']) 
+                                  || $g_current_organization->countAllRecords() == 1))
+    || ($_GET['type'] == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
     {
-        $_POST['cat_org_id'] = NULL;
-        $check_all_orgas = true;
+        $category->setValue('cat_org_id', '0');
+        $search_orga = ' AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                             OR cat_org_id IS NULL )';
     }
     else
     {
-        $_POST['cat_org_id'] = $g_current_organization->getValue('org_id');
+        $category->setValue('cat_org_id', $g_current_organization->getValue('org_id'));
+        $search_orga = ' AND cat_org_id  = '. $g_current_organization->getValue('org_id');
     }
 
     if($category->getValue('cat_name') != $_POST['cat_name'])
     {
         // Schauen, ob die Kategorie bereits existiert
-        $search_orga = '';
-        if($check_all_orgas == false)
-        {
-            $search_orga = ' AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
-                                 OR cat_org_id IS NULL )';
-        }
         $sql    = 'SELECT COUNT(*) as count
                      FROM '. TBL_CATEGORIES. '
                     WHERE cat_type = "'. $_GET['type']. '"
@@ -203,7 +199,9 @@ if($_GET['mode'] == 1)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    $err_code = 'SYS_SAVE_DATA';
+    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+
 }
 elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
 {
@@ -222,12 +220,14 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
 
         if($ret_code)
         {
-            $err_code = 'SYS_DELETE_DATA';
+            $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+            $g_message->show($g_l10n->get('SYS_DELETE_DATA'));
         }
         else
         {
             // Kategorie konnte nicht geloescht werden, da evtl. die letzte Kategorie fuer diesen Typ
-            $err_code = 'CAT_CATEGORY_NOT_DELETE';
+            $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+            $g_message->show($g_l10n->get('CAT_CATEGORY_NOT_DELETE'));
         }
     }
     elseif($_GET['mode'] == 3)
@@ -243,8 +243,4 @@ elseif($_GET['mode'] == 4)
     $category->moveSequence($_GET['sequence']);
     exit();
 }
-
-// zur Kategorienuebersicht zurueck
-$g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-$g_message->show($g_l10n->get($err_code));
 ?>

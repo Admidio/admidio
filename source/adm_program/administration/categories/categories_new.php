@@ -89,6 +89,10 @@ if(isset($_SESSION['categories_request']))
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
 	$category->setArray($_SESSION['categories_request']);
+	if(isset($_SESSION['categories_request']['show_in_several_organizations']) == false)
+	{
+	   $category->setValue('cat_org_id', $g_current_organization->getValue('org_id'));
+	}
     unset($_SESSION['categories_request']);
 }
 
@@ -147,13 +151,13 @@ echo '
                         <dl>
                             <dt>&nbsp;</dt>
                             <dd>
-                                <input type="checkbox" id="cat_org_id" name="cat_org_id" tabindex="3" ';
+                                <input type="checkbox" id="show_in_several_organizations" name="show_in_several_organizations" tabindex="3" ';
                                 if($category->getValue('cat_org_id') == 0)
                                 {
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                                <label for=\"cat_org_id\">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
+                                <label for="show_in_several_organizations">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
                                 <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=CAT_CATEGORY_GLOBAL&amp;inline=true"><img 
                                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=CAT_CATEGORY_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
