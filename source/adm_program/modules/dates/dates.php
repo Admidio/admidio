@@ -291,6 +291,8 @@ $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.me
           LEFT JOIN '. TBL_MEMBERS. ' mem
             ON mem.mem_usr_id = '.$g_current_user->getValue('usr_id').'
            AND mem.mem_rol_id = dat_rol_id
+           AND mem_begin <= "'.DATE_NOW.'"
+           AND mem_end    > "'.DATE_NOW.'"
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                OR (   dat_global   = 1
