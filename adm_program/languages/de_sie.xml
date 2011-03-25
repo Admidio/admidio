@@ -850,7 +850,7 @@
     <text id="ROL_SEMIYEARLY" development="new" translation="todo">Halbjährlich</text>
     <text id="ROL_SEND_MAIL_GUESTS" development="new" translation="todo">Alle Besucher der Webseite dürfen E-Mails an diese Rolle schreiben.</text>
     <text id="ROL_SEND_MAIL_MEMBERS" development="new" translation="todo">Eingeloggte Benutzer dürfen E-Mails an diese Rolle schreiben.</text>
-    <text id="ROL_SEND_MAIL_ROLE" development="new" translation="todo">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreieben.</text>
+    <text id="ROL_SEND_MAIL_ROLE" development="new" translation="todo">Nur Mitglieder dieser Rolle dürfen E-Mails an sie schreiben.</text>
     <text id="ROL_SEND_MAILS" development="new" translation="todo">E-Mails zusenden</text>
     <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="todo">Rolle unsichtbar machen</text>
     <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="todo">Rolle sichtbar machen</text>
