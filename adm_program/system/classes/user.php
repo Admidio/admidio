@@ -189,6 +189,7 @@ class User extends TableUsers
         // Arrays initialisieren
         $this->roles_rights = array();
         $this->list_view_rights = array();
+        $this->role_mail_rights = array();
     }
     
     // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
