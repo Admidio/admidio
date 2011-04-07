@@ -169,7 +169,7 @@ if($show == 2)
 	else
 	{
 		if(BETA_VERSION > 0) {$versionstext_beta = 'Beta ';}
-		else {$versionstext_beta = '';}
+		else {$versionstext_beta = ' ';}
 		$versionstext = '<img style="vertical-align: middle;" src="'. THEME_PATH. '/icons/ok.png" alt="Ok" /> '.$g_l10n->get('UPD_NO_NEW', $versionstext_beta);
 	}
 
