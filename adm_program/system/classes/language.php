@@ -224,7 +224,7 @@ class Language
         {
             $this->language = $language;
             $languageFile = $this->languageFilePath.'/'.$language.'.xml';
-            error_log($languageFile);
+
 			if(file_exists($languageFile))
 			{
 				$this->l10nObject = new SimpleXMLElement($languageFile, 0, true);
