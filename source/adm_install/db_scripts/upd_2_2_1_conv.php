@@ -28,7 +28,8 @@ foreach($g_l10n->getCountries() as $key => $value)
 	if($g_preferences['default_country'] == $value)
 	{
 		$sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = "'.$key.'" 
-		         WHERE prf_name LIKE "default_country" ';
+		         WHERE prf_name  LIKE "default_country"
+		           AND prf_value LIKE "'.$value.'"';
 		$g_db->query($sql);
 	}
 }
@@ -47,7 +48,8 @@ while($row_countries = $g_db->fetch_array($result_countries))
 		if($row_countries['usd_value'] == $value)
 		{
 			$sql = 'UPDATE '.TBL_USER_DATA.' SET usd_value = "'.$key.'" 
-					 WHERE usd_usf_id = '.$row_countries['usd_usf_id'];
+					 WHERE usd_usf_id = '.$row_countries['usd_usf_id'].'
+					   AND usd_value LIKE "'.$value.'"';
 			$g_db->query($sql);
 		}
 	} 
@@ -65,7 +67,8 @@ while($row_countries = $g_db->fetch_array($result_countries))
 		if($row_countries['dat_country'] == $value)
 		{
 			$sql = 'UPDATE '.TBL_DATES.' SET dat_country = "'.$key.'" 
-					 WHERE dat_id = '.$row_countries['dat_id'];
+					 WHERE dat_id = '.$row_countries['dat_id'].'
+					   AND usd_value LIKE "'.$value.'"';
 			$g_db->query($sql);
 		}
 	} 
