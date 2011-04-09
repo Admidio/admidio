@@ -536,9 +536,9 @@ INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
  (98,209,1,'Baumgarten'),
  (99,209,2,'Dalton'),
  (100,209,3,'Blumenwiese 30'),
- (101,209,4,'12345'),
- (102,209,5,'Müllerhausen'),
- (103,209,6,'DEU'),
+ (101,209,4,'4711'),
+ (102,209,5,'Bergdorf'),
+ (103,209,6,'CHE'),
  (104,209,7,'0882-2255773'),
  (105,209,8,'0177-457412'),
  (106,209,10,'1988-01-08'),
@@ -548,9 +548,9 @@ INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
  (110,210,1,'Báierle'),
  (111,210,2,'Damasus'),
  (112,210,3,'Blumenwiese 31'),
- (113,210,4,'12345'),
- (114,210,5,'Müllerhausen'),
- (115,210,6,'DEU'),
+ (113,210,4,'4711'),
+ (114,210,5,'Bergdorf'),
+ (115,210,6,'CHE'),
  (116,210,7,'0883-2255773'),
  (117,210,8,'0178-457412'),
  (118,210,10,'1988-01-09'),
@@ -774,9 +774,9 @@ INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
  (336,229,1,'Bohlen'),
  (337,229,2,'Dario'),
  (338,229,3,'Blumenwiese 50'),
- (339,229,4,'12345'),
- (340,229,5,'Müllerhausen'),
- (341,229,6,'DEU'),
+ (339,229,4,'B5563'),
+ (340,229,5,'Brüssel'),
+ (341,229,6,'BEL'),
  (342,229,7,'0902-2255773'),
  (343,229,8,'0197-457412'),
  (344,229,10,'1988-01-28'),
@@ -798,9 +798,9 @@ INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
  (360,231,1,'Borchers'),
  (361,231,2,'Darla'),
  (362,231,3,'Blumenwiese 52'),
- (363,231,4,'12345'),
- (364,231,5,'Müllerhausen'),
- (365,231,6,'DEU'),
+ (363,231,4,'B5563'),
+ (364,231,5,'Brüssel'),
+ (365,231,6,'BEL'),
  (366,231,7,'0904-2255773'),
  (367,231,8,'0199-457412'),
  (368,231,10,'1988-01-30'),
@@ -2522,15 +2522,15 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `%PREFIX%_guestbook` DISABLE KEYS */;
 LOCK TABLES `%PREFIX%_guestbook` WRITE;
-INSERT INTO `%PREFIX%_guestbook` VALUES  (1,1,1,'Heinz Webmaster','Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.','webmaster@admidio.org','http://www.admidio.org',concat(date_add(date(sysdate()), interval -14 day),' 12:14:42'),'84.63.38.55',0,NULL,NULL),
- (2,1,NULL,'Sepp Mayerchen','Dann werde ich mir das Programm mal anschauen.',NULL,NULL,concat(date_add(date(sysdate()), interval -5 day),' 20:16:42'),'84.63.38.55',0,NULL,NULL);
+INSERT INTO `%PREFIX%_guestbook` VALUES  (1,1,'Heinz Webmaster','Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.','webmaster@admidio.org','http://www.admidio.org','84.63.38.55',0,1,concat(date_add(date(sysdate()), interval -14 day),' 12:14:42'),NULL,NULL),
+ (2,1,'Sepp Mayerchen','Dann werde ich mir das Programm mal anschauen.',NULL,NULL,'84.63.38.55',0,NULL,concat(date_add(date(sysdate()), interval -5 day),' 20:16:42'),NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PREFIX%_guestbook` ENABLE KEYS */;
 
 
 /*!40000 ALTER TABLE `%PREFIX%_guestbook_comments` DISABLE KEYS */;
 LOCK TABLES `%PREFIX%_guestbook_comments` WRITE;
-INSERT INTO `%PREFIX%_guestbook_comments` VALUES  (1,2,1,'Heinz Webmaster','Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.','webmaster@admidio.org',concat(date_add(date(sysdate()), interval -4 day),' 16:23:12'),'84.63.38.55',0,NULL,NULL);
+INSERT INTO `%PREFIX%_guestbook_comments` VALUES  (1,2,'Heinz Webmaster','Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.','webmaster@admidio.org','84.63.38.55',0,1,concat(date_add(date(sysdate()), interval -4 day),' 16:23:12'),NULL,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PREFIX%_guestbook_comments` ENABLE KEYS */;
 
