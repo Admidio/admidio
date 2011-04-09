@@ -414,7 +414,7 @@ create table %PREFIX%_lists
    lst_default                    tinyint(1) unsigned            not null default 0,
    primary key (lst_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
@@ -443,7 +443,7 @@ create table %PREFIX%_list_columns
    lsc_filter                     varchar(255),
    primary key (lsc_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
