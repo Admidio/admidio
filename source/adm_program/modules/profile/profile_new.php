@@ -170,7 +170,7 @@ function getFieldCode($field, $user, $new_user)
         //Laenderliste oeffnen
 		$countries = $g_l10n->getCountries();
         $value = '
-		<select size="1" id="default_country" name="default_country">
+		<select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '">
 			<option value="" ';
                 if(strlen($g_preferences['default_country']) == 0
                 && strlen($field->getValue('usd_value')) == 0)
