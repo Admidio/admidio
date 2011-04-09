@@ -138,7 +138,7 @@ create table %PREFIX%_lists
    lst_default                    tinyint(1) unsigned            not null default 0,
    primary key (lst_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
@@ -165,7 +165,7 @@ create table %PREFIX%_list_columns
    lsc_filter                     varchar(255),
    primary key (lsc_id)
 )
-type = InnoDB
+engine = InnoDB
 auto_increment = 1;
 
 -- Index
