@@ -68,7 +68,7 @@ while($row_countries = $g_db->fetch_array($result_countries))
 		{
 			$sql = 'UPDATE '.TBL_DATES.' SET dat_country = "'.$key.'" 
 					 WHERE dat_id = '.$row_countries['dat_id'].'
-					   AND usd_value LIKE "'.$value.'"';
+					   AND dat_country LIKE "'.$value.'"';
 			$g_db->query($sql);
 		}
 	} 
