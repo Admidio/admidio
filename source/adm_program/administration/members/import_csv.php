@@ -135,11 +135,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 {
                     if(strlen($col_value) > 0)
                     {
-                        $date = new DateTimeExtended($col_value, $g_preferences['system_date'], 'date');
-                        if($date->valid())
-                        {
-                            $user->setValue($field->getValue('usf_name_intern'), $date->format('Y-m-d'));
-                        }
+						$user->setValue($field->getValue('usf_name_intern'), $col_value);
                     }
                 }
                 elseif($field->getValue('usf_type') == 'EMAIL')
@@ -147,7 +143,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     $col_value = admStrToLower($col_value);
                     if(strValidCharacters($col_value, 'email'))
                     {
-                        $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 50));
+                        $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
                     }
                 }
                 elseif($field->getValue('usf_type') == 'INTEGER')
@@ -159,6 +155,10 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     }
                 }
                 elseif($field->getValue('usf_type') == 'TEXT_BIG')
+                {
+                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
+                }
+                elseif($field->getValue('usf_type') == 'URL')
                 {
                     $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
                 }
@@ -208,7 +208,14 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 {
                     if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
                     {
-                        $duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern));
+						if($duplicate_user->getProperty($field_name_intern, 'usf_type') == 'DATE')
+						{
+							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $g_preferences['system_date']));
+						}
+						else
+						{
+							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern));
+						}
                     }
                 }
                 $user = $duplicate_user;
