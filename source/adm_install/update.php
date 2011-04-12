@@ -46,7 +46,6 @@ if(!isset($g_db_type))
 require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 
@@ -75,14 +74,17 @@ $g_l10n = new Language($g_preferences['system_language']);
 
 $message = '';
 
+//Datenbank- und PHP-Version prüfen
+if(checkVersions($g_db, $message) == false)
+{
+	showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'), 2);
+}
+
+// diese Scripte nutzen PHP5-Funktionen, deshalb erst nach Versionscheck einbinden
+require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
+
 if($req_mode == 1)
 {
-    //Datenbank- und PHP-Version prüfen
-    if(checkVersions($g_db, $message) == false)
-    {
-        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'), 2);
-    }
-
     // pruefen, ob ein Update ueberhaupt notwendig ist
     if(isset($g_preferences['db_version']) == false)
     {

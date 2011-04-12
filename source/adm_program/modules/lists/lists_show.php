@@ -678,11 +678,11 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             {
                                 if($req_mode == 'html')
                                 {
-                                    $content = '<a href="'. $row[$sql_column_number]. '" target="_blank">'. substr($row[$sql_column_number], 7). '</a>';
+                                    $content = '<a href="'.$row[$sql_column_number].'" target="_blank">'.$row[$sql_column_number].'</a>';
                                 }
                                 else
                                 {
-                                    $content = substr($row[$sql_column_number], 7);
+                                    $content = $row[$sql_column_number];
                                 }
                             }
                             break;
