@@ -215,7 +215,7 @@ echo '<h1>'. $g_layout['title']. '</h1>';
 echo '
 <form id="memsearch_form">
     <ul class="iconTextLinkList">
-        <li>'.$g_l10n->get('MEM_SEARCH').'<input type="text" name="mem_search" id="mem_search" /></li>
+        <li>'.$g_l10n->get('SYS_SEARCH').': <input type="text" name="mem_search" id="mem_search" /></li>
         <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$g_l10n->get('MEM_SHOW_ALL_USERS').'</lable></li>
         <li>
 	        <span class="iconTextLink" id="add_user_link" style="display: none;">

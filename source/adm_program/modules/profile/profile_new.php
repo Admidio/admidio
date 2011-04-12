@@ -168,7 +168,6 @@ function getFieldCode($field, $user, $new_user)
     elseif($field->getValue('usf_name_intern') == 'COUNTRY')
     {
         //Laenderliste oeffnen
-		$countries = $g_l10n->getCountries();
         $value = '
 		<select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '">
 			<option value="" ';
@@ -181,7 +180,7 @@ function getFieldCode($field, $user, $new_user)
             if(strlen($g_preferences['default_country']) > 0)
             {
                 $value = $value. ' <option value="">--------------------------------</option>
-				<option value="'. $g_preferences['default_country']. '">'. $countries[$g_preferences['default_country']]. '</option>
+				<option value="'. $g_preferences['default_country']. '">'. $g_l10n->getCountryByCode($g_preferences['default_country']). '</option>
                 <option value="">--------------------------------</option>';
             }
 			foreach($g_l10n->getCountries() as $key => $country_name)

@@ -574,6 +574,10 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                         }
                     }
                 }
+                elseif($usf_id == $g_current_user->getProperty('COUNTRY', 'usf_id'))
+				{
+					$content = $g_l10n->getCountryByCode($row[$sql_column_number]);
+				}
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
                     // Benutzerfoto anzeigen
