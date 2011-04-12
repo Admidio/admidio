@@ -221,7 +221,7 @@ function getFieldCode($field, $user, $new_user)
         elseif($field->getValue('usf_type') == 'EMAIL' || $field->getValue('usf_type') == 'URL')
         {
             $width     = '300px';
-            $maxlength = '50';
+            $maxlength = '255';
         }
         else
         {
