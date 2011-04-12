@@ -219,23 +219,23 @@ class User extends TableUsers
     // Methode gibt den Wert eines Profilfeldes zurueck
     // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
     // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    public function getProperty($field_name, $property)
+    public function getProperty($field_name, $property, $format = '')
     {
         if(isset($this->userFieldData[$field_name]))
         {
-            return $this->userFieldData[$field_name]->getValue($property);
+            return $this->userFieldData[$field_name]->getValue($property, $format);
         }
         return '';
     }
 
     // aehnlich getProperty, allerdings suche ueber usf_id
-    public function getPropertyById($field_id, $property)
+    public function getPropertyById($field_id, $property, $format = '')
     {
         foreach($this->userFieldData as $field)
         {
             if($field->getValue('usf_id') == $field_id)
             {
-                return $field->getValue($property);
+                return $field->getValue($property, $format);
             }
         }
         return '';
@@ -251,7 +251,7 @@ class User extends TableUsers
         }
         else
         {
-            return $this->getProperty($field_name, 'usd_value');
+            return $this->getProperty($field_name, 'usd_value', $format);
         }
     }
 
