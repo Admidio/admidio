@@ -108,6 +108,10 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                         $user->setValue($field->getValue('usf_name_intern'), '2');
                     }
                 }
+                elseif($field->getValue('usf_name_intern') == 'COUNTRY')
+				{
+					$user->setValue($field->getValue('usf_name_intern'), $g_l10n->getCountryByName($col_value));
+				}
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
                     if($col_value_to_lower == 'j'

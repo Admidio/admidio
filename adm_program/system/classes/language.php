@@ -22,6 +22,10 @@
  * getCountries() 
  *         - liefert ein Array mit allen Laendern und Laendercodes zurueck
  *         - Beispiel: array('DEU' => 'Deutschland' ...)
+ * getCountryByCode($isoCode)
+ *         - Land sprachabhaengig nach Uebergabe des ISO-Codes ausgeben
+ * getCountryByName($country)
+ *         - Land sprachabhaengig nach Uebergabe des ISO-Codes ausgeben
  * getLanguages()
  *         - liefert ein Array mit allen Sprachen und Sprachcodes zurueck, 
  *         - fuer die Admidio-Uebersetzungen zur Verfuegung stehen
@@ -185,6 +189,26 @@ class Language
 			}
 		}
 		return $this->countries;
+	}
+	
+	// Land sprachabhaengig nach Uebergabe des ISO-Codes ausgeben
+	public function getCountryByCode($isoCode)
+	{
+		if(count($this->countries) == 0)
+		{
+			$this->getCountries();
+		}
+		return $this->countries[$isoCode];
+	}
+	
+	// Land sprachabhaengig nach Uebergabe des ISO-Codes ausgeben
+	public function getCountryByName($country)
+	{
+		if(count($this->countries) == 0)
+		{
+			$this->getCountries();
+		}
+		return array_search($country, $this->countries);
 	}
 
 	// liefert ein Array mit allen Sprachen und Sprachcodes zurueck, 
