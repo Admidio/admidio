@@ -490,7 +490,8 @@
     <text id="MEM_REMOVE_USER_DESC" development="new" translation="todo">Wenn du %VAR1_BOLD% auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</text>
     <text id="MEM_REPLACE" development="new" translation="todo">Ersetzen</text>
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="todo">Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.\nBitte wähle eine andere Rolle aus.</text>
-    <text id="MEM_SEND_NEW_LOGIN" development="new" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem Benutzernamen und einem neuen Passwort zumailen?</text>
+    <text id="MEM_SEARCH" development="new" translation="edited">Suche: </text>
+	<text id="MEM_SEND_NEW_LOGIN" development="new" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="todo">E-Mail mit Benutzernamen und neuem Passwort zuschicken</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="todo">Alle Benutzer anzeigen</text>
     <text id="MEM_SHOW_MEMBERS" development="new" translation="todo">Momentan werden nur aktive Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.</text>

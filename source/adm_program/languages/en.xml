@@ -499,7 +499,8 @@
     <text id="MEM_REMOVE_USER_DESC" development="new" translation="edited">By choosing %VAR1_BOLD%, all data will be deleted and this information wont be available anymore.</text>
     <text id="MEM_REPLACE" development="new" translation="edited">Replace</text>
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="edited">You do not have permission to select role %VAR1%.\nPlease try to select another role.</text>
-    <text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Would you like to e-mail %VAR1_BOLD% new user name and password?</text>
+    <text id="MEM_SEARCH" development="new" translation="edited">Search: </text>
+	<text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Would you like to e-mail %VAR1_BOLD% new user name and password?</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Send e-mail with user name and password.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Display all users</text>
     <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Only active members are displayed. Click here to see all members registered in the database.</text>
