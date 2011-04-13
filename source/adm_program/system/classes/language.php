@@ -155,7 +155,6 @@ class Language
 				$text = '#undefined text#';
 			}
         }
-        // Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
         return $text;
     }
 
