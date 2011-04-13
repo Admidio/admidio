@@ -131,13 +131,6 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                         $user->setValue($field->getValue('usf_name_intern'), '0');
                     }
                 }
-                elseif($field->getValue('usf_type') == 'DATE')
-                {
-                    if(strlen($col_value) > 0)
-                    {
-						$user->setValue($field->getValue('usf_name_intern'), $col_value);
-                    }
-                }
                 elseif($field->getValue('usf_type') == 'EMAIL')
                 {
                     $col_value = admStrToLower($col_value);
@@ -154,17 +147,13 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                         $user->setValue($field->getValue('usf_name_intern'), $col_value);
                     }
                 }
-                elseif($field->getValue('usf_type') == 'TEXT_BIG')
+                elseif($field->getValue('usf_type') == 'TEXT')
                 {
-                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
-                }
-                elseif($field->getValue('usf_type') == 'URL')
-                {
-                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
+                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 50));
                 }
                 else
                 {
-                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 50));
+                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
                 }
             }
         }
