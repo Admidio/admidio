@@ -407,7 +407,7 @@ echo '
                     echo '
                     <li>
                         <dl>
-                            <dt><label for="add_attachment">Anhang:</label></dt>
+                            <dt><label for="add_attachment">'.$g_l10n->get('MAI_ATTACHEMENT').'</label></dt>
                             <dd id="attachments">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="' . ($g_preferences['max_email_attachment_size'] * 1024) . '" />
                                 <span id="add_attachment" class="iconTextLink" style="display: block;">
