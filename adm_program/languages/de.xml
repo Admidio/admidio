@@ -435,6 +435,7 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="todo">Mailmodul aktivieren</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="todo">Das Mailmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="todo">Anhang hinzufügen</text>
+	<text id="MAI_ATTACHEMENT" development="new" translation="todo">Anhang:</text>
     <text id="MAI_ATTACHMENT_SIZE" development="new" translation="todo">Maximale Dateigröße für Anhänge</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="todo">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>

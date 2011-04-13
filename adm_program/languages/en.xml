@@ -444,10 +444,11 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Activating e-mail module</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail module can be deactivated by unchecking the check box. After deactivation, the module will be unavailable in the module overview panel as well. When server does not support sending e-mails, please deactivate the module. (default: active)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Attach file</text>
-    <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum size of e-mail attachments</text>
+    <text id="MAI_ATTACHEMENT" development="new" translation="todo">Attachment:</text>
+	<text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum size of e-mail attachments</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Users are able to attach files of smaller size than the value defined here. When value is 0, attachments can not be sent. (default: 1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">E-mail attachment upload error.\nFile size is most likely to large!</text>
-<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">When option is activated, logged in users will receive a picture with a captcha code or a simple calculation. It's necessary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (default: yes)</text>
+	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">When option is activated, logged in users will receive a picture with a captcha code or a simple calculation. It's necessary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (default: yes)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Please select a role as recipient of the e-mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Number if BCC recipients</text>
     <text id="MAI_COUNT_BCC_DESC" development="new" translation="edited">Define here how many BCC recipients per mail can be added. (default: 50)</text>
