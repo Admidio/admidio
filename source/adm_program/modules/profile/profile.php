@@ -386,7 +386,7 @@ echo '
                                                             if(strlen($user->getValue('COUNTRY')) > 0
                                                             && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('COUNTRY', 'usf_hidden') == 0))
                                                             {
-																$country    = $g_l10n->getCountryByCode($user->getValue('COUNTRY'));
+																$country    = $user->getValue('COUNTRY');
                                                                 $address   .= '<div>'.$country. '</div>';
                                                                 $map_url   .= ',%20'. urlencode($country);
                                                                 $route_url .= ',%20'. urlencode($country);
