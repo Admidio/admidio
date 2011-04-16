@@ -78,13 +78,22 @@ class TableUserData extends TableAccess
     public function getValue($field_name, $format = '')
     {
         $value = parent::getValue($field_name, $format);
-        
-        // ist das Feld ein Datumsfeld, dann das Datum formatieren
-        if($this->dbColumns['usf_type'] == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
+
+        if($field_name == 'usd_value')
         {
-            $dateArray = preg_split('/[- :]/', $value);
-            $timestamp = @mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
-            $value = date($format, $timestamp);
+            if($this->dbColumns['usf_type'] == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
+            {
+                // ist das Feld ein Datumsfeld, dann das Datum formatieren
+                $dateArray = preg_split('/[- :]/', $value);
+                $timestamp = @mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
+                $value = date($format, $timestamp);
+            }
+            elseif($this->dbColumns['usf_name_intern'] == 'COUNTRY' && strlen($value) > 0)
+            {
+                // beim Land die sprachabhaengige Bezeichnung auslesen
+                global $g_l10n;
+                $value = $g_l10n->getCountryByCode($value);
+            }
         }
         return $value;
     }
