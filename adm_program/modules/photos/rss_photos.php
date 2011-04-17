@@ -116,7 +116,7 @@ while ($row = $g_db->fetch_array($result))
         $description = $description. '<br /><br />'.$g_l10n->get('SYS_PREVIEW').':<br />';
         for($bild=$photo_album->getValue('pho_quantity'); $bild>=$photo_album->getValue('pho_quantity')-4 && $bild>0; $bild--)
         {
-            $bildpfad = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id').'/'.$bild.'.jpg';
+            $bildpfad = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$bild.'.jpg';
             //Zu Sicherheit noch überwachen ob das Foto existiert, wenn ja raus damit
             if (file_exists($bildpfad))
             {

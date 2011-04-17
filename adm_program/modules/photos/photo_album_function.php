@@ -65,7 +65,7 @@ if($_GET['job'] != 'new')
 }
 
 //Speicherort mit dem Pfad aus der Datenbank
-$ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin').'_'.$photo_album->getValue('pho_id');
+$ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
 if(isset($_POST['submit']) && $_POST['submit'])
