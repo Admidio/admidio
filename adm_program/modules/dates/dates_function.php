@@ -61,7 +61,7 @@ if(isset($_GET['dat_id']))
 }
 
 if(is_numeric($_GET['mode']) == false
-    || $_GET['mode'] < 1 || $_GET['mode'] > 5)
+    || $_GET['mode'] < 1 || $_GET['mode'] > 6)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -453,7 +453,7 @@ elseif($_GET['mode'] == 5)  // Eintrag fuer Sichtbarkeit erzeugen
 elseif($_GET['mode'] == 6)  // Termin im iCal-Format exportieren
 {
     header('Content-Type: text/calendar');
-    header('Content-Disposition: attachment; filename='. $date->getValue('dat_headline'). '.ics');
+    header('Content-Disposition: attachment; filename='. urlencode($date->getValue('dat_headline')). '.ics');
 
     echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();

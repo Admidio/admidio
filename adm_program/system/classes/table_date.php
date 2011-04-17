@@ -175,6 +175,13 @@ class TableDate extends TableAccess
             $value = parent::getValue($field_name, $format);
         }
 
+        if($field_name == 'dat_country' && strlen($value) > 0)
+        {
+            // beim Land die sprachabhaengige Bezeichnung auslesen
+            global $g_l10n;
+            $value = $g_l10n->getCountryByCode($value);
+        }
+
         return $value;
     }
 

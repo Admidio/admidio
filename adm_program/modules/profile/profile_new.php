@@ -190,7 +190,7 @@ function getFieldCode($field, $user, $new_user)
 				{
 					$value = $value. ' selected="selected" ';
 				}
-				if(!$new_user > 0 && $key == $field->getValue('usd_value'))
+				if(!$new_user > 0 && $country_name == $field->getValue('usd_value'))
 				{
 					$value = $value. ' selected="selected" ';
 				}
