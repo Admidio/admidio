@@ -34,13 +34,6 @@ else
     
     $message_code = strStripTags($_GET['message_code']);
     $show_time = 2000;
-    
-    if($g_preferences['enable_forum_interface'])
-    {
-        // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
-        $g_message->addVariableContent($g_current_user->getValue('usr_login_name'));
-        $g_message->addVariableContent($g_forum->sitename);
-    }
 
     if($message_code != 'SYS_LOGIN_SUCCESSFUL' && $message_code != 'SYS_FORUM_LOGIN_SUCCESSFUL')
     {
@@ -55,6 +48,15 @@ else
     }
     $g_message->setForwardUrl($_SESSION['login_forward_url'], $show_time);
     unset($_SESSION['login_forward_url']);  
-    $g_message->show($g_l10n->get($message_code));
+    
+    if($g_preferences['enable_forum_interface'])
+    {
+        // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
+        $g_message->show($g_l10n->get($message_code, $g_current_user->getValue('usr_login_name'), $g_forum->sitename));
+    }
+    else
+    {
+        $g_message->show($g_l10n->get($message_code));
+    }
 }
 ?>
