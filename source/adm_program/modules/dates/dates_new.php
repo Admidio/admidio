@@ -535,7 +535,7 @@ echo '
             </li>';
             if($g_preferences['dates_show_map_link'])
             {
-                if(strlen($date->getValue('dat_country')) == 0)
+                if(strlen($date->getValue('dat_country')) == 0 && $req_dat_id == 0)
                 {
                     $date->setValue('dat_country', $g_preferences['default_country']);
                 }
@@ -548,7 +548,7 @@ echo '
 								foreach($g_l10n->getCountries() as $key => $value)
 								{
 									echo '<option value="'.$key.'" ';
-									if($key == $date->getValue('dat_country'))
+									if($value == $date->getValue('dat_country'))
 									{
 										echo ' selected="selected" ';
 									}

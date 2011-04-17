@@ -487,7 +487,7 @@ else
                         if(strlen($date->getValue('dat_country')) > 0)
                         {
                             // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
-                            $location_url .= ',%20'. $g_l10n->getCountryByCode($date->getValue('dat_country'));
+                            $location_url .= ',%20'. $date->getValue('dat_country');
                         }
                         $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$g_l10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
