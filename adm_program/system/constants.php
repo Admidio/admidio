@@ -13,9 +13,11 @@ if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
     die('This page may not be called directly !');
 }
 
-// Admidio-Versionsnummern und Flags bitte nicht aendern !!!
+// !!! Please do not edit these version numbers !!!
 define('ADMIDIO_VERSION', '2.3.0');
 define('BETA_VERSION', '1');
+define('MIN_PHP_VERSION', '5.2.0');
+define('MIN_MYSQL_VERSION', '4.1.0');
 
 if(BETA_VERSION > 0)
 {
