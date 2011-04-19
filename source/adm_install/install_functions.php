@@ -112,32 +112,30 @@ function checkVersions(&$db, &$message)
 {
     global $g_l10n;
     $message = '';
-    $min_mysql_version = '4.1.0';
-    $min_php_version   = '5.2.0';
 
     // Datenbank pruefen
-    if(version_compare($db->server_info(), $min_mysql_version) == -1)
+    if(version_compare($db->server_info(), MIN_MYSQL_VERSION) == -1)
     {
         $message = $message. ' 
         <li>
             <dl>
                 <dt>'.$g_l10n->get('INS_MYSQL_VERSION').':</dt>
                 <dd><strong>'.$db->server_info().'</strong><br />'.
-                    $g_l10n->get('INS_PHP_WRONG_PHP_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, $min_mysql_version, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
+                    $g_l10n->get('INS_PHP_WRONG_PHP_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, MIN_MYSQL_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
                 '</dd>
             </dl>
         </li>';
     }
 
     // PHP pruefen
-    if(version_compare(phpversion(), $min_php_version) == -1)
+    if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
     {
         $message = $message. ' 
         <li>
             <dl>
                 <dt>'.$g_l10n->get('INS_PHP_VERSION').':</dt>
                 <dd><strong>'.phpversion().'</strong><br />'.
-                    $g_l10n->get('INS_PHP_WRONG_PHP_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, $min_php_version, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
+                    $g_l10n->get('INS_PHP_WRONG_PHP_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, MIN_PHP_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
                 '</dd>
             </dl>
         </li>';

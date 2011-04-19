@@ -332,7 +332,7 @@ elseif($req_mode == 6)
     foreach($systemmails_texts as $key => $value)
     {
         // <br /> muessen zu normalen Zeilenumbruechen umgewandelt werden
-        $value = eregi_replace('<br[[:space:]]*/?[[:space:]]*>',chr(13).chr(10),$value);
+        $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$value);
 
         $text->clear();
         $text->setValue('txt_name', $key);

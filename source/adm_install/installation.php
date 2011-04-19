@@ -46,6 +46,14 @@ $admidio_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1);
 
 // Konstanten und Konfigurationsdatei einbinden
 require_once($admidio_path. '/adm_program/system/constants.php');
+
+// PHP-Version pruefen und ggf. mit Hinweis abbrechen
+if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
+{
+    die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill 
+		the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or more highly.</div>');
+}
+
 require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
@@ -559,7 +567,7 @@ elseif($req_mode == 8)
     foreach($systemmails_texts as $key => $value)
     {
         // <br /> muessen zu normalen Zeilenumbruechen umgewandelt werden
-        $value = eregi_replace('<br[[:space:]]*/?[[:space:]]*>',chr(13).chr(10),$value);
+        $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$value);
 
         $text->clear();
         $text->setValue('txt_name', $key);

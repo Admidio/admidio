@@ -1647,10 +1647,10 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="weblinks_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
+                            <dt><label for="dates_per_page">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
                             <dd>
-                                <input type="text" id="weblinks_per_page" name="weblinks_per_page"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_per_page']. '" />
+                                <input type="text" id="dates_per_page" name="dates_per_page"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['dates_per_page']. '" />
                             </dd>
                         </dl>
                     </li>

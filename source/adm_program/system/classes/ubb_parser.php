@@ -54,7 +54,6 @@ function ubbtexthandler($text, $this = null)
   global $g_root_path;
 
   //$text = htmlspecialchars($text);
-  if(is_object($this)) if(strpos(strtolower($text), '/me') > 0) $text = eregi_replace("([^[])/me([^\n\r$]*)([\n\r$])", "\\1<span class=\"me\">*".$this->username." \\2 *</span>\\3", $text);
   $text = nl2br($text);
 
   //echo '<div>'.htmlspecialchars($text).'</div>';
@@ -137,26 +136,16 @@ function _quickerUBB_isTextTag($tag)
 * site admin messages and which allowes html input, using the
 * [html]html code[/html] tag.
 *
-* When using the /me tag (which will automatically be
-* replace to a [me=username][/me] structure), you should use
-* $parser->setUsername('username') first.
 */
 
 class ubbParser
 {
   var $usedTags;
-  var $username;
-
-  function setUsername($username)
-  {
-    $this->username = eregi_replace('([^a-z0-9_~]*)', '', $username);
-  }
 
   function ubbParser()
   {
     $this->usedTags = array();
     $this->textTags = array();
-    $this->username = '';
     $methods = get_class_methods(get_class($this));
     foreach($methods as $m)
     {
@@ -171,7 +160,6 @@ class ubbParser
 
   function parse($text)
   {
-     if(strpos(strtolower($text), '/me') > 0) $text = eregi_replace("([^[])/me([^\n\r$]*)([\n\r$])", "\\1[me=".$this->username."]\\2[/me]\\3", $text);
      $text = str_replace('[*]','[li]', $text);
      $text = str_replace('[/*]','[/li]', $text);
      $basetree = new stackItem();

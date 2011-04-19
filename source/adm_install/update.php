@@ -43,9 +43,17 @@ if(!isset($g_db_type))
     $g_db_type = 'mysql';
 }
 
+// PHP-Version pruefen und ggf. mit Hinweis abbrechen
+if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
+{
+    die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill 
+		the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or more highly.</div>');
+}
+
 require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 
@@ -79,9 +87,6 @@ if(checkVersions($g_db, $message) == false)
 {
 	showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $g_l10n->get('SYS_OVERVIEW'), 2);
 }
-
-// diese Scripte nutzen PHP5-Funktionen, deshalb erst nach Versionscheck einbinden
-require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 
 if($req_mode == 1)
 {
