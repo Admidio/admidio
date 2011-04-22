@@ -125,7 +125,7 @@
     <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Folder %VAR1% was renamed.</text>
     <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">An error occurred while folder %VAR1% was renamed.</text>
     <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Maximum file size</text>
-    <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default4000KB)</text>
+    <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Users are only allowed to upload files of smaller size than displayed here. In case of 0 upload is deactivated. (default: 3072KB)</text>
 	<text id="DOW_NEW_FILE_NAME" development="new" translation="edited">New file name</text>
 	<text id="DOW_NEW_NAME" development="new" translation="edited">New name</text>
     <text id="DOW_NO_ACCESS" development="new" translation="edited">Access denied</text>
@@ -365,6 +365,7 @@
     <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">No enabled lists available.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="edited">Would you like to load and change default configuration or to create new configuration?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choose role for selected list.</text>
+    <text id="LST_COLUMN" development="new" translation="todo">Column</text>    
     <text id="LST_CONFIGURATION" development="new" translation="edited">Configuration</text>
     <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="edited">Permission to use configuration for all members</text>
     <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="edited">Would you like to mark selected configuration as default configuration for this organization?</text>
@@ -582,7 +583,7 @@
     <text id="ORG_DATE_FORMAT_DESC" development="new" translation="edited">Format complies with PHP function %VAR1%. (default: d.m.Y)</text>
     <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="edited">Editing profile field</text>
     <text id="ORG_EMAIL_ALERTS" development="new" translation="edited">E-mail alert</text>
-    <text id="ORG_EMAIL_ALERTS" development="new" translation="edited">All members of all roles with permission %VAR1_BOLD% receive e-mail in case of new user registration. (default: yes)</text>
+    <text id="ORG_EMAIL_ALERTS_DESC" development="new" translation="edited">All members of all roles with permission %VAR1_BOLD% receive e-mail in case of new user registration. (default: yes)</text>
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="edited">Captcha activation</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="edited">RSS-Feed activation</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio is able to provide RSS-Feed service for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</text>
@@ -636,6 +637,8 @@
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">System information</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">System e-mail address</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Fill in the e-mail address of an administrator. This address will be used as sender address for system messages and for registration confirmations. (default: webmaster@%VAR1%)</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="edited">Notification for new entries</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="edited">You can activate email notification for new database entries in this modules. The administrator is informed by mail about new entries in the modules (only in case of new entries). The notification e-mail will be sent to the system mail address %VAR1%. (default: no)</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="edited">System message texts</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="edited">Please individualize all system message here. Texts have to paragraphs (subject &amp; content) which are identified by titles like #subject# and #content#. Content parts follow after this titles.\n\nEach message can have free space for current messages.</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="edited">Time format</text>
@@ -983,9 +986,6 @@
     <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail has been sent to %VAR1_BOLD%.</text>
     <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">E-mail to %VAR1_BOLD% could not be sent.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entry visible for multiple organizations</text>
-	<text id="SYS_EMAIL_NOTIFICATION_ACTIVATE" development="new" translation="edited">Activating e-mail notification</text>
-	<text id="SYS_EMAIL_NOTIFICATION_CONFIG" development="new" translation="edited">Configure e-mail notification</text>
-	<text id="SYS_EMAIL_NOTIFICATION_DESCRIPTION" development="new" translation="edited">You can activate email notification for new database entries in this modules. The administrator is informed by mail about new entries in the modules (only in case of new entries). The notification e-mail will be sent to the system mail address %VAR1%. (default: no)</text>
     <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
     <text id="SYS_ERROR" development="new" translation="edited">Error</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>

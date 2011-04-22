@@ -123,7 +123,7 @@
     <text id="DOW_FOLDER_RENAME" development="new" translation="todo">Der Ordner %VAR1% wurde umbenannt.</text>
     <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
     <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="todo">Maximale Dateigröße</text>
-    <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 4000KB)</text>
+    <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3072KB)</text>
 	<text id="DOW_NEW_FILE_NAME" development="new" translation="todo">Neuer Dateiname</text>
 	<text id="DOW_NEW_NAME" development="new" translation="todo">Neuer Name</text>
     <text id="DOW_NO_ACCESS" development="new" translation="todo">Kein Zugriff</text>
@@ -356,6 +356,7 @@
     <text id="LST_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="todo">Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="todo">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest.</text>
+    <text id="LST_COLUMN" development="new" translation="todo">Spalte</text>    
     <text id="LST_CONFIGURATION" development="new" translation="todo">Konfiguration</text>
     <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="todo">Konfiguration allen Benutzern zur Verfügung stellen</text>
     <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="todo">Willst du die aktuelle Listenkonfiguration zur neuen Standardkonfiguration dieser Organisation machen?</text>
@@ -570,7 +571,7 @@
     <text id="ORG_DATE_FORMAT_DESC" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: d.m.Y)</text>
     <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="todo">Profilfeld bearbeiten</text>
     <text id="ORG_EMAIL_ALERTS" development="new" translation="todo">E-Mail-Benachrichtigung</text>
-    <text id="ORG_EMAIL_ALERTS" development="new" translation="todo">Mitglieder aller Rollen mit der Berechtigung %VAR1_BOLD% erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</text>
+    <text id="ORG_EMAIL_ALERTS_DESC" development="new" translation="todo">Mitglieder aller Rollen mit der Berechtigung %VAR1_BOLD% erhalten eine E-Mail, sobald sich ein neuer User im System registriert hat. (Standard: ja)</text>
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="todo">Captcha aktivieren</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="todo">RSS-Feeds aktivieren</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="todo">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</text>
@@ -624,6 +625,8 @@
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="todo">Systemmailadresse</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systemnachrichten benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="todo">Benachrichtigung bei neuen Einträgen</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="todo">Hier kann die Email-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per Email benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Benachrichtigungs-Email wird an die Systemmailadresse %VAR1% versendet. (standard: nein)</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="todo">Systemmail-Texte</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="todo">Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
@@ -969,9 +972,6 @@
     <text id="SYS_EMAIL_SEND" development="new" translation="todo">Die E-Mail wurde an %VAR1_BOLD% versendet.</text>
     <text id="SYS_EMAIL_NOT_SEND" development="new" translation="todo">Die E-Mail konnte nicht an %VAR1_BOLD% gesendet werden.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="todo">Eintrag für mehrere Organisationen sichtbar</text>
-	<text id="SYS_EMAIL_NOTIFICATION_ACTIVATE" development="new" translation="todo">Email-Benachrichtigung aktivieren</text>
-	<text id="SYS_EMAIL_NOTIFICATION_CONFIG" development="new" translation="todo">Email-Benachrichtigung konfigurieren</text>
-	<text id="SYS_EMAIL_NOTIFICATION_DESCRIPTION" development="new" translation="todo">Hier kann die Email-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per Email benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Benachrichtigungs-Email wird an die Systemmailadresse %VAR1% versendet. (standard: nein)</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>

@@ -498,7 +498,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('ORG_EMAIL_ALERTS', $g_l10n->get('ROL_RIGHT_APPROVE_USERS')).'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_EMAIL_ALERTS_DESC', $g_l10n->get('ROL_RIGHT_APPROVE_USERS')).'</li>
                 </ul>
             </div>
         </div>';
@@ -1143,7 +1143,7 @@ echo '
                     <li class="smallFontSize">'.$g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                     <li>
                         <dl>
-                            <dt><label>'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_ACTIVATE').':</label></dt>
+                            <dt><label>'.$g_l10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_email_notification" name="enable_email_notification" ';
                                 if(isset($form_values['enable_email_notification']) && $form_values['enable_email_notification'] == 1)
@@ -1154,7 +1154,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$g_l10n->get('SYS_EMAIL_NOTIFICATION_DESCRIPTION', '<i>'.$g_preferences['email_administrator'].'</i>').'</li>
+                    <li class="smallFontSize">'.$g_l10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<i>'.$g_preferences['email_administrator'].'</i>').'</li>
                     <li>
                         <dl>
                             <dt><label>'.$g_l10n->get('ORG_SYSTEM_MAIL_TEXTS').':</label></dt>

@@ -203,7 +203,7 @@ else
                 JOIN '. TBL_USER_DATA. ' as email
                   ON email.usd_usr_id = usr_id
                  AND LENGTH(email.usd_value) > 0
-				JOIN adm_user_fields as field
+				JOIN '.TBL_USER_FIELDS.' as field
 				  ON field.usf_id = email.usd_usf_id
 				 AND field.usf_type = "EMAIL"
                 LEFT JOIN '. TBL_USER_DATA. ' as last_name
