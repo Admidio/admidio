@@ -392,7 +392,7 @@ elseif($req_mode == 6)
     $role_webmaster->setValue('rol_profile', 1);
     $role_webmaster->setValue('rol_this_list_view', 1);
     $role_webmaster->setValue('rol_all_lists_view', 1);
-    $role_webmaster->save(0);
+    $role_webmaster->save();
 
     // Mitglied
     $role_member = new TableRoles($db);
@@ -402,7 +402,7 @@ elseif($req_mode == 6)
     $role_member->setValue('rol_mail_this_role', 2);
     $role_member->setValue('rol_profile', 1);
     $role_member->setValue('rol_this_list_view', 1);
-    $role_member->save(0);
+    $role_member->save();
 
     // Vorstand
     $role_management = new TableRoles($db);
@@ -418,7 +418,7 @@ elseif($req_mode == 6)
     $role_management->setValue('rol_profile', 1);
     $role_management->setValue('rol_this_list_view', 1);
     $role_management->setValue('rol_all_lists_view', 1);
-    $role_management->save(0);
+    $role_management->save();
 
     // die Rolle Mitglied wird als Defaultrolle fuer neue User eingestellt
 	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = '. $role_member->getValue('rol_id'). '

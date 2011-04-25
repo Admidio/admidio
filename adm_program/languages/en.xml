@@ -430,7 +430,7 @@
     <text id="LST_SEARCH_TELEFON_EXAMPLE" development="new" translation="edited">*241* *54</text>
     <text id="LST_SEARCH_TELEFON_DESC" development="new" translation="edited">Searching for users with phone number including 241 and ending with 54</text>
     <text id="LST_SEARCH_YES_NO_FIELD" development="new" translation="edited">yes/no field</text>
-    <text id="LST_SEARCH_YES_NO_FIELD_DESC" development="new" translation="edited">Searching for flagged (check marked) users (</text>
+    <text id="LST_SEARCH_YES_NO_FIELD_DESC" development="new" translation="edited">Searching for flagged (check marked) users</text>
     <text id="LST_SET_COLUMNS" development="new" translation="edited">Define columns to show in list</text>
     <text id="LST_SHOW_LIST" development="new" translation="edited">Display list</text>
     <text id="LST_SHOW_LISTS" development="new" translation="edited">Display lists</text>
