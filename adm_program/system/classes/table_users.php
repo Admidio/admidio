@@ -32,7 +32,7 @@ class TableUsers extends TableAccess
     // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
     public function updateLoginData()
     {
-        $this->setValue('usr_last_login',   $this->getValue('usr_actual_login'));
+        $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
         $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
         $this->setValue('usr_actual_login', DATETIME_NOW);
         $this->setValue('usr_date_invalid', NULL);
