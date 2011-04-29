@@ -21,6 +21,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_roles.php');
@@ -104,10 +105,6 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     if(strlen($_POST['dat_headline']) == 0)
     {
         $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TITLE')));
-    }
-    if(strlen($_POST['dat_description']) == 0)
-    {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_DESCRIPTION')));
     }
     if(strlen($_POST['date_from']) == 0)
     {
@@ -440,7 +437,7 @@ elseif($_GET['mode'] == 5)  // Eintrag fuer Sichtbarkeit erzeugen
     }
     echo '<dl id="roleID_'.$_GET['count'].'">
         <dt>'.$label.'</dt>
-        <dd>'.generateRoleSelectBox($req_rol_id, 'role_'.$_GET['count'], 0, 1);
+        <dd>'.FormElements::generateRoleSelectBox($req_rol_id, 'role_'.$_GET['count'], 0, 1);
             if($_GET['count'] > 1)
             {
                 echo '<a href="javascript:removeRoleSelection(\'roleID_'.$_GET['count'].'\')"><img 

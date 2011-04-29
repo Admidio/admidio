@@ -10,6 +10,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_text.php');
 
 // nur Webmaster duerfen Organisationen bearbeiten
@@ -1597,7 +1598,7 @@ echo '
                         <dl>
                             <dt><label for="profile_default_role">'.$g_l10n->get('PRO_DEFAULT_ROLE').':</label></dt>
                             <dd>
-                                '.generateRoleSelectBox($g_preferences['profile_default_role'], 'profile_default_role').'
+                                '.FormElements::generateRoleSelectBox($g_preferences['profile_default_role'], 'profile_default_role').'
                             </dd>
                         </dl>
                     </li>

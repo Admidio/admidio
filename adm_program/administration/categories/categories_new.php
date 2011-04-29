@@ -151,7 +151,7 @@ echo '
                         <dl>
                             <dt>&nbsp;</dt>
                             <dd>
-                                <input type="checkbox" id="show_in_several_organizations" name="show_in_several_organizations" tabindex="3" ';
+                                <input type="checkbox" id="show_in_several_organizations" name="show_in_several_organizations" ';
                                 if($category->getValue('cat_org_id') == 0)
                                 {
                                     echo ' checked="checked" ';
@@ -186,8 +186,24 @@ echo '
                     </dl>
                 </li>';
             }
-        echo '</ul>
-
+			echo '
+			<li>
+				<dl>
+					<dt>
+						<label for="cat_default"><img src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" /></label>
+					</dt>
+					<dd>
+						<input type="checkbox" id="cat_default" name="cat_default" ';
+							if($category->getValue('cat_default') == 1)
+							{
+								echo ' checked="checked" ';
+							}
+							echo ' value="1" />
+						<label for="cat_default">'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'</label>
+					</dd>
+				</dl>
+			</li>
+		</ul>
         <hr />';
 
         if($category->getValue('cat_usr_id_create') > 0)

@@ -112,7 +112,7 @@ echo '
                     <dt><label for="userfile">'.$g_l10n->get('DOW_CHOOSE_FILE').':</label></dt>
                     <dd>
                         <input type="hidden" name="MAX_FILE_SIZE" value="'.($g_preferences['max_file_upload_size'] * 1024).'" />
-                        <input type="file" id="userfile" name="userfile" tabindex="1" size="30" style="width: 345px;" />
+                        <input type="file" id="userfile" name="userfile" size="30" style="width: 345px;" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -121,7 +121,7 @@ echo '
                 <dl>
                     <dt><label for="new_name">'.$g_l10n->get('DOW_NEW_FILE_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="new_name" name="new_name" tabindex="2" value="'.$form_values['new_name'].'" style="width: 250px;" maxlength="255" />
+                        <input type="text" id="new_name" name="new_name" value="'.$form_values['new_name'].'" style="width: 250px;" maxlength="255" />
                         &nbsp;('.$g_l10n->get('SYS_OPTIONAL').')
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES&amp;inline=true"><img 
 			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
@@ -133,7 +133,7 @@ echo '
                 <dl>
                     <dt><label for="new_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
-                        <textarea id="new_description" name="new_description" style="width: 345px;" rows="4" cols="40" tabindex="3" >'.$form_values['new_description'].'</textarea>
+                        <textarea id="new_description" name="new_description" style="width: 345px;" rows="4" cols="40">'.$form_values['new_description'].'</textarea>
                     </dd>
                 </dl>
             </li>
@@ -142,7 +142,7 @@ echo '
         <hr />
 
         <div class="formSubmit">
-            <button id="btnUpload" type="submit" tabindex="4"><img 
+            <button id="btnUpload" type="submit"><img 
             src="'.THEME_PATH.'/icons/page_white_upload.png" alt="'.$g_l10n->get('SYS_UPLOAD').'" />
             &nbsp;'.$g_l10n->get('SYS_UPLOAD').'</button>
         </div>

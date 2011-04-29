@@ -16,6 +16,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_weblink.php');
 
 if ($g_preferences['enable_bbcode'] == 1)
@@ -120,7 +121,7 @@ echo '
                 <dl>
                     <dt><label for="lnk_name">'.$g_l10n->get('LNK_LINK_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="lnk_name" name="lnk_name" tabindex="1" style="width: 345px;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
+                        <input type="text" id="lnk_name" name="lnk_name" style="width: 345px;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -129,7 +130,7 @@ echo '
                 <dl>
                     <dt><label for="lnk_url">'.$g_l10n->get('LNK_LINK_ADDRESS').':</label></dt>
                     <dd>
-                        <input type="text" id="lnk_url" name="lnk_url" tabindex="2" style="width: 345px;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
+                        <input type="text" id="lnk_url" name="lnk_url" style="width: 345px;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -138,30 +139,7 @@ echo '
                 <dl>
                     <dt><label for="lnk_cat_id">'.$g_l10n->get('SYS_CATEGORY').':</label></dt>
                     <dd>
-                        <select id="lnk_cat_id" name="lnk_cat_id" size="1" tabindex="3">
-                            <option value=" "';
-                                if($link->getValue('lnk_cat_id') == 0)
-                                {
-                                    echo ' selected="selected"';
-                                }
-                                echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-
-                            $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
-                                     WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                                       AND cat_type   = "LNK"
-                                     ORDER BY cat_sequence ASC ';
-                            $result = $g_db->query($sql);
-
-                            while($row = $g_db->fetch_object($result))
-                            {
-                                echo '<option value="'.$row->cat_id.'"';
-                                    if($link->getValue('lnk_cat_id') == $row->cat_id)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                echo '>'.$row->cat_name.'</option>';
-                            }
-                        echo '</select>
+						'.FormElements::generateCategorySelectBox('LNK', $link->getValue('lnk_cat_id'), 'lnk_cat_id').'
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -181,7 +159,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="lnk_description" name="lnk_description" tabindex="4" style="width: 345px;" rows="10" cols="40">'. $link->getValue('lnk_description'). '</textarea>
+                        <textarea id="lnk_description" name="lnk_description" style="width: 345px;" rows="10" cols="40">'. $link->getValue('lnk_description'). '</textarea>
                     </dd>
                 </dl>
             </li>
@@ -205,7 +183,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="submit" tabindex="5"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>

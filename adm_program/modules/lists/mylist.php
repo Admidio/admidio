@@ -20,6 +20,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/list_configuration.php');
 
 // Uebergabevariablen pruefen und ggf. vorbelegen
@@ -616,7 +617,7 @@ echo '
         {
             $role_select_box_mode = 2;
         }
-        echo generateRoleSelectBox($req_rol_id, '', $role_select_box_mode);
+        echo FormElements::generateRoleSelectBox($req_rol_id, '', $role_select_box_mode);
 
         // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
         // bei inaktiven Rollen gibt es nur Ehemalige

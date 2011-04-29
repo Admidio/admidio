@@ -231,104 +231,6 @@ function generatePagination($base_url, $num_items, $per_page, $start_item, $add_
     return $page_string;
 }
 
-// Diese Funktion erzeugt eine Combobox mit allen Rollen, die der Benutzer sehen darf
-// Die Rollen werden dabei nach Kategorie gruppiert
-//
-// Uebergaben:
-// default_role : Id der Rolle die markiert wird
-// field_id     : Id und Name der Select-Box
-// show_mode    : Modus der bestimmt, welche Rollen angezeigt werden
-//          = 0 : Alle Rollen, die der Benutzer sehen darf
-//          = 1 : Alle sicheren Rollen, so dass der Benutzer sich kein "Rollenzuordnungsrecht" 
-//                dazuholen kann, wenn er es nicht schon besitzt
-//          = 2 : Alle nicht aktiven Rollen auflisten
-// visitors = 1 : weiterer Eintrag um auch Besucher auswaehlen zu koennen
-
-function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0, $visitors = 0)
-{
-    global $g_current_user, $g_current_organization, $g_db, $g_l10n;
-    
-    if(strlen($field_id) == 0)
-    {
-        $field_id = 'rol_id';
-    }
-
-    // SQL-Statement entsprechend dem Modus zusammensetzen
-    $condition = '';
-    $active_roles = 1;
-    if($show_mode == 1 && $g_current_user->assignRoles() == false)
-    {
-        // keine Rollen mit Rollenzuordnungsrecht anzeigen
-        $condition .= ' AND rol_assign_roles = 0 ';
-    }
-    elseif($show_mode == 1 && $g_current_user->isWebmaster() == false)
-    {
-        // Webmasterrolle nicht anzeigen
-        $condition .= ' AND rol_name <> "'.$g_l10n->get('SYS_WEBMASTER').'" ';
-    }
-    elseif($show_mode == 2)
-    {
-        $active_roles = 0;
-    }
-    
-    $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-             WHERE rol_valid   = '.$active_roles.'
-               AND rol_visible = 1
-               AND rol_cat_id  = cat_id
-               AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
-                   OR cat_org_id IS NULL )
-                   '.$condition.'
-             ORDER BY cat_sequence, rol_name';
-    $result_lst = $g_db->query($sql);
-
-    // Selectbox mit allen selektierten Rollen zusammensetzen
-    $act_category = '';
-    $selectBoxHtml = '
-    <select size="1" id="'.$field_id.'" name="'.$field_id.'">
-        <option value="0" ';
-        if($default_role == 0)
-        {
-            $selectBoxHtml .= ' selected="selected" ';
-        }
-        $selectBoxHtml .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-
-        if($visitors == 1)
-        {
-            $selectBoxHtml .= '<option value="-1" ';
-            if($default_role == -1)
-            {
-                $selectBoxHtml .= ' selected="selected" ';
-            }
-            $selectBoxHtml .= '>'.$g_l10n->get('SYS_ALL').' ('.$g_l10n->get('SYS_ALSO_VISITORS').')</option>';
-        }
-
-        while($row = $g_db->fetch_object($result_lst))
-        {
-            if($g_current_user->viewRole($row->rol_id))
-            {
-                if($act_category != $row->cat_name)
-                {
-                    if(strlen($act_category) > 0)
-                    {
-                        $selectBoxHtml .= '</optgroup>';
-                    }
-                    $selectBoxHtml .= '<optgroup label="'.$row->cat_name.'">';
-                    $act_category = $row->cat_name;
-                }
-                // wurde eine Rollen-Id uebergeben, dann Combobox mit dieser vorbelegen
-                $selected = "";
-                if($row->rol_id == $default_role)
-                {
-                    $selected = ' selected="selected" ';
-                }
-                $selectBoxHtml .= '<option '.$selected.' value="'.$row->rol_id.'">'.$row->rol_name.'</option>';
-            }
-        }
-        $selectBoxHtml .= '</optgroup>
-    </select>';
-    return $selectBoxHtml;
-}
-
 // Teile dieser Funktion sind von get_backtrace aus phpBB3
 // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
 
@@ -456,14 +358,14 @@ function processableImageSize()
 // Funktion zur Versendung von Benachrichtigungs-Emails (bei neuen Einträgen)
 function EmailNotification($receiptian, $reference, $message, $sender_name, $sender_mail)
 {
-//Konfiguration Mail
-$empfaenger = $receiptian;
-$betreff = utf8_decode($reference);
-$nachricht = utf8_decode($message);
-$absender = utf8_decode($sender_name);
-$absendermail = $sender_mail;
+	//Konfiguration Mail
+	$empfaenger = $receiptian;
+	$betreff = utf8_decode($reference);
+	$nachricht = utf8_decode($message);
+	$absender = utf8_decode($sender_name);
+	$absendermail = $sender_mail;
 
-mail($empfaenger, $betreff, $nachricht, "From: $absender <$absendermail>");
-//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
+	mail($empfaenger, $betreff, $nachricht, "From: $absender <$absendermail>");
+	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
 ?>

@@ -18,6 +18,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 require_once('../../system/classes/table_roles.php');
@@ -312,254 +313,267 @@ echo '
 <div class="formLayout" id="edit_dates_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="dat_headline">'.$g_l10n->get('SYS_TITLE').':</label></dt>
-                    <dd>
-                        <input type="text" id="dat_headline" name="dat_headline" style="width: 345px;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>';
+		<div class="groupBox" id="admTitleLocation">
+			<div class="groupBoxHeadline" id="admTitleLocationHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admTitleLocationBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+				id="admTitleLocationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_TITLE').' & '.$g_l10n->get('DAT_LOCATION').'
+			</div>
 
-            // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
-            if($g_current_organization->getValue('org_org_id_parent') > 0
-                || $g_current_organization->hasChildOrganizations())
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>&nbsp;</dt>
-                        <dd>
-                            <input type="checkbox" id="dat_global" name="dat_global" ';
-                            if($date->getValue('dat_global') == 1)
-                            {
-                                echo ' checked="checked" ';
-                            }
-                            echo ' value="1" />
-                            <label for="dat_global">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-
-        echo '<li><hr /></li>
-
-            <li>
-                <dl>
-                    <dt><label for="date_from">'.$g_l10n->get('SYS_START').':</label></dt>
-                    <dd>
-                        <span>
-                            <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$date_from.'" />
-                            <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-                                src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                            <span id="calendardiv" style="position: absolute; visibility: hidden; "></span>
-                        </span>
-                        <span style="margin-left: 10px;">
-                            <input type="text" id="time_from" name="time_from" size="5" maxlength="5" value="'.$time_from.'" />
-                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        </span>
-                        <span style="margin-left: 15px;">
-                            <input type="checkbox" id="dat_all_day" name="dat_all_day" ';
-                            if($date->getValue('dat_all_day') == 1)
-                            {
-                                echo ' checked="checked" ';
-                            }
-                            echo ' value="1" />
-                            <label for="dat_all_day">'.$g_l10n->get('DAT_ALL_DAY').'</label>
-                        </span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="date_to">'.$g_l10n->get('SYS_END').':</label></dt>
-                    <dd>
-                        <span>
-                            <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$date_to.'" />
-                            <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-                                src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                        </span>
-                        <span style="margin-left: 10px;">
-                            <input type="text" id="time_to" name="time_to" size="5" maxlength="5" value="'.$time_to.'" />
-                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" id="timeToMandatory"';
-                            if($date->getValue('dat_repeat_type') != 0)
-                            {
-                                echo ' style="visibility: hidden;"';
-                            }
-                            echo '>*</span>
-                        </span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="dat_cat_id">'.$g_l10n->get('DAT_CALENDAR').':</label></dt>
-                    <dd>
-                        <select id="dat_cat_id" name="dat_cat_id" size="1" tabindex="4">
-                            <option value=" "';
-                            if($date->getValue('dat_cat_id') == 0)
-                            {
-                                echo ' selected="selected" ';
-                            }
-                            echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-
-                            $sql = 'SELECT cat_id, cat_name 
-                                      FROM '. TBL_CATEGORIES. '
-                                     WHERE cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                                       AND cat_type   = "DAT"
-                                     ORDER BY cat_sequence ASC ';
-                            $result = $g_db->query($sql);
-
-                            while($row = $g_db->fetch_array($result))
-                            {
-                                echo '<option value="'.$row['cat_id'].'"';
-                                if($date->getValue('dat_cat_id') == $row['cat_id'])
-                                {
-                                    echo ' selected="selected" ';
-                                }
-                                echo '>'.$row['cat_name'].'</option>';
-                            }
-                        echo '</select>
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt>'.$g_l10n->get('DAT_REGISTRATION_POSSIBLE').':</dt>
-                    <dd>
-                        <input type="checkbox" id="date_login" name="date_login"';
-                        if($date->getValue('dat_rol_id') > 0 || $date_login == 1)
-                        {
-                            echo ' checked="checked" ';
-                        }
-                        echo ' value="1" />
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE\',this)" 
-                            onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>';
-            if($g_preferences['dates_show_rooms']==1) //nur wenn Raumauswahl aktiviert ist
-            {
-                echo'
-                    <li id="room">
-                        <dl>
-                            <dt>'.$g_l10n->get('SYS_ROOM').':</dt>
-                            <dd>
-                                <select id="dat_room_id" name="dat_room_id" size="1" tabindex="6" onchange="toggleRolId()">
-                                    <option value="0"';
-                                    if($date->getValue('dat_room_id') == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$g_l10n->get('SYS_NONE').'</option>';
-        
-                                    $sql = 'SELECT room_id, room_name, room_capacity, room_overhang 
-                                              FROM '.TBL_ROOMS.'
-                                             ORDER BY room_name';
-                                    $result = $g_db->query($sql);
-        
-                                    while($row = $g_db->fetch_array($result))
-                                    {
-                                        echo '<option value="'.$row['room_id'].'"';
-                                            if($date->getValue('dat_room_id') == $row['room_id'])
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                        echo '>'.$row['room_name'].' ('.$row['room_capacity'].'+'.$row['room_overhang'].')</option>';
-                                    }
-                                echo '</select>
-                            </dd>
-                        </dl>
-                    </li>';
-            }
-          
-            echo'
-            <li id="admAssignYourself">
-                <dl>
-                    <dt>'.$g_l10n->get('DAT_PARTICIPATE_AT_DATE').':</dt>
-                    <dd>
-                        <input type="checkbox" id="date_assign_yourself" name="date_assign_yourself"';
-                        if($date->getValue('dat_rol_id') > 0 || $date_assign_yourself == 1)
-                        {
-                            echo ' checked="checked" ';
-                        }
-                        echo ' value="1" />
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC\',this)" 
-                            onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>
-            <li id="admMaxMembers">
-                <dl>
-                    <dt>'.$g_l10n->get('DAT_PARTICIPANTS_LIMIT').':</dt>
-                    <dd>
-                        <input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_MAX_MEMBERS&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_MAX_MEMBERS\',this)" 
-                            onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>
-            <li id="liRoles"></li>
-            <li>
-                <dl>
-                    <dt></dt>
-                    <dd><span id="add_attachment" class="iconTextLink">
-                            <a href="javascript:addRoleSelection(0)"><img
-                            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_ADD_ROLE').'" /></a>
-                            <a href="javascript:addRoleSelection(0)">'.$g_l10n->get('DAT_ADD_ROLE').'</a>
-                        </span></dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="dat_location">'.$g_l10n->get('DAT_LOCATION').':</label></dt>
-                    <dd>
-                        <input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
-                        if($g_preferences['dates_show_map_link'])
-                        {
-                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK\',this)" 
-                                onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
-                        }
-                    echo '</dd>
-                </dl>
-            </li>';
-            if($g_preferences['dates_show_map_link'])
-            {
-                if(strlen($date->getValue('dat_country')) == 0 && $req_dat_id == 0)
-                {
-                    $date->setValue('dat_country', $g_preferences['default_country']);
-                }
-                echo '<li>
-                    <dl>
-                        <dt>&nbsp;</dt>
-                        <dd>
-							<select size="1" id="dat_country" name="dat_country">
-								<option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-								foreach($g_l10n->getCountries() as $key => $value)
+			<div class="groupBoxBody" id="admTitleLocationBody">
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="dat_headline">'.$g_l10n->get('SYS_TITLE').':</label></dt>
+							<dd>
+								<input type="text" id="dat_headline" name="dat_headline" style="width: 345px;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
+								<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="dat_location">'.$g_l10n->get('DAT_LOCATION').':</label></dt>
+							<dd>
+								<input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
+								if($g_preferences['dates_show_map_link'])
 								{
-									echo '<option value="'.$key.'" ';
-									if($value == $date->getValue('dat_country'))
-									{
-										echo ' selected="selected" ';
-									}
-									echo '>'.$value.'</option>';
+									echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK&amp;inline=true"><img 
+										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK\',this)" 
+										onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
 								}
-							echo '</select>
-                        </dd>
-                    </dl>
-                </li>';
-            }
+							echo '</dd>
+						</dl>
+					</li>';
+
+					if($g_preferences['dates_show_map_link'])
+					{
+						if(strlen($date->getValue('dat_country')) == 0 && $req_dat_id == 0)
+						{
+							$date->setValue('dat_country', $g_preferences['default_country']);
+						}
+						echo '<li>
+							<dl>
+								<dt>&nbsp;</dt>
+								<dd>
+									<select size="1" id="dat_country" name="dat_country">
+										<option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+										foreach($g_l10n->getCountries() as $key => $value)
+										{
+											echo '<option value="'.$key.'" ';
+											if($value == $date->getValue('dat_country'))
+											{
+												echo ' selected="selected" ';
+											}
+											echo '>'.$value.'</option>';
+										}
+									echo '</select>
+								</dd>
+							</dl>
+						</li>';
+					}
+
+					if($g_preferences['dates_show_rooms']==1) //nur wenn Raumauswahl aktiviert ist
+					{
+						echo'
+							<li id="room">
+								<dl>
+									<dt>'.$g_l10n->get('SYS_ROOM').':</dt>
+									<dd>
+										<select id="dat_room_id" name="dat_room_id" size="1" onchange="toggleRolId()">
+											<option value="0"';
+											if($date->getValue('dat_room_id') == 0)
+											{
+												echo ' selected="selected" ';
+											}
+											echo '>'.$g_l10n->get('SYS_NONE').'</option>';
+				
+											$sql = 'SELECT room_id, room_name, room_capacity, room_overhang 
+													  FROM '.TBL_ROOMS.'
+													 ORDER BY room_name';
+											$result = $g_db->query($sql);
+				
+											while($row = $g_db->fetch_array($result))
+											{
+												echo '<option value="'.$row['room_id'].'"';
+													if($date->getValue('dat_room_id') == $row['room_id'])
+													{
+														echo ' selected="selected" ';
+													}
+												echo '>'.$row['room_name'].' ('.$row['room_capacity'].'+'.$row['room_overhang'].')</option>';
+											}
+										echo '</select>
+									</dd>
+								</dl>
+							</li>';
+					}
+				echo '</ul>
+			</div>
+		</div>
+
+		<div class="groupBox" id="admPeriodCalendar">
+			<div class="groupBoxHeadline" id="admPeriodCalendarHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admPeriodCalendarBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+				id="admPeriodCalendarBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_PERIOD').' & '.$g_l10n->get('DAT_CALENDAR').'
+			</div>
+
+			<div class="groupBoxBody" id="admPeriodCalendarBody">
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="date_from">'.$g_l10n->get('SYS_START').':</label></dt>
+							<dd>
+								<span>
+									<input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$date_from.'" />
+									<a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
+										src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
+									<span id="calendardiv" style="position: absolute; visibility: hidden; "></span>
+								</span>
+								<span style="margin-left: 10px;">
+									<input type="text" id="time_from" name="time_from" size="5" maxlength="5" value="'.$time_from.'" />
+									<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+								</span>
+								<span style="margin-left: 15px;">
+									<input type="checkbox" id="dat_all_day" name="dat_all_day" ';
+									if($date->getValue('dat_all_day') == 1)
+									{
+										echo ' checked="checked" ';
+									}
+									echo ' value="1" />
+									<label for="dat_all_day">'.$g_l10n->get('DAT_ALL_DAY').'</label>
+								</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="date_to">'.$g_l10n->get('SYS_END').':</label></dt>
+							<dd>
+								<span>
+									<input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$date_to.'" />
+									<a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$g_preferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
+										src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
+								</span>
+								<span style="margin-left: 10px;">
+									<input type="text" id="time_to" name="time_to" size="5" maxlength="5" value="'.$time_to.'" />
+									<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" id="timeToMandatory"';
+									if($date->getValue('dat_repeat_type') != 0)
+									{
+										echo ' style="visibility: hidden;"';
+									}
+									echo '>*</span>
+								</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="dat_cat_id">'.$g_l10n->get('DAT_CALENDAR').':</label></dt>
+							<dd>
+								'.FormElements::generateCategorySelectBox('DAT', $date->getValue('dat_cat_id'), 'dat_cat_id').'
+								<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>';
+	  
+		echo'
+		<div class="groupBox" id="admVisibilityRegistration">
+			<div class="groupBoxHeadline" id="admVisibilityRegistrationHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admVisibilityRegistrationBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+				id="admVisibilityRegistrationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('DAT_VISIBILITY').' & '.$g_l10n->get('SYS_REGISTRATION').'
+			</div>
+
+			<div class="groupBoxBody" id="admVisibilityRegistrationBody">
+				<ul class="formFieldList">
+					<li id="liRoles"></li>
+					<li>
+						<dl>
+							<dt></dt>
+							<dd><span id="add_attachment" class="iconTextLink">
+									<a href="javascript:addRoleSelection(0)"><img
+									src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_ADD_ROLE').'" /></a>
+									<a href="javascript:addRoleSelection(0)">'.$g_l10n->get('DAT_ADD_ROLE').'</a>
+								</span></dd>
+						</dl>
+					</li>';
+
+					// besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
+					if($g_current_organization->getValue('org_org_id_parent') > 0
+						|| $g_current_organization->hasChildOrganizations())
+					{
+						echo '
+						<li>
+							<dl>
+								<dt>&nbsp;</dt>
+								<dd>
+									<input type="checkbox" id="dat_global" name="dat_global" ';
+									if($date->getValue('dat_global') == 1)
+									{
+										echo ' checked="checked" ';
+									}
+									echo ' value="1" />
+									<label for="dat_global">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
+									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
+										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
+										class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+								</dd>
+							</dl>
+						</li>';
+					}
+
+					echo '
+					<li>
+						<dl>
+							<dt>&nbsp;</dt>
+							<dd>
+								<input type="checkbox" id="date_login" name="date_login"';
+								if($date->getValue('dat_rol_id') > 0 || $date_login == 1)
+								{
+									echo ' checked="checked" ';
+								}
+								echo ' value="1" />
+								<label for="date_login">'.$g_l10n->get('DAT_REGISTRATION_POSSIBLE').'</label>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE\',this)" 
+									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>
+					<li id="admAssignYourself">
+						<dl>
+							<dt>&nbsp;</dt>
+							<dd>
+								<input type="checkbox" id="date_assign_yourself" name="date_assign_yourself"';
+								if($date->getValue('dat_rol_id') > 0 || $date_assign_yourself == 1)
+								{
+									echo ' checked="checked" ';
+								}
+								echo ' value="1" />
+								<label for="date_assign_yourself">'.$g_l10n->get('DAT_PARTICIPATE_AT_DATE').'</label>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC\',this)" 
+									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>
+					<li id="admMaxMembers">
+						<dl>
+							<dt>'.$g_l10n->get('DAT_PARTICIPANTS_LIMIT').':</dt>
+							<dd>
+								<input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_MAX_MEMBERS&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_MAX_MEMBERS\',this)" 
+									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>
             
+		<ul class="formFieldList">';
             if ($g_preferences['enable_bbcode'] == 1)
             {
                printBBcodeIcons();
@@ -575,7 +589,6 @@ echo '
                     echo '</dt>
                     <dd>
                         <textarea id="dat_description" name="dat_description" style="width: 345px;" rows="10" cols="40">'. $date->getValue('dat_description'). '</textarea>
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>

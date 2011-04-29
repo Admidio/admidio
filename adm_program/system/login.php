@@ -38,13 +38,13 @@ echo '
             <li>
                 <dl>
                     <dt><label for="usr_login_name">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
-                    <dd><input type="text" id="usr_login_name" name="usr_login_name" style="width: 120px;" maxlength="35" tabindex="1" /></dd>
+                    <dd><input type="text" id="usr_login_name" name="usr_login_name" style="width: 120px;" maxlength="35" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
                     <dt><label for="usr_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
-                    <dd><input type="password" id="usr_password" name="usr_password" style="width: 120px;" maxlength="20" tabindex="2" /></dd>
+                    <dd><input type="password" id="usr_password" name="usr_password" style="width: 120px;" maxlength="20" /></dd>
                 </dl>
             </li>';
             
@@ -54,14 +54,14 @@ echo '
                 <li>
                     <dl>
                         <dt><label for="auto_login">'.$g_l10n->get('SYS_REMEMBER_ME').':</label></dt>
-                        <dd><input type="checkbox" id="auto_login" name="auto_login" value="1" tabindex="3" /></dd>
+                        <dd><input type="checkbox" id="auto_login" name="auto_login" value="1" /></dd>
                     </dl>
                 </li>';
             }
         echo '</ul>
         
         <div class="formSubmit">
-            <button id="btnLogin" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOGIN').'" />&nbsp;'.$g_l10n->get('SYS_LOGIN').'</button>
+            <button id="btnLogin" type="submit"><img src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_LOGIN').'" />&nbsp;'.$g_l10n->get('SYS_LOGIN').'</button>
         </div>';
         
         if($g_preferences['registration_mode'] > 0)

@@ -3,7 +3,6 @@
  *
  * Copyright    : (c) 2004 - 2005 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  ******************************************************************************/
@@ -107,9 +106,10 @@ create table %PREFIX%_categories
    cat_org_id                     tinyint(4),
    cat_type                       varchar(10)                    not null,
    cat_name_intern                varchar(110)                   not null,
-   cat_name                       varchar(100)                    not null,
+   cat_name                       varchar(100)                   not null,
    cat_hidden                     tinyint(1) unsigned            not null default 0,
    cat_system                     tinyint(1) unsigned            not null default 0,
+   cat_default                    tinyint(1) unsigned            not null default 0,
    cat_sequence                   smallint                       not null,
    cat_usr_id_create              int(11) unsigned,
    cat_timestamp_create           datetime                       not null,

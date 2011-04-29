@@ -155,6 +155,7 @@ echo '
             <th>'.$g_l10n->get('SYS_TITLE').'</th>
             <th>&nbsp;</th>
             <th>'.$icon_login_user.'</th>
+			<th><img class="iconInformation" src="'.THEME_PATH.'/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" title="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" /></th>
             <th>&nbsp;</th>
         </tr>
     </thead>';
@@ -214,6 +215,16 @@ echo '
                 if($cat_row['cat_hidden'] == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" />';
+                }
+                else
+                {
+                    echo '&nbsp;';
+                }
+            echo '</td>
+            <td>';
+                if($cat_row['cat_default'] == 1)
+                {
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" title="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" />';
                 }
                 else
                 {
