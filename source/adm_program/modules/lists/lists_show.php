@@ -783,7 +783,7 @@ else
                         {
                             echo'<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('LST_PERIOD').':</dt>
+                                    <dt>'.$g_l10n->get('SYS_PERIOD').':</dt>
                                     <dd>'.$g_l10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
                                 </dl>
                             </li>';

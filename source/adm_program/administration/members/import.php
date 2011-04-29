@@ -10,6 +10,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/form_elements.php');
 
 // nur berechtigte User duerfen User importieren
 if(!$g_current_user->editUsers())
@@ -68,7 +69,7 @@ echo '
                     <dd>';
                         // Combobox mit allen Rollen ausgeben, die der Benutzer sehen darf
                         // Rollen mit der Rollenzuordnungsberechtigung werden nur angezeigt, wenn der User die Rechte schon hat
-                        echo generateRoleSelectBox(0,'',1);
+                        echo FormElements::generateRoleSelectBox(0,'',1);
 
                         echo '&nbsp;
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_ASSIGN_ROLE_FOR_IMPORT&amp;inline=true"><img 
@@ -98,7 +99,7 @@ echo '
         <div class="formSubmit">
             <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnForward" type="submit" tabindex="2">'.$g_l10n->get('SYS_NEXT').'&nbsp;<img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></button>
+            <button id="btnForward" type="submit">'.$g_l10n->get('SYS_NEXT').'&nbsp;<img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></button>
         </div>
     </div>
 </div>

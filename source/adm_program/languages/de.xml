@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+<version id="2.3.0">
+	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
+    <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
+    <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
+    <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
+    <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
+    <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
+    <text id="SYS_REGISTRATION" development="new" translation="todo">Anmeldung</text>
+</version>
 <version id="2.2.0">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
@@ -64,11 +74,9 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="todo">Am Termin teilnehmen</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Du nimmst an diesem Termin als Gruppenleiter teil und kannst weitere teilnehmende Personen hinzufügen.</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="todo">Teilnehmerbegrenzung</text>
     <text id="DAT_PREVIOUS_DATES" description="Vergangene Termine" development="new" translation="todo">Vergangene %VAR1%</text>
-    <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="todo">Anmeldung möglich.</text>
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="todo">Keine Anmeldung mehr möglich.</text>
     <text id="DAT_REMOVE_APPLICATION" development="new" translation="todo">Willst du die Anmeldung für den Termin wirklich entfernen? Hierbei werden alle bisherigen Teilnehmer gelöscht werden.</text>
     <text id="DAT_ROOM_INFORMATIONS" development="new" translation="todo">Rauminformationen</text>
@@ -399,7 +407,6 @@
     <text id="LST_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
     <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="todo">Konfiguration wird zur neuen Standardkonfiguration</text>
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
-    <text id="LST_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="LST_PRESET_CONFIGURATION" development="new" translation="todo">Vorgegebene Konfigurationen</text>
     <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="todo">Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen. Wähle nun die neu erstellte Liste aus und klick auf dieses Symbol: %VAR1%</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="todo">Druckvorschau</text>
@@ -510,7 +517,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="todo">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="todo">Anmeldung zuordnen</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Anmeldung löschen</text>
-    <text id="NWU_REGISTRATION" development="new" translation="todo">Anmeldung</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen verwalten.</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="todo">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen</text>

@@ -116,7 +116,7 @@ echo '
                 <dl>
                     <dt><label for="ann_headline">'.$g_l10n->get('SYS_HEADLINE').':</label></dt>
                     <dd>
-                        <input type="text" id="ann_headline" name="ann_headline" style="width: 345px;" tabindex="1" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
+                        <input type="text" id="ann_headline" name="ann_headline" style="width: 345px;" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -136,7 +136,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="ann_description" name="ann_description" style="width: 345px;" tabindex="2" rows="10" cols="40">'. $announcement->getValue('ann_description'). '</textarea>
+                        <textarea id="ann_description" name="ann_description" style="width: 345px;" rows="10" cols="40">'. $announcement->getValue('ann_description'). '</textarea>
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -151,7 +151,7 @@ echo '
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <input type="checkbox" id="ann_global" name="ann_global" tabindex="3" ';
+                            <input type="checkbox" id="ann_global" name="ann_global" ';
                             if($announcement->getValue('ann_global') == 1)
                             {
                                 echo ' checked="checked" ';
@@ -185,7 +185,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="submit" tabindex="4"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>

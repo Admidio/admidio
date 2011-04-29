@@ -180,13 +180,13 @@ else
             <li>
                 <dl>
                     <dt><label for="plg_usr_login_name">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
-                    <dd><input type="text" id="plg_usr_login_name" name="plg_usr_login_name" size="10" maxlength="35" tabindex="95" /></dd>
+                    <dd><input type="text" id="plg_usr_login_name" name="plg_usr_login_name" size="10" maxlength="35" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
                     <dt><label for="plg_usr_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
-                    <dd><input type="password" id="plg_usr_password" name="plg_usr_password" size="10" maxlength="25" tabindex="96" /></dd>
+                    <dd><input type="password" id="plg_usr_password" name="plg_usr_password" size="10" maxlength="25" /></dd>
                 </dl>
             </li>';
             
@@ -196,7 +196,7 @@ else
                 <li>
                     <dl>
                         <dt><label for="plg_auto_login">'.$g_l10n->get('SYS_REMEMBER_ME').':</label></dt>
-                        <dd><input type="checkbox" id="plg_auto_login" name="plg_auto_login" value="1" tabindex="97" /></dd>
+                        <dd><input type="checkbox" id="plg_auto_login" name="plg_auto_login" value="1" /></dd>
                     </dl>
                 </li>';
             } 
@@ -209,7 +209,7 @@ else
             <li id="plgRowLoginButton">
                 <dl>
                     <dt>
-                        <button type="submit" tabindex="98">'.$plg_icon_code. $g_l10n->get('SYS_LOGIN').'</button>
+                        <button type="submit">'.$plg_icon_code. $g_l10n->get('SYS_LOGIN').'</button>
                     </dt>
                     <dd>&nbsp;</dd>
                 </dl>

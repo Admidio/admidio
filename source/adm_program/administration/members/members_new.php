@@ -45,7 +45,7 @@ function send()
                 <dl>
                     <dt><label for="lastname">'.$g_l10n->get('SYS_LASTNAME').':</label></dt>
                     <dd>
-                        <input type="text" id="lastname" name="lastname" style="width: 300px;" tabindex="1" maxlength="100" />
+                        <input type="text" id="lastname" name="lastname" style="width: 300px;" maxlength="100" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -54,7 +54,7 @@ function send()
                 <dl>
                     <dt><label for="firstname">'.$g_l10n->get('SYS_FIRSTNAME').':</label></dt>
                     <dd>
-                        <input type="text" id="firstname" name="firstname" style="width: 300px;" tabindex="1" maxlength="100" />
+                        <input type="text" id="firstname" name="firstname" style="width: 300px;" maxlength="100" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>

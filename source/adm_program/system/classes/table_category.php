@@ -241,11 +241,22 @@ class TableCategory extends TableAccess
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
     public function setValue($field_name, $field_value)
     {
+		global $g_current_organization;
+
         // Systemkategorien duerfen nicht umbenannt werden
         if($field_name == 'cat_name' && $this->getValue('cat_system') == 1)
         {
             return false;
         }
+		elseif($field_name == 'cat_default' && $field_value == '1')
+		{
+			// es darf immer nur eine Default-Kategorie je Bereich geben
+			$sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_default = 0
+					 WHERE cat_type = "'. $this->getValue('cat_type'). '"
+					   AND (  cat_org_id IS NOT NULL 
+					       OR cat_org_id = '.$g_current_organization->getValue('org_id').')';
+			$this->db->query($sql);
+		}
 
         return parent::setValue($field_name, $field_value);
     }

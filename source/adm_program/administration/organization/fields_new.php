@@ -14,6 +14,7 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_user_field.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
@@ -132,35 +133,11 @@ echo '
                         {
                             // bei Systemfeldern darf die Kategorie nicht mehr veraendert werden
                             echo '<input type="text" name="usf_cat_id" id="usf_cat_id" readonly="readonly" style="width: 150px;" 
-                                maxlength="30" value="'. $user_field->getValue("cat_name"). '" />';
+                                maxlength="30" value="'. $user_field->getValue('cat_name'). '" />';
                         }
                         else
                         {
-                            echo '<select size="1" name="usf_cat_id" id="usf_cat_id">
-                            <option value=" " '; 
-                                if($user_field->getValue('usf_cat_id') == 0) 
-                                {
-                                    echo ' selected="selected" ';
-                                }
-                                echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-
-                            $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
-                                     WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                                           OR cat_org_id IS NULL )
-                                       AND cat_type   = "USF"
-                                     ORDER BY cat_sequence ASC ';
-                            $result = $g_db->query($sql);
-
-                            while($row = $g_db->fetch_object($result))
-                            {
-                                echo '<option value="'.$row->cat_id.'"';
-                                    if($user_field->getValue('usf_cat_id') == $row->cat_id)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                echo '>'.$row->cat_name.'</option>';
-                            }
-                            echo '</select>';
+							echo FormElements::generateCategorySelectBox('USF', $user_field->getValue('usf_cat_id'), 'usf_cat_id');
                         }
                         echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>

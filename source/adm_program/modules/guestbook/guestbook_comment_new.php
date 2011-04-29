@@ -206,11 +206,11 @@ echo '
                         if ($g_current_user->getValue('usr_id') > 0)
                         {
                             // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo '<input readonly="readonly" type="text" id="gbc_name" name="gbc_name" tabindex="1" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />';
+                            echo '<input readonly="readonly" type="text" id="gbc_name" name="gbc_name" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />';
                         }
                         else
                         {
-                            echo '<input type="text" id="gbc_name" name="gbc_name" tabindex="1" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />
+                            echo '<input type="text" id="gbc_name" name="gbc_name" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />
                             <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
                     echo '</dd>
@@ -220,7 +220,7 @@ echo '
                 <dl>
                     <dt><label for="gbc_email">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
                     <dd>
-                        <input type="text" id="gbc_email" name="gbc_email" tabindex="2" style="width: 345px;" maxlength="50" value="'. $guestbook_comment->getValue('gbc_email'). '" />
+                        <input type="text" id="gbc_email" name="gbc_email" style="width: 345px;" maxlength="50" value="'. $guestbook_comment->getValue('gbc_email'). '" />
                     </dd>
                 </dl>
             </li>';
@@ -239,7 +239,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea  id="gbc_text" name="gbc_text" tabindex="3" style="width: 345px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" style="color: #990000;">*</span>
+                        <textarea  id="gbc_text" name="gbc_text" style="width: 345px;" rows="10" cols="40">'. $guestbook_comment->getValue('gbc_text'). '</textarea>&nbsp;<span title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'" style="color: #990000;">*</span>
                     </dd>
                 </dl>
             </li>';
@@ -275,7 +275,7 @@ echo '
                     <dl>
                            <dt><label for="captcha">'.$captcha_label.':</label></dt>
                            <dd>
-                               <input type="text" id="captcha" name="captcha" tabindex="4" style="width: 200px;" maxlength="8" value="" />
+                               <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
 				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
@@ -304,7 +304,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="submit" tabindex="5"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
         </div>';
 
     echo '</div>

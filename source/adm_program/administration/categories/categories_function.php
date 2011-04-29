@@ -145,11 +145,18 @@ if($_GET['mode'] == 1)
             $g_message->show($g_l10n->get('CAT_CATEGORY_EXIST'));
         }
     }
+	
+	// bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
+	// falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+	$checkboxes = array('cat_hidden','cat_default');
 
-    if(isset($_POST['cat_hidden']) == false)
-    {
-        $_POST['cat_hidden'] = 0;
-    }
+	foreach($checkboxes as $key => $value)
+	{
+		if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+		{
+			$_POST[$value] = 0;
+		}
+	}
 
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value)

@@ -14,8 +14,9 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_roles.php');
+require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/role_dependency.php');
+require_once('../../system/classes/table_roles.php');
 
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!$g_current_user->assignRoles())
@@ -266,31 +267,7 @@ echo '
                 <dl>
                     <dt><label for="rol_cat_id">'.$g_l10n->get('SYS_CATEGORY').':</label></dt>
                     <dd>
-                        <select size="1" id="rol_cat_id" name="rol_cat_id">
-                            <option value=" "';
-                                if($role->getValue('rol_cat_id') == 0)
-                                {
-                                    echo ' selected="selected" ';
-                                }
-                                echo '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-
-                            $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
-                                     WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                                           OR cat_org_id IS NULL )
-                                       AND cat_type   = "ROL"
-                                     ORDER BY cat_sequence ASC ';
-                            $result = $g_db->query($sql);
-
-                            while($row = $g_db->fetch_object($result))
-                            {
-                                echo '<option value="'.$row->cat_id.'"';
-                                    if($role->getValue('rol_cat_id') == $row->cat_id)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                echo '>'.$row->cat_name.'</option>';
-                            }
-                        echo '</select>
+						'.FormElements::generateCategorySelectBox('ROL', $role->getValue('rol_cat_id'), 'rol_cat_id').'
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
