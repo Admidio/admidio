@@ -150,7 +150,7 @@ button img {
     padding:            5px 10px 5px 10px;
     text-align:         left;
     margin-top:         12px;
-    -moz-border-radius: 10px;
+    border-radius:      10px;
 }
 
 .groupBoxHeadline {
