@@ -151,9 +151,9 @@ echo '
                     '. $g_l10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
                     
                     <span class="iconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname'].'"><img
+                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname'].'&remove_url=1"><img
                         src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_NEW_USER').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname'].'">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</a>
+                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname'].'&remove_url=1">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</a>
                     </span>
                 </div>
             </div>
