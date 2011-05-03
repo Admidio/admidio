@@ -17,12 +17,12 @@ function getBBcodeJS($target_textbox)
     global $g_root_path;
     return ' <script type="text/javascript"><!--
     var vorbelegt = Array(false,false,false,false,false,false,false,false,false,false);
-    var bbcodes = Array("[b]","[/b]","[u]","[/u]","[i]","[/i]","[big]","[/big]","[small]","[/small]","[center]","[/center]",
+    var bbcodes = Array("[b]","[/b]","[i]","[/i]","[u]","[/u]","[big]","[/big]","[small]","[/small]","[center]","[/center]",
                         "[url='.$g_root_path.']","[/url]","[email=adresse@demo.de]","[/email]","[img]","[/img]");
-    var bbids = Array("b","u","i","big","small","center","url","email","img");
+    var bbids = Array("b","i","u","big","small","center","url","email","img");
     var bbcodestext = Array("text_bold_point.png","text_bold.png",
-                            "text_underline_point.png","text_underline.png",
                             "text_italic_point.png","text_italic.png",
+                            "text_underline_point.png","text_underline.png",
                             "text_bigger_point.png","text_bigger.png",
                             "text_smaller_point.png","text_smaller.png",
                             "text_align_center_point.png","text_align_center.png",
@@ -87,10 +87,10 @@ function printBBcodeIcons()
                     <div style="float: left;">
                         <a class="iconLink" href="javascript:bbcode(0)"><img id="b"
                             src="'. THEME_PATH. '/icons/text_bold.png" title="'.$g_l10n->get('SYS_BOLD').'" alt="'.$g_l10n->get('SYS_BOLD').'" /></a>
-                        <a class="iconLink" href="javascript:bbcode(1)"><img id="u"
-                            src="'. THEME_PATH. '/icons/text_underline.png" title="'.$g_l10n->get('SYS_ITALIC').'" alt="'.$g_l10n->get('SYS_ITALIC').'" /></a>
-                        <a class="iconLink" href="javascript:bbcode(2)"><img id="i"
-                            src="'. THEME_PATH. '/icons/text_italic.png" title="'.$g_l10n->get('SYS_UNDERLINE').'" alt="'.$g_l10n->get('SYS_UNDERLINE').'" /></a>
+                        <a class="iconLink" href="javascript:bbcode(1)"><img id="i"
+                            src="'. THEME_PATH. '/icons/text_italic.png" title="'.$g_l10n->get('SYS_ITALIC').'" alt="'.$g_l10n->get('SYS_ITALIC').'" /></a>
+                        <a class="iconLink" href="javascript:bbcode(2)"><img id="u"
+                            src="'. THEME_PATH. '/icons/text_underline.png" title="'.$g_l10n->get('SYS_UNDERLINE').'" alt="'.$g_l10n->get('SYS_UNDERLINE').'" /></a>
                         <a class="iconLink" href="javascript:bbcode(3)"><img id="big"
                             src="'. THEME_PATH. '/icons/text_bigger.png" title="'.$g_l10n->get('SYS_INCREASE_FONT_SIZE').'" alt="'.$g_l10n->get('SYS_INCREASE_FONT_SIZE').'" /></a>
                         <a class="iconLink" href="javascript:bbcode(4)"><img id="small"

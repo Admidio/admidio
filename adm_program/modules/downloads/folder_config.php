@@ -99,7 +99,7 @@ if ($parentRoleSet == null)
 $roleSet = $folder->getRoleArrayOfFolder();
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $g_l10n->get('DOW_SET_FOLER_PERMISSIONS');
+$g_layout['title'] = $g_l10n->get('DOW_SET_FOLDER_PERMISSIONS');
 
 $g_layout['header'] = '
     <script type="text/javascript"><!--
