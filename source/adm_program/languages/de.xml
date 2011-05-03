@@ -18,7 +18,7 @@
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Ankündigung wurde angelegt</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
 	
-	<!-- Phrases only in Announcementmodule -->
+	<!-- Phrases only in Backupmodule -->
     <text id="BAC_BACK_TO_BACKUP_PAGE" development="new" translation="todo">Zurück zur Backupseite</text>
     <text id="BAC_BACKUP_COMPLETED" development="new" translation="todo">Backup fertiggestellt in %VAR1%</text>
     <text id="BAC_BACKUP_FILE" development="new" translation="todo">Backupdatei</text>
