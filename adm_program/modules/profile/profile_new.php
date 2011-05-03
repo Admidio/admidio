@@ -15,6 +15,7 @@
  *            3 - Registrierung zuordnen/akzeptieren
  * lastname  : Der Nachname kann uebergeben und bei neuen Benutzern vorbelegt werden
  * firstname : Der Vorname kann uebergeben und bei neuen Benutzern vorbelegt werden
+ * remove_usr : 1 - Entfernt die letzte Url aus dem Navigations-Cache
  *
  *****************************************************************************/
 
@@ -46,6 +47,11 @@ if(array_key_exists('lastname', $_GET))
 if(array_key_exists('firstname', $_GET))
 {
     $req_firstname = $_GET['firstname'];
+}
+
+if(array_key_exists('remove_url', $_GET) && $_GET['remove_url'] == 1)
+{
+    $_SESSION['navigation']->deleteLastUrl();
 }
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
