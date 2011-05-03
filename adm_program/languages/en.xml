@@ -5,10 +5,10 @@
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Announcement</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="edited">Announcements</text>
 	<text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="edited">Display or edit announcements, news and other information.</text>
-	
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new announcement was created</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new announcement at %VAR1% was created\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
 	
+	<!-- Phrases only in Backupmodule -->
     <text id="BAC_BACK_TO_BACKUP_PAGE" development="new" translation="edited">Back to main page</text>
     <text id="BAC_BACKUP_COMPLETED" development="new" translation="edited">Backup created in %VAR1%</text>
     <text id="BAC_BACKUP_FILE" development="new" translation="edited">Backup file</text>
@@ -180,18 +180,15 @@
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">New message received</text>    
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">No user with valid e-mail address!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">No further recipients</text>
-	
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card could not be sent!</text>
 	<text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Other recipients</text>
     <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="edited">Please select a valid role type!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail recipient</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Name of recipient</text>    
-	
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Greeting card image size preference (width x height)</text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Image preview preference (width x height)</text>
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Set size of preview picture. (default: 250 x 250 Pixel²)</text>
     <text id="ECA_SEND_ERROR" development="new" translation="edited">An error occurred while sending the greeting card. Please try again later.</text>    
-	
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Your greeting card will be sent to members of the selected role if members provided e-mail address.\n\nSelect a member of a role or entire role.</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% characters left</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card was send.</text>
@@ -288,7 +285,6 @@
     <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Provide access information of a webmaster of an existing organization. Use his/her access information later in order to log in to new organization.</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Access information of webmaster is not complete!</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Incorrect log in. Provided access information does not exist or can not be found in previous organizations!</text> 
-
 	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Membership</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
@@ -309,15 +305,13 @@
     <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
     <text id="INS_POSTCODE" development="new" translation="edited">Postal code</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
-	
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Set administrator</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Creating organization</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="edited">Configure organization</text>
     <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="edited">New organization %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="edited">Configuration successful</text>
     <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
-	<text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We would appreciate a lot if you could support the development of Admidio with your donation!
-</text>
+	<text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We would appreciate a lot if you could support the development of Admidio with your donation!</text>
     <text id="INS_TABLE_PREFIX" development="new" translation="edited">Table prefix</text>
     <text id="INS_TABLE_PREFIX_INVALID" development="new" translation="edited">Table prefix includes invalid character!</text>
     <text id="INS_TABLE_PREFIX_OVERRIDE_DATA" development="new" translation="edited">Existing data stored under same prefix will be overwritten!</text>
@@ -455,7 +449,7 @@
     <text id="MAI_COUNT_BCC_DESC" development="new" translation="edited">Define here how many BCC recipients per mail can be added. (default: 50)</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% has sent to role %VAR4% of %VAR2% following message:\nPlease reply to %VAR3%.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% has sent you from %VAR2% following message:\nPlease reply to %VAR3%.</text>
-	 <text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails can be sent to different roles like groups, courses or departments.</text>
+    <text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails can be sent to different roles like groups, courses or departments.</text>
     <text id="MAI_EMAILS" development="new" translation="edited">E-mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Unlimited number of recipients can be added. Total size of all attachments together must not exceed %VAR1% MB.</text>
     <text id="MAI_MESSAGE" development="new" translation="edited">Message</text>
@@ -562,7 +556,6 @@
 	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Display preview of the captcha. Please note that only saved values are considered!</text>
 	<text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">After activation a picture with a captcha code or a simple calculation will be displayed to new users. It's necessary to fill in the correct code or result to save presently edited entry. The captcha is part of anti-spam solution in Admidio. (default: yes)</text>
 	<text id="ORG_CAPTCHA_SIZE" development="new" translation="edited">Define captcha size.</text>
-
 	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha signature</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Select font size for the captcha signature. (default: 9)</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Fill in your preferred signature for the captcha. Default font type of the current theme will be used.</text>
@@ -573,7 +566,6 @@
 	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="edited">Calculation</text>
 	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="edited">Picture</text>
 	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="edited">Select type of captcha. Choose between displaying the captcha as a picture or a simple calculation in form of text. (default: picture)</text>
-	
     <text id="ORG_CONFIRM_REGISTRATION" development="new" translation="edited">Registration confirmation after manual confirmation.</text>
 	<text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="edited">Create profile field</text>
     <text id="ORG_CURRENCY" development="new" translation="edited">Currency</text>
