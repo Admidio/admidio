@@ -74,7 +74,7 @@
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">Registration is closed.</text>
     <text id="DAT_REMOVE_APPLICATION" development="new" translation="edited">Would you like to remove this event? All participants will be removed.</text>
     <text id="DAT_ROOM_INFORMATIONS" development="new" translation="edited">Room information</text>
-    <text id="DAT_ROOM_OVERHANG" development="new" translation="edited">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined her.</text>
+    <text id="DAT_ROOM_OVERHANG" development="new" translation="edited">In case of any further available space (e.g. additional seats, standing room), the number of additional spaces can be defined here.</text>
     <text id="DAT_ROOM_RESERVED" development="new" translation="edited">Selected room is already in use in this time frame.</text>
     <text id="DAT_ROOM_SELECTABLE" development="new" translation="edited">Room is available</text>
     <text id="DAT_ROOM_SELECTABLE_DESC" development="new" translation="edited">Selection box for available rooms is available. Select room and create event for selected room. (standard answer: no)</text>
@@ -133,7 +133,7 @@
     <text id="DOW_PUBLIC_DOWNLOAD_FLAG" development="new" translation="edited">If this option is activated, only logged in users of permitted roles are allowed to display the content of this folder.</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="edited">Role access permission</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">This panel allows you to configure folder access permissions. Access rights are set recursively for subfolders and all existing folder permissions will be overwritten. Allowed roles must have access permission for higher folders.</text>
-	<text id="DOW_SET_FOLER_PERMISSIONS" development="new" translation="edited">Set folder permissions</text>
+	<text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Set folder permissions</text>
 	<text id="DOW_SET_PERMISSIONS" development="new" translation="edited">Set permissions</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Unmanaged files</text>
 	<text id="DOW_UPLOAD_FILE" development="new" translation="edited">Upload file</text>
@@ -142,7 +142,7 @@
     <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Previous name</text>
     <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Uploading file</text>
     <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Upload file to folder %VAR1_BOLD%</text>
-    <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed sever defined upload size of  %VAR1%B!</text>
+    <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed server defined upload size of  %VAR1%B!</text>
 
 
     <!-- Phrases only in Ecardsmodule -->
@@ -752,7 +752,7 @@
 	<text id="PRO_DEFAULT_ROLE_DESC" development="new" translation="edited">Role is being automatically assigned if person, who is creating a new user, does not have any permissions to assign roles.</text>
 	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Delete profile picture</text>
 	<text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Edit own profile</text>
-	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Edit won profile picture</text>
+	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Edit own profile picture</text>
 	<text id="PRO_EDIT_PASSWORD" development="new" translation="edited">Edit password</text>
 	<text id="PRO_EDIT_PROFILE" development="new" translation="edited">Edit profile</text>
 	<text id="PRO_EDIT_PROFILE_PIC_FROM" development="new" translation="edited">Edit profile picture of %VAR1% %VAR2%</text>
