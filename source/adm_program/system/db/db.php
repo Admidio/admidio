@@ -10,21 +10,20 @@
  
 class DB
 {
-    var $layer;
-    var $user;
-    var $password;
-    var $dbname;
-    var $server;
-    var $utf8;
-    var $version;
+    protected $layer;
+    protected $user;
+    protected $password;
+    protected $dbname;
+    protected $server;
+    protected $version;
     
-    var $connect_id;    
-    var $query_result;
-    var $sql;
-    var $transactions = 0;
+    protected $connect_id;    
+    protected $query_result;
+    protected $sql;
+    protected $transactions = 0;
     
     // Modus der Transaktoin setzen (Inspiriert von phpBB)
-    function startTransaction()
+    public function startTransaction()
     {
         // If we are within a transaction we will not open another one, 
         // but enclose the current one to not loose data (prevening auto commit)
@@ -34,7 +33,7 @@ class DB
             return true;
         }
 
-        $result = $this->query("START TRANSACTION");
+        $result = $this->query('START TRANSACTION');
 
         if (!$result)
         {
@@ -45,11 +44,11 @@ class DB
         return $result;
     }
     
-    function endTransaction($rollback = false)
+    public function endTransaction($rollback = false)
     {
         if($rollback)
         {
-            $result = $this->query("ROLLBACK");
+            $result = $this->query('ROLLBACK');
         }
         else
         {
@@ -61,7 +60,7 @@ class DB
                 return true;
             }
 
-            $result = $this->query("COMMIT");
+            $result = $this->query('COMMIT');
 
             if (!$result)
             {
@@ -73,9 +72,9 @@ class DB
     }   
     
     // Ausgabe der Datenbank-Fehlermeldung
-    function db_error($code = 0, $message = '')
+    public function db_error($code = 0, $message = '')
     {
-        global $g_root_path, $g_message, $g_preferences, $g_current_organization, $g_debug;
+        global $g_root_path, $g_message, $g_preferences, $g_current_organization, $g_debug, $g_l10n;
 
         $backtrace = getBacktrace();
 
@@ -88,29 +87,29 @@ class DB
         if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
         {
             // Html-Kopf ausgeben
-            $g_layout['title']  = "Datenbank-Fehler";
-            require(THEME_SERVER_PATH. "/overall_header.php");       
+            $g_layout['title']  = $g_l10n->get('SYS_DATABASE_ERROR');
+            require(THEME_SERVER_PATH. '/overall_header.php');       
         }
         
         // Ausgabe des Fehlers an Browser
-        $error_string = "<div style=\"font-family: monospace;\">
+        $error_string = '<div style="font-family: monospace;">
                          <p><b>S Q L - E R R O R</b></p>
-                         <p><b>CODE:</b> ". $code. "</p>
-                         ". $message. "<br /><br />
+                         <p><b>CODE:</b> '.$code.'</p>
+                         '.$message.'<br /><br />
                          <b>B A C K T R A C E</b><br />
-                         $backtrace
-                         </div>";
+                         '.$backtrace.'
+                         </div>';
         echo $error_string;
         
         // ggf. Ausgabe des Fehlers in Log-Datei
         if($g_debug == 1)
         {
-            error_log($code. ": ". $message);
+            error_log($code. ': '. $message);
         }
         
         if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
         {
-            require(THEME_SERVER_PATH. "/overall_footer.php");       
+            require(THEME_SERVER_PATH. '/overall_footer.php');       
         }
         
         exit();

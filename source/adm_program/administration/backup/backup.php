@@ -102,11 +102,11 @@ echo '
         echo '
         <tr class="tableMouseOver" id="row_file_'.$key.'">
             <td>
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='. $old_backup_file. '">
-                <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'.$g_l10n->get('SYS_FILE').'" title="'.$g_l10n->get('SYS_FILE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='. $old_backup_file. '">'. $old_backup_file. '</a></td>
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">
+                <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" /></a>
+                <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">'. $old_backup_file. '</a></td>
             <td>'. date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)). '</td>
-            <td style="text-align: right;">'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' KB&nbsp;</td>
+            <td style="text-align: right;">'. round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB&nbsp;</td>
             <td style="text-align: center;">
                 <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                     $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img 
@@ -115,13 +115,14 @@ echo '
         </tr>';
 		$backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
     }
-echo '<tr>
+	echo '
+	<tr>
 		<th>&nbsp</th>
 		<th>'.$g_l10n->get('BAC_SUM').'</th>
-		<th style="text-align: right;">'. $backup_size_sum .' KB&nbsp</th>
+		<th style="text-align: right;">'. $backup_size_sum .' kB&nbsp</th>
 		<th>&nbsp</th>
-</tr>
-		</table>';
+	</tr>
+</table>';
 
 require(THEME_SERVER_PATH. '/overall_footer.php');
 ?>

@@ -185,7 +185,7 @@ $ret_code = $g_current_organization->save();
 if($ret_code != 0)
 {
     $g_current_organization->clear();
-    $g_message->show($g_l10n->get('SYS_DATABASE_ERROR', $ret_code));
+    $g_message->show($g_l10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
 }
 
 $g_current_organization->setPreferences($g_preferences);
